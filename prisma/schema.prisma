@@ -1,0 +1,250 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum DecisionStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
+enum DecisionType {
+  TENDER
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ScenarioType {
+  BEST_CASE
+  EXPECTED_CASE
+  WORST_CASE
+}
+
+enum RecommendationType {
+  GO
+  GO_WITH_CONDITIONS
+  NO_GO
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum AuditAction {
+  CREATED
+  UPDATED
+  STATUS_CHANGED
+  APPROVED
+  REJECTED
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  users     User[]
+  decisions Decision[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id                  String       @id @default(cuid())
+  email               String       @unique
+  name                String
+  role                UserRole     @default(MEMBER)
+  organizationId      String
+  organization        Organization @relation(fields: [organizationId], references: [id])
+  ownedDecisions      Decision[]   @relation("DecisionOwner")
+  reviewedDecisions   Decision[]   @relation("DecisionReviewer")
+  approvedDecisions   Decision[]   @relation("DecisionApprover")
+  approvals           Approval[]   @relation("ApprovalApprover")
+  auditLogs           AuditLog[]
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+
+model Decision {
+  id             String        @id @default(cuid())
+  title          String
+  type           DecisionType  @default(TENDER)
+  ownerId        String
+  owner          User          @relation("DecisionOwner", fields: [ownerId], references: [id])
+  reviewerId     String?
+  reviewer       User?         @relation("DecisionReviewer", fields: [reviewerId], references: [id])
+  approverId     String?
+  approver       User?         @relation("DecisionApprover", fields: [approverId], references: [id])
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  status         DecisionStatus @default(DRAFT)
+  tenderProfile  TenderProfile?
+  objectives     Objective[]
+  constraints    Constraint[]
+  assumptions    Assumption[]
+  alternatives   Alternative[]
+  risks          Risk[]
+  scenarios      Scenario[]
+  simulations    SimulationResult[]
+  recommendation Recommendation?
+  approvals      Approval[]
+  auditLogs      AuditLog[]
+  reports        DecisionReport[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Objective {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Constraint {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Assumption {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Alternative {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Risk {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  level       RiskLevel
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TenderProfile {
+  id                     String   @id @default(cuid())
+  decisionId             String   @unique
+  decision               Decision @relation(fields: [decisionId], references: [id])
+  clientName             String
+  estimatedContractValue Float
+  estimatedCost          Float
+  durationMonths         Int
+  requiredCapacity       Int
+  internalAvailableCapacity Int
+  strategicFitScore      Int
+  riskLevel              RiskLevel
+  marginEstimate         Float
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model Scenario {
+  id          String       @id @default(cuid())
+  decisionId  String
+  decision    Decision     @relation(fields: [decisionId], references: [id])
+  type        ScenarioType
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  simulation  SimulationResult?
+
+  @@unique([decisionId, type])
+}
+
+model SimulationResult {
+  id                  String       @id @default(cuid())
+  decisionId          String
+  decision            Decision     @relation(fields: [decisionId], references: [id])
+  scenarioId         String?       @unique
+  scenario            Scenario?    @relation(fields: [scenarioId], references: [id])
+  feasibilityScore    Float
+  financialScore      Float
+  capacityScore       Float
+  riskScore           Float
+  strategicFitScore   Float
+  overallDecisionScore Float
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+
+model Recommendation {
+  id             String            @id @default(cuid())
+  decisionId     String            @unique
+  decision       Decision          @relation(fields: [decisionId], references: [id])
+  type           RecommendationType
+  confidenceScore Float?
+  reasoning      String?
+  conditions     String?
+  riskNotes      String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model Approval {
+  id          String        @id @default(cuid())
+  decisionId  String
+  decision    Decision      @relation(fields: [decisionId], references: [id])
+  approverId  String
+  approver    User          @relation("ApprovalApprover", fields: [approverId], references: [id])
+  status      ApprovalStatus @default(PENDING)
+  comments    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  action      AuditAction
+  entity      String?
+  before      String?
+  after       String?
+  createdAt   DateTime @default(now())
+}
+
+model DecisionReport {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  title       String
+  content     Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
