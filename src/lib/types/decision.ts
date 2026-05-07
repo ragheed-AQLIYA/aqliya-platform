@@ -10,6 +10,8 @@ export type ScenarioType = "BEST_CASE" | "EXPECTED_CASE" | "WORST_CASE"
 
 export type RecommendationType = "GO" | "GO_WITH_CONDITIONS" | "NO_GO"
 
+export type IntakeStatus = "accepted" | "rejected" | "reframe_required"
+
 export interface Decision {
   id: string
   title: string
@@ -26,6 +28,85 @@ export interface Decision {
   risks?: string
   createdAt: Date
   updatedAt: Date
+}
+
+export interface DecisionIntake {
+  status: IntakeStatus
+  readyForFramework: boolean
+  reasonCodes: string[]
+  reasons: string[]
+  requiredNextSteps: string[]
+}
+
+export interface DecisionFramework {
+  id: string
+  decisionId: string
+  context: string
+  purpose: string
+  options: string
+  criteria: string
+  values: string
+  informationGaps: string
+  certainty: string
+  assumptions: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface DecisionFrameworkState {
+  isComplete: boolean
+  missingFields: string[]
+  nextSteps: string[]
+}
+
+export interface DecisionScenario {
+  id: string
+  decisionId: string
+  name: string
+  description: string
+  assumptions: string
+  expectedOutcome: string
+  affectedStakeholders: string
+  requiredConditions: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface DecisionScenariosState {
+  isComplete: boolean
+  missingDefaultScenarios: string[]
+  incompleteScenarios: Array<{
+    name: string
+    missingFields: string[]
+  }>
+  nextSteps: string[]
+}
+
+export interface DecisionRiskAnalysis {
+  id: string
+  decisionId: string
+  scenarioId: string
+  risks: string
+  tradeoffs: string
+  sacrifices: string
+  opportunityCosts: string
+  stakeholderRisks: string
+  operationalRisks: string
+  strategicRisks: string
+  knowledgeRisks: string
+  uncertaintyLevel: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface DecisionRiskAnalysisState {
+  isComplete: boolean
+  missingScenarioAnalyses: string[]
+  incompleteAnalyses: Array<{
+    scenarioName: string
+    missingFields: string[]
+  }>
+  nextSteps: string[]
 }
 
 export interface Tender {
@@ -61,8 +142,24 @@ export interface Simulation {
 export interface Recommendation {
   id: string
   decisionId: string
+  recommendedAction: string
+  rationale: string
+  expectedNextState: string
+  scopeExclusions: string
+  assumptionsUsed: string
+  risksAccepted: string
+  risksRejected: string
+  humanReviewRequired: boolean
   type: RecommendationType
+  confidenceScore?: number
+  reasoning?: string
   conditions?: string
   createdAt: Date
   updatedAt: Date
+}
+
+export interface RecommendationState {
+  isComplete: boolean
+  missingFields: string[]
+  nextSteps: string[]
 }

@@ -6,9 +6,19 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const tabs = [
   { name: "Overview", href: "" },
+  { name: "Intake", href: "/intake" },
+  { name: "Framework", href: "/framework" },
+  { name: "Scenarios", href: "/scenarios" },
+  { name: "Risks", href: "/risks" },
+  { name: "Recommendation", href: "/recommendation" },
+  { name: "Insight", href: "/insight" },
+  { name: "What to Do", href: "/what-to-do" },
+  { name: "Overview", href: "/overview" },
+  { name: "Sector", href: "/sector" },
+  { name: "Signals", href: "/signals" },
+  { name: "Alerts", href: "/alerts" },
   { name: "Tender", href: "/tender" },
   { name: "Simulation", href: "/simulation" },
-  { name: "Recommendation", href: "/recommendation" },
   { name: "Governance", href: "/governance" },
   { name: "Report", href: "/report" },
 ]
@@ -25,7 +35,7 @@ export function DecisionTabs({ decisionId }: { decisionId: string }) {
 
   return (
     <Tabs value={currentTab} className="mb-6">
-      <TabsList className="grid w-full grid-cols-6">
+      <TabsList className="grid w-full grid-cols-2 md:grid-cols-10">
         {tabs.map((tab) => (
           <Link key={tab.name} href={`/decisions/${decisionId}${tab.href}`}>
             <TabsTrigger value={tab.name} className="w-full">

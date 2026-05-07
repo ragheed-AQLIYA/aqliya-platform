@@ -3,10 +3,12 @@
 import { prisma } from "@/lib/prisma"
 import { runSimulation, type TenderInput } from "@/lib/simulation/tender-simulation"
 import { generateRecommendation } from "@/lib/recommendation/tender-recommendation"
-import { Prisma } from "@prisma/client"
+import { ScenarioType } from "@prisma/client"
+import { isExpectedAccessDeniedError, requireDecisionAccess } from "@/lib/auth"
 
 export async function runSimulationAndRecommendation(decisionId: string) {
   try {
+    await requireDecisionAccess(decisionId, "OPERATOR")
     // 1. Get decision with tender profile
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -51,7 +53,7 @@ export async function runSimulationAndRecommendation(decisionId: string) {
         scenario = await prisma.scenario.create({
           data: {
             decisionId: decision.id,
-            type: result.scenarioType as any,
+            type: result.scenarioType as ScenarioType,
           },
           include: {
             simulation: true,
@@ -105,35 +107,44 @@ export async function runSimulationAndRecommendation(decisionId: string) {
       await prisma.recommendation.update({
         where: { id: existingRecommendation.id },
         data: {
-          type: recommendation.type as any,
-          confidenceScore: recommendation.confidenceScore,
-          reasoning: recommendation.reasoning,
-          conditions: recommendation.conditions,
-          riskNotes: recommendation.riskNotes,
+          recommendedAction: recommendation.recommendedAction,
+          rationale: recommendation.rationale,
+          expectedNextState: recommendation.expectedNextState,
+          scopeExclusions: recommendation.scopeExclusions,
+          assumptionsUsed: recommendation.assumptionsUsed,
+          risksAccepted: recommendation.risksAccepted,
+          risksRejected: recommendation.risksRejected,
+          humanReviewRequired: recommendation.humanReviewRequired,
         },
       })
     } else {
       await prisma.recommendation.create({
         data: {
           decisionId: decision.id,
-          type: recommendation.type as any,
-          confidenceScore: recommendation.confidenceScore,
-          reasoning: recommendation.reasoning,
-          conditions: recommendation.conditions,
-          riskNotes: recommendation.riskNotes,
+          recommendedAction: recommendation.recommendedAction,
+          rationale: recommendation.rationale,
+          expectedNextState: recommendation.expectedNextState,
+          scopeExclusions: recommendation.scopeExclusions,
+          assumptionsUsed: recommendation.assumptionsUsed,
+          risksAccepted: recommendation.risksAccepted,
+          risksRejected: recommendation.risksRejected,
+          humanReviewRequired: recommendation.humanReviewRequired,
         },
       })
     }
 
     return { success: true, data: { results, recommendation } }
   } catch (error) {
-    console.error('Error running simulation:', error)
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error('Error running simulation:', error)
+    }
     return { success: false, error: "Failed to run simulation" }
   }
 }
 
 export async function getSimulationResults(decisionId: string) {
   try {
+    await requireDecisionAccess(decisionId, "OPERATOR")
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
       include: {
@@ -165,7 +176,9 @@ export async function getSimulationResults(decisionId: string) {
       },
     }
   } catch (error) {
-    console.error('Error fetching simulation results:', error)
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error('Error fetching simulation results:', error)
+    }
     return { success: false, error: "Failed to fetch simulation results" }
   }
 }

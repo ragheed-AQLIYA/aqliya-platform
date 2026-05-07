@@ -1,122 +1,343 @@
 "use client"
 
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { DecisionTabs } from "@/components/decisions/decision-tabs"
-import { getDecisionById } from "@/actions/decisions"
-import { getSimulationResults } from "@/actions/simulation"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { getDecisionRecommendation, updateDecisionRecommendation, checkRecommendationGate, publishRecommendationAction, unpublishRecommendationAction } from "@/actions/decisions"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { DecisionTabs } from "@/components/decisions/decision-tabs"
+import { Badge } from "@/components/ui/badge"
+import { Loader2, AlertTriangle } from "lucide-react"
 
-export default function RecommendationPage({ params }: { params: Promise<{ id: string }> }) {
-  const [id, setId] = useState<string | null>(null)
-  const [decision, setDecision] = useState<any>(null)
-  const [recommendation, setRecommendation] = useState<any>(null)
+const missingLabels: Record<string, string> = {
+  intake_not_accepted: "Intake must be accepted",
+  framework_incomplete: "Framework must be complete",
+  scenarios_missing: "At least 3 scenarios required",
+  scenarios_incomplete: "All scenarios must be complete",
+  risks_missing: "Risk analysis missing for some scenarios",
+  risks_incomplete: "Risk analysis incomplete for some scenarios",
+}
+
+export default function RecommendationPage({ params }: { params: { id: string } }) {
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [gate, setGate] = useState<{ allowed: boolean; missing: string[] }>({ allowed: false, missing: [] })
+  const [formData, setFormData] = useState({
+    recommendedAction: "",
+    rationale: "",
+    expectedNextState: "",
+    scopeExclusions: "",
+    assumptionsUsed: "",
+    risksAccepted: "",
+    risksRejected: "",
+    humanReviewRequired: false,
+  })
+  const [error, setError] = useState("")
+  const [hasRecommendation, setHasRecommendation] = useState(false)
+  const [currentUserRole, setCurrentUserRole] = useState<"ADMIN" | "OPERATOR" | "VIEWER">("OPERATOR")
+  const [publication, setPublication] = useState({
+    isClientVisible: false,
+    publishedVersion: 1,
+  })
 
-  // Extract id from params Promise
-  useEffect(() => {
-    const getId = async () => {
-      const { id: decisionId } = await params
-      setId(decisionId)
-    }
-    getId()
-  }, [params])
-
-  // Load data
-  useEffect(() => {
-    if (!id) return
-
-    const loadData = async () => {
-      // Get decision details
-      const decisionResult = await getDecisionById(id)
-      if (decisionResult.success && decisionResult.data) {
-        setDecision(decisionResult.data)
-      }
-
-      // Get simulation results (includes recommendation)
-      const simResult = await getSimulationResults(id)
-      if (simResult.success && simResult.data?.recommendation) {
-        setRecommendation(simResult.data.recommendation)
-      }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function checkGate() {
+    setLoading(true)
+    const result = await checkRecommendationGate(params.id)
+    setGate(result)
+    if (result.allowed) {
+      loadRecommendation()
+    } else {
       setLoading(false)
     }
-    loadData()
-  }, [id])
+  }
 
-  if (loading || !id) {
+  async function loadRecommendation() {
+    const result = await getDecisionRecommendation(params.id)
+    if (result.success && result.data) {
+      setCurrentUserRole(result.data.currentUserRole || "OPERATOR")
+      const rec = result.data.recommendation
+      setHasRecommendation(Boolean(rec))
+      if (rec) {
+        setPublication({
+          isClientVisible: rec.isClientVisible,
+          publishedVersion: rec.publishedVersion,
+        })
+        if ("scopeExclusions" in rec) {
+          setFormData({
+            recommendedAction: rec.recommendedAction || "",
+            rationale: rec.rationale || "",
+            expectedNextState: rec.expectedNextState || "",
+            scopeExclusions: rec.scopeExclusions || "",
+            assumptionsUsed: rec.assumptionsUsed || "",
+            risksAccepted: rec.risksAccepted || "",
+            risksRejected: rec.risksRejected || "",
+            humanReviewRequired: rec.humanReviewRequired || false,
+          })
+        }
+      }
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    let cancelled = false
+    async function run() {
+      setLoading(true)
+      const result = await checkRecommendationGate(params.id)
+      if (cancelled) return
+      setGate(result)
+      if (result.allowed) {
+        const recResult = await getDecisionRecommendation(params.id)
+        if (cancelled) return
+        if (recResult.success && recResult.data) {
+          setCurrentUserRole(recResult.data.currentUserRole || "OPERATOR")
+          const rec = recResult.data.recommendation
+          setHasRecommendation(Boolean(rec))
+          if (rec) {
+            setPublication({
+              isClientVisible: rec.isClientVisible,
+              publishedVersion: rec.publishedVersion,
+            })
+            if ("scopeExclusions" in rec) {
+              setFormData({
+                recommendedAction: rec.recommendedAction || "",
+                rationale: rec.rationale || "",
+                expectedNextState: rec.expectedNextState || "",
+                scopeExclusions: rec.scopeExclusions || "",
+                assumptionsUsed: rec.assumptionsUsed || "",
+                risksAccepted: rec.risksAccepted || "",
+                risksRejected: rec.risksRejected || "",
+                humanReviewRequired: rec.humanReviewRequired || false,
+              })
+            }
+          }
+        }
+      }
+      setLoading(false)
+    }
+    run()
+    return () => { cancelled = true }
+  }, [params.id])
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setSaving(true)
+    setError("")
+
+    const result = await updateDecisionRecommendation(params.id, formData)
+    if (result.success) {
+      router.refresh()
+    } else {
+      setError(result.error || "Failed to save recommendation")
+      if (result.missing) {
+        setGate({ allowed: false, missing: result.missing })
+      }
+    }
+    setSaving(false)
+  }
+
+  async function handlePublish() {
+    setSaving(true)
+    setError("")
+    const result = await publishRecommendationAction(params.id)
+    if (result.success) {
+      await loadRecommendation()
+      router.refresh()
+    } else {
+      setError(result.error || "Failed to publish recommendation")
+    }
+    setSaving(false)
+  }
+
+  async function handleUnpublish() {
+    setSaving(true)
+    setError("")
+    const result = await unpublishRecommendationAction(params.id)
+    if (result.success) {
+      await loadRecommendation()
+      router.refresh()
+    } else {
+      setError(result.error || "Failed to unpublish recommendation")
+    }
+    setSaving(false)
+  }
+
+  if (loading) {
     return (
-      <div>
-        <DecisionTabs decisionId={id || ""} />
-        <div className="mt-6 text-center">Loading...</div>
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
+  if (!gate.allowed) {
+    return (
+      <div className="space-y-6">
+        <DecisionTabs decisionId={params.id} />
+        <Card className="border-destructive">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              Recommendation Blocked
+            </CardTitle>
+            <CardDescription>
+              The recommendation stage is blocked until all prerequisites are met.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2">
+              {gate.missing.map((reason) => (
+                <li key={reason}>
+                  <Badge variant="outline" className="text-destructive border-destructive">
+                    {missingLabels[reason] || reason}
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
       </div>
     )
   }
 
   return (
-    <div>
-      <DecisionTabs decisionId={id} />
-      <div className="mt-6 max-w-2xl mx-auto">
-        <h2 className="text-xl font-semibold mb-4">Recommendation</h2>
-
-        {!recommendation ? (
-          <Card className="p-6 space-y-4">
-            <p className="text-muted-foreground">No recommendation generated yet. Run simulation first.</p>
-            <Button onClick={() => window.location.href = `/decisions/${id}/simulation`}>
-              Go to Simulation
-            </Button>
-          </Card>
-        ) : (
-          <Card className="p-6 space-y-4">
+    <div className="space-y-6">
+      <DecisionTabs decisionId={params.id} />
+      <Card>
+        <CardHeader>
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <h3 className="text-sm text-muted-foreground">Recommendation</h3>
-              <Badge variant="outline" className="text-lg mt-1">
-                {recommendation.type || 'PENDING'}
+              <CardTitle>Recommendation</CardTitle>
+              <CardDescription>
+                Define the recommended action and rationale. This is human-facing and requires review.
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge variant={publication.isClientVisible ? "default" : "outline"}>
+                {publication.isClientVisible ? "Published" : "Draft/Internal"}
               </Badge>
+              <Badge variant="secondary">v{publication.publishedVersion}</Badge>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {currentUserRole === "ADMIN" && hasRecommendation && (
+            <div className="mb-4 flex gap-2">
+              {publication.isClientVisible ? (
+                <Button type="button" variant="outline" onClick={handleUnpublish} disabled={saving}>
+                  Unpublish Recommendation
+                </Button>
+              ) : (
+                <Button type="button" variant="outline" onClick={handlePublish} disabled={saving}>
+                  Publish Recommendation
+                </Button>
+              )}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="recommendedAction">Recommended Action</Label>
+              <Textarea
+                id="recommendedAction"
+                value={formData.recommendedAction}
+                onChange={(e) => setFormData({ ...formData, recommendedAction: e.target.value })}
+                placeholder="Describe the recommended action..."
+                required
+              />
             </div>
 
-            {recommendation.confidenceScore && (
-              <div>
-                <h3 className="text-sm text-muted-foreground">Confidence Score</h3>
-                <p className="text-3xl font-bold">{recommendation.confidenceScore}%</p>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="rationale">Rationale</Label>
+              <Textarea
+                id="rationale"
+                value={formData.rationale}
+                onChange={(e) => setFormData({ ...formData, rationale: e.target.value })}
+                placeholder="Explain the rationale behind this recommendation..."
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="expectedNextState">Expected Next State</Label>
+              <Textarea
+                id="expectedNextState"
+                value={formData.expectedNextState}
+                onChange={(e) => setFormData({ ...formData, expectedNextState: e.target.value })}
+                placeholder="Describe the expected state after implementing this recommendation..."
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="scopeExclusions">Scope Exclusions</Label>
+              <Textarea
+                id="scopeExclusions"
+                value={formData.scopeExclusions}
+                onChange={(e) => setFormData({ ...formData, scopeExclusions: e.target.value })}
+                placeholder="Define what is explicitly out of scope..."
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="assumptionsUsed">Assumptions Used</Label>
+              <Textarea
+                id="assumptionsUsed"
+                value={formData.assumptionsUsed}
+                onChange={(e) => setFormData({ ...formData, assumptionsUsed: e.target.value })}
+                placeholder="List assumptions made in this recommendation..."
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="risksAccepted">Risks Accepted</Label>
+              <Textarea
+                id="risksAccepted"
+                value={formData.risksAccepted}
+                onChange={(e) => setFormData({ ...formData, risksAccepted: e.target.value })}
+                placeholder="List risks that are accepted with this recommendation..."
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="risksRejected">Risks Rejected</Label>
+              <Textarea
+                id="risksRejected"
+                value={formData.risksRejected}
+                onChange={(e) => setFormData({ ...formData, risksRejected: e.target.value })}
+                placeholder="List risks that are rejected or mitigated..."
+                required
+              />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="humanReviewRequired"
+                checked={formData.humanReviewRequired}
+                onChange={(e) => setFormData({ ...formData, humanReviewRequired: e.target.checked })}
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              <Label htmlFor="humanReviewRequired">Human Review Required</Label>
+            </div>
+
+            {error && (
+              <div className="text-destructive text-sm">{error}</div>
             )}
 
-            {recommendation.overallScore && (
-              <div>
-                <h3 className="text-sm text-muted-foreground">Overall Score</h3>
-                <p className="text-3xl font-bold">{recommendation.overallScore}</p>
-              </div>
-            )}
-
-            {recommendation.reasoning && (
-              <div>
-                <h3 className="text-sm text-muted-foreground">Reasoning</h3>
-                <p className="text-sm mt-1">{recommendation.reasoning}</p>
-              </div>
-            )}
-
-            {recommendation.conditions && (
-              <div>
-                <h3 className="text-sm text-muted-foreground">Conditions</h3>
-                <p className="text-sm mt-1">{recommendation.conditions}</p>
-              </div>
-            )}
-
-            {recommendation.riskNotes && (
-              <div>
-                <h3 className="text-sm text-muted-foreground">Risk Notes</h3>
-                <p className="text-sm mt-1">{recommendation.riskNotes}</p>
-              </div>
-            )}
-
-            <Button onClick={() => window.location.href = `/decisions/${id}/simulation`}>
-              Re-run Simulation
+            <Button type="submit" disabled={saving}>
+              {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Save Recommendation
             </Button>
-          </Card>
-        )}
-      </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }

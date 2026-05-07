@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AQLIYA - نظام دعم القرار",
-  description: "منصة الذكاء القراري لدعم اتخاذ القرارات",
+  title: "AQLIYA | Mind the Future",
+  description: "AQLIYA decision intelligence platform for smarter governance and tender decisions.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

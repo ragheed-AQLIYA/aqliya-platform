@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 enum UserRole {
   ADMIN
-  MEMBER
+  OPERATOR
   VIEWER
 }
 
@@ -49,27 +49,37 @@ enum ApprovalStatus {
 }
 
 enum AuditAction {
-  CREATED
-  UPDATED
-  STATUS_CHANGED
-  APPROVED
-  REJECTED
+  DECISION_CREATED
+  DECISION_UPDATED
+  RECOMMENDATION_UPDATED
+  PATTERN_EXTRACTED
+  ALERT_RESOLVED
+  SECTOR_ASSIGNED
+  BENCHMARK_CREATED
+  OUTPUT_PUBLISHED
+  OUTPUT_UNPUBLISHED
 }
 
 model Organization {
-  id        String   @id @default(cuid())
-  name      String
-  users     User[]
-  decisions Decision[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String                   @id @default(cuid())
+  name             String
+  users            User[]
+  decisions        Decision[]
+  auditLogs        AuditLog[]
+  signals          DecisionMonitoringSignal[]
+  alerts           DecisionRiskAlert[]
+  decisionPatterns DecisionPattern[]
+  reports          DecisionReport[]
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
 }
 
 model User {
   id                  String       @id @default(cuid())
   email               String       @unique
   name                String
-  role                UserRole     @default(MEMBER)
+  passwordHash         String?
+  role                UserRole     @default(OPERATOR)
   organizationId      String
   organization        Organization @relation(fields: [organizationId], references: [id])
   ownedDecisions      Decision[]   @relation("DecisionOwner")
@@ -77,6 +87,7 @@ model User {
   approvedDecisions   Decision[]   @relation("DecisionApprover")
   approvals           Approval[]   @relation("ApprovalApprover")
   auditLogs           AuditLog[]
+  publishedRecommendations Recommendation[] @relation("RecommendationPublisher")
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 }
@@ -100,14 +111,74 @@ model Decision {
   assumptions    Assumption[]
   alternatives   Alternative[]
   risks          Risk[]
+  framework      DecisionFramework?
+  decisionScenarios DecisionScenario[]
+  riskAnalyses   DecisionRiskAnalysis[]
   scenarios      Scenario[]
   simulations    SimulationResult[]
   recommendation Recommendation?
   approvals      Approval[]
   auditLogs      AuditLog[]
   reports        DecisionReport[]
+  signals        DecisionMonitoringSignal[]
+  alerts         DecisionRiskAlert[]
+  // A-3: Sector assignment
+  sectorId       String?
+  sector         Sector?        @relation(fields: [sectorId], references: [id])
+  decisionPatterns DecisionPattern?
+  sectorPatterns SectorPattern[] // Added opposite relation for SectorPattern
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
+}
+
+model DecisionFramework {
+  id              String   @id @default(cuid())
+  decisionId      String   @unique
+  decision        Decision @relation(fields: [decisionId], references: [id])
+  context         String
+  purpose         String
+  options         String
+  criteria        String
+  values          String
+  informationGaps String
+  certainty       String
+  assumptions     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model DecisionScenario {
+  id                   String   @id @default(cuid())
+  decisionId           String
+  decision             Decision @relation(fields: [decisionId], references: [id])
+  riskAnalysis         DecisionRiskAnalysis?
+  name                 String
+  description          String
+  assumptions          String
+  expectedOutcome      String
+  affectedStakeholders String
+  requiredConditions   String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model DecisionRiskAnalysis {
+  id                   String           @id @default(cuid())
+  decisionId           String
+  decision             Decision         @relation(fields: [decisionId], references: [id])
+  scenarioId           String           @unique
+  scenario             DecisionScenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  risks                String
+  tradeoffs            String
+  sacrifices           String
+  opportunityCosts     String
+  stakeholderRisks     String
+  operationalRisks     String
+  strategicRisks       String
+  knowledgeRisks       String
+  uncertaintyLevel     String
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
 }
 
 model Objective {
@@ -201,17 +272,101 @@ model SimulationResult {
   updatedAt           DateTime     @updatedAt
 }
 
+model DecisionMonitoringSignal {
+  id            String   @id @default(cuid())
+  decisionId    String
+  decision      Decision @relation(fields: [decisionId], references: [id])
+  organizationId String
+  organization  Organization @relation(fields: [organizationId], references: [id])
+  // Required: source of signal
+  source        String   // "assumption" | "risk" | "scenario" | "execution"
+  // Required: link to A-1 entity
+  referenceId   String   // ID of the assumption/risk/scenario that triggered this
+  signalType    String   // e.g., "risk-increased", "assumption-invalidated"
+  description   String
+  severity      SignalSeverity @default(INFO)
+  status        SignalStatus @default(NEW)
+  // No manual creation - system only
+  generatedBy  String   @default("system") //Always "system"
+  acknowledgedBy String?
+  acknowledgedAt DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  // Opposite relation for alerts triggered by this signal
+  alerts        DecisionRiskAlert[]
+
+  @@index([organizationId])
+}
+
+model DecisionRiskAlert {
+  id              String   @id @default(cuid())
+  decisionId      String
+  decision        Decision @relation(fields: [decisionId], references: [id])
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id])
+  // Required: what triggered this alert
+  triggeringSignalId String   @unique
+  triggeringSignal  DecisionMonitoringSignal @relation(fields: [triggeringSignalId], references: [id])
+  alertType       String   // e.g., "scenario-risk-emerged", "assumption-invalidated"
+  description     String
+  severity        AlertSeverity @default(MEDIUM)
+  status          AlertStatus @default(OPEN)
+  // Must always require human review
+  requiresReview Boolean  @default(true)
+  // Never auto-resolve
+  reviewedBy     String?
+  reviewedAt     DateTime?
+  resolution     String?  // Only set after human review
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+enum SignalSeverity {
+  INFO
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum SignalStatus {
+  NEW
+  ACKNOWLEDGED
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  RESOLVED  // Only after human review, never auto
+}
+
 model Recommendation {
-  id             String            @id @default(cuid())
-  decisionId     String            @unique
-  decision       Decision          @relation(fields: [decisionId], references: [id])
-  type           RecommendationType
-  confidenceScore Float?
-  reasoning      String?
-  conditions     String?
-  riskNotes      String?
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
+  id                  String   @id @default(cuid())
+  decisionId          String   @unique
+  decision            Decision @relation(fields: [decisionId], references: [id])
+  recommendedAction    String
+  rationale           String
+  expectedNextState   String
+  scopeExclusions     String
+  assumptionsUsed     String
+  risksAccepted       String
+  risksRejected       String
+  humanReviewRequired Boolean @default(true)
+  isClientVisible     Boolean  @default(false)
+  publishedAt         DateTime?
+  publishedById       String?
+  publishedBy         User?    @relation("RecommendationPublisher", fields: [publishedById], references: [id])
+  publishedVersion    Int      @default(1)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model Approval {
@@ -230,6 +385,8 @@ model AuditLog {
   id          String   @id @default(cuid())
   decisionId  String
   decision    Decision @relation(fields: [decisionId], references: [id])
+  organizationId String
+  organization Organization @relation(fields: [organizationId], references: [id])
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   action      AuditAction
@@ -237,14 +394,128 @@ model AuditLog {
   before      String?
   after       String?
   createdAt   DateTime @default(now())
+
+  @@index([organizationId])
+}
+
+// ==================== A-3 Intelligence Layer ====================
+
+model Sector {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  code        String   @unique
+  isActive    Boolean  @default(true)
+
+  // Relations
+  benchmarks  SectorBenchmark[]
+  patterns    SectorPattern[]
+  playbooks   SectorPlaybook[]
+  rules       SectorRule[]
+  decisions   Decision[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SectorBenchmark {
+  id          String   @id @default(cuid())
+  sectorId    String
+  sector      Sector   @relation(fields: [sectorId], references: [id])
+
+  metricName  String
+  value       Float
+  unit        String
+  benchmarkType String
+
+  // Per A-3 design: not static
+  sourceType  String   @default("manual") // "manual" | "derived" | "assumption"
+  confidence  Float    @default(1.0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([sectorId, metricName, benchmarkType])
+}
+
+model SectorPattern {
+  id             String   @id @default(cuid())
+  sectorId       String
+  sector         Sector   @relation(fields: [sectorId], references: [id])
+
+  patternType    String
+  patternKey     String
+
+  // Incremental fields
+  occurrenceCount  Int      @default(1)
+  lastObservedAt  DateTime  @default(now())
+  confidenceScore Float
+
+  sourceDecisionId String?
+  sourceDecision   Decision? @relation(fields: [sourceDecisionId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([sectorId, patternType, patternKey])
+}
+
+model DecisionPattern {
+  id            String   @id @default(cuid())
+  decisionId    String   @unique
+  decision      Decision @relation(fields: [decisionId], references: [id])
+  organizationId String
+  organization  Organization @relation(fields: [organizationId], references: [id])
+
+  patternScope  String   @default("DECISION") // "DECISION" | "SECTOR" | "CROSS_SECTOR"
+
+  extractedAt   DateTime @default(now())
+  confidence    Float
+
+  // No raw analysis stored in DB
+
+  @@index([organizationId])
+}
+
+model SectorPlaybook {
+  id          String   @id @default(cuid())
+  sectorId    String
+  sector      Sector   @relation(fields: [sectorId], references: [id])
+
+  title       String
+  content     String
+  playbookType String
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SectorRule {
+  id          String   @id @default(cuid())
+  sectorId    String
+  sector      Sector   @relation(fields: [sectorId], references: [id])
+
+  ruleName    String
+  condition   String
+  action      String
+  isActive    Boolean  @default(false)
+  requiresHumanReview Boolean @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model DecisionReport {
   id          String   @id @default(cuid())
   decisionId  String
   decision    Decision @relation(fields: [decisionId], references: [id])
+  organizationId String
+  organization Organization @relation(fields: [organizationId], references: [id])
   title       String
   content     Json
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([organizationId])
 }

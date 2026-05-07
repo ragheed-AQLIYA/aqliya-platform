@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/select"
 import { DecisionTabs } from "@/components/decisions/decision-tabs"
 import { getTenderProfile, createOrUpdateTenderProfile } from "@/actions/tender"
+import { RiskLevel } from "@prisma/client"
 import { useState, useEffect } from "react"
 
 export default function TenderPage({ params }: { params: Promise<{ id: string }> }) {
@@ -99,8 +99,8 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
       internalAvailableCapacity: parseInt(formData.internalAvailableCapacity),
       marginEstimate: parseFloat(formData.marginEstimate),
       strategicFitScore: parseInt(formData.strategicFitScore),
-      riskLevel: formData.riskLevel,
-    }, "mock-user-id")
+      riskLevel: formData.riskLevel as RiskLevel,
+    })
 
     if (result.success) {
       setSuccess(true)

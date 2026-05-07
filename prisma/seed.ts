@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 import { resolve } from 'path'
-import { PrismaClient, DecisionType, DecisionStatus, UserRole, RiskLevel, ScenarioType, RecommendationType, ApprovalStatus } from '@prisma/client'
+import { PrismaClient, DecisionType, DecisionStatus, UserRole, RiskLevel, ScenarioType, ApprovalStatus } from '@prisma/client'
 
 // Load .env file explicitly
 config({ path: resolve(__dirname, '../.env') })
@@ -49,7 +49,7 @@ async function main() {
     data: {
       email: 'sara@aqliya.com',
       name: 'Sara Al-Otaibi',
-      role: UserRole.MEMBER,
+       role: UserRole.OPERATOR,
       organizationId: org.id,
     },
   })
@@ -203,11 +203,14 @@ async function main() {
   await prisma.recommendation.create({
     data: {
       decisionId: decision.id,
-      type: RecommendationType.GO_WITH_CONDITIONS,
-      confidenceScore: 83.0,
-      reasoning: 'Strong strategic fit and acceptable Expected Case score of 83. Capacity and financial scores are adequate with identified manageable risks.',
-      conditions: '1. Reallocate 20% capacity from Project Y 2. Secure training material price lock-in by May 15 3. Include payment term clause in contract',
-      riskNotes: 'Medium risks related to resource allocation and payment delays. Mitigation plan required for resource management.',
+      recommendedAction: "Proceed with the tender with conditions",
+      rationale: "Strong strategic fit and acceptable Expected Case score of 83. Capacity and financial scores are adequate with identified manageable risks.",
+      expectedNextState: "Contract signed with reallocated capacity and price lock-in secured",
+      scopeExclusions: "Does not include additional training material development beyond current scope",
+      assumptionsUsed: "Current resource allocation can be reallocated by 20% without impacting other projects",
+      risksAccepted: "Medium risks related to resource allocation and payment delays with mitigation plan",
+      risksRejected: "High financial risk from uncapped payment terms - mitigated through contract clauses",
+      humanReviewRequired: true,
     },
   })
   console.log('Created recommendation')
@@ -227,22 +230,25 @@ async function main() {
     data: [
       {
         decisionId: decision.id,
+        organizationId: org.id,
         userId: admin.id,
-        action: 'CREATED',
+        action: 'DECISION_CREATED',
         entity: 'Decision',
         after: JSON.stringify({ title: decision.title, status: 'DRAFT' }),
       },
       {
         decisionId: decision.id,
+        organizationId: org.id,
         userId: admin.id,
-        action: 'UPDATED',
+        action: 'DECISION_UPDATED',
         entity: 'TenderProfile',
         after: JSON.stringify({ clientName: 'Social Development Non-Profit Organization' }),
       },
       {
         decisionId: decision.id,
+        organizationId: org.id,
         userId: admin.id,
-        action: 'STATUS_CHANGED',
+        action: 'DECISION_UPDATED',
         entity: 'Decision',
         before: 'DRAFT',
         after: 'IN_REVIEW',

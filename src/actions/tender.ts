@@ -1,16 +1,22 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { RiskLevel } from "@prisma/client"
+import { isExpectedAccessDeniedError, requireDecisionAccess } from "@/lib/auth"
+import { logAudit, toAuditJson } from "@/lib/audit"
 
 export async function getTenderProfile(decisionId: string) {
   try {
+    await requireDecisionAccess(decisionId, "OPERATOR")
     const tender = await prisma.tenderProfile.findUnique({
       where: { decisionId },
     })
 
     return { success: true, data: tender }
   } catch (error) {
-    console.error('Error fetching tender profile:', error)
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error('Error fetching tender profile:', error)
+    }
     return { success: false, error: "Failed to fetch tender profile" }
   }
 }
@@ -26,11 +32,11 @@ export async function createOrUpdateTenderProfile(
     internalAvailableCapacity: number;
     marginEstimate: number;
     strategicFitScore: number;
-    riskLevel: string;
-  },
-  userId: string
+     riskLevel: RiskLevel;
+  }
 ) {
   try {
+    const { user } = await requireDecisionAccess(decisionId, "OPERATOR")
     // Check if tender profile exists
     const existing = await prisma.tenderProfile.findUnique({
       where: { decisionId },
@@ -49,21 +55,20 @@ export async function createOrUpdateTenderProfile(
           internalAvailableCapacity: data.internalAvailableCapacity,
           marginEstimate: data.marginEstimate,
           strategicFitScore: data.strategicFitScore,
-          riskLevel: data.riskLevel as any,
+          riskLevel: data.riskLevel,
         },
       })
 
       // Create audit log for update
-      await prisma.auditLog.create({
-        data: {
-          decisionId,
-          userId,
-          action: 'UPDATED',
-          entity: 'TenderProfile',
-          before: JSON.stringify(existing),
-          after: JSON.stringify(updated),
-        },
-      })
+      await logAudit(
+        user.id,
+        decisionId,
+        'DECISION_UPDATED',
+        'TenderProfile',
+        toAuditJson(existing),
+        toAuditJson(updated),
+        user.organizationId
+      )
 
       return { success: true, data: updated }
     } else {
@@ -79,25 +84,27 @@ export async function createOrUpdateTenderProfile(
           internalAvailableCapacity: data.internalAvailableCapacity,
           marginEstimate: data.marginEstimate,
           strategicFitScore: data.strategicFitScore,
-          riskLevel: data.riskLevel as any,
+          riskLevel: data.riskLevel,
         },
       })
 
       // Create audit log for create
-      await prisma.auditLog.create({
-        data: {
-          decisionId,
-          userId,
-          action: 'CREATED',
-          entity: 'TenderProfile',
-          after: JSON.stringify(created),
-        },
-      })
+      await logAudit(
+        user.id,
+        decisionId,
+        'DECISION_CREATED',
+        'TenderProfile',
+        undefined,
+        toAuditJson(created),
+        user.organizationId
+      )
 
       return { success: true, data: created }
     }
   } catch (error) {
-    console.error('Error saving tender profile:', error)
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error('Error saving tender profile:', error)
+    }
     return { success: false, error: "Failed to save tender profile" }
   }
 }

@@ -1,6 +1,22 @@
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { getDecisions } from "@/actions/decisions"
+
+type DecisionListItem = {
+  id: string
+  title: string
+  status: string
+  type: string
+  owner?: { name: string } | null
+  intake?: { status: string }
+}
+
+function getIntakeVariant(status?: string) {
+  if (status === "accepted") return "default" as const
+  if (status === "rejected") return "destructive" as const
+  return "secondary" as const
+}
 
 export default async function DecisionsPage() {
   const result = await getDecisions()
@@ -19,10 +35,15 @@ export default async function DecisionsPage() {
         <p className="text-muted-foreground">No decisions found. Create your first decision.</p>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {decisions.map((decision: any) => (
+          {(decisions as DecisionListItem[]).map((decision) => (
             <Link key={decision.id} href={`/decisions/${decision.id}`}>
               <div className="border rounded-lg p-4 hover:border-primary transition-colors">
-                <h2 className="font-semibold">{decision.title}</h2>
+                <div className="flex items-start justify-between gap-3">
+                  <h2 className="font-semibold">{decision.title}</h2>
+                  <Badge variant={getIntakeVariant(decision.intake?.status)}>
+                    {decision.intake?.status?.replace("_", " ") || "intake pending"}
+                  </Badge>
+                </div>
                 <div className="text-sm text-muted-foreground mt-2">
                   <p>Status: {decision.status}</p>
                   <p>Type: {decision.type}</p>
