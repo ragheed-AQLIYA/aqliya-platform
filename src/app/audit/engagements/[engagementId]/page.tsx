@@ -1,0 +1,112 @@
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { EngagementHeader } from "@/components/audit/engagement/engagement-header"
+import { AlertsBar } from "@/components/audit/engagement/alerts-bar"
+import { OverviewTab } from "@/components/audit/engagement/overview-tab"
+import { RecentActivity } from "@/components/audit/dashboard/recent-activity"
+import { WorkflowProgress } from "@/components/audit/layout/workflow-progress"
+import {
+  getEngagement, getEngagementWorkflowStatus, getAuditEvents, getAISuggestions,
+} from "@/lib/audit/services"
+import { ArrowLeft, Circle, Bot } from "lucide-react"
+import { AIOutputsPanel } from "@/components/audit/ai/ai-outputs-panel"
+
+export default async function EngagementDetailPage({ params }: { params: Promise<{ engagementId: string }> }) {
+  const { engagementId } = await params
+
+  const [engagement, workflowStatus, auditEvents, aiOutputs] = await Promise.all([
+    getEngagement(engagementId),
+    getEngagementWorkflowStatus(engagementId),
+    getAuditEvents(engagementId),
+    getAISuggestions(engagementId),
+  ])
+
+  if (!engagement) {
+    return (
+      <div className="space-y-6">
+        <Link href="/audit">
+          <Button variant="outline" size="sm">
+            <ArrowLeft className="mr-1 h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </Link>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <h1 className="text-2xl font-bold">Engagement not found</h1>
+          <p className="mt-2 text-sm text-muted-foreground">The engagement you are looking for does not exist.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const recentEvents = auditEvents.slice(-5).reverse()
+
+  return (
+    <div className="space-y-6">
+      <Link href="/audit">
+        <Button variant="outline" size="sm">
+          <ArrowLeft className="mr-1 h-4 w-4" />
+          Back to Dashboard
+        </Button>
+      </Link>
+
+      <EngagementHeader engagement={engagement} status={workflowStatus} />
+
+      <WorkflowProgress status={engagement.status} />
+
+      {engagement.alerts && engagement.alerts.length > 0 && (
+        <AlertsBar alerts={engagement.alerts} />
+      )}
+
+      <OverviewTab engagementId={engagementId} engagement={engagement} />
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card>
+          <div className="border-b px-4 py-3">
+            <h2 className="text-sm font-semibold">Activity Feed</h2>
+          </div>
+          <CardContent className="pt-4">
+            <RecentActivity events={recentEvents} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <div className="border-b px-4 py-3">
+            <h2 className="text-sm font-semibold">Traceability Summary</h2>
+          </div>
+          <CardContent className="pt-4">
+            <div className="space-y-3">
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-900 dark:bg-emerald-950">
+                <h3 className="text-xs font-medium text-emerald-700 dark:text-emerald-400">Forward Trace</h3>
+                <div className="mt-2 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-300">
+                  <span>Trial Balance → Mapped → Evidence → Findings → Recommendations</span>
+                </div>
+              </div>
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-900 dark:bg-amber-950">
+                <h3 className="text-xs font-medium text-amber-700 dark:text-amber-400">Backward Trace</h3>
+                <div className="mt-2 flex items-center gap-2 text-xs text-amber-600 dark:text-amber-300">
+                  <span>Publication ← Approval ← Review ← Statements</span>
+                </div>
+              </div>
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950">
+                <h3 className="text-xs font-medium text-blue-700 dark:text-blue-400">Missing Links</h3>
+                <ul className="mt-2 space-y-1 text-xs text-blue-600 dark:text-blue-300">
+                  <li className="flex items-center gap-1">
+                    <Circle className="h-2 w-2" />
+                    Sundry Income (5100) has no confirmed mapping
+                  </li>
+                  <li className="flex items-center gap-1">
+                    <Circle className="h-2 w-2" />
+                    Inventory evidence not yet uploaded
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <AIOutputsPanel engagementId={engagementId} initialOutputs={aiOutputs} />
+    </div>
+  )
+}

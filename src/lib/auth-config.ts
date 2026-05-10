@@ -1,3 +1,4 @@
+import "dotenv/config"
 import NextAuth from "next-auth"
 import type { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
@@ -6,6 +7,8 @@ import bcrypt from "bcryptjs"
 
 export const authConfig: NextAuthConfig = {
   session: { strategy: "jwt" },
+  secret: process.env.AUTH_SECRET,
+  trustHost: true,
   providers: [
     Credentials({
       name: "Credentials",
@@ -54,23 +57,27 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = (user as any).id
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const u = user as any
+        token.id = u.id
         token.email = user.email
         token.name = user.name
-        token.role = (user as any).role
-        token.organizationId = (user as any).organizationId
-        token.organization = (user as any).organization
+        token.role = u.role
+        token.organizationId = u.organizationId
+        token.organization = u.organization
       }
       return token
     },
     async session({ session, token }) {
       if (token && session.user) {
-        (session.user as any).id = token.id
-        (session.user as any).email = token.email
-        (session.user as any).name = token.name
-        (session.user as any).role = token.role
-        (session.user as any).organizationId = token.organizationId
-        (session.user as any).organization = token.organization
+        Object.assign(session.user, {
+          id: token.id,
+          email: token.email,
+          name: token.name,
+          role: token.role,
+          organizationId: token.organizationId,
+          organization: token.organization,
+        })
       }
       return session
     },
@@ -78,7 +85,7 @@ export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/login",
   },
-  debug: true, // Enable debug to see what's happening
+  debug: false,
 }
 
 export const { auth, handlers, signIn: nextSignIn, signOut } = NextAuth(authConfig)

@@ -4,7 +4,7 @@ import { getSectors, getSectorById, createSector, updateSector, assignSectorToDe
 import { getBenchmarksBySector, createBenchmark } from "@/lib/decision/sector-benchmark"
 import { revalidatePath } from "next/cache"
 import { requireDecisionAccess, requireUserContext } from "@/lib/auth"
-import { logAudit, toAuditJson } from "@/lib/audit"
+import { logAudit, toAuditJson } from "@/lib/platform-audit"
 
 // Sector actions
 export async function getSectorsAction() {

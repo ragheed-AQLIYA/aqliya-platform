@@ -1,11 +1,14 @@
 import { config } from 'dotenv'
 import { resolve } from 'path'
+import bcrypt from 'bcryptjs'
 import { PrismaClient, DecisionType, DecisionStatus, UserRole, RiskLevel, ScenarioType, ApprovalStatus } from '@prisma/client'
+import { PrismaPg } from "@prisma/adapter-pg"
 
 // Load .env file explicitly
 config({ path: resolve(__dirname, '../.env') })
 
-const prisma = new PrismaClient()
+const adapter = new PrismaPg(process.env.DATABASE_URL!)
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
   // Clean existing data
@@ -42,6 +45,7 @@ async function main() {
       name: 'Ahmed Al-Mansouri',
       role: UserRole.ADMIN,
       organizationId: org.id,
+      passwordHash: await bcrypt.hash('admin123', 10),
     },
   })
 
@@ -51,6 +55,7 @@ async function main() {
       name: 'Sara Al-Otaibi',
        role: UserRole.OPERATOR,
       organizationId: org.id,
+      passwordHash: await bcrypt.hash('operator123', 10),
     },
   })
 
@@ -58,8 +63,9 @@ async function main() {
     data: {
       email: 'mohammad@aqliya.com',
       name: 'Mohammad Al-Harbi',
-      role: UserRole.ADMIN,
+      role: UserRole.VIEWER,
       organizationId: org.id,
+      passwordHash: await bcrypt.hash('viewer123', 10),
     },
   })
   console.log('Created 3 users')

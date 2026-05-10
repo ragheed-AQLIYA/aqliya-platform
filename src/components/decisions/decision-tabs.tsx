@@ -17,7 +17,7 @@ const tabs = [
   { name: "Sector", href: "/sector" },
   { name: "Signals", href: "/signals" },
   { name: "Alerts", href: "/alerts" },
-  { name: "Tender", href: "/tender" },
+  { name: "Tender Workflow", href: "/tender" },
   { name: "Simulation", href: "/simulation" },
   { name: "Governance", href: "/governance" },
   { name: "Report", href: "/report" },

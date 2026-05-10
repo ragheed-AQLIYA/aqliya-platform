@@ -1,22 +1,38 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const notoSansArabic = Noto_Sans_Arabic({
+  variable: "--font-sans",
+  subsets: ["arabic", "latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "AQLIYA | Mind the Future",
-  description: "AQLIYA decision intelligence platform for smarter governance and tender decisions.",
+  title: "AQLIYA | أنظمة برمجية وذكاء مؤسسي",
+  description:
+    "عقلية شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات — أنظمة تشغيل، تحليل، تتبع، مراجعة، وتطوير.",
   icons: {
     icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "AQLIYA | أنظمة برمجية وذكاء مؤسسي",
+    description:
+      "عقلية شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.",
+    url: "https://aqliya.com",
+    siteName: "AQLIYA",
+    locale: "ar_SA",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AQLIYA | أنظمة برمجية وذكاء مؤسسي",
+    description:
+      "عقلية شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -27,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+        <body className={`${notoSansArabic.variable} h-full font-sans antialiased`}>
         {children}
       </body>
     </html>

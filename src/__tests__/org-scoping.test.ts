@@ -1,19 +1,13 @@
 import { prisma } from "@/lib/prisma"
 import { getDecisionById } from "@/actions/decisions"
-import {
-  getCurrentUser,
-  requireUserContext,
-  requireOrgAccess,
-  requireDecisionAccess,
-} from "@/lib/auth"
 
 // Mock auth module with proper access control
 jest.mock("@/lib/auth", () => {
-  const getCurrentUser = jest.fn()
-  const requireDecisionAccess = jest.fn().mockImplementation(async (decisionId: string, role: string) => {
-    const user = await getCurrentUser()
-    const { prisma } = require("@/lib/prisma")
-    const decision = await prisma.decision.findUnique({
+  const mockGetCurrentUser = jest.fn()
+  const requireDecisionAccess = jest.fn().mockImplementation(async (decisionId: string) => {
+    const user = await mockGetCurrentUser()
+    const { prisma: db } = jest.requireActual("@/lib/prisma")
+    const decision = await db.decision.findUnique({
       where: { id: decisionId },
       select: { organizationId: true }
     })
@@ -24,15 +18,15 @@ jest.mock("@/lib/auth", () => {
   })
   
   return {
-    getCurrentUser,
+    getCurrentUser: mockGetCurrentUser,
     requireUserContext: jest.fn(),
     requireOrgAccess: jest.fn(),
     requireDecisionAccess,
-    isExpectedAccessDeniedError: (error: any) => error?.message === "Access denied",
+    isExpectedAccessDeniedError: (error: Error) => error?.message === "Access denied",
   }
 })
 
-const { getCurrentUser } = require("@/lib/auth")
+import { getCurrentUser } from "@/lib/auth"
 
 async function cleanup() {
   await prisma.auditLog.deleteMany()

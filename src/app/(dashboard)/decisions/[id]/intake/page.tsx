@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { DecisionTabs } from "@/components/decisions/decision-tabs"
 import { getDecisionIntake, updateDecisionIntake } from "@/actions/decisions"
-import type { DecisionIntake } from "@/lib/types/decision"
+import type { DecisionIntake as DecisionIntakeState } from "@/lib/types/decision"
 
 type IntakeForm = {
   title: string
@@ -35,7 +35,7 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-  const [intake, setIntake] = useState<DecisionIntake | null>(null)
+  const [intake, setIntake] = useState<DecisionIntakeState | null>(null)
   const [formData, setFormData] = useState<IntakeForm>({
     title: "",
     objectives: "",

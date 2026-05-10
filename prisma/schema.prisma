@@ -519,3 +519,379 @@ model DecisionReport {
 
   @@index([organizationId])
 }
+
+// ==================== AuditOS Models ====================
+
+model AuditOrganization {
+  id                  String                @id @default(cuid())
+  name                String
+  slug                String                @unique
+  jurisdiction        String
+  regulatoryFramework String
+  governanceRules     Json?
+  status              String                @default("active")
+  clients             AuditClient[]
+  users               AuditUser[]
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  deletedAt           DateTime?
+}
+
+model AuditUser {
+  id               String          @id @default(cuid())
+  organizationId   String
+  organization     AuditOrganization @relation(fields: [organizationId], references: [id])
+  email            String
+  name             String
+  role             String          @default("operator")
+  status           String          @default("active")
+  lastLoginAt      DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@unique([organizationId, email])
+  @@index([organizationId, status])
+}
+
+model AuditClient {
+  id                  String          @id @default(cuid())
+  organizationId      String
+  organization        AuditOrganization @relation(fields: [organizationId], references: [id])
+  name                String
+  registrationNumber  String?
+  industry            String
+  reportingFramework  String          @default("ifrs_for_smes")
+  fiscalPeriodEnd     String          @default("12-31")
+  currencyCode        String          @default("SAR")
+  status              String          @default("active")
+  contactEmail        String?
+  contactPhone        String?
+  engagements         AuditEngagement[]
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  deletedAt           DateTime?
+
+  @@index([organizationId, status])
+}
+
+model AuditEngagement {
+  id               String            @id @default(cuid())
+  organizationId   String
+  clientId         String
+  client           AuditClient       @relation(fields: [clientId], references: [id])
+  fiscalPeriod     String
+  engagementType   String            @default("full_audit")
+  status           String            @default("draft")
+  team             Json?
+  alerts           Json?
+  governanceRules  Json?
+  accountMappings  AuditAccountMapping[]
+  trialBalances    AuditTrialBalance[]
+  evidences        AuditEvidence[]
+  findings         AuditFinding[]
+  recommendations  AuditRecommendation[]
+  reviewComments   AuditReviewComment[]
+  approvalRecords  AuditApprovalRecord[]
+  publications     AuditPublicationPackage[]
+  events           AuditEvent[]
+  aiOutputs        AuditAiOutput[]
+  pilotFeedback    PilotFeedback[]
+  pilotBlockers    ProductionBlocker[]
+  pilotSignoffs    PilotSignoff[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model AuditTrialBalance {
+  id             String                 @id @default(cuid())
+  engagementId   String
+  engagement     AuditEngagement       @relation(fields: [engagementId], references: [id])
+  importTimestamp DateTime              @default(now())
+  sourceFile     String
+  fileHash       String?
+  trustState     String                @default("pending")
+  totalDebits    Float                 @default(0)
+  totalCredits   Float                 @default(0)
+  variance       Float                 @default(0)
+  lines          AuditTrialBalanceLine[]
+  createdAt      DateTime              @default(now())
+}
+
+model AuditTrialBalanceLine {
+  id              String            @id @default(cuid())
+  trialBalanceId  String
+  trialBalance    AuditTrialBalance @relation(fields: [trialBalanceId], references: [id])
+  accountCode     String
+  accountName     String
+  debitAmount     Float             @default(0)
+  creditAmount    Float             @default(0)
+  balance         Float             @default(0)
+  accountType     String?
+  currency        String            @default("SAR")
+}
+
+model AuditCanonicalAccount {
+  id                String   @id @default(cuid())
+  code              String   @unique
+  name              String
+  category          String
+  subcategory       String?
+  statementType     String
+  reportingFramework String  @default("ifrs_for_smes")
+  version           String   @default("1.0")
+  displayOrder      Int                @default(0)
+  mappings          AuditAccountMapping[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model AuditAccountMapping {
+  id                    String               @id @default(cuid())
+  engagementId          String
+  engagement            AuditEngagement      @relation(fields: [engagementId], references: [id])
+  sourceAccountId       String
+  sourceAccountCode     String
+  sourceAccountName     String
+  debitAmount           Float                @default(0)
+  creditAmount          Float                @default(0)
+  canonicalAccountId    String?
+  canonicalAccount      AuditCanonicalAccount? @relation(fields: [canonicalAccountId], references: [id])
+  confidence            Float?
+  mappingType           String               @default("ai_suggested")
+  status                String               @default("pending")
+  statementClassification String?
+  mappedBy              String?
+  mappedAt              DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+}
+
+model AuditFinancialStatement {
+  id             String        @id @default(cuid())
+  engagementId   String
+  statementType  String
+  title          String
+  status         String        @default("draft")
+  lines          Json?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model AuditDisclosureNote {
+  id                String   @id @default(cuid())
+  engagementId      String
+  noteNumber        String
+  title             String
+  noteType          String
+  content           String
+  linkedStatementLine String?
+  missingInformation Json?
+  aiDrafted         Boolean  @default(false)
+  status            String   @default("draft")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model AuditEvidence {
+  id           String             @id @default(cuid())
+  engagementId String
+  engagement   AuditEngagement   @relation(fields: [engagementId], references: [id])
+  filename     String
+  fileType     String
+  fileSize     Int                @default(0)
+  fileHash     String?
+  storageKey   String?
+  uploadedBy   String?
+  uploadedAt   DateTime?
+  state        String             @default("missing")
+  links        AuditEvidenceLink[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model AuditEvidenceLink {
+  id         String       @id @default(cuid())
+  evidenceId String
+  evidence   AuditEvidence @relation(fields: [evidenceId], references: [id])
+  targetType String
+  targetId   String
+  linkType   String       @default("supports")
+  context    String?
+  createdBy  String?
+  createdAt  DateTime     @default(now())
+}
+
+model AuditFinding {
+  id               String            @id @default(cuid())
+  engagementId     String
+  engagement       AuditEngagement   @relation(fields: [engagementId], references: [id])
+  title            String
+  findingType      String            @default("observation")
+  severity         String            @default("medium")
+  materiality      String            @default("immaterial")
+  description      String
+  rootCause        String?
+  impact           String?
+  status           String            @default("draft")
+  relatedAccountIds Json?
+  relatedEvidenceIds Json?
+  aiSuggested      Boolean           @default(false)
+  assignedTo       String?
+  recommendations  AuditRecommendation[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model AuditRecommendation {
+  id               String          @id @default(cuid())
+  engagementId     String
+  engagement       AuditEngagement @relation(fields: [engagementId], references: [id])
+  findingId        String
+  finding          AuditFinding    @relation(fields: [findingId], references: [id])
+  title            String
+  description      String
+  recommendedAction String
+  impactAssessment String?
+  riskLevel        String          @default("medium")
+  status           String          @default("suggested")
+  aiContributed    Boolean         @default(false)
+  aiSuggestionId   String?
+  reviewerDecision String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model AuditReviewComment {
+  id              String          @id @default(cuid())
+  engagementId    String
+  engagement      AuditEngagement @relation(fields: [engagementId], references: [id])
+  targetType      String
+  targetId        String
+  reviewerId      String
+  reviewerName    String
+  comment         String
+  requiredAction  String          @default("none")
+  resolution      String?
+  status          String          @default("open")
+  createdAt       DateTime        @default(now())
+  resolvedAt      DateTime?
+}
+
+model AuditApprovalRecord {
+  id            String          @id @default(cuid())
+  engagementId  String
+  engagement    AuditEngagement @relation(fields: [engagementId], references: [id])
+  approverId    String
+  approverName  String
+  approverRole  String
+  action        String
+  rationale     String?
+  targetType    String
+  targetId      String
+  createdAt     DateTime        @default(now())
+}
+
+model AuditPublicationPackage {
+  id            String          @id @default(cuid())
+  engagementId  String
+  engagement    AuditEngagement @relation(fields: [engagementId], references: [id])
+  status        String          @default("draft")
+  publishedAt   DateTime?
+  publishedBy   String?
+  lockedAt      DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model AuditEvent {
+  id             String          @id @default(cuid())
+  engagementId   String
+  engagement     AuditEngagement @relation(fields: [engagementId], references: [id])
+  eventType      String
+  actorId        String
+  actorName      String
+  actorRole      String
+  targetType     String
+  targetId       String
+  previousState  String          @default("")
+  newState       String          @default("")
+  description    String
+  aiRelated      Boolean         @default(false)
+  metadata       Json?
+  timestamp      DateTime        @default(now())
+  createdAt      DateTime        @default(now())
+
+  @@index([engagementId, eventType, timestamp])
+}
+
+model AuditAiOutput {
+  id               String          @id @default(cuid())
+  engagementId     String
+  engagement       AuditEngagement @relation(fields: [engagementId], references: [id])
+  suggestionType   String
+  inputContext     String?
+  outputContent    String
+  confidence       Float?
+  modelVersion     String?
+  status           String   @default("suggested")
+  acceptedBy       String?
+  acceptedAt       DateTime?
+  rejectedBy       String?
+  rejectedAt       DateTime?
+  sourceEntityType String?
+  sourceEntityId   String?
+  metadata         Json?
+  createdAt        DateTime @default(now())
+
+  @@index([engagementId, sourceEntityType, sourceEntityId])
+}
+
+model PilotFeedback {
+  id             String          @id @default(cuid())
+  engagementId   String
+  engagement     AuditEngagement @relation(fields: [engagementId], references: [id])
+  title          String
+  description    String
+  source         String
+  category       String
+  severity       String          @default("medium")
+  status         String          @default("open")
+  decision       String?
+  owner          String?
+  nextAction     String?
+  createdBy      String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model ProductionBlocker {
+  id              String          @id @default(cuid())
+  engagementId    String?
+  engagement      AuditEngagement? @relation(fields: [engagementId], references: [id])
+  title           String
+  description     String
+  category        String
+  severity        String          @default("critical")
+  status          String          @default("open")
+  requiredBefore  String          @default("production")
+  owner           String?
+  resolutionPlan  String?
+  createdBy       String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model PilotSignoff {
+  id              String          @id @default(cuid())
+  engagementId    String
+  engagement      AuditEngagement @relation(fields: [engagementId], references: [id])
+  checklistItem   String
+  status          String          @default("pending")
+  signedBy        String?
+  signedAt        DateTime?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([engagementId, checklistItem])
+}

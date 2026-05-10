@@ -5,7 +5,7 @@ import { getDecisionPattern } from "@/lib/decision/decision-pattern"
 import { getSectorPatterns } from "@/lib/decision/sector-pattern"
 import { revalidatePath } from "next/cache"
 import { requireDecisionAccess, requireUserContext } from "@/lib/auth"
-import { logAudit, toAuditJson } from "@/lib/audit"
+import { logAudit, toAuditJson } from "@/lib/platform-audit"
 
 function safeRevalidatePath(path: string) {
   try {

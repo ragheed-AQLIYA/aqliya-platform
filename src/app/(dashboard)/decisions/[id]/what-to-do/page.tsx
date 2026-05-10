@@ -3,13 +3,18 @@ import { DecisionTabs } from "@/components/decisions/decision-tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
-export default async function WhatToDoNowPage({ params }: { params: { id: string } }) {
-  const result = await generateWhatToDoNowAction(params.id)
+type PageProps = {
+  params: Promise<{ id: string }>
+}
+
+export default async function WhatToDoNowPage({ params }: PageProps) {
+  const { id } = await params
+  const result = await generateWhatToDoNowAction(id)
 
   if (!result.success) {
     return (
       <div className="space-y-6">
-        <DecisionTabs decisionId={params.id} />
+        <DecisionTabs decisionId={id} />
         <Card className="border-destructive">
           <CardHeader>
             <CardTitle>Access Blocked</CardTitle>
@@ -40,7 +45,7 @@ export default async function WhatToDoNowPage({ params }: { params: { id: string
 
   return (
     <div className="space-y-6">
-      <DecisionTabs decisionId={params.id} />
+      <DecisionTabs decisionId={id} />
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">

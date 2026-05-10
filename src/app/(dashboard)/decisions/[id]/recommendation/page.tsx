@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, use } from "react"
 import { useRouter } from "next/navigation"
 import { getDecisionRecommendation, updateDecisionRecommendation, checkRecommendationGate, publishRecommendationAction, unpublishRecommendationAction } from "@/actions/decisions"
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,12 @@ const missingLabels: Record<string, string> = {
   risks_incomplete: "Risk analysis incomplete for some scenarios",
 }
 
-export default function RecommendationPage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: Promise<{ id: string }>
+}
+
+export default function RecommendationPage({ params }: PageProps) {
+  const { id } = use(params)
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -46,7 +51,7 @@ export default function RecommendationPage({ params }: { params: { id: string } 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function checkGate() {
     setLoading(true)
-    const result = await checkRecommendationGate(params.id)
+    const result = await checkRecommendationGate(id)
     setGate(result)
     if (result.allowed) {
       loadRecommendation()
@@ -56,7 +61,7 @@ export default function RecommendationPage({ params }: { params: { id: string } 
   }
 
   async function loadRecommendation() {
-    const result = await getDecisionRecommendation(params.id)
+    const result = await getDecisionRecommendation(id)
     if (result.success && result.data) {
       setCurrentUserRole(result.data.currentUserRole || "OPERATOR")
       const rec = result.data.recommendation
@@ -87,11 +92,11 @@ export default function RecommendationPage({ params }: { params: { id: string } 
     let cancelled = false
     async function run() {
       setLoading(true)
-      const result = await checkRecommendationGate(params.id)
+      const result = await checkRecommendationGate(id)
       if (cancelled) return
       setGate(result)
       if (result.allowed) {
-        const recResult = await getDecisionRecommendation(params.id)
+        const recResult = await getDecisionRecommendation(id)
         if (cancelled) return
         if (recResult.success && recResult.data) {
           setCurrentUserRole(recResult.data.currentUserRole || "OPERATOR")
@@ -121,20 +126,20 @@ export default function RecommendationPage({ params }: { params: { id: string } 
     }
     run()
     return () => { cancelled = true }
-  }, [params.id])
+  }, [id])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
     setError("")
 
-    const result = await updateDecisionRecommendation(params.id, formData)
+    const result = await updateDecisionRecommendation(id, formData)
     if (result.success) {
       router.refresh()
     } else {
       setError(result.error || "Failed to save recommendation")
-      if (result.missing) {
-        setGate({ allowed: false, missing: result.missing })
+      if ("missing" in result && result.missing) {
+        setGate({ allowed: false, missing: result.missing as string[] })
       }
     }
     setSaving(false)
@@ -143,7 +148,7 @@ export default function RecommendationPage({ params }: { params: { id: string } 
   async function handlePublish() {
     setSaving(true)
     setError("")
-    const result = await publishRecommendationAction(params.id)
+    const result = await publishRecommendationAction(id)
     if (result.success) {
       await loadRecommendation()
       router.refresh()
@@ -156,7 +161,7 @@ export default function RecommendationPage({ params }: { params: { id: string } 
   async function handleUnpublish() {
     setSaving(true)
     setError("")
-    const result = await unpublishRecommendationAction(params.id)
+    const result = await unpublishRecommendationAction(id)
     if (result.success) {
       await loadRecommendation()
       router.refresh()
@@ -177,7 +182,7 @@ export default function RecommendationPage({ params }: { params: { id: string } 
   if (!gate.allowed) {
     return (
       <div className="space-y-6">
-        <DecisionTabs decisionId={params.id} />
+        <DecisionTabs decisionId={id} />
         <Card className="border-destructive">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -206,7 +211,7 @@ export default function RecommendationPage({ params }: { params: { id: string } 
 
   return (
     <div className="space-y-6">
-      <DecisionTabs decisionId={params.id} />
+      <DecisionTabs decisionId={id} />
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between gap-4">

@@ -25,7 +25,10 @@ export default async function DecisionsPage() {
   return (
     <main className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Decisions</h1>
+        <div>
+          <h1 className="text-2xl font-bold">AQLIYA Decision OS</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Decision workflows and supporting tender scenarios within the broader AQLIYA platform</p>
+        </div>
         <Link href="/decisions/new">
           <Button>New Decision</Button>
         </Link>

@@ -74,10 +74,9 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
       const result = await getDecisionFramework(decisionId)
 
       if (result.success && result.data) {
-        const decision = result.data
-        const framework = decision.framework as FrameworkRecord | null
-        setIntake(decision.intake)
-        setFrameworkState(decision.frameworkState)
+        const framework = result.data.framework as FrameworkRecord | null
+        setIntake(result.data.intake)
+        setFrameworkState(result.data.frameworkState)
         setFormData(framework ? {
           context: framework.context,
           purpose: framework.purpose,
