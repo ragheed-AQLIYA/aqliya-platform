@@ -312,9 +312,18 @@ export function CustomProductForm() {
           </div>
           <h2 className="text-2xl font-bold">تم استلام طلبك</h2>
           <p className="mt-3 text-muted-foreground">
-            شكرًا لتواصلك مع عقلية. فريقنا سيراجع طلب تصميم النظام لـ {data.orgName} ويتواصل معك خلال يومي عمل.
+            سنراجع طبيعة العمل ونقترح المسار الأنسب:
           </p>
-          <p className="mt-2 text-sm text-muted-foreground/80">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-sm text-muted-foreground">
+            <span className="rounded-full bg-muted px-3 py-1">جلسة فهم</span>
+            <span>→</span>
+            <span className="rounded-full bg-muted px-3 py-1">تصور أولي</span>
+            <span>→</span>
+            <span className="rounded-full bg-muted px-3 py-1">ديمو أو Pilot</span>
+            <span>→</span>
+            <span className="rounded-full bg-muted px-3 py-1">بناء النظام</span>
+          </div>
+          <p className="mt-6 text-sm text-muted-foreground/80">
             سيتم إرسال نسخة إلى {data.contactEmail}
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
@@ -419,6 +428,25 @@ export function CustomProductForm() {
           />
         </div>
       </section>
+
+      {/* Summary Before Submit */}
+      {data.orgName && data.systemCategory && (
+        <section className="mt-6 rounded-xl border bg-muted/30 p-6">
+          <h3 className="mb-4 text-base font-bold">ملخص الطلب</h3>
+          <div className="grid gap-3 sm:grid-cols-2 text-sm">
+            <div><span className="text-muted-foreground">المؤسسة:</span> <span className="font-medium">{data.orgName}</span></div>
+            <div><span className="text-muted-foreground">القطاع:</span> <span className="font-medium">{industries.find((i) => i.value === data.industry)?.label ?? "-"}</span></div>
+            <div><span className="text-muted-foreground">النظام:</span> <span className="font-medium">{systemCategories.find((c) => c.id === data.systemCategory)?.label ?? "-"}</span></div>
+            <div><span className="text-muted-foreground">الهدف:</span> <span className="font-medium">{intents.find((i) => i.value === data.intent)?.label ?? "-"}</span></div>
+            {data.challenges.length > 0 && (
+              <div className="sm:col-span-2"><span className="text-muted-foreground">التحديات:</span> <span className="font-medium">{data.challenges.map((c) => challenges.find((x) => x.id === c)?.label).join("، ")}</span></div>
+            )}
+            {data.outcomes.length > 0 && (
+              <div className="sm:col-span-2"><span className="text-muted-foreground">المخرجات:</span> <span className="font-medium">{data.outcomes.map((o) => outcomes.find((x) => x.id === o)?.label).join("، ")}</span></div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Submit */}
       <div className="mt-8">

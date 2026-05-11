@@ -1,5 +1,6 @@
 import { getDemoFinancialStatements, getDemoDisclosureNotes } from "@/lib/audit/demo-data"
 import { StepNav } from "../step-nav"
+import { GuidedDemoPanel, InsightCallout, MetricCard } from "@/components/enterprise"
 
 function formatSAR(n: number) {
   if (n === 0) return "—"
@@ -14,7 +15,7 @@ export default function AuditosStatements() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <div className="space-y-2 border-b pb-6">
+      <div className="mb-8 space-y-2 border-b pb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 3</p>
         <h1 className="text-2xl font-bold">القوائم المالية</h1>
         <p className="text-muted-foreground">
@@ -22,7 +23,28 @@ export default function AuditosStatements() {
         </p>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-2">
+      {/* Guided Demo Panel */}
+      <GuidedDemoPanel
+        questions={[
+          "ما الذي تراه؟ قائمة الدخل والمركز المالي مولّدة تلقائيًا من الحسابات المصنفة.",
+          "لماذا هذا مهم؟ القوائم هي المخرج الرئيسي لعملية المراجعة.",
+          "ما المخرج؟ قوائم مالية أولية + إيضاحات مسودة جاهزة للمراجعة.",
+          "ما القرار التالي؟ مراجعة الإيضاحات والمضي إلى الأدلة والنتائج.",
+        ]}
+        className="mb-8"
+      />
+
+      {/* Insight Callout */}
+      <InsightCallout text="تم توليد القوائم المالية تلقائيًا. 7 إيضاحات مسودة، بعضها يحتاج معلومات إضافية." type="info" className="mb-8" />
+
+      {/* Metrics */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-2">
+        <MetricCard label="قوائم مالية مولّدة" value={statements.length} />
+        <MetricCard label="إيضاحات مسودة" value={notes.length} />
+      </div>
+
+      {/* Statements */}
+      <div className="mb-8 grid gap-8 lg:grid-cols-2">
         {incomeStmt && (
           <div className="rounded-xl border bg-background p-6">
             <h2 className="mb-1 text-lg font-bold">{incomeStmt.title}</h2>
@@ -68,7 +90,8 @@ export default function AuditosStatements() {
         )}
       </div>
 
-      <div className="mt-8 rounded-xl border bg-background p-6">
+      {/* Notes */}
+      <div className="mb-8 rounded-xl border bg-background p-6">
         <h2 className="mb-4 text-lg font-bold">الإيضاحات ({notes.length})</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {notes.map((note) => (

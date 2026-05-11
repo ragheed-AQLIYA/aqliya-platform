@@ -41,9 +41,35 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://aqliya.com/#organization",
+        "name": "AQLIYA",
+        "url": "https://aqliya.com",
+        "description": "شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.",
+        "email": "ragheed@aqliya.com",
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://aqliya.com/#website",
+        "url": "https://aqliya.com",
+        "name": "AQLIYA",
+        "publisher": { "@id": "https://aqliya.com/#organization" },
+        "inLanguage": "ar-SA",
+      },
+    ],
+  }
+
   return (
     <html lang="ar" dir="rtl">
         <body className={`${notoSansArabic.variable} h-full font-sans antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {children}
       </body>
     </html>

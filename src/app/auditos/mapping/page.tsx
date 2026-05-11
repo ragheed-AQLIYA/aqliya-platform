@@ -1,5 +1,6 @@
 import { getDemoMappings } from "@/lib/audit/demo-data"
 import { StepNav } from "../step-nav"
+import { GuidedDemoPanel, InsightCallout, MetricCard } from "@/components/enterprise"
 
 export default function AuditosMapping() {
   const mappings = getDemoMappings()
@@ -8,7 +9,7 @@ export default function AuditosMapping() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <div className="space-y-2 border-b pb-6">
+      <div className="mb-8 space-y-2 border-b pb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 2</p>
         <h1 className="text-2xl font-bold">تصنيف الحسابات</h1>
         <p className="text-muted-foreground">
@@ -16,22 +17,29 @@ export default function AuditosMapping() {
         </p>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-lg border bg-green-50 p-4">
-          <p className="text-xs text-muted-foreground">مؤكد</p>
-          <p className="mt-1 text-xl font-bold text-green-700">{confirmed}</p>
-        </div>
-        <div className="rounded-lg border bg-amber-50 p-4">
-          <p className="text-xs text-muted-foreground">معلق</p>
-          <p className="mt-1 text-xl font-bold text-amber-700">{pending}</p>
-        </div>
-        <div className="rounded-lg border bg-blue-50 p-4">
-          <p className="text-xs text-muted-foreground">بمساعدة الذكاء المؤسسي</p>
-          <p className="mt-1 text-xl font-bold text-blue-700">{mappings.filter((m) => m.mappingType?.includes("ai")).length}</p>
-        </div>
+      {/* Guided Demo Panel */}
+      <GuidedDemoPanel
+        questions={[
+          "ما الذي تراه؟ جدول يربط كل حساب من ميزان المراجعة بالحساب المعياري المقابل.",
+          "لماذا هذا مهم؟ التصنيف الصحيح هو أساس القوائم المالية الدقيقة.",
+          "ما المخرج؟ 21 حسابًا مؤكد التصنيف، وحساب واحد يحتاج مراجعة بشرية.",
+          "ما القرار التالي؟ اعتماد الحساب المعلق أو تعديله، ثم الانتقال إلى القوائم.",
+        ]}
+        className="mb-8"
+      />
+
+      {/* Insight Callout */}
+      <InsightCallout text="تم تصنيف 21 من 22 حسابًا تلقائيًا بمساعدة الذكاء المؤسسي. حساب واحد معلق للمراجعة البشرية." type="info" className="mb-8" />
+
+      {/* Metrics */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+        <MetricCard label="مؤكد" value={confirmed} />
+        <MetricCard label="معلق" value={pending} />
+        <MetricCard label="بمساعدة الذكاء المؤسسي" value={mappings.filter((m) => m.mappingType?.includes("ai")).length} />
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border">
+      {/* Mapping Table */}
+      <div className="mb-8 overflow-x-auto rounded-xl border">
         <table className="w-full text-sm">
           <thead className="border-b bg-muted/40 text-xs font-semibold uppercase text-muted-foreground">
             <tr>

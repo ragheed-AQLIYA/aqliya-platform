@@ -1,19 +1,11 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import { SectionEyebrow, BeforeAfterBlock, ProductWorkflowVisual, OutputCard, EnterpriseCTA } from "@/components/enterprise"
 
 export const metadata: Metadata = {
   title: "أنظمة المحاكاة | AQLIYA",
   description: "نظام يساعد المؤسسات على اختبار السيناريوهات قبل التنفيذ.",
 }
-
-const useCases = [
-  "محاكاة أثر تغيير الأسعار",
-  "محاكاة تغير التكاليف",
-  "محاكاة أثر اختيار مورد",
-  "محاكاة سيناريوهات المبيعات",
-  "محاكاة نسب المحتوى المحلي",
-  "محاكاة المخاطر التشغيلية",
-]
 
 const outputs = [
   "Scenario Report",
@@ -25,76 +17,102 @@ const outputs = [
 
 export default function SimulationProductPage() {
   return (
-    <>
-      <section className="border-b py-20 sm:py-28">
-        <div className="mx-auto max-w-4xl px-6">
+    <div className="flex flex-col gap-20 sm:gap-28">
+      {/* 1. Product Hero */}
+      <section className="border-b">
+        <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
           <Link href="/products" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← العودة إلى خطوط الحلول
           </Link>
-          <h1 className="mt-4 text-3xl font-black sm:text-4xl">أنظمة المحاكاة</h1>
+          <h1 className="mt-6 text-3xl font-black sm:text-4xl">أنظمة المحاكاة</h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
             نظام يساعد المؤسسات على اختبار السيناريوهات قبل التنفيذ، ومقارنة أثر الخيارات على النتائج، التكاليف، المخاطر، الإيرادات، أو مؤشرات الأداء.
           </p>
-        </div>
-      </section>
-
-      <section className="border-b py-16">
-        <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-xl font-bold">لمن هذا النظام؟</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {["فرق الإدارة", "فرق المالية", "فرق المبيعات", "فرق المشتريات", "فرق التخطيط", "فرق المحتوى المحلي والامتثال"].map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-lg border bg-background p-4">
-                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
-                <span className="text-sm">{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b py-16">
-        <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-xl font-bold">ما المشكلة التي يحلها؟</h2>
-          <p className="mt-4 text-base leading-7 text-muted-foreground">
-            القرارات الكبرى غالبًا تُتخذ قبل اختبار أثرها بشكل كافٍ. المحاكاة تساعد المؤسسة على رؤية النتائج المحتملة قبل الالتزام بالتنفيذ.
-          </p>
-        </div>
-      </section>
-
-      <section className="border-b py-16">
-        <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-xl font-bold">أمثلة استخدام</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {useCases.map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-lg border bg-background p-4">
-                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
-                <span className="text-sm">{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16">
-        <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-xl font-bold">المخرجات</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {outputs.map((item) => (
-              <div key={item} className="rounded-lg border bg-background px-4 py-3 text-sm">
-                {item}
-              </div>
-            ))}
-          </div>
-          <div className="mt-10">
-            <Link
-              href="/contact"
-              className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              اطلب النظام
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link href="/custom-product" className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+              اطلب تخصيص هذا النظام
+            </Link>
+            <Link href="/auditos" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+              استعرض AuditOS
             </Link>
           </div>
         </div>
       </section>
-    </>
+
+      {/* 2. Before / After */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="المشكلة والحل"
+          title="لماذا تحتاج المؤسسات محاكاة قبل التنفيذ؟"
+        />
+        <div className="mt-10">
+          <BeforeAfterBlock
+            before={["قرارات تتخذ دون اختبار الأثر", "توقعات غير مدعومة ببيانات", "صعوبة مقارنة السيناريوهات", "مخاطر غير محسوبة", "تكاليف غير متوقعة"]}
+            after={["سيناريوهات مدروسة وقابلة للمقارنة", "أثر واضح على التكلفة والإيرادات", "تقييم مخاطر منهجي", "دعم القرار بالبيانات", "توقعات واقعية وموثقة"]}
+          />
+        </div>
+      </section>
+
+      {/* 3. Workflow Visual */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="سير العمل"
+          title="كيف يعمل النظام؟"
+        />
+        <div className="mt-10">
+          <ProductWorkflowVisual
+            title="من المدخلات إلى دعم القرار"
+            steps={["المدخلات", "نموذج السيناريو", "الافتراضات", "الأثر", "المقارنة", "دعم القرار"]}
+          />
+        </div>
+      </section>
+
+      {/* 4. Outputs */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="المخرجات"
+          title="ماذا ينتج النظام؟"
+        />
+        <div className="mt-10">
+          <OutputCard title="تقارير المحاكاة والمقارنات" items={outputs} />
+        </div>
+      </section>
+
+      {/* 5. Customization */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="التخصيص"
+          title="كيف يتكيف النظام مع مؤسستك؟"
+          description="يمكن تخصيص النماذج، المتغيرات، معايير المقارنة، التقارير، ولوحات العرض حسب طبيعة عملك."
+        />
+      </section>
+
+      {/* 6. Use Scenario */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="سيناريو تطبيقي"
+          title="محاكاة أثر تغيير الموردين"
+        />
+        <div className="mt-10 rounded-xl border bg-muted/30 p-6 sm:p-8">
+          <p className="text-base leading-8 text-muted-foreground">
+            <strong className="text-foreground">قبل:</strong> اختيار الموردين يعتمد على السعر فقط، دون فهم الأثر الكلي على الجودة، الالتزام، والمحتوى المحلي.
+          </p>
+          <p className="mt-4 text-base leading-8 text-muted-foreground">
+            <strong className="text-foreground">بعد:</strong> محاكاة شاملة تقارن بين الموردين بناءً على السعر، الجودة، الالتزام، المحتوى المحلي، والمخاطر التشغيلية.
+          </p>
+        </div>
+      </section>
+
+      {/* 7. CTA */}
+      <section className="mx-auto max-w-7xl px-6 pb-20">
+        <EnterpriseCTA
+          title="هل تحتاج نظام محاكاة لمؤسستك؟"
+          primaryLabel="اطلب تخصيص هذا النظام"
+          primaryHref="/custom-product"
+          secondaryLabel="تواصل معنا"
+          secondaryHref="/contact"
+        />
+      </section>
+    </div>
   )
 }

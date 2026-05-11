@@ -1,5 +1,7 @@
+import Link from "next/link"
 import { getDemoDashboardSummary, getDemoEngagement, getDemoAuditEvents } from "@/lib/audit/demo-data"
 import { StepNav } from "./step-nav"
+import { GuidedDemoPanel, InsightCallout, MetricCard, TraceabilityChain } from "@/components/enterprise"
 
 export default function AuditosOverview() {
   const summary = getDemoDashboardSummary()
@@ -8,22 +10,40 @@ export default function AuditosOverview() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <div className="space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">تجربة نظام المراجعة</p>
-        <h1 className="text-2xl font-bold">AQLIYA AuditOS</h1>
-        <p className="text-muted-foreground">
-          نظام يساعد مكاتب المراجعة والفرق المالية على تنظيم أعمال المراجعة والأدلة والملاحظات والمخرجات.
+      {/* Intro */}
+      <div className="mb-8 rounded-xl border bg-muted/30 p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">تجربة AuditOS</p>
+        <h1 className="mt-2 text-2xl font-bold">شركة الخليج التجارية — FY2025</h1>
+        <p className="mt-2 text-muted-foreground">مدة الاستعراض: 4 دقائق</p>
+        <p className="mt-4 text-sm leading-7 text-muted-foreground">
+          AuditOS هو أحد منتجات عقلية المتخصصة في المراجعة والتدقيق والذكاء المالي. يوضح هذا الديمو كيف يمكن تحويل سير عمل مهني معقد إلى نظام واضح، قابل للتتبع، وجاهز للمراجعة.
         </p>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="إجمالي الارتباطات" value={summary.totalEngagements} />
-        <StatCard label="نشطة" value={summary.activeEngagements} variant="info" />
-        <StatCard label="مراجعات معلقة" value={summary.pendingReviews} variant="warning" />
-        <StatCard label="ملاحظات مفتوحة" value={summary.openFindings} variant="warning" />
+      {/* Guided Demo Panel */}
+      <GuidedDemoPanel
+        questions={[
+          "ما الذي تراه؟ نظرة عامة على بيانات المراجعة والارتباط التجريبي.",
+          "لماذا هذا مهم؟ كل مخرج في النظام مرتبط بمصدره وقابل للتتبع.",
+          "ما المخرج؟ قوائم مالية، إيضاحات، أدلة، وسجل تتبع كامل.",
+          "ما القرار التالي؟ استعراض ميزان المراجعة وتصنيف الحسابات.",
+        ]}
+        className="mb-8"
+      />
+
+      {/* Metrics */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <MetricCard label="إجمالي الارتباطات" value={summary.totalEngagements} />
+        <MetricCard label="نشطة" value={summary.activeEngagements} />
+        <MetricCard label="مراجعات معلقة" value={summary.pendingReviews} />
+        <MetricCard label="ملاحظات مفتوحة" value={summary.openFindings} />
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[3fr,2fr]">
+      {/* Insight Callout */}
+      <InsightCallout text="تم تصنيف 21 من 22 حسابًا. حساب واحد يحتاج مراجعة بشرية." type="success" className="mb-8" />
+
+      {/* Engagement & Activity */}
+      <div className="mb-8 grid gap-6 lg:grid-cols-[3fr,2fr]">
         <div className="rounded-xl border bg-background p-6">
           <h2 className="mb-4 text-lg font-semibold">الارتباط التجريبي</h2>
           <div className="space-y-3">
@@ -54,16 +74,28 @@ export default function AuditosOverview() {
         </div>
       </div>
 
-      <StepNav current="/auditos" />
-    </div>
-  )
-}
+      {/* Traceability Preview */}
+      <div className="mb-8">
+        <h2 className="mb-4 text-lg font-semibold">مسار التتبع في AuditOS</h2>
+        <TraceabilityChain
+          steps={["حساب خام", "قرار التصنيف", "بند في القائمة", "إيضاح", "دليل", "نتيجة", "نقطة مراجعة"]}
+        />
+      </div>
 
-function StatCard({ label, value, variant }: { label: string; value: number; variant?: "info" | "warning" }) {
-  return (
-    <div className="rounded-xl border bg-background p-5">
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="mt-1 text-3xl font-bold">{value}</p>
+      {/* Final CTA */}
+      <div className="rounded-xl border bg-gradient-to-b from-background to-muted/30 p-6 text-center">
+        <h3 className="text-lg font-semibold">هل تريد تجربة AuditOS على بيانات مؤسستك؟</h3>
+        <div className="mt-4 flex flex-wrap justify-center gap-4">
+          <Link href="/custom-product" className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+            اطلب Pilot
+          </Link>
+          <Link href="/custom-product" className="inline-flex h-10 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+            صمّم نظامك مع عقلية
+          </Link>
+        </div>
+      </div>
+
+      <StepNav current="/auditos" />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { getDemoTrialBalance } from "@/lib/audit/demo-data"
 import { StepNav } from "../step-nav"
+import { GuidedDemoPanel, InsightCallout, MetricCard } from "@/components/enterprise"
 
 function formatSAR(n: number) {
   return n.toLocaleString("ar-SA") + " ر.س"
@@ -12,7 +13,7 @@ export default function AuditosTrialBalance() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <div className="space-y-2 border-b pb-6">
+      <div className="mb-8 space-y-2 border-b pb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 1</p>
         <h1 className="text-2xl font-bold">ميزان المراجعة</h1>
         <p className="text-muted-foreground">
@@ -20,22 +21,29 @@ export default function AuditosTrialBalance() {
         </p>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-lg border bg-background p-4">
-          <p className="text-xs text-muted-foreground">إجمالي المدين</p>
-          <p className="mt-1 text-xl font-bold text-green-600">{formatSAR(totalDebits)}</p>
-        </div>
-        <div className="rounded-lg border bg-background p-4">
-          <p className="text-xs text-muted-foreground">إجمالي الدائن</p>
-          <p className="mt-1 text-xl font-bold text-red-600">{formatSAR(totalCredits)}</p>
-        </div>
-        <div className="rounded-lg border bg-background p-4">
-          <p className="text-xs text-muted-foreground">الفرق</p>
-          <p className="mt-1 text-xl font-bold text-amber-600">{formatSAR(trialBalance.variance)}</p>
-        </div>
+      {/* Guided Demo Panel */}
+      <GuidedDemoPanel
+        questions={[
+          "ما الذي تراه؟ ميزان المراجعة المستورد بجميع الحسابات والأرصدة.",
+          "لماذا هذا مهم؟ هذه هي البيانات الخام التي سيُبنى عليها كل شيء لاحقًا.",
+          "ما المخرج؟ قائمة حسابات مصنفة مبدئيًا مع أرصدة المدين والدائن.",
+          "ما القرار التالي؟ مراجعة التصنيف والانتقال إلى ربط الحسابات بالقوائم.",
+        ]}
+        className="mb-8"
+      />
+
+      {/* Insight Callout */}
+      <InsightCallout text="تم استيراد 22 حسابًا بنجاح. الفرق بين المدين والدائن صفر — الميزان متوازن." type="success" className="mb-8" />
+
+      {/* Metrics */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+        <MetricCard label="إجمالي المدين" value={formatSAR(totalDebits)} />
+        <MetricCard label="إجمالي الدائن" value={formatSAR(totalCredits)} />
+        <MetricCard label="الفرق" value={formatSAR(trialBalance.variance)} />
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border">
+      {/* TB Table */}
+      <div className="mb-8 overflow-x-auto rounded-xl border">
         <table className="w-full text-sm">
           <thead className="border-b bg-muted/40 text-xs font-semibold uppercase text-muted-foreground">
             <tr>

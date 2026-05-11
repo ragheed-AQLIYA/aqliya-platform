@@ -1,5 +1,6 @@
 import { getDemoAuditEvents, getDemoAiOutputs } from "@/lib/audit/demo-data"
 import { StepNav } from "../step-nav"
+import { GuidedDemoPanel, InsightCallout, MetricCard, TraceabilityChain } from "@/components/enterprise"
 
 const eventTypeLabels: Record<string, { label: string; color: string }> = {
   "engagement.created": { label: "إنشاء الارتباط", color: "bg-gray-100 text-gray-700" },
@@ -26,7 +27,7 @@ export default function AuditosTraceability() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <div className="space-y-2 border-b pb-6">
+      <div className="mb-8 space-y-2 border-b pb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 5</p>
         <h1 className="text-2xl font-bold">التتبع الكامل</h1>
         <p className="text-muted-foreground">
@@ -34,7 +35,35 @@ export default function AuditosTraceability() {
         </p>
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[2fr,1fr]">
+      {/* Guided Demo Panel */}
+      <GuidedDemoPanel
+        questions={[
+          "ما الذي تراه؟ المسار الزمني الكامل لكل حدث في عملية المراجعة.",
+          "لماذا هذا مهم؟ كل مخرج مرتبط بمصدره، وكل قرار يمكن تتبعه.",
+          "ما المخرج؟ سجل تدقيق كامل + مساهمات الذكاء المؤسسي.",
+          "ما القرار التالي؟ هذا هو المخرج النهائي — النظام جاهز للمراجعة البشرية.",
+        ]}
+        className="mb-8"
+      />
+
+      {/* Insight Callout */}
+      <InsightCallout text="16 حدث تتبع مسجل. كل قرار موثق ومرتبط بالبيانات التي بُني عليها." type="success" className="mb-8" />
+
+      {/* Traceability Chain Preview */}
+      <div className="mb-8">
+        <TraceabilityChain
+          steps={["حساب خام", "قرار التصنيف", "بند في القائمة", "إيضاح", "دليل", "نتيجة", "نقطة مراجعة"]}
+        />
+      </div>
+
+      {/* Metrics */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-2">
+        <MetricCard label="أحداث التتبع" value={events.length} />
+        <MetricCard label="مساهمات الذكاء المؤسسي" value={aiOutputs.length} />
+      </div>
+
+      {/* Timeline & AI */}
+      <div className="mb-8 grid gap-6 lg:grid-cols-[2fr,1fr]">
         <div>
           <h2 className="mb-4 text-lg font-bold">المسار الزمني</h2>
           <div className="relative space-y-0">

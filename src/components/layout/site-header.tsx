@@ -9,7 +9,6 @@ import { Menu, X } from "lucide-react"
 
 const navItems = [
   { label: "الرئيسية", href: "/" },
-  { label: "صمّم منتجك", href: "/custom-product" },
   { label: "المنتجات", href: "/products" },
   { label: "كيف نعمل", href: "/how-we-work" },
   { label: "من نحن", href: "/about" },
@@ -21,7 +20,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-3" aria-label="AQLIYA">
           <Image
@@ -53,10 +52,10 @@ export function SiteHeader() {
             )
           })}
           <Link
-            href="/contact"
+            href="/custom-product"
             className="mr-3 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            ابدأ مشروعك
+            صمّم نظامك
           </Link>
         </nav>
 
@@ -91,11 +90,11 @@ export function SiteHeader() {
               )
             })}
             <Link
-              href="/contact"
+              href="/custom-product"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
             >
-              ابدأ مشروعك
+              صمّم نظامك
             </Link>
           </nav>
         </div>

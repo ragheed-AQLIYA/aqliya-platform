@@ -1,5 +1,6 @@
 import { getDemoEvidence, getDemoFindings, getDemoRecommendations } from "@/lib/audit/demo-data"
 import { StepNav } from "../step-nav"
+import { GuidedDemoPanel, InsightCallout, MetricCard } from "@/components/enterprise"
 
 const severityColors: Record<string, string> = {
   high: "bg-red-50 text-red-700",
@@ -21,7 +22,7 @@ export default function AuditosEvidence() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <div className="space-y-2 border-b pb-6">
+      <div className="mb-8 space-y-2 border-b pb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 4</p>
         <h1 className="text-2xl font-bold">الأدلة والملاحظات</h1>
         <p className="text-muted-foreground">
@@ -29,7 +30,29 @@ export default function AuditosEvidence() {
         </p>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-2">
+      {/* Guided Demo Panel */}
+      <GuidedDemoPanel
+        questions={[
+          "ما الذي تراه؟ مستندات الأدلة، الملاحظات، والتوصيات المرتبطة بها.",
+          "لماذا هذا مهم؟ كل ملاحظة يجب أن تكون مدعومة بدليل واضح.",
+          "ما المخرج؟ قائمة أدلة وملاحظات وتوصيات قابلة للمراجعة.",
+          "ما القرار التالي؟ الانتقال إلى صفحة التتبع لرؤية المسار الكامل.",
+        ]}
+        className="mb-8"
+      />
+
+      {/* Insight Callout */}
+      <InsightCallout text="هذا الإيضاح مرتبط بدليل محدد. كل مخرج مرتبط بمصدره." type="success" className="mb-8" />
+
+      {/* Metrics */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+        <MetricCard label="أدلة" value={evidence.length} />
+        <MetricCard label="ملاحظات" value={findings.length} />
+        <MetricCard label="توصيات" value={recommendations.length} />
+      </div>
+
+      {/* Evidence & Findings */}
+      <div className="mb-8 grid gap-8 lg:grid-cols-2">
         <div>
           <h2 className="mb-4 text-lg font-bold">الأدلة ({evidence.length})</h2>
           <div className="space-y-3">

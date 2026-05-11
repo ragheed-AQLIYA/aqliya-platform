@@ -3,24 +3,35 @@ import Image from "next/image"
 
 const footerLinks = [
   {
-    title: "الصفحات",
+    title: "الشركة",
     links: [
       { label: "الرئيسية", href: "/" },
-      { label: "صمّم منتجك", href: "/custom-product" },
-      { label: "المنتجات", href: "/products" },
-      { label: "كيف نعمل", href: "/how-we-work" },
       { label: "من نحن", href: "/about" },
+      { label: "كيف نعمل", href: "/how-we-work" },
       { label: "تواصل معنا", href: "/contact" },
+    ],
+  },
+  {
+    title: "الأنظمة",
+    links: [
+      { label: "صمّم نظامك", href: "/custom-product" },
+      { label: "أنظمة اتخاذ القرار", href: "/products/decision" },
+      { label: "أنظمة المحاكاة", href: "/products/simulation" },
+      { label: "أنظمة المبيعات", href: "/products/sales" },
     ],
   },
   {
     title: "المنتجات",
     links: [
-      { label: "اتخاذ القرار", href: "/products/decision" },
-      { label: "المحاكاة", href: "/products/simulation" },
-      { label: "المبيعات", href: "/products/sales" },
-      { label: "المراجعة والتدقيق", href: "/products/audit" },
-      { label: "المحتوى المحلي", href: "/products/local-content" },
+      { label: "AQLIYA AuditOS", href: "/auditos" },
+      { label: "أنظمة المحتوى المحلي", href: "/products/local-content" },
+      { label: "جميع خطوط الحلول", href: "/products" },
+    ],
+  },
+  {
+    title: "التواصل",
+    links: [
+      { label: "البريد الإلكتروني", href: "mailto:ragheed@aqliya.com" },
     ],
   },
 ]
@@ -29,8 +40,8 @@ export function SiteFooter() {
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="space-y-4">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="space-y-4 lg:col-span-2">
             <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/brand/aqliya-logo-approved.png"
@@ -43,11 +54,9 @@ export function SiteFooter() {
             <p className="text-sm leading-6 text-muted-foreground">
               شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.
             </p>
-            <p className="text-sm text-muted-foreground">
-              <a href="mailto:ragheed@aqliya.com" className="hover:text-primary transition-colors">
-                ragheed@aqliya.com
-              </a>
-            </p>
+            <a href="mailto:ragheed@aqliya.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              ragheed@aqliya.com
+            </a>
           </div>
 
           {footerLinks.map((group) => (
