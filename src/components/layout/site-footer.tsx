@@ -33,13 +33,12 @@ export function SiteFooter() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-3">
               <Image
-                src="/brand/aqliya-mark.svg"
+                src="/brand/aqliya-logo-approved.png"
                 alt="AQLIYA"
-                width={32}
-                height={32}
-                className="shrink-0"
+                width={120}
+                height={36}
+                className="shrink-0 h-9 w-auto"
               />
-              <span className="text-lg font-black tracking-tight text-primary">AQLIYA</span>
             </Link>
             <p className="text-sm leading-6 text-muted-foreground">
               شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.

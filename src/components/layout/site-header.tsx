@@ -25,14 +25,13 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-3" aria-label="AQLIYA">
           <Image
-            src="/brand/aqliya-mark.svg"
+            src="/brand/aqliya-logo-approved.png"
             alt="AQLIYA"
-            width={36}
-            height={36}
+            width={140}
+            height={42}
             priority
-            className="shrink-0"
+            className="shrink-0 h-10 w-auto"
           />
-          <span className="text-lg font-black tracking-tight text-primary">AQLIYA</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
