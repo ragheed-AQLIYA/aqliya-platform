@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "عقلية شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات — أنظمة تشغيل، تحليل، تتبع، مراجعة، وتطوير.",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/brand/Favicons/symbol (1).svg",
   },
   openGraph: {
     title: "AQLIYA | أنظمة برمجية وذكاء مؤسسي",
