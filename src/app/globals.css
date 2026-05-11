@@ -51,6 +51,8 @@
   --brand-blue: #137dc5;
   --brand-indigo: #2f4598;
   --brand-cyan: #0baee8;
+  --brand-navy: #0B1728;
+  --brand-navy-light: #0F2440;
   --brand-gradient: linear-gradient(90deg, var(--brand-indigo), var(--brand-blue), var(--brand-cyan));
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

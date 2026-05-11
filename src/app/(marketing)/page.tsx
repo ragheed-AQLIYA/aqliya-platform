@@ -1,154 +1,142 @@
 import Link from "next/link"
-import { SectionEyebrow, AqliyaOperatingMap, CompanyProductMap, BeforeAfterBlock, WorkflowChain, ProductLineCard, ProofCard, EnterpriseCTA, ExecutiveSurface } from "@/components/enterprise"
+import { SectionEyebrow, CommandCenterPanel, BrandArchitecturePanel, BeforeAfterBlock, WorkflowChain, ProductProofCard, ProofChain, EnterpriseCTA, ExecutiveSurface } from "@/components/enterprise"
 
 const products = [
   {
-    title: "الأنظمة المؤسسية المخصصة",
-    desc: "نبني أنظمة رقمية من الصفر أو نخصص حلولاً موجودة لتتناسب تمامًا مع إجراءات مؤسستك، بياناتها، صلاحياتها، ومخرجاتها.",
+    title: "Custom Enterprise Systems",
+    problem: "إجراءات متكررة، ملفات متفرقة، قرارات غير موثقة، مخرجات بلا تتبع.",
+    system: "نحوّل طريقة عمل مؤسستك إلى نظام رقمي واضح: صفحات، صلاحيات، مسارات عمل، تقارير.",
+    output: "نظام تشغيل داخلي قابل للتتبع والمراجعة والتطوير.",
+    flow: ["فهم العمل", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات"],
     href: "/custom-product",
-    workflow: ["فهم العمل", "تصميم النظام", "البناء", "التشغيل"],
-    visualType: "workflow" as const,
   },
   {
-    title: "أنظمة اتخاذ القرار",
-    desc: "أنظمة تساعد المؤسسات على تنظيم القرارات المعقدة من البدائل والمعايير إلى التوصية والاعتماد.",
+    title: "Decision Systems",
+    problem: "قرارات مهمة تُبنى على نقاشات وملفات متفرقة بلا توثيق.",
+    system: "بدائل، معايير، مخاطر، أدلة، توصية قابلة للمراجعة والاعتماد.",
+    output: "Decision Memo موثق وقابل للتتبع من المشكلة إلى القرار.",
+    flow: ["Problem", "Criteria", "Evidence", "Recommendation"],
     href: "/products/decision",
-    workflow: ["المشكلة", "البدائل", "المعايير", "التوصية"],
-    visualType: "decision" as const,
   },
   {
-    title: "أنظمة المحاكاة",
-    desc: "أنظمة تساعد على اختبار السيناريوهات قبل التنفيذ لفهم الأثر، المخاطر، التكلفة، والنتائج المحتملة.",
+    title: "Simulation Systems",
+    problem: "قرارات كبرى تُتخذ قبل اختبار أثرها على التكلفة والأداء.",
+    system: "مدخلات، نموذج سيناريو، افتراضات، أثر، مقارنة، دعم قرار.",
+    output: "تقرير محاكاة يقارن السيناريوهات قبل التنفيذ.",
+    flow: ["Inputs", "Scenario", "Impact", "Comparison"],
     href: "/products/simulation",
-    workflow: ["المدخلات", "السيناريو", "الافتراضات", "الأثر"],
-    visualType: "simulation" as const,
   },
   {
-    title: "أنظمة المبيعات",
-    desc: "أنظمة تساعد فرق B2B على التأهيل، الترتيب، الفلترة، الحملات، المتابعة، وتحسين الأداء.",
+    title: "Sales Systems",
+    problem: "فرص غير مؤهلة، رسائل عامة، متابعة عشوائية، أولويات غير واضحة.",
+    system: "ICP، تأهيل، فلترة، تواصل، متابعة، تعلم مستمر.",
+    output: "مسار مبيعات واضح من التأهيل إلى التحسين.",
+    flow: ["ICP", "Scoring", "Outreach", "Learning"],
     href: "/products/sales",
-    workflow: ["ICP", "التأهيل", "المتابعة", "التحسين"],
-    visualType: "sales" as const,
   },
   {
     title: "AQLIYA AuditOS",
-    desc: "نظام المراجعة والتدقيق والذكاء المالي. يوضح كيف يمكن لعقلية تحويل سير عمل مهني معقد إلى نظام واضح وقابل للتتبع.",
+    problem: "ميزان مراجعة، تصنيف يدوي، أدلة متفرقة، مراجعة بطيئة.",
+    system: "Mapping، قوائم مالية، إيضاحات، أدلة، ملاحظات، تتبع.",
+    output: "ملف مراجعة قابل للتتبع من الحساب إلى الدليل.",
+    flow: ["TB", "Mapping", "Statement", "Evidence"],
     href: "/auditos",
-    workflow: ["ميزان المراجعة", "التصنيف", "القوائم", "الأدلة"],
-    visualType: "audit" as const,
   },
   {
-    title: "أنظمة المحتوى المحلي",
-    desc: "أنظمة تساعد المؤسسات على إدارة وتحليل الموردين، الإنفاق، الالتزام، ومؤشرات المحتوى المحلي.",
+    title: "Local Content Systems",
+    problem: "بيانات موردين غير مصنفة، إنفاق غير محلل، التزام غير واضح.",
+    system: "موردون، إنفاق، تصنيف، فجوة التزام، محاكاة، تقارير.",
+    output: "نظام محتوى محلي يربط الموردين بالالتزام والمؤشرات.",
+    flow: ["Suppliers", "Spend", "Compliance", "Report"],
     href: "/products/local-content",
-    workflow: ["الموردين", "الإنفاق", "الالتزام", "التقارير"],
-    visualType: "local-content" as const,
-  },
-]
-
-const proofPrinciples = [
-  {
-    title: "التتبع",
-    description: "كل مخرج مرتبط بمصدره، وكل قرار يمكن تتبعه إلى البيانات التي بُني عليها.",
-    flow: ["المصدر", "المعالجة", "المخرج", "الدليل"],
-    metric: { value: "100%", label: "قابل للتتبع" },
-  },
-  {
-    title: "المراجعة",
-    description: "كل نتيجة قابلة للفحص والمراجعة قبل الاعتماد النهائي، مما يضمن جودة المخرجات.",
-    flow: ["النتيجة", "الفحص", "المراجعة", "الاعتماد"],
-    metric: { value: "3", label: "نقاط مراجعة" },
-  },
-  {
-    title: "التخصيص",
-    description: "النظام يُبنى حسب طبيعة المؤسسة، لا نفرض قالبًا واحدًا على جميع العملاء.",
-    flow: ["العمل", "القواعد", "النظام"],
-    metric: { value: "6", label: "خطوط حلول" },
-  },
-  {
-    title: "التطوير",
-    description: "النظام قابل للتحسين والتوسع بعد التشغيل لينمو مع نمو المؤسسة.",
-    flow: ["الاستخدام", "الملاحظات", "التحسين"],
-    metric: { value: "∞", label: "قابل للتوسع" },
   },
 ]
 
 export default function HomePage() {
   return (
     <div className="flex flex-col">
-      {/* 1. Hero — Split Layout Command Center */}
-      <section className="relative overflow-hidden border-b">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--brand-blue)/6,transparent_70%)]" />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:20px_20px]" />
+      {/* 1. Hero — Dark Command Center */}
+      <section className="relative overflow-hidden bg-[#0B1728]">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(19,125,197,0.15),transparent_70%)]" />
 
         <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-20 lg:py-24">
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
-            {/* Right: Text Content */}
+            {/* Right: Text */}
             <div className="flex flex-col justify-center">
-              <span className="inline-block w-fit rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold tracking-wider text-primary uppercase mb-6">
+              <span className="inline-block w-fit rounded-full border border-[#137dc5]/30 bg-[#137dc5]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#137dc5] mb-6">
                 Enterprise Operating Systems
               </span>
-              <h1 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-                أنظمة برمجية مصممة حول طريقة عمل مؤسستك
+              <h1 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+                أنظمة مؤسسية تُبنى حول طريقة عملك
               </h1>
-              <p className="mt-5 text-base leading-7 text-muted-foreground sm:text-lg">
-                نصنع ونعدّ أنظمة رقمية وذكاء مؤسسي تساعد المؤسسات على تنظيم أعمالها، تشغيل بياناتها، تحسين مخرجاتها، وربط إجراءاتها بمنطق واضح قابل للتتبع والمراجعة.
+              <p className="mt-5 text-base leading-7 text-white/60 sm:text-lg">
+                نحوّل البيانات، الإجراءات، القرارات، والمراجعات إلى أنظمة تشغيل رقمية واضحة، قابلة للتتبع، وجاهزة للتطوير.
+              </p>
+              <p className="mt-3 text-sm leading-6 text-white/40">
+                عقلية لا تقدم قالبًا عامًا ولا منتجًا واحدًا لكل المؤسسات. نبدأ من واقع العمل داخل مؤسستك، ثم نصمم النظام الذي يربط البيانات بالمخرجات، والمخرجات بالأدلة، والأدلة بالقرار.
               </p>
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row">
                 <Link
                   href="/custom-product"
-                  className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-8 text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                  className="inline-flex h-12 items-center justify-center rounded-md bg-[#137dc5] px-8 text-base font-medium text-white transition-colors hover:bg-[#137dc5]/90"
                 >
                   صمّم نظامك
                 </Link>
                 <Link
                   href="/auditos"
-                  className="inline-flex h-12 items-center justify-center rounded-md border bg-background px-8 text-base font-medium text-foreground transition-colors hover:bg-muted"
+                  className="inline-flex h-12 items-center justify-center rounded-md border border-white/15 bg-white/5 px-8 text-base font-medium text-white/80 transition-colors hover:bg-white/10"
                 >
                   استعرض AuditOS
                 </Link>
               </div>
-              <p className="mt-5 text-sm text-muted-foreground/70">
-                أنظمة مخصصة  ·  مخرجات قابلة للتتبع  ·  ديمو AuditOS جاهز
+              <p className="mt-5 text-xs text-white/30">
+                Custom Systems · Traceable Outputs · Human Review · Enterprise Workflows
               </p>
             </div>
 
-            {/* Left: Operating Map Visual */}
+            {/* Left: Command Center Panel */}
             <div className="flex items-center">
-              <AqliyaOperatingMap className="w-full" />
+              <CommandCenterPanel className="w-full" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. Brand Architecture */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
-        <SectionEyebrow
-          label="هيكلية العلامة التجارية"
-          title="عقلية ليست منتجًا واحدًا"
-          description="عقلية هي الشركة التي تبني الأنظمة. منتجات مثل AuditOS تمثل أحد تطبيقات عقلية في مجال محدد، لكنها لا تحد نطاق الشركة."
-        />
-        <div className="mt-10">
-          <CompanyProductMap />
+      {/* 2. Brand Architecture — Dark */}
+      <section className="bg-[#0B1728] border-t border-white/5">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-3xl text-center mb-10">
+            <span className="inline-block rounded-full border border-[#137dc5]/20 bg-[#137dc5]/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#137dc5]">
+              Brand Architecture
+            </span>
+            <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">
+              AQLIYA هي الشركة. AuditOS أحد منتجاتها.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-white/50">
+              عقلية تبني أنظمة مؤسسية قابلة للتخصيص حسب طبيعة عمل المؤسسة. AuditOS هو أحد تطبيقات عقلية في المراجعة والتدقيق، لكنه لا يحد نطاق الشركة ولا يعرّفها وحده.
+            </p>
+          </div>
+          <BrandArchitecturePanel />
         </div>
       </section>
 
-      {/* 3. Problem — Before / After */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24 border-t">
+      {/* 3. Problem — Before / After — Light */}
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <SectionEyebrow
           label="المشكلة والحل"
           title="المؤسسات لا تحتاج أدوات أكثر. تحتاج أنظمة أوضح."
         />
         <div className="mt-10">
           <BeforeAfterBlock
-            before={["ملفات Excel متفرقة", "اعتماد عبر البريد الإلكتروني", "موافقات يدوية غير موثقة", "أنظمة غير مترابطة", "صلاحيات ومسؤوليات غير واضحة"]}
-            after={["سير عمل موحد ومترابط", "مخرجات قابلة للتتبع والمراجعة", "قرارات موثقة ومنطقية", "وضوح تشغيلي كامل", "تقارير وأدلة جاهزة"]}
+            before={["ملفات Excel متفرقة", "اعتماد عبر البريد", "موافقات غير موثقة", "أنظمة غير مترابطة", "صلاحيات غير واضحة"]}
+            after={["سير عمل موحد", "مخرجات قابلة للتتبع", "قرارات موثقة", "وضوح تشغيلي", "تقارير وأدلة جاهزة"]}
           />
         </div>
       </section>
 
-      {/* 4. Methodology */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24 border-t">
+      {/* 4. Methodology — Light */}
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
           label="منهجية العمل"
           title="من طبيعة العمل إلى نظام قابل للتشغيل"
@@ -156,19 +144,19 @@ export default function HomePage() {
         <div className="mt-10">
           <ExecutiveSurface>
             <WorkflowChain
-              steps={["فهم العمل", "رسم سير العمليات", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات", "التتبع والمراجعة", "التطوير"]}
+              steps={["فهم العمل", "رسم العمليات", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات", "التتبع", "التطوير"]}
               className="justify-center"
             />
           </ExecutiveSurface>
         </div>
       </section>
 
-      {/* 5. Custom Product */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24 border-t">
+      {/* 5. Custom Product — Light */}
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
           label="العرض الأساسي"
           title="صمّم نظامًا خاصًا بطبيعة عمل مؤسستك"
-          description="إذا كانت مؤسستك تعتمد على إجراءات متكررة، ملفات متفرقة، قرارات غير موثقة، أو مخرجات تحتاج مراجعة واعتماد، يمكن لعقلية تحويل ذلك إلى نظام رقمي واضح وقابل للتشغيل."
+          description="إذا كانت مؤسستك تعتمد على إجراءات متكررة، ملفات متفرقة، قرارات غير موثقة، أو مخرجات تحتاج مراجعة واعتماد، نحوّل ذلك إلى نظام رقمي واضح وقابل للتشغيل."
         />
         <div className="mt-8 text-center">
           <Link
@@ -180,8 +168,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. Product Lines */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24 border-t">
+      {/* 6. Product Lines — Light */}
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
           label="خطوط الحلول"
           title="خطوط حلول جاهزة وقابلة للتخصيص"
@@ -189,43 +177,40 @@ export default function HomePage() {
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <ProductLineCard
+            <ProductProofCard
               key={product.href}
               title={product.title}
-              description={product.desc}
+              problem={product.problem}
+              system={product.system}
+              output={product.output}
+              flow={product.flow}
               href={product.href}
-              workflow={product.workflow}
-              visualType={product.visualType}
             />
           ))}
         </div>
       </section>
 
-      {/* 7. Proof Layer */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24 border-t">
-        <SectionEyebrow
-          label="الثقة البصرية"
-          title="كيف تتحول البيانات إلى نظام قابل للثقة؟"
-        />
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {proofPrinciples.map((principle) => (
-            <ProofCard
-              key={principle.title}
-              title={principle.title}
-              description={principle.description}
-              flow={principle.flow}
-              metric={principle.metric}
-            />
-          ))}
+      {/* 7. Trust / Proof — Dark */}
+      <section className="bg-[#0B1728] border-t border-white/5">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-3xl text-center mb-10">
+            <span className="inline-block rounded-full border border-[#137dc5]/20 bg-[#137dc5]/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#137dc5]">
+              Trust & Proof
+            </span>
+            <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">
+              الثقة في عقلية لا تأتي من الذكاء الاصطناعي. تأتي من التتبع.
+            </h2>
+          </div>
+          <ProofChain />
         </div>
       </section>
 
-      {/* 8. AuditOS Example */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24 border-t">
+      {/* 8. AuditOS Example — Light */}
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
           label="مثال تطبيقي"
           title="AuditOS: مثال على أنظمة عقلية المتخصصة"
-          description="AuditOS هو أحد منتجات عقلية، مصمم للمراجعة والتدقيق والذكاء المالي. يوضح كيف يمكن لعقلية تحويل سير عمل مهني معقد إلى نظام واضح، قابل للتتبع، وجاهز للمراجعة."
+          description="AuditOS هو أحد منتجات عقلية، مصمم للمراجعة والتدقيق والذكاء المالي. يوضح كيف نحوّل سير عمل مهني معقد إلى نظام واضح، قابل للتتبع، وجاهز للمراجعة."
         />
         <div className="mt-10">
           <ExecutiveSurface>
@@ -245,15 +230,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 9. Executive CTA */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24 border-t">
-        <EnterpriseCTA
-          title="هل تحتاج نظامًا مصممًا لطريقة عمل مؤسستك؟"
-          primaryLabel="صمّم نظامك الآن"
-          primaryHref="/custom-product"
-          secondaryLabel="تواصل معنا"
-          secondaryHref="/contact"
-        />
+      {/* 9. Final CTA — Dark */}
+      <section className="bg-[#0B1728] border-t border-white/5">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-3xl rounded-xl border border-white/10 bg-white/[0.03] p-8 sm:p-12 text-center">
+            <h2 className="text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">
+              هل تحتاج نظامًا مصممًا لطريقة عمل مؤسستك؟
+            </h2>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link href="/custom-product" className="inline-flex h-12 items-center justify-center rounded-md bg-[#137dc5] px-8 text-base font-medium text-white transition-colors hover:bg-[#137dc5]/90">
+                صمّم نظامك الآن
+              </Link>
+              <Link href="/contact" className="inline-flex h-12 items-center justify-center rounded-md border border-white/15 bg-white/5 px-8 text-base font-medium text-white/80 transition-colors hover:bg-white/10">
+                تواصل معنا
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   )

@@ -1,26 +1,71 @@
 import { cn } from "@/lib/utils"
 
 interface CommandCenterPanelProps {
-  title: string
-  status?: "active" | "pending" | "completed"
-  children: React.ReactNode
   className?: string
 }
 
-export function CommandCenterPanel({ title, status = "active", children, className }: CommandCenterPanelProps) {
-  const statusColors = {
-    active: "bg-primary",
-    pending: "bg-muted-foreground",
-    completed: "bg-emerald-500",
-  }
+const layers = [
+  { id: "intake", label: "Data Intake", status: "active", count: "12 source" },
+  { id: "workflow", label: "Workflow Engine", status: "active", count: "8 paths" },
+  { id: "intelligence", label: "Intelligence Layer", status: "active", count: "5 models" },
+  { id: "review", label: "Review Layer", status: "active", count: "3 points" },
+  { id: "decision", label: "Decision Log", status: "active", count: "2 outputs" },
+  { id: "evidence", label: "Evidence Trail", status: "active", count: "6 links" },
+  { id: "reports", label: "Output Reports", status: "active", count: "4 ready" },
+]
 
+const metrics = [
+  { label: "processed accounts", value: "22" },
+  { label: "trace events", value: "16" },
+  { label: "generated outputs", value: "7" },
+  { label: "human review required", value: "1" },
+]
+
+export function CommandCenterPanel({ className }: CommandCenterPanelProps) {
   return (
-    <div className={cn("rounded-xl border bg-background p-4 shadow-sm sm:p-6", className)}>
-      <div className="mb-4 flex items-center justify-between border-b pb-3">
-        <h3 className="text-sm font-semibold">{title}</h3>
-        <span className={cn("h-2 w-2 rounded-full", statusColors[status])} />
+    <div className={cn("relative w-full rounded-xl border border-white/10 bg-[#0B1728] p-4 sm:p-5 shadow-2xl", className)}>
+      {/* Header */}
+      <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-[#137dc5] animate-pulse" />
+          <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50">AQLIYA Operating System</span>
+        </div>
+        <div className="flex items-center gap-3 text-[10px] text-white/40">
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-[#137dc5]" /> Active</span>
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-white/20" /> Review</span>
+        </div>
       </div>
-      {children}
+
+      {/* Layers */}
+      <div className="space-y-1.5">
+        {layers.map((layer, i) => (
+          <div key={layer.id} className="group relative flex items-center gap-2.5">
+            {i > 0 && <div className="absolute -top-1.5 right-[0.85rem] h-1.5 w-px bg-gradient-to-b from-[#137dc5]/40 to-transparent" />}
+            <div className={cn(
+              "flex h-6 w-6 shrink-0 items-center justify-center rounded text-[10px] font-bold transition-all",
+              layer.status === "active"
+                ? "bg-[#137dc5]/20 text-[#137dc5] border border-[#137dc5]/30"
+                : "bg-white/5 text-white/30 border border-white/10"
+            )}>
+              {i + 1}
+            </div>
+            <div className="flex flex-1 items-center justify-between rounded-md border border-white/8 bg-white/[0.03] px-3 py-1.5 text-xs transition-all group-hover:border-[#137dc5]/30 group-hover:bg-[#137dc5]/5">
+              <span className="font-medium text-white/80">{layer.label}</span>
+              <span className="rounded bg-white/5 px-1.5 py-0.5 text-[9px] font-medium text-white/40">{layer.count}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Metrics Row */}
+      <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/10 pt-3 sm:grid-cols-4">
+        {metrics.map((m) => (
+          <div key={m.label} className="rounded-md border border-white/8 bg-white/[0.03] px-2.5 py-2 text-center">
+            <div className="text-base font-bold text-[#137dc5]">{m.value}</div>
+            <div className="text-[9px] text-white/40">{m.label}</div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
