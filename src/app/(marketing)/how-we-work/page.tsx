@@ -20,9 +20,9 @@ const phases = [
 
 export default function HowWeWorkPage() {
   return (
-    <div className="flex flex-col gap-20 sm:gap-28">
+    <div className="flex flex-col">
       <section className="border-b">
-        <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
           <SectionEyebrow
             label="منهجية العمل"
             title="كيف تبني عقلية الأنظمة؟"
@@ -32,8 +32,8 @@ export default function HowWeWorkPage() {
       </section>
 
       {/* Workflow Overview */}
-      <section className="mx-auto max-w-7xl px-6">
-        <div className="rounded-xl border bg-muted/30 p-6">
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
+        <div className="rounded-xl border bg-muted/20 p-6 sm:p-8">
           <WorkflowChain
             steps={phases.map((p) => p.title)}
             className="justify-center"
@@ -41,20 +41,36 @@ export default function HowWeWorkPage() {
         </div>
       </section>
 
-      {/* Detailed Phases */}
-      <section className="mx-auto max-w-7xl px-6">
-        <div className="space-y-6">
+      {/* Detailed Phases — Wide Layout */}
+      <section className="mx-auto max-w-7xl px-6 pb-20">
+        <div className="space-y-4">
           {phases.map((phase) => (
-            <div key={phase.num} className="rounded-xl border bg-background p-6 shadow-sm">
-              <div className="flex items-start gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">{phase.num}</span>
+            <div key={phase.num} className="group rounded-xl border bg-background p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+              <div className="flex items-start gap-5">
+                {/* Step Number */}
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-b from-primary/15 to-primary/5 text-base font-black text-primary border border-primary/20">
+                  {phase.num}
+                </div>
+
+                {/* Content */}
                 <div className="flex-1">
-                  <h2 className="text-lg font-semibold">{phase.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{phase.desc}</p>
+                  <h2 className="text-lg font-bold">{phase.title}</h2>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">{phase.desc}</p>
+
+                  {/* Details Grid */}
                   <div className="mt-4 grid gap-3 sm:grid-cols-3 text-sm">
-                    <div><span className="text-muted-foreground">المخرج:</span> <span className="font-medium">{phase.output}</span></div>
-                    <div><span className="text-muted-foreground">المشاركون:</span> <span className="font-medium">{phase.participants}</span></div>
-                    <div><span className="text-muted-foreground">القرار التالي:</span> <span className="font-medium">{phase.next}</span></div>
+                    <div className="rounded-lg border bg-muted/20 px-4 py-2.5">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">المخرج</span>
+                      <div className="mt-1 font-medium">{phase.output}</div>
+                    </div>
+                    <div className="rounded-lg border bg-muted/20 px-4 py-2.5">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">المشاركون</span>
+                      <div className="mt-1 font-medium">{phase.participants}</div>
+                    </div>
+                    <div className="rounded-lg border bg-muted/20 px-4 py-2.5">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">القرار التالي</span>
+                      <div className="mt-1 font-medium">{phase.next}</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -64,7 +80,7 @@ export default function HowWeWorkPage() {
       </section>
 
       {/* CTA */}
-      <section className="mx-auto max-w-7xl px-6 pb-20">
+      <section className="mx-auto max-w-7xl px-6 pb-20 border-t pt-20">
         <EnterpriseCTA
           title="هل تحتاج نظامًا مصممًا لطبيعة عملك؟"
           primaryLabel="ابدأ مشروعك مع عقلية"

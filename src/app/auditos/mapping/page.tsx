@@ -8,16 +8,15 @@ export default function AuditosMapping() {
   const pending = mappings.filter((m) => m.status === "pending").length
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10">
+    <div className="mx-auto max-w-6xl px-6 py-8">
       <div className="mb-8 space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 2</p>
-        <h1 className="text-2xl font-bold">تصنيف الحسابات</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">المرحلة 2 — تصنيف الحسابات</p>
+        <h1 className="text-2xl font-black sm:text-3xl">تصنيف الحسابات</h1>
         <p className="text-muted-foreground">
           {confirmed} حسابًا مصنفًا · {pending} معلق · الربط بدليل الحسابات المعياري IFRS for SMEs
         </p>
       </div>
 
-      {/* Guided Demo Panel */}
       <GuidedDemoPanel
         questions={[
           "ما الذي تراه؟ جدول يربط كل حساب من ميزان المراجعة بالحساب المعياري المقابل.",
@@ -28,18 +27,15 @@ export default function AuditosMapping() {
         className="mb-8"
       />
 
-      {/* Insight Callout */}
       <InsightCallout text="تم تصنيف 21 من 22 حسابًا تلقائيًا بمساعدة الذكاء المؤسسي. حساب واحد معلق للمراجعة البشرية." type="info" className="mb-8" />
 
-      {/* Metrics */}
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <MetricCard label="مؤكد" value={confirmed} />
         <MetricCard label="معلق" value={pending} />
         <MetricCard label="بمساعدة الذكاء المؤسسي" value={mappings.filter((m) => m.mappingType?.includes("ai")).length} />
       </div>
 
-      {/* Mapping Table */}
-      <div className="mb-8 overflow-x-auto rounded-xl border">
+      <div className="mb-8 overflow-x-auto rounded-xl border shadow-sm">
         <table className="w-full text-sm">
           <thead className="border-b bg-muted/40 text-xs font-semibold uppercase text-muted-foreground">
             <tr>

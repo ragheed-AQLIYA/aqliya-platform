@@ -21,16 +21,15 @@ export default function AuditosEvidence() {
   const recommendations = getDemoRecommendations()
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10">
+    <div className="mx-auto max-w-6xl px-6 py-8">
       <div className="mb-8 space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 4</p>
-        <h1 className="text-2xl font-bold">الأدلة والملاحظات</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">المرحلة 4 — الأدلة والملاحظات</p>
+        <h1 className="text-2xl font-black sm:text-3xl">الأدلة والملاحظات</h1>
         <p className="text-muted-foreground">
           {evidence.length} مستند · {findings.length} ملاحظة · {recommendations.length} توصية
         </p>
       </div>
 
-      {/* Guided Demo Panel */}
       <GuidedDemoPanel
         questions={[
           "ما الذي تراه؟ مستندات الأدلة، الملاحظات، والتوصيات المرتبطة بها.",
@@ -41,23 +40,20 @@ export default function AuditosEvidence() {
         className="mb-8"
       />
 
-      {/* Insight Callout */}
       <InsightCallout text="هذا الإيضاح مرتبط بدليل محدد. كل مخرج مرتبط بمصدره." type="success" className="mb-8" />
 
-      {/* Metrics */}
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <MetricCard label="أدلة" value={evidence.length} />
         <MetricCard label="ملاحظات" value={findings.length} />
         <MetricCard label="توصيات" value={recommendations.length} />
       </div>
 
-      {/* Evidence & Findings */}
       <div className="mb-8 grid gap-8 lg:grid-cols-2">
         <div>
-          <h2 className="mb-4 text-lg font-bold">الأدلة ({evidence.length})</h2>
+          <h2 className="mb-4 text-lg font-semibold">الأدلة ({evidence.length})</h2>
           <div className="space-y-3">
             {evidence.map((ev) => (
-              <div key={ev.id} className="flex items-start gap-3 rounded-lg border bg-background p-4">
+              <div key={ev.id} className="flex items-start gap-3 rounded-lg border bg-background p-4 shadow-sm">
                 <div className={`mt-0.5 h-2 w-2 shrink-0 rounded-full ${
                   ev.state === "missing" ? "bg-amber-400" : "bg-green-500"
                 }`} />
@@ -86,10 +82,10 @@ export default function AuditosEvidence() {
         </div>
 
         <div>
-          <h2 className="mb-4 text-lg font-bold">الملاحظات ({findings.length})</h2>
+          <h2 className="mb-4 text-lg font-semibold">الملاحظات ({findings.length})</h2>
           <div className="space-y-4">
             {findings.map((f) => (
-              <div key={f.id} className="rounded-lg border bg-background p-4">
+              <div key={f.id} className="rounded-lg border bg-background p-4 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="text-sm font-semibold">{f.title}</h3>
                   <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${severityColors[f.severity] ?? ""}`}>

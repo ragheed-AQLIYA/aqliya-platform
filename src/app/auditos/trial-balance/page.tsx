@@ -12,16 +12,15 @@ export default function AuditosTrialBalance() {
   const totalCredits = lines.reduce((s, l) => s + l.creditAmount, 0)
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10">
+    <div className="mx-auto max-w-6xl px-6 py-8">
       <div className="mb-8 space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 1</p>
-        <h1 className="text-2xl font-bold">ميزان المراجعة</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">المرحلة 1 — استيراد البيانات</p>
+        <h1 className="text-2xl font-black sm:text-3xl">ميزان المراجعة</h1>
         <p className="text-muted-foreground">
           تم استيراد {lines.length} حسابًا من ملف Excel — gulf_trading_tb_fy2025.xlsx
         </p>
       </div>
 
-      {/* Guided Demo Panel */}
       <GuidedDemoPanel
         questions={[
           "ما الذي تراه؟ ميزان المراجعة المستورد بجميع الحسابات والأرصدة.",
@@ -32,18 +31,15 @@ export default function AuditosTrialBalance() {
         className="mb-8"
       />
 
-      {/* Insight Callout */}
       <InsightCallout text="تم استيراد 22 حسابًا بنجاح. الفرق بين المدين والدائن صفر — الميزان متوازن." type="success" className="mb-8" />
 
-      {/* Metrics */}
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <MetricCard label="إجمالي المدين" value={formatSAR(totalDebits)} />
         <MetricCard label="إجمالي الدائن" value={formatSAR(totalCredits)} />
         <MetricCard label="الفرق" value={formatSAR(trialBalance.variance)} />
       </div>
 
-      {/* TB Table */}
-      <div className="mb-8 overflow-x-auto rounded-xl border">
+      <div className="mb-8 overflow-x-auto rounded-xl border shadow-sm">
         <table className="w-full text-sm">
           <thead className="border-b bg-muted/40 text-xs font-semibold uppercase text-muted-foreground">
             <tr>

@@ -26,12 +26,13 @@ export default function AuditosTraceability() {
   const aiOutputs = getDemoAiOutputs()
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10">
+    <div className="mx-auto max-w-6xl px-6 py-8">
+      {/* Header */}
       <div className="mb-8 space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 5</p>
-        <h1 className="text-2xl font-bold">التتبع الكامل</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">المرحلة 5 — التتبع الكامل</p>
+        <h1 className="text-2xl font-black sm:text-3xl">مسار التدقيق من البداية إلى المخرجات</h1>
         <p className="text-muted-foreground">
-          مسار التدقيق من البداية إلى المخرجات — {events.length} حدثًا مسجلًا
+          {events.length} حدثًا مسجلًا · كل قرار موثق ومرتبط بالبيانات التي بُني عليها
         </p>
       </div>
 
@@ -47,17 +48,18 @@ export default function AuditosTraceability() {
       />
 
       {/* Insight Callout */}
-      <InsightCallout text="16 حدث تتبع مسجل. كل قرار موثق ومرتبط بالبيانات التي بُني عليها." type="success" className="mb-8" />
+      <InsightCallout text="16 حدث تتبع مسجل. كل مخرج مرتبط بمصدره. هذا الإيضاح مرتبط بدليل محدد." type="success" className="mb-8" />
 
-      {/* Traceability Chain Preview */}
-      <div className="mb-8">
+      {/* Traceability Chain — Dominant Visual */}
+      <div className="mb-10 rounded-xl border-2 border-primary/10 bg-gradient-to-b from-primary/5 to-background p-6 sm:p-8">
+        <h2 className="mb-6 text-center text-lg font-bold">سلسلة التتبع الكاملة</h2>
         <TraceabilityChain
           steps={["حساب خام", "قرار التصنيف", "بند في القائمة", "إيضاح", "دليل", "نتيجة", "نقطة مراجعة"]}
         />
       </div>
 
       {/* Metrics */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2">
+      <div className="mb-10 grid gap-4 sm:grid-cols-2">
         <MetricCard label="أحداث التتبع" value={events.length} />
         <MetricCard label="مساهمات الذكاء المؤسسي" value={aiOutputs.length} />
       </div>
@@ -65,43 +67,45 @@ export default function AuditosTraceability() {
       {/* Timeline & AI */}
       <div className="mb-8 grid gap-6 lg:grid-cols-[2fr,1fr]">
         <div>
-          <h2 className="mb-4 text-lg font-bold">المسار الزمني</h2>
-          <div className="relative space-y-0">
-            {events.map((e, i) => {
-              const meta = eventTypeLabels[e.eventType] ?? { label: e.eventType, color: "bg-gray-100 text-gray-700" }
-              return (
-                <div key={e.id} className="flex gap-4 pb-6">
-                  <div className="flex flex-col items-center">
-                    <div className={`h-3 w-3 rounded-full border-2 ${e.aiRelated ? "border-purple-400 bg-purple-100" : "border-primary/30 bg-background"}`} />
-                    {i < events.length - 1 && <div className="w-px flex-1 bg-border" />}
-                  </div>
-                  <div className="min-w-0 flex-1 pb-2">
-                    <div className="flex items-center gap-2">
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${meta.color}`}>
-                        {meta.label}
-                      </span>
-                      {e.aiRelated && (
-                        <span className="text-[10px] font-medium text-purple-600">AI</span>
-                      )}
+          <h2 className="mb-4 text-lg font-semibold">المسار الزمني</h2>
+          <div className="rounded-xl border bg-background p-4 shadow-sm">
+            <div className="relative space-y-0">
+              {events.map((e, i) => {
+                const meta = eventTypeLabels[e.eventType] ?? { label: e.eventType, color: "bg-gray-100 text-gray-700" }
+                return (
+                  <div key={e.id} className="flex gap-4 pb-6 last:pb-0">
+                    <div className="flex flex-col items-center">
+                      <div className={`h-3 w-3 rounded-full border-2 ${e.aiRelated ? "border-purple-400 bg-purple-100" : "border-primary/30 bg-background"}`} />
+                      {i < events.length - 1 && <div className="h-6 w-px bg-border" />}
                     </div>
-                    <p className="mt-1 text-sm leading-5">{e.description}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      {e.actorName} · {new Date(e.timestamp).toLocaleDateString("ar-SA", {
-                        year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
-                      })}
-                    </p>
+                    <div className="min-w-0 flex-1 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${meta.color}`}>
+                          {meta.label}
+                        </span>
+                        {e.aiRelated && (
+                          <span className="text-[10px] font-medium text-purple-600">AI</span>
+                        )}
+                      </div>
+                      <p className="mt-1 text-sm leading-5">{e.description}</p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {e.actorName} · {new Date(e.timestamp).toLocaleDateString("ar-SA", {
+                          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
         </div>
 
         <div>
-          <h2 className="mb-4 text-lg font-bold">مساهمات الذكاء المؤسسي</h2>
+          <h2 className="mb-4 text-lg font-semibold">مساهمات الذكاء المؤسسي</h2>
           <div className="space-y-3">
             {aiOutputs.map((ai) => (
-              <div key={ai.id} className="rounded-lg border bg-background p-4">
+              <div key={ai.id} className="rounded-lg border bg-background p-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <span className="rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700">
                     {ai.suggestionType === "mapping" && "تصنيف"}

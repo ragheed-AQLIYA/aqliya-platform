@@ -9,12 +9,20 @@ export default function AuditosOverview() {
   const events = getDemoAuditEvents().slice(-5).reverse()
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10">
-      {/* Intro */}
-      <div className="mb-8 rounded-xl border bg-muted/30 p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">تجربة AuditOS</p>
-        <h1 className="mt-2 text-2xl font-bold">شركة الخليج التجارية — FY2025</h1>
-        <p className="mt-2 text-muted-foreground">مدة الاستعراض: 4 دقائق</p>
+    <div className="mx-auto max-w-6xl px-6 py-8">
+      {/* Intro Header */}
+      <div className="mb-8 rounded-xl border-2 border-primary/10 bg-gradient-to-b from-primary/5 to-background p-6 sm:p-8">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">تجربة AuditOS — Guided Demo</p>
+            <h1 className="mt-2 text-2xl font-black sm:text-3xl">شركة الخليج التجارية — FY2025</h1>
+            <p className="mt-2 text-muted-foreground">مدة الاستعراض: 4 دقائق</p>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-1.5">
+            <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-xs font-semibold text-primary">Live Demo</span>
+          </div>
+        </div>
         <p className="mt-4 text-sm leading-7 text-muted-foreground">
           AuditOS هو أحد منتجات عقلية المتخصصة في المراجعة والتدقيق والذكاء المالي. يوضح هذا الديمو كيف يمكن تحويل سير عمل مهني معقد إلى نظام واضح، قابل للتتبع، وجاهز للمراجعة.
         </p>
@@ -44,7 +52,7 @@ export default function AuditosOverview() {
 
       {/* Engagement & Activity */}
       <div className="mb-8 grid gap-6 lg:grid-cols-[3fr,2fr]">
-        <div className="rounded-xl border bg-background p-6">
+        <div className="rounded-xl border bg-background p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold">الارتباط التجريبي</h2>
           <div className="space-y-3">
             <Row label="العميل" value={engagement.client?.name ?? "-"} />
@@ -56,7 +64,7 @@ export default function AuditosOverview() {
           </div>
         </div>
 
-        <div className="rounded-xl border bg-background p-6">
+        <div className="rounded-xl border bg-background p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold">آخر النشاطات</h2>
           <div className="space-y-4">
             {events.map((e) => (
@@ -83,7 +91,7 @@ export default function AuditosOverview() {
       </div>
 
       {/* Final CTA */}
-      <div className="rounded-xl border bg-gradient-to-b from-background to-muted/30 p-6 text-center">
+      <div className="rounded-xl border bg-gradient-to-b from-background to-muted/30 p-6 text-center shadow-sm">
         <h3 className="text-lg font-semibold">هل تريد تجربة AuditOS على بيانات مؤسستك؟</h3>
         <div className="mt-4 flex flex-wrap justify-center gap-4">
           <Link href="/custom-product" className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">

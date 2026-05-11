@@ -14,16 +14,15 @@ export default function AuditosStatements() {
   const balanceSheet = statements.find((s) => s.statementType === "balance_sheet")
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10">
+    <div className="mx-auto max-w-6xl px-6 py-8">
       <div className="mb-8 space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">المرحلة 3</p>
-        <h1 className="text-2xl font-bold">القوائم المالية</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">المرحلة 3 — القوائم المالية</p>
+        <h1 className="text-2xl font-black sm:text-3xl">القوائم المالية</h1>
         <p className="text-muted-foreground">
           قائمة الدخل والمركز المالي مُولّدة تلقائيًا من تصنيف الحسابات
         </p>
       </div>
 
-      {/* Guided Demo Panel */}
       <GuidedDemoPanel
         questions={[
           "ما الذي تراه؟ قائمة الدخل والمركز المالي مولّدة تلقائيًا من الحسابات المصنفة.",
@@ -34,19 +33,16 @@ export default function AuditosStatements() {
         className="mb-8"
       />
 
-      {/* Insight Callout */}
       <InsightCallout text="تم توليد القوائم المالية تلقائيًا. 7 إيضاحات مسودة، بعضها يحتاج معلومات إضافية." type="info" className="mb-8" />
 
-      {/* Metrics */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2">
         <MetricCard label="قوائم مالية مولّدة" value={statements.length} />
         <MetricCard label="إيضاحات مسودة" value={notes.length} />
       </div>
 
-      {/* Statements */}
       <div className="mb-8 grid gap-8 lg:grid-cols-2">
         {incomeStmt && (
-          <div className="rounded-xl border bg-background p-6">
+          <div className="rounded-xl border bg-background p-6 shadow-sm">
             <h2 className="mb-1 text-lg font-bold">{incomeStmt.title}</h2>
             <p className="mb-4 text-xs text-muted-foreground">للسنة المنتهية في 31 ديسمبر 2025 — بالريال السعودي</p>
             <div className="space-y-1 text-sm">
@@ -68,7 +64,7 @@ export default function AuditosStatements() {
         )}
 
         {balanceSheet && (
-          <div className="rounded-xl border bg-background p-6">
+          <div className="rounded-xl border bg-background p-6 shadow-sm">
             <h2 className="mb-1 text-lg font-bold">{balanceSheet.title}</h2>
             <p className="mb-4 text-xs text-muted-foreground">كما في 31 ديسمبر 2025 — بالريال السعودي</p>
             <div className="space-y-1 text-sm">
@@ -90,8 +86,7 @@ export default function AuditosStatements() {
         )}
       </div>
 
-      {/* Notes */}
-      <div className="mb-8 rounded-xl border bg-background p-6">
+      <div className="mb-8 rounded-xl border bg-background p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-bold">الإيضاحات ({notes.length})</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {notes.map((note) => (
