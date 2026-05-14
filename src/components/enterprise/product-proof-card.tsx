@@ -8,10 +8,11 @@ interface ProductProofCardProps {
   output: string
   flow: string[]
   href: string
+  note?: string
   className?: string
 }
 
-export function ProductProofCard({ title, problem, system, output, flow, href, className }: ProductProofCardProps) {
+export function ProductProofCard({ title, problem, system, output, flow, href, note, className }: ProductProofCardProps) {
   return (
     <Link href={href} className={cn("group flex flex-col rounded-xl border border-border bg-background shadow-sm transition-all hover:border-primary/30 hover:shadow-lg", className)}>
       {/* Header */}
@@ -54,6 +55,11 @@ export function ProductProofCard({ title, problem, system, output, flow, href, c
             </div>
           ))}
         </div>
+
+        {/* Optional Note */}
+        {note && (
+          <p className="text-[10px] text-muted-foreground/70 border-t pt-2">{note}</p>
+        )}
       </div>
     </Link>
   )
