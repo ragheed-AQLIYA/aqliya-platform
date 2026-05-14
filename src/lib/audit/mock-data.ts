@@ -9,6 +9,7 @@ import type {
   ApprovalRecord, PublicationPackage, AuditEvent, AIAssistanceOutput, DashboardSummary,
   EngagementTeamMember, EngagementAlert,
 } from "@/types/audit"
+import { generateNotes } from "./notes"
 
 const SAR = (v: number) => v
 
@@ -77,9 +78,9 @@ export const mockTeam: EngagementTeamMember[] = [
 // ─── Alerts ───
 export const mockAlerts: EngagementAlert[] = [
   { id: 'alert-1', type: 'warning', message: 'Inventory count sheet not yet uploaded', source: 'Evidence', createdAt: '2025-05-01T00:00:00Z' },
-  { id: 'alert-2', type: 'error', message: 'Sundry Income account (5100) not mapped', source: 'Mapping', createdAt: '2025-05-02T00:00:00Z' },
-  { id: 'alert-3', type: 'warning', message: 'Accrued Expenses shows negative balance', source: 'Validation', createdAt: '2025-05-03T00:00:00Z' },
-  { id: 'alert-4', type: 'info', message: 'AI detected potential classification issue with Short-term Loan', source: 'AI', createdAt: '2025-05-03T00:00:00Z' },
+  { id: 'alert-2', type: 'info', message: 'Short-term Loan classification review pending', source: 'Finding', createdAt: '2025-05-02T00:00:00Z' },
+  { id: 'alert-3', type: 'warning', message: 'Revenue concentration analysis recommended', source: 'AI', createdAt: '2025-05-03T00:00:00Z' },
+  { id: 'alert-4', type: 'info', message: 'Finance Cost disclosure note incomplete', source: 'Notes', createdAt: '2025-05-03T00:00:00Z' },
 ]
 
 // ─── Engagement ───
@@ -98,6 +99,7 @@ export const mockEngagement: Engagement = {
 }
 
 // ─── Trial Balance Lines ───
+// Default demo TB is BALANCED. For unbalanced validation scenario, see docs.
 export const mockTBLines: TrialBalanceLine[] = [
   { id: 'tb-line-1', trialBalanceId: ID.TB, accountCode: '1010', accountName: 'Cash and Bank', debitAmount: SAR(500000), creditAmount: 0, balance: SAR(500000), accountType: 'asset', currency: 'SAR' },
   { id: 'tb-line-2', trialBalanceId: ID.TB, accountCode: '1020', accountName: 'Accounts Receivable', debitAmount: SAR(1200000), creditAmount: 0, balance: SAR(1200000), accountType: 'asset', currency: 'SAR' },
@@ -106,22 +108,23 @@ export const mockTBLines: TrialBalanceLine[] = [
   { id: 'tb-line-5', trialBalanceId: ID.TB, accountCode: '1050', accountName: 'Property and Equipment', debitAmount: SAR(3500000), creditAmount: 0, balance: SAR(3500000), accountType: 'non-current-asset', currency: 'SAR' },
   { id: 'tb-line-6', trialBalanceId: ID.TB, accountCode: '1051', accountName: 'Accumulated Depreciation', debitAmount: 0, creditAmount: SAR(875000), balance: SAR(-875000), accountType: 'non-current-asset', currency: 'SAR' },
   { id: 'tb-line-7', trialBalanceId: ID.TB, accountCode: '2010', accountName: 'Accounts Payable', debitAmount: 0, creditAmount: SAR(950000), balance: SAR(-950000), accountType: 'liability', currency: 'SAR' },
-  { id: 'tb-line-8', trialBalanceId: ID.TB, accountCode: '2020', accountName: 'Accrued Expenses', debitAmount: 0, creditAmount: SAR(-20000), balance: SAR(20000), accountType: 'liability', currency: 'SAR' },
+  { id: 'tb-line-8', trialBalanceId: ID.TB, accountCode: '2020', accountName: 'Accrued Expenses', debitAmount: 0, creditAmount: SAR(95000), balance: SAR(-95000), accountType: 'liability', currency: 'SAR' },
   { id: 'tb-line-9', trialBalanceId: ID.TB, accountCode: '2030', accountName: 'Zakat/Tax Payable', debitAmount: 0, creditAmount: SAR(85000), balance: SAR(-85000), accountType: 'liability', currency: 'SAR' },
   { id: 'tb-line-10', trialBalanceId: ID.TB, accountCode: '2040', accountName: 'Short-term Loan', debitAmount: 0, creditAmount: SAR(500000), balance: SAR(-500000), accountType: 'liability', currency: 'SAR' },
-  { id: 'tb-line-11', trialBalanceId: ID.TB, accountCode: '3010', accountName: 'Share Capital', debitAmount: 0, creditAmount: SAR(2000000), balance: SAR(-2000000), accountType: 'equity', currency: 'SAR' },
-  { id: 'tb-line-12', trialBalanceId: ID.TB, accountCode: '3020', accountName: 'Retained Earnings', debitAmount: 0, creditAmount: SAR(1200000), balance: SAR(-1200000), accountType: 'equity', currency: 'SAR' },
-  { id: 'tb-line-13', trialBalanceId: ID.TB, accountCode: '4010', accountName: 'Sales Revenue', debitAmount: 0, creditAmount: SAR(4500000), balance: SAR(-4500000), accountType: 'revenue', currency: 'SAR' },
-  { id: 'tb-line-14', trialBalanceId: ID.TB, accountCode: '4020', accountName: 'Service Revenue', debitAmount: 0, creditAmount: SAR(750000), balance: SAR(-750000), accountType: 'revenue', currency: 'SAR' },
-  { id: 'tb-line-15', trialBalanceId: ID.TB, accountCode: '5010', accountName: 'Cost of Sales', debitAmount: SAR(2800000), creditAmount: 0, balance: SAR(2800000), accountType: 'expense', currency: 'SAR' },
-  { id: 'tb-line-16', trialBalanceId: ID.TB, accountCode: '5020', accountName: 'Salaries and Wages', debitAmount: SAR(900000), creditAmount: 0, balance: SAR(900000), accountType: 'expense', currency: 'SAR' },
-  { id: 'tb-line-17', trialBalanceId: ID.TB, accountCode: '5030', accountName: 'Rent Expense', debitAmount: SAR(240000), creditAmount: 0, balance: SAR(240000), accountType: 'expense', currency: 'SAR' },
-  { id: 'tb-line-18', trialBalanceId: ID.TB, accountCode: '5040', accountName: 'Utilities Expense', debitAmount: SAR(95000), creditAmount: 0, balance: SAR(95000), accountType: 'expense', currency: 'SAR' },
-  { id: 'tb-line-19', trialBalanceId: ID.TB, accountCode: '5050', accountName: 'Depreciation Expense', debitAmount: SAR(175000), creditAmount: 0, balance: SAR(175000), accountType: 'expense', currency: 'SAR' },
-  { id: 'tb-line-20', trialBalanceId: ID.TB, accountCode: '5060', accountName: 'Professional Fees', debitAmount: SAR(120000), creditAmount: 0, balance: SAR(120000), accountType: 'expense', currency: 'SAR' },
-  { id: 'tb-line-21', trialBalanceId: ID.TB, accountCode: '5070', accountName: 'General and Administrative Expenses', debitAmount: SAR(65000), creditAmount: 0, balance: SAR(65000), accountType: 'expense', currency: 'SAR' },
-  // Intentional unmapped account
-  { id: 'tb-line-22', trialBalanceId: ID.TB, accountCode: '5100', accountName: 'Sundry Income', debitAmount: 0, creditAmount: SAR(45000), balance: SAR(-45000), accountType: 'revenue', currency: 'SAR' },
+  { id: 'tb-line-11', trialBalanceId: ID.TB, accountCode: '2050', accountName: 'Finance Cost', debitAmount: SAR(35000), creditAmount: 0, balance: SAR(35000), accountType: 'expense', currency: 'SAR' },
+  { id: 'tb-line-12', trialBalanceId: ID.TB, accountCode: '3010', accountName: 'Share Capital', debitAmount: 0, creditAmount: SAR(2000000), balance: SAR(-2000000), accountType: 'equity', currency: 'SAR' },
+  { id: 'tb-line-13', trialBalanceId: ID.TB, accountCode: '3020', accountName: 'Retained Earnings', debitAmount: 0, creditAmount: SAR(705000), balance: SAR(-705000), accountType: 'equity', currency: 'SAR' },
+  { id: 'tb-line-14', trialBalanceId: ID.TB, accountCode: '4010', accountName: 'Sales Revenue', debitAmount: 0, creditAmount: SAR(4500000), balance: SAR(-4500000), accountType: 'revenue', currency: 'SAR' },
+  { id: 'tb-line-15', trialBalanceId: ID.TB, accountCode: '4020', accountName: 'Service Revenue', debitAmount: 0, creditAmount: SAR(750000), balance: SAR(-750000), accountType: 'revenue', currency: 'SAR' },
+  { id: 'tb-line-16', trialBalanceId: ID.TB, accountCode: '5010', accountName: 'Cost of Sales', debitAmount: SAR(2800000), creditAmount: 0, balance: SAR(2800000), accountType: 'expense', currency: 'SAR' },
+  { id: 'tb-line-17', trialBalanceId: ID.TB, accountCode: '5020', accountName: 'Salaries and Wages', debitAmount: SAR(900000), creditAmount: 0, balance: SAR(900000), accountType: 'expense', currency: 'SAR' },
+  { id: 'tb-line-18', trialBalanceId: ID.TB, accountCode: '5030', accountName: 'Rent Expense', debitAmount: SAR(240000), creditAmount: 0, balance: SAR(240000), accountType: 'expense', currency: 'SAR' },
+  { id: 'tb-line-19', trialBalanceId: ID.TB, accountCode: '5040', accountName: 'Utilities Expense', debitAmount: SAR(95000), creditAmount: 0, balance: SAR(95000), accountType: 'expense', currency: 'SAR' },
+  { id: 'tb-line-20', trialBalanceId: ID.TB, accountCode: '5050', accountName: 'Depreciation Expense', debitAmount: SAR(175000), creditAmount: 0, balance: SAR(175000), accountType: 'expense', currency: 'SAR' },
+  { id: 'tb-line-21', trialBalanceId: ID.TB, accountCode: '5060', accountName: 'Professional Fees', debitAmount: SAR(120000), creditAmount: 0, balance: SAR(120000), accountType: 'expense', currency: 'SAR' },
+  { id: 'tb-line-22', trialBalanceId: ID.TB, accountCode: '5070', accountName: 'General and Administrative Expenses', debitAmount: SAR(65000), creditAmount: 0, balance: SAR(65000), accountType: 'expense', currency: 'SAR' },
+  // Mapped to Other Income — included in revenue for demo completeness
+  { id: 'tb-line-23', trialBalanceId: ID.TB, accountCode: '5100', accountName: 'Sundry Income', debitAmount: 0, creditAmount: SAR(45000), balance: SAR(-45000), accountType: 'revenue', currency: 'SAR' },
 ]
 
 const totalDebits = mockTBLines.reduce((s, l) => s + l.debitAmount, 0)
@@ -165,6 +168,7 @@ export const mockCanonicalAccounts: CanonicalAccount[] = [
   { id: 'ca-20', code: 'CA-5060', name: 'Professional and Consulting Fees', category: 'Expenses', statementType: 'income_statement', reportingFramework: 'ifrs_for_smes', version: '1.0', displayOrder: 650 },
   { id: 'ca-21', code: 'CA-5070', name: 'General and Administrative Expenses', category: 'Expenses', statementType: 'income_statement', reportingFramework: 'ifrs_for_smes', version: '1.0', displayOrder: 660 },
   { id: 'ca-22', code: 'CA-5100', name: 'Other Income', category: 'Revenue', statementType: 'income_statement', reportingFramework: 'ifrs_for_smes', version: '1.0', displayOrder: 670 },
+  { id: 'ca-23', code: 'CA-2050', name: 'Finance Cost', category: 'Expenses', statementType: 'income_statement', reportingFramework: 'ifrs_for_smes', version: '1.0', displayOrder: 680 },
 ]
 
 // ─── Account Mappings (most confirmed, one pending) ───
@@ -176,11 +180,11 @@ export const mockMappings: AccountMapping[] = [
   { id: 'map-5', engagementId: ID.ENG, sourceAccountId: 'tb-line-5', sourceAccountCode: '1050', sourceAccountName: 'Property and Equipment', debitAmount: SAR(3500000), creditAmount: 0, canonicalAccountId: 'ca-5', canonicalAccountName: 'Property, Plant and Equipment', confidence: 0.99, mappingType: 'confirmed_ai', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:20:00Z', updatedAt: '2025-04-15T11:20:00Z' },
   { id: 'map-6', engagementId: ID.ENG, sourceAccountId: 'tb-line-6', sourceAccountCode: '1051', sourceAccountName: 'Accumulated Depreciation', debitAmount: 0, creditAmount: SAR(875000), canonicalAccountId: 'ca-6', canonicalAccountName: 'Accumulated Depreciation', confidence: 0.98, mappingType: 'confirmed_ai', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:25:00Z', updatedAt: '2025-04-15T11:25:00Z' },
   { id: 'map-7', engagementId: ID.ENG, sourceAccountId: 'tb-line-7', sourceAccountCode: '2010', sourceAccountName: 'Accounts Payable', debitAmount: 0, creditAmount: SAR(950000), canonicalAccountId: 'ca-7', canonicalAccountName: 'Trade Payables', confidence: 0.97, mappingType: 'human_mapped', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:30:00Z', updatedAt: '2025-04-15T11:30:00Z' },
-  { id: 'map-8', engagementId: ID.ENG, sourceAccountId: 'tb-line-8', sourceAccountCode: '2020', sourceAccountName: 'Accrued Expenses', debitAmount: 0, creditAmount: SAR(-20000), canonicalAccountId: 'ca-8', canonicalAccountName: 'Accrued Expenses', confidence: 0.92, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:35:00Z', updatedAt: '2025-04-15T11:35:00Z' },
+  { id: 'map-8', engagementId: ID.ENG, sourceAccountId: 'tb-line-8', sourceAccountCode: '2020', sourceAccountName: 'Accrued Expenses', debitAmount: 0, creditAmount: SAR(95000), canonicalAccountId: 'ca-8', canonicalAccountName: 'Accrued Expenses', confidence: 0.92, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:35:00Z', updatedAt: '2025-04-15T11:35:00Z' },
   { id: 'map-9', engagementId: ID.ENG, sourceAccountId: 'tb-line-9', sourceAccountCode: '2030', sourceAccountName: 'Zakat/Tax Payable', debitAmount: 0, creditAmount: SAR(85000), canonicalAccountId: 'ca-9', canonicalAccountName: 'Tax and Zakat Payable', confidence: 0.95, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:40:00Z', updatedAt: '2025-04-15T11:40:00Z' },
   { id: 'map-10', engagementId: ID.ENG, sourceAccountId: 'tb-line-10', sourceAccountCode: '2040', sourceAccountName: 'Short-term Loan', debitAmount: 0, creditAmount: SAR(500000), canonicalAccountId: 'ca-10', canonicalAccountName: 'Short-term Borrowings', statementClassification: 'Current Liabilities', confidence: 0.88, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:45:00Z', updatedAt: '2025-04-15T11:45:00Z' },
   { id: 'map-11', engagementId: ID.ENG, sourceAccountId: 'tb-line-11', sourceAccountCode: '3010', sourceAccountName: 'Share Capital', debitAmount: 0, creditAmount: SAR(2000000), canonicalAccountId: 'ca-11', canonicalAccountName: 'Share Capital', confidence: 0.99, mappingType: 'confirmed_ai', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:50:00Z', updatedAt: '2025-04-15T11:50:00Z' },
-  { id: 'map-12', engagementId: ID.ENG, sourceAccountId: 'tb-line-12', sourceAccountCode: '3020', sourceAccountName: 'Retained Earnings', debitAmount: 0, creditAmount: SAR(1200000), canonicalAccountId: 'ca-12', canonicalAccountName: 'Retained Earnings', confidence: 0.99, mappingType: 'human_mapped', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:55:00Z', updatedAt: '2025-04-15T11:55:00Z' },
+  { id: 'map-12', engagementId: ID.ENG, sourceAccountId: 'tb-line-13', sourceAccountCode: '3020', sourceAccountName: 'Retained Earnings', debitAmount: 0, creditAmount: SAR(705000), canonicalAccountId: 'ca-12', canonicalAccountName: 'Retained Earnings', confidence: 0.99, mappingType: 'human_mapped', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T11:55:00Z', updatedAt: '2025-04-15T11:55:00Z' },
   { id: 'map-13', engagementId: ID.ENG, sourceAccountId: 'tb-line-13', sourceAccountCode: '4010', sourceAccountName: 'Sales Revenue', debitAmount: 0, creditAmount: SAR(4500000), canonicalAccountId: 'ca-13', canonicalAccountName: 'Revenue - Sale of Goods', confidence: 0.98, mappingType: 'confirmed_ai', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:00:00Z', updatedAt: '2025-04-15T12:00:00Z' },
   { id: 'map-14', engagementId: ID.ENG, sourceAccountId: 'tb-line-14', sourceAccountCode: '4020', sourceAccountName: 'Service Revenue', debitAmount: 0, creditAmount: SAR(750000), canonicalAccountId: 'ca-14', canonicalAccountName: 'Revenue - Services', confidence: 0.97, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:05:00Z', updatedAt: '2025-04-15T12:05:00Z' },
   { id: 'map-15', engagementId: ID.ENG, sourceAccountId: 'tb-line-15', sourceAccountCode: '5010', sourceAccountName: 'Cost of Sales', debitAmount: SAR(2800000), creditAmount: 0, canonicalAccountId: 'ca-15', canonicalAccountName: 'Cost of Sales', confidence: 0.99, mappingType: 'confirmed_ai', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:10:00Z', updatedAt: '2025-04-15T12:10:00Z' },
@@ -189,9 +193,10 @@ export const mockMappings: AccountMapping[] = [
   { id: 'map-18', engagementId: ID.ENG, sourceAccountId: 'tb-line-18', sourceAccountCode: '5040', sourceAccountName: 'Utilities Expense', debitAmount: SAR(95000), creditAmount: 0, canonicalAccountId: 'ca-18', canonicalAccountName: 'Utilities', confidence: 0.97, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:25:00Z', updatedAt: '2025-04-15T12:25:00Z' },
   { id: 'map-19', engagementId: ID.ENG, sourceAccountId: 'tb-line-19', sourceAccountCode: '5050', sourceAccountName: 'Depreciation Expense', debitAmount: SAR(175000), creditAmount: 0, canonicalAccountId: 'ca-19', canonicalAccountName: 'Depreciation and Amortisation', confidence: 0.98, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:30:00Z', updatedAt: '2025-04-15T12:30:00Z' },
   { id: 'map-20', engagementId: ID.ENG, sourceAccountId: 'tb-line-20', sourceAccountCode: '5060', sourceAccountName: 'Professional Fees', debitAmount: SAR(120000), creditAmount: 0, canonicalAccountId: 'ca-20', canonicalAccountName: 'Professional and Consulting Fees', confidence: 0.96, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:35:00Z', updatedAt: '2025-04-15T12:35:00Z' },
-  { id: 'map-21', engagementId: ID.ENG, sourceAccountId: 'tb-line-21', sourceAccountCode: '5070', sourceAccountName: 'General and Administrative Expenses', debitAmount: SAR(65000), creditAmount: 0, canonicalAccountId: 'ca-21', canonicalAccountName: 'General and Administrative Expenses', confidence: 0.97, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:40:00Z', updatedAt: '2025-04-15T12:40:00Z' },
-  // Unmapped account (intentional issue) - no mappedBy or mappedAt since it's pending
-  { id: 'map-22', engagementId: ID.ENG, sourceAccountId: 'tb-line-22', sourceAccountCode: '5100', sourceAccountName: 'Sundry Income', debitAmount: 0, creditAmount: SAR(45000), status: 'pending', mappingType: 'ai_suggested', confidence: 0.85, canonicalAccountId: 'ca-22', canonicalAccountCode: 'CA-5100', canonicalAccountName: 'Other Income', statementClassification: 'Revenue', updatedAt: '2025-04-15T12:45:00Z' },
+  { id: 'map-21', engagementId: ID.ENG, sourceAccountId: 'tb-line-22', sourceAccountCode: '5070', sourceAccountName: 'General and Administrative Expenses', debitAmount: SAR(65000), creditAmount: 0, canonicalAccountId: 'ca-21', canonicalAccountName: 'General and Administrative Expenses', confidence: 0.97, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:40:00Z', updatedAt: '2025-04-15T12:40:00Z' },
+  { id: 'map-23', engagementId: ID.ENG, sourceAccountId: 'tb-line-11', sourceAccountCode: '2050', sourceAccountName: 'Finance Cost', debitAmount: SAR(35000), creditAmount: 0, canonicalAccountId: 'ca-23', canonicalAccountName: 'Finance Cost', confidence: 0.94, mappingType: 'ai_suggested', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:42:00Z', updatedAt: '2025-04-15T12:42:00Z' },
+  // Sundry Income mapped to Other Income — confirmed for balanced demo
+  { id: 'map-22', engagementId: ID.ENG, sourceAccountId: 'tb-line-23', sourceAccountCode: '5100', sourceAccountName: 'Sundry Income', debitAmount: 0, creditAmount: SAR(45000), canonicalAccountId: 'ca-22', canonicalAccountName: 'Other Income', confidence: 0.85, mappingType: 'confirmed_ai', status: 'confirmed', mappedBy: 'Ahmed Al Ghamdi', mappedAt: '2025-04-15T12:45:00Z', updatedAt: '2025-04-15T12:45:00Z' },
 ]
 
 // ─── Validation ───
@@ -200,35 +205,32 @@ export const mockValidationRun: ValidationRun = {
   engagementId: ID.ENG,
   validationType: 'full',
   status: 'completed',
-  summary: '2 errors, 3 warnings found. Trust state: Conditional.',
-  trustState: 'conditional',
+  summary: '0 errors, 2 warnings found. Trust state: Verified.',
+  trustState: 'trusted',
   validatedAt: '2025-04-15T13:00:00Z',
   issues: [
-    { id: 'vi-1', validationRunId: 'val-1', checkType: 'balance_equality', severity: 'error', status: 'open', description: 'Trial balance variance: SAR 45,000', message: 'Total debits (SAR 11,045,000) do not equal total credits (SAR 11,000,000). Variance: SAR 45,000.' },
-    { id: 'vi-2', validationRunId: 'val-1', checkType: 'missing_mappings', severity: 'error', status: 'open', description: 'Sundry Income (5100) unmapped', accountCode: '5100', accountName: 'Sundry Income', message: 'Account Sundry Income (5100) has no confirmed mapping.' },
-    { id: 'vi-3', validationRunId: 'val-1', checkType: 'unusual_balance', severity: 'warning', status: 'open', description: 'Accrued Expenses shows negative credit balance', accountCode: '2020', accountName: 'Accrued Expenses', expectedValue: -95000, actualValue: -20000, message: 'Accrued Expenses (2020) has an unusual credit balance of SAR 20,000 (expected ~SAR 95,000).' },
-    { id: 'vi-4', validationRunId: 'val-1', checkType: 'classification_conflict', severity: 'warning', status: 'open', description: 'Short-term Loan may have maturity > 12 months', accountCode: '2040', accountName: 'Short-term Loan', message: 'Short-term Loan (2040) is classified as current but the loan agreement indicates a 24-month term. Verify classification.' },
-    { id: 'vi-5', validationRunId: 'val-1', checkType: 'prior_period_variance', severity: 'warning', status: 'open', description: 'Significant variance in Professional Fees', accountCode: '5060', accountName: 'Professional Fees', expectedValue: 75000, actualValue: 120000, message: 'Professional Fees (5060) increased 60% from prior period (SAR 75,000 → SAR 120,000). No supporting explanation found.' },
+    { id: 'vi-1', validationRunId: 'val-1', checkType: 'classification_conflict', severity: 'warning', status: 'open', description: 'Short-term Loan may have maturity > 12 months', accountCode: '2040', accountName: 'Short-term Loan', message: 'Short-term Loan (2040) is classified as current but the loan agreement indicates a 24-month term. Verify classification.' },
+    { id: 'vi-2', validationRunId: 'val-1', checkType: 'prior_period_variance', severity: 'warning', status: 'open', description: 'Significant variance in Professional Fees', accountCode: '5060', accountName: 'Professional Fees', expectedValue: 75000, actualValue: 120000, message: 'Professional Fees (5060) increased 60% from prior period (SAR 75,000 → SAR 120,000). No supporting explanation found.' },
   ],
 }
 
 // ─── Financial Statements ───
 const incomeStatementLines: FinancialStatementLine[] = [
-  { id: 'fsl-is-1', statementId: 'fs-is-1', label: 'Revenue', amount: SAR(5250000), isTotal: true, indentLevel: 0, displayOrder: 10, linkedAccountMappings: ['map-13', 'map-14', 'map-22'] },
+  { id: 'fsl-is-1', statementId: 'fs-is-1', label: 'Revenue', amount: SAR(5295000), isTotal: true, indentLevel: 0, displayOrder: 10, linkedAccountMappings: ['map-13', 'map-14', 'map-22'] },
   { id: 'fsl-is-2', statementId: 'fs-is-1', label: '  Sales Revenue', amount: SAR(4500000), isTotal: false, indentLevel: 1, displayOrder: 11, linkedAccountMappings: ['map-13'] },
   { id: 'fsl-is-3', statementId: 'fs-is-1', label: '  Service Revenue', amount: SAR(750000), isTotal: false, indentLevel: 1, displayOrder: 12, linkedAccountMappings: ['map-14'] },
+  { id: 'fsl-is-3b', statementId: 'fs-is-1', label: '  Other Income', amount: SAR(45000), isTotal: false, indentLevel: 1, displayOrder: 13, linkedAccountMappings: ['map-22'] },
   { id: 'fsl-is-4', statementId: 'fs-is-1', label: 'Cost of Sales', amount: SAR(2800000), isTotal: true, indentLevel: 0, displayOrder: 20, linkedAccountMappings: ['map-15'] },
-  { id: 'fsl-is-5', statementId: 'fs-is-1', label: 'Gross Profit', amount: SAR(2450000), isTotal: true, indentLevel: 0, displayOrder: 30, linkedAccountMappings: [] },
-  { id: 'fsl-is-6', statementId: 'fs-is-1', label: 'Operating Expenses', amount: SAR(1595000), isTotal: true, indentLevel: 0, displayOrder: 40, linkedAccountMappings: ['map-16', 'map-17', 'map-18', 'map-19', 'map-20', 'map-21'] },
+  { id: 'fsl-is-5', statementId: 'fs-is-1', label: 'Gross Profit', amount: SAR(2495000), isTotal: true, indentLevel: 0, displayOrder: 30, linkedAccountMappings: [] },
+  { id: 'fsl-is-6', statementId: 'fs-is-1', label: 'Operating Expenses', amount: SAR(1630000), isTotal: true, indentLevel: 0, displayOrder: 40, linkedAccountMappings: ['map-16', 'map-17', 'map-18', 'map-19', 'map-20', 'map-21', 'map-23'] },
   { id: 'fsl-is-7', statementId: 'fs-is-1', label: '  Salaries and Wages', amount: SAR(900000), isTotal: false, indentLevel: 1, displayOrder: 41, linkedAccountMappings: ['map-16'] },
   { id: 'fsl-is-8', statementId: 'fs-is-1', label: '  Rent Expense', amount: SAR(240000), isTotal: false, indentLevel: 1, displayOrder: 42, linkedAccountMappings: ['map-17'] },
   { id: 'fsl-is-9', statementId: 'fs-is-1', label: '  Utilities', amount: SAR(95000), isTotal: false, indentLevel: 1, displayOrder: 43, linkedAccountMappings: ['map-18'] },
   { id: 'fsl-is-10', statementId: 'fs-is-1', label: '  Depreciation', amount: SAR(175000), isTotal: false, indentLevel: 1, displayOrder: 44, linkedAccountMappings: ['map-19'] },
   { id: 'fsl-is-11', statementId: 'fs-is-1', label: '  Professional Fees', amount: SAR(120000), isTotal: false, indentLevel: 1, displayOrder: 45, linkedAccountMappings: ['map-20'] },
   { id: 'fsl-is-12', statementId: 'fs-is-1', label: '  General and Administrative', amount: SAR(65000), isTotal: false, indentLevel: 1, displayOrder: 46, linkedAccountMappings: ['map-21'] },
-  { id: 'fsl-is-13', statementId: 'fs-is-1', label: 'Profit Before Tax', amount: SAR(855000), isTotal: true, indentLevel: 0, displayOrder: 50, linkedAccountMappings: [] },
-  { id: 'fsl-is-14', statementId: 'fs-is-1', label: 'Other Income', amount: SAR(45000), isTotal: false, indentLevel: 0, displayOrder: 55, linkedAccountMappings: ['map-22'] },
-  { id: 'fsl-is-15', statementId: 'fs-is-1', label: 'Net Profit', amount: SAR(900000), isTotal: true, indentLevel: 0, displayOrder: 60, linkedAccountMappings: [] },
+  { id: 'fsl-is-12b', statementId: 'fs-is-1', label: '  Finance Cost', amount: SAR(35000), isTotal: false, indentLevel: 1, displayOrder: 47, linkedAccountMappings: ['map-23'] },
+  { id: 'fsl-is-13', statementId: 'fs-is-1', label: 'Net Profit', amount: SAR(865000), isTotal: true, indentLevel: 0, displayOrder: 50, linkedAccountMappings: [] },
 ]
 
 const balanceSheetLines: FinancialStatementLine[] = [
@@ -243,17 +245,16 @@ const balanceSheetLines: FinancialStatementLine[] = [
   { id: 'fsl-bs-9', statementId: 'fs-bs-1', label: '  Less: Accumulated Depreciation', amount: SAR(-875000), isTotal: false, indentLevel: 1, displayOrder: 22, linkedAccountMappings: ['map-6'] },
   { id: 'fsl-bs-10', statementId: 'fs-bs-1', label: 'TOTAL ASSETS', amount: SAR(5200000), isTotal: true, indentLevel: 0, displayOrder: 30, linkedAccountMappings: [] },
   { id: 'fsl-bs-11', statementId: 'fs-bs-1', label: 'LIABILITIES AND EQUITY', amount: 0, isTotal: false, indentLevel: 0, displayOrder: 35, linkedAccountMappings: [] },
-  { id: 'fsl-bs-12', statementId: 'fs-bs-1', label: 'Current Liabilities', amount: SAR(1510000), isTotal: true, indentLevel: 0, displayOrder: 40, linkedAccountMappings: [] },
+  { id: 'fsl-bs-12', statementId: 'fs-bs-1', label: 'Current Liabilities', amount: SAR(1630000), isTotal: true, indentLevel: 0, displayOrder: 40, linkedAccountMappings: [] },
   { id: 'fsl-bs-13', statementId: 'fs-bs-1', label: '  Trade Payables', amount: SAR(950000), isTotal: false, indentLevel: 1, displayOrder: 41, linkedAccountMappings: ['map-7'] },
-  { id: 'fsl-bs-14', statementId: 'fs-bs-1', label: '  Accrued Expenses', amount: SAR(-20000), isTotal: false, indentLevel: 1, displayOrder: 42, linkedAccountMappings: ['map-8'] },
+  { id: 'fsl-bs-14', statementId: 'fs-bs-1', label: '  Accrued Expenses', amount: SAR(95000), isTotal: false, indentLevel: 1, displayOrder: 42, linkedAccountMappings: ['map-8'] },
   { id: 'fsl-bs-15', statementId: 'fs-bs-1', label: '  Tax and Zakat Payable', amount: SAR(85000), isTotal: false, indentLevel: 1, displayOrder: 43, linkedAccountMappings: ['map-9'] },
   { id: 'fsl-bs-16', statementId: 'fs-bs-1', label: '  Short-term Borrowings', amount: SAR(500000), isTotal: false, indentLevel: 1, displayOrder: 44, linkedAccountMappings: ['map-10'] },
-  { id: 'fsl-bs-17', statementId: 'fs-bs-1', label: 'Equity', amount: SAR(3690000), isTotal: true, indentLevel: 0, displayOrder: 50, linkedAccountMappings: [] },
+  { id: 'fsl-bs-17', statementId: 'fs-bs-1', label: 'Equity', amount: SAR(3570000), isTotal: true, indentLevel: 0, displayOrder: 50, linkedAccountMappings: [] },
   { id: 'fsl-bs-18', statementId: 'fs-bs-1', label: '  Share Capital', amount: SAR(2000000), isTotal: false, indentLevel: 1, displayOrder: 51, linkedAccountMappings: ['map-11'] },
-  { id: 'fsl-bs-19', statementId: 'fs-bs-1', label: '  Retained Earnings', amount: SAR(1200000), isTotal: false, indentLevel: 1, displayOrder: 52, linkedAccountMappings: ['map-12'] },
-  { id: 'fsl-bs-20', statementId: 'fs-bs-1', label: '  Current Year Profit', amount: SAR(900000), isTotal: false, indentLevel: 1, displayOrder: 53, linkedAccountMappings: [] },
-  { id: 'fsl-bs-21', statementId: 'fs-bs-1', label: '  Less: Other Income (unmapped)', amount: SAR(-45000), isTotal: false, indentLevel: 1, displayOrder: 54, linkedAccountMappings: ['map-22'] },
-  { id: 'fsl-bs-22', statementId: 'fs-bs-1', label: 'TOTAL LIABILITIES AND EQUITY', amount: SAR(5200000), isTotal: true, indentLevel: 0, displayOrder: 60, linkedAccountMappings: [] },
+  { id: 'fsl-bs-19', statementId: 'fs-bs-1', label: '  Retained Earnings', amount: SAR(705000), isTotal: false, indentLevel: 1, displayOrder: 52, linkedAccountMappings: ['map-12'] },
+  { id: 'fsl-bs-20', statementId: 'fs-bs-1', label: '  Current Year Profit', amount: SAR(865000), isTotal: false, indentLevel: 1, displayOrder: 53, linkedAccountMappings: [] },
+  { id: 'fsl-bs-21', statementId: 'fs-bs-1', label: 'TOTAL LIABILITIES AND EQUITY', amount: SAR(5200000), isTotal: true, indentLevel: 0, displayOrder: 60, linkedAccountMappings: [] },
 ]
 
 export const mockFinancialStatements: FinancialStatement[] = [
@@ -269,49 +270,96 @@ export const mockFinancialStatements: FinancialStatement[] = [
 
 export const mockEquityStatementLines: FinancialStatementLine[] = [
   { id: 'fsl-eq-1', statementId: 'fs-eq-1', label: 'Share Capital', amount: SAR(2000000), isTotal: false, indentLevel: 0, displayOrder: 10, linkedAccountMappings: ['map-11'] },
-  { id: 'fsl-eq-2', statementId: 'fs-eq-1', label: 'Retained Earnings - Opening', amount: SAR(1200000), isTotal: false, indentLevel: 0, displayOrder: 20, linkedAccountMappings: ['map-12'] },
-  { id: 'fsl-eq-3', statementId: 'fs-eq-1', label: 'Current Year Profit', amount: SAR(900000), isTotal: false, indentLevel: 0, displayOrder: 30, linkedAccountMappings: [] },
-  { id: 'fsl-eq-4', statementId: 'fs-eq-1', label: 'Total Equity', amount: SAR(4100000), isTotal: true, indentLevel: 0, displayOrder: 40, linkedAccountMappings: [] },
+  { id: 'fsl-eq-2', statementId: 'fs-eq-1', label: 'Retained Earnings - Opening', amount: SAR(705000), isTotal: false, indentLevel: 0, displayOrder: 20, linkedAccountMappings: ['map-12'] },
+  { id: 'fsl-eq-3', statementId: 'fs-eq-1', label: 'Current Year Profit', amount: SAR(865000), isTotal: false, indentLevel: 0, displayOrder: 30, linkedAccountMappings: [] },
+  { id: 'fsl-eq-4', statementId: 'fs-eq-1', label: 'Total Equity', amount: SAR(3570000), isTotal: true, indentLevel: 0, displayOrder: 40, linkedAccountMappings: [] },
 ]
 
-// ─── Disclosure Notes ───
-export const mockDisclosureNotes: DisclosureNote[] = [
-  {
-    id: 'note-1', engagementId: ID.ENG, noteNumber: '1', title: 'General Information and Basis of Preparation',
-    noteType: 'accounting_policy', content: 'Gulf Trading Co. (the "Company") is a limited liability company incorporated in the Kingdom of Saudi Arabia. These financial statements have been prepared in accordance with IFRS for SMEs.',
-    aiDrafted: true, status: 'draft', missingInformation: ['Legal form of entity', 'Date of incorporation'], reviewComments: [], createdAt: '2025-04-16T10:00:00Z', updatedAt: '2025-04-16T10:00:00Z',
-  },
-  {
-    id: 'note-2', engagementId: ID.ENG, noteNumber: '2', title: 'Property, Plant and Equipment',
-    noteType: 'fixed_assets', content: 'Property, plant and equipment are stated at cost less accumulated depreciation. Depreciation is computed on a straight-line basis over the estimated useful lives of the assets.',
-    linkedStatementLine: 'Property, Plant and Equipment', aiDrafted: true, status: 'needs_info', missingInformation: ['Depreciation rates/useful lives by asset class', 'Addition and disposal details', 'Collateral details if pledged'], reviewComments: [], createdAt: '2025-04-16T10:10:00Z', updatedAt: '2025-04-16T10:10:00Z',
-  },
-  {
-    id: 'note-3', engagementId: ID.ENG, noteNumber: '3', title: 'Trade Receivables',
-    noteType: 'financial_instruments', content: 'Trade receivables are carried at original invoice amount less allowance for expected credit losses.',
-    linkedStatementLine: 'Trade Receivables', aiDrafted: true, status: 'needs_info', missingInformation: ['Aging analysis of receivables', 'Expected credit loss assessment'], reviewComments: [], createdAt: '2025-04-16T10:20:00Z', updatedAt: '2025-04-16T10:20:00Z',
-  },
-  {
-    id: 'note-4', engagementId: ID.ENG, noteNumber: '4', title: 'Inventories',
-    noteType: 'inventory', content: 'Inventories are stated at the lower of cost and net realisable value.',
-    linkedStatementLine: 'Inventories', aiDrafted: true, status: 'needs_info', missingInformation: ['Inventory costing method (FIFO/Weighted Average)', 'Inventory count date and coverage', 'Net realisable value assessment'], reviewComments: [], createdAt: '2025-04-16T10:30:00Z', updatedAt: '2025-04-16T10:30:00Z',
-  },
-  {
-    id: 'note-5', engagementId: ID.ENG, noteNumber: '5', title: 'Revenue Recognition',
-    noteType: 'accounting_policy', content: 'Revenue is recognised when control of goods or services is transferred to the customer at an amount that reflects the consideration to which the Company expects to be entitled.',
-    aiDrafted: true, status: 'draft', missingInformation: ['Revenue recognition point for each revenue stream', 'Performance obligation details'], reviewComments: [], createdAt: '2025-04-16T10:40:00Z', updatedAt: '2025-04-16T10:40:00Z',
-  },
-  {
-    id: 'note-6', engagementId: ID.ENG, noteNumber: '6', title: 'Short-term Borrowings',
-    noteType: 'financial_instruments', content: 'Short-term borrowings consist of an Islamic financing facility from a local bank.',
-    linkedStatementLine: 'Short-term Borrowings', aiDrafted: true, status: 'needs_info', missingInformation: ['Financing facility terms and conditions', 'Maturity date (verify current/non-current classification)', 'Profit/interest rate'], reviewComments: [], createdAt: '2025-04-16T10:50:00Z', updatedAt: '2025-04-16T10:50:00Z',
-  },
-  {
-    id: 'note-7', engagementId: ID.ENG, noteNumber: '7', title: 'Related Party Transactions',
-    noteType: 'related_party', content: 'Note 7 - Related Party Transactions: To be completed based on management representations.',
-    aiDrafted: false, status: 'draft', missingInformation: ['Identity of related parties', 'Nature and volume of transactions', 'Outstanding balances'], reviewComments: [], createdAt: '2025-04-16T11:00:00Z', updatedAt: '2025-04-16T11:00:00Z',
-  },
-]
+// ─── Disclosure Notes (generated by Notes Engine v1) ───
+// Note: Generated lazily via function to avoid TDZ issues with mockEvidence/mockFindings
+function generateMockDisclosureNotes(): DisclosureNote[] {
+  const notesEngineContext = {
+    engagementId: ID.ENG,
+    trialBalanceLines: mockTBLines.map(l => ({
+      accountCode: l.accountCode,
+      accountName: l.accountName,
+      debitAmount: l.debitAmount,
+      creditAmount: l.creditAmount,
+      balance: l.balance,
+      accountType: l.accountType,
+    })),
+    mappings: mockMappings.map(m => ({
+      sourceAccountCode: m.sourceAccountCode,
+      sourceAccountName: m.sourceAccountName,
+      canonicalAccountName: m.canonicalAccountName,
+      statementClassification: m.statementClassification,
+    })),
+    financialStatements: [
+      { statementType: 'income_statement', lines: incomeStatementLines.map(l => ({ label: l.label, amount: l.amount, isTotal: l.isTotal, linkedAccountMappings: l.linkedAccountMappings })) },
+      { statementType: 'balance_sheet', lines: balanceSheetLines.map(l => ({ label: l.label, amount: l.amount, isTotal: l.isTotal, linkedAccountMappings: l.linkedAccountMappings })) },
+    ],
+    existingNotes: [],
+    evidence: mockEvidence.map(e => ({
+      filename: e.filename,
+      state: e.state,
+      targetLabel: e.linkedEntities[0]?.targetLabel ?? '',
+    })),
+    findings: mockFindings.map(f => ({
+      title: f.title,
+      findingType: f.findingType,
+      severity: f.severity,
+      relatedAccountIds: f.relatedAccountIds,
+    })),
+  }
+
+  const generatedNotes = generateNotes(notesEngineContext)
+
+  return generatedNotes.map((note, i) => {
+    let status = note.status
+    if (note.noteNumber === '1') status = 'reviewed'
+    if (note.noteNumber === '2') status = 'reviewed'
+    if (note.noteNumber === '6') status = 'approved'
+
+    const reviewComments: ReviewComment[] = []
+    if (note.noteNumber === '2') {
+      reviewComments.push({
+        id: 'rc-2', engagementId: ID.ENG, targetType: 'note', targetId: `note-${i + 1}`,
+        reviewerId: ID.REVIEWER, reviewerName: 'Sarah Al Otaibi',
+        comment: 'PPE note needs depreciation rates per asset class and details of additions/disposals during the year.',
+        requiredAction: 'provide_evidence', status: 'open',
+        createdAt: '2025-04-28T14:30:00Z',
+      })
+    }
+    if (note.noteNumber === '1') {
+      reviewComments.push({
+        id: 'rc-3', engagementId: ID.ENG, targetType: 'note', targetId: `note-${i + 1}`,
+        reviewerId: ID.REVIEWER, reviewerName: 'Sarah Al Otaibi',
+        comment: 'General information note reviewed. Basis of preparation is appropriate for IFRS for SMEs.',
+        requiredAction: 'none', status: 'resolved', resolution: 'Note accepted as drafted.',
+        createdAt: '2025-04-29T09:00:00Z', resolvedAt: '2025-04-29T09:30:00Z',
+      })
+    }
+
+    return {
+      id: `note-${i + 1}`,
+      engagementId: ID.ENG,
+      noteNumber: note.noteNumber,
+      title: note.title,
+      noteType: note.noteType,
+      content: note.content,
+      linkedStatementLine: note.linkedStatementLine,
+      missingInformation: note.missingInformation,
+      aiDrafted: false,
+      status,
+      reviewComments,
+      createdAt: '2025-04-16T10:00:00Z',
+      updatedAt: '2025-04-16T10:00:00Z',
+    }
+  })
+}
+
+// Placeholder - actual export is at end of file after mockFindings
+export const mockDisclosureNotes: DisclosureNote[] = []
 
 // ─── Evidence ───
 export const mockEvidence: EvidenceObject[] = [
@@ -327,11 +375,11 @@ export const mockEvidence: EvidenceObject[] = [
 // ─── Findings ───
 export const mockFindings: Finding[] = [
   {
-    id: 'find-1', engagementId: ID.ENG, title: 'Negative Balance in Accrued Expenses',
-    findingType: 'control_deficiency', severity: 'medium', materiality: 'immaterial',
-    description: 'Accrued Expenses (account 2020) shows a negative credit balance of SAR 20,000, which indicates a potential reversal or over-accrual in the prior period that was not properly adjusted.',
-    rootCause: 'Prior period adjustment not recorded correctly', impact: 'Misstatement of current liabilities',
-    status: 'open', relatedAccountIds: ['tb-line-8'], relatedEvidenceIds: [], aiSuggested: true,
+    id: 'find-1', engagementId: ID.ENG, title: 'Revenue Concentration Risk',
+    findingType: 'observation', severity: 'medium', materiality: 'immaterial',
+    description: 'Sales Revenue represents 85% of total revenue. Customer concentration analysis recommended to assess dependency risk.',
+    rootCause: 'Single revenue stream dominance', impact: 'Business continuity risk if major customer relationship changes',
+    status: 'open', relatedAccountIds: ['tb-line-14'], relatedEvidenceIds: [], aiSuggested: true,
     createdAt: '2025-04-20T08:00:00Z', updatedAt: '2025-04-20T08:00:00Z',
   },
   {
@@ -356,18 +404,26 @@ export const mockFindings: Finding[] = [
     findingType: 'observation', severity: 'low', materiality: 'immaterial',
     description: 'Professional Fees increased 60% from SAR 75,000 to SAR 120,000 year-over-year with no supporting explanation.',
     rootCause: 'Engagement of additional consultants', impact: 'N/A - immaterial',
-    status: 'draft', relatedAccountIds: ['tb-line-20'], relatedEvidenceIds: [], aiSuggested: true,
+    status: 'draft', relatedAccountIds: ['tb-line-21'], relatedEvidenceIds: [], aiSuggested: true,
     createdAt: '2025-04-24T11:00:00Z', updatedAt: '2025-04-24T11:00:00Z',
+  },
+  {
+    id: 'find-5', engagementId: ID.ENG, title: 'Finance Cost Disclosure',
+    findingType: 'disclosure_gap', severity: 'low', materiality: 'immaterial',
+    description: 'Finance Cost of SAR 35,000 requires disclosure of financing arrangement terms, effective interest rate, and maturity profile.',
+    rootCause: 'Note disclosure incomplete', impact: 'Incomplete note disclosure',
+    status: 'draft', relatedAccountIds: ['tb-line-11'], relatedEvidenceIds: ['ev-5'], aiSuggested: true,
+    createdAt: '2025-04-26T09:00:00Z', updatedAt: '2025-04-26T09:00:00Z',
   },
 ]
 
 // ─── Recommendations ───
 export const mockRecommendations: Recommendation[] = [
   {
-    id: 'rec-1', engagementId: ID.ENG, findingId: 'find-1', title: 'Adjust Accrued Expenses Balance',
-    description: 'Reverse the negative balance in Accrued Expenses through a correcting entry.',
-    recommendedAction: 'Pass adjusting journal entry to correct the Accrued Expenses balance. Debit Accrued Expenses SAR 20,000, Credit appropriate income/expense account pending investigation.',
-    impactAssessment: 'Corrects liability presentation. Immaterial impact on profit.',
+    id: 'rec-1', engagementId: ID.ENG, findingId: 'find-1', title: 'Perform Customer Concentration Analysis',
+    description: 'Analyze revenue by customer to assess concentration risk and document findings.',
+    recommendedAction: 'Request customer-level revenue breakdown from management. Calculate percentage of total revenue per customer. Document any customer exceeding 10% of total revenue.',
+    impactAssessment: 'Improves risk disclosure. Supports going concern assessment.',
     riskLevel: 'medium', status: 'suggested', aiContributed: true,
     createdAt: '2025-04-25T08:00:00Z', updatedAt: '2025-04-25T08:00:00Z',
   },
@@ -394,8 +450,8 @@ export const mockReviewComments: ReviewComment[] = [
   {
     id: 'rc-1', engagementId: ID.ENG, targetType: 'statement', targetId: 'fs-is-1',
     reviewerId: ID.REVIEWER, reviewerName: 'Sarah Al Otaibi',
-    comment: 'The Other Income of SAR 45,000 should be shown separately in the income statement and linked to a mapped account. Sundry Income (5100) is still unmapped.',
-    requiredAction: 'revise', status: 'open',
+    comment: 'Revenue breakdown by segment should be disclosed in the notes. Verify that service revenue recognition criteria are documented.',
+    requiredAction: 'provide_evidence', status: 'open',
     createdAt: '2025-04-28T14:00:00Z',
   },
   {
@@ -418,16 +474,17 @@ export const mockApprovalRecords: ApprovalRecord[] = [
 ]
 
 // ─── Publication Package ───
+// Note: notes field is populated after mockDisclosureNotesGenerated is defined
 export const mockPublicationPackage: PublicationPackage = {
   id: 'pub-1',
   engagementId: ID.ENG,
   status: 'draft',
   statements: mockFinancialStatements,
-  notes: mockDisclosureNotes,
+  notes: [], // Populated below after mockDisclosureNotesGenerated
   findings: mockFindings,
   recommendations: mockRecommendations,
   reviewSummary: '1 open comment on Income Statement, 1 open comment on PPE note',
-  findingsSummary: '4 findings (1 draft, 2 open, 1 in review)',
+  findingsSummary: '5 findings (2 draft, 2 open, 1 in review)',
   evidenceSummary: '5 evidence items (3 accepted, 1 reviewed, 1 missing)',
   approvalHistory: mockApprovalRecords,
 }
@@ -439,15 +496,15 @@ export const mockAuditEvents: AuditEvent[] = [
   { id: 'ae-1', engagementId: ID.ENG, eventType: 'engagement.created', actorId: ID.PARTNER, actorName: 'Khalid Al Saud', actorRole: 'partner', targetType: 'engagement', targetId: ID.ENG, newState: 'setup', description: 'Engagement created for Gulf Trading Co. FY2025', aiRelated: false, timestamp: '2025-03-01T08:00:00Z' },
   { id: 'ae-2', engagementId: ID.ENG, eventType: 'team.assigned', actorId: ID.PARTNER, actorName: 'Khalid Al Saud', actorRole: 'partner', targetType: 'engagement', targetId: ID.ENG, newState: 'setup', description: 'Team assigned: Farida (Manager), Sarah (Reviewer), Ahmed (Operator)', aiRelated: false, timestamp: '2025-03-01T09:00:00Z' },
   { id: 'ae-3', engagementId: ID.ENG, eventType: 'trial_balance.uploaded', actorId: ID.OPERATOR, actorName: 'Ahmed Al Ghamdi', actorRole: 'operator', targetType: 'trial_balance', targetId: ID.TB, newState: 'uploaded', description: 'Trial balance uploaded: gulf_trading_tb_fy2025.xlsx', aiRelated: false, timestamp: '2025-04-15T10:30:00Z' },
-  { id: 'ae-4', engagementId: ID.ENG, eventType: 'mapping.ai_suggested', actorId: 'system', actorName: 'AI Assistant', actorRole: 'operator', targetType: 'account_mapping', targetId: 'map-1', newState: 'suggested', description: 'AI suggested 21 account mappings', aiRelated: true, metadata: { suggestionCount: 21, modelVersion: 'audit-os-llm-v1' }, timestamp: '2025-04-15T10:45:00Z' },
-  { id: 'ae-5', engagementId: ID.ENG, eventType: 'mapping.confirmed', actorId: ID.OPERATOR, actorName: 'Ahmed Al Ghamdi', actorRole: 'operator', targetType: 'account_mapping', targetId: 'map-1', newState: 'confirmed', description: 'Ahmed confirmed 21 account mappings. 1 pending (Sundry Income)', aiRelated: false, timestamp: '2025-04-15T12:45:00Z' },
-  { id: 'ae-6', engagementId: ID.ENG, eventType: 'validation.completed', actorId: 'system', actorName: 'System', actorRole: 'operator', targetType: 'validation', targetId: 'val-1', newState: 'completed', description: 'Validation completed: 2 errors, 3 warnings', aiRelated: false, timestamp: '2025-04-15T13:00:00Z' },
+  { id: 'ae-4', engagementId: ID.ENG, eventType: 'mapping.ai_suggested', actorId: 'system', actorName: 'AI Assistant', actorRole: 'operator', targetType: 'account_mapping', targetId: 'map-1', newState: 'suggested', description: 'AI suggested 23 account mappings', aiRelated: true, metadata: { suggestionCount: 23, modelVersion: 'audit-os-llm-v1' }, timestamp: '2025-04-15T10:45:00Z' },
+  { id: 'ae-5', engagementId: ID.ENG, eventType: 'mapping.confirmed', actorId: ID.OPERATOR, actorName: 'Ahmed Al Ghamdi', actorRole: 'operator', targetType: 'account_mapping', targetId: 'map-1', newState: 'confirmed', description: 'Ahmed confirmed all 23 account mappings', aiRelated: false, timestamp: '2025-04-15T12:45:00Z' },
+  { id: 'ae-6', engagementId: ID.ENG, eventType: 'validation.completed', actorId: 'system', actorName: 'System', actorRole: 'operator', targetType: 'validation', targetId: 'val-1', newState: 'completed', description: 'Validation completed: 0 errors, 2 warnings', aiRelated: false, timestamp: '2025-04-15T13:00:00Z' },
   { id: 'ae-7', engagementId: ID.ENG, eventType: 'evidence.uploaded', actorId: ID.OPERATOR, actorName: 'Ahmed Al Ghamdi', actorRole: 'operator', targetType: 'evidence', targetId: 'ev-1', newState: 'uploaded', description: 'Evidence uploaded: gulf_trading_tb_fy2025.xlsx', aiRelated: false, timestamp: '2025-04-15T10:30:00Z' },
   { id: 'ae-8', engagementId: ID.ENG, eventType: 'evidence.accepted', actorId: ID.REVIEWER, actorName: 'Sarah Al Otaibi', actorRole: 'reviewer', targetType: 'evidence', targetId: 'ev-2', previousState: 'reviewed', newState: 'accepted', description: 'Bank confirmation verified and accepted', aiRelated: false, timestamp: '2025-04-22T15:00:00Z' },
-  { id: 'ae-9', engagementId: ID.ENG, eventType: 'signal.generated', actorId: 'ai-system', actorName: 'AI Assistant', actorRole: 'operator', targetType: 'signal', targetId: 'find-1', newState: 'generated', description: 'AI detected unusual balance in Accrued Expenses', aiRelated: true, metadata: { signalType: 'unusual_balance', confidence: 0.82 }, timestamp: '2025-04-20T07:55:00Z' },
-  { id: 'ae-10', engagementId: ID.ENG, eventType: 'finding.created', actorId: ID.REVIEWER, actorName: 'Sarah Al Otaibi', actorRole: 'reviewer', targetType: 'finding', targetId: 'find-1', newState: 'open', description: 'Finding created: Negative Balance in Accrued Expenses', aiRelated: false, timestamp: '2025-04-20T08:00:00Z' },
-  { id: 'ae-11', engagementId: ID.ENG, eventType: 'recommendation.ai_suggested', actorId: 'ai-system', actorName: 'AI Assistant', actorRole: 'manager', targetType: 'recommendation', targetId: 'rec-1', newState: 'draft', description: 'AI drafted recommendation for Accrued Expenses adjustment', aiRelated: true, metadata: { modelVersion: 'audit-os-llm-v1' }, timestamp: '2025-04-25T07:55:00Z' },
-  { id: 'ae-12', engagementId: ID.ENG, eventType: 'recommendation.created', actorId: ID.REVIEWER, actorName: 'Sarah Al Otaibi', actorRole: 'reviewer', targetType: 'recommendation', targetId: 'rec-1', newState: 'suggested', description: 'Sarah reviewed and accepted AI recommendation for Accrued Expenses', aiRelated: true, timestamp: '2025-04-25T08:00:00Z' },
+  { id: 'ae-9', engagementId: ID.ENG, eventType: 'signal.generated', actorId: 'ai-system', actorName: 'AI Assistant', actorRole: 'operator', targetType: 'signal', targetId: 'find-1', newState: 'generated', description: 'AI detected revenue concentration risk in Sales Revenue', aiRelated: true, metadata: { signalType: 'revenue_concentration', confidence: 0.75 }, timestamp: '2025-04-20T07:55:00Z' },
+  { id: 'ae-10', engagementId: ID.ENG, eventType: 'finding.created', actorId: ID.REVIEWER, actorName: 'Sarah Al Otaibi', actorRole: 'reviewer', targetType: 'finding', targetId: 'find-1', newState: 'open', description: 'Finding created: Revenue Concentration Risk', aiRelated: false, timestamp: '2025-04-20T08:00:00Z' },
+  { id: 'ae-11', engagementId: ID.ENG, eventType: 'recommendation.ai_suggested', actorId: 'ai-system', actorName: 'AI Assistant', actorRole: 'manager', targetType: 'recommendation', targetId: 'rec-1', newState: 'draft', description: 'AI drafted recommendation for customer concentration analysis', aiRelated: true, metadata: { modelVersion: 'audit-os-llm-v1' }, timestamp: '2025-04-25T07:55:00Z' },
+  { id: 'ae-12', engagementId: ID.ENG, eventType: 'recommendation.created', actorId: ID.REVIEWER, actorName: 'Sarah Al Otaibi', actorRole: 'reviewer', targetType: 'recommendation', targetId: 'rec-1', newState: 'suggested', description: 'Sarah reviewed and accepted AI recommendation for concentration analysis', aiRelated: true, timestamp: '2025-04-25T08:00:00Z' },
   { id: 'ae-13', engagementId: ID.ENG, eventType: 'review.comment_added', actorId: ID.REVIEWER, actorName: 'Sarah Al Otaibi', actorRole: 'reviewer', targetType: 'statement', targetId: 'fs-is-1', newState: 'commented', description: 'Review comment: Other Income needs separate presentation', aiRelated: false, timestamp: '2025-04-28T14:00:00Z' },
   { id: 'ae-14', engagementId: ID.ENG, eventType: 'engagement.state_changed', actorId: ID.PARTNER, actorName: 'Khalid Al Saud', actorRole: 'partner', targetType: 'engagement', targetId: ID.ENG, previousState: 'setup', newState: 'in_progress', description: 'Engagement moved to In Progress after setup completion', aiRelated: false, timestamp: '2025-03-05T09:00:00Z' },
   // Most recent events
@@ -458,7 +515,7 @@ export const mockAuditEvents: AuditEvent[] = [
 // ─── AI Assistance ───
 export const mockAiOutputs: AIAssistanceOutput[] = [
   { id: 'ai-1', engagementId: ID.ENG, suggestionType: 'mapping', inputContext: 'Account: Sundry Income (5100), balance SAR 45,000 credit', outputContent: 'Suggested mapping: Sundry Income → Other Income (CA-5100) - Revenue', confidence: 0.85, modelVersion: 'audit-os-llm-v1', status: 'suggested', sourceEntityType: 'engagement', sourceEntityId: ID.ENG, createdAt: '2025-04-15T10:45:00Z' },
-  { id: 'ai-2', engagementId: ID.ENG, suggestionType: 'finding', inputContext: 'Accrued Expenses (2020): credit balance SAR -20,000', outputContent: 'Potential finding: Negative balance in Accrued Expenses indicates prior period adjustment not recorded.', confidence: 0.82, modelVersion: 'audit-os-llm-v1', status: 'accepted_by_human', acceptedBy: 'Sarah Al Otaibi', acceptedAt: '2025-04-20T08:00:00Z', sourceEntityType: 'engagement', sourceEntityId: ID.ENG, createdAt: '2025-04-20T07:55:00Z' },
+  { id: 'ai-2', engagementId: ID.ENG, suggestionType: 'finding', inputContext: 'Revenue concentration: Sales Revenue 85% of total', outputContent: 'Potential observation: High revenue concentration in Sales Revenue. Recommend customer concentration analysis.', confidence: 0.75, modelVersion: 'audit-os-llm-v1', status: 'accepted_by_human', acceptedBy: 'Sarah Al Otaibi', acceptedAt: '2025-04-20T08:00:00Z', sourceEntityType: 'engagement', sourceEntityId: ID.ENG, createdAt: '2025-04-20T07:55:00Z' },
   { id: 'ai-3', engagementId: ID.ENG, suggestionType: 'recommendation', inputContext: 'Finding: Short-term Loan classification - 24-month term', outputContent: 'Recommendation: Reclassify Short-term Loan of SAR 500,000 from current to non-current liabilities.', confidence: 0.91, modelVersion: 'audit-os-llm-v1', status: 'accepted_by_human', acceptedBy: 'Sarah Al Otaibi', acceptedAt: '2025-04-25T08:30:00Z', sourceEntityType: 'engagement', sourceEntityId: ID.ENG, createdAt: '2025-04-25T08:25:00Z' },
   { id: 'ai-4', engagementId: ID.ENG, suggestionType: 'note_draft', inputContext: 'PPE note for Gulf Trading Co.', outputContent: 'Drafted Note 2 - Property, Plant and Equipment with standard IFRS for SMEs disclosure.', confidence: 0.78, modelVersion: 'audit-os-llm-v1', status: 'accepted_by_human', acceptedBy: 'Sarah Al Otaibi', acceptedAt: '2025-04-16T10:10:00Z', sourceEntityType: 'engagement', sourceEntityId: ID.ENG, createdAt: '2025-04-16T10:05:00Z' },
   { id: 'ai-5', engagementId: ID.ENG, suggestionType: 'anomaly_explanation', inputContext: 'Professional Fees 60% increase from SAR 75K to SAR 120K', outputContent: 'Significant variance detected. Professional Fees increased 60% YoY. Common causes: new consulting engagements, regulatory projects, or one-time advisory fees.', confidence: 0.72, modelVersion: 'audit-os-llm-v1', status: 'suggested', sourceEntityType: 'engagement', sourceEntityId: ID.ENG, createdAt: '2025-04-24T10:55:00Z' },
@@ -469,7 +526,7 @@ export const mockDashboardSummary: DashboardSummary = {
   totalEngagements: 3,
   activeEngagements: 2,
   pendingReviews: 2,
-  openFindings: 4,
+  openFindings: 5,
   missingEvidence: 1,
   readyForApproval: 0,
   publishedCount: 0,
@@ -488,3 +545,9 @@ export const mockDashboardSummary: DashboardSummary = {
     },
   ],
 }
+
+// Re-export mockDisclosureNotes after all dependencies are defined
+export const mockDisclosureNotesGenerated: DisclosureNote[] = generateMockDisclosureNotes()
+
+// Populate the notes field in mockPublicationPackage now that we have the generated notes
+mockPublicationPackage.notes = mockDisclosureNotesGenerated
