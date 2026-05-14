@@ -22,6 +22,15 @@ enum DecisionStatus {
 
 enum DecisionType {
   TENDER
+  INVESTMENT
+  EXPANSION
+  PROCUREMENT
+  HIRING
+  PARTNERSHIP
+  PRICING
+  STRATEGIC
+  OPERATIONS
+  CUSTOM
 }
 
 enum RiskLevel {
@@ -48,6 +57,13 @@ enum ApprovalStatus {
   REJECTED
 }
 
+enum OutcomeStatus {
+  SUCCESS
+  PARTIAL_SUCCESS
+  FAILURE
+  UNKNOWN
+}
+
 enum AuditAction {
   DECISION_CREATED
   DECISION_UPDATED
@@ -58,6 +74,18 @@ enum AuditAction {
   BENCHMARK_CREATED
   OUTPUT_PUBLISHED
   OUTPUT_UNPUBLISHED
+  SUBMITTED_FOR_REVIEW
+  DECISION_APPROVED
+  DECISION_APPROVED_WITH_CONDITIONS
+  DECISION_REJECTED
+  REVISION_REQUESTED
+  SNAPSHOT_PUBLISHED
+  CURRENT_PUBLISHED_WITHOUT_APPROVAL
+  STALE_PUBLISH_BLOCKED
+  STALE_PUBLISH_OVERRIDE
+  OUTCOME_CREATED
+  OUTCOME_UPDATED
+  OUTCOME_REVIEWED
 }
 
 model Organization {
@@ -86,6 +114,7 @@ model User {
   reviewedDecisions   Decision[]   @relation("DecisionReviewer")
   approvedDecisions   Decision[]   @relation("DecisionApprover")
   approvals           Approval[]   @relation("ApprovalApprover")
+  reviewedOutcomes    DecisionOutcome[] @relation("OutcomeReviewer")
   auditLogs           AuditLog[]
   publishedRecommendations Recommendation[] @relation("RecommendationPublisher")
   createdAt           DateTime     @default(now())
@@ -105,6 +134,9 @@ model Decision {
   organizationId String
   organization   Organization  @relation(fields: [organizationId], references: [id])
   status         DecisionStatus @default(DRAFT)
+  description    String?
+  priority       String          @default("MEDIUM")
+  targetDate     DateTime?
   tenderProfile  TenderProfile?
   objectives     Objective[]
   constraints    Constraint[]
@@ -118,6 +150,7 @@ model Decision {
   simulations    SimulationResult[]
   recommendation Recommendation?
   approvals      Approval[]
+  outcome        DecisionOutcome?
   auditLogs      AuditLog[]
   reports        DecisionReport[]
   signals        DecisionMonitoringSignal[]
@@ -365,6 +398,9 @@ model Recommendation {
   publishedById       String?
   publishedBy         User?    @relation("RecommendationPublisher", fields: [publishedById], references: [id])
   publishedVersion    Int      @default(1)
+  publishedFromSnapshot Boolean @default(false)
+  publishedApprovalId String?
+  approvals           Approval[]
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
@@ -377,8 +413,43 @@ model Approval {
   approver    User          @relation("ApprovalApprover", fields: [approverId], references: [id])
   status      ApprovalStatus @default(PENDING)
   comments    String?
+  recommendationId String?
+  recommendation Recommendation? @relation(fields: [recommendationId], references: [id])
+  snapshotAction String?
+  snapshotRationale String?
+  snapshotExpectedNextState String?
+  snapshotScopeExclusions String?
+  snapshotAssumptionsUsed String?
+  snapshotRisksAccepted String?
+  snapshotRisksRejected String?
+  snapshotConditions String?
+  snapshotRisks Json?
+  snapshotNextActions Json?
+  snapshotConfidence Float?
+  snapshotScore Float?
+  snapshotOverrideReason String?
+  snapshotCreatedAt DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+}
+
+model DecisionOutcome {
+  id              String        @id @default(cuid())
+  decisionId      String        @unique
+  decision        Decision      @relation(fields: [decisionId], references: [id])
+  expectedOutcome String
+  actualOutcome   String?
+  outcomeStatus   OutcomeStatus @default(UNKNOWN)
+  actualValue     Float?
+  expectedValue   Float?
+  variance        Float?
+  lessonsLearned  String?
+  followUpActions Json?
+  reviewedById    String?
+  reviewedBy      User?         @relation("OutcomeReviewer", fields: [reviewedById], references: [id])
+  reviewedAt      DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
 model AuditLog {
@@ -598,6 +669,9 @@ model AuditEngagement {
   pilotFeedback    PilotFeedback[]
   pilotBlockers    ProductionBlocker[]
   pilotSignoffs    PilotSignoff[]
+  validationRuns   AuditValidationRun[]
+  validationIssues AuditValidationIssue[]
+  validationDispositions AuditValidationDisposition[]
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 }
@@ -894,4 +968,68 @@ model PilotSignoff {
   updatedAt       DateTime        @updatedAt
 
   @@unique([engagementId, checklistItem])
+}
+
+model AuditValidationRun {
+  id             String              @id @default(cuid())
+  engagementId   String
+  engagement     AuditEngagement     @relation(fields: [engagementId], references: [id])
+  validationType String
+  status         String              @default("completed")
+  trustState     String              @default("conditional")
+  summary        String?
+  issueCount     Int                 @default(0)
+  criticalCount  Int                 @default(0)
+  highCount      Int                 @default(0)
+  mediumCount    Int                 @default(0)
+  lowCount       Int                 @default(0)
+  createdBy      String
+  createdAt      DateTime            @default(now())
+  completedAt    DateTime?
+  issues         AuditValidationIssue[]
+
+  @@index([engagementId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AuditValidationIssue {
+  id              String                      @id @default(cuid())
+  validationRunId String
+  validationRun   AuditValidationRun          @relation(fields: [validationRunId], references: [id])
+  engagementId    String
+  engagement      AuditEngagement             @relation(fields: [engagementId], references: [id])
+  checkType       String
+  severity        String
+  status          String                      @default("open")
+  title           String
+  description     String
+  message         String
+  accountCode     String?
+  accountName     String?
+  expectedValue   Float?
+  actualValue     Float?
+  difference      Float?
+  createdAt       DateTime                    @default(now())
+  dispositions    AuditValidationDisposition[]
+
+  @@index([validationRunId])
+  @@index([engagementId])
+  @@index([severity])
+  @@index([status])
+}
+
+model AuditValidationDisposition {
+  id           String                @id @default(cuid())
+  issueId      String
+  issue        AuditValidationIssue  @relation(fields: [issueId], references: [id])
+  engagementId String
+  engagement   AuditEngagement       @relation(fields: [engagementId], references: [id])
+  action       String
+  rationale    String?
+  disposedBy   String
+  disposedAt   DateTime              @default(now())
+
+  @@index([issueId])
+  @@index([engagementId])
 }
