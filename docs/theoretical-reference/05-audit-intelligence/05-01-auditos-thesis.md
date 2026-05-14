@@ -141,6 +141,8 @@ AuditOS follows AQLIYA's broader doctrine and applies it to audit.
 
 **AI assists; humans decide.** AI may propose evidence links, rank reviewer queues, summarize document deltas, suggest risk patterns, or draft finding language. It may not independently accept evidence, close findings, approve sign-offs, or issue conclusions.
 
+**Draft outputs require professional review.** AI-generated finding drafts, risk classifications, and report language are starting points for professional review — they must be evaluated and approved by a qualified reviewer before carrying authoritative weight in the engagement.
+
 **Reviewer trust is a product requirement.** If reviewers cannot quickly determine why something is surfaced, what evidence supports it, what validation state it carries, and who already touched it, the system fails regardless of automation quality.
 
 **Governance and accountability are structural requirements.** Review stages, approval thresholds, escalation rules, and sign-off responsibilities must be built into the workflow engine and evidence model, not left to policy documents alone.

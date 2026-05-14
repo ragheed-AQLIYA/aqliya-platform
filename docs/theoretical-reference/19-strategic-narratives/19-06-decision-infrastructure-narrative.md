@@ -1,4 +1,4 @@
-﻿---
+---
 title: Decision Infrastructure Narrative
 document_id: 19.06
 status: Reviewed v0.2
@@ -188,7 +188,7 @@ Decision infrastructure is built on principles that distinguish it from every ad
 
 3. Pricing reflects infrastructure value, not SaaS seat licensing. The enterprise pays for the decision layer that makes every professional more effective, not for user accounts.
 
-4. The current primary commercial focus is audit (`AQLIYA AuditOS / Financial Intelligence`), where decision density is highest and evidence requirements are strictest. From audit, the same doctrine can extend to adjacent product lines and enterprise-wide governed workflows.
+4. The current primary commercial focus is audit (`AuditOS / Financial Intelligence`), where decision density is highest and evidence requirements are strictest. From audit, the same doctrine can extend to adjacent product lines and enterprise-wide governed workflows.
 
 5. Self-hosted and air-gapped deployments are commercial differentiators. Enterprises that require data sovereignty can adopt decision infrastructure that operates entirely within their boundaries.
 

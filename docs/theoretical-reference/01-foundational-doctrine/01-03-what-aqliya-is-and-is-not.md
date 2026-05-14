@@ -1,4 +1,4 @@
-﻿---
+---
 title: What AQLIYA Is / Is Not
 document_id: 01.03
 status: Approved
@@ -83,6 +83,8 @@ AQLIYA is not here to compete with these categories. We are here to make them ob
 5. **Human-in-the-Loop Operating Systems.** AI assists. Humans decide. The system is built for professional users, not for replacing them.
 
 6. **Category Creator.** AQLIYA is defining a broader category of AI operating systems for governed enterprise work. Enterprise Decision Intelligence remains one important doctrine within that broader architecture. We measure success by category leadership, not feature parity.
+
+7. **Evidence-Centered Financial Intelligence, Not a Replacement.** AQLIYA does not replace accountants, auditors, or professional judgment. It provides evidence-centered intelligence that equips professionals to decide faster, better, and more defensibly. The professional remains accountable; the system serves their judgment.
 
 ### What AQLIYA IS NOT
 
@@ -297,7 +299,7 @@ A feature is AQLIYA-native only if it strengthens at least one of the following:
 
 **Example 4: The Partnership.** A large tech company offers to integrate AQLIYA as an "AI copilot for Excel." The partnership would position AQLIYA as a generic AI add-on. It is declined because it reinforces the wrong category.
 
-**Example 5: Product Naming.** The product is not named "AuditOS Pro" or "AuditAI." It is named within the AQLIYA company architecture as `AQLIYA AuditOS`, preserving company identity while serving the audit market.
+**Example 5: Product Naming.** The product is not named "AuditOS Pro" or "AuditAI." It is named within the AQLIYA company architecture as `AuditOS`, preserving company identity while serving the audit market.
 
 ## 17. Enterprise Impact
 

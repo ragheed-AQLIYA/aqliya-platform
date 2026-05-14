@@ -4,6 +4,8 @@
 
 This is the structured intellectual foundation of AQLIYA. It is not generic documentation — it is a long-term reference system that defines the company's theory, philosophy, and principles across 21 parts.
 
+This reference system explains WHY AQLIYA takes its positions — it does not document HOW to implement them. Every document here is anchored by the core operating principle: AI assists. Humans decide. Evidence governs.
+
 ## Doctrine Modernization Note
 
 The theoretical reference system was originally authored when Enterprise Decision Intelligence language served as AQLIYA's top-level category framing.
@@ -51,7 +53,102 @@ Follow the 8-phase writing agenda defined in `00-writing-agenda.md`.
 
 ## Current Priority
 
-**Phase 1: Foundation Documents** — establish the core identity and philosophy before writing anything else.
+**Phase 3 Complete: Institutional Intelligence Layer Expansion** — see Phase 3 section below.
+
+## Architecture Alignment Layer
+
+This 21-part system supports the broader AQLIYA documentation architecture through a conceptual alignment layer.
+
+### Phase 1 — Architecture Overview
+- `theoretical-documentation-system.md` — Architecture overview and role definition
+- `theoretical-reference-mapping.md` — Detailed mapping from the 21-part structure to the 13-section conceptual model
+
+### Phase 2 — Compatibility Gateways and Concept Indexes
+- `gateways/` — Topic gateways organized by the 13-section conceptual model
+  - `financial-intelligence-gateway.md`
+  - `audit-methodology-gateway.md`
+  - `ai-governance-gateway.md`
+  - `evidence-traceability-gateway.md`
+  - `decision-intelligence-gateway.md`
+- `concept-indexes/` — Cross-cutting concept indexes
+  - `core-principles-index.md`
+  - `professional-judgment-index.md`
+  - `evidence-centered-design-index.md`
+  - `human-in-the-loop-index.md`
+  - `draft-output-boundaries-index.md`
+
+### Phase 3 — Institutional Intelligence Layer Expansion
+
+The system evolved from a documentation library into an institutional knowledge architecture with six new intelligence layers:
+
+- `knowledge-graph/` — Semantic relationships between concepts, doctrine, products, workflows, governance, and AI boundaries
+  - `concepts-to-products-map.md`
+  - `doctrine-to-workflows-map.md`
+  - `governance-to-product-behavior-map.md`
+  - `evidence-to-decision-traceability-map.md`
+  - `ai-boundaries-to-operational-controls-map.md`
+- `traceability/` — Traceability chains from principle to execution
+  - `principle-to-product-traceability.md`
+  - `governance-traceability-framework.md`
+  - `audit-behavior-traceability.md`
+  - `evidence-chain-framework.md`
+  - `human-approval-traceability.md`
+- `institutional-memory/` — Institutional operating memory preserving decisions, principles, and evolution
+  - `founder-principles-index.md`
+  - `strategic-doctrine-map.md`
+  - `anti-pattern-history-map.md`
+  - `architectural-decisions-memory.md`
+  - `product-philosophy-memory.md`
+- `system-intelligence/` — Cross-system intelligence maps connecting doctrine to active systems
+  - `auditos-doctrine-map.md`
+  - `commercial-system-doctrine-map.md`
+  - `pilot-system-governance-map.md`
+  - `decision-intelligence-system-map.md`
+  - `financial-intelligence-operating-model.md`
+- `discovery/` — Navigation and discoverability for different reader types
+  - `where-to-start.md`
+  - `doctrine-reading-paths.md`
+  - `by-topic-navigation.md`
+  - `by-governance-topic.md`
+- `governance-boundaries/` — Reinforced governance doctrine boundaries
+  - `ai-assistance-boundaries.md`
+  - `professional-accountability-framework.md`
+  - `evidence-over-automation-principle.md`
+  - `human-review-mandatory-controls.md`
+
+All Phase 3 layers are additive. No files were moved, renamed, or restructured. The 21-part doctrine structure remains the authoritative organizational scheme.
+
+### Phase 4 — Operationalization Layer
+
+- `operationalization/` — AI retrieval, governance-aware querying, decision provenance, agent context
+  - `README.md`
+  - `ai-retrieval-architecture.md`
+  - `institutional-query-layer.md`
+  - `decision-provenance-framework.md`
+  - `governance-aware-context-injection.md`
+  - `doctrine-retrieval-patterns.md`
+  - `evidence-to-principle-query-map.md`
+  - `product-doctrine-lookup-map.md`
+  - `human-approval-query-map.md`
+  - `enterprise-governance-readiness.md`
+  - `operationalization-risk-register.md`
+  - `phase-4-completion-report.md`
+
+### Phase 5 — Operational Governance Integration
+
+- `runtime-governance/` — Runtime governance behavior, doctrine-backed prompts, human approval enforcement, evidence-aware execution, escalation, provenance, retrieval context
+  - `README.md`
+  - `governance-aware-runtime-model.md`
+  - `doctrine-backed-prompt-framework.md`
+  - `runtime-human-approval-enforcement.md`
+  - `evidence-aware-execution-model.md`
+  - `runtime-escalation-framework.md`
+  - `provenance-aware-output-model.md`
+  - `governance-checkpoint-system.md`
+  - `auditos-runtime-governance-map.md`
+  - `retrieval-context-runtime-framework.md`
+  - `runtime-risk-register.md`
+  - `phase-5-completion-report.md`
 
 ## Structure Overview
 

@@ -1,4 +1,4 @@
-﻿---
+---
 title: Product Philosophy Thesis
 document_id: 13.01
 status: Approved
@@ -92,7 +92,7 @@ AQLIYA's product philosophy is built on six positions that cannot be compromised
 - **Governance-Aware Product:** A product where governance constraints are embedded in the product architecture, not applied as a compliance overlay.
 - **Reviewer-Native UX:** Interface design optimized for the professional reviewer who uses the product as their primary work tool for extended periods.
 - **Category Discipline:** The practice of rejecting features, markets, and directions that do not advance AQLIYA's operating-system architecture or its core strategic doctrines, even when they are individually profitable.
-- **Primary Product Line:** The initial market entry point (`AQLIYA AuditOS / Financial Intelligence`) that proves the architecture and generates revenue while the broader platform expands.
+- **Primary Product Line:** The initial market entry point (`AuditOS / Financial Intelligence`) that proves the architecture and generates revenue while the broader platform expands.
 
 ## 8. Operational Implications
 

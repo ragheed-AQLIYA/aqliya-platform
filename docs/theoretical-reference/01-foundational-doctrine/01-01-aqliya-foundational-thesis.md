@@ -87,6 +87,10 @@ AQLIYA operates on a set of philosophical commitments that define every product,
 
 **Human-in-the-loop, always.** AI assists. Humans decide. In regulated, liability-bearing domains, this is not a design preference — it is a professional and legal requirement.
 
+**Evidence governs.** Every AI output is traceable to the evidence that produced it. No recommendation carries weight without its evidentiary foundation.
+
+**Draft outputs require professional review.** AI-generated findings, recommendations, and report language are starting points — they must be reviewed and approved by a qualified professional before entering the evidence lifecycle.
+
 **Explainability before autonomy.** A system that cannot explain itself should not act autonomously. Every AI output in AQLIYA must be explainable to a professional reviewer.
 
 **Category creation, not feature competition.** AQLIYA is not competing as a generic AI tool vendor. We are defining a company architecture of AI operating systems, with governed decision intelligence remaining one strategic domain thesis inside that structure. This means we measure success by category leadership, not feature parity.

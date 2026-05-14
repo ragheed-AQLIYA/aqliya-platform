@@ -146,7 +146,7 @@ AuditOS is AQLIYA's first wedge, not the company identity. The Engagement Model 
 
 ## 18. Long-Term Strategic Importance
 
-The Audit Engagement Model is the operational backbone of AQLIYA. Every other capability — Findings Intelligence, Evidence Intelligence, Risk Scoring — serves the engagement. As the wedge into the enterprise, AuditOS delivers engagement management as the entry point. The Engagement Model ensures that entry point is defensible, scalable, and intelligence-aware. Without it, AQLIYA is just another tool. With it, AQLIYA becomes the operating system for audit.
+The Audit Engagement Model is the operational backbone of AuditOS. Every other capability — Findings Intelligence, Evidence Intelligence, Risk Scoring — serves the engagement. As the wedge into the enterprise, AuditOS delivers engagement management as the entry point. The Engagement Model ensures that entry point is defensible, scalable, and intelligence-aware. Without it, AuditOS is just another tool. With it, AuditOS becomes AQLIYA's operating system for audit.
 
 ## 19. Related Documents
 
