@@ -55,7 +55,7 @@ The repository meets the Internal Reviewable, Demo-ready with governance, and Pi
 
 Pilot-ready blockers:
 - Jest integration tests require PostgreSQL (Docker Compose setup exists — `docker-compose.test.yml`)
-- 9 ESLint errors remain in pre-existing shared lib code
+- Pre-existing ESLint warnings/errors remain in pre-existing shared lib code (count varies by lint run; documented in `PRODUCT_STATUS_MATRIX.md`)
 - Backup not automated (manual only; scheduling guidance exists — `docs/operations/backup-schedule.md`)
 - Production malware scanner not integrated (fail-closed blocks uploads)
 - No external penetration test executed

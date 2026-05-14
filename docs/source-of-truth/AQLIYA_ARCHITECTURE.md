@@ -1,15 +1,28 @@
-# AQLIYA Architecture
+# AQLIYA Architecture (aligned with v1.1)
 
 ## Official Hierarchy
 
 ```
 AQLIYA Company
-├── Systems (products)
-│   ├── AuditOS                 (active, workspace + demo)
-│   ├── DecisionOS              (active, workspace)
+├── AQLIYA Intelligence Core (shared platform layer)
+│   ├── AI Orchestration Engine
+│   ├── Governance Engine
+│   ├── Workflow Engine
+│   ├── Evidence Graph
+│   ├── Institutional Memory
+│   ├── RBAC / Permissions
+│   ├── Audit Logs
+│   ├── Model Governance
+│   ├── Document Intelligence
+│   ├── Reporting Engine
+│   └── Deployment Layer
+├── AQLIYA Studio (custom systems layer)
+├── Systems (products — built on Core)
+│   ├── AuditOS                 (active, workspace + demo, first proof product)
+│   ├── DecisionOS              (active, workspace, adjacent system)
 │   ├── SalesOS                 (prototype, static dashboard)
 │   ├── SimulationOS            (marketing-only)
-│   └── Local Content OS        (marketing-only)
+│   └── Local Content OS        (strategic second product, currently marketing-only)
 ├── Workspaces (execution environments)
 │   ├── AuditOS Workspace       (/audit)  — governed operational environment
 │   ├── DecisionOS Workspace    (/decisions, /organizations, /intelligence/sectors)
@@ -28,6 +41,9 @@ AQLIYA Company
     ├── Product Detail Pages    (/products/*)
     ├── About / How We Work / Contact
     └── Custom Product Inquiry  (/custom-product)
+
+Future products (not yet implemented): LocalContactOS, RiskOS, ComplianceOS, LegalOS, GovOS.
+Deployment models: Cloud (active), Private/On-Prem (strategic — not yet implemented), Air-Gapped (strategic — not yet implemented).
 ```
 
 ## Layer Definitions

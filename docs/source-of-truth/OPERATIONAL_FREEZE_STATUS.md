@@ -4,6 +4,8 @@
 
 The AQLIYA architecture has reached operational steady state. No further expansion, redesign, or governance work will proceed until the first real customer Trial Balance intake provides operational learning.
 
+**v1.1 note:** Phase 3 AI abstraction (deterministic wiring of all 5 AuditOS AI generation functions through AIOrchestrator) was completed under this freeze as a non-expansion stabilization task. Cloud API wiring and Local AI prototype (Phase 4) remain frozen pending real TB operational feedback.
+
 ---
 
 ## Architecture Freeze

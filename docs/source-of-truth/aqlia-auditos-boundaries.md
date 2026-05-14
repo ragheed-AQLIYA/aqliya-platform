@@ -1,15 +1,15 @@
-# AQLIYA / AuditOS Architecture Boundaries
+# AQLIYA Platform / AuditOS Product Boundaries
 
 ## Purpose
 
-This document defines the boundary between **DecisionOS tender workflows** and **AuditOS** inside the broader AQLIYA company platform. It prevents naming collisions, import confusion, and accidental crossover during development.
+This document defines the boundary between **DecisionOS** and **AuditOS**, both products built on the **AQLIYA Intelligence Core** platform. AuditOS is the first proof product under AQLIYA. It prevents naming collisions, import confusion, and accidental crossover during development.
 
 ## Product Separation
 
 | Product | Route Prefix | Description |
 |---------|-------------|-------------|
-| **DecisionOS** | `/` → `/decisions`, `/organizations`, etc. | Decision workflows including tender decision use cases. Arabic (RTL). |
-| **AuditOS** | `/audit` → `/audit/engagements/...` | Governed financial assurance workflow. English (LTR). |
+| **DecisionOS** | `/` → `/decisions`, `/organizations`, etc. | Decision workflows including tender decision use cases. |
+| **AuditOS** | `/audit` → `/audit/engagements/...` | Governed financial & audit intelligence — first proof product under AQLIYA. |
 
 Both products share:
 - `src/components/ui/` (shadcn component library)

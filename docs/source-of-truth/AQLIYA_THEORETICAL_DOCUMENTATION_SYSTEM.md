@@ -6,9 +6,7 @@ This document is the foundational source-of-truth for all AQLIYA documentation, 
 
 ## 2. AQLIYA Company Thesis
 
-AQLIYA builds AI-augmented systems that make organizational decision-making auditable, defensible, and continuously improvable. We believe that the best decisions emerge from a structured partnership between human judgment and machine analysis, where evidence—not authority or intuition—governs outcomes.
-
-Our thesis: Organizations that systematize decision-making with auditable evidence trails will outperform those that rely on unstructured judgment, because they can learn, defend, and adapt faster.
+AQLIYA is a **Private Governed Institutional Intelligence Platform** — a multi-product platform that gives institutions private intelligence running on their data, within their environment, under their governance. AQLIYA builds AI-augmented institutional systems spanning financial intelligence, audit assurance, local content governance, revenue intelligence, executive decisions, risk management, and compliance — all sharing a common Core of governance, workflow, evidence, and AI orchestration engines.
 
 ## 3. System Philosophy
 
@@ -32,13 +30,19 @@ This principle is non-negotiable across all AQLIYA systems, at all maturity leve
 
 ## 5. Company → Systems → Workspaces Model
 
-AQLIYA is organized as a three-tier hierarchy:
+AQLIYA is organized as a four-tier hierarchy:
 
 ### Company (AQLIYA)
 The legal and operational entity. Owns all systems and workspaces.
 
+### AQLIYA Intelligence Core (platform layer)
+The shared platform layer containing AI Orchestration, Governance, Workflow, Evidence Graph, Institutional Memory, RBAC, Audit Logs, Model Governance, Document Intelligence, Reporting, and Deployment engines. All products are built on this Core.
+
+### AQLIYA Studio (custom systems layer)
+Enables building custom institutional systems on top of the Core without starting from scratch. Strategic/future — not yet implemented.
+
 ### Systems
-A system is a product line with a defined purpose, maturity state, and lifecycle. Systems are the primary unit of product organization. Examples: AuditOS, DecisionOS, SalesOS.
+A system is a product line with a defined purpose, maturity state, and lifecycle. Systems are the primary unit of product organization. Examples: AuditOS, DecisionOS, SalesOS, LocalContentOS.
 
 ### Workspaces
 A workspace is a concrete deployment instance of a system. Workspaces belong to exactly one system. A system may have multiple workspaces at different maturity levels (e.g., active workspace, guided demo workspace).
@@ -47,17 +51,19 @@ Workspaces are the unit of access control, data isolation, and operational gover
 
 ```
 AQLIYA (Company)
- └── AuditOS (System)
-      ├── /audit (Active Workspace)
-      └── /auditos (Guided Demo Workspace)
- └── DecisionOS (System)
-      └── (Active Workspace)
- └── SalesOS (System)
-      └── (Prototype Workspace)
- └── SimulationOS (System)
-      └── (Marketing-only)
- └── Local Content OS (System)
-      └── (Marketing-only)
+ └── AQLIYA Intelligence Core (Shared Platform)
+      └── AQLIYA Studio (Custom Systems — future)
+      └── AuditOS (System — first proof product)
+           ├── /audit (Active Workspace)
+           └── /auditos (Guided Demo Workspace)
+      └── DecisionOS (System — adjacent)
+           └── (Active Workspace)
+      └── SalesOS (System)
+           └── (Prototype Workspace)
+      └── LocalContentOS (System — strategic second product)
+           └── (Marketing-only)
+      └── SimulationOS (System)
+           └── (Marketing-only)
 ```
 
 ## 6. System Lifecycle
@@ -102,8 +108,8 @@ System for sales process management and decision support. Currently in prototype
 ### SimulationOS — *Marketing-only*
 Decision simulation environment. Public marketing materials exist. No working software or workspace.
 
-### Local Content OS — *Marketing-only*
-Local content management and compliance system. Public marketing materials exist. No working software or workspace.
+### Local Content OS — *Marketing-only (strategic second product)*
+Local content measurement and governance system. Targeted at Saudi market. Strategic second product per v1.1. Public marketing materials exist. No working software or workspace.
 
 ## 9. AuditOS as Current Flagship
 
