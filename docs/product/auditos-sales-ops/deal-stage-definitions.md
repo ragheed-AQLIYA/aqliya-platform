@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Deal Stage Definitions
+# AuditOS Deal Stage Definitions
 
 ## Discovery
 

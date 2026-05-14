@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot Master Tracker
+# AuditOS Pilot Master Tracker
 
 Source of truth:
 

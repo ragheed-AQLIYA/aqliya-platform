@@ -1,4 +1,4 @@
-# AQLIYA AuditOS First 5 Customers Operating Rules
+# AuditOS First 5 Customers Operating Rules
 
 Source of truth:
 

@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Qualified Outreach Sequence
+# AuditOS Qualified Outreach Sequence
 
 Source of truth:
 

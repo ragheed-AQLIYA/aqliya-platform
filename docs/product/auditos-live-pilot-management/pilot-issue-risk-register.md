@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot Issue And Risk Register
+# AuditOS Pilot Issue And Risk Register
 
 Source of truth:
 

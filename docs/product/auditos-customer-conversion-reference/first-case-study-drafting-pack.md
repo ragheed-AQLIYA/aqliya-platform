@@ -1,4 +1,4 @@
-# AQLIYA AuditOS First Case Study Drafting Pack
+# AuditOS First Case Study Drafting Pack
 
 Source of truth:
 

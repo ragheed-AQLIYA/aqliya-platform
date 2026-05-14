@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Proof Asset Index
+# AuditOS Proof Asset Index
 
 Source of truth:
 

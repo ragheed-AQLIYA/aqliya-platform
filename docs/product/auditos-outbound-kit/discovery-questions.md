@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Discovery Questions
+# AuditOS Discovery Questions
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 

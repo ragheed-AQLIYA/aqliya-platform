@@ -19,7 +19,7 @@ Move the Phase 1 demo prototype from mock-data-only into a Prisma-backed MVP fou
 
 | # | Task | Description |
 |---|------|-------------|
-| 1 | Prisma schema extension | Add all AuditOS entity models alongside existing AQLIYA Decision OS models |
+| 1 | Prisma schema extension | Add all AuditOS entity models alongside existing DecisionOS models |
 | 2 | Seed data | Gulf Trading Co. FY2025 engagement with all pre-seeded data |
 | 3 | Prisma-backed server actions | Replace mock services with real DB calls |
 | 4 | Engagement create/edit flow | Dialog-based CRUD for engagements |
@@ -195,7 +195,7 @@ export async function getEngagement(id: string) {
 
 | Risk | Mitigation |
 |------|------------|
-| Schema migration breaks existing AQLIYA Decision OS data | AuditOS models are entirely new — no existing table changes |
+| Schema migration breaks existing DecisionOS data | AuditOS models are entirely new — no existing table changes |
 | UI breaks during migration | Mock fallback keeps UI working while DB is being built |
 | Seed data diverges from mock data | Both use same constants file for canonical data |
 | TypeScript errors from new Prisma types | Generate Prisma types before fixing service signatures |
@@ -211,4 +211,4 @@ export async function getEngagement(id: string) {
 7. TraceabilityDrawer shows real linked data from DB
 8. Audit events are recorded in DB and displayed
 9. `npx tsc --noEmit` reports 0 errors
-10. Existing AQLIYA Decision OS screens still work
+10. Existing DecisionOS screens still work

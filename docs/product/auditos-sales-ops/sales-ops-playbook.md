@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Sales Ops Playbook
+# AuditOS Sales Ops Playbook
 
 Source of truth:
 

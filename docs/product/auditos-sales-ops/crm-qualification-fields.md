@@ -1,4 +1,4 @@
-# AQLIYA AuditOS CRM Qualification Fields
+# AuditOS CRM Qualification Fields
 
 Source of truth:
 

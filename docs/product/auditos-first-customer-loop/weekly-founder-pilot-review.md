@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Weekly Founder Pilot Review
+# AuditOS Weekly Founder Pilot Review
 
 Source of truth:
 

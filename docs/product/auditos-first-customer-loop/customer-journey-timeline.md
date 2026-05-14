@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Customer Journey Timeline
+# AuditOS Customer Journey Timeline
 
 Source of truth:
 

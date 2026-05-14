@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Founder Learning Log
+# AuditOS Founder Learning Log
 
 Source of truth:
 

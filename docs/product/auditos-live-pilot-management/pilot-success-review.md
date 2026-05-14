@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot Success Review
+# AuditOS Pilot Success Review
 
 Source of truth:
 

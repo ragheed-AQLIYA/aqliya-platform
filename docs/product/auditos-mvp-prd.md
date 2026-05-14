@@ -23,7 +23,7 @@ This PRD is the bridge between doctrine and code. Every requirement in this docu
 
 | Position | Statement |
 |----------|-----------|
-| **Category** | AQLIYA AuditOS / Financial Intelligence product line |
+| **Category** | AuditOS / Financial Intelligence product line |
 | **Identity** | Governed workflow and evidence infrastructure for audit firms |
 | **Powered by** | Financial Intelligence — financial data ingestion, normalization, validation, and signal extraction |
 | **Is NOT** | Audit checklist software, AI chatbot, dashboard product, autonomous audit tool, CRM, generic SaaS, AI wrapper, prompt layer |

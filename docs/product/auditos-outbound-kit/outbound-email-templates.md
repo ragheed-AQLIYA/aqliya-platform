@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Outbound Email Templates
+# AuditOS Outbound Email Templates
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 
@@ -8,7 +8,7 @@ Source of truth: `docs/product/auditos-product-packaging.md`
 
 مرحبًا [الاسم]،
 
-نحن في AQLIYA نعمل حاليًا على `AQLIYA AuditOS / Financial Intelligence`، وهو خط المنتج التجاري الأساسي الحالي لدينا.
+نحن في AQLIYA نعمل حاليًا على `AuditOS / Financial Intelligence`، وهو خط المنتج التجاري الأساسي الحالي لدينا.
 
 الفكرة باختصار: مساعدة فرق المراجعة على تحويل Trial Balance والبيانات المالية إلى draft financial statements, notes, evidence requirements, findings, review, and approval داخل Workflow منظم وقابل للتتبع.
 
@@ -42,7 +42,7 @@ Source of truth: `docs/product/auditos-product-packaging.md`
 
 أرسل لك لأن كثيرًا من فرق المالية تمتلك البيانات فعلًا، لكن ما يزال تحويلها إلى draft outputs قابلة للمراجعة والاعتماد يتم عبر مسارات مشتتة يصعب تتبعها.
 
-`AQLIYA AuditOS / Financial Intelligence` يساعد على تنظيم هذه الرحلة داخل Workflow واحد يبدأ من Trial Balance ويمر عبر mapping, statements, notes, evidence, findings, review, and approval.
+`AuditOS / Financial Intelligence` يساعد على تنظيم هذه الرحلة داخل Workflow واحد يبدأ من Trial Balance ويمر عبر mapping, statements, notes, evidence, findings, review, and approval.
 
 إذا كان هذا التحدي حاضرًا عندكم، يمكننا مشاركة عرض مختصر يركز على use case واحدة فقط.
 

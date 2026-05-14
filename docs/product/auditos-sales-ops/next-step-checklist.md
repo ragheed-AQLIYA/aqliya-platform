@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Next-Step Checklist
+# AuditOS Next-Step Checklist
 
 Source of truth:
 

@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot Extension Decision Framework
+# AuditOS Pilot Extension Decision Framework
 
 Source of truth:
 

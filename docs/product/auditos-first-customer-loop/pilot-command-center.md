@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot Command Center
+# AuditOS Pilot Command Center
 
 Source of truth:
 

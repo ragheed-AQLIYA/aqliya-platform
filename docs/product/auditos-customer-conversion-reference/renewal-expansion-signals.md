@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Renewal And Expansion Signals
+# AuditOS Renewal And Expansion Signals
 
 Source of truth:
 

@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot Evidence Checklist
+# AuditOS Pilot Evidence Checklist
 
 Source of truth:
 

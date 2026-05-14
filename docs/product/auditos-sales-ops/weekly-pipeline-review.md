@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Weekly Pipeline Review
+# AuditOS Weekly Pipeline Review
 
 Source of truth:
 

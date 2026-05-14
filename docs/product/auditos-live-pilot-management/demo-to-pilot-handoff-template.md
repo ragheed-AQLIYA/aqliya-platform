@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Demo To Pilot Handoff Template
+# AuditOS Demo To Pilot Handoff Template
 
 Source of truth:
 

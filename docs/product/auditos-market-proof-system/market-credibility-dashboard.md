@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Market Credibility Dashboard
+# AuditOS Market Credibility Dashboard
 
 Source of truth:
 

@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Lead Status Definitions
+# AuditOS Lead Status Definitions
 
 ## New
 

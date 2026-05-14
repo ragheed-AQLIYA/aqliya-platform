@@ -1,4 +1,4 @@
-# AQLIYA AuditOS First Revenue Learning Memo
+# AuditOS First Revenue Learning Memo
 
 Source of truth:
 

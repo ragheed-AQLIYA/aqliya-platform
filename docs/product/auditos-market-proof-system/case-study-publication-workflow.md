@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Case Study Publication Workflow
+# AuditOS Case Study Publication Workflow
 
 Source of truth:
 

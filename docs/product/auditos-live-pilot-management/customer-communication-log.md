@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Customer Communication Log
+# AuditOS Customer Communication Log
 
 Source of truth:
 

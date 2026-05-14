@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Simple CRM Board Structure
+# AuditOS Simple CRM Board Structure
 
 Source of truth:
 

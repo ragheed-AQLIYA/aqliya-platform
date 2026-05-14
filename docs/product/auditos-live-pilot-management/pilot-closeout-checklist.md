@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot Closeout Checklist
+# AuditOS Pilot Closeout Checklist
 
 Source of truth:
 

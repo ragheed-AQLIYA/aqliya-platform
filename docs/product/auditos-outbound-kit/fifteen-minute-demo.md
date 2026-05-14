@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Fifteen-Minute Demo
+# AuditOS Fifteen-Minute Demo
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 

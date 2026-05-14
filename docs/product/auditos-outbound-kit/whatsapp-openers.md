@@ -1,4 +1,4 @@
-# AQLIYA AuditOS WhatsApp Openers
+# AuditOS WhatsApp Openers
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 
@@ -15,4 +15,4 @@ Source of truth: `docs/product/auditos-product-packaging.md`
 ## Opener 3
 
 مرحبًا [الاسم]،
-هل لديكم اليوم تحدي في تحويل Trial Balance إلى draft statements / notes / evidence / review بشكل منظم؟ إذا نعم، أعتقد أن `AQLIYA AuditOS` قد يكون ذا صلة. يسعدني أرسل ملخصًا أو Demo flow.
+هل لديكم اليوم تحدي في تحويل Trial Balance إلى draft statements / notes / evidence / review بشكل منظم؟ إذا نعم، أعتقد أن `AuditOS` قد يكون ذا صلة. يسعدني أرسل ملخصًا أو Demo flow.

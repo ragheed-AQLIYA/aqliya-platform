@@ -1,4 +1,4 @@
-# AQLIYA AuditOS ICP Messaging
+# AuditOS ICP Messaging
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 

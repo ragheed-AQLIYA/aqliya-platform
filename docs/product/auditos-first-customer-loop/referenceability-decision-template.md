@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Referenceability Decision Template
+# AuditOS Referenceability Decision Template
 
 Source of truth:
 

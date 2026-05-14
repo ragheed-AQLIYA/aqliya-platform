@@ -1,10 +1,10 @@
-# AQLIYA AuditOS Sales Deck Outline
+# AuditOS Sales Deck Outline
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 
 ## Slide 1
 
-**Title:** AQLIYA AuditOS / Financial Intelligence
+**Title:** AuditOS / Financial Intelligence
 
 **Purpose:** تقديم المنتج بسرعة
 

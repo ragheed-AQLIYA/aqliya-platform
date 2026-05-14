@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot To Paid Conversion Memo
+# AuditOS Pilot To Paid Conversion Memo
 
 Source of truth:
 

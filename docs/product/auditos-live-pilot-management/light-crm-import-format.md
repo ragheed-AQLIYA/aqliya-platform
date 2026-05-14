@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Light CRM Import Format
+# AuditOS Light CRM Import Format
 
 Source of truth:
 

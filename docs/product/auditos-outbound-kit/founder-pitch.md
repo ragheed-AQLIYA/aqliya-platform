@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Founder Pitch
+# AuditOS Founder Pitch
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 
@@ -6,7 +6,7 @@ Source of truth: `docs/product/auditos-product-packaging.md`
 
 نحن في AQLIYA نبني أنظمة ذكاء اصطناعي تشغيلية للشركات.
 
-أول خط منتج تجاري لدينا اليوم هو `AQLIYA AuditOS / Financial Intelligence`.
+أول خط منتج تجاري لدينا اليوم هو `AuditOS / Financial Intelligence`.
 
 AuditOS يعالج مشكلة واضحة جدًا: في كثير من مكاتب المراجعة، والمكاتب المحاسبية، وحتى بعض فرق المالية، الطريق من Trial Balance إلى القوائم المالية، الإيضاحات، الأدلة، المراجعة، والاعتماد ما زال يدويًا، متشظيًا، وصعب التتبع.
 
@@ -20,7 +20,7 @@ AI assists. Humans decide. Evidence governs.
 
 ## Medium Founder Pitch
 
-AQLIYA هي شركة تبني AI operating systems للأعمال. اليوم تركيزنا التجاري الأساسي هو `AQLIYA AuditOS / Financial Intelligence`.
+AQLIYA هي شركة تبني AI operating systems للأعمال. اليوم تركيزنا التجاري الأساسي هو `AuditOS / Financial Intelligence`.
 
 المشكلة التي نراها متكررة: البيانات المالية موجودة، لكن تحويلها إلى مخرجات جاهزة للمراجعة يمر غالبًا عبر Excel، ملفات PDF، ملاحظات متناثرة، ومتابعة يدوية بين أعضاء الفريق. هذا يبطئ العمل، يضعف الاتساق، ويجعل traceability صعبة عند الحاجة.
 

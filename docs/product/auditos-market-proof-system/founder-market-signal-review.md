@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Founder Market Signal Review
+# AuditOS Founder Market Signal Review
 
 Source of truth:
 

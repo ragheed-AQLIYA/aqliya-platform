@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Proposal Template
+# AuditOS Proposal Template
 
 Source of truth:
 

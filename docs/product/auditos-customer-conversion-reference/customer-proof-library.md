@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Customer Proof Library
+# AuditOS Customer Proof Library
 
 Source of truth:
 

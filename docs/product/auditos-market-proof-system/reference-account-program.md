@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Reference Account Program
+# AuditOS Reference Account Program
 
 Source of truth:
 

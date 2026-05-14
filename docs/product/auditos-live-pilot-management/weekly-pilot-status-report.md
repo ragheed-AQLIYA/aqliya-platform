@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Weekly Pilot Status Report
+# AuditOS Weekly Pilot Status Report
 
 Source of truth:
 

@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Demo Script
+# AuditOS Demo Script
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 
@@ -15,7 +15,7 @@ Source of truth: `docs/product/auditos-product-packaging.md`
 
 ## Opening Narrative
 
-"هذا هو AQLIYA AuditOS، خط المنتج التجاري الأساسي الحالي تحت AQLIYA. الهدف ليس استبدال الحكم المهني، بل تنظيم الطريق من Trial Balance إلى Draft Outputs ومراجعة واعتماد أوضح."
+"هذا هو AuditOS، خط المنتج التجاري الأساسي الحالي تحت AQLIYA. الهدف ليس استبدال الحكم المهني، بل تنظيم الطريق من Trial Balance إلى Draft Outputs ومراجعة واعتماد أوضح."
 
 ## Demo Flow
 

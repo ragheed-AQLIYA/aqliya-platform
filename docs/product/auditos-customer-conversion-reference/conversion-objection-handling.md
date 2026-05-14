@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Conversion Objection Handling
+# AuditOS Conversion Objection Handling
 
 Source of truth:
 

@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Follow-Up Templates
+# AuditOS Follow-Up Templates
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 
@@ -8,7 +8,7 @@ Source of truth: `docs/product/auditos-product-packaging.md`
 
 سعدت بالحديث اليوم.
 
-كما اتفقنا، `AQLIYA AuditOS / Financial Intelligence` يركز على تنظيم المسار من Trial Balance إلى draft outputs, evidence, findings, review, and approval داخل Workflow واضح وقابل للتتبع.
+كما اتفقنا، `AuditOS / Financial Intelligence` يركز على تنظيم المسار من Trial Balance إلى draft outputs, evidence, findings, review, and approval داخل Workflow واضح وقابل للتتبع.
 
 أرفق/أرسل لك بعد المكالمة:
 1. product brief
@@ -35,7 +35,7 @@ Source of truth: `docs/product/auditos-product-packaging.md`
 
 مرحبًا [الاسم]،
 
-أعود للمتابعة فقط على `AQLIYA AuditOS`.
+أعود للمتابعة فقط على `AuditOS`.
 
 إذا كان التحدي لديكم لا يزال متعلقًا بتحويل البيانات المالية إلى مخرجات قابلة للمراجعة ضمن Workflow أوضح، يسعدني أن نعيد فتح النقاش على نطاق صغير وواضح.
 

@@ -1,4 +1,4 @@
-# AQLIYA AuditOS First Customer Case Study Capture
+# AuditOS First Customer Case Study Capture
 
 Source of truth:
 

@@ -98,7 +98,7 @@ All services are in `src/lib/audit/services.ts`:
 1. **No Prisma schema for AuditOS** — All data is in-memory mock
 2. **No real file handling** — Evidence filenames exist but no file operations
 3. **No real AI** — All AI suggestions are predetermined
-4. **No authentication for AuditOS** — Uses the existing AQLIYA Decision OS authentication layer
+4. **No authentication for AuditOS** — Uses the existing DecisionOS authentication layer
 5. **Single user** — All operations appear as "Current User"
 6. **In-memory audit events** — Events lost on server restart
 7. **Hardcoded engagement ID** — Only `eng-gulf-2025` has full data
@@ -114,7 +114,7 @@ All services are in `src/lib/audit/services.ts`:
 4. WorkflowProgress stepper
 5. AI governance labels (Sparkles, "AI Suggested", etc.)
 6. Audit event display
-7. Existing AQLIYA Decision OS routes (under `/(dashboard)/`)
+7. Existing DecisionOS routes (under `/(dashboard)/`)
 8. All existing tests (`src/__tests__/`)
 9. ESLint compliance
 10. TypeScript compilation (0 errors)

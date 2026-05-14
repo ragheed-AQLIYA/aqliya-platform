@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Objection Handling
+# AuditOS Objection Handling
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 

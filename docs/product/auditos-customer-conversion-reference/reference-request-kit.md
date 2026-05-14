@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Reference Request Kit
+# AuditOS Reference Request Kit
 
 Source of truth:
 

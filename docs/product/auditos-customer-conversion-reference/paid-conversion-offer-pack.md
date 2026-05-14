@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Paid Conversion Offer Pack
+# AuditOS Paid Conversion Offer Pack
 
 Source of truth:
 

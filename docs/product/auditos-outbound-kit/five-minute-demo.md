@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Five-Minute Demo
+# AuditOS Five-Minute Demo
 
 Source of truth: `docs/product/auditos-product-packaging.md`
 
@@ -17,7 +17,7 @@ Source of truth: `docs/product/auditos-product-packaging.md`
 
 ### Minute 1: Context
 
-"AQLIYA AuditOS هو خط المنتج التجاري الأساسي الحالي تحت AQLIYA. يساعد الفرق على الانتقال من Trial Balance إلى Draft Outputs ومراجعة واعتماد أوضح ضمن Workflow منظم."
+"AuditOS هو خط المنتج التجاري الأساسي الحالي تحت AQLIYA. يساعد الفرق على الانتقال من Trial Balance إلى Draft Outputs ومراجعة واعتماد أوضح ضمن Workflow منظم."
 
 ### Minute 2: Show Engagement + Trial Balance
 

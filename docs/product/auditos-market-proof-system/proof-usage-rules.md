@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Proof Usage Rules
+# AuditOS Proof Usage Rules
 
 Source of truth:
 

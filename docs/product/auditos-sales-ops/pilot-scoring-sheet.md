@@ -1,4 +1,4 @@
-# AQLIYA AuditOS Pilot Scoring Sheet
+# AuditOS Pilot Scoring Sheet
 
 Source of truth:
 
