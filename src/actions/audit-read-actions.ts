@@ -32,6 +32,8 @@ import type { PaginatedResult } from "@/lib/audit/pagination"
 import type { WorkflowContext } from "@/lib/audit/workflow-gating"
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context"
 import { assertEngagementAccess } from "@/lib/audit/tenant-guard"
+import { confirmMappingAction as _confirmMapping } from "./audit-actions"
+import { runValidationAction as _runValidation } from "./audit-actions"
 
 export async function getEngagementAction(id: string): Promise<Engagement | null> {
   const actor = await getAuditActor()
@@ -225,13 +227,11 @@ export async function getCanonicalAccountsAction(limit?: number): Promise<Array<
   return getCanonicalAccounts(limit)
 }
 
-// Re-export via wrapper — barrel exports not allowed in "use server" files
+// Delegated to audit-actions.ts — imported statically
 export async function confirmMappingAction(engagementId: string, mappingId: string) {
-  const mod = await import("./audit-actions")
-  return mod.confirmMappingAction(engagementId, mappingId)
+  return _confirmMapping(engagementId, mappingId)
 }
 
 export async function runValidationAction(engagementId: string) {
-  const mod = await import("./audit-actions")
-  return mod.runValidationAction(engagementId)
+  return _runValidation(engagementId)
 }

@@ -1,4 +1,5 @@
 "use server"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {
   createEngagement as svcCreateEngagement,
@@ -7,6 +8,7 @@ import {
   createEvidence as svcCreateEvidence,
   updateEvidenceState as svcUpdateEvidenceState,
   updateEvidenceStateWithEvent as svcUpdateEvidenceStateWithEvent,
+  updateEvidenceStorageService as svcUpdateEvidenceStorage,
   createFinding as svcCreateFinding,
   updateFindingStatus as svcUpdateFindingStatus,
   createRecommendation as svcCreateRecommendation,
@@ -35,12 +37,30 @@ import {
   createOrUpdatePilotSignoff as svcCreateOrUpdatePilotSignoff,
   getPilotSignoffChecklist as svcGetPilotSignoffChecklist,
   updateManualMapping as svcUpdateManualMapping,
+  runValidation as svcRunValidation,
+  disposeValidationIssue as svcDisposeValidationIssue,
+  publishEngagement as svcPublishEngagement,
+  getEngagement as svcGetEngagement,
+  getEvidence as svcGetEvidence,
 } from "@/lib/audit/services"
 import { linkEvidenceToEntity as svcLinkEvidenceToEntity } from "@/lib/audit/services"
 import { getAuditActor, canDraft, canReview, canApprove, requireRole } from "@/lib/audit/actor-context"
 import { assertEngagementAccess } from "@/lib/audit/tenant-guard"
 import { enforceAuditRateLimit } from "@/lib/audit/rate-limit"
 import { scanEvidenceFile } from "@/lib/audit/file-scanner"
+import {
+  checkPublicationGovernance,
+  evaluateFindingEscalation,
+  evaluateEvidenceEscalation,
+  getGovernanceAuditMetadata,
+  buildProvenanceMetadata,
+  mapFindingStatusToApprovalState,
+  mapRecommendationStatusToApprovalState,
+  buildEvidenceRequirementsFromEvidenceList,
+} from "@/lib/audit/governance-bridge"
+import { getGovernanceContext } from "@/lib/governance/retrieval-router"
+import { getStorageProvider, buildStorageKey } from "@/lib/audit/storage"
+import { createHash } from "crypto"
 
 export async function createEngagementAction(params: {
   organizationId: string; clientName: string; fiscalPeriod: string;
@@ -92,7 +112,32 @@ export async function updateManualMappingAction(input: {
 }
 
 export async function getTraceabilityAction(engagementId: string, targetType: string, targetId: string) {
+  const actor = await getAuditActor()
+  requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
+  await assertEngagementAccess(engagementId, actor)
   return svcGetTraceability(engagementId, targetType, targetId)
+}
+
+export async function confirmMappingAction(engagementId: string, mappingId: string): Promise<import("@/types/audit").AccountMapping | null> {
+  const actor = await getAuditActor()
+  requireRole(actor, ["admin", "operator"])
+  await assertEngagementAccess(engagementId, actor)
+  const { confirmMapping } = await import("@/lib/audit/services")
+  const result = await confirmMapping(engagementId, mappingId)
+  if (result) {
+    await svcRecordAuditEvent({
+      engagementId,
+      eventType: 'mapping.confirmed',
+      actorId: actor.actorId,
+      actorName: actor.actorName,
+      actorRole: actor.actorRole,
+      targetType: 'account_mapping',
+      targetId: mappingId,
+      newState: 'confirmed',
+      description: `Mapping confirmed: ${result.sourceAccountName} → ${result.canonicalAccountName ?? 'unmapped'}`,
+    })
+  }
+  return result
 }
 
 const ALLOWED_FILE_TYPES = ["pdf", "xlsx", "xls", "docx", "jpg", "jpeg", "png", "csv"]
@@ -116,22 +161,37 @@ export async function createEvidenceAction(params: {
     throw new Error(scanResult.details || "File rejected by security scanner")
   }
   const evidence = await svcCreateEvidence({ ...params, actorId: actor.actorId, actorName: actor.actorName })
+  const escalation = evaluateEvidenceEscalation(evidence.evidence.state)
+  const eventMetadata: Record<string, unknown> = {
+    scanStatus: scanResult.status,
+    scanProvider: scanResult.provider,
+    scannedAt: scanResult.scannedAt,
+  }
+  if (escalation.triggers.length > 0) {
+    eventMetadata.governanceEscalationLevel = escalation.level
+    eventMetadata.governanceEscalationTriggers = escalation.triggers.map(t => t.trigger)
+    eventMetadata.governanceRequiresHumanResolution = escalation.requiresHumanResolution
+  }
   await svcRecordAuditEvent({
     engagementId: params.engagementId,
-    eventType: 'evidence.file_scanned',
+    eventType: escalation.triggers.length > 0 ? 'evidence.escalation_triggered' : 'evidence.file_scanned',
     actorId: actor.actorId,
     actorName: actor.actorName,
     actorRole: actor.actorRole,
     targetType: 'evidence',
     targetId: evidence.evidence.id,
     newState: evidence.evidence.state,
-    description: `File scanned: ${params.filename} → ${scanResult.status} (${scanResult.provider})`,
-    metadata: { scanStatus: scanResult.status, scanProvider: scanResult.provider, scannedAt: scanResult.scannedAt },
+    description: escalation.triggers.length > 0
+      ? `File scanned: ${params.filename} — governance escalation: ${escalation.message}`
+      : `File scanned: ${params.filename} → ${scanResult.status} (${scanResult.provider})`,
+    metadata: eventMetadata,
   })
   return evidence
 }
 
+/** @deprecated Use updateEvidenceStateWithEventAction instead — records audit event */
 export async function updateEvidenceStateAction(id: string, state: string) {
+  console.warn('[AuditActions] updateEvidenceStateAction called without audit event — use updateEvidenceStateWithEventAction instead')
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "operator", "reviewer"])
   await enforceAuditRateLimit(actor, "update_evidence_state", "mutation")
@@ -142,7 +202,149 @@ export async function updateEvidenceStateWithEventAction(id: string, state: stri
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "operator", "reviewer"])
   await assertEngagementAccess(engagementId, actor)
-  return svcUpdateEvidenceStateWithEvent(id, state, engagementId, actor)
+  await enforceAuditRateLimit(actor, "update_evidence_state", "mutation")
+  const escalation = evaluateEvidenceEscalation(state)
+  const result = await svcUpdateEvidenceStateWithEvent(id, state, engagementId, actor)
+  if (escalation.triggers.length > 0) {
+    await svcRecordAuditEvent({
+      engagementId,
+      eventType: 'evidence.escalation_triggered',
+      actorId: actor.actorId,
+      actorName: actor.actorName,
+      actorRole: actor.actorRole,
+      targetType: 'evidence',
+      targetId: id,
+      newState: state,
+      description: `Evidence state change triggered escalation: ${escalation.message}`,
+      aiRelated: false,
+      metadata: {
+        governanceEscalationLevel: escalation.level,
+        governanceEscalationTriggers: escalation.triggers.map(t => t.trigger),
+        governanceRequiresHumanResolution: escalation.requiresHumanResolution,
+      },
+    })
+  }
+  return result
+}
+
+export async function uploadEvidenceFileAction(params: {
+  engagementId: string
+  filename: string
+  fileType: string
+  fileData: string // base64-encoded file content
+}) {
+  const actor = await getAuditActor()
+  requireRole(actor, ["admin", "operator"])
+  await assertEngagementAccess(params.engagementId, actor)
+  await enforceAuditRateLimit(actor, "upload_evidence_file", "upload")
+
+  if (!ALLOWED_FILE_TYPES.includes(params.fileType.toLowerCase())) {
+    throw new Error(`Unsupported file type: ${params.fileType}. Allowed: ${ALLOWED_FILE_TYPES.join(", ")}`)
+  }
+
+  const content = Buffer.from(params.fileData, 'base64')
+  if (content.length > MAX_FILE_SIZE_BYTES) {
+    throw new Error(`File too large: ${(content.length / 1024 / 1024).toFixed(1)}MB. Maximum: ${MAX_FILE_SIZE_BYTES / 1024 / 1024}MB`)
+  }
+
+  // Compute file hash
+  const fileHash = createHash('sha256').update(content).digest('hex')
+
+  // File scanning
+  const scanResult = await scanEvidenceFile({
+    filename: params.filename,
+    fileType: params.fileType,
+    fileSize: content.length,
+  })
+  if (scanResult.status === "infected") {
+    throw new Error(scanResult.details || "File rejected by security scanner")
+  }
+
+  // Create evidence record first to get the ID
+  const { evidence } = await svcCreateEvidence({
+    engagementId: params.engagementId,
+    filename: params.filename,
+    fileType: params.fileType,
+    fileSize: content.length,
+    state: 'missing',
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+  })
+
+  // Store the file
+  const storageKey = buildStorageKey(params.engagementId, evidence.id, params.filename)
+  const storageProvider = getStorageProvider()
+  await storageProvider.store(storageKey, {
+    filename: params.filename,
+    mimeType: params.fileType,
+    content,
+  })
+
+  // Update evidence record with storage metadata
+  await svcUpdateEvidenceStorage(evidence.id, { fileHash, storageKey, fileSize: content.length })
+
+  await svcRecordAuditEvent({
+    engagementId: params.engagementId,
+    eventType: 'evidence.uploaded',
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: 'evidence',
+    targetId: evidence.id,
+    newState: 'uploaded',
+    description: `Evidence file uploaded: ${params.filename} (${(content.length / 1024).toFixed(1)}KB, scan: ${scanResult.status})`,
+    aiRelated: false,
+    metadata: {
+      fileSize: content.length,
+      fileHash: fileHash.substring(0, 12),
+      storageKey,
+      scanMethod: scanResult.provider,
+      scanStatus: scanResult.status,
+    },
+  })
+
+  return {
+    evidence,
+    storageKey,
+    fileHash: fileHash.substring(0, 12),
+    downloadUrl: `/api/audit/evidence/${evidence.id}/download`,
+  }
+}
+
+export async function getEvidenceDownloadUrlAction(evidenceId: string, engagementId: string): Promise<{
+  url: string
+  filename: string
+  fileType: string
+  fileSize: number
+} | null> {
+  const actor = await getAuditActor()
+  requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
+  await assertEngagementAccess(engagementId, actor)
+  const evidenceList = await svcGetEvidence(engagementId)
+  const evidence = evidenceList.find(e => e.id === evidenceId)
+  if (!evidence || !evidence.storageKey) return null
+  const storageProvider = getStorageProvider()
+  const exists = await storageProvider.exists(evidence.storageKey)
+  if (!exists) return null
+  await svcRecordAuditEvent({
+    engagementId,
+    eventType: 'evidence.download_requested',
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: 'evidence',
+    targetId: evidenceId,
+    newState: evidence.state,
+    description: `Evidence download requested: ${evidence.filename}`,
+    aiRelated: false,
+    metadata: { storageKey: evidence.storageKey },
+  })
+  return {
+    url: `/api/audit/evidence/${evidenceId}/download`,
+    filename: evidence.filename,
+    fileType: evidence.fileType,
+    fileSize: evidence.fileSize,
+  }
 }
 
 export async function createFindingAction(params: {
@@ -152,15 +354,57 @@ export async function createFindingAction(params: {
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "operator"])
   await assertEngagementAccess(params.engagementId, actor)
-  return svcCreateFinding({ ...params, actorId: actor.actorId, actorName: actor.actorName })
   await enforceAuditRateLimit(actor, "create_finding", "mutation")
+  const escalation = evaluateFindingEscalation(params.severity)
+  const result = await svcCreateFinding({ ...params, actorId: actor.actorId, actorName: actor.actorName })
+  if (escalation.triggers.length > 0) {
+    await svcRecordAuditEvent({
+      engagementId: params.engagementId,
+      eventType: 'finding.governance_escalation',
+      actorId: actor.actorId,
+      actorName: actor.actorName,
+      actorRole: actor.actorRole,
+      targetType: 'finding',
+      targetId: result.finding.id,
+      newState: result.finding.status,
+      description: `Governance escalation on finding "${params.title}": ${escalation.message}`,
+      aiRelated: false,
+      metadata: {
+        governanceEscalationLevel: escalation.level,
+        governanceEscalationTriggers: escalation.triggers.map(t => t.trigger),
+        governanceRequiresHumanResolution: escalation.requiresHumanResolution,
+      },
+    })
+  }
+  return result
 }
 
 export async function updateFindingStatusAction(id: string, status: string, engagementId: string) {
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "operator", "reviewer"])
   await assertEngagementAccess(engagementId, actor)
-  return svcUpdateFindingStatus(id, status, engagementId, actor.actorId)
+  await enforceAuditRateLimit(actor, "update_finding_status", "mutation")
+  const governanceContext = getGovernanceContext('audit_findings')
+  const provenance = buildProvenanceMetadata({
+    taskType: 'audit_findings',
+    approvalState: mapFindingStatusToApprovalState(status),
+    evidenceRequirements: governanceContext.evidenceRequirements,
+  })
+  const result = await svcUpdateFindingStatus(id, status, engagementId, actor.actorId)
+  await svcRecordAuditEvent({
+    engagementId,
+    eventType: 'finding.governance_state_changed',
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: 'finding',
+    targetId: id,
+    newState: status,
+    description: `Finding status changed to ${status} — governance check: ${provenance.approvalState}`,
+    aiRelated: false,
+    metadata: getGovernanceAuditMetadata('audit_findings', provenance),
+  })
+  return result
 }
 
 export async function createRecommendationAction(params: {
@@ -170,15 +414,36 @@ export async function createRecommendationAction(params: {
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "operator"])
   await assertEngagementAccess(params.engagementId, actor)
-  return svcCreateRecommendation({ ...params, actorId: actor.actorId, actorName: actor.actorName })
   await enforceAuditRateLimit(actor, "create_recommendation", "mutation")
+  return svcCreateRecommendation({ ...params, actorId: actor.actorId, actorName: actor.actorName })
 }
 
 export async function updateRecommendationStatusAction(id: string, status: string, engagementId: string, reviewerDecision?: string) {
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "operator", "reviewer"])
   await assertEngagementAccess(engagementId, actor)
-  return svcUpdateRecommendationStatus(id, status, engagementId, reviewerDecision)
+  await enforceAuditRateLimit(actor, "update_recommendation_status", "mutation")
+  const governanceContext = getGovernanceContext('audit_findings')
+  const provenance = buildProvenanceMetadata({
+    taskType: 'audit_findings',
+    approvalState: mapRecommendationStatusToApprovalState(status),
+    evidenceRequirements: governanceContext.evidenceRequirements,
+  })
+  const result = await svcUpdateRecommendationStatus(id, status, engagementId, reviewerDecision)
+  await svcRecordAuditEvent({
+    engagementId,
+    eventType: 'recommendation.governance_state_changed',
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: 'recommendation',
+    targetId: id,
+    newState: status,
+    description: `Recommendation status changed to ${status} — governance check: ${provenance.approvalState}${reviewerDecision ? ` (${reviewerDecision})` : ''}`,
+    aiRelated: false,
+    metadata: getGovernanceAuditMetadata('audit_findings', provenance),
+  })
+  return result
 }
 
 export async function createReviewCommentAction(params: {
@@ -188,8 +453,8 @@ export async function createReviewCommentAction(params: {
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "operator", "reviewer"])
   await assertEngagementAccess(params.engagementId, actor)
-  return svcCreateReviewComment({ ...params, actorId: actor.actorId, actorName: actor.actorName })
   await enforceAuditRateLimit(actor, "create_review_comment", "mutation")
+  return svcCreateReviewComment({ ...params, actorId: actor.actorId, actorName: actor.actorName })
 }
 
 export async function updateReviewCommentStatusAction(id: string, status: string, resolution?: string) {
@@ -205,8 +470,8 @@ export async function createApprovalRecordAction(params: {
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "partner"])
   await assertEngagementAccess(params.engagementId, actor)
-  return svcCreateApprovalRecord({ ...params, actorId: actor.actorId, actorName: actor.actorName, actorRole: actor.actorRole })
   await enforceAuditRateLimit(actor, "create_approval", "mutation")
+  return svcCreateApprovalRecord({ ...params, actorId: actor.actorId, actorName: actor.actorName, actorRole: actor.actorRole })
 }
 
 export async function linkEvidenceToEntityAction(params: {
@@ -452,6 +717,14 @@ export async function rejectDraftNoteAction(aiOutputId: string, engagementId: st
   return aiOutput
 }
 
+export async function updateNoteStatusAction(noteId: string, status: string, engagementId: string, comment?: string) {
+  const actor = await getAuditActor()
+  requireRole(actor, ["admin", "operator", "reviewer"])
+  await assertEngagementAccess(engagementId, actor)
+  const { updateNoteStatus } = await import("@/lib/audit/services")
+  return updateNoteStatus(noteId, status, engagementId, actor.actorName, comment)
+}
+
 export async function generateAnalyticalReviewAction(engagementId: string) {
   const actor = await getAuditActor()
   requireRole(actor, ["admin", "operator", "reviewer"])
@@ -610,4 +883,78 @@ export async function getPilotSignoffChecklistAction(engagementId: string) {
   const actor = await getAuditActor()
   await assertEngagementAccess(engagementId, actor)
   return svcGetPilotSignoffChecklist(engagementId)
+}
+
+export async function runValidationAction(engagementId: string) {
+  const actor = await getAuditActor()
+  requireRole(actor, ["admin", "partner", "manager", "reviewer", "operator"])
+  await assertEngagementAccess(engagementId, actor)
+  return svcRunValidation(engagementId, actor.actorId)
+}
+
+export async function disposeValidationIssueAction(issueId: string, action: string, rationale?: string) {
+  const actor = await getAuditActor()
+  requireRole(actor, ["admin", "partner", "manager", "reviewer"])
+  return svcDisposeValidationIssue(issueId, action, rationale, actor.actorId, actor.actorName)
+}
+
+export async function publishEngagementAction(engagementId: string) {
+  const actor = await getAuditActor()
+  requireRole(actor, ["admin", "partner"])
+  await assertEngagementAccess(engagementId, actor)
+  await enforceAuditRateLimit(actor, "publish_engagement", "mutation")
+
+  const engagement = await svcGetEngagement(actor.organizationId, engagementId)
+  if (!engagement) {
+    throw new Error('Engagement not found')
+  }
+  const evidence = await svcGetEvidence(engagementId)
+  const evidenceRequirements = buildEvidenceRequirementsFromEvidenceList(evidence)
+  const governanceCheck = checkPublicationGovernance({
+    engagementStatus: engagement.status,
+    evidenceRequirements,
+    taskType: 'approval_review',
+    approvedBy: actor.actorName,
+  })
+  if (!governanceCheck.allowed) {
+    const reasons = governanceCheck.reasons.join('; ')
+    await svcRecordAuditEvent({
+      engagementId,
+      eventType: 'publication.blocked_by_governance',
+      actorId: actor.actorId,
+      actorName: actor.actorName,
+      actorRole: actor.actorRole,
+      targetType: 'engagement',
+      targetId: engagementId,
+      newState: engagement.status,
+      description: `Publication blocked by governance rules: ${reasons}`,
+      aiRelated: false,
+      metadata: {
+        governanceBlocked: true,
+        governanceReasons: governanceCheck.reasons,
+        governanceEvidenceMissing: evidence.filter(e => e.state === 'missing').length,
+        governanceEvidenceRejected: evidence.filter(e => e.state === 'rejected').length,
+      },
+    })
+    throw new Error(`Publication blocked by governance rules: ${reasons}`)
+  }
+
+  const result = await svcPublishEngagement(engagementId, actor.actorId, actor.actorName)
+  await svcRecordAuditEvent({
+    engagementId,
+    eventType: 'publication.governance_passed',
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: 'engagement',
+    targetId: engagementId,
+    newState: 'published',
+    description: `Publication passed governance check — approved by ${actor.actorName}`,
+    aiRelated: false,
+    metadata: {
+      governancePassed: true,
+      governanceEvidenceCount: evidence.length,
+    },
+  })
+  return result
 }
