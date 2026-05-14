@@ -13,13 +13,13 @@ const products = [
     note: "أول تطبيق مُثبت على AQLIYA Intelligence Core، ويُظهر كيف يتحول الذكاء المالي إلى مسار محكوم وقابل للمراجعة.",
   },
   {
-    title: "LocalContentOS | المنتج الاستراتيجي الثاني",
+    title: "LocalContentOS | نظام المحتوى المحلي تحت عقلية",
     problem: "بيانات موردين، إنفاق، التزام، وتصنيفات موزعة بين فرق ومصادر مختلفة.",
     system: "يوحّد قياس المحتوى المحلي عبر ربط الموردين بالإنفاق، التصنيف، نسب الالتزام، الفجوات، ومسارات التتبع.",
     output: "رؤية مؤسسية أوضح لمؤشرات المحتوى المحلي وجاهزية القرارات الشرائية.",
     flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات"],
     href: "/products/local-content",
-    note: "الخط الاستراتيجي الثاني تحت عقلية. نظام قابل للتفعيل حسب نطاق المؤسسة ويبنى على AQLIYA Intelligence Core.",
+    note: "خط نظام تحت عقلية، قابل للتفعيل حسب نطاق المؤسسة، ويبنى على AQLIYA Intelligence Core.",
   },
   {
     title: "DecisionOS | حوكمة القرار التنفيذي",
@@ -186,7 +186,7 @@ export default function HomePage() {
         <SectionEyebrow
           label="عائلة المنتجات"
           title="منتجات متعددة فوق نواة واحدة"
-          description="AQLIYA ليست منتجًا واحدًا. هذه خطوط أنظمة متخصصة تُبنى على AQLIYA Intelligence Core وتُفعّل حسب نطاق المؤسسة، مع بقاء AuditOS أول تطبيق مُثبت وLocalContentOS الخط الاستراتيجي الثاني."
+          description="AQLIYA ليست منتجًا واحدًا. هذه خطوط أنظمة متخصصة تُبنى على AQLIYA Intelligence Core وتُفعّل حسب نطاق المؤسسة، مع بقاء AuditOS أول تطبيق مُثبت وLocalContentOS أحد خطوط الأنظمة الرئيسية تحت عقلية."
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (

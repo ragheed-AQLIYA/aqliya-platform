@@ -50,7 +50,7 @@ export default function AuditProductPage() {
         <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:py-32">
           <div className="mx-auto max-w-3xl">
             <Link href="/products" className="inline-block text-xs text-white/40 hover:text-white/60 transition-colors mb-8">
-              ← خطوط الحلول
+              ← خطوط عقلية
             </Link>
 
             <span className="inline-block w-fit rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-primary mb-5">
@@ -278,7 +278,7 @@ export default function AuditProductPage() {
           description="ارفع ميزان مراجعة حقيقي واحد. في تجربتك، سينتج AuditOS كل هذه المخرجات ضمن مسار عمل محكوم:"
         />
         <div className="mt-10">
-          <OutputCard title="مخرجات تجربة Pilot" items={pilotOutputs} />
+          <OutputCard title="مخرجات التفعيل الأولي" items={pilotOutputs} />
         </div>
       </section>
 

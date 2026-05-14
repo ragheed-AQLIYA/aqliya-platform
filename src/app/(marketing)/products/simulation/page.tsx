@@ -22,7 +22,7 @@ export default function SimulationProductPage() {
       <section className="border-b">
         <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
           <Link href="/products" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            ← العودة إلى خطوط الحلول
+            ← العودة إلى خطوط عقلية
           </Link>
           <h1 className="mt-6 text-3xl font-black sm:text-4xl">SimulationOS — نظام محاكاة السيناريوهات</h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">

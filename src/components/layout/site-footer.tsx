@@ -13,7 +13,7 @@ const footerLinks = [
     ],
   },
   {
-    title: "خطوط الحلول",
+    title: "خطوط الأنظمة",
     links: [
       { label: "AuditOS — نظام التدقيق والذكاء المالي", href: "/products/audit" },
       { label: "LocalContentOS — نظام المحتوى المحلي", href: "/products/local-content" },
@@ -27,7 +27,7 @@ const footerLinks = [
     title: "التفعيل والاستكشاف",
     links: [
       { label: "استكشف خطوط عقلية", href: "/products" },
-      { label: "جرّب AuditOS", href: "/auditos" },
+      { label: "شاهد AuditOS كأول تطبيق", href: "/auditos" },
     ],
   },
 ]
