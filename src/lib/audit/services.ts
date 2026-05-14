@@ -9,8 +9,13 @@ import type {
   AuditEvent, AIAssistanceOutput, DashboardSummary, WorkflowStatus,
   PilotFeedback, ProductionBlocker, PilotSignoff,
 } from "@/types/audit"
+import type { PaginatedResult } from "@/lib/audit/pagination"
 import { type FinancialStatementLine } from "@/types/audit"
 import * as mock from "./mock-data"
+
+// Phase 3B: AI abstraction wiring — imports handlers to register them on deterministicProvider
+import "@/lib/ai/handlers/register-handlers"
+import { aiOrchestrator } from "@/lib/ai/orchestrator"
 
 const USE_DATABASE = true
 
@@ -39,10 +44,10 @@ export async function getEngagements(organizationId?: string): Promise<Engagemen
   return tryDb(() => Promise.resolve(mock.mockDashboardSummary.engagements), (db) => db.getEngagements(organizationId))
 }
 
-export async function getEngagement(id: string): Promise<Engagement | null> {
+export async function getEngagement(organizationId: string | undefined, id: string): Promise<Engagement | null> {
   return tryDb(
     () => { const e = mock.mockDashboardSummary.engagements.find(e => e.id === id); return Promise.resolve(e ?? null) },
-    (db) => db.getEngagement(id),
+    (db) => db.getEngagement(organizationId, id),
   )
 }
 
@@ -108,11 +113,19 @@ export async function getValidationRun(engagementId: string): Promise<Validation
   )
 }
 
-export async function runValidation(engagementId: string): Promise<ValidationRun> {
-  return tryDb(
-    () => Promise.resolve(mock.mockValidationRun),
-    (db) => db.runValidation(engagementId),
-  )
+export async function runValidation(engagementId: string, actorId: string): Promise<ValidationRun> {
+  const db = await getDb().catch(() => { throw new Error('Database not available') })
+  return db.runValidation(engagementId, actorId)
+}
+
+export async function disposeValidationIssue(issueId: string, action: string, rationale: string | undefined, actorId: string, actorName: string): Promise<ValidationRun | null> {
+  const db = await getDb().catch(() => { throw new Error('Database not available') })
+  return db.disposeValidationIssue(issueId, action, rationale, actorId, actorName)
+}
+
+export async function publishEngagement(engagementId: string, actorId: string, actorName: string): Promise<{ package: import("@/types/audit").PublicationPackage | null }> {
+  const db = await getDb().catch(() => { throw new Error('Database not available') })
+  return db.publishEngagement(engagementId, actorId, actorName)
 }
 
 export async function getFinancialStatements(engagementId: string): Promise<FinancialStatement[]> {
@@ -131,7 +144,7 @@ export async function getEquityStatementLines(): Promise<FinancialStatementLine[
 
 export async function getDisclosureNotes(engagementId: string): Promise<DisclosureNote[]> {
   return tryDb(
-    () => engagementId === mock.mockEngagement.id ? Promise.resolve(mock.mockDisclosureNotes) : Promise.resolve([]),
+    () => engagementId === mock.mockEngagement.id ? Promise.resolve(mock.mockDisclosureNotesGenerated) : Promise.resolve([]),
     (db) => db.getDisclosureNotes(engagementId),
   )
 }
@@ -140,6 +153,20 @@ export async function getEvidence(engagementId: string): Promise<EvidenceObject[
   return tryDb(
     () => engagementId === mock.mockEngagement.id ? Promise.resolve(mock.mockEvidence) : Promise.resolve([]),
     (db) => db.getEvidence(engagementId),
+  )
+}
+
+export async function getEvidencePaginated(engagementId: string, params: { page?: number; pageSize?: number } = {}): Promise<PaginatedResult<EvidenceObject>> {
+  return tryDb(
+    () => {
+      if (engagementId !== mock.mockEngagement.id) return Promise.resolve({ items: [] as EvidenceObject[], total: 0, page: params.page ?? 1, pageSize: params.pageSize ?? 20, hasMore: false })
+      const page = Math.max(1, params.page ?? 1)
+      const pageSize = Math.max(1, params.pageSize ?? 20)
+      const skip = (page - 1) * pageSize
+      const items = mock.mockEvidence.slice(skip, skip + pageSize)
+      return Promise.resolve({ items, total: mock.mockEvidence.length, page, pageSize, hasMore: page * pageSize < mock.mockEvidence.length })
+    },
+    (db) => db.getEvidencePaginated(engagementId, params),
   )
 }
 
@@ -157,6 +184,20 @@ export async function getFindings(engagementId: string): Promise<Finding[]> {
   )
 }
 
+export async function getFindingsPaginated(engagementId: string, params: { page?: number; pageSize?: number } = {}): Promise<PaginatedResult<Finding>> {
+  return tryDb(
+    () => {
+      if (engagementId !== mock.mockEngagement.id) return Promise.resolve({ items: [] as Finding[], total: 0, page: params.page ?? 1, pageSize: params.pageSize ?? 20, hasMore: false })
+      const page = Math.max(1, params.page ?? 1)
+      const pageSize = Math.max(1, params.pageSize ?? 20)
+      const skip = (page - 1) * pageSize
+      const items = mock.mockFindings.slice(skip, skip + pageSize)
+      return Promise.resolve({ items, total: mock.mockFindings.length, page, pageSize, hasMore: page * pageSize < mock.mockFindings.length })
+    },
+    (db) => db.getFindingsPaginated(engagementId, params),
+  )
+}
+
 export async function getFinding(engagementId: string, findingId: string): Promise<Finding | null> {
   return tryDb(
     () => engagementId === mock.mockEngagement.id ? Promise.resolve(mock.mockFindings.find(f => f.id === findingId) ?? null) : Promise.resolve(null),
@@ -168,6 +209,20 @@ export async function getRecommendations(engagementId: string): Promise<Recommen
   return tryDb(
     () => engagementId === mock.mockEngagement.id ? Promise.resolve(mock.mockRecommendations) : Promise.resolve([]),
     (db) => db.getRecommendations(engagementId),
+  )
+}
+
+export async function getRecommendationsPaginated(engagementId: string, params: { page?: number; pageSize?: number } = {}): Promise<PaginatedResult<Recommendation>> {
+  return tryDb(
+    () => {
+      if (engagementId !== mock.mockEngagement.id) return Promise.resolve({ items: [] as Recommendation[], total: 0, page: params.page ?? 1, pageSize: params.pageSize ?? 20, hasMore: false })
+      const page = Math.max(1, params.page ?? 1)
+      const pageSize = Math.max(1, params.pageSize ?? 20)
+      const skip = (page - 1) * pageSize
+      const items = mock.mockRecommendations.slice(skip, skip + pageSize)
+      return Promise.resolve({ items, total: mock.mockRecommendations.length, page, pageSize, hasMore: page * pageSize < mock.mockRecommendations.length })
+    },
+    (db) => db.getRecommendationsPaginated(engagementId, params),
   )
 }
 
@@ -252,116 +307,23 @@ export async function createAIOutput(data: {
 }
 
 export async function generateDraftNotes(engagementId: string): Promise<AIAssistanceOutput[]> {
-  const db = await getDb().catch(() => { throw new Error('Database not available') })
-  const [trialBalance, mappings, statements, existingNotes] = await Promise.all([
-    db.getTrialBalance(engagementId),
-    db.getMappings(engagementId),
-    db.getFinancialStatements(engagementId),
-    db.getDisclosureNotes(engagementId),
-  ])
-  const existingTitles = new Set(existingNotes.map(n => n.title.toLowerCase()))
-  const accountByType = new Map<string, { code: string; name: string; balance: number }[]>()
-  if (trialBalance) {
-    for (const line of trialBalance.lines) {
-      const type = line.accountType ?? 'other'
-      if (!accountByType.has(type)) accountByType.set(type, [])
-      accountByType.get(type)!.push({ code: line.accountCode, name: line.accountName, balance: line.balance })
-    }
-  }
-  const draftDefs: Array<{
-    noteNumber: string; title: string; noteType: string;
-    content: string; linkAccounts: string; missingInfo: string[];
-  }> = [
-    {
-      noteNumber: '8', title: 'Revenue Breakdown',
-      noteType: 'accounting_policy',
-      content: `Revenue is primarily generated from trading activities within the Kingdom of Saudi Arabia. The Company recognises revenue upon transfer of control of goods to customers.`,
-      linkAccounts: 'Revenue Accounts',
-      missingInfo: ['Revenue by segment', 'Customer concentration details'],
-    },
-    {
-      noteNumber: '9', title: 'Expenses by Nature',
-      noteType: 'other',
-      content: `Operating expenses include cost of goods sold, salaries and wages, depreciation, professional fees, and other administrative expenses.`,
-      linkAccounts: 'Expense Accounts',
-      missingInfo: ['Nature of expenses breakdown', 'Employee benefit details'],
-    },
-    {
-      noteNumber: '10', title: 'Commitments and Contingencies',
-      noteType: 'other',
-      content: `The Company has no material capital commitments or contingent liabilities as at the reporting date, other than those arising in the ordinary course of business.`,
-      linkAccounts: 'Off-Balance Sheet Items',
-      missingInfo: ['Capital commitments', 'Contingent liabilities', 'Litigation status'],
-    },
-  ]
-  const existing = existingTitles
-  const created: AIAssistanceOutput[] = []
-  for (const def of draftDefs) {
-    const titleLower = def.title.toLowerCase()
-    if (existing.has(titleLower)) continue
-    const sourceAccounts = (trialBalance?.lines ?? []).slice(0, 5).map(l => `${l.accountCode} - ${l.accountName}`).join('; ')
-    const ai = await db.createAIOutput({
-      engagementId,
-      suggestionType: 'note_draft',
-      inputContext: `Draft Note ${def.noteNumber}: ${def.title}. Source accounts: ${sourceAccounts}`,
-      outputContent: JSON.stringify({
-        noteNumber: def.noteNumber,
-        title: def.title,
-        noteType: def.noteType,
-        content: def.content + `\n\nNote: This is an AI-generated draft and requires human review, verification of amounts, and tailoring to the Company's specific circumstances.`,
-        linkedStatementLine: def.linkAccounts,
-        missingInformation: def.missingInfo,
-      }),
-      confidence: 0.75,
-      modelVersion: 'audit-os-llm-v1',
-      sourceEntityType: 'engagement',
-      sourceEntityId: engagementId,
-      metadata: { draftType: 'notes_assistant' },
-    })
-    created.push(ai)
-  }
-  return created
+  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → draftNotesHandler
+  const result = await aiOrchestrator.generate({
+    taskType: 'notes_generation',
+    taskInput: { engagementId },
+    engagementId,
+  })
+  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? []
 }
 
 export async function generateEvidenceSuggestions(engagementId: string): Promise<AIAssistanceOutput[]> {
-  const db = await getDb().catch(() => { throw new Error('Database not available') })
-  const [trialBalance, evidence, findings] = await Promise.all([
-    db.getTrialBalance(engagementId),
-    db.getEvidence(engagementId),
-    db.getFindings(engagementId),
-  ])
-  const existingFilenames = new Set(evidence.map(e => e.filename.toLowerCase()))
-  const evidenceSuggestions: Array<{
-    filename: string; accountCode: string; accountName: string; balance: number;
-    reason: string; confidence: number;
-  }> = []
-  const materialThreshold = 50000
-  const tbLines = trialBalance?.lines ?? []
-  for (const line of tbLines) {
-    if (Math.abs(line.balance) < materialThreshold) continue
-    const suggestedName = `${line.accountName.toLowerCase().replace(/\s+/g, '_')}_evidence.pdf`
-    if (existingFilenames.has(suggestedName)) continue
-    const reason = `Material balance of SAR ${Math.abs(line.balance).toLocaleString()} — standard audit evidence required`
-    evidenceSuggestions.push({ filename: suggestedName, accountCode: line.accountCode, accountName: line.accountName, balance: line.balance, reason, confidence: 0.8 })
-  }
-  for (const f of findings) {
-    const fName = `finding_${f.id.substring(0, 8)}_evidence.pdf`
-    if (existingFilenames.has(fName)) continue
-    evidenceSuggestions.push({ filename: fName, accountCode: '', accountName: f.title, balance: 0, reason: `Finding: ${f.title} — supporting evidence needed`, confidence: 0.7 })
-  }
-  const created: AIAssistanceOutput[] = []
-  for (const sug of evidenceSuggestions) {
-    const ai = await db.createAIOutput({
-      engagementId, suggestionType: 'evidence_suggestion',
-      inputContext: `Account: ${sug.accountCode} ${sug.accountName}, balance: SAR ${sug.balance}`,
-      outputContent: JSON.stringify({ filename: sug.filename, accountCode: sug.accountCode, accountName: sug.accountName, reason: sug.reason }),
-      confidence: sug.confidence, modelVersion: 'audit-os-llm-v1',
-      sourceEntityType: 'engagement', sourceEntityId: engagementId,
-      metadata: { draftType: 'evidence_suggestion' },
-    })
-    created.push(ai)
-  }
-  return created
+  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → evidenceSuggestionsHandler
+  const result = await aiOrchestrator.generate({
+    taskType: 'evidence_review',
+    taskInput: { engagementId },
+    engagementId,
+  })
+  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? []
 }
 
 export async function acceptEvidenceSuggestion(aiOutputId: string, engagementId: string): Promise<{ aiOutput: AIAssistanceOutput | null; evidence: EvidenceObject | null }> {
@@ -398,6 +360,37 @@ export async function acceptDraftNote(aiOutputId: string, noteContent: string, e
   return { aiOutput, note }
 }
 
+export async function updateNoteStatus(noteId: string, status: string, engagementId: string, reviewerName?: string, comment?: string): Promise<{ note: DisclosureNote | null; reviewComment: ReviewComment | null }> {
+  const db = await getDb().catch(() => { throw new Error('Database not available') })
+  const note = await db.updateDisclosureNote(noteId, { status })
+  let reviewComment: ReviewComment | null = null
+  if (comment && note) {
+    reviewComment = await db.createReviewComment({
+      engagementId,
+      targetType: 'note',
+      targetId: noteId,
+      reviewerId: 'system',
+      reviewerName: reviewerName ?? 'Reviewer',
+      comment,
+      requiredAction: status === 'needs_info' ? 'provide_evidence' : status === 'rejected' ? 'revise' : 'none',
+    })
+  }
+  if (note) {
+    await db.recordAuditEvent({
+      engagementId,
+      eventType: 'note.status_changed',
+      actorId: 'system',
+      actorName: reviewerName ?? 'Reviewer',
+      actorRole: 'reviewer',
+      targetType: 'disclosure_note',
+      targetId: noteId,
+      newState: status,
+      description: `Note "${note.title}" status changed to ${status}${comment ? ` — ${comment.substring(0, 80)}` : ''}`,
+    })
+  }
+  return { note, reviewComment }
+}
+
 export async function getAIOutputsForEntity(engagementId: string, sourceEntityType: string, sourceEntityId: string): Promise<AIAssistanceOutput[]> {
   return tryDb(
     () => Promise.resolve(mock.mockAiOutputs.filter(a => a.engagementId === engagementId)),
@@ -411,53 +404,13 @@ export async function updateAIOutputStatus(id: string, status: string, userId?: 
 }
 
 export async function generateFindingDrafts(engagementId: string): Promise<AIAssistanceOutput[]> {
-  const db = await getDb().catch(() => { throw new Error('Database not available') })
-  const [trialBalance, evidence, findings] = await Promise.all([
-    db.getTrialBalance(engagementId),
-    db.getEvidence(engagementId),
-    db.getFindings(engagementId),
-  ])
-  const existingTitles = new Set(findings.map(f => f.title.toLowerCase()))
-  const findingDefs: Array<{
-    title: string; findingType: string; severity: string; description: string;
-    rootCause: string; impact: string; materiality: string;
-  }> = [
-    {
-      title: 'Unusual Balance in Accrued Expenses',
-      findingType: 'observation',
-      severity: 'medium',
-      description: 'Accrued Expenses show a negative credit balance of SAR 20,000, which may indicate a prior period adjustment or recording error. Investigation required.',
-      rootCause: 'Possible unrecorded adjustment or reversal entry not posted correctly.',
-      impact: 'Potential misstatement of current liabilities.',
-      materiality: 'immaterial',
-    },
-    {
-      title: 'Revenue Recognition Timing',
-      findingType: 'disclosure_gap',
-      severity: 'medium',
-      description: 'Revenue recognition practices should be reviewed for consistency with IFRS for SMEs. Current policies may not fully disclose performance obligation details.',
-      rootCause: 'Revenue recognition policy documentation incomplete.',
-      impact: 'Disclosure gap in revenue note — may require supplemental disclosure.',
-      materiality: 'immaterial',
-    },
-  ]
-  const created: AIAssistanceOutput[] = []
-  for (const def of findingDefs) {
-    if (existingTitles.has(def.title.toLowerCase())) continue
-    const ai = await db.createAIOutput({
-      engagementId,
-      suggestionType: 'finding',
-      inputContext: `Draft finding: ${def.title}`,
-      outputContent: JSON.stringify(def),
-      confidence: 0.7,
-      modelVersion: 'audit-os-llm-v1',
-      sourceEntityType: 'engagement',
-      sourceEntityId: engagementId,
-      metadata: { draftType: 'finding_assistant' },
-    })
-    created.push(ai)
-  }
-  return created
+  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → findingDraftsHandler
+  const result = await aiOrchestrator.generate({
+    taskType: 'audit_findings',
+    taskInput: { engagementId },
+    engagementId,
+  })
+  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? []
 }
 
 export async function acceptFindingDraft(aiOutputId: string, engagementId: string): Promise<{ aiOutput: AIAssistanceOutput | null; finding: Finding | null }> {
@@ -481,96 +434,26 @@ export async function acceptFindingDraft(aiOutputId: string, engagementId: strin
 }
 
 export async function generateRecommendationDrafts(engagementId: string): Promise<AIAssistanceOutput[]> {
-  const db = await getDb().catch(() => { throw new Error('Database not available') })
-  const findings = await db.getFindings(engagementId)
-  const recs = await db.getRecommendations(engagementId)
-  const existingFindingIds = new Set(recs.map(r => r.findingId))
-  const created: AIAssistanceOutput[] = []
-  for (const finding of findings) {
-    if (existingFindingIds.has(finding.id)) continue
-    const recContent = {
-      findingId: finding.id,
-      title: `Remediation: ${finding.title}`,
-      description: `Based on finding "${finding.title}", the following remediation is recommended.`,
-      recommendedAction: `Review and address the root causes identified in finding "${finding.title}". Implement appropriate controls and document the resolution process.`,
-      riskLevel: finding.severity === 'critical' || finding.severity === 'high' ? 'high' : 'medium',
-    }
-    const ai = await db.createAIOutput({
-      engagementId,
-      suggestionType: 'recommendation',
-      inputContext: `Draft recommendation for finding: ${finding.title} (${finding.id})`,
-      outputContent: JSON.stringify(recContent),
-      confidence: 0.75,
-      modelVersion: 'audit-os-llm-v1',
-      sourceEntityType: 'finding',
-      sourceEntityId: finding.id,
-      metadata: { draftType: 'recommendation_assistant', findingId: finding.id },
-    })
-    created.push(ai)
-  }
-  return created
+  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → recommendationDraftsHandler
+  const result = await aiOrchestrator.generate({
+    taskType: 'approval_review',
+    taskInput: { engagementId },
+    engagementId,
+  })
+  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? []
 }
 
 export async function generateAnalyticalReview(engagementId: string): Promise<AIAssistanceOutput[]> {
-  const db = await getDb().catch(() => { throw new Error('Database not available') })
-  const [trialBalance, mappings, evidence, findings] = await Promise.all([
-    db.getTrialBalance(engagementId),
-    db.getMappings(engagementId),
-    db.getEvidence(engagementId),
-    db.getFindings(engagementId),
-  ])
-  const flags: Array<{
-    flagType: string; title: string; description: string; severity: string; confidence: number;
-  }> = []
-  const tbLines = trialBalance?.lines ?? []
-  for (const line of tbLines) {
-    if (line.balance < 0 && (line.accountType === 'liability' || line.accountType === 'equity')) {
-      flags.push({
-        flagType: 'negative_balance', severity: 'warning',
-        title: `Negative balance in ${line.accountName}`,
-        description: `${line.accountName} (${line.accountCode}) has a negative credit balance of SAR ${Math.abs(line.balance).toLocaleString()}. This may indicate a prior period adjustment or reclassification needed.`,
-        confidence: 0.85,
-      })
-    }
-    if (Math.abs(line.balance) > 500000) {
-      flags.push({
-        flagType: 'large_balance', severity: 'info',
-        title: `Large balance: ${line.accountName}`,
-        description: `${line.accountName} (${line.accountCode}) has a material balance of SAR ${Math.abs(line.balance).toLocaleString()}. Consider additional substantive procedures.`,
-        confidence: 0.7,
-      })
-    }
-  }
-  const unmapped = mappings.filter(m => m.status === 'pending' || !m.canonicalAccountId)
-  for (const m of unmapped.slice(0, 3)) {
-    flags.push({
-      flagType: 'unmapped_account', severity: 'warning',
-      title: `Unmapped account: ${m.sourceAccountName}`,
-      description: `${m.sourceAccountName} (${m.sourceAccountCode}) has not been mapped to a canonical account. Suggest classification review.`,
-      confidence: 0.9,
-    })
-  }
-  if (flags.length === 0) {
-    flags.push({
-      flagType: 'review_complete', severity: 'info',
-      title: 'Analytical review complete',
-      description: 'No unusual balances or unmapped accounts detected during analytical review.',
-      confidence: 1.0,
-    })
-  }
-  const created: AIAssistanceOutput[] = []
-  for (const flag of flags.slice(0, 8)) {
-    const ai = await db.createAIOutput({
-      engagementId, suggestionType: 'anomaly_explanation',
-      inputContext: `Analytical review flag: ${flag.title}`,
-      outputContent: JSON.stringify({ flagType: flag.flagType, title: flag.title, description: flag.description, severity: flag.severity }),
-      confidence: flag.confidence, modelVersion: 'audit-os-llm-v1',
-      sourceEntityType: 'engagement', sourceEntityId: engagementId,
-      metadata: { draftType: 'analytical_review' },
-    })
-    created.push(ai)
-  }
-  return created
+  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → analyticalReviewHandler
+  // The handler performs the rule-based TB scan + anomaly flag generation and persists outputs.
+  // Returned AIAssistanceOutput[] is extracted from AIResponse.metadata.outputs.
+  // Public function signature unchanged — callers (audit-actions.ts, UI) are unaffected.
+  const result = await aiOrchestrator.generate({
+    taskType: 'trial_balance_upload',
+    taskInput: { engagementId },
+    engagementId,
+  })
+  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? []
 }
 
 export async function acceptRecommendationDraft(aiOutputId: string, engagementId: string): Promise<{ aiOutput: AIAssistanceOutput | null; recommendation: Recommendation | null }> {
@@ -627,10 +510,10 @@ export async function getFullTraceability(engagementId: string, statementLineLab
   )
 }
 
-export async function getAuditUsers() {
+export async function getAuditUsers(organizationId?: string) {
   return tryDb(
     () => Promise.resolve(mock.mockUsers),
-    (db) => db.getAuditUsers(),
+    (db) => db.getAuditUsers(organizationId),
   )
 }
 
@@ -757,13 +640,13 @@ export async function uploadTrialBalance(
 // ─── Evidence Mutations ───
 
 export async function createEvidence(params: {
-  engagementId: string; filename: string; fileType: string;
+  engagementId: string; filename: string; fileType: string; fileSize?: number;
   state?: string; uploadedBy?: string; actorId?: string; actorName?: string;
 }): Promise<{ evidence: EvidenceObject }> {
   const db = await getDb().catch(() => { throw new Error('Database not available') })
   const evidence = await db.createEvidence({
     engagementId: params.engagementId, filename: params.filename, fileType: params.fileType,
-    state: params.state, uploadedBy: params.uploadedBy,
+    fileSize: params.fileSize, state: params.state, uploadedBy: params.uploadedBy,
   })
   await db.recordAuditEvent({
     engagementId: params.engagementId, eventType: 'evidence.created',
@@ -774,9 +657,32 @@ export async function createEvidence(params: {
   return { evidence }
 }
 
+export async function createEvidenceWithStorage(params: {
+  engagementId: string; filename: string; fileType: string; fileSize: number;
+  fileHash: string; storageKey: string; uploadedBy?: string;
+  actorId?: string; actorName?: string;
+}): Promise<{ evidence: EvidenceObject }> {
+  const db = await getDb().catch(() => { throw new Error('Database not available') })
+  const evidence = await db.createEvidence({
+    engagementId: params.engagementId, filename: params.filename, fileType: params.fileType,
+    fileSize: params.fileSize, state: 'uploaded',
+    uploadedBy: params.uploadedBy, fileHash: params.fileHash, storageKey: params.storageKey,
+  })
+  await db.recordAuditEvent({
+    engagementId: params.engagementId, eventType: 'evidence.uploaded',
+    actorId: params.actorId ?? 'system', actorName: params.actorName ?? 'System', actorRole: 'operator',
+    targetType: 'evidence', targetId: evidence.id, newState: 'uploaded',
+    description: `Evidence uploaded: ${params.filename} (${(params.fileSize / 1024).toFixed(1)}KB, hash: ${params.fileHash.substring(0, 12)}...)`,
+    metadata: { fileSize: params.fileSize, fileHash: params.fileHash.substring(0, 12), storageKey: params.storageKey },
+  })
+  return { evidence }
+}
+
+/** @deprecated Use updateEvidenceStateWithEvent instead — records audit event */
 export async function updateEvidenceState(id: string, state: string, params?: {
   userId?: string; actorName?: string;
 }): Promise<{ evidence: EvidenceObject }> {
+  console.warn('[AuditServices] updateEvidenceState called without audit event — use updateEvidenceStateWithEvent instead')
   const db = await getDb().catch(() => { throw new Error('Database not available') })
   const evidence = await db.updateEvidenceState(id, state, params?.userId)
   return { evidence }
@@ -792,6 +698,13 @@ export async function updateEvidenceStateWithEvent(id: string, state: string, en
     description: `Evidence state changed to ${state}: ${evidence.filename}`,
   })
   return { evidence }
+}
+
+export async function updateEvidenceStorageService(id: string, data: {
+  fileHash: string; storageKey: string; fileSize: number;
+}): Promise<EvidenceObject | null> {
+  const db = await getDb().catch(() => { throw new Error('Database not available') })
+  return db.updateEvidenceStorage(id, data)
 }
 
 // ─── Findings Mutations ───
@@ -819,6 +732,17 @@ export async function createFinding(params: {
 export async function updateFindingStatus(id: string, status: string, engagementId: string, actorId?: string): Promise<{ finding: Finding }> {
   const db = await getDb().catch(() => { throw new Error('Database not available') })
   const finding = await db.updateFindingStatus(id, status)
+  await db.recordAuditEvent({
+    engagementId,
+    eventType: 'finding.state_changed',
+    actorId: actorId ?? 'system',
+    actorName: 'System',
+    actorRole: 'reviewer',
+    targetType: 'finding',
+    targetId: id,
+    newState: status,
+    description: `Finding status changed to ${status}`,
+  })
   return { finding }
 }
 
@@ -846,6 +770,17 @@ export async function createRecommendation(params: {
 export async function updateRecommendationStatus(id: string, status: string, engagementId: string, reviewerDecision?: string): Promise<{ recommendation: Recommendation }> {
   const db = await getDb().catch(() => { throw new Error('Database not available') })
   const rec = await db.updateRecommendationStatus(id, status, reviewerDecision)
+  await db.recordAuditEvent({
+    engagementId,
+    eventType: 'recommendation.state_changed',
+    actorId: 'system',
+    actorName: 'Reviewer',
+    actorRole: 'reviewer',
+    targetType: 'recommendation',
+    targetId: id,
+    newState: status,
+    description: `Recommendation status changed to ${status}${reviewerDecision ? ': ' + reviewerDecision : ''}`,
+  })
   return { recommendation: rec }
 }
 
@@ -874,7 +809,31 @@ export async function createReviewComment(params: {
 export async function updateReviewCommentStatus(id: string, status: string, resolution?: string): Promise<{ comment: ReviewComment }> {
   const db = await getDb().catch(() => { throw new Error('Database not available') })
   const rc = await db.updateReviewCommentStatus(id, status, resolution)
+  if (status === 'resolved' && rc) {
+    try {
+      const engagement = await (await prismaGlobal()).auditReviewComment.findUnique({ where: { id }, select: { engagementId: true } })
+      if (engagement) {
+        await db.recordAuditEvent({
+          engagementId: engagement.engagementId,
+          eventType: 'review.comment_resolved',
+          actorId: 'system',
+          actorName: rc.reviewerName,
+          actorRole: 'reviewer',
+          targetType: 'review_comment',
+          targetId: id,
+          newState: status,
+          description: `Review comment resolved${resolution ? ': ' + resolution : ''}`,
+        })
+      }
+    } catch (e) {
+      console.warn('[AuditServices] Failed to record review comment resolution event:', (e as Error).message)
+    }
+  }
   return { comment: rc }
+}
+
+async function prismaGlobal() {
+  return import('@/lib/prisma').then(m => m.prisma)
 }
 
 // ─── Approval Mutations ───
@@ -924,6 +883,36 @@ export async function linkEvidenceToEntity(params: {
     metadata: { evidenceId: params.evidenceId, linkType: 'supports', context: params.context },
   })
   return { link }
+}
+
+export async function getCanonicalAccounts(limit?: number): Promise<Array<{ id: string; code: string; name: string }>> {
+  return tryDb(
+    () => Promise.resolve([
+      { id: "ca-1", code: "CA-1010", name: "Cash and Cash Equivalents" },
+      { id: "ca-2", code: "CA-1020", name: "Trade Receivables" },
+      { id: "ca-3", code: "CA-1030", name: "Inventories" },
+      { id: "ca-4", code: "CA-1040", name: "Prepayments" },
+      { id: "ca-5", code: "CA-1050", name: "Property, Plant and Equipment" },
+      { id: "ca-6", code: "CA-1060", name: "Accumulated Depreciation" },
+      { id: "ca-7", code: "CA-2010", name: "Trade Payables" },
+      { id: "ca-8", code: "CA-2020", name: "Accrued Expenses" },
+      { id: "ca-9", code: "CA-2030", name: "Tax and Zakat Payable" },
+      { id: "ca-10", code: "CA-2040", name: "Short-term Borrowings" },
+      { id: "ca-11", code: "CA-3010", name: "Share Capital" },
+      { id: "ca-12", code: "CA-3020", name: "Retained Earnings" },
+      { id: "ca-13", code: "CA-4010", name: "Revenue - Sale of Goods" },
+      { id: "ca-14", code: "CA-4020", name: "Revenue - Services" },
+      { id: "ca-15", code: "CA-5010", name: "Cost of Sales" },
+      { id: "ca-16", code: "CA-5020", name: "Employee Benefits" },
+      { id: "ca-17", code: "CA-5030", name: "Occupancy Expenses" },
+      { id: "ca-18", code: "CA-5040", name: "Utilities" },
+      { id: "ca-19", code: "CA-5050", name: "Depreciation and Amortisation" },
+      { id: "ca-20", code: "CA-5060", name: "Professional and Consulting Fees" },
+      { id: "ca-21", code: "CA-5070", name: "General and Administrative Expenses" },
+      { id: "ca-22", code: "CA-5100", name: "Other Income" },
+    ]),
+    (db) => db.getCanonicalAccounts(limit),
+  )
 }
 
 function classifyAccount(code: string): string | undefined {
