@@ -4,13 +4,13 @@ import { OperatingSystemMapVisual, ProofChainVisual } from "@/components/visuals
 
 const products = [
   {
-    title: "AuditOS | المنتج الأول المُثبِت تحت عقلية",
+    title: "AuditOS | أول تطبيق مُثبت على عقلية",
     problem: "بيانات مالية متفرقة، تصنيفات يدوية، أدلة غير مرتبطة، ومراجعة يصعب تتبعها.",
     system: "يبني مسار مراجعة وتدقيق محكوم يربط البيانات المالية بالتصنيف، الأدلة، الملاحظات، المراجعة، والاعتماد.",
     output: "مخرجات مراجعة منظمة وقابلة للتتبع من المصدر إلى القرار البشري النهائي.",
     flow: ["بيانات", "تصنيف", "مخرجات", "أدلة", "مراجعة"],
     href: "/products/audit",
-    note: "المسار النشط والأوضح اليوم تحت عقلية، ويُقدَّم كأول منتج مُثبت على AQLIYA Intelligence Core.",
+    note: "أول تطبيق مُثبت على AQLIYA Intelligence Core، ويُظهر كيف يتحول الذكاء المالي إلى مسار محكوم وقابل للمراجعة.",
   },
   {
     title: "LocalContentOS | المنتج الاستراتيجي الثاني",
@@ -19,7 +19,7 @@ const products = [
     output: "رؤية مؤسسية أوضح لمؤشرات المحتوى المحلي وجاهزية القرارات الشرائية.",
     flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات"],
     href: "/products/local-content",
-    note: "المنتج الاستراتيجي الثاني تحت عقلية. يُعرض حاليًا كاتجاه منتج وتسويق، وليس كمساحة تشغيل إنتاجية.",
+    note: "الخط الاستراتيجي الثاني تحت عقلية. نظام قابل للتفعيل حسب نطاق المؤسسة ويبنى على AQLIYA Intelligence Core.",
   },
   {
     title: "DecisionOS | حوكمة القرار التنفيذي",
@@ -28,25 +28,25 @@ const products = [
     output: "مذكرة قرار موثقة يمكن مراجعتها وفهم أسبابها قبل الاعتماد.",
     flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية"],
     href: "/products/decision",
-    note: "نظام مجاور نشط تحت عقلية لحوكمة القرار التنفيذي، وليس المنتج الذي يختصر هوية الشركة.",
+    note: "خط نظام لحوكمة القرار التنفيذي، يُفعّل ضمن نطاق المؤسسة ويبنى على AQLIYA Intelligence Core.",
   },
   {
-    title: "SalesOS | نموذج أولي للمستقبل",
+    title: "SalesOS | خط نظام الذاكرة التجارية والمبيعات",
     problem: "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
-    system: "يوضح كيف يمكن توظيف النواة في تأهيل الفرص، ترتيبها، وضبط المتابعة داخل مسار مبيعات أكثر انضباطًا.",
-    output: "تصور تشغيلي لمسار مبيعات أوضح، مع نضج تنفيذي ما يزال في طور النموذج الأولي.",
+    system: "ينظم تأهيل الفرص، ترتيبها، وضبط المتابعة داخل مسار مبيعات محكوم ومبني على الذاكرة المؤسسية.",
+    output: "مسار مبيعات أوضح يربط العملاء المحتملين بالأولوية، المتابعة، والتعلم المؤسسي.",
     flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة", "تعلم"],
     href: "/products/sales",
-    note: "منتج مستقبلي/نماذج أولية، وليس مسارًا إنتاجيًا مكتملاً مثل AuditOS.",
+    note: "خط نظام قابل للتفعيل حسب نطاق المؤسسة ويبنى على AQLIYA Intelligence Core لإدارة الذاكرة التجارية والمبيعات.",
   },
   {
-    title: "SimulationOS | مسار تسويقي مستقبلي",
+    title: "SimulationOS | خط نظام محاكاة السيناريوهات",
     problem: "قرارات تُنفذ قبل اختبار أثرها على التكلفة، المخاطر، الأداء، أو النتائج.",
-    system: "يعرض اتجاهًا لربط المدخلات بالافتراضات والسيناريوهات والمقارنات قبل التنفيذ.",
-    output: "رؤية مقارنة تساعد الإدارة على فهم البدائل عندما يصبح المسار جاهزًا للتنفيذ الفعلي.",
+    system: "يربط المدخلات بالافتراضات والسيناريوهات والمقارنات قبل التنفيذ داخل مسار محاكاة قابل للمراجعة.",
+    output: "رؤية مقارنة تساعد الإدارة على فهم البدائل قبل اعتماد القرار أو تنفيذ الأثر.",
     flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
     href: "/products/simulation",
-    note: "حضور تسويقي فقط في هذه المرحلة، وليس منتجًا تشغيليًا قائمًا.",
+    note: "خط نظام قابل للتفعيل حسب نطاق المؤسسة ويبنى على AQLIYA Intelligence Core لدعم المقارنة والمحاكاة قبل التنفيذ.",
   },
 ]
 
@@ -89,13 +89,13 @@ export default function HomePage() {
                   href="/products"
                   className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-8 text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                 >
-                  استعرض المنتجات
+                  استكشف خطوط عقلية
                 </Link>
                 <Link
                   href="/auditos"
                   className="inline-flex h-12 items-center justify-center rounded-md border border-white/15 bg-white/5 px-8 text-base font-medium text-white/80 transition-colors hover:bg-white/10"
                 >
-                  جرّب AuditOS
+                  شاهد AuditOS كأول تطبيق
                 </Link>
               </div>
               <p className="mt-5 text-sm font-medium text-white/70">
@@ -114,13 +114,14 @@ export default function HomePage() {
       {/* 2. Problem — Before / After — Light */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <SectionEyebrow
-          label="المشكلة والحل"
-          title="المؤسسات لا تحتاج أدوات أكثر. تحتاج أنظمة أوضح."
+          label="المخاطر المؤسسية"
+          title="الذكاء بلا حوكمة ينتج مخرجات عمياء لا يمكن الاعتماد عليها"
+          description="حين تتحرك البيانات، الإجراءات، المراجعات، والاعتمادات خارج مسار واحد، تصبح المخرجات أسرع من أن تكون موثوقة. عقلية تبني طبقة تشغيل تربط الذكاء بسير العمل، والأدلة، والمراجعة البشرية قبل القرار النهائي."
         />
         <div className="mt-10">
           <BeforeAfterBlock
-            before={["ملفات Excel متفرقة", "اعتماد عبر البريد", "موافقات غير موثقة", "أنظمة غير مترابطة", "صلاحيات غير واضحة"]}
-            after={["سير عمل موحد", "مخرجات قابلة للتتبع", "قرارات موثقة", "وضوح تشغيلي", "تقارير وأدلة جاهزة"]}
+            before={["مخرجات ذكاء غير مرتبطة بسياق العمل", "اعتماد عبر البريد والذاكرة", "موافقات غير موثقة", "أدلة منفصلة عن القرار", "صلاحيات لا تحكم المسار كاملًا"]}
+            after={["سير عمل محكوم", "مخرجات قابلة للتتبع", "قرارات موثقة", "أدلة مربوطة بكل خطوة", "وضوح تشغيلي قابل للمراجعة"]}
           />
         </div>
       </section>
@@ -149,13 +150,14 @@ export default function HomePage() {
       {/* 4. Methodology — Light */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
-          label="منهجية العمل"
-          title="من طبيعة العمل إلى نظام قابل للتشغيل"
+          label="سلسلة التشغيل"
+          title="البيانات ← سير العمل ← الأدلة ← المراجعة ← الاعتماد ← المخرجات"
+          description="AQLIYA لا تضيف طبقة ذكاء فوق الفوضى. بل تنظّم انتقال المؤسسة من البيانات الخام إلى المخرجات النهائية داخل مسار واحد قابل للمراجعة والاعتماد."
         />
         <div className="mt-10">
           <ExecutiveSurface>
             <WorkflowChain
-              steps={["فهم العمل", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات", "المراجعة والتتبع", "التطوير"]}
+              steps={["البيانات", "سير العمل", "الأدلة", "المراجعة", "الاعتماد", "المخرجات"]}
               className="justify-center"
             />
           </ExecutiveSurface>
@@ -165,16 +167,16 @@ export default function HomePage() {
       {/* 5. Custom Product — Light */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
-          label="التخصيص المؤسسي"
-          title="وعند الحاجة، يمكن توسيع النواة إلى نظام خاص بمؤسستك"
-          description="إلى جانب المنتجات، يمكن بناء مسارات مؤسسية مخصصة فوق نفس منطق الحوكمة، الأدلة، وسير العمل عندما تتطلب طبيعة المؤسسة ذلك."
+          label="التفعيل المؤسسي"
+          title="وعند الحاجة، يمكن تفعيل نظام مؤسسي خاص فوق النواة نفسها"
+          description="إلى جانب خطوط الأنظمة الجاهزة، يمكن تفعيل مسارات مؤسسية مخصصة فوق نفس منطق الحوكمة، الأدلة، الصلاحيات، وسير العمل عندما يتطلب نطاق المؤسسة ذلك."
         />
         <div className="mt-8 text-center">
           <Link
             href="/custom-product"
             className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-8 text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            ابدأ طلب تصميم النظام
+            صمّم نظامك المؤسسي
           </Link>
         </div>
       </section>
@@ -184,7 +186,7 @@ export default function HomePage() {
         <SectionEyebrow
           label="عائلة المنتجات"
           title="منتجات متعددة فوق نواة واحدة"
-          description="AQLIYA ليست منتجًا واحدًا. هذه المنتجات تمثل مسارات مختلفة مبنية على النواة نفسها، مع وضوح في حالة كل منتج ونضجه الحالي."
+          description="AQLIYA ليست منتجًا واحدًا. هذه خطوط أنظمة متخصصة تُبنى على AQLIYA Intelligence Core وتُفعّل حسب نطاق المؤسسة، مع بقاء AuditOS أول تطبيق مُثبت وLocalContentOS الخط الاستراتيجي الثاني."
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
@@ -225,14 +227,14 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto max-w-3xl rounded-xl border border-white/10 bg-white/[0.03] p-8 sm:p-12 text-center">
             <h2 className="text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">
-              هل تحتاج نظامًا مصممًا لطريقة عمل مؤسستك؟
+              هل تريد تفعيل خط نظام أو تصميم نظام مؤسسي محكوم؟
             </h2>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link href="/custom-product" className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-8 text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-                صمّم نظامك الآن
+                صمّم نظامك المؤسسي
               </Link>
               <Link href="/contact" className="inline-flex h-12 items-center justify-center rounded-md border border-white/15 bg-white/5 px-8 text-base font-medium text-white/80 transition-colors hover:bg-white/10">
-                تواصل معنا
+                ناقش تفعيل النظام
               </Link>
             </div>
           </div>
