@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma"
 import * as mock from "@/lib/audit/mock-data"
+import { paginate, offsetFromPage, DEFAULT_PAGE_SIZE } from "@/lib/audit/pagination"
+import type { PaginatedResult } from "@/lib/audit/pagination"
 import type {
-  Engagement, TrialBalance, TrialBalanceLine, AccountMapping, ValidationRun,
+  Engagement, TrialBalance, TrialBalanceLine, AccountMapping, ValidationRun, ValidationIssue,
   FinancialStatement, FinancialStatementLine, DisclosureNote,
   EvidenceObject, EvidenceLink, Finding, Recommendation, ReviewComment,
   ApprovalRecord, PublicationPackage, AuditEvent, AIAssistanceOutput,
@@ -208,7 +211,7 @@ function toEvidenceLink(el: {
     evidenceId: el.evidenceId,
     targetType: el.targetType as EvidenceLink['targetType'],
     targetId: el.targetId,
-    targetLabel: '',
+    targetLabel: el.context ?? `${el.targetType}:${el.targetId.substring(0, 8)}`,
     linkType: el.linkType as EvidenceLink['linkType'],
     context: el.context ?? undefined,
     createdBy: el.createdBy ?? '',
@@ -393,10 +396,10 @@ export async function getDashboardSummary(organizationId?: string): Promise<Dash
     const orgFilter = organizationId ? { organizationId } : {}
     const [engagements, events, findings, evidence, mappings] = await Promise.all([
       prisma.auditEngagement.findMany({ where: orgFilter, include: { client: true } }),
-      prisma.auditEvent.findMany({ orderBy: { timestamp: 'desc' }, take: 5 }),
-      prisma.auditFinding.findMany({ where: { status: { not: 'resolved' } } }),
-      prisma.auditEvidence.findMany({ where: { state: 'missing' } }),
-      prisma.auditAccountMapping.findMany({ where: { status: 'pending' } }),
+      prisma.auditEvent.findMany({ where: organizationId ? { engagement: { organizationId } } : {}, orderBy: { timestamp: 'desc' }, take: 5 }),
+      prisma.auditFinding.findMany({ where: { status: { not: 'resolved' }, ...(organizationId ? { engagement: { organizationId } } : {}) } }),
+      prisma.auditEvidence.findMany({ where: { state: 'missing', ...(organizationId ? { engagement: { organizationId } } : {}) } }),
+      prisma.auditAccountMapping.findMany({ where: { status: 'pending', ...(organizationId ? { engagement: { organizationId } } : {}) } }),
     ])
     if (engagements.length === 0) {
       console.warn('[AuditDB] getDashboardSummary: no engagements found, falling back to mock')
@@ -438,10 +441,12 @@ export async function getEngagements(organizationId?: string): Promise<Engagemen
   }
 }
 
-export async function getEngagement(id: string): Promise<Engagement | null> {
+export async function getEngagement(organizationId: string | undefined, id: string): Promise<Engagement | null> {
   try {
+    const where: Record<string, unknown> = { id }
+    if (organizationId) (where as Record<string, unknown>).organizationId = organizationId
     const engagement = await prisma.auditEngagement.findUnique({
-      where: { id },
+      where: where as { id: string },
       include: { client: true },
     })
     if (!engagement) {
@@ -863,8 +868,39 @@ export async function getUnmappedAccounts(engagementId: string): Promise<Account
 
 export async function getValidationRun(engagementId: string): Promise<ValidationRun | null> {
   try {
-    if (engagementId === mock.mockEngagement.id) return mock.mockValidationRun
-    return null
+    const run = await prisma.auditValidationRun.findFirst({
+      where: { engagementId },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        issues: { include: { dispositions: true }, orderBy: { severity: 'asc' } },
+      },
+    })
+    if (!run) return null
+    return {
+      id: run.id,
+      engagementId: run.engagementId,
+      validationType: run.validationType,
+      status: run.status as ValidationRun['status'],
+      summary: run.summary ?? '',
+      trustState: run.trustState as ValidationRun['trustState'],
+      validatedAt: run.completedAt?.toISOString() ?? run.createdAt.toISOString(),
+      issues: run.issues.map(i => ({
+        id: i.id,
+        validationRunId: i.validationRunId,
+        checkType: i.checkType as ValidationIssue['checkType'],
+        severity: i.severity as ValidationIssue['severity'],
+        status: (i.status as ValidationIssue['status']) ?? 'open',
+        description: i.description ?? i.title,
+        accountCode: i.accountCode ?? undefined,
+        accountName: i.accountName ?? undefined,
+        expectedValue: i.expectedValue ?? undefined,
+        actualValue: i.actualValue ?? undefined,
+        message: i.message ?? '',
+        disposedBy: i.dispositions[0]?.disposedBy ?? undefined,
+        disposedAt: i.dispositions[0]?.disposedAt?.toISOString() ?? undefined,
+        disposition: i.dispositions[0]?.action ?? undefined,
+      })),
+    }
   } catch (error) {
     console.warn(`[AuditDB] getValidationRun(${engagementId}) error, falling back to mock`, error)
     if (engagementId === mock.mockEngagement.id) return mock.mockValidationRun
@@ -872,13 +908,243 @@ export async function getValidationRun(engagementId: string): Promise<Validation
   }
 }
 
-export async function runValidation(engagementId: string): Promise<ValidationRun> {
+function severityRank(s: string): number {
+  if (s === 'critical') return 0; if (s === 'high') return 1; if (s === 'medium') return 2; return 3
+}
+
+export async function runValidation(engagementId: string, actorId: string): Promise<ValidationRun> {
   try {
-    const { mockValidationRun } = await import("@/lib/audit/mock-data")
-    return mockValidationRun
+    const existing = await prisma.auditValidationRun.findFirst({
+      where: { engagementId },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true },
+    })
+
+    const now = new Date()
+    const runId = `vr-${Date.now()}`
+    const run = await prisma.auditValidationRun.create({
+      data: {
+        id: runId,
+        engagementId,
+        validationType: 'full',
+        status: 'completed',
+        trustState: 'conditional',
+        createdBy: actorId,
+        completedAt: now,
+      },
+    })
+
+    const issues: Array<{
+      id: string
+      validationRunId: string
+      engagementId: string
+      checkType: string
+      severity: string
+      status: string
+      title: string
+      description: string
+      message: string
+      accountCode: string | null
+      accountName: string | null
+      expectedValue: number | null
+      actualValue: number | null
+      difference: number | null
+      createdAt: Date
+    }> = []
+
+    let idx = 0
+
+    const tb = await prisma.auditTrialBalance.findFirst({
+      where: { engagementId },
+      include: { lines: true },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    const mappings = await prisma.auditAccountMapping.findMany({
+      where: { engagementId },
+      include: { canonicalAccount: true },
+    })
+
+    const evidence = await prisma.auditEvidence.findMany({ where: { engagementId } })
+    const statements = await prisma.auditFinancialStatement.findMany({ where: { engagementId } })
+
+    // Check 1: Trial balance balance check
+    if (tb) {
+      const tbLines = tb.lines ?? []
+      const totalDebits = tbLines.reduce((s: number, l: { debitAmount: number }) => s + l.debitAmount, 0)
+      const totalCredits = tbLines.reduce((s: number, l: { creditAmount: number }) => s + l.creditAmount, 0)
+      const variance = totalDebits - totalCredits
+      const sev = Math.abs(variance) < 1 ? 'low' : variance > 10000 ? 'high' : 'medium'
+      issues.push({
+        id: `vi-${++idx}`, validationRunId: runId, engagementId,
+        checkType: 'balance_equality', severity: sev, status: 'open',
+        title: 'Trial Balance Balance Check',
+        description: 'Verify total debits equal total credits',
+        message: Math.abs(variance) < 1
+          ? `Trial balance is balanced (variance: SAR ${variance.toFixed(2)})`
+          : `Trial balance is unbalanced — variance: SAR ${variance.toFixed(2)}`,
+        accountCode: null, accountName: null,
+        expectedValue: null, actualValue: variance, difference: variance,
+        createdAt: now,
+      })
+    }
+
+    // Check 2: Unmapped accounts
+    const pendingMappings = mappings.filter(m => m.status === 'pending')
+    if (pendingMappings.length > 0) {
+      issues.push({
+        id: `vi-${++idx}`, validationRunId: runId, engagementId,
+        checkType: 'missing_mappings', severity: pendingMappings.length > 3 ? 'high' : 'medium', status: 'open',
+        title: 'Unmapped Accounts',
+        description: `${pendingMappings.length} account(s) require mapping`,
+        message: `Accounts pending mapping: ${pendingMappings.map(m => `${m.sourceAccountCode} - ${m.sourceAccountName}`).join(', ')}`,
+        accountCode: null, accountName: null, expectedValue: null, actualValue: pendingMappings.length, difference: null,
+        createdAt: now,
+      })
+    }
+
+    // Check 3: Mapping amount consistency
+    for (const m of mappings) {
+      if (m.status !== 'confirmed') continue
+      const line = tb?.lines.find((l: { id: string }) => l.id === m.sourceAccountId)
+      if (line && (Math.abs(m.debitAmount - line.debitAmount) > 1 || Math.abs(m.creditAmount - line.creditAmount) > 1)) {
+        issues.push({
+          id: `vi-${++idx}`, validationRunId: runId, engagementId,
+          checkType: 'classification_conflict', severity: 'medium', status: 'open',
+          title: `Mapping Amount Mismatch: ${m.sourceAccountCode}`,
+          description: `Mapping amount for ${m.sourceAccountName} (${m.sourceAccountCode}) does not match trial balance`,
+          message: `Mapping: Debit ${m.debitAmount}, Credit ${m.creditAmount} | TB: Debit ${line.debitAmount}, Credit ${line.creditAmount}`,
+          accountCode: m.sourceAccountCode, accountName: m.sourceAccountName,
+          expectedValue: line.debitAmount || line.creditAmount, actualValue: m.debitAmount || m.creditAmount, difference: null,
+          createdAt: now,
+        })
+      }
+      if (idx >= 30) break
+    }
+
+    // Check 4: Missing evidence
+    const missingEvidence = evidence.filter(e => e.state === 'missing')
+    if (missingEvidence.length > 0) {
+      issues.push({
+        id: `vi-${++idx}`, validationRunId: runId, engagementId,
+        checkType: 'completeness', severity: missingEvidence.length > 2 ? 'high' : 'medium', status: 'open',
+        title: 'Missing Evidence',
+        description: `${missingEvidence.length} evidence item(s) are missing or not uploaded`,
+        message: `${missingEvidence.map(e => e.filename).join(', ')}`,
+        accountCode: null, accountName: null, expectedValue: null, actualValue: missingEvidence.length, difference: null,
+        createdAt: now,
+      })
+    }
+
+    // Check 5: Statement existence
+    if (statements.length === 0) {
+      issues.push({
+        id: `vi-${++idx}`, validationRunId: runId, engagementId,
+        checkType: 'completeness', severity: 'medium', status: 'open',
+        title: 'No Financial Statements Generated',
+        description: 'No financial statements found for this engagement',
+        message: 'Run account mapping to generate financial statements',
+        accountCode: null, accountName: null, expectedValue: null, actualValue: null, difference: null,
+        createdAt: now,
+      })
+    }
+
+    // Persist issues
+    for (const i of issues) {
+      await prisma.auditValidationIssue.create({ data: i })
+    }
+
+    // Update summary counts
+    const critical = issues.filter(i => i.severity === 'critical').length
+    const high = issues.filter(i => i.severity === 'high').length
+    const medium = issues.filter(i => i.severity === 'medium').length
+    const low = issues.filter(i => i.severity === 'low').length
+    const summaryParts: string[] = []
+    if (issues.length === 0) summaryParts.push('All checks passed')
+    if (critical > 0) summaryParts.push(`${critical} critical`)
+    if (high > 0) summaryParts.push(`${high} high`)
+    if (medium > 0) summaryParts.push(`${medium} medium`)
+    if (low > 0) summaryParts.push(`${low} low`)
+
+    const trustState = critical > 0 ? 'blocked' : high > 0 ? 'conditional' : 'trusted'
+
+    await prisma.auditValidationRun.update({
+      where: { id: runId },
+      data: {
+        summary: summaryParts.join(', '),
+        issueCount: issues.length,
+        criticalCount: critical,
+        highCount: high,
+        mediumCount: medium,
+        lowCount: low,
+        trustState,
+      },
+    })
+
+    await prisma.auditEvent.create({
+      data: {
+        engagementId,
+        eventType: 'validation.run_completed',
+        actorId,
+        actorName: 'System',
+        actorRole: 'system',
+        targetType: 'validation_run',
+        targetId: runId,
+        newState: 'completed',
+        description: `Validation run completed: ${issues.length} issue(s) found`,
+        timestamp: now,
+      },
+    })
+
+    // Return the persisted run
+    return (await getValidationRun(engagementId))!
   } catch (error) {
     console.warn(`[AuditDB] runValidation(${engagementId}) error, falling back to mock`, error)
     return mock.mockValidationRun
+  }
+}
+
+export async function disposeValidationIssue(issueId: string, action: string, rationale: string | undefined, actorId: string, actorName: string): Promise<ValidationRun | null> {
+  try {
+    const issue = await prisma.auditValidationIssue.findUnique({ where: { id: issueId }, select: { id: true, engagementId: true } })
+    if (!issue) throw new Error('Validation issue not found')
+
+    const newStatus = action === 'accepted' ? 'accepted' : action === 'dismissed' ? 'dismissed' : 'investigated'
+
+    await prisma.auditValidationDisposition.create({
+      data: {
+        issueId,
+        engagementId: issue.engagementId,
+        action,
+        rationale: rationale ?? null,
+        disposedBy: actorId,
+      },
+    })
+
+    await prisma.auditValidationIssue.update({
+      where: { id: issueId },
+      data: { status: newStatus },
+    })
+
+    await prisma.auditEvent.create({
+      data: {
+        engagementId: issue.engagementId,
+        eventType: 'validation.issue_disposed',
+        actorId,
+        actorName,
+        actorRole: 'reviewer',
+        targetType: 'validation_issue',
+        targetId: issueId,
+        newState: newStatus,
+        description: `Validation issue ${action}${rationale ? ': ' + rationale.substring(0, 80) : ''}`,
+        timestamp: new Date(),
+      },
+    })
+
+    return getValidationRun(issue.engagementId)
+  } catch (error) {
+    console.warn(`[AuditDB] disposeValidationIssue(${issueId}) error`, error)
+    return null
   }
 }
 
@@ -982,6 +1248,36 @@ export async function getEvidence(engagementId: string): Promise<EvidenceObject[
   }
 }
 
+export async function getEvidencePaginated(engagementId: string, params: { page?: number; pageSize?: number } = {}): Promise<PaginatedResult<EvidenceObject>> {
+  try {
+    const page = Math.max(1, params.page ?? 1)
+    const pageSize = Math.max(1, Math.min(100, params.pageSize ?? DEFAULT_PAGE_SIZE))
+    const skip = offsetFromPage(page, pageSize)
+    const [evidence, total] = await Promise.all([
+      prisma.auditEvidence.findMany({
+        where: { engagementId },
+        include: { links: true },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: pageSize,
+      }),
+      prisma.auditEvidence.count({ where: { engagementId } }),
+    ])
+    if (evidence.length === 0 && total === 0 && engagementId === mock.mockEngagement.id) {
+      return paginate(mock.mockEvidence.slice(skip, skip + pageSize), mock.mockEvidence.length, { page, pageSize })
+    }
+    return paginate(evidence.map(toEvidenceObject), total, { page, pageSize })
+  } catch (error) {
+    console.warn(`[AuditDB] getEvidencePaginated(${engagementId}) error, falling back to mock`, error)
+    if (engagementId === mock.mockEngagement.id) {
+      const all = mock.mockEvidence
+      const skip = offsetFromPage(params.page ?? 1, params.pageSize ?? DEFAULT_PAGE_SIZE)
+      return paginate(all.slice(skip, skip + (params.pageSize ?? DEFAULT_PAGE_SIZE)), all.length, { page: params.page ?? 1, pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE })
+    }
+    return paginate([], 0, { page: params.page ?? 1, pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE })
+  }
+}
+
 export async function getMissingEvidence(engagementId: string): Promise<EvidenceObject[]> {
   try {
     const evidence = await prisma.auditEvidence.findMany({
@@ -1017,6 +1313,30 @@ export async function getFindings(engagementId: string): Promise<Finding[]> {
   }
 }
 
+export async function getFindingsPaginated(engagementId: string, params: { page?: number; pageSize?: number } = {}): Promise<PaginatedResult<Finding>> {
+  try {
+    const page = Math.max(1, params.page ?? 1)
+    const pageSize = Math.max(1, Math.min(100, params.pageSize ?? DEFAULT_PAGE_SIZE))
+    const skip = offsetFromPage(page, pageSize)
+    const [findings, total] = await Promise.all([
+      prisma.auditFinding.findMany({ where: { engagementId }, skip, take: pageSize }),
+      prisma.auditFinding.count({ where: { engagementId } }),
+    ])
+    if (findings.length === 0 && total === 0 && engagementId === mock.mockEngagement.id) {
+      return paginate(mock.mockFindings.slice(skip, skip + pageSize), mock.mockFindings.length, { page, pageSize })
+    }
+    return paginate(findings.map(toFinding), total, { page, pageSize })
+  } catch (error) {
+    console.warn(`[AuditDB] getFindingsPaginated(${engagementId}) error, falling back to mock`, error)
+    if (engagementId === mock.mockEngagement.id) {
+      const all = mock.mockFindings
+      const skip = offsetFromPage(params.page ?? 1, params.pageSize ?? DEFAULT_PAGE_SIZE)
+      return paginate(all.slice(skip, skip + (params.pageSize ?? DEFAULT_PAGE_SIZE)), all.length, { page: params.page ?? 1, pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE })
+    }
+    return paginate([], 0, { page: params.page ?? 1, pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE })
+  }
+}
+
 export async function getFinding(engagementId: string, findingId: string): Promise<Finding | null> {
   try {
     const finding = await prisma.auditFinding.findUnique({ where: { id: findingId } })
@@ -1046,6 +1366,30 @@ export async function getRecommendations(engagementId: string): Promise<Recommen
     console.warn(`[AuditDB] getRecommendations(${engagementId}) error, falling back to mock`, error)
     if (engagementId === mock.mockEngagement.id) return mock.mockRecommendations
     return []
+  }
+}
+
+export async function getRecommendationsPaginated(engagementId: string, params: { page?: number; pageSize?: number } = {}): Promise<PaginatedResult<Recommendation>> {
+  try {
+    const page = Math.max(1, params.page ?? 1)
+    const pageSize = Math.max(1, Math.min(100, params.pageSize ?? DEFAULT_PAGE_SIZE))
+    const skip = offsetFromPage(page, pageSize)
+    const [recs, total] = await Promise.all([
+      prisma.auditRecommendation.findMany({ where: { engagementId }, include: { finding: true }, skip, take: pageSize }),
+      prisma.auditRecommendation.count({ where: { engagementId } }),
+    ])
+    if (recs.length === 0 && total === 0 && engagementId === mock.mockEngagement.id) {
+      return paginate(mock.mockRecommendations.slice(skip, skip + pageSize), mock.mockRecommendations.length, { page, pageSize })
+    }
+    return paginate(recs.map(toRecommendation), total, { page, pageSize })
+  } catch (error) {
+    console.warn(`[AuditDB] getRecommendationsPaginated(${engagementId}) error, falling back to mock`, error)
+    if (engagementId === mock.mockEngagement.id) {
+      const all = mock.mockRecommendations
+      const skip = offsetFromPage(params.page ?? 1, params.pageSize ?? DEFAULT_PAGE_SIZE)
+      return paginate(all.slice(skip, skip + (params.pageSize ?? DEFAULT_PAGE_SIZE)), all.length, { page: params.page ?? 1, pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE })
+    }
+    return paginate([], 0, { page: params.page ?? 1, pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE })
   }
 }
 
@@ -1605,6 +1949,21 @@ export async function getFullTraceability(engagementId: string, label: string): 
   }
 }
 
+// ─── Canonical Accounts ───
+
+export async function getCanonicalAccounts(limit?: number): Promise<Array<{ id: string; code: string; name: string }>> {
+  try {
+    const accounts = await prisma.auditCanonicalAccount.findMany({
+      orderBy: { displayOrder: 'asc' },
+      take: limit ?? 100,
+    })
+    return accounts.map(a => ({ id: a.id, code: a.code, name: a.name }))
+  } catch (error) {
+    console.warn('[AuditDB] getCanonicalAccounts error, returning empty', error)
+    return []
+  }
+}
+
 // ─── Write Operations ───
 
 export async function createClient(data: {
@@ -1678,13 +2037,14 @@ export async function recordAuditEvent(params: {
 
 export async function createEvidence(data: {
   engagementId: string; filename: string; fileType: string; fileSize?: number;
-  state?: string; uploadedBy?: string;
+  state?: string; uploadedBy?: string; fileHash?: string; storageKey?: string;
 }): Promise<EvidenceObject> {
   const ev = await prisma.auditEvidence.create({
     data: {
       engagementId: data.engagementId, filename: data.filename, fileType: data.fileType,
       fileSize: data.fileSize ?? 0, state: data.state ?? 'missing',
       uploadedBy: data.uploadedBy ?? null, uploadedAt: data.uploadedBy ? new Date() : null,
+      fileHash: data.fileHash ?? null, storageKey: data.storageKey ?? null,
     },
     include: { links: true },
   })
@@ -1698,6 +2058,27 @@ export async function updateEvidenceState(id: string, state: string, userId?: st
     include: { links: true },
   })
   return toEvidenceObject(ev)
+}
+
+export async function updateEvidenceStorage(id: string, data: {
+  fileHash: string; storageKey: string; fileSize: number;
+}): Promise<EvidenceObject | null> {
+  try {
+    const ev = await prisma.auditEvidence.update({
+      where: { id },
+      data: {
+        fileHash: data.fileHash,
+        storageKey: data.storageKey,
+        fileSize: data.fileSize,
+        state: 'uploaded',
+        uploadedAt: new Date(),
+      },
+      include: { links: true },
+    })
+    return toEvidenceObject(ev)
+  } catch {
+    return null
+  }
 }
 
 // ─── Findings CRUD ───
@@ -1973,9 +2354,9 @@ export async function getPilotSignoffChecklist(engagementId: string): Promise<Pi
   } catch { return [] }
 }
 
-export async function getAuditUsers(): Promise<AuditUser[]> {
+export async function getAuditUsers(organizationId?: string): Promise<AuditUser[]> {
   try {
-    const users = await prisma.auditUser.findMany({ orderBy: { name: 'asc' } })
+    const users = await prisma.auditUser.findMany({ where: organizationId ? { organizationId } : {}, orderBy: { name: 'asc' } })
     if (users.length === 0) {
       console.warn('[AuditDB] getAuditUsers: no users found, falling back to mock')
       return mock.mockUsers
@@ -1984,5 +2365,56 @@ export async function getAuditUsers(): Promise<AuditUser[]> {
   } catch (error) {
     console.warn('[AuditDB] getAuditUsers error, falling back to mock', error)
     return mock.mockUsers
+  }
+}
+
+export async function publishEngagement(engagementId: string, actorId: string, actorName: string): Promise<{ package: PublicationPackage | null }> {
+  try {
+    let pkg = await prisma.auditPublicationPackage.findFirst({
+      where: { engagementId },
+      orderBy: { createdAt: 'desc' },
+    })
+    if (!pkg) {
+      pkg = await prisma.auditPublicationPackage.create({
+        data: { engagementId, status: 'published' },
+      })
+    }
+    if (pkg.status === 'published' || pkg.status === 'locked') {
+      throw new Error('Engagement is already published or locked')
+    }
+    const now = new Date()
+    await prisma.auditPublicationPackage.update({
+      where: { id: pkg.id },
+      data: {
+        status: 'published',
+        publishedAt: now,
+        publishedBy: actorId,
+        lockedAt: now,
+      },
+    })
+    const safeStatuses = ['approved', 'in_progress', 'under_review', 'ready_for_approval']
+    const engagement = await prisma.auditEngagement.findUnique({ where: { id: engagementId }, select: { status: true } })
+    if (engagement && safeStatuses.includes(engagement.status)) {
+      await prisma.auditEngagement.update({ where: { id: engagementId }, data: { status: 'published' } })
+    }
+    await prisma.auditEvent.create({
+      data: {
+        engagementId,
+        eventType: 'publication.published',
+        actorId,
+        actorName,
+        actorRole: 'partner',
+        targetType: 'publication_package',
+        targetId: pkg.id,
+        newState: 'published',
+        description: `Engagement published by ${actorName}`,
+        timestamp: now,
+      },
+    })
+    const result = await getPublicationPackage(engagementId)
+    return { package: result }
+  } catch (error) {
+    console.warn(`[AuditDB] publishEngagement(${engagementId}) error`, error)
+    throw error
   }
 }
