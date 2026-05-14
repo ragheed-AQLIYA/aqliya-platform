@@ -5,33 +5,29 @@ const footerLinks = [
   {
     title: "الشركة",
     links: [
-      { label: "الرئيسية", href: "/" },
       { label: "من نحن", href: "/about" },
       { label: "كيف نعمل", href: "/how-we-work" },
+      { label: "ناقش تفعيل النظام", href: "/contact" },
+      { label: "صمّم نظامك المؤسسي", href: "/custom-product" },
       { label: "تواصل معنا", href: "/contact" },
     ],
   },
   {
-    title: "الأنظمة",
+    title: "خطوط الحلول",
     links: [
-      { label: "صمّم نظامك", href: "/custom-product" },
-      { label: "أنظمة اتخاذ القرار", href: "/products/decision" },
-      { label: "أنظمة المحاكاة", href: "/products/simulation" },
-      { label: "أنظمة المبيعات", href: "/products/sales" },
+      { label: "AuditOS — نظام التدقيق والذكاء المالي", href: "/products/audit" },
+      { label: "LocalContentOS — نظام المحتوى المحلي", href: "/products/local-content" },
+      { label: "DecisionOS — نظام حوكمة القرارات", href: "/products/decision" },
+      { label: "SalesOS — نظام الذاكرة التجارية والمبيعات", href: "/products/sales" },
+      { label: "SimulationOS — نظام محاكاة السيناريوهات", href: "/products/simulation" },
+      { label: "Custom Systems — أنظمة مؤسسية مخصصة", href: "/custom-product" },
     ],
   },
   {
-    title: "المنتجات",
+    title: "التفعيل والاستكشاف",
     links: [
-      { label: "AQLIYA AuditOS", href: "/auditos" },
-      { label: "أنظمة المحتوى المحلي", href: "/products/local-content" },
-      { label: "جميع خطوط الحلول", href: "/products" },
-    ],
-  },
-  {
-    title: "التواصل",
-    links: [
-      { label: "البريد الإلكتروني", href: "mailto:ragheed@aqliya.com" },
+      { label: "استكشف خطوط عقلية", href: "/products" },
+      { label: "جرّب AuditOS", href: "/auditos" },
     ],
   },
 ]
@@ -52,7 +48,10 @@ export function SiteFooter() {
               />
             </Link>
             <p className="text-sm leading-6 text-muted-foreground">
-              شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.
+              عقلية منصة ذكاء مؤسسي خاص ومحكوم، تقدم خطوط أنظمة متخصصة تربط البيانات، الإجراءات، المخرجات، والأدلة داخل بيئة واحدة قابلة للمراجعة والاعتماد.
+            </p>
+            <p className="text-xs leading-6 text-muted-foreground/90">
+              الذكاء الاصطناعي يساعد. الإنسان يقرر. الدليل يحكم.
             </p>
             <a href="mailto:ragheed@aqliya.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               ragheed@aqliya.com
@@ -67,7 +66,7 @@ export function SiteFooter() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {link.label}
                     </Link>

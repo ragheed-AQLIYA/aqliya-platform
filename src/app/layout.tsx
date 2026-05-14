@@ -9,16 +9,16 @@ const notoSansArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "AQLIYA | أنظمة برمجية وذكاء مؤسسي",
+  title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",
   description:
-    "عقلية شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات — أنظمة تشغيل، تحليل، تتبع، مراجعة، وتطوير.",
+    "عقلية منصة ذكاء مؤسسي خاص ومحكوم، تقدم خطوط أنظمة متخصصة تربط البيانات، الإجراءات، المخرجات، والأدلة داخل بيئة واحدة قابلة للمراجعة والاعتماد.",
   icons: {
     icon: "/brand/Favicons/symbol (1).svg",
   },
   openGraph: {
-    title: "AQLIYA | أنظمة برمجية وذكاء مؤسسي",
+    title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",
     description:
-      "عقلية شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.",
+      "عقلية منصة ذكاء مؤسسي خاص ومحكوم تقدم خطوط أنظمة متخصصة تبنى على AQLIYA Intelligence Core داخل بيئة واحدة قابلة للمراجعة والاعتماد.",
     url: "https://aqliya.com",
     siteName: "AQLIYA",
     locale: "ar_SA",
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AQLIYA | أنظمة برمجية وذكاء مؤسسي",
+    title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",
     description:
-      "عقلية شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.",
+      "عقلية منصة ذكاء مؤسسي خاص ومحكوم تقدم خطوط أنظمة متخصصة تبنى على AQLIYA Intelligence Core داخل بيئة واحدة قابلة للمراجعة والاعتماد.",
   },
   robots: {
     index: true,
@@ -44,14 +44,14 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://aqliya.com/#organization",
-        "name": "AQLIYA",
-        "url": "https://aqliya.com",
-        "description": "شركة تقنية تصنع وتعدّ أنظمة برمجية وذكاء مؤسسي حسب طبيعة عمل المؤسسات.",
-        "email": "ragheed@aqliya.com",
-      },
+        {
+          "@type": "Organization",
+          "@id": "https://aqliya.com/#organization",
+          "name": "AQLIYA",
+          "url": "https://aqliya.com",
+          "description": "عقلية منصة ذكاء مؤسسي خاص ومحكوم تقدم خطوط أنظمة متخصصة مبنية على AQLIYA Intelligence Core ضمن بيئة قابلة للمراجعة والاعتماد.",
+          "email": "ragheed@aqliya.com",
+        },
       {
         "@type": "WebSite",
         "@id": "https://aqliya.com/#website",

@@ -31,6 +31,11 @@ export function SiteHeader() {
             priority
             className="shrink-0 h-10 w-auto"
           />
+          <div className="hidden xl:block">
+            <p className="text-[11px] font-medium leading-5 text-muted-foreground">
+              منصة ذكاء مؤسسي خاص ومحكوم تقدم خطوط أنظمة متخصصة فوق AQLIYA Intelligence Core
+            </p>
+          </div>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -55,7 +60,7 @@ export function SiteHeader() {
             href="/custom-product"
             className="mr-3 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            صمّم نظامك
+            صمّم نظامك المؤسسي
           </Link>
         </nav>
 
@@ -94,7 +99,7 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
             >
-              صمّم نظامك
+              صمّم نظامك المؤسسي
             </Link>
           </nav>
         </div>
