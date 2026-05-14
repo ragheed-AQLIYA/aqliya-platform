@@ -1,4 +1,4 @@
-# AQLIYA Decision OS - MVP Scope
+# DecisionOS - MVP Scope
 
 ## What Was Built
 

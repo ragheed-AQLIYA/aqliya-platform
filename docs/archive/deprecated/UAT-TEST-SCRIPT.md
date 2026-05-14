@@ -1,4 +1,4 @@
-# AQLIYA AuditOS — UAT Test Script
+# AuditOS — UAT Test Script
 
 ## Setup
 - URL: http://localhost:3000/audit

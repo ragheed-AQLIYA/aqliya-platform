@@ -1,4 +1,4 @@
-# AQLIYA AuditOS MVP — Demo Guide
+# AuditOS MVP — Demo Guide
 
 ## Product Summary
 
@@ -194,5 +194,5 @@ See `docs/product/auditos-phase-2-plan.md` for details.
 
 ---
 
-*AQLIYA AuditOS — Governed Financial Assurance Workflow*
+*AuditOS — Governed Financial Assurance Workflow*
 *AI assists. Humans decide. Evidence governs.*

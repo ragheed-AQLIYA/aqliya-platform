@@ -1,4 +1,4 @@
-# AQLIYA Decision OS - Technical Overview
+# DecisionOS - Technical Overview
 
 ## Tech Stack
 

@@ -1,8 +1,8 @@
-# AQLIYA Decision OS - MVP Demo Guide
+# DecisionOS - MVP Demo Guide
 
 ## نظرة عامة
 
-AQLIYA Decision OS هو نظام ذكاء قراري يساعد المنظمات في اتخاذ قرارات مدروسة حول دخول المناقصات. هذا MVP يركز على حالة استخدام واحدة: **نظام قرار المناقصة (Tender Decision System)**.
+DecisionOS هو نظام ذكاء قراري يساعد المنظمات في اتخاذ قرارات مدروسة حول دخول المناقصات. هذا MVP يركز على حالة استخدام واحدة: **نظام قرار المناقصة (Tender Decision System)**.
 
 ---
 

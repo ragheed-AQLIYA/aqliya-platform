@@ -1,4 +1,4 @@
-# AQLIYA AuditOS — Known Limitations
+# AuditOS — Known Limitations
 
 ## 1. JSON-Only Exports
 
