@@ -224,3 +224,14 @@ export async function getCanonicalAccountsAction(limit?: number): Promise<Array<
   requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
   return getCanonicalAccounts(limit)
 }
+
+// Re-export via wrapper — barrel exports not allowed in "use server" files
+export async function confirmMappingAction(engagementId: string, mappingId: string) {
+  const mod = await import("./audit-actions")
+  return mod.confirmMappingAction(engagementId, mappingId)
+}
+
+export async function runValidationAction(engagementId: string) {
+  const mod = await import("./audit-actions")
+  return mod.runValidationAction(engagementId)
+}
