@@ -1,55 +1,63 @@
 import Link from "next/link"
-import { SectionEyebrow, CommandCenterPanel, BrandArchitecturePanel, BeforeAfterBlock, WorkflowChain, ProductProofCard, ProofChain, EnterpriseCTA, ExecutiveSurface } from "@/components/enterprise"
+import { SectionEyebrow, BeforeAfterBlock, WorkflowChain, ProductProofCard, ExecutiveSurface } from "@/components/enterprise"
+import { OperatingSystemMapVisual, ProofChainVisual } from "@/components/visuals"
 
 const products = [
   {
-    title: "Custom Enterprise Systems",
-    problem: "إجراءات متكررة، ملفات متفرقة، قرارات غير موثقة، مخرجات بلا تتبع.",
-    system: "نحوّل طريقة عمل مؤسستك إلى نظام رقمي واضح: صفحات، صلاحيات، مسارات عمل، تقارير.",
-    output: "نظام تشغيل داخلي قابل للتتبع والمراجعة والتطوير.",
-    flow: ["فهم العمل", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات"],
-    href: "/custom-product",
+    title: "AuditOS | المنتج الأول المُثبِت تحت عقلية",
+    problem: "بيانات مالية متفرقة، تصنيفات يدوية، أدلة غير مرتبطة، ومراجعة يصعب تتبعها.",
+    system: "يبني مسار مراجعة وتدقيق محكوم يربط البيانات المالية بالتصنيف، الأدلة، الملاحظات، المراجعة، والاعتماد.",
+    output: "مخرجات مراجعة منظمة وقابلة للتتبع من المصدر إلى القرار البشري النهائي.",
+    flow: ["بيانات", "تصنيف", "مخرجات", "أدلة", "مراجعة"],
+    href: "/products/audit",
+    note: "المسار النشط والأوضح اليوم تحت عقلية، ويُقدَّم كأول منتج مُثبت على AQLIYA Intelligence Core.",
   },
   {
-    title: "Decision Systems",
-    problem: "قرارات مهمة تُبنى على نقاشات وملفات متفرقة بلا توثيق.",
-    system: "بدائل، معايير، مخاطر، أدلة، توصية قابلة للمراجعة والاعتماد.",
-    output: "Decision Memo موثق وقابل للتتبع من المشكلة إلى القرار.",
-    flow: ["Problem", "Criteria", "Evidence", "Recommendation"],
-    href: "/products/decision",
-  },
-  {
-    title: "Simulation Systems",
-    problem: "قرارات كبرى تُتخذ قبل اختبار أثرها على التكلفة والأداء.",
-    system: "مدخلات، نموذج سيناريو، افتراضات، أثر، مقارنة، دعم قرار.",
-    output: "تقرير محاكاة يقارن السيناريوهات قبل التنفيذ.",
-    flow: ["Inputs", "Scenario", "Impact", "Comparison"],
-    href: "/products/simulation",
-  },
-  {
-    title: "Sales Systems",
-    problem: "فرص غير مؤهلة، رسائل عامة، متابعة عشوائية، أولويات غير واضحة.",
-    system: "ICP، تأهيل، فلترة، تواصل، متابعة، تعلم مستمر.",
-    output: "مسار مبيعات واضح من التأهيل إلى التحسين.",
-    flow: ["ICP", "Scoring", "Outreach", "Learning"],
-    href: "/products/sales",
-  },
-  {
-    title: "AQLIYA AuditOS",
-    problem: "ميزان مراجعة، تصنيف يدوي، أدلة متفرقة، مراجعة بطيئة.",
-    system: "Mapping، قوائم مالية، إيضاحات، أدلة، ملاحظات، تتبع.",
-    output: "ملف مراجعة قابل للتتبع من الحساب إلى الدليل.",
-    flow: ["TB", "Mapping", "Statement", "Evidence"],
-    href: "/auditos",
-  },
-  {
-    title: "Local Content Systems",
-    problem: "بيانات موردين غير مصنفة، إنفاق غير محلل، التزام غير واضح.",
-    system: "موردون، إنفاق، تصنيف، فجوة التزام، محاكاة، تقارير.",
-    output: "نظام محتوى محلي يربط الموردين بالالتزام والمؤشرات.",
-    flow: ["Suppliers", "Spend", "Compliance", "Report"],
+    title: "LocalContentOS | المنتج الاستراتيجي الثاني",
+    problem: "بيانات موردين، إنفاق، التزام، وتصنيفات موزعة بين فرق ومصادر مختلفة.",
+    system: "يوحّد قياس المحتوى المحلي عبر ربط الموردين بالإنفاق، التصنيف، نسب الالتزام، الفجوات، ومسارات التتبع.",
+    output: "رؤية مؤسسية أوضح لمؤشرات المحتوى المحلي وجاهزية القرارات الشرائية.",
+    flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات"],
     href: "/products/local-content",
+    note: "المنتج الاستراتيجي الثاني تحت عقلية. يُعرض حاليًا كاتجاه منتج وتسويق، وليس كمساحة تشغيل إنتاجية.",
   },
+  {
+    title: "DecisionOS | حوكمة القرار التنفيذي",
+    problem: "قرارات مهمة تُبنى على نقاشات متفرقة، ملفات متعددة، ومعايير غير موحدة.",
+    system: "يحوّل القرار التنفيذي إلى مسار محكوم: بدائل، معايير، مخاطر، أدلة، توصية، واعتماد.",
+    output: "مذكرة قرار موثقة يمكن مراجعتها وفهم أسبابها قبل الاعتماد.",
+    flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية"],
+    href: "/products/decision",
+    note: "نظام مجاور نشط تحت عقلية لحوكمة القرار التنفيذي، وليس المنتج الذي يختصر هوية الشركة.",
+  },
+  {
+    title: "SalesOS | نموذج أولي للمستقبل",
+    problem: "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
+    system: "يوضح كيف يمكن توظيف النواة في تأهيل الفرص، ترتيبها، وضبط المتابعة داخل مسار مبيعات أكثر انضباطًا.",
+    output: "تصور تشغيلي لمسار مبيعات أوضح، مع نضج تنفيذي ما يزال في طور النموذج الأولي.",
+    flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة", "تعلم"],
+    href: "/products/sales",
+    note: "منتج مستقبلي/نماذج أولية، وليس مسارًا إنتاجيًا مكتملاً مثل AuditOS.",
+  },
+  {
+    title: "SimulationOS | مسار تسويقي مستقبلي",
+    problem: "قرارات تُنفذ قبل اختبار أثرها على التكلفة، المخاطر، الأداء، أو النتائج.",
+    system: "يعرض اتجاهًا لربط المدخلات بالافتراضات والسيناريوهات والمقارنات قبل التنفيذ.",
+    output: "رؤية مقارنة تساعد الإدارة على فهم البدائل عندما يصبح المسار جاهزًا للتنفيذ الفعلي.",
+    flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
+    href: "/products/simulation",
+    note: "حضور تسويقي فقط في هذه المرحلة، وليس منتجًا تشغيليًا قائمًا.",
+  },
+]
+
+const coreItems = [
+  { title: "تنسيق الذكاء", english: "AI Orchestration" },
+  { title: "الحوكمة", english: "Governance Engine" },
+  { title: "سير العمل", english: "Workflow Engine" },
+  { title: "ربط الأدلة", english: "Evidence Graph" },
+  { title: "الصلاحيات", english: "RBAC / Permissions" },
+  { title: "سجل التدقيق", english: "Audit Logs" },
+  { title: "التقارير", english: "Reporting Engine" },
 ]
 
 export default function HomePage() {
@@ -64,64 +72,46 @@ export default function HomePage() {
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
             {/* Right: Text */}
             <div className="flex flex-col justify-center">
-              <span className="inline-block w-fit rounded-full border border-[#137dc5]/30 bg-[#137dc5]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#137dc5] mb-6">
-                Enterprise Operating Systems
+              <span className="inline-block w-fit rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-primary mb-6">
+                Private Governed Institutional Intelligence Platform
               </span>
               <h1 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-                أنظمة مؤسسية تُبنى حول طريقة عملك
+                منصة ذكاء مؤسسي خاص ومحكوم
               </h1>
               <p className="mt-5 text-base leading-7 text-white/60 sm:text-lg">
-                نحوّل البيانات، الإجراءات، القرارات، والمراجعات إلى أنظمة تشغيل رقمية واضحة، قابلة للتتبع، وجاهزة للتطوير.
+                عقلية تمنح المؤسسات ذكاءً خاصًا يعمل على بياناتها، داخل بيئتها، وتحت حوكمتها.
               </p>
               <p className="mt-3 text-sm leading-6 text-white/40">
-                عقلية لا تقدم قالبًا عامًا ولا منتجًا واحدًا لكل المؤسسات. نبدأ من واقع العمل داخل مؤسستك، ثم نصمم النظام الذي يربط البيانات بالمخرجات، والمخرجات بالأدلة، والأدلة بالقرار.
+                نحوّل البيانات، الإجراءات، المراجعات، والمخرجات إلى أنظمة تشغيل مؤسسية قابلة للتتبع، مرتبطة بالأدلة، وخاضعة للمراجعة البشرية.
               </p>
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row">
                 <Link
-                  href="/custom-product"
-                  className="inline-flex h-12 items-center justify-center rounded-md bg-[#137dc5] px-8 text-base font-medium text-white transition-colors hover:bg-[#137dc5]/90"
+                  href="/products"
+                  className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-8 text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                 >
-                  صمّم نظامك
+                  استعرض المنتجات
                 </Link>
                 <Link
                   href="/auditos"
                   className="inline-flex h-12 items-center justify-center rounded-md border border-white/15 bg-white/5 px-8 text-base font-medium text-white/80 transition-colors hover:bg-white/10"
                 >
-                  استعرض AuditOS
+                  جرّب AuditOS
                 </Link>
               </div>
-              <p className="mt-5 text-xs text-white/30">
-                Custom Systems · Traceable Outputs · Human Review · Enterprise Workflows
+              <p className="mt-5 text-sm font-medium text-white/70">
+                الذكاء الاصطناعي يساعد. الإنسان يقرر. الدليل يحكم.
               </p>
             </div>
 
-            {/* Left: Command Center Panel */}
+            {/* Left: Operating System Map Visual */}
             <div className="flex items-center">
-              <CommandCenterPanel className="w-full" />
+              <OperatingSystemMapVisual className="w-full" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. Brand Architecture — Dark */}
-      <section className="bg-[#0B1728] border-t border-white/5">
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl text-center mb-10">
-            <span className="inline-block rounded-full border border-[#137dc5]/20 bg-[#137dc5]/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#137dc5]">
-              Brand Architecture
-            </span>
-            <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">
-              AQLIYA هي الشركة. AuditOS أحد منتجاتها.
-            </h2>
-            <p className="mt-4 text-base leading-7 text-white/50">
-              عقلية تبني أنظمة مؤسسية قابلة للتخصيص حسب طبيعة عمل المؤسسة. AuditOS هو أحد تطبيقات عقلية في المراجعة والتدقيق، لكنه لا يحد نطاق الشركة ولا يعرّفها وحده.
-            </p>
-          </div>
-          <BrandArchitecturePanel />
-        </div>
-      </section>
-
-      {/* 3. Problem — Before / After — Light */}
+      {/* 2. Problem — Before / After — Light */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <SectionEyebrow
           label="المشكلة والحل"
@@ -135,6 +125,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 3. AQLIYA Intelligence Core — Light */}
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="AQLIYA Intelligence Core"
+          title="كل منتج يُبنى على نواة ذكاء واحدة"
+          description="AQLIYA Intelligence Core تجمع محرك تنسيق الذكاء، الحوكمة، سير العمل، ربط الأدلة، الصلاحيات، سجل التدقيق، وطبقة التقارير في بنية واحدة تُستخدم لبناء منتجات وأنظمة مؤسسية متعددة."
+        />
+        <div className="mt-10">
+          <ExecutiveSurface>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {coreItems.map((item) => (
+                <div key={item.english} className="rounded-xl border border-border/60 bg-background/80 p-4 text-right shadow-sm">
+                  <p className="text-sm font-bold text-foreground">{item.title}</p>
+                  <p className="mt-2 text-xs leading-6 text-muted-foreground">{item.english}</p>
+                </div>
+              ))}
+            </div>
+          </ExecutiveSurface>
+        </div>
+      </section>
+
       {/* 4. Methodology — Light */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
@@ -144,7 +155,7 @@ export default function HomePage() {
         <div className="mt-10">
           <ExecutiveSurface>
             <WorkflowChain
-              steps={["فهم العمل", "رسم العمليات", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات", "التتبع", "التطوير"]}
+              steps={["فهم العمل", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات", "المراجعة والتتبع", "التطوير"]}
               className="justify-center"
             />
           </ExecutiveSurface>
@@ -154,9 +165,9 @@ export default function HomePage() {
       {/* 5. Custom Product — Light */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
-          label="العرض الأساسي"
-          title="صمّم نظامًا خاصًا بطبيعة عمل مؤسستك"
-          description="إذا كانت مؤسستك تعتمد على إجراءات متكررة، ملفات متفرقة، قرارات غير موثقة، أو مخرجات تحتاج مراجعة واعتماد، نحوّل ذلك إلى نظام رقمي واضح وقابل للتشغيل."
+          label="التخصيص المؤسسي"
+          title="وعند الحاجة، يمكن توسيع النواة إلى نظام خاص بمؤسستك"
+          description="إلى جانب المنتجات، يمكن بناء مسارات مؤسسية مخصصة فوق نفس منطق الحوكمة، الأدلة، وسير العمل عندما تتطلب طبيعة المؤسسة ذلك."
         />
         <div className="mt-8 text-center">
           <Link
@@ -171,9 +182,9 @@ export default function HomePage() {
       {/* 6. Product Lines — Light */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
-          label="خطوط الحلول"
-          title="خطوط حلول جاهزة وقابلة للتخصيص"
-          description="هذه الخطوط لا تحد نطاق عقلية، بل تمثل نماذج من قدرتها على بناء أنظمة متخصصة حسب الحاجة."
+          label="عائلة المنتجات"
+          title="منتجات متعددة فوق نواة واحدة"
+          description="AQLIYA ليست منتجًا واحدًا. هذه المنتجات تمثل مسارات مختلفة مبنية على النواة نفسها، مع وضوح في حالة كل منتج ونضجه الحالي."
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
@@ -185,6 +196,7 @@ export default function HomePage() {
               output={product.output}
               flow={product.flow}
               href={product.href}
+              note={product.note}
             />
           ))}
         </div>
@@ -194,43 +206,21 @@ export default function HomePage() {
       <section className="bg-[#0B1728] border-t border-white/5">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto max-w-3xl text-center mb-10">
-            <span className="inline-block rounded-full border border-[#137dc5]/20 bg-[#137dc5]/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#137dc5]">
+            <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">
               Trust & Proof
             </span>
             <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">
               الثقة في عقلية لا تأتي من الذكاء الاصطناعي. تأتي من التتبع.
             </h2>
+            <p className="mt-4 text-sm font-medium text-white/60">
+              الذكاء الاصطناعي يساعد. الإنسان يقرر. الدليل يحكم.
+            </p>
           </div>
-          <ProofChain />
+          <ProofChainVisual />
         </div>
       </section>
 
-      {/* 8. AuditOS Example — Light */}
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
-        <SectionEyebrow
-          label="مثال تطبيقي"
-          title="AuditOS: مثال على أنظمة عقلية المتخصصة"
-          description="AuditOS هو أحد منتجات عقلية، مصمم للمراجعة والتدقيق والذكاء المالي. يوضح كيف نحوّل سير عمل مهني معقد إلى نظام واضح، قابل للتتبع، وجاهز للمراجعة."
-        />
-        <div className="mt-10">
-          <ExecutiveSurface>
-            <WorkflowChain
-              steps={["ميزان المراجعة", "التصنيف", "القوائم المالية", "الإيضاحات", "الأدلة", "التتبع"]}
-              className="justify-center"
-            />
-          </ExecutiveSurface>
-        </div>
-        <div className="mt-8 text-center">
-          <Link
-            href="/auditos"
-            className="inline-flex h-12 items-center justify-center rounded-md border bg-background px-8 text-base font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            استعرض AuditOS
-          </Link>
-        </div>
-      </section>
-
-      {/* 9. Final CTA — Dark */}
+      {/* 8. Final CTA — Dark */}
       <section className="bg-[#0B1728] border-t border-white/5">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto max-w-3xl rounded-xl border border-white/10 bg-white/[0.03] p-8 sm:p-12 text-center">
@@ -238,7 +228,7 @@ export default function HomePage() {
               هل تحتاج نظامًا مصممًا لطريقة عمل مؤسستك؟
             </h2>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link href="/custom-product" className="inline-flex h-12 items-center justify-center rounded-md bg-[#137dc5] px-8 text-base font-medium text-white transition-colors hover:bg-[#137dc5]/90">
+              <Link href="/custom-product" className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-8 text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90">
                 صمّم نظامك الآن
               </Link>
               <Link href="/contact" className="inline-flex h-12 items-center justify-center rounded-md border border-white/15 bg-white/5 px-8 text-base font-medium text-white/80 transition-colors hover:bg-white/10">
