@@ -18,6 +18,7 @@
 /out/
 
 # production
+/backups/
 /build
 
 # misc
@@ -30,8 +31,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — ignore sensitive/private envs, keep templates committable
+.env
+.env.local
+.env.*.local
 
 # vercel
 .vercel
