@@ -10,7 +10,7 @@ export function WorkflowChain({ steps, className }: WorkflowChainProps) {
     <div className={cn("flex flex-wrap items-center gap-2 sm:gap-3", className)}>
       {steps.map((step, i) => (
         <div key={i} className="flex items-center gap-2 sm:gap-3">
-          <div className="rounded-md border bg-background px-3 py-2 text-xs font-medium shadow-sm sm:px-4 sm:py-2.5 sm:text-sm">
+          <div className="rounded-md border bg-background px-3 py-2 text-xs font-medium leading-5 shadow-sm sm:px-4 sm:py-2.5 sm:text-sm">
             {step}
           </div>
           {i < steps.length - 1 && (
