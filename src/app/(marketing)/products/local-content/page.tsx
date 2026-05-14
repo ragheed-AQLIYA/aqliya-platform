@@ -4,7 +4,7 @@ import { SectionEyebrow, BeforeAfterBlock, ProductWorkflowVisual, OutputCard, En
 
 export const metadata: Metadata = {
   title: "أنظمة المحتوى المحلي | AQLIYA",
-  description: "نظام يساعد المؤسسات على إدارة وتحليل بيانات الموردين والإنفاق والالتزام.",
+  description: "LocalContentOS خط نظام للمحتوى المحلي مبني على AQLIYA Intelligence Core، يربط الموردين والإنفاق والالتزام والمؤشرات داخل مسار قابل للمراجعة والتتبع.",
 }
 
 const outputs = [
@@ -26,16 +26,21 @@ export default function LocalContentProductPage() {
           <Link href="/products" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← العودة إلى خطوط الحلول
           </Link>
-          <h1 className="mt-6 text-3xl font-black sm:text-4xl">أنظمة المحتوى المحلي</h1>
+          <h1 className="mt-6 text-3xl font-black sm:text-4xl">LocalContentOS — نظام المحتوى المحلي</h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            نظام يساعد المؤسسات على إدارة وتحليل بيانات الموردين، الإنفاق، الالتزام، ومؤشرات المحتوى المحلي بطريقة أوضح وقابلة للتتبع.
+            خط نظام تحت عقلية يربط الموردين، الإنفاق، الالتزام، ومؤشرات المحتوى المحلي داخل مسار مؤسسي قابل للتتبع، مبني على AQLIYA Intelligence Core.
           </p>
+          <div className="mt-4 flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              نظام قابل للتفعيل حسب نطاق المؤسسة
+            </span>
+          </div>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link href="/custom-product" className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              اطلب تخصيص هذا النظام
+              ناقش تفعيل النظام
             </Link>
-            <Link href="/auditos" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
-              استعرض AuditOS
+            <Link href="/products" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+              استكشف خطوط عقلية
             </Link>
           </div>
         </div>
@@ -46,6 +51,7 @@ export default function LocalContentProductPage() {
         <SectionEyebrow
           label="المشكلة والحل"
           title="لماذا تحتاج المؤسسات نظام محتوى محلي واضح؟"
+          description="LocalContentOS لا يقدم مؤشرًا منفصلًا فقط، بل يحوّل بيانات الموردين والإنفاق والالتزام إلى خط نظام مؤسسي محكوم ومبني على AQLIYA Intelligence Core."
         />
         <div className="mt-10">
           <BeforeAfterBlock
@@ -60,6 +66,7 @@ export default function LocalContentProductPage() {
         <SectionEyebrow
           label="سير العمل"
           title="كيف يعمل النظام؟"
+          description="من الموردين والإنفاق إلى الفجوات والمؤشرات والتقارير، ضمن مسار واحد قابل للمراجعة والاعتماد."
         />
         <div className="mt-10">
           <ProductWorkflowVisual
@@ -85,7 +92,7 @@ export default function LocalContentProductPage() {
         <SectionEyebrow
           label="التخصيص"
           title="كيف يتكيف النظام مع مؤسستك؟"
-          description="يمكن تخصيص معايير التصنيف، مؤشرات المحتوى المحلي، قوالب التقارير، ومتطلبات الامتثال حسب طبيعة عملك والجهة التنظيمية."
+          description="يُفعّل LocalContentOS حسب نطاق المؤسسة عبر معايير التصنيف، مؤشرات المحتوى المحلي، قوالب التقارير، ومتطلبات الامتثال، مع بقاء منطق الحوكمة والتتبع ثابتًا فوق AQLIYA Intelligence Core."
         />
       </section>
 
@@ -109,9 +116,9 @@ export default function LocalContentProductPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام محتوى محلي لمؤسستك؟"
-          primaryLabel="اطلب تخصيص هذا النظام"
+          primaryLabel="ناقش تفعيل النظام"
           primaryHref="/custom-product"
-          secondaryLabel="تواصل معنا"
+          secondaryLabel="استكشف خطوط عقلية"
           secondaryHref="/contact"
         />
       </section>

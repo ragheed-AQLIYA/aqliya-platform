@@ -4,7 +4,7 @@ import { SectionEyebrow, BeforeAfterBlock, ProductWorkflowVisual, OutputCard, En
 
 export const metadata: Metadata = {
   title: "أنظمة المحاكاة | AQLIYA",
-  description: "نظام يساعد المؤسسات على اختبار السيناريوهات قبل التنفيذ.",
+  description: "SimulationOS خط نظام لمحاكاة السيناريوهات مبني على AQLIYA Intelligence Core، يدعم المقارنة والتقدير قبل التنفيذ داخل مسار قابل للمراجعة والاعتماد.",
 }
 
 const outputs = [
@@ -24,16 +24,21 @@ export default function SimulationProductPage() {
           <Link href="/products" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← العودة إلى خطوط الحلول
           </Link>
-          <h1 className="mt-6 text-3xl font-black sm:text-4xl">أنظمة المحاكاة</h1>
+          <h1 className="mt-6 text-3xl font-black sm:text-4xl">SimulationOS — نظام محاكاة السيناريوهات</h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            نظام يساعد المؤسسات على اختبار السيناريوهات قبل التنفيذ، ومقارنة أثر الخيارات على النتائج، التكاليف، المخاطر، الإيرادات، أو مؤشرات الأداء.
+            خط نظام تحت عقلية يساعد المؤسسات على اختبار السيناريوهات قبل التنفيذ ومقارنة أثر الخيارات على النتائج والتكلفة والمخاطر، ضمن مسار محاكاة مبني على AQLIYA Intelligence Core.
           </p>
+          <div className="mt-4 flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              نظام قابل للتفعيل حسب نطاق المؤسسة
+            </span>
+          </div>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link href="/custom-product" className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              اطلب تخصيص هذا النظام
+              ناقش تفعيل النظام
             </Link>
-            <Link href="/auditos" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
-              استعرض AuditOS
+            <Link href="/products" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+              استكشف خطوط عقلية
             </Link>
           </div>
         </div>
@@ -44,6 +49,7 @@ export default function SimulationProductPage() {
         <SectionEyebrow
           label="المشكلة والحل"
           title="لماذا تحتاج المؤسسات محاكاة قبل التنفيذ؟"
+          description="SimulationOS يربط الافتراضات والمدخلات والمقارنة داخل خط نظام محكوم، بحيث تصبح المحاكاة أداة قرار قابلة للمراجعة لا مجرد تصور منفصل."
         />
         <div className="mt-10">
           <BeforeAfterBlock
@@ -83,7 +89,7 @@ export default function SimulationProductPage() {
         <SectionEyebrow
           label="التخصيص"
           title="كيف يتكيف النظام مع مؤسستك؟"
-          description="يمكن تخصيص النماذج، المتغيرات، معايير المقارنة، التقارير، ولوحات العرض حسب طبيعة عملك."
+          description="يُفعّل SimulationOS حسب نطاق المؤسسة عبر النماذج، المتغيرات، معايير المقارنة، التقارير، ولوحات العرض، مع بقاء منطق التتبع والمراجعة ثابتًا فوق AQLIYA Intelligence Core."
         />
       </section>
 
@@ -107,9 +113,9 @@ export default function SimulationProductPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام محاكاة لمؤسستك؟"
-          primaryLabel="اطلب تخصيص هذا النظام"
+          primaryLabel="ناقش تفعيل النظام"
           primaryHref="/custom-product"
-          secondaryLabel="تواصل معنا"
+          secondaryLabel="استكشف خطوط عقلية"
           secondaryHref="/contact"
         />
       </section>

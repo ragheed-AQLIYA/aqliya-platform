@@ -4,7 +4,7 @@ import { SectionEyebrow, BeforeAfterBlock, ProductWorkflowVisual, OutputCard, En
 
 export const metadata: Metadata = {
   title: "أنظمة المبيعات | AQLIYA",
-  description: "نظام يساعد فرق B2B على تنظيم المبيعات من تأهيل العملاء إلى تحسين الأداء.",
+  description: "SalesOS خط نظام للذاكرة التجارية والمبيعات مبني على AQLIYA Intelligence Core، ينظم التأهيل والترتيب والمتابعة والتعلم داخل مسار تجاري محكوم.",
 }
 
 const outputs = [
@@ -25,16 +25,22 @@ export default function SalesProductPage() {
           <Link href="/products" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← العودة إلى خطوط الحلول
           </Link>
-          <h1 className="mt-6 text-3xl font-black sm:text-4xl">أنظمة المبيعات</h1>
+          <h1 className="mt-6 text-3xl font-black sm:text-4xl">SalesOS — نظام الذاكرة التجارية والمبيعات</h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            نظام يساعد فرق B2B على تنظيم المبيعات من تعريف العميل المثالي إلى تأهيل العملاء، ترتيب الأولويات، تنفيذ الحملات، المتابعة، وتحسين الأداء.
+            خط نظام تحت عقلية ينظم المبيعات من تعريف العميل المثالي إلى التأهيل والترتيب والمتابعة والتعلم المؤسسي، ضمن مسار تجاري محكوم مبني على AQLIYA Intelligence Core.
           </p>
+          <div className="mt-4 flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900 dark:text-amber-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+              خط متخصص ضمن عقلية
+            </span>
+          </div>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link href="/custom-product" className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              اطلب تخصيص هذا النظام
+              ناقش تفعيل النظام
             </Link>
-            <Link href="/auditos" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
-              استعرض AuditOS
+            <Link href="/products" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+              استكشف خطوط عقلية
             </Link>
           </div>
         </div>
@@ -45,6 +51,7 @@ export default function SalesProductPage() {
         <SectionEyebrow
           label="المشكلة والحل"
           title="لماذا تحتاج فرق المبيعات نظامًا واضحًا؟"
+          description="SalesOS لا يقدم CRM عامًا، بل يفعّل ذاكرة تجارية مؤسسية تربط التأهيل والأولوية والمتابعة والتعلم داخل منطق واحد قابل للتتبع."
         />
         <div className="mt-10">
           <BeforeAfterBlock
@@ -84,7 +91,7 @@ export default function SalesProductPage() {
         <SectionEyebrow
           label="التخصيص"
           title="كيف يتكيف النظام مع مؤسستك؟"
-          description="يمكن تخصيص معايير التأهيل، منطق الترتيب، قنوات التواصل، تقارير الأداء، ولوحات المتابعة حسب طبيعة عملك."
+          description="يُفعّل SalesOS حسب نطاق المؤسسة عبر معايير التأهيل، منطق الترتيب، قنوات التواصل، تقارير الأداء، ولوحات المتابعة، مع بقاء منطق الحوكمة والتعلم المؤسسي ثابتًا فوق AQLIYA Intelligence Core."
         />
       </section>
 
@@ -108,9 +115,9 @@ export default function SalesProductPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام مبيعات واضح لفريقك؟"
-          primaryLabel="اطلب تخصيص هذا النظام"
+          primaryLabel="ناقش تفعيل النظام"
           primaryHref="/custom-product"
-          secondaryLabel="تواصل معنا"
+          secondaryLabel="استكشف خطوط عقلية"
           secondaryHref="/contact"
         />
       </section>

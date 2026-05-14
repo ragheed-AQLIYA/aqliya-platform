@@ -4,7 +4,7 @@ import { SectionEyebrow, BeforeAfterBlock, ProductWorkflowVisual, OutputCard, En
 
 export const metadata: Metadata = {
   title: "أنظمة اتخاذ القرار | AQLIYA",
-  description: "نظام يساعد المؤسسات على تنظيم القرارات المعقدة من المشكلة إلى التوصية والاعتماد.",
+  description: "DecisionOS خط نظام لحوكمة القرارات مبني على AQLIYA Intelligence Core، يربط البدائل والمعايير والمخاطر والأدلة ضمن مسار قابل للمراجعة والاعتماد.",
 }
 
 const outputs = [
@@ -25,16 +25,22 @@ export default function DecisionProductPage() {
           <Link href="/products" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← العودة إلى خطوط الحلول
           </Link>
-          <h1 className="mt-6 text-3xl font-black sm:text-4xl">أنظمة اتخاذ القرار</h1>
+          <h1 className="mt-6 text-3xl font-black sm:text-4xl">DecisionOS — نظام حوكمة القرارات</h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            نظام يساعد المؤسسات على تنظيم القرارات المعقدة من مرحلة تحديد المشكلة إلى مقارنة البدائل، تقييم المخاطر، توثيق المبررات، وإصدار توصية قابلة للمراجعة والاعتماد.
+            خط نظام تحت عقلية ينظم القرارات المعقدة من تحديد المشكلة إلى مقارنة البدائل وتقييم المخاطر وتوثيق المبررات، ضمن مسار محكوم مبني على AQLIYA Intelligence Core.
           </p>
+          <div className="mt-4 flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              خط نظام ضمن عقلية
+            </span>
+          </div>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link href="/custom-product" className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              اطلب تخصيص هذا النظام
+              ناقش تفعيل النظام
             </Link>
-            <Link href="/auditos" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
-              استعرض AuditOS
+            <Link href="/products" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+              استكشف خطوط عقلية
             </Link>
           </div>
         </div>
@@ -45,6 +51,7 @@ export default function DecisionProductPage() {
         <SectionEyebrow
           label="المشكلة والحل"
           title="لماذا تحتاج المؤسسات نظام قرار واضح؟"
+          description="DecisionOS يربط البدائل والمعايير والمخاطر والأدلة داخل منطق حوكمة واحد، بحيث يصبح القرار المؤسسي قابلاً للمراجعة لا مجرد توصية سريعة."
         />
         <div className="mt-10">
           <BeforeAfterBlock
@@ -84,7 +91,7 @@ export default function DecisionProductPage() {
         <SectionEyebrow
           label="التخصيص"
           title="كيف يتكيف النظام مع مؤسستك؟"
-          description="يمكن تخصيص النظام ليناسب بياناتك، صلاحيات فرقك، إجراءات الاعتماد، معايير التقييم، والتقارير المطلوبة."
+          description="يُفعّل DecisionOS حسب نطاق المؤسسة من خلال مواءمة البيانات، الصلاحيات، إجراءات الاعتماد، معايير التقييم، والتقارير، مع بقاء النواة الحاكمة نفسها فوق AQLIYA Intelligence Core."
         />
       </section>
 
@@ -108,9 +115,9 @@ export default function DecisionProductPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام قرار واضح لمؤسستك؟"
-          primaryLabel="اطلب تخصيص هذا النظام"
+          primaryLabel="ناقش تفعيل النظام"
           primaryHref="/custom-product"
-          secondaryLabel="تواصل معنا"
+          secondaryLabel="استكشف خطوط عقلية"
           secondaryHref="/contact"
         />
       </section>
