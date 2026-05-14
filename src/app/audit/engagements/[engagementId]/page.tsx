@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { EngagementHeader } from "@/components/audit/engagement/engagement-header"
@@ -9,34 +10,33 @@ import { WorkflowProgress } from "@/components/audit/layout/workflow-progress"
 import {
   getEngagement, getEngagementWorkflowStatus, getAuditEvents, getAISuggestions,
 } from "@/lib/audit/services"
+import { getAuditActor } from "@/lib/audit/actor-context"
+import { assertEngagementAccess } from "@/lib/audit/tenant-guard"
 import { ArrowLeft, Circle, Bot } from "lucide-react"
 import { AIOutputsPanel } from "@/components/audit/ai/ai-outputs-panel"
 
 export default async function EngagementDetailPage({ params }: { params: Promise<{ engagementId: string }> }) {
   const { engagementId } = await params
+  const actor = await getAuditActor()
 
-  const [engagement, workflowStatus, auditEvents, aiOutputs] = await Promise.all([
-    getEngagement(engagementId),
-    getEngagementWorkflowStatus(engagementId),
-    getAuditEvents(engagementId),
-    getAISuggestions(engagementId),
+  const [engagement, workflowStatusRaw, auditEvents, aiOutputs] = await Promise.all([
+    getEngagement(actor.organizationId, engagementId),
+    getEngagementWorkflowStatus(engagementId).catch(() => null),
+    getAuditEvents(engagementId).catch(() => []),
+    getAISuggestions(engagementId).catch(() => []),
   ])
 
   if (!engagement) {
-    return (
-      <div className="space-y-6">
-        <Link href="/audit">
-          <Button variant="outline" size="sm">
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Back to Dashboard
-          </Button>
-        </Link>
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <h1 className="text-2xl font-bold">Engagement not found</h1>
-          <p className="mt-2 text-sm text-muted-foreground">The engagement you are looking for does not exist.</p>
-        </div>
-      </div>
-    )
+    notFound()
+  }
+
+  await assertEngagementAccess(engagementId, actor)
+
+  const workflowStatus = workflowStatusRaw ?? {
+    currentState: 'setup' as const,
+    availableTransitions: [] as string[],
+    blockingIssues: [] as string[],
+    completionPercentage: 0,
   }
 
   const recentEvents = auditEvents.slice(-5).reverse()
@@ -91,10 +91,6 @@ export default async function EngagementDetailPage({ params }: { params: Promise
               <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950">
                 <h3 className="text-xs font-medium text-blue-700 dark:text-blue-400">Missing Links</h3>
                 <ul className="mt-2 space-y-1 text-xs text-blue-600 dark:text-blue-300">
-                  <li className="flex items-center gap-1">
-                    <Circle className="h-2 w-2" />
-                    Sundry Income (5100) has no confirmed mapping
-                  </li>
                   <li className="flex items-center gap-1">
                     <Circle className="h-2 w-2" />
                     Inventory evidence not yet uploaded
