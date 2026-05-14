@@ -55,7 +55,7 @@ function buildLabels(engagementStatus: string, approvals: ApprovalRecord[]): Exp
 
 export async function exportFinancialStatements(engagementId: string): Promise<ExportPackage> {
   const [engagement, statements, notes, approvalRecords] = await Promise.all([
-    svc.getEngagement(engagementId),
+    svc.getEngagement(undefined, engagementId),
     svc.getFinancialStatements(engagementId),
     svc.getDisclosureNotes(engagementId),
     svc.getApprovalRecords(engagementId),
