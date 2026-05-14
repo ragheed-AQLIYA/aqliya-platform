@@ -1,107 +1,61 @@
 # AQLIYA Documentation
 
-## Company Definition
+## v1.1 Official Reference (Highest Authority)
 
-عقلية تبني أنظمة ذكاء اصطناعي تشغيلية للشركات في القرار، المبيعات، المالية، الامتثال، والتقارير المهنية.
+AQLIYA is a **Private Governed Institutional Intelligence Platform**. The v1.1 official docs supersede all previous vision and product definitions.
 
-**English:** AQLIYA builds AI operating systems for business decisions, sales, finance, compliance, and professional reporting.
+| Document | Description |
+|---|---|
+| `official/aqliya-vision-v1.1.md` | Platform identity — what AQLIYA is and is not |
+| `official/aqliya-implementation-rules-v1.1.md` | Mandatory rules for any code change |
+| `official/aqliya-product-taxonomy-v1.1.md` | Product boundaries and implementation status |
+| `official/aqliya-core-architecture-v1.1.md` | Architecture layers, engine status, current limits |
+| `official/aqliya-skill-context-v1.1.md` | Development skills and guardrails |
+| `official/aqliya-glossary-v1.1.md` | Official terminology reference |
+| `official/aqliya-roadmap-v1.1.md` | Execution phases 1-11 |
+| `official/aqliya-agent-context-v1.1.md` | Full agent brief for human and AI developers |
 
-## Official Product Architecture
+---
 
-```text
-AQLIYA Company
-├── Core Engines
-├── Product Lines
-└── Market Solutions
-```
+## Source of Truth (v1.0 — aligned with v1.1)
 
-## Official Products
+| Directory / File | Description |
+|---|---|
+| `source-of-truth/` | Canonical references — architecture, product definition, system taxonomy |
+| `source-of-truth/AQLIYA_ARCHITECTURE.md` | Route model and system hierarchy |
+| `source-of-truth/AQLIYA_SYSTEM_TAXONOMY.md` | System classification and terminology rules |
+| `source-of-truth/PRODUCT_STATUS_MATRIX.md` | Current product status across all dimensions |
+| `source-of-truth/ROUTE_STRATEGY.md` | Route purpose and workspace/demo separation |
+| `source-of-truth/READINESS_GATES.md` | Pilot and commercial readiness criteria |
 
-1. AQLIYA Decision OS
-2. AQLIYA Simulation OS
-3. AQLIYA Sales OS
-4. AQLIYA Edit OS
-5. AQLIYA Local Content OS
-6. AQLIYA AuditOS / Financial Intelligence
-7. AQLIYA Content Authority OS
+---
 
-## Purpose
-
-AQLIYA AuditOS is an assistive audit preparation and financial intelligence system. It helps convert raw accounting data into structured financial statement drafts, notes, evidence requirements, review points, and approval workflows.
-
-AuditOS is one of the official AQLIYA product lines under the broader AQLIYA company architecture.
-
-## Route
-
-- **Current route:** `/audit`
-- **Future rename candidate:** `/auditos` (not during demo stabilization — route rename is NOT happening now)
-
-## Documentation Structure
-
-### Active Documentation (AQLIYA AuditOS)
-
-| # | Section | Description |
-|---|---------|-------------|
-| 1 | `01-product-foundation/` | Overview, problem, users, workflow, boundaries, disclaimer |
-| 2 | `02-accounting-methodology/` | Trial balance, chart of accounts, classification, mapping, materiality, standards support |
-| 3 | `03-audit-methodology/` | Preparation scope, risk framework, red flags, observations, missing info, reviewer approval |
-| 4 | `04-financial-statements/` | Statement generation rules, review checklists for each statement |
-| 5 | `05-notes-system/` | Notes generation methodology, policies library, disclosure requirements, missing note data |
-| 6 | `06-evidence-and-review/` | Evidence requirements by account area, review queue, findings classification, publication |
-| 7 | `07-ai-governance/` | AI role and limitations, human review requirement, confidence scoring, explainability, audit trail |
-
-### Support Files
-
-| File | Description |
-|------|-------------|
-| `AQLIYA-company-product-architecture-official.md` | Official company architecture, product structure, and approved definition |
-| `aqliya-auditos-boundaries.md` | Defines separation between AQLIYA Decision OS tender workflows and AuditOS at the code/route level |
-| `AUDIT_REPORT.md` | Full documentation audit report |
-
-### Additional Directories
+## Systems Documentation
 
 | Directory | Description |
-|-----------|-------------|
-| `archive/decision-os/` | **Legacy — Internal reference only.** Old AQLIYA Decision OS (Tender Decisions) documentation. Not active. |
-| `product/` | Product requirements, architecture spec, phase plans |
-| `prototype-planning/` | Prototype specifications (UI/UX, data model, engineering) |
-| `theoretical-reference/` | AQLIYA Core Doctrine v1.0 and theory documents |
+|---|---|
+| `systems/auditos/` | AuditOS product documentation, operator manual |
+| `systems/decisionos/` | DecisionOS architecture, engine, inputs, publishing |
+| `systems/local-content-os/` | LocalContentOS documentation |
+| `systems/salesos/` | SalesOS documentation |
+| `systems/simulationos/` | SimulationOS documentation |
 
-## Core Workflow
+---
 
-```txt
-Trial Balance
-    → Account Mapping
-    → Trial Balance Review
-    → Financial Statement Draft
-    → Notes Draft
-    → Evidence Requirements
-    → Review Findings
-    → Reviewer Approval
-    → Publication Package
-```
+## Theoretical Reference (v1.0)
 
-## Related Documents
+Full 21-part theoretical foundation: foundational doctrine, enterprise decision intelligence, market theory, financial intelligence, audit intelligence, audit firm operating theory, workflow intelligence, governance & trust, data trust, human-AI model, organizational memory, deployment & sovereignty, product philosophy, commercialization, responsible intelligence, system design principles, terminology, anti-patterns, strategic narratives, reference models, and documentation maintenance system.
 
-- `docs/theoretical-reference/00-doctrine-to-execution-map.md` — Doctrine-to-Execution Map
-- `docs/product/auditos-mvp-prd.md` — AuditOS MVP Product Requirements Document
-- `docs/product/auditos-commercial-operating-system.md` — AuditOS unified commercial operating system — master index linking all 10 commercial stages
-- `docs/product/auditos-product-packaging.md` — AuditOS product positioning and packaging
-- `docs/product/auditos-commercial-assets/` — AuditOS commercial brief, demo, deck, ICP messaging, and objection handling
-- `docs/product/auditos-outbound-kit/` — AuditOS founder pitch, demo variants, outreach, discovery, and follow-up assets
-- `docs/product/auditos-sales-ops/` — AuditOS sales ops playbook, pipeline rhythm, pilot scoring, CRM fields, and deal stages
-- `docs/product/auditos-live-pilot-management/` — AuditOS live pilot tracking, handoff, risks, evidence, and closeout assets
-- `docs/product/auditos-first-customer-loop/` — AuditOS founder pilot control, paid conversion, referenceability, and learning-loop assets
-- `docs/product/auditos-customer-conversion-reference/` — AuditOS paid conversion, reference paths, case studies, and reusable customer proof assets
-- `docs/product/auditos-market-proof-system/` — AuditOS market proof: proof index, reference program, case study workflow, founder signal review, revenue learning, usage rules, and credibility dashboard
+→ `theoretical-reference/` for the full index.
+
+---
 
 ## Language Support
 
-AuditOS supports bilingual financial data processing:
-- Account names in Arabic, English, or both
-- Account mapping uses Arabic/English keyword matching
-- Outputs can be generated with Arabic notes and English standard references
+AQLIYA is Arabic-first (RTL), bilingual. Supports Arabic and English financial data processing.
+
+---
 
 ## Important Disclaimer
 
-Outputs generated by AuditOS are draft preparation materials and require review and approval by qualified professionals before official use. AuditOS is an assistive system — AI assists, humans decide, evidence governs.
+Outputs generated by AQLIYA products are draft preparation materials and require review and approval by qualified professionals before official use. AI assists, humans decide, evidence governs.
