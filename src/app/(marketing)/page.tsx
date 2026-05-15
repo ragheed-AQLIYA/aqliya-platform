@@ -189,7 +189,7 @@ export default function HomePage() {
                 {impactMetrics.map((metric) => (
                   <div
                     key={metric.label}
-                    className="glass-card-light border-white/10 bg-white/6 p-4 text-white shadow-none backdrop-blur"
+                    className="rounded-2xl border border-white/15 bg-white/8 p-4 backdrop-blur"
                   >
                     <div className="text-2xl font-black text-white">
                       {metric.value}
