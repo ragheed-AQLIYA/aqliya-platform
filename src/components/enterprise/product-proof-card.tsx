@@ -9,6 +9,8 @@ interface ProductProofCardProps {
   flow: string[];
   href: string;
   note?: string;
+  maturity?: string;
+  status?: string;
   className?: string;
 }
 
@@ -20,6 +22,8 @@ export function ProductProofCard({
   flow,
   href,
   note,
+  maturity,
+  status,
   className,
 }: ProductProofCardProps) {
   return (
@@ -32,8 +36,15 @@ export function ProductProofCard({
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqliya-cyan/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="border-b bg-gradient-to-r from-muted/40 to-transparent px-5 py-4">
-        <div className="mb-3 inline-flex rounded-full border border-primary/15 bg-primary/5 px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em] text-primary uppercase">
-          خط نظام
+        <div className="mb-2 flex items-center gap-2">
+          <span className="inline-flex rounded-full border border-primary/15 bg-primary/5 px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em] text-primary uppercase">
+            خط نظام
+          </span>
+          {maturity && (
+            <span className="inline-flex rounded-full border border-white/15 bg-white/6 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+              {maturity}
+            </span>
+          )}
         </div>
         <h3 className="text-base font-bold leading-7 text-foreground transition-colors group-hover:text-primary">
           {title}

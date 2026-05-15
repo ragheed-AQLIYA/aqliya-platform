@@ -432,6 +432,8 @@ export default function HomePage() {
               flow={product.flow}
               href={product.href}
               note={product.note}
+              maturity={product.maturity}
+              status={product.status}
             />
           ))}
         </div>
