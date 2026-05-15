@@ -10,11 +10,11 @@ interface DraftOnlyBannerProps {
 }
 
 const contextualMessages: Record<string, string> = {
-  evidence: "Evidence is in draft state and must be reviewed before use in final reporting.",
-  finding: "This finding is draft-only and requires human approval before it becomes final.",
-  recommendation: "Recommendation is marked as draft and needs human review before adoption.",
-  approval: "Approval workflow is in draft mode. Final approval requires human sign-off.",
-  publication: "Publication content is draft-only and must be approved before release.",
+  evidence: "الأدلة في حالة مسودة ويجب مراجعتها قبل الاستخدام في التقارير النهائية.",
+  finding: "هذه النتيجة هي مسودة فقط وتتطلب اعتماداً بشرياً قبل أن تصبح نهائية.",
+  recommendation: "التوصية مصنفة كمسودة وتحتاج إلى مراجعة بشرية قبل التبني.",
+  approval: "سير اعتماد العمل في وضع المسودة. الاعتماد النهائي يتطلب توقيعاً بشرياً.",
+  publication: "محتوى النشر هو مسودة فقط ويجب اعتماده قبل الإصدار.",
 }
 
 function DraftOnlyBanner({ taskType, className }: DraftOnlyBannerProps) {
@@ -29,7 +29,7 @@ function DraftOnlyBanner({ taskType, className }: DraftOnlyBannerProps) {
         <FileWarning className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
         <div className="space-y-0.5">
           <p className="text-xs font-medium text-amber-800 dark:text-amber-300">
-            Draft Only — Human review and approval required
+            مسودة فقط — مراجعة بشرية واعتماد مطلوب
           </p>
           {contextMsg && (
             <p className="text-[11px] leading-snug text-amber-700/80 dark:text-amber-400/70">

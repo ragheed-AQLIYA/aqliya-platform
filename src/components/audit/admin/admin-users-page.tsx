@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { UserPlus, Shield, UserX, Loader2, AlertTriangle } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -27,7 +27,7 @@ export default function AdminUsersPage() {
   const [submitting, setSubmitting] = useState(false)
   const [actionError, setActionError] = useState<string | null>(null)
 
-  const loadUsers = useCallback(async () => {
+  const loadUsers = async () => {
     try {
       const result = await getAuditUsersAdminAction()
       setUsers(result)
@@ -37,9 +37,14 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }
 
-  useEffect(() => { loadUsers() }, [loadUsers])
+  useEffect(() => {
+    getAuditUsersAdminAction()
+      .then(result => { setUsers(result); setError(null) })
+      .catch(e => { setError(e instanceof Error ? e.message : "فشل تحميل المستخدمين") })
+      .finally(() => { setLoading(false) })
+  }, [])
 
   const handleCreate = async () => {
     if (!newUser.email.trim() || !newUser.name.trim()) return

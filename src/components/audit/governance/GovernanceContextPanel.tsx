@@ -37,7 +37,7 @@ export function GovernanceContextPanel({
       >
         <CardTitle className="flex items-center gap-2 text-sm font-semibold">
           <Shield className="h-4 w-4 text-amber-500" />
-          Governance Context
+          سياق الحوكمة
         </CardTitle>
         <div className="text-muted-foreground">
           {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
@@ -47,7 +47,7 @@ export function GovernanceContextPanel({
         <CardContent className="space-y-4 px-4 py-3 text-xs">
           {taskType && (
             <p className="text-muted-foreground">
-              <span className="font-medium text-foreground">Task:</span> {taskType}
+              <span className="font-medium text-foreground">المهمة:</span> {taskType}
             </p>
           )}
 
@@ -55,7 +55,7 @@ export function GovernanceContextPanel({
             <div>
               <h4 className="mb-1 flex items-center gap-1.5 font-medium text-foreground">
                 <Scale className="h-3.5 w-3.5 text-blue-500" />
-                Doctrine References
+                مراجع المبادئ
               </h4>
               <ul className="list-inside list-disc space-y-0.5 text-muted-foreground">
                 {doctrineRefs!.map((ref, i) => (
@@ -69,7 +69,7 @@ export function GovernanceContextPanel({
             <div>
               <h4 className="mb-1 flex items-center gap-1.5 font-medium text-foreground">
                 <FileCheck className="h-3.5 w-3.5 text-emerald-500" />
-                Governance Rules
+                قواعد الحوكمة
               </h4>
               <ul className="list-inside list-disc space-y-0.5 text-muted-foreground">
                 {governanceRules!.map((rule, i) => (
@@ -83,7 +83,7 @@ export function GovernanceContextPanel({
             <div>
               <h4 className="mb-1 flex items-center gap-1.5 font-medium text-foreground">
                 <FileCheck className="h-3.5 w-3.5 text-cyan-500" />
-                Evidence Expectations
+                توقعات الأدلة
               </h4>
               <p className={cn(
                 "text-muted-foreground",
@@ -91,9 +91,9 @@ export function GovernanceContextPanel({
                 evidenceStatus === "incomplete" && "text-amber-600",
                 evidenceStatus === "satisfied" && "text-emerald-600",
               )}>
-                {evidenceStatus === "missing" && "Evidence has not been provided yet."}
-                {evidenceStatus === "incomplete" && "Some evidence is still outstanding."}
-                {evidenceStatus === "satisfied" && "All evidence expectations are met."}
+                {evidenceStatus === "missing" && "لم يتم تقديم الأدلة بعد."}
+                {evidenceStatus === "incomplete" && "بعض الأدلة لا تزال معلقة."}
+                {evidenceStatus === "satisfied" && "جميع توقعات الأدلة مستوفاة."}
                 {evidenceStatus !== "missing" && evidenceStatus !== "incomplete" && evidenceStatus !== "satisfied" && evidenceStatus}
               </p>
             </div>
@@ -102,13 +102,13 @@ export function GovernanceContextPanel({
           <div>
             <h4 className="mb-1 flex items-center gap-1.5 font-medium text-foreground">
               <UserCheck className="h-3.5 w-3.5 text-purple-500" />
-              Reviewer Obligations
+               التزامات المراجع
             </h4>
             <ul className="list-inside list-disc space-y-0.5 text-muted-foreground">
-              <li>Verify completeness and accuracy of all entries</li>
-              <li>Confirm supporting evidence is properly linked</li>
-              <li>Document any exceptions or deviations identified</li>
-              {!hasEscalation && <li>Escalate unresolved issues per governance policy</li>}
+              <li>التحقق من اكتمال ودقة جميع القيود</li>
+              <li>تأكيد ربط الأدلة الداعمة بشكل صحيح</li>
+              <li>توثيق أي استثناءات أو انحرافات يتم تحديدها</li>
+              {!hasEscalation && <li>رفع القضايا غير المحلولة وفقاً لسياسة الحوكمة</li>}
             </ul>
           </div>
 
@@ -116,10 +116,10 @@ export function GovernanceContextPanel({
             <div>
               <h4 className="mb-1 flex items-center gap-1.5 font-medium text-foreground">
                 <ArrowUpCircle className="h-3.5 w-3.5 text-red-500" />
-                Escalation Guidance
+                توجيهات التصعيد
               </h4>
               <p className="text-muted-foreground">
-                Current escalation level:{" "}
+                مستوى التصعيد الحالي:{" "}
                 <span className={cn(
                   "font-medium",
                   escalationLevel === "critical" && "text-red-600",

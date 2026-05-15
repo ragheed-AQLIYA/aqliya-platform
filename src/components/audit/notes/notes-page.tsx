@@ -14,7 +14,7 @@ import type { DisclosureNote, Engagement, AIAssistanceOutput } from "@/types/aud
 import { TraceabilityDrawer } from "@/components/audit/shared/traceability-drawer"
 import type { TraceabilityNode } from "@/components/audit/shared/traceability-drawer"
 import { getDisclosureNotesAction, getEngagementAction } from "@/actions/audit-read-actions"
-import { getEvidenceForNoteType } from "@/lib/audit/notes"
+import { getEvidenceForNoteType, type NoteCategory } from "@/lib/audit/notes"
 
 const statusColors: Record<string, string> = { draft: "bg-gray-100 text-gray-700 border-gray-300", needs_info: "bg-amber-100 text-amber-700 border-amber-300", reviewed: "bg-blue-100 text-blue-700 border-blue-300", approved: "bg-green-100 text-green-700 border-green-300", rejected: "bg-red-100 text-red-700 border-red-300" }
 
@@ -266,7 +266,7 @@ export default function NotesPage() {
 
 function NoteCard({ note, expanded, onToggle, onTrace, onStatusChange }: { note: DisclosureNote; expanded: boolean; onToggle: () => void; onTrace: (note: DisclosureNote) => void; onStatusChange: (noteId: string, status: string, comment?: string) => void }) {
   const statusColors: Record<string, string> = { draft: "bg-gray-100 text-gray-700 border-gray-300", needs_info: "bg-amber-100 text-amber-700 border-amber-300", reviewed: "bg-blue-100 text-blue-700 border-blue-300", approved: "bg-green-100 text-green-700 border-green-300", rejected: "bg-red-100 text-red-700 border-red-300" }
-  const evidenceReq = getEvidenceForNoteType(note.noteType as any)
+  const evidenceReq = getEvidenceForNoteType(note.noteType as NoteCategory)
   const linkedLabel = note.linkedStatementLine ? (accountTypeLabels[note.linkedStatementLine] ?? note.linkedStatementLine) : null
   const [reviewComment, setReviewComment] = useState("")
   const [submittingStatus, setSubmittingStatus] = useState<string | null>(null)

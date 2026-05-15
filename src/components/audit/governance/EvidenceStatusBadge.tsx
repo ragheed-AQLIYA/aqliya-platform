@@ -39,11 +39,11 @@ const statusStyles: Record<
 }
 
 const defaultLabels: Record<string, string> = {
-  sufficient: "Sufficient",
-  partial: "Partial",
-  missing: "Missing",
-  conflicting: "Conflicting",
-  weak: "Weak",
+  sufficient: "كافٍ",
+  partial: "جزئي",
+  missing: "مفقود",
+  conflicting: "متضارب",
+  weak: "ضعيف",
 }
 
 function EvidenceStatusBadge({ status, label, className }: EvidenceStatusBadgeProps) {

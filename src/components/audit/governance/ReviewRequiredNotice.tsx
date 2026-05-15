@@ -25,7 +25,7 @@ function ReviewRequiredNotice({
     >
       <ShieldAlert className="size-3 shrink-0" />
       <span>
-        {message ?? "AI cannot approve. Human accountability remains mandatory."}
+        {message ?? "الذكاء الاصطناعي لا يمكنه الاعتماد. المساءلة البشرية تبقى إلزامية."}
       </span>
     </div>
   )

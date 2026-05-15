@@ -57,12 +57,12 @@ function ProvenanceSummary({
           <div className="flex flex-wrap items-center gap-1.5">
             {doctrineCount !== undefined && (
               <span className="inline-flex items-center gap-1 rounded-md border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">
-                Doctrine: {doctrineCount}
+                المبادئ: {doctrineCount}
               </span>
             )}
             {governanceCount !== undefined && (
               <span className="inline-flex items-center gap-1 rounded-md border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">
-                Governance: {governanceCount}
+                الحوكمة: {governanceCount}
               </span>
             )}
             {evidenceStatus && (
