@@ -91,7 +91,7 @@ export default function AdminUsersPage() {
           <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
-        <Button onClick={() => setShowCreate(true)}><UserPlus className="size-4 ml-1" />{t("provisionUser")}</Button>
+        <Button onClick={() => setShowCreate(true)}><UserPlus className="size-4 me-1" />{t("provisionUser")}</Button>
       </div>
 
       {error && (

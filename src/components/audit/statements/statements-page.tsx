@@ -70,7 +70,7 @@ export default function StatementsPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" disabled={exporting !== null}>
-                {exporting ? <Loader2 className="size-4 ml-1 animate-spin" /> : <Download className="size-4 ml-1" />}
+                {exporting ? <Loader2 className="size-4 me-1 animate-spin" /> : <Download className="size-4 me-1" />}
                 {exporting ? t("exporting", { format: exporting.toUpperCase() }) : t("export")}
               </Button>
             </DropdownMenuTrigger>
@@ -86,7 +86,7 @@ export default function StatementsPage() {
                 } catch (e: unknown) { setExportError(e instanceof Error ? e.message : 'فشل التصدير') }
                 finally { setExporting(null) }
               }}>
-                <FileText className="size-4 ml-2" />{t("exportPDF")}
+                <FileText className="size-4 me-2" />{t("exportPDF")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={async () => {
                 setExporting('xlsx'); setExportError(null)
@@ -99,7 +99,7 @@ export default function StatementsPage() {
                 } catch (e: unknown) { setExportError(e instanceof Error ? e.message : 'فشل التصدير') }
                 finally { setExporting(null) }
               }}>
-                <FileSpreadsheet className="size-4 ml-2" />{t("exportXLSX")}
+                <FileSpreadsheet className="size-4 me-2" />{t("exportXLSX")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -141,7 +141,7 @@ export default function StatementsPage() {
               {statementIcons[s.statementType]}
               {statementLabels[s.statementType] || s.title}
               {s.reviewComments.length > 0 && (
-                <Badge variant="outline" className="ml-1 bg-amber-100 text-amber-700 text-[10px] px-1">{s.reviewComments.length}</Badge>
+                <Badge variant="outline" className="me-1 bg-amber-100 text-amber-700 text-[10px] px-1">{s.reviewComments.length}</Badge>
               )}
             </TabsTrigger>
           ))}

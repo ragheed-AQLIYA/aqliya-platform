@@ -117,7 +117,7 @@ export default function FindingsPage() {
           <Button variant="outline" size="sm" disabled={generatingFindingDrafts} onClick={async () => { setGeneratingFindingDrafts(true); try { const r = await generateFindingDraftsAction(engagementId); setAiDrafts(prev => [...r, ...prev]) } catch {} finally { setGeneratingFindingDrafts(false) } }} className="gap-1.5">
             {generatingFindingDrafts ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} {t("generateDrafts")}
           </Button>
-          <Button onClick={() => setShowCreate(true)}><Plus className="size-4 ml-1" />{t("createFinding")}</Button>
+          <Button onClick={() => setShowCreate(true)}><Plus className="size-4 me-1" />{t("createFinding")}</Button>
         </div>
       </div>
 
@@ -254,15 +254,15 @@ export default function FindingsPage() {
                             <span>{t("updated", { date: new Date(finding.updatedAt).toLocaleDateString() })}</span>
                           </div>
                           <div className="flex gap-2 pt-1 flex-wrap">
-                            {finding.status === 'draft' && <Button size="xs" variant="outline" className="text-green-600 border-green-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'open', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'open' } : f)) } catch {} }}><CheckCircle className="size-3 ml-1" />{t("acceptFinding")}</Button>}
-                            {finding.status === 'open' && <Button size="xs" variant="outline" className="text-purple-600 border-purple-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'in_review', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'in_review' } : f)) } catch {} }}><CheckCircle className="size-3 ml-1" />{t("startReview")}</Button>}
-                            {finding.status !== 'resolved' && finding.status !== 'dismissed' && <Button size="xs" variant="outline" className="text-red-600 border-red-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'dismissed', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'dismissed' } : f)) } catch {} }}><XCircle className="size-3 ml-1" />{t("dismissFinding")}</Button>}
-                            <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setLoadingLinked(true); try { const ev = await getEvidenceAction(engagementId); const linked = ev.filter(e => e.linkedEntities.some(le => le.targetId === finding.id || le.targetType === 'finding')); setLinkedEvidence(linked); setShowLinkedEvidence(finding) } catch {} finally { setLoadingLinked(false) } }}><FileText className="size-3 ml-1" />{t("evidenceCount", { count: finding.relatedEvidenceIds?.length ?? 0 })}</Button>
-                            <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setLoadingLinkedRecs(true); try { const r = await getRecommendationsAction(engagementId); const recs = r.filter(re => re.findingId === finding.id); setLinkedRecs(recs); setShowLinkedRecs(finding) } catch {} finally { setLoadingLinkedRecs(false) } }}><ListChecks className="size-3 ml-1" />{t("recommendations")}</Button>
+                            {finding.status === 'draft' && <Button size="xs" variant="outline" className="text-green-600 border-green-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'open', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'open' } : f)) } catch {} }}><CheckCircle className="size-3 me-1" />{t("acceptFinding")}</Button>}
+                            {finding.status === 'open' && <Button size="xs" variant="outline" className="text-purple-600 border-purple-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'in_review', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'in_review' } : f)) } catch {} }}><CheckCircle className="size-3 me-1" />{t("startReview")}</Button>}
+                            {finding.status !== 'resolved' && finding.status !== 'dismissed' && <Button size="xs" variant="outline" className="text-red-600 border-red-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'dismissed', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'dismissed' } : f)) } catch {} }}><XCircle className="size-3 me-1" />{t("dismissFinding")}</Button>}
+                            <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setLoadingLinked(true); try { const ev = await getEvidenceAction(engagementId); const linked = ev.filter(e => e.linkedEntities.some(le => le.targetId === finding.id || le.targetType === 'finding')); setLinkedEvidence(linked); setShowLinkedEvidence(finding) } catch {} finally { setLoadingLinked(false) } }}><FileText className="size-3 me-1" />{t("evidenceCount", { count: finding.relatedEvidenceIds?.length ?? 0 })}</Button>
+                            <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setLoadingLinkedRecs(true); try { const r = await getRecommendationsAction(engagementId); const recs = r.filter(re => re.findingId === finding.id); setLinkedRecs(recs); setShowLinkedRecs(finding) } catch {} finally { setLoadingLinkedRecs(false) } }}><ListChecks className="size-3 me-1" />{t("recommendations")}</Button>
                             <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setTraceFinding(finding); try { const trace = await getTraceabilityAction(engagementId, 'finding', finding.id); setTraceData({ forward: trace.forwardTrace ?? [], backward: trace.backwardTrace ?? [] }) } catch { setTraceData({ forward: [], backward: [] }) }; setTraceabilityOpen(true) }}>
-                              <Share2 className="size-3 ml-1" />{t("traceability")}
+                              <Share2 className="size-3 me-1" />{t("traceability")}
                             </Button>
-                            {finding.aiSuggested && <Badge variant="outline" className="bg-purple-100 text-purple-700"><Sparkles className="size-3 ml-1" />{t("aiSuggested")}</Badge>}
+                            {finding.aiSuggested && <Badge variant="outline" className="bg-purple-100 text-purple-700"><Sparkles className="size-3 me-1" />{t("aiSuggested")}</Badge>}
                           </div>
                           {finding.aiSuggested && (
                             <div className="mt-2 rounded border border-purple-200 bg-purple-50 p-2 text-xs text-purple-700">
@@ -290,7 +290,7 @@ export default function FindingsPage() {
                 setFindHasMore(r.hasMore)
               } catch {} finally { setLoadingFindMore(false) }
             }}>
-              {loadingFindMore ? <Loader2 className="size-4 ml-1 animate-spin" /> : <RefreshCw className="size-4 ml-1" />}
+              {loadingFindMore ? <Loader2 className="size-4 me-1 animate-spin" /> : <RefreshCw className="size-4 me-1" />}
               {t("loadMore", { remaining: findTotal - findings.length })}
             </Button>
           </div>

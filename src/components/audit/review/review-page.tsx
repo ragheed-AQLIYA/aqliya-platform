@@ -156,7 +156,7 @@ export default function ReviewPage() {
             </div>
             <div className="flex flex-col gap-1 pt-5">
               <Button size="sm" onClick={handleAddComment} disabled={!newComment.trim() || sending}>
-                <Send className="size-4 ml-1" />{sending ? t("sending") : t("send")}
+                <Send className="size-4 me-1" />{sending ? t("sending") : t("send")}
               </Button>
             </div>
           </div>
@@ -216,13 +216,13 @@ function ReviewCommentCard({ comment, targetLabel, onTrace, onResolve }: { comme
             )}
             {comment.status === "open" && (
               <div className="flex items-center gap-1 mt-2">
-                <Button size="xs" variant="outline" className="text-green-600 border-green-300" onClick={(e) => { e.stopPropagation(); onResolve?.(comment) }}><CheckCircle className="size-3 ml-1" />{t("resolve")}</Button>
-                <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(comment) }}><Share2 className="size-3 ml-1" />{t("trace")}</Button>
+                <Button size="xs" variant="outline" className="text-green-600 border-green-300" onClick={(e) => { e.stopPropagation(); onResolve?.(comment) }}><CheckCircle className="size-3 me-1" />{t("resolve")}</Button>
+                <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(comment) }}><Share2 className="size-3 me-1" />{t("trace")}</Button>
               </div>
             )}
             {comment.status !== "open" && (
               <div className="flex items-center gap-1 mt-2">
-                <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(comment) }}><Share2 className="size-3 ml-1" />{t("trace")}</Button>
+                <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(comment) }}><Share2 className="size-3 me-1" />{t("trace")}</Button>
               </div>
             )}
           </div>

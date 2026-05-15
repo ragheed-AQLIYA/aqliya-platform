@@ -86,7 +86,7 @@ export default function RecommendationsPage() {
           <Button variant="outline" size="sm" disabled={generatingRecDrafts} onClick={async () => { setGeneratingRecDrafts(true); try { const r = await generateRecommendationDraftsAction(engagementId); setAiDrafts(prev => [...r, ...prev]) } catch {} finally { setGeneratingRecDrafts(false) } }} className="gap-1.5">
             {generatingRecDrafts ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />}{t("generateDrafts")}
           </Button>
-          <Button onClick={() => setShowCreate(true)}><Plus className="size-4 ml-1" />{t("newRecommendation")}</Button>
+          <Button onClick={() => setShowCreate(true)}><Plus className="size-4 me-1" />{t("newRecommendation")}</Button>
         </div>
       </div>
 
@@ -190,7 +190,7 @@ export default function RecommendationsPage() {
                           </div>
                           <div className="flex gap-2 pt-1">
                             <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setTraceRec(rec); try { const trace = await getTraceabilityAction(engagementId, 'recommendation', rec.id); setTraceData({ forward: trace.forwardTrace ?? [], backward: trace.backwardTrace ?? [] }) } catch { setTraceData({ forward: [], backward: [] }) }; setTraceabilityOpen(true) }}>
-                              <Share2 className="size-3 ml-1" />{t("traceability")}
+                              <Share2 className="size-3 me-1" />{t("traceability")}
                             </Button>
                           </div>
                           {rec.aiContributed && (
@@ -198,9 +198,9 @@ export default function RecommendationsPage() {
                               <div className="flex items-center justify-between">
                                 <span className="flex items-center gap-1 text-xs font-medium text-purple-700"><Sparkles className="size-3" />{t("aiSuggestion")}</span>
                                   <div className="flex items-center gap-1">
-                                    <Button size="xs" variant="outline" className="text-green-600 border-green-300" disabled={rec.status === 'accepted' || rec.status === 'rejected'} onClick={async (e) => { e.stopPropagation(); try { const r = await updateRecommendationStatusAction(rec.id, 'accepted', engagementId); if (r.recommendation) setRecommendations(prev => prev.map(rr => rr.id === rec.id ? { ...rr, status: 'accepted' } : rr)) } catch {} }}><CheckCircle className="size-3 ml-1" />{t("accept")}</Button>
-                                    <Button size="xs" variant="outline" className="text-red-600 border-red-300" disabled={rec.status === 'accepted' || rec.status === 'rejected'} onClick={async (e) => { e.stopPropagation(); try { const r = await updateRecommendationStatusAction(rec.id, 'rejected', engagementId, 'Rejected by reviewer'); if (r.recommendation) setRecommendations(prev => prev.map(rr => rr.id === rec.id ? { ...rr, status: 'rejected' } : rr)) } catch {} }}><XCircle className="size-3 ml-1" />{t("reject")}</Button>
-                                    <Button size="xs" variant="outline"><Edit3 className="size-3 ml-1" />{t("edit")}</Button>
+                                    <Button size="xs" variant="outline" className="text-green-600 border-green-300" disabled={rec.status === 'accepted' || rec.status === 'rejected'} onClick={async (e) => { e.stopPropagation(); try { const r = await updateRecommendationStatusAction(rec.id, 'accepted', engagementId); if (r.recommendation) setRecommendations(prev => prev.map(rr => rr.id === rec.id ? { ...rr, status: 'accepted' } : rr)) } catch {} }}><CheckCircle className="size-3 me-1" />{t("accept")}</Button>
+                                    <Button size="xs" variant="outline" className="text-red-600 border-red-300" disabled={rec.status === 'accepted' || rec.status === 'rejected'} onClick={async (e) => { e.stopPropagation(); try { const r = await updateRecommendationStatusAction(rec.id, 'rejected', engagementId, 'Rejected by reviewer'); if (r.recommendation) setRecommendations(prev => prev.map(rr => rr.id === rec.id ? { ...rr, status: 'rejected' } : rr)) } catch {} }}><XCircle className="size-3 me-1" />{t("reject")}</Button>
+                                    <Button size="xs" variant="outline"><Edit3 className="size-3 me-1" />{t("edit")}</Button>
                                   </div>
                               </div>
                               <p className="text-xs text-purple-900">{rec.description}</p>
@@ -227,7 +227,7 @@ export default function RecommendationsPage() {
                 setRecHasMore(r.hasMore)
               } catch {} finally { setLoadingRecMore(false) }
             }}>
-              {loadingRecMore ? <Loader2 className="size-4 ml-1 animate-spin" /> : <RefreshCw className="size-4 ml-1" />}
+              {loadingRecMore ? <Loader2 className="size-4 me-1 animate-spin" /> : <RefreshCw className="size-4 me-1" />}
               {t("loadMore", { remaining: recTotal - recommendations.length })}
             </Button>
           </div>

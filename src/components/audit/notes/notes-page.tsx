@@ -128,7 +128,7 @@ export default function NotesPage() {
         ))}
         <div className="ml-auto flex items-center gap-2">
           <Button variant={showMissing ? "default" : "outline"} size="sm" onClick={() => setShowMissing(!showMissing)}>
-            <AlertTriangle className="size-3 ml-1" />{t("missingInfo")}
+            <AlertTriangle className="size-3 me-1" />{t("missingInfo")}
           </Button>
           <Button variant="outline" size="sm" onClick={handleGenerateDrafts} disabled={generating} className="gap-1.5">
             {generating ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />}
@@ -186,7 +186,7 @@ export default function NotesPage() {
                           <div className="flex items-center gap-1 mt-1 flex-wrap">
                             {(parsed.missingInformation as string[]).map((mi: string, i: number) => (
                               <Badge key={i} variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-[10px]">
-                                <AlertTriangle className="size-2.5 ml-0.5" />{mi}
+                                <AlertTriangle className="size-2.5 me-0.5" />{mi}
                               </Badge>
                             ))}
                           </div>
@@ -314,7 +314,7 @@ function NoteCard({ note, expanded, onToggle, onTrace, onStatusChange }: { note:
               <div className="flex items-center gap-1 mt-2 flex-wrap">
                 {note.missingInformation.slice(0, 2).map((mi, i) => (
                   <Badge key={i} variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-[10px]">
-                    <AlertTriangle className="size-2.5 ml-0.5" />{mi}
+                    <AlertTriangle className="size-2.5 me-0.5" />{mi}
                   </Badge>
                 ))}
                 {note.missingInformation.length > 2 && (
@@ -329,19 +329,19 @@ function NoteCard({ note, expanded, onToggle, onTrace, onStatusChange }: { note:
           <div className="mt-4 space-y-3 border-t pt-3">
             {note.status === "approved" ? (
               <div className="rounded border border-green-200 bg-green-50/60 p-2 text-xs text-green-800">
-                <CheckCircle2 className="inline size-3 ml-1" />{t("approvedMessage")}
+                <CheckCircle2 className="inline size-3 me-1" />{t("approvedMessage")}
               </div>
             ) : note.status === "rejected" ? (
               <div className="rounded border border-red-200 bg-red-50/60 p-2 text-xs text-red-800">
-                <XCircle className="inline size-3 ml-1" />{t("rejectedMessage")}
+                <XCircle className="inline size-3 me-1" />{t("rejectedMessage")}
               </div>
             ) : note.status === "reviewed" ? (
               <div className="rounded border border-blue-200 bg-blue-50/60 p-2 text-xs text-blue-800">
-                <Eye className="inline size-3 ml-1" />{t("reviewedMessage")}
+                <Eye className="inline size-3 me-1" />{t("reviewedMessage")}
               </div>
             ) : (
               <div className="rounded border border-amber-200 bg-amber-50/60 p-2 text-xs text-amber-800">
-                <ShieldCheck className="inline size-3 ml-1" />{t("draftMessage")}
+                <ShieldCheck className="inline size-3 me-1" />{t("draftMessage")}
               </div>
             )}
             <div className="text-sm leading-relaxed whitespace-pre-wrap">{note.content}</div>
@@ -383,17 +383,17 @@ function NoteCard({ note, expanded, onToggle, onTrace, onStatusChange }: { note:
                 <div className="flex items-center gap-2 flex-wrap">
                   {note.status !== "reviewed" && (
                     <Button size="xs" variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50" onClick={(e) => { e.stopPropagation(); handleStatusAction("reviewed") }} disabled={submittingStatus !== null}>
-                      {submittingStatus === "reviewed" ? <Loader2 className="size-3 ml-1 animate-spin" /> : <Eye className="size-3 ml-1" />}{t("markReviewed")}
+                      {submittingStatus === "reviewed" ? <Loader2 className="size-3 me-1 animate-spin" /> : <Eye className="size-3 me-1" />}{t("markReviewed")}
                     </Button>
                   )}
                   <Button size="xs" variant="outline" className="border-green-300 text-green-700 hover:bg-green-50" onClick={(e) => { e.stopPropagation(); handleStatusAction("approved") }} disabled={submittingStatus !== null}>
-                      {submittingStatus === "approved" ? <Loader2 className="size-3 ml-1 animate-spin" /> : <CheckCircle2 className="size-3 ml-1" />}{t("approve")}
+                      {submittingStatus === "approved" ? <Loader2 className="size-3 me-1 animate-spin" /> : <CheckCircle2 className="size-3 me-1" />}{t("approve")}
                   </Button>
                   <Button size="xs" variant="outline" className="border-red-300 text-red-700 hover:bg-red-50" onClick={(e) => { e.stopPropagation(); handleStatusAction("rejected") }} disabled={submittingStatus !== null}>
-                      {submittingStatus === "rejected" ? <Loader2 className="size-3 ml-1 animate-spin" /> : <ThumbsDown className="size-3 ml-1" />}{t("reject")}
+                      {submittingStatus === "rejected" ? <Loader2 className="size-3 me-1 animate-spin" /> : <ThumbsDown className="size-3 me-1" />}{t("reject")}
                   </Button>
                   <Button size="xs" variant="outline" className="border-amber-300 text-amber-700 hover:bg-amber-50" onClick={(e) => { e.stopPropagation(); handleStatusAction("needs_info") }} disabled={submittingStatus !== null}>
-                      {submittingStatus === "needs_info" ? <Loader2 className="size-3 ml-1 animate-spin" /> : <Info className="size-3 ml-1" />}{t("requestInfo")}
+                      {submittingStatus === "needs_info" ? <Loader2 className="size-3 me-1 animate-spin" /> : <Info className="size-3 me-1" />}{t("requestInfo")}
                   </Button>
                 </div>
                 <div className="flex gap-2">
@@ -432,7 +432,7 @@ function NoteCard({ note, expanded, onToggle, onTrace, onStatusChange }: { note:
 
             <div className="flex items-center gap-2 mt-2">
               <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(note) }}>
-                <Share2 className="size-3 ml-1" />{t("traceability")}
+                <Share2 className="size-3 me-1" />{t("traceability")}
               </Button>
             </div>
             <div className="text-xs text-muted-foreground">{t("updated")} {new Date(note.updatedAt).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>

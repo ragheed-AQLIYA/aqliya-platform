@@ -70,7 +70,7 @@ export default function ApprovalPage() {
           <div className="flex items-center gap-2">
             {canApprove && (
               <>
-                <Button variant="outline" className="text-red-600 border-red-300" onClick={() => setShowRejectDialog(true)} disabled={approving}><XCircle className="size-4 ml-1" />{t("reject")}</Button>
+                <Button variant="outline" className="text-red-600 border-red-300" onClick={() => setShowRejectDialog(true)} disabled={approving}><XCircle className="size-4 me-1" />{t("reject")}</Button>
                 <Button disabled={approving} onClick={async () => {
                   setApproving(true); setApproveError(null)
                   try {
@@ -78,10 +78,10 @@ export default function ApprovalPage() {
                     if (result.record) setRecords(prev => [...prev, result.record])
                     setApprovalInfo({ status: 'approved', blockingIssues: [], checklist: approvalInfo.checklist.map(c => ({ ...c, passed: true })) })
                   } catch { setApproveError(t("approveFailed")) } finally { setApproving(false) }
-                }}>{approving ? t("approving") : <><CheckCircle className="size-4 ml-1" />{t("approve")}</>}</Button>
+                }}>{approving ? t("approving") : <><CheckCircle className="size-4 me-1" />{t("approve")}</>}</Button>
               </>
             )}
-            {isApproved && <Badge variant="outline" className="bg-green-100 text-green-700"><CheckCircle className="size-3 ml-1" />{t("statusApproved")}</Badge>}
+            {isApproved && <Badge variant="outline" className="bg-green-100 text-green-700"><CheckCircle className="size-3 me-1" />{t("statusApproved")}</Badge>}
           </div>
           {approveError && <div className="mt-2 flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"><AlertTriangle className="size-4 shrink-0" /><span>{approveError}</span></div>}
         </CardHeader>

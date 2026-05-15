@@ -48,7 +48,7 @@ export default function TrialBalancePage() {
     <div className="space-y-4">
       <Card><CardContent className="p-6 text-center text-muted-foreground">{t("notFound")}</CardContent></Card>
       <div className="flex justify-center">
-        <Button onClick={() => setShowUpload(true)}><Upload className="size-4 ml-1" />{t("uploadButton")}</Button>
+        <Button onClick={() => setShowUpload(true)}><Upload className="size-4 me-1" />{t("uploadButton")}</Button>
       </div>
       <TrialBalanceUpload open={showUpload} onClose={() => setShowUpload(false)} engagementId={engagementId} onComplete={handleUploadComplete} />
     </div>
@@ -78,7 +78,7 @@ export default function TrialBalancePage() {
           <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => setShowUpload(true)}><Upload className="size-4 ml-1" />{t("upload")}</Button>
+        <Button variant="outline" size="sm" onClick={() => setShowUpload(true)}><Upload className="size-4 me-1" />{t("upload")}</Button>
       </div>
 
       <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-4 py-2 rounded-lg">

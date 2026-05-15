@@ -176,7 +176,7 @@ function downloadJSON(data: unknown, filename: string) {
           </div>
         ) : isReady ? (
           <Button size="lg" disabled={publishing} onClick={handlePublish}>
-            {publishing ? <Loader2 className="size-4 ml-2 animate-spin" /> : <Send className="size-4 ml-2" />}
+            {publishing ? <Loader2 className="size-4 me-2 animate-spin" /> : <Send className="size-4 me-2" />}
             {publishing ? t("publishing") : t("publish")}
           </Button>
         ) : !isReady && pkg.status !== "published" && (

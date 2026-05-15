@@ -90,7 +90,7 @@ export function RecentActivity({ events }: RecentActivityProps) {
 
   return (
     <div className="relative">
-      <div className="absolute left-4 top-0 h-full w-px bg-border" />
+      <div className="absolute start-4 top-0 h-full w-px bg-border" />
       <div className="space-y-0">
         {events.map((event, index) => (
           <div key={event.id} className="relative flex gap-4 pb-6 last:pb-0">

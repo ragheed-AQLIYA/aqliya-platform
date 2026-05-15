@@ -91,7 +91,7 @@ export default function ValidationPage() {
             {generatingReview ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} {t("analyticalReview")}
           </Button>
           <Button variant="outline" onClick={handleRunValidation} disabled={running}>
-            <RotateCcw className={`size-4 ml-1 ${running ? "animate-spin" : ""}`} />
+            <RotateCcw className={`size-4 me-1 ${running ? "animate-spin" : ""}`} />
             {running ? t("running") : t("runValidation")}
           </Button>
         </div>
@@ -143,7 +143,7 @@ export default function ValidationPage() {
             <CardDescription>
               <span className="flex items-center gap-2 mt-1">
                 <Badge variant="outline" className={trustColors[validation.trustState]}>
-                  <AlertTriangle className="size-3 ml-1" />{t("trustState")} {validation.trustState}
+                  <AlertTriangle className="size-3 me-1" />{t("trustState")} {validation.trustState}
                 </Badge>
                 <span className="text-sm">
                   {errors.length > 0 && <span className="text-red-600">{errors.length} {t("errors")}</span>}

@@ -101,7 +101,7 @@ export default function EvidencePage() {
         <Button variant="outline" size="sm" onClick={async () => { setSuggesting(true); try { const result = await generateEvidenceSuggestionsAction(engagementId); setAiSuggestions(prev => [...result, ...prev]) } catch {} finally { setSuggesting(false) } }} disabled={suggesting} className="gap-1.5">
           {suggesting ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} {t("suggestEvidence")}
         </Button>
-        <Button onClick={() => setShowRequest(true)}><Upload className="size-4 ml-1" />{t("requestEvidence")}</Button>
+        <Button onClick={() => setShowRequest(true)}><Upload className="size-4 me-1" />{t("requestEvidence")}</Button>
         </div>
 
       {aiSuggestions.length > 0 && (
@@ -231,7 +231,7 @@ export default function EvidencePage() {
                 setEvHasMore(r.hasMore)
               } catch {} finally { setLoadingMore(false) }
             }}>
-              {loadingMore ? <Loader2 className="size-4 ml-1 animate-spin" /> : <RefreshCw className="size-4 ml-1" />}
+              {loadingMore ? <Loader2 className="size-4 me-1 animate-spin" /> : <RefreshCw className="size-4 me-1" />}
               {t("loadMore", { remaining: evTotal - evidence.length })}
             </Button>
           </div>
@@ -318,7 +318,7 @@ export default function EvidencePage() {
 
       {selectedEv && (
         <div className="fixed inset-0 z-50 bg-black/20" onClick={() => setSelectedEv(null)}>
-          <div className="absolute left-0 top-0 bottom-0 w-96 bg-background shadow-xl border-r p-6 overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div className="absolute start-0 top-0 bottom-0 w-96 bg-background shadow-xl border-r p-6 overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-sm">{t("evidenceDetails")}</h3>
               <Button variant="ghost" size="icon" onClick={() => setSelectedEv(null)}><XCircle className="size-4" /></Button>
@@ -338,7 +338,7 @@ export default function EvidencePage() {
                   setTraceEvOpen(true)
                 }}
               >
-                <ExternalLink className="size-3 ml-1" />{t("showTraceability")}
+                <ExternalLink className="size-3 me-1" />{t("showTraceability")}
               </Button>
               <TraceabilityDrawer
                 open={traceEvOpen}
@@ -394,7 +394,7 @@ export default function EvidencePage() {
               {(selectedEv.state === 'missing' || selectedEv.state === 'requested') && (
                 <>
                   <Button size="sm" className="w-full" disabled={uploadingId === selectedEv.id} onClick={() => { setUploadTargetId(selectedEv.id); fileInputRef.current?.click() }}>
-                    {uploadingId === selectedEv.id ? <Loader2 className="size-4 ml-1 animate-spin" /> : <Upload className="size-4 ml-1" />}
+                    {uploadingId === selectedEv.id ? <Loader2 className="size-4 me-1 animate-spin" /> : <Upload className="size-4 me-1" />}
                     {uploadingId === selectedEv.id ? t("uploading") : t("uploadFile")}
                   </Button>
                   <input ref={fileInputRef} type="file" className="hidden" onChange={async (e) => {
@@ -422,23 +422,23 @@ export default function EvidencePage() {
                     if (info) window.open(info.url, '_blank')
                   } catch { setActionError(t("downloadFailed")) }
                 }}>
-                  <FileText className="size-4 ml-1" />{t("download", { hash: selectedEv.fileHash.substring(0, 8) })}
+                  <FileText className="size-4 me-1" />{t("download", { hash: selectedEv.fileHash.substring(0, 8) })}
                 </Button>
               )}
               {actionError && <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700"><AlertTriangle className="size-3 shrink-0" /><span>{actionError}</span></div>}
               <div className="flex gap-2 pt-2">
                 <Button size="sm" variant="outline" className="flex-1" onClick={async () => { setLinkTargetId(''); setLinkTargetType('finding'); try { const f = await getFindingsAction(engagementId); setFindingsList(f) } catch {} setShowLinkDialog(true) }}>
-                  <Link className="size-4 ml-1" />{t("linkToFinding")}
+                  <Link className="size-4 me-1" />{t("linkToFinding")}
                 </Button>
                 <Button size="sm" variant="outline" className="flex-1" disabled={selectedEv.state === 'accepted' || selectedEv.state === 'rejected'} onClick={async () => {
                   setActionError(null)
                   try { const result = await updateEvidenceStateWithEventAction(selectedEv.id, 'accepted', engagementId); if (result.evidence) { setEvidence(prev => prev.map(e => e.id === selectedEv.id ? { ...e, state: 'accepted' } : e)); setSelectedEv({ ...selectedEv, state: 'accepted' }) }                   } catch { setActionError(t("verifyFailed")) } }}>
-                  <CheckCircle className="size-4 ml-1" />{t("verify")}
+                  <CheckCircle className="size-4 me-1" />{t("verify")}
                 </Button>
                 <Button size="sm" variant="outline" className="flex-1" disabled={selectedEv.state === 'accepted' || selectedEv.state === 'rejected'} onClick={async () => {
                   setActionError(null)
                   try { const result = await updateEvidenceStateWithEventAction(selectedEv.id, 'reviewed', engagementId); if (result.evidence) { setEvidence(prev => prev.map(e => e.id === selectedEv.id ? { ...e, state: 'reviewed' } : e)); setSelectedEv({ ...selectedEv, state: 'reviewed' }) }                 } catch { setActionError(t("updateFailed")) } }}>
-                  <Link className="size-4 ml-1" />{t("markReviewed")}
+                  <Link className="size-4 me-1" />{t("markReviewed")}
                 </Button>
               </div>
             </div>

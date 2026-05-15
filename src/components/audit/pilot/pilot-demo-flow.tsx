@@ -292,7 +292,7 @@ export default function PilotDemoFlow() {
                       className="shrink-0 mt-1 sm:mt-0"
                       onClick={(e) => { e.stopPropagation(); window.location.href = stepHref }}
                     >
-                      <ExternalLink className="size-3 ml-1" />فتح
+                      <ExternalLink className="size-3 me-1" />فتح
                     </Button>
                   </div>
 
@@ -301,7 +301,7 @@ export default function PilotDemoFlow() {
                     <div className="mt-3 pt-3 border-t space-y-2">
                       <div className="rounded border border-blue-100 bg-blue-50/60 p-2">
                         <p className="text-[11px] text-blue-800 break-words">
-                          <ShieldCheck className="inline size-3 ml-1" />
+                          <ShieldCheck className="inline size-3 me-1" />
                           <span className="font-medium">نقطة الثقة:</span> {step.trustCheckpoint}
                         </p>
                       </div>

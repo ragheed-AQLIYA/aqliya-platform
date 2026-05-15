@@ -94,7 +94,7 @@ export default function AuditTrailPage() {
 
       <div className="flex items-center gap-2 flex-wrap">
         <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
+          <Search className="absolute start-2.5 top-2.5 size-4 text-muted-foreground" />
           <Input placeholder={t("searchPlaceholder")} className="pr-8" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <Select value={typeFilter} onValueChange={(v) => { if (v !== null) { setTypeFilter(v) } }}>
@@ -117,11 +117,11 @@ export default function AuditTrailPage() {
       <Card>
         <CardContent className="p-0">
           <div className="relative">
-            <div className="absolute left-6 top-0 bottom-0 w-px bg-border hidden md:block" />
+            <div className="absolute start-6 top-0 bottom-0 w-px bg-border hidden md:block" />
             <div className="divide-y">
               {paged.map(ev => (
                 <div key={ev.id} className="relative md:pl-14 p-4 hover:bg-muted/20">
-                  <div className="hidden md:flex absolute left-3 top-5 w-2 h-2 rounded-full bg-muted-foreground/30 ring-2 ring-background" />
+                  <div className="hidden md:flex absolute start-3 top-5 w-2 h-2 rounded-full bg-muted-foreground/30 ring-2 ring-background" />
                   <div className="flex items-start gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">

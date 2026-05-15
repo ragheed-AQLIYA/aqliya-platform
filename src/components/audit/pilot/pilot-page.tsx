@@ -198,7 +198,7 @@ function PilotPageContent() {
             <MessageSquare className="size-4 shrink-0" />
             {t("feedbackBoard")}
           </CardTitle>
-          <Button size="sm" className="self-start sm:self-auto" onClick={() => setShowFeedbackDialog(true)}><Plus className="size-3 ml-1" />{t("addFeedback")}</Button>
+          <Button size="sm" className="self-start sm:self-auto" onClick={() => setShowFeedbackDialog(true)}><Plus className="size-3 me-1" />{t("addFeedback")}</Button>
         </CardHeader>
         <CardContent className="pt-3 px-3 sm:px-4">
           <div className="flex flex-wrap items-center gap-2 mb-3">

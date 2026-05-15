@@ -32,7 +32,7 @@ export function EngagementHeader({ engagement, status }: EngagementHeaderProps) 
   const statusConfig = statusLabels[engagement.status] || { label: engagement.status, variant: "secondary" as const }
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border bg-card p-6">
+    <div className="flex flex-col gap-4 rounded-xl border bg-card p-6" dir="rtl">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
@@ -47,11 +47,11 @@ export function EngagementHeader({ engagement, status }: EngagementHeaderProps) 
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
-            <Settings className="ml-1 h-4 w-4" />
+            <Settings className="me-1 h-4 w-4" />
             الإعدادات
           </Button>
           <Button variant="outline" size="sm">
-            <ExternalLink className="ml-1 h-4 w-4" />
+            <ExternalLink className="me-1 h-4 w-4" />
             فتح
           </Button>
           <Button variant="ghost" size="icon">

@@ -32,12 +32,12 @@ export function AuditErrorCard({
       <div className="flex gap-2">
         {onRetry && (
           <Button variant="outline" size="sm" onClick={onRetry}>
-            <RefreshCw className="size-4 ml-1" />إعادة المحاولة
+            <RefreshCw className="size-4 me-1" />إعادة المحاولة
           </Button>
         )}
         {onBack && (
           <Button variant="ghost" size="sm" onClick={onBack}>
-            <ArrowLeft className="size-4 ml-1" />العودة
+            <ArrowLeft className="size-4 me-1" />العودة
           </Button>
         )}
       </div>

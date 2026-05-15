@@ -45,7 +45,7 @@ function AiBadge({
       {showDetails && (modelVersion || confidence !== undefined) && (
         <span
           className={cn(
-            "absolute top-full left-0 mt-1 z-10 rounded-md border border-purple-200 bg-white px-2 py-1 text-[10px] text-purple-600 shadow-sm dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300",
+            "absolute top-full start-0 mt-1 z-10 rounded-md border border-purple-200 bg-white px-2 py-1 text-[10px] text-purple-600 shadow-sm dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300",
             "whitespace-nowrap"
           )}
         >
