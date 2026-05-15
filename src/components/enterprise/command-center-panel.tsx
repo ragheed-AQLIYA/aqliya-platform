@@ -5,20 +5,19 @@ interface CommandCenterPanelProps {
 }
 
 const layers = [
-  { id: "intake", label: "Data Intake", status: "active", count: "12 source" },
-  { id: "workflow", label: "Workflow Engine", status: "active", count: "8 paths" },
-  { id: "intelligence", label: "Intelligence Layer", status: "active", count: "5 models" },
-  { id: "review", label: "Review Layer", status: "active", count: "3 points" },
-  { id: "decision", label: "Decision Log", status: "active", count: "2 outputs" },
-  { id: "evidence", label: "Evidence Trail", status: "active", count: "6 links" },
-  { id: "reports", label: "Output Reports", status: "active", count: "4 ready" },
+  { id: "workflows", label: "Workflows", status: "active", count: "مسارات" },
+  { id: "data", label: "Data", status: "active", count: "بيانات" },
+  { id: "rules", label: "Rules", status: "active", count: "قواعد" },
+  { id: "outputs", label: "Outputs", status: "active", count: "مخرجات" },
+  { id: "review", label: "Review", status: "active", count: "مراجعة" },
+  { id: "decisions", label: "Decisions", status: "active", count: "قرارات" },
 ]
 
 const metrics = [
-  { label: "processed accounts", value: "22" },
-  { label: "trace events", value: "16" },
-  { label: "generated outputs", value: "7" },
-  { label: "human review required", value: "1" },
+  { label: "سير عمل مصمم", value: "✓" },
+  { label: "مخرجات منظمة", value: "✓" },
+  { label: "قرارات قابلة للتتبع", value: "✓" },
+  { label: "أنظمة قابلة للتخصيص", value: "✓" },
 ]
 
 export function CommandCenterPanel({ className }: CommandCenterPanelProps) {
@@ -28,7 +27,7 @@ export function CommandCenterPanel({ className }: CommandCenterPanelProps) {
       <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-[#137dc5] animate-pulse" />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50">AQLIYA Operating System</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50">AQLIYA Enterprise Systems</span>
         </div>
         <div className="flex items-center gap-3 text-[10px] text-white/40">
           <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-[#137dc5]" /> Active</span>

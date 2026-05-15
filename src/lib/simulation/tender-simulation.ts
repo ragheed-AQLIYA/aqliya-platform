@@ -41,7 +41,7 @@ export function calculateFinancialScore(
   scenarioType: 'BEST_CASE' | 'EXPECTED_CASE' | 'WORST_CASE'
 ): number {
   // Base financial score from margin
-  let marginScore = Math.min(marginEstimate * 5, 100); // 20% margin = 100 score
+  const marginScore = Math.min(marginEstimate * 5, 100); // 20% margin = 100 score
 
   // Scenario adjustments
   const scenarioMultiplier = {

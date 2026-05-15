@@ -85,12 +85,20 @@ export async function getDecisionById(id: string) {
   }
 }
 
+const VALID_DECISION_TYPES = ["TENDER", "INVESTMENT", "EXPANSION", "PROCUREMENT", "HIRING", "PARTNERSHIP", "PRICING", "STRATEGIC", "OPERATIONS", "CUSTOM"] as const
+type ValidDecisionType = typeof VALID_DECISION_TYPES[number]
+
+function isValidDecisionType(type: string): type is ValidDecisionType {
+  return (VALID_DECISION_TYPES as readonly string[]).includes(type)
+}
+
 // --- Create Decision ---
 export async function createDecision(data: {
   title: string
   type?: string
-  ownerId: string
-  organizationId: string
+  description?: string
+  priority?: string
+  targetDate?: string
   objectives?: string
   constraints?: string
   assumptions?: string
@@ -98,16 +106,43 @@ export async function createDecision(data: {
   risks?: string
 }) {
   try {
-    await requireUserContext("OPERATOR")
+    const user = await requireUserContext("OPERATOR")
+
+    if (!data.title || data.title.trim().length === 0) {
+      return { success: false, error: "Decision title is required" }
+    }
+
+    const decisionType = data.type || "TENDER"
+    if (!isValidDecisionType(decisionType)) {
+      return { success: false, error: `Invalid decision type: ${data.type}` }
+    }
+
+    const targetDate = data.targetDate ? new Date(data.targetDate) : undefined
+
     const decision = await prisma.decision.create({
       data: {
-        title: data.title,
-        type: (data.type as "TENDER") || "TENDER",
-        ownerId: data.ownerId,
-        organizationId: data.organizationId,
+        title: data.title.trim(),
+        type: decisionType,
+        description: data.description?.trim() || null,
+        priority: data.priority || "MEDIUM",
+        targetDate,
+        ownerId: user.id,
+        organizationId: user.organizationId,
         status: "DRAFT",
       },
     })
+
+    await prisma.auditLog.create({
+      data: {
+        userId: user.id,
+        decisionId: decision.id,
+        organizationId: user.organizationId,
+        action: "DECISION_CREATED",
+        entity: "Decision",
+        after: JSON.stringify({ title: decision.title, type: decision.type }),
+      },
+    })
+
     return { success: true, data: decision }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
@@ -142,6 +177,7 @@ export async function getDecisionFramework(id: string) {
       where: { id },
       select: {
         title: true,
+        type: true,
         objectives: true,
         alternatives: true,
         risks: true,
@@ -156,7 +192,7 @@ export async function getDecisionFramework(id: string) {
       risks: decision.risks,
     })
     const frameworkState = evaluateFramework(decision.framework)
-    return { success: true, data: { framework: decision.framework, intake, frameworkState } }
+    return { success: true, data: { type: decision.type, framework: decision.framework, intake, frameworkState } }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
       console.error("Error fetching framework:", error)
@@ -193,6 +229,7 @@ export async function getDecisionIntake(id: string) {
       where: { id },
       select: {
         title: true,
+        type: true,
         objectives: true,
         constraints: true,
         assumptions: true,
@@ -263,6 +300,7 @@ export async function getDecisionScenarios(id: string) {
       where: { id },
       select: {
         title: true,
+        type: true,
         objectives: true,
         alternatives: true,
         risks: true,
@@ -291,7 +329,7 @@ export async function getDecisionScenarios(id: string) {
     }))
     const scenarioState = evaluateScenarios(decision.decisionScenarios)
 
-    return { success: true, data: { intake, frameworkState, scenarioState, scenarioDrafts } }
+    return { success: true, data: { type: decision.type, intake, frameworkState, scenarioState, scenarioDrafts } }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
       console.error("Error fetching scenarios:", error)
@@ -306,7 +344,41 @@ export async function updateDecisionScenarios(
 ) {
   try {
     await requireDecisionAccess(id, "OPERATOR")
-    return { success: true, data: { decisionScenarios: _input.scenarios, scenarioState: { isComplete: true, missingDefaultScenarios: [], incompleteScenarios: [], nextSteps: [] } } }
+    const decision = await prisma.decision.findUnique({
+      where: { id },
+      select: { decisionScenarios: { select: { id: true } } },
+    })
+    const existingIds = new Set(decision?.decisionScenarios.map((s) => s.id) || [])
+    for (const scenario of _input.scenarios) {
+      if (scenario.id && existingIds.has(scenario.id)) {
+        await prisma.decisionScenario.update({
+          where: { id: scenario.id },
+          data: {
+            name: scenario.name,
+            description: scenario.description,
+            assumptions: scenario.assumptions,
+            expectedOutcome: scenario.expectedOutcome,
+            affectedStakeholders: scenario.affectedStakeholders,
+            requiredConditions: scenario.requiredConditions,
+          },
+        })
+      } else {
+        await prisma.decisionScenario.create({
+          data: {
+            decisionId: id,
+            name: scenario.name,
+            description: scenario.description,
+            assumptions: scenario.assumptions,
+            expectedOutcome: scenario.expectedOutcome,
+            affectedStakeholders: scenario.affectedStakeholders,
+            requiredConditions: scenario.requiredConditions,
+          },
+        })
+      }
+    }
+    const updatedScenarios = await prisma.decisionScenario.findMany({ where: { decisionId: id } })
+    const scenarioState = evaluateScenarios(updatedScenarios)
+    return { success: true, data: { decisionScenarios: updatedScenarios, scenarioState } }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
       console.error("Error updating scenarios:", error)
@@ -323,6 +395,7 @@ export async function getDecisionRiskAnalysis(id: string) {
       where: { id },
       select: {
         title: true,
+        type: true,
         objectives: true,
         alternatives: true,
         risks: true,
@@ -357,7 +430,7 @@ export async function getDecisionRiskAnalysis(id: string) {
       uncertaintyLevel: r.uncertaintyLevel,
     }))
 
-    return { success: true, data: { intake, frameworkState, scenarioState, riskAnalysisState, decisionScenarios: decision.decisionScenarios as { id: string; name: string }[], analysisDrafts } }
+    return { success: true, data: { type: decision.type, intake, frameworkState, scenarioState, riskAnalysisState, decisionScenarios: decision.decisionScenarios as { id: string; name: string }[], analysisDrafts } }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
       console.error("Error fetching risks:", error)
@@ -372,7 +445,50 @@ export async function updateDecisionRiskAnalysis(
 ) {
   try {
     await requireDecisionAccess(id, "OPERATOR")
-    return { success: true, data: { riskAnalyses: _input.analyses, riskAnalysisState: { isComplete: true, missingScenarioAnalyses: [], incompleteAnalyses: [], nextSteps: [] } } }
+    for (const analysis of _input.analyses) {
+      const existing = await prisma.decisionRiskAnalysis.findFirst({
+        where: { decisionId: id, scenarioId: analysis.scenarioId },
+      })
+      if (existing) {
+        await prisma.decisionRiskAnalysis.update({
+          where: { id: existing.id },
+          data: {
+            risks: analysis.risks,
+            tradeoffs: analysis.tradeoffs,
+            sacrifices: analysis.sacrifices,
+            opportunityCosts: analysis.opportunityCosts,
+            stakeholderRisks: analysis.stakeholderRisks,
+            operationalRisks: analysis.operationalRisks,
+            strategicRisks: analysis.strategicRisks,
+            knowledgeRisks: analysis.knowledgeRisks,
+            uncertaintyLevel: analysis.uncertaintyLevel,
+          },
+        })
+      } else {
+        await prisma.decisionRiskAnalysis.create({
+          data: {
+            decisionId: id,
+            scenarioId: analysis.scenarioId,
+            risks: analysis.risks,
+            tradeoffs: analysis.tradeoffs,
+            sacrifices: analysis.sacrifices,
+            opportunityCosts: analysis.opportunityCosts,
+            stakeholderRisks: analysis.stakeholderRisks,
+            operationalRisks: analysis.operationalRisks,
+            strategicRisks: analysis.strategicRisks,
+            knowledgeRisks: analysis.knowledgeRisks,
+            uncertaintyLevel: analysis.uncertaintyLevel,
+          },
+        })
+      }
+    }
+    const updatedAnalyses = await prisma.decisionRiskAnalysis.findMany({
+      where: { decisionId: id },
+      include: { scenario: true },
+    })
+    const scenarios = await prisma.decisionScenario.findMany({ where: { decisionId: id } })
+    const riskAnalysisState = evaluateRisks(scenarios, updatedAnalyses)
+    return { success: true, data: { riskAnalyses: updatedAnalyses, riskAnalysisState } }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
       console.error("Error updating risks:", error)
@@ -395,6 +511,7 @@ export async function getDecisionRecommendation(id: string) {
       where: { id },
       select: {
         id: true,
+        type: true,
         recommendation: true,
       },
     })
@@ -408,6 +525,7 @@ export async function getDecisionRecommendation(id: string) {
       data: {
         id: decision.id,
         recommendation: decision.recommendation,
+        decisionType: decision.type,
         currentUserRole: user.role,
       },
     }
@@ -487,9 +605,10 @@ export async function checkRecommendationGate(decisionId: string) {
 }
 
 // --- Publish / Unpublish ---
-export async function publishRecommendationAction(decisionId: string) {
+export async function publishRecommendationAction(decisionId: string, forcePublishCurrent?: boolean) {
   try {
-    await requireDecisionAccess(decisionId, "ADMIN")
+    const access = await requireDecisionAccess(decisionId, "ADMIN")
+    const user = access.user
     const existing = await prisma.recommendation.findUnique({
       where: { decisionId },
     })
@@ -498,28 +617,133 @@ export async function publishRecommendationAction(decisionId: string) {
       return { success: false, error: "Recommendation not found" }
     }
 
+    const latestApproval = await prisma.approval.findFirst({
+      where: { decisionId, status: "APPROVED" },
+      orderBy: { createdAt: "desc" },
+    })
+
+    const hasImmutableSnapshot = !!(latestApproval?.snapshotAction && latestApproval?.snapshotRationale)
+
+    if (hasImmutableSnapshot && latestApproval) {
+      const snapshotDiffers =
+        latestApproval.snapshotAction !== existing.recommendedAction ||
+        latestApproval.snapshotRationale !== existing.rationale
+
+      if (snapshotDiffers && !forcePublishCurrent) {
+        await prisma.auditLog.create({
+          data: {
+            action: "STALE_PUBLISH_BLOCKED",
+            entity: "Recommendation",
+            userId: user.id,
+            organizationId: access.organizationId,
+            decisionId,
+            before: JSON.stringify({ currentVersion: existing.publishedVersion }),
+            after: JSON.stringify({ reason: "Current recommendation differs from approved snapshot", snapshotAction: latestApproval.snapshotAction, currentAction: existing.recommendedAction }),
+          },
+        })
+
+        return {
+          success: false,
+          error: "Current recommendation differs from approved snapshot. Publish the approved version or provide forcePublishCurrent override.",
+          requiresOverride: true,
+          snapshotInfo: {
+            approvedAction: latestApproval.snapshotAction,
+            currentAction: existing.recommendedAction,
+            approvedAt: latestApproval.snapshotCreatedAt,
+            approver: latestApproval.approverId,
+          },
+        }
+      }
+
+      if (snapshotDiffers && forcePublishCurrent) {
+        await prisma.auditLog.create({
+          data: {
+            action: "STALE_PUBLISH_OVERRIDE",
+            entity: "Recommendation",
+            userId: user.id,
+            organizationId: access.organizationId,
+            decisionId,
+            before: JSON.stringify({ snapshotAction: latestApproval.snapshotAction }),
+            after: JSON.stringify({ publishedCurrentInstead: true, currentAction: existing.recommendedAction }),
+          },
+        })
+
+        const recommendation = await prisma.recommendation.update({
+          where: { decisionId },
+          data: {
+            isClientVisible: true,
+            publishedAt: new Date(),
+            publishedById: user.id,
+            publishedVersion: { increment: 1 },
+            publishedFromSnapshot: false,
+            publishedApprovalId: null,
+          },
+        })
+
+        await prisma.auditLog.create({
+          data: {
+            action: "CURRENT_PUBLISHED_WITHOUT_APPROVAL",
+            entity: "Recommendation",
+            userId: user.id,
+            organizationId: access.organizationId,
+            decisionId,
+            after: JSON.stringify({ version: recommendation.publishedVersion, fromSnapshot: false }),
+          },
+        })
+
+        return { success: true, data: recommendation, publishedFromSnapshot: false }
+      }
+
+      const recommendation = await prisma.recommendation.update({
+        where: { decisionId },
+        data: {
+          isClientVisible: true,
+          publishedAt: new Date(),
+          publishedById: user.id,
+          publishedVersion: { increment: 1 },
+          publishedFromSnapshot: true,
+          publishedApprovalId: latestApproval.id,
+        },
+      })
+
+      await prisma.auditLog.create({
+        data: {
+          action: "SNAPSHOT_PUBLISHED",
+          entity: "Recommendation",
+          userId: user.id,
+          organizationId: access.organizationId,
+          decisionId,
+          after: JSON.stringify({ version: recommendation.publishedVersion, approvalId: latestApproval.id, fromSnapshot: true }),
+        },
+      })
+
+      return { success: true, data: recommendation, publishedFromSnapshot: true }
+    }
+
     const recommendation = await prisma.recommendation.update({
       where: { decisionId },
       data: {
         isClientVisible: true,
         publishedAt: new Date(),
-        publishedById: (await getCurrentUser()).id,
+        publishedById: user.id,
         publishedVersion: { increment: 1 },
+        publishedFromSnapshot: false,
+        publishedApprovalId: null,
       },
     })
 
-    // Audit log
     await prisma.auditLog.create({
       data: {
-        action: "OUTPUT_PUBLISHED",
+        action: "CURRENT_PUBLISHED_WITHOUT_APPROVAL",
         entity: "Recommendation",
-        userId: (await getCurrentUser()).id,
-        organizationId: (await requireDecisionAccess(decisionId)).organizationId,
-        decisionId: decisionId,
+        userId: user.id,
+        organizationId: access.organizationId,
+        decisionId,
+        after: JSON.stringify({ version: recommendation.publishedVersion, fromSnapshot: false }),
       },
     })
 
-    return { success: true, data: recommendation }
+    return { success: true, data: recommendation, publishedFromSnapshot: false }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
       console.error("Error publishing recommendation:", error)
@@ -530,22 +754,24 @@ export async function publishRecommendationAction(decisionId: string) {
 
 export async function unpublishRecommendationAction(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "ADMIN")
+    const access = await requireDecisionAccess(decisionId, "ADMIN")
+    const user = access.user
     const recommendation = await prisma.recommendation.update({
       where: { decisionId },
       data: {
         isClientVisible: false,
+        publishedFromSnapshot: false,
+        publishedApprovalId: null,
       },
     })
 
-    // Audit log
     await prisma.auditLog.create({
       data: {
         action: "OUTPUT_UNPUBLISHED",
         entity: "Recommendation",
-        userId: (await getCurrentUser()).id,
-        organizationId: (await requireDecisionAccess(decisionId)).organizationId,
-        decisionId: decisionId,
+        userId: user.id,
+        organizationId: access.organizationId,
+        decisionId,
       },
     })
 
@@ -567,15 +793,22 @@ export async function getPublishedRecommendationViewAction(decisionId: string) {
       select: {
         id: true,
         title: true,
+        type: true,
         organizationId: true,
         recommendation: {
           select: {
             recommendedAction: true,
             rationale: true,
             expectedNextState: true,
+            scopeExclusions: true,
+            assumptionsUsed: true,
+            risksAccepted: true,
+            risksRejected: true,
             isClientVisible: true,
             publishedAt: true,
             publishedVersion: true,
+            publishedFromSnapshot: true,
+            publishedApprovalId: true,
           },
         },
       },
@@ -593,13 +826,77 @@ export async function getPublishedRecommendationViewAction(decisionId: string) {
       return { success: false, error: "Recommendation not available" }
     }
 
+    let contentSource: "approved_snapshot" | "current_recommendation" | "legacy" = "current_recommendation"
+    let snapshotMetadata = null
+
+    if (decision.recommendation.publishedFromSnapshot && decision.recommendation.publishedApprovalId) {
+      const approval = await prisma.approval.findUnique({
+        where: { id: decision.recommendation.publishedApprovalId },
+        select: {
+          snapshotAction: true,
+          snapshotRationale: true,
+          snapshotExpectedNextState: true,
+          snapshotScopeExclusions: true,
+          snapshotAssumptionsUsed: true,
+          snapshotRisksAccepted: true,
+          snapshotRisksRejected: true,
+          snapshotConditions: true,
+          snapshotConfidence: true,
+          snapshotScore: true,
+          snapshotCreatedAt: true,
+          approver: { select: { name: true } },
+        },
+      })
+
+      if (approval?.snapshotAction && approval.snapshotRationale) {
+        contentSource = "approved_snapshot"
+        snapshotMetadata = {
+          approvedAt: approval.snapshotCreatedAt,
+          approver: approval.approver?.name,
+          conditions: approval.snapshotConditions,
+          confidence: approval.snapshotConfidence,
+          score: approval.snapshotScore,
+        }
+      }
+    } else if (decision.recommendation.publishedAt && !decision.recommendation.publishedFromSnapshot) {
+      const latestApproval = await prisma.approval.findFirst({
+        where: { decisionId, status: "APPROVED" },
+        orderBy: { createdAt: "desc" },
+        select: {
+          snapshotAction: true,
+          snapshotRationale: true,
+          snapshotCreatedAt: true,
+          approver: { select: { name: true } },
+        },
+      })
+
+      if (latestApproval?.snapshotAction && latestApproval.snapshotRationale) {
+        const matchesSnapshot =
+          latestApproval.snapshotAction === decision.recommendation.recommendedAction &&
+          latestApproval.snapshotRationale === decision.recommendation.rationale
+
+        if (matchesSnapshot) {
+          contentSource = "approved_snapshot"
+          snapshotMetadata = {
+            approvedAt: latestApproval.snapshotCreatedAt,
+            approver: latestApproval.approver?.name,
+          }
+        }
+      } else if (latestApproval) {
+        contentSource = "legacy"
+      }
+    }
+
     return {
       success: true,
       data: {
         id: decision.id,
         title: decision.title,
         recommendation: decision.recommendation,
+        decisionType: decision.type,
         currentUserRole: user.role,
+        contentSource,
+        snapshotMetadata,
       },
     }
   } catch (error) {
@@ -607,5 +904,253 @@ export async function getPublishedRecommendationViewAction(decisionId: string) {
       console.error("Error fetching published recommendation:", error)
     }
     return { success: false, error: "Failed to fetch published recommendation" }
+  }
+}
+
+// --- Dashboard Metrics ---
+export async function getDashboardMetrics() {
+  try {
+    const user = await getCurrentUser()
+
+    const decisions = await prisma.decision.findMany({
+      where: { organizationId: user.organizationId },
+      include: {
+        owner: true,
+        recommendation: true,
+        approvals: { include: { approver: true } },
+        objectives: true,
+        constraints: true,
+        alternatives: true,
+        risks: true,
+        framework: true,
+        decisionScenarios: true,
+        riskAnalyses: true,
+        outcome: true,
+      },
+      orderBy: { createdAt: "desc" },
+    })
+
+    const totalDecisions = decisions.length
+    const byStatus = decisions.reduce((acc, d) => {
+      acc[d.status] = (acc[d.status] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+
+    const byType = decisions.reduce((acc, d) => {
+      acc[d.type] = (acc[d.type] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+
+    const byPriority = decisions.reduce((acc, d) => {
+      const p = d.priority || "MEDIUM"
+      acc[p] = (acc[p] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+
+    const approvedCount = decisions.filter((d) =>
+      d.approvals.some((a) => a.status === "APPROVED")
+    ).length
+
+    const pendingApproval = decisions.filter((d) =>
+      d.recommendation && !d.approvals.some((a) => a.status === "APPROVED")
+    ).length
+
+    const draftCount = byStatus["DRAFT"] || 0
+    const inProgressCount = totalDecisions - draftCount - approvedCount
+
+    const completionRates = decisions.map((d) => {
+      let stages = 0
+      let complete = 0
+
+      if (d.title) { stages++; complete++ }
+      if (d.objectives.length > 0) { stages++; complete++ }
+      if (d.framework) { stages++; complete++ }
+      if (d.decisionScenarios.length >= 3) { stages++; complete++ }
+      if (d.riskAnalyses.length > 0) { stages++; complete++ }
+      if (d.recommendation) { stages++; complete++ }
+      if (d.approvals.some((a) => a.status === "APPROVED")) { stages++; complete++ }
+
+      return stages > 0 ? (complete / stages) * 100 : 0
+    })
+
+    const avgCompletion = completionRates.length > 0
+      ? Math.round(completionRates.reduce((a, b) => a + b, 0) / completionRates.length)
+      : 0
+
+    const recentDecisions = decisions.slice(0, 5).map((d) => ({
+      id: d.id,
+      title: d.title,
+      type: d.type,
+      status: d.status,
+      priority: d.priority,
+      createdAt: d.createdAt,
+      hasRecommendation: !!d.recommendation,
+      hasApproval: d.approvals.some((a) => a.status === "APPROVED"),
+      stageCount: [
+        !!d.title,
+        d.objectives.length > 0,
+        !!d.framework,
+        d.decisionScenarios.length >= 3,
+        d.riskAnalyses.length > 0,
+        !!d.recommendation,
+        d.approvals.some((a) => a.status === "APPROVED"),
+      ].filter(Boolean).length,
+    }))
+
+    const bottlenecks = decisions.filter((d) => {
+      const hasFramework = !!d.framework
+      const hasScenarios = d.decisionScenarios.length >= 3
+      const hasRisks = d.riskAnalyses.length > 0
+      const hasRecommendation = !!d.recommendation
+      const hasApproval = d.approvals.some((a) => a.status === "APPROVED")
+
+      return (hasFramework && !hasScenarios) ||
+        (hasScenarios && !hasRisks) ||
+        (hasRisks && !hasRecommendation) ||
+        (hasRecommendation && !hasApproval)
+    }).map((d) => {
+      let stage = "Unknown"
+      if (d.framework && d.decisionScenarios.length < 3) stage = "Scenarios"
+      else if (d.decisionScenarios.length >= 3 && d.riskAnalyses.length === 0) stage = "Risk Analysis"
+      else if (d.riskAnalyses.length > 0 && !d.recommendation) stage = "Recommendation"
+      else if (d.recommendation && !d.approvals.some((a) => a.status === "APPROVED")) stage = "Approval"
+      return { id: d.id, title: d.title, stage, priority: d.priority }
+    })
+
+    const outcomeMetrics = {
+      totalOutcomes: decisions.filter((d) => d.outcome).length,
+      byStatus: decisions.filter((d) => d.outcome).reduce((acc, d) => {
+        if (d.outcome) {
+          acc[d.outcome.outcomeStatus] = (acc[d.outcome.outcomeStatus] || 0) + 1
+        }
+        return acc
+      }, {} as Record<string, number>),
+      missingReview: decisions.filter((d) => d.outcome && !d.outcome.reviewedAt).length,
+      reviewedCount: decisions.filter((d) => d.outcome?.reviewedAt).length,
+    }
+
+    return {
+      success: true,
+      data: {
+        totalDecisions,
+        byStatus,
+        byType,
+        byPriority,
+        approvedCount,
+        pendingApproval,
+        draftCount,
+        inProgressCount,
+        avgCompletion,
+        recentDecisions,
+        bottlenecks,
+        outcomeMetrics,
+      },
+    }
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error fetching dashboard metrics:", error)
+    }
+    return { success: false, error: "Failed to fetch dashboard metrics" }
+  }
+}
+
+// --- Workflow Readiness ---
+export async function getWorkflowReadiness(decisionId: string) {
+  try {
+    await requireDecisionAccess(decisionId, "VIEWER")
+
+    const decision = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      include: {
+        objectives: true,
+        constraints: true,
+        assumptions: true,
+        alternatives: true,
+        risks: true,
+        framework: true,
+        decisionScenarios: {
+          include: {
+            riskAnalysis: true,
+          },
+        },
+        scenarios: { include: { simulation: true } },
+        recommendation: true,
+      },
+    })
+
+    if (!decision) {
+      return { success: false, error: "Decision not found" }
+    }
+
+    const intakeAccepted = true
+    const frameworkComplete = !!(decision.framework &&
+      decision.framework.context &&
+      decision.framework.purpose &&
+      decision.framework.options &&
+      decision.framework.criteria &&
+      decision.framework.values)
+
+    const scenariosComplete = decision.decisionScenarios.length >= 3 &&
+      decision.decisionScenarios.every((s) => s.name && s.description)
+
+    const risksComplete = decision.decisionScenarios.length > 0 &&
+      decision.decisionScenarios.every((s) => s.riskAnalysis)
+
+    const hasSimulationResults = decision.scenarios.some((s) => s.simulation)
+    const simulationReady = hasSimulationResults
+
+    const recommendationReady = !!decision.recommendation &&
+      decision.recommendation.recommendedAction &&
+      decision.recommendation.rationale
+
+    const { deriveScores, buildScoringData } = await import("@/lib/simulation/simulation-engine")
+    const scoringData = buildScoringData({
+      objectives: decision.objectives,
+      constraints: decision.constraints,
+      assumptions: decision.assumptions,
+      alternatives: decision.alternatives,
+      risks: decision.risks,
+      framework: decision.framework ? {
+        context: decision.framework.context,
+        purpose: decision.framework.purpose,
+        options: decision.framework.options,
+        criteria: decision.framework.criteria,
+        values: decision.framework.values,
+        informationGaps: decision.framework.informationGaps,
+        certainty: decision.framework.certainty,
+        assumptions: decision.framework.assumptions,
+      } : null,
+      decisionScenarios: decision.decisionScenarios.map((s) => ({ name: s.name, description: s.description })),
+      priority: decision.priority,
+      targetDate: decision.targetDate,
+    })
+
+    const derived = deriveScores(scoringData)
+
+    return {
+      success: true,
+      data: {
+        decisionType: decision.type,
+        intakeAccepted,
+        frameworkComplete,
+        scenariosComplete,
+        risksComplete,
+        simulationReady,
+        recommendationReady,
+        dataQuality: derived.dataQuality,
+        missingInputs: derived.missingInputs,
+        derivedScores: {
+          strategicFitScore: derived.strategicFitScore,
+          feasibilityScore: derived.feasibilityScore,
+          riskScore: derived.riskScore,
+          confidenceScore: derived.confidenceScore,
+        },
+      },
+    }
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error fetching workflow readiness:", error)
+    }
+    return { success: false, error: "Failed to fetch workflow readiness" }
   }
 }

@@ -8,7 +8,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-heading);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -38,88 +38,146 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-xl: calc(var(--radius) * 1.33);
+  --radius-2xl: calc(var(--radius) * 1.67);
+  --radius-3xl: calc(var(--radius) * 2);
+  --radius-4xl: calc(var(--radius) * 2.5);
+
+  /* AQLIYA Brand Colors */
+  --color-aqliya-deep: var(--aqliya-deep);
+  --color-aqliya-indigo: var(--aqliya-indigo);
+  --color-aqliya-blue: var(--aqliya-blue);
+  --color-aqliya-cyan: var(--aqliya-cyan);
+
+  /* Module Accents */
+  --color-module-audit: var(--module-audit);
+  --color-module-sales: var(--module-sales);
+  --color-module-decision: var(--module-decision);
+
+  /* Status Colors */
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-status-error: var(--status-error);
+  --color-status-info: var(--status-info);
+
+  /* Enterprise Surfaces */
+  --color-surface-elevated: var(--surface-elevated);
 }
 
+/* ============================================
+   AQLIYA BRAND — Enterprise Intelligence Platform
+   ============================================ */
+
 :root {
-  --brand-blue: #137dc5;
-  --brand-indigo: #2f4598;
-  --brand-cyan: #0baee8;
-  --brand-navy: #0B1728;
-  --brand-navy-light: #0F2440;
-  --brand-gradient: linear-gradient(90deg, var(--brand-indigo), var(--brand-blue), var(--brand-cyan));
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: var(--brand-blue);
-  --primary-foreground: #ffffff;
-  --secondary: #eef7fc;
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: #e8f7fd;
-  --accent-foreground: #0f4f7a;
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: var(--brand-blue);
-  --chart-1: var(--brand-blue);
-  --chart-2: var(--brand-cyan);
-  --chart-3: var(--brand-indigo);
-  --chart-4: #63c9ed;
-  --chart-5: #0f4f7a;
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: var(--brand-blue);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eef7fc;
-  --sidebar-accent-foreground: #0f4f7a;
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* AQLIYA Brand Colors */
+  --aqliya-deep: #0A0F24;
+  --aqliya-indigo: #1E3A8A;
+  --aqliya-blue: #2563EB;
+  --aqliya-cyan: #0EA5E9;
+
+  /* Module Accents */
+  --module-audit: #1E3A8A;
+  --module-sales: #0EA5E9;
+  --module-decision: #2563EB;
+
+  /* Status Colors */
+  --status-success: #10B981;
+  --status-warning: #F59E0B;
+  --status-error: #EF4444;
+  --status-info: #8B5CF6;
+
+  /* Gradient System */
+  --gradient-brand: linear-gradient(135deg, #0A0F24 0%, #1E3A8A 50%, #2563EB 100%);
+  --gradient-ai: linear-gradient(135deg, #1E3A8A 0%, #0EA5E9 100%);
+  --gradient-trust: linear-gradient(135deg, #10B981 0%, #0EA5E9 100%);
+  --gradient-subtle: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+
+  /* shadcn Theme — Light Mode */
+  --background: #FFFFFF;
+  --foreground: #111827;
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
+  --primary: #2563EB;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #1E293B;
+  --muted: #F8FAFC;
+  --muted-foreground: #6B7280;
+  --accent: #EFF6FF;
+  --accent-foreground: #1E3A8A;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #2563EB;
+
+  /* Chart Colors */
+  --chart-1: #2563EB;
+  --chart-2: #0EA5E9;
+  --chart-3: #1E3A8A;
+  --chart-4: #60A5FA;
+  --chart-5: #10B981;
+
+  /* Radius */
+  --radius: 0.5rem;
+
+  /* Sidebar */
+  --sidebar: #F8FAFC;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #2563EB;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EFF6FF;
+  --sidebar-accent-foreground: #1E3A8A;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #2563EB;
+
+  /* Enterprise Surfaces */
+  --surface-elevated: #FFFFFF;
+  --surface-overlay: rgba(10, 15, 36, 0.5);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #0F172A;
+  --foreground: #F9FAFB;
+  --card: #1E293B;
+  --card-foreground: #F9FAFB;
+  --popover: #1E293B;
+  --popover-foreground: #F9FAFB;
+  --primary: #60A5FA;
+  --primary-foreground: #0F172A;
+  --secondary: #334155;
+  --secondary-foreground: #F1F5F9;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #1E3A8A;
+  --accent-foreground: #93C5FD;
+  --destructive: #F87171;
+  --destructive-foreground: #0F172A;
+  --border: #334155;
+  --input: #334155;
+  --ring: #60A5FA;
+
+  --chart-1: #60A5FA;
+  --chart-2: #38BDF8;
+  --chart-3: #818CF8;
+  --chart-4: #34D399;
+  --chart-5: #FBBF24;
+
+  --sidebar: #1E293B;
+  --sidebar-foreground: #F9FAFB;
+  --sidebar-primary: #60A5FA;
+  --sidebar-primary-foreground: #0F172A;
+  --sidebar-accent: #1E3A8A;
+  --sidebar-accent-foreground: #93C5FD;
+  --sidebar-border: #334155;
+  --sidebar-ring: #60A5FA;
+
+  --surface-elevated: #1E293B;
 }
 
 @layer base {
@@ -127,9 +185,132 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
   }
   html {
     @apply font-sans;
+  }
+}
+
+/* ============================================
+   Enterprise Typography
+   ============================================ */
+
+@layer components {
+  .text-display {
+    @apply text-[3.052rem] font-bold leading-[1.1] tracking-tight;
+  }
+  .text-h1 {
+    @apply text-[2.441rem] font-bold leading-[1.2] tracking-tight;
+  }
+  .text-h2 {
+    @apply text-[1.953rem] font-semibold leading-[1.2];
+  }
+  .text-h3 {
+    @apply text-[1.563rem] font-semibold leading-[1.3];
+  }
+  .text-h4 {
+    @apply text-[1.25rem] font-semibold leading-[1.4];
+  }
+  .text-h5 {
+    @apply text-base font-medium leading-[1.4];
+  }
+  .text-h6 {
+    @apply text-sm font-semibold leading-[1.4] uppercase tracking-wider;
+  }
+  .text-body-lg {
+    @apply text-lg leading-relaxed;
+  }
+  .text-body {
+    @apply text-base leading-normal;
+  }
+  .text-body-sm {
+    @apply text-sm leading-normal;
+  }
+  .text-caption {
+    @apply text-xs font-medium leading-snug;
+  }
+  .text-label {
+    @apply text-xs font-medium uppercase tracking-wider;
+  }
+  .text-kpi-value {
+    @apply text-[2rem] font-bold leading-none tracking-tight;
+  }
+  .text-kpi-label {
+    @apply text-xs font-medium uppercase tracking-wider;
+  }
+  .text-financial {
+    @apply font-mono tabular-nums;
+  }
+}
+
+/* ============================================
+   Enterprise Surfaces
+   ============================================ */
+
+@layer components {
+  .surface-card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+  }
+  .surface-elevated {
+    @apply rounded-lg border bg-surface-elevated shadow-md;
+  }
+  .surface-flat {
+    @apply rounded-lg bg-muted/50;
+  }
+}
+
+/* ============================================
+   Module Accent Borders
+   ============================================ */
+
+@layer components {
+  .border-module-audit {
+    @apply border-l-[--module-audit];
+  }
+  .border-module-sales {
+    @apply border-l-[--module-sales];
+  }
+  .border-module-decision {
+    @apply border-l-[--module-decision];
+  }
+}
+
+/* ============================================
+   AI Visual Language
+   ============================================ */
+
+@layer components {
+  .ai-indicator {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-aqliya-cyan/30 bg-aqliya-cyan/10 px-2.5 py-1 text-xs font-medium text-aqliya-cyan;
+  }
+  .ai-insight-card {
+    @apply rounded-lg border-l-[3px] border-l-aqliya-cyan bg-aqliya-cyan/5 p-4;
+  }
+  .ai-thinking {
+    animation: ai-pulse 2s ease-in-out infinite;
+  }
+  @keyframes ai-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+}
+
+/* ============================================
+   Status Colors (Enterprise)
+   ============================================ */
+
+@layer components {
+  .status-success {
+    @apply text-status-success;
+  }
+  .status-warning {
+    @apply text-status-warning;
+  }
+  .status-error {
+    @apply text-status-error;
+  }
+  .status-info {
+    @apply text-status-info;
   }
 }

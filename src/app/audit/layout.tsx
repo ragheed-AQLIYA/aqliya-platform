@@ -1,5 +1,5 @@
-import { AuditSidebar } from "@/components/audit/layout/audit-sidebar"
-import { Header } from "@/components/layout/header"
+import { PlatformSidebar } from "@/components/platform/platform-sidebar"
+import { PlatformHeader } from "@/components/platform/platform-header"
 
 export default function AuditLayout({
   children,
@@ -7,12 +7,14 @@ export default function AuditLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex h-screen overflow-x-hidden" dir="rtl">
-      <AuditSidebar />
+    <div className="flex h-screen overflow-hidden" dir="rtl">
+      <PlatformSidebar />
       <div className="flex flex-1 min-w-0 flex-col overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-y-auto p-8">
-          {children}
+        <PlatformHeader />
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-4 sm:p-6 lg:p-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>

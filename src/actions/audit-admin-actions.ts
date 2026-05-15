@@ -1,8 +1,8 @@
 "use server"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context"
 import { assertOrganizationAccess } from "@/lib/audit/tenant-guard"
-import { recordAuditEvent as svcRecordAuditEvent } from "@/lib/audit/services"
 
 // Inline DB access via prisma to avoid circular dependencies
 import { prisma } from "@/lib/prisma"
@@ -22,6 +22,37 @@ function toResult(u: {
   lastLoginAt: Date | null; createdAt: Date;
 }): AuditUserResult {
   return { id: u.id, email: u.email, name: u.name, role: u.role, status: u.status, lastLoginAt: u.lastLoginAt?.toISOString() ?? null, createdAt: u.createdAt.toISOString() }
+}
+
+async function recordOrgEvent(actor: { actorId: string; actorName: string; actorRole: string; organizationId: string }, params: {
+  eventType: string; targetType: string; targetId: string; newState: string; previousState?: string; description: string;
+}) {
+  try {
+    const engagement = await prisma.auditEngagement.findFirst({
+      where: { organizationId: actor.organizationId },
+      select: { id: true },
+    })
+    if (!engagement) {
+      console.warn(`[AdminAudit] No engagement found for org ${actor.organizationId}; skipping audit event for ${params.eventType}`)
+      return
+    }
+    await prisma.auditEvent.create({
+      data: {
+        engagementId: engagement.id,
+        eventType: params.eventType,
+        actorId: actor.actorId,
+        actorName: actor.actorName,
+        actorRole: actor.actorRole,
+        targetType: params.targetType,
+        targetId: params.targetId,
+        previousState: params.previousState ?? '',
+        newState: params.newState,
+        description: params.description,
+      },
+    })
+  } catch (e) {
+    console.warn(`[AdminAudit] Failed to record audit event ${params.eventType}:`, (e as Error).message)
+  }
 }
 
 export async function getAuditUsersAdminAction(): Promise<AuditUserResult[]> {
@@ -54,12 +85,8 @@ export async function createAuditUserAction(params: {
       status: "active",
     },
   })
-  await svcRecordAuditEvent({
-    engagementId: "",
+  await recordOrgEvent(actor, {
     eventType: "audit_user.created",
-    actorId: actor.actorId,
-    actorName: actor.actorName,
-    actorRole: actor.actorRole,
     targetType: "audit_user",
     targetId: user.id,
     newState: "active",
@@ -77,12 +104,8 @@ export async function updateAuditUserRoleAction(userId: string, role: string) {
     throw new Error("Access denied: user belongs to another organization")
   }
   const updated = await prisma.auditUser.update({ where: { id: userId }, data: { role } })
-  await svcRecordAuditEvent({
-    engagementId: "",
+  await recordOrgEvent(actor, {
     eventType: "audit_user.role_updated",
-    actorId: actor.actorId,
-    actorName: actor.actorName,
-    actorRole: actor.actorRole,
     targetType: "audit_user",
     targetId: userId,
     previousState: user.role,
@@ -104,12 +127,8 @@ export async function deactivateAuditUserAction(userId: string) {
     throw new Error("Cannot deactivate yourself")
   }
   const updated = await prisma.auditUser.update({ where: { id: userId }, data: { status: "inactive" } })
-  await svcRecordAuditEvent({
-    engagementId: "",
+  await recordOrgEvent(actor, {
     eventType: "audit_user.deactivated",
-    actorId: actor.actorId,
-    actorName: actor.actorName,
-    actorRole: actor.actorRole,
     targetType: "audit_user",
     targetId: userId,
     previousState: "active",

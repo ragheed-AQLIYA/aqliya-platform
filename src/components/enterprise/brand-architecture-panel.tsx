@@ -5,12 +5,12 @@ interface BrandArchitecturePanelProps {
 }
 
 const branches = [
-  { name: "Custom Systems", desc: "أنظمة مبنية من الصفر حول طريقة العمل", icon: "⬡" },
-  { name: "Decision Systems", desc: "قرارات موثقة وقابلة للمراجعة", icon: "◆" },
-  { name: "Simulation Systems", desc: "اختبار السيناريوهات قبل التنفيذ", icon: "◈" },
-  { name: "Sales Systems", desc: "تأهيل وترتيب ومتابعة الفرص", icon: "▲" },
-  { name: "AQLIYA AuditOS", desc: "مراجعة وتدقيق قابل للتتبع", icon: "●" },
-  { name: "Local Content Systems", desc: "موردون، إنفاق، التزام، مؤشرات", icon: "▤" },
+  { name: "الأنظمة المؤسسية المخصصة", desc: "أنظمة مبنية من الصفر حول طريقة العمل", icon: "⬡" },
+  { name: "أنظمة اتخاذ القرار", desc: "قرارات موثقة وقابلة للمراجعة", icon: "◆" },
+  { name: "أنظمة المحاكاة", desc: "اختبار السيناريوهات قبل التنفيذ", icon: "◈" },
+  { name: "أنظمة المبيعات", desc: "تأهيل وترتيب ومتابعة الفرص", icon: "▲" },
+  { name: "أنظمة المراجعة والتدقيق", desc: "مراجعة وتدقيق قابل للتتبع", icon: "●" },
+  { name: "أنظمة المحتوى المحلي", desc: "موردون، إنفاق، التزام، مؤشرات", icon: "▤" },
 ]
 
 export function BrandArchitecturePanel({ className }: BrandArchitecturePanelProps) {
@@ -50,7 +50,7 @@ export function BrandArchitecturePanel({ className }: BrandArchitecturePanelProp
                     <div className="text-[10px] text-white/40">{branch.desc}</div>
                   </div>
                   <div className="rounded bg-white/5 px-1.5 py-0.5 text-[9px] font-medium text-white/30">
-                    Product
+                    Line
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@ export type UserRole = "ADMIN" | "MEMBER" | "VIEWER"
 
 export type DecisionStatus = "DRAFT" | "IN_REVIEW" | "APPROVED" | "REJECTED" | "ARCHIVED"
 
-export type DecisionType = "TENDER"
+export type DecisionType = "TENDER" | "INVESTMENT" | "EXPANSION" | "PROCUREMENT" | "HIRING" | "PARTNERSHIP" | "PRICING" | "STRATEGIC" | "OPERATIONS" | "CUSTOM"
 
 export type RiskLevel = "LOW" | "MEDIUM" | "HIGH"
 

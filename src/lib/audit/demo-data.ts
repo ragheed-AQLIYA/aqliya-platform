@@ -10,7 +10,7 @@ import {
   mockMappings,
   mockValidationRun,
   mockFinancialStatements,
-  mockDisclosureNotes,
+  mockDisclosureNotesGenerated as mockDisclosureNotes,
   mockEvidence,
   mockFindings,
   mockRecommendations,

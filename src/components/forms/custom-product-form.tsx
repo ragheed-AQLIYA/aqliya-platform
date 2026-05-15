@@ -330,8 +330,8 @@ export function CustomProductForm() {
             <a href="/products" className="inline-flex h-10 items-center justify-center rounded-md border px-5 text-sm font-medium transition-colors hover:bg-muted">
               استكشف خطوط حلول عقلية
             </a>
-            <a href="/auditos" className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              جرب العرض التوضيحي
+            <a href="/contact" className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+              تواصل معنا
             </a>
           </div>
         </div>

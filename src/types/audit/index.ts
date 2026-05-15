@@ -240,7 +240,7 @@ export interface DisclosureNote {
   linkedStatementLine?: string
   missingInformation: string[]
   aiDrafted: boolean
-  status: 'draft' | 'needs_info' | 'reviewed' | 'approved'
+  status: 'draft' | 'needs_info' | 'reviewed' | 'approved' | 'rejected'
   reviewComments: ReviewComment[]
   createdAt: string
   updatedAt: string

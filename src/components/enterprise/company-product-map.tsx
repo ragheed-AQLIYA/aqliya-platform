@@ -6,11 +6,11 @@ interface CompanyProductMapProps {
 
 const products = [
   { name: "Custom Enterprise Systems", desc: "أنظمة مبنية من الصفر حسب طبيعة العمل", icon: "⬡" },
-  { name: "Decision Systems", desc: "تنظيم القرارات من المشكلة إلى الاعتماد", icon: "◆" },
-  { name: "Simulation Systems", desc: "اختبار السيناريوهات قبل التنفيذ", icon: "◈" },
-  { name: "Sales Systems", desc: "تأهيل وترتيب ومتابعة الفرص", icon: "▲" },
-  { name: "AQLIYA AuditOS", desc: "المراجعة والتدقيق والذكاء المالي", icon: "●" },
-  { name: "Local Content Systems", desc: "إدارة الموردين والالتزام والمؤشرات", icon: "▤" },
+  { name: "DecisionOS", desc: "تنظيم القرارات من المشكلة إلى الاعتماد", icon: "◆" },
+  { name: "SimulationOS", desc: "اختبار السيناريوهات قبل التنفيذ", icon: "◈" },
+  { name: "SalesOS", desc: "تأهيل وترتيب ومتابعة الفرص", icon: "▲" },
+  { name: "AuditOS", desc: "المراجعة والتدقيق والذكاء المالي", icon: "●" },
+  { name: "Local Content OS", desc: "إدارة الموردين والالتزام والمؤشرات", icon: "▤" },
 ]
 
 export function CompanyProductMap({ className }: CompanyProductMapProps) {

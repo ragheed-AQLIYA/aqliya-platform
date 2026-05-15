@@ -1,5 +1,5 @@
-import { Sidebar } from "@/components/layout/sidebar"
-import { Header } from "@/components/layout/header"
+import { PlatformSidebar } from "@/components/platform/platform-sidebar"
+import { PlatformHeader } from "@/components/platform/platform-header"
 
 export default function DashboardLayout({
   children,
@@ -8,11 +8,13 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex h-screen" dir="rtl">
-      <Sidebar />
+      <PlatformSidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-y-auto p-8">
-          {children}
+        <PlatformHeader />
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-6 lg:p-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>
