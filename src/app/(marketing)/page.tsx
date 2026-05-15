@@ -48,9 +48,11 @@ const products = [
     flow: ["بيانات", "تصنيف", "مخرجات", "أدلة", "مراجعة"],
     href: "/products/audit",
     note: "أول تطبيق مُثبت على AQLIYA Intelligence Core، ويُظهر كيف يتحول الذكاء المالي إلى مسار محكوم وقابل للمراجعة.",
+    maturity: "أول تطبيق مُثبت",
+    status: "active",
   },
   {
-    title: "LocalContentOS | نظام المحتوى المحلي تحت عقلية",
+    title: "LocalContentOS | المنتج الاستراتيجي الثاني ضمن عقلية",
     problem:
       "بيانات موردين، إنفاق، التزام، وتصنيفات موزعة بين فرق ومصادر مختلفة.",
     system:
@@ -59,7 +61,9 @@ const products = [
       "رؤية مؤسسية أوضح لمؤشرات المحتوى المحلي وجاهزية القرارات الشرائية.",
     flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات"],
     href: "/products/local-content",
-    note: "خط نظام تحت عقلية، قابل للتفعيل حسب نطاق المؤسسة، ويبنى على AQLIYA Intelligence Core.",
+    note: "المنتج الاستراتيجي الثاني ضمن عقلية، موجه لسوق المحتوى المحلي السعودي، ويبنى على AQLIYA Intelligence Core.",
+    maturity: "استراتيجي — المنتج الثاني",
+    status: "strategic",
   },
   {
     title: "DecisionOS | حوكمة القرار التنفيذي",
@@ -71,6 +75,8 @@ const products = [
     flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية"],
     href: "/products/decision",
     note: "خط نظام لحوكمة القرار التنفيذي، يُفعّل ضمن نطاق المؤسسة ويبنى على AQLIYA Intelligence Core.",
+    maturity: "متاح للتفعيل",
+    status: "available",
   },
   {
     title: "SalesOS | خط نظام الذاكرة التجارية والمبيعات",
@@ -82,7 +88,9 @@ const products = [
       "مسار مبيعات أوضح يربط العملاء المحتملين بالأولوية، المتابعة، والتعلم المؤسسي.",
     flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة", "تعلم"],
     href: "/products/sales",
-    note: "خط نظام قابل للتفعيل حسب نطاق المؤسسة ويبنى على AQLIYA Intelligence Core لإدارة الذاكرة التجارية والمبيعات.",
+    note: "خط نظام مستقبلي ضمن عقلية — نموذج أولي بلوحة معلومات ثابتة، بدون خلفية تشغيلية بعد.",
+    maturity: "نموذج أولي — مستقبلي",
+    status: "prototype",
   },
   {
     title: "SimulationOS | خط نظام محاكاة السيناريوهات",
@@ -94,7 +102,9 @@ const products = [
       "رؤية مقارنة تساعد الإدارة على فهم البدائل قبل اعتماد القرار أو تنفيذ الأثر.",
     flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
     href: "/products/simulation",
-    note: "خط نظام قابل للتفعيل حسب نطاق المؤسسة ويبنى على AQLIYA Intelligence Core لدعم المقارنة والمحاكاة قبل التنفيذ.",
+    note: "خط نظام مستقبلي ضمن عقلية — يُعرَض حاليًا كمفهوم تسويقي لحين تطوير النموذج التشغيلي.",
+    maturity: "مستقبلي",
+    status: "future",
   },
 ];
 
@@ -147,7 +157,15 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row">
+              <div className="mt-6 rounded-2xl border border-aqliya-cyan/20 bg-aqliya-cyan/[0.06] p-4 backdrop-blur-sm">
+                <p className="text-xs font-semibold text-aqliya-cyan">
+                  مبدأ الثقة:
+                </p>
+                <p className="mt-1 text-base font-bold text-white">
+                  الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
+                </p>
+              </div>
+              <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row">
                 <Link
                   href="/products"
                   className="btn-primary h-12 px-8 text-base"
@@ -159,6 +177,12 @@ export default function HomePage() {
                   className="btn-secondary h-12 px-8 text-base"
                 >
                   شاهد AuditOS كأول تطبيق
+                </Link>
+                <Link
+                  href="/custom-product"
+                  className="btn-secondary h-12 px-8 text-base"
+                >
+                  ناقش حالة استخدام مؤسسية
                 </Link>
               </div>
               <div className="mt-10 grid gap-3 sm:grid-cols-3">
@@ -186,6 +210,94 @@ export default function HomePage() {
                 <OperatingSystemMapVisual className="w-full rounded-[22px] glow-accent" />
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="الوضوح الموضعي"
+          title="عقلية ليست..."
+          description="بعض الأشياء التي عقلية لا تفعلها. هذا يساعد في فهم ما هي في الواقع."
+        />
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-6 backdrop-blur">
+            <div className="flex items-start justify-between">
+              <h3 className="text-sm font-bold text-white">ليست صفحة دردشة</h3>
+              <span className="text-lg text-red-400">✕</span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-white/70">
+              صفحات الدردشة العامة تعطيك إجابات. عقلية تعطيك مسارات مراجعة
+              محكومة وموثقة تربط الإجابة بالبيانات والسياق والموافقات.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-yellow-600/20 bg-yellow-600/[0.05] p-6 backdrop-blur">
+            <div className="flex items-start justify-between">
+              <h3 className="text-sm font-bold text-white">ليست SaaS فقط</h3>
+              <span className="text-lg text-yellow-500">✕</span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-white/70">
+              عقلية ليست حصرية على السحابة. نقدم نموذج تشغيل مزدوج: سحابة متاحة
+              الآن، وخوادم خاصة ومعزولة قيد التطوير للمؤسسات الحساسة.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-amber-600/20 bg-amber-600/[0.05] p-6 backdrop-blur">
+            <div className="flex items-start justify-between">
+              <h3 className="text-sm font-bold text-white">
+                ليست منتج واحد فقط
+              </h3>
+              <span className="text-lg text-amber-500">✕</span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-white/70">
+              بعض المؤسسات تبحث عن أداة واحدة مثل AuditOS. عقلية نواة تشغيلية
+              تسمح ببناء أكثر من خط نظام فوقها حسب احتياج المؤسسة.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="نماذج التشغيل"
+          title="السحابة متاحة الآن. الخوادم الخاصة والمعزولة قادمة"
+          description="نقدم خيارات تشغيل مختلفة حسب احتياجات المؤسسة الأمنية والتشغيلية. كل نموذج يحافظ على نفس منطق الحوكمة والتتبع والأدلة."
+        />
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-2xl border border-aqliya-cyan/30 bg-aqliya-cyan/[0.08] p-6 backdrop-blur">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-black text-white">السحابة</h3>
+              <span className="inline-flex rounded-full bg-aqliya-cyan/20 px-2 py-1 text-[9px] font-bold text-aqliya-cyan uppercase">
+                متاح الآن
+              </span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-white/70">
+              إصدار سحابة متكامل مع كل الخصائص والتحديثات التلقائية والنسخ
+              الاحتياطي. مثالي للمؤسسات التي تفضل عدم إدارة البنية التحتية.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-black text-white">خوادم خاصة</h3>
+              <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold text-white/60 uppercase">
+                قريبًا
+              </span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-white/70">
+              تثبيت على خوادمك الخاصة مع كل خصائص الحوكمة والتحكم. متوفر على
+              Docker أو Kubernetes. يسمح بالتحكم الكامل والتعديلات المؤسسية.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-black text-white">معزولة تماما</h3>
+              <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold text-white/60 uppercase">
+                استراتيجي
+              </span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-white/70">
+              بيئة معزولة بدون أي اتصال بالانترنت (air-gapped) للمؤسسات ذات
+              متطلبات أمنية صارمة. كل البيانات والمعالجة محلية بالكامل.
+            </p>
           </div>
         </div>
       </section>
@@ -319,6 +431,138 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ════════════════════════════════════════════
+          PROOF PRODUCT — AuditOS
+          ════════════════════════════════════════════ */}
+      <section className="section-gradient-dark border-t border-white/5">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-4xl">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full border border-aqliya-cyan/30 bg-aqliya-cyan/[0.1] px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan">
+                <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
+                أول تطبيق مُثبت
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-medium text-emerald-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                جاهز للتجربة
+              </span>
+            </div>
+            <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl">
+              AuditOS — أول منتج مُثبت على AQLIYA Intelligence Core
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-8 text-white/62">
+              AuditOS هو أول تطبيق يُظهر كيف تتحول نواة عقلية إلى خط نظام مالي
+              محكوم. يعالج مسار المراجعة المالية بالكامل: من ميزان المراجعة
+              الخام إلى القوائم المالية، الإيضاحات، الأدلة، الملاحظات، المراجعة
+              البشرية، والاعتماد النهائي.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan/80">
+                  المسار
+                </span>
+                <p className="mt-2 text-sm leading-7 text-white/70">
+                  ميزان المراجعة ← ربط الحسابات ← القوائم المالية ← الإيضاحات ←
+                  الأدلة ← المراجعة ← الاعتماد ← التصدير
+                </p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan/80">
+                  الحوكمة
+                </span>
+                <p className="mt-2 text-sm leading-7 text-white/70">
+                  كل مخرج مربوط بالدليل، كل خطوة تحتاج مراجعة بشرية، كل اعتماد
+                  مسجل في سجل التدقيق.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan/80">
+                  المخرجات
+                </span>
+                <p className="mt-2 text-sm leading-7 text-white/70">
+                  قوائم مالية، إيضاحات، توصيات إعادة تصنيف، تقارير الأدلة، مسار
+                  مراجعة كامل.
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Link href="/auditos" className="btn-primary px-6">
+                شاهد AuditOS — عرض تفاعلي
+              </Link>
+              <Link href="/products/audit" className="btn-secondary px-6">
+                استكشف AuditOS
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════
+          STRATEGIC PRODUCT — LocalContentOS
+          ════════════════════════════════════════════ */}
+      <section className="border-t border-white/5 bg-gradient-to-b from-background to-muted/20">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-4xl">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                المنتج الاستراتيجي الثاني
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-medium text-white/60">
+                <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+                مستقبلي — قيد التخطيط
+              </span>
+            </div>
+            <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight text-foreground sm:text-4xl">
+              LocalContentOS — المنتج الاستراتيجي الثاني لسوق المحتوى المحلي
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-8 text-muted-foreground">
+              LocalContentOS يستهدف قياس المحتوى المحلي وإدارة الموردين والإنفاق
+              والالتزام داخل مسار حوكمة موحد. صُمم خصيصًا للسوق السعودي، وسيُبنى
+              على AQLIYA Intelligence Core بنفس منطق الحوكمة والأدلة والمراجعة
+              البشرية.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              <div className="rounded-2xl border border-border/70 bg-muted/20 p-5">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-600/80">
+                  النطاق
+                </span>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                  تصنيف الموردين، تحليل الإنفاق، قياس الالتزام، مؤشرات المحتوى
+                  المحلي.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-muted/20 p-5">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-600/80">
+                  السوق
+                </span>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                  موجه للمؤسسات السعودية التي تحتاج قياس المحتوى المحلي والتزام
+                  الموردين وفق متطلبات هيئة المحتوى المحلي.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-muted/20 p-5">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-600/80">
+                  الحالة
+                </span>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                  قيد التخطيط الاستراتيجي — يُعرَض حاليًا كصفحة تعريفية لحين بدء
+                  التطوير.
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Link href="/products/local-content" className="btn-primary px-6">
+                استكشف LocalContentOS
+              </Link>
+              <Link href="/custom-product" className="btn-outline px-6">
+                ناقش التفعيل المستقبلي
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="section-gradient-dark border-t border-white/5">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto mb-10 max-w-3xl text-center">
@@ -330,6 +574,14 @@ export default function HomePage() {
               الثقة في عقلية لا تُبنى على الوعود، بل على القدرة على الرجوع لكل
               خطوة
             </h2>
+            <div className="mt-6 rounded-2xl border border-aqliya-cyan/30 bg-aqliya-cyan/[0.08] p-5 backdrop-blur-sm">
+              <p className="text-sm font-semibold text-aqliya-cyan">
+                المبدأ الأساسي:
+              </p>
+              <p className="mt-2 text-lg font-black tracking-tight text-white">
+                الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
+              </p>
+            </div>
             <p className="mt-4 text-base leading-8 text-white/58">
               عندما يسأل المدير أو المدقق أو صاحب الصلاحية: كيف وصلنا إلى هذا
               المخرج؟ يجب أن تكون الإجابة موجودة داخل النظام نفسه، لا في الذاكرة

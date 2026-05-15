@@ -9,19 +9,19 @@ import {
 } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "أنظمة المحتوى المحلي | AQLIYA",
+  title: "LocalContentOS — المنتج الاستراتيجي الثاني | AQLIYA",
   description:
-    "LocalContentOS خط نظام للمحتوى المحلي مبني على AQLIYA Intelligence Core، يربط الموردين والإنفاق والالتزام والمؤشرات داخل مسار قابل للمراجعة والتتبع.",
+    "LocalContentOS المنتج الاستراتيجي الثاني ضمن عقلية لقياس المحتوى المحلي وإدارة الموردين والإنفاق والالتزام، مبني على AQLIYA Intelligence Core ويستهدف السوق السعودي.",
 };
 
 const outputs = [
-  "Supplier Classification",
-  "Spend Analysis",
-  "Local Content Indicators",
-  "Compliance Gap View",
-  "Procurement Impact Simulation",
-  "Local Content Report",
-  "Supplier Improvement Tracker",
+  "تصنيف الموردين",
+  "تحليل الإنفاق",
+  "مؤشرات المحتوى المحلي",
+  "عرض فجوات الامتثال",
+  "محاكاة تأثير المشتريات",
+  "تقرير المحتوى المحلي",
+  "متتبع تحسين الموردين",
 ];
 
 export default function LocalContentProductPage() {
@@ -41,27 +41,35 @@ export default function LocalContentProductPage() {
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
               LocalContentOS / Supplier & Spend Intelligence
             </span>
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+              استراتيجي — المنتج الثاني
+            </div>
+            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/50">
+              <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+              قيد التخطيط — يُعرَض حاليًا كصفحة تعريفية
+            </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               قياس المحتوى المحلي يجب أن يكون مسارًا تشغيليًا لا تقريرًا متأخرًا
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              LocalContentOS يربط الموردين، والإنفاق، والالتزام، والفجوات،
-              والمؤشرات داخل مسار واحد قابل للتتبع، بحيث تتحول قرارات الشراء
-              والموردين إلى رؤية مؤسسية أوضح وأكثر قابلية للمراجعة.
+              LocalContentOS هو المنتج الاستراتيجي الثاني ضمن عقلية، يستهدف قياس
+              المحتوى المحلي وإدارة الموردين والإنفاق والالتزام داخل مسار واحد
+              قابل للتتبع. صُمم خصيصًا للسوق السعودي وفق متطلبات هيئة المحتوى
+              المحلي، وسيُبنى على AQLIYA Intelligence Core.
             </p>
-            <div className="mt-4 flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
-                نظام قابل للتفعيل حسب نطاق المؤسسة
-              </span>
-            </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
-                ناقش تفعيل النظام
+                ناقش التفعيل المستقبلي
               </Link>
               <Link href="/products" className="btn-secondary px-6">
                 استكشف خطوط عقلية
               </Link>
             </div>
+            <p className="mt-4 text-xs leading-6 text-white/35">
+              LocalContentOS حاليًا في مرحلة التخطيط الاستراتيجي. لم يبدأ
+              التطوير التشغيلي بعد.
+            </p>
           </div>
         </div>
       </section>
@@ -93,7 +101,43 @@ export default function LocalContentProductPage() {
         </div>
       </section>
 
-      {/* 3. Workflow Visual */}
+      {/* 3. Governance & Trust Principle */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="الحوكمة والثقة"
+          title="كيف يعمل مبدأ الثقة في نظام المحتوى المحلي؟"
+          description="الذكاء يساعد بتصنيف الموردين وتحليل الإنفاق. الإنسان يقرر بشأن الالتزام والسياسات. الدليل يحكم من خلال توثيق كامل للموردين والمحاكاة."
+        />
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الذكاء يساعد
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              النظام يصنف الموردين، يحلل الإنفاق، يحسب الفجوات والمؤشرات.
+            </p>
+          </div>
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الإنسان يقرر
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              المسؤولون يحددون معايير الالتزام، يختارون الموردين، يوجهون
+              المحاكاة.
+            </p>
+          </div>
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الدليل يحكم
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              كل قرار مرتبط بتقرير كامل، فجوات موثقة، وسجل الالتزام واضح.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Workflow Visual */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="سير العمل"
@@ -115,7 +159,7 @@ export default function LocalContentProductPage() {
         </div>
       </section>
 
-      {/* 4. Outputs */}
+      {/* 5. Outputs */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow label="المخرجات" title="ماذا ينتج النظام؟" />
         <div className="mt-10">
@@ -123,7 +167,7 @@ export default function LocalContentProductPage() {
         </div>
       </section>
 
-      {/* 5. Customization */}
+      {/* 6. Customization */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="التخصيص"
@@ -132,7 +176,7 @@ export default function LocalContentProductPage() {
         />
       </section>
 
-      {/* 6. Use Scenario */}
+      {/* 7. Use Scenario */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="سيناريو تطبيقي"
@@ -152,14 +196,15 @@ export default function LocalContentProductPage() {
         </div>
       </section>
 
-      {/* 7. CTA */}
+      {/* 8. CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام محتوى محلي لمؤسستك؟"
-          primaryLabel="ناقش تفعيل النظام"
+          description="LocalContentOS في مرحلة التخطيط الاستراتيجي. إذا كنت مهتمًا بالتفعيل المستقبلي، ناقش احتياجك مع فريق عقلية."
+          primaryLabel="ناقش التفعيل المستقبلي"
           primaryHref="/custom-product"
           secondaryLabel="استكشف خطوط عقلية"
-          secondaryHref="/contact"
+          secondaryHref="/products"
         />
       </section>
     </div>

@@ -9,9 +9,9 @@ import {
 } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "أنظمة المحاكاة | AQLIYA",
+  title: "SimulationOS — محاكاة السيناريوهات | AQLIYA",
   description:
-    "SimulationOS خط نظام لمحاكاة السيناريوهات مبني على AQLIYA Intelligence Core، يدعم المقارنة والتقدير قبل التنفيذ داخل مسار قابل للمراجعة والاعتماد.",
+    "SimulationOS مفهوم مستقبلي ضمن عقلية لمحاكاة السيناريوهات ومقارنة أثر القرارات قبل التنفيذ. يُعرَض حاليًا كصفحة تعريفية.",
 };
 
 const outputs = [
@@ -44,23 +44,27 @@ export default function SimulationProductPage() {
               منفصلًا
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              SimulationOS يساعد المؤسسة على اختبار السيناريوهات ومقارنة أثر
-              الخيارات على النتائج والتكلفة والمخاطر قبل التنفيذ، داخل مسار
-              محاكاة قابل للمراجعة والاعتماد.
+              SimulationOS هو مفهوم مستقبلي ضمن عقلية لمحاكاة السيناريوهات
+              ومقارنة أثر الخيارات على النتائج والتكلفة والمخاطر قبل التنفيذ،
+              داخل مسار محاكاة قابل للمراجعة والاعتماد. يُعرَض حاليًا كصفحة
+              تعريفية لحين بدء التطوير.
             </p>
-            <div className="mt-4 flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
-                نظام قابل للتفعيل حسب نطاق المؤسسة
-              </span>
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/50">
+              <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+              مستقبلي — تسويقي
             </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
-                ناقش تفعيل النظام
+                ناقش حالة استخدام مؤسسية
               </Link>
               <Link href="/products" className="btn-secondary px-6">
                 استكشف خطوط عقلية
               </Link>
             </div>
+            <p className="mt-4 text-xs leading-6 text-white/35">
+              SimulationOS حاليًا في المرحلة التسويقية فقط. لم يبدأ التطوير
+              التشغيلي بعد.
+            </p>
           </div>
         </div>
       </section>
@@ -92,7 +96,43 @@ export default function SimulationProductPage() {
         </div>
       </section>
 
-      {/* 3. Workflow Visual */}
+      {/* 3. Governance & Trust Principle */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="الحوكمة والثقة"
+          title="كيف يعمل مبدأ الثقة في المحاكاة؟"
+          description="الذكاء يساعد بمعالجة السيناريوهات والافتراضات والأثر. الإنسان يقرر بناءً على النتائج والمقارنات. الدليل يحكم من خلال توثيق كامل للنموذج والافتراضات."
+        />
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الذكاء يساعد
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              النظام يعالج المدخلات، يبني النماذج، يحسب الأثر والمقارنات.
+            </p>
+          </div>
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الإنسان يقرر
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              المتخذ يقيّم السيناريوهات، يختار الافتراضات الأساسية، يحكم على
+              الأثر.
+            </p>
+          </div>
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الدليل يحكم
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              كل محاكاة مرتبطة بنموذج موثق، افتراضات معروضة، وتقارير مدقوقة.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Workflow Visual */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow label="سير العمل" title="كيف يعمل النظام؟" />
         <div className="mt-10">
@@ -110,7 +150,7 @@ export default function SimulationProductPage() {
         </div>
       </section>
 
-      {/* 4. Outputs */}
+      {/* 5. Outputs */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow label="المخرجات" title="ماذا ينتج النظام؟" />
         <div className="mt-10">
@@ -118,7 +158,7 @@ export default function SimulationProductPage() {
         </div>
       </section>
 
-      {/* 5. Customization */}
+      {/* 6. Customization */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="التخصيص"
@@ -127,7 +167,7 @@ export default function SimulationProductPage() {
         />
       </section>
 
-      {/* 6. Use Scenario */}
+      {/* 7. Use Scenario */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="سيناريو تطبيقي"
@@ -147,14 +187,15 @@ export default function SimulationProductPage() {
         </div>
       </section>
 
-      {/* 7. CTA */}
+      {/* 8. CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام محاكاة لمؤسستك؟"
-          primaryLabel="ناقش تفعيل النظام"
+          description="SimulationOS في المرحلة التسويقية حاليًا. إذا كنت مهتمًا بهذا المفهوم، ناقش حالة الاستخدام مع فريق عقلية."
+          primaryLabel="ناقش حالة الاستخدام"
           primaryHref="/custom-product"
           secondaryLabel="استكشف خطوط عقلية"
-          secondaryHref="/contact"
+          secondaryHref="/products"
         />
       </section>
     </div>

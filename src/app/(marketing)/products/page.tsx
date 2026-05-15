@@ -18,17 +18,18 @@ export const metadata: Metadata = {
 
 const solutions = [
   {
-    title: "Custom Systems — أنظمة مؤسسية مخصصة",
+    title: "AuditOS — نظام التدقيق والذكاء المالي",
     problem:
-      "إجراءات متكررة، ملفات متفرقة، صلاحيات غير واضحة، ومخرجات لا تُدار من مكان واحد.",
+      "بيانات مالية متفرقة، تصنيفات يدوية، أدلة غير مرتبطة، ومراجعة يصعب تتبعها.",
     system:
-      "خط نظام مؤسسي يُفعّل فوق AQLIYA Intelligence Core لربط سير العمل، الصلاحيات، البيانات، والمخرجات داخل منطق حوكمة واحد.",
+      "أول تطبيق مُثبت على AQLIYA Intelligence Core، يربط البيانات المالية بالتصنيف، القوائم، الأدلة، الملاحظات، ومسار المراجعة والاعتماد.",
     output:
-      "نظام تشغيلي خاص بالمؤسسة، قابل للمراجعة، التتبع، والتطوير ضمن نطاقها التشغيلي.",
-    flow: ["فهم العمل", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات"],
-    href: "/custom-product",
-    visual: <CustomWorkflowBuilderVisual />,
-    line: "يُفعّل حسب نطاق المؤسسة",
+      "مخرجات مراجعة منظمة وقابلة للتتبع من المصدر إلى القرار البشري النهائي.",
+    flow: ["بيانات", "تصنيف", "مخرجات", "أدلة", "مراجعة"],
+    href: "/products/audit",
+    visual: <AuditTraceVisual />,
+    line: "أول تطبيق مُثبت",
+    status: "active" as const,
   },
   {
     title: "DecisionOS — نظام حوكمة القرارات",
@@ -40,57 +41,62 @@ const solutions = [
     flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية"],
     href: "/products/decision",
     visual: <DecisionMatrixVisual />,
-    line: "خط نظام ضمن عقلية",
-  },
-  {
-    title: "SimulationOS — نظام محاكاة السيناريوهات",
-    problem:
-      "قرارات تُنفذ قبل اختبار أثرها على التكلفة، المخاطر، الأداء، أو النتائج.",
-    system:
-      "خط نظام يبنى على AQLIYA Intelligence Core لربط المدخلات بالافتراضات، السيناريوهات، المقارنة، ودعم القرار قبل التنفيذ.",
-    output: "تقرير مقارنة يساعد الإدارة على فهم الخيارات قبل التنفيذ.",
-    flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
-    href: "/products/simulation",
-    visual: <SimulationScenarioVisual />,
-    line: "نظام قابل للتفعيل",
-  },
-  {
-    title: "SalesOS — نظام الذاكرة التجارية والمبيعات",
-    problem:
-      "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
-    system:
-      "خط نظام مبني على AQLIYA Intelligence Core ينظم التأهيل، الترتيب، المتابعة، والتعلم المؤسسي داخل ذاكرة تجارية محكومة.",
-    output:
-      "مسار مبيعات واضح يربط العملاء المحتملين بالأولوية، الرسالة، والمتابعة.",
-    flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة", "تعلم"],
-    href: "/products/sales",
-    visual: <SalesPipelineVisual />,
-    line: "خط متخصص ضمن عقلية",
-  },
-  {
-    title: "AuditOS — نظام التدقيق والذكاء المالي",
-    problem:
-      "بيانات مالية متفرقة، تصنيفات يدوية، أدلة غير مرتبطة، ومراجعة يصعب تتبعها.",
-    system:
-      "أول تطبيق مُثبت على AQLIYA Intelligence Core، يربط البيانات المالية بالتصنيف، القوائم، الأدلة، الملاحظات، ومسار المراجعة والاعتماد.",
-    output:
-      "مخرجات مراجعة منظمة وقابلة للتتبع من المصدر إلى القرار البشري النهائي.",
-    flow: ["بيانات", "تصنيف", "مخرجات", "أدلة", "مراجعة"],
-    href: "/products/audit",
-    visual: <AuditTraceVisual />,
-    line: "أول تطبيق مُثبت على عقلية",
+    line: "نظام قائم",
+    status: "active" as const,
   },
   {
     title: "LocalContentOS — نظام المحتوى المحلي",
     problem:
       "بيانات موردين، إنفاق، التزام، وتصنيفات موزعة بين فرق ومصادر مختلفة.",
     system:
-      "الخط الثاني ضمن عائلة الأنظمة تحت عقلية، يبنى على AQLIYA Intelligence Core لربط الموردين بالإنفاق، التصنيف، نسب الالتزام، والفجوات.",
+      "المنتج الاستراتيجي الثاني ضمن عائلة الأنظمة تحت عقلية، يبنى على AQLIYA Intelligence Core لربط الموردين بالإنفاق، التصنيف، نسب الالتزام، والفجوات.",
     output: "رؤية واضحة لمؤشرات المحتوى المحلي وأثر القرارات الشرائية.",
     flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات"],
     href: "/products/local-content",
     visual: <LocalContentMapVisual />,
-    line: "الخط الثاني ضمن عقلية",
+    line: "استراتيجي — المنتج الثاني",
+    status: "strategic" as const,
+  },
+  {
+    title: "SimulationOS — نظام محاكاة السيناريوهات",
+    problem:
+      "قرارات تُنفذ قبل اختبار أثرها على التكلفة، المخاطر، الأداء، أو النتائج.",
+    system:
+      "خط نظام مستقبلي يهدف إلى ربط المدخلات بالافتراضات، السيناريوهات، المقارنة، ودعم القرار قبل التنفيذ.",
+    output: "تقرير مقارنة يساعد الإدارة على فهم الخيارات قبل التنفيذ.",
+    flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
+    href: "/products/simulation",
+    visual: <SimulationScenarioVisual />,
+    line: "مستقبلي — تسويقي",
+    status: "future" as const,
+  },
+  {
+    title: "SalesOS — نظام الذاكرة التجارية والمبيعات",
+    problem:
+      "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
+    system:
+      "نموذج أولي لنظام ذاكرة تجارية محكومة ينظم التأهيل، الترتيب، المتابعة، والتعلم المؤسسي.",
+    output:
+      "مسار مبيعات واضح يربط العملاء المحتملين بالأولوية، الرسالة، والمتابعة.",
+    flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة", "تعلم"],
+    href: "/products/sales",
+    visual: <SalesPipelineVisual />,
+    line: "نموذج أولي — مستقبلي",
+    status: "prototype" as const,
+  },
+  {
+    title: "Custom Systems — أنظمة مؤسسية مخصصة",
+    problem:
+      "إجراءات متكررة، ملفات متفرقة، صلاحيات غير واضحة، ومخرجات لا تُدار من مكان واحد.",
+    system:
+      "خط نظام مؤسسي يُفعّل فوق AQLIYA Intelligence Core لربط سير العمل، الصلاحيات، البيانات، والمخرجات داخل منطق حوكمة واحد.",
+    output:
+      "نظام تشغيلي خاص بالمؤسسة، قابل للمراجعة، التتبع، والتطوير ضمن نطاقها التشغيلي.",
+    flow: ["فهم العمل", "تصميم النظام", "ربط البيانات", "تشغيل المخرجات"],
+    href: "/custom-product",
+    visual: <CustomWorkflowBuilderVisual />,
+    line: "يُفعّل حسب نطاق المؤسسة",
+    status: "available" as const,
   },
 ];
 
@@ -176,201 +182,258 @@ export default function ProductsPage() {
       </section>
 
       {/* Solution Blocks — Alternating with Visuals */}
-      {solutions.map((solution, i) => (
-        <section
-          key={solution.href}
-          className={cn(
-            "border-t",
-            i % 2 === 0
-              ? "bg-background"
-              : "section-gradient-dark border-white/5",
-          )}
-        >
-          <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-            <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
-              <div className="flex flex-col justify-center">
-                <div className="flex flex-wrap items-center gap-3">
-                  <h2
-                    className={cn(
-                      "text-2xl font-black leading-tight sm:text-3xl",
-                      i % 2 === 0 ? "text-foreground" : "text-white",
-                    )}
-                  >
-                    {solution.title}
-                  </h2>
-                  <span
-                    className={cn(
-                      "inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-semibold tracking-[0.18em] uppercase",
-                      i % 2 === 0
-                        ? "border-primary/15 bg-primary/5 text-primary"
-                        : "border-white/10 bg-white/5 text-white/75",
-                    )}
-                  >
-                    {solution.line}
-                  </span>
-                </div>
-                <div className="mt-6 space-y-4">
-                  <div>
+      {solutions.map((solution, i) => {
+        const statusColors = {
+          active: {
+            border: "border-emerald-500/30",
+            bg: "bg-emerald-500/10",
+            text: "text-emerald-400",
+          },
+          strategic: {
+            border: "border-amber-500/30",
+            bg: "bg-amber-500/10",
+            text: "text-amber-400",
+          },
+          future: {
+            border: "border-white/10",
+            bg: "bg-white/5",
+            text: "text-white/60",
+          },
+          prototype: {
+            border: "border-amber-500/30",
+            bg: "bg-amber-500/10",
+            text: "text-amber-400",
+          },
+          available: {
+            border: "border-primary/15",
+            bg: "bg-primary/5",
+            text: "text-primary",
+          },
+        };
+        const sc = statusColors[solution.status] || statusColors.available;
+        return (
+          <section
+            key={solution.href}
+            className={cn(
+              "border-t",
+              i % 2 === 0
+                ? "bg-background"
+                : "section-gradient-dark border-white/5",
+            )}
+          >
+            <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+              <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
+                <div className="flex flex-col justify-center">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h2
+                      className={cn(
+                        "text-2xl font-black leading-tight sm:text-3xl",
+                        i % 2 === 0 ? "text-foreground" : "text-white",
+                      )}
+                    >
+                      {solution.title}
+                    </h2>
                     <span
                       className={cn(
-                        "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                        i % 2 === 0 ? "text-destructive/75" : "text-red-300/75",
-                      )}
-                    >
-                      الفجوة الحالية
-                    </span>
-                    <p
-                      className={cn(
-                        "mt-1.5 text-sm leading-7",
-                        i % 2 === 0 ? "text-muted-foreground" : "text-white/62",
-                      )}
-                    >
-                      {solution.problem}
-                    </p>
-                  </div>
-                  <div>
-                    <span
-                      className={cn(
-                        "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                        i % 2 === 0 ? "text-primary/75" : "text-aqliya-cyan/80",
-                      )}
-                    >
-                      كيف يعمل النظام
-                    </span>
-                    <p
-                      className={cn(
-                        "mt-1.5 text-sm leading-7",
-                        i % 2 === 0 ? "text-foreground" : "text-white/74",
-                      )}
-                    >
-                      {solution.system}
-                    </p>
-                  </div>
-                  <div>
-                    <span
-                      className={cn(
-                        "text-[10px] font-semibold uppercase tracking-[0.18em]",
+                        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-semibold tracking-[0.18em] uppercase",
                         i % 2 === 0
-                          ? "text-emerald-600/75"
-                          : "text-emerald-300/75",
+                          ? "border-primary/15 bg-primary/5 text-primary"
+                          : sc.border + " " + sc.bg + " " + sc.text,
                       )}
                     >
-                      القيمة الناتجة
+                      {solution.status === "active" && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      )}
+                      {solution.status === "prototype" && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                      )}
+                      {solution.status === "strategic" && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                      )}
+                      {solution.status === "future" && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                      )}
+                      {solution.line}
                     </span>
-                    <p
-                      className={cn(
-                        "mt-1.5 text-sm leading-7",
-                        i % 2 === 0 ? "text-foreground" : "text-white/74",
-                      )}
-                    >
-                      {solution.output}
-                    </p>
                   </div>
-                  <div
-                    className={cn(
-                      "rounded-2xl border p-4",
-                      i % 2 === 0
-                        ? "border-border/60 bg-muted/20"
-                        : "border-white/10 bg-white/[0.03]",
-                    )}
-                  >
-                    <span
+                  <div className="mt-6 space-y-4">
+                    <div>
+                      <span
+                        className={cn(
+                          "text-[10px] font-semibold uppercase tracking-[0.18em]",
+                          i % 2 === 0
+                            ? "text-destructive/75"
+                            : "text-red-300/75",
+                        )}
+                      >
+                        الفجوة الحالية
+                      </span>
+                      <p
+                        className={cn(
+                          "mt-1.5 text-sm leading-7",
+                          i % 2 === 0
+                            ? "text-muted-foreground"
+                            : "text-white/62",
+                        )}
+                      >
+                        {solution.problem}
+                      </p>
+                    </div>
+                    <div>
+                      <span
+                        className={cn(
+                          "text-[10px] font-semibold uppercase tracking-[0.18em]",
+                          i % 2 === 0
+                            ? "text-primary/75"
+                            : "text-aqliya-cyan/80",
+                        )}
+                      >
+                        كيف يعمل النظام
+                      </span>
+                      <p
+                        className={cn(
+                          "mt-1.5 text-sm leading-7",
+                          i % 2 === 0 ? "text-foreground" : "text-white/74",
+                        )}
+                      >
+                        {solution.system}
+                      </p>
+                    </div>
+                    <div>
+                      <span
+                        className={cn(
+                          "text-[10px] font-semibold uppercase tracking-[0.18em]",
+                          i % 2 === 0
+                            ? "text-emerald-600/75"
+                            : "text-emerald-300/75",
+                        )}
+                      >
+                        القيمة الناتجة
+                      </span>
+                      <p
+                        className={cn(
+                          "mt-1.5 text-sm leading-7",
+                          i % 2 === 0 ? "text-foreground" : "text-white/74",
+                        )}
+                      >
+                        {solution.output}
+                      </p>
+                    </div>
+                    <div
                       className={cn(
-                        "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                        i % 2 === 0 ? "text-muted-foreground" : "text-white/45",
+                        "rounded-2xl border p-4",
+                        i % 2 === 0
+                          ? "border-border/60 bg-muted/20"
+                          : "border-white/10 bg-white/[0.03]",
                       )}
                     >
-                      المسار التشغيلي
-                    </span>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {solution.flow.map((step, j) => (
-                        <div key={j} className="flex items-center gap-1">
-                          <span
-                            className={cn(
-                              "rounded-md px-2 py-1 text-[10px] font-medium",
-                              i % 2 === 0
-                                ? "bg-background text-muted-foreground shadow-sm"
-                                : "bg-white/6 text-white/62",
-                            )}
-                          >
-                            {step}
-                          </span>
-                          {j < solution.flow.length - 1 && (
-                            <svg
+                      <span
+                        className={cn(
+                          "text-[10px] font-semibold uppercase tracking-[0.18em]",
+                          i % 2 === 0
+                            ? "text-muted-foreground"
+                            : "text-white/45",
+                        )}
+                      >
+                        المسار التشغيلي
+                      </span>
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {solution.flow.map((step, j) => (
+                          <div key={j} className="flex items-center gap-1">
+                            <span
                               className={cn(
-                                "h-2 w-2 rtl:rotate-180",
+                                "rounded-md px-2 py-1 text-[10px] font-medium",
                                 i % 2 === 0
-                                  ? "text-muted-foreground/40"
-                                  : "text-white/20",
+                                  ? "bg-background text-muted-foreground shadow-sm"
+                                  : "bg-white/6 text-white/62",
                               )}
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
                             >
-                              <path d="M5 12h14" />
-                              <path d="m12 5 7 7-7 7" />
-                            </svg>
-                          )}
-                        </div>
-                      ))}
+                              {step}
+                            </span>
+                            {j < solution.flow.length - 1 && (
+                              <svg
+                                className={cn(
+                                  "h-2 w-2 rtl:rotate-180",
+                                  i % 2 === 0
+                                    ? "text-muted-foreground/40"
+                                    : "text-white/20",
+                                )}
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M5 12h14" />
+                                <path d="m12 5 7 7-7 7" />
+                              </svg>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
+                  <div className="mt-6 flex flex-wrap gap-3 border-t border-dashed pt-5">
+                    <Link
+                      href={solution.href}
+                      className={cn(
+                        i % 2 === 0 ? "btn-primary" : "btn-primary",
+                        "px-6",
+                      )}
+                    >
+                      استكشف خط النظام
+                    </Link>
+                    <Link
+                      href="/contact"
+                      className={cn(
+                        i % 2 === 0 ? "btn-outline" : "btn-secondary",
+                        "px-6",
+                      )}
+                    >
+                      ناقش التفعيل
+                    </Link>
+                  </div>
                 </div>
-                <div className="mt-6 flex flex-wrap gap-3 border-t border-dashed pt-5">
-                  <Link
-                    href={solution.href}
-                    className={cn(
-                      i % 2 === 0 ? "btn-primary" : "btn-primary",
-                      "px-6",
-                    )}
-                  >
-                    استكشف خط النظام
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className={cn(
-                      i % 2 === 0 ? "btn-outline" : "btn-secondary",
-                      "px-6",
-                    )}
-                  >
-                    ناقش التفعيل
-                  </Link>
-                </div>
-              </div>
 
-              <div className="flex items-center">
-                <div
-                  className={cn(
-                    "w-full rounded-[28px] p-3",
-                    i % 2 === 0
-                      ? "gradient-border bg-gradient-to-br from-primary/[0.04] via-background to-aqliya-cyan/[0.04]"
-                      : "gradient-border bg-white/[0.03]",
-                  )}
-                >
-                  {solution.visual}
+                <div className="flex items-center">
+                  <div
+                    className={cn(
+                      "w-full rounded-[28px] p-3",
+                      i % 2 === 0
+                        ? "gradient-border bg-gradient-to-br from-primary/[0.04] via-background to-aqliya-cyan/[0.04]"
+                        : "gradient-border bg-white/[0.03]",
+                    )}
+                  >
+                    {solution.visual}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      ))}
+          </section>
+        );
+      })}
 
       {/* AuditOS Note */}
       <section className="border-t bg-muted/20">
         <div className="mx-auto max-w-7xl px-6 py-10 text-center">
           <p className="text-sm leading-7 text-muted-foreground">
-            يظهر{" "}
             <Link
               href="/auditos"
               className="text-primary underline-offset-4 hover:underline"
             >
               AuditOS
             </Link>{" "}
-            كأول تطبيق مُثبت على عقلية، بينما تُفعّل بقية الخطوط فوق النواة
-            نفسها بحسب نطاق المؤسسة.
+            هو أول تطبيق مُثبت على AQLIYA Intelligence Core، ويمكن تجربته كعرض
+            تفاعلي.{" "}
+            <Link
+              href="/products/local-content"
+              className="text-primary underline-offset-4 hover:underline"
+            >
+              LocalContentOS
+            </Link>{" "}
+            هو المنتج الاستراتيجي الثاني، وبقية الخطوط تُفعّل فوق النواة نفسها
+            بحسب نطاق المؤسسة وجاهزيتها.
           </p>
         </div>
       </section>

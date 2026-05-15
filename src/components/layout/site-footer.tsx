@@ -40,6 +40,15 @@ const footerLinks = [
     links: [
       { label: "استكشف خطوط عقلية", href: "/products" },
       { label: "شاهد AuditOS كأول تطبيق", href: "/auditos" },
+      { label: "ناقش حالة استخدام مؤسسية", href: "/custom-product" },
+    ],
+  },
+  {
+    title: "نماذج التشغيل",
+    links: [
+      { label: "سحابة عقلية — متاح الآن", href: "/products" },
+      { label: "خوادم خاصة — قيد التطوير", href: "/products" },
+      { label: "بيئة معزولة — استراتيجي", href: "/products" },
     ],
   },
 ];
@@ -48,7 +57,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t bg-gradient-to-b from-muted/30 to-background">
       <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-6">
           <div className="space-y-4 lg:col-span-2">
             <Link href="/" className="flex items-center gap-3">
               <Image
@@ -60,9 +69,9 @@ export function SiteFooter() {
               />
             </Link>
             <p className="text-sm leading-7 text-muted-foreground">
-              عقلية منصة ذكاء مؤسسي خاص ومحكوم، تبني خطوط أنظمة متخصصة فوق نواة
-              تشغيل واحدة تربط البيانات، الإجراءات، المخرجات، والأدلة داخل بيئة
-              قابلة للمراجعة والاعتماد.
+              عقلية منصة ذكاء مؤسسي خاص ومحكوم، تبني خطوط أنظمة متخصصة فوق
+              AQLIYA Intelligence Core. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
+              سحابة متاحة الآن. خوادم خاصة ومعزولة قيد التطوير.
             </p>
             <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/30 p-4 shadow-sm">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">

@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { Noto_Sans_Arabic } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { WebVitals } from "@/components/platform/web-vitals";
+import { Analytics } from "@/components/platform/analytics";
+import { jsonLd } from "@/components/platform/json-ld";
+import { SkipToContent } from "@/components/platform/skip-to-content";
+import { ServiceWorkerRegister } from "@/components/platform/service-worker-register";
+import { A11yProvider } from "@/components/platform/a11y-provider";
 import "./globals.css";
 
 const notoSansArabic = Noto_Sans_Arabic({
@@ -13,14 +19,14 @@ const notoSansArabic = Noto_Sans_Arabic({
 export const metadata: Metadata = {
   title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",
   description:
-    "عقلية منصة ذكاء مؤسسي خاص ومحكوم، تقدم خطوط أنظمة متخصصة تربط البيانات، الإجراءات، المخرجات، والأدلة داخل بيئة واحدة قابلة للمراجعة والاعتماد.",
+    "عقلية منصة ذكاء مؤسسي خاص ومحكوم: تقدم خطوط أنظمة مؤسسية ذكية مع حوكمة القرار، ربط الأدلة، المراجعة البشرية، سير العمل، الصلاحيات، وسجل التدقيق. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.",
   icons: {
     icon: "/brand/Favicons/symbol (1).svg",
   },
   openGraph: {
     title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",
     description:
-      "عقلية منصة ذكاء مؤسسي خاص ومحكوم تقدم خطوط أنظمة متخصصة تبنى على AQLIYA Intelligence Core داخل بيئة واحدة قابلة للمراجعة والاعتماد.",
+      "عقلية منصة ذكاء مؤسسي خاص ومحكوم مع حوكمة مدمجة، ربط الأدلة، مراجعة بشرية، وسير عمل مؤسسي. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.",
     url: "https://aqliya.com",
     siteName: "AQLIYA",
     locale: "ar_SA",
@@ -30,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",
     description:
-      "عقلية منصة ذكاء مؤسسي خاص ومحكوم تقدم خطوط أنظمة متخصصة تبنى على AQLIYA Intelligence Core داخل بيئة واحدة قابلة للمراجعة والاعتماد.",
+      "عقلية منصة ذكاء مؤسسي خاص ومحكوم مع حوكمة مدمجة، ربط الأدلة، مراجعة بشرية، وسير عمل مؤسسي. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.",
   },
   robots: {
     index: true,
@@ -43,39 +49,30 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale()
-  const messages = await getMessages()
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-          "@type": "Organization",
-          "@id": "https://aqliya.com/#organization",
-          "name": "AQLIYA",
-          "url": "https://aqliya.com",
-          "description": "عقلية منصة ذكاء مؤسسي خاص ومحكوم تقدم خطوط أنظمة متخصصة مبنية على AQLIYA Intelligence Core ضمن بيئة قابلة للمراجعة والاعتماد.",
-          "email": "ragheed@aqliya.com",
-        },
-      {
-        "@type": "WebSite",
-        "@id": "https://aqliya.com/#website",
-        "url": "https://aqliya.com",
-        "name": "AQLIYA",
-        "publisher": { "@id": "https://aqliya.com/#organization" },
-        "inLanguage": "ar-SA",
-      },
-    ],
-  }
-
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
-        <body className={`${notoSansArabic.variable} h-full font-sans antialiased`}>
+      <body
+        className={`${notoSansArabic.variable} h-full font-sans antialiased`}
+      >
+        <SkipToContent />
+        <ServiceWorkerRegister />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": jsonLd,
+            }),
+          }}
         />
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <A11yProvider>
+            <WebVitals />
+            <Analytics />
+            {children}
+          </A11yProvider>
         </NextIntlClientProvider>
       </body>
     </html>

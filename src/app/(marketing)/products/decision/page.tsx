@@ -9,9 +9,9 @@ import {
 } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "أنظمة اتخاذ القرار | AQLIYA",
+  title: "DecisionOS — حوكمة القرارات التنفيذية | AQLIYA",
   description:
-    "DecisionOS خط نظام لحوكمة القرارات مبني على AQLIYA Intelligence Core، يربط البدائل والمعايير والمخاطر والأدلة ضمن مسار قابل للمراجعة والاعتماد.",
+    "DecisionOS خط نظام لحوكمة القرارات التنفيذية ضمن AQLIYA Intelligence Core، يربط البدائل والمعايير والمخاطر والأدلة ضمن مسار قابل للمراجعة والاعتماد.",
 };
 
 const outputs = [
@@ -40,6 +40,10 @@ export default function DecisionProductPage() {
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
               DecisionOS / Governed Decisions
             </span>
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              متاح للتفعيل
+            </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               حوكمة القرار بدل تركه لمذكرات متفرقة ونقاشات غير قابلة للتتبع
             </h1>
@@ -48,12 +52,6 @@ export default function DecisionProductPage() {
               مؤسسي واضح: مشكلة، بدائل، معايير، مخاطر، أدلة، توصية، واعتماد داخل
               منطق واحد مبني على AQLIYA Intelligence Core.
             </p>
-            <div className="mt-4 flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                خط نظام ضمن عقلية
-              </span>
-            </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
                 ناقش تفعيل النظام
@@ -93,7 +91,42 @@ export default function DecisionProductPage() {
         </div>
       </section>
 
-      {/* 3. Workflow Visual */}
+      {/* 3. Governance & Trust Principle */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="الحوكمة والثقة"
+          title="كيف يعمل مبدأ الثقة في نظام القرار؟"
+          description="الذكاء يساعد بإعداد البيانات والبدائل. الإنسان يقرر بناءً على المعايير والأدلة. الدليل يحكم من خلال توثيق كامل للمسار والقرار."
+        />
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الذكاء يساعد
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              النظام يصنف البدائل، يقيّم المخاطر، يجمع الأدلة، لكنه لا يقرر.
+            </p>
+          </div>
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الإنسان يقرر
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              المتخذ يختار بناءً على معايير واضحة وأدلة موثقة وتقييم مخاطر كامل.
+            </p>
+          </div>
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الدليل يحكم
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              كل قرار مرتبط بمسار تام، معايير معروضة، وسجل اعتماد كامل.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Workflow Visual */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow label="سير العمل" title="كيف يعمل النظام؟" />
         <div className="mt-10">
@@ -112,7 +145,7 @@ export default function DecisionProductPage() {
         </div>
       </section>
 
-      {/* 4. Outputs */}
+      {/* 5. Outputs */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow label="المخرجات" title="ماذا ينتج النظام؟" />
         <div className="mt-10">
@@ -120,7 +153,7 @@ export default function DecisionProductPage() {
         </div>
       </section>
 
-      {/* 5. Customization */}
+      {/* 6. Customization */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="التخصيص"
@@ -129,7 +162,7 @@ export default function DecisionProductPage() {
         />
       </section>
 
-      {/* 6. Use Scenario */}
+      {/* 7. Use Scenario */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="سيناريو تطبيقي"
@@ -149,7 +182,7 @@ export default function DecisionProductPage() {
         </div>
       </section>
 
-      {/* 7. CTA */}
+      {/* 8. CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام قرار واضح لمؤسستك؟"

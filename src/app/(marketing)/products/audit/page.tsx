@@ -11,9 +11,9 @@ import {
 } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "AuditOS — نظام المراجعة والتدقيق والذكاء المالي",
+  title: "AuditOS — أول منتج مُثبت على AQLIYA | نظام المراجعة والذكاء المالي",
   description:
-    "AuditOS هو أول تطبيق مُثبت على AQLIYA Intelligence Core، ويحوّل ميزان المراجعة إلى مخرجات مالية محكومة وقابلة للتتبع والمراجعة البشرية.",
+    "AuditOS هو أول منتج مُثبت على AQLIYA Intelligence Core. يحوّل ميزان المراجعة إلى مخرجات مالية محكومة مع ربط الأدلة، المراجعة البشرية، سير العمل، وسجل الاعتماد.",
 };
 
 const governanceFeatures = [

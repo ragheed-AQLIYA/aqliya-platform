@@ -9,9 +9,9 @@ import {
 } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "أنظمة المبيعات | AQLIYA",
+  title: "SalesOS — الذاكرة التجارية والمبيعات | AQLIYA",
   description:
-    "SalesOS خط نظام للذاكرة التجارية والمبيعات مبني على AQLIYA Intelligence Core، ينظم التأهيل والترتيب والمتابعة والتعلم داخل مسار تجاري محكوم.",
+    "SalesOS نموذج أولي لنظام الذاكرة التجارية والمبيعات ضمن عقلية، ينظم التأهيل والترتيب والمتابعة والتعلم داخل مسار تجاري محكوم.",
 };
 
 const outputs = [
@@ -40,28 +40,31 @@ export default function SalesProductPage() {
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
               SalesOS / Commercial Memory
             </span>
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+              نموذج أولي — مستقبلي
+            </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               المبيعات ليست فقط Pipeline بل ذاكرة تشغيلية يجب أن تتعلم وتتحسن
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              SalesOS ينظم رحلة المبيعات من تعريف العميل المثالي إلى التأهيل
-              والترتيب والمتابعة والتعلم المؤسسي، داخل مسار تجاري محكوم يمنع
-              ضياع المعرفة بين الأفراد والحملات.
+              SalesOS هو نموذج أولي ضمن عقلية لنظام الذاكرة التجارية والمبيعات.
+              ينظم رحلة المبيعات من تعريف العميل المثالي إلى التأهيل والترتيب
+              والمتابعة والتعلم المؤسسي. حاليًا، يوجد واجهة لوحة معلومات ثابتة
+              بدون خلفية تشغيلية مكتملة.
             </p>
-            <div className="mt-4 flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                خط متخصص ضمن عقلية
-              </span>
-            </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
-                ناقش تفعيل النظام
+                ناقش التفعيل المستقبلي
               </Link>
               <Link href="/products" className="btn-secondary px-6">
                 استكشف خطوط عقلية
               </Link>
             </div>
+            <p className="mt-4 text-xs leading-6 text-white/35">
+              SalesOS حاليًا في مرحلة النموذج الأولي. لا توجد خلفية تشغيلية أو
+              قاعدة بيانات مكتملة بعد.
+            </p>
           </div>
         </div>
       </section>
@@ -93,7 +96,43 @@ export default function SalesProductPage() {
         </div>
       </section>
 
-      {/* 3. Workflow Visual */}
+      {/* 3. Governance & Trust Principle */}
+      <section className="mx-auto max-w-7xl px-6">
+        <SectionEyebrow
+          label="الحوكمة والثقة"
+          title="كيف يعمل مبدأ الثقة في النظام التجاري؟"
+          description="الذكاء يساعد بتصنيف العملاء والأولويات. الإنسان يقرر حول الاستراتيجية والرسالة. الدليل يحكم من خلال سجل كامل للتواصل والنتائج."
+        />
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الذكاء يساعد
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              النظام يصنف العملاء وفقاً لـ ICP، يقيّم التأهيل، يوصي بالأولويات.
+            </p>
+          </div>
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الإنسان يقرر
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              الفريق يختار الرسالة والنهج والأولويات بناءً على السياق والحكم
+              الشخصي.
+            </p>
+          </div>
+          <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-sm font-semibold text-aqliya-cyan">
+              الدليل يحكم
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              كل تواصل وتفاعل مسجل، والنتائج مرتبطة بالحملة والفريق والعميل.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Workflow Visual */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow label="سير العمل" title="كيف يعمل النظام؟" />
         <div className="mt-10">
@@ -111,7 +150,7 @@ export default function SalesProductPage() {
         </div>
       </section>
 
-      {/* 4. Outputs */}
+      {/* 5. Outputs */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow label="المخرجات" title="ماذا ينتج النظام؟" />
         <div className="mt-10">
@@ -119,7 +158,7 @@ export default function SalesProductPage() {
         </div>
       </section>
 
-      {/* 5. Customization */}
+      {/* 6. Customization */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="التخصيص"
@@ -128,7 +167,7 @@ export default function SalesProductPage() {
         />
       </section>
 
-      {/* 6. Use Scenario */}
+      {/* 7. Use Scenario */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="سيناريو تطبيقي"
@@ -148,14 +187,15 @@ export default function SalesProductPage() {
         </div>
       </section>
 
-      {/* 7. CTA */}
+      {/* 8. CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام مبيعات واضح لفريقك؟"
-          primaryLabel="ناقش تفعيل النظام"
+          description="SalesOS في مرحلة النموذج الأولي. إذا كنت مهتمًا بهذا المفهوم، ناقش حالة الاستخدام مع فريق عقلية."
+          primaryLabel="ناقش حالة الاستخدام"
           primaryHref="/custom-product"
           secondaryLabel="استكشف خطوط عقلية"
-          secondaryHref="/contact"
+          secondaryHref="/products"
         />
       </section>
     </div>
