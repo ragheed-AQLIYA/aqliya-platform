@@ -1,0 +1,16 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npx prisma generate && next build --webpack",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "preview": true
+    }
+  },
+  "github": {
+    "silent": false,
+    "autoJobCancelation": true
+  }
+}
