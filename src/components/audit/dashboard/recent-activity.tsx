@@ -42,12 +42,12 @@ function formatRelativeTime(timestamp: string): string {
   const diffWeek = Math.floor(diffDay / 7)
   const diffMonth = Math.floor(diffDay / 30)
 
-  if (diffSec < 60) return "just now"
-  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? "s" : ""} ago`
-  if (diffHr < 24) return `${diffHr} hour${diffHr !== 1 ? "s" : ""} ago`
-  if (diffDay < 7) return `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`
-  if (diffWeek < 5) return `${diffWeek} week${diffWeek !== 1 ? "s" : ""} ago`
-  return `${diffMonth} month${diffMonth !== 1 ? "s" : ""} ago`
+  if (diffSec < 60) return "الآن"
+  if (diffMin < 60) return `منذ ${diffMin} دقيقة`
+  if (diffHr < 24) return `منذ ${diffHr} ساعة`
+  if (diffDay < 7) return `منذ ${diffDay} يوم`
+  if (diffWeek < 5) return `منذ ${diffWeek} أسبوع`
+  return `منذ ${diffMonth} شهر`
 }
 
 const eventColors: Record<string, string> = {
@@ -83,7 +83,7 @@ export function RecentActivity({ events }: RecentActivityProps) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Activity className="mb-2 h-8 w-8 text-muted-foreground/40" />
-        <p className="text-sm text-muted-foreground">No recent activity</p>
+        <p className="text-sm text-muted-foreground">لا توجد نشاطات حديثة</p>
       </div>
     )
   }
@@ -109,7 +109,7 @@ export function RecentActivity({ events }: RecentActivityProps) {
               </div>
               {event.aiRelated && (
                 <span className="mt-1 inline-flex w-fit items-center rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
-                  AI
+                  ذكاء اصطناعي
                 </span>
               )}
             </div>

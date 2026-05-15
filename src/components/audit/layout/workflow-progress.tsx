@@ -4,17 +4,17 @@ import { cn } from "@/lib/utils"
 import { Check, Circle } from "lucide-react"
 
 const workflowSteps = [
-  "Setup",
-  "Data Intake",
-  "Mapping",
-  "Validation",
-  "Statements",
-  "Evidence",
-  "Findings",
-  "Recommendations",
-  "Review",
-  "Approval",
-  "Publication",
+  "إعداد",
+  "إدخال البيانات",
+  "تعيين",
+  "التحقق",
+  "القوائم",
+  "الأدلة",
+  "النتائج",
+  "التوصيات",
+  "المراجعة",
+  "الاعتماد",
+  "النشر",
 ]
 
 const engagementStepMap: Record<string, number> = {

@@ -34,12 +34,12 @@ interface ValidationCheck {
 }
 
 const targetFields = [
-  { key: "accountCode", label: "Account Code", required: true },
-  { key: "accountName", label: "Account Name", required: true },
-  { key: "debit", label: "Debit", required: false },
-  { key: "credit", label: "Credit", required: false },
-  { key: "openingBalance", label: "Opening Balance", required: false },
-  { key: "priorYearBalance", label: "Prior Year Balance", required: false },
+  { key: "accountCode", label: "رمز الحساب", required: true },
+  { key: "accountName", label: "اسم الحساب", required: true },
+  { key: "debit", label: "مدين", required: false },
+  { key: "credit", label: "دائن", required: false },
+  { key: "openingBalance", label: "الرصيد الافتتاحي", required: false },
+  { key: "priorYearBalance", label: "رصيد العام السابق", required: false },
 ]
 
 const statusIcon = {
@@ -96,6 +96,7 @@ function parseXLSX(file: File): Promise<ParsedRow[]> {
     reader.onload = (e) => {
       try {
         const data = new Uint8Array(e.target?.result as ArrayBuffer)
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const XLSX = require("xlsx")
         const workbook = XLSX.read(data, { type: "array" })
         const sheet = workbook.Sheets[workbook.SheetNames[0]]
@@ -108,10 +109,10 @@ function parseXLSX(file: File): Promise<ParsedRow[]> {
         })
         resolve(rows)
       } catch (err) {
-        reject(new Error("Failed to parse XLSX file"))
+        reject(new Error("فشل في تحليل ملف XLSX"))
       }
     }
-    reader.onerror = () => reject(new Error("Failed to read file"))
+    reader.onerror = () => reject(new Error("فشل في قراءة الملف"))
     reader.readAsArrayBuffer(file)
   })
 }
@@ -147,12 +148,12 @@ function computeValidation(rows: ParsedRow[], colMap: ColumnMapping[]): Validati
   const isBalanced = debitCol && creditCol ? Math.abs(totalDebits - totalCredits) < 0.01 : true
 
   return [
-    { label: "Row Count", status: rows.length > 0 ? "valid" : "error", detail: `${rows.length} rows parsed` },
-    { label: "Account Codes", status: emptyCodes > 0 ? "error" : "valid", detail: emptyCodes > 0 ? `${emptyCodes} row(s) missing account code` : "All rows have codes" },
-    { label: "Account Names", status: emptyNames > 0 ? "error" : "valid", detail: emptyNames > 0 ? `${emptyNames} row(s) missing account name` : "All rows have names" },
-    { label: "Empty Rows", status: emptyBoth > 0 ? "issue" : "valid", detail: emptyBoth > 0 ? `${emptyBoth} completely empty row(s) found` : "No empty rows" },
-    { label: "Duplicate Codes", status: duplicateCodes.length > 0 ? "issue" : "valid", detail: duplicateCodes.length > 0 ? `Duplicates: ${duplicateCodes.join(", ")}` : "No duplicates" },
-    ...(debitCol && creditCol ? [{ label: "Balance", status: (isBalanced ? "valid" : "error") as "valid" | "error", detail: isBalanced ? `Debits (${totalDebits.toLocaleString()}) = Credits (${totalCredits.toLocaleString()})` : `Total debits (${totalDebits.toLocaleString()}) != total credits (${totalCredits.toLocaleString()})` }] : []),
+    { label: "عدد الصفوف", status: rows.length > 0 ? "valid" : "error", detail: `تم تحليل ${rows.length} صفوف` },
+    { label: "رموز الحسابات", status: emptyCodes > 0 ? "error" : "valid", detail: emptyCodes > 0 ? `${emptyCodes} صفوف تفتقد رمز الحساب` : "جميع الصفوف تحتوي على رموز" },
+    { label: "أسماء الحسابات", status: emptyNames > 0 ? "error" : "valid", detail: emptyNames > 0 ? `${emptyNames} صفوف تفتقد اسم الحساب` : "جميع الصفوف تحتوي على أسماء" },
+    { label: "الصفوف الفارغة", status: emptyBoth > 0 ? "issue" : "valid", detail: emptyBoth > 0 ? `تم العثور على ${emptyBoth} صفوف فارغة بالكامل` : "لا توجد صفوف فارغة" },
+    { label: "الرموز المكررة", status: duplicateCodes.length > 0 ? "issue" : "valid", detail: duplicateCodes.length > 0 ? `مكررة: ${duplicateCodes.join("، ")}` : "لا توجد مكررات" },
+    ...(debitCol && creditCol ? [{ label: "التوازن", status: (isBalanced ? "valid" : "error") as "valid" | "error", detail: isBalanced ? `المدين (${totalDebits.toLocaleString()}) = الدائن (${totalCredits.toLocaleString()})` : `إجمالي المدين (${totalDebits.toLocaleString()}) ≠ إجمالي الدائن (${totalCredits.toLocaleString()})` }] : []),
   ]
 }
 
@@ -192,11 +193,11 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
       } else if (file.name.endsWith(".xlsx")) {
         rows = await parseXLSX(file)
       } else {
-        setImportError("Unsupported file format. Use .csv or .xlsx")
+        setImportError("صيغة ملف غير مدعومة. استخدم .csv أو .xlsx")
         return
       }
       if (rows.length === 0) {
-        setImportError("No data rows found in file")
+        setImportError("لم يتم العثور على صفوف بيانات في الملف")
         return
       }
       setParsedRows(rows)
@@ -209,7 +210,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
       }))
       setMappings(autoMappings)
     } catch (err) {
-      setImportError(err instanceof Error ? err.message : "Failed to parse file")
+      setImportError(err instanceof Error ? err.message : "فشل في تحليل الملف")
     }
   }
 
@@ -243,7 +244,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
       const nameCol = mappings.find(m => m.target === "accountName")?.source
       const debitCol = mappings.find(m => m.target === "debit")?.source
       const creditCol = mappings.find(m => m.target === "credit")?.source
-      if (!codeCol || !nameCol) throw new Error("Account Code and Name mappings are required")
+      if (!codeCol || !nameCol) throw new Error("تعيين رمز الحساب واسمه مطلوب")
 
       const rows = parsedRows.map(r => ({
         accountCode: (r[codeCol] ?? "").trim(),
@@ -252,13 +253,13 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
         credit: creditCol ? (parseFloat(r[creditCol] || "0") || 0) : 0,
       })).filter(r => r.accountCode && r.accountName)
 
-      if (rows.length === 0) throw new Error("No valid rows after filtering")
+      if (rows.length === 0) throw new Error("لا توجد صفوف صالحة بعد التصفية")
 
       await uploadTrialBalanceAction(engagementId, fileName, rows)
       setImportSuccess(true)
       setTimeout(() => { reset(); onClose(); onComplete() }, 800)
     } catch (err) {
-      setImportError(err instanceof Error ? err.message : "Import failed")
+      setImportError(err instanceof Error ? err.message : "فشل الاستيراد")
     } finally {
       setImporting(false)
     }
@@ -270,9 +271,9 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
     <Dialog open={open} onOpenChange={(next) => { if (!next) { reset(); onClose() } }}>
       <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Import Trial Balance</DialogTitle>
+          <DialogTitle>استيراد ميزان المراجعة</DialogTitle>
           <DialogDescription>
-            Step {step} of 4: {step === 1 ? "Upload" : step === 2 ? "Column Mapping" : step === 3 ? "Validation" : "Confirm"}
+            الخطوة {step} من 4: {step === 1 ? "رفع" : step === 2 ? "تعيين الأعمدة" : step === 3 ? "التحقق" : "تأكيد"}
           </DialogDescription>
         </DialogHeader>
 
@@ -286,8 +287,8 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
           <div className="space-y-4 py-4 px-4">
             <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25 p-10 text-center hover:border-muted-foreground/50 transition-colors">
               <Upload className="size-8 text-muted-foreground mb-3" />
-              <p className="text-sm font-medium mb-1">Drop your file here or click to browse</p>
-              <p className="text-xs text-muted-foreground mb-4">CSV or XLSX files only</p>
+              <p className="text-sm font-medium mb-1">قم بإسقاط الملف هنا أو انقر للتصفح</p>
+              <p className="text-xs text-muted-foreground mb-4">ملفات CSV أو XLSX فقط</p>
               <Input
                 type="file"
                 accept=".csv,.xlsx"
@@ -311,9 +312,9 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="bg-muted/50">Target Field</TableHead>
-                    <TableHead className="bg-muted/50">Source Column</TableHead>
-                    <TableHead className="bg-muted/50">Required</TableHead>
+                    <TableHead className="bg-muted/50">الحقل المستهدف</TableHead>
+                    <TableHead className="bg-muted/50">العمود المصدر</TableHead>
+                    <TableHead className="bg-muted/50">مطلوب</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -331,7 +332,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                             onValueChange={(val) => updateMapping(field.key, val || null)}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder="-- Select column --" />
+                              <SelectValue placeholder="-- اختر العمود --" />
                             </SelectTrigger>
                             <SelectContent>
                               {sourceColumns.map(col => (
@@ -342,8 +343,8 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                         </TableCell>
                         <TableCell>
                           {field.required
-                            ? <Badge variant="destructive">Required</Badge>
-                            : <Badge variant="outline">Optional</Badge>
+                            ? <Badge variant="destructive">مطلوب</Badge>
+                            : <Badge variant="outline">اختياري</Badge>
                           }
                         </TableCell>
                       </TableRow>
@@ -374,7 +375,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                   </TableBody>
                 </Table>
                 <div className="px-3 py-2 text-xs text-muted-foreground border-t bg-muted/30">
-                  Showing 5 of {parsedRows.length} rows
+                  عرض 5 من أصل {parsedRows.length} صف
                 </div>
               </div>
             )}
@@ -391,7 +392,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-sm font-medium">{check.label}</span>
                       <Badge className={statusBadge[check.status]}>
-                        {check.status === "valid" ? "VALID" : check.status === "issue" ? "ISSUE" : "ERROR"}
+                        {check.status === "valid" ? "صحيح" : check.status === "issue" ? "ملاحظة" : "خطأ"}
                       </Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">{check.detail}</p>
@@ -406,31 +407,31 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
           <div className="space-y-4 py-4 px-4">
             <div className="rounded-md border divide-y">
               <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">Source File</span>
+                <span className="text-muted-foreground">الملف المصدر</span>
                 <span className="font-medium">{fileName}</span>
               </div>
               <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">Rows Detected</span>
+                <span className="text-muted-foreground">عدد الصفوف</span>
                 <span className="font-medium">{parsedRows.length}</span>
               </div>
               <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">Mapped Columns</span>
+                <span className="text-muted-foreground">الأعمدة المعينة</span>
                 <span className="font-medium">{mappings.filter(m => m.source).length} / {targetFields.length}</span>
               </div>
               <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">Validation</span>
+                <span className="text-muted-foreground">التحقق</span>
                 <span className="font-medium">
                   {hasErrors ? (
-                    <span className="text-red-600 flex items-center gap-1"><XCircle className="size-3.5" />Issues found</span>
+                    <span className="text-red-600 flex items-center gap-1"><XCircle className="size-3.5" />تم العثور على مشكلات</span>
                   ) : (
-                    <span className="text-green-600 flex items-center gap-1"><CheckCircle className="size-3.5" />All passed</span>
+                    <span className="text-green-600 flex items-center gap-1"><CheckCircle className="size-3.5" />جميعها ناجحة</span>
                   )}
                 </span>
               </div>
             </div>
             {importSuccess && (
               <div className="flex items-center gap-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
-                <CheckCircle className="size-4 shrink-0" /><span>Trial balance imported successfully</span>
+                <CheckCircle className="size-4 shrink-0" /><span>تم استيراد ميزان المراجعة بنجاح</span>
               </div>
             )}
           </div>
@@ -439,7 +440,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
         <DialogFooter className="gap-2">
           {step > 1 && (
             <Button variant="outline" onClick={() => setStep(s => s - 1)} disabled={importing}>
-              <ArrowLeft className="size-4" /> Back
+              <ArrowLeft className="size-4" /> رجوع
             </Button>
           )}
           {step < 4 ? (
@@ -447,11 +448,11 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
               onClick={() => setStep(s => s + 1)}
               disabled={(step === 1 && !fileName) || (step === 2 && !requiredMapped) || (step === 3 && hasErrors)}
             >
-              Next <ArrowRight className="size-4" />
+              التالي <ArrowRight className="size-4" />
             </Button>
           ) : (
             <Button onClick={handleConfirm} disabled={importing || importSuccess}>
-              {importing ? "Importing..." : importSuccess ? "Done" : "Import Trial Balance"}
+              {importing ? "جارٍ الاستيراد..." : importSuccess ? "تم" : "استيراد ميزان المراجعة"}
             </Button>
           )}
         </DialogFooter>

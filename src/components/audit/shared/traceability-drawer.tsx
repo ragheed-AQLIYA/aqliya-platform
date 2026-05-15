@@ -31,16 +31,16 @@ interface TraceabilityDrawerProps {
 }
 
 const nodeTypeConfig: Record<string, { label: string; color: string }> = {
-  source_data: { label: "Source Data", color: "text-gray-600 bg-gray-50" },
-  account: { label: "Account", color: "text-blue-600 bg-blue-50" },
-  evidence: { label: "Evidence", color: "text-cyan-600 bg-cyan-50" },
-  finding: { label: "Finding", color: "text-amber-600 bg-amber-50" },
-  recommendation: { label: "Recommendation", color: "text-purple-600 bg-purple-50" },
-  approval: { label: "Approval", color: "text-emerald-600 bg-emerald-50" },
-  publication: { label: "Publication", color: "text-indigo-600 bg-indigo-50" },
-  review: { label: "Review", color: "text-orange-600 bg-orange-50" },
-  event: { label: "Audit Event", color: "text-pink-600 bg-pink-50" },
-  ai_output: { label: "AI Output", color: "text-violet-600 bg-violet-50" },
+  source_data: { label: "بيانات المصدر", color: "text-gray-600 bg-gray-50" },
+  account: { label: "حساب", color: "text-blue-600 bg-blue-50" },
+  evidence: { label: "دليل", color: "text-cyan-600 bg-cyan-50" },
+  finding: { label: "نتيجة", color: "text-amber-600 bg-amber-50" },
+  recommendation: { label: "توصية", color: "text-purple-600 bg-purple-50" },
+  approval: { label: "اعتماد", color: "text-emerald-600 bg-emerald-50" },
+  publication: { label: "نشر", color: "text-indigo-600 bg-indigo-50" },
+  review: { label: "مراجعة", color: "text-orange-600 bg-orange-50" },
+  event: { label: "حدث تدقيق", color: "text-pink-600 bg-pink-50" },
+  ai_output: { label: "مخرجات الذكاء الاصطناعي", color: "text-violet-600 bg-violet-50" },
 }
 
 const sar = (v: number) => new Intl.NumberFormat('en-SA', { style: 'currency', currency: 'SAR', minimumFractionDigits: 0 }).format(v)
@@ -83,7 +83,7 @@ function TraceabilityNodeCard({ node, isForward }: { node: TraceabilityNode; isF
         {(node.reviewer || node.actor) && (
           <p className="text-[10px] text-muted-foreground mt-0.5">
             {node.reviewer || node.actor}
-            {node.timestamp && ` · ${new Date(node.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`}
+            {node.timestamp && ` · ${new Date(node.timestamp).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`}
           </p>
         )}
       </div>
@@ -112,7 +112,7 @@ function TraceabilityDrawer({
             "duration-300"
           )}
         >
-          <DialogPrimitive.Title className="sr-only">Traceability details</DialogPrimitive.Title>
+          <DialogPrimitive.Title className="sr-only">تفاصيل التتبع</DialogPrimitive.Title>
           <div className="flex items-center justify-between border-b px-4 py-3">
             <div>
               <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -122,7 +122,7 @@ function TraceabilityDrawer({
             </div>
             <DialogPrimitive.Close className="rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100">
               <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
+              <span className="sr-only">إغلاق</span>
             </DialogPrimitive.Close>
           </div>
 
@@ -131,7 +131,7 @@ function TraceabilityDrawer({
               <div className="mb-3 flex items-center gap-2">
                 <ArrowRight className="h-3.5 w-3.5 text-blue-500" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Forward Trace
+                  التتبع الأمامي
                 </span>
               </div>
               {forwardTrace.length > 0 ? (
@@ -139,7 +139,7 @@ function TraceabilityDrawer({
                   <TraceabilityNodeCard key={node.id} node={node} isForward={true} />
                 ))
               ) : (
-                <p className="text-xs text-muted-foreground">No forward trace available</p>
+                <p className="text-xs text-muted-foreground">لا يتوفر تتبع أمامي</p>
               )}
             </div>
 
@@ -147,7 +147,7 @@ function TraceabilityDrawer({
               <div className="mb-3 flex items-center gap-2">
                 <ArrowLeft className="h-3.5 w-3.5 text-purple-500" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Backward Trace
+                  التتبع العكسي
                 </span>
               </div>
               {backwardTrace.length > 0 ? (
@@ -155,14 +155,14 @@ function TraceabilityDrawer({
                   <TraceabilityNodeCard key={node.id} node={node} isForward={false} />
                 ))
               ) : (
-                <p className="text-xs text-muted-foreground">No backward trace available</p>
+                <p className="text-xs text-muted-foreground">لا يتوفر تتبع عكسي</p>
               )}
             </div>
           </div>
 
           <div className="border-t px-4 py-3">
             <p className="text-[10px] text-muted-foreground">
-              Entity ID: <span className="font-mono text-foreground">{entityType}_{entityId}</span>
+              معرف الكيان: <span className="font-mono text-foreground">{entityType}_{entityId}</span>
             </p>
           </div>
         </DialogPrimitive.Content>

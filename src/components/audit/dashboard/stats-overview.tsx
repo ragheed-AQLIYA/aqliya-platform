@@ -29,41 +29,41 @@ interface StatsOverviewProps {
 export function StatsOverview({ stats }: StatsOverviewProps) {
   const items: StatItem[] = [
     {
-      label: "Total Engagements",
+      label: "إجمالي المهام",
       value: stats.totalEngagements,
       icon: <Briefcase className="h-5 w-5" />,
     },
     {
-      label: "Active",
+      label: "نشط",
       value: stats.activeEngagements,
       icon: <Activity className="h-5 w-5" />,
       trend: { direction: "up", value: "2" },
     },
     {
-      label: "Pending Reviews",
+      label: "مراجعات معلقة",
       value: stats.pendingReviews,
       icon: <MessageSquare className="h-5 w-5" />,
       variant: "warning",
     },
     {
-      label: "Open Findings",
+      label: "نتائج مفتوحة",
       value: stats.openFindings,
       icon: <AlertTriangle className="h-5 w-5" />,
       variant: stats.openFindings > 0 ? "danger" : "default",
     },
     {
-      label: "Missing Evidence",
+      label: "أدلة مفقودة",
       value: stats.missingEvidence,
       icon: <FileSearch className="h-5 w-5" />,
       variant: stats.missingEvidence > 0 ? "danger" : "default",
     },
     {
-      label: "Ready for Approval",
+      label: "جاهز للاعتماد",
       value: stats.readyForApproval,
       icon: <CheckCircle className="h-5 w-5" />,
     },
     {
-      label: "Published",
+      label: "منشور",
       value: stats.publishedCount,
       icon: <Send className="h-5 w-5" />,
     },

@@ -24,9 +24,9 @@ interface AIOutputsPanelProps {
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
-  suggested: { label: "AI Draft", color: "bg-violet-100 text-violet-700 border-violet-200" },
-  accepted_by_human: { label: "Accepted", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
-  rejected: { label: "Rejected", color: "bg-red-100 text-red-700 border-red-200" },
+  suggested: { label: "مسودة ذكاء اصطناعي", color: "bg-violet-100 text-violet-700 border-violet-200" },
+  accepted_by_human: { label: "مقبول", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
+  rejected: { label: "مرفوض", color: "bg-red-100 text-red-700 border-red-200" },
 }
 
 export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelProps) {
@@ -43,7 +43,7 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
         setOutputs(prev => prev.map(o => o.id === id ? { ...o, status: "accepted_by_human" } : o))
       }
     } catch {
-      setError("Failed to accept AI output")
+      setError("فشل قبول مخرج الذكاء الاصطناعي")
     } finally {
       setLoadingId(null)
     }
@@ -58,24 +58,38 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
         setOutputs(prev => prev.map(o => o.id === id ? { ...o, status: "rejected" } : o))
       }
     } catch {
-      setError("Failed to reject AI output")
+      setError("فشل رفض مخرج الذكاء الاصطناعي")
     } finally {
       setLoadingId(null)
     }
   }, [])
 
-  if (outputs.length === 0) return null
+  if (outputs.length === 0) {
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between border-b px-4 py-3">
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+            <Bot className="h-4 w-4 text-violet-500" />
+            مخرجات الذكاء الاصطناعي
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 py-6 text-center">
+          <p className="text-sm text-muted-foreground">لا توجد مخرجات ذكاء اصطناعي بعد.</p>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between border-b px-4 py-3">
         <CardTitle className="flex items-center gap-2 text-sm font-semibold">
           <Bot className="h-4 w-4 text-violet-500" />
-          AI Outputs
-          <span className="text-[10px] font-normal text-muted-foreground ml-1">Draft · Requires human review · Not final</span>
+          مخرجات الذكاء الاصطناعي
+          <span className="text-[10px] font-normal text-muted-foreground mr-1">مسودة · تتطلب مراجعة بشرية · ليست نهائية</span>
         </CardTitle>
         <Badge variant="outline" className="text-[10px]">
-          {outputs.filter(o => o.status === "suggested").length} pending review
+          {outputs.filter(o => o.status === "suggested").length} قيد المراجعة
         </Badge>
       </CardHeader>
       <CardContent className="divide-y pt-0">
@@ -102,13 +116,13 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
                   </span>
                   {output.confidence !== null && (
                     <span className="text-[10px] text-muted-foreground">
-                      {Math.round(output.confidence * 100)}% confidence
+                      {Math.round(output.confidence * 100)}% ثقة
                     </span>
                   )}
                 </div>
                 <p className="text-sm text-foreground line-clamp-2">{output.outputContent}</p>
                 <p className="mt-0.5 text-[10px] text-muted-foreground">
-                  {new Date(output.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                  {new Date(output.createdAt).toLocaleDateString("ar-SA", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                 </p>
               </div>
               {output.status === "suggested" && (
@@ -119,7 +133,7 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
                     className="h-7 w-7 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                     onClick={() => handleAccept(output.id)}
                     disabled={loadingId === output.id}
-                    title="Accept"
+                    title="قبول"
                   >
                     <CheckCircle2 className="h-4 w-4" />
                   </Button>
@@ -129,7 +143,7 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
                     className="h-7 w-7 text-red-600 hover:text-red-700 hover:bg-red-50"
                     onClick={() => handleReject(output.id)}
                     disabled={loadingId === output.id}
-                    title="Reject"
+                    title="رفض"
                   >
                     <XCircle className="h-4 w-4" />
                   </Button>

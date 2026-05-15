@@ -77,18 +77,18 @@ function AuditHeader({
           <div className="absolute right-0 top-full z-50 mt-1 hidden w-48 rounded-lg border bg-background py-1 shadow-md group-focus-within:block group-hover:block">
             <div className="border-b px-3 py-2">
               <p className="text-sm font-medium text-foreground">{userName}</p>
-              <p className="text-[10px] text-muted-foreground">Auditor</p>
+              <p className="text-[10px] text-muted-foreground">مدقق</p>
             </div>
             <Link
               href="/audit/settings"
               className="flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <User className="h-3.5 w-3.5" />
-              Profile
+              الملف الشخصي
             </Link>
             <button className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">
               <LogOut className="h-3.5 w-3.5" />
-              Sign Out
+              تسجيل الخروج
             </button>
           </div>
         </div>

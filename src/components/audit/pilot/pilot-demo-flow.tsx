@@ -25,75 +25,75 @@ interface DemoStep {
 const DEMO_STEPS: DemoStep[] = [
   {
     id: "engagement",
-    label: "Engagement",
+    label: "المهمة",
     href: "",
     icon: ClipboardCheck,
-    description: "Review engagement overview, team, and alerts.",
-    trustCheckpoint: "Engagement scope and team assignment confirmed.",
+    description: "مراجعة نظرة عامة على المهمة والفريق والتنبيهات.",
+    trustCheckpoint: "تم تأكيد نطاق المهمة وتعيين الفريق.",
   },
   {
     id: "trial-balance",
-    label: "Trial Balance",
+    label: "ميزان المراجعة",
     href: "/trial-balance",
     icon: FileSpreadsheet,
-    description: "Verify imported trial balance — debits equal credits.",
-    trustCheckpoint: "TB variance = SAR 0. Data integrity confirmed.",
+    description: "التحقق من ميزان المراجعة المستورد — الديون تساوي الدائنين.",
+    trustCheckpoint: "الفرق في ميزان المراجعة = 0 ريال. تم تأكيد سلامة البيانات.",
   },
   {
     id: "mapping",
-    label: "Mapping",
+    label: "التعيين",
     href: "/mapping",
     icon: Link2,
-    description: "Review account mappings to canonical chart of accounts.",
-    trustCheckpoint: "All accounts mapped and confirmed by human reviewer.",
+    description: "مراجعة تعيينات الحسابات إلى دليل الحسابات الموحد.",
+    trustCheckpoint: "جميع الحسابات معينة ومؤكدة من قبل المراجع البشري.",
   },
   {
     id: "statements",
-    label: "Financial Statements",
+    label: "القوائم المالية",
     href: "/statements",
     icon: FileText,
-    description: "Review draft income statement, balance sheet, and equity.",
-    trustCheckpoint: "Statements auto-generated from confirmed mappings.",
+    description: "مراجعة مسودة قائمة الدخل والميزانية العمومية وحقوق الملكية.",
+    trustCheckpoint: "القوائم منشأة تلقائياً من التعيينات المؤكدة.",
   },
   {
     id: "notes",
-    label: "Disclosure Notes",
+    label: "الإيضاحات",
     href: "/notes",
     icon: FileText,
-    description: "Review 14 auto-generated disclosure notes with evidence requirements.",
-    trustCheckpoint: "Notes are draft — human review and evidence linkage required.",
+    description: "مراجعة 14 إيضاحة منشأة تلقائياً مع متطلبات الأدلة.",
+    trustCheckpoint: "الإيضاحات في طور المسودة — تتطلب مراجعة بشرية وربط الأدلة.",
   },
   {
     id: "evidence",
-    label: "Evidence",
+    label: "الأدلة",
     href: "/evidence",
     icon: FolderOpen,
-    description: "Check evidence collection status and missing items.",
-    trustCheckpoint: "Evidence governs — no note approved without supporting evidence.",
+    description: "التحقق من حالة جمع الأدلة والعناصر المفقودة.",
+    trustCheckpoint: "الأدلة هي الحاكم — لا تتم الموافقة على إيضاحة بدون دليل داعم.",
   },
   {
     id: "findings",
-    label: "Findings",
+    label: "النتائج",
     href: "/findings",
     icon: SearchCheck,
-    description: "Review audit findings and their severity.",
-    trustCheckpoint: "All findings require human assessment and resolution.",
+    description: "مراجعة نتائج التدقيق ودرجة خطورتها.",
+    trustCheckpoint: "جميع النتائج تتطلب تقييماً وحلاً بشرياً.",
   },
   {
     id: "review",
-    label: "Review",
+    label: "المراجعة",
     href: "/review",
     icon: Eye,
-    description: "Review comments queue and unresolved items.",
-    trustCheckpoint: "AI assists. Humans decide. Every review action is human-triggered.",
+    description: "مراجعة قائمة التعليقات والعناصر غير المحلولة.",
+    trustCheckpoint: "الذكاء الاصطناعي يساعد. البشر يقررون. كل إجراء مراجعة يبدأ بواسطة البشر.",
   },
   {
     id: "approval",
-    label: "Approval",
+    label: "الاعتماد",
     href: "/approval",
     icon: ShieldCheck,
-    description: "Check approval readiness and blocking issues.",
-    trustCheckpoint: "No AI auto-approval. Final sign-off is human-only.",
+    description: "التحقق من جاهزية الاعتماد والمشكلات العالقة.",
+    trustCheckpoint: "لا يوجد موافقة تلقائية من الذكاء الاصطناعي. الاعتماد النهائي بشري فقط.",
   },
 ]
 
@@ -194,7 +194,7 @@ export default function PilotDemoFlow() {
     return (
       <Card>
         <CardContent className="p-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="size-4 animate-spin" />Loading demo flow...
+          <Loader2 className="size-4 animate-spin" />جاري تحميل العرض التجريبي...
         </CardContent>
       </Card>
     )
@@ -208,15 +208,15 @@ export default function PilotDemoFlow() {
           <div className="flex items-start gap-2 sm:gap-3">
             <ShieldCheck className="size-4 sm:size-5 text-emerald-600 mt-0.5 shrink-0" />
             <div className="flex-1 min-w-0">
-              <h2 className="text-sm font-semibold text-emerald-800 break-words">Pilot Demo Flow</h2>
+              <h2 className="text-sm font-semibold text-emerald-800 break-words">عرض تجريبي</h2>
               <p className="text-xs text-emerald-700/80 mt-0.5 break-words">
-                Walk through the audit workflow step by step. Each step links to the relevant page for live demonstration.
+                تصفح سير عمل التدقيق خطوة بخطوة. كل خطوة ترتبط بالصفحة ذات الصلة للعرض المباشر.
               </p>
               <div className="mt-2 flex items-center gap-2">
                 <div className="flex-1 h-1.5 bg-emerald-200 rounded-full overflow-hidden">
                   <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${progressPercent}%` }} />
                 </div>
-                <span className="text-[10px] font-medium text-emerald-700 whitespace-nowrap">{completedCount}/{totalCount} steps</span>
+                <span className="text-[10px] font-medium text-emerald-700 whitespace-nowrap">{completedCount}/{totalCount} خطوة</span>
               </div>
             </div>
           </div>
@@ -227,7 +227,7 @@ export default function PilotDemoFlow() {
       <Card className="border-amber-200 bg-amber-50/50">
         <CardContent className="px-3 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2">
           <ShieldCheck className="size-4 text-amber-600 shrink-0" />
-          <p className="text-xs font-medium text-amber-800 break-words">AI assists. Humans decide. Evidence governs.</p>
+          <p className="text-xs font-medium text-amber-800 break-words">الذكاء الاصطناعي يساعد. البشر يقررون. الأدلة تحكم.</p>
         </CardContent>
       </Card>
 
@@ -279,7 +279,7 @@ export default function PilotDemoFlow() {
                             "bg-slate-50 text-slate-600 border-slate-200"
                           }`}
                         >
-                          {status === "complete" ? "Complete" : status === "partial" ? "In Progress" : "Pending"}
+                          {status === "complete" ? "مكتمل" : status === "partial" ? "قيد التنفيذ" : "معلق"}
                         </Badge>
                       </div>
                       <p className="text-[11px] text-muted-foreground mt-0.5 break-words">{step.description}</p>
@@ -292,7 +292,7 @@ export default function PilotDemoFlow() {
                       className="shrink-0 mt-1 sm:mt-0"
                       onClick={(e) => { e.stopPropagation(); window.location.href = stepHref }}
                     >
-                      <ExternalLink className="size-3 mr-1" />Open
+                      <ExternalLink className="size-3 ml-1" />فتح
                     </Button>
                   </div>
 
@@ -301,14 +301,14 @@ export default function PilotDemoFlow() {
                     <div className="mt-3 pt-3 border-t space-y-2">
                       <div className="rounded border border-blue-100 bg-blue-50/60 p-2">
                         <p className="text-[11px] text-blue-800 break-words">
-                          <ShieldCheck className="inline size-3 mr-1" />
-                          <span className="font-medium">Trust checkpoint:</span> {step.trustCheckpoint}
+                          <ShieldCheck className="inline size-3 ml-1" />
+                          <span className="font-medium">نقطة الثقة:</span> {step.trustCheckpoint}
                         </p>
                       </div>
                       {status !== "complete" && (
                         <p className="text-[11px] text-amber-700 flex items-center gap-1 break-words">
                           <AlertTriangle className="size-3 shrink-0" />
-                          This step requires human review before proceeding.
+                          هذه الخطوة تتطلب مراجعة بشرية قبل المتابعة.
                         </p>
                       )}
                     </div>
@@ -332,7 +332,7 @@ export default function PilotDemoFlow() {
         <CardContent className="p-3">
           <div className="flex items-start sm:items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="size-3.5 shrink-0 mt-0.5 sm:mt-0" />
-            <span className="break-words">All draft content requires explicit human approval. AI-generated outputs cannot be final without human review.</span>
+            <span className="break-words">جميع محتويات المسودة تتطلب موافقة بشرية صريحة. مخرجات الذكاء الاصطناعي لا يمكن أن تكون نهائية بدون مراجعة بشرية.</span>
           </div>
         </CardContent>
       </Card>

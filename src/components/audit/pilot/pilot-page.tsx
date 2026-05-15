@@ -25,7 +25,18 @@ const statusColors: Record<string, string> = { open: "bg-blue-100 text-blue-700"
 const blockerCategories = ["Security", "Infrastructure", "Auth", "Export", "Performance", "Compliance", "Integration", "Other"]
 const signoffItems = ["Internal demo completed", "Client walkthrough completed", "Limitations acknowledged", "Pilot scope approved", "Pilot data approved", "Pilot users assigned", "Pilot start approved"]
 
+import PilotDemoFlow from "@/components/audit/pilot/pilot-demo-flow"
+
 export default function PilotPage() {
+  return (
+    <div className="space-y-6 sm:space-y-8">
+      <PilotDemoFlow />
+      <PilotPageContent />
+    </div>
+  )
+}
+
+function PilotPageContent() {
   const params = useParams()
   const engagementId = params.engagementId as string
   const [engagement, setEngagement] = useState<Engagement | null>(null)
@@ -93,72 +104,72 @@ export default function PilotPage() {
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
 
   return (
-    <div className="space-y-6" dir="ltr">
+    <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Pilot Readiness</h1>
-        <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight break-words">جاهزية التجربة التجريبية</h1>
+        <p className="text-sm text-muted-foreground break-words">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
       </div>
 
       {/* Status Summary */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
         <Card className={openBlockers === 0 ? "border-emerald-300" : "border-amber-300"}>
-          <CardContent className="p-4 text-center">
-            <Rocket className="size-6 mx-auto mb-1 text-muted-foreground" />
-            <div className="text-lg font-bold">{openBlockers === 0 ? "Ready" : `${openBlockers} blockers`}</div>
-            <div className="text-[10px] text-muted-foreground">Production Readiness</div>
+          <CardContent className="p-3 sm:p-4 text-center">
+            <Rocket className="size-5 sm:size-6 mx-auto mb-1 text-muted-foreground" />
+            <div className="text-base sm:text-lg font-bold break-words">{openBlockers === 0 ? "جاهز" : `${openBlockers} معيقات`}</div>
+            <div className="text-[10px] text-muted-foreground break-words">جاهزية الإنتاج</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 text-center">
-            <MessageSquare className="size-6 mx-auto mb-1 text-muted-foreground" />
-            <div className="text-lg font-bold">{feedback.length}</div>
-            <div className="text-[10px] text-muted-foreground">Feedback Items {openFeedbacks > 0 ? `(${openFeedbacks} open)` : ""}</div>
+          <CardContent className="p-3 sm:p-4 text-center">
+            <MessageSquare className="size-5 sm:size-6 mx-auto mb-1 text-muted-foreground" />
+            <div className="text-base sm:text-lg font-bold">{feedback.length}</div>
+            <div className="text-[10px] text-muted-foreground break-words">عناصر التغذية الراجعة {openFeedbacks > 0 ? `(${openFeedbacks} مفتوحة)` : ""}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 text-center">
-            <Bug className="size-6 mx-auto mb-1 text-muted-foreground" />
-            <div className="text-lg font-bold">{blockers.length}</div>
-            <div className="text-[10px] text-muted-foreground">Blockers ({openBlockers} open)</div>
+          <CardContent className="p-3 sm:p-4 text-center">
+            <Bug className="size-5 sm:size-6 mx-auto mb-1 text-muted-foreground" />
+            <div className="text-base sm:text-lg font-bold">{blockers.length}</div>
+            <div className="text-[10px] text-muted-foreground break-words">المعيقات ({openBlockers} مفتوحة)</div>
           </CardContent>
         </Card>
         <Card className={allApproved ? "border-emerald-300" : ""}>
-          <CardContent className="p-4 text-center">
-            <ListChecks className="size-6 mx-auto mb-1 text-muted-foreground" />
-            <div className="text-lg font-bold">{signoffs.filter(s => s.status === "approved").length}/{signoffItems.length}</div>
-            <div className="text-[10px] text-muted-foreground">Sign-off Checklist</div>
+          <CardContent className="p-3 sm:p-4 text-center">
+            <ListChecks className="size-5 sm:size-6 mx-auto mb-1 text-muted-foreground" />
+            <div className="text-base sm:text-lg font-bold">{signoffs.filter(s => s.status === "approved").length}/{signoffItems.length}</div>
+            <div className="text-[10px] text-muted-foreground break-words">قائمة التحقق من الاعتماد</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Sign-off Checklist */}
       <Card>
-        <CardHeader className="border-b px-4 py-3">
-          <CardTitle className="flex items-center gap-2 text-sm font-semibold">
-            <ListChecks className="size-4" />
-            Pilot Sign-off Checklist
+        <CardHeader className="border-b px-3 sm:px-4 py-3">
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold break-words">
+            <ListChecks className="size-4 shrink-0" />
+            قائمة التحقق من اعتماد التجربة التجريبية
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-3">
+        <CardContent className="pt-3 px-3 sm:px-4">
           <div className="space-y-2">
             {signoffItems.map(item => {
               const signoff = signoffs.find(s => s.checklistItem === item)
               const isApproved = signoff?.status === "approved"
               return (
-                <div key={item} className="flex items-center justify-between py-1.5">
-                  <div className="flex items-center gap-2">
+                <div key={item} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 py-1.5">
+                  <div className="flex items-center gap-2 min-w-0">
                     {isApproved ? (
-                      <CheckCircle2 className="size-4 text-emerald-500" />
+                      <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
                     ) : (
-                      <XCircle className="size-4 text-muted-foreground" />
+                      <XCircle className="size-4 text-muted-foreground shrink-0" />
                     )}
-                    <span className="text-sm">{item}</span>
+                    <span className="text-sm break-words">{item}</span>
                     {signoff?.signedBy && (
-                      <span className="text-[10px] text-muted-foreground">by {signoff.signedBy}</span>
+                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">بواسطة {signoff.signedBy}</span>
                     )}
                   </div>
-                  <Button variant={isApproved ? "outline" : "default"} size="sm" onClick={() => handleToggleSignoff(item)}>
-                    {isApproved ? "Undo" : "Approve"}
+                  <Button variant={isApproved ? "outline" : "default"} size="sm" className="self-start sm:self-auto" onClick={() => handleToggleSignoff(item)}>
+                    {isApproved ? "تراجع" : "اعتماد"}
                   </Button>
                 </div>
               )
@@ -166,12 +177,12 @@ export default function PilotPage() {
           </div>
           <div className="mt-3 p-2 rounded border text-center text-sm">
             {allApproved ? (
-              <span className="text-emerald-600 font-semibold flex items-center justify-center gap-1">
-                <CheckCircle2 className="size-4" /> All sign-off items complete — Ready for pilot
+              <span className="text-emerald-600 font-semibold flex items-center justify-center gap-1 break-words">
+                <CheckCircle2 className="size-4 shrink-0" /> جميع بنود الاعتماد مكتملة — جاهز للتجربة التجريبية
               </span>
             ) : (
-              <span className="text-amber-600 flex items-center justify-center gap-1">
-                <AlertTriangle className="size-4" /> {signoffItems.length - signoffs.filter(s => s.status === "approved").length} items remaining
+              <span className="text-amber-600 flex items-center justify-center gap-1 break-words">
+                <AlertTriangle className="size-4 shrink-0" /> {signoffItems.length - signoffs.filter(s => s.status === "approved").length} بنود متبقية
               </span>
             )}
           </div>
@@ -180,36 +191,36 @@ export default function PilotPage() {
 
       {/* Feedback Board */}
       <Card>
-        <CardHeader className="border-b px-4 py-3 flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-sm font-semibold">
-            <MessageSquare className="size-4" />
-            Pilot Feedback Board
+        <CardHeader className="border-b px-3 sm:px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold break-words">
+            <MessageSquare className="size-4 shrink-0" />
+            لوحة التغذية الراجعة للتجربة التجريبية
           </CardTitle>
-          <Button size="sm" onClick={() => setShowFeedbackDialog(true)}><Plus className="size-3 mr-1" />Add Feedback</Button>
+          <Button size="sm" className="self-start sm:self-auto" onClick={() => setShowFeedbackDialog(true)}><Plus className="size-3 ml-1" />إضافة تغذية راجعة</Button>
         </CardHeader>
-        <CardContent className="pt-3">
-          <div className="flex items-center gap-2 mb-3">
+        <CardContent className="pt-3 px-3 sm:px-4">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
             <Select value={fbFilterCat} onValueChange={(v) => { if (v !== null) setFbFilterCat(v) }}>
-              <SelectTrigger className="w-36"><SelectValue placeholder="Category" /></SelectTrigger>
+              <SelectTrigger className="w-full sm:w-36"><SelectValue placeholder="الفئة" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="all">جميع الفئات</SelectItem>
                 {feedbackCategories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
               </SelectContent>
             </Select>
             <Select value={fbFilterStatus} onValueChange={(v) => { if (v !== null) setFbFilterStatus(v) }}>
-              <SelectTrigger className="w-32"><SelectValue placeholder="Status" /></SelectTrigger>
+              <SelectTrigger className="w-full sm:w-32"><SelectValue placeholder="الحالة" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="open">Open</SelectItem>
-                <SelectItem value="in_review">In Review</SelectItem>
-                <SelectItem value="accepted">Accepted</SelectItem>
-                <SelectItem value="resolved">Resolved</SelectItem>
-                <SelectItem value="dismissed">Dismissed</SelectItem>
+                <SelectItem value="all">جميع الحالات</SelectItem>
+                <SelectItem value="open">مفتوح</SelectItem>
+                <SelectItem value="in_review">قيد المراجعة</SelectItem>
+                <SelectItem value="accepted">مقبول</SelectItem>
+                <SelectItem value="resolved">تم الحل</SelectItem>
+                <SelectItem value="dismissed">مرفوض</SelectItem>
               </SelectContent>
             </Select>
           </div>
           {feedback.length === 0 ? (
-            <div className="py-8 text-center text-sm text-muted-foreground">No feedback recorded yet. Click &quot;Add Feedback&quot; to start.</div>
+            <div className="py-8 text-center text-sm text-muted-foreground break-words">لا توجد تغذية راجعة مسجلة بعد. انقر &quot;إضافة تغذية راجعة&quot; للبدء.</div>
           ) : (
             <div className="divide-y">
               {feedback
@@ -217,29 +228,29 @@ export default function PilotPage() {
                 .filter(f => fbFilterStatus === "all" || f.status === fbFilterStatus)
                 .map(f => (
                 <div key={f.id} className="py-2.5">
-                  <div className="flex items-start justify-between cursor-pointer" onClick={() => setFbExpanded(fbExpanded === f.id ? null : f.id)}>
+                  <div className="flex items-start justify-between cursor-pointer gap-2" onClick={() => setFbExpanded(fbExpanded === f.id ? null : f.id)}>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">{f.title}</span>
-                        <Badge variant="outline" className={`text-[10px] ${severityColors[f.severity] ?? ""}`}>{f.severity}</Badge>
-                        <Badge variant="outline" className="text-[10px] bg-gray-50">{f.category}</Badge>
-                        <Badge variant="outline" className={`text-[10px] ${statusColors[f.status] ?? ""}`}>{f.status.replace(/_/g, " ")}</Badge>
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="text-sm font-medium break-words">{f.title}</span>
+                        <Badge variant="outline" className={`text-[10px] shrink-0 ${severityColors[f.severity] ?? ""}`}>{f.severity}</Badge>
+                        <Badge variant="outline" className="text-[10px] bg-gray-50 shrink-0">{f.category}</Badge>
+                        <Badge variant="outline" className={`text-[10px] shrink-0 ${statusColors[f.status] ?? ""}`}>{f.status.replace(/_/g, " ")}</Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">Source: {f.source} — {new Date(f.createdAt).toLocaleDateString()}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5 break-words">المصدر: {f.source} — {new Date(f.createdAt).toLocaleDateString("ar-SA")}</p>
                     </div>
-                    <div className="ml-2">{fbExpanded === f.id ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}</div>
+                    <div className="shrink-0">{fbExpanded === f.id ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}</div>
                   </div>
                   {fbExpanded === f.id && (
-                    <div className="mt-2 ml-4 space-y-2">
-                      <p className="text-sm">{f.description}</p>
-                      {f.decision && <p className="text-xs"><span className="font-medium">Decision:</span> {f.decision}</p>}
-                      {f.owner && <p className="text-xs"><span className="font-medium">Owner:</span> {f.owner}</p>}
-                      {f.nextAction && <p className="text-xs"><span className="font-medium">Next action:</span> {f.nextAction}</p>}
-                      <div className="flex items-center gap-1 flex-wrap">
-                        {f.status === "open" && <Button size="xs" variant="outline" onClick={() => handleUpdateFeedbackStatus(f.id, "in_review")} className="text-[10px]">Mark In Review</Button>}
-                        {f.status === "in_review" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "accepted")}>Accept</Button>}
-                        {(f.status === "open" || f.status === "in_review") && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "dismissed")}>Dismiss</Button>}
-                        {f.status === "accepted" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "resolved")}>Mark Resolved</Button>}
+                    <div className="mt-2 space-y-2">
+                      <p className="text-sm break-words">{f.description}</p>
+                      {f.decision && <p className="text-xs break-words"><span className="font-medium">القرار:</span> {f.decision}</p>}
+                      {f.owner && <p className="text-xs break-words"><span className="font-medium">المالك:</span> {f.owner}</p>}
+                      {f.nextAction && <p className="text-xs break-words"><span className="font-medium">الإجراء التالي:</span> {f.nextAction}</p>}
+                      <div className="flex flex-wrap items-center gap-1">
+                        {f.status === "open" && <Button size="xs" variant="outline" onClick={() => handleUpdateFeedbackStatus(f.id, "in_review")} className="text-[10px]">وضع قيد المراجعة</Button>}
+                        {f.status === "in_review" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "accepted")}>قبول</Button>}
+                        {(f.status === "open" || f.status === "in_review") && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "dismissed")}>رفض</Button>}
+                        {f.status === "accepted" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "resolved")}>وضع كحل</Button>}
                       </div>
                     </div>
                   )}
@@ -252,40 +263,40 @@ export default function PilotPage() {
 
       {/* Production Blockers */}
       <Card>
-        <CardHeader className="border-b px-4 py-3">
-          <CardTitle className="flex items-center gap-2 text-sm font-semibold">
-            <Bug className="size-4" />
-            Production Blockers
-            {openBlockers > 0 && <Badge variant="outline" className="bg-red-100 text-red-700 text-[10px]">{openBlockers} open</Badge>}
+        <CardHeader className="border-b px-3 sm:px-4 py-3">
+          <CardTitle className="flex flex-wrap items-center gap-2 text-sm font-semibold break-words">
+            <Bug className="size-4 shrink-0" />
+            معيقات الإنتاج
+            {openBlockers > 0 && <Badge variant="outline" className="bg-red-100 text-red-700 text-[10px] shrink-0">{openBlockers} مفتوحة</Badge>}
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-3">
+        <CardContent className="pt-3 px-3 sm:px-4">
           {blockers.length === 0 ? (
-            <div className="py-4 text-sm text-muted-foreground">No production blockers defined.</div>
+            <div className="py-4 text-sm text-muted-foreground break-words">لم يتم تعريف معيقات إنتاج.</div>
           ) : (
             <div className="divide-y">
               {blockers.map(b => (
                 <div key={b.id} className="py-2.5">
-                  <div className="flex items-start justify-between cursor-pointer" onClick={() => setBlockerExpanded(blockerExpanded === b.id ? null : b.id)}>
+                  <div className="flex items-start justify-between cursor-pointer gap-2" onClick={() => setBlockerExpanded(blockerExpanded === b.id ? null : b.id)}>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">{b.title}</span>
-                        <Badge variant="outline" className={`text-[10px] ${severityColors[b.severity] ?? ""}`}>{b.severity}</Badge>
-                        <Badge variant="outline" className="text-[10px] bg-gray-50">{b.category}</Badge>
-                        <Badge variant="outline" className={`text-[10px] ${statusColors[b.status] ?? ""}`}>{b.status}</Badge>
-                        <Badge variant="outline" className="text-[10px]">Before: {b.requiredBefore}</Badge>
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="text-sm font-medium break-words">{b.title}</span>
+                        <Badge variant="outline" className={`text-[10px] shrink-0 ${severityColors[b.severity] ?? ""}`}>{b.severity}</Badge>
+                        <Badge variant="outline" className="text-[10px] bg-gray-50 shrink-0">{b.category}</Badge>
+                        <Badge variant="outline" className={`text-[10px] shrink-0 ${statusColors[b.status] ?? ""}`}>{b.status}</Badge>
+                        <Badge variant="outline" className="text-[10px] shrink-0">قبل: {b.requiredBefore}</Badge>
                       </div>
                     </div>
-                    <div>{blockerExpanded === b.id ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}</div>
+                    <div className="shrink-0">{blockerExpanded === b.id ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}</div>
                   </div>
                   {blockerExpanded === b.id && (
-                    <div className="mt-2 ml-4 space-y-2">
-                      <p className="text-sm">{b.description}</p>
-                      {b.owner && <p className="text-xs"><span className="font-medium">Owner:</span> {b.owner}</p>}
-                      {b.resolutionPlan && <p className="text-xs"><span className="font-medium">Plan:</span> {b.resolutionPlan}</p>}
-                      <div className="flex items-center gap-1">
-                        {b.status === "open" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateBlockerStatus(b.id, "in_progress")}>In Progress</Button>}
-                        {b.status === "in_progress" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateBlockerStatus(b.id, "resolved")}>Resolve</Button>}
+                    <div className="mt-2 space-y-2">
+                      <p className="text-sm break-words">{b.description}</p>
+                      {b.owner && <p className="text-xs break-words"><span className="font-medium">المالك:</span> {b.owner}</p>}
+                      {b.resolutionPlan && <p className="text-xs break-words"><span className="font-medium">الخطة:</span> {b.resolutionPlan}</p>}
+                      <div className="flex flex-wrap items-center gap-1">
+                        {b.status === "open" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateBlockerStatus(b.id, "in_progress")}>قيد التنفيذ</Button>}
+                        {b.status === "in_progress" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateBlockerStatus(b.id, "resolved")}>حل</Button>}
                       </div>
                     </div>
                   )}
@@ -298,13 +309,13 @@ export default function PilotPage() {
 
       {/* Add Feedback Dialog */}
       <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader><DialogTitle>Add Pilot Feedback</DialogTitle><DialogDescription>Record feedback from demo or pilot sessions.</DialogDescription></DialogHeader>
+        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>إضافة تغذية راجعة للتجربة التجريبية</DialogTitle><DialogDescription>سجل التغذية الراجعة من جلسات العرض أو التجربة.</DialogDescription></DialogHeader>
           <div className="space-y-3">
-            <div><Label>Title *</Label><Input value={newFeedback.title} onChange={e => setNewFeedback({ ...newFeedback, title: e.target.value })} placeholder="Brief title" /></div>
-            <div><Label>Description</Label><Textarea value={newFeedback.description} onChange={e => setNewFeedback({ ...newFeedback, description: e.target.value })} placeholder="Describe the feedback..." /></div>
-            <div><Label>Source</Label><Input value={newFeedback.source} onChange={e => setNewFeedback({ ...newFeedback, source: e.target.value })} placeholder="e.g. Client, Internal team" /></div>
-            <div><Label>Category</Label>
+            <div><Label>العنوان *</Label><Input value={newFeedback.title} onChange={e => setNewFeedback({ ...newFeedback, title: e.target.value })} placeholder="عنوان مختصر" /></div>
+            <div><Label>الوصف</Label><Textarea value={newFeedback.description} onChange={e => setNewFeedback({ ...newFeedback, description: e.target.value })} placeholder="صف التغذية الراجعة..." /></div>
+            <div><Label>المصدر</Label><Input value={newFeedback.source} onChange={e => setNewFeedback({ ...newFeedback, source: e.target.value })} placeholder="مثال: عميل، فريق داخلي" /></div>
+            <div><Label>الفئة</Label>
               <Select value={newFeedback.category} onValueChange={(v) => { if (v !== null) setNewFeedback({ ...newFeedback, category: v }) }}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -312,21 +323,21 @@ export default function PilotPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div><Label>Severity</Label>
+            <div><Label>درجة التأثير</Label>
               <Select value={newFeedback.severity} onValueChange={(v) => { if (v !== null) setNewFeedback({ ...newFeedback, severity: v }) }}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="critical">Critical</SelectItem>
+                  <SelectItem value="low">منخفض</SelectItem>
+                  <SelectItem value="medium">متوسط</SelectItem>
+                  <SelectItem value="high">مرتفع</SelectItem>
+                  <SelectItem value="critical">حرج</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowFeedbackDialog(false)}>Cancel</Button>
-            <Button disabled={!newFeedback.title.trim() || fbSubmitting} onClick={handleCreateFeedback}>{fbSubmitting ? "Saving..." : "Save Feedback"}</Button>
+            <Button variant="outline" onClick={() => setShowFeedbackDialog(false)}>إلغاء</Button>
+            <Button disabled={!newFeedback.title.trim() || fbSubmitting} onClick={handleCreateFeedback}>{fbSubmitting ? "جاري الحفظ..." : "حفظ التغذية الراجعة"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

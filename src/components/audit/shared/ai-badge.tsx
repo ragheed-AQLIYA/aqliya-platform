@@ -21,9 +21,9 @@ function AiBadge({
   className,
 }: AiBadgeProps) {
   const labels: Record<string, string> = {
-    suggested: "AI Suggested",
-    assisted: "AI Assisted",
-    generated: "AI Generated",
+    suggested: "مقترح من الذكاء الاصطناعي",
+    assisted: "بمساعدة الذكاء الاصطناعي",
+    generated: "منتج بواسطة الذكاء الاصطناعي",
   }
 
   const sizeClasses = {
@@ -49,7 +49,7 @@ function AiBadge({
             "whitespace-nowrap"
           )}
         >
-          {modelVersion && <span className="mr-1.5 font-mono">v{modelVersion}</span>}
+          {modelVersion && <span className="ml-1.5 font-mono">v{modelVersion}</span>}
           {confidence !== undefined && (
             <span className={cn(confidence > 0.9 ? "text-emerald-600" : confidence > 0.7 ? "text-amber-600" : "text-red-600")}>
               {Math.round(confidence * 100)}%

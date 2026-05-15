@@ -54,7 +54,7 @@ function AiSuggestionPanel({
       <div className="mb-3 flex items-center gap-2">
         <span className="inline-flex items-center gap-1 rounded-full border border-purple-200 bg-purple-50 px-2 py-0.5 text-[10px] font-medium text-purple-700 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300">
           <Bot className="h-2.5 w-2.5" />
-          Suggested by AI
+          مقترح من الذكاء الاصطناعي
         </span>
         {suggestion.modelVersion && (
           <span className="text-[10px] font-mono text-muted-foreground">
@@ -63,7 +63,7 @@ function AiSuggestionPanel({
         )}
         {confidence !== undefined && (
           <span className={cn("text-[10px] font-semibold", confidenceColor)}>
-            {Math.round(confidence * 100)}% confidence
+            {Math.round(confidence * 100)}% ثقة
           </span>
         )}
       </div>
@@ -75,7 +75,7 @@ function AiSuggestionPanel({
       {suggestion.evidenceTrace && suggestion.evidenceTrace.length > 0 && (
         <div className="mb-4">
           <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Evidence Trace
+            سلسلة الأدلة
           </span>
           <div className="space-y-1">
             {suggestion.evidenceTrace.map((trace) => (
@@ -99,16 +99,16 @@ function AiSuggestionPanel({
       <div className="flex items-center gap-2">
         <Button onClick={onAccept} size="sm" className="gap-1.5">
           <CheckCircle2 className="h-3.5 w-3.5" />
-          Accept
+          قبول
         </Button>
         <Button onClick={onReject} variant="destructive" size="sm" className="gap-1.5">
           <XCircle className="h-3.5 w-3.5" />
-          Reject
+          رفض
         </Button>
         {onEdit && (
           <Button onClick={onEdit} variant="outline" size="sm" className="gap-1.5">
             <PencilLine className="h-3.5 w-3.5" />
-            Edit
+            تعديل
           </Button>
         )}
       </div>

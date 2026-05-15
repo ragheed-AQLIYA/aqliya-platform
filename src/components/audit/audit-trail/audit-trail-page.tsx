@@ -16,36 +16,36 @@ import type { TraceabilityNode } from "@/components/audit/shared/traceability-dr
 import { getAuditEventsAction, getEngagementAction } from "@/actions/audit-read-actions"
 
 const eventTypeLabels: Record<string, string> = {
-  "engagement.created": "Engagement Created", "team.assigned": "Team Assigned",
-  "trial_balance.uploaded": "TB Uploaded", "mapping.ai_suggested": "AI Mappings Suggested",
-  "mapping.confirmed": "Mapping Confirmed", "validation.completed": "Validation Completed",
-  "evidence.uploaded": "Evidence Uploaded", "evidence.accepted": "Evidence Accepted",
-  "signal.generated": "AI Signal Generated", "finding.created": "Finding Created",
-  "finding.state_changed": "Finding State Changed", "recommendation.ai_suggested": "AI Recommendation",
-  "recommendation.created": "Recommendation Created", "recommendation.state_changed": "Recommendation Updated",
-  "review.comment_added": "Review Comment Added",
-  "engagement.state_changed": "Engagement State Changed",
-  "ai.output_generated": "AI Output Generated",
-  "ai.output_accepted": "AI Output Accepted",
-  "ai.output_rejected": "AI Output Rejected",
-  "ai.notes_draft_generated": "AI Draft Notes Generated",
-  "ai.notes_draft_accepted": "AI Draft Notes Accepted",
-  "ai.notes_draft_rejected": "AI Draft Notes Rejected",
-  "ai.finding_draft_generated": "AI Finding Draft Generated",
-  "ai.finding_draft_accepted": "AI Finding Draft Accepted",
-  "ai.recommendation_draft_generated": "AI Recommendation Draft Generated",
-  "ai.recommendation_draft_accepted": "AI Recommendation Draft Accepted",
-  "ai.analytical_review_generated": "AI Analytical Review Generated",
-  "evidence.state_changed": "Evidence State Changed",
-  "evidence.file_scanned": "File Scan Result",
-  "pilot.feedback_created": "Pilot Feedback Created",
-  "pilot.feedback_updated": "Pilot Feedback Updated",
-  "pilot.blocker_created": "Production Blocker Created",
-  "pilot.blocker_updated": "Production Blocker Updated",
-  "pilot.signoff_updated": "Pilot Sign-off Updated",
-  "audit_user.created": "Audit User Created",
-  "audit_user.role_updated": "Audit User Role Updated",
-  "audit_user.deactivated": "Audit User Deactivated",
+  "engagement.created": "تم إنشاء الارتباط", "team.assigned": "تم تعيين الفريق",
+  "trial_balance.uploaded": "تم رفع ميزان المراجعة", "mapping.ai_suggested": "تم اقتراح التصنيف بواسطة الذكاء الاصطناعي",
+  "mapping.confirmed": "تم تأكيد التصنيف", "validation.completed": "اكتمل التدقيق",
+  "evidence.uploaded": "تم رفع الدليل", "evidence.accepted": "تم قبول الدليل",
+  "signal.generated": "تم إنشاء إشارة الذكاء الاصطناعي", "finding.created": "تم إنشاء النتيجة",
+  "finding.state_changed": "تغيرت حالة النتيجة", "recommendation.ai_suggested": "توصية الذكاء الاصطناعي",
+  "recommendation.created": "تم إنشاء التوصية", "recommendation.state_changed": "تم تحديث التوصية",
+  "review.comment_added": "تمت إضافة تعليق المراجعة",
+  "engagement.state_changed": "تغيرت حالة الارتباط",
+  "ai.output_generated": "تم إنشاء مخرج الذكاء الاصطناعي",
+  "ai.output_accepted": "تم قبول مخرج الذكاء الاصطناعي",
+  "ai.output_rejected": "تم رفض مخرج الذكاء الاصطناعي",
+  "ai.notes_draft_generated": "تم إنشاء مسودة ملاحظات الذكاء الاصطناعي",
+  "ai.notes_draft_accepted": "تم قبول مسودة ملاحظات الذكاء الاصطناعي",
+  "ai.notes_draft_rejected": "تم رفض مسودة ملاحظات الذكاء الاصطناعي",
+  "ai.finding_draft_generated": "تم إنشاء مسودة نتيجة الذكاء الاصطناعي",
+  "ai.finding_draft_accepted": "تم قبول مسودة نتيجة الذكاء الاصطناعي",
+  "ai.recommendation_draft_generated": "تم إنشاء مسودة توصية الذكاء الاصطناعي",
+  "ai.recommendation_draft_accepted": "تم قبول مسودة توصية الذكاء الاصطناعي",
+  "ai.analytical_review_generated": "تم إنشاء المراجعة التحليلية للذكاء الاصطناعي",
+  "evidence.state_changed": "تغيرت حالة الدليل",
+  "evidence.file_scanned": "نتيجة فحص الملف",
+  "pilot.feedback_created": "تم إنشاء ملاحظات التجربة",
+  "pilot.feedback_updated": "تم تحديث ملاحظات التجربة",
+  "pilot.blocker_created": "تم إنشاء عائق إنتاجي",
+  "pilot.blocker_updated": "تم تحديث عائق إنتاجي",
+  "pilot.signoff_updated": "تم تحديث اعتماد التجربة",
+  "audit_user.created": "تم إنشاء مستخدم التدقيق",
+  "audit_user.role_updated": "تم تحديث دور مستخدم التدقيق",
+  "audit_user.deactivated": "تم إلغاء تنشيط مستخدم التدقيق",
 }
 
 export default function AuditTrailPage() {
@@ -70,7 +70,7 @@ export default function AuditTrailPage() {
   }, [engagementId])
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
-  if (events.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">No audit events found.</CardContent></Card>
+  if (events.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">لم يتم العثور على أحداث تدقيق.</CardContent></Card>
 
   const uniqueTypes = [...new Set(events.map(e => e.eventType))]
   const uniqueActors = [...new Set(events.map(e => e.actorName))]
@@ -85,32 +85,32 @@ export default function AuditTrailPage() {
   const hasMore = paged.length < sorted.length
 
   return (
-    <div className="space-y-6" dir="ltr">
+    <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Audit Trail</h1>
+        <h1 className="text-2xl font-bold tracking-tight">سجل التدقيق</h1>
         <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
         <div className="relative flex-1 max-w-xs">
           <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-          <Input placeholder="Search events..." className="pl-8" value={search} onChange={e => setSearch(e.target.value)} />
+          <Input placeholder="البحث في الأحداث..." className="pr-8" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <Select value={typeFilter} onValueChange={(v) => { if (v !== null) { setTypeFilter(v) } }}>
-          <SelectTrigger className="w-48"><SelectValue placeholder="Event type" /></SelectTrigger>
+          <SelectTrigger className="w-48"><SelectValue placeholder="نوع الحدث" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
+            <SelectItem value="all">جميع الأنواع</SelectItem>
             {uniqueTypes.map(t => <SelectItem key={t} value={t}>{eventTypeLabels[t] || t}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={actorFilter} onValueChange={(v) => { if (v !== null) { setActorFilter(v) } }}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="Actor" /></SelectTrigger>
+          <SelectTrigger className="w-40"><SelectValue placeholder="الجهة" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Actors</SelectItem>
+            <SelectItem value="all">جميع الجهات</SelectItem>
             {uniqueActors.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}
           </SelectContent>
         </Select>
-        <div className="text-xs text-muted-foreground ml-auto">{sorted.length} events</div>
+        <div className="text-xs text-muted-foreground mr-auto">{sorted.length} أحداث</div>
       </div>
 
       <Card>
@@ -127,7 +127,7 @@ export default function AuditTrailPage() {
                         <span className="text-sm font-medium">{eventTypeLabels[ev.eventType] || ev.eventType}</span>
                         {ev.aiRelated && (
                           <Badge variant="outline" className="bg-purple-100 text-purple-700 border-purple-300 flex items-center gap-1 text-[10px]">
-                            <Sparkles className="size-2.5" />AI
+                            <Sparkles className="size-2.5" />ذكاء اصطناعي
                           </Badge>
                         )}
                       </div>
@@ -135,7 +135,7 @@ export default function AuditTrailPage() {
                       <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1"><User className="size-3" />{ev.actorName}</span>
                         <Badge variant="outline" className="text-[10px]">{ev.actorRole}</Badge>
-                        <span className="flex items-center gap-1"><Clock className="size-3" />{new Date(ev.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        <span className="flex items-center gap-1"><Clock className="size-3" />{new Date(ev.timestamp).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                         <Button size="xs" variant="ghost" className="h-5 px-1" onClick={async () => { setTraceEvent(ev); try { const trace = await getTraceabilityAction(engagementId, 'audit_event', ev.id); setTraceData({ forward: trace.forwardTrace ?? [], backward: trace.backwardTrace ?? [] }) } catch { setTraceData({ forward: [], backward: [] }) }; setTraceabilityOpen(true) }}><Share2 className="size-3" /></Button>
                       </div>
                       {ev.previousState && (
@@ -159,7 +159,7 @@ export default function AuditTrailPage() {
 
       {hasMore && (
         <div className="flex justify-center">
-          <Button variant="outline" onClick={() => setPage(page + 1)}>Load More</Button>
+          <Button variant="outline" onClick={() => setPage(page + 1)}>تحميل المزيد</Button>
         </div>
       )}
 

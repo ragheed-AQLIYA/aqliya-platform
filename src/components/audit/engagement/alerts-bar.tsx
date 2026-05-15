@@ -36,12 +36,12 @@ export function AlertsBar({ alerts }: AlertsBarProps) {
             <Icon className="mt-0.5 h-4 w-4 shrink-0" />
             <div className="flex-1">
               <span>{alert.message}</span>
-              <span className="ml-2 text-xs opacity-70">({alert.source})</span>
+              <span className="mr-2 text-xs opacity-70">({alert.source})</span>
             </div>
             <button
               onClick={() => setDismissed((prev) => new Set(prev).add(alert.id))}
               className="shrink-0 rounded p-0.5 opacity-60 hover:opacity-100"
-              aria-label="Dismiss alert"
+              aria-label="إغلاق التنبيه"
             >
               <X className="h-3.5 w-3.5" />
             </button>

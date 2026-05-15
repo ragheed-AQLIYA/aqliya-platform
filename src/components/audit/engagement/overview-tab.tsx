@@ -20,17 +20,17 @@ function engagementHref(engagementId: string, step: string) {
   return `/audit/engagements/${engagementId}/${step}`
 }
 const workflowSteps = [
-  { key: "trial-balance", label: "Trial Balance", icon: FileSpreadsheet },
-  { key: "mapping", label: "Account Mapping", icon: Network },
-  { key: "validation", label: "Validation", icon: Network },
-  { key: "statements", label: "Statements", icon: FileText },
-  { key: "notes", label: "Notes", icon: FileText },
-  { key: "evidence", label: "Evidence", icon: FileSearch },
-  { key: "findings", label: "Findings", icon: Scale },
-  { key: "recommendations", label: "Recommendations", icon: FileText },
-  { key: "review", label: "Review", icon: MessageSquare },
-  { key: "approval", label: "Approval", icon: CheckCircle },
-  { key: "publication", label: "Publication", icon: FileText },
+  { key: "trial-balance", label: "ميزان المراجعة", icon: FileSpreadsheet },
+  { key: "mapping", label: "تعيين الحسابات", icon: Network },
+  { key: "validation", label: "التحقق", icon: Network },
+  { key: "statements", label: "القوائم المالية", icon: FileText },
+  { key: "notes", label: "الإيضاحات", icon: FileText },
+  { key: "evidence", label: "الأدلة", icon: FileSearch },
+  { key: "findings", label: "النتائج", icon: Scale },
+  { key: "recommendations", label: "التوصيات", icon: FileText },
+  { key: "review", label: "المراجعة", icon: MessageSquare },
+  { key: "approval", label: "الاعتماد", icon: CheckCircle },
+  { key: "publication", label: "النشر", icon: FileText },
 ]
 
 const sarFormatter = new Intl.NumberFormat("en-SA", { style: "currency", currency: "SAR", minimumFractionDigits: 0, maximumFractionDigits: 0 })
@@ -75,20 +75,20 @@ export function OverviewTab({ engagementId, engagement }: OverviewTabProps) {
 
   const metrics = [
     {
-      label: "Trial Balance",
+      label: "ميزان المراجعة",
       icon: FileSpreadsheet,
       content: tb ? (
         <div className="space-y-1 text-xs">
-          <div className="flex justify-between"><span className="text-muted-foreground">Total Debits:</span><span className="font-medium">{sarFormatter.format(tb.totalDebits)}</span></div>
-          <div className="flex justify-between"><span className="text-muted-foreground">Total Credits:</span><span className="font-medium">{sarFormatter.format(tb.totalCredits)}</span></div>
-          <div className="flex justify-between border-t pt-1"><span className="text-muted-foreground">Variance:</span><span className={`font-medium ${tb.variance !== 0 ? "text-destructive" : "text-emerald-600"}`}>{sarFormatter.format(tb.variance)}</span></div>
+          <div className="flex justify-between"><span className="text-muted-foreground">إجمالي الديون:</span><span className="font-medium">{sarFormatter.format(tb.totalDebits)}</span></div>
+          <div className="flex justify-between"><span className="text-muted-foreground">إجمالي الدائنين:</span><span className="font-medium">{sarFormatter.format(tb.totalCredits)}</span></div>
+          <div className="flex justify-between border-t pt-1"><span className="text-muted-foreground">الفرق:</span><span className={`font-medium ${tb.variance !== 0 ? "text-destructive" : "text-emerald-600"}`}>{sarFormatter.format(tb.variance)}</span></div>
         </div>
       ) : (
-        <span className="text-xs text-muted-foreground">Not imported</span>
+        <span className="text-xs text-muted-foreground">غير مستورد</span>
       ),
     },
     {
-      label: "Mapping Progress",
+      label: "تقدم التعيين",
       icon: Network,
       content: (
         <div className="space-y-1">
@@ -99,50 +99,50 @@ export function OverviewTab({ engagementId, engagement }: OverviewTabProps) {
               style={{ width: mappings.total > 0 ? `${(mappings.confirmed / mappings.total) * 100}%` : "0%" }}
             />
           </div>
-          <span className="text-xs text-muted-foreground">accounts mapped</span>
+          <span className="text-xs text-muted-foreground">حسابات معينة</span>
         </div>
       ),
     },
     {
-      label: "Evidence",
+      label: "الأدلة",
       icon: FileSearch,
       content: (
         <div className="space-y-1">
           <div className="flex items-baseline gap-3">
             <span className="text-2xl font-bold text-emerald-600">{evidence.uploaded}</span>
-            <span className="text-sm text-muted-foreground">uploaded</span>
+            <span className="text-sm text-muted-foreground">مرفوع</span>
           </div>
           {evidence.missing > 0 && (
             <div className="flex items-baseline gap-3">
               <span className="text-2xl font-bold text-destructive">{evidence.missing}</span>
-              <span className="text-sm text-muted-foreground">missing</span>
+              <span className="text-sm text-muted-foreground">مفقود</span>
             </div>
           )}
         </div>
       ),
     },
     {
-      label: "Findings",
+      label: "النتائج",
       icon: Scale,
       content: (
         <div className="space-y-1">
           <div className="text-2xl font-bold">{findings.total}</div>
-          <span className="text-xs text-muted-foreground">{findings.open} open</span>
+          <span className="text-xs text-muted-foreground">{findings.open} مفتوحة</span>
         </div>
       ),
     },
     {
-      label: "Review Status",
+      label: "حالة المراجعة",
       icon: MessageSquare,
       content: (
         <div className="space-y-1">
           <div className="text-2xl font-bold">{openReviews}</div>
-          <span className="text-xs text-muted-foreground">{openReviews === 1 ? "open comment" : "open comments"}</span>
+          <span className="text-xs text-muted-foreground">{openReviews === 1 ? "تعليق مفتوح" : "تعليقات مفتوحة"}</span>
         </div>
       ),
     },
     {
-      label: "Approval Status",
+      label: "حالة الاعتماد",
       icon: CheckCircle,
       content: (
         <div className="space-y-1">
@@ -184,7 +184,7 @@ export function OverviewTab({ engagementId, engagement }: OverviewTabProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
               <Users className="h-4 w-4 text-muted-foreground" />
-              Team Members
+              أعضاء الفريق
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -205,7 +205,7 @@ export function OverviewTab({ engagementId, engagement }: OverviewTabProps) {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No team members assigned</p>
+              <p className="text-sm text-muted-foreground">لم يتم تعيين أعضاء فريق</p>
             )}
           </CardContent>
         </Card>
@@ -213,7 +213,7 @@ export function OverviewTab({ engagementId, engagement }: OverviewTabProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              Recent Activity
+              النشاط الأخير
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -225,7 +225,7 @@ export function OverviewTab({ engagementId, engagement }: OverviewTabProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm font-medium">
-            Workflow Steps
+            خطوات سير العمل
           </CardTitle>
         </CardHeader>
         <CardContent>

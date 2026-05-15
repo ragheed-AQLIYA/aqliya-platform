@@ -44,13 +44,13 @@ export function WorkflowGuard({ engagementId, tabKey, children, fallbackMessage 
           <Lock className="h-6 w-6 text-muted-foreground" />
         </div>
         <div className="text-center space-y-2">
-          <h2 className="text-lg font-semibold text-muted-foreground">Step Not Available Yet</h2>
+          <h2 className="text-lg font-semibold text-muted-foreground">الخطوة غير متاحة بعد</h2>
           <p className="text-sm text-muted-foreground max-w-md">
-            {fallbackMessage || gate.reason || 'Complete the previous steps before accessing this section.'}
+            {fallbackMessage || gate.reason || 'أكمل الخطوات السابقة قبل الوصول إلى هذا القسم.'}
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={() => window.history.back()}>
-          Go Back
+          العودة
         </Button>
       </CardContent>
     </Card>
