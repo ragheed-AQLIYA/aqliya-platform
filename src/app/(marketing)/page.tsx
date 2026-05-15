@@ -223,32 +223,36 @@ export default function HomePage() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-6 backdrop-blur">
             <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-white">ليست صفحة دردشة</h3>
+              <h3 className="text-sm font-bold text-foreground">
+                ليست صفحة دردشة
+              </h3>
               <span className="text-lg text-red-400">✕</span>
             </div>
-            <p className="mt-3 text-xs leading-6 text-white/70">
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
               صفحات الدردشة العامة تعطيك إجابات. عقلية تعطيك مسارات مراجعة
               محكومة وموثقة تربط الإجابة بالبيانات والسياق والموافقات.
             </p>
           </div>
           <div className="rounded-2xl border border-yellow-600/20 bg-yellow-600/[0.05] p-6 backdrop-blur">
             <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-white">ليست SaaS فقط</h3>
+              <h3 className="text-sm font-bold text-foreground">
+                ليست SaaS فقط
+              </h3>
               <span className="text-lg text-yellow-500">✕</span>
             </div>
-            <p className="mt-3 text-xs leading-6 text-white/70">
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
               عقلية ليست حصرية على السحابة. نقدم نموذج تشغيل مزدوج: سحابة متاحة
               الآن، وخوادم خاصة ومعزولة قيد التطوير للمؤسسات الحساسة.
             </p>
           </div>
           <div className="rounded-2xl border border-amber-600/20 bg-amber-600/[0.05] p-6 backdrop-blur">
             <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-white">
+              <h3 className="text-sm font-bold text-foreground">
                 ليست منتج واحد فقط
               </h3>
               <span className="text-lg text-amber-500">✕</span>
             </div>
-            <p className="mt-3 text-xs leading-6 text-white/70">
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
               بعض المؤسسات تبحث عن أداة واحدة مثل AuditOS. عقلية نواة تشغيلية
               تسمح ببناء أكثر من خط نظام فوقها حسب احتياج المؤسسة.
             </p>
@@ -263,38 +267,40 @@ export default function HomePage() {
           description="نقدم خيارات تشغيل مختلفة حسب احتياجات المؤسسة الأمنية والتشغيلية. كل نموذج يحافظ على نفس منطق الحوكمة والتتبع والأدلة."
         />
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-2xl border border-aqliya-cyan/30 bg-aqliya-cyan/[0.08] p-6 backdrop-blur">
+          <div className="rounded-2xl border border-aqliya-cyan/30 bg-gradient-to-br from-aqliya-cyan/[0.08] to-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-white">السحابة</h3>
+              <h3 className="text-sm font-black text-foreground">السحابة</h3>
               <span className="inline-flex rounded-full bg-aqliya-cyan/20 px-2 py-1 text-[9px] font-bold text-aqliya-cyan uppercase">
                 متاح الآن
               </span>
             </div>
-            <p className="mt-3 text-xs leading-6 text-white/70">
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
               إصدار سحابة متكامل مع كل الخصائص والتحديثات التلقائية والنسخ
               الاحتياطي. مثالي للمؤسسات التي تفضل عدم إدارة البنية التحتية.
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+          <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-muted/30 to-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-white">خوادم خاصة</h3>
-              <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold text-white/60 uppercase">
+              <h3 className="text-sm font-black text-foreground">خوادم خاصة</h3>
+              <span className="inline-flex rounded-full bg-amber-100 px-2 py-1 text-[9px] font-bold text-amber-700 uppercase">
                 قريبًا
               </span>
             </div>
-            <p className="mt-3 text-xs leading-6 text-white/70">
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
               تثبيت على خوادمك الخاصة مع كل خصائص الحوكمة والتحكم. متوفر على
               Docker أو Kubernetes. يسمح بالتحكم الكامل والتعديلات المؤسسية.
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+          <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-muted/30 to-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-white">معزولة تماما</h3>
-              <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold text-white/60 uppercase">
+              <h3 className="text-sm font-black text-foreground">
+                معزولة تماما
+              </h3>
+              <span className="inline-flex rounded-full bg-slate-100 px-2 py-1 text-[9px] font-bold text-slate-600 uppercase">
                 استراتيجي
               </span>
             </div>
-            <p className="mt-3 text-xs leading-6 text-white/70">
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
               بيئة معزولة بدون أي اتصال بالانترنت (air-gapped) للمؤسسات ذات
               متطلبات أمنية صارمة. كل البيانات والمعالجة محلية بالكامل.
             </p>
