@@ -4,6 +4,7 @@ const nextConfig = {
     "@prisma/client",
     "@prisma/adapter-pg",
     "pg",
+    "pdfkit",
   ],
 };
 
