@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
-import { AlertTriangle, Plus, Sparkles, ChevronDown, ChevronRight, FileText, User, Calendar, Filter, Flag, Share2, CheckCircle, XCircle, ListChecks, Bot, Loader2 } from "lucide-react"
+import { AlertTriangle, Plus, Sparkles, ChevronDown, ChevronRight, FileText, User, Calendar, Filter, Flag, Share2, CheckCircle, XCircle, ListChecks, Bot, Loader2, RefreshCw } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { TraceabilityDrawer } from "@/components/audit/shared/traceability-drawer"
 import type { TraceabilityNode } from "@/components/audit/shared/traceability-drawer"
-import { getFindingsAction, getEngagementAction, getEvidenceAction, getRecommendationsAction } from "@/actions/audit-read-actions"
+import { getFindingsPaginatedAction, getEngagementAction, getEvidenceAction, getRecommendationsAction } from "@/actions/audit-read-actions"
 
 const severityColors: Record<string, string> = { low: "bg-green-100 text-green-700 border-green-300", medium: "bg-amber-100 text-amber-700 border-amber-300", high: "bg-orange-100 text-orange-700 border-orange-300", critical: "bg-red-100 text-red-700 border-red-300" }
 const statusColors: Record<string, string> = { draft: "bg-gray-100 text-gray-600", open: "bg-blue-100 text-blue-700", in_review: "bg-purple-100 text-purple-700", accepted: "bg-green-100 text-green-700", resolved: "bg-teal-100 text-teal-700", dismissed: "bg-gray-100 text-gray-500" }
@@ -51,10 +51,15 @@ export default function FindingsPage() {
   const [acceptingFindingId, setAcceptingFindingId] = useState<string | null>(null)
   const [createSubmitting, setCreateSubmitting] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
+  const [findPage, setFindPage] = useState(1)
+  const [findHasMore, setFindHasMore] = useState(false)
+  const [findTotal, setFindTotal] = useState(0)
+  const [loadingFindMore, setLoadingFindMore] = useState(false)
+  const FINDINGS_PAGE_SIZE = 20
 
   useEffect(() => {
-    Promise.all([getFindingsAction(engagementId), getEngagementAction(engagementId)]).then(([f, e]) => {
-      setFindings(f); setEngagement(e); setLoading(false)
+    Promise.all([getFindingsPaginatedAction(engagementId, 1, FINDINGS_PAGE_SIZE), getEngagementAction(engagementId)]).then(([r, e]) => {
+      setFindings(r.items); setFindTotal(r.total); setFindHasMore(r.hasMore); setFindPage(1); setEngagement(e); setLoading(false)
     })
   }, [engagementId])
 
@@ -83,17 +88,17 @@ export default function FindingsPage() {
   }
 
   return (
-    <div className="space-y-6" dir="ltr">
+    <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Findings</h1>
+          <h1 className="text-2xl font-bold tracking-tight">النتائج</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" disabled={generatingFindingDrafts} onClick={async () => { setGeneratingFindingDrafts(true); try { const r = await generateFindingDraftsAction(engagementId); setAiDrafts(prev => [...r, ...prev]) } catch {} finally { setGeneratingFindingDrafts(false) } }} className="gap-1.5">
-            {generatingFindingDrafts ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} Generate Draft Findings
+            {generatingFindingDrafts ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} إنشاء مسودات نتائج
           </Button>
-          <Button onClick={() => setShowCreate(true)}><Plus className="size-4 mr-1" />New Finding</Button>
+          <Button onClick={() => setShowCreate(true)}><Plus className="size-4 ml-1" />نتيجة جديدة</Button>
         </div>
       </div>
 
@@ -102,8 +107,8 @@ export default function FindingsPage() {
           <CardHeader className="border-b border-violet-100 px-4 py-3">
             <CardTitle className="flex items-center gap-2 text-sm font-semibold">
               <Bot className="h-4 w-4 text-violet-500" />
-              AI Draft Findings — Requires human review
-              <Badge variant="outline" className="bg-violet-100 text-violet-700 border-violet-200 text-[10px]">Not final</Badge>
+              مسودات نتائج الذكاء — تتطلب مراجعة بشرية
+              <Badge variant="outline" className="bg-violet-100 text-violet-700 border-violet-200 text-[10px]">غير نهائي</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="divide-y divide-violet-100 pt-0">
@@ -117,22 +122,22 @@ export default function FindingsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">{(parsed.title as string) ?? "Draft Finding"}</span>
+                      <span className="text-sm font-medium">{(parsed.title as string) ?? "مسودة نتيجة"}</span>
                       {(parsed.severity != null && String(parsed.severity)) && (
-                        <Badge variant="outline" className={(severityColors[String(parsed.severity)] ?? "") + " text-[10px]"}>{String(parsed.severity)}</Badge>
+                        <Badge variant="outline" className={(severityColors[String(parsed.severity)] ?? "") + " text-[10px]"}>{String(parsed.severity) === "low" ? "منخفض" : String(parsed.severity) === "medium" ? "متوسط" : String(parsed.severity) === "high" ? "عالٍ" : String(parsed.severity) === "critical" ? "حرج" : String(parsed.severity)}</Badge>
                       )}
-                      <span className="text-[10px] text-muted-foreground">{Math.round((ai.confidence ?? 0) * 100)}% confidence</span>
+                      <span className="text-[10px] text-muted-foreground">%{Math.round((ai.confidence ?? 0) * 100)} ثقة</span>
                     </div>
                     <p className="text-xs text-muted-foreground line-clamp-2">{String(parsed.description ?? "")}</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <Button variant="ghost" size="icon" className="h-7 w-7 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                       onClick={async () => { setAcceptingFindingId(ai.id); try { const r = await acceptFindingDraftAction(ai.id, engagementId); if (r.finding) { setFindings(prev => [r.finding!, ...prev]); setAiDrafts(prev => prev.filter(a => a.id !== ai.id)) } } catch {} finally { setAcceptingFindingId(null) } }}
-                      disabled={acceptingFindingId === ai.id} title="Accept">
+                      disabled={acceptingFindingId === ai.id} title="قبول">
                       {acceptingFindingId === ai.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
                     </Button>
                     <Button variant="ghost" size="icon" className="h-7 w-7 text-red-600 hover:text-red-700 hover:bg-red-50"
-                      onClick={() => { updateAIOutputStatusAction(ai.id, 'rejected'); setAiDrafts(prev => prev.filter(a => a.id !== ai.id)) }} title="Reject">
+                      onClick={() => { updateAIOutputStatusAction(ai.id, 'rejected'); setAiDrafts(prev => prev.filter(a => a.id !== ai.id)) }} title="رفض">
                       <XCircle className="h-4 w-4" />
                     </Button>
                   </div>
@@ -145,35 +150,35 @@ export default function FindingsPage() {
 
       <div className="flex items-center gap-2 flex-wrap">
         <Select value={statusFilter} onValueChange={(v) => { if (v !== null) { setStatusFilter(v) } }}>
-          <SelectTrigger className="w-32"><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectTrigger className="w-32"><SelectValue placeholder="الحالة" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="open">Open</SelectItem>
-            <SelectItem value="in_review">In Review</SelectItem>
-            <SelectItem value="accepted">Accepted</SelectItem>
-            <SelectItem value="resolved">Resolved</SelectItem>
-            <SelectItem value="dismissed">Dismissed</SelectItem>
+            <SelectItem value="all">جميع الحالات</SelectItem>
+            <SelectItem value="draft">مسودة</SelectItem>
+            <SelectItem value="open">مفتوح</SelectItem>
+            <SelectItem value="in_review">قيد المراجعة</SelectItem>
+            <SelectItem value="accepted">مقبول</SelectItem>
+            <SelectItem value="resolved">تم الحل</SelectItem>
+            <SelectItem value="dismissed">مرفوض</SelectItem>
           </SelectContent>
         </Select>
         <Select value={severityFilter} onValueChange={(v) => { if (v !== null) { setSeverityFilter(v) } }}>
-          <SelectTrigger className="w-32"><SelectValue placeholder="Severity" /></SelectTrigger>
+          <SelectTrigger className="w-32"><SelectValue placeholder="الخطورة" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Severities</SelectItem>
-            <SelectItem value="low">Low</SelectItem>
-            <SelectItem value="medium">Medium</SelectItem>
-            <SelectItem value="high">High</SelectItem>
-            <SelectItem value="critical">Critical</SelectItem>
+            <SelectItem value="all">جميع المستويات</SelectItem>
+            <SelectItem value="low">منخفض</SelectItem>
+            <SelectItem value="medium">متوسط</SelectItem>
+            <SelectItem value="high">عالٍ</SelectItem>
+            <SelectItem value="critical">حرج</SelectItem>
           </SelectContent>
         </Select>
         <Select value={typeFilter} onValueChange={(v) => { if (v !== null) { setTypeFilter(v) } }}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="Type" /></SelectTrigger>
+          <SelectTrigger className="w-40"><SelectValue placeholder="النوع" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="material_misstatement">Material Misstatement</SelectItem>
-            <SelectItem value="control_deficiency">Control Deficiency</SelectItem>
-            <SelectItem value="disclosure_gap">Disclosure Gap</SelectItem>
-            <SelectItem value="observation">Observation</SelectItem>
+            <SelectItem value="all">جميع الأنواع</SelectItem>
+            <SelectItem value="material_misstatement">تحريف جوهري</SelectItem>
+            <SelectItem value="control_deficiency">ضعف رقابي</SelectItem>
+            <SelectItem value="disclosure_gap">فجوة إفصاح</SelectItem>
+            <SelectItem value="observation">ملاحظة</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -183,13 +188,13 @@ export default function FindingsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Severity</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>AI</TableHead>
-                <TableHead>Related Account</TableHead>
-                <TableHead>Created</TableHead>
+                <TableHead>العنوان</TableHead>
+                <TableHead>النوع</TableHead>
+                <TableHead>الخطورة</TableHead>
+                <TableHead>الحالة</TableHead>
+                <TableHead>ذكاء</TableHead>
+                <TableHead>الحساب المرتبط</TableHead>
+                <TableHead>تاريخ الإنشاء</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -197,52 +202,52 @@ export default function FindingsPage() {
                 <Fragment key={finding.id}>
                   <TableRow className="cursor-pointer" onClick={() => setExpandedId(expandedId === finding.id ? null : finding.id)}>
                     <TableCell className="font-medium">{finding.title}</TableCell>
-                    <TableCell><Badge variant="outline" className={typeColors[finding.findingType]}>{finding.findingType.replace(/_/g, " ")}</Badge></TableCell>
-                    <TableCell><Badge variant="outline" className={severityColors[finding.severity]}>{finding.severity}</Badge></TableCell>
-                    <TableCell><Badge variant="outline" className={statusColors[finding.status]}>{finding.status.replace(/_/g, " ")}</Badge></TableCell>
+                    <TableCell><Badge variant="outline" className={typeColors[finding.findingType]}>{finding.findingType === "material_misstatement" ? "تحريف جوهري" : finding.findingType === "control_deficiency" ? "ضعف رقابي" : finding.findingType === "disclosure_gap" ? "فجوة إفصاح" : "ملاحظة"}</Badge></TableCell>
+                    <TableCell><Badge variant="outline" className={severityColors[finding.severity]}>{finding.severity === "low" ? "منخفض" : finding.severity === "medium" ? "متوسط" : finding.severity === "high" ? "عالٍ" : "حرج"}</Badge></TableCell>
+                    <TableCell><Badge variant="outline" className={statusColors[finding.status]}>{finding.status === "draft" ? "مسودة" : finding.status === "open" ? "مفتوح" : finding.status === "in_review" ? "قيد المراجعة" : finding.status === "accepted" ? "مقبول" : finding.status === "resolved" ? "تم الحل" : "مرفوض"}</Badge></TableCell>
                     <TableCell>{finding.aiSuggested ? <Sparkles className="size-4 text-purple-500" /> : "-"}</TableCell>
                     <TableCell>{finding.relatedAccountIds.length > 0 ? finding.relatedAccountIds.map(id => <Badge key={id} variant="outline" className="text-[10px] mr-1">{id}</Badge>) : "-"}</TableCell>
-                    <TableCell className="text-muted-foreground text-xs">{new Date(finding.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</TableCell>
+                    <TableCell className="text-muted-foreground text-xs">{new Date(finding.createdAt).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric' })}</TableCell>
                   </TableRow>
                   {expandedId === finding.id && (
                     <TableRow key={`${finding.id}-detail`}>
                       <TableCell colSpan={7} className="bg-muted/30">
                         <div className="p-4 space-y-3 text-sm">
                           <div>
-                            <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Description</div>
+                            <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">الوصف</div>
                             <p>{finding.description}</p>
                           </div>
                           {finding.rootCause && (
                             <div>
-                              <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Root Cause</div>
+                              <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">السبب الجذري</div>
                               <p>{finding.rootCause}</p>
                             </div>
                           )}
                           {finding.impact && (
                             <div>
-                              <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Impact</div>
+                              <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">الأثر</div>
                               <p>{finding.impact}</p>
                             </div>
                           )}
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                            <span>Materiality: {finding.materiality}</span>
-                            {finding.assignedTo && <span>Assigned to: {finding.assignedTo}</span>}
-                            <span>Updated: {new Date(finding.updatedAt).toLocaleDateString()}</span>
+                            <span>الأهمية النسبية: {finding.materiality}</span>
+                            {finding.assignedTo && <span>مسند إلى: {finding.assignedTo}</span>}
+                            <span>آخر تحديث: {new Date(finding.updatedAt).toLocaleDateString()}</span>
                           </div>
                           <div className="flex gap-2 pt-1 flex-wrap">
-                            {finding.status === 'draft' && <Button size="xs" variant="outline" className="text-green-600 border-green-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'open', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'open' } : f)) } catch {} }}><CheckCircle className="size-3 mr-1" />Accept</Button>}
-                            {finding.status === 'open' && <Button size="xs" variant="outline" className="text-purple-600 border-purple-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'in_review', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'in_review' } : f)) } catch {} }}><CheckCircle className="size-3 mr-1" />Start Review</Button>}
-                            {finding.status !== 'resolved' && finding.status !== 'dismissed' && <Button size="xs" variant="outline" className="text-red-600 border-red-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'dismissed', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'dismissed' } : f)) } catch {} }}><XCircle className="size-3 mr-1" />Dismiss</Button>}
-                            <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setLoadingLinked(true); try { const ev = await getEvidenceAction(engagementId); const linked = ev.filter(e => e.linkedEntities.some(le => le.targetId === finding.id || le.targetType === 'finding')); setLinkedEvidence(linked); setShowLinkedEvidence(finding) } catch {} finally { setLoadingLinked(false) } }}><FileText className="size-3 mr-1" />Evidence ({finding.relatedEvidenceIds?.length ?? 0})</Button>
-                            <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setLoadingLinkedRecs(true); try { const r = await getRecommendationsAction(engagementId); const recs = r.filter(re => re.findingId === finding.id); setLinkedRecs(recs); setShowLinkedRecs(finding) } catch {} finally { setLoadingLinkedRecs(false) } }}><ListChecks className="size-3 mr-1" />Recs</Button>
+                            {finding.status === 'draft' && <Button size="xs" variant="outline" className="text-green-600 border-green-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'open', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'open' } : f)) } catch {} }}><CheckCircle className="size-3 ml-1" />قبول</Button>}
+                            {finding.status === 'open' && <Button size="xs" variant="outline" className="text-purple-600 border-purple-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'in_review', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'in_review' } : f)) } catch {} }}><CheckCircle className="size-3 ml-1" />بدء المراجعة</Button>}
+                            {finding.status !== 'resolved' && finding.status !== 'dismissed' && <Button size="xs" variant="outline" className="text-red-600 border-red-300" onClick={async (e) => { e.stopPropagation(); try { const r = await updateFindingStatusAction(finding.id, 'dismissed', engagementId); if (r.finding) setFindings(prev => prev.map(f => f.id === finding.id ? { ...f, status: 'dismissed' } : f)) } catch {} }}><XCircle className="size-3 ml-1" />رفض</Button>}
+                            <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setLoadingLinked(true); try { const ev = await getEvidenceAction(engagementId); const linked = ev.filter(e => e.linkedEntities.some(le => le.targetId === finding.id || le.targetType === 'finding')); setLinkedEvidence(linked); setShowLinkedEvidence(finding) } catch {} finally { setLoadingLinked(false) } }}><FileText className="size-3 ml-1" />أدلة ({finding.relatedEvidenceIds?.length ?? 0})</Button>
+                            <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setLoadingLinkedRecs(true); try { const r = await getRecommendationsAction(engagementId); const recs = r.filter(re => re.findingId === finding.id); setLinkedRecs(recs); setShowLinkedRecs(finding) } catch {} finally { setLoadingLinkedRecs(false) } }}><ListChecks className="size-3 ml-1" />توصيات</Button>
                             <Button size="xs" variant="outline" onClick={async (e) => { e.stopPropagation(); setTraceFinding(finding); try { const trace = await getTraceabilityAction(engagementId, 'finding', finding.id); setTraceData({ forward: trace.forwardTrace ?? [], backward: trace.backwardTrace ?? [] }) } catch { setTraceData({ forward: [], backward: [] }) }; setTraceabilityOpen(true) }}>
-                              <Share2 className="size-3 mr-1" />Traceability
+                              <Share2 className="size-3 ml-1" />التتبع
                             </Button>
-                            {finding.aiSuggested && <Badge variant="outline" className="bg-purple-100 text-purple-700"><Sparkles className="size-3 mr-1" />AI Suggested</Badge>}
+                            {finding.aiSuggested && <Badge variant="outline" className="bg-purple-100 text-purple-700"><Sparkles className="size-3 ml-1" />مقترح من الذكاء</Badge>}
                           </div>
                           {finding.aiSuggested && (
                             <div className="mt-2 rounded border border-purple-200 bg-purple-50 p-2 text-xs text-purple-700">
-                              Requires human confirmation — this is an AI-generated candidate, not a finalized finding
+                              يتطلب تأكيدًا بشريًا — هذه نتيجة مقترحة من الذكاء الاصطناعي، وليست نتيجة نهائية
                             </div>
                           )}
                         </div>
@@ -254,22 +259,39 @@ export default function FindingsPage() {
             </TableBody>
           </Table>
         </CardContent>
+        {findHasMore && (
+          <div className="flex justify-center py-3 border-t">
+            <Button variant="outline" size="sm" disabled={loadingFindMore || generatingFindingDrafts} onClick={async () => {
+              setLoadingFindMore(true)
+              try {
+                const nextPage = findPage + 1
+                const r = await getFindingsPaginatedAction(engagementId, nextPage, FINDINGS_PAGE_SIZE)
+                setFindings(prev => [...prev, ...r.items])
+                setFindPage(nextPage)
+                setFindHasMore(r.hasMore)
+              } catch {} finally { setLoadingFindMore(false) }
+            }}>
+              {loadingFindMore ? <Loader2 className="size-4 ml-1 animate-spin" /> : <RefreshCw className="size-4 ml-1" />}
+              تحميل المزيد ({findTotal - findings.length} متبقي)
+            </Button>
+          </div>
+        )}
       </Card>
 
       <Dialog open={!!showLinkedEvidence} onOpenChange={() => setShowLinkedEvidence(null)}>
         <DialogContent className="sm:max-w-lg">
-          <DialogHeader><DialogTitle>Linked Evidence</DialogTitle><DialogDescription>Evidence linked to: {showLinkedEvidence?.title}</DialogDescription></DialogHeader>
-          {loadingLinked ? <div className="p-4 text-center text-sm text-muted-foreground">Loading...</div> : linkedEvidence.length === 0 ? <div className="p-4 text-center text-sm text-muted-foreground">No evidence linked to this finding.</div> : (
-            <div className="space-y-2">{[...new Set(linkedEvidence.map(e => e.id))].map(id => { const ev = linkedEvidence.find(e => e.id === id)!; return <div key={ev.id} className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><FileText className="size-4 shrink-0 text-muted-foreground" /><span>{ev.filename}</span><Badge variant="outline" className="ml-auto text-[10px]">{ev.state}</Badge></div> })}</div>
+          <DialogHeader><DialogTitle>الأدلة المرتبطة</DialogTitle><DialogDescription>الأدلة المرتبطة بـ: {showLinkedEvidence?.title}</DialogDescription></DialogHeader>
+          {loadingLinked ? <div className="p-4 text-center text-sm text-muted-foreground">جارٍ التحميل...</div> : linkedEvidence.length === 0 ? <div className="p-4 text-center text-sm text-muted-foreground">لا توجد أدلة مرتبطة بهذه النتيجة.</div> : (
+            <div className="space-y-2">{[...new Set(linkedEvidence.map(e => e.id))].map(id => { const ev = linkedEvidence.find(e => e.id === id)!; return <div key={ev.id} className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><FileText className="size-4 shrink-0 text-muted-foreground" /><span>{ev.filename}</span><Badge variant="outline" className="mr-auto text-[10px]">{ev.state === "missing" ? "مفقود" : ev.state === "requested" ? "مطلوب" : ev.state === "uploaded" ? "مرفوع" : ev.state === "linked" ? "مرتبط" : ev.state === "reviewed" ? "تمت المراجعة" : ev.state === "accepted" ? "مقبول" : "مرفوض"}</Badge></div> })}</div>
           )}
         </DialogContent>
       </Dialog>
 
       <Dialog open={!!showLinkedRecs} onOpenChange={() => setShowLinkedRecs(null)}>
         <DialogContent className="sm:max-w-lg">
-          <DialogHeader><DialogTitle>Linked Recommendations</DialogTitle><DialogDescription>Recommendations for: {showLinkedRecs?.title}</DialogDescription></DialogHeader>
-          {loadingLinkedRecs ? <div className="p-4 text-center text-sm text-muted-foreground">Loading...</div> : linkedRecs.length === 0 ? <div className="p-4 text-center text-sm text-muted-foreground">No recommendations for this finding.</div> : (
-            <div className="space-y-2">{linkedRecs.map(rec => <div key={rec.id} className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><ListChecks className="size-4 shrink-0 text-muted-foreground" /><span>{rec.title}</span><Badge variant="outline" className="ml-auto text-[10px]">{rec.status}</Badge></div>)}</div>
+          <DialogHeader><DialogTitle>التوصيات المرتبطة</DialogTitle><DialogDescription>التوصيات الخاصة بـ: {showLinkedRecs?.title}</DialogDescription></DialogHeader>
+          {loadingLinkedRecs ? <div className="p-4 text-center text-sm text-muted-foreground">جارٍ التحميل...</div> : linkedRecs.length === 0 ? <div className="p-4 text-center text-sm text-muted-foreground">لا توجد توصيات لهذه النتيجة.</div> : (
+            <div className="space-y-2">{linkedRecs.map(rec => <div key={rec.id} className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><ListChecks className="size-4 shrink-0 text-muted-foreground" /><span>{rec.title}</span><Badge variant="outline" className="mr-auto text-[10px]">{(rec.status as string) === "draft" ? "مسودة" : (rec.status as string) === "approved" ? "معتمدة" : (rec.status as string) === "rejected" ? "مرفوضة" : rec.status}</Badge></div>)}</div>
           )}
         </DialogContent>
       </Dialog>
@@ -287,57 +309,57 @@ export default function FindingsPage() {
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Create New Finding</DialogTitle>
-            <DialogDescription>Enter the details of the new audit finding.</DialogDescription>
+            <DialogTitle>إنشاء نتيجة جديدة</DialogTitle>
+            <DialogDescription>أدخل تفاصيل نتيجة التدقيق الجديدة.</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div>
-              <Label>Title</Label>
-              <Input value={newFinding.title} onChange={e => setNewFinding({ ...newFinding, title: e.target.value })} placeholder="Finding title..." />
+              <Label>العنوان</Label>
+              <Input value={newFinding.title} onChange={e => setNewFinding({ ...newFinding, title: e.target.value })} placeholder="عنوان النتيجة..." />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label>Type</Label>
+                <Label>النوع</Label>
                 <Select value={newFinding.findingType} onValueChange={v => { if (v !== null) { setNewFinding({ ...newFinding, findingType: v }) } }}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="material_misstatement">Material Misstatement</SelectItem>
-                    <SelectItem value="control_deficiency">Control Deficiency</SelectItem>
-                    <SelectItem value="disclosure_gap">Disclosure Gap</SelectItem>
-                    <SelectItem value="observation">Observation</SelectItem>
+                    <SelectItem value="material_misstatement">تحريف جوهري</SelectItem>
+                    <SelectItem value="control_deficiency">ضعف رقابي</SelectItem>
+                    <SelectItem value="disclosure_gap">فجوة إفصاح</SelectItem>
+                    <SelectItem value="observation">ملاحظة</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div>
-                <Label>Severity</Label>
+                <Label>الخطورة</Label>
                 <Select value={newFinding.severity} onValueChange={v => { if (v !== null) { setNewFinding({ ...newFinding, severity: v }) } }}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="critical">Critical</SelectItem>
+                    <SelectItem value="low">منخفض</SelectItem>
+                    <SelectItem value="medium">متوسط</SelectItem>
+                    <SelectItem value="high">عالٍ</SelectItem>
+                    <SelectItem value="critical">حرج</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div>
-              <Label>Description</Label>
-              <Textarea value={newFinding.description} onChange={e => setNewFinding({ ...newFinding, description: e.target.value })} placeholder="Describe the finding..." />
+              <Label>الوصف</Label>
+              <Textarea value={newFinding.description} onChange={e => setNewFinding({ ...newFinding, description: e.target.value })} placeholder="صِف النتيجة..." />
             </div>
             <div>
-              <Label>Root Cause (optional)</Label>
-              <Input value={newFinding.rootCause} onChange={e => setNewFinding({ ...newFinding, rootCause: e.target.value })} placeholder="Root cause..." />
+              <Label>السبب الجذري (اختياري)</Label>
+              <Input value={newFinding.rootCause} onChange={e => setNewFinding({ ...newFinding, rootCause: e.target.value })} placeholder="السبب الجذري..." />
             </div>
             <div>
-              <Label>Impact (optional)</Label>
-              <Input value={newFinding.impact} onChange={e => setNewFinding({ ...newFinding, impact: e.target.value })} placeholder="Impact assessment..." />
+              <Label>الأثر (اختياري)</Label>
+              <Input value={newFinding.impact} onChange={e => setNewFinding({ ...newFinding, impact: e.target.value })} placeholder="تقييم الأثر..." />
             </div>
           </div>
           {createError && <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"><AlertTriangle className="size-4 shrink-0" /><span>{createError}</span></div>}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
-            <Button onClick={handleCreate} disabled={!newFinding.title.trim() || createSubmitting}>{createSubmitting ? 'Creating...' : 'Create'}</Button>
+            <Button variant="outline" onClick={() => setShowCreate(false)}>إلغاء</Button>
+            <Button onClick={handleCreate} disabled={!newFinding.title.trim() || createSubmitting}>{createSubmitting ? 'جارٍ الإنشاء...' : 'إنشاء'}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

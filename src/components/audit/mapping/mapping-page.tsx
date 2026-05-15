@@ -10,8 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table"
 
 import type { AccountMapping, Engagement } from "@/types/audit"
-import { getMappingsAction, confirmMappingAction, getEngagementAction } from "@/actions/audit-read-actions"
-import { updateManualMappingAction } from "@/actions/audit-actions"
+import { getMappingsAction, getEngagementAction, getCanonicalAccountsAction } from "@/actions/audit-read-actions"
+import { confirmMappingAction, updateManualMappingAction } from "@/actions/audit-actions"
 
 const sar = (v: number) => new Intl.NumberFormat('en-SA', { style: 'currency', currency: 'SAR', minimumFractionDigits: 0 }).format(v)
 
@@ -24,11 +24,13 @@ export default function MappingPage() {
   const [filter, setFilter] = useState<"all" | "mapped" | "unmapped">("all")
   const [toast, setToast] = useState<string | null>(null)
   const [toastType, setToastType] = useState<"success" | "error">("success")
+  const [canonicalAccounts, setCanonicalAccounts] = useState<Array<{ id: string; code: string; name: string }>>([])
 
   useEffect(() => {
     Promise.all([getMappingsAction(engagementId), getEngagementAction(engagementId)]).then(([m, e]) => {
       setMappings(m); setEngagement(e); setLoading(false)
     })
+    getCanonicalAccountsAction().then(setCanonicalAccounts).catch(() => setCanonicalAccounts([]))
   }, [engagementId])
 
   const showToast = (msg: string, type: "success" | "error" = "success") => {
@@ -66,7 +68,7 @@ export default function MappingPage() {
   if (filter === "mapped") filtered = mappings.filter(m => m.status === "confirmed")
   if (filter === "unmapped") filtered = mappings.filter(m => m.status === "pending")
 
-  const canonicalAccounts = [
+  const canonicals = canonicalAccounts.length > 0 ? canonicalAccounts : [
     { id: "ca-1", code: "CA-1010", name: "Cash and Cash Equivalents" },
     { id: "ca-2", code: "CA-1020", name: "Trade Receivables" },
     { id: "ca-3", code: "CA-1030", name: "Inventories" },
@@ -92,16 +94,16 @@ export default function MappingPage() {
   ]
 
   return (
-    <div className="space-y-6" dir="ltr">
+    <div className="space-y-6" dir="rtl">
       {toast && (
-        <div className={`fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg text-sm font-medium text-white ${toastType === "success" ? "bg-green-600" : "bg-red-600"}`}>
-          {toastType === "success" ? <CheckCircle className="inline size-4 mr-1" /> : <XCircle className="inline size-4 mr-1" />}
+        <div className={`fixed top-4 left-4 z-50 px-4 py-2 rounded-lg shadow-lg text-sm font-medium text-white ${toastType === "success" ? "bg-green-600" : "bg-red-600"}`}>
+          {toastType === "success" ? <CheckCircle className="inline size-4 ml-1" /> : <XCircle className="inline size-4 ml-1" />}
           {toast}
         </div>
       )}
 
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Account Mapping</h1>
+        <h1 className="text-2xl font-bold tracking-tight">تصنيف الحسابات</h1>
         <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
       </div>
 
@@ -109,12 +111,12 @@ export default function MappingPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <CardTitle>Mapping Progress</CardTitle>
-              <CardDescription>{confirmed} of {total} accounts mapped</CardDescription>
+              <CardTitle>تقدّم التصنيف</CardTitle>
+              <CardDescription>{confirmed} من {total} حساب مُصنّف</CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant={pending === 0 ? "secondary" : "outline"} className={pending > 0 ? "bg-amber-100 text-amber-800" : ""}>
-                {pending} pending
+                {pending} معلّق
               </Badge>
             </div>
           </div>
@@ -126,22 +128,22 @@ export default function MappingPage() {
           <div className="flex items-center gap-2 mb-4">
             {(["all", "mapped", "unmapped"] as const).map(f => (
               <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)}>
-                {f === "all" ? "All" : f === "mapped" ? "Mapped" : "Unmapped"}
+                {f === "all" ? "الكل" : f === "mapped" ? "مُصنّف" : "غير مُصنّف"}
               </Button>
             ))}
           </div>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Source Code</TableHead>
-                <TableHead>Source Name</TableHead>
-                <TableHead>Debit</TableHead>
-                <TableHead>Credit</TableHead>
-                <TableHead>Suggested Mapping</TableHead>
-                <TableHead>Classification</TableHead>
-                <TableHead>Confidence</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead>رمز المصدر</TableHead>
+                <TableHead>اسم المصدر</TableHead>
+                <TableHead>مدين</TableHead>
+                <TableHead>دائن</TableHead>
+                <TableHead>التصنيف المقترح</TableHead>
+                <TableHead>التصنيف</TableHead>
+                <TableHead>الثقة</TableHead>
+                <TableHead>الحالة</TableHead>
+                <TableHead>إجراءات</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -159,39 +161,39 @@ export default function MappingPage() {
                         {m.mappingType === "human_mapped" && <User className="size-3 text-green-500" />}
                         {m.canonicalAccountName}
                       </span>
-                    ) : <span className="text-muted-foreground italic">Not mapped</span>}
+                    ) : <span className="text-muted-foreground italic">غير مُصنّف</span>}
                   </TableCell>
                   <TableCell>{m.statementClassification || "-"}</TableCell>
                   <TableCell>{m.confidence ? `${(m.confidence * 100).toFixed(0)}%` : "-"}</TableCell>
                   <TableCell>
                     {m.status === "confirmed" ? (
                       <Badge variant="outline" className="bg-green-100 text-green-700 border-green-300 flex items-center gap-1 w-fit">
-                        <CheckCircle className="size-3" />Confirmed
+                        <CheckCircle className="size-3" />مؤكّد
                       </Badge>
                     ) : (
                       <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-300 flex items-center gap-1 w-fit">
-                        <Clock className="size-3" />Pending
+                        <Clock className="size-3" />معلّق
                       </Badge>
                     )}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       {m.status === "pending" && (
-                        <Button size="sm" variant="default" onClick={() => handleConfirm(m.id)}>Accept</Button>
+                        <Button size="sm" variant="default" onClick={() => handleConfirm(m.id)}>قبول</Button>
                       )}
                       {m.status === "confirmed" && (
                         <span className="text-xs text-muted-foreground flex items-center gap-1 shrink-0">
-                          {m.mappingType === "confirmed_ai" && <><Sparkles className="size-3" />AI</>}
-                          {m.mappingType === "human_mapped" && <><User className="size-3" />Human</>}
-                          {m.mappingType === "ai_suggested" && <><Sparkles className="size-3" />AI</>}
+                          {m.mappingType === "confirmed_ai" && <><Sparkles className="size-3" />ذكاء</>}
+                          {m.mappingType === "human_mapped" && <><User className="size-3" />بشري</>}
+                          {m.mappingType === "ai_suggested" && <><Sparkles className="size-3" />ذكاء</>}
                         </span>
                       )}
                       <Select value={m.canonicalAccountId ?? ""} onValueChange={(v) => { handleManualMappingChange(m.id, v || null) }}>
                         <SelectTrigger className="w-40">
-                          <SelectValue placeholder="Manual map..." />
+                          <SelectValue placeholder="تصنيف يدوي..." />
                         </SelectTrigger>
                         <SelectContent>
-                          {canonicalAccounts.map(ca => (
+                          {canonicals.map(ca => (
                             <SelectItem key={ca.id} value={ca.id}>{ca.code} - {ca.name}</SelectItem>
                           ))}
                         </SelectContent>

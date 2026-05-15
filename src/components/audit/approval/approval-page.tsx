@@ -49,10 +49,10 @@ export default function ApprovalPage() {
   const isApproved = approvalInfo.status === "approved"
 
   return (
-    <div className="space-y-6" dir="ltr">
+    <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Approval</h1>
+          <h1 className="text-2xl font-bold tracking-tight">الاعتماد</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
       </div>
@@ -60,33 +60,33 @@ export default function ApprovalPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-3">
-            <CardTitle>Approval Status</CardTitle>
+            <CardTitle>حالة الاعتماد</CardTitle>
             <Badge variant="outline" className={`${statusColors[approvalInfo.status]} text-sm px-3 py-1`}>
-              {approvalInfo.status === "not_ready" ? "Not Ready" : approvalInfo.status === "pending_approval" ? "Pending Approval" : approvalInfo.status === "approved" ? "Approved" : approvalInfo.status === "blocked" ? "Blocked" : "Ready"}
+              {approvalInfo.status === "not_ready" ? "غير جاهز" : approvalInfo.status === "pending_approval" ? "بانتظار الاعتماد" : approvalInfo.status === "approved" ? "معتمد" : approvalInfo.status === "blocked" ? "محظور" : "جاهز"}
             </Badge>
           </div>
           <div className="flex items-center gap-2">
             {canApprove && (
               <>
-                <Button variant="outline" className="text-red-600 border-red-300" onClick={() => setShowRejectDialog(true)} disabled={approving}><XCircle className="size-4 mr-1" />Reject</Button>
+                <Button variant="outline" className="text-red-600 border-red-300" onClick={() => setShowRejectDialog(true)} disabled={approving}><XCircle className="size-4 ml-1" />رفض</Button>
                 <Button disabled={approving} onClick={async () => {
                   setApproving(true); setApproveError(null)
                   try {
                     const result = await createApprovalRecordAction({ engagementId, action: 'approved', targetType: 'engagement', targetId: engagementId })
                     if (result.record) setRecords(prev => [...prev, result.record])
                     setApprovalInfo({ status: 'approved', blockingIssues: [], checklist: approvalInfo.checklist.map(c => ({ ...c, passed: true })) })
-                  } catch { setApproveError('Approval failed') } finally { setApproving(false) }
-                }}>{approving ? 'Approving...' : <><CheckCircle className="size-4 mr-1" />Approve</>}</Button>
+                  } catch { setApproveError('فشل الاعتماد') } finally { setApproving(false) }
+                }}>{approving ? 'جارٍ الاعتماد...' : <><CheckCircle className="size-4 ml-1" />اعتماد</>}</Button>
               </>
             )}
-            {isApproved && <Badge variant="outline" className="bg-green-100 text-green-700"><CheckCircle className="size-3 mr-1" />Approved</Badge>}
+            {isApproved && <Badge variant="outline" className="bg-green-100 text-green-700"><CheckCircle className="size-3 ml-1" />معتمد</Badge>}
           </div>
           {approveError && <div className="mt-2 flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"><AlertTriangle className="size-4 shrink-0" /><span>{approveError}</span></div>}
         </CardHeader>
         <CardContent>
           {approvalInfo.blockingIssues.length > 0 && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-              <div className="flex items-center gap-2 text-sm font-medium text-red-700 mb-1"><Ban className="size-4" />Blocking Issues</div>
+              <div className="flex items-center gap-2 text-sm font-medium text-red-700 mb-1"><Ban className="size-4" />مشكلات مانعة</div>
               <ul className="text-xs text-red-600 space-y-1">
                 {approvalInfo.blockingIssues.map((issue, i) => <li key={i} className="flex items-center gap-1"><XCircle className="size-3" />{issue}</li>)}
               </ul>
@@ -97,13 +97,13 @@ export default function ApprovalPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><ListChecks className="size-4" />Approval Checklist</CardTitle>
-          <CardDescription>Financial statements are currently in <strong>draft</strong> status. Approval will mark the engagement as finalized. All blocking issues must be resolved before approval.</CardDescription>
+          <CardTitle className="flex items-center gap-2"><ListChecks className="size-4" />قائمة التحقق</CardTitle>
+          <CardDescription>القوائم المالية حالياً في حالة <strong>مسودة</strong>. الاعتماد سيؤدي إلى إنهاء الارتباط. يجب حل جميع المشكلات المانعة قبل الاعتماد.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             {approvalInfo.checklist.length === 0 ? (
-              <div className="text-sm text-muted-foreground italic">Unable to load readiness checks.</div>
+              <div className="text-sm text-muted-foreground italic">تعذر تحميل فحوصات الجاهزية.</div>
             ) : (
               approvalInfo.checklist.map((item, i) => (
                 <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-muted/30">
@@ -113,7 +113,7 @@ export default function ApprovalPage() {
                     <div className="text-xs text-muted-foreground">{item.detail}</div>
                   </div>
                   <Badge variant="outline" className={item.passed ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}>
-                    {item.passed ? "Passed" : "Blocking"}
+                    {item.passed ? "ناجح" : "مانع"}
                   </Badge>
                 </div>
               ))
@@ -124,27 +124,27 @@ export default function ApprovalPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><History className="size-4" />Approval History</CardTitle>
+          <CardTitle className="flex items-center gap-2"><History className="size-4" />سجل الاعتماد</CardTitle>
         </CardHeader>
         <CardContent>
           {records.length === 0 ? (
-            <div className="text-sm text-muted-foreground italic">No approval actions recorded yet.</div>
+            <div className="text-sm text-muted-foreground italic">لا توجد إجراءات اعتماد بعد.</div>
           ) : (
             <div className="relative">
-              <div className="absolute left-4 top-0 bottom-0 w-px bg-border" />
+              <div className="absolute right-4 top-0 bottom-0 w-px bg-border" />
               <div className="space-y-4">
                 {records.map(rec => (
-                  <div key={rec.id} className="relative pl-10">
-                    <div className="absolute left-2.5 top-1 bg-background p-0.5">{actionIcons[rec.action]}</div>
+                  <div key={rec.id} className="relative pr-10">
+                    <div className="absolute right-2.5 top-1 bg-background p-0.5">{actionIcons[rec.action]}</div>
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">{rec.approverName}</span>
                         <Badge variant="outline" className="text-[10px]">{rec.approverRole}</Badge>
                       </div>
-                      <div className="text-xs text-muted-foreground">{rec.action.replace(/_/g, " ")} on {rec.targetType}</div>
-                      {rec.rationale && <p className="text-xs text-muted-foreground mt-0.5">"{rec.rationale}"</p>}
+                      <div className="text-xs text-muted-foreground">{rec.action.replace(/_/g, " ")} على {rec.targetType === 'engagement' ? 'الارتباط' : rec.targetType}</div>
+                      {rec.rationale && <p className="text-xs text-muted-foreground mt-0.5">&ldquo;{rec.rationale}&rdquo;</p>}
                       <div className="flex items-center gap-2 mt-1">
-                        <div className="text-xs text-muted-foreground">{new Date(rec.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                        <div className="text-xs text-muted-foreground">{new Date(rec.createdAt).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
                         <Button size="xs" variant="ghost" onClick={async () => { setTraceApproval(rec); try { const trace = await getTraceabilityAction(engagementId, 'approval', rec.id); setTraceData({ forward: trace.forwardTrace ?? [], backward: trace.backwardTrace ?? [] }) } catch { setTraceData({ forward: [], backward: [] }) }; setTraceabilityOpen(true) }}><Share2 className="size-3" /></Button>
                       </div>
                     </div>
@@ -158,30 +158,30 @@ export default function ApprovalPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Shield className="size-4" />Authority</CardTitle>
+          <CardTitle className="flex items-center gap-2"><Shield className="size-4" />الصلاحية</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-sm">
-            <div className="flex items-center gap-2 mb-2">
-              <User className="size-4 text-muted-foreground" />
-              <span>Required approver: <strong>Partner</strong> (Khalid Al Saud)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Shield className="size-4 text-muted-foreground" />
-              <span>Risk tier: <strong>Standard</strong> - Full audit engagement</span>
-            </div>
+          <CardContent>
+            <div className="text-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <User className="size-4 text-muted-foreground" />
+                <span>المعتمِد المطلوب: <strong>شريك</strong>{engagement?.team?.find(t => t.role === 'partner')?.userName ? ` (${engagement.team.find(t => t.role === 'partner')!.userName})` : ''}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Shield className="size-4 text-muted-foreground" />
+                <span>مستوى المخاطر: <strong>{(engagement?.engagementType as string) === 'full_audit' ? 'قياسي' : 'محدود'}</strong> - {engagement?.engagementType?.replace('_', ' ') ?? 'ارتباط تدقيق'}</span>
+              </div>
           </div>
         </CardContent>
       </Card>
       <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader><DialogTitle>Reject Engagement</DialogTitle><DialogDescription>Provide a reason for rejection.</DialogDescription></DialogHeader>
+          <DialogHeader><DialogTitle>رفض الارتباط</DialogTitle><DialogDescription>قدّم سبب الرفض.</DialogDescription></DialogHeader>
           <div className="space-y-3">
-            <Label>Rejection Reason</Label>
-            <Textarea value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="Describe why this engagement is being rejected..." className="min-h-[80px]" />
+            <Label>سبب الرفض</Label>
+            <Textarea value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="صِف سبب رفض هذا الارتباط..." className="min-h-[80px]" />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>إلغاء</Button>
             <Button variant="destructive" disabled={!rejectReason.trim() || rejecting} onClick={async () => {
               setRejecting(true); setRejectError(null)
               try {
@@ -189,8 +189,8 @@ export default function ApprovalPage() {
                 if (result.record) setRecords(prev => [...prev, result.record])
                 getApprovalStatusAction(engagementId).then(a => setApprovalInfo({ status: a.status, blockingIssues: a.blockingIssues, checklist: a.checklist }))
                 setShowRejectDialog(false); setRejectReason('')
-              } catch { setRejectError('Rejection failed') } finally { setRejecting(false) }
-            }}>{rejecting ? 'Rejecting...' : 'Reject'}</Button>
+              } catch { setRejectError('فشل الرفض') } finally { setRejecting(false) }
+            }}>{rejecting ? 'جارٍ الرفض...' : 'رفض'}</Button>
             {rejectError && <p className="text-xs text-red-600">{rejectError}</p>}
           </DialogFooter>
         </DialogContent>
@@ -201,7 +201,7 @@ export default function ApprovalPage() {
         onClose={() => { setTraceabilityOpen(false); setTraceApproval(null) }}
         entityType="approval_record"
         entityId={traceApproval?.id || ''}
-        entityLabel={`Approval by ${traceApproval?.approverName || ''}`}
+        entityLabel={`اعتماد بواسطة ${traceApproval?.approverName || ''}`}
         forwardTrace={traceData.forward}
         backwardTrace={traceData.backward}
       />
