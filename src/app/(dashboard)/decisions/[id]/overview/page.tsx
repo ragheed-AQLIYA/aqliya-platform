@@ -17,7 +17,7 @@ export default async function ExecutiveOverviewPage({ params }: PageProps) {
         <DecisionTabs decisionId={id} />
         <Card className="border-destructive">
           <CardHeader>
-            <CardTitle>Access Blocked</CardTitle>
+            <CardTitle>الوصول محظور</CardTitle>
             <CardDescription>
               {result.error}
               {result.missing && (
@@ -43,42 +43,42 @@ export default async function ExecutiveOverviewPage({ params }: PageProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Executive Decision Overview</CardTitle>
+              <CardTitle>نظرة تنفيذية على القرار</CardTitle>
               <CardDescription>
-                Computed on-demand from A-1 stages. Human-facing summary for executives.
+                تُحسَب عند الطلب من مراحل أ-١. موجّهة للجهات التنفيذية.
               </CardDescription>
             </div>
             <Badge variant={overview.decisionQuality >= 80 ? "default" : overview.decisionQuality >= 60 ? "secondary" : "destructive"}>
-              Quality: {overview.decisionQuality}%
+              الجودة: {overview.decisionQuality}%
             </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h3 className="font-medium mb-2">Executive Summary</h3>
+            <h3 className="font-medium mb-2">الملخص التنفيذي</h3>
             <p className="text-sm text-muted-foreground whitespace-pre-wrap">{overview.executiveSummary}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <h3 className="font-medium mb-2">Strategic Fit</h3>
+              <h3 className="font-medium mb-2">الملاءمة الاستراتيجية</h3>
               <p className="text-sm text-muted-foreground whitespace-pre-wrap">{overview.strategicFit}</p>
             </div>
 
             <div>
-              <h3 className="font-medium mb-2">Risk Posture</h3>
+              <h3 className="font-medium mb-2">الموقف المخاطري</h3>
               <p className="text-sm text-muted-foreground whitespace-pre-wrap">{overview.riskPosture}</p>
             </div>
           </div>
 
           <div>
-            <h3 className="font-medium mb-2">Recommendation</h3>
+            <h3 className="font-medium mb-2">التوصية</h3>
             <p className="text-sm text-muted-foreground whitespace-pre-wrap">{overview.recommendation}</p>
           </div>
 
           <div className="pt-4 border-t">
             <p className="text-xs text-muted-foreground">
-              This overview is computed on-demand from A-1 data. Quality score: {overview.decisionQuality}/100.
+              تُحسَب هذه النظرة عند الطلب من بيانات أ-١. درجة الجودة: {overview.decisionQuality}/100.
             </p>
           </div>
         </CardContent>

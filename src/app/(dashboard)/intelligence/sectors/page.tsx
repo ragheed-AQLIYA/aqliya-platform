@@ -51,7 +51,7 @@ export default function SectorsPage() {
           setSectors(result.data as Sector[])
         }
       } catch {
-        setError("Failed to load sectors")
+        setError("فشل في تحميل القطاعات")
       } finally {
         setLoading(false)
       }
@@ -75,38 +75,38 @@ export default function SectorsPage() {
     }
   }
 
-  if (loading) return <div className="p-6">Loading sectors...</div>
+  if (loading) return <div className="p-6">جارٍ تحميل القطاعات...</div>
   if (error) return <div className="p-6 text-red-600">{error}</div>
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Sectors</h1>
+        <h1 className="text-2xl font-bold">القطاعات</h1>
         <Button onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Cancel" : "Add Sector"}
+          {showForm ? "إلغاء" : "إضافة قطاع"}
         </Button>
       </div>
 
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>Create New Sector</CardTitle>
+            <CardTitle>إنشاء قطاع جديد</CardTitle>
           </CardHeader>
           <CardContent>
             <form action={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">الاسم</Label>
                 <Input id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} required />
               </div>
               <div>
-                <Label htmlFor="code">Code</Label>
+                <Label htmlFor="code">الرمز</Label>
                 <Input id="code" name="code" value={code} onChange={(e) => setCode(e.target.value)} required />
               </div>
               <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">الوصف</Label>
                 <Input id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
               </div>
-              <Button type="submit">Create Sector</Button>
+              <Button type="submit">إنشاء قطاع</Button>
             </form>
           </CardContent>
         </Card>
@@ -117,12 +117,12 @@ export default function SectorsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Code</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Decisions</TableHead>
-                <TableHead>Benchmarks</TableHead>
-                <TableHead>Action</TableHead>
+                <TableHead>الاسم</TableHead>
+                <TableHead>الرمز</TableHead>
+                <TableHead>الحالة</TableHead>
+                <TableHead>القرارات</TableHead>
+                <TableHead>المعايير</TableHead>
+                <TableHead>الإجراء</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -132,7 +132,7 @@ export default function SectorsPage() {
                   <TableCell>{sector.code}</TableCell>
                   <TableCell>
                     <span className={sector.isActive ? "text-green-600" : "text-gray-400"}>
-                      {sector.isActive ? "Active" : "Inactive"}
+                      {sector.isActive ? "نشط" : "غير نشط"}
                     </span>
                   </TableCell>
                   <TableCell>{sector._count.decisions}</TableCell>
@@ -143,7 +143,7 @@ export default function SectorsPage() {
                       size="sm"
                       onClick={() => router.push(`/intelligence/sectors/${sector.id}`)}
                     >
-                      View
+                      عرض
                     </Button>
                   </TableCell>
                 </TableRow>

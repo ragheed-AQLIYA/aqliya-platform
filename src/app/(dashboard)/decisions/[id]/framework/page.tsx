@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { DecisionTabs } from "@/components/decisions/decision-tabs"
-import { getDecisionFramework, updateDecisionFramework } from "@/actions/decisions"
+import { DecisionProgress, buildStageStatus } from "@/components/decisions/decision-progress"
+import { getDecisionFramework, updateDecisionFramework, getWorkflowReadiness } from "@/actions/decisions"
+import { getDecisionTypeConfig } from "@/lib/decision-type-config"
 import type { DecisionFrameworkState, DecisionIntake } from "@/lib/types/decision"
 
 type FrameworkForm = {
@@ -55,6 +57,8 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
   const [success, setSuccess] = useState(false)
   const [intake, setIntake] = useState<DecisionIntake | null>(null)
   const [frameworkState, setFrameworkState] = useState<DecisionFrameworkState | null>(null)
+  const [decisionType, setDecisionType] = useState<string>("CUSTOM")
+  const [readiness, setReadiness] = useState<any>(null)
   const [formData, setFormData] = useState<FrameworkForm>(emptyForm)
 
   useEffect(() => {
@@ -62,7 +66,6 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
       const { id: decisionId } = await params
       setId(decisionId)
     }
-
     resolveParams()
   }, [params])
 
@@ -70,13 +73,17 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
     if (!id) return
     const decisionId: string = id
 
-    async function loadFramework() {
-      const result = await getDecisionFramework(decisionId)
+    async function loadData() {
+      const [frameworkResult, readinessResult] = await Promise.all([
+        getDecisionFramework(decisionId),
+        getWorkflowReadiness(decisionId),
+      ])
 
-      if (result.success && result.data) {
-        const framework = result.data.framework as FrameworkRecord | null
-        setIntake(result.data.intake)
-        setFrameworkState(result.data.frameworkState)
+      if (frameworkResult.success && frameworkResult.data) {
+        const framework = frameworkResult.data.framework as FrameworkRecord | null
+        setIntake(frameworkResult.data.intake)
+        setFrameworkState(frameworkResult.data.frameworkState)
+        setDecisionType(frameworkResult.data.type || "CUSTOM")
         setFormData(framework ? {
           context: framework.context,
           purpose: framework.purpose,
@@ -88,13 +95,17 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
           assumptions: framework.assumptions,
         } : emptyForm)
       } else {
-        setError(result.error || "Failed to load decision framework")
+        setError(frameworkResult.error || "Failed to load decision framework")
+      }
+
+      if (readinessResult.success && readinessResult.data) {
+        setReadiness(readinessResult.data)
       }
 
       setLoading(false)
     }
 
-    loadFramework()
+    loadData()
   }, [id])
 
   function handleChange(field: keyof FrameworkForm, value: string) {
@@ -117,9 +128,13 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
       setFormData(result.data.framework)
       setFrameworkState(result.data.frameworkState)
       setSuccess(true)
+      const readinessResult = await getWorkflowReadiness(id)
+      if (readinessResult.success && readinessResult.data) {
+        setReadiness(readinessResult.data)
+      }
       setTimeout(() => setSuccess(false), 3000)
     } else {
-      setError(result.error || "Failed to save decision framework")
+      setError(result.error || "فشل في حفظ إطار القرار")
     }
 
     setSaving(false)
@@ -129,42 +144,62 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
     return (
       <div>
         <DecisionTabs decisionId={id || ""} />
-        <div className="mt-6 text-center">Loading...</div>
+        <div className="mt-6 text-center">جارٍ التحميل...</div>
       </div>
     )
   }
 
   const blocked = intake?.status !== "accepted"
+  const config = getDecisionTypeConfig(decisionType)
+  const stages = readiness ? buildStageStatus("framework", {
+    intakeAccepted: readiness.intakeAccepted,
+    frameworkComplete: readiness.frameworkComplete,
+    scenariosComplete: readiness.scenariosComplete,
+    risksComplete: readiness.risksComplete,
+    simulationReady: readiness.simulationReady,
+    recommendationReady: readiness.recommendationReady,
+  }) : []
 
   return (
     <div>
-      <DecisionTabs decisionId={id} />
+      <DecisionTabs decisionId={id} decisionType={decisionType} />
       <div className="mt-6 max-w-3xl mx-auto">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-semibold">A-1.1 Decision Framework</h2>
+            <h2 className="text-xl font-semibold">أ-١٫١ إطار القرار</h2>
             <p className="text-sm text-muted-foreground">
-              Framework captures context, purpose, options, criteria, values, gaps, certainty, and assumptions.
+              {config.frameworkGuidance}
             </p>
           </div>
           {frameworkState && !blocked && (
             <Badge variant={getStateVariant(frameworkState.isComplete)}>
-              {frameworkState.isComplete ? "complete" : "incomplete"}
+              {frameworkState.isComplete ? "مكتمل" : "غير مكتمل"}
             </Badge>
           )}
         </div>
 
+        {readiness && (
+          <div className="mb-6">
+            <DecisionProgress
+              stages={stages}
+              decisionType={decisionType}
+              missingInputs={readiness.missingInputs}
+              dataQuality={readiness.dataQuality}
+            />
+          </div>
+        )}
+
         {error && <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">{error}</div>}
-        {success && <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">Framework saved successfully.</div>}
+        {success && <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">تم حفظ الإطار بنجاح. يُحسّن ذلك درجات الملاءمة الاستراتيجية والجدوى.</div>}
 
         {blocked ? (
           <section className="rounded-lg border p-4">
             <div className="mb-3 flex items-center justify-between gap-3">
-              <h3 className="font-semibold">Framework blocked</h3>
-              <Badge variant={getIntakeVariant(intake?.status)}>{intake?.status.replace("_", " ") || "intake missing"}</Badge>
+              <h3 className="font-semibold">الإطار محظور</h3>
+              <Badge variant={getIntakeVariant(intake?.status)}>{intake?.status.replace("_", " ") || "الاستلام مفقود"}</Badge>
             </div>
             <p className="text-sm text-muted-foreground">
-              A-1.1 cannot proceed before A-1.0 intake is accepted. Resolve the intake issues first.
+              أ-١٫١ لا يمكن المتابعة قبل قبول أ-١٫٠ الاستلام. حل مشكلات الاستلام أولاً.
             </p>
             {intake && (
               <ul className="mt-4 list-disc pl-5 text-sm">
@@ -176,7 +211,7 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
           <>
             {frameworkState && !frameworkState.isComplete && (
               <section className="mb-6 rounded-lg border p-4">
-                <h3 className="text-sm font-medium">Required next steps</h3>
+                <h3 className="text-sm font-medium">الخطوات التالية المطلوبة</h3>
                 <ul className="mt-2 list-disc pl-5 text-sm">
                   {frameworkState.nextSteps.map((step) => <li key={step}>{step}</li>)}
                 </ul>
@@ -185,38 +220,40 @@ export default function DecisionFrameworkPage({ params }: { params: Promise<{ id
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="context">Context *</Label>
-                <Textarea id="context" value={formData.context} onChange={(event) => handleChange("context", event.target.value)} placeholder="Decision background, boundaries, stakeholders, timing" />
+                <Label htmlFor="context">السياق *</Label>
+                <Textarea id="context" value={formData.context} onChange={(event) => handleChange("context", event.target.value)} placeholder="خلفية القرار والحدود وأصحاب المصلحة والتوقيت" />
+                <p className="text-xs text-muted-foreground mt-1">إكمال حقول الإطار يزيد جودة البيانات ودرجات الملاءمة الاستراتيجية مباشرة.</p>
               </div>
               <div>
-                <Label htmlFor="purpose">Purpose *</Label>
-                <Textarea id="purpose" value={formData.purpose} onChange={(event) => handleChange("purpose", event.target.value)} placeholder="What this decision must accomplish" />
+                <Label htmlFor="purpose">الغرض *</Label>
+                <Textarea id="purpose" value={formData.purpose} onChange={(event) => handleChange("purpose", event.target.value)} placeholder="ما يجب أن يحققه هذا القرار" />
               </div>
               <div>
-                <Label htmlFor="options">Options *</Label>
-                <Textarea id="options" value={formData.options} onChange={(event) => handleChange("options", event.target.value)} placeholder="One option per line" />
+                <Label htmlFor="options">الخيارات *</Label>
+                <Textarea id="options" value={formData.options} onChange={(event) => handleChange("options", event.target.value)} placeholder="خيار واحد في كل سطر" />
               </div>
               <div>
-                <Label htmlFor="criteria">Criteria *</Label>
-                <Textarea id="criteria" value={formData.criteria} onChange={(event) => handleChange("criteria", event.target.value)} placeholder="Evaluation criteria, one per line" />
+                <Label htmlFor="criteria">المعايير *</Label>
+                <Textarea id="criteria" value={formData.criteria} onChange={(event) => handleChange("criteria", event.target.value)} placeholder="معايير التقييم، واحد في كل سطر" />
+                <p className="text-xs text-muted-foreground mt-1">المعايير المفصّلة تُحسّن تسجيل الملاءمة الاستراتيجية.</p>
               </div>
               <div>
-                <Label htmlFor="values">Values *</Label>
-                <Textarea id="values" value={formData.values} onChange={(event) => handleChange("values", event.target.value)} placeholder="Decision principles, trade-off preferences, non-negotiables" />
+                <Label htmlFor="values">القيم *</Label>
+                <Textarea id="values" value={formData.values} onChange={(event) => handleChange("values", event.target.value)} placeholder="مبادئ القرار وتفضيلات المفاضلة والثوابت" />
               </div>
               <div>
-                <Label htmlFor="informationGaps">Information Gaps *</Label>
-                <Textarea id="informationGaps" value={formData.informationGaps} onChange={(event) => handleChange("informationGaps", event.target.value)} placeholder="Unknowns or missing evidence" />
+                <Label htmlFor="informationGaps">فجوات المعلومات *</Label>
+                <Textarea id="informationGaps" value={formData.informationGaps} onChange={(event) => handleChange("informationGaps", event.target.value)} placeholder="المجهولات أو الأدلة المفقودة" />
               </div>
               <div>
-                <Label htmlFor="certainty">Certainty *</Label>
-                <Input id="certainty" value={formData.certainty} onChange={(event) => handleChange("certainty", event.target.value)} placeholder="High, medium, low, or explain confidence level" />
+                <Label htmlFor="certainty">اليقين *</Label>
+                <Input id="certainty" value={formData.certainty} onChange={(event) => handleChange("certainty", event.target.value)} placeholder="عالٍ، متوسط، منخفض، أو شرح مستوى الثقة" />
               </div>
               <div>
-                <Label htmlFor="assumptions">Assumptions *</Label>
-                <Textarea id="assumptions" value={formData.assumptions} onChange={(event) => handleChange("assumptions", event.target.value)} placeholder="Assumptions this framework depends on" />
+                <Label htmlFor="assumptions">الافتراضات *</Label>
+                <Textarea id="assumptions" value={formData.assumptions} onChange={(event) => handleChange("assumptions", event.target.value)} placeholder="الافتراضات التي يعتمد عليها هذا الإطار" />
               </div>
-              <Button type="submit" disabled={saving}>{saving ? "Saving..." : "Save Framework"}</Button>
+              <Button type="submit" disabled={saving}>{saving ? "جارٍ الحفظ..." : "حفظ الإطار"}</Button>
             </form>
           </>
         )}

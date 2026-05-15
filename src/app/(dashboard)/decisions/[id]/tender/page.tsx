@@ -85,7 +85,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
 
     // Validate required fields
     if (!formData.clientName || !formData.estimatedContractValue || !formData.estimatedCost) {
-      setError("Please fill in all required fields")
+      setError("يرجى ملء جميع الحقول المطلوبة")
       setSaving(false)
       return
     }
@@ -106,7 +106,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
     } else {
-      setError(result.error || "Failed to save")
+      setError(result.error || "فشل في الحفظ")
     }
 
     setSaving(false)
@@ -116,7 +116,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
     return (
       <div>
         <DecisionTabs decisionId={id || ""} />
-        <div className="mt-6 text-center">Loading...</div>
+        <div className="mt-6 text-center">جارٍ التحميل...</div>
       </div>
     )
   }
@@ -125,7 +125,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
     <div>
       <DecisionTabs decisionId={id} />
       <div className="mt-6 max-w-2xl mx-auto">
-        <h2 className="text-xl font-semibold mb-4">Tender Details</h2>
+        <h2 className="text-xl font-semibold mb-4">تفاصيل المنافسة</h2>
 
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">
@@ -135,25 +135,25 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
 
         {success && (
           <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">
-            Tender profile saved successfully!
+            تم حفظ ملف المنافسة بنجاح!
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="clientName">Client / Issuing Entity *</Label>
+            <Label htmlFor="clientName">العميل / الجهة المصدرة *</Label>
             <Input
               id="clientName"
               value={formData.clientName}
               onChange={(e) => handleChange("clientName", e.target.value)}
-              placeholder="Enter client name"
+              placeholder="أدخل اسم العميل"
               required
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="contractValue">Estimated Contract Value *</Label>
+              <Label htmlFor="contractValue">قيمة العقد التقديرية *</Label>
               <Input
                 id="contractValue"
                 type="number"
@@ -164,7 +164,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
               />
             </div>
             <div>
-              <Label htmlFor="estimatedCost">Estimated Cost *</Label>
+              <Label htmlFor="estimatedCost">التكلفة التقديرية *</Label>
               <Input
                 id="estimatedCost"
                 type="number"
@@ -177,7 +177,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
           </div>
 
           <div>
-            <Label htmlFor="duration">Duration (Months)</Label>
+            <Label htmlFor="duration">المدة (بالأشهر)</Label>
             <Input
               id="duration"
               type="number"
@@ -189,7 +189,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="requiredCapacity">Required Capacity</Label>
+              <Label htmlFor="requiredCapacity">القدرة المطلوبة</Label>
               <Input
                 id="requiredCapacity"
                 type="number"
@@ -199,7 +199,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
               />
             </div>
             <div>
-              <Label htmlFor="availableCapacity">Internal Available Capacity</Label>
+              <Label htmlFor="availableCapacity">السعة الداخلية المتاحة</Label>
               <Input
                 id="availableCapacity"
                 type="number"
@@ -212,7 +212,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="strategicFit">Strategic Fit Score (0-100)</Label>
+              <Label htmlFor="strategicFit">درجة الملاءمة الاستراتيجية (٠-١٠٠)</Label>
               <Input
                 id="strategicFit"
                 type="number"
@@ -223,7 +223,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
               />
             </div>
             <div>
-              <Label htmlFor="margin">Margin Estimate (%)</Label>
+              <Label htmlFor="margin">هامش الربح المتوقع (%)</Label>
               <Input
                 id="margin"
                 type="number"
@@ -236,7 +236,7 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
           </div>
 
           <div>
-            <Label htmlFor="riskLevel">Risk Level</Label>
+            <Label htmlFor="riskLevel">مستوى المخاطر</Label>
             <Select
               value={formData.riskLevel}
               onValueChange={(value: string | null) => {
@@ -244,18 +244,18 @@ export default function TenderPage({ params }: { params: Promise<{ id: string }>
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select risk level" />
+                <SelectValue placeholder="اختر مستوى المخاطر" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="LOW">Low</SelectItem>
-                <SelectItem value="MEDIUM">Medium</SelectItem>
-                <SelectItem value="HIGH">High</SelectItem>
+                <SelectItem value="LOW">منخفض</SelectItem>
+                <SelectItem value="MEDIUM">متوسط</SelectItem>
+                <SelectItem value="HIGH">عالٍ</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <Button type="submit" disabled={saving}>
-            {saving ? "Saving..." : "Save Tender Details"}
+            {saving ? "جارٍ الحفظ..." : "حفظ تفاصيل المنافسة"}
           </Button>
         </form>
       </div>

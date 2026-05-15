@@ -86,7 +86,7 @@ export default function SectorDetailPage() {
           setSectorPatterns(patternsResult.data as SectorPattern[])
         }
       } catch {
-        setError("Failed to load data")
+        setError("فشل في تحميل البيانات")
       } finally {
         setLoading(false)
       }
@@ -108,16 +108,16 @@ export default function SectorDetailPage() {
     }
   }
 
-  if (loading) return <div className="p-6">Loading...</div>
+  if (loading) return <div className="p-6">جارٍ التحميل...</div>
   if (error) return <div className="p-6 text-red-600">{error}</div>
-  if (!sector) return <div className="p-6">Sector not found</div>
+  if (!sector) return <div className="p-6">القطاع غير موجود</div>
 
   return (
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold">{sector.name}</h1>
         <p className="text-sm text-muted-foreground">
-          Code: {sector.code} | Status: {sector.isActive ? "Active" : "Inactive"}
+          الرمز: {sector.code} | الحالة: {sector.isActive ? "نشط" : "غير نشط"}
         </p>
         {sector.description && (
           <p className="mt-2 text-sm">{sector.description}</p>
@@ -125,40 +125,40 @@ export default function SectorDetailPage() {
       </div>
 
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Benchmarks</h2>
+        <h2 className="text-xl font-semibold">المعايير</h2>
         <Button onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Cancel" : "Add Benchmark"}
+          {showForm ? "إلغاء" : "إضافة معيار"}
         </Button>
       </div>
 
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>Add Benchmark</CardTitle>
+            <CardTitle>إضافة معيار</CardTitle>
           </CardHeader>
           <CardContent>
             <form action={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="metricName">Metric Name</Label>
+                <Label htmlFor="metricName">اسم المقياس</Label>
                 <Input id="metricName" name="metricName" required />
               </div>
               <div>
-                <Label htmlFor="value">Value</Label>
+                <Label htmlFor="value">القيمة</Label>
                 <Input id="value" name="value" type="number" step="0.01" required />
               </div>
               <div>
-                <Label htmlFor="unit">Unit</Label>
+                <Label htmlFor="unit">الوحدة</Label>
                 <Input id="unit" name="unit" required />
               </div>
               <div>
-                <Label htmlFor="benchmarkType">Benchmark Type</Label>
+                <Label htmlFor="benchmarkType">نوع المعيار</Label>
                 <Input id="benchmarkType" name="benchmarkType" required />
               </div>
               <div>
-                <Label htmlFor="sourceType">Source Type</Label>
+                <Label htmlFor="sourceType">نوع المصدر</Label>
                 <Input id="sourceType" name="sourceType" defaultValue="manual" />
               </div>
-              <Button type="submit">Add Benchmark</Button>
+              <Button type="submit">إضافة معيار</Button>
             </form>
           </CardContent>
         </Card>
@@ -166,20 +166,20 @@ export default function SectorDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Learned Patterns</CardTitle>
+          <CardTitle>الأنماط المستخلصة</CardTitle>
         </CardHeader>
         <CardContent>
           {sectorPatterns.length === 0 ? (
-            <p className="text-muted-foreground">No patterns learned yet.</p>
+            <p className="text-muted-foreground">لا توجد أنماط مستخلصة بعد.</p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Pattern Type</TableHead>
-                  <TableHead>Pattern Key</TableHead>
-                  <TableHead>Occurrences</TableHead>
-                  <TableHead>Last Observed</TableHead>
-                  <TableHead>Confidence</TableHead>
+                  <TableHead>نوع النمط</TableHead>
+                  <TableHead>مفتاح النمط</TableHead>
+                  <TableHead>التكرارات</TableHead>
+                  <TableHead>آخر ملاحظة</TableHead>
+                  <TableHead>الثقة</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -200,18 +200,18 @@ export default function SectorDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Benchmarks</CardTitle>
+          <CardTitle>المعايير</CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Metric</TableHead>
-                <TableHead>Value</TableHead>
-                <TableHead>Unit</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Confidence</TableHead>
+                <TableHead>المقياس</TableHead>
+                <TableHead>القيمة</TableHead>
+                <TableHead>الوحدة</TableHead>
+                <TableHead>النوع</TableHead>
+                <TableHead>المصدر</TableHead>
+                <TableHead>الثقة</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

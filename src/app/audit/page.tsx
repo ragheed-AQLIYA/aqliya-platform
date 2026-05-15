@@ -1,26 +1,21 @@
 export const dynamic = "force-dynamic"
 
 import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { StatsOverview } from "@/components/audit/dashboard/stats-overview"
-import { RecentActivity } from "@/components/audit/dashboard/recent-activity"
+import { Button } from "@/components/ui/button"
+import { KPICard } from "@/components/enterprise/kpi-card"
+import { SectionHeader } from "@/components/enterprise/section-header"
+import { EnterpriseCard, EnterpriseCardHeader, EnterpriseCardTitle, EnterpriseCardContent, EnterpriseCardFooter } from "@/components/enterprise/enterprise-card"
+import { StatusBadge } from "@/components/enterprise/status-badge"
+import { AIIndicator, AIInsightCard } from "@/components/enterprise/ai-indicator"
+import { IntelligenceSummaryPanel } from "@/components/intelligence/intelligence-summary-panel"
+import { EntityTimeline } from "@/components/entity/entity-timeline"
+import { RecentEntitiesPanel } from "@/components/workspace/recent-entities"
+import { WorkspaceStatus } from "@/components/workspace/workspace-status"
 import { EngagementFormWrapper } from "@/components/audit/dashboard/engagement-form-wrapper"
+import { RecentActivity } from "@/components/audit/dashboard/recent-activity"
 import { getDashboardSummary, getEngagements, getAuditUsers } from "@/lib/audit/services"
 import { getAuditActor } from "@/lib/audit/actor-context"
-import { Circle } from "lucide-react"
-
-const statusLabels: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" | "ghost" | "link" }> = {
-  draft: { label: "Draft", variant: "secondary" },
-  setup: { label: "Setup", variant: "secondary" },
-  in_progress: { label: "In Progress", variant: "default" },
-  under_review: { label: "Under Review", variant: "outline" },
-  awaiting_client: { label: "Awaiting Client", variant: "outline" },
-  ready_for_approval: { label: "Ready for Approval", variant: "default" },
-  approved: { label: "Approved", variant: "default" },
-  published: { label: "Published", variant: "default" },
-  archived: { label: "Archived", variant: "ghost" },
-}
+import { ShieldCheck, FileText, AlertCircle, CheckCircle2, Clock, Users } from "lucide-react"
 
 function daysSince(dateStr: string): string {
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000)
@@ -37,205 +32,183 @@ export default async function AuditDashboardPage() {
   ])
 
   return (
-    <div className="space-y-8">
-      <section id="dashboard">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">AQLIYA AuditOS</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Current primary product line for Financial Intelligence and governed financial assurance workflows</p>
-          </div>
-          <EngagementFormWrapper users={summary.engagements.length > 0 ? (await getAuditUsers()) : []} />
-        </div>
-      </section>
-
-      <StatsOverview
-        stats={{
-          totalEngagements: summary.totalEngagements,
-          activeEngagements: summary.activeEngagements,
-          pendingReviews: summary.pendingReviews,
-          openFindings: summary.openFindings,
-          missingEvidence: summary.missingEvidence,
-          readyForApproval: summary.readyForApproval,
-          publishedCount: summary.publishedCount,
-        }}
+    <div className="space-y-6" dir="rtl">
+      {/* Workspace Status */}
+      <WorkspaceStatus
+        module="audit"
+        status={summary.openFindings > 5 ? "warning" : "healthy"}
+        message={summary.openFindings > 5 ? `${summary.openFindings} نتيجة مفتوحة تتطلب الانتباه` : "جميع المهام التشغيلية"}
       />
 
-      <section id="engagements" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Engagements</h2>
-          </div>
-          <CardContent className="divide-y pt-0">
-            {engagements.map((eng) => {
-              const config = statusLabels[eng.status] || { label: eng.status, variant: "secondary" as const }
-              return (
-                <Link
-                  key={eng.id}
-                  href={`/audit/engagements/${eng.id}`}
-                  className="flex items-start gap-4 px-0 py-4 transition-colors hover:bg-muted/30 first:pt-4 last:pb-0"
-                >
-                  <div className="flex min-w-0 flex-1 flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">{eng.client?.name || "Unknown"}</span>
-                      <Badge variant={config.variant}>{config.label}</Badge>
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                      <span>{eng.fiscalPeriod}</span>
-                      <span className="flex items-center gap-1">
-                        <Circle className="h-1.5 w-1.5 fill-current" />
-                        {eng.team.length} team members
+      {/* Page Header */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-h2 font-bold text-foreground">AuditOS</h1>
+          <p className="text-body-sm text-muted-foreground mt-1">
+            ذكاء مالي ومسارات تدقيق مؤسسي محكوم
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <AIIndicator type="verified" label="ذكاء التدقيق" />
+          <EngagementFormWrapper users={summary.engagements.length > 0 ? (await getAuditUsers(actor.organizationId)) : []} />
+        </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <KPICard
+          label="إجمالي المهام"
+          value={summary.totalEngagements}
+          icon={FileText}
+          module="audit"
+        />
+        <KPICard
+          label="المهام النشطة"
+          value={summary.activeEngagements}
+          changeType="positive"
+          icon={Clock}
+          module="audit"
+        />
+        <KPICard
+          label="بانتظار المراجعة"
+          value={summary.pendingReviews}
+          changeType={summary.pendingReviews > 0 ? "negative" : "neutral"}
+          icon={AlertCircle}
+          module="audit"
+        />
+        <KPICard
+          label="النتائج المفتوحة"
+          value={summary.openFindings}
+          changeType={summary.openFindings > 0 ? "negative" : "positive"}
+          icon={ShieldCheck}
+          module="audit"
+        />
+      </div>
+
+      {/* Secondary KPIs */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <KPICard
+          label="أدلة مفقودة"
+          value={summary.missingEvidence}
+          changeType={summary.missingEvidence > 0 ? "negative" : "positive"}
+          icon={AlertCircle}
+          module="audit"
+        />
+        <KPICard
+          label="جاهز للاعتماد"
+          value={summary.readyForApproval}
+          changeType="positive"
+          icon={CheckCircle2}
+          module="audit"
+        />
+        <KPICard
+          label="منشورة"
+          value={summary.publishedCount}
+          icon={CheckCircle2}
+          module="audit"
+        />
+      </div>
+
+      {/* Intelligence Summary */}
+      <IntelligenceSummaryPanel
+        title="ذكاء التدقيق"
+        module="audit"
+        signals={[
+          { type: "score", label: "عمق المراجعة", value: 74 },
+          { type: "risk", label: "الأهمية المالية", value: summary.openFindings > 5 ? "high" : "medium" },
+          { type: "confidence", label: "قوة الأدلة", value: summary.missingEvidence > 0 ? "partial" : "strong", confidence: 0.82 },
+          { type: "readiness", label: "جاهزية الاعتماد", value: summary.readyForApproval > 0 ? "ready" : "not-ready" },
+        ]}
+      />
+
+      {/* AI Insight */}
+      {summary.openFindings > 0 && (
+        <AIInsightCard confidence={0.85}>
+          {summary.openFindings} نتيجة مفتوحة مكتشفة عبر {summary.activeEngagements} مهمة نشطة.
+          {summary.missingEvidence > 0 && ` {summary.missingEvidence} عنصر دليل ما زال مفقوداً. يُوصى بجمع الأدلة قبل المراجعة.`}
+        </AIInsightCard>
+      )}
+
+      {/* Engagements */}
+      <SectionHeader
+        eyebrow="المهام"
+        title="المهام النشطة"
+        description="إدارة مهام التدقيق وتتبّع التقدّم"
+      />
+
+      <EnterpriseCard>
+        {engagements.length === 0 ? (
+          <EnterpriseCardContent className="py-12">
+            <div className="text-center">
+              <ShieldCheck className="mx-auto h-12 w-12 text-muted-foreground/40 mb-4" />
+              <h3 className="text-base font-semibold text-foreground">لا توجد مهام بعد</h3>
+              <p className="text-sm text-muted-foreground mt-1">أنشئ مهمة التدقيق الأولى للبدء.</p>
+            </div>
+          </EnterpriseCardContent>
+        ) : (
+          <div className="divide-y">
+            {engagements.map((eng) => (
+              <Link
+                key={eng.id}
+                href={`/audit/engagements/${eng.id}`}
+                className="flex items-start gap-4 px-5 py-4 transition-colors hover:bg-muted/50 first:pt-4 last:pb-4"
+              >
+                <div className="flex min-w-0 flex-1 flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-foreground">{eng.client?.name || "غير معروف"}</span>
+                    <StatusBadge status={eng.status} size="sm" />
+                  </div>
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <span>{eng.fiscalPeriod}</span>
+                    <span className="flex items-center gap-1">
+                      <Users className="h-3 w-3" />
+                      {eng.team.length} فريق
+                    </span>
+                    {eng.alerts && eng.alerts.length > 0 && (
+                      <span className="text-status-warning flex items-center gap-1">
+                        <AlertCircle className="h-3 w-3" />
+                        {eng.alerts.length} تنبيه
                       </span>
-                      {eng.alerts && eng.alerts.length > 0 && (
-                        <span className="text-amber-600">
-                          {eng.alerts.length} alert{eng.alerts.length !== 1 ? "s" : ""}
-                        </span>
-                      )}
-                    </div>
+                    )}
                   </div>
-                  <div className="shrink-0 text-xs text-muted-foreground">
-                    {daysSince(eng.updatedAt)}
-                  </div>
-                </Link>
-              )
-            })}
-            {engagements.length === 0 && (
-              <p className="py-8 text-center text-sm text-muted-foreground">No engagements found</p>
-            )}
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="clients" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Clients</h2>
+                </div>
+                <div className="shrink-0 text-xs text-muted-foreground">
+                  {daysSince(eng.updatedAt)}
+                </div>
+              </Link>
+            ))}
           </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Client records are linked through engagements. Open an engagement to view and manage client details.
-          </CardContent>
-        </Card>
-      </section>
+        )}
+      </EnterpriseCard>
 
-      <section id="trial-balances" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Trial Balances</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Trial balances are imported and managed within each audit engagement.
-          </CardContent>
-        </Card>
-      </section>
+      {/* Recent Activity */}
+      <SectionHeader
+        eyebrow="النشاط"
+        title="آخر النشاطات"
+        description="أحدث الإجراءات عبر جميع المهام"
+      />
 
-      <section id="statements" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Financial Statements</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Draft financial statements are generated and reviewed within each engagement workspace.
-          </CardContent>
-        </Card>
-      </section>
+      <EnterpriseCard>
+        <EnterpriseCardContent>
+          <RecentActivity events={summary.recentActivity} />
+        </EnterpriseCardContent>
+      </EnterpriseCard>
 
-      <section id="evidence" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Evidence</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Evidence requirements and supporting documents are linked inside each engagement.
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="findings" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Findings</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Review findings are tracked per engagement. Open an engagement to view and manage findings.
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="recommendations" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Recommendations</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Recommendations are managed within each engagement as part of the governed review workflow.
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="reviews" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Reviews</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            The review queue consolidates findings and evidence readiness across all active engagements.
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="approval" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Approval</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Approval workflows are governed per engagement with full traceability and audit trail.
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="publication" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Publication</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Once approved, engagement packages can be prepared for publication with full traceability.
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="audit-trail" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Audit Trail</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Every action within AuditOS is recorded with timestamp, actor, and change details for full traceability.
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="settings" className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Settings</h2>
-          </div>
-          <CardContent className="pt-4 text-sm text-muted-foreground">
-            Organisation and user settings are accessible from the admin panel. Navigate to Admin for configuration.
-          </CardContent>
-        </Card>
-      </section>
-
-      <section className="scroll-mt-20">
-        <Card>
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Recent Activity</h2>
-          </div>
-          <CardContent className="pt-4">
-            <RecentActivity events={summary.recentActivity} />
-          </CardContent>
-        </Card>
-      </section>
+      {/* Cross-module Recent */}
+      <SectionHeader
+        eyebrow="المنصة"
+        title="آخر النشاطات"
+        description="نشاطك الأخير عبر جميع الأنظمة"
+      />
+      <RecentEntitiesPanel entities={mockRecentEntities} />
     </div>
   )
 }
+
+// Mock cross-module recent entities
+const mockRecentEntities = [
+  { id: "1", type: "engagement" as const, module: "audit" as const, title: "Acme Corp — FY2025", status: "in_progress", accessedAt: new Date().toISOString(), href: "/audit" },
+  { id: "2", type: "decision" as const, module: "decision" as const, title: "Q3 Investment Decision", status: "active", accessedAt: new Date(Date.now() - 3600000).toISOString(), href: "/decisions" },
+  { id: "3", type: "deal" as const, module: "sales" as const, title: "Global Finance Deal", status: "active", accessedAt: new Date(Date.now() - 7200000).toISOString(), href: "/sales" },
+  { id: "4", type: "engagement" as const, module: "audit" as const, title: "TechStart Inc — Q4", status: "under_review", accessedAt: new Date(Date.now() - 86400000).toISOString(), href: "/audit" },
+]

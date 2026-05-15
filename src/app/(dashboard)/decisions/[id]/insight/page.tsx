@@ -17,7 +17,7 @@ export default async function StrategicInsightPage({ params }: PageProps) {
         <DecisionTabs decisionId={id} />
         <Card className="border-destructive">
           <CardHeader>
-            <CardTitle>Access Blocked</CardTitle>
+            <CardTitle>الوصول محظور</CardTitle>
             <CardDescription>
               {result.error}
               {result.missing && (
@@ -50,24 +50,24 @@ export default async function StrategicInsightPage({ params }: PageProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Strategic Decision Insight</CardTitle>
+              <CardTitle>الرؤية الاستراتيجية للقرار</CardTitle>
               <CardDescription>
-                Computed on-demand from A-1 stages. This is a read-only artifact.
+                تُحسَب عند الطلب من مراحل أ-١. ناتج للاطلاع فقط.
               </CardDescription>
             </div>
             <Badge className={severityColor[insight.severity] || ""}>
-              {insight.severity} Confidence: {insight.confidence}%
+              {insight.severity} الثقة: {insight.confidence}%
             </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h3 className="font-medium mb-2">Summary</h3>
+            <h3 className="font-medium mb-2">الملخص</h3>
             <p className="text-sm text-muted-foreground whitespace-pre-wrap">{insight.summary}</p>
           </div>
 
           <div>
-            <h3 className="font-medium mb-2">Key Factors</h3>
+            <h3 className="font-medium mb-2">العوامل الرئيسية</h3>
             <ul className="list-disc pl-5 text-sm text-muted-foreground">
               {insight.keyFactors.map((factor, i) => (
                 <li key={i}>{factor}</li>
@@ -77,7 +77,7 @@ export default async function StrategicInsightPage({ params }: PageProps) {
 
           <div className="pt-4 border-t">
             <p className="text-xs text-muted-foreground">
-              This insight is computed on-demand from A-1 data. It does not modify source data.
+              تُحسَب هذه الرؤية عند الطلب من بيانات أ-١. لا تُعدّل البيانات المصدر.
             </p>
           </div>
         </CardContent>

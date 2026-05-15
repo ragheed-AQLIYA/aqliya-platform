@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { DecisionTabs } from "@/components/decisions/decision-tabs"
-import { getDecisionIntake, updateDecisionIntake } from "@/actions/decisions"
+import { DecisionProgress, buildStageStatus } from "@/components/decisions/decision-progress"
+import { getDecisionIntake, updateDecisionIntake, getWorkflowReadiness } from "@/actions/decisions"
+import { getDecisionTypeConfig } from "@/lib/decision-type-config"
 import type { DecisionIntake as DecisionIntakeState } from "@/lib/types/decision"
 
 type IntakeForm = {
@@ -36,6 +38,8 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [intake, setIntake] = useState<DecisionIntakeState | null>(null)
+  const [decisionType, setDecisionType] = useState<string>("CUSTOM")
+  const [readiness, setReadiness] = useState<any>(null)
   const [formData, setFormData] = useState<IntakeForm>({
     title: "",
     objectives: "",
@@ -50,7 +54,6 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
       const { id: decisionId } = await params
       setId(decisionId)
     }
-
     resolveParams()
   }, [params])
 
@@ -58,11 +61,14 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
     if (!id) return
     const decisionId: string = id
 
-    async function loadIntake() {
-      const result = await getDecisionIntake(decisionId)
+    async function loadData() {
+      const [intakeResult, readinessResult] = await Promise.all([
+        getDecisionIntake(decisionId),
+        getWorkflowReadiness(decisionId),
+      ])
 
-      if (result.success && result.data) {
-        const decision = result.data
+      if (intakeResult.success && intakeResult.data) {
+        const decision = intakeResult.data
         setFormData({
           title: decision.title,
           objectives: joinDescriptions(decision.objectives),
@@ -72,14 +78,19 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
           risks: joinDescriptions(decision.risks),
         })
         setIntake(decision.intake)
+        setDecisionType(decision.type || "CUSTOM")
       } else {
-        setError(result.error || "Failed to load decision intake")
+        setError(intakeResult.error || "Failed to load decision intake")
+      }
+
+      if (readinessResult.success && readinessResult.data) {
+        setReadiness(readinessResult.data)
       }
 
       setLoading(false)
     }
 
-    loadIntake()
+    loadData()
   }, [id])
 
   function handleChange(field: keyof IntakeForm, value: string) {
@@ -101,9 +112,13 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
     if (result.success && result.data) {
       setIntake(result.data.intake)
       setSuccess(true)
+      const readinessResult = await getWorkflowReadiness(id)
+      if (readinessResult.success && readinessResult.data) {
+        setReadiness(readinessResult.data)
+      }
       setTimeout(() => setSuccess(false), 3000)
     } else {
-      setError(result.error || "Failed to save decision intake")
+      setError(result.error || "فشل في حفظ استلام القرار")
     }
 
     setSaving(false)
@@ -113,20 +128,30 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
     return (
       <div>
         <DecisionTabs decisionId={id || ""} />
-        <div className="mt-6 text-center">Loading...</div>
+        <div className="mt-6 text-center">جارٍ التحميل...</div>
       </div>
     )
   }
 
+  const config = getDecisionTypeConfig(decisionType)
+  const stages = readiness ? buildStageStatus("intake", {
+    intakeAccepted: readiness.intakeAccepted,
+    frameworkComplete: readiness.frameworkComplete,
+    scenariosComplete: readiness.scenariosComplete,
+    risksComplete: readiness.risksComplete,
+    simulationReady: readiness.simulationReady,
+    recommendationReady: readiness.recommendationReady,
+  }) : []
+
   return (
     <div>
-      <DecisionTabs decisionId={id} />
+      <DecisionTabs decisionId={id} decisionType={decisionType} />
       <div className="mt-6 max-w-3xl mx-auto">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-semibold">A-1.0 Decision Intake</h2>
+            <h2 className="text-xl font-semibold">أ-١٫٠ استلام القرار</h2>
             <p className="text-sm text-muted-foreground">
-              Intake gates decisions before frameworks, scenarios, risks, or recommendations.
+              {config.intakeGuidance}
             </p>
           </div>
           {intake && (
@@ -136,25 +161,36 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
           )}
         </div>
 
+        {readiness && (
+          <div className="mb-6">
+            <DecisionProgress
+              stages={stages}
+              decisionType={decisionType}
+              missingInputs={readiness.missingInputs}
+              dataQuality={readiness.dataQuality}
+            />
+          </div>
+        )}
+
         {error && <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">{error}</div>}
-        {success && <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">Intake saved successfully.</div>}
+        {success && <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">تم حفظ الاستلام بنجاح.</div>}
 
         {intake && (
           <section className="mb-6 rounded-lg border p-4">
             <p className="text-sm text-muted-foreground">
               {intake.readyForFramework
-                ? "Ready to proceed to A-1.1 Decision Frameworks."
-                : "Resolve intake issues before proceeding to framework analysis."}
+                ? "جاهز للمتابعة إلى أ-١٫١ إطار القرار."
+                : "حل مشكلات الاستلام قبل المتابعة إلى تحليل الإطار."}
             </p>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <div>
-                <h3 className="text-sm font-medium">Reasons</h3>
+                <h3 className="text-sm font-medium">الأسباب</h3>
                 <ul className="mt-2 list-disc pl-5 text-sm">
                   {intake.reasons.map((reason) => <li key={reason}>{reason}</li>)}
                 </ul>
               </div>
               <div>
-                <h3 className="text-sm font-medium">Required next steps</h3>
+                <h3 className="text-sm font-medium">الخطوات التالية المطلوبة</h3>
                 <ul className="mt-2 list-disc pl-5 text-sm">
                   {intake.requiredNextSteps.map((step) => <li key={step}>{step}</li>)}
                 </ul>
@@ -165,30 +201,35 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="title">Decision Title *</Label>
+            <Label htmlFor="title">عنوان القرار *</Label>
             <Input id="title" value={formData.title} onChange={(event) => handleChange("title", event.target.value)} required />
           </div>
           <div>
-            <Label htmlFor="objectives">Objectives *</Label>
-            <Textarea id="objectives" value={formData.objectives} onChange={(event) => handleChange("objectives", event.target.value)} placeholder="One objective per line" />
+            <Label htmlFor="objectives">الأهداف *</Label>
+            <Textarea id="objectives" value={formData.objectives} onChange={(event) => handleChange("objectives", event.target.value)} placeholder="هدف واحد في كل سطر" />
+            <p className="text-xs text-muted-foreground mt-1">يُحدّد الملاءمة الاستراتيجية ودرجات الجدوى. استهدف ٣-٥ أهداف.</p>
           </div>
           <div>
-            <Label htmlFor="alternatives">Alternatives *</Label>
-            <Textarea id="alternatives" value={formData.alternatives} onChange={(event) => handleChange("alternatives", event.target.value)} placeholder="At least two viable options, one per line" />
+            <Label htmlFor="alternatives">البدائل *</Label>
+            <Textarea id="alternatives" value={formData.alternatives} onChange={(event) => handleChange("alternatives", event.target.value)} placeholder="خياران ممكنان على الأقل، واحد في كل سطر" />
+            <p className="text-xs text-muted-foreground mt-1">المزيد من البدائل يُحسّن تسجيل الملاءمة الاستراتيجية. استهدف ٢-٣.</p>
           </div>
           <div>
-            <Label htmlFor="risks">Risks / Uncertainty *</Label>
-            <Textarea id="risks" value={formData.risks} onChange={(event) => handleChange("risks", event.target.value)} placeholder="Use LOW:, MEDIUM:, or HIGH: prefixes when useful" />
+            <Label htmlFor="risks">المخاطر / عدم اليقين *</Label>
+            <Textarea id="risks" value={formData.risks} onChange={(event) => handleChange("risks", event.target.value)} placeholder="استخدم البادئات: LOW: أو MEDIUM: أو HIGH: عند اللزوم" />
+            <p className="text-xs text-muted-foreground mt-1">تقييم المخاطر يؤثّر مباشرة على درجة المخاطر. وثّق جميع المخاطر المعروفة.</p>
           </div>
           <div>
-            <Label htmlFor="constraints">Constraints</Label>
-            <Textarea id="constraints" value={formData.constraints} onChange={(event) => handleChange("constraints", event.target.value)} placeholder="One constraint per line" />
+            <Label htmlFor="constraints">القيود</Label>
+            <Textarea id="constraints" value={formData.constraints} onChange={(event) => handleChange("constraints", event.target.value)} placeholder="قيد واحد في كل سطر" />
+            <p className="text-xs text-muted-foreground mt-1">قيود أقل = درجة قدرة أعلى. كن محدّداً.</p>
           </div>
           <div>
-            <Label htmlFor="assumptions">Assumptions</Label>
-            <Textarea id="assumptions" value={formData.assumptions} onChange={(event) => handleChange("assumptions", event.target.value)} placeholder="One assumption per line" />
+            <Label htmlFor="assumptions">الافتراضات</Label>
+            <Textarea id="assumptions" value={formData.assumptions} onChange={(event) => handleChange("assumptions", event.target.value)} placeholder="افتراض واحد في كل سطر" />
+            <p className="text-xs text-muted-foreground mt-1">الافتراضات الموثّقة تُحسّن الثقة ودرجات المخاطر. استهدف ٣-٤.</p>
           </div>
-          <Button type="submit" disabled={saving}>{saving ? "Saving..." : "Save Intake"}</Button>
+          <Button type="submit" disabled={saving}>{saving ? "جارٍ الحفظ..." : "حفظ الاستلام"}</Button>
         </form>
       </div>
     </div>

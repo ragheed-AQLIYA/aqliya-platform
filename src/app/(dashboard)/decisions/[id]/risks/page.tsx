@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { DecisionTabs } from "@/components/decisions/decision-tabs"
-import { getDecisionRiskAnalysis, updateDecisionRiskAnalysis } from "@/actions/decisions"
+import { DecisionProgress, buildStageStatus } from "@/components/decisions/decision-progress"
+import { getDecisionRiskAnalysis, updateDecisionRiskAnalysis, getWorkflowReadiness } from "@/actions/decisions"
+import { getDecisionTypeConfig } from "@/lib/decision-type-config"
 import type { DecisionFrameworkState, DecisionIntake, DecisionRiskAnalysisState, DecisionScenariosState } from "@/lib/types/decision"
 
 type ScenarioRef = {
@@ -45,6 +47,8 @@ export default function DecisionRisksPage({ params }: { params: Promise<{ id: st
   const [frameworkState, setFrameworkState] = useState<DecisionFrameworkState | null>(null)
   const [scenarioState, setScenarioState] = useState<DecisionScenariosState | null>(null)
   const [riskAnalysisState, setRiskAnalysisState] = useState<DecisionRiskAnalysisState | null>(null)
+  const [decisionType, setDecisionType] = useState<string>("CUSTOM")
+  const [readiness, setReadiness] = useState<any>(null)
   const [scenarios, setScenarios] = useState<ScenarioRef[]>([])
   const [analyses, setAnalyses] = useState<RiskAnalysisForm[]>([])
 
@@ -53,7 +57,6 @@ export default function DecisionRisksPage({ params }: { params: Promise<{ id: st
       const { id: decisionId } = await params
       setId(decisionId)
     }
-
     resolveParams()
   }, [params])
 
@@ -61,24 +64,32 @@ export default function DecisionRisksPage({ params }: { params: Promise<{ id: st
     if (!id) return
     const decisionId: string = id
 
-    async function loadRiskAnalysis() {
-      const result = await getDecisionRiskAnalysis(decisionId)
+    async function loadData() {
+      const [risksResult, readinessResult] = await Promise.all([
+        getDecisionRiskAnalysis(decisionId),
+        getWorkflowReadiness(decisionId),
+      ])
 
-      if (result.success && result.data) {
-        setIntake(result.data.intake)
-        setFrameworkState(result.data.frameworkState)
-        setScenarioState(result.data.scenarioState)
-        setRiskAnalysisState(result.data.riskAnalysisState)
-        setScenarios(result.data.decisionScenarios)
-        setAnalyses(result.data.analysisDrafts)
+      if (risksResult.success && risksResult.data) {
+        setIntake(risksResult.data.intake)
+        setFrameworkState(risksResult.data.frameworkState)
+        setScenarioState(risksResult.data.scenarioState)
+        setRiskAnalysisState(risksResult.data.riskAnalysisState)
+        setDecisionType(risksResult.data.type || "CUSTOM")
+        setScenarios(risksResult.data.decisionScenarios)
+        setAnalyses(risksResult.data.analysisDrafts)
       } else {
-        setError(result.error || "Failed to load decision risk analysis")
+        setError(risksResult.error || "فشل في تحميل تحليل المخاطر")
+      }
+
+      if (readinessResult.success && readinessResult.data) {
+        setReadiness(readinessResult.data)
       }
 
       setLoading(false)
     }
 
-    loadRiskAnalysis()
+    loadData()
   }, [id])
 
   function handleAnalysisChange(index: number, field: keyof RiskAnalysisForm, value: string) {
@@ -103,9 +114,13 @@ export default function DecisionRisksPage({ params }: { params: Promise<{ id: st
       setAnalyses(result.data.riskAnalyses)
       setRiskAnalysisState(result.data.riskAnalysisState)
       setSuccess(true)
+      const readinessResult = await getWorkflowReadiness(id)
+      if (readinessResult.success && readinessResult.data) {
+        setReadiness(readinessResult.data)
+      }
       setTimeout(() => setSuccess(false), 3000)
     } else {
-      setError(result.error || "Failed to save decision risk analysis")
+      setError(result.error || "فشل في حفظ تحليل المخاطر")
     }
 
     setSaving(false)
@@ -115,7 +130,7 @@ export default function DecisionRisksPage({ params }: { params: Promise<{ id: st
     return (
       <div>
         <DecisionTabs decisionId={id || ""} />
-        <div className="mt-6 text-center">Loading...</div>
+        <div className="mt-6 text-center">جارٍ التحميل...</div>
       </div>
     )
   }
@@ -124,46 +139,66 @@ export default function DecisionRisksPage({ params }: { params: Promise<{ id: st
   const frameworkBlocked = !intakeBlocked && !frameworkState?.isComplete
   const scenariosBlocked = !intakeBlocked && !frameworkBlocked && (!scenarioState?.isComplete || scenarios.length < 3)
   const blocked = intakeBlocked || frameworkBlocked || scenariosBlocked
+  const config = getDecisionTypeConfig(decisionType)
+  const stages = readiness ? buildStageStatus("risks", {
+    intakeAccepted: readiness.intakeAccepted,
+    frameworkComplete: readiness.frameworkComplete,
+    scenariosComplete: readiness.scenariosComplete,
+    risksComplete: readiness.risksComplete,
+    simulationReady: readiness.simulationReady,
+    recommendationReady: readiness.recommendationReady,
+  }) : []
 
   return (
     <div>
-      <DecisionTabs decisionId={id} />
+      <DecisionTabs decisionId={id} decisionType={decisionType} />
       <div className="mt-6 max-w-4xl mx-auto">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-semibold">A-1.3 Risk & Trade-offs</h2>
+            <h2 className="text-xl font-semibold">أ-١٫٣ المخاطر والمفاضلات</h2>
             <p className="text-sm text-muted-foreground">
-              Analyze risks and trade-offs for each scenario. Do not recommend, rank, choose a path, or modify scenarios.
+              {config.riskGuidance}
             </p>
           </div>
           {riskAnalysisState && !blocked && (
             <Badge variant={riskAnalysisState.isComplete ? "default" : "secondary"}>
-              {riskAnalysisState.isComplete ? "complete" : "incomplete"}
+              {riskAnalysisState.isComplete ? "مكتمل" : "غير مكتمل"}
             </Badge>
           )}
         </div>
 
+        {readiness && (
+          <div className="mb-6">
+            <DecisionProgress
+              stages={stages}
+              decisionType={decisionType}
+              missingInputs={readiness.missingInputs}
+              dataQuality={readiness.dataQuality}
+            />
+          </div>
+        )}
+
         {error && <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">{error}</div>}
-        {success && <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">Risk analysis saved successfully.</div>}
+        {success && <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">تم حفظ تحليل المخاطر. يمكّن ذلك المحاكاة والتوصية.</div>}
 
         {blocked ? (
           <section className="rounded-lg border p-4">
             <div className="mb-3 flex items-center justify-between gap-3">
-              <h3 className="font-semibold">Risk analysis blocked</h3>
+              <h3 className="font-semibold">تحليل المخاطر محظور</h3>
               {intakeBlocked ? (
-                <Badge variant={getIntakeVariant(intake?.status)}>{intake?.status.replace("_", " ") || "intake missing"}</Badge>
+                <Badge variant={getIntakeVariant(intake?.status)}>{intake?.status.replace("_", " ") || "الاستلام مفقود"}</Badge>
               ) : frameworkBlocked ? (
-                <Badge variant="secondary">framework incomplete</Badge>
+                <Badge variant="secondary">الإطار غير مكتمل</Badge>
               ) : (
-                <Badge variant="secondary">scenarios incomplete</Badge>
+                <Badge variant="secondary">السيناريوهات غير مكتملة</Badge>
               )}
             </div>
             <p className="text-sm text-muted-foreground">
               {intakeBlocked
-                ? "A-1.3 cannot proceed before A-1.0 intake is accepted."
+                ? "أ-١٫٣ لا يمكن المتابعة قبل قبول أ-١٫٠ الاستلام."
                 : frameworkBlocked
-                  ? "A-1.3 cannot proceed before A-1.1 framework exists and is complete."
-                  : "A-1.3 cannot proceed before at least three complete scenarios exist."}
+                  ? "أ-١٫٣ لا يمكن المتابعة قبل اكتمال أ-١٫١ الإطار."
+                  : "أ-١٫٣ لا يمكن المتابعة قبل وجود ثلاثة سيناريوهات مكتملة على الأقل."}
             </p>
             <ul className="mt-4 list-disc pl-5 text-sm">
               {(intakeBlocked ? intake?.requiredNextSteps : frameworkBlocked ? frameworkState?.nextSteps : scenarioState?.nextSteps)?.map((step) => <li key={step}>{step}</li>)}
@@ -173,7 +208,7 @@ export default function DecisionRisksPage({ params }: { params: Promise<{ id: st
           <>
             {riskAnalysisState && !riskAnalysisState.isComplete && (
               <section className="mb-6 rounded-lg border p-4">
-                <h3 className="text-sm font-medium">Required next steps</h3>
+                <h3 className="text-sm font-medium">الخطوات التالية المطلوبة</h3>
                 <ul className="mt-2 list-disc pl-5 text-sm">
                   {riskAnalysisState.nextSteps.map((step) => <li key={step}>{step}</li>)}
                 </ul>
@@ -187,52 +222,52 @@ export default function DecisionRisksPage({ params }: { params: Promise<{ id: st
                 return (
                   <section key={analysis.scenarioId || index} className="rounded-lg border p-4">
                     <div className="mb-4 flex items-center justify-between gap-3">
-                      <h3 className="font-semibold">{scenario?.name || `Scenario ${index + 1}`}</h3>
-                      <Badge variant="outline">analysis only</Badge>
+                      <h3 className="font-semibold">{scenario?.name || `السيناريو ${index + 1}`}</h3>
+                      <Badge variant="outline">تحليل فقط</Badge>
                     </div>
                     <input type="hidden" value={analysis.scenarioId} readOnly />
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor={`risks-${index}`}>Risks *</Label>
-                        <Textarea id={`risks-${index}`} value={analysis.risks} onChange={(event) => handleAnalysisChange(index, "risks", event.target.value)} placeholder="Scenario-specific risks only" />
+                        <Label htmlFor={`risks-${index}`}>المخاطر *</Label>
+                        <Textarea id={`risks-${index}`} value={analysis.risks} onChange={(event) => handleAnalysisChange(index, "risks", event.target.value)} placeholder="مخاطر خاصة بهذا السيناريو فقط" />
                       </div>
                       <div>
-                        <Label htmlFor={`tradeoffs-${index}`}>Trade-offs *</Label>
-                        <Textarea id={`tradeoffs-${index}`} value={analysis.tradeoffs} onChange={(event) => handleAnalysisChange(index, "tradeoffs", event.target.value)} placeholder="Trade-offs created by this scenario" />
+                        <Label htmlFor={`tradeoffs-${index}`}>المفاضلات *</Label>
+                        <Textarea id={`tradeoffs-${index}`} value={analysis.tradeoffs} onChange={(event) => handleAnalysisChange(index, "tradeoffs", event.target.value)} placeholder="المفاضلات الناتجة عن هذا السيناريو" />
                       </div>
                       <div>
-                        <Label htmlFor={`sacrifices-${index}`}>Sacrifices *</Label>
-                        <Textarea id={`sacrifices-${index}`} value={analysis.sacrifices} onChange={(event) => handleAnalysisChange(index, "sacrifices", event.target.value)} placeholder="What must be given up or constrained" />
+                        <Label htmlFor={`sacrifices-${index}`}>التنازلات *</Label>
+                        <Textarea id={`sacrifices-${index}`} value={analysis.sacrifices} onChange={(event) => handleAnalysisChange(index, "sacrifices", event.target.value)} placeholder="ما يجب التخلي عنه أو تقييده" />
                       </div>
                       <div>
-                        <Label htmlFor={`opportunityCosts-${index}`}>Opportunity Costs *</Label>
-                        <Textarea id={`opportunityCosts-${index}`} value={analysis.opportunityCosts} onChange={(event) => handleAnalysisChange(index, "opportunityCosts", event.target.value)} placeholder="Foregone options, time, capital, or focus" />
+                        <Label htmlFor={`opportunityCosts-${index}`}>تكاليف الفرصة *</Label>
+                        <Textarea id={`opportunityCosts-${index}`} value={analysis.opportunityCosts} onChange={(event) => handleAnalysisChange(index, "opportunityCosts", event.target.value)} placeholder="الخيارات أو الوقت أو رأس المال أو التركيز المفوّت" />
                       </div>
                       <div>
-                        <Label htmlFor={`stakeholderRisks-${index}`}>Stakeholder Risks *</Label>
-                        <Textarea id={`stakeholderRisks-${index}`} value={analysis.stakeholderRisks} onChange={(event) => handleAnalysisChange(index, "stakeholderRisks", event.target.value)} placeholder="Stakeholder exposure or friction" />
+                        <Label htmlFor={`stakeholderRisks-${index}`}>مخاطر أصحاب المصلحة *</Label>
+                        <Textarea id={`stakeholderRisks-${index}`} value={analysis.stakeholderRisks} onChange={(event) => handleAnalysisChange(index, "stakeholderRisks", event.target.value)} placeholder="تعرض أصحاب المصلحة أو الاحتكاك" />
                       </div>
                       <div>
-                        <Label htmlFor={`operationalRisks-${index}`}>Operational Risks *</Label>
-                        <Textarea id={`operationalRisks-${index}`} value={analysis.operationalRisks} onChange={(event) => handleAnalysisChange(index, "operationalRisks", event.target.value)} placeholder="Execution, capacity, process, delivery risks" />
+                        <Label htmlFor={`operationalRisks-${index}`}>المخاطر التشغيلية *</Label>
+                        <Textarea id={`operationalRisks-${index}`} value={analysis.operationalRisks} onChange={(event) => handleAnalysisChange(index, "operationalRisks", event.target.value)} placeholder="مخاطر التنفيذ والقدرة والعملية والتسليم" />
                       </div>
                       <div>
-                        <Label htmlFor={`strategicRisks-${index}`}>Strategic Risks *</Label>
-                        <Textarea id={`strategicRisks-${index}`} value={analysis.strategicRisks} onChange={(event) => handleAnalysisChange(index, "strategicRisks", event.target.value)} placeholder="Strategic fit, positioning, or long-term implications" />
+                        <Label htmlFor={`strategicRisks-${index}`}>المخاطر الاستراتيجية *</Label>
+                        <Textarea id={`strategicRisks-${index}`} value={analysis.strategicRisks} onChange={(event) => handleAnalysisChange(index, "strategicRisks", event.target.value)} placeholder="الملاءمة الاستراتيجية أو التمركز أو الآثار طويلة المدى" />
                       </div>
                       <div>
-                        <Label htmlFor={`knowledgeRisks-${index}`}>Knowledge Risks *</Label>
-                        <Textarea id={`knowledgeRisks-${index}`} value={analysis.knowledgeRisks} onChange={(event) => handleAnalysisChange(index, "knowledgeRisks", event.target.value)} placeholder="Unknowns, weak evidence, or missing information" />
+                        <Label htmlFor={`knowledgeRisks-${index}`}>مخاطر المعرفة *</Label>
+                        <Textarea id={`knowledgeRisks-${index}`} value={analysis.knowledgeRisks} onChange={(event) => handleAnalysisChange(index, "knowledgeRisks", event.target.value)} placeholder="المجهولات أو الأدلة الضعيفة أو المعلومات المفقودة" />
                       </div>
                       <div>
-                        <Label htmlFor={`uncertaintyLevel-${index}`}>Uncertainty Level *</Label>
-                        <Input id={`uncertaintyLevel-${index}`} value={analysis.uncertaintyLevel} onChange={(event) => handleAnalysisChange(index, "uncertaintyLevel", event.target.value)} placeholder="High, medium, low, or explain" />
+                        <Label htmlFor={`uncertaintyLevel-${index}`}>مستوى عدم اليقين *</Label>
+                        <Input id={`uncertaintyLevel-${index}`} value={analysis.uncertaintyLevel} onChange={(event) => handleAnalysisChange(index, "uncertaintyLevel", event.target.value)} placeholder="عالٍ، متوسط، منخفض، أو شرح" />
                       </div>
                     </div>
                   </section>
                 )
               })}
-              <Button type="submit" disabled={saving}>{saving ? "Saving..." : "Save Risk Analysis"}</Button>
+              <Button type="submit" disabled={saving}>{saving ? "جارٍ الحفظ..." : "حفظ تحليل المخاطر"}</Button>
             </form>
           </>
         )}

@@ -6,47 +6,47 @@ import { Label } from "@/components/ui/label"
 export default function SettingsPage() {
   return (
     <main className="p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Settings</h1>
+      <h1 className="text-2xl font-bold mb-6">الإعدادات</h1>
 
       <div className="space-y-6">
         <section>
-          <h2 className="text-xl font-semibold mb-4">Account Settings</h2>
+          <h2 className="text-xl font-semibold mb-4">إعدادات الحساب</h2>
           <Card className="p-4 space-y-4">
             <div>
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" defaultValue="Ahmed Al-Mansouri" />
+              <Label htmlFor="name">الاسم</Label>
+              <Input id="name" defaultValue="أحمد المنصوري" />
             </div>
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">البريد الإلكتروني</Label>
               <Input id="email" type="email" defaultValue="ahmed@aqliya.com" />
             </div>
-            <Button size="sm">Update Account</Button>
+            <Button size="sm">تحديث الحساب</Button>
           </Card>
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mb-4">Organization Settings</h2>
+          <h2 className="text-xl font-semibold mb-4">إعدادات المؤسسة</h2>
           <Card className="p-4 space-y-4">
             <div>
-              <Label htmlFor="orgName">Organization Name</Label>
+              <Label htmlFor="orgName">اسم المؤسسة</Label>
               <Input id="orgName" defaultValue="AQLIYA" />
             </div>
-            <Button size="sm">Update Organization</Button>
+            <Button size="sm">تحديث المؤسسة</Button>
           </Card>
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mb-4">System Preferences</h2>
+          <h2 className="text-xl font-semibold mb-4">تفضيلات النظام</h2>
           <Card className="p-4 space-y-4">
             <div>
-              <Label htmlFor="language">Language</Label>
-              <Input id="language" defaultValue="English" disabled />
+              <Label htmlFor="language">اللغة</Label>
+              <Input id="language" defaultValue="العربية" disabled />
             </div>
             <div>
-              <Label htmlFor="timezone">Timezone</Label>
+              <Label htmlFor="timezone">المنطقة الزمنية</Label>
               <Input id="timezone" defaultValue="Asia/Riyadh" disabled />
             </div>
-            <p className="text-xs text-muted-foreground">Additional preferences coming soon</p>
+            <p className="text-xs text-muted-foreground">تفضيلات إضافية قريباً</p>
           </Card>
         </section>
       </div>

@@ -17,7 +17,7 @@ export default async function WhatToDoNowPage({ params }: PageProps) {
         <DecisionTabs decisionId={id} />
         <Card className="border-destructive">
           <CardHeader>
-            <CardTitle>Access Blocked</CardTitle>
+            <CardTitle>الوصول محظور</CardTitle>
             <CardDescription>
               {result.error}
               {result.missing && (
@@ -50,25 +50,25 @@ export default async function WhatToDoNowPage({ params }: PageProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>What To Do Now</CardTitle>
+              <CardTitle>ماذا تفعل الآن</CardTitle>
               <CardDescription>
-                Computed on-demand from A-1 stages. Reviewable and non-executing.
+                تُحسَب عند الطلب من مراحل أ-١. قابلة للمراجعة وغير منفّذة.
               </CardDescription>
             </div>
             <Badge className={priorityColor[whatToDo.priority] || ""}>
-              Priority: {whatToDo.priority}
+              الأولوية: {whatToDo.priority}
             </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h3 className="font-medium mb-2">Immediate Action</h3>
+            <h3 className="font-medium mb-2">إجراء فوري</h3>
             <p className="text-sm font-semibold text-muted-foreground">{whatToDo.immediateAction}</p>
           </div>
 
           {whatToDo.nextSteps.length > 0 && (
             <div>
-              <h3 className="font-medium mb-2">Next Steps</h3>
+              <h3 className="font-medium mb-2">الخطوات التالية</h3>
               <ul className="list-disc pl-5 text-sm text-muted-foreground">
                 {whatToDo.nextSteps.map((step, i) => (
                   <li key={i}>{step}</li>
@@ -79,7 +79,7 @@ export default async function WhatToDoNowPage({ params }: PageProps) {
 
           {whatToDo.blockers.length > 0 && (
             <div>
-              <h3 className="font-medium mb-2 text-destructive">Blockers</h3>
+              <h3 className="font-medium mb-2 text-destructive">المعوقات</h3>
               <ul className="list-disc pl-5 text-sm text-destructive">
                 {whatToDo.blockers.map((blocker, i) => (
                   <li key={i}>{blocker}</li>
@@ -90,7 +90,7 @@ export default async function WhatToDoNowPage({ params }: PageProps) {
 
           <div className="pt-4 border-t">
             <p className="text-xs text-muted-foreground">
-              This recommendation is computed on-demand from A-1 data. It remains reviewable and non-executing.
+              تُحسَب هذه التوصية عند الطلب من بيانات أ-١. تبقى قابلة للمراجعة وغير منفّذة.
             </p>
           </div>
         </CardContent>

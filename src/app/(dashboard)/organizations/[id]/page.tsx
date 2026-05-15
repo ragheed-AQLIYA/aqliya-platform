@@ -20,28 +20,28 @@ export default function OrganizationDetailPage() {
     <main className="p-8 max-w-4xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
         <Link href="/dashboard/organizations">
-          <Button variant="outline" size="sm">Back</Button>
+          <Button variant="outline" size="sm">رجوع</Button>
         </Link>
         <h1 className="text-2xl font-bold">{mockOrg.name}</h1>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3 mb-8">
         <Card className="p-4">
-          <div className="text-sm text-muted-foreground">Total Members</div>
+          <div className="text-sm text-muted-foreground">إجمالي الأعضاء</div>
           <div className="text-2xl font-bold">{mockOrg.members.length}</div>
         </Card>
         <Card className="p-4">
-          <div className="text-sm text-muted-foreground">Decisions</div>
+          <div className="text-sm text-muted-foreground">القرارات</div>
           <div className="text-2xl font-bold">{mockOrg.decisionCount}</div>
         </Card>
         <Card className="p-4">
-          <div className="text-sm text-muted-foreground">Created</div>
+          <div className="text-sm text-muted-foreground">تاريخ الإنشاء</div>
           <div className="text-lg font-medium">{mockOrg.createdAt}</div>
         </Card>
       </div>
 
       <section>
-        <h2 className="text-xl font-semibold mb-4">Members</h2>
+        <h2 className="text-xl font-semibold mb-4">الأعضاء</h2>
         <div className="space-y-2">
           {mockOrg.members.map((member, i) => (
             <Card key={i} className="p-3 flex items-center justify-between">
