@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Bot, CheckCircle2, XCircle, AlertCircle } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -23,13 +24,13 @@ interface AIOutputsPanelProps {
   initialOutputs: AIOutputDisplay[]
 }
 
-const statusConfig: Record<string, { label: string; color: string }> = {
-  suggested: { label: "مسودة ذكاء اصطناعي", color: "bg-violet-100 text-violet-700 border-violet-200" },
-  accepted_by_human: { label: "مقبول", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
-  rejected: { label: "مرفوض", color: "bg-red-100 text-red-700 border-red-200" },
-}
-
 export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelProps) {
+  const t = useTranslations("audit.aiOutputs")
+  const statusConfig: Record<string, { label: string; color: string }> = {
+    suggested: { label: t("aiDraft"), color: "bg-violet-100 text-violet-700 border-violet-200" },
+    accepted_by_human: { label: t("accepted"), color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
+    rejected: { label: t("rejected"), color: "bg-red-100 text-red-700 border-red-200" },
+  }
   const [outputs, setOutputs] = useState<AIOutputDisplay[]>(initialOutputs)
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -43,11 +44,11 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
         setOutputs(prev => prev.map(o => o.id === id ? { ...o, status: "accepted_by_human" } : o))
       }
     } catch {
-      setError("فشل قبول مخرج الذكاء الاصطناعي")
+      setError(t("acceptError"))
     } finally {
       setLoadingId(null)
     }
-  }, [])
+  }, [t])
 
   const handleReject = useCallback(async (id: string) => {
     setLoadingId(id)
@@ -58,11 +59,11 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
         setOutputs(prev => prev.map(o => o.id === id ? { ...o, status: "rejected" } : o))
       }
     } catch {
-      setError("فشل رفض مخرج الذكاء الاصطناعي")
+      setError(t("rejectError"))
     } finally {
       setLoadingId(null)
     }
-  }, [])
+  }, [t])
 
   if (outputs.length === 0) {
     return (
@@ -70,11 +71,11 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
         <CardHeader className="flex flex-row items-center justify-between border-b px-4 py-3">
           <CardTitle className="flex items-center gap-2 text-sm font-semibold">
             <Bot className="h-4 w-4 text-violet-500" />
-            مخرجات الذكاء الاصطناعي
+            {t("title")}
           </CardTitle>
         </CardHeader>
         <CardContent className="px-4 py-6 text-center">
-          <p className="text-sm text-muted-foreground">لا توجد مخرجات ذكاء اصطناعي بعد.</p>
+          <p className="text-sm text-muted-foreground">{t("noOutputs")}</p>
         </CardContent>
       </Card>
     )
@@ -85,11 +86,11 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
       <CardHeader className="flex flex-row items-center justify-between border-b px-4 py-3">
         <CardTitle className="flex items-center gap-2 text-sm font-semibold">
           <Bot className="h-4 w-4 text-violet-500" />
-          مخرجات الذكاء الاصطناعي
-          <span className="text-[10px] font-normal text-muted-foreground mr-1">مسودة · تتطلب مراجعة بشرية · ليست نهائية</span>
+          {t("title")}
+          <span className="text-[10px] font-normal text-muted-foreground mr-1">{t("subtitle")}</span>
         </CardTitle>
         <Badge variant="outline" className="text-[10px]">
-          {outputs.filter(o => o.status === "suggested").length} قيد المراجعة
+          {outputs.filter(o => o.status === "suggested").length} {t("pendingReview")}
         </Badge>
       </CardHeader>
       <CardContent className="divide-y pt-0">
@@ -116,7 +117,7 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
                   </span>
                   {output.confidence !== null && (
                     <span className="text-[10px] text-muted-foreground">
-                      {Math.round(output.confidence * 100)}% ثقة
+                      {t("confidence", { pct: Math.round(output.confidence * 100) })}
                     </span>
                   )}
                 </div>
@@ -133,7 +134,7 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
                     className="h-7 w-7 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                     onClick={() => handleAccept(output.id)}
                     disabled={loadingId === output.id}
-                    title="قبول"
+                    title={t("accept")}
                   >
                     <CheckCircle2 className="h-4 w-4" />
                   </Button>
@@ -143,7 +144,7 @@ export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelP
                     className="h-7 w-7 text-red-600 hover:text-red-700 hover:bg-red-50"
                     onClick={() => handleReject(output.id)}
                     disabled={loadingId === output.id}
-                    title="رفض"
+                    title={t("reject")}
                   >
                     <XCircle className="h-4 w-4" />
                   </Button>

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useTranslations } from "next-intl"
 
 import { getTraceabilityAction } from "@/actions/audit-actions"
 import type { FinancialStatement, FinancialStatementLine, Engagement } from "@/types/audit"
@@ -27,6 +28,7 @@ const governanceCtx = getGovernanceContext('statement_drafting')
 export default function StatementsPage() {
   const params = useParams()
   const engagementId = params.engagementId as string
+  const t = useTranslations("audit.statements")
   const [statements, setStatements] = useState<FinancialStatement[]>([])
   const [engagement, setEngagement] = useState<Engagement | null>(null)
   const [loading, setLoading] = useState(true)
@@ -38,6 +40,9 @@ export default function StatementsPage() {
   const [exportError, setExportError] = useState<string | null>(null)
   const downloadLinkRef = useRef<HTMLAnchorElement>(null)
 
+  const statementLabels: Record<string, string> = { balance_sheet: t("balanceSheet"), income_statement: t("incomeStatement"), equity: t("equity"), cash_flow: t("cashFlow") }
+  const statementIcons: Record<string, React.ReactNode> = { balance_sheet: <FileText className="size-4" />, income_statement: <FileSpreadsheet className="size-4" />, equity: <FileText className="size-4" />, cash_flow: <FileText className="size-4" /> }
+
   useEffect(() => {
     Promise.all([getFinancialStatementsAction(engagementId), getEngagementAction(engagementId)]).then(([s, e]) => {
       setStatements(s); setEngagement(e); setLoading(false)
@@ -45,7 +50,7 @@ export default function StatementsPage() {
   }, [engagementId])
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
-  if (statements.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">لم يتم العثور على قوائم مالية.</CardContent></Card>
+  if (statements.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">{t("noStatements")}</CardContent></Card>
 
   const getDefaultTab = () => {
     const bs = statements.find(s => s.statementType === "balance_sheet")
@@ -53,14 +58,11 @@ export default function StatementsPage() {
     return bs?.id || is?.id || statements[0]?.id || ""
   }
 
-  const statementLabels: Record<string, string> = { balance_sheet: "قائمة المركز المالي", income_statement: "قائمة الدخل", equity: "قائمة التغيرات في حقوق الملكية", cash_flow: "قائمة التدفقات النقدية" }
-  const statementIcons: Record<string, React.ReactNode> = { balance_sheet: <FileText className="size-4" />, income_statement: <FileSpreadsheet className="size-4" />, equity: <FileText className="size-4" />, cash_flow: <FileText className="size-4" /> }
-
   return (
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">القوائم المالية</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -69,7 +71,7 @@ export default function StatementsPage() {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" disabled={exporting !== null}>
                 {exporting ? <Loader2 className="size-4 ml-1 animate-spin" /> : <Download className="size-4 ml-1" />}
-                {exporting ? `جاري تصدير ${exporting.toUpperCase()}...` : 'تصدير'}
+                {exporting ? t("exporting", { format: exporting.toUpperCase() }) : t("export")}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -84,7 +86,7 @@ export default function StatementsPage() {
                 } catch (e: unknown) { setExportError(e instanceof Error ? e.message : 'فشل التصدير') }
                 finally { setExporting(null) }
               }}>
-                <FileText className="size-4 ml-2" />تصدير PDF
+                <FileText className="size-4 ml-2" />{t("exportPDF")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={async () => {
                 setExporting('xlsx'); setExportError(null)
@@ -97,7 +99,7 @@ export default function StatementsPage() {
                 } catch (e: unknown) { setExportError(e instanceof Error ? e.message : 'فشل التصدير') }
                 finally { setExporting(null) }
               }}>
-                <FileSpreadsheet className="size-4 ml-2" />تصدير XLSX
+                <FileSpreadsheet className="size-4 ml-2" />{t("exportXLSX")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -111,17 +113,17 @@ export default function StatementsPage() {
         <GovernanceTooltip content={`المرجعية: ${governanceCtx.doctrineReferences.length} مرجع يوجه سير العمل. الحوكمة: ${governanceCtx.governanceReferences.length} قاعدة مطبقة. ${governanceCtx.humanApprovalRequired ? 'المراجعة البشرية مطلوبة.' : 'لا تتطلب مراجعة بشرية.'}`}>
           <button onClick={() => setGovernanceOpen(!governanceOpen)} className="flex items-center gap-1 hover:text-foreground transition-colors">
             <Shield className="size-3.5" />
-            سياق الحوكمة
+            {t("governanceContext")}
           </button>
         </GovernanceTooltip>
         <span className="text-muted-foreground/60">·</span>
-        <span className="text-muted-foreground/80">{governanceCtx.humanApprovalRequired ? 'المراجعة البشرية مطلوبة قبل الاعتماد' : 'لا تتطلب مراجعة بشرية'}</span>
+        <span className="text-muted-foreground/80">{governanceCtx.humanApprovalRequired ? t("humanReviewRequired") : t("noHumanReviewRequired")}</span>
       </div>
 
       {governanceOpen && (
         <Card className="border-dashed">
           <CardContent className="p-4 space-y-2 text-sm">
-            <p className="font-medium">لماذا الحوكمة مهمة هنا</p>
+            <p className="font-medium">{t("whyGovernance")}</p>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
               {governanceCtx.doctrineReferences.map(d => <li key={d.documentId}><strong>{d.documentId}:</strong> {d.principle}</li>)}
             </ul>
@@ -151,12 +153,12 @@ export default function StatementsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>{s.title}</CardTitle>
-                    <CardDescription>{engagement?.client?.name} - بتاريخ {engagement?.fiscalPeriod}</CardDescription>
+                    <CardDescription>{engagement?.client?.name} - {t("asAt")} {engagement?.fiscalPeriod}</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
                     {s.reviewComments.length > 0 && (
                       <Badge variant="outline" className="bg-amber-100 text-amber-700 flex items-center gap-1">
-                        <MessageSquare className="size-3" />{s.reviewComments.length} تعليقات
+                        <MessageSquare className="size-3" />{s.reviewComments.length} {t("comments")}
                       </Badge>
                     )}
                     <Badge variant="outline" className={s.status === "draft" ? "bg-amber-100 text-amber-700" : s.status === "reviewed" ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"}>{s.status === "draft" ? "مسودة" : s.status === "reviewed" ? "تمت المراجعة" : s.status}</Badge>

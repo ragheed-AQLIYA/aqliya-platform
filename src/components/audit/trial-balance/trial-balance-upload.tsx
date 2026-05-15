@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Upload, FileSpreadsheet, CheckCircle, AlertTriangle, XCircle, ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -32,15 +33,6 @@ interface ValidationCheck {
   status: "valid" | "issue" | "error"
   detail: string
 }
-
-const targetFields = [
-  { key: "accountCode", label: "رمز الحساب", required: true },
-  { key: "accountName", label: "اسم الحساب", required: true },
-  { key: "debit", label: "مدين", required: false },
-  { key: "credit", label: "دائن", required: false },
-  { key: "openingBalance", label: "الرصيد الافتتاحي", required: false },
-  { key: "priorYearBalance", label: "رصيد العام السابق", required: false },
-]
 
 const statusIcon = {
   valid: <CheckCircle className="size-3.5 text-green-600" />,
@@ -117,7 +109,7 @@ function parseXLSX(file: File): Promise<ParsedRow[]> {
   })
 }
 
-function computeValidation(rows: ParsedRow[], colMap: ColumnMapping[]): ValidationCheck[] {
+function computeValidation(rows: ParsedRow[], colMap: ColumnMapping[], t: (key: string, values?: Record<string, string | number | Date>) => string): ValidationCheck[] {
   const getCol = (target: string): string | null => colMap.find(m => m.target === target)?.source ?? null
   const codeCol = getCol("accountCode")
   const nameCol = getCol("accountName")
@@ -148,22 +140,31 @@ function computeValidation(rows: ParsedRow[], colMap: ColumnMapping[]): Validati
   const isBalanced = debitCol && creditCol ? Math.abs(totalDebits - totalCredits) < 0.01 : true
 
   return [
-    { label: "عدد الصفوف", status: rows.length > 0 ? "valid" : "error", detail: `تم تحليل ${rows.length} صفوف` },
-    { label: "رموز الحسابات", status: emptyCodes > 0 ? "error" : "valid", detail: emptyCodes > 0 ? `${emptyCodes} صفوف تفتقد رمز الحساب` : "جميع الصفوف تحتوي على رموز" },
-    { label: "أسماء الحسابات", status: emptyNames > 0 ? "error" : "valid", detail: emptyNames > 0 ? `${emptyNames} صفوف تفتقد اسم الحساب` : "جميع الصفوف تحتوي على أسماء" },
-    { label: "الصفوف الفارغة", status: emptyBoth > 0 ? "issue" : "valid", detail: emptyBoth > 0 ? `تم العثور على ${emptyBoth} صفوف فارغة بالكامل` : "لا توجد صفوف فارغة" },
-    { label: "الرموز المكررة", status: duplicateCodes.length > 0 ? "issue" : "valid", detail: duplicateCodes.length > 0 ? `مكررة: ${duplicateCodes.join("، ")}` : "لا توجد مكررات" },
-    ...(debitCol && creditCol ? [{ label: "التوازن", status: (isBalanced ? "valid" : "error") as "valid" | "error", detail: isBalanced ? `المدين (${totalDebits.toLocaleString()}) = الدائن (${totalCredits.toLocaleString()})` : `إجمالي المدين (${totalDebits.toLocaleString()}) ≠ إجمالي الدائن (${totalCredits.toLocaleString()})` }] : []),
+    { label: t("rowCount"), status: rows.length > 0 ? "valid" : "error", detail: t("rowsParsed", { count: rows.length }) },
+    { label: t("accountCodes"), status: emptyCodes > 0 ? "error" : "valid", detail: emptyCodes > 0 ? t("missingCode", { count: emptyCodes }) : t("allHaveCodes") },
+    { label: t("accountNames"), status: emptyNames > 0 ? "error" : "valid", detail: emptyNames > 0 ? t("missingName", { count: emptyNames }) : t("allHaveNames") },
+    { label: t("emptyRows"), status: emptyBoth > 0 ? "issue" : "valid", detail: emptyBoth > 0 ? t("emptyRowsDetail", { count: emptyBoth }) : t("noEmptyRows") },
+    { label: t("duplicateCodes"), status: duplicateCodes.length > 0 ? "issue" : "valid", detail: duplicateCodes.length > 0 ? t("duplicateDetail", { codes: duplicateCodes.join("، ") }) : t("noDuplicates") },
+    ...(debitCol && creditCol ? [{ label: t("balance"), status: (isBalanced ? "valid" : "error") as "valid" | "error", detail: isBalanced ? t("balancedDetail", { debits: totalDebits.toLocaleString(), credits: totalCredits.toLocaleString() }) : t("unbalancedDetail", { debits: totalDebits.toLocaleString(), credits: totalCredits.toLocaleString() }) }] : []),
   ]
 }
 
 export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: TrialBalanceUploadProps) {
+  const t = useTranslations("audit.trialBalanceUpload")
+  const targetFields = [
+    { key: "accountCode", label: t("accountCode"), required: true },
+    { key: "accountName", label: t("accountName"), required: true },
+    { key: "debit", label: t("debit"), required: false },
+    { key: "credit", label: t("credit"), required: false },
+    { key: "openingBalance", label: t("openingBalance"), required: false },
+    { key: "priorYearBalance", label: t("priorYearBalance"), required: false },
+  ]
   const [step, setStep] = useState(1)
   const [fileName, setFileName] = useState<string | null>(null)
   const [parsedRows, setParsedRows] = useState<ParsedRow[]>([])
   const [sourceColumns, setSourceColumns] = useState<string[]>([])
   const [mappings, setMappings] = useState<ColumnMapping[]>(
-    targetFields.map(f => ({ target: f.key, source: null, required: f.required }))
+    (["accountCode", "accountName", "debit", "credit", "openingBalance", "priorYearBalance"] as const).map(key => ({ target: key, source: null, required: key === "accountCode" || key === "accountName" }))
   )
   const [importing, setImporting] = useState(false)
   const [importError, setImportError] = useState<string | null>(null)
@@ -174,7 +175,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
     setFileName(null)
     setParsedRows([])
     setSourceColumns([])
-    setMappings(targetFields.map(f => ({ target: f.key, source: null, required: f.required })))
+    setMappings((["accountCode", "accountName", "debit", "credit", "openingBalance", "priorYearBalance"] as const).map(key => ({ target: key, source: null, required: key === "accountCode" || key === "accountName" })))
     setImporting(false)
     setImportError(null)
     setImportSuccess(false)
@@ -193,24 +194,25 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
       } else if (file.name.endsWith(".xlsx")) {
         rows = await parseXLSX(file)
       } else {
-        setImportError("صيغة ملف غير مدعومة. استخدم .csv أو .xlsx")
+        setImportError(t("invalidFormat"))
         return
       }
       if (rows.length === 0) {
-        setImportError("لم يتم العثور على صفوف بيانات في الملف")
+        setImportError(t("noDataRows"))
         return
       }
       setParsedRows(rows)
       const cols = Object.keys(rows[0] ?? {})
       setSourceColumns(cols)
-      const autoMappings = targetFields.map(f => ({
+      const fieldDefs = [{ key: "accountCode" as const, required: true }, { key: "accountName" as const, required: true }, { key: "debit" as const, required: false }, { key: "credit" as const, required: false }, { key: "openingBalance" as const, required: false }, { key: "priorYearBalance" as const, required: false }]
+      const autoMappings = fieldDefs.map(f => ({
         target: f.key,
         source: autoDetectColumn(f.key, cols) ?? null,
         required: f.required,
       }))
       setMappings(autoMappings)
     } catch (err) {
-      setImportError(err instanceof Error ? err.message : "فشل في تحليل الملف")
+      setImportError(err instanceof Error ? err.message : t("parseFailed"))
     }
   }
 
@@ -232,7 +234,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
   }
 
   const requiredMapped = mappings.filter(m => m.required).every(m => m.source)
-  const validationChecks = parsedRows.length > 0 ? computeValidation(parsedRows, mappings) : []
+  const validationChecks = parsedRows.length > 0 ? computeValidation(parsedRows, mappings, t) : []
   const hasErrors = validationChecks.some(c => c.status === "error")
 
   const handleConfirm = async () => {
@@ -244,7 +246,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
       const nameCol = mappings.find(m => m.target === "accountName")?.source
       const debitCol = mappings.find(m => m.target === "debit")?.source
       const creditCol = mappings.find(m => m.target === "credit")?.source
-      if (!codeCol || !nameCol) throw new Error("تعيين رمز الحساب واسمه مطلوب")
+      if (!codeCol || !nameCol) throw new Error(t("requiredFieldMapping"))
 
       const rows = parsedRows.map(r => ({
         accountCode: (r[codeCol] ?? "").trim(),
@@ -253,13 +255,13 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
         credit: creditCol ? (parseFloat(r[creditCol] || "0") || 0) : 0,
       })).filter(r => r.accountCode && r.accountName)
 
-      if (rows.length === 0) throw new Error("لا توجد صفوف صالحة بعد التصفية")
+      if (rows.length === 0) throw new Error(t("noValidRows"))
 
       await uploadTrialBalanceAction(engagementId, fileName, rows)
       setImportSuccess(true)
       setTimeout(() => { reset(); onClose(); onComplete() }, 800)
     } catch (err) {
-      setImportError(err instanceof Error ? err.message : "فشل الاستيراد")
+      setImportError(err instanceof Error ? err.message : t("importFailed"))
     } finally {
       setImporting(false)
     }
@@ -271,9 +273,9 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
     <Dialog open={open} onOpenChange={(next) => { if (!next) { reset(); onClose() } }}>
       <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>استيراد ميزان المراجعة</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            الخطوة {step} من 4: {step === 1 ? "رفع" : step === 2 ? "تعيين الأعمدة" : step === 3 ? "التحقق" : "تأكيد"}
+            {t("stepDescription", { step, label: step === 1 ? t("step1") : step === 2 ? t("step2") : step === 3 ? t("step3") : t("step4") })}
           </DialogDescription>
         </DialogHeader>
 
@@ -287,8 +289,8 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
           <div className="space-y-4 py-4 px-4">
             <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25 p-10 text-center hover:border-muted-foreground/50 transition-colors">
               <Upload className="size-8 text-muted-foreground mb-3" />
-              <p className="text-sm font-medium mb-1">قم بإسقاط الملف هنا أو انقر للتصفح</p>
-              <p className="text-xs text-muted-foreground mb-4">ملفات CSV أو XLSX فقط</p>
+              <p className="text-sm font-medium mb-1">{t("dropFile")}</p>
+              <p className="text-xs text-muted-foreground mb-4">{t("csvOnly")}</p>
               <Input
                 type="file"
                 accept=".csv,.xlsx"
@@ -312,9 +314,9 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="bg-muted/50">الحقل المستهدف</TableHead>
-                    <TableHead className="bg-muted/50">العمود المصدر</TableHead>
-                    <TableHead className="bg-muted/50">مطلوب</TableHead>
+                    <TableHead className="bg-muted/50">{t("targetField")}</TableHead>
+                    <TableHead className="bg-muted/50">{t("sourceColumn")}</TableHead>
+                    <TableHead className="bg-muted/50">{t("required")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -332,7 +334,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                             onValueChange={(val) => updateMapping(field.key, val || null)}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder="-- اختر العمود --" />
+                              <SelectValue placeholder={t("selectColumn")} />
                             </SelectTrigger>
                             <SelectContent>
                               {sourceColumns.map(col => (
@@ -343,8 +345,8 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                         </TableCell>
                         <TableCell>
                           {field.required
-                            ? <Badge variant="destructive">مطلوب</Badge>
-                            : <Badge variant="outline">اختياري</Badge>
+                            ? <Badge variant="destructive">{t("required")}</Badge>
+                            : <Badge variant="outline">{t("optional")}</Badge>
                           }
                         </TableCell>
                       </TableRow>
@@ -375,7 +377,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                   </TableBody>
                 </Table>
                 <div className="px-3 py-2 text-xs text-muted-foreground border-t bg-muted/30">
-                  عرض 5 من أصل {parsedRows.length} صف
+                  {t("showingRows", { total: parsedRows.length })}
                 </div>
               </div>
             )}
@@ -392,7 +394,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-sm font-medium">{check.label}</span>
                       <Badge className={statusBadge[check.status]}>
-                        {check.status === "valid" ? "صحيح" : check.status === "issue" ? "ملاحظة" : "خطأ"}
+                        {check.status === "valid" ? t("statusValid") : check.status === "issue" ? t("statusIssue") : t("statusError")}
                       </Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">{check.detail}</p>
@@ -407,31 +409,31 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
           <div className="space-y-4 py-4 px-4">
             <div className="rounded-md border divide-y">
               <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">الملف المصدر</span>
+                <span className="text-muted-foreground">{t("sourceFile")}</span>
                 <span className="font-medium">{fileName}</span>
               </div>
               <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">عدد الصفوف</span>
+                <span className="text-muted-foreground">{t("rowCount")}</span>
                 <span className="font-medium">{parsedRows.length}</span>
               </div>
               <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">الأعمدة المعينة</span>
+                <span className="text-muted-foreground">{t("mappedColumns")}</span>
                 <span className="font-medium">{mappings.filter(m => m.source).length} / {targetFields.length}</span>
               </div>
               <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">التحقق</span>
+                <span className="text-muted-foreground">{t("validation")}</span>
                 <span className="font-medium">
                   {hasErrors ? (
-                    <span className="text-red-600 flex items-center gap-1"><XCircle className="size-3.5" />تم العثور على مشكلات</span>
+                    <span className="text-red-600 flex items-center gap-1"><XCircle className="size-3.5" />{t("issuesFound")}</span>
                   ) : (
-                    <span className="text-green-600 flex items-center gap-1"><CheckCircle className="size-3.5" />جميعها ناجحة</span>
+                    <span className="text-green-600 flex items-center gap-1"><CheckCircle className="size-3.5" />{t("allPassed")}</span>
                   )}
                 </span>
               </div>
             </div>
             {importSuccess && (
               <div className="flex items-center gap-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
-                <CheckCircle className="size-4 shrink-0" /><span>تم استيراد ميزان المراجعة بنجاح</span>
+                <CheckCircle className="size-4 shrink-0" /><span>{t("importSuccess")}</span>
               </div>
             )}
           </div>
@@ -440,7 +442,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
         <DialogFooter className="gap-2">
           {step > 1 && (
             <Button variant="outline" onClick={() => setStep(s => s - 1)} disabled={importing}>
-              <ArrowLeft className="size-4" /> رجوع
+              <ArrowLeft className="size-4" /> {t("back")}
             </Button>
           )}
           {step < 4 ? (
@@ -448,11 +450,11 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
               onClick={() => setStep(s => s + 1)}
               disabled={(step === 1 && !fileName) || (step === 2 && !requiredMapped) || (step === 3 && hasErrors)}
             >
-              التالي <ArrowRight className="size-4" />
+              {t("next")} <ArrowRight className="size-4" />
             </Button>
           ) : (
             <Button onClick={handleConfirm} disabled={importing || importSuccess}>
-              {importing ? "جارٍ الاستيراد..." : importSuccess ? "تم" : "استيراد ميزان المراجعة"}
+              {importing ? t("importing") : importSuccess ? t("done") : t("import")}
             </Button>
           )}
         </DialogFooter>

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useEffect, useState, useCallback } from "react"
 import { useParams } from "next/navigation"
 import { Rocket, CheckCircle2, XCircle, AlertTriangle, Plus, Loader2, MessageSquare, Bug, Target, ListChecks, ExternalLink, ChevronDown, ChevronRight } from "lucide-react"
@@ -37,6 +38,7 @@ export default function PilotPage() {
 }
 
 function PilotPageContent() {
+  const t = useTranslations("audit.pilot")
   const params = useParams()
   const engagementId = params.engagementId as string
   const [engagement, setEngagement] = useState<Engagement | null>(null)
@@ -106,7 +108,7 @@ function PilotPageContent() {
   return (
     <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight break-words">جاهزية التجربة التجريبية</h1>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight break-words">{t("title")}</h1>
         <p className="text-sm text-muted-foreground break-words">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
       </div>
 
@@ -115,29 +117,29 @@ function PilotPageContent() {
         <Card className={openBlockers === 0 ? "border-emerald-300" : "border-amber-300"}>
           <CardContent className="p-3 sm:p-4 text-center">
             <Rocket className="size-5 sm:size-6 mx-auto mb-1 text-muted-foreground" />
-            <div className="text-base sm:text-lg font-bold break-words">{openBlockers === 0 ? "جاهز" : `${openBlockers} معيقات`}</div>
-            <div className="text-[10px] text-muted-foreground break-words">جاهزية الإنتاج</div>
+            <div className="text-base sm:text-lg font-bold break-words">{openBlockers === 0 ? t("ready") : `${openBlockers} ${t("blockers")}`}</div>
+            <div className="text-[10px] text-muted-foreground break-words">{t("productionReadiness")}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 sm:p-4 text-center">
             <MessageSquare className="size-5 sm:size-6 mx-auto mb-1 text-muted-foreground" />
             <div className="text-base sm:text-lg font-bold">{feedback.length}</div>
-            <div className="text-[10px] text-muted-foreground break-words">عناصر التغذية الراجعة {openFeedbacks > 0 ? `(${openFeedbacks} مفتوحة)` : ""}</div>
+            <div className="text-[10px] text-muted-foreground break-words">{t("feedbackItems")} {openFeedbacks > 0 ? `(${openFeedbacks} ${t("open")})` : ""}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 sm:p-4 text-center">
             <Bug className="size-5 sm:size-6 mx-auto mb-1 text-muted-foreground" />
             <div className="text-base sm:text-lg font-bold">{blockers.length}</div>
-            <div className="text-[10px] text-muted-foreground break-words">المعيقات ({openBlockers} مفتوحة)</div>
+            <div className="text-[10px] text-muted-foreground break-words">{t("blockersTitle")} ({openBlockers} {t("open")})</div>
           </CardContent>
         </Card>
         <Card className={allApproved ? "border-emerald-300" : ""}>
           <CardContent className="p-3 sm:p-4 text-center">
             <ListChecks className="size-5 sm:size-6 mx-auto mb-1 text-muted-foreground" />
             <div className="text-base sm:text-lg font-bold">{signoffs.filter(s => s.status === "approved").length}/{signoffItems.length}</div>
-            <div className="text-[10px] text-muted-foreground break-words">قائمة التحقق من الاعتماد</div>
+            <div className="text-[10px] text-muted-foreground break-words">{t("signoffChecklist")}</div>
           </CardContent>
         </Card>
       </div>
@@ -147,7 +149,7 @@ function PilotPageContent() {
         <CardHeader className="border-b px-3 sm:px-4 py-3">
           <CardTitle className="flex items-center gap-2 text-sm font-semibold break-words">
             <ListChecks className="size-4 shrink-0" />
-            قائمة التحقق من اعتماد التجربة التجريبية
+            {t("signoffChecklist")}
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-3 px-3 sm:px-4">
@@ -165,11 +167,11 @@ function PilotPageContent() {
                     )}
                     <span className="text-sm break-words">{item}</span>
                     {signoff?.signedBy && (
-                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">بواسطة {signoff.signedBy}</span>
+                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">{t("by")} {signoff.signedBy}</span>
                     )}
                   </div>
                   <Button variant={isApproved ? "outline" : "default"} size="sm" className="self-start sm:self-auto" onClick={() => handleToggleSignoff(item)}>
-                    {isApproved ? "تراجع" : "اعتماد"}
+                    {isApproved ? t("undo") : t("approve")}
                   </Button>
                 </div>
               )
@@ -178,11 +180,11 @@ function PilotPageContent() {
           <div className="mt-3 p-2 rounded border text-center text-sm">
             {allApproved ? (
               <span className="text-emerald-600 font-semibold flex items-center justify-center gap-1 break-words">
-                <CheckCircle2 className="size-4 shrink-0" /> جميع بنود الاعتماد مكتملة — جاهز للتجربة التجريبية
+                <CheckCircle2 className="size-4 shrink-0" /> {t("allComplete")}
               </span>
             ) : (
               <span className="text-amber-600 flex items-center justify-center gap-1 break-words">
-                <AlertTriangle className="size-4 shrink-0" /> {signoffItems.length - signoffs.filter(s => s.status === "approved").length} بنود متبقية
+                <AlertTriangle className="size-4 shrink-0" /> {signoffItems.length - signoffs.filter(s => s.status === "approved").length} {t("itemsRemaining")}
               </span>
             )}
           </div>
@@ -194,33 +196,33 @@ function PilotPageContent() {
         <CardHeader className="border-b px-3 sm:px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <CardTitle className="flex items-center gap-2 text-sm font-semibold break-words">
             <MessageSquare className="size-4 shrink-0" />
-            لوحة التغذية الراجعة للتجربة التجريبية
+            {t("feedbackBoard")}
           </CardTitle>
-          <Button size="sm" className="self-start sm:self-auto" onClick={() => setShowFeedbackDialog(true)}><Plus className="size-3 ml-1" />إضافة تغذية راجعة</Button>
+          <Button size="sm" className="self-start sm:self-auto" onClick={() => setShowFeedbackDialog(true)}><Plus className="size-3 ml-1" />{t("addFeedback")}</Button>
         </CardHeader>
         <CardContent className="pt-3 px-3 sm:px-4">
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <Select value={fbFilterCat} onValueChange={(v) => { if (v !== null) setFbFilterCat(v) }}>
-              <SelectTrigger className="w-full sm:w-36"><SelectValue placeholder="الفئة" /></SelectTrigger>
+              <SelectTrigger className="w-full sm:w-36"><SelectValue placeholder={t("categoryField")} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">جميع الفئات</SelectItem>
+                <SelectItem value="all">{t("allCategories")}</SelectItem>
                 {feedbackCategories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
               </SelectContent>
             </Select>
             <Select value={fbFilterStatus} onValueChange={(v) => { if (v !== null) setFbFilterStatus(v) }}>
-              <SelectTrigger className="w-full sm:w-32"><SelectValue placeholder="الحالة" /></SelectTrigger>
+              <SelectTrigger className="w-full sm:w-32"><SelectValue placeholder={t("statusField")} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">جميع الحالات</SelectItem>
-                <SelectItem value="open">مفتوح</SelectItem>
-                <SelectItem value="in_review">قيد المراجعة</SelectItem>
-                <SelectItem value="accepted">مقبول</SelectItem>
-                <SelectItem value="resolved">تم الحل</SelectItem>
-                <SelectItem value="dismissed">مرفوض</SelectItem>
+                <SelectItem value="all">{t("allStatuses")}</SelectItem>
+                <SelectItem value="open">{t("statusOpen")}</SelectItem>
+                <SelectItem value="in_review">{t("statusInReview")}</SelectItem>
+                <SelectItem value="accepted">{t("statusAccepted")}</SelectItem>
+                <SelectItem value="resolved">{t("statusResolved")}</SelectItem>
+                <SelectItem value="dismissed">{t("statusDismissed")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           {feedback.length === 0 ? (
-            <div className="py-8 text-center text-sm text-muted-foreground break-words">لا توجد تغذية راجعة مسجلة بعد. انقر &quot;إضافة تغذية راجعة&quot; للبدء.</div>
+            <div className="py-8 text-center text-sm text-muted-foreground break-words">{t("noFeedback")}</div>
           ) : (
             <div className="divide-y">
               {feedback
@@ -236,21 +238,21 @@ function PilotPageContent() {
                         <Badge variant="outline" className="text-[10px] bg-gray-50 shrink-0">{f.category}</Badge>
                         <Badge variant="outline" className={`text-[10px] shrink-0 ${statusColors[f.status] ?? ""}`}>{f.status.replace(/_/g, " ")}</Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-0.5 break-words">المصدر: {f.source} — {new Date(f.createdAt).toLocaleDateString("ar-SA")}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5 break-words">{t("source")} {f.source} — {new Date(f.createdAt).toLocaleDateString("ar-SA")}</p>
                     </div>
                     <div className="shrink-0">{fbExpanded === f.id ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}</div>
                   </div>
                   {fbExpanded === f.id && (
                     <div className="mt-2 space-y-2">
                       <p className="text-sm break-words">{f.description}</p>
-                      {f.decision && <p className="text-xs break-words"><span className="font-medium">القرار:</span> {f.decision}</p>}
-                      {f.owner && <p className="text-xs break-words"><span className="font-medium">المالك:</span> {f.owner}</p>}
-                      {f.nextAction && <p className="text-xs break-words"><span className="font-medium">الإجراء التالي:</span> {f.nextAction}</p>}
+                      {f.decision && <p className="text-xs break-words"><span className="font-medium">{t("decision")}</span> {f.decision}</p>}
+                      {f.owner && <p className="text-xs break-words"><span className="font-medium">{t("owner")}</span> {f.owner}</p>}
+                      {f.nextAction && <p className="text-xs break-words"><span className="font-medium">{t("nextAction")}</span> {f.nextAction}</p>}
                       <div className="flex flex-wrap items-center gap-1">
-                        {f.status === "open" && <Button size="xs" variant="outline" onClick={() => handleUpdateFeedbackStatus(f.id, "in_review")} className="text-[10px]">وضع قيد المراجعة</Button>}
-                        {f.status === "in_review" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "accepted")}>قبول</Button>}
-                        {(f.status === "open" || f.status === "in_review") && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "dismissed")}>رفض</Button>}
-                        {f.status === "accepted" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "resolved")}>وضع كحل</Button>}
+                        {f.status === "open" && <Button size="xs" variant="outline" onClick={() => handleUpdateFeedbackStatus(f.id, "in_review")} className="text-[10px]">{t("markInReview")}</Button>}
+                        {f.status === "in_review" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "accepted")}>{t("accept")}</Button>}
+                        {(f.status === "open" || f.status === "in_review") && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "dismissed")}>{t("dismiss")}</Button>}
+                        {f.status === "accepted" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateFeedbackStatus(f.id, "resolved")}>{t("markResolved")}</Button>}
                       </div>
                     </div>
                   )}
@@ -266,13 +268,13 @@ function PilotPageContent() {
         <CardHeader className="border-b px-3 sm:px-4 py-3">
           <CardTitle className="flex flex-wrap items-center gap-2 text-sm font-semibold break-words">
             <Bug className="size-4 shrink-0" />
-            معيقات الإنتاج
-            {openBlockers > 0 && <Badge variant="outline" className="bg-red-100 text-red-700 text-[10px] shrink-0">{openBlockers} مفتوحة</Badge>}
+            {t("productionBlockers")}
+            {openBlockers > 0 && <Badge variant="outline" className="bg-red-100 text-red-700 text-[10px] shrink-0">{openBlockers} {t("open")}</Badge>}
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-3 px-3 sm:px-4">
           {blockers.length === 0 ? (
-            <div className="py-4 text-sm text-muted-foreground break-words">لم يتم تعريف معيقات إنتاج.</div>
+            <div className="py-4 text-sm text-muted-foreground break-words">{t("noBlockers")}</div>
           ) : (
             <div className="divide-y">
               {blockers.map(b => (
@@ -284,7 +286,7 @@ function PilotPageContent() {
                         <Badge variant="outline" className={`text-[10px] shrink-0 ${severityColors[b.severity] ?? ""}`}>{b.severity}</Badge>
                         <Badge variant="outline" className="text-[10px] bg-gray-50 shrink-0">{b.category}</Badge>
                         <Badge variant="outline" className={`text-[10px] shrink-0 ${statusColors[b.status] ?? ""}`}>{b.status}</Badge>
-                        <Badge variant="outline" className="text-[10px] shrink-0">قبل: {b.requiredBefore}</Badge>
+                        <Badge variant="outline" className="text-[10px] shrink-0">{t("before")} {b.requiredBefore}</Badge>
                       </div>
                     </div>
                     <div className="shrink-0">{blockerExpanded === b.id ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}</div>
@@ -292,11 +294,11 @@ function PilotPageContent() {
                   {blockerExpanded === b.id && (
                     <div className="mt-2 space-y-2">
                       <p className="text-sm break-words">{b.description}</p>
-                      {b.owner && <p className="text-xs break-words"><span className="font-medium">المالك:</span> {b.owner}</p>}
-                      {b.resolutionPlan && <p className="text-xs break-words"><span className="font-medium">الخطة:</span> {b.resolutionPlan}</p>}
+                      {b.owner && <p className="text-xs break-words"><span className="font-medium">{t("owner")}</span> {b.owner}</p>}
+                      {b.resolutionPlan && <p className="text-xs break-words"><span className="font-medium">{t("plan")}</span> {b.resolutionPlan}</p>}
                       <div className="flex flex-wrap items-center gap-1">
-                        {b.status === "open" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateBlockerStatus(b.id, "in_progress")}>قيد التنفيذ</Button>}
-                        {b.status === "in_progress" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateBlockerStatus(b.id, "resolved")}>حل</Button>}
+                        {b.status === "open" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateBlockerStatus(b.id, "in_progress")}>{t("inProgress")}</Button>}
+                        {b.status === "in_progress" && <Button size="xs" variant="outline" className="text-[10px]" onClick={() => handleUpdateBlockerStatus(b.id, "resolved")}>{t("resolve")}</Button>}
                       </div>
                     </div>
                   )}
@@ -310,12 +312,12 @@ function PilotPageContent() {
       {/* Add Feedback Dialog */}
       <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
         <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>إضافة تغذية راجعة للتجربة التجريبية</DialogTitle><DialogDescription>سجل التغذية الراجعة من جلسات العرض أو التجربة.</DialogDescription></DialogHeader>
+          <DialogHeader><DialogTitle>{t("dialogTitle")}</DialogTitle><DialogDescription>{t("dialogDescription")}</DialogDescription></DialogHeader>
           <div className="space-y-3">
-            <div><Label>العنوان *</Label><Input value={newFeedback.title} onChange={e => setNewFeedback({ ...newFeedback, title: e.target.value })} placeholder="عنوان مختصر" /></div>
-            <div><Label>الوصف</Label><Textarea value={newFeedback.description} onChange={e => setNewFeedback({ ...newFeedback, description: e.target.value })} placeholder="صف التغذية الراجعة..." /></div>
-            <div><Label>المصدر</Label><Input value={newFeedback.source} onChange={e => setNewFeedback({ ...newFeedback, source: e.target.value })} placeholder="مثال: عميل، فريق داخلي" /></div>
-            <div><Label>الفئة</Label>
+            <div><Label>{t("titleField")}</Label><Input value={newFeedback.title} onChange={e => setNewFeedback({ ...newFeedback, title: e.target.value })} placeholder={t("titlePlaceholder")} /></div>
+            <div><Label>{t("descriptionField")}</Label><Textarea value={newFeedback.description} onChange={e => setNewFeedback({ ...newFeedback, description: e.target.value })} placeholder={t("descriptionPlaceholder")} /></div>
+            <div><Label>{t("sourceField")}</Label><Input value={newFeedback.source} onChange={e => setNewFeedback({ ...newFeedback, source: e.target.value })} placeholder={t("sourcePlaceholder")} /></div>
+            <div><Label>{t("categoryField")}</Label>
               <Select value={newFeedback.category} onValueChange={(v) => { if (v !== null) setNewFeedback({ ...newFeedback, category: v }) }}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -323,21 +325,21 @@ function PilotPageContent() {
                 </SelectContent>
               </Select>
             </div>
-            <div><Label>درجة التأثير</Label>
+            <div><Label>{t("severityField")}</Label>
               <Select value={newFeedback.severity} onValueChange={(v) => { if (v !== null) setNewFeedback({ ...newFeedback, severity: v }) }}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="low">منخفض</SelectItem>
-                  <SelectItem value="medium">متوسط</SelectItem>
-                  <SelectItem value="high">مرتفع</SelectItem>
-                  <SelectItem value="critical">حرج</SelectItem>
+                  <SelectItem value="low">{t("low")}</SelectItem>
+                  <SelectItem value="medium">{t("medium")}</SelectItem>
+                  <SelectItem value="high">{t("high")}</SelectItem>
+                  <SelectItem value="critical">{t("critical")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowFeedbackDialog(false)}>إلغاء</Button>
-            <Button disabled={!newFeedback.title.trim() || fbSubmitting} onClick={handleCreateFeedback}>{fbSubmitting ? "جاري الحفظ..." : "حفظ التغذية الراجعة"}</Button>
+            <Button variant="outline" onClick={() => setShowFeedbackDialog(false)}>{t("cancel")}</Button>
+            <Button disabled={!newFeedback.title.trim() || fbSubmitting} onClick={handleCreateFeedback}>{fbSubmitting ? t("saving") : t("saveFeedback")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

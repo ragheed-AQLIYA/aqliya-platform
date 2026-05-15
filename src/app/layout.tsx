@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Arabic } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 
 const notoSansArabic = Noto_Sans_Arabic({
@@ -36,11 +38,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale()
+  const messages = await getMessages()
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -64,13 +68,15 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="ar" dir="rtl">
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
         <body className={`${notoSansArabic.variable} h-full font-sans antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTranslations } from "next-intl"
 
 import { getTraceabilityAction, createReviewCommentAction, updateReviewCommentStatusAction } from "@/actions/audit-actions"
 import type { ReviewComment, Engagement, FinancialStatement, DisclosureNote, Finding, EvidenceObject, Recommendation } from "@/types/audit"
@@ -22,6 +23,7 @@ const targetIcons: Record<string, React.ReactNode> = { statement: <MessageSquare
 export default function ReviewPage() {
   const params = useParams()
   const engagementId = params.engagementId as string
+  const t = useTranslations("audit.review")
   const [comments, setComments] = useState<ReviewComment[]>([])
   const [engagement, setEngagement] = useState<Engagement | null>(null)
   const [loading, setLoading] = useState(true)
@@ -83,7 +85,7 @@ export default function ReviewPage() {
       })
       if (result.comment) setComments(prev => [result.comment, ...prev])
       setNewComment("")
-    } catch { setCommentError('فشل إضافة التعليق') } finally { setSending(false) }
+    } catch { setCommentError(t("failedToAdd")) } finally { setSending(false) }
   }
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
@@ -101,13 +103,13 @@ export default function ReviewPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">مراجعة</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
         <div className="flex items-center gap-2">
           {(["all", "open", "resolved"] as const).map(f => (
             <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)}>
-              {f === "all" ? `الكل (${comments.length})` : f === "open" ? `مفتوحة (${openCount})` : `تم الحل (${comments.length - openCount})`}
+              {f === "all" ? t("all", { count: comments.length }) : f === "open" ? t("open", { count: openCount }) : t("resolved", { count: comments.length - openCount })}
             </Button>
           ))}
         </div>
@@ -115,30 +117,30 @@ export default function ReviewPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>إضافة تعليق مراجعة</CardTitle>
-          <CardDescription>تقديم تعليق مراجعة جديد لهذه المهمة</CardDescription>
+          <CardTitle>{t("addComment")}</CardTitle>
+          <CardDescription>{t("addCommentDescription")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex gap-2">
             <div className="flex-1 space-y-2">
               <div className="flex items-center gap-2">
                 <div className="flex-1">
-                  <Label className="text-xs">نوع الهدف</Label>
+                  <Label className="text-xs">{t("targetType")}</Label>
                   <Select value={commentTargetType} onValueChange={(v) => { if (v !== null) { setCommentTargetType(v); setCommentTargetId('') } }}>
                     <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="statement_line">بند القائمة المالية</SelectItem>
-                      <SelectItem value="note">إيضاح</SelectItem>
-                      <SelectItem value="finding">نتيجة</SelectItem>
-                      <SelectItem value="evidence">دليل</SelectItem>
-                      <SelectItem value="recommendation">توصية</SelectItem>
+                      <SelectItem value="statement_line">{t("statementLine")}</SelectItem>
+                      <SelectItem value="note">{t("note")}</SelectItem>
+                      <SelectItem value="finding">{t("finding")}</SelectItem>
+                      <SelectItem value="evidence">{t("evidence")}</SelectItem>
+                      <SelectItem value="recommendation">{t("recommendation")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="flex-1">
-                  <Label className="text-xs">الكيان المستهدف</Label>
+                  <Label className="text-xs">{t("targetEntity")}</Label>
                   <Select value={commentTargetId} onValueChange={(v) => { if (v !== null) setCommentTargetId(v) }} disabled={getTargetOptions().length === 0}>
-                    <SelectTrigger className="h-8 text-xs"><SelectValue placeholder={getTargetOptions().length === 0 ? "لم يتم العثور على كيانات" : "اختر الهدف..."} /></SelectTrigger>
+                    <SelectTrigger className="h-8 text-xs"><SelectValue placeholder={getTargetOptions().length === 0 ? t("noEntities") : t("selectTarget")} /></SelectTrigger>
                     <SelectContent>
                       {getTargetOptions().map(opt => <SelectItem key={opt.id} value={opt.id}>{opt.label}</SelectItem>)}
                     </SelectContent>
@@ -148,13 +150,13 @@ export default function ReviewPage() {
               <Textarea
                 value={newComment}
                 onChange={e => setNewComment(e.target.value)}
-                placeholder="أدخل تعليق المراجعة..."
+                placeholder={t("commentPlaceholder")}
                 className="min-h-[60px]"
               />
             </div>
             <div className="flex flex-col gap-1 pt-5">
               <Button size="sm" onClick={handleAddComment} disabled={!newComment.trim() || sending}>
-                <Send className="size-4 ml-1" />{sending ? "جارٍ الإرسال..." : "إرسال"}
+                <Send className="size-4 ml-1" />{sending ? t("sending") : t("send")}
               </Button>
             </div>
           </div>
@@ -182,6 +184,7 @@ export default function ReviewPage() {
 }
 
 function ReviewCommentCard({ comment, targetLabel, onTrace, onResolve }: { comment: ReviewComment; targetLabel: string; onTrace: (c: ReviewComment) => void; onResolve?: (c: ReviewComment) => void }) {
+  const t = useTranslations("audit.review")
   const [expanded, setExpanded] = useState(false)
   const statusColors: Record<string, string> = { open: "bg-blue-100 text-blue-700 border-blue-300", resolved: "bg-green-100 text-green-700 border-green-300", acknowledged: "bg-gray-100 text-gray-600 border-gray-300" }
   const targetIcons: Record<string, React.ReactNode> = { statement: <MessageSquare className="size-4" />, note: <MessageSquare className="size-4" />, finding: <AlertTriangle className="size-4" />, recommendation: <CheckCircle className="size-4" />, evidence: <MessageSquare className="size-4" /> }
@@ -203,23 +206,23 @@ function ReviewCommentCard({ comment, targetLabel, onTrace, onResolve }: { comme
             </div>
             <p className="text-sm mt-1">{comment.comment}</p>
             <div className="flex items-center gap-1 mt-1">
-              <span className="text-xs text-muted-foreground">على: {targetLabel}</span>
+              <span className="text-xs text-muted-foreground">{t("on")} {targetLabel}</span>
             </div>
             {comment.resolution && (
               <div className="mt-2 p-2 bg-green-50 rounded text-xs text-green-700">
-                تم الحل: {comment.resolution}
+                {t("resolved", { count: "" }).replace(/\(\)/g, "").trim()}: {comment.resolution}
                 {comment.resolvedAt && <span className="mr-1">({new Date(comment.resolvedAt).toLocaleDateString()})</span>}
               </div>
             )}
             {comment.status === "open" && (
               <div className="flex items-center gap-1 mt-2">
-                <Button size="xs" variant="outline" className="text-green-600 border-green-300" onClick={(e) => { e.stopPropagation(); onResolve?.(comment) }}><CheckCircle className="size-3 ml-1" />حل</Button>
-                <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(comment) }}><Share2 className="size-3 ml-1" />تتبع</Button>
+                <Button size="xs" variant="outline" className="text-green-600 border-green-300" onClick={(e) => { e.stopPropagation(); onResolve?.(comment) }}><CheckCircle className="size-3 ml-1" />{t("resolve")}</Button>
+                <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(comment) }}><Share2 className="size-3 ml-1" />{t("trace")}</Button>
               </div>
             )}
             {comment.status !== "open" && (
               <div className="flex items-center gap-1 mt-2">
-                <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(comment) }}><Share2 className="size-3 ml-1" />تتبع</Button>
+                <Button size="xs" variant="outline" onClick={(e) => { e.stopPropagation(); onTrace(comment) }}><Share2 className="size-3 ml-1" />{t("trace")}</Button>
               </div>
             )}
           </div>

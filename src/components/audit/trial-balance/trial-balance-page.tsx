@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Fragment } from "react"
 import { useParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { ArrowUpDown, Search, ChevronDown, ChevronRight, FileSpreadsheet, AlertTriangle, CheckCircle, XCircle, Upload } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -20,6 +21,7 @@ const typeColors: Record<string, string> = { asset: "text-blue-600", "non-curren
 const TrustIcon = ({ state }: { state: string }) => state === "trusted" ? <CheckCircle className="size-4" /> : state === "conditional" ? <AlertTriangle className="size-4" /> : <XCircle className="size-4" />
 
 export default function TrialBalancePage() {
+  const t = useTranslations("audit.trialBalance")
   const params = useParams()
   const engagementId = params.engagementId as string
   const [tb, setTb] = useState<TrialBalance | null>(null)
@@ -44,9 +46,9 @@ export default function TrialBalancePage() {
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
   if (!tb) return (
     <div className="space-y-4">
-      <Card><CardContent className="p-6 text-center text-muted-foreground">لم يتم العثور على ميزان المراجعة. قم برفع واحد للبدء.</CardContent></Card>
+      <Card><CardContent className="p-6 text-center text-muted-foreground">{t("notFound")}</CardContent></Card>
       <div className="flex justify-center">
-        <Button onClick={() => setShowUpload(true)}><Upload className="size-4 ml-1" />رفع ميزان المراجعة</Button>
+        <Button onClick={() => setShowUpload(true)}><Upload className="size-4 ml-1" />{t("uploadButton")}</Button>
       </div>
       <TrialBalanceUpload open={showUpload} onClose={() => setShowUpload(false)} engagementId={engagementId} onComplete={handleUploadComplete} />
     </div>
@@ -73,36 +75,36 @@ export default function TrialBalancePage() {
       <TrialBalanceUpload open={showUpload} onClose={() => setShowUpload(false)} engagementId={engagementId} onComplete={handleUploadComplete} />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">ميزان المراجعة</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => setShowUpload(true)}><Upload className="size-4 ml-1" />رفع</Button>
+        <Button variant="outline" size="sm" onClick={() => setShowUpload(true)}><Upload className="size-4 ml-1" />{t("upload")}</Button>
       </div>
 
       <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-4 py-2 rounded-lg">
         <FileSpreadsheet className="size-4" />
-        <span>{tb.sourceFile} تم الرفع {new Date(tb.importTimestamp).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <span>{tb.sourceFile} {t("uploaded")} {new Date(tb.importTimestamp).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
       </div>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <CardTitle>الحسابات</CardTitle>
+            <CardTitle>{t("accounts")}</CardTitle>
             <Badge variant="outline" className={`${trustColors[tb.trustState]} flex items-center gap-1`}>
               <TrustIcon state={tb.trustState} />{tb.trustState}
             </Badge>
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <div>إجمالي المدين: <span className="font-medium">{sar(tb.totalDebits)}</span></div>
-            <div>إجمالي الدائن: <span className="font-medium">{sar(tb.totalCredits)}</span></div>
+            <div>{t("totalDebits")} <span className="font-medium">{sar(tb.totalDebits)}</span></div>
+            <div>{t("totalCredits")} <span className="font-medium">{sar(tb.totalCredits)}</span></div>
             {tb.variance !== 0 && (
               <div className="flex items-center gap-1 text-red-600 font-medium">
-                <AlertTriangle className="size-4" />الفروق: {sar(tb.variance)}
+                <AlertTriangle className="size-4" />{t("variance")} {sar(tb.variance)}
               </div>
             )}
             {tb.variance === 0 && (
               <div className="flex items-center gap-1 text-green-600 font-medium">
-                <CheckCircle className="size-4" />متوازن
+                <CheckCircle className="size-4" />{t("inBalance")}
               </div>
             )}
           </div>
@@ -110,17 +112,17 @@ export default function TrialBalancePage() {
         <CardContent>
           <div className="relative mb-4">
             <Search className="absolute right-2.5 top-2.5 size-4 text-muted-foreground" />
-            <Input placeholder="البحث باسم أو رمز الحساب..." className="pr-8" value={search} onChange={e => setSearch(e.target.value)} />
+            <Input placeholder={t("searchPlaceholder")} className="pr-8" value={search} onChange={e => setSearch(e.target.value)} />
           </div>
           <Table>
             <TableHeader>
               <TableRow>
-                <SortHeader k="accountCode">رمز الحساب</SortHeader>
-                <SortHeader k="accountName">اسم الحساب</SortHeader>
-                <SortHeader k="debitAmount">مدين (ريال)</SortHeader>
-                <SortHeader k="creditAmount">دائن (ريال)</SortHeader>
-                <SortHeader k="balance">الرصيد (ريال)</SortHeader>
-                <TableHead>النوع</TableHead>
+                <SortHeader k="accountCode">{t("accountCode")}</SortHeader>
+                <SortHeader k="accountName">{t("accountName")}</SortHeader>
+                <SortHeader k="debitAmount">{t("debit")}</SortHeader>
+                <SortHeader k="creditAmount">{t("credit")}</SortHeader>
+                <SortHeader k="balance">{t("balance")}</SortHeader>
+                <TableHead>{t("type")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -132,7 +134,7 @@ export default function TrialBalancePage() {
                     <TableCell>{line.debitAmount > 0 ? sar(line.debitAmount) : "-"}</TableCell>
                     <TableCell>{line.creditAmount > 0 ? sar(line.creditAmount) : "-"}</TableCell>
                     <TableCell className={line.balance < 0 ? "text-red-600" : ""}>{sar(line.balance)}</TableCell>
-                    <TableCell><Badge variant="outline" className={typeColors[line.accountType || ""] || ""}>{line.accountType || "غير معروف"}</Badge></TableCell>
+                    <TableCell><Badge variant="outline" className={typeColors[line.accountType || ""] || ""}>{line.accountType || t("unknown")}</Badge></TableCell>
                   </TableRow>
                   {expandedRow === line.id && (
                     <TableRow>
@@ -140,11 +142,11 @@ export default function TrialBalancePage() {
                         <div className="p-3 text-sm space-y-1">
                           <div className="font-medium">{line.accountName} ({line.accountCode})</div>
                           <div className="grid grid-cols-2 gap-2 text-muted-foreground">
-                            <div>مدين: {sar(line.debitAmount)}</div>
-                            <div>دائن: {sar(line.creditAmount)}</div>
-                            <div>الرصيد: {sar(line.balance)}</div>
-                            <div>النوع: {line.accountType || "غير معروف"}</div>
-                            <div>العملة: {line.currency}</div>
+                            <div>{t("debit")}: {sar(line.debitAmount)}</div>
+                            <div>{t("credit")}: {sar(line.creditAmount)}</div>
+                            <div>{t("balance")}: {sar(line.balance)}</div>
+                            <div>{t("type")}: {line.accountType || t("unknown")}</div>
+                            <div>{t("currency")}: {line.currency}</div>
                           </div>
                         </div>
                       </TableCell>

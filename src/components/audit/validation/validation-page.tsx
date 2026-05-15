@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { AlertTriangle, CheckCircle, XCircle, Info, AlertOctagon, FileSearch, RotateCcw, ChevronDown, ChevronRight, Scale, MapPin, Activity, MinusCircle, FileSpreadsheet, TrendingUp, Bot, Sparkles, Loader2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -23,6 +24,7 @@ const checkIcons: Record<string, React.ReactNode> = {
 }
 
 export default function ValidationPage() {
+  const t = useTranslations("audit.validation")
   const params = useParams()
   const engagementId = params.engagementId as string
   const [validation, setValidation] = useState<ValidationRun | null>(null)
@@ -69,7 +71,7 @@ export default function ValidationPage() {
   }
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
-  if (!validation) return <Card><CardContent className="p-6 text-muted-foreground">لم يتم العثور على تشغيل تدقيق.</CardContent></Card>
+  if (!validation) return <Card><CardContent className="p-6 text-muted-foreground">{t("noRun")}</CardContent></Card>
 
   const errors = validation.issues.filter(i => i.severity === "error")
   const warnings = validation.issues.filter(i => i.severity === "warning")
@@ -81,16 +83,16 @@ export default function ValidationPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">التدقيق</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" disabled={generatingReview} onClick={async () => { setGeneratingReview(true); try { const r = await generateAnalyticalReviewAction(engagementId); setAnalyticalFlags(prev => [...r, ...prev]) } catch {} finally { setGeneratingReview(false) } }} className="gap-1.5">
-            {generatingReview ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} مراجعة تحليلية
+            {generatingReview ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} {t("analyticalReview")}
           </Button>
           <Button variant="outline" onClick={handleRunValidation} disabled={running}>
             <RotateCcw className={`size-4 ml-1 ${running ? "animate-spin" : ""}`} />
-            {running ? "جارٍ التشغيل..." : "تشغيل التدقيق"}
+            {running ? t("running") : t("runValidation")}
           </Button>
         </div>
       </div>
@@ -100,8 +102,8 @@ export default function ValidationPage() {
           <CardHeader className="border-b border-violet-100 px-4 py-3">
             <CardTitle className="flex items-center gap-2 text-sm font-semibold">
               <Bot className="h-4 w-4 text-violet-500" />
-              المراجعة التحليلية للذكاء الاصطناعي — علامات المخاطر والملاحظات
-              <Badge variant="outline" className="bg-violet-100 text-violet-700 border-violet-200 text-[10px]">تتطلب مراجعة بشرية</Badge>
+              {t("aiReviewTitle")}
+              <Badge variant="outline" className="bg-violet-100 text-violet-700 border-violet-200 text-[10px]">{t("requiresReview")}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="divide-y divide-violet-100 pt-0">
@@ -137,18 +139,18 @@ export default function ValidationPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>نتائج التدقيق</CardTitle>
+            <CardTitle>{t("results")}</CardTitle>
             <CardDescription>
               <span className="flex items-center gap-2 mt-1">
                 <Badge variant="outline" className={trustColors[validation.trustState]}>
-                  <AlertTriangle className="size-3 ml-1" />حالة الثقة: {validation.trustState}
+                  <AlertTriangle className="size-3 ml-1" />{t("trustState")} {validation.trustState}
                 </Badge>
                 <span className="text-sm">
-                  {errors.length > 0 && <span className="text-red-600">{errors.length} أخطاء</span>}
+                  {errors.length > 0 && <span className="text-red-600">{errors.length} {t("errors")}</span>}
                   {errors.length > 0 && warnings.length > 0 && <span>, </span>}
-                  {warnings.length > 0 && <span className="text-amber-600">{warnings.length} تحذيرات</span>}
-                  {(errors.length > 0 || warnings.length > 0) && <span> تم العثور</span>}
-                  {errors.length === 0 && warnings.length === 0 && <span className="text-green-600">جميع الفحوصات ناجحة</span>}
+                  {warnings.length > 0 && <span className="text-amber-600">{warnings.length} {t("warnings")}</span>}
+                  {(errors.length > 0 || warnings.length > 0) && <span> {t("found")}</span>}
+                  {errors.length === 0 && warnings.length === 0 && <span className="text-green-600">{t("allPassed")}</span>}
                 </span>
               </span>
             </CardDescription>
@@ -166,16 +168,16 @@ export default function ValidationPage() {
       <Dialog open={!!disposeDialog} onOpenChange={() => { setDisposeDialog(null); setDisposeRationale("") }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{disposeDialog?.action === "accepted" ? "قبول" : "رفض"} المشكلة</DialogTitle>
+            <DialogTitle>{disposeDialog?.action === "accepted" ? t("acceptIssue") : t("dismissIssue")}</DialogTitle>
             <DialogDescription>{disposeDialog?.issue.description}</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
-            <Label htmlFor="rationale">المبرر</Label>
-            <Textarea id="rationale" placeholder="قدم سببًا لهذا القرار..." value={disposeRationale} onChange={e => setDisposeRationale(e.target.value)} />
+            <Label htmlFor="rationale">{t("rationale")}</Label>
+            <Textarea id="rationale" placeholder={t("rationalePlaceholder")} value={disposeRationale} onChange={e => setDisposeRationale(e.target.value)} />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setDisposeDialog(null); setDisposeRationale("") }}>إلغاء</Button>
-            <Button onClick={handleDispose} disabled={!disposeRationale.trim()}>تأكيد</Button>
+            <Button variant="outline" onClick={() => { setDisposeDialog(null); setDisposeRationale("") }}>{t("cancel")}</Button>
+            <Button onClick={handleDispose} disabled={!disposeRationale.trim()}>{t("confirm")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -184,6 +186,7 @@ export default function ValidationPage() {
 }
 
 function IssueCard({ issue, onDispose }: { issue: ValidationIssue; onDispose: (issue: ValidationIssue, action: "accepted" | "dismissed") => void }) {
+  const t = useTranslations("audit.validation")
   const [expanded, setExpanded] = useState(false)
   const severityBg = issue.severity === "error" ? "border-l-red-500 bg-red-50/30" : issue.severity === "warning" ? "border-l-amber-500 bg-amber-50/30" : "border-l-blue-500 bg-blue-50/30"
   const statusColors: Record<string, string> = { open: "bg-blue-100 text-blue-700", accepted: "bg-green-100 text-green-700", dismissed: "bg-gray-100 text-gray-500", investigated: "bg-purple-100 text-purple-700" }
@@ -206,14 +209,14 @@ function IssueCard({ issue, onDispose }: { issue: ValidationIssue; onDispose: (i
               </div>
               <p className="text-xs text-muted-foreground mt-1">{issue.message}</p>
               {issue.disposition && (
-                <p className="text-xs mt-1 italic text-muted-foreground">القرار: {issue.disposition}</p>
+                <p className="text-xs mt-1 italic text-muted-foreground">{t("disposition")} {issue.disposition}</p>
               )}
             </div>
           </div>
           {issue.status === "open" && (
             <div className="flex items-center gap-1 shrink-0 mr-2">
-              <Button size="xs" variant="outline" className="text-green-600" onClick={() => onDispose(issue, "accepted")}>قبول</Button>
-              <Button size="xs" variant="outline" className="text-muted-foreground" onClick={() => onDispose(issue, "dismissed")}>رفض</Button>
+              <Button size="xs" variant="outline" className="text-green-600" onClick={() => onDispose(issue, "accepted")}>{t("accept")}</Button>
+              <Button size="xs" variant="outline" className="text-muted-foreground" onClick={() => onDispose(issue, "dismissed")}>{t("dismiss")}</Button>
             </div>
           )}
         </div>

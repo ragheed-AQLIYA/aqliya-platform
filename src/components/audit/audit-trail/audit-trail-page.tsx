@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Sparkles, User, Search, Filter, ChevronDown, ChevronRight, Clock, ArrowRight, Calendar, Share2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -15,40 +16,40 @@ import { TraceabilityDrawer } from "@/components/audit/shared/traceability-drawe
 import type { TraceabilityNode } from "@/components/audit/shared/traceability-drawer"
 import { getAuditEventsAction, getEngagementAction } from "@/actions/audit-read-actions"
 
-const eventTypeLabels: Record<string, string> = {
-  "engagement.created": "تم إنشاء الارتباط", "team.assigned": "تم تعيين الفريق",
-  "trial_balance.uploaded": "تم رفع ميزان المراجعة", "mapping.ai_suggested": "تم اقتراح التصنيف بواسطة الذكاء الاصطناعي",
-  "mapping.confirmed": "تم تأكيد التصنيف", "validation.completed": "اكتمل التدقيق",
-  "evidence.uploaded": "تم رفع الدليل", "evidence.accepted": "تم قبول الدليل",
-  "signal.generated": "تم إنشاء إشارة الذكاء الاصطناعي", "finding.created": "تم إنشاء النتيجة",
-  "finding.state_changed": "تغيرت حالة النتيجة", "recommendation.ai_suggested": "توصية الذكاء الاصطناعي",
-  "recommendation.created": "تم إنشاء التوصية", "recommendation.state_changed": "تم تحديث التوصية",
-  "review.comment_added": "تمت إضافة تعليق المراجعة",
-  "engagement.state_changed": "تغيرت حالة الارتباط",
-  "ai.output_generated": "تم إنشاء مخرج الذكاء الاصطناعي",
-  "ai.output_accepted": "تم قبول مخرج الذكاء الاصطناعي",
-  "ai.output_rejected": "تم رفض مخرج الذكاء الاصطناعي",
-  "ai.notes_draft_generated": "تم إنشاء مسودة ملاحظات الذكاء الاصطناعي",
-  "ai.notes_draft_accepted": "تم قبول مسودة ملاحظات الذكاء الاصطناعي",
-  "ai.notes_draft_rejected": "تم رفض مسودة ملاحظات الذكاء الاصطناعي",
-  "ai.finding_draft_generated": "تم إنشاء مسودة نتيجة الذكاء الاصطناعي",
-  "ai.finding_draft_accepted": "تم قبول مسودة نتيجة الذكاء الاصطناعي",
-  "ai.recommendation_draft_generated": "تم إنشاء مسودة توصية الذكاء الاصطناعي",
-  "ai.recommendation_draft_accepted": "تم قبول مسودة توصية الذكاء الاصطناعي",
-  "ai.analytical_review_generated": "تم إنشاء المراجعة التحليلية للذكاء الاصطناعي",
-  "evidence.state_changed": "تغيرت حالة الدليل",
-  "evidence.file_scanned": "نتيجة فحص الملف",
-  "pilot.feedback_created": "تم إنشاء ملاحظات التجربة",
-  "pilot.feedback_updated": "تم تحديث ملاحظات التجربة",
-  "pilot.blocker_created": "تم إنشاء عائق إنتاجي",
-  "pilot.blocker_updated": "تم تحديث عائق إنتاجي",
-  "pilot.signoff_updated": "تم تحديث اعتماد التجربة",
-  "audit_user.created": "تم إنشاء مستخدم التدقيق",
-  "audit_user.role_updated": "تم تحديث دور مستخدم التدقيق",
-  "audit_user.deactivated": "تم إلغاء تنشيط مستخدم التدقيق",
-}
-
 export default function AuditTrailPage() {
+  const t = useTranslations("audit.auditTrail")
+  const eventTypeLabels: Record<string, string> = {
+    "engagement.created": t("eventTypes.engagement.created"), "team.assigned": t("eventTypes.team.assigned"),
+    "trial_balance.uploaded": t("eventTypes.trial_balance.uploaded"), "mapping.ai_suggested": t("eventTypes.mapping.ai_suggested"),
+    "mapping.confirmed": t("eventTypes.mapping.confirmed"), "validation.completed": t("eventTypes.validation.completed"),
+    "evidence.uploaded": t("eventTypes.evidence.uploaded"), "evidence.accepted": t("eventTypes.evidence.accepted"),
+    "signal.generated": t("eventTypes.signal.generated"), "finding.created": t("eventTypes.finding.created"),
+    "finding.state_changed": t("eventTypes.finding.state_changed"), "recommendation.ai_suggested": t("eventTypes.recommendation.ai_suggested"),
+    "recommendation.created": t("eventTypes.recommendation.created"), "recommendation.state_changed": t("eventTypes.recommendation.state_changed"),
+    "review.comment_added": t("eventTypes.review.comment_added"),
+    "engagement.state_changed": t("eventTypes.engagement.state_changed"),
+    "ai.output_generated": t("eventTypes.ai.output_generated"),
+    "ai.output_accepted": t("eventTypes.ai.output_accepted"),
+    "ai.output_rejected": t("eventTypes.ai.output_rejected"),
+    "ai.notes_draft_generated": t("eventTypes.ai.notes_draft_generated"),
+    "ai.notes_draft_accepted": t("eventTypes.ai.notes_draft_accepted"),
+    "ai.notes_draft_rejected": t("eventTypes.ai.notes_draft_rejected"),
+    "ai.finding_draft_generated": t("eventTypes.ai.finding_draft_generated"),
+    "ai.finding_draft_accepted": t("eventTypes.ai.finding_draft_accepted"),
+    "ai.recommendation_draft_generated": t("eventTypes.ai.recommendation_draft_generated"),
+    "ai.recommendation_draft_accepted": t("eventTypes.ai.recommendation_draft_accepted"),
+    "ai.analytical_review_generated": t("eventTypes.ai.analytical_review_generated"),
+    "evidence.state_changed": t("eventTypes.evidence.state_changed"),
+    "evidence.file_scanned": t("eventTypes.evidence.file_scanned"),
+    "pilot.feedback_created": t("eventTypes.pilot.feedback_created"),
+    "pilot.feedback_updated": t("eventTypes.pilot.feedback_updated"),
+    "pilot.blocker_created": t("eventTypes.pilot.blocker_created"),
+    "pilot.blocker_updated": t("eventTypes.pilot.blocker_updated"),
+    "pilot.signoff_updated": t("eventTypes.pilot.signoff_updated"),
+    "audit_user.created": t("eventTypes.audit_user.created"),
+    "audit_user.role_updated": t("eventTypes.audit_user.role_updated"),
+    "audit_user.deactivated": t("eventTypes.audit_user.deactivated"),
+  }
   const params = useParams()
   const engagementId = params.engagementId as string
   const [events, setEvents] = useState<AuditEvent[]>([])
@@ -70,7 +71,7 @@ export default function AuditTrailPage() {
   }, [engagementId])
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
-  if (events.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">لم يتم العثور على أحداث تدقيق.</CardContent></Card>
+  if (events.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">{t("noEvents")}</CardContent></Card>
 
   const uniqueTypes = [...new Set(events.map(e => e.eventType))]
   const uniqueActors = [...new Set(events.map(e => e.actorName))]
@@ -87,30 +88,30 @@ export default function AuditTrailPage() {
   return (
     <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">سجل التدقيق</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
         <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
         <div className="relative flex-1 max-w-xs">
           <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-          <Input placeholder="البحث في الأحداث..." className="pr-8" value={search} onChange={e => setSearch(e.target.value)} />
+          <Input placeholder={t("searchPlaceholder")} className="pr-8" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <Select value={typeFilter} onValueChange={(v) => { if (v !== null) { setTypeFilter(v) } }}>
-          <SelectTrigger className="w-48"><SelectValue placeholder="نوع الحدث" /></SelectTrigger>
+          <SelectTrigger className="w-48"><SelectValue placeholder={t("eventTypePlaceholder")} /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">جميع الأنواع</SelectItem>
-            {uniqueTypes.map(t => <SelectItem key={t} value={t}>{eventTypeLabels[t] || t}</SelectItem>)}
+            <SelectItem value="all">{t("allTypes")}</SelectItem>
+            {uniqueTypes.map(evType => <SelectItem key={evType} value={evType}>{eventTypeLabels[evType] || evType}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={actorFilter} onValueChange={(v) => { if (v !== null) { setActorFilter(v) } }}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="الجهة" /></SelectTrigger>
+          <SelectTrigger className="w-40"><SelectValue placeholder={t("actorPlaceholder")} /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">جميع الجهات</SelectItem>
+            <SelectItem value="all">{t("allActors")}</SelectItem>
             {uniqueActors.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}
           </SelectContent>
         </Select>
-        <div className="text-xs text-muted-foreground mr-auto">{sorted.length} أحداث</div>
+        <div className="text-xs text-muted-foreground mr-auto">{sorted.length} {t("events")}</div>
       </div>
 
       <Card>
@@ -127,7 +128,7 @@ export default function AuditTrailPage() {
                         <span className="text-sm font-medium">{eventTypeLabels[ev.eventType] || ev.eventType}</span>
                         {ev.aiRelated && (
                           <Badge variant="outline" className="bg-purple-100 text-purple-700 border-purple-300 flex items-center gap-1 text-[10px]">
-                            <Sparkles className="size-2.5" />ذكاء اصطناعي
+                            <Sparkles className="size-2.5" />{t("ai")}
                           </Badge>
                         )}
                       </div>
@@ -159,7 +160,7 @@ export default function AuditTrailPage() {
 
       {hasMore && (
         <div className="flex justify-center">
-          <Button variant="outline" onClick={() => setPage(page + 1)}>تحميل المزيد</Button>
+          <Button variant="outline" onClick={() => setPage(page + 1)}>{t("loadMore")}</Button>
         </div>
       )}
 

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { FileText, CheckCircle, XCircle, AlertTriangle, Clock, Download, Send, Eye, Sparkles, History, BarChart3, BookOpen, Target, Lightbulb, FileDown, Loader2 } from "lucide-react"
@@ -15,6 +16,7 @@ const pubStatusColors: Record<string, string> = { draft: "bg-gray-100 text-gray-
 const actionIcons: Record<string, React.ReactNode> = { approved: <CheckCircle className="size-4 text-green-600" />, rejected: <XCircle className="size-4 text-red-600" />, modifications_requested: <AlertTriangle className="size-4 text-amber-600" /> }
 
 export default function PublicationPage() {
+  const t = useTranslations("audit.publication")
   const params = useParams()
   const engagementId = params.engagementId as string
   const [pkg, setPkg] = useState<PublicationPackage | null>(null)
@@ -39,7 +41,7 @@ function downloadJSON(data: unknown, filename: string) {
 }
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
-  if (!pkg) return <Card><CardContent className="p-6 text-muted-foreground">حزمة النشر غير موجودة.</CardContent></Card>
+  if (!pkg) return <Card><CardContent className="p-6 text-muted-foreground">{t("notFound")}</CardContent></Card>
 
   const isReady = pkg.status === "ready" || pkg.status === "draft"
   const isPublished = pkg.status === "published" || pkg.status === "locked"
@@ -56,7 +58,7 @@ function downloadJSON(data: unknown, filename: string) {
         setPkg(refreshed)
       }
     } catch (e: unknown) {
-      setPublishError(e instanceof Error ? e.message : 'فشل في نشر مهمة التدقيق')
+      setPublishError(e instanceof Error ? e.message : t("failedToPublish"))
     } finally {
       setPublishing(false)
     }
@@ -66,7 +68,7 @@ function downloadJSON(data: unknown, filename: string) {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">النشر</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
         <Badge variant="outline" className={`${pubStatusColors[pkg.status]} text-sm px-3 py-1`}>{pkg.status}</Badge>
@@ -77,56 +79,56 @@ function downloadJSON(data: unknown, filename: string) {
           <CardContent className="p-4 text-center">
             <FileText className="size-8 mx-auto mb-2 text-muted-foreground" />
             <div className="text-2xl font-bold">{pkg.statements.length}</div>
-            <div className="text-xs text-muted-foreground">القوائم</div>
+            <div className="text-xs text-muted-foreground">{t("statements")}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <BookOpen className="size-8 mx-auto mb-2 text-muted-foreground" />
             <div className="text-2xl font-bold">{pkg.notes.length}</div>
-            <div className="text-xs text-muted-foreground">الإيضاحات</div>
+            <div className="text-xs text-muted-foreground">{t("notes")}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <Target className="size-8 mx-auto mb-2 text-muted-foreground" />
             <div className="text-2xl font-bold">{pkg.findings.length}</div>
-            <div className="text-xs text-muted-foreground">النتائج</div>
+            <div className="text-xs text-muted-foreground">{t("findings")}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <Lightbulb className="size-8 mx-auto mb-2 text-muted-foreground" />
             <div className="text-2xl font-bold">{pkg.recommendations.length}</div>
-            <div className="text-xs text-muted-foreground">التوصيات</div>
+            <div className="text-xs text-muted-foreground">{t("recommendations")}</div>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><BarChart3 className="size-4" />الملخصات</CardTitle>
+          <CardTitle className="flex items-center gap-2"><BarChart3 className="size-4" />{t("summaries")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <div className="flex items-start gap-2 p-2 rounded bg-muted/30">
               <CheckCircle className="size-4 text-green-600 mt-0.5" />
               <div>
-                <div className="text-sm font-medium">ملخص المراجعة</div>
+                <div className="text-sm font-medium">{t("reviewSummary")}</div>
                 <p className="text-xs text-muted-foreground">{pkg.reviewSummary}</p>
               </div>
             </div>
             <div className="flex items-start gap-2 p-2 rounded bg-muted/30">
               <AlertTriangle className="size-4 text-amber-600 mt-0.5" />
               <div>
-                <div className="text-sm font-medium">ملخص النتائج</div>
+                <div className="text-sm font-medium">{t("findingsSummary")}</div>
                 <p className="text-xs text-muted-foreground">{pkg.findingsSummary}</p>
               </div>
             </div>
             <div className="flex items-start gap-2 p-2 rounded bg-muted/30">
               <FileText className="size-4 text-blue-600 mt-0.5" />
               <div>
-                <div className="text-sm font-medium">ملخص الأدلة</div>
+                <div className="text-sm font-medium">{t("evidenceSummary")}</div>
                 <p className="text-xs text-muted-foreground">{pkg.evidenceSummary}</p>
               </div>
             </div>
@@ -136,11 +138,11 @@ function downloadJSON(data: unknown, filename: string) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><History className="size-4" />سجل الاعتماد</CardTitle>
+          <CardTitle className="flex items-center gap-2"><History className="size-4" />{t("approvalHistory")}</CardTitle>
         </CardHeader>
         <CardContent>
           {pkg.approvalHistory.length === 0 ? (
-            <div className="text-sm text-muted-foreground italic">لم يتم تسجيل أي إجراءات اعتماد.</div>
+            <div className="text-sm text-muted-foreground italic">{t("noApprovalActions")}</div>
           ) : (
             <div className="space-y-3">
               {pkg.approvalHistory.map(rec => (
@@ -160,26 +162,26 @@ function downloadJSON(data: unknown, filename: string) {
 
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="outline" size="sm" disabled={exporting !== null} onClick={async () => { setExporting("fs"); try { const data = await exportFinancialStatementsAction(engagementId); downloadJSON(data, `financial_statements_${engagementId}.json`) } catch {} finally { setExporting(null) } }} className="gap-1.5">
-          {exporting === "fs" ? <Loader2 className="size-3 animate-spin" /> : <FileDown className="size-3" />} تصدير القوائم
+          {exporting === "fs" ? <Loader2 className="size-3 animate-spin" /> : <FileDown className="size-3" />} {t("exportStatements")}
         </Button>
         <Button variant="outline" size="sm" disabled={exporting !== null} onClick={async () => { setExporting("audit"); try { const data = await exportAuditFileAction(engagementId); downloadJSON(data, `audit_file_${engagementId}.json`) } catch {} finally { setExporting(null) } }} className="gap-1.5">
-          {exporting === "audit" ? <Loader2 className="size-3 animate-spin" /> : <Download className="size-3" />} تصدير ملف المراجعة
+          {exporting === "audit" ? <Loader2 className="size-3 animate-spin" /> : <Download className="size-3" />} {t("exportAuditFile")}
         </Button>
         <Button variant="outline" size="sm" disabled={exporting !== null} onClick={async () => { setExporting("bilingual"); try { const data = await exportBilingualAction(engagementId, "ar"); downloadJSON(data, `bilingual_report_${engagementId}.json`) } catch {} finally { setExporting(null) } }} className="gap-1.5">
-          {exporting === "bilingual" ? <Loader2 className="size-3 animate-spin" /> : <Sparkles className="size-3" />} تصدير ثنائي اللغة (عربي/إنجليزي)
+          {exporting === "bilingual" ? <Loader2 className="size-3 animate-spin" /> : <Sparkles className="size-3" />} {t("exportBilingual")}
         </Button>
         {isPublished ? (
           <div className="flex items-center gap-1 text-xs text-emerald-600">
-            <CheckCircle className="size-3" />منشور
+            <CheckCircle className="size-3" />{t("published")}
           </div>
         ) : isReady ? (
           <Button size="lg" disabled={publishing} onClick={handlePublish}>
             {publishing ? <Loader2 className="size-4 ml-2 animate-spin" /> : <Send className="size-4 ml-2" />}
-            {publishing ? "جاري النشر..." : "نشر"}
+            {publishing ? t("publishing") : t("publish")}
           </Button>
         ) : !isReady && pkg.status !== "published" && (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Clock className="size-3" />أكمل قائمة التحقق من الاعتماد لتمكين النشر
+            <Clock className="size-3" />{t("publishDisabled")}
           </div>
         )}
       </div>
@@ -187,8 +189,8 @@ function downloadJSON(data: unknown, filename: string) {
       {publishError && <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"><AlertTriangle className="size-3 shrink-0" />{publishError}</div>}
 
       <div className="text-[10px] text-muted-foreground">
-        {pkg.status === "draft" && "تصدير مسودة — غير نهائي. المحتوى المعتمد سيتضمن بيانات الاعتماد."}
-        {pkg.status === "published" && "منشور — التصدير يتضمن المحتوى النهائي المعتمد."}
+        {pkg.status === "draft" && t("draftFooter")}
+        {pkg.status === "published" && t("publishedFooter")}
       </div>
     </div>
   )

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { useParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { FileText, FileSpreadsheet, File, Upload, User, Clock, CheckCircle, XCircle, AlertTriangle, RefreshCw, Link, ExternalLink, Search, Filter, Bot, Sparkles, Loader2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -34,6 +35,7 @@ const fileIcons: Record<string, React.ReactNode> = { xlsx: <FileSpreadsheet clas
 export default function EvidencePage() {
   const params = useParams()
   const engagementId = params.engagementId as string
+  const t = useTranslations("audit.evidence")
   const [evidence, setEvidence] = useState<EvidenceObject[]>([])
   const [engagement, setEngagement] = useState<Engagement | null>(null)
   const [loading, setLoading] = useState(true)
@@ -64,6 +66,10 @@ export default function EvidencePage() {
   const [evTotal, setEvTotal] = useState(0)
   const [loadingMore, setLoadingMore] = useState(false)
   const EVIDENCE_PAGE_SIZE = 20
+  const stateLabel: Record<string, string> = {
+    missing: t("missingState"), requested: t("requestedState"), uploaded: t("uploadedState"),
+    linked: t("linkedState"), reviewed: t("reviewedState"), accepted: t("acceptedState"), rejected: t("rejectedState"),
+  }
 
   useEffect(() => {
     Promise.all([getEvidencePaginatedAction(engagementId, 1, EVIDENCE_PAGE_SIZE), getEngagementAction(engagementId)]).then(([r, eng]) => {
@@ -72,7 +78,7 @@ export default function EvidencePage() {
   }, [engagementId])
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
-  if (evidence.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">لا توجد أدلة بعد.</CardContent></Card>
+  if (evidence.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">{t("noEvidence")}</CardContent></Card>
 
   const missingCount = evidence.filter(e => e.state === "missing").length
 
@@ -84,18 +90,18 @@ export default function EvidencePage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">الأدلة</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{engagement?.client?.name} - {engagement?.fiscalPeriod}</p>
         </div>
         <div className="flex items-center gap-2">
           {missingCount > 0 && (
-            <Badge variant="outline" className="bg-red-100 text-red-700">{missingCount} مفقود</Badge>
+            <Badge variant="outline" className="bg-red-100 text-red-700">{t("missingCount", { count: missingCount })}</Badge>
           )}
         </div>
         <Button variant="outline" size="sm" onClick={async () => { setSuggesting(true); try { const result = await generateEvidenceSuggestionsAction(engagementId); setAiSuggestions(prev => [...result, ...prev]) } catch {} finally { setSuggesting(false) } }} disabled={suggesting} className="gap-1.5">
-          {suggesting ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} اقتراح أدلة
+          {suggesting ? <Loader2 className="size-3 animate-spin" /> : <Bot className="size-3" />} {t("suggestEvidence")}
         </Button>
-        <Button onClick={() => setShowRequest(true)}><Upload className="size-4 ml-1" />طلب دليل</Button>
+        <Button onClick={() => setShowRequest(true)}><Upload className="size-4 ml-1" />{t("requestEvidence")}</Button>
         </div>
 
       {aiSuggestions.length > 0 && (
@@ -103,11 +109,11 @@ export default function EvidencePage() {
           <CardHeader className="border-b border-violet-100 px-4 py-3">
             <CardTitle className="flex items-center gap-2 text-sm font-semibold">
               <Bot className="h-4 w-4 text-violet-500" />
-              اقتراحات أدلة الذكاء — تتطلب مراجعة بشرية
-              <Badge variant="outline" className="bg-violet-100 text-violet-700 border-violet-200 text-[10px]">غير نهائي</Badge>
+              {t("aiTitle")}
+              <Badge variant="outline" className="bg-violet-100 text-violet-700 border-violet-200 text-[10px]">{t("notFinal")}</Badge>
             </CardTitle>
             <CardDescription className="text-[10px] text-muted-foreground">
-              عناصر أدلة مقترحة بناءً على الأرصدة الجوهرية والنتائج. القبول يُنشئ طلب دليل، والرفض يُلغي الاقتراح.
+              {t("aiDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="divide-y divide-violet-100 pt-0">
@@ -121,27 +127,27 @@ export default function EvidencePage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">{(parsed.filename as string) ?? "دليل"}</span>
+                      <span className="text-sm font-medium">{(parsed.filename as string) ?? t("evidenceDraft")}</span>
                       {ai.confidence !== null && (
-                        <span className="text-[10px] text-muted-foreground">%{Math.round(ai.confidence * 100)} ثقة</span>
+                        <span className="text-[10px] text-muted-foreground">{t("confidence", { pct: Math.round(ai.confidence * 100) })}</span>
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground">{(parsed.reason as string) ?? ""}</p>
                     {(parsed.accountName as string | undefined) && (
-                      <p className="text-[10px] text-muted-foreground mt-0.5">الحساب المرتبط: {String(parsed.accountName)}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{t("relatedAccount", { account: String(parsed.accountName) })}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <Button
                       variant="ghost" size="icon" className="h-7 w-7 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                       onClick={async () => { setAcceptingSuggestionId(ai.id); try { const r = await acceptEvidenceSuggestionAction(ai.id, engagementId); if (r.evidence) { setEvidence(prev => [r.evidence!, ...prev]); setAiSuggestions(prev => prev.filter(a => a.id !== ai.id)) } } catch {} finally { setAcceptingSuggestionId(null) } }}
-                      disabled={acceptingSuggestionId === ai.id} title="قبول الاقتراح"
+                      disabled={acceptingSuggestionId === ai.id} title={t("acceptSuggestion")}
                     >
                       {acceptingSuggestionId === ai.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
                     </Button>
                     <Button
                       variant="ghost" size="icon" className="h-7 w-7 text-red-600 hover:text-red-700 hover:bg-red-50"
-                      onClick={() => setAiSuggestions(prev => prev.filter(a => a.id !== ai.id))} title="تجاهل"
+                      onClick={() => setAiSuggestions(prev => prev.filter(a => a.id !== ai.id))} title={t("dismissSuggestion")}
                     >
                       <XCircle className="h-4 w-4" />
                     </Button>
@@ -156,20 +162,20 @@ export default function EvidencePage() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>عناصر الأدلة</CardTitle>
+            <CardTitle>{t("evidenceItems")}</CardTitle>
             <div className="flex items-center gap-2">
-              <Input placeholder="بحث باسم الملف..." className="w-56" value={search} onChange={e => setSearch(e.target.value)} />
+              <Input placeholder={t("searchByFilename")} className="w-56" value={search} onChange={e => setSearch(e.target.value)} />
               <Select value={stateFilter} onValueChange={(v) => { if (v !== null) { setStateFilter(v) } }}>
-                <SelectTrigger className="w-32"><SelectValue placeholder="تصفية بالحالة" /></SelectTrigger>
+                <SelectTrigger className="w-32"><SelectValue placeholder={t("filterByState")} /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">جميع الحالات</SelectItem>
-                  <SelectItem value="missing">مفقود</SelectItem>
-                  <SelectItem value="requested">مطلوب</SelectItem>
-                  <SelectItem value="uploaded">مرفوع</SelectItem>
-                  <SelectItem value="linked">مرتبط</SelectItem>
-                  <SelectItem value="reviewed">تمت المراجعة</SelectItem>
-                  <SelectItem value="accepted">مقبول</SelectItem>
-                  <SelectItem value="rejected">مرفوض</SelectItem>
+                  <SelectItem value="all">{t("allStates")}</SelectItem>
+                  <SelectItem value="missing">{t("missingState")}</SelectItem>
+                  <SelectItem value="requested">{t("requestedState")}</SelectItem>
+                  <SelectItem value="uploaded">{t("uploadedState")}</SelectItem>
+                  <SelectItem value="linked">{t("linkedState")}</SelectItem>
+                  <SelectItem value="reviewed">{t("reviewedState")}</SelectItem>
+                  <SelectItem value="accepted">{t("acceptedState")}</SelectItem>
+                  <SelectItem value="rejected">{t("rejectedState")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -179,12 +185,12 @@ export default function EvidencePage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>اسم الملف</TableHead>
-                <TableHead>النوع</TableHead>
-                <TableHead>رفع بواسطة</TableHead>
-                <TableHead>تاريخ الرفع</TableHead>
-                <TableHead>الحالة</TableHead>
-                <TableHead>مرتبط بـ</TableHead>
+                <TableHead>{t("filenameCol")}</TableHead>
+                <TableHead>{t("typeCol")}</TableHead>
+                <TableHead>{t("uploadedByCol")}</TableHead>
+                <TableHead>{t("uploadDateCol")}</TableHead>
+                <TableHead>{t("stateCol")}</TableHead>
+                <TableHead>{t("linkedToCol")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -193,14 +199,14 @@ export default function EvidencePage() {
                   <TableCell className="flex items-center gap-2">
                     {fileIcons[ev.fileType] || <File className="size-4" />}
                     <span className="font-medium">{ev.filename}</span>
-                    {ev.state === "missing" && <Badge variant="outline" className="bg-red-600 text-white border-red-600 text-[10px]">مفقود</Badge>}
+                    {ev.state === "missing" && <Badge variant="outline" className="bg-red-600 text-white border-red-600 text-[10px]">{t("missingState")}</Badge>}
                   </TableCell>
                   <TableCell><Badge variant="outline">{ev.fileType.toUpperCase()}</Badge></TableCell>
                   <TableCell>{ev.uploadedBy || "-"}</TableCell>
                   <TableCell>{ev.uploadedAt ? new Date(ev.uploadedAt).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric', year: 'numeric' }) : "-"}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className={`${stateColors[ev.state] || ""} flex items-center gap-1 w-fit`}>
-                      {stateIcons[ev.state]}{ev.state === "missing" ? "مفقود" : ev.state === "requested" ? "مطلوب" : ev.state === "uploaded" ? "مرفوع" : ev.state === "linked" ? "مرتبط" : ev.state === "reviewed" ? "تمت المراجعة" : ev.state === "accepted" ? "مقبول" : "مرفوض"}
+                      {stateIcons[ev.state]}{stateLabel[ev.state] || t("rejectedState")}
                     </Badge>
                   </TableCell>
                   <TableCell className="max-w-[200px] truncate">
@@ -226,7 +232,7 @@ export default function EvidencePage() {
               } catch {} finally { setLoadingMore(false) }
             }}>
               {loadingMore ? <Loader2 className="size-4 ml-1 animate-spin" /> : <RefreshCw className="size-4 ml-1" />}
-              تحميل المزيد ({evTotal - evidence.length} متبقي)
+              {t("loadMore", { remaining: evTotal - evidence.length })}
             </Button>
           </div>
         )}
@@ -234,56 +240,56 @@ export default function EvidencePage() {
 
       <Dialog open={showRequest} onOpenChange={(open) => { if (!open) { setShowRequest(false); setReqError(null) } }}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader><DialogTitle>طلب دليل</DialogTitle><DialogDescription>طلب عنصر دليل جديد من العميل أو الفريق.</DialogDescription></DialogHeader>
+          <DialogHeader><DialogTitle>{t("requestEvidence")}</DialogTitle><DialogDescription>{t("requestEvidenceDescription")}</DialogDescription></DialogHeader>
           <div className="space-y-3">
-            <Label>اسم الملف / الوصف</Label>
-            <Input value={reqFilename} onChange={e => setReqFilename(e.target.value)} placeholder="مثال: inventory_count_sheet.pdf" />
-            <Label>نوع الملف</Label>
+            <Label>{t("filenameLabel")}</Label>
+            <Input value={reqFilename} onChange={e => setReqFilename(e.target.value)} placeholder={t("filenamePlaceholder")} />
+            <Label>{t("fileTypeLabel")}</Label>
             <Select value={reqFileType} onValueChange={(v) => { if (v !== null) setReqFileType(v) }}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="pdf">PDF</SelectItem>
                 <SelectItem value="xlsx">Excel (XLSX)</SelectItem>
                 <SelectItem value="docx">Word (DOCX)</SelectItem>
-                <SelectItem value="jpg">صورة (JPG)</SelectItem>
-                <SelectItem value="png">صورة (PNG)</SelectItem>
+                <SelectItem value="jpg">{t("imageJpg")}</SelectItem>
+                <SelectItem value="png">{t("imagePng")}</SelectItem>
                 <SelectItem value="csv">CSV</SelectItem>
               </SelectContent>
             </Select>
             {reqError && <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700"><AlertTriangle className="size-3 shrink-0" />{reqError}</div>}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setShowRequest(false); setReqError(null) }}>إلغاء</Button>
+            <Button variant="outline" onClick={() => { setShowRequest(false); setReqError(null) }}>{t("cancel")}</Button>
             <Button disabled={!reqFilename.trim() || reqSubmitting} onClick={async () => {
               setReqSubmitting(true); setReqError(null)
               try {
                 const result = await createEvidenceAction({ engagementId, filename: reqFilename.trim(), fileType: reqFileType, state: 'missing' })
                 if (result.evidence) setEvidence(prev => [result.evidence, ...prev])
                 setShowRequest(false); setReqFilename('')
-              } catch (e: unknown) { setReqError(e instanceof Error ? e.message : 'فشل إنشاء طلب الدليل') } finally { setReqSubmitting(false) }
-            }}>{reqSubmitting ? 'جارٍ الطلب...' : 'طلب دليل'}</Button>
+              } catch (e: unknown) { setReqError(e instanceof Error ? e.message : t("requestFailed")) } finally { setReqSubmitting(false) }
+            }}>{reqSubmitting ? t("requesting") : t("requestEvidence")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader><DialogTitle>ربط الدليل</DialogTitle><DialogDescription>ربط هذا الدليل بنتيجة أو كيان آخر.</DialogDescription></DialogHeader>
+          <DialogHeader><DialogTitle>{t("linkEvidence")}</DialogTitle><DialogDescription>{t("linkDescription")}</DialogDescription></DialogHeader>
           <div className="space-y-3">
-            <div><Label>نوع الهدف</Label>
+            <div><Label>{t("targetTypeLabel")}</Label>
               <Select value={linkTargetType} onValueChange={(v) => { if (v !== null) { setLinkTargetType(v); setLinkTargetId('') } }}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="finding">نتيجة</SelectItem>
-                  <SelectItem value="statement">قائمة</SelectItem>
-                  <SelectItem value="note">إيضاح</SelectItem>
+                  <SelectItem value="finding">{t("finding")}</SelectItem>
+                  <SelectItem value="statement">{t("statementLabel")}</SelectItem>
+                  <SelectItem value="note">{t("note")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             {linkTargetType === 'finding' && findingsList.length > 0 && (
-              <div><Label>اختر نتيجة</Label>
+              <div><Label>{t("selectFinding")}</Label>
                 <Select value={linkTargetId} onValueChange={(v) => { if (v !== null) setLinkTargetId(v) }}>
-                  <SelectTrigger><SelectValue placeholder="اختر نتيجة..." /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t("selectFinding")} /></SelectTrigger>
                   <SelectContent>
                     {findingsList.map(f => <SelectItem key={f.id} value={f.id}>{f.title}</SelectItem>)}
                   </SelectContent>
@@ -291,11 +297,11 @@ export default function EvidencePage() {
               </div>
             )}
             {linkTargetType !== 'finding' && (
-              <div><Label>معرف الهدف</Label><Input value={linkTargetId} onChange={e => setLinkTargetId(e.target.value)} placeholder="أدخل معرف الهدف" /></div>
+              <div><Label>{t("targetIdLabel")}</Label><Input value={linkTargetId} onChange={e => setLinkTargetId(e.target.value)} placeholder={t("targetIdPlaceholder")} /></div>
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowLinkDialog(false)}>إلغاء</Button>
+            <Button variant="outline" onClick={() => setShowLinkDialog(false)}>{t("cancel")}</Button>
             <Button disabled={!linkTargetId || linkSubmitting} onClick={async () => {
               setLinkSubmitting(true)
               try {
@@ -305,7 +311,7 @@ export default function EvidencePage() {
                 if (selectedEv) setSelectedEv(updated.find(e => e.id === selectedEv.id) ?? null)
                 setShowLinkDialog(false)
               } catch {} finally { setLinkSubmitting(false) }
-            }}>{linkSubmitting ? 'جارٍ الربط...' : 'ربط'}</Button>
+            }}>{linkSubmitting ? t("linking") : t("link")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -314,7 +320,7 @@ export default function EvidencePage() {
         <div className="fixed inset-0 z-50 bg-black/20" onClick={() => setSelectedEv(null)}>
           <div className="absolute left-0 top-0 bottom-0 w-96 bg-background shadow-xl border-r p-6 overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">تفاصيل الدليل</h3>
+              <h3 className="font-semibold text-sm">{t("evidenceDetails")}</h3>
               <Button variant="ghost" size="icon" onClick={() => setSelectedEv(null)}><XCircle className="size-4" /></Button>
             </div>
             <div className="space-y-4 text-sm">
@@ -332,7 +338,7 @@ export default function EvidencePage() {
                   setTraceEvOpen(true)
                 }}
               >
-                <ExternalLink className="size-3 ml-1" />عرض التتبع
+                <ExternalLink className="size-3 ml-1" />{t("showTraceability")}
               </Button>
               <TraceabilityDrawer
                 open={traceEvOpen}
@@ -344,52 +350,52 @@ export default function EvidencePage() {
                 backwardTrace={traceEvData.backward}
               />
               <div>
-                <div className="text-muted-foreground text-xs uppercase tracking-wide">اسم الملف</div>
+                <div className="text-muted-foreground text-xs uppercase tracking-wide">{t("filenameCol")}</div>
                 <div className="font-medium flex items-center gap-2">{fileIcons[selectedEv.fileType]}{selectedEv.filename}</div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <div className="text-muted-foreground text-xs uppercase tracking-wide">النوع</div>
+                  <div className="text-muted-foreground text-xs uppercase tracking-wide">{t("typeCol")}</div>
                   <div>{selectedEv.fileType.toUpperCase()}</div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs uppercase tracking-wide">الحجم</div>
-                  <div>{selectedEv.fileSize > 0 ? `${(selectedEv.fileSize / 1024).toFixed(0)} كيلوبايت` : "-"}</div>
+                  <div className="text-muted-foreground text-xs uppercase tracking-wide">{t("size")}</div>
+                  <div>{selectedEv.fileSize > 0 ? t("kilobytes", { size: (selectedEv.fileSize / 1024).toFixed(0) }) : "-"}</div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs uppercase tracking-wide">رفع بواسطة</div>
+                  <div className="text-muted-foreground text-xs uppercase tracking-wide">{t("uploadedByCol")}</div>
                   <div>{selectedEv.uploadedBy || "-"}</div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground text-xs uppercase tracking-wide">تاريخ الرفع</div>
+                  <div className="text-muted-foreground text-xs uppercase tracking-wide">{t("uploadDateCol")}</div>
                   <div>{selectedEv.uploadedAt ? new Date(selectedEv.uploadedAt).toLocaleDateString() : "-"}</div>
                 </div>
               </div>
               <div>
-                <div className="text-muted-foreground text-xs uppercase tracking-wide">بصمة الملف</div>
-                <div className="font-mono text-xs">{selectedEv.fileHash || "غير متاح"}</div>
+                <div className="text-muted-foreground text-xs uppercase tracking-wide">{t("fileHash")}</div>
+                <div className="font-mono text-xs">{selectedEv.fileHash || t("notAvailable")}</div>
               </div>
               <div>
-                <div className="text-muted-foreground text-xs uppercase tracking-wide">الحالة</div>
+                <div className="text-muted-foreground text-xs uppercase tracking-wide">{t("stateCol")}</div>
                 <Badge variant="outline" className={`${stateColors[selectedEv.state]} flex items-center gap-1 w-fit`}>
-                  {stateIcons[selectedEv.state]}{selectedEv.state === "missing" ? "مفقود" : selectedEv.state === "requested" ? "مطلوب" : selectedEv.state === "uploaded" ? "مرفوع" : selectedEv.state === "linked" ? "مرتبط" : selectedEv.state === "reviewed" ? "تمت المراجعة" : selectedEv.state === "accepted" ? "مقبول" : "مرفوض"}
+                  {stateIcons[selectedEv.state]}{stateLabel[selectedEv.state] || t("rejectedState")}
                 </Badge>
               </div>
               <div>
-                <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">الكيانات المرتبطة</div>
+                <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">{t("linkedEntities")}</div>
                 {selectedEv.linkedEntities.length > 0 ? selectedEv.linkedEntities.map((le, i) => (
                   <div key={i} className="flex items-center gap-2 py-1.5 border-b last:border-0">
-                    <Badge variant="outline" className="text-[10px]">{(le.linkType as string) === 'finding' ? 'نتيجة' : le.linkType}</Badge>
+                    <Badge variant="outline" className="text-[10px]">{(le.linkType as string) === 'finding' ? t("entityFinding") : le.linkType}</Badge>
                     <span className="text-xs">{le.targetLabel}</span>
-                    <Badge variant="outline" className="text-[10px] mr-auto">{(le.targetType as string) === 'finding' ? 'نتيجة' : (le.targetType as string) === 'statement' ? 'قائمة' : (le.targetType as string) === 'note' ? 'إيضاح' : le.targetType}</Badge>
+                    <Badge variant="outline" className="text-[10px] mr-auto">{(le.targetType as string) === 'finding' ? t("entityFinding") : (le.targetType as string) === 'statement' ? t("statementLabel") : (le.targetType as string) === 'note' ? t("entityNote") : le.targetType}</Badge>
                   </div>
-                )) : <div className="text-xs text-muted-foreground italic">لا توجد كيانات مرتبطة</div>}
+                )) : <div className="text-xs text-muted-foreground italic">{t("noLinkedEntities")}</div>}
               </div>
               {(selectedEv.state === 'missing' || selectedEv.state === 'requested') && (
                 <>
                   <Button size="sm" className="w-full" disabled={uploadingId === selectedEv.id} onClick={() => { setUploadTargetId(selectedEv.id); fileInputRef.current?.click() }}>
                     {uploadingId === selectedEv.id ? <Loader2 className="size-4 ml-1 animate-spin" /> : <Upload className="size-4 ml-1" />}
-                    {uploadingId === selectedEv.id ? 'جارٍ الرفع...' : 'رفع ملف'}
+                    {uploadingId === selectedEv.id ? t("uploading") : t("uploadFile")}
                   </Button>
                   <input ref={fileInputRef} type="file" className="hidden" onChange={async (e) => {
                     const file = e.target.files?.[0]
@@ -404,7 +410,7 @@ export default function EvidencePage() {
                       const updated = await getEvidenceAction(engagementId)
                       setEvidence(updated)
                       if (result.evidence) setSelectedEv(result.evidence)
-                    } catch (e: unknown) { setActionError(e instanceof Error ? e.message : 'فشل الرفع') }
+                    } catch (e: unknown) { setActionError(e instanceof Error ? e.message : t("uploadFailed")) }
                     finally { setUploadingId(null); setUploadTargetId(null); if (fileInputRef.current) fileInputRef.current.value = '' }
                   }} />
                 </>
@@ -414,25 +420,25 @@ export default function EvidencePage() {
                   try {
                     const info = await getEvidenceDownloadUrlAction(selectedEv.id, engagementId)
                     if (info) window.open(info.url, '_blank')
-                  } catch { setActionError('فشل الحصول على رابط التحميل') }
+                  } catch { setActionError(t("downloadFailed")) }
                 }}>
-                  <FileText className="size-4 ml-1" />تحميل ({selectedEv.fileHash.substring(0, 8)}...)
+                  <FileText className="size-4 ml-1" />{t("download", { hash: selectedEv.fileHash.substring(0, 8) })}
                 </Button>
               )}
               {actionError && <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700"><AlertTriangle className="size-3 shrink-0" /><span>{actionError}</span></div>}
               <div className="flex gap-2 pt-2">
                 <Button size="sm" variant="outline" className="flex-1" onClick={async () => { setLinkTargetId(''); setLinkTargetType('finding'); try { const f = await getFindingsAction(engagementId); setFindingsList(f) } catch {} setShowLinkDialog(true) }}>
-                  <Link className="size-4 ml-1" />ربط بنتيجة
+                  <Link className="size-4 ml-1" />{t("linkToFinding")}
                 </Button>
                 <Button size="sm" variant="outline" className="flex-1" disabled={selectedEv.state === 'accepted' || selectedEv.state === 'rejected'} onClick={async () => {
                   setActionError(null)
-                  try { const result = await updateEvidenceStateWithEventAction(selectedEv.id, 'accepted', engagementId); if (result.evidence) { setEvidence(prev => prev.map(e => e.id === selectedEv.id ? { ...e, state: 'accepted' } : e)); setSelectedEv({ ...selectedEv, state: 'accepted' }) } } catch { setActionError('فشل التحقق من الدليل') } }}>
-                  <CheckCircle className="size-4 ml-1" />تحقق
+                  try { const result = await updateEvidenceStateWithEventAction(selectedEv.id, 'accepted', engagementId); if (result.evidence) { setEvidence(prev => prev.map(e => e.id === selectedEv.id ? { ...e, state: 'accepted' } : e)); setSelectedEv({ ...selectedEv, state: 'accepted' }) }                   } catch { setActionError(t("verifyFailed")) } }}>
+                  <CheckCircle className="size-4 ml-1" />{t("verify")}
                 </Button>
                 <Button size="sm" variant="outline" className="flex-1" disabled={selectedEv.state === 'accepted' || selectedEv.state === 'rejected'} onClick={async () => {
                   setActionError(null)
-                  try { const result = await updateEvidenceStateWithEventAction(selectedEv.id, 'reviewed', engagementId); if (result.evidence) { setEvidence(prev => prev.map(e => e.id === selectedEv.id ? { ...e, state: 'reviewed' } : e)); setSelectedEv({ ...selectedEv, state: 'reviewed' }) } } catch { setActionError('فشل تحديث الدليل') } }}>
-                  <Link className="size-4 ml-1" />تحديد تمت المراجعة
+                  try { const result = await updateEvidenceStateWithEventAction(selectedEv.id, 'reviewed', engagementId); if (result.evidence) { setEvidence(prev => prev.map(e => e.id === selectedEv.id ? { ...e, state: 'reviewed' } : e)); setSelectedEv({ ...selectedEv, state: 'reviewed' }) }                 } catch { setActionError(t("updateFailed")) } }}>
+                  <Link className="size-4 ml-1" />{t("markReviewed")}
                 </Button>
               </div>
             </div>
