@@ -1,24 +1,39 @@
-import { getDemoFinancialStatements, getDemoDisclosureNotes } from "@/lib/audit/demo-data"
-import { StepNav } from "../step-nav"
-import { GuidedDemoPanel, InsightCallout, MetricCard } from "@/components/enterprise"
+import {
+  getDemoFinancialStatements,
+  getDemoDisclosureNotes,
+} from "@/lib/audit/demo-data";
+import { StepNav } from "../step-nav";
+import {
+  GuidedDemoPanel,
+  InsightCallout,
+  MetricCard,
+} from "@/components/enterprise";
 
 function formatSAR(n: number) {
-  if (n === 0) return "—"
-  return Math.abs(n).toLocaleString("ar-SA") + " ر.س"
+  if (n === 0) return "—";
+  return Math.abs(n).toLocaleString("ar-SA") + " ر.س";
 }
 
 export default function AuditosStatements() {
-  const statements = getDemoFinancialStatements()
-  const notes = getDemoDisclosureNotes()
-  const incomeStmt = statements.find((s) => s.statementType === "income_statement")
-  const balanceSheet = statements.find((s) => s.statementType === "balance_sheet")
+  const statements = getDemoFinancialStatements();
+  const notes = getDemoDisclosureNotes();
+  const incomeStmt = statements.find(
+    (s) => s.statementType === "income_statement",
+  );
+  const balanceSheet = statements.find(
+    (s) => s.statementType === "balance_sheet",
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
-      <div className="mb-8 space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">المرحلة 3 — القوائم المالية</p>
-        <h1 className="text-2xl font-black sm:text-3xl">القوائم المالية</h1>
-        <p className="text-muted-foreground">
+      <div className="mb-8 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          المرحلة 3 — القوائم المالية
+        </p>
+        <h1 className="mt-2 text-2xl font-black sm:text-3xl">
+          القوائم المالية
+        </h1>
+        <p className="mt-2 text-muted-foreground">
           قائمة الدخل والمركز المالي مُولّدة تلقائيًا من تصنيف الحسابات
         </p>
       </div>
@@ -33,7 +48,11 @@ export default function AuditosStatements() {
         className="mb-8"
       />
 
-      <InsightCallout text="تم توليد القوائم المالية تلقائيًا. 7 إيضاحات مسودة، بعضها يحتاج معلومات إضافية." type="info" className="mb-8" />
+      <InsightCallout
+        text="تم توليد القوائم المالية تلقائيًا. 7 إيضاحات مسودة، بعضها يحتاج معلومات إضافية."
+        type="info"
+        className="mb-8"
+      />
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2">
         <MetricCard label="قوائم مالية مولّدة" value={statements.length} />
@@ -42,9 +61,11 @@ export default function AuditosStatements() {
 
       <div className="mb-8 grid gap-8 lg:grid-cols-2">
         {incomeStmt && (
-          <div className="rounded-xl border bg-background p-6 shadow-sm">
+          <div className="rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
             <h2 className="mb-1 text-lg font-bold">{incomeStmt.title}</h2>
-            <p className="mb-4 text-xs text-muted-foreground">للسنة المنتهية في 31 ديسمبر 2025 — بالريال السعودي</p>
+            <p className="mb-4 text-xs text-muted-foreground">
+              للسنة المنتهية في 31 ديسمبر 2025 — بالريال السعودي
+            </p>
             <div className="space-y-1 text-sm">
               {incomeStmt.lines.map((line) => (
                 <div
@@ -55,7 +76,9 @@ export default function AuditosStatements() {
                 >
                   <span>{line.label}</span>
                   <span className="font-mono text-xs">
-                    {line.isTotal || line.amount !== 0 ? formatSAR(line.amount) : ""}
+                    {line.isTotal || line.amount !== 0
+                      ? formatSAR(line.amount)
+                      : ""}
                   </span>
                 </div>
               ))}
@@ -64,9 +87,11 @@ export default function AuditosStatements() {
         )}
 
         {balanceSheet && (
-          <div className="rounded-xl border bg-background p-6 shadow-sm">
+          <div className="rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
             <h2 className="mb-1 text-lg font-bold">{balanceSheet.title}</h2>
-            <p className="mb-4 text-xs text-muted-foreground">كما في 31 ديسمبر 2025 — بالريال السعودي</p>
+            <p className="mb-4 text-xs text-muted-foreground">
+              كما في 31 ديسمبر 2025 — بالريال السعودي
+            </p>
             <div className="space-y-1 text-sm">
               {balanceSheet.lines.map((line) => (
                 <div
@@ -77,7 +102,9 @@ export default function AuditosStatements() {
                 >
                   <span>{line.label}</span>
                   <span className="font-mono text-xs">
-                    {line.isTotal || line.amount !== 0 ? formatSAR(line.amount) : ""}
+                    {line.isTotal || line.amount !== 0
+                      ? formatSAR(line.amount)
+                      : ""}
                   </span>
                 </div>
               ))}
@@ -86,11 +113,14 @@ export default function AuditosStatements() {
         )}
       </div>
 
-      <div className="mb-8 rounded-xl border bg-background p-6 shadow-sm">
+      <div className="mb-8 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-bold">الإيضاحات ({notes.length})</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {notes.map((note) => (
-            <div key={note.id} className="rounded-lg border bg-muted/20 p-4">
+            <div
+              key={note.id}
+              className="rounded-2xl border border-border/60 bg-background/80 p-4"
+            >
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold">
                   إيضاح {note.noteNumber}: {note.title}
@@ -101,14 +131,17 @@ export default function AuditosStatements() {
                   </span>
                 )}
               </div>
-              <p className="mt-2 text-xs leading-5 text-muted-foreground line-clamp-3">{note.content}</p>
-              {note.missingInformation && note.missingInformation.length > 0 && (
-                <div className="mt-2">
-                  <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
-                    {note.status === "draft" ? "مسودة" : "تحتاج معلومات"}
-                  </span>
-                </div>
-              )}
+              <p className="mt-2 text-xs leading-5 text-muted-foreground line-clamp-3">
+                {note.content}
+              </p>
+              {note.missingInformation &&
+                note.missingInformation.length > 0 && (
+                  <div className="mt-2">
+                    <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
+                      {note.status === "draft" ? "مسودة" : "تحتاج معلومات"}
+                    </span>
+                  </div>
+                )}
             </div>
           ))}
         </div>
@@ -116,5 +149,5 @@ export default function AuditosStatements() {
 
       <StepNav current="/auditos/statements" />
     </div>
-  )
+  );
 }

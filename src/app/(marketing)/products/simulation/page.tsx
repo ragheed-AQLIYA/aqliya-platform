@@ -1,11 +1,18 @@
-import Link from "next/link"
-import type { Metadata } from "next"
-import { SectionEyebrow, BeforeAfterBlock, ProductWorkflowVisual, OutputCard, EnterpriseCTA } from "@/components/enterprise"
+import Link from "next/link";
+import type { Metadata } from "next";
+import {
+  SectionEyebrow,
+  BeforeAfterBlock,
+  ProductWorkflowVisual,
+  OutputCard,
+  EnterpriseCTA,
+} from "@/components/enterprise";
 
 export const metadata: Metadata = {
   title: "أنظمة المحاكاة | AQLIYA",
-  description: "SimulationOS خط نظام لمحاكاة السيناريوهات مبني على AQLIYA Intelligence Core، يدعم المقارنة والتقدير قبل التنفيذ داخل مسار قابل للمراجعة والاعتماد.",
-}
+  description:
+    "SimulationOS خط نظام لمحاكاة السيناريوهات مبني على AQLIYA Intelligence Core، يدعم المقارنة والتقدير قبل التنفيذ داخل مسار قابل للمراجعة والاعتماد.",
+};
 
 const outputs = [
   "Scenario Report",
@@ -13,33 +20,47 @@ const outputs = [
   "Risk View",
   "Cost/Benefit Simulation",
   "Recommendation Input",
-]
+];
 
 export default function SimulationProductPage() {
   return (
     <div className="flex flex-col gap-20 sm:gap-28">
-      {/* 1. Product Hero */}
-      <section className="border-b">
+      <section className="hero-gradient relative overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px]" />
         <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
-          <Link href="/products" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link
+            href="/products"
+            className="relative text-sm text-white/45 hover:text-white/70 transition-colors"
+          >
             ← العودة إلى خطوط عقلية
           </Link>
-          <h1 className="mt-6 text-3xl font-black sm:text-4xl">SimulationOS — نظام محاكاة السيناريوهات</h1>
-          <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            خط نظام تحت عقلية يساعد المؤسسات على اختبار السيناريوهات قبل التنفيذ ومقارنة أثر الخيارات على النتائج والتكلفة والمخاطر، ضمن مسار محاكاة مبني على AQLIYA Intelligence Core.
-          </p>
-          <div className="mt-4 flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-              نظام قابل للتفعيل حسب نطاق المؤسسة
+          <div className="relative max-w-4xl">
+            <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
+              <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
+              SimulationOS / Scenario Intelligence
             </span>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link href="/custom-product" className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              ناقش تفعيل النظام
-            </Link>
-            <Link href="/products" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
-              استكشف خطوط عقلية
-            </Link>
+            <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
+              اختبار القرار قبل تنفيذه يجب أن يكون جزءًا من المسار لا تمرينًا
+              منفصلًا
+            </h1>
+            <p className="mt-5 text-lg leading-8 text-white/62">
+              SimulationOS يساعد المؤسسة على اختبار السيناريوهات ومقارنة أثر
+              الخيارات على النتائج والتكلفة والمخاطر قبل التنفيذ، داخل مسار
+              محاكاة قابل للمراجعة والاعتماد.
+            </p>
+            <div className="mt-4 flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
+                نظام قابل للتفعيل حسب نطاق المؤسسة
+              </span>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link href="/custom-product" className="btn-primary px-6">
+                ناقش تفعيل النظام
+              </Link>
+              <Link href="/products" className="btn-secondary px-6">
+                استكشف خطوط عقلية
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -53,32 +74,45 @@ export default function SimulationProductPage() {
         />
         <div className="mt-10">
           <BeforeAfterBlock
-            before={["قرارات تتخذ دون اختبار الأثر", "توقعات غير مدعومة ببيانات", "صعوبة مقارنة السيناريوهات", "مخاطر غير محسوبة", "تكاليف غير متوقعة"]}
-            after={["سيناريوهات مدروسة وقابلة للمقارنة", "أثر واضح على التكلفة والإيرادات", "تقييم مخاطر منهجي", "دعم القرار بالبيانات", "توقعات واقعية وموثقة"]}
+            before={[
+              "قرارات تتخذ دون اختبار الأثر",
+              "توقعات غير مدعومة ببيانات",
+              "صعوبة مقارنة السيناريوهات",
+              "مخاطر غير محسوبة",
+              "تكاليف غير متوقعة",
+            ]}
+            after={[
+              "سيناريوهات مدروسة وقابلة للمقارنة",
+              "أثر واضح على التكلفة والإيرادات",
+              "تقييم مخاطر منهجي",
+              "دعم القرار بالبيانات",
+              "توقعات واقعية وموثقة",
+            ]}
           />
         </div>
       </section>
 
       {/* 3. Workflow Visual */}
       <section className="mx-auto max-w-7xl px-6">
-        <SectionEyebrow
-          label="سير العمل"
-          title="كيف يعمل النظام؟"
-        />
+        <SectionEyebrow label="سير العمل" title="كيف يعمل النظام؟" />
         <div className="mt-10">
           <ProductWorkflowVisual
             title="من المدخلات إلى دعم القرار"
-            steps={["المدخلات", "نموذج السيناريو", "الافتراضات", "الأثر", "المقارنة", "دعم القرار"]}
+            steps={[
+              "المدخلات",
+              "نموذج السيناريو",
+              "الافتراضات",
+              "الأثر",
+              "المقارنة",
+              "دعم القرار",
+            ]}
           />
         </div>
       </section>
 
       {/* 4. Outputs */}
       <section className="mx-auto max-w-7xl px-6">
-        <SectionEyebrow
-          label="المخرجات"
-          title="ماذا ينتج النظام؟"
-        />
+        <SectionEyebrow label="المخرجات" title="ماذا ينتج النظام؟" />
         <div className="mt-10">
           <OutputCard title="تقارير المحاكاة والمقارنات" items={outputs} />
         </div>
@@ -99,12 +133,16 @@ export default function SimulationProductPage() {
           label="سيناريو تطبيقي"
           title="محاكاة أثر تغيير الموردين"
         />
-        <div className="mt-10 rounded-xl border bg-muted/30 p-6 sm:p-8">
+        <div className="mt-10 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm sm:p-8">
           <p className="text-base leading-8 text-muted-foreground">
-            <strong className="text-foreground">قبل:</strong> اختيار الموردين يعتمد على السعر فقط، دون فهم الأثر الكلي على الجودة، الالتزام، والمحتوى المحلي.
+            <strong className="text-foreground">قبل:</strong> اختيار الموردين
+            يعتمد على السعر فقط، دون فهم الأثر الكلي على الجودة، الالتزام،
+            والمحتوى المحلي.
           </p>
           <p className="mt-4 text-base leading-8 text-muted-foreground">
-            <strong className="text-foreground">بعد:</strong> محاكاة شاملة تقارن بين الموردين بناءً على السعر، الجودة، الالتزام، المحتوى المحلي، والمخاطر التشغيلية.
+            <strong className="text-foreground">بعد:</strong> محاكاة شاملة تقارن
+            بين الموردين بناءً على السعر، الجودة، الالتزام، المحتوى المحلي،
+            والمخاطر التشغيلية.
           </p>
         </div>
       </section>
@@ -120,5 +158,5 @@ export default function SimulationProductPage() {
         />
       </section>
     </div>
-  )
+  );
 }

@@ -1,23 +1,30 @@
-import { getDemoTrialBalance } from "@/lib/audit/demo-data"
-import { StepNav } from "../step-nav"
-import { GuidedDemoPanel, InsightCallout, MetricCard } from "@/components/enterprise"
+import { getDemoTrialBalance } from "@/lib/audit/demo-data";
+import { StepNav } from "../step-nav";
+import {
+  GuidedDemoPanel,
+  InsightCallout,
+  MetricCard,
+} from "@/components/enterprise";
 
 function formatSAR(n: number) {
-  return n.toLocaleString("ar-SA") + " ر.س"
+  return n.toLocaleString("ar-SA") + " ر.س";
 }
 
 export default function AuditosTrialBalance() {
-  const { trialBalance, lines } = getDemoTrialBalance()
-  const totalDebits = lines.reduce((s, l) => s + l.debitAmount, 0)
-  const totalCredits = lines.reduce((s, l) => s + l.creditAmount, 0)
+  const { trialBalance, lines } = getDemoTrialBalance();
+  const totalDebits = lines.reduce((s, l) => s + l.debitAmount, 0);
+  const totalCredits = lines.reduce((s, l) => s + l.creditAmount, 0);
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
-      <div className="mb-8 space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">المرحلة 1 — استيراد البيانات</p>
-        <h1 className="text-2xl font-black sm:text-3xl">ميزان المراجعة</h1>
-        <p className="text-muted-foreground">
-          تم استيراد {lines.length} حسابًا من ملف Excel — gulf_trading_tb_fy2025.xlsx
+      <div className="mb-8 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          المرحلة 1 — استيراد البيانات
+        </p>
+        <h1 className="mt-2 text-2xl font-black sm:text-3xl">ميزان المراجعة</h1>
+        <p className="mt-2 text-muted-foreground">
+          تم استيراد {lines.length} حسابًا من ملف Excel —
+          gulf_trading_tb_fy2025.xlsx
         </p>
       </div>
 
@@ -31,7 +38,11 @@ export default function AuditosTrialBalance() {
         className="mb-8"
       />
 
-      <InsightCallout text="تم استيراد 22 حسابًا بنجاح. الفرق بين المدين والدائن صفر — الميزان متوازن." type="success" className="mb-8" />
+      <InsightCallout
+        text="تم استيراد 22 حسابًا بنجاح. الفرق بين المدين والدائن صفر — الميزان متوازن."
+        type="success"
+        className="mb-8"
+      />
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <MetricCard label="إجمالي المدين" value={formatSAR(totalDebits)} />
@@ -39,7 +50,7 @@ export default function AuditosTrialBalance() {
         <MetricCard label="الفرق" value={formatSAR(trialBalance.variance)} />
       </div>
 
-      <div className="mb-8 overflow-x-auto rounded-xl border shadow-sm">
+      <div className="mb-8 overflow-x-auto rounded-[24px] border border-border/70 shadow-sm">
         <table className="w-full text-sm">
           <thead className="border-b bg-muted/40 text-xs font-semibold uppercase text-muted-foreground">
             <tr>
@@ -54,7 +65,9 @@ export default function AuditosTrialBalance() {
           <tbody className="divide-y">
             {lines.map((line) => (
               <tr key={line.id} className="hover:bg-muted/30">
-                <td className="px-4 py-2.5 font-mono text-xs">{line.accountCode}</td>
+                <td className="px-4 py-2.5 font-mono text-xs">
+                  {line.accountCode}
+                </td>
                 <td className="px-4 py-2.5">{line.accountName}</td>
                 <td className="px-4 py-2.5 text-xs text-muted-foreground">
                   {line.accountType === "asset" && "أصل"}
@@ -64,16 +77,34 @@ export default function AuditosTrialBalance() {
                   {line.accountType === "revenue" && "إيراد"}
                   {line.accountType === "expense" && "مصروف"}
                 </td>
-                <td className="px-4 py-2.5 text-left font-mono text-xs">{line.debitAmount > 0 ? line.debitAmount.toLocaleString() : "-"}</td>
-                <td className="px-4 py-2.5 text-left font-mono text-xs">{line.creditAmount > 0 ? line.creditAmount.toLocaleString() : "-"}</td>
-                <td className="px-4 py-2.5 text-left font-mono text-xs">{formatSAR(line.balance)}</td>
+                <td className="px-4 py-2.5 text-left font-mono text-xs">
+                  {line.debitAmount > 0
+                    ? line.debitAmount.toLocaleString()
+                    : "-"}
+                </td>
+                <td className="px-4 py-2.5 text-left font-mono text-xs">
+                  {line.creditAmount > 0
+                    ? line.creditAmount.toLocaleString()
+                    : "-"}
+                </td>
+                <td className="px-4 py-2.5 text-left font-mono text-xs">
+                  {formatSAR(line.balance)}
+                </td>
               </tr>
             ))}
             <tr className="border-t-2 bg-muted/20 font-bold">
-              <td className="px-4 py-2.5" colSpan={3}>الإجمالي</td>
-              <td className="px-4 py-2.5 text-left font-mono text-xs">{totalDebits.toLocaleString()}</td>
-              <td className="px-4 py-2.5 text-left font-mono text-xs">{totalCredits.toLocaleString()}</td>
-              <td className="px-4 py-2.5 text-left font-mono text-xs">{formatSAR(trialBalance.variance)}</td>
+              <td className="px-4 py-2.5" colSpan={3}>
+                الإجمالي
+              </td>
+              <td className="px-4 py-2.5 text-left font-mono text-xs">
+                {totalDebits.toLocaleString()}
+              </td>
+              <td className="px-4 py-2.5 text-left font-mono text-xs">
+                {totalCredits.toLocaleString()}
+              </td>
+              <td className="px-4 py-2.5 text-left font-mono text-xs">
+                {formatSAR(trialBalance.variance)}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -81,5 +112,5 @@ export default function AuditosTrialBalance() {
 
       <StepNav current="/auditos/trial-balance" />
     </div>
-  )
+  );
 }

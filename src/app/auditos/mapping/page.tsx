@@ -1,19 +1,26 @@
-import { getDemoMappings } from "@/lib/audit/demo-data"
-import { StepNav } from "../step-nav"
-import { GuidedDemoPanel, InsightCallout, MetricCard } from "@/components/enterprise"
+import { getDemoMappings } from "@/lib/audit/demo-data";
+import { StepNav } from "../step-nav";
+import {
+  GuidedDemoPanel,
+  InsightCallout,
+  MetricCard,
+} from "@/components/enterprise";
 
 export default function AuditosMapping() {
-  const mappings = getDemoMappings()
-  const confirmed = mappings.filter((m) => m.status === "confirmed").length
-  const pending = mappings.filter((m) => m.status === "pending").length
+  const mappings = getDemoMappings();
+  const confirmed = mappings.filter((m) => m.status === "confirmed").length;
+  const pending = mappings.filter((m) => m.status === "pending").length;
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
-      <div className="mb-8 space-y-2 border-b pb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">المرحلة 2 — تصنيف الحسابات</p>
-        <h1 className="text-2xl font-black sm:text-3xl">تصنيف الحسابات</h1>
-        <p className="text-muted-foreground">
-          {confirmed} حسابًا مصنفًا · {pending} معلق · الربط بدليل الحسابات المعياري IFRS for SMEs
+      <div className="mb-8 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          المرحلة 2 — تصنيف الحسابات
+        </p>
+        <h1 className="mt-2 text-2xl font-black sm:text-3xl">تصنيف الحسابات</h1>
+        <p className="mt-2 text-muted-foreground">
+          {confirmed} حسابًا مصنفًا · {pending} معلق · الربط بدليل الحسابات
+          المعياري IFRS for SMEs
         </p>
       </div>
 
@@ -27,15 +34,22 @@ export default function AuditosMapping() {
         className="mb-8"
       />
 
-      <InsightCallout text="تم تصنيف 21 من 22 حسابًا تلقائيًا بمساعدة الذكاء المؤسسي. حساب واحد معلق للمراجعة البشرية." type="info" className="mb-8" />
+      <InsightCallout
+        text="تم تصنيف 21 من 22 حسابًا تلقائيًا بمساعدة الذكاء المؤسسي. حساب واحد معلق للمراجعة البشرية."
+        type="info"
+        className="mb-8"
+      />
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <MetricCard label="مؤكد" value={confirmed} />
         <MetricCard label="معلق" value={pending} />
-        <MetricCard label="بمساعدة الذكاء المؤسسي" value={mappings.filter((m) => m.mappingType?.includes("ai")).length} />
+        <MetricCard
+          label="بمساعدة الذكاء المؤسسي"
+          value={mappings.filter((m) => m.mappingType?.includes("ai")).length}
+        />
       </div>
 
-      <div className="mb-8 overflow-x-auto rounded-xl border shadow-sm">
+      <div className="mb-8 overflow-x-auto rounded-[24px] border border-border/70 shadow-sm">
         <table className="w-full text-sm">
           <thead className="border-b bg-muted/40 text-xs font-semibold uppercase text-muted-foreground">
             <tr>
@@ -50,16 +64,22 @@ export default function AuditosMapping() {
             {mappings.map((m) => (
               <tr key={m.id} className="hover:bg-muted/30">
                 <td className="px-4 py-2.5">
-                  <span className="font-mono text-xs text-muted-foreground">{m.sourceAccountCode}</span>
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {m.sourceAccountCode}
+                  </span>
                   <span className="mx-1">·</span>
                   <span>{m.sourceAccountName}</span>
                 </td>
                 <td className="px-4 py-2.5">
-                  <span className="font-mono text-xs text-muted-foreground">{m.canonicalAccountCode}</span>
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {m.canonicalAccountCode}
+                  </span>
                   <span className="mx-1">·</span>
                   <span>{m.canonicalAccountName}</span>
                 </td>
-                <td className="px-4 py-2.5 text-xs">{m.statementClassification}</td>
+                <td className="px-4 py-2.5 text-xs">
+                  {m.statementClassification}
+                </td>
                 <td className="px-4 py-2.5">
                   <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">
                     {m.mappingType === "confirmed_ai" && "ذكاء مؤسسي"}
@@ -68,9 +88,13 @@ export default function AuditosMapping() {
                   </span>
                 </td>
                 <td className="px-4 py-2.5">
-                  <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                    m.status === "confirmed" ? "bg-green-50 text-green-700" : "bg-amber-50 text-amber-700"
-                  }`}>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                      m.status === "confirmed"
+                        ? "bg-green-50 text-green-700"
+                        : "bg-amber-50 text-amber-700"
+                    }`}
+                  >
                     {m.status === "confirmed" ? "مؤكد" : "معلق"}
                   </span>
                 </td>
@@ -82,5 +106,5 @@ export default function AuditosMapping() {
 
       <StepNav current="/auditos/mapping" />
     </div>
-  )
+  );
 }

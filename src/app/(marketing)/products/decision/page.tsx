@@ -1,11 +1,18 @@
-import Link from "next/link"
-import type { Metadata } from "next"
-import { SectionEyebrow, BeforeAfterBlock, ProductWorkflowVisual, OutputCard, EnterpriseCTA } from "@/components/enterprise"
+import Link from "next/link";
+import type { Metadata } from "next";
+import {
+  SectionEyebrow,
+  BeforeAfterBlock,
+  ProductWorkflowVisual,
+  OutputCard,
+  EnterpriseCTA,
+} from "@/components/enterprise";
 
 export const metadata: Metadata = {
   title: "أنظمة اتخاذ القرار | AQLIYA",
-  description: "DecisionOS خط نظام لحوكمة القرارات مبني على AQLIYA Intelligence Core، يربط البدائل والمعايير والمخاطر والأدلة ضمن مسار قابل للمراجعة والاعتماد.",
-}
+  description:
+    "DecisionOS خط نظام لحوكمة القرارات مبني على AQLIYA Intelligence Core، يربط البدائل والمعايير والمخاطر والأدلة ضمن مسار قابل للمراجعة والاعتماد.",
+};
 
 const outputs = [
   "Decision Brief",
@@ -14,34 +21,47 @@ const outputs = [
   "Risk Summary",
   "Recommendation Report",
   "Approval Log",
-]
+];
 
 export default function DecisionProductPage() {
   return (
     <div className="flex flex-col gap-20 sm:gap-28">
-      {/* 1. Product Hero */}
-      <section className="border-b">
+      <section className="hero-gradient relative overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px]" />
         <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
-          <Link href="/products" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link
+            href="/products"
+            className="relative text-sm text-white/45 hover:text-white/70 transition-colors"
+          >
             ← العودة إلى خطوط عقلية
           </Link>
-          <h1 className="mt-6 text-3xl font-black sm:text-4xl">DecisionOS — نظام حوكمة القرارات</h1>
-          <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            خط نظام تحت عقلية ينظم القرارات المعقدة من تحديد المشكلة إلى مقارنة البدائل وتقييم المخاطر وتوثيق المبررات، ضمن مسار محكوم مبني على AQLIYA Intelligence Core.
-          </p>
-          <div className="mt-4 flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              خط نظام ضمن عقلية
+          <div className="relative max-w-4xl">
+            <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
+              <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
+              DecisionOS / Governed Decisions
             </span>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link href="/custom-product" className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              ناقش تفعيل النظام
-            </Link>
-            <Link href="/products" className="inline-flex h-11 items-center justify-center rounded-md border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted">
-              استكشف خطوط عقلية
-            </Link>
+            <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
+              حوكمة القرار بدل تركه لمذكرات متفرقة ونقاشات غير قابلة للتتبع
+            </h1>
+            <p className="mt-5 text-lg leading-8 text-white/62">
+              DecisionOS يحول القرارات المعقدة من نقاشات وملفات متفرقة إلى مسار
+              مؤسسي واضح: مشكلة، بدائل، معايير، مخاطر، أدلة، توصية، واعتماد داخل
+              منطق واحد مبني على AQLIYA Intelligence Core.
+            </p>
+            <div className="mt-4 flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                خط نظام ضمن عقلية
+              </span>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link href="/custom-product" className="btn-primary px-6">
+                ناقش تفعيل النظام
+              </Link>
+              <Link href="/products" className="btn-secondary px-6">
+                استكشف خطوط عقلية
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -55,32 +75,46 @@ export default function DecisionProductPage() {
         />
         <div className="mt-10">
           <BeforeAfterBlock
-            before={["قرارات تعتمد على النقاشات فقط", "ملفات ومبررات غير موثقة", "تقييم مخاطر غير منهجي", "صعوبة تتبع سبب القرار", "اعتمادات غير واضحة"]}
-            after={["مسار قرار موثق ومنهجي", "معايير تقييم واضحة وقابلة للقياس", "ملخص مخاطر مرتبط بالبدائل", "توصية مدعومة بالأدلة", "سجل اعتماد كامل"]}
+            before={[
+              "قرارات تعتمد على النقاشات فقط",
+              "ملفات ومبررات غير موثقة",
+              "تقييم مخاطر غير منهجي",
+              "صعوبة تتبع سبب القرار",
+              "اعتمادات غير واضحة",
+            ]}
+            after={[
+              "مسار قرار موثق ومنهجي",
+              "معايير تقييم واضحة وقابلة للقياس",
+              "ملخص مخاطر مرتبط بالبدائل",
+              "توصية مدعومة بالأدلة",
+              "سجل اعتماد كامل",
+            ]}
           />
         </div>
       </section>
 
       {/* 3. Workflow Visual */}
       <section className="mx-auto max-w-7xl px-6">
-        <SectionEyebrow
-          label="سير العمل"
-          title="كيف يعمل النظام؟"
-        />
+        <SectionEyebrow label="سير العمل" title="كيف يعمل النظام؟" />
         <div className="mt-10">
           <ProductWorkflowVisual
             title="من المشكلة إلى الاعتماد"
-            steps={["المشكلة", "البدائل", "المعايير", "المخاطر", "الأدلة", "التوصية", "الاعتماد"]}
+            steps={[
+              "المشكلة",
+              "البدائل",
+              "المعايير",
+              "المخاطر",
+              "الأدلة",
+              "التوصية",
+              "الاعتماد",
+            ]}
           />
         </div>
       </section>
 
       {/* 4. Outputs */}
       <section className="mx-auto max-w-7xl px-6">
-        <SectionEyebrow
-          label="المخرجات"
-          title="ماذا ينتج النظام؟"
-        />
+        <SectionEyebrow label="المخرجات" title="ماذا ينتج النظام؟" />
         <div className="mt-10">
           <OutputCard title="تقارير وسجلات القرار" items={outputs} />
         </div>
@@ -101,12 +135,16 @@ export default function DecisionProductPage() {
           label="سيناريو تطبيقي"
           title="لجنة المشتريات في مؤسسة كبيرة"
         />
-        <div className="mt-10 rounded-xl border bg-muted/30 p-6 sm:p-8">
+        <div className="mt-10 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm sm:p-8">
           <p className="text-base leading-8 text-muted-foreground">
-            <strong className="text-foreground">قبل:</strong> قرارات الشراء تتم عبر اجتماعات متفرقة، عروض أسعار غير مقارنة بمنهجية واضحة، ومبررات غير موثقة.
+            <strong className="text-foreground">قبل:</strong> قرارات الشراء تتم
+            عبر اجتماعات متفرقة، عروض أسعار غير مقارنة بمنهجية واضحة، ومبررات
+            غير موثقة.
           </p>
           <p className="mt-4 text-base leading-8 text-muted-foreground">
-            <strong className="text-foreground">بعد:</strong> كل قرار يمر بمسار واضح: تحديد الحاجة → مقارنة البدائل → تقييم المخاطر → توثيق المبررات → إصدار التوصية → الاعتماد الرسمي.
+            <strong className="text-foreground">بعد:</strong> كل قرار يمر بمسار
+            واضح: تحديد الحاجة → مقارنة البدائل → تقييم المخاطر → توثيق المبررات
+            → إصدار التوصية → الاعتماد الرسمي.
           </p>
         </div>
       </section>
@@ -122,5 +160,5 @@ export default function DecisionProductPage() {
         />
       </section>
     </div>
-  )
+  );
 }
