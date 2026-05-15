@@ -71,7 +71,7 @@ function AuditSidebar() {
     <aside className="flex h-full w-60 shrink-0 flex-col border-l bg-background overflow-x-hidden">
       <div className="flex h-14 shrink-0 items-center border-b px-3 overflow-hidden">
         <Link href="/audit" className="flex items-center gap-2 min-w-0" aria-label="AQLIYA — Mind The Future">
-          <Image src="/brand/aqliya-mark.svg" alt="AQLIYA — Mind The Future" width={32} height={32} priority className="shrink-0" />
+          <Image src="/brand/aqliya-logo-approved.png" alt="AQLIYA — Mind The Future" width={32} height={32} priority className="shrink-0" />
           <div className="min-w-0 leading-tight">
             <div className="text-sm font-black tracking-wide text-primary truncate">AQLIYA</div>
             <div className="text-[9px] font-semibold uppercase tracking-[0.15em] text-muted-foreground truncate">
