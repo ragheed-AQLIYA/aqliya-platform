@@ -15,20 +15,20 @@ export function GovernanceDemo() {
 
   return (
     <div className="p-8 space-y-8 max-w-3xl">
-      <h1 className="text-2xl font-bold">Governance UI Components Demo</h1>
+      <h1 className="text-2xl font-bold">عرض توضيحي لمكونات الحوكمة</h1>
 
       <section>
-        <h2 className="text-lg font-semibold mb-2">DraftOnlyBanner</h2>
+        <h2 className="text-lg font-semibold mb-2">شعار المسودة فقط</h2>
         <DraftOnlyBanner taskType="statement_drafting" />
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold mb-2">ReviewRequiredNotice</h2>
+        <h2 className="text-lg font-semibold mb-2">إشعار المراجعة المطلوبة</h2>
         <ReviewRequiredNotice />
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold mb-2">EvidenceStatusBadge — All Statuses</h2>
+        <h2 className="text-lg font-semibold mb-2">شارة حالة الدليل — جميع الحالات</h2>
         <div className="flex flex-wrap gap-2">
           {evidenceStatuses.map((status) => (
             <EvidenceStatusBadge key={status} status={status} />
@@ -37,18 +37,18 @@ export function GovernanceDemo() {
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold mb-2">EscalationBadge — All Levels</h2>
+        <h2 className="text-lg font-semibold mb-2">شارة التصعيد — جميع المستويات</h2>
         <div className="flex flex-wrap gap-2">
           {escalationLevels.map((level) => (
-            <EscalationBadge key={level} level={level} reason={level === 'blocked' ? 'Approval bypass attempt detected' : undefined} />
+            <EscalationBadge key={level} level={level} reason={level === 'blocked' ? 'محاولة تجاوز الاعتماد' : undefined} />
           ))}
         </div>
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold mb-2">ProvenanceSummary (mock data)</h2>
+        <h2 className="text-lg font-semibold mb-2">ملخص التتبع (بيانات تجريبية)</h2>
         <ProvenanceSummary
-          taskType="Statement Drafting"
+          taskType="صياغة القوائم"
           doctrineCount={3}
           governanceCount={5}
           evidenceStatus="partial"
@@ -58,7 +58,7 @@ export function GovernanceDemo() {
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold mb-2">GovernanceContextPanel (mock data)</h2>
+        <h2 className="text-lg font-semibold mb-2">لوحة سياق الحوكمة (بيانات تجريبية)</h2>
         <GovernanceContextPanel
           taskType="statement_drafting"
           evidenceStatus="partial"

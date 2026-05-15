@@ -39,7 +39,7 @@ interface EngagementTabsProps {
 
 const tabDefs = [
   { key: "overview", label: "Overview", icon: LayoutDashboard },
-  { key: "trial-balance", label: "Trial Balance", icon: FileSpreadsheet },
+  { key: "trial-balance", label: "ميزان المراجعة", icon: FileSpreadsheet },
   { key: "mapping", label: "Mapping", icon: GitCompareArrows },
   { key: "validation", label: "Validation", icon: ShieldCheck },
   { key: "statements", label: "Statements", icon: FileText },
@@ -47,10 +47,10 @@ const tabDefs = [
   { key: "evidence", label: "Evidence", icon: FolderOpen },
   { key: "findings", label: "Findings", icon: SearchCheck },
   { key: "recommendations", label: "Recommendations", icon: ListChecks },
-  { key: "review", label: "Reviews", icon: Eye },
+  { key: "review", label: "المراجعات", icon: Eye },
   { key: "approval", label: "Approval", icon: CheckCircle2 },
   { key: "publication", label: "Publication", icon: FileOutput },
-  { key: "audit-trail", label: "Audit Trail", icon: History },
+  { key: "audit-trail", label: "سجل التدقيق", icon: History },
   { key: "pilot", label: "Pilot", icon: Rocket },
 ]
 

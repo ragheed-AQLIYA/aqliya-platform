@@ -132,6 +132,8 @@
       "fileTypeLabel": "نوع الملف",
       "imageJpg": "صورة (JPG)",
       "imagePng": "صورة (PNG)",
+      "excelXlsx": "إكسل (XLSX)",
+      "wordDocx": "وورد (DOCX)",
       "cancel": "إلغاء",
       "requesting": "جارٍ الطلب...",
       "requestFailed": "فشل إنشاء طلب الدليل",

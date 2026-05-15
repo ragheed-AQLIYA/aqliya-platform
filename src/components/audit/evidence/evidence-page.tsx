@@ -249,8 +249,8 @@ export default function EvidencePage() {
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="pdf">PDF</SelectItem>
-                <SelectItem value="xlsx">Excel (XLSX)</SelectItem>
-                <SelectItem value="docx">Word (DOCX)</SelectItem>
+                <SelectItem value="xlsx">{t("excelXlsx")}</SelectItem>
+                <SelectItem value="docx">{t("wordDocx")}</SelectItem>
                 <SelectItem value="jpg">{t("imageJpg")}</SelectItem>
                 <SelectItem value="png">{t("imagePng")}</SelectItem>
                 <SelectItem value="csv">CSV</SelectItem>

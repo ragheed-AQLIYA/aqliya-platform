@@ -22,9 +22,9 @@ interface EngagementFormProps {
 const teamRoles = ["partner", "manager", "reviewer", "operator"] as const
 
 const engagementTypeLabels: Record<string, string> = {
-  full_audit: "Full Audit",
-  review: "Review",
-  agreed_upon_procedures: "Agreed Upon Procedures",
+  full_audit: "تدقيق كامل",
+  review: "مراجعة",
+  agreed_upon_procedures: "إجراءات متفق عليها",
 }
 
 export function EngagementForm({ open, onClose, onCreated, engagement, users = [], organizationId }: EngagementFormProps) {
@@ -96,35 +96,35 @@ function FormContent({
   return (
     <DialogContent className="sm:max-w-lg">
       <DialogHeader>
-        <DialogTitle>{engagement ? "Edit Engagement" : "Create Engagement"}</DialogTitle>
+        <DialogTitle>{engagement ? "تعديل الارتباط" : "إنشاء ارتباط"}</DialogTitle>
         <DialogDescription>
-          {engagement ? "Update the audit engagement details." : "Set up a new audit engagement."}
+          {engagement ? "تحديث تفاصيل ارتباط التدقيق." : "إعداد ارتباط تدقيق جديد."}
         </DialogDescription>
       </DialogHeader>
 
       <div className="grid gap-4 py-4">
         <div className="grid gap-2">
-          <Label htmlFor="client-name">Client Name</Label>
+          <Label htmlFor="client-name">اسم العميل</Label>
           <Input
             id="client-name"
             value={clientName}
             onChange={e => setClientName(e.target.value)}
-            placeholder="e.g. Gulf Trading Co."
+            placeholder="مثال: شركة الخليج التجارية"
           />
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="fiscal-period">Fiscal Period</Label>
+          <Label htmlFor="fiscal-period">الفترة المالية</Label>
           <Input
             id="fiscal-period"
             value={fiscalPeriod}
             onChange={e => setFiscalPeriod(e.target.value)}
-            placeholder="e.g. FY2025"
+            placeholder="مثال: 2025"
           />
         </div>
 
         <div className="grid gap-2">
-          <Label>Engagement Type</Label>
+          <Label>نوع الارتباط</Label>
           <Select value={engagementType} onValueChange={(val) => setEngagementType(val || "full_audit")}>
             <SelectTrigger>
               <SelectValue />
@@ -138,7 +138,7 @@ function FormContent({
         </div>
 
         <div className="grid gap-2">
-          <Label>Team Members</Label>
+          <Label>أعضاء الفريق</Label>
           <div className="grid gap-1">
             {teamRoles.map(role => {
               const roleUsers = users.filter(u => u.role === role)
@@ -176,14 +176,14 @@ function FormContent({
       )}
       {success && (
         <div className="flex items-center gap-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
-          <CheckCircle className="size-4 shrink-0" /><span>Engagement created successfully</span>
+          <CheckCircle className="size-4 shrink-0" /><span>تم إنشاء الارتباط بنجاح</span>
         </div>
       )}
       <DialogFooter>
-        <Button variant="outline" onClick={onClose} disabled={submitting}>Cancel</Button>
+        <Button variant="outline" onClick={onClose} disabled={submitting}>إلغاء</Button>
         <Button onClick={handleSubmit} disabled={!canSubmit || submitting || success}>
           {submitting && <Loader2 className="size-4 animate-spin" />}
-          {submitting ? "Saving..." : success ? "Done" : engagement ? "Update Engagement" : "Create Engagement"}
+          {submitting ? "جارٍ الحفظ..." : success ? "تم" : engagement ? "تحديث الارتباط" : "إنشاء ارتباط"}
         </Button>
       </DialogFooter>
     </DialogContent>

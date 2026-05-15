@@ -22,20 +22,20 @@ import {
 } from "lucide-react"
 
 const navItems = [
-  { label: "Dashboard", href: "/audit", icon: LayoutDashboard, hash: "" },
-  { label: "Engagements", href: "/audit#engagements", icon: Briefcase, hash: "engagements" },
-  { label: "Clients", href: "/audit#clients", icon: Building2, hash: "clients" },
-  { label: "Trial Balances", href: "/audit#trial-balances", icon: FileSpreadsheet, hash: "trial-balances" },
-  { label: "Financial Statements", href: "/audit#statements", icon: FileText, hash: "statements" },
-  { label: "Evidence", href: "/audit#evidence", icon: FolderOpen, hash: "evidence" },
-  { label: "Findings", href: "/audit#findings", icon: SearchCheck, hash: "findings" },
-  { label: "Recommendations", href: "/audit#recommendations", icon: ListChecks, hash: "recommendations" },
-  { label: "Reviews", href: "/audit#reviews", icon: Eye, hash: "reviews" },
-  { label: "Approval", href: "/audit#approval", icon: ShieldCheck, hash: "approval" },
-  { label: "Publication", href: "/audit#publication", icon: FileOutput, hash: "publication" },
-  { label: "Audit Trail", href: "/audit#audit-trail", icon: History, hash: "audit-trail" },
-  { label: "Settings", href: "/audit#settings", icon: Settings, hash: "settings" },
-  { label: "Admin", href: "/audit/admin/users", icon: ShieldCheck, hash: "" },
+  { label: "لوحة القيادة", href: "/audit", icon: LayoutDashboard, hash: "" },
+  { label: "الارتباطات", href: "/audit#engagements", icon: Briefcase, hash: "engagements" },
+  { label: "العملاء", href: "/audit#clients", icon: Building2, hash: "clients" },
+  { label: "ميزان المراجعة", href: "/audit#trial-balances", icon: FileSpreadsheet, hash: "trial-balances" },
+  { label: "القوائم المالية", href: "/audit#statements", icon: FileText, hash: "statements" },
+  { label: "الأدلة", href: "/audit#evidence", icon: FolderOpen, hash: "evidence" },
+  { label: "النتائج", href: "/audit#findings", icon: SearchCheck, hash: "findings" },
+  { label: "التوصيات", href: "/audit#recommendations", icon: ListChecks, hash: "recommendations" },
+  { label: "المراجعات", href: "/audit#reviews", icon: Eye, hash: "reviews" },
+  { label: "الاعتماد", href: "/audit#approval", icon: ShieldCheck, hash: "approval" },
+  { label: "النشر", href: "/audit#publication", icon: FileOutput, hash: "publication" },
+  { label: "سجل التدقيق", href: "/audit#audit-trail", icon: History, hash: "audit-trail" },
+  { label: "الإعدادات", href: "/audit#settings", icon: Settings, hash: "settings" },
+  { label: "المشرفون", href: "/audit/admin/users", icon: ShieldCheck, hash: "" },
 ]
 
 function AuditSidebar() {
@@ -75,7 +75,7 @@ function AuditSidebar() {
           <div className="min-w-0 leading-tight">
             <div className="text-sm font-black tracking-wide text-primary truncate">AQLIYA</div>
             <div className="text-[9px] font-semibold uppercase tracking-[0.15em] text-muted-foreground truncate">
-              AuditOS / Fin Intelligence
+              أوديت أو إس / ذكاء مالي
             </div>
           </div>
         </Link>

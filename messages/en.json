@@ -132,6 +132,8 @@
       "fileTypeLabel": "File type",
       "imageJpg": "Image (JPG)",
       "imagePng": "Image (PNG)",
+      "excelXlsx": "Excel (XLSX)",
+      "wordDocx": "Word (DOCX)",
       "cancel": "Cancel",
       "requesting": "Requesting...",
       "requestFailed": "Failed to create evidence request",
