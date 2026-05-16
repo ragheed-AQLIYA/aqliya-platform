@@ -12,7 +12,7 @@
 
 ## Current Implementation
 
-- `docs/07-ai-governance/` — Product-level AI governance docs (role/limitations, confidence scoring, explainability, audit trail, human review requirement, professional disclaimer)
+- `docs/archive/legacy-numbered/07-ai-governance/` — Product-level AI governance docs (role/limitations, confidence scoring, explainability, audit trail, human review requirement, professional disclaimer)
 - Models operate inside governed workflows — chat bypass surfaces do not exist
 - AI outputs are candidates until accepted by a human
 - Model version, input context, and explanation artifacts retained per output
@@ -22,12 +22,12 @@
 | Document | Location |
 |----------|----------|
 | AI Governance Doctrine | `docs/theoretical-reference/08-governance-and-trust/08-10-ai-governance-doctrine.md` |
-| AI Role & Limitations | `docs/07-ai-governance/01-ai-role-and-limitations.md` |
-| Human Review Requirement | `docs/07-ai-governance/02-human-review-requirement.md` |
-| Confidence Scoring | `docs/07-ai-governance/03-confidence-scoring.md` |
-| Explainability Policy | `docs/07-ai-governance/04-explainability-policy.md` |
-| Audit Trail Policy | `docs/07-ai-governance/05-audit-trail-policy.md` |
-| Professional Disclaimer | `docs/07-ai-governance/06-professional-disclaimer.md` |
+| AI Role & Limitations | `docs/archive/legacy-numbered/07-ai-governance/01-ai-role-and-limitations.md` |
+| Human Review Requirement | `docs/archive/legacy-numbered/07-ai-governance/02-human-review-requirement.md` |
+| Confidence Scoring | `docs/archive/legacy-numbered/07-ai-governance/03-confidence-scoring.md` |
+| Explainability Policy | `docs/archive/legacy-numbered/07-ai-governance/04-explainability-policy.md` |
+| Audit Trail Policy | `docs/archive/legacy-numbered/07-ai-governance/05-audit-trail-policy.md` |
+| Professional Disclaimer | `docs/archive/legacy-numbered/07-ai-governance/06-professional-disclaimer.md` |
 | Black-Box AI Rejection Doctrine | `docs/theoretical-reference/10-human-ai-operating-model/10-11-black-box-ai-rejection-doctrine.md` |
 | Responsible Intelligence Doctrine | `docs/theoretical-reference/15-responsible-intelligence/15-01-responsible-intelligence-doctrine.md` |
 | No Autonomous Audit Decision Rule | `docs/theoretical-reference/15-responsible-intelligence/15-04-no-autonomous-audit-decision-rule.md` |

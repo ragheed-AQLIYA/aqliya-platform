@@ -100,7 +100,7 @@ Gross Profit = Revenue - Cost of Revenue
 ## Draft Output Format
 
 ```txt
-AQLIYA AuditOS — Draft Statement of Profit or Loss
+AuditOS — Draft Statement of Profit or Loss
 Client:     ABC Company
 Period:     Year Ended 31 December 2026
 Status:     DRAFT — NOT FINAL

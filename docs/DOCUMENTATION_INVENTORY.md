@@ -9,26 +9,23 @@
 
 | Directory                    | Type                    | Status                | Purpose                                                        |
 | ---------------------------- | ----------------------- | --------------------- | -------------------------------------------------------------- |
-| `01-product-foundation/`     | Product documentation   | Active                | AuditOS overview, problem, users, workflow, boundaries         |
+| `archive/legacy-numbered/`   | Pre-v1.1 documentation | Archived              | Legacy numbered docs archived from root (01, 04, 06, 07)      |
 | `02-accounting-methodology/` | Product documentation   | Active                | TB, COA, classification, mapping, materiality                  |
 | `03-audit-methodology/`      | Product documentation   | Active                | Audit prep, risk, red flags, observations, approval            |
-| `04-financial-statements/`   | Product documentation   | Active                | SFP, P&L, equity, cash flows, generation rules                 |
 | `05-notes-system/`           | Product documentation   | Active                | Notes generation, policies, FS mapping, disclosures            |
-| `06-evidence-and-review/`    | Product documentation   | Active                | Evidence requirements, review queue, findings, approval        |
-| `07-ai-governance/`          | Product documentation   | Active                | AI role, human review, confidence, explainability, audit trail |
 | `api/`                       | Technical documentation | Active                | API reference docs                                             |
-| `archive/`                   | Historical / archived   | Archived              | Pre-v1.1 architecture, brand, deployment, CLI docs             |
+| `archive/`                   | Historical / archived   | Archived              | Pre-v1.1 architecture, brand, deployment, CLI docs, legacy-numbered, content-drafts, pilot-history, commercial-legacy |
 | `auditos/`                   | Operating manual        | Active                | AuditOS production readiness, pilot operations                 |
 | `brand/`                     | Brand assets            | Empty                 | Reserved for brand assets                                      |
 | `commercial-pack/`           | Commercial asset        | Active                | Pilot offer, scope, onboarding, data files                     |
-| `commercial/`                | Commercial asset        | Active                | Demo storyline, pilot pack                                     |
+| `commercial/`                | Commercial asset        | Active                | Demo storyline (modular); pilot-pack + demo-storyline single archived |
 | `company/`                   | Company documentation   | Active                | Company overview README                                        |
-| `content/`                   | Website content source  | Active                | Content rewrites, extracts, implementation checklist           |
+| `content/`                   | Website content source  | Active                | Content rewrites (v3 hybrid active; old drafts archived)       |
 | `execution/`                 | Implementation report   | Active                | Architecture guards, build plan, engineering protocol          |
 | `governance/`                | Official source         | Active                | AI, audit, evidence, readiness, security governance            |
 | `official/`                  | **Official source**     | **Highest authority** | v1.1 vision, taxonomy, architecture, glossary, roadmap         |
 | `operations/`                | Operating manual        | Active                | Backup, CI, dependency, freeze, drift                          |
-| `pilot/`                     | Implementation report   | Active                | Pilot sessions, dry runs, feedback, governance observations    |
+| `pilot/`                     | Implementation report   | Active                | Pilot runbooks, checklists, operational docs (history archived)|
 | `product/`                   | Product documentation   | Active                | PRDs, definition packs, commercial assets, sales ops           |
 | `prototype-planning/`        | Draft                   | Active                | Scope, UI/UX, data model, engineering, QA                      |
 | `releases/`                  | Release note            | Active                | Release notes                                                  |
@@ -60,7 +57,7 @@
 | Implementation report               | ~80 files              |
 | QA report                           | ~10 files              |
 | Operating manual                    | ~50 files              |
-| Website content source              | 10 files               |
+| Website content source              | 2 files (8 archived)   |
 | Needs review                        | 0 (all classified)     |
 | Duplicate / potentially conflicting | See CONFLICT_REPORT.md |
 

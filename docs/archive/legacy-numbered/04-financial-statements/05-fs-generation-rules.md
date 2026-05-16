@@ -74,7 +74,7 @@ Every page of every generated statement includes:
 ```txt
 ═══════════════════════════════════════════════════════
 DRAFT — NOT FINAL
-Prepared by AQLIYA AuditOS on 2026-05-08
+Prepared by AuditOS on 2026-05-08
 Requires review and approval by qualified professional
 ═══════════════════════════════════════════════════════
 ```

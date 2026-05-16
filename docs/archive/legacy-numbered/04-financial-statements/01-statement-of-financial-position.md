@@ -91,7 +91,7 @@ If not balanced (due to mapping gaps):
 ## Draft Output Format
 
 ```txt
-AQLIYA AuditOS — Draft Statement of Financial Position
+AuditOS — Draft Statement of Financial Position
 Client:     ABC Company
 Period:     31 December 2026
 Status:     DRAFT — NOT FINAL

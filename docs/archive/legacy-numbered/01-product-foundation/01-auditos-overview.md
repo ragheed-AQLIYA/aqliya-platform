@@ -10,7 +10,7 @@ AuditOS is not an audit tool. It is a governed, evidence-backed, AI-assisted wor
 
 | Aspect | Statement |
 |--------|-----------|
-| Category | AQLIYA AuditOS / Financial Intelligence product line |
+| Category | AuditOS / Financial Intelligence product line |
 | Role | Assistive — prepares draft outputs for professional review |
 | Method | Workflow-first, evidence-centric, governance-first, human-in-the-loop |
 | Differentiator | Financial intelligence depth, structural governance, full traceability |

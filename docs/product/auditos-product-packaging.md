@@ -460,6 +460,6 @@ When presenting AuditOS externally, keep this order:
 
 ## Related References
 
-1. `docs/01-product-foundation/01-auditos-overview.md`
+1. `docs/archive/legacy-numbered/01-product-foundation/01-auditos-overview.md`
 2. `docs/product/auditos-mvp-prd.md`
 3. `docs/AQLIYA-company-product-architecture-official.md`

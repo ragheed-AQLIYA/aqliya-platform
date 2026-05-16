@@ -31,7 +31,7 @@ Publication Package — Client Name — FY 2026
 
 ```txt
 ══════════════════════════════════════════════
-AQLIYA AuditOS — Engagement Publication Package
+AuditOS — Engagement Publication Package
 
 Client:            ABC Company
 Period:            31 December 2026
@@ -41,11 +41,11 @@ Package Generated: 2026-05-08
 STATUS: DRAFT — NOT FINAL
 
 This package contains draft financial statements and supporting
-documentation prepared by AQLIYA AuditOS. These are preparation
+documentation prepared by AuditOS. These are preparation
 drafts only and require review and approval by qualified
 professionals before any official use.
 
-Prepared by:  AQLIYA AuditOS
+Prepared by:  AuditOS
 Firm:         [Audit Firm Name]
 Engagement:   E-2026-0042
 ══════════════════════════════════════════════

@@ -1,6 +1,7 @@
 # AQLIYA Documentation Conflict Report
 
 > Generated: 2026-05-16
+> Updated: 2026-05-16 (Phase 2 — updated after numbered folder archival)
 > Purpose: Identify potential conflicts between documentation files and official v1.1 positioning.
 
 ---
@@ -79,12 +80,19 @@
 
 ---
 
-## Summary
+## Summary (Phase 2 Update)
 
 | Severity | Count | Details                                                            |
 | -------- | ----- | ------------------------------------------------------------------ |
 | Critical | 0     | —                                                                  |
 | High     | 0     | —                                                                  |
-| Medium   | 1     | `Mind The Future` in 3 active pilot docs                           |
+| Medium   | 0     | 3 pilot docs previously flagged for `Mind The Future` reviewed and noted as already cleaned in commits `ac19a8d`/`ac00dde` |
 | Low      | 4     | Archive docs, Claude draft, superseded rewrites, product naming    |
 | None     | 2     | On-Prem and Docker references in official docs (correctly aligned) |
+
+### Phase 2 Resolutions
+
+| Previous Finding | Status | Action |
+|-----------------|--------|--------|
+| Finding 2: `Mind The Future` in active pilot docs | ✅ Resolved | Confirmed already cleaned in commits `ac19a8d`, `ac00dde`; pilot files updated |
+| Finding 7: `AQLIYA AuditOS` naming in product docs | ✅ v1.1 notices added | 4 product definition packs now have v1.1 alignment notices |

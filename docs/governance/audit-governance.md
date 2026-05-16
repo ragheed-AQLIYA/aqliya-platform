@@ -13,7 +13,7 @@
 ## Current Implementation
 
 - `docs/03-audit-methodology/` — Audit preparation scope, risk framework, red flags, reviewer observations, missing-info checklist, approval model
-- `docs/04-financial-statements/` + `docs/05-notes-system/` — Governed statement/notes generation with review checklists
+- `docs/archive/legacy-numbered/04-financial-statements/` + `docs/05-notes-system/` — Governed statement/notes generation with review checklists
 - Engagement closure is blocked unless all findings are approved, evidence gaps resolved, report reviewed, governance breach count zero
 
 ## Canonical References

@@ -13,10 +13,9 @@
 | Resource                                                 | Purpose                                              |
 | -------------------------------------------------------- | ---------------------------------------------------- |
 | `content/website-content-rewrite-v3-hybrid.md`           | **Current public website messaging source of truth** |
-| `content/website-content-extract.md`                     | Original content extraction (pre-rewrite baseline)   |
 | `releases/aqliya-website-copy-v3-hybrid-release-note.md` | v3 hybrid implementation release note                |
 
-All old content rewrites (`v1-*`, `v2*`) are superseded by v3 hybrid.
+Old content rewrites (`v1-*`, `v2*`) have been archived to `archive/content-drafts/`.
 
 ## v1.1 Official Reference (Highest Authority)
 
@@ -81,11 +80,25 @@ These README files provide navigation and recommended reading order for each doc
 | Directory          | README                                                                |
 | ------------------ | --------------------------------------------------------------------- |
 | `product/`         | `product/README.md` — Product definitions and commercial chain        |
-| `commercial/`      | `commercial/README.md` — Commercial and go-to-market materials        |
-| `commercial-pack/` | `commercial-pack/README.md` — Pilot commercial pack (overlap warning) |
+| `commercial/`      | `commercial/README.md` — Commercial and go-to-market materials (pilot-pack archived) |
+| `commercial-pack/` | `commercial-pack/README.md` — Pilot commercial pack (active, primary) |
 | `systems/`         | `systems/README.md` — System and operator documentation               |
-| `pilot/`           | `pilot/README.md` — Pilot execution, readiness, session reports       |
+| `pilot/`           | `pilot/README.md` — Pilot execution, readiness, operational docs      |
 | `reports/`         | `reports/README.md` — Stabilization, audit, documentation, QA reports |
+
+---
+
+## Archive (Historical Documentation)
+
+| Directory | Description |
+|-----------|-------------|
+| `archive/` | Historical and superseded documents retained for reference |
+| `archive/legacy-numbered/` | Pre-v1.1 numbered documentation (product foundation, financial statements, evidence, AI governance) |
+| `archive/content-drafts/` | Superseded website content drafts (v1, v2 drafts) |
+| `archive/pilot-history/` | Historical pilot session reports and run records |
+| `archive/commercial-legacy/` | Legacy commercial materials (archived pilot-pack and demo-storyline) |
+
+> **Important:** Archived files are **not authoritative**. They are retained for historical reference only. `docs/official/` remains the highest authority.
 
 ---
 

@@ -1,0 +1,212 @@
+{
+  "metadata": {
+    "version": "v2 — Final Merged Rewrite",
+    "status": "Ready for implementation",
+    "language": "Bilingual (Arabic-first, English-supportive)",
+    "lastUpdated": "2026-05-16"
+  },
+  "corePositioning": {
+    "oneLiner": {
+      "ar": "عقلية — منصة ذكاء مؤسسي خاص ومحكوم",
+      "en": "AQLIYA — Private Governed Institutional Intelligence"
+    },
+    "platformDescription": {
+      "ar": "عقلية هي منصة تشغيل مؤسسية تبني خطوط أنظمة ذكية فوق نواة حوكمة واحدة. كل مخرج مربوط بالدليل، كل خطوة تحتاج مراجعة بشرية، وكل قرار موثق في سجل تدقيق قابل للمراجعة. السحابة متاحة الآن. الخوادم الخاصة / On-Prem مسار استراتيجي مستقبلي، وليست حزمة إنتاجية متاحة حاليًا.",
+      "en": "AQLIYA is an institutional intelligence platform that builds governed systems on a shared core. Every output is evidence-linked. Every step requires human review. Every decision is auditable. Cloud is live. Private / On-Prem is a strategic future deployment path, not yet available as a production package."
+    },
+    "heroHeadline": {
+      "ar": "بنية مؤسسية تجعل الذكاء مفيدًا، مفهومًا، ومحكومًا. عقلية ليست طبقة محادثة فوق المؤسسة. هي منصة تشغيل تربط البيانات، القواعل، الصلاحيات، الأدلة، والمراجعة داخل مسار واحد يمكن الوثوق به.",
+      "en": "An institutional architecture that makes intelligence useful, understandable, and governed. AQLIYA is not a chatbot layer over chaos — it is an operating platform that connects data, rules, permissions, evidence, and review in a single trustworthy chain."
+    }
+  },
+  "trustPrinciple": {
+    "ar": "الذكاء الاصطناعي يساعد. الإنسان يقرر. الدليل يحكم.",
+    "en": "AI assists. Humans decide. Evidence governs."
+  },
+  "whatAqLiyaIs": [
+    {
+      "ar": "منصة ذكاء مؤسسي خاص ومحكوم — تحافظ المؤسسات على السيطرة على بيانات وقرارات وحوكمتها",
+      "en": "A Private Governed Institutional Intelligence Platform — institutions keep control of their data, decisions, and governance"
+    },
+    {
+      "ar": "منصة متعددة المنتجات — خطوط أنظمة متعددة مبنية على نواة ذكاء مشتركة",
+      "en": "A multi-product platform company — multiple system lines built on a shared intelligence core"
+    },
+    {
+      "ar": "منصة موجهة نحو السحابة أولاً مع الخوادم الخاصة / On-Prem كنموذج نشر مستقبلي استراتيجي",
+      "en": "A Cloud-first platform with Private/On-Prem as a strategic future deployment model"
+    },
+    {
+      "ar": "نظام موجه نحو الحوكمة أولاً: كل مخرج ذكاء مربوط بالدليل وتمت مراجعته بشريًا وقابل للتدقيق",
+      "en": "A governance-first system: every AI output is evidence-linked, human-reviewed, and auditable"
+    },
+    {
+      "ar": "منشئ أنظمة مخصصة (عبر AQLIYA Studio، استراتيجي/مستقبلي) — تمكين الأنظمة المؤسسية بدون البدء من الصفر",
+      "en": "A custom systems builder (via AQLIYA Studio, strategic/future) — enabling institutional systems without starting from scratch"
+    }
+  ],
+  "whatAqLiyaIsNot": [
+    {
+      "ar": "ليست روبوت محادثة ذكي",
+      "en": "NOT an AI chatbot"
+    },
+    {
+      "ar": "ليست SaaS فقط",
+      "en": "NOT SaaS only"
+    },
+    {
+      "ar": "ليست AuditOS فقط",
+      "en": "NOT AuditOS only"
+    },
+    {
+      "ar": "ليست نظام إدارة علاقات العملاء (CRM)",
+      "en": "NOT a CRM"
+    },
+    {
+      "ar": "ليست أداة سير عمل عام",
+      "en": "NOT a generic workflow tool"
+    },
+    {
+      "ar": "ليست بديلاً للحكم المهني",
+      "en": "NOT a replacement for professional judgment"
+    }
+  ],
+  "products": {
+    "auditOS": {
+      "status": {
+        "ar": "أول تطبيق مُثبت — جاهز للتجربة",
+        "en": "First proof product — pilot-ready"
+      },
+      "treatment": "Strongest marketed product. Full marketing page + guided demo. Show as proof of AQLIYA Core."
+    },
+    "localContentOS": {
+      "status": {
+        "ar": "استراتيجي — المنتج الثاني — قيد التخطيط",
+        "en": "Strategic second product — in planning"
+      },
+      "treatment": "Marketing page with clear disclaimer. Saudi market focus."
+    },
+    "decisionOS": {
+      "status": {
+        "ar": "نظام مجاور — نشط",
+        "en": "Adjacent active system"
+      },
+      "treatment": "Presented as active workspace built on AQLIYA Core, not as primary product line."
+    },
+    "salesOS": {
+      "status": {
+        "ar": "نموذج أولي — مستقبلي",
+        "en": "Prototype — future"
+      },
+      "treatment": "Marketing page + static dashboard. Clear disclaimer: no backend."
+    },
+    "simulationOS": {
+      "status": {
+        "ar": "مفهوم — مستقبلي",
+        "en": "Marketing concept — future"
+      },
+      "treatment": "Marketing page only. Clear disclaimer: not yet in development."
+    },
+    "customSystems": {
+      "status": {
+        "ar": "يُفعّل حسب نطاق المؤسسة",
+        "en": "Activated per institutional scope"
+      },
+      "treatment": "Presented as built on AQLIYA Core. Studio is future; current offering is custom project-based."
+    }
+  },
+  "deploymentModels": {
+    "cloud": {
+      "title": {
+        "ar": "السحابة",
+        "en": "Cloud"
+      },
+      "description": {
+        "ar": "سحابة عقلية — النسخة السحابية متاحة الآن. إدارة للخصائص الحالية المتاحة، تحديثات تشغيلية، ونسخ احتياطي. مناسبة للشركات المتوسطة والمؤسسات التي تفضل عدم إدارة البنية التحتية.",
+        "en": "AQLIYA Cloud — managed cloud deployment for currently available capabilities, with operational updates and backups. Suitable for SMEs, pilots, and mid-market organizations."
+      },
+      "status": "Available now"
+    },
+    "private": {
+      "title": {
+        "ar": "خوادم خاصة / On-Prem",
+        "en": "Private / On-Prem"
+      },
+      "description": {
+        "ar": "خوادم خاصة / On-Prem — مسار استراتيجي مستقبلي قيد التخطيط والتحضير. عند اكتماله، سيتيح تشغيل عقلية داخل بيئة العميل مع قاعدة بيانات محلية وتخزين محلي وتحكم أعلى. ليس متاحًا حاليًا كحزمة إنتاجية.",
+        "en": "Private / On-Prem — strategic future deployment path under planning and preparation. Once completed, it is intended to enable organizations to run AQLIYA inside their own infrastructure with local database, local storage, and higher control. Not currently available as a production package."
+      },
+      "status": "Strategic / future — not yet available as a production package"
+    },
+    "airGapped": {
+      "title": {
+        "ar": "بيئة معزولة",
+        "en": "Air-Gapped"
+      },
+      "description": {
+        "ar": "بيئة معزولة — نموذج استراتيجي مستقبلي للمؤسسات ذات المتطلبات الأمنية العالية. يتطلب اكتمال نموذج الخوادم الخاصة أولاً.",
+        "en": "Air-Gapped — strategic future model for high-security environments. Requires the Private/On-Prem model to be completed first."
+      },
+      "status": "Strategic / future — not yet implemented"
+    }
+  },
+  "ctas": {
+    "exploreProducts": {
+      "ar": "استكشف خطوط عقلية",
+      "en": "Explore AQLIYA Systems",
+      "target": "/products"
+    },
+    "watchAuditOS": {
+      "ar": "شاهد AuditOS — عرض تفاعلي",
+      "en": "See AuditOS — First Proof Product",
+      "target": "/auditos"
+    },
+    "designSystem": {
+      "ar": "صمّم نظامك المؤسسي",
+      "en": "Design Your Institutional System",
+      "target": "/custom-product"
+    },
+    "contactUs": {
+      "ar": "تواصل معنا",
+      "en": "Contact Us",
+      "target": "/contact"
+    }
+  },
+  "navigation": {
+    "primary": [
+      { "ar": "الرئيسية", "en": "Home", "route": "/" },
+      { "ar": "المنتجات", "en": "Products", "route": "/products" },
+      { "ar": "منهجية العمل", "en": "How We Work", "route": "/how-we-work" },
+      { "ar": "من نحن", "en": "About", "route": "/about" },
+      { "ar": "تواصل معنا", "en": "Contact", "route": "/contact" }
+    ],
+    "secondary": [
+      { "ar": "صمّم نظامك المؤسسي", "en": "Design Your System", "route": "/custom-product" }
+    ]
+  },
+  "guidelinesAndConstraints": {
+    "mustNeverClaim": [
+      "Private/On-Prem as available production package",
+      "Air-Gapped as implemented",
+      "Local AI runtime",
+      "AQLIYA Studio as available",
+      "Institutional Memory as implemented",
+      "Model Governance as implemented",
+      "Docker/Kubernetes as available deployment"
+    ],
+    "mustAlwaysPresent": [
+      "AQLIYA as platform-first (not AuditOS-only)",
+      "AuditOS as first proof product",
+      "LocalContentOS as second strategic product",
+      "DecisionOS as adjacent active system",
+      "Trust principle: AI assists, humans decide, evidence governs"
+    ],
+    "principlesPerRequest": [
+      "Platform-first positioning",
+      "Governance-first messaging",
+      "Arabic-first copy (English supportive)",
+      "Evidence-governed language",
+      "No unsupported capability claims"
+    ]
+  }
+}

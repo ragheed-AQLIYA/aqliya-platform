@@ -8,9 +8,8 @@ This folder contains commercial and go-to-market materials for AuditOS. Some fil
 
 ### For AuditOS pilot preparation
 
-- `demo-storyline/` — Modular demo storyline (opening pitch, pain statement, demo flow, screen script, questions, objections, closing)
-- `demo-storyline-auditos.md` — Single-file demo storyline (moved from root; overlaps with modular version)
-- `pilot-pack/` — Pilot offer, scope, checklists, client messages
+- `demo-storyline/` — Modular demo storyline (opening pitch, pain statement, demo flow, screen script, questions, objections, closing). This is the primary demo resource. The single-file version (`demo-storyline-auditos.md`) is archived at `docs/archive/commercial-legacy/`.
+- `docs/commercial-pack/` — Primary pilot commercial pack (newer, Arabic-first, 12 files). The older `pilot-pack/` is archived at `docs/archive/commercial-legacy/pilot-pack/`.
 - Commercial assets in `docs/product/auditos-commercial-assets/`
 - Execution environment in `docs/product/auditos-first-customer-loop/`
 - Live pilot management in `docs/product/auditos-live-pilot-management/`
@@ -30,14 +29,13 @@ This folder contains commercial and go-to-market materials for AuditOS. Some fil
 - Reference request kit in `docs/product/auditos-customer-conversion-reference/reference-request-kit.md`
 - Conversion offer in `docs/product/auditos-customer-conversion-reference/paid-conversion-offer-pack.md`
 
-## Known Overlaps
+## Resolved Overlaps (Phase 2)
 
-- `docs/commercial/pilot-pack/` overlaps with `docs/commercial-pack/` — nearly identical pilot packs.
-- `docs/commercial/demo-storyline-auditos.md` overlaps with `docs/commercial/demo-storyline/` (modular version).
-- AuditOS commercial packages under `docs/product/auditos-commercial-assets/` overlap with these commercial folders.
-- The next cleanup phase should decide which commercial pack is primary and archive the duplicate.
+- ✅ `docs/commercial/pilot-pack/` → **Archived** to `docs/archive/commercial-legacy/pilot-pack/`. Use `docs/commercial-pack/` instead.
+- ✅ `docs/commercial/demo-storyline-auditos.md` → **Archived** to `docs/archive/commercial-legacy/`. Use `docs/commercial/demo-storyline/` instead.
+- 🔶 `docs/product/auditos-commercial-assets/` overlap with commercial folders — still needs review.
 
-See `docs/reports/product-commercial-docs-structure-review.md` for full overlap analysis.
+See `docs/archive/commercial-legacy/COMMERCIAL_DUPLICATION_REVIEW.md` for full analysis.
 
 ## AuditOS Commercial Master Index
 

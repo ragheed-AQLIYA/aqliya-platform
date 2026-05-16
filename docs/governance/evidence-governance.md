@@ -12,7 +12,7 @@
 
 ## Current Implementation
 
-- `docs/06-evidence-and-review/` — Evidence requirements, account-area evidence maps, review queue methodology, findings classification, approval checklist, publication package
+- `docs/archive/legacy-numbered/06-evidence-and-review/` — Evidence requirements, account-area evidence maps, review queue methodology, findings classification, approval checklist, publication package
 - Evidence lifecycle is modeled as candidate → accepted → superseded — no direct AI promotion to accepted
 - Evidence objects carry source provenance, acceptance state, and linked finding context
 
@@ -21,8 +21,8 @@
 | Document | Location |
 |----------|----------|
 | Evidence Governance Doctrine | `docs/theoretical-reference/08-governance-and-trust/08-09-evidence-governance-doctrine.md` |
-| Evidence Requirements | `docs/06-evidence-and-review/01-evidence-requirements.md` |
-| Evidence by Account Area | `docs/06-evidence-and-review/02-evidence-by-account-area.md` |
+| Evidence Requirements | `docs/archive/legacy-numbered/06-evidence-and-review/01-evidence-requirements.md` |
+| Evidence by Account Area | `docs/archive/legacy-numbered/06-evidence-and-review/02-evidence-by-account-area.md` |
 | Evidence Lifecycle Framework | `docs/theoretical-reference/07-workflow-intelligence/07-06-evidence-lifecycle-framework.md` |
 | Data Provenance Theory | `docs/theoretical-reference/09-data-trust-and-data-quality/09-05-data-provenance-theory.md` |
 | Evidence-Centered Design Index | `docs/theoretical-reference/concept-indexes/evidence-centered-design-index.md` |
