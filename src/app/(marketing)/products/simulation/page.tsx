@@ -51,7 +51,7 @@ export default function SimulationProductPage() {
             </p>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/50">
               <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
-              مستقبلي — تسويقي
+              مفهوم — مستقبلي
             </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">

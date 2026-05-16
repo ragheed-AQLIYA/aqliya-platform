@@ -42,7 +42,7 @@ export default function DecisionProductPage() {
             </span>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              متاح للتفعيل
+              نظام مجاور — نشط
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               حوكمة القرار بدل تركه لمذكرات متفرقة ونقاشات غير قابلة للتتبع

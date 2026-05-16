@@ -11,7 +11,7 @@ import { Menu, X } from "lucide-react";
 const navItems = [
   { label: "الرئيسية", href: "/" },
   { label: "المنتجات", href: "/products" },
-  { label: "كيف نعمل", href: "/how-we-work" },
+  { label: "منهجية العمل", href: "/how-we-work" },
   { label: "من نحن", href: "/about" },
   { label: "تواصل معنا", href: "/contact" },
 ];

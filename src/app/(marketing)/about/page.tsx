@@ -63,6 +63,18 @@ export default function AboutPage() {
               الوثوق به
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-white/68 sm:text-lg">
+              وُجدت عقلية لأن المؤسسات لا تحتاج ذكاءً أسرع فقط.
+            </p>
+            <p className="mx-auto max-w-3xl text-base leading-8 text-white/68 sm:text-lg">
+              تحتاج ذكاءً يمكن مساءلته.
+            </p>
+            <p className="mx-auto max-w-3xl text-base leading-8 text-white/68 sm:text-lg">
+              القرار المؤسسي لا يكفي أن يكون صحيحًا.
+            </p>
+            <p className="mx-auto max-w-3xl text-base leading-8 text-white/68 sm:text-lg">
+              يجب أن يكون مفهومًا، موثقًا، وقابلًا للمراجعة.
+            </p>
+            <p className="mx-auto max-w-3xl text-base leading-8 text-white/68 sm:text-lg">
               بدأ التصور من سؤال بسيط وصعب في الوقت نفسه: كيف تستفيد المؤسسة من
               الذكاء الاصطناعي من دون أن تفقد القدرة على المراجعة، والتفسير،
               وربط القرار بمساره الكامل؟ من هنا جاءت عقلية كمنصة لا تبني مخرجات
@@ -103,7 +115,7 @@ export default function AboutPage() {
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              Operating Beliefs
+              مبادئ التشغيل
             </p>
             <h2 className="mt-4 text-3xl font-black text-foreground">
               كيف تفكر عقلية قبل أن تبني أي نظام؟

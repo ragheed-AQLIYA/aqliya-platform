@@ -36,19 +36,19 @@ const footerLinks = [
     ],
   },
   {
-    title: "التفعيل والاستكشاف",
+    title: "ابدأ الآن",
     links: [
       { label: "استكشف خطوط عقلية", href: "/products" },
       { label: "شاهد AuditOS كأول تطبيق", href: "/auditos" },
-      { label: "ناقش حالة استخدام مؤسسية", href: "/custom-product" },
+      { label: "ناقش حالة استخدام", href: "/custom-product" },
     ],
   },
   {
     title: "نماذج التشغيل",
     links: [
-      { label: "سحابة عقلية — متاح الآن", href: "/products" },
-      { label: "خوادم خاصة — قيد التطوير", href: "/products" },
-      { label: "بيئة معزولة — استراتيجي", href: "/products" },
+      { label: "سحابة عقلية — متاحة الآن", href: "/products" },
+      { label: "خوادم خاصة — قيد التخطيط والتحضير", href: "/products" },
+      { label: "بيئة معزولة — مستقبلية", href: "/products" },
     ],
   },
 ];
@@ -71,7 +71,7 @@ export function SiteFooter() {
             <p className="text-sm leading-7 text-muted-foreground">
               عقلية منصة ذكاء مؤسسي خاص ومحكوم، تبني خطوط أنظمة متخصصة فوق
               AQLIYA Intelligence Core. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
-              سحابة متاحة الآن. خوادم خاصة ومعزولة قيد التطوير.
+              السحابة متاحة الآن. الخوادم الخاصة قيد التخطيط والتحضير.
             </p>
             <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/30 p-4 shadow-sm">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">

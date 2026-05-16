@@ -41,7 +41,7 @@ const solutions = [
     flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية"],
     href: "/products/decision",
     visual: <DecisionMatrixVisual />,
-    line: "نظام قائم",
+    line: "نظام مجاور — نشط",
     status: "active" as const,
   },
   {
@@ -67,7 +67,7 @@ const solutions = [
     flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
     href: "/products/simulation",
     visual: <SimulationScenarioVisual />,
-    line: "مستقبلي — تسويقي",
+    line: "مفهوم — مستقبلي",
     status: "future" as const,
   },
   {
@@ -75,7 +75,7 @@ const solutions = [
     problem:
       "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
     system:
-      "نموذج أولي لنظام ذاكرة تجارية محكومة ينظم التأهيل، الترتيب، المتابعة، والتعلم المؤسسي.",
+      "نموذج أولي لنظام ذاكرة تجارية محكومة يستكشف كيفية تنظيم التأهيل، الترتيب، المتابعة، والتعلم المؤسسي.",
     output:
       "مسار مبيعات واضح يربط العملاء المحتملين بالأولوية، الرسالة، والمتابعة.",
     flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة", "تعلم"],
@@ -391,7 +391,7 @@ export default function ProductsPage() {
                         "px-6",
                       )}
                     >
-                      ناقش التفعيل
+                      تحدث إلى متخصص
                     </Link>
                   </div>
                 </div>
@@ -463,7 +463,7 @@ export default function ProductsPage() {
                 href="/contact"
                 className="btn-secondary h-12 px-8 text-base"
               >
-                ناقش تفعيل النظام
+                تحدث إلى متخصص
               </Link>
             </div>
           </div>

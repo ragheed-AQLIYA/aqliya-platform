@@ -18,10 +18,10 @@ const impactMetrics = [
     detail: "منطق حوكمة واحد يمكن البناء فوقه عبر أكثر من خط نظام",
   },
   {
-    value: "06",
-    label: "خطوط تشغيل",
+    value: "عدة",
+    label: "مسارات تشغيل",
     detail:
-      "تبدأ من AuditOS وتمتد إلى المحتوى المحلي والقرار والمبيعات والمحاكاة",
+      "تشمل التدقيق المالي، المحتوى المحلي، حوكمة القرارات، المبيعات، المحاكاة، والأنظمة المخصصة بدرجات نضج مختلفة",
   },
   {
     value: "100%",
@@ -75,7 +75,7 @@ const products = [
     flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية"],
     href: "/products/decision",
     note: "خط نظام لحوكمة القرار التنفيذي، يُفعّل ضمن نطاق المؤسسة ويبنى على AQLIYA Intelligence Core.",
-    maturity: "متاح للتفعيل",
+    maturity: "نظام مجاور — نشط",
     status: "available",
   },
   {
@@ -83,7 +83,7 @@ const products = [
     problem:
       "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
     system:
-      "ينظم تأهيل الفرص، ترتيبها، وضبط المتابعة داخل مسار مبيعات محكوم ومبني على الذاكرة المؤسسية.",
+      "نموذج أولي لنظام ذاكرة تجارية يستكشف كيفية تنظيم التأهيل والترتيب والمتابعة والتعلم المؤسسي.",
     output:
       "مسار مبيعات أوضح يربط العملاء المحتملين بالأولوية، المتابعة، والتعلم المؤسسي.",
     flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة", "تعلم"],
@@ -103,7 +103,7 @@ const products = [
     flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
     href: "/products/simulation",
     note: "خط نظام مستقبلي ضمن عقلية — يُعرَض حاليًا كمفهوم تسويقي لحين تطوير النموذج التشغيلي.",
-    maturity: "مستقبلي",
+    maturity: "مفهوم — مستقبلي",
     status: "future",
   },
 ];
@@ -141,10 +141,15 @@ export default function HomePage() {
                   مفيدًا، مفهومًا، ومحكومًا
                 </span>
               </h1>
+              <div className="mt-4 space-y-1 text-base font-semibold text-aqliya-cyan/90 sm:text-lg">
+                <p>الذكاء لا يقرر. يساعد.</p>
+                <p>الإنسان يقرر.</p>
+                <p>والدليل يحكم.</p>
+              </div>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-white/72 sm:text-xl">
-                عقلية ليست صفحة دردشة للمؤسسة، وليست طبقة AI منفصلة فوق الفوضى.
-                هي منصة تشغيل تربط البيانات، القواعد، الصلاحيات، الأدلة،
-                والمراجعة داخل مسار واحد يمكن الوثوق به.
+                عقلية ليست طبقة محادثة فوق المؤسسة. هي منصة تشغيل تربط البيانات،
+                القواعد، الصلاحيات، الأدلة، والمراجعة داخل مسار واحد يمكن الوثوق
+                به.
               </p>
               <div className="mt-6 space-y-3">
                 {promisePoints.map((point) => (
@@ -179,10 +184,10 @@ export default function HomePage() {
                   شاهد AuditOS كأول تطبيق
                 </Link>
                 <Link
-                  href="/custom-product"
+                  href="/contact"
                   className="btn-secondary h-12 px-8 text-base"
                 >
-                  ناقش حالة استخدام مؤسسية
+                  تحدث إلى متخصص
                 </Link>
               </div>
               <div className="mt-10 grid gap-3 sm:grid-cols-3">
@@ -248,13 +253,14 @@ export default function HomePage() {
           <div className="rounded-2xl border border-amber-600/20 bg-amber-600/[0.05] p-6 backdrop-blur">
             <div className="flex items-start justify-between">
               <h3 className="text-sm font-bold text-foreground">
-                ليست منتج واحد فقط
+                ليست منتجًا واحدًا
               </h3>
               <span className="text-lg text-amber-500">✕</span>
             </div>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              بعض المؤسسات تبحث عن أداة واحدة مثل AuditOS. عقلية نواة تشغيلية
-              تسمح ببناء أكثر من خط نظام فوقها حسب احتياج المؤسسة.
+              عقلية ليست AuditOS فقط. هي نواة تشغيلية تسمح ببناء خطوط أنظمة
+              متعددة فوقها حسب احتياج المؤسسة — من التدقيق إلى المحتوى المحلي
+              إلى حوكمة القرارات.
             </p>
           </div>
         </div>
@@ -262,9 +268,17 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <SectionEyebrow
+          label="الوضوح والثقة"
+          title="ليست صناديق سوداء. ليست قرارات آلية. ليست مخرجات بلا دليل."
+          description="داخل المؤسسة، الإجابة وحدها لا تكفي. يجب أن يعرف صاحب القرار: ما البيانات؟ ما الدليل؟ من راجع؟ ومن اعتمد؟ عقلية تجعل كل مخرج مفهومًا، قابلًا للمراجعة، ومرتبطًا بسياقه التشغيلي."
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
           label="نماذج التشغيل"
-          title="السحابة متاحة الآن. الخوادم الخاصة والمعزولة قادمة"
-          description="نقدم خيارات تشغيل مختلفة حسب احتياجات المؤسسة الأمنية والتشغيلية. كل نموذج يحافظ على نفس منطق الحوكمة والتتبع والأدلة."
+          title="السحابة متاحة الآن. الخوادم الخاصة قيد التخطيط والتحضير."
+          description="نقدم خيارات تشغيل تناسب درجة حساسية المؤسسة. كل نموذج يحافظ على نفس منطق الحوكمة والتتبع والأدلة."
         />
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-2xl border border-aqliya-cyan/30 bg-gradient-to-br from-aqliya-cyan/[0.08] to-white p-6 shadow-sm">
@@ -275,34 +289,35 @@ export default function HomePage() {
               </span>
             </div>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              إصدار سحابة متكامل مع كل الخصائص والتحديثات التلقائية والنسخ
-              الاحتياطي. مثالي للمؤسسات التي تفضل عدم إدارة البنية التحتية.
+              نسخة سحابية للخصائص الحالية المتاحة، مع تحديثات تشغيلية ونسخ
+              احتياطي. مناسبة للمؤسسات التي تفضل عدم إدارة البنية التحتية.
             </p>
           </div>
           <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-muted/30 to-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-black text-foreground">خوادم خاصة</h3>
               <span className="inline-flex rounded-full bg-amber-100 px-2 py-1 text-[9px] font-bold text-amber-700 uppercase">
-                قريبًا
+                قيد التخطيط والتحضير
               </span>
             </div>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              تثبيت على خوادمك الخاصة مع كل خصائص الحوكمة والتحكم. متوفر على
-              Docker أو Kubernetes. يسمح بالتحكم الكامل والتعديلات المؤسسية.
+              تشغيل عقلية داخل البنية التحتية للمؤسسة مع قاعدة بيانات محلية
+              وتحكم كامل. قيد التخطيط والتحضير، وقد يُتاح للمؤسسات الحساسة بعد
+              اكتماله واعتماده.
             </p>
           </div>
           <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-muted/30 to-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-black text-foreground">
-                معزولة تماما
+                بيئة معزولة
               </h3>
               <span className="inline-flex rounded-full bg-slate-100 px-2 py-1 text-[9px] font-bold text-slate-600 uppercase">
-                استراتيجي
+                استراتيجي — مستقبلي
               </span>
             </div>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              بيئة معزولة بدون أي اتصال بالانترنت (air-gapped) للمؤسسات ذات
-              متطلبات أمنية صارمة. كل البيانات والمعالجة محلية بالكامل.
+              نموذج مستقبلي للمؤسسات ذات المتطلبات الأمنية العالية. يعتمد على
+              اكتمال نموذج الخوادم الخاصة أولاً.
             </p>
           </div>
         </div>
@@ -334,6 +349,14 @@ export default function HomePage() {
             />
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="ما بعد الإجابة السريعة"
+          title="معظم أدوات الذكاء تعطي إجابة. عقلية تبني مسارًا."
+          description="الإجابة السريعة قد تساعد فردًا، لكنها لا تكفي داخل مؤسسة. المؤسسة تحتاج مخرجًا يمكن تفسيره، مراجعته، وربطه بالدليل والصلاحية والاعتماد. لذلك لا تتعامل عقلية مع الذكاء كواجهة محادثة، بل كجزء من نظام تشغيل محكوم."
+        />
       </section>
 
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
@@ -589,6 +612,11 @@ export default function HomePage() {
               <p className="mt-2 text-lg font-black tracking-tight text-white">
                 الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
               </p>
+              <p className="mt-2 text-sm leading-6 text-aqliya-cyan/70">
+                هذا ليس شعارًا تسويقيًا. هذا مبدأ معماري داخل عقلية: الذكاء لا
+                يعمل خارج المسار، الإنسان لا يعتمد بلا مراجعة، والدليل لا ينفصل
+                عن المخرج.
+              </p>
             </div>
             <p className="mt-4 text-base leading-8 text-white/58">
               عندما يسأل المدير أو المدقق أو صاحب الصلاحية: كيف وصلنا إلى هذا
@@ -625,7 +653,7 @@ export default function HomePage() {
                 href="/contact"
                 className="btn-secondary h-12 px-8 text-base"
               >
-                ناقش تفعيل النظام
+                تحدث إلى متخصص
               </Link>
             </div>
           </div>

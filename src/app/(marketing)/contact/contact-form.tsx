@@ -16,7 +16,7 @@ export function ContactForm() {
         <div className="grid gap-8 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
           <div className="space-y-4">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              Engagement Start
+              بداية التشغيل
             </p>
             <h2 className="text-3xl font-black text-foreground">
               ابدأ المحادثة من زاوية تشغيلية واضحة

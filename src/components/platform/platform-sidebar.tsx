@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   Users,
@@ -14,8 +14,8 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-} from "lucide-react"
-import { useState } from "react"
+} from "lucide-react";
+import { useState } from "react";
 
 const modules = [
   {
@@ -48,72 +48,112 @@ const modules = [
     bgActive: "bg-module-sales/10",
     borderActive: "border-l-module-sales",
   },
-]
+];
 
 const platformNav = [
-  { name: "Decision Intelligence", nameAr: "الذكاء القرارات", href: "/decisions", icon: LayoutDashboard },
+  {
+    name: "Decision Intelligence",
+    nameAr: "الذكاء القرارات",
+    href: "/decisions",
+    icon: LayoutDashboard,
+  },
   { name: "المنظمات", href: "/organizations", icon: Users },
   { name: "الذكاء", href: "/intelligence/sectors", icon: Brain },
   { name: "الإعدادات", href: "/settings", icon: Settings },
-]
+];
 
 const auditNav = [
-  { name: "Dashboard", nameAr: "لوحة التحكم", href: "/audit", icon: LayoutDashboard },
+  {
+    name: "Dashboard",
+    nameAr: "لوحة التحكم",
+    href: "/audit",
+    icon: LayoutDashboard,
+  },
   { name: "Engagements", nameAr: "المهام", href: "/audit", icon: ShieldCheck },
   { name: "Clients", nameAr: "العملاء", href: "/audit", icon: Users },
   { name: "Evidence", nameAr: "الأدلة", href: "/audit", icon: LayoutDashboard },
-  { name: "Findings", nameAr: "الملاحظات", href: "/audit", icon: LayoutDashboard },
-  { name: "Reviews", nameAr: "المراجعات", href: "/audit", icon: LayoutDashboard },
+  {
+    name: "Findings",
+    nameAr: "الملاحظات",
+    href: "/audit",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Reviews",
+    nameAr: "المراجعات",
+    href: "/audit",
+    icon: LayoutDashboard,
+  },
   { name: "Approval", nameAr: "الموافقة", href: "/audit", icon: ShieldCheck },
-  { name: "Audit Trail", nameAr: "سجل التدقيق", href: "/audit", icon: LayoutDashboard },
-]
+  {
+    name: "Audit Trail",
+    nameAr: "سجل التدقيق",
+    href: "/audit",
+    icon: LayoutDashboard,
+  },
+];
 
 function getActiveModule(pathname: string | null) {
-  if (!pathname) return "decision"
-  if (pathname.startsWith("/audit")) return "audit"
-  if (pathname.startsWith("/sales")) return "sales"
-  if (pathname.startsWith("/decisions") || pathname.startsWith("/organizations") || pathname.startsWith("/intelligence")) return "decision"
-  return "decision"
+  if (!pathname) return "decision";
+  if (pathname.startsWith("/audit")) return "audit";
+  if (pathname.startsWith("/sales")) return "sales";
+  if (
+    pathname.startsWith("/decisions") ||
+    pathname.startsWith("/organizations") ||
+    pathname.startsWith("/intelligence")
+  )
+    return "decision";
+  return "decision";
 }
 
 function getModuleNav(moduleId: string) {
   switch (moduleId) {
     case "audit":
-      return auditNav
+      return auditNav;
     case "sales":
-      return salesNav
+      return salesNav;
     case "decision":
-      return platformNav
+      return platformNav;
     default:
-      return platformNav
+      return platformNav;
   }
 }
 
 const salesNav = [
-  { name: "Dashboard", nameAr: "لوحة التحكم", href: "/sales", icon: LayoutDashboard },
+  {
+    name: "Dashboard",
+    nameAr: "لوحة التحكم",
+    href: "/sales",
+    icon: LayoutDashboard,
+  },
   { name: "المنظمات", href: "/organizations", icon: Users },
   { name: "الإعدادات", href: "/settings", icon: Settings },
-]
+];
 
 export function PlatformSidebar() {
-  const pathname = usePathname()
-  const [collapsed, setCollapsed] = useState(false)
-  const [moduleOpen, setModuleOpen] = useState(false)
+  const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
+  const [moduleOpen, setModuleOpen] = useState(false);
 
-  const activeModule = getActiveModule(pathname)
-  const currentModule = modules.find((m) => m.id === activeModule) || modules[0]
-  const navItems = getModuleNav(activeModule)
+  const activeModule = getActiveModule(pathname);
+  const currentModule =
+    modules.find((m) => m.id === activeModule) || modules[0];
+  const navItems = getModuleNav(activeModule);
 
   return (
     <aside
       className={cn(
         "flex h-full shrink-0 flex-col border-l bg-sidebar transition-all duration-200",
-        collapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-64",
       )}
     >
       {/* Brand Header */}
       <div className="flex h-14 shrink-0 items-center border-b px-3">
-        <Link href="/" className="flex items-center gap-2.5 min-w-0" aria-label="AQLIYA — Mind The Future">
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 min-w-0"
+          aria-label="AQLIYA — منصة ذكاء مؤسسي خاص ومحكوم"
+        >
           <Image
             src="/brand/aqliya-logo-approved.png"
             alt="AQLIYA"
@@ -124,9 +164,11 @@ export function PlatformSidebar() {
           />
           {!collapsed && (
             <div className="min-w-0 leading-tight">
-              <div className="text-sm font-bold tracking-wide text-primary truncate">AQLIYA</div>
-              <div className="text-[9px] font-medium uppercase tracking-wider text-muted-foreground truncate">
-                Mind The Future
+              <div className="text-sm font-bold tracking-wide text-primary truncate">
+                AQLIYA
+              </div>
+              <div className="text-[9px] font-medium tracking-wider text-muted-foreground truncate">
+                منصة ذكاء مؤسسي خاص ومحكوم
               </div>
             </div>
           )}
@@ -150,18 +192,23 @@ export function PlatformSidebar() {
             className={cn(
               "flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors",
               currentModule.bgActive,
-              currentModule.color
+              currentModule.color,
             )}
           >
             <currentModule.icon className="h-4 w-4 shrink-0" />
             <span className="truncate">{currentModule.name}</span>
-            <ChevronDown className={cn("h-3.5 w-3.5 mr-auto transition-transform", moduleOpen && "rotate-180")} />
+            <ChevronDown
+              className={cn(
+                "h-3.5 w-3.5 mr-auto transition-transform",
+                moduleOpen && "rotate-180",
+              )}
+            />
           </button>
 
           {moduleOpen && (
             <div className="mt-1 space-y-0.5 rounded-md border bg-background p-1">
               {modules.map((module) => {
-                const isActive = module.id === activeModule
+                const isActive = module.id === activeModule;
                 return (
                   <Link
                     key={module.id}
@@ -170,13 +217,13 @@ export function PlatformSidebar() {
                       "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors",
                       isActive
                         ? cn(module.bgActive, module.color, "font-medium")
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
                     )}
                   >
                     <module.icon className="h-4 w-4 shrink-0" />
                     <span className="truncate">{module.name}</span>
                   </Link>
-                )
+                );
               })}
             </div>
           )}
@@ -186,7 +233,8 @@ export function PlatformSidebar() {
       {/* Navigation */}
       <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
         {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname?.startsWith(item.href + "/")
+          const isActive =
+            pathname === item.href || pathname?.startsWith(item.href + "/");
           return (
             <Link
               key={item.href}
@@ -196,14 +244,14 @@ export function PlatformSidebar() {
                 collapsed && "justify-center px-2",
                 isActive
                   ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
               title={collapsed ? item.name : undefined}
             >
               <item.icon className="h-4 w-4 shrink-0" />
               {!collapsed && <span className="truncate">{item.name}</span>}
             </Link>
-          )
+          );
         })}
       </nav>
 
@@ -211,15 +259,15 @@ export function PlatformSidebar() {
       {!collapsed && (
         <div className="shrink-0 border-t p-3">
           <div className="rounded-md bg-muted/50 px-3 py-2">
-            <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-              Governed Intelligence Platform
+            <div className="text-[10px] font-medium tracking-wider text-muted-foreground">
+              منصة ذكاء مؤسسي خاص ومحكوم
             </div>
             <div className="text-[10px] text-muted-foreground/60 mt-0.5">
-              v1.1 — Private & Governed
+              الإصدار 1.1
             </div>
           </div>
         </div>
       )}
     </aside>
-  )
+  );
 }
