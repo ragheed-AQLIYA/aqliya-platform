@@ -131,7 +131,7 @@ export default function AuditProductPage() {
                 href="/auditos"
                 className="btn-secondary h-12 px-8 text-base"
               >
-                شاهد AuditOS كأول تطبيق
+                شاهد AuditOS — عرض تفاعلي
               </Link>
             </div>
 
@@ -416,7 +416,7 @@ export default function AuditProductPage() {
           description="ابدأ من ميزان مراجعة واحد، وشاهد كيف يُفعّل AuditOS مسارًا ماليًا محكومًا فوق AQLIYA Intelligence Core من البيانات إلى المراجعة والاعتماد."
           primaryLabel="ناقش تفعيل النظام"
           primaryHref="/custom-product"
-          secondaryLabel="شاهد AuditOS كأول تطبيق"
+          secondaryLabel="شاهد AuditOS — عرض تفاعلي"
           secondaryHref="/auditos"
         />
       </section>

@@ -181,7 +181,7 @@ export default function HomePage() {
                   href="/auditos"
                   className="btn-secondary h-12 px-8 text-base"
                 >
-                  شاهد AuditOS كأول تطبيق
+                  شاهد AuditOS — أول تطبيق مُثبت
                 </Link>
                 <Link
                   href="/contact"

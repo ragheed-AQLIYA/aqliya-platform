@@ -39,7 +39,7 @@ const footerLinks = [
     title: "ابدأ الآن",
     links: [
       { label: "استكشف خطوط عقلية", href: "/products" },
-      { label: "شاهد AuditOS كأول تطبيق", href: "/auditos" },
+      { label: "شاهد AuditOS — عرض تفاعلي", href: "/auditos" },
       { label: "ناقش حالة استخدام", href: "/custom-product" },
     ],
   },
