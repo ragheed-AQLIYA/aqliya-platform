@@ -2,14 +2,14 @@
 
 ## Current Product Status
 
-| Product        | Status                                 | Documentation State                            | Primary Docs                                                                                        |
-| -------------- | -------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| AuditOS        | First proof product — pilot-ready      | Extensive                                      | product packaging, commercial operating system, pilot/commercial packs                              |
-| LocalContentOS | Strategic second product — in planning | Discovery + Templates + Pilot Runbook complete | `localcontentos-discovery-pack/`, `localcontentos-data-templates/`, `localcontentos-pilot-runbook/` |
-| DecisionOS     | Adjacent active system                 | System docs in `docs/systems/decisionos/`      | system docs                                                                                         |
-| SalesOS        | Prototype / future                     | Minimal                                        | README / future concept                                                                             |
-| SimulationOS   | Concept / future                       | Minimal                                        | README / future concept                                                                             |
-| Custom Systems | Activated per institutional scope      | Scattered                                      | custom-product references / platform docs                                                           |
+| Product        | Status                                 | Documentation State                                   | Primary Docs                                                                                                                      |
+| -------------- | -------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| AuditOS        | First proof product — pilot-ready      | Extensive                                             | product packaging, commercial operating system, pilot/commercial packs                                                            |
+| LocalContentOS | Strategic second product — in planning | Discovery + Templates + Runbook + Sales Pack complete | `localcontentos-discovery-pack/`, `localcontentos-data-templates/`, `localcontentos-pilot-runbook/`, `localcontentos-sales-pack/` |
+| DecisionOS     | Adjacent active system                 | System docs in `docs/systems/decisionos/`             | system docs                                                                                                                       |
+| SalesOS        | Prototype / future                     | Minimal                                               | README / future concept                                                                                                           |
+| SimulationOS   | Concept / future                       | Minimal                                               | README / future concept                                                                                                           |
+| Custom Systems | Activated per institutional scope      | Scattered                                             | custom-product references / platform docs                                                                                         |
 
 ## AuditOS Commercial Chain
 

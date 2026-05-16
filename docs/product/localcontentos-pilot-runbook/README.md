@@ -3,7 +3,7 @@
 **Status:** Analyst-Led Pilot Operations Guide — not software implementation
 **Version:** 1.0
 **Phase:** Phase 2 (Manual Workflow Prototype) — maps to roadmap in Discovery Pack
-**Depends on:** `docs/product/localcontentos-discovery-pack/`, `docs/product/localcontentos-data-templates/`
+**Depends on:** `docs/product/localcontentos-discovery-pack/`, `docs/product/localcontentos-data-templates/`, `docs/product/localcontentos-sales-pack/`
 
 ---
 

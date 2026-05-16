@@ -12,6 +12,7 @@
 - **Discovery & Pilot Pack** — product discovery, commercial positioning, workflow design, pilot materials (`docs/product/localcontentos-discovery-pack/`)
 - **Data Templates Pack** — customer-fillable templates (CSV + markdown specs) for analyst-led pilot data collection (`docs/product/localcontentos-data-templates/`)
 - **Pilot Runbook** — complete analyst-led pilot operating procedure, meeting agendas, decision memo, risk register, and success scorecard (`docs/product/localcontentos-pilot-runbook/`)
+- **Sales Pack** — commercial enablement: one-pager, sales deck, proposals, objection handling, outbound messages, demo script, case study mockup, conversion plan (`docs/product/localcontentos-sales-pack/`)
 
 ## What Does Not Exist
 
