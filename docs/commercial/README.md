@@ -38,3 +38,7 @@ This folder contains commercial and go-to-market materials for AuditOS. Some fil
 - The next cleanup phase should decide which commercial pack is primary and archive the duplicate.
 
 See `docs/reports/product-commercial-docs-structure-review.md` for full overlap analysis.
+
+## AuditOS Commercial Master Index
+
+For AuditOS commercial navigation, use the [`auditos-commercial-master-index.md`](../product/auditos-commercial-master-index.md). It points to current primary sources and documents known duplicates.

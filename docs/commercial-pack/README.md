@@ -70,3 +70,7 @@ This directory overlaps with:
 - Do not treat as the only active commercial source.
 - Do not delete yet.
 - See `docs/reports/product-commercial-docs-structure-review.md` for the full overlap analysis.
+
+## AuditOS Commercial Master Index
+
+For AuditOS commercial navigation, use the [`auditos-commercial-master-index.md`](../product/auditos-commercial-master-index.md). It points to current primary sources and documents known duplicates.

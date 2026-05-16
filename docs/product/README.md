@@ -31,3 +31,7 @@ Recommended reading order:
 - Do not delete or move yet.
 - See `docs/reports/product-commercial-docs-structure-review.md` before any consolidation.
 - `docs/content/website-content-rewrite-v3-hybrid.md` remains the public website messaging source.
+
+## AuditOS Commercial Master Index
+
+For AuditOS commercial navigation, use the [`auditos-commercial-master-index.md`](./auditos-commercial-master-index.md). It points to current primary sources and documents known duplicates.
