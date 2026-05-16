@@ -2,7 +2,7 @@
 
 **Status:** Commercial Sales Pack for Analyst-Led Pilot — not software
 **Version:** 1.0
-**Depends on:** `docs/product/localcontentos-discovery-pack/`, `docs/product/localcontentos-data-templates/`, `docs/product/localcontentos-pilot-runbook/`
+**Depends on:** `docs/product/localcontentos-discovery-pack/`, `docs/product/localcontentos-data-templates/`, `docs/product/localcontentos-pilot-runbook/`, `docs/product/localcontentos-mvp-spec/`
 
 ---
 

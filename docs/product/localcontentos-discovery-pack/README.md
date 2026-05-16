@@ -77,3 +77,4 @@ It covers product definition, target customers, workflow design, data requiremen
 | Phase 1 | Data Templates Pack | ✅ Complete | `docs/product/localcontentos-data-templates/` |
 | Phase 2 | Pilot Runbook       | ✅ Complete | `docs/product/localcontentos-pilot-runbook/`  |
 | Sales   | Sales Pack          | ✅ Complete | `docs/product/localcontentos-sales-pack/`     |
+| MVP     | MVP Specification   | ✅ Complete | `docs/product/localcontentos-mvp-spec/`       |

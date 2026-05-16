@@ -99,6 +99,7 @@ All classification criteria and calculation logic must be validated against appl
 | `docs/product/localcontentos-discovery-pack/` | Product definition, workflow design, data requirements — foundation for templates |
 | `docs/product/localcontentos-pilot-runbook/`  | Operating procedure that uses these templates during pilot execution              |
 | `docs/product/localcontentos-sales-pack/`     | Commercial sales pack that references these templates in proposals                |
+| `docs/product/localcontentos-mvp-spec/`       | Technical specification that translates these templates into data model entities  |
 
 ### Discovery Pack Document Mapping
 
