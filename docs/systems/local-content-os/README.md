@@ -11,6 +11,7 @@
 - Brand and positioning assets
 - **Discovery & Pilot Pack** — product discovery, commercial positioning, workflow design, pilot materials (`docs/product/localcontentos-discovery-pack/`)
 - **Data Templates Pack** — customer-fillable templates (CSV + markdown specs) for analyst-led pilot data collection (`docs/product/localcontentos-data-templates/`)
+- **Pilot Runbook** — complete analyst-led pilot operating procedure, meeting agendas, decision memo, risk register, and success scorecard (`docs/product/localcontentos-pilot-runbook/`)
 
 ## What Does Not Exist
 

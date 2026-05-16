@@ -92,7 +92,14 @@ All classification criteria and calculation logic must be validated against appl
 
 ---
 
-## Relationship to Discovery Pack
+## Relationship to Other Packs
+
+| Pack                                          | Relationship                                                                      |
+| --------------------------------------------- | --------------------------------------------------------------------------------- |
+| `docs/product/localcontentos-discovery-pack/` | Product definition, workflow design, data requirements — foundation for templates |
+| `docs/product/localcontentos-pilot-runbook/`  | Operating procedure that uses these templates during pilot execution              |
+
+### Discovery Pack Document Mapping
 
 | Discovery Pack Document        | Maps To                                                      |
 | ------------------------------ | ------------------------------------------------------------ |

@@ -52,8 +52,9 @@ It covers product definition, target customers, workflow design, data requiremen
 
 1. ✅ Complete this discovery pack (Phase 0) — **done**
 2. ✅ Proceed to **Data Templates (Phase 1)** — standardized CSV templates created at `docs/product/localcontentos-data-templates/` — **done**
-3. Use templates to start conversations with potential pilot customers
-4. When AuditOS customer is secured and running, shift focus to LocalContentOS Phase 2 (Manual Workflow Prototype) or Phase 3 (MVP Workspace) depending on readiness
+3. ✅ Proceed to **Pilot Runbook (Phase 2)** — complete analyst-led pilot operating pack created at `docs/product/localcontentos-pilot-runbook/` — **done**
+4. Use the full pack (Discovery + Templates + Runbook) to execute an analyst-led pilot with a real customer
+5. After pilot: shift to Phase 3 (MVP Workspace) or Phase 6 (Customer Pilot with software) based on pilot learnings
 
 ---
 
