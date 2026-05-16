@@ -12,7 +12,7 @@ const jsonLd: WithContext<Organization | WebSite>[] = [
     email: "ragheed@aqliya.com",
     foundingDate: "2025",
     knowsLanguage: ["ar-SA", "en-US", "tr-TR"],
-    slogan: "Mind The Future",
+    slogan: "منصة ذكاء مؤسسي خاص ومحكوم",
   },
   {
     "@context": "https://schema.org",
