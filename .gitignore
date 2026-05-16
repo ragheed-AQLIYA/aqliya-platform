@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/cypress/videos/
+/cypress/screenshots/
 
 # next.js
 /.next/
@@ -24,6 +26,8 @@
 # misc
 .DS_Store
 *.pem
+.opencode/
+/lighthouse-reports/
 
 # debug
 npm-debug.log*

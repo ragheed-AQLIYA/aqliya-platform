@@ -1,0 +1,79 @@
+Code,Account Name (AR),Account Name (EN),Debit,Credit,Statement Classification,Suggested Mapping
+1001,الصندوق,Cash on Hand,200000,,Current Assets,Cash & Cash Equivalents
+1002,البنك — حساب جاري,Bank — Current Account,3000000,,Current Assets,Cash & Cash Equivalents
+1003,البنك — وديعة إسلامية,Bank — Islamic Deposit,6000000,,Current Assets,Cash & Cash Equivalents
+1010,ذمم تجارية مدينة,Trade Receivables,9000000,,Current Assets,Trade Receivables
+1011,مخصص ديون مشكوك فيها,Allowance for Doubtful Debts,,900000,Contra-Asset,Trade Receivables (offset)
+1012,ذمم طرف ذي علاقة,Due from Related Party,1300000,,Current Assets,Related Party Receivables
+1013,ذمم مدينة أخرى,Other Receivables,250000,,Current Assets,Other Receivables
+1014,سلف موظفين,Staff Receivables,,70000,Current Liabilities,Payables / Reclass Required
+1020,مخزون — بضاعة تامة,Inventory — Finished Goods,12500000,,Current Assets,Inventory
+1021,مخصص تقادم مخزون,Inventory Provision — Slow-moving,,650000,Contra-Asset,Inventory (offset)
+1022,مخزون — بضاعة في الطريق,Inventory — Goods in Transit,2700000,,Current Assets,Inventory
+1030,إيجار مدفوع مقدماً,Prepaid Rent,350000,,Current Assets,Prepayments
+1031,تأمين مدفوع مقدماً,Prepaid Insurance,200000,,Current Assets,Prepayments
+1032,دفعات مقدمة للموردين,Advances to Suppliers,800000,,Current Assets,Advances to Suppliers
+1033,ضريبة القيمة المضافة — مدينة,VAT Receivable,420000,,Current Assets,VAT / Tax Receivable
+1050,حساب معلق,Suspense Account,380000,,Current Assets,Ambiguous — Requires Investigation
+1100,أراضي,Land,10000000,,Non-Current Assets,Property Plant & Equipment
+1101,مباني,Buildings,17000000,,Non-Current Assets,Property Plant & Equipment
+1102,آلات ومعدات,Machinery & Equipment,5800000,,Non-Current Assets,Property Plant & Equipment
+1103,سيارات,Vehicles,2830000,,Non-Current Assets,Property Plant & Equipment
+1104,أثاث وتجهيزات,Furniture & Fixtures,1500000,,Non-Current Assets,Property Plant & Equipment
+1105,أجهزة حاسب آلي,Computer Equipment,1000000,,Non-Current Assets,Property Plant & Equipment
+1106,مجمع إهلاك مباني,Accumulated Depreciation — Buildings,,4200000,Contra-Asset,PPE (offset)
+1107,مجمع إهلاك آلات,Accumulated Depreciation — Machinery,,2400000,Contra-Asset,PPE (offset)
+1108,مجمع إهلاك سيارات,Accumulated Depreciation — Vehicles,,950000,Contra-Asset,PPE (offset)
+1109,مجمع إهلاك أثاث,Accumulated Depreciation — Furniture,,450000,Contra-Asset,PPE (offset)
+1110,مجمع إهلاك حاسب آلي,Accumulated Depreciation — Computers,,600000,Contra-Asset,PPE (offset)
+1120,أصول غير ملموسة — برمجيات,Intangible Assets — Software,700000,,Non-Current Assets,Intangible Assets
+1121,مجمع إطفاء برمجيات,Accumulated Amortisation — Software,,240000,Contra-Asset,Intangible Assets (offset)
+1130,استثمار في شركة زميلة,Investment in Associate,3500000,,Non-Current Assets,Investments
+1140,أصل ضريبي مؤجل,Deferred Tax Asset,300000,,Non-Current Assets,Deferred Tax Assets
+2001,ذمم تجارية دائنة,Trade Payables,,8000000,Current Liabilities,Trade Payables
+2002,ذمم دائنة — طرف ذي علاقة,Due to Related Party,,2000000,Current Liabilities,Related Party Payables
+2003,رواتب مستحقة,Accrued Salaries,,480000,Current Liabilities,Accruals
+2004,إيجار مستحق,Accrued Rent,,200000,Current Liabilities,Accruals
+2005,أتعاب مهنية مستحقة,Accrued Professional Fees,,320000,Current Liabilities,Accruals
+2006,فواتير مرافق مستحقة,Accrued Utilities,,75000,Current Liabilities,Accruals
+2007,ضريبة القيمة المضافة — دائنة,VAT Payable,,620000,Current Liabilities,VAT / Tax Payable
+2008,مخصص زكاة,Zakat Provision,,780000,Current Liabilities,Zakat / Tax Provision
+2009,دفعات مقدمة من العملاء,Advances from Customers,,1200000,Current Liabilities,Deferred Revenue
+2010,أرباح مستحقة الدفع,Dividends Payable,,400000,Current Liabilities,Dividends Payable
+2011,تمويل مرابحة قصير الأجل,Short-term Murabaha Financing,,4500000,Current Liabilities,Borrowings — Current
+2012,قرض طويل الأجل,Long-term Loan,,11000000,Non-Current Liabilities,Borrowings — Non-Current
+2013,القسط الجاري — قرض طويل,Current Portion — LT Loan,,2200000,Current Liabilities,Borrowings — Current
+2014,مخصص مكافأة نهاية الخدمة,EOSB Provision,,1900000,Non-Current Liabilities,Employee Benefits
+2015,التزام ضريبي مؤجل,Deferred Tax Liability,,150000,Non-Current Liabilities,Deferred Tax Liabilities
+3001,رأس المال,Share Capital,,25000000,Equity,Share Capital
+3002,احتياطي نظامي,Statutory Reserve,,2800000,Equity,Reserves
+3003,احتياطي عام,General Reserve,,1100000,Equity,Reserves
+3004,أرباح مبقاة — مرحلة,Retained Earnings — Brought Forward,,5500000,Equity,Retained Earnings
+4001,إيرادات — جملة,Revenue — Wholesale,,48000000,Revenue,Revenue
+4002,إيرادات — تجزئة,Revenue — Retail,,19000000,Revenue,Revenue
+4003,مردودات ومسموحات مبيعات,Sales Returns & Allowances,1400000,,Contra-Revenue,Revenue (offset)
+4010,إيرادات أخرى,Other Income,,600000,Other Income,Other Income
+4011,أرباح استثمار في شركة زميلة,Investment Income — Associate,,450000,Other Income,Share of Profit of Associate
+5001,تكلفة مبيعات — مشتريات,COGS — Purchases,40500000,,Cost of Sales,Cost of Sales
+5002,تكلفة مبيعات — شحن وجمارك,COGS — Freight & Customs,2700000,,Cost of Sales,Cost of Sales
+5003,تكلفة مبيعات — تسوية مخزون,COGS — Inventory Write-down,500000,,Cost of Sales,Cost of Sales
+6001,رواتب وأجور,Salaries & Wages,8500000,,Operating Expense,Employee Costs
+6002,اشتراكات التأمينات الاجتماعية,GOSI Contributions,1275000,,Operating Expense,Employee Costs
+6003,مصروف إيجار,Rent Expense,2400000,,Operating Expense,Occupancy Costs
+6004,مصروف مرافق,Utilities Expense,580000,,Operating Expense,Occupancy Costs
+6005,أتعاب مهنية — تدقيق,Professional Fees — Audit,350000,,Operating Expense,Professional Fees
+6006,أتعاب مهنية — قانونية,Professional Fees — Legal,250000,,Operating Expense,Professional Fees
+6007,أتعاب مهنية — استشارات,Professional Fees — Consulting,1200000,,Operating Expense,Potential Reclassification (Capex)
+6008,مصروف إهلاك,Depreciation Expense,2050000,,Operating Expense,Depreciation
+6009,مصروف إطفاء,Amortisation Expense,100000,,Operating Expense,Amortisation
+6010,مصروف ديون مشكوك فيها,Bad Debt Expense,300000,,Operating Expense,Impairment — Receivables
+6011,مصروف تأمين,Insurance Expense,190000,,Operating Expense,Insurance
+6012,مصروف دعاية وإعلان,Advertising & Marketing,1400000,,Operating Expense,Selling & Marketing
+6013,مصروف سفر,Travel Expense,650000,,Operating Expense,Administrative Expenses
+6014,مصروف صيانة,Repairs & Maintenance,420000,,Operating Expense,Repairs & Maintenance
+6015,مصروف قرطاسية,Office Supplies,180000,,Operating Expense,Administrative Expenses
+6016,مصروف عمولات بنكية,Bank Charges,130000,,Operating Expense,Finance Costs — Bank
+6017,مصروف اتصالات,Telecom Expense,170000,,Operating Expense,Administrative Expenses
+6020,تكلفة تمويل — مرابحة,Finance Cost — Murabaha,400000,,Finance Cost,Finance Costs
+6021,تكلفة تمويل — قرض طويل,Finance Cost — LT Loan,580000,,Finance Cost,Finance Costs
+6030,مصروف زكاة,Zakat Expense,780000,,Taxation,Zakat / Income Tax
