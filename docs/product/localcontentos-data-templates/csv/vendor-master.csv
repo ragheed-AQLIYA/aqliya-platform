@@ -1,0 +1,6 @@
+vendor_id,vendor_name,commercial_registration_number,country,city,vendor_type,ownership_classification,local_content_certificate_available,certificate_reference,classification_status,notes
+VEN-0001,الشركة السعودية للصناعات المتطورة,1010234567,SA,الرياض,Manufacturer,Local,Yes,LCGPA-2024-01234,Reviewed,Certified local manufacturer with 85% local content
+VEN-0002,التقنية المتقدمة للحلول الرقمية,1010345678,SA,جدة,Service Provider,Local,No,,Draft,New vendor with verified Saudi CR
+VEN-0003,Global Tech Solutions W.L.L.,,BH,Manama,Distributor,Non-Local,No,,Draft,Bahrain registered non-Saudi entity
+VEN-0004,مجموعة أعمال المتحدة المحدودة,1010456789,SA,الدمام,Contractor,Mixed,Yes,LCGPA-2023-98765,Pending Evidence,Local distributor for international brand
+VEN-0005,International Construction Co.,2020567890,SA,الخبر,Contractor,Undetermined,No,,Draft,Saudi CR but operations base unclear
