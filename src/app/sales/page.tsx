@@ -129,6 +129,12 @@ const mockTimeline = [
 export default function SalesDashboardPage() {
   return (
     <div className="space-y-6" dir="rtl">
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
+        هذا السطح نموذج أولي داخلي لـ `SalesOS` ببيانات توضيحية ومسارات تفاعلية
+        غير موصولة بقاعدة بيانات أو سير عمل محكوم. ليس جزءًا من إصدار v0.1
+        الحالي.
+      </div>
+
       {/* Workspace Status */}
       <WorkspaceStatus
         module="sales"

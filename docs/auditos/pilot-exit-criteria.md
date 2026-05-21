@@ -2,7 +2,7 @@
 
 ## Overview
 
-These criteria define when AQLIYA AuditOS can transition from limited production pilot to external production readiness.
+These criteria define when AuditOS can transition from limited production pilot to external production readiness.
 
 ---
 
@@ -72,17 +72,17 @@ These criteria define when AQLIYA AuditOS can transition from limited production
 
 ## Scoring
 
-| Category | Required | Met | Notes |
-|----------|----------|-----|-------|
-| Virus/malware scanning | 5 | /5 | |
-| Authentication | 5 | /5 | |
-| Backup | 4 | /4 | |
-| Monitoring | 5 | /5 | |
-| Export | 3 | /3 | |
-| Security | 5 | /5 | |
-| Operations | 4 | /4 | |
-| UAT | 4 | /4 | |
-| **Total** | **35** | **/35** | |
+| Category               | Required | Met     | Notes |
+| ---------------------- | -------- | ------- | ----- |
+| Virus/malware scanning | 5        | /5      |       |
+| Authentication         | 5        | /5      |       |
+| Backup                 | 4        | /4      |       |
+| Monitoring             | 5        | /5      |       |
+| Export                 | 3        | /3      |       |
+| Security               | 5        | /5      |       |
+| Operations             | 4        | /4      |       |
+| UAT                    | 4        | /4      |       |
+| **Total**              | **35**   | **/35** |       |
 
 **Result:** ☐ Pass (35/35) ☐ Conditional pass (≥30/35 with documented exceptions) ☐ Fail (<30/35)
 
@@ -90,18 +90,18 @@ These criteria define when AQLIYA AuditOS can transition from limited production
 
 ## Decision
 
-| Stage | Criteria |
-|-------|----------|
-| **Move to external production** | All 35 criteria met |
-| **Extend limited pilot** | ≥30 criteria met, exceptions documented |
-| **Pause pilot / return to dev** | <30 criteria met |
+| Stage                           | Criteria                                |
+| ------------------------------- | --------------------------------------- |
+| **Move to external production** | All 35 criteria met                     |
+| **Extend limited pilot**        | ≥30 criteria met, exceptions documented |
+| **Pause pilot / return to dev** | <30 criteria met                        |
 
 ---
 
 ## Sign-Off
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| AQLIYA Product Lead | | | |
-| AQLIYA Security Lead | | | |
-| Stakeholder Representative | | | |
+| Role                       | Name | Signature | Date |
+| -------------------------- | ---- | --------- | ---- |
+| AQLIYA Product Lead        |      |           |      |
+| AQLIYA Security Lead       |      |           |      |
+| Stakeholder Representative |      |           |      |

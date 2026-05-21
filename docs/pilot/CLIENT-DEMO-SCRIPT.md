@@ -1,14 +1,15 @@
-# AQLIYA AuditOS — Client Demo Script
+# AuditOS — Client Demo Script
 
 ## Opening Positioning (3 minutes)
 
-**What AQLIYA AuditOS is:**
+**What AuditOS is:**
 A controlled audit engagement platform that digitizes the statutory audit workflow — from trial balance intake through financial statement publication — with full traceability, AI-assisted drafting, and role-based review and approval.
 
 **Who it is for:**
 Audit firms conducting IFRS for SMEs and similar framework audits. Designed for engagement teams with preparers, reviewers, and partners who need structured, auditable collaboration.
 
 **What problem it solves:**
+
 - Fragmented spreadsheets and email-based audit workflows
 - Missing traceability from source data to published statements
 - Manual drafting of standard disclosure notes
@@ -16,7 +17,7 @@ Audit firms conducting IFRS for SMEs and similar framework audits. Designed for 
 - Approval without readiness checks
 
 **Why audit traceability matters:**
-Every number in audit should be traceable back to its source. Every decision should have an actor, a timestamp, and a rationale. AQLIYA AuditOS makes this a structural requirement, not an afterthought.
+Every number in audit should be traceable back to its source. Every decision should have an actor, a timestamp, and a rationale. AuditOS makes this a structural requirement, not an afterthought.
 
 **Why AI is assistant-only:**
 AI assists. Humans decide. Evidence governs. All AI output is draft, requires human review, and is never final by default. The platform enforces this separation at every level — schema, service layer, server actions, and UI.
@@ -30,7 +31,7 @@ AI assists. Humans decide. Evidence governs. All AI output is draft, requires hu
 **Framework:** IFRS for SMEs  
 **Currency:** SAR (Saudi Riyal)  
 **Engagement Type:** Full Audit  
-**Status:** In Progress  
+**Status:** In Progress
 
 Gulf Trading Co. is a Saudi-based trading company. The audit engagement has been set up with trial balance data uploaded, accounts mapped, financial statements structured, and initial evidence collected. The team is actively working through findings and review.
 
@@ -344,6 +345,7 @@ Exports include clear status labels. Draft exports show a warning. Approved expo
 ## Closing Narrative (3 minutes)
 
 **What is ready now:**
+
 - Complete audit workflow: engagement → trial balance → mapping → statements → notes → evidence → findings → recommendations → review → approval
 - AI-assisted drafting for notes, evidence suggestions, findings, recommendations, and analytical review
 - Role-based security (preparer, reviewer, partner, admin) enforced at server-action level
@@ -355,12 +357,14 @@ Exports include clear status labels. Draft exports show a warning. Approved expo
 
 **What is pilot scope:**
 This is a controlled pilot using structured demo data under supervised conditions. The product is ready for:
+
 - Internal team evaluation
 - Controlled client walkthrough
 - Workflow validation
 - AI capability demonstration
 
 **What is NOT production-ready yet:**
+
 - PDF/Word export — current output is JSON
 - Virus/malware scanning — file uploads should be treated as trusted documents
 - Production authentication — user provisioning still requires setup
@@ -368,10 +372,11 @@ This is a controlled pilot using structured demo data under supervised condition
 - External production deployment — requires additional security review
 
 **Next step after pilot:**
+
 1. Collect stakeholder feedback
 2. Prioritize production requirements
 3. Address identified gaps
 4. Schedule production readiness review
 
 **Final message:**
-"Thank you for your time. We are excited to share AQLIYA AuditOS with you and look forward to your feedback as we prepare for production deployment."
+"Thank you for your time. We are excited to share AuditOS with you and look forward to your feedback as we prepare for production deployment."

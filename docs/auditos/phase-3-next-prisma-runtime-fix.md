@@ -28,14 +28,14 @@ Client Components → Server Actions ("use server") → AuditOS Services → DB 
 
 ### Changes Made
 
-| File | Change |
-|------|--------|
-| `src/lib/prisma.ts` | Added `import "server-only"`, static `import { PrismaPg }`, removed Proxy/dynamic require/catch fallback |
-| `prisma/schema.prisma` | Removed `engineType = "library"` (ignored by Prisma 7) |
-| `next.config.mjs` | Created with `serverExternalPackages` for `@prisma/client`, `@prisma/adapter-pg`, `pg` |
-| `src/actions/audit-read-actions.ts` | NEW — 16 server actions wrapping all read-only service functions |
-| 4 AQLIYA Decision OS pages | Fixed `params: Promise<{ id: string }>` with `await params` |
-| 13 audit client components | Changed imports from `@/lib/audit/services` to `@/actions/audit-read-actions` |
+| File                                | Change                                                                                                   |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `src/lib/prisma.ts`                 | Added `import "server-only"`, static `import { PrismaPg }`, removed Proxy/dynamic require/catch fallback |
+| `prisma/schema.prisma`              | Removed `engineType = "library"` (ignored by Prisma 7)                                                   |
+| `next.config.mjs`                   | Created with `serverExternalPackages` for `@prisma/client`, `@prisma/adapter-pg`, `pg`                   |
+| `src/actions/audit-read-actions.ts` | NEW — 16 server actions wrapping all read-only service functions                                         |
+| 4 DecisionOS pages                  | Fixed `params: Promise<{ id: string }>` with `await params`                                              |
+| 13 audit client components          | Changed imports from `@/lib/audit/services` to `@/actions/audit-read-actions`                            |
 
 ### Architecture Boundary
 
@@ -55,13 +55,13 @@ PostgreSQL                     (via @prisma/adapter-pg)
 
 ### Validation Results
 
-| Check | Result |
-|-------|--------|
-| `npx prisma generate` | ✅ Pass (Prisma 7.8.0) |
-| `npm run seed:audit` | ✅ Pass |
-| `npx tsc --noEmit` | ✅ **Zero errors** |
+| Check                        | Result                                         |
+| ---------------------------- | ---------------------------------------------- |
+| `npx prisma generate`        | ✅ Pass (Prisma 7.8.0)                         |
+| `npm run seed:audit`         | ✅ Pass                                        |
+| `npx tsc --noEmit`           | ✅ **Zero errors**                             |
 | `npm run build -- --webpack` | ✅ Compiled, type-checked, page data collected |
-| `npm run dev` | ✅ Ready in 351ms |
+| `npm run dev`                | ✅ Ready in 351ms                              |
 
 ### Key Metrics
 

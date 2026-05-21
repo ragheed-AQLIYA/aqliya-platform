@@ -2,7 +2,7 @@
 
 ## Overview
 
-AQLIYA AuditOS authenticates users via NextAuth (Credentials provider) against the `User` table. For AuditOS operations, session users must have a corresponding `AuditUser` record in the `AuditUser` table.
+AuditOS authenticates users via NextAuth (Credentials provider) against the `User` table. For AuditOS operations, session users must have a corresponding `AuditUser` record in the `AuditUser` table.
 
 ## How Auth Flows
 
@@ -17,23 +17,23 @@ Request → NextAuth session → getCurrentUser() → getAuditActor()
 
 ## AuditUser Fields
 
-| Field | Required | Description | Source |
-|-------|----------|-------------|--------|
-| `id` | Auto | CUID | Generated |
-| `organizationId` | Yes | Links to AuditOrganization | From session user's org |
-| `email` | Yes | User email | From session user |
-| `name` | Yes | Display name | From session user |
-| `role` | Yes | admin / operator / reviewer / partner / viewer | Mapped from session user role |
-| `status` | Yes | active / inactive | Default: active |
-| `lastLoginAt` | No | Auto-updated | Updated each login |
+| Field            | Required | Description                                    | Source                        |
+| ---------------- | -------- | ---------------------------------------------- | ----------------------------- |
+| `id`             | Auto     | CUID                                           | Generated                     |
+| `organizationId` | Yes      | Links to AuditOrganization                     | From session user's org       |
+| `email`          | Yes      | User email                                     | From session user             |
+| `name`           | Yes      | Display name                                   | From session user             |
+| `role`           | Yes      | admin / operator / reviewer / partner / viewer | Mapped from session user role |
+| `status`         | Yes      | active / inactive                              | Default: active               |
+| `lastLoginAt`    | No       | Auto-updated                                   | Updated each login            |
 
 ## Role Mapping
 
-| Session User Role | AuditUser Role | Permissions |
-|-------------------|---------------|-------------|
-| ADMIN | admin | Full access: create, upload, draft, review, approve |
-| OPERATOR | operator | Create, upload, draft (cannot approve) |
-| VIEWER | viewer | Read-only |
+| Session User Role | AuditUser Role | Permissions                                         |
+| ----------------- | -------------- | --------------------------------------------------- |
+| ADMIN             | admin          | Full access: create, upload, draft, review, approve |
+| OPERATOR          | operator       | Create, upload, draft (cannot approve)              |
+| VIEWER            | viewer         | Read-only                                           |
 
 ## Provisioning Methods
 
@@ -42,6 +42,7 @@ Request → NextAuth session → getCurrentUser() → getAuditActor()
 An Admin Users page is available at `/audit/admin/users` (requires admin role).
 
 Features:
+
 - List all audit users in your organization
 - Create/provision new audit users
 - Update user roles
@@ -54,9 +55,9 @@ Features:
 `ensureAuditUserProvisioned()` creates an AuditUser from the session user if none exists.
 
 ```ts
-import { ensureAuditUserProvisioned } from "@/lib/audit/actor-context"
+import { ensureAuditUserProvisioned } from "@/lib/audit/actor-context";
 
-const actor = await ensureAuditUserProvisioned()
+const actor = await ensureAuditUserProvisioned();
 ```
 
 This function is safe to call in development. In production, provisioning should happen through the admin workflow below.
@@ -96,12 +97,12 @@ VALUES (
 
 ## Error Messages
 
-| Scenario | Error |
-|----------|-------|
-| No session (production) | "Authentication required" |
-| No AuditUser mapping | "Audit user not provisioned" |
-| Inactive AuditUser | "Audit user status is inactive" |
-| Role denied | "Access denied: operator role cannot perform this action" |
+| Scenario                | Error                                                     |
+| ----------------------- | --------------------------------------------------------- |
+| No session (production) | "Authentication required"                                 |
+| No AuditUser mapping    | "Audit user not provisioned"                              |
+| Inactive AuditUser      | "Audit user status is inactive"                           |
+| Role denied             | "Access denied: operator role cannot perform this action" |
 
 ## Testing
 
@@ -113,9 +114,9 @@ VALUES (
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `src/lib/auth.ts` | Session user resolution |
-| `src/lib/auth-config.ts` | NextAuth configuration |
+| File                             | Purpose                                   |
+| -------------------------------- | ----------------------------------------- |
+| `src/lib/auth.ts`                | Session user resolution                   |
+| `src/lib/auth-config.ts`         | NextAuth configuration                    |
 | `src/lib/audit/actor-context.ts` | AuditActor resolution + AuditUser mapping |
-| `prisma/schema.prisma` | `AuditUser` model definition |
+| `prisma/schema.prisma`           | `AuditUser` model definition              |

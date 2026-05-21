@@ -2,7 +2,7 @@
 
 ## Current Architecture
 
-AQLIYA AuditOS currently stores **evidence metadata only** (filename, type, size, hash). No actual file bytes are uploaded or stored. The scanner abstraction validates that the security check is performed before evidence creation is allowed.
+AuditOS currently stores **evidence metadata only** (filename, type, size, hash). No actual file bytes are uploaded or stored. The scanner abstraction validates that the security check is performed before evidence creation is allowed.
 
 ## Scanner Modes
 
@@ -21,8 +21,8 @@ AQLIYA AuditOS currently stores **evidence metadata only** (filename, type, size
 
 ## Configuration
 
-| Variable | Required | Description |
-|----------|----------|-------------|
+| Variable           | Required   | Description                                         |
+| ------------------ | ---------- | --------------------------------------------------- |
 | `SCANNER_PROVIDER` | Production | Set to `"clamav"`, `"s3"`, or other once integrated |
 
 ## How It Works
@@ -41,28 +41,29 @@ createEvidenceAction
 
 ## Scan Result Flow
 
-| Result | Dev Behavior | Production Behavior |
-|--------|-------------|-------------------|
-| `clean` | N/A (dev uses skipped_dev) | Requires real scanner integration |
-| `skipped_dev` | ✅ Allow | Never returned in production |
-| `infected` | ❌ Block | ❌ Block |
-| `error` | Allow (dev) | ❌ Block |
+| Result        | Dev Behavior               | Production Behavior               |
+| ------------- | -------------------------- | --------------------------------- |
+| `clean`       | N/A (dev uses skipped_dev) | Requires real scanner integration |
+| `skipped_dev` | ✅ Allow                   | Never returned in production      |
+| `infected`    | ❌ Block                   | ❌ Block                          |
+| `error`       | Allow (dev)                | ❌ Block                          |
 
 ## Audit Trail
 
 Every scan creates an `evidence.file_scanned` AuditEvent with:
+
 - `scanStatus`: clean / infected / error / skipped_dev
 - `scanProvider`: provider name
 - `scannedAt`: ISO timestamp
 
 ## Recommended Providers
 
-| Provider | Type | Notes |
-|----------|------|-------|
-| ClamAV | Open source | Can run as daemon, REST API available |
-| AWS S3 Virus Scanning | Cloud | Uses ClamAV integration with S3 events |
-| Azure Defender for Storage | Cloud | Built-in malware scanning |
-| VirusTotal API | Cloud API | For low-volume scans |
+| Provider                   | Type        | Notes                                  |
+| -------------------------- | ----------- | -------------------------------------- |
+| ClamAV                     | Open source | Can run as daemon, REST API available  |
+| AWS S3 Virus Scanning      | Cloud       | Uses ClamAV integration with S3 events |
+| Azure Defender for Storage | Cloud       | Built-in malware scanning              |
+| VirusTotal API             | Cloud API   | For low-volume scans                   |
 
 ## Limitations
 

@@ -2,7 +2,7 @@
 
 ## Pilot Scope
 
-**Product:** AQLIYA AuditOS  
+**Product:** AuditOS  
 **Pilot Type:** Limited production pilot  
 **Environment:** Controlled — approved pilot clients only  
 **Duration:** [TBD — suggested 4–8 weeks]
@@ -53,15 +53,15 @@ This is a **limited production pilot**, not a full external production deploymen
 
 ## Data Boundaries
 
-| Item | Allowed | Not Allowed |
-|------|---------|-------------|
-| Synthetic/anonymized audit data | ✅ | |
-| Real client trial balance data | ✅ | |
-| Real client financial statements | ✅ | |
-| Real client personally identifiable information | | ❌ |
-| Real client sensitive commercial data | | ❌ |
-| Uploaded unverified files | | ❌ |
-| Production-critical infrastructure data | | ❌ |
+| Item                                            | Allowed | Not Allowed |
+| ----------------------------------------------- | ------- | ----------- |
+| Synthetic/anonymized audit data                 | ✅      |             |
+| Real client trial balance data                  | ✅      |             |
+| Real client financial statements                | ✅      |             |
+| Real client personally identifiable information |         | ❌          |
+| Real client sensitive commercial data           |         | ❌          |
+| Uploaded unverified files                       |         | ❌          |
+| Production-critical infrastructure data         |         | ❌          |
 
 ☐ I acknowledge the data boundaries above.
 
@@ -69,19 +69,19 @@ This is a **limited production pilot**, not a full external production deploymen
 
 ## Sign-Off
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| Pilot Sponsor | | | |
-| AQLIYA Product Lead | | | |
-| Client Stakeholder (if applicable) | | | |
+| Role                               | Name | Signature | Date |
+| ---------------------------------- | ---- | --------- | ---- |
+| Pilot Sponsor                      |      |           |      |
+| AQLIYA Product Lead                |      |           |      |
+| Client Stakeholder (if applicable) |      |           |      |
 
 ---
 
 ## Agreement
 
-I have read, understood, and accept the limitations, risks, and data boundaries described in this document. I acknowledge that AQLIYA AuditOS is in limited production pilot and is not yet a full external production system.
+I have read, understood, and accept the limitations, risks, and data boundaries described in this document. I acknowledge that AuditOS is in limited production pilot and is not yet a full external production system.
 
-**Signed:** __________________ **Date:** __________________
+**Signed:** ********\_\_******** **Date:** ********\_\_********
 
 ---
 
@@ -89,4 +89,4 @@ I have read, understood, and accept the limitations, risks, and data boundaries 
 
 I confirm that the pilot environment has been configured according to the Pilot Environment Checklist and that the documented limitations have been communicated.
 
-**Name:** __________________ **Date:** __________________
+**Name:** ********\_\_******** **Date:** ********\_\_********

@@ -1,13 +1,13 @@
-# AQLIYA AuditOS — Production Review Decision Memo
+# AuditOS — Production Review Decision Memo
 
 ## Review Context
 
-| Field | Value |
-|-------|-------|
-| System | AQLIYA AuditOS v0.1.0 |
-| Readiness score | 27.5/35 (79%) |
-| Pilot type | Limited production pilot |
-| Review date | TBD |
+| Field           | Value                    |
+| --------------- | ------------------------ |
+| System          | AuditOS v0.1.0           |
+| Readiness score | 27.5/35 (79%)            |
+| Pilot type      | Limited production pilot |
+| Review date     | TBD                      |
 
 ## Current Recommendation
 
@@ -19,13 +19,13 @@ External production remains **NO-GO** until 35/35 exit criteria is achieved.
 
 ### Option A: Continue Limited Production Pilot ✅ Recommended
 
-| Condition | Detail |
-|-----------|--------|
-| Status | Continue current limited pilot |
-| Requirements | Accept current limitations as documented |
-| Risk acceptance | Documented in Risk Acceptance Form |
-| Action plan | Approve 35/35 action plan with owners and deadlines |
-| Next review | When score reaches 30/35+ or after 3 months |
+| Condition       | Detail                                              |
+| --------------- | --------------------------------------------------- |
+| Status          | Continue current limited pilot                      |
+| Requirements    | Accept current limitations as documented            |
+| Risk acceptance | Documented in Risk Acceptance Form                  |
+| Action plan     | Approve 35/35 action plan with owners and deadlines |
+| Next review     | When score reaches 30/35+ or after 3 months         |
 
 **Score requirement:** Current (27.5/35) — no minimum for continuation.
 
@@ -33,12 +33,12 @@ External production remains **NO-GO** until 35/35 exit criteria is achieved.
 
 ### Option B: Extend Pilot with Specific Targets
 
-| Condition | Detail |
-|-----------|--------|
-| Status | Extend current pilot for defined period |
-| Targets | Defined in action plan |
-| Duration | 4–8 weeks |
-| Next review | At end of extension period |
+| Condition   | Detail                                  |
+| ----------- | --------------------------------------- |
+| Status      | Extend current pilot for defined period |
+| Targets     | Defined in action plan                  |
+| Duration    | 4–8 weeks                               |
+| Next review | At end of extension period              |
 
 **Use if:** Major gaps identified that require additional pilot time to close.
 
@@ -46,12 +46,12 @@ External production remains **NO-GO** until 35/35 exit criteria is achieved.
 
 ### Option C: Pause and Remediate
 
-| Condition | Detail |
-|-----------|--------|
-| Status | Stop active pilot |
-| Reason | Critical issue requiring remediation |
-| Remediation plan | Defined in action plan |
-| Next review | When remediation complete |
+| Condition        | Detail                               |
+| ---------------- | ------------------------------------ |
+| Status           | Stop active pilot                    |
+| Reason           | Critical issue requiring remediation |
+| Remediation plan | Defined in action plan               |
+| Next review      | When remediation complete            |
 
 **Use if:** Critical security, auth, or data integrity issue found.
 
@@ -59,11 +59,11 @@ External production remains **NO-GO** until 35/35 exit criteria is achieved.
 
 ### Option D: Approve External Production ❌ Not Under Consideration
 
-| Condition | Detail |
-|-----------|--------|
-| Status | ❌ Not under consideration |
-| Requirement | 35/35 exit criteria |
-| Current score | 27.5/35 — insufficient |
+| Condition     | Detail                     |
+| ------------- | -------------------------- |
+| Status        | ❌ Not under consideration |
+| Requirement   | 35/35 exit criteria        |
+| Current score | 27.5/35 — insufficient     |
 
 ## Risk Acceptance Requirements
 
@@ -78,30 +78,30 @@ Before any expansion of pilot scope:
 
 ## Owners and Deadlines
 
-| Gap | Owner | Target Date |
-|-----|-------|-------------|
-| Scanner provider integration | AQLIYA eng | Pre-production |
-| SSO/OAuth configuration | AQLIYA eng | Pre-production |
-| Risk Acceptance Form signature | Pilot sponsor | Pre-production |
-| On-call staffing | Product lead | Pre-production |
-| Escalation test execution | Pilot operator | Pre-production |
-| Backup scheduler activation | Infra admin | Pre-production |
-| Penetration test execution | Security lead | Pre-production |
+| Gap                            | Owner          | Target Date    |
+| ------------------------------ | -------------- | -------------- |
+| Scanner provider integration   | AQLIYA eng     | Pre-production |
+| SSO/OAuth configuration        | AQLIYA eng     | Pre-production |
+| Risk Acceptance Form signature | Pilot sponsor  | Pre-production |
+| On-call staffing               | Product lead   | Pre-production |
+| Escalation test execution      | Pilot operator | Pre-production |
+| Backup scheduler activation    | Infra admin    | Pre-production |
+| Penetration test execution     | Security lead  | Pre-production |
 
 ## Decision
 
-| Option | Decision | Approved By | Date |
-|--------|----------|-------------|------|
-| Continue limited pilot | ☐ | | |
-| Extend pilot | ☐ | | |
-| Pause and remediate | ☐ | | |
-| External production | ❌ NO-GO | | |
+| Option                 | Decision | Approved By | Date |
+| ---------------------- | -------- | ----------- | ---- |
+| Continue limited pilot | ☐        |             |      |
+| Extend pilot           | ☐        |             |      |
+| Pause and remediate    | ☐        |             |      |
+| External production    | ❌ NO-GO |             |      |
 
 ## Signatures
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| Product Lead | | | |
-| Engineering Lead | | | |
-| Security Lead | | | |
-| Pilot Sponsor | | | |
+| Role             | Name | Signature | Date |
+| ---------------- | ---- | --------- | ---- |
+| Product Lead     |      |           |      |
+| Engineering Lead |      |           |      |
+| Security Lead    |      |           |      |
+| Pilot Sponsor    |      |           |      |

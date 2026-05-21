@@ -2,7 +2,7 @@
 
 ## Overview
 
-This runbook covers the setup, operation, and recovery procedures for a limited production pilot of AQLIYA AuditOS.
+This runbook covers the setup, operation, and recovery procedures for a limited production pilot of AuditOS.
 
 **Pilot Type:** Limited production — controlled real-engagement environment  
 **Status:** CONDITIONAL GO  
@@ -62,7 +62,7 @@ npm start
 
 ## 2. Auth Provider Setup
 
-AQLIYA AuditOS uses NextAuth.js with Credentials provider.
+AuditOS uses NextAuth.js with Credentials provider.
 
 ### Default Login
 
@@ -112,10 +112,10 @@ pg_restore -h localhost -U aqliya -d aqliya --clean backup_file.dump
 
 ### Schedule
 
-| Frequency | Type | Retention |
-|-----------|------|-----------|
-| Every 6 hours | Full database dump | 30 days |
-| Daily | Copy to remote storage | 90 days |
+| Frequency     | Type                   | Retention |
+| ------------- | ---------------------- | --------- |
+| Every 6 hours | Full database dump     | 30 days   |
+| Daily         | Copy to remote storage | 90 days   |
 
 ---
 
@@ -133,14 +133,14 @@ Expected output:
 
 If any check fails:
 
-| Check | Possible Cause | Action |
-|-------|---------------|--------|
-| Database connectivity | DB down, wrong URL | Check DATABASE_URL, restart PostgreSQL |
-| Engagements = 0 | Seed not run | Run `npm run seed:audit` |
-| Audit events = 0 | No activity | Verify application is processing requests |
-| AI outputs = 0 | Seed not run | Run `npm run seed:audit` |
-| Audit users = 0 | Seed not run | Run `npm run seed:audit` or provision via Admin UI |
-| Open blockers > 0 | Production blockers unresolved | Review and close blockers |
+| Check                 | Possible Cause                 | Action                                             |
+| --------------------- | ------------------------------ | -------------------------------------------------- |
+| Database connectivity | DB down, wrong URL             | Check DATABASE_URL, restart PostgreSQL             |
+| Engagements = 0       | Seed not run                   | Run `npm run seed:audit`                           |
+| Audit events = 0      | No activity                    | Verify application is processing requests          |
+| AI outputs = 0        | Seed not run                   | Run `npm run seed:audit`                           |
+| Audit users = 0       | Seed not run                   | Run `npm run seed:audit` or provision via Admin UI |
+| Open blockers > 0     | Production blockers unresolved | Review and close blockers                          |
 
 ---
 
@@ -182,11 +182,11 @@ pg_restore -h localhost -U aqliya -d aqliya --clean backup_file.dump
 
 ## 8. Support Escalation Process
 
-| Level | Team | Response Time |
-|-------|------|---------------|
-| L1 | Pilot operator | Within 4 hours |
-| L2 | AQLIYA engineering team | Within 24 hours |
-| L3 | Infrastructure/DB admin | Within 48 hours |
+| Level | Team                    | Response Time   |
+| ----- | ----------------------- | --------------- |
+| L1    | Pilot operator          | Within 4 hours  |
+| L2    | AQLIYA engineering team | Within 24 hours |
+| L3    | Infrastructure/DB admin | Within 48 hours |
 
 ### Reporting Issues
 

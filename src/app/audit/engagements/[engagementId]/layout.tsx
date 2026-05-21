@@ -1,27 +1,32 @@
-import { EngagementTabs } from "@/components/audit/engagement/engagement-tabs"
-import { getWorkflowReadinessAction } from "@/actions/audit-read-actions"
+import { EngagementTabs } from "@/components/audit/engagement/engagement-tabs";
+import { PlatformContextCard } from "@/components/audit/engagement/platform-context-card";
+import { getWorkflowReadinessAction } from "@/actions/audit-read-actions";
 
 export default async function EngagementLayout({
   children,
   params,
 }: {
-  children: React.ReactNode
-  params: Promise<{ engagementId: string }>
+  children: React.ReactNode;
+  params: Promise<{ engagementId: string }>;
 }) {
-  const { engagementId } = await params
+  const { engagementId } = await params;
 
-  let workflowContext = undefined
+  let workflowContext = undefined;
   try {
-    const readiness = await getWorkflowReadinessAction(engagementId)
-    workflowContext = readiness.context
+    const readiness = await getWorkflowReadinessAction(engagementId);
+    workflowContext = readiness.context;
   } catch {
     // If readiness fetch fails (e.g., no session), render tabs without gating
   }
 
   return (
     <div className="space-y-6">
-      <EngagementTabs engagementId={engagementId} workflowContext={workflowContext} />
+      <PlatformContextCard engagementId={engagementId} />
+      <EngagementTabs
+        engagementId={engagementId}
+        workflowContext={workflowContext}
+      />
       {children}
     </div>
-  )
+  );
 }

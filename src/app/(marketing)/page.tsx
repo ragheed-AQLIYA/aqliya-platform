@@ -61,8 +61,8 @@ const products = [
       "رؤية مؤسسية أوضح لمؤشرات المحتوى المحلي وجاهزية القرارات الشرائية.",
     flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات"],
     href: "/products/local-content",
-    note: "المنتج الاستراتيجي الثاني ضمن عقلية، موجه لسوق المحتوى المحلي السعودي، ويبنى على AQLIYA Intelligence Core.",
-    maturity: "استراتيجي — المنتج الثاني",
+    note: "مسار منتج استراتيجي يبحث عن شركاء تصميم للتحقق من الاحتياج وتحديد نطاق بايلوت مستقبلي.",
+    maturity: "استراتيجي — مرحلة التخطيط",
     status: "strategic",
   },
   {
@@ -74,7 +74,7 @@ const products = [
     output: "مذكرة قرار موثقة يمكن مراجعتها وفهم أسبابها قبل الاعتماد.",
     flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية"],
     href: "/products/decision",
-    note: "خط نظام لحوكمة القرار التنفيذي، يُفعّل ضمن نطاق المؤسسة ويبنى على AQLIYA Intelligence Core.",
+    note: "نظام مجاور نشط داخل AQLIYA، ويُستخدم كطبقة منهجية لحوكمة القرارات.",
     maturity: "نظام مجاور — نشط",
     status: "available",
   },
@@ -136,9 +136,9 @@ export default function HomePage() {
                 AQLIYA
               </p>
               <h1 className="mt-3 text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                بنية مؤسسية تجعل الذكاء
+                الحوكمة الفعلية للعمليات
                 <span className="block text-white/70">
-                  مفيدًا، مفهومًا، ومحكومًا
+                  تبدأ بالأدلة. ليس بالآراء.
                 </span>
               </h1>
               <div className="mt-4 space-y-1 text-base font-semibold text-aqliya-cyan/90 sm:text-lg">
@@ -221,53 +221,6 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <SectionEyebrow
-          label="الوضوح الموضعي"
-          title="عقلية ليست..."
-          description="بعض الأشياء التي عقلية لا تفعلها. هذا يساعد في فهم ما هي في الواقع."
-        />
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-6 backdrop-blur">
-            <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-foreground">
-                ليست صفحة دردشة
-              </h3>
-              <span className="text-lg text-red-400">✕</span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              صفحات الدردشة العامة تعطيك إجابات. عقلية تعطيك مسارات مراجعة
-              محكومة وموثقة تربط الإجابة بالبيانات والسياق والموافقات.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-yellow-600/20 bg-yellow-600/[0.05] p-6 backdrop-blur">
-            <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-foreground">
-                ليست SaaS فقط
-              </h3>
-              <span className="text-lg text-yellow-500">✕</span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              عقلية ليست حصرية على السحابة. نقدم نموذج تشغيل مزدوج: سحابة متاحة
-              الآن، وخوادم خاصة ومعزولة قيد التطوير للمؤسسات الحساسة.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-amber-600/20 bg-amber-600/[0.05] p-6 backdrop-blur">
-            <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-foreground">
-                ليست منتجًا واحدًا
-              </h3>
-              <span className="text-lg text-amber-500">✕</span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              عقلية ليست AuditOS فقط. هي نواة تشغيلية تسمح ببناء خطوط أنظمة
-              متعددة فوقها حسب احتياج المؤسسة — من التدقيق إلى المحتوى المحلي
-              إلى حوكمة القرارات.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
-        <SectionEyebrow
           label="الوضوح والثقة"
           title="ليست صناديق سوداء. ليست قرارات آلية. ليست مخرجات بلا دليل."
           description="داخل المؤسسة، الإجابة وحدها لا تكفي. يجب أن يعرف صاحب القرار: ما البيانات؟ ما الدليل؟ من راجع؟ ومن اعتمد؟ عقلية تجعل كل مخرج مفهومًا، قابلًا للمراجعة، ومرتبطًا بسياقه التشغيلي."
@@ -318,6 +271,39 @@ export default function HomePage() {
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
               نموذج مستقبلي للمؤسسات ذات المتطلبات الأمنية العالية. يعتمد على
               اكتمال نموذج الخوادم الخاصة أولاً.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="السياق التشغيلي"
+          title="من التحدي إلى السبب إلى الحل"
+        />
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <div className="rounded-2xl border border-red-500/20 bg-gradient-to-br from-red-500/10 to-white p-6 shadow-sm">
+            <h3 className="text-sm font-black text-red-600">التحدي</h3>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              المؤسسات تتخذ قرارات كل يوم، لكن بدون نظام محكوم: البيانات في
+              مكان، الموافقات في آخر، والأدلة مشتتة. النتيجة: قرارات سريعة، لكن
+              ضعيفة الثقة والقابلية للمراجعة.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-white p-6 shadow-sm">
+            <h3 className="text-sm font-black text-amber-600">السبب الجذري</h3>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              لا توجد طبقة نظام واحدة تجمع البيانات والسير والموافقات والأدلة.
+              كل مؤسسة تعيد بناء هذا اليدوي، مما يؤدي إلى ضعف الثقة والإنفاق غير
+              الضروري.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-white p-6 shadow-sm">
+            <h3 className="text-sm font-black text-emerald-600">الحل</h3>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              عقلية توفر النواة المشتركة: AQLIYA Intelligence Core. طبقة نظام
+              واحدة تدعم السير المحكوم، والأدلة المرتبطة، والموافقات الموثقة —
+              وعائلة من خطوط النظام تبني عليها.
             </p>
           </div>
         </div>
@@ -441,24 +427,101 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
         <SectionEyebrow
           label="عائلة المنتجات"
-          title="كل خط نظام يعالج فجوة تشغيلية محددة داخل المؤسسة"
-          description="هذه ليست صفحات منتجات عامة. كل خط نظام في عقلية يبدأ من مشكلة مؤسسية واضحة، ثم يحولها إلى تدفق عمل محكوم ومخرج قابل للمراجعة والتوسع."
+          title="كل مستوى نضج يعالج احتياجًا مختلفًا"
+          description="بعض المؤسسات تحتاج حلاً مثبتًا وجاهزًا الآن. وبعضها يحتاج لاستكشاف نظام نشط أو تخطيط خط استراتيجي جديد. عقلية تدعم كل المسارات."
         />
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <ProductProofCard
-              key={product.href}
-              title={product.title}
-              problem={product.problem}
-              system={product.system}
-              output={product.output}
-              flow={product.flow}
-              href={product.href}
-              note={product.note}
-              maturity={product.maturity}
-              status={product.status}
-            />
-          ))}
+        <div className="mt-10 space-y-12">
+          {/* Proven Products / المنتجات المُثبتة */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <h3 className="text-lg font-black text-foreground">
+                المنتجات المُثبتة — جاهزة الآن
+              </h3>
+              <span className="inline-flex rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 text-[11px] font-bold text-emerald-400 uppercase">
+                متاح
+              </span>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products
+                .filter((p) => p.status === "active")
+                .map((product) => (
+                  <ProductProofCard
+                    key={product.href}
+                    title={product.title}
+                    problem={product.problem}
+                    system={product.system}
+                    output={product.output}
+                    flow={product.flow}
+                    href={product.href}
+                    note={product.note}
+                    maturity={product.maturity}
+                    status={product.status}
+                  />
+                ))}
+            </div>
+          </div>
+
+          {/* Active Systems / الأنظمة المجاورة النشطة */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <h3 className="text-lg font-black text-foreground">
+                الأنظمة المجاورة — نشطة ومتكاملة
+              </h3>
+              <span className="inline-flex rounded-full bg-blue-500/15 border border-blue-500/30 px-2.5 py-1 text-[11px] font-bold text-blue-400 uppercase">
+                متاح
+              </span>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products
+                .filter((p) => p.status === "available")
+                .map((product) => (
+                  <ProductProofCard
+                    key={product.href}
+                    title={product.title}
+                    problem={product.problem}
+                    system={product.system}
+                    output={product.output}
+                    flow={product.flow}
+                    href={product.href}
+                    note={product.note}
+                    maturity={product.maturity}
+                    status={product.status}
+                  />
+                ))}
+            </div>
+          </div>
+
+          {/* Strategic & Future / خطوط النظام الاستراتيجية */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <h3 className="text-lg font-black text-foreground">
+                خطوط النظام الاستراتيجية — قيد التخطيط والتطوير
+              </h3>
+              <span className="inline-flex rounded-full bg-amber-500/15 border border-amber-500/30 px-2.5 py-1 text-[11px] font-bold text-amber-400 uppercase">
+                قيد التخطيط
+              </span>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products
+                .filter((p) =>
+                  ["strategic", "prototype", "future"].includes(p.status),
+                )
+                .map((product) => (
+                  <ProductProofCard
+                    key={product.href}
+                    title={product.title}
+                    problem={product.problem}
+                    system={product.system}
+                    output={product.output}
+                    flow={product.flow}
+                    href={product.href}
+                    note={product.note}
+                    maturity={product.maturity}
+                    status={product.status}
+                  />
+                ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -625,6 +688,53 @@ export default function HomePage() {
             </p>
           </div>
           <ProofChainVisual />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="الوضوح الموضعي"
+          title="عقلية ليست..."
+          description="بعض الأشياء التي عقلية لا تفعلها. هذا يساعد في فهم ما هي في الواقع."
+        />
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-6 backdrop-blur">
+            <div className="flex items-start justify-between">
+              <h3 className="text-sm font-bold text-foreground">
+                ليست صفحة دردشة
+              </h3>
+              <span className="text-lg text-red-400">✕</span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
+              صفحات الدردشة العامة تعطيك إجابات. عقلية تعطيك مسارات مراجعة
+              محكومة وموثقة تربط الإجابة بالبيانات والسياق والموافقات.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-yellow-600/20 bg-yellow-600/[0.05] p-6 backdrop-blur">
+            <div className="flex items-start justify-between">
+              <h3 className="text-sm font-bold text-foreground">
+                ليست SaaS فقط
+              </h3>
+              <span className="text-lg text-yellow-500">✕</span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
+              عقلية ليست حصرية على السحابة. نقدم نموذج تشغيل مزدوج: سحابة متاحة
+              الآن، وخوادم خاصة ومعزولة قيد التطوير للمؤسسات الحساسة.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-amber-600/20 bg-amber-600/[0.05] p-6 backdrop-blur">
+            <div className="flex items-start justify-between">
+              <h3 className="text-sm font-bold text-foreground">
+                ليست منتجًا واحدًا
+              </h3>
+              <span className="text-lg text-amber-500">✕</span>
+            </div>
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
+              عقلية ليست AuditOS فقط. هي نواة تشغيلية تسمح ببناء خطوط أنظمة
+              متعددة فوقها حسب احتياج المؤسسة — من التدقيق إلى المحتوى المحلي
+              إلى حوكمة القرارات.
+            </p>
+          </div>
         </div>
       </section>
 

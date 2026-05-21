@@ -43,11 +43,7 @@ export default function LocalContentProductPage() {
             </span>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-              استراتيجي — المنتج الثاني
-            </div>
-            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/50">
-              <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
-              قيد التخطيط — يُعرَض حاليًا كصفحة تعريفية
+              استراتيجي — مرحلة التخطيط
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               قياس المحتوى المحلي يجب أن يكون مسارًا تشغيليًا لا تقريرًا متأخرًا
@@ -67,8 +63,8 @@ export default function LocalContentProductPage() {
               </Link>
             </div>
             <p className="mt-4 text-xs leading-6 text-white/35">
-              LocalContentOS حاليًا في مرحلة التخطيط الاستراتيجي. لم يبدأ
-              التطوير التشغيلي بعد.
+              LocalContentOS مسار منتج استراتيجي يبحث عن شركاء تصميم للتحقق من
+              الاحتياج وتحديد نطاق بايلوت مستقبلي.
             </p>
           </div>
         </div>
@@ -200,8 +196,8 @@ export default function LocalContentProductPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام محتوى محلي لمؤسستك؟"
-          description="LocalContentOS في مرحلة التخطيط الاستراتيجي. إذا كنت مهتمًا بالتفعيل المستقبلي، ناقش احتياجك مع فريق عقلية."
-          primaryLabel="ناقش التفعيل المستقبلي"
+          description="LocalContentOS في مرحلة التخطيط. نبحث عن شركاء تصميم للتحقق من الاحتياج وتحديد نطاق البايلوت. إذا كانت مؤسستك مهتمة بهذا المسار، دعنا نناقش احتياجاتك."
+          primaryLabel="ناقش شراكة التصميم"
           primaryHref="/custom-product"
           secondaryLabel="استكشف خطوط عقلية"
           secondaryHref="/products"

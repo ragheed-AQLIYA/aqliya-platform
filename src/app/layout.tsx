@@ -49,8 +49,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  let locale = "ar";
+  let messages: Record<string, unknown> | undefined;
+  try {
+    locale = await getLocale();
+    messages = await getMessages();
+  } catch {
+    // Locale detection is best-effort
+  }
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body
