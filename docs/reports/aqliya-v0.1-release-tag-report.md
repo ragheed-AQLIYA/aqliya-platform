@@ -2,72 +2,68 @@
 
 ## 1. Executive Summary
 
-Release notes were created. No commit was created and no tag was created because the repository is not in a safe tagging state: the worktree contains a very large number of unrelated tracked and untracked changes beyond the release package.
+Release notes were created, a clean release snapshot was prepared as a small series of hook-safe commits, and the annotated `v0.1.0` tag was created successfully.
 
 ## 2. Release Notes
 
 - Path: `docs/releases/aqliya-v0.1-release-notes.md`
-- Summary: formalizes the approved v0.1 release candidate scope, validation status, included/excluded systems, known limitations, commercial safety rules, and proposed release tag metadata.
+- Summary: formal release summary for the approved v0.1.0 initial usable platform release candidate, including scope, validation, limitations, and allowed/forbidden claims.
 
 ## 3. Git Status Before Tag
 
 - Branch: `main`
-- Existing `v0.1.0` tag: not found
-- Worktree state: **dirty and not safe for release tagging**
+- Existing `v0.1.0` tag before creation: not found
+- Tracked release snapshot state: clean and committed
+- Remaining worktree noise: unrelated untracked files/directories outside the committed release snapshot
 
-Observed status summary:
+Repository state used for tagging:
 
-- large set of modified tracked files across docs, config, schema, scripts, app code, components, and libraries
-- large set of untracked files and directories across docs, infra, scripts, tests, routes, and libraries
-- release-related docs are mixed into a much larger uncommitted worktree
-
-Conclusion:
-
-- the repository is not in a safe state for an annotated release tag
-- tagging now would point to a commit that does not represent the current approved release-candidate worktree
+- release-candidate code/config/docs were committed
+- unrelated future/supporting work remained untracked and was intentionally excluded
+- no tracked release-candidate changes were left unstaged when the tag decision was made
 
 ## 4. Validation
 
-| Command                   | Result | Notes                               |
-| ------------------------- | ------ | ----------------------------------- |
-| `npx tsc --noEmit`        | Pass   | Re-run in this task                 |
-| `npm run lint`            | Pass   | 134 warnings, 0 errors              |
-| `npm run build`           | Pass   | Existing warnings remain documented |
-| `npm test -- --runInBand` | Pass   | 18/18 suites passed                 |
-| `npm run audit:health`    | Pass   | 7/7 checks passed                   |
-| `npm run backup:verify`   | Pass   | Data-integrity verification passed  |
+| Command                   | Result | Notes                                            |
+| ------------------------- | ------ | ------------------------------------------------ |
+| `npx tsc --noEmit`        | Pass   | Re-run after release snapshot commits            |
+| `npm run lint`            | Pass   | 134 documented warnings, 0 errors                |
+| `npm run build`           | Pass   | Existing warnings remain documented and accepted |
+| `npm test -- --runInBand` | Pass   | 18/18 suites passed                              |
+| `npm run audit:health`    | Pass   | 7/7 checks passed                                |
+| `npm run backup:verify`   | Pass   | Data-integrity verification passed               |
 
 ## 5. Commit
 
-- Commit hash: none
-- Commit message: none
-- Files included: none
+Release snapshot commits:
 
-Why no commit was made:
+1. `3c3bcc1` — `Lock AQLIYA v0.1 release scope`
+2. `9f7595b` — `Add AQLIYA v0.1 validation foundation`
+3. `a513a63` — `Add AQLIYA platform and Office AI release surfaces`
+4. `afb582b` — `Add Sunbul and workflowos release workspace`
+5. `6d8d274` — `Finalize AQLIYA v0.1 release snapshot`
+6. `d2adde5` — `Fix AuditOS dashboard release lint issue`
 
-- the worktree contains many unrelated changes
-- creating a partial release commit would not safely capture the actual release-candidate code and documentation state
-- tagging should only happen after intended release changes are reviewed, staged, and committed in a clean release snapshot
+Files included:
 
-Recommended exact next commit approach once the tree is cleaned and reviewed:
-
-```bash
-git add docs/releases docs/reports AGENTS.md docs/official docs/source-of-truth docs/product
-git commit -m "Prepare AQLIYA v0.1 release candidate"
-```
-
-Only do that after confirming which current worktree changes are intended for the release snapshot.
+- official docs
+- source-of-truth docs
+- release docs
+- release/go-no-go reports
+- platform/shared-application/custom-workspace code required for the approved v0.1 snapshot
+- validation/test infrastructure required for the current passing release candidate
 
 ## 6. Tag
 
 - Tag name: `v0.1.0`
 - Tag type: annotated git tag
 - Tag message: `AQLIYA v0.1.0 — initial usable platform release candidate`
-- Tag target commit: none
+- Tag target commit: `d2adde54eed36c282cd53182372780d9af18d3f5`
 
-Why no tag was created:
+Verification:
 
-- the repository state is not safe for tagging because of extensive unrelated uncommitted changes
+- `git tag --list "v0.1.0"` returned `v0.1.0`
+- `git show --stat v0.1.0` confirmed the annotated tag and target commit
 
 ## 7. Push Status
 
@@ -79,8 +75,8 @@ Why no tag was created:
 - pre-existing lint warnings remain
 - build warnings remain documented and accepted
 - prototype/internal surfaces remain present and must retain restricted framing
-- release tagging is blocked by dirty-tree repository state, not by validation failure
+- unrelated untracked future/supporting repository work still exists outside the release snapshot and was intentionally excluded from tagging
 
 ## 9. Next Recommended Step
 
-Create a clean release snapshot by reviewing, staging, and committing only the intended release-candidate changes, then create the annotated `v0.1.0` tag on that clean commit.
+If desired, prepare a human-readable changelog/release announcement from `docs/releases/aqliya-v0.1-release-notes.md`, then push the release commit series and `v0.1.0` tag only when explicitly approved.
