@@ -48,6 +48,32 @@ function daysSince(dateStr: string): string {
   return `منذ ${diff} أيام`;
 }
 
+type EngagementWithPlatformContext = Awaited<
+  ReturnType<typeof getEngagements>
+>[number] & {
+  projectId?: string | null;
+  client?:
+    | (Awaited<ReturnType<typeof getEngagements>>[number]["client"] & {
+        clientWorkspaceId?: string | null;
+      })
+    | null;
+};
+
+function getEngagementProjectId(
+  engagement: Awaited<ReturnType<typeof getEngagements>>[number],
+) {
+  return (engagement as EngagementWithPlatformContext).projectId ?? null;
+}
+
+function getClientWorkspaceId(
+  engagement: Awaited<ReturnType<typeof getEngagements>>[number],
+) {
+  return (
+    (engagement as EngagementWithPlatformContext).client?.clientWorkspaceId ??
+    null
+  );
+}
+
 export default async function AuditDashboardPage() {
   const actor = await getAuditActor();
   const [summary, engagements] = await Promise.all([
@@ -56,11 +82,9 @@ export default async function AuditDashboardPage() {
   ]);
 
   // Batch-fetch project context for engagements
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const engagementProjectIds = (engagements as any[])
-    .filter((e) => e.projectId)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .map((e: any) => e.projectId);
+  const engagementProjectIds = engagements
+    .map((engagement) => getEngagementProjectId(engagement))
+    .filter((projectId): projectId is string => Boolean(projectId));
   const projects =
     engagementProjectIds.length > 0
       ? await prisma.project.findMany({
@@ -71,15 +95,13 @@ export default async function AuditDashboardPage() {
   const projectMap = new Map(projects.map((p) => [p.id, p]));
 
   // Batch-fetch workspace context for unique client workspace IDs
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   const clientWorkspaceIds = [
     ...new Set(
-      (engagements as any[])
-        .filter((e: any) => e.client?.clientWorkspaceId)
-        .map((e: any) => e.client.clientWorkspaceId),
+      engagements
+        .map((engagement) => getClientWorkspaceId(engagement))
+        .filter((workspaceId): workspaceId is string => Boolean(workspaceId)),
     ),
   ];
-  /* eslint-enable @typescript-eslint/no-explicit-any */
   const workspaces =
     clientWorkspaceIds.length > 0
       ? await prisma.clientWorkspace.findMany({
@@ -246,27 +268,17 @@ export default async function AuditDashboardPage() {
                       {eng.client?.name || "غير معروف"}
                     </span>
                     <StatusBadge status={eng.status} size="sm" />
-                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    {(eng as any).projectId &&
-                      projectMap.has((eng as any).projectId) && (
+                    {getEngagementProjectId(eng) &&
+                      projectMap.has(getEngagementProjectId(eng)!) && (
                         <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-950 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                           <Building2 className="h-2.5 w-2.5" />
-                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {projectMap.get((eng as any).projectId)!.name}
+                          {projectMap.get(getEngagementProjectId(eng)!)!.name}
                         </span>
                       )}
-                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    {(eng as any).client?.clientWorkspaceId &&
-                      workspaceMap.has(
-                        (eng as any).client.clientWorkspaceId,
-                      ) && (
+                    {getClientWorkspaceId(eng) &&
+                      workspaceMap.has(getClientWorkspaceId(eng)!) && (
                         <span className="inline-flex items-center gap-1 rounded-md bg-green-50 dark:bg-green-950 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800">
-                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {
-                            workspaceMap.get(
-                              (eng as any).client.clientWorkspaceId,
-                            )!.name
-                          }
+                          {workspaceMap.get(getClientWorkspaceId(eng)!)!.name}
                         </span>
                       )}
                   </div>
