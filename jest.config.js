@@ -7,12 +7,16 @@ module.exports = {
   testEnvironment: "node",
   maxWorkers: 1,
   testMatch: ["**/__tests__/**/*.test.ts"],
+  setupFiles: [path.join(__dirname, "src/__tests__/setup.ts")],
   moduleNameMapper: {
     "^@/(.*)$": path.join(__dirname, "src", "$1"),
     "^next-auth$": path.join(__dirname, "src/__mocks__/next-auth.js"),
     "^next-auth/providers/credentials$": path.join(__dirname, "src/__mocks__/next-auth.js"),
     "^@auth/prisma-adapter$": path.join(__dirname, "src/__mocks__/auth-prisma-adapter.js"),
     "^bcryptjs$": path.join(__dirname, "src/__mocks__/bcryptjs.js"),
+    "^server-only$": path.join(__dirname, "src/__mocks__/server-only.js"),
+    "^@prisma/client$": path.join(__dirname, "src/__mocks__/prisma-client-mock.js"),
+    "^@prisma/adapter-pg$": path.join(__dirname, "src/__mocks__/prisma-adapter-mock.js"),
   },
   transform: {
     "^.+\\.tsx?$": ["ts-jest", {
