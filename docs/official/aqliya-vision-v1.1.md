@@ -1,9 +1,8 @@
 # AQLIYA v1.1 — Official Vision
 
-**Version:** 1.1
-**Status:** Official — supersedes all previous vision documents
+**Version:** 1.1  
+**Status:** Official — aligned to hardened repository reality for v0.1 scope lock  
 **Source files:** `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`
-**Depends on:** AQLIYA Intelligence Core
 
 ---
 
@@ -11,84 +10,25 @@
 
 AQLIYA is a **Private Governed Institutional Intelligence Platform**.
 
-**Arabic:** عقلية هي منصة ذكاء مؤسسي خاص للجهات التي تريد استخدام الذكاء الاصطناعي دون فقدان السيطرة على بياناتها وقراراتها وحوكمتها.
+**Arabic:** عقلية هي منصة ذكاء مؤسسي خاص ومحكوم تساعد الجهات على بناء وتشغيل أنظمة مؤسسية ذكية داخل بيئة مضبوطة، مع حوكمة، أدلة، صلاحيات، وسجل تدقيقي.
 
-**English:** AQLIYA gives institutions private intelligence that runs on their data, within their environment, under their governance.
-
----
+**English:** AQLIYA gives institutions governed intelligence that runs on their data, within their environment, under their permissions, evidence rules, and audit controls.
 
 ## What AQLIYA Is NOT
 
-- NOT an AI chatbot
-- NOT SaaS only
 - NOT AuditOS only
+- NOT SaaS only
+- NOT an AI chatbot
 - NOT a CRM
 - NOT a generic workflow tool
 
 ## What AQLIYA IS
 
 - A Private Governed Institutional Intelligence Platform
-- A multi-product intelligence company
-- A builder of custom institutional systems (via AQLIYA Studio)
-- A Cloud + Private/On-Prem dual-deployment platform
-- A governance-first, evidence-based, human-reviewed AI system
-
----
-
-## Operating Models
-
-| Model | Description | Target | Implementation Status |
-|---|---|---|---|---|
-| **AQLIYA Cloud** | Managed SaaS deployment | SMEs, pilots, mid-market | **Active** — currently implemented |
-| **AQLIYA Private / On-Prem** | Runs inside customer infrastructure | Banks, government, sensitive sectors | **Strategic / future** — not yet implemented as a production deployment package |
-| **AQLIYA Air-Gapped** | No internet, no external APIs, local AI only | Defense, critical national infrastructure | **Strategic / future** — not yet implemented; requires Private/On-Prem foundation first |
-
----
-
-## Platform Architecture
-
-```
-AQLIYA Intelligence Core (shared platform layer)
-├── AI Orchestration Engine
-├── Governance Engine
-├── Workflow Engine
-├── Evidence Graph
-├── Institutional Memory
-├── RBAC / Permissions
-├── Audit Logs
-├── Model Governance
-├── Document Intelligence
-├── Reporting Engine
-└── Deployment Layer
-```
-
----
-
-## Product Family
-
-| Priority | Product | Description | Status |
-|---|---|---|---|
-| 1 | **AuditOS** | Governed financial & audit intelligence | Active (primary, pilot-ready) |
-| 2 | **LocalContentOS** | Local content measurement & governance | Strategic (second product) |
-| 3 | **AQLIYA Core / Studio** | Custom systems builder layer | Platform foundation |
-| 4 | SalesOS | Governed revenue intelligence | Future |
-| 5 | LocalContactOS | Institutional relationship intelligence | Future |
-| 6 | DecisionOS | Executive decision governance | Active (adjacent system) |
-| 7 | RiskOS | Internal risk intelligence | Future |
-| 8 | ComplianceOS | Regulated compliance management | Future |
-| 9 | LegalOS | Legal intelligence assistant | Future |
-| 10 | GovOS | Government institutional intelligence | Future |
-
----
-
-## Key Rules
-
-1. AQLIYA is a platform, not one product. Never reduce AQLIYA to AuditOS.
-2. AI assists. Humans decide. Evidence governs.
-3. Cloud + Private is the dual strategy. Never position as SaaS-only.
-4. Every AI output must be evidence-linked, human-reviewed, and auditable.
-5. Studio is a strategic layer. It enables custom systems without building each from scratch.
-6. Private/On-Prem and Air-Gapped are strategic deployment models. They are not yet implemented as production packages. Do not claim otherwise.
+- A multi-system company and platform
+- A governance-first, evidence-based, human-reviewed AI environment
+- A Cloud + Private strategic platform
+- A platform that can host products, shared applications, and custom workspaces
 
 ---
 
@@ -97,3 +37,70 @@ AQLIYA Intelligence Core (shared platform layer)
 > AI assists. Humans decide. Evidence governs.
 
 **Arabic:** الذكاء الاصطناعي يساعد. الإنسان يقرر. الدليل يحكم.
+
+---
+
+## Operating Models
+
+| Model                        | Description                                                       | Implementation Status                                            |
+| ---------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------- |
+| **AQLIYA Cloud**             | Managed cloud deployment for current pilots and active workspaces | **Implemented**                                                  |
+| **AQLIYA Private / On-Prem** | Strategic deployment inside customer infrastructure               | **Strategic / future** — not implemented as a production package |
+| **AQLIYA Air-Gapped**        | Strategic no-internet deployment with local-only processing       | **Strategic / future** — not implemented                         |
+
+---
+
+## Current v0.1 Reality Snapshot
+
+| Area                    | Release Inclusion Status                | Maturity       | Customer Demo Status          |
+| ----------------------- | --------------------------------------- | -------------- | ----------------------------- |
+| **AQLIYA Platform**     | Included in v0.1                        | L4 Usable v0.1 | Safe to show with explanation |
+| **AuditOS**             | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
+| **DecisionOS**          | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
+| **Office AI Assistant** | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
+| **Sunbul**              | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation |
+| **workflowos**          | Included as custom/internal workspace   | L3 Prototype   | Internal only                 |
+| **auditos demo**        | Included as demo only                   | L1 Marketing   | Demo only                     |
+| **SalesOS**             | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
+| **LocalContentOS**      | Strategic / future                      | L1 Marketing   | Do not show as implemented    |
+
+---
+
+## Product Family and Boundaries
+
+| Area                    | Official Position                          | Current Reality                                   |
+| ----------------------- | ------------------------------------------ | ------------------------------------------------- |
+| **AuditOS**             | First proof product under AQLIYA           | Real and pilot-ready candidate                    |
+| **DecisionOS**          | Active adjacent decision governance system | Real and included in v0.1 scope                   |
+| **Office AI Assistant** | Governed shared application on AQLIYA Core | Real; not a standalone product                    |
+| **Sunbul**              | Custom/client-specific governed workspace  | Real; not a default core product claim            |
+| **workflowos**          | Custom/internal workflow route family      | Real alias/duplicate surface over Sunbul patterns |
+| **LocalContentOS**      | Strategic second product                   | Not implemented                                   |
+| **SalesOS**             | Future governed revenue intelligence       | Prototype only                                    |
+
+---
+
+## Do Not Claim As Implemented
+
+- Production On-Prem package
+- Air-Gapped deployment
+- Local AI runtime
+- AQLIYA Studio builder
+- Model Governance registry
+- Institutional Memory engine
+- LocalContentOS workspace
+- SalesOS backend/workflow
+- LocalContactOS backend
+- RiskOS, ComplianceOS, LegalOS, GovOS product implementations
+
+---
+
+## Key Rules
+
+1. AQLIYA is the platform, not one product.
+2. AuditOS is the first proof product, not the whole company.
+3. DecisionOS is real and active, but distinct from AuditOS.
+4. Office AI Assistant is a governed shared application, not a generic chatbot or standalone product.
+5. Sunbul and workflowos must not be hidden, but must be framed honestly as custom/internal workspace surfaces.
+6. Cloud is implemented; Private/On-Prem and Air-Gapped remain strategic.
+7. Every AI output must remain reviewable, permissioned, evidence-aware, and auditable.

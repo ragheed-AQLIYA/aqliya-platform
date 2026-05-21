@@ -1,80 +1,81 @@
 # AQLIYA Agent Context v1.1
 
-**Purpose:** Mandatory context for any coding agent (human or AI) working on the AQLIYA repository.
-
-**Version:** 1.1
-**Status:** Official — load before any code change
+**Purpose:** Mandatory context for any coding or documentation agent working on the AQLIYA repository.  
+**Version:** 1.1  
+**Status:** Official — aligned to hardened v0.1 reality
 
 ---
 
-## Before Writing Any Code: Read These
+## Read First
 
-1. **`docs/official/aqliya-vision-v1.1.md`** — What AQLIYA is and is not
-2. **`docs/official/aqliya-implementation-rules-v1.1.md`** — Mandatory coding rules
-3. **`docs/official/aqliya-product-taxonomy-v1.1.md`** — Product boundaries and status
-4. **`docs/official/aqliya-core-architecture-v1.1.md`** — Architecture layers and engine status
-5. **`docs/official/aqliya-glossary-v1.1.md`** — Terminology
-6. **`docs/source-of-truth/AQLIYA_ARCHITECTURE.md`** — Route model and hierarchy
-7. **`docs/source-of-truth/AQLIYA_SYSTEM_TAXONOMY.md`** — System classification rules
-8. **`docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`** — Current implementation status
-9. **`docs/source-of-truth/ROUTE_STRATEGY.md`** — Route purpose and rules
+1. `docs/official/aqliya-vision-v1.1.md`
+2. `docs/official/aqliya-product-taxonomy-v1.1.md`
+3. `docs/official/aqliya-core-architecture-v1.1.md`
+4. `docs/official/aqliya-roadmap-v1.1.md`
+5. `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`
+6. `docs/source-of-truth/ROUTE_STRATEGY.md`
+7. `docs/source-of-truth/AQLIYA_ARCHITECTURE.md`
+8. `docs/source-of-truth/AQLIYA_SYSTEM_TAXONOMY.md`
+9. `docs/releases/aqliya-v0.1-release-scope.md`
 
 ---
 
 ## Critical Identity Rules
 
-These override any assumptions the agent may have:
-
-1. **AQLIYA is a Private Governed Institutional Intelligence Platform** — not an audit system, not a chatbot, not SaaS-only.
-2. **AuditOS is the first proof product**, not the whole company.
-3. **LocalContentOS is the second strategic product** — currently marketing-only.
-4. **Cloud + Private is the dual strategy** — do not assume SaaS-only.
-5. **AI assists, humans decide, evidence governs** — every AI feature must include human review, evidence linking, and audit trail.
-6. **Do not claim Private/On-Prem/Air-Gapped capabilities as implemented** unless existing code/docs support them.
-
----
-
-## Project Conventions
-
-| Area | Convention |
-|---|---|
-| Language | TypeScript 5, strict mode |
-| Framework | Next.js 16 (App Router) |
-| Database | PostgreSQL via Prisma 7 |
-| Auth | NextAuth v5 |
-| Styling | Tailwind CSS 4 + shadcn/ui |
-| Testing | Jest |
-| Package manager | npm |
-| Linting | ESLint 9 (flat config) |
-| UI direction | RTL (Arabic-first) |
-| Font | Noto Sans Arabic |
+1. AQLIYA is a Private Governed Institutional Intelligence Platform.
+2. AuditOS is the first proof product, not the whole platform.
+3. DecisionOS is a real active adjacent system.
+4. Office AI Assistant is a real governed shared application, not a standalone product.
+5. Sunbul is a real custom/client-specific governed workspace.
+6. workflowos is a real route family but currently an alias/duplicate custom workflow surface, not a separate product.
+7. SalesOS and LocalContentOS are not implemented operational products.
+8. Private/On-Prem, Air-Gapped, Local AI, Studio, Model Governance, and Institutional Memory are not implemented.
 
 ---
 
-## File Naming and Structure
+## Release Classification Rules
 
-- `src/app/` — Next.js App Router routes and layouts
-- `src/components/` — React components organized by domain
-- `src/actions/` — Server Actions (database operations)
-- `src/lib/` — Business logic, services, engines
-- `src/types/` — TypeScript type definitions
-- `prisma/` — Database schema and migrations
-- `docs/` — All documentation
-- `docs/official/` — v1.1 official references (highest authority)
-- `docs/source-of-truth/` — Architecture, taxonomy, route strategy
-- `docs/systems/` — Per-system documentation
-- `docs/theoretical-reference/` — Full theoretical foundation
+Use these exact labels when classifying repository reality:
+
+- Included in v0.1
+- Included as pilot-ready product
+- Included as active adjacent system
+- Included as governed shared application
+- Included as custom/internal workspace
+- Included as demo only
+- Prototype / internal preview
+- Strategic / future
+- Not implemented
+- Do not claim as live
 
 ---
 
-## Commands
+## Current v0.1 Scope Baseline
 
-```bash
-npm run dev            # Development server
-npm run build          # Production build (includes prisma generate)
-npm run lint           # ESLint
-npx tsc --noEmit       # TypeScript check
-npm test               # Jest tests
-npm run audit:health   # AuditOS health check
-npm run backup:verify  # Data integrity check
-```
+| Area                | Status                                  |
+| ------------------- | --------------------------------------- |
+| AuditOS             | Included as pilot-ready product         |
+| DecisionOS          | Included as active adjacent system      |
+| Office AI Assistant | Included as governed shared application |
+| Sunbul              | Included as custom/internal workspace   |
+| workflowos          | Included as custom/internal workspace   |
+| auditos             | Included as demo only                   |
+| SalesOS             | Prototype / internal preview            |
+| LocalContentOS      | Strategic / future                      |
+
+---
+
+## Non-Negotiable Claims Discipline
+
+Do not claim these as live unless code, validation, and routes prove them:
+
+- On-Prem production package
+- Air-Gapped deployment
+- Local AI runtime
+- AQLIYA Studio builder
+- Model Governance registry
+- Institutional Memory engine
+- LocalContentOS workspace
+- SalesOS backend
+- LocalContactOS backend
+- RiskOS / ComplianceOS / LegalOS / GovOS product implementations

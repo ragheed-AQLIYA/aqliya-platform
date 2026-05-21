@@ -2,37 +2,66 @@
 
 ## Terms
 
-| Term | Definition | Examples | Allowed Usage | Forbidden Usage |
-|---|---|---|---|---|
-| **Company** | The legal and brand entity that owns all systems | AQLIYA | Use as the top-level identity | Do not use as a product name |
-| **AQLIYA Intelligence Core** | The shared platform layer containing AI, governance, workflow, evidence, memory, RBAC, audit logs, model governance, document intelligence, reporting, and deployment engines | AI Orchestration Engine, Governance Engine, Workflow Engine | Reference as the platform foundation all products build on | Do not treat as a product itself |
-| **AQLIYA Studio** | The custom systems builder layer that enables building institutional systems on top of the Core | Custom workflows, forms, approvals, reports, AI prompts | Reference for custom system capabilities | Do not present as a standalone product |
-| **System** | A named product or product line with its own route, data model, and purpose | AuditOS, DecisionOS, SalesOS | Use in product docs, UI titles, and marketing | Do not call a marketing-only page a system |
-| **Workspace** | A governed operational execution environment with auth, access control, and durable data | AuditOS Workspace (`/audit`), DecisionOS (`/decisions`) | Use for authenticated, DB-backed execution surfaces | Do not apply to mock-only or marketing routes |
-| **Product (marketing)** | A marketing page describing a capability without a workspace implementation | SimulationOS, Local Content OS | Use on `/products/*` pages | Do not present as operational or link to nonexistent routes |
-| **Demo** | A guided, read-only, mock-backed walkthrough | `/auditos` | Use only for explicitly demo-labeled routes | Do not label as "Live" or "Production" |
-| **Governance layer** | Cross-cutting controls shared by all workspaces | Audit trail, validation, publication | Apply across all workspaces | Do not make workspace-specific |
-| **Deployment Model** | How AQLIYA is hosted and operated | Cloud (active), Private/On-Prem (strategic), Air-Gapped (strategic) | Reference cloud as active, private/on-prem and air-gapped as future | Do not claim unimplemented deployment models as available |
-| **Marketing page** | Public-facing content explaining a product or capability | `/products/simulation`, `/products/local-content` | Link to real CTAs matched to current state | Do not link to unrelated products or nonexistent routes |
+| Term                             | Definition                                                                       | Examples                                             | Allowed Usage                                           | Forbidden Usage                                     |
+| -------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------- |
+| **Company**                      | Parent legal and brand entity                                                    | AQLIYA                                               | Use as top-level identity                               | Do not present as a single product                  |
+| **Platform Layer**               | Shared underlying technical/governance foundation                                | AQLIYA Intelligence Core                             | Use for cross-product/shared foundations                | Do not market as a finished product                 |
+| **Product / System**             | Named operational system with route, data, workflow, and governance purpose      | AuditOS, DecisionOS                                  | Use for real operational systems                        | Do not apply to marketing-only pages                |
+| **Shared Application**           | Governed application built on the Core but not a standalone product family       | Office AI Assistant                                  | Use for real shared work-assistant style applications   | Do not reframe as product without explicit decision |
+| **Custom Workspace**             | Real governed workspace tailored to a client-specific or custom workflow         | Sunbul                                               | Use when code exists but positioning is custom/internal | Do not hide if it exists                            |
+| **Custom Workspace Alias**       | Duplicate or alias route family over an existing custom workspace implementation | workflowos                                           | Use when routes exist without a separate domain         | Do not describe as separate product                 |
+| **Demo**                         | Guided, read-only, mock-backed walkthrough                                       | `/auditos`                                           | Use only for explicit demo surfaces                     | Do not present as live workspace                    |
+| **Prototype / Internal Preview** | Incomplete or local-state-only workspace-like surface                            | `/sales`, `/organizations`, `/settings`              | Use to label real but incomplete surfaces               | Do not present as v0.1-complete product             |
+| **Marketing-only Product Page**  | Product description with no operational implementation                           | LocalContentOS, SimulationOS, SalesOS marketing page | Use on `/products/*`                                    | Do not claim as working product                     |
+| **Strategic / Future**           | Planned direction without implemented route/workflow/data proof                  | On-Prem, Air-Gapped, Studio, RiskOS                  | Use for roadmap truthfulness                            | Do not present as available                         |
 
 ## Key Distinctions
 
-### AuditOS is both a System and has a Workspace
-- AuditOS = the product/system
-- `/audit` = the governed workspace (authenticated, DB-backed, with audit trail)
-- `/auditos` = the guided demo (public, mock-backed, unauthenticated)
+### AuditOS
+
+- `AuditOS` = product/system
+- `/audit` = real governed workspace
+- `/auditos` = demo only
 
 ### DecisionOS
-- Active system with routes under `/(dashboard)/`
-- Has DB models, server actions, components, and a real workspace
 
-### SalesOS
-- Static dashboard prototype at `/sales`
-- Has no dedicated services, DB models, or deeper routes
-- Positioned as an adjacent system but currently a prototype
+- Real product/system
+- Real workspace under `/decisions`
+- Included in v0.1 as active adjacent system
 
-### SimulationOS and Local Content OS
-- Marketing-only: exist as `/products/*` pages with no workspace implementation
-- No `src/app/simulation/` or `src/app/local-content/` routes exist
-- Should not be presented as operational systems
-- LocalContentOS is the **strategic second product** per v1.1, targeting Saudi market
+### Office AI Assistant
+
+- Real governed shared application
+- Real routes at `/assistant/*`
+- Not a standalone product claim
+
+### Sunbul and workflowos
+
+- `Sunbul` = real custom workspace
+- `workflowos` = real alias/duplicate route family over Sunbul patterns
+- Neither should be hidden, and neither should be promoted into a general AQLIYA product claim without further product decisions
+
+### SalesOS, organizations, settings
+
+- `SalesOS` current runtime surface is prototype only
+- `/organizations/*` and `/settings` generic surfaces are internal preview/prototype only
+- These must not be shown as implemented v0.1 operational modules
+
+### LocalContentOS and SimulationOS
+
+- `LocalContentOS` = strategic second product, not implemented
+- `SimulationOS` = current marketing/category label, not standalone runtime
+
+## Release-Scope Mapping
+
+| Area                | Release Inclusion Status                | Maturity       | Customer Demo Status          |
+| ------------------- | --------------------------------------- | -------------- | ----------------------------- |
+| AQLIYA Platform     | Included in v0.1                        | L4 Usable v0.1 | Safe to show with explanation |
+| AuditOS             | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
+| DecisionOS          | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
+| Office AI Assistant | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
+| Sunbul              | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation |
+| workflowos          | Included as custom/internal workspace   | L3 Prototype   | Internal only                 |
+| auditos             | Included as demo only                   | L1 Marketing   | Demo only                     |
+| SalesOS             | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
+| LocalContentOS      | Strategic / future                      | L1 Marketing   | Do not show as implemented    |
