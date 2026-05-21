@@ -11,9 +11,13 @@ import {
   ShieldCheck,
   TrendingUp,
   Brain,
+  KanbanSquare,
+  Building2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ScrollText,
+  Bot,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -48,6 +52,16 @@ const modules = [
     bgActive: "bg-module-sales/10",
     borderActive: "border-l-module-sales",
   },
+  {
+    id: "sunbul",
+    name: "WorkflowOS",
+    nameAr: "نظام سير العمل",
+    icon: KanbanSquare,
+    href: "/workflowos",
+    color: "text-aqliya-cyan",
+    bgActive: "bg-aqliya-cyan/10",
+    borderActive: "border-l-aqliya-cyan",
+  },
 ];
 
 const platformNav = [
@@ -58,8 +72,38 @@ const platformNav = [
     icon: LayoutDashboard,
   },
   { name: "المنظمات", href: "/organizations", icon: Users },
+  {
+    name: "Sunbul Company",
+    nameAr: "شركة سنبل",
+    href: "/organizations/sunbul",
+    icon: Building2,
+  },
   { name: "الذكاء", href: "/intelligence/sectors", icon: Brain },
   { name: "الإعدادات", href: "/settings", icon: Settings },
+  {
+    name: "Platform Organization",
+    nameAr: "منظمة المنصة",
+    href: "/settings/platform-organization",
+    icon: ShieldCheck,
+  },
+  {
+    name: "Client Workspaces",
+    nameAr: "مساحات العملاء",
+    href: "/settings/workspaces",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Platform Audit Logs",
+    nameAr: "سجلات تدقيق المنصة",
+    href: "/settings/audit-logs",
+    icon: ScrollText,
+  },
+  {
+    name: "Office AI Assistant",
+    nameAr: "مساعد العمل الذكي",
+    href: "/assistant",
+    icon: Bot,
+  },
 ];
 
 const auditNav = [
@@ -91,12 +135,38 @@ const auditNav = [
     href: "/audit",
     icon: LayoutDashboard,
   },
+  {
+    name: "Platform Organization",
+    nameAr: "منظمة المنصة",
+    href: "/settings/platform-organization",
+    icon: ShieldCheck,
+  },
+  {
+    name: "Client Workspaces",
+    nameAr: "مساحات العملاء",
+    href: "/settings/workspaces",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Platform Audit Logs",
+    nameAr: "سجلات تدقيق المنصة",
+    href: "/settings/audit-logs",
+    icon: ScrollText,
+  },
+  {
+    name: "Office AI Assistant",
+    nameAr: "مساعد العمل الذكي",
+    href: "/assistant",
+    icon: Bot,
+  },
 ];
 
 function getActiveModule(pathname: string | null) {
   if (!pathname) return "decision";
   if (pathname.startsWith("/audit")) return "audit";
   if (pathname.startsWith("/sales")) return "sales";
+  if (pathname.startsWith("/sunbul") || pathname.startsWith("/workflowos"))
+    return "sunbul";
   if (
     pathname.startsWith("/decisions") ||
     pathname.startsWith("/organizations") ||
@@ -112,6 +182,8 @@ function getModuleNav(moduleId: string) {
       return auditNav;
     case "sales":
       return salesNav;
+    case "sunbul":
+      return sunbulNav;
     case "decision":
       return platformNav;
     default:
@@ -128,6 +200,51 @@ const salesNav = [
   },
   { name: "المنظمات", href: "/organizations", icon: Users },
   { name: "الإعدادات", href: "/settings", icon: Settings },
+  {
+    name: "Platform Organization",
+    nameAr: "منظمة المنصة",
+    href: "/settings/platform-organization",
+    icon: ShieldCheck,
+  },
+  {
+    name: "Client Workspaces",
+    nameAr: "مساحات العملاء",
+    href: "/settings/workspaces",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Platform Audit Logs",
+    nameAr: "سجلات تدقيق المنصة",
+    href: "/settings/audit-logs",
+    icon: ScrollText,
+  },
+  {
+    name: "Office AI Assistant",
+    nameAr: "مساعد العمل الذكي",
+    href: "/assistant",
+    icon: Bot,
+  },
+];
+
+const sunbulNav = [
+  {
+    name: "Dashboard",
+    nameAr: "لوحة التحكم",
+    href: "/workflowos",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Review Queue",
+    nameAr: "قائمة المراجعة",
+    href: "/workflowos",
+    icon: ShieldCheck,
+  },
+  {
+    name: "WorkflowOS Admin",
+    nameAr: "إدارة WorkflowOS",
+    href: "/workflowos/admin",
+    icon: Settings,
+  },
 ];
 
 export function PlatformSidebar() {
@@ -227,6 +344,28 @@ export function PlatformSidebar() {
               })}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Current Organization Context */}
+      {!collapsed && (
+        <div className="px-3 pb-1">
+          <Link
+            href="/organizations/sunbul"
+            className="flex items-center gap-2 rounded-md bg-muted/40 px-3 py-2 hover:bg-muted transition-colors"
+          >
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">
+              S
+            </div>
+            <div className="min-w-0 leading-tight">
+              <div className="text-[11px] font-medium text-foreground truncate">
+                Sunbul
+              </div>
+              <div className="text-[9px] text-muted-foreground truncate">
+                المؤسسة الحالية
+              </div>
+            </div>
+          </Link>
         </div>
       )}
 

@@ -1,25 +1,26 @@
-"use server"
+"use server";
 
-import { prisma } from "@/lib/prisma"
-import type { DecisionStatus } from "@prisma/client"
+import { prisma } from "@/lib/prisma";
+import type { DecisionStatus } from "@prisma/client";
 import {
   evaluateIntake,
   evaluateFramework,
   evaluateScenarios,
   evaluateRisks,
-} from "@/lib/decision"
+} from "@/lib/decision";
 
-import { isExpectedAccessDeniedError } from "@/lib/auth"
+import { isExpectedAccessDeniedError } from "@/lib/auth";
 import {
   getCurrentUser,
   requireUserContext,
   requireDecisionAccess,
-} from "@/lib/auth"
+} from "@/lib/auth";
+import { logAudit, toAuditJson } from "@/lib/platform-audit";
 
 // --- Decision List ---
 export async function getDecisions() {
   try {
-    const user = await getCurrentUser()
+    const user = await getCurrentUser();
     const decisions = await prisma.decision.findMany({
       where: { organizationId: user.organizationId },
       include: {
@@ -28,20 +29,20 @@ export async function getDecisions() {
         tenderProfile: true,
       },
       orderBy: { createdAt: "desc" },
-    })
-    return { success: true, data: decisions }
+    });
+    return { success: true, data: decisions };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching decisions:", error)
+      console.error("Error fetching decisions:", error);
     }
-    return { success: false, error: "Failed to fetch decisions" }
+    return { success: false, error: "Failed to fetch decisions" };
   }
 }
 
 // --- Decision by ID ---
 export async function getDecisionById(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER")
+    await requireDecisionAccess(id, "VIEWER");
     const decision = await prisma.decision.findUnique({
       where: { id },
       include: {
@@ -70,54 +71,65 @@ export async function getDecisionById(id: string) {
           orderBy: { createdAt: "desc" },
         },
       },
-    })
+    });
 
     if (!decision) {
-      return { success: false, error: "Decision not found" }
+      return { success: false, error: "Decision not found" };
     }
 
-    return { success: true, data: decision }
+    return { success: true, data: decision };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching decision:", error)
+      console.error("Error fetching decision:", error);
     }
-    return { success: false, error: "Failed to fetch decision" }
+    return { success: false, error: "Failed to fetch decision" };
   }
 }
 
-const VALID_DECISION_TYPES = ["TENDER", "INVESTMENT", "EXPANSION", "PROCUREMENT", "HIRING", "PARTNERSHIP", "PRICING", "STRATEGIC", "OPERATIONS", "CUSTOM"] as const
-type ValidDecisionType = typeof VALID_DECISION_TYPES[number]
+const VALID_DECISION_TYPES = [
+  "TENDER",
+  "INVESTMENT",
+  "EXPANSION",
+  "PROCUREMENT",
+  "HIRING",
+  "PARTNERSHIP",
+  "PRICING",
+  "STRATEGIC",
+  "OPERATIONS",
+  "CUSTOM",
+] as const;
+type ValidDecisionType = (typeof VALID_DECISION_TYPES)[number];
 
 function isValidDecisionType(type: string): type is ValidDecisionType {
-  return (VALID_DECISION_TYPES as readonly string[]).includes(type)
+  return (VALID_DECISION_TYPES as readonly string[]).includes(type);
 }
 
 // --- Create Decision ---
 export async function createDecision(data: {
-  title: string
-  type?: string
-  description?: string
-  priority?: string
-  targetDate?: string
-  objectives?: string
-  constraints?: string
-  assumptions?: string
-  alternatives?: string
-  risks?: string
+  title: string;
+  type?: string;
+  description?: string;
+  priority?: string;
+  targetDate?: string;
+  objectives?: string;
+  constraints?: string;
+  assumptions?: string;
+  alternatives?: string;
+  risks?: string;
 }) {
   try {
-    const user = await requireUserContext("OPERATOR")
+    const user = await requireUserContext("OPERATOR");
 
     if (!data.title || data.title.trim().length === 0) {
-      return { success: false, error: "Decision title is required" }
+      return { success: false, error: "Decision title is required" };
     }
 
-    const decisionType = data.type || "TENDER"
+    const decisionType = data.type || "TENDER";
     if (!isValidDecisionType(decisionType)) {
-      return { success: false, error: `Invalid decision type: ${data.type}` }
+      return { success: false, error: `Invalid decision type: ${data.type}` };
     }
 
-    const targetDate = data.targetDate ? new Date(data.targetDate) : undefined
+    const targetDate = data.targetDate ? new Date(data.targetDate) : undefined;
 
     const decision = await prisma.decision.create({
       data: {
@@ -130,49 +142,48 @@ export async function createDecision(data: {
         organizationId: user.organizationId,
         status: "DRAFT",
       },
-    })
+    });
 
-    await prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        decisionId: decision.id,
-        organizationId: user.organizationId,
-        action: "DECISION_CREATED",
-        entity: "Decision",
-        after: JSON.stringify({ title: decision.title, type: decision.type }),
-      },
-    })
+    await logAudit(
+      user.id,
+      decision.id,
+      "DECISION_CREATED",
+      "Decision",
+      undefined,
+      JSON.stringify({ title: decision.title, type: decision.type }),
+      user.organizationId,
+    );
 
-    return { success: true, data: decision }
+    return { success: true, data: decision };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error creating decision:", error)
+      console.error("Error creating decision:", error);
     }
-    return { success: false, error: "Failed to create decision" }
+    return { success: false, error: "Failed to create decision" };
   }
 }
 
 // --- Update Decision Status ---
 export async function updateDecisionStatus(id: string, status: string) {
   try {
-    await requireDecisionAccess(id, "OPERATOR")
+    await requireDecisionAccess(id, "OPERATOR");
     const decision = await prisma.decision.update({
       where: { id },
       data: { status: status as DecisionStatus },
-    })
-    return { success: true, data: decision }
+    });
+    return { success: true, data: decision };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error updating decision status:", error)
+      console.error("Error updating decision status:", error);
     }
-    return { success: false, error: "Failed to update decision status" }
+    return { success: false, error: "Failed to update decision status" };
   }
 }
 
 // --- Decision Framework ---
 export async function getDecisionFramework(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER")
+    await requireDecisionAccess(id, "VIEWER");
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
@@ -183,48 +194,66 @@ export async function getDecisionFramework(id: string) {
         risks: true,
         framework: true,
       },
-    })
-    if (!decision) return { success: false, error: "Decision not found" }
+    });
+    if (!decision) return { success: false, error: "Decision not found" };
     const intake = evaluateIntake({
       title: decision.title,
       objectives: decision.objectives,
       alternatives: decision.alternatives,
       risks: decision.risks,
-    })
-    const frameworkState = evaluateFramework(decision.framework)
-    return { success: true, data: { type: decision.type, framework: decision.framework, intake, frameworkState } }
+    });
+    const frameworkState = evaluateFramework(decision.framework);
+    return {
+      success: true,
+      data: {
+        type: decision.type,
+        framework: decision.framework,
+        intake,
+        frameworkState,
+      },
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching framework:", error)
+      console.error("Error fetching framework:", error);
     }
-    return { success: false, error: "Failed to fetch framework" }
+    return { success: false, error: "Failed to fetch framework" };
   }
 }
 
-export async function updateDecisionFramework(id: string, form: {
-  context: string; purpose: string; options: string; criteria: string; values: string; informationGaps: string; certainty: string; assumptions: string
-}) {
+export async function updateDecisionFramework(
+  id: string,
+  form: {
+    context: string;
+    purpose: string;
+    options: string;
+    criteria: string;
+    values: string;
+    informationGaps: string;
+    certainty: string;
+    assumptions: string;
+  },
+) {
   try {
-    await requireDecisionAccess(id, "OPERATOR")
+    await requireDecisionAccess(id, "OPERATOR");
     await prisma.decision.update({
       where: { id },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: { framework: form as any },
-    })
-    const frameworkState = evaluateFramework(form)
-    return { success: true, data: { framework: form, frameworkState } }
+    });
+    const frameworkState = evaluateFramework(form);
+    return { success: true, data: { framework: form, frameworkState } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error updating framework:", error)
+      console.error("Error updating framework:", error);
     }
-    return { success: false, error: "Failed to update framework" }
+    return { success: false, error: "Failed to update framework" };
   }
 }
 
 // --- Decision Intake ---
 export async function getDecisionIntake(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER")
+    await requireDecisionAccess(id, "VIEWER");
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
@@ -236,66 +265,90 @@ export async function getDecisionIntake(id: string) {
         alternatives: true,
         risks: true,
       },
-    })
-    if (!decision) return { success: false, error: "Decision not found" }
+    });
+    if (!decision) return { success: false, error: "Decision not found" };
     const intake = evaluateIntake({
       title: decision.title,
       objectives: decision.objectives,
       alternatives: decision.alternatives,
       risks: decision.risks,
-    })
-    return { success: true, data: { ...decision, intake } }
+    });
+    return { success: true, data: { ...decision, intake } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching intake:", error)
+      console.error("Error fetching intake:", error);
     }
-    return { success: false, error: "Failed to fetch intake" }
+    return { success: false, error: "Failed to fetch intake" };
   }
 }
 
-export async function updateDecisionIntake(id: string, data: {
-  objectives?: string
-  constraints?: string
-  assumptions?: string
-  alternatives?: string
-  risks?: string
-}) {
+export async function updateDecisionIntake(
+  id: string,
+  data: {
+    objectives?: string;
+    constraints?: string;
+    assumptions?: string;
+    alternatives?: string;
+    risks?: string;
+  },
+) {
   try {
-    await requireUserContext("OPERATOR")
+    await requireUserContext("OPERATOR");
     await prisma.decision.update({
       where: { id },
       data: {
-        objectives: data.objectives ? { set: { description: data.objectives } } : undefined,
-        constraints: data.constraints ? { set: { description: data.constraints } } : undefined,
-        assumptions: data.assumptions ? { set: { description: data.assumptions } } : undefined,
-        alternatives: data.alternatives ? { set: { description: data.alternatives } } : undefined,
+        objectives: data.objectives
+          ? { set: { description: data.objectives } }
+          : undefined,
+        constraints: data.constraints
+          ? { set: { description: data.constraints } }
+          : undefined,
+        assumptions: data.assumptions
+          ? { set: { description: data.assumptions } }
+          : undefined,
+        alternatives: data.alternatives
+          ? { set: { description: data.alternatives } }
+          : undefined,
         risks: data.risks ? { set: { description: data.risks } } : undefined,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any,
-    })
+    });
     const result = await prisma.decision.findUnique({
       where: { id },
-      select: { title: true, objectives: true, alternatives: true, risks: true },
-    })
-    const intake = result ? evaluateIntake({
-      title: result.title,
-      objectives: result.objectives,
-      alternatives: result.alternatives,
-      risks: result.risks,
-    }) : { status: "reframe_required" as const, readyForFramework: false, reasonCodes: [], reasons: [], requiredNextSteps: [] }
-    return { success: true, data: { ...result, intake } }
+      select: {
+        title: true,
+        objectives: true,
+        alternatives: true,
+        risks: true,
+      },
+    });
+    const intake = result
+      ? evaluateIntake({
+          title: result.title,
+          objectives: result.objectives,
+          alternatives: result.alternatives,
+          risks: result.risks,
+        })
+      : {
+          status: "reframe_required" as const,
+          readyForFramework: false,
+          reasonCodes: [],
+          reasons: [],
+          requiredNextSteps: [],
+        };
+    return { success: true, data: { ...result, intake } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error updating intake:", error)
+      console.error("Error updating intake:", error);
     }
-    return { success: false, error: "Failed to update intake" }
+    return { success: false, error: "Failed to update intake" };
   }
 }
 
 // --- Decision Scenarios ---
 export async function getDecisionScenarios(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER")
+    await requireDecisionAccess(id, "VIEWER");
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
@@ -308,16 +361,16 @@ export async function getDecisionScenarios(id: string) {
         decisionScenarios: true,
         scenarios: { include: { simulation: true } },
       },
-    })
-    if (!decision) return { success: false, error: "Decision not found" }
+    });
+    if (!decision) return { success: false, error: "Decision not found" };
 
     const intake = evaluateIntake({
       title: decision.title,
       objectives: decision.objectives,
       alternatives: decision.alternatives,
       risks: decision.risks,
-    })
-    const frameworkState = evaluateFramework(decision.framework)
+    });
+    const frameworkState = evaluateFramework(decision.framework);
     const scenarioDrafts = decision.decisionScenarios.map((s) => ({
       id: s.id,
       name: s.name,
@@ -326,29 +379,50 @@ export async function getDecisionScenarios(id: string) {
       expectedOutcome: s.expectedOutcome,
       affectedStakeholders: s.affectedStakeholders,
       requiredConditions: s.requiredConditions,
-    }))
-    const scenarioState = evaluateScenarios(decision.decisionScenarios)
+    }));
+    const scenarioState = evaluateScenarios(decision.decisionScenarios);
 
-    return { success: true, data: { type: decision.type, intake, frameworkState, scenarioState, scenarioDrafts } }
+    return {
+      success: true,
+      data: {
+        type: decision.type,
+        intake,
+        frameworkState,
+        scenarioState,
+        scenarioDrafts,
+      },
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching scenarios:", error)
+      console.error("Error fetching scenarios:", error);
     }
-    return { success: false, error: "Failed to fetch scenarios" }
+    return { success: false, error: "Failed to fetch scenarios" };
   }
 }
 
 export async function updateDecisionScenarios(
   id: string,
-  _input: { scenarios: { id?: string; name: string; description: string; assumptions: string; expectedOutcome: string; affectedStakeholders: string; requiredConditions: string }[] }
+  _input: {
+    scenarios: {
+      id?: string;
+      name: string;
+      description: string;
+      assumptions: string;
+      expectedOutcome: string;
+      affectedStakeholders: string;
+      requiredConditions: string;
+    }[];
+  },
 ) {
   try {
-    await requireDecisionAccess(id, "OPERATOR")
+    await requireDecisionAccess(id, "OPERATOR");
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: { decisionScenarios: { select: { id: true } } },
-    })
-    const existingIds = new Set(decision?.decisionScenarios.map((s) => s.id) || [])
+    });
+    const existingIds = new Set(
+      decision?.decisionScenarios.map((s) => s.id) || [],
+    );
     for (const scenario of _input.scenarios) {
       if (scenario.id && existingIds.has(scenario.id)) {
         await prisma.decisionScenario.update({
@@ -361,7 +435,7 @@ export async function updateDecisionScenarios(
             affectedStakeholders: scenario.affectedStakeholders,
             requiredConditions: scenario.requiredConditions,
           },
-        })
+        });
       } else {
         await prisma.decisionScenario.create({
           data: {
@@ -373,24 +447,29 @@ export async function updateDecisionScenarios(
             affectedStakeholders: scenario.affectedStakeholders,
             requiredConditions: scenario.requiredConditions,
           },
-        })
+        });
       }
     }
-    const updatedScenarios = await prisma.decisionScenario.findMany({ where: { decisionId: id } })
-    const scenarioState = evaluateScenarios(updatedScenarios)
-    return { success: true, data: { decisionScenarios: updatedScenarios, scenarioState } }
+    const updatedScenarios = await prisma.decisionScenario.findMany({
+      where: { decisionId: id },
+    });
+    const scenarioState = evaluateScenarios(updatedScenarios);
+    return {
+      success: true,
+      data: { decisionScenarios: updatedScenarios, scenarioState },
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error updating scenarios:", error)
+      console.error("Error updating scenarios:", error);
     }
-    return { success: false, error: "Failed to update scenarios" }
+    return { success: false, error: "Failed to update scenarios" };
   }
 }
 
 // --- Decision Risk Analysis ---
 export async function getDecisionRiskAnalysis(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER")
+    await requireDecisionAccess(id, "VIEWER");
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
@@ -404,18 +483,21 @@ export async function getDecisionRiskAnalysis(id: string) {
         riskAnalyses: true,
         scenarios: { include: { simulation: true } },
       },
-    })
-    if (!decision) return { success: false, error: "Decision not found" }
+    });
+    if (!decision) return { success: false, error: "Decision not found" };
 
     const intake = evaluateIntake({
       title: decision.title,
       objectives: decision.objectives,
       alternatives: decision.alternatives,
       risks: decision.risks,
-    })
-    const frameworkState = evaluateFramework(decision.framework)
-    const scenarioState = evaluateScenarios(decision.decisionScenarios)
-    const riskAnalysisState = evaluateRisks(decision.decisionScenarios, decision.riskAnalyses)
+    });
+    const frameworkState = evaluateFramework(decision.framework);
+    const scenarioState = evaluateScenarios(decision.decisionScenarios);
+    const riskAnalysisState = evaluateRisks(
+      decision.decisionScenarios,
+      decision.riskAnalyses,
+    );
     const analysisDrafts = decision.riskAnalyses.map((r) => ({
       id: r.id,
       scenarioId: r.scenarioId,
@@ -428,27 +510,54 @@ export async function getDecisionRiskAnalysis(id: string) {
       strategicRisks: r.strategicRisks,
       knowledgeRisks: r.knowledgeRisks,
       uncertaintyLevel: r.uncertaintyLevel,
-    }))
+    }));
 
-    return { success: true, data: { type: decision.type, intake, frameworkState, scenarioState, riskAnalysisState, decisionScenarios: decision.decisionScenarios as { id: string; name: string }[], analysisDrafts } }
+    return {
+      success: true,
+      data: {
+        type: decision.type,
+        intake,
+        frameworkState,
+        scenarioState,
+        riskAnalysisState,
+        decisionScenarios: decision.decisionScenarios as {
+          id: string;
+          name: string;
+        }[],
+        analysisDrafts,
+      },
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching risks:", error)
+      console.error("Error fetching risks:", error);
     }
-    return { success: false, error: "Failed to fetch risks" }
+    return { success: false, error: "Failed to fetch risks" };
   }
 }
 
 export async function updateDecisionRiskAnalysis(
   id: string,
-  _input: { analyses: { scenarioId: string; risks: string; tradeoffs: string; sacrifices: string; opportunityCosts: string; stakeholderRisks: string; operationalRisks: string; strategicRisks: string; knowledgeRisks: string; uncertaintyLevel: string }[] }
+  _input: {
+    analyses: {
+      scenarioId: string;
+      risks: string;
+      tradeoffs: string;
+      sacrifices: string;
+      opportunityCosts: string;
+      stakeholderRisks: string;
+      operationalRisks: string;
+      strategicRisks: string;
+      knowledgeRisks: string;
+      uncertaintyLevel: string;
+    }[];
+  },
 ) {
   try {
-    await requireDecisionAccess(id, "OPERATOR")
+    await requireDecisionAccess(id, "OPERATOR");
     for (const analysis of _input.analyses) {
       const existing = await prisma.decisionRiskAnalysis.findFirst({
         where: { decisionId: id, scenarioId: analysis.scenarioId },
-      })
+      });
       if (existing) {
         await prisma.decisionRiskAnalysis.update({
           where: { id: existing.id },
@@ -463,7 +572,7 @@ export async function updateDecisionRiskAnalysis(
             knowledgeRisks: analysis.knowledgeRisks,
             uncertaintyLevel: analysis.uncertaintyLevel,
           },
-        })
+        });
       } else {
         await prisma.decisionRiskAnalysis.create({
           data: {
@@ -479,32 +588,37 @@ export async function updateDecisionRiskAnalysis(
             knowledgeRisks: analysis.knowledgeRisks,
             uncertaintyLevel: analysis.uncertaintyLevel,
           },
-        })
+        });
       }
     }
     const updatedAnalyses = await prisma.decisionRiskAnalysis.findMany({
       where: { decisionId: id },
       include: { scenario: true },
-    })
-    const scenarios = await prisma.decisionScenario.findMany({ where: { decisionId: id } })
-    const riskAnalysisState = evaluateRisks(scenarios, updatedAnalyses)
-    return { success: true, data: { riskAnalyses: updatedAnalyses, riskAnalysisState } }
+    });
+    const scenarios = await prisma.decisionScenario.findMany({
+      where: { decisionId: id },
+    });
+    const riskAnalysisState = evaluateRisks(scenarios, updatedAnalyses);
+    return {
+      success: true,
+      data: { riskAnalyses: updatedAnalyses, riskAnalysisState },
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error updating risks:", error)
+      console.error("Error updating risks:", error);
     }
-    return { success: false, error: "Failed to update risks" }
+    return { success: false, error: "Failed to update risks" };
   }
 }
 
 // --- Decision Recommendation ---
 export async function getDecisionRecommendation(id: string) {
   try {
-    const { user } = await requireDecisionAccess(id, "VIEWER")
+    const { user } = await requireDecisionAccess(id, "VIEWER");
 
     // If viewer, only show published
     if (user.role === "VIEWER") {
-      return await getPublishedRecommendationViewAction(id)
+      return await getPublishedRecommendationViewAction(id);
     }
 
     const decision = await prisma.decision.findUnique({
@@ -514,10 +628,10 @@ export async function getDecisionRecommendation(id: string) {
         type: true,
         recommendation: true,
       },
-    })
+    });
 
     if (!decision?.recommendation) {
-      return { success: false, error: "Recommendation not found" }
+      return { success: false, error: "Recommendation not found" };
     }
 
     return {
@@ -528,27 +642,30 @@ export async function getDecisionRecommendation(id: string) {
         decisionType: decision.type,
         currentUserRole: user.role,
       },
-    }
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching recommendation:", error)
+      console.error("Error fetching recommendation:", error);
     }
-    return { success: false, error: "Failed to fetch recommendation" }
+    return { success: false, error: "Failed to fetch recommendation" };
   }
 }
 
-export async function updateDecisionRecommendation(id: string, data: {
-  recommendedAction: string
-  rationale: string
-  expectedNextState: string
-  scopeExclusions: string
-  assumptionsUsed: string
-  risksAccepted: string
-  risksRejected: string
-  humanReviewRequired: boolean
-}) {
+export async function updateDecisionRecommendation(
+  id: string,
+  data: {
+    recommendedAction: string;
+    rationale: string;
+    expectedNextState: string;
+    scopeExclusions: string;
+    assumptionsUsed: string;
+    risksAccepted: string;
+    risksRejected: string;
+    humanReviewRequired: boolean;
+  },
+) {
   try {
-    await requireDecisionAccess(id, "OPERATOR")
+    await requireDecisionAccess(id, "OPERATOR");
     const recommendation = await prisma.recommendation.upsert({
       where: { decisionId: id },
       create: {
@@ -572,79 +689,87 @@ export async function updateDecisionRecommendation(id: string, data: {
         risksRejected: data.risksRejected,
         humanReviewRequired: data.humanReviewRequired ?? true,
       },
-    })
-    return { success: true, data: recommendation }
+    });
+    return { success: true, data: recommendation };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error updating recommendation:", error)
+      console.error("Error updating recommendation:", error);
     }
-    return { success: false, error: "Failed to update recommendation" }
+    return { success: false, error: "Failed to update recommendation" };
   }
 }
 
 // --- Check Recommendation Gate ---
 function validateRecommendationGate(decisionId: string) {
   // These should fetch data from DB and evaluate
-  const intake = evaluateIntake({ title: "" })
-  const framework = evaluateFramework(null)
-  const scenarios = evaluateScenarios([])
-  const risks = evaluateRisks([], [])
+  const intake = evaluateIntake({ title: "" });
+  const framework = evaluateFramework(null);
+  const scenarios = evaluateScenarios([]);
+  const risks = evaluateRisks([], []);
 
-  const missing: string[] = []
-  if (intake.status !== "accepted") missing.push("intake_not_accepted")
-  if (!framework.isComplete) missing.push("framework_incomplete")
-  if (!scenarios.isComplete) missing.push("scenarios_incomplete")
-  if (!risks.isComplete) missing.push("risks_incomplete")
+  const missing: string[] = [];
+  if (intake.status !== "accepted") missing.push("intake_not_accepted");
+  if (!framework.isComplete) missing.push("framework_incomplete");
+  if (!scenarios.isComplete) missing.push("scenarios_incomplete");
+  if (!risks.isComplete) missing.push("risks_incomplete");
 
-  return { allowed: missing.length === 0, missing }
+  return { allowed: missing.length === 0, missing };
 }
 
 export async function checkRecommendationGate(decisionId: string) {
-  await requireDecisionAccess(decisionId, "OPERATOR")
-  return await validateRecommendationGate(decisionId)
+  await requireDecisionAccess(decisionId, "OPERATOR");
+  return await validateRecommendationGate(decisionId);
 }
 
 // --- Publish / Unpublish ---
-export async function publishRecommendationAction(decisionId: string, forcePublishCurrent?: boolean) {
+export async function publishRecommendationAction(
+  decisionId: string,
+  forcePublishCurrent?: boolean,
+) {
   try {
-    const access = await requireDecisionAccess(decisionId, "ADMIN")
-    const user = access.user
+    const access = await requireDecisionAccess(decisionId, "ADMIN");
+    const user = access.user;
     const existing = await prisma.recommendation.findUnique({
       where: { decisionId },
-    })
+    });
 
     if (!existing) {
-      return { success: false, error: "Recommendation not found" }
+      return { success: false, error: "Recommendation not found" };
     }
 
     const latestApproval = await prisma.approval.findFirst({
       where: { decisionId, status: "APPROVED" },
       orderBy: { createdAt: "desc" },
-    })
+    });
 
-    const hasImmutableSnapshot = !!(latestApproval?.snapshotAction && latestApproval?.snapshotRationale)
+    const hasImmutableSnapshot = !!(
+      latestApproval?.snapshotAction && latestApproval?.snapshotRationale
+    );
 
     if (hasImmutableSnapshot && latestApproval) {
       const snapshotDiffers =
         latestApproval.snapshotAction !== existing.recommendedAction ||
-        latestApproval.snapshotRationale !== existing.rationale
+        latestApproval.snapshotRationale !== existing.rationale;
 
       if (snapshotDiffers && !forcePublishCurrent) {
-        await prisma.auditLog.create({
-          data: {
-            action: "STALE_PUBLISH_BLOCKED",
-            entity: "Recommendation",
-            userId: user.id,
-            organizationId: access.organizationId,
-            decisionId,
-            before: JSON.stringify({ currentVersion: existing.publishedVersion }),
-            after: JSON.stringify({ reason: "Current recommendation differs from approved snapshot", snapshotAction: latestApproval.snapshotAction, currentAction: existing.recommendedAction }),
-          },
-        })
+        await logAudit(
+          user.id,
+          decisionId,
+          "STALE_PUBLISH_BLOCKED",
+          "Recommendation",
+          JSON.stringify({ currentVersion: existing.publishedVersion }),
+          JSON.stringify({
+            reason: "Current recommendation differs from approved snapshot",
+            snapshotAction: latestApproval.snapshotAction,
+            currentAction: existing.recommendedAction,
+          }),
+          access.organizationId,
+        );
 
         return {
           success: false,
-          error: "Current recommendation differs from approved snapshot. Publish the approved version or provide forcePublishCurrent override.",
+          error:
+            "Current recommendation differs from approved snapshot. Publish the approved version or provide forcePublishCurrent override.",
           requiresOverride: true,
           snapshotInfo: {
             approvedAction: latestApproval.snapshotAction,
@@ -652,21 +777,22 @@ export async function publishRecommendationAction(decisionId: string, forcePubli
             approvedAt: latestApproval.snapshotCreatedAt,
             approver: latestApproval.approverId,
           },
-        }
+        };
       }
 
       if (snapshotDiffers && forcePublishCurrent) {
-        await prisma.auditLog.create({
-          data: {
-            action: "STALE_PUBLISH_OVERRIDE",
-            entity: "Recommendation",
-            userId: user.id,
-            organizationId: access.organizationId,
-            decisionId,
-            before: JSON.stringify({ snapshotAction: latestApproval.snapshotAction }),
-            after: JSON.stringify({ publishedCurrentInstead: true, currentAction: existing.recommendedAction }),
-          },
-        })
+        await logAudit(
+          user.id,
+          decisionId,
+          "STALE_PUBLISH_OVERRIDE",
+          "Recommendation",
+          JSON.stringify({ snapshotAction: latestApproval.snapshotAction }),
+          JSON.stringify({
+            publishedCurrentInstead: true,
+            currentAction: existing.recommendedAction,
+          }),
+          access.organizationId,
+        );
 
         const recommendation = await prisma.recommendation.update({
           where: { decisionId },
@@ -678,20 +804,26 @@ export async function publishRecommendationAction(decisionId: string, forcePubli
             publishedFromSnapshot: false,
             publishedApprovalId: null,
           },
-        })
+        });
 
-        await prisma.auditLog.create({
-          data: {
-            action: "CURRENT_PUBLISHED_WITHOUT_APPROVAL",
-            entity: "Recommendation",
-            userId: user.id,
-            organizationId: access.organizationId,
-            decisionId,
-            after: JSON.stringify({ version: recommendation.publishedVersion, fromSnapshot: false }),
-          },
-        })
+        await logAudit(
+          user.id,
+          decisionId,
+          "CURRENT_PUBLISHED_WITHOUT_APPROVAL",
+          "Recommendation",
+          undefined,
+          JSON.stringify({
+            version: recommendation.publishedVersion,
+            fromSnapshot: false,
+          }),
+          access.organizationId,
+        );
 
-        return { success: true, data: recommendation, publishedFromSnapshot: false }
+        return {
+          success: true,
+          data: recommendation,
+          publishedFromSnapshot: false,
+        };
       }
 
       const recommendation = await prisma.recommendation.update({
@@ -704,20 +836,27 @@ export async function publishRecommendationAction(decisionId: string, forcePubli
           publishedFromSnapshot: true,
           publishedApprovalId: latestApproval.id,
         },
-      })
+      });
 
-      await prisma.auditLog.create({
-        data: {
-          action: "SNAPSHOT_PUBLISHED",
-          entity: "Recommendation",
-          userId: user.id,
-          organizationId: access.organizationId,
-          decisionId,
-          after: JSON.stringify({ version: recommendation.publishedVersion, approvalId: latestApproval.id, fromSnapshot: true }),
-        },
-      })
+      await logAudit(
+        user.id,
+        decisionId,
+        "SNAPSHOT_PUBLISHED",
+        "Recommendation",
+        undefined,
+        JSON.stringify({
+          version: recommendation.publishedVersion,
+          approvalId: latestApproval.id,
+          fromSnapshot: true,
+        }),
+        access.organizationId,
+      );
 
-      return { success: true, data: recommendation, publishedFromSnapshot: true }
+      return {
+        success: true,
+        data: recommendation,
+        publishedFromSnapshot: true,
+      };
     }
 
     const recommendation = await prisma.recommendation.update({
@@ -730,32 +869,38 @@ export async function publishRecommendationAction(decisionId: string, forcePubli
         publishedFromSnapshot: false,
         publishedApprovalId: null,
       },
-    })
+    });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "CURRENT_PUBLISHED_WITHOUT_APPROVAL",
-        entity: "Recommendation",
-        userId: user.id,
-        organizationId: access.organizationId,
-        decisionId,
-        after: JSON.stringify({ version: recommendation.publishedVersion, fromSnapshot: false }),
-      },
-    })
+    await logAudit(
+      user.id,
+      decisionId,
+      "CURRENT_PUBLISHED_WITHOUT_APPROVAL",
+      "Recommendation",
+      undefined,
+      JSON.stringify({
+        version: recommendation.publishedVersion,
+        fromSnapshot: false,
+      }),
+      access.organizationId,
+    );
 
-    return { success: true, data: recommendation, publishedFromSnapshot: false }
+    return {
+      success: true,
+      data: recommendation,
+      publishedFromSnapshot: false,
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error publishing recommendation:", error)
+      console.error("Error publishing recommendation:", error);
     }
-    return { success: false, error: "Failed to publish recommendation" }
+    return { success: false, error: "Failed to publish recommendation" };
   }
 }
 
 export async function unpublishRecommendationAction(decisionId: string) {
   try {
-    const access = await requireDecisionAccess(decisionId, "ADMIN")
-    const user = access.user
+    const access = await requireDecisionAccess(decisionId, "ADMIN");
+    const user = access.user;
     const recommendation = await prisma.recommendation.update({
       where: { decisionId },
       data: {
@@ -763,31 +908,31 @@ export async function unpublishRecommendationAction(decisionId: string) {
         publishedFromSnapshot: false,
         publishedApprovalId: null,
       },
-    })
+    });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "OUTPUT_UNPUBLISHED",
-        entity: "Recommendation",
-        userId: user.id,
-        organizationId: access.organizationId,
-        decisionId,
-      },
-    })
+    await logAudit(
+      user.id,
+      decisionId,
+      "OUTPUT_UNPUBLISHED",
+      "Recommendation",
+      undefined,
+      undefined,
+      access.organizationId,
+    );
 
-    return { success: true, data: recommendation }
+    return { success: true, data: recommendation };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error unpublishing recommendation:", error)
+      console.error("Error unpublishing recommendation:", error);
     }
-    return { success: false, error: "Failed to unpublish recommendation" }
+    return { success: false, error: "Failed to unpublish recommendation" };
   }
 }
 
 // --- Published Recommendation View (Read-only, org-scoped) ---
 export async function getPublishedRecommendationViewAction(decisionId: string) {
   try {
-    const user = await getCurrentUser()
+    const user = await getCurrentUser();
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
       select: {
@@ -812,24 +957,30 @@ export async function getPublishedRecommendationViewAction(decisionId: string) {
           },
         },
       },
-    })
+    });
 
     if (!decision) {
-      return { success: false, error: "Recommendation not available" }
+      return { success: false, error: "Recommendation not available" };
     }
 
     if (decision.organizationId !== user.organizationId) {
-      return { success: false, error: "Recommendation not available" }
+      return { success: false, error: "Recommendation not available" };
     }
 
     if (!decision.recommendation?.isClientVisible) {
-      return { success: false, error: "Recommendation not available" }
+      return { success: false, error: "Recommendation not available" };
     }
 
-    let contentSource: "approved_snapshot" | "current_recommendation" | "legacy" = "current_recommendation"
-    let snapshotMetadata = null
+    let contentSource:
+      | "approved_snapshot"
+      | "current_recommendation"
+      | "legacy" = "current_recommendation";
+    let snapshotMetadata = null;
 
-    if (decision.recommendation.publishedFromSnapshot && decision.recommendation.publishedApprovalId) {
+    if (
+      decision.recommendation.publishedFromSnapshot &&
+      decision.recommendation.publishedApprovalId
+    ) {
       const approval = await prisma.approval.findUnique({
         where: { id: decision.recommendation.publishedApprovalId },
         select: {
@@ -846,19 +997,22 @@ export async function getPublishedRecommendationViewAction(decisionId: string) {
           snapshotCreatedAt: true,
           approver: { select: { name: true } },
         },
-      })
+      });
 
       if (approval?.snapshotAction && approval.snapshotRationale) {
-        contentSource = "approved_snapshot"
+        contentSource = "approved_snapshot";
         snapshotMetadata = {
           approvedAt: approval.snapshotCreatedAt,
           approver: approval.approver?.name,
           conditions: approval.snapshotConditions,
           confidence: approval.snapshotConfidence,
           score: approval.snapshotScore,
-        }
+        };
       }
-    } else if (decision.recommendation.publishedAt && !decision.recommendation.publishedFromSnapshot) {
+    } else if (
+      decision.recommendation.publishedAt &&
+      !decision.recommendation.publishedFromSnapshot
+    ) {
       const latestApproval = await prisma.approval.findFirst({
         where: { decisionId, status: "APPROVED" },
         orderBy: { createdAt: "desc" },
@@ -868,22 +1022,24 @@ export async function getPublishedRecommendationViewAction(decisionId: string) {
           snapshotCreatedAt: true,
           approver: { select: { name: true } },
         },
-      })
+      });
 
       if (latestApproval?.snapshotAction && latestApproval.snapshotRationale) {
         const matchesSnapshot =
-          latestApproval.snapshotAction === decision.recommendation.recommendedAction &&
-          latestApproval.snapshotRationale === decision.recommendation.rationale
+          latestApproval.snapshotAction ===
+            decision.recommendation.recommendedAction &&
+          latestApproval.snapshotRationale ===
+            decision.recommendation.rationale;
 
         if (matchesSnapshot) {
-          contentSource = "approved_snapshot"
+          contentSource = "approved_snapshot";
           snapshotMetadata = {
             approvedAt: latestApproval.snapshotCreatedAt,
             approver: latestApproval.approver?.name,
-          }
+          };
         }
       } else if (latestApproval) {
-        contentSource = "legacy"
+        contentSource = "legacy";
       }
     }
 
@@ -898,19 +1054,22 @@ export async function getPublishedRecommendationViewAction(decisionId: string) {
         contentSource,
         snapshotMetadata,
       },
-    }
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching published recommendation:", error)
+      console.error("Error fetching published recommendation:", error);
     }
-    return { success: false, error: "Failed to fetch published recommendation" }
+    return {
+      success: false,
+      error: "Failed to fetch published recommendation",
+    };
   }
 }
 
 // --- Dashboard Metrics ---
 export async function getDashboardMetrics() {
   try {
-    const user = await getCurrentUser()
+    const user = await getCurrentUser();
 
     const decisions = await prisma.decision.findMany({
       where: { organizationId: user.organizationId },
@@ -928,54 +1087,88 @@ export async function getDashboardMetrics() {
         outcome: true,
       },
       orderBy: { createdAt: "desc" },
-    })
+    });
 
-    const totalDecisions = decisions.length
-    const byStatus = decisions.reduce((acc, d) => {
-      acc[d.status] = (acc[d.status] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    const totalDecisions = decisions.length;
+    const byStatus = decisions.reduce(
+      (acc, d) => {
+        acc[d.status] = (acc[d.status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
-    const byType = decisions.reduce((acc, d) => {
-      acc[d.type] = (acc[d.type] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    const byType = decisions.reduce(
+      (acc, d) => {
+        acc[d.type] = (acc[d.type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
-    const byPriority = decisions.reduce((acc, d) => {
-      const p = d.priority || "MEDIUM"
-      acc[p] = (acc[p] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    const byPriority = decisions.reduce(
+      (acc, d) => {
+        const p = d.priority || "MEDIUM";
+        acc[p] = (acc[p] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     const approvedCount = decisions.filter((d) =>
-      d.approvals.some((a) => a.status === "APPROVED")
-    ).length
+      d.approvals.some((a) => a.status === "APPROVED"),
+    ).length;
 
-    const pendingApproval = decisions.filter((d) =>
-      d.recommendation && !d.approvals.some((a) => a.status === "APPROVED")
-    ).length
+    const pendingApproval = decisions.filter(
+      (d) =>
+        d.recommendation && !d.approvals.some((a) => a.status === "APPROVED"),
+    ).length;
 
-    const draftCount = byStatus["DRAFT"] || 0
-    const inProgressCount = totalDecisions - draftCount - approvedCount
+    const draftCount = byStatus["DRAFT"] || 0;
+    const inProgressCount = totalDecisions - draftCount - approvedCount;
 
     const completionRates = decisions.map((d) => {
-      let stages = 0
-      let complete = 0
+      let stages = 0;
+      let complete = 0;
 
-      if (d.title) { stages++; complete++ }
-      if (d.objectives.length > 0) { stages++; complete++ }
-      if (d.framework) { stages++; complete++ }
-      if (d.decisionScenarios.length >= 3) { stages++; complete++ }
-      if (d.riskAnalyses.length > 0) { stages++; complete++ }
-      if (d.recommendation) { stages++; complete++ }
-      if (d.approvals.some((a) => a.status === "APPROVED")) { stages++; complete++ }
+      if (d.title) {
+        stages++;
+        complete++;
+      }
+      if (d.objectives.length > 0) {
+        stages++;
+        complete++;
+      }
+      if (d.framework) {
+        stages++;
+        complete++;
+      }
+      if (d.decisionScenarios.length >= 3) {
+        stages++;
+        complete++;
+      }
+      if (d.riskAnalyses.length > 0) {
+        stages++;
+        complete++;
+      }
+      if (d.recommendation) {
+        stages++;
+        complete++;
+      }
+      if (d.approvals.some((a) => a.status === "APPROVED")) {
+        stages++;
+        complete++;
+      }
 
-      return stages > 0 ? (complete / stages) * 100 : 0
-    })
+      return stages > 0 ? (complete / stages) * 100 : 0;
+    });
 
-    const avgCompletion = completionRates.length > 0
-      ? Math.round(completionRates.reduce((a, b) => a + b, 0) / completionRates.length)
-      : 0
+    const avgCompletion =
+      completionRates.length > 0
+        ? Math.round(
+            completionRates.reduce((a, b) => a + b, 0) / completionRates.length,
+          )
+        : 0;
 
     const recentDecisions = decisions.slice(0, 5).map((d) => ({
       id: d.id,
@@ -995,39 +1188,56 @@ export async function getDashboardMetrics() {
         !!d.recommendation,
         d.approvals.some((a) => a.status === "APPROVED"),
       ].filter(Boolean).length,
-    }))
+    }));
 
-    const bottlenecks = decisions.filter((d) => {
-      const hasFramework = !!d.framework
-      const hasScenarios = d.decisionScenarios.length >= 3
-      const hasRisks = d.riskAnalyses.length > 0
-      const hasRecommendation = !!d.recommendation
-      const hasApproval = d.approvals.some((a) => a.status === "APPROVED")
+    const bottlenecks = decisions
+      .filter((d) => {
+        const hasFramework = !!d.framework;
+        const hasScenarios = d.decisionScenarios.length >= 3;
+        const hasRisks = d.riskAnalyses.length > 0;
+        const hasRecommendation = !!d.recommendation;
+        const hasApproval = d.approvals.some((a) => a.status === "APPROVED");
 
-      return (hasFramework && !hasScenarios) ||
-        (hasScenarios && !hasRisks) ||
-        (hasRisks && !hasRecommendation) ||
-        (hasRecommendation && !hasApproval)
-    }).map((d) => {
-      let stage = "Unknown"
-      if (d.framework && d.decisionScenarios.length < 3) stage = "Scenarios"
-      else if (d.decisionScenarios.length >= 3 && d.riskAnalyses.length === 0) stage = "Risk Analysis"
-      else if (d.riskAnalyses.length > 0 && !d.recommendation) stage = "Recommendation"
-      else if (d.recommendation && !d.approvals.some((a) => a.status === "APPROVED")) stage = "Approval"
-      return { id: d.id, title: d.title, stage, priority: d.priority }
-    })
+        return (
+          (hasFramework && !hasScenarios) ||
+          (hasScenarios && !hasRisks) ||
+          (hasRisks && !hasRecommendation) ||
+          (hasRecommendation && !hasApproval)
+        );
+      })
+      .map((d) => {
+        let stage = "Unknown";
+        if (d.framework && d.decisionScenarios.length < 3) stage = "Scenarios";
+        else if (d.decisionScenarios.length >= 3 && d.riskAnalyses.length === 0)
+          stage = "Risk Analysis";
+        else if (d.riskAnalyses.length > 0 && !d.recommendation)
+          stage = "Recommendation";
+        else if (
+          d.recommendation &&
+          !d.approvals.some((a) => a.status === "APPROVED")
+        )
+          stage = "Approval";
+        return { id: d.id, title: d.title, stage, priority: d.priority };
+      });
 
     const outcomeMetrics = {
       totalOutcomes: decisions.filter((d) => d.outcome).length,
-      byStatus: decisions.filter((d) => d.outcome).reduce((acc, d) => {
-        if (d.outcome) {
-          acc[d.outcome.outcomeStatus] = (acc[d.outcome.outcomeStatus] || 0) + 1
-        }
-        return acc
-      }, {} as Record<string, number>),
-      missingReview: decisions.filter((d) => d.outcome && !d.outcome.reviewedAt).length,
+      byStatus: decisions
+        .filter((d) => d.outcome)
+        .reduce(
+          (acc, d) => {
+            if (d.outcome) {
+              acc[d.outcome.outcomeStatus] =
+                (acc[d.outcome.outcomeStatus] || 0) + 1;
+            }
+            return acc;
+          },
+          {} as Record<string, number>,
+        ),
+      missingReview: decisions.filter((d) => d.outcome && !d.outcome.reviewedAt)
+        .length,
       reviewedCount: decisions.filter((d) => d.outcome?.reviewedAt).length,
-    }
+    };
 
     return {
       success: true,
@@ -1045,19 +1255,19 @@ export async function getDashboardMetrics() {
         bottlenecks,
         outcomeMetrics,
       },
-    }
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching dashboard metrics:", error)
+      console.error("Error fetching dashboard metrics:", error);
     }
-    return { success: false, error: "Failed to fetch dashboard metrics" }
+    return { success: false, error: "Failed to fetch dashboard metrics" };
   }
 }
 
 // --- Workflow Readiness ---
 export async function getWorkflowReadiness(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER")
+    await requireDecisionAccess(decisionId, "VIEWER");
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -1076,56 +1286,67 @@ export async function getWorkflowReadiness(decisionId: string) {
         scenarios: { include: { simulation: true } },
         recommendation: true,
       },
-    })
+    });
 
     if (!decision) {
-      return { success: false, error: "Decision not found" }
+      return { success: false, error: "Decision not found" };
     }
 
-    const intakeAccepted = true
-    const frameworkComplete = !!(decision.framework &&
+    const intakeAccepted = true;
+    const frameworkComplete = !!(
+      decision.framework &&
       decision.framework.context &&
       decision.framework.purpose &&
       decision.framework.options &&
       decision.framework.criteria &&
-      decision.framework.values)
+      decision.framework.values
+    );
 
-    const scenariosComplete = decision.decisionScenarios.length >= 3 &&
-      decision.decisionScenarios.every((s) => s.name && s.description)
+    const scenariosComplete =
+      decision.decisionScenarios.length >= 3 &&
+      decision.decisionScenarios.every((s) => s.name && s.description);
 
-    const risksComplete = decision.decisionScenarios.length > 0 &&
-      decision.decisionScenarios.every((s) => s.riskAnalysis)
+    const risksComplete =
+      decision.decisionScenarios.length > 0 &&
+      decision.decisionScenarios.every((s) => s.riskAnalysis);
 
-    const hasSimulationResults = decision.scenarios.some((s) => s.simulation)
-    const simulationReady = hasSimulationResults
+    const hasSimulationResults = decision.scenarios.some((s) => s.simulation);
+    const simulationReady = hasSimulationResults;
 
-    const recommendationReady = !!decision.recommendation &&
+    const recommendationReady =
+      !!decision.recommendation &&
       decision.recommendation.recommendedAction &&
-      decision.recommendation.rationale
+      decision.recommendation.rationale;
 
-    const { deriveScores, buildScoringData } = await import("@/lib/simulation/simulation-engine")
+    const { deriveScores, buildScoringData } =
+      await import("@/lib/simulation/simulation-engine");
     const scoringData = buildScoringData({
       objectives: decision.objectives,
       constraints: decision.constraints,
       assumptions: decision.assumptions,
       alternatives: decision.alternatives,
       risks: decision.risks,
-      framework: decision.framework ? {
-        context: decision.framework.context,
-        purpose: decision.framework.purpose,
-        options: decision.framework.options,
-        criteria: decision.framework.criteria,
-        values: decision.framework.values,
-        informationGaps: decision.framework.informationGaps,
-        certainty: decision.framework.certainty,
-        assumptions: decision.framework.assumptions,
-      } : null,
-      decisionScenarios: decision.decisionScenarios.map((s) => ({ name: s.name, description: s.description })),
+      framework: decision.framework
+        ? {
+            context: decision.framework.context,
+            purpose: decision.framework.purpose,
+            options: decision.framework.options,
+            criteria: decision.framework.criteria,
+            values: decision.framework.values,
+            informationGaps: decision.framework.informationGaps,
+            certainty: decision.framework.certainty,
+            assumptions: decision.framework.assumptions,
+          }
+        : null,
+      decisionScenarios: decision.decisionScenarios.map((s) => ({
+        name: s.name,
+        description: s.description,
+      })),
       priority: decision.priority,
       targetDate: decision.targetDate,
-    })
+    });
 
-    const derived = deriveScores(scoringData)
+    const derived = deriveScores(scoringData);
 
     return {
       success: true,
@@ -1146,11 +1367,11 @@ export async function getWorkflowReadiness(decisionId: string) {
           confidenceScore: derived.confidenceScore,
         },
       },
-    }
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching workflow readiness:", error)
+      console.error("Error fetching workflow readiness:", error);
     }
-    return { success: false, error: "Failed to fetch workflow readiness" }
+    return { success: false, error: "Failed to fetch workflow readiness" };
   }
 }

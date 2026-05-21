@@ -1,27 +1,33 @@
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const timestamp = new Date().toISOString()
-  const environment = process.env.NODE_ENV ?? "development"
+  const checks: Record<string, unknown> = {};
 
-  let dbStatus = "disconnected"
   try {
-    await prisma.$queryRaw`SELECT 1`
-    dbStatus = "connected"
+    await prisma.$queryRaw`SELECT 1`;
+    checks.database = { status: "ok" };
   } catch {
-    dbStatus = "disconnected"
+    checks.database = {
+      status: "error",
+      message: "Database connection failed",
+    };
   }
 
-  const healthy = dbStatus === "connected"
+  const allOk = Object.values(checks).every(
+    (c) => (c as { status: string }).status === "ok",
+  );
 
   return NextResponse.json(
     {
-      status: healthy ? "ok" : "degraded",
-      timestamp,
-      environment,
-      database: dbStatus,
+      status: allOk ? "ok" : "degraded",
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      environment: process.env.NODE_ENV,
+      checks,
     },
-    { status: healthy ? 200 : 503 }
-  )
+    { status: allOk ? 200 : 503 },
+  );
 }

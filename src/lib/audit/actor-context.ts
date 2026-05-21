@@ -3,19 +3,19 @@
 // Tries authenticated user → AuditUser mapping first.
 // Falls back to demo actor only in development mode.
 
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/prisma";
 
 export interface AuditActor {
-  actorId: string
-  actorName: string
-  actorRole: string
-  organizationId: string
+  actorId: string;
+  actorName: string;
+  actorRole: string;
+  organizationId: string;
 }
 
-let demoFallbackActive = false
+let demoFallbackActive = false;
 
 export function isUsingDemoFallback(): boolean {
-  return demoFallbackActive
+  return demoFallbackActive;
 }
 
 /**
@@ -27,8 +27,8 @@ export function isUsingDemoFallback(): boolean {
  */
 export async function getAuditActor(): Promise<AuditActor> {
   try {
-    const { getCurrentUser } = await import("@/lib/auth")
-    const sessionUser = await getCurrentUser()
+    const { getCurrentUser } = await import("@/lib/auth");
+    const sessionUser = await getCurrentUser();
 
     // Map session user to AuditUser by email + organization
     const auditUser = await prisma.auditUser.findUnique({
@@ -38,43 +38,46 @@ export async function getAuditActor(): Promise<AuditActor> {
           email: sessionUser.email,
         },
       },
-    })
+    });
 
     if (!auditUser) {
-      throw new Error("Audit user not provisioned")
+      throw new Error("Audit user not provisioned");
     }
 
     if (auditUser.status !== "active") {
-      throw new Error(`Audit user status is ${auditUser.status}`)
+      throw new Error(`Audit user status is ${auditUser.status}`);
     }
 
     // Update lastLoginAt
-    await prisma.auditUser.update({
-      where: { id: auditUser.id },
-      data: { lastLoginAt: new Date() },
-    }).catch(() => {})
+    await prisma.auditUser
+      .update({
+        where: { id: auditUser.id },
+        data: { lastLoginAt: new Date() },
+      })
+      .catch(() => {});
 
-    demoFallbackActive = false
+    demoFallbackActive = false;
     return {
       actorId: auditUser.id,
       actorName: auditUser.name,
       actorRole: auditUser.role,
       organizationId: auditUser.organizationId,
-    }
+    };
   } catch (error) {
     // DEV ONLY: Demo fallback used when no auth session or no AuditUser mapping.
-    // In production, all requests require a provisioned AuditUser.
-    if (process.env.NODE_ENV === "production") {
-      const message = error instanceof Error ? error.message : "Authentication required"
-      throw new Error(message)
+    // Only available in development mode — never in test or production.
+    if (process.env.NODE_ENV !== "development") {
+      const message =
+        error instanceof Error ? error.message : "Authentication required";
+      throw new Error(message);
     }
-    demoFallbackActive = true
+    demoFallbackActive = true;
     return {
       actorId: "usr-ahmed",
       actorName: "Ahmed Al Ghamdi",
       actorRole: "operator",
       organizationId: "org-aqliya",
-    }
+    };
   }
 }
 
@@ -84,8 +87,8 @@ export async function getAuditActor(): Promise<AuditActor> {
  * happen through a controlled admin workflow.
  */
 export async function ensureAuditUserProvisioned(): Promise<AuditActor> {
-  const { getCurrentUser } = await import("@/lib/auth")
-  const sessionUser = await getCurrentUser()
+  const { getCurrentUser } = await import("@/lib/auth");
+  const sessionUser = await getCurrentUser();
 
   const existing = await prisma.auditUser.findUnique({
     where: {
@@ -94,7 +97,7 @@ export async function ensureAuditUserProvisioned(): Promise<AuditActor> {
         email: sessionUser.email,
       },
     },
-  })
+  });
 
   if (existing) {
     return {
@@ -102,7 +105,7 @@ export async function ensureAuditUserProvisioned(): Promise<AuditActor> {
       actorName: existing.name,
       actorRole: existing.role,
       organizationId: existing.organizationId,
-    }
+    };
   }
 
   const auditUser = await prisma.auditUser.create({
@@ -113,14 +116,14 @@ export async function ensureAuditUserProvisioned(): Promise<AuditActor> {
       role: mapRole(sessionUser.role),
       status: "active",
     },
-  })
+  });
 
   return {
     actorId: auditUser.id,
     actorName: auditUser.name,
     actorRole: auditUser.role,
     organizationId: auditUser.organizationId,
-  }
+  };
 }
 
 function mapRole(role: string): string {
@@ -128,24 +131,26 @@ function mapRole(role: string): string {
     ADMIN: "admin",
     OPERATOR: "operator",
     VIEWER: "viewer",
-  }
-  return roleMap[role] ?? "operator"
+  };
+  return roleMap[role] ?? "operator";
 }
 
 export function requireRole(actor: AuditActor, allowedRoles: string[]): void {
   if (!allowedRoles.includes(actor.actorRole)) {
-    throw new Error(`Access denied: ${actor.actorRole} role cannot perform this action. Required: ${allowedRoles.join(" or ")}`)
+    throw new Error(
+      `Access denied: ${actor.actorRole} role cannot perform this action. Required: ${allowedRoles.join(" or ")}`,
+    );
   }
 }
 
 export function canDraft(actor: AuditActor): boolean {
-  return ["admin", "operator"].includes(actor.actorRole)
+  return ["admin", "operator"].includes(actor.actorRole);
 }
 
 export function canReview(actor: AuditActor): boolean {
-  return ["admin", "operator", "reviewer"].includes(actor.actorRole)
+  return ["admin", "operator", "reviewer"].includes(actor.actorRole);
 }
 
 export function canApprove(actor: AuditActor): boolean {
-  return ["admin", "partner"].includes(actor.actorRole)
+  return ["admin", "partner"].includes(actor.actorRole);
 }

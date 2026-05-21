@@ -1,34 +1,80 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import {
-  Search,
-  Bell,
-  Command,
-  ChevronDown,
-} from "lucide-react"
-import { useState } from "react"
-import { PlatformCommandPalette } from "./command-palette"
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Search, Bell, Command, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { PlatformCommandPalette } from "./command-palette";
 
 function getWorkspaceInfo(pathname: string | null) {
-  if (!pathname) return { module: "منصة عقلية", moduleAr: "حوكمة القرارات", accent: "text-module-decision" }
-  if (pathname.startsWith("/audit")) return { module: "AuditOS", moduleAr: "نظام التدقيق المالي", accent: "text-module-audit" }
-  if (pathname.startsWith("/sales")) return { module: "SalesOS", moduleAr: "الذاكرة التجارية والمبيعات", accent: "text-module-sales" }
-  if (pathname.startsWith("/decisions")) return { module: "DecisionOS", moduleAr: "حوكمة القرارات", accent: "text-module-decision" }
-  if (pathname.startsWith("/organizations")) return { module: "DecisionOS", moduleAr: "حوكمة القرارات", accent: "text-module-decision" }
-  if (pathname.startsWith("/intelligence")) return { module: "DecisionOS", moduleAr: "حوكمة القرارات", accent: "text-module-decision" }
-  if (pathname.startsWith("/settings")) return { module: "منصة عقلية", moduleAr: "الإعدادات", accent: "text-muted-foreground" }
-  return { module: "منصة عقلية", moduleAr: "مساحة العمل", accent: "text-aqliya-blue" }
+  if (!pathname)
+    return {
+      module: "منصة عقلية",
+      moduleAr: "حوكمة القرارات",
+      accent: "text-module-decision",
+    };
+  if (pathname.startsWith("/workflowos"))
+    return {
+      module: "WorkflowOS",
+      moduleAr: "نظام سير العمل",
+      accent: "text-aqliya-cyan",
+    };
+  if (pathname.startsWith("/audit"))
+    return {
+      module: "AuditOS",
+      moduleAr: "نظام التدقيق المالي",
+      accent: "text-module-audit",
+    };
+  if (pathname.startsWith("/sales"))
+    return {
+      module: "SalesOS",
+      moduleAr: "الذاكرة التجارية والمبيعات",
+      accent: "text-module-sales",
+    };
+  if (pathname.startsWith("/decisions"))
+    return {
+      module: "DecisionOS",
+      moduleAr: "حوكمة القرارات",
+      accent: "text-module-decision",
+    };
+  if (pathname === "/organizations/sunbul")
+    return {
+      module: "Sunbul",
+      moduleAr: "شركة سنبل",
+      accent: "text-aqliya-cyan",
+    };
+  if (pathname.startsWith("/organizations"))
+    return {
+      module: "DecisionOS",
+      moduleAr: "حوكمة القرارات",
+      accent: "text-module-decision",
+    };
+  if (pathname.startsWith("/intelligence"))
+    return {
+      module: "DecisionOS",
+      moduleAr: "حوكمة القرارات",
+      accent: "text-module-decision",
+    };
+  if (pathname.startsWith("/settings"))
+    return {
+      module: "منصة عقلية",
+      moduleAr: "الإعدادات",
+      accent: "text-muted-foreground",
+    };
+  return {
+    module: "منصة عقلية",
+    moduleAr: "مساحة العمل",
+    accent: "text-aqliya-blue",
+  };
 }
 
 function getPageTitle(pathname: string | null) {
-  if (!pathname) return ""
-  const segments = pathname.split("/").filter(Boolean)
-  if (segments.length <= 1) return ""
-  const last = segments[segments.length - 1]
+  if (!pathname) return "";
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length <= 1) return "";
+  const last = segments[segments.length - 1];
   const map: Record<string, string> = {
     new: "جديد",
     framework: "الإطار",
@@ -61,16 +107,17 @@ function getPageTitle(pathname: string | null) {
     "trial-balance": "ميزان المراجعة",
     validation: "التحقق",
     organizations: "المنظمات",
+    sunbul: "شركة سنبل",
     settings: "الإعدادات",
-  }
-  return map[last] ?? last.replace(/-/g, " ")
+  };
+  return map[last] ?? last.replace(/-/g, " ");
 }
 
 export function PlatformHeader() {
-  const pathname = usePathname()
-  const [commandOpen, setCommandOpen] = useState(false)
-  const workspace = getWorkspaceInfo(pathname)
-  const pageTitle = getPageTitle(pathname)
+  const pathname = usePathname();
+  const [commandOpen, setCommandOpen] = useState(false);
+  const workspace = getWorkspaceInfo(pathname);
+  const pageTitle = getPageTitle(pathname);
 
   return (
     <>
@@ -78,8 +125,18 @@ export function PlatformHeader() {
         <div className="flex h-14 items-center justify-between px-4">
           {/* Left: Mobile logo + Breadcrumbs */}
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2 md:hidden" aria-label="AQLIYA">
-              <Image src="/brand/aqliya-logo-approved.png" alt="AQLIYA" width={28} height={28} priority />
+            <Link
+              href="/"
+              className="flex items-center gap-2 md:hidden"
+              aria-label="AQLIYA"
+            >
+              <Image
+                src="/brand/aqliya-logo-approved.png"
+                alt="AQLIYA"
+                width={28}
+                height={28}
+                priority
+              />
               <span className="font-bold text-primary">AQLIYA</span>
             </Link>
 
@@ -110,7 +167,9 @@ export function PlatformHeader() {
               <Command className="h-3.5 w-3.5" />
               <Search className="h-3.5 w-3.5" />
               <span className="text-xs">ابحث في مساحة العمل...</span>
-              <kbd className="ml-2 rounded bg-background px-1.5 py-0.5 text-[10px] font-mono border">⌘K</kbd>
+              <kbd className="ml-2 rounded bg-background px-1.5 py-0.5 text-[10px] font-mono border">
+                ⌘K
+              </kbd>
             </button>
 
             {/* Mobile search button */}
@@ -142,7 +201,10 @@ export function PlatformHeader() {
         </div>
       </header>
 
-      <PlatformCommandPalette open={commandOpen} onOpenChange={setCommandOpen} />
+      <PlatformCommandPalette
+        open={commandOpen}
+        onOpenChange={setCommandOpen}
+      />
     </>
-  )
+  );
 }

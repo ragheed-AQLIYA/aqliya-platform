@@ -1,12 +1,17 @@
-"use server"
+"use server";
 
-import { prisma } from "@/lib/prisma"
-import { isExpectedAccessDeniedError, requireDecisionAccess, getCurrentUser } from "@/lib/auth"
-import type { OutcomeStatus, Prisma } from "@prisma/client"
+import { prisma } from "@/lib/prisma";
+import {
+  isExpectedAccessDeniedError,
+  requireDecisionAccess,
+  getCurrentUser,
+} from "@/lib/auth";
+import type { OutcomeStatus, Prisma } from "@prisma/client";
+import { logAudit } from "@/lib/platform-audit";
 
 export async function getDecisionOutcome(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER")
+    await requireDecisionAccess(decisionId, "VIEWER");
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -25,10 +30,10 @@ export async function getDecisionOutcome(decisionId: string) {
           },
         },
       },
-    })
+    });
 
     if (!decision) {
-      return { success: false, error: "Decision not found" }
+      return { success: false, error: "Decision not found" };
     }
 
     return {
@@ -39,33 +44,33 @@ export async function getDecisionOutcome(decisionId: string) {
         expectedOutcome: decision.recommendation?.expectedNextState || null,
         outcome: decision.outcome,
       },
-    }
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching outcome:", error)
+      console.error("Error fetching outcome:", error);
     }
-    return { success: false, error: "Failed to fetch outcome" }
+    return { success: false, error: "Failed to fetch outcome" };
   }
 }
 
 export async function upsertDecisionOutcome(data: {
-  decisionId: string
-  expectedOutcome: string
-  actualOutcome?: string
-  outcomeStatus?: OutcomeStatus
-  actualValue?: number
-  expectedValue?: number
-  lessonsLearned?: string
-  followUpActions?: Prisma.InputJsonValue
+  decisionId: string;
+  expectedOutcome: string;
+  actualOutcome?: string;
+  outcomeStatus?: OutcomeStatus;
+  actualValue?: number;
+  expectedValue?: number;
+  lessonsLearned?: string;
+  followUpActions?: Prisma.InputJsonValue;
 }) {
   try {
-    const access = await requireDecisionAccess(data.decisionId, "OPERATOR")
-    const user = access.user
+    const access = await requireDecisionAccess(data.decisionId, "OPERATOR");
+    const user = access.user;
 
     const variance =
       data.actualValue != null && data.expectedValue != null
         ? data.actualValue - data.expectedValue
-        : undefined
+        : undefined;
 
     const outcome = await prisma.decisionOutcome.upsert({
       where: { decisionId: data.decisionId },
@@ -90,37 +95,41 @@ export async function upsertDecisionOutcome(data: {
         lessonsLearned: data.lessonsLearned || null,
         followUpActions: data.followUpActions ?? undefined,
       },
-    })
+    });
 
-    await prisma.auditLog.create({
-      data: {
-        decisionId: data.decisionId,
-        organizationId: user.organizationId,
-        userId: user.id,
-        action: outcome.createdAt === outcome.updatedAt ? "OUTCOME_CREATED" : "OUTCOME_UPDATED",
-        entity: "DecisionOutcome",
-        before: outcome.createdAt === outcome.updatedAt ? null : JSON.stringify({ status: outcome.outcomeStatus }),
-        after: JSON.stringify({
-          status: outcome.outcomeStatus,
-          variance,
-          hasActualOutcome: !!data.actualOutcome,
-        }),
-      },
-    })
+    const action =
+      outcome.createdAt === outcome.updatedAt
+        ? ("OUTCOME_CREATED" as const)
+        : ("OUTCOME_UPDATED" as const);
+    await logAudit(
+      user.id,
+      data.decisionId,
+      action,
+      "DecisionOutcome",
+      outcome.createdAt === outcome.updatedAt
+        ? undefined
+        : JSON.stringify({ status: outcome.outcomeStatus }),
+      JSON.stringify({
+        status: outcome.outcomeStatus,
+        variance,
+        hasActualOutcome: !!data.actualOutcome,
+      }),
+      user.organizationId,
+    );
 
-    return { success: true, data: outcome }
+    return { success: true, data: outcome };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error upserting outcome:", error)
+      console.error("Error upserting outcome:", error);
     }
-    return { success: false, error: "Failed to save outcome" }
+    return { success: false, error: "Failed to save outcome" };
   }
 }
 
 export async function reviewDecisionOutcome(decisionId: string) {
   try {
-    const access = await requireDecisionAccess(decisionId, "ADMIN")
-    const user = access.user
+    const access = await requireDecisionAccess(decisionId, "ADMIN");
+    const user = access.user;
 
     const outcome = await prisma.decisionOutcome.update({
       where: { decisionId },
@@ -131,53 +140,54 @@ export async function reviewDecisionOutcome(decisionId: string) {
       include: {
         reviewedBy: true,
       },
-    })
+    });
 
-    await prisma.auditLog.create({
-      data: {
-        decisionId,
-        organizationId: user.organizationId,
-        userId: user.id,
-        action: "OUTCOME_REVIEWED",
-        entity: "DecisionOutcome",
-        after: JSON.stringify({
-          reviewedBy: user.name,
-          reviewedAt: outcome.reviewedAt,
-          status: outcome.outcomeStatus,
-        }),
-      },
-    })
+    await logAudit(
+      user.id,
+      decisionId,
+      "OUTCOME_REVIEWED",
+      "DecisionOutcome",
+      undefined,
+      JSON.stringify({ reviewedBy: outcome.reviewedBy?.name || user.name }),
+      user.organizationId,
+    );
 
-    return { success: true, data: outcome }
+    return { success: true, data: outcome };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error reviewing outcome:", error)
+      console.error("Error reviewing outcome:", error);
     }
-    return { success: false, error: "Failed to review outcome" }
+    return { success: false, error: "Failed to review outcome" };
   }
 }
 
-export async function calculateOutcomeVariance(expected: number | null, actual: number | null): Promise<number | null> {
-  if (expected == null || actual == null) return null
-  return actual - expected
+export async function calculateOutcomeVariance(
+  expected: number | null,
+  actual: number | null,
+): Promise<number | null> {
+  if (expected == null || actual == null) return null;
+  return actual - expected;
 }
 
 export async function getOutcomeSummaryForDecision(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER")
+    await requireDecisionAccess(decisionId, "VIEWER");
 
     const outcome = await prisma.decisionOutcome.findUnique({
       where: { decisionId },
       include: {
         reviewedBy: true,
       },
-    })
+    });
 
     if (!outcome) {
-      return { success: false, error: "No outcome found" }
+      return { success: false, error: "No outcome found" };
     }
 
-    const variance = calculateOutcomeVariance(outcome.expectedValue, outcome.actualValue)
+    const variance = calculateOutcomeVariance(
+      outcome.expectedValue,
+      outcome.actualValue,
+    );
 
     return {
       success: true,
@@ -197,18 +207,18 @@ export async function getOutcomeSummaryForDecision(decisionId: string) {
         createdAt: outcome.createdAt,
         updatedAt: outcome.updatedAt,
       },
-    }
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching outcome summary:", error)
+      console.error("Error fetching outcome summary:", error);
     }
-    return { success: false, error: "Failed to fetch outcome summary" }
+    return { success: false, error: "Failed to fetch outcome summary" };
   }
 }
 
 export async function getOrganizationOutcomeMetrics() {
   try {
-    const user = await getCurrentUser()
+    const user = await getCurrentUser();
 
     const outcomes = await prisma.decisionOutcome.findMany({
       where: {
@@ -226,16 +236,19 @@ export async function getOrganizationOutcomeMetrics() {
           },
         },
       },
-    })
+    });
 
-    const totalOutcomes = outcomes.length
-    const byStatus = outcomes.reduce((acc, o) => {
-      acc[o.outcomeStatus] = (acc[o.outcomeStatus] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    const totalOutcomes = outcomes.length;
+    const byStatus = outcomes.reduce(
+      (acc, o) => {
+        acc[o.outcomeStatus] = (acc[o.outcomeStatus] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
-    const reviewedCount = outcomes.filter((o) => o.reviewedAt).length
-    const missingReview = totalOutcomes - reviewedCount
+    const reviewedCount = outcomes.filter((o) => o.reviewedAt).length;
+    const missingReview = totalOutcomes - reviewedCount;
 
     const decisionsWithOutcomes = outcomes.map((o) => ({
       id: o.decision.id,
@@ -245,7 +258,7 @@ export async function getOrganizationOutcomeMetrics() {
       outcomeStatus: o.outcomeStatus,
       reviewed: !!o.reviewedAt,
       variance: o.variance,
-    }))
+    }));
 
     return {
       success: true,
@@ -256,11 +269,11 @@ export async function getOrganizationOutcomeMetrics() {
         missingReview,
         decisionsWithOutcomes,
       },
-    }
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching outcome metrics:", error)
+      console.error("Error fetching outcome metrics:", error);
     }
-    return { success: false, error: "Failed to fetch outcome metrics" }
+    return { success: false, error: "Failed to fetch outcome metrics" };
   }
 }

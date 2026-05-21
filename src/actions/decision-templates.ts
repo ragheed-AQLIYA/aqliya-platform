@@ -1,73 +1,96 @@
-"use server"
+"use server";
 
-import { prisma } from "@/lib/prisma"
-import { isExpectedAccessDeniedError, requireUserContext, getCurrentUser } from "@/lib/auth"
-import { getTemplate, getAllTemplates, type DecisionTemplate } from "@/lib/decision/decision-templates"
+import { prisma } from "@/lib/prisma";
+import {
+  isExpectedAccessDeniedError,
+  requireUserContext,
+  getCurrentUser,
+} from "@/lib/auth";
+import {
+  getTemplate,
+  getAllTemplates,
+  type DecisionTemplate,
+} from "@/lib/decision/decision-templates";
+import { logAudit } from "@/lib/platform-audit";
 
-const VALID_DECISION_TYPES = ["TENDER", "INVESTMENT", "EXPANSION", "PROCUREMENT", "HIRING", "PARTNERSHIP", "PRICING", "STRATEGIC", "OPERATIONS", "CUSTOM"] as const
-type ValidDecisionType = typeof VALID_DECISION_TYPES[number]
+const VALID_DECISION_TYPES = [
+  "TENDER",
+  "INVESTMENT",
+  "EXPANSION",
+  "PROCUREMENT",
+  "HIRING",
+  "PARTNERSHIP",
+  "PRICING",
+  "STRATEGIC",
+  "OPERATIONS",
+  "CUSTOM",
+] as const;
+type ValidDecisionType = (typeof VALID_DECISION_TYPES)[number];
 
 function isValidDecisionType(type: string): type is ValidDecisionType {
-  return (VALID_DECISION_TYPES as readonly string[]).includes(type)
+  return (VALID_DECISION_TYPES as readonly string[]).includes(type);
 }
 
 export async function getAvailableTemplates() {
   try {
-    await getCurrentUser()
-    const templates = getAllTemplates()
-    return { success: true, data: templates }
+    await getCurrentUser();
+    const templates = getAllTemplates();
+    return { success: true, data: templates };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching templates:", error)
+      console.error("Error fetching templates:", error);
     }
-    return { success: false, error: "Failed to fetch templates" }
+    return { success: false, error: "Failed to fetch templates" };
   }
 }
 
 export async function getTemplateById(templateId: string) {
   try {
-    await getCurrentUser()
-    const template = getTemplate(templateId)
+    await getCurrentUser();
+    const template = getTemplate(templateId);
     if (!template) {
-      return { success: false, error: "Template not found" }
+      return { success: false, error: "Template not found" };
     }
-    return { success: true, data: template }
+    return { success: true, data: template };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching template:", error)
+      console.error("Error fetching template:", error);
     }
-    return { success: false, error: "Failed to fetch template" }
+    return { success: false, error: "Failed to fetch template" };
   }
 }
 
 export async function createDecisionFromTemplate(data: {
-  templateId: string
-  title: string
-  description?: string
-  priority?: string
-  targetDate?: string
-  objectives?: string[]
-  constraints?: string[]
-  assumptions?: string[]
-  alternatives?: string[]
+  templateId: string;
+  title: string;
+  description?: string;
+  priority?: string;
+  targetDate?: string;
+  objectives?: string[];
+  constraints?: string[];
+  assumptions?: string[];
+  alternatives?: string[];
 }) {
   try {
-    const user = await requireUserContext("OPERATOR")
+    const user = await requireUserContext("OPERATOR");
 
-    const template = getTemplate(data.templateId)
+    const template = getTemplate(data.templateId);
     if (!template) {
-      return { success: false, error: "Template not found" }
+      return { success: false, error: "Template not found" };
     }
 
     if (!data.title || data.title.trim().length === 0) {
-      return { success: false, error: "Decision title is required" }
+      return { success: false, error: "Decision title is required" };
     }
 
     if (!isValidDecisionType(template.type)) {
-      return { success: false, error: `Invalid decision type: ${template.type}` }
+      return {
+        success: false,
+        error: `Invalid decision type: ${template.type}`,
+      };
     }
 
-    const targetDate = data.targetDate ? new Date(data.targetDate) : undefined
+    const targetDate = data.targetDate ? new Date(data.targetDate) : undefined;
 
     const decision = await prisma.decision.create({
       data: {
@@ -80,18 +103,18 @@ export async function createDecisionFromTemplate(data: {
         organizationId: user.organizationId,
         status: "DRAFT",
       },
-    })
+    });
 
-    const objectives = data.objectives || template.suggestedObjectives
-    const constraints = data.constraints || template.suggestedConstraints
-    const assumptions = data.assumptions || template.suggestedAssumptions
-    const alternatives = data.alternatives || template.suggestedAlternatives
+    const objectives = data.objectives || template.suggestedObjectives;
+    const constraints = data.constraints || template.suggestedConstraints;
+    const assumptions = data.assumptions || template.suggestedAssumptions;
+    const alternatives = data.alternatives || template.suggestedAlternatives;
 
     for (const desc of objectives) {
       if (desc.trim()) {
         await prisma.objective.create({
           data: { decisionId: decision.id, description: desc.trim() },
-        })
+        });
       }
     }
 
@@ -99,7 +122,7 @@ export async function createDecisionFromTemplate(data: {
       if (desc.trim()) {
         await prisma.constraint.create({
           data: { decisionId: decision.id, description: desc.trim() },
-        })
+        });
       }
     }
 
@@ -107,7 +130,7 @@ export async function createDecisionFromTemplate(data: {
       if (desc.trim()) {
         await prisma.assumption.create({
           data: { decisionId: decision.id, description: desc.trim() },
-        })
+        });
       }
     }
 
@@ -115,20 +138,23 @@ export async function createDecisionFromTemplate(data: {
       if (desc.trim()) {
         await prisma.alternative.create({
           data: { decisionId: decision.id, description: desc.trim() },
-        })
+        });
       }
     }
 
-    await prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        decisionId: decision.id,
-        organizationId: user.organizationId,
-        action: "DECISION_CREATED",
-        entity: "Decision",
-        after: JSON.stringify({ title: decision.title, type: decision.type, templateId: template.id }),
-      },
-    })
+    await logAudit(
+      user.id,
+      decision.id,
+      "DECISION_CREATED",
+      "Decision",
+      undefined,
+      JSON.stringify({
+        title: decision.title,
+        type: decision.type,
+        templateId: template.id,
+      }),
+      user.organizationId,
+    );
 
     return {
       success: true,
@@ -143,11 +169,11 @@ export async function createDecisionFromTemplate(data: {
           recommendedNextStep: template.recommendedNextStep,
         },
       },
-    }
+    };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error creating decision from template:", error)
+      console.error("Error creating decision from template:", error);
     }
-    return { success: false, error: "Failed to create decision from template" }
+    return { success: false, error: "Failed to create decision from template" };
   }
 }
