@@ -24,7 +24,7 @@ AQLIYA Company
 │   ├── DecisionOS              (active, workspace, adjacent system)
 │   ├── SalesOS                 (prototype only)
 │   ├── SimulationOS            (marketing-only label)
-│   └── Local Content OS        (strategic second product, not implemented)
+│   └── Local Content OS        (strategic second product, scope locked for v0.1, not yet implemented)
 ├── Custom / Client-Specific Workspaces
 │   ├── Sunbul                  (/sunbul) — real governed custom workflow workspace
 │   └── workflowos              (/workflowos) — route alias/duplicate over Sunbul implementation

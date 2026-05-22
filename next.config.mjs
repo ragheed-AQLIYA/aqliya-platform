@@ -21,6 +21,10 @@ const bundleAnalyzer = withBundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  turbopack: {
+    root: "C:/Users/PC/Documents/Aqliya",
+  },
+
   serverExternalPackages: [
     "@prisma/client",
     "@prisma/adapter-pg",

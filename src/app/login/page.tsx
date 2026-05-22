@@ -2,7 +2,6 @@
 
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,7 +14,6 @@ import {
 import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -35,18 +33,26 @@ export default function LoginPage() {
 
       if (res?.error) {
         setError("بريد إلكتروني أو كلمة مرور غير صحيحة");
+        setLoading(false);
       } else if (res?.ok) {
         const verifyRes = await fetch("/api/auth/session");
         const session = await verifyRes.json();
 
         if (session?.user) {
-          window.location.href = "/";
+          const url = new URL(window.location.href);
+          const callbackUrl = url.searchParams.get("callbackUrl") || "/";
+          window.location.href = callbackUrl;
         } else {
           setError("تم تسجيل الدخول ولكن الجلسة لم تُنشأ. حاول مرة أخرى.");
+          setLoading(false);
         }
+      } else {
+        setError("حدث خطأ غير متوقع. حاول مرة أخرى.");
+        setLoading(false);
       }
     } catch {
       setError("حدث خطأ في الاتصال. حاول مرة أخرى.");
+      setLoading(false);
     }
   }
 
