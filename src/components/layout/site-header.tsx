@@ -8,12 +8,20 @@ import { getCookie, setCookie } from "cookies-next";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 
+// Navigation redesign decisions:
+// 1. Platform + Systems + Governance = three pillars enterprise buyers need
+// 2. Removed "How We Work" from primary nav (moved to footer)
+// 3. Removed Turkish (AR/EN for target market only)
+// 4. CTA changed: "طلب جلسة تنفيذية" — executive qualification signal
+// 5. Added institutional top bar with operational status signal
+
 const navItems = [
-  { label: "الرئيسية", href: "/" },
-  { label: "المنتجات", href: "/products" },
-  { label: "منهجية العمل", href: "/how-we-work" },
-  { label: "من نحن", href: "/about" },
-  { label: "تواصل معنا", href: "/contact" },
+  { label: "المنصة", href: "/platform", description: "AQLIYA Intelligence Core" },
+  { label: "الأنظمة", href: "/products", description: "خطوط الأنظمة المؤسسية" },
+  { label: "الحوكمة", href: "/governance", description: "بنية الثقة والأدلة" },
+  { label: "الإثبات", href: "/case-studies", description: "دراسات الحالة والدليل" },
+  { label: "من نحن", href: "/about", description: "" },
+  { label: "تواصل", href: "/contact", description: "" },
 ];
 
 export function SiteHeader() {
@@ -22,50 +30,79 @@ export function SiteHeader() {
   const currentLocale = getCookie("NEXT_LOCALE") ?? "ar";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/78 backdrop-blur-xl supports-[backdrop-filter]:bg-background/62">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
+      {/* Institutional top bar */}
+      <div className="hidden border-b border-border/30 bg-muted/20 md:block">
+        <div className="mx-auto flex h-7 max-w-7xl items-center justify-between px-6">
+          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground/70">
+            Private Governed Institutional Intelligence Platform
+          </p>
+          <div className="flex items-center gap-5">
+            <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground/70">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-status-success" />
+              السحابة متاحة الآن
+            </span>
+            <a
+              href="mailto:ragheed@aqliya.com"
+              className="text-[10px] text-muted-foreground/60 transition-colors hover:text-muted-foreground"
+            >
+              ragheed@aqliya.com
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
         <Link
           href="/"
-          className="flex items-center gap-3 shrink-0"
+          className="flex shrink-0 items-center gap-3"
           aria-label="AQLIYA"
         >
           <Image
             src="/brand/aqliya-logo-approved.png"
             alt="AQLIYA"
-            width={120}
-            height={36}
+            width={116}
+            height={34}
             priority
-            className="shrink-0 h-9 w-auto"
+            className="h-8 w-auto shrink-0"
           />
         </Link>
 
+        {/* Desktop Navigation */}
         <nav
-          className="hidden items-center gap-1 md:flex"
+          className="hidden items-center gap-0.5 md:flex"
           aria-label="التنقل الرئيسي"
         >
           {navItems.map((item) => {
-            const active = pathname === item.href;
+            const active =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "rounded-full px-3.5 py-2 text-sm font-medium transition-all duration-200",
+                  "relative rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200",
                   active
-                    ? "bg-primary/10 text-primary shadow-sm"
-                    : "text-muted-foreground hover:bg-muted/80 hover:text-foreground",
+                    ? "bg-primary/8 text-primary"
+                    : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
                 )}
                 aria-current={active ? "page" : undefined}
               >
                 {item.label}
+                {active && (
+                  <span className="absolute inset-x-3 -bottom-px h-px rounded-full bg-primary/50" />
+                )}
               </Link>
             );
           })}
-          <span className="mx-2 h-5 w-px bg-border" />
+
+          <span className="mx-3 h-4 w-px bg-border" />
+
+          {/* Language switcher — AR/EN only */}
           {[
-            { label: "AR", value: "ar" },
+            { label: "ع", value: "ar" },
             { label: "EN", value: "en" },
-            { label: "TR", value: "tr" },
           ].map(({ label, value }) => (
             <button
               key={value}
@@ -74,7 +111,7 @@ export function SiteHeader() {
                 window.location.reload();
               }}
               className={cn(
-                "rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wider transition-colors",
+                "rounded-md px-2.5 py-1.5 text-xs font-semibold transition-colors",
                 value === currentLocale
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:text-foreground",
@@ -86,56 +123,75 @@ export function SiteHeader() {
               {label}
             </button>
           ))}
+
+          {/* Secondary CTA — Demo */}
           <Link
-            href="/custom-product"
-            className="btn-primary mr-3 h-9 px-4 text-sm"
+            href="/demo"
+            className="mr-1 inline-flex h-9 items-center rounded-lg border border-border/60 px-3.5 text-sm font-medium text-muted-foreground transition-all duration-200 hover:border-primary/40 hover:text-primary"
           >
-            صمّم نظامك المؤسسي
+            الديمو
+          </Link>
+
+          {/* Primary CTA */}
+          <Link
+            href="/contact"
+            className="mr-1 inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/15 transition-all duration-200 hover:bg-primary/90 hover:shadow-md hover:shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          >
+            طلب جلسة تنفيذية
           </Link>
         </nav>
 
+        {/* Mobile Menu Toggle */}
         <button
           onClick={() => setOpen(!open)}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md md:hidden"
-          aria-label="Toggle menu"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-muted/30 md:hidden"
+          aria-label="فتح القائمة"
           aria-expanded={open}
           aria-controls="mobile-main-menu"
         >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {open && (
-        <div className="border-t md:hidden">
+        <div className="border-t border-border/40 bg-background/98 backdrop-blur-xl md:hidden">
           <nav
             id="mobile-main-menu"
-            className="flex flex-col gap-1 px-4 py-4"
+            className="flex flex-col gap-0.5 px-4 py-3"
             aria-label="التنقل الرئيسي للجوال"
           >
             {navItems.map((item) => {
-              const active = pathname === item.href;
+              const active =
+                pathname === item.href ||
+                (item.href !== "/" && pathname.startsWith(item.href));
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className={cn(
-                    "rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                    "flex items-center justify-between rounded-xl px-3 py-3 text-sm font-medium transition-colors",
                     active
-                      ? "bg-primary/10 text-primary"
+                      ? "bg-primary/8 text-primary"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground",
                   )}
                   aria-current={active ? "page" : undefined}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  {item.description && (
+                    <span className="text-[11px] text-muted-foreground/50">
+                      {item.description}
+                    </span>
+                  )}
                 </Link>
               );
             })}
-            <div className="mt-3 flex items-center gap-1 border-t pt-3">
+
+            <div className="mt-2 flex items-center gap-1.5 border-t border-border/40 pt-3">
               {[
-                { label: "AR", value: "ar" },
+                { label: "ع", value: "ar" },
                 { label: "EN", value: "en" },
-                { label: "TR", value: "tr" },
               ].map(({ label, value }) => (
                 <button
                   key={value}
@@ -144,7 +200,7 @@ export function SiteHeader() {
                     window.location.reload();
                   }}
                   className={cn(
-                    "rounded-md px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-colors",
+                    "rounded-md px-3 py-1.5 text-xs font-semibold transition-colors",
                     value === currentLocale
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:text-foreground",
@@ -156,12 +212,20 @@ export function SiteHeader() {
                 </button>
               ))}
             </div>
+
             <Link
-              href="/custom-product"
+              href="/demo"
               onClick={() => setOpen(false)}
-              className="btn-primary mt-3 h-10 text-sm"
+              className="btn-outline mt-2 h-11 text-sm"
             >
-              صمّم نظامك المؤسسي
+              مشاهدة الديمو
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => setOpen(false)}
+              className="btn-primary mt-1 h-11 text-sm"
+            >
+              طلب جلسة تنفيذية
             </Link>
           </nav>
         </div>

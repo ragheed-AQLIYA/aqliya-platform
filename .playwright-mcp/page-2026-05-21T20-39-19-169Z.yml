@@ -1,0 +1,20 @@
+- generic [active] [ref=e1]:
+  - link "تخطي إلى المحتوى الرئيسي" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: الدخول إلى مساحة العمل المؤسسية
+        - generic [ref=e7]: أدخل بياناتك للوصول إلى بيئة تشغيل محكومة.
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: البريد الإلكتروني
+          - textbox "البريد الإلكتروني" [ref=e12]: wrong@test.com
+        - generic [ref=e13]:
+          - generic [ref=e14]: كلمة المرور
+          - textbox "كلمة المرور" [ref=e15]: wrongpassword
+        - paragraph [ref=e27]: بريد إلكتروني أو كلمة مرور غير صحيحة
+        - button "تسجيل الدخول" [ref=e16]
+  - button "Open Next.js Dev Tools" [ref=e22] [cursor=pointer]:
+    - img [ref=e23]
+  - alert [ref=e26]

@@ -1,217 +1,249 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   SectionEyebrow,
-  BeforeAfterBlock,
   WorkflowChain,
-  ProductProofCard,
   ExecutiveSurface,
+  BeforeAfterBlock,
 } from "@/components/enterprise";
 import {
   OperatingSystemMapVisual,
   ProofChainVisual,
 } from "@/components/visuals";
 
-const impactMetrics = [
+export const metadata: Metadata = {
+  title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",
+  description:
+    "عقلية منصة ذكاء مؤسسي خاص ومحكوم: تجمع الذكاء الاصطناعي مع الحوكمة، الأدلة، المراجعة البشرية، وسجل التدقيق داخل بيئة مؤسسية مضبوطة. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.",
+};
+
+// ─── Governance Trust Pillars ────────────────────────────────────────────────
+// هذه ليست ادعاءات تسويقية — هي قدرات مُبنية داخل المنصة فعلاً
+const trustPillars = [
   {
-    value: "01",
-    label: "نواة مشتركة",
-    detail: "منطق حوكمة واحد يمكن البناء فوقه عبر أكثر من خط نظام",
+    icon: "🔗",
+    title: "سلسلة الأدلة",
+    en: "Evidence Chain",
+    body: "كل مخرج مربوط بمصدر بياناته، خطوات معالجته، ومن راجعه واعتمده.",
   },
   {
-    value: "عدة",
-    label: "مسارات تشغيل",
-    detail:
-      "تشمل التدقيق المالي، المحتوى المحلي، حوكمة القرارات، المبيعات، المحاكاة، والأنظمة المخصصة بدرجات نضج مختلفة",
+    icon: "🔐",
+    title: "صلاحيات محكومة",
+    en: "Role-Based Access",
+    body: "RBAC على مستوى كل عملية: من يقرأ، من يراجع، من يعتمد، ومن يُصدر.",
   },
   {
-    value: "100%",
-    label: "مبدأ التتبع",
-    detail: "كل مخرج يجب أن يبقى مربوطًا بالبيانات، والمراجعة، وصاحب الصلاحية",
+    icon: "📋",
+    title: "سجل تدقيق كامل",
+    en: "Full Audit Trail",
+    body: "كل حدث، تغيير، وقرار مسجل بالهوية والوقت والسياق — لا يمكن حذفه.",
+  },
+  {
+    icon: "👁",
+    title: "مراجعة بشرية إلزامية",
+    en: "Human Review Gates",
+    body: "الذكاء لا يُصدر مخرجًا نهائيًا — كل مخرج يمر عبر مراجعة وموافقة إنسانية.",
+  },
+  {
+    icon: "🏛",
+    title: "عزل تام بين المؤسسات",
+    en: "Tenant Isolation",
+    body: "كل مؤسسة في بيئتها المستقلة — لا تشارك بيانات، لا تداخل صلاحيات.",
+  },
+  {
+    icon: "🛡",
+    title: "حدود واضحة للذكاء",
+    en: "AI Boundary Rules",
+    body: "الذكاء مُقيَّد بدور المساعد: يقترح، يلخص، يصنف — لا يقرر ولا يعتمد.",
   },
 ];
 
-const promisePoints = [
-  "ذكاء يعمل داخل نطاق المؤسسة لا خارجه",
-  "مسارات تشغيل تربط الإدخال، المراجعة، والاعتماد في بنية واحدة",
-  "مخرجات قابلة للفهم والمراجعة بدل إجابات سريعة بلا سياق",
-];
-
-const products = [
+// ─── Active Systems (real, implemented) ─────────────────────────────────────
+const activeSystems = [
   {
-    title: "AuditOS | أول تطبيق مُثبت على عقلية",
-    problem:
-      "بيانات مالية متفرقة، تصنيفات يدوية، أدلة غير مرتبطة، ومراجعة يصعب تتبعها.",
-    system:
-      "يبني مسار مراجعة وتدقيق محكوم يربط البيانات المالية بالتصنيف، الأدلة، الملاحظات، المراجعة، والاعتماد.",
-    output:
-      "مخرجات مراجعة منظمة وقابلة للتتبع من المصدر إلى القرار البشري النهائي.",
-    flow: ["بيانات", "تصنيف", "مخرجات", "أدلة", "مراجعة"],
+    id: "auditos",
+    name: "AuditOS",
+    tagline: "نظام التدقيق والذكاء المالي",
+    status: "proven" as const,
+    statusLabel: "مُثبت — L5 Pilot-ready",
+    description:
+      "مسار مراجعة مالية محكوم بالكامل: من ميزان المراجعة إلى القوائم المالية والإيضاحات والأدلة والمراجعة والاعتماد والتصدير.",
+    capabilities: [
+      "رفع ميزان المراجعة",
+      "ربط الحسابات والتصنيف",
+      "القوائم المالية",
+      "إدارة الأدلة",
+      "مراجعة واعتماد محكومة",
+      "تصدير النتائج",
+    ],
     href: "/products/audit",
-    note: "أول تطبيق مُثبت على AQLIYA Intelligence Core، ويُظهر كيف يتحول الذكاء المالي إلى مسار محكوم وقابل للمراجعة.",
-    maturity: "أول تطبيق مُثبت",
-    status: "active",
+    demoHref: "/auditos",
+    hasDemoButton: true,
   },
   {
-    title: "LocalContentOS | المنتج الاستراتيجي الثاني ضمن عقلية",
-    problem:
-      "بيانات موردين، إنفاق، التزام، وتصنيفات موزعة بين فرق ومصادر مختلفة.",
-    system:
-      "يوحّد قياس المحتوى المحلي عبر ربط الموردين بالإنفاق، التصنيف، نسب الالتزام، الفجوات، ومسارات التتبع.",
-    output:
-      "رؤية مؤسسية أوضح لمؤشرات المحتوى المحلي وجاهزية القرارات الشرائية.",
-    flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات"],
-    href: "/products/local-content",
-    note: "مسار منتج استراتيجي يبحث عن شركاء تصميم للتحقق من الاحتياج وتحديد نطاق بايلوت مستقبلي.",
-    maturity: "استراتيجي — مرحلة التخطيط",
-    status: "strategic",
-  },
-  {
-    title: "DecisionOS | حوكمة القرار التنفيذي",
-    problem:
-      "قرارات مهمة تُبنى على نقاشات متفرقة، ملفات متعددة، ومعايير غير موحدة.",
-    system:
-      "يحوّل القرار التنفيذي إلى مسار محكوم: بدائل، معايير، مخاطر، أدلة، توصية، واعتماد.",
-    output: "مذكرة قرار موثقة يمكن مراجعتها وفهم أسبابها قبل الاعتماد.",
-    flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية"],
+    id: "decisionos",
+    name: "DecisionOS",
+    tagline: "حوكمة القرار التنفيذي",
+    status: "active" as const,
+    statusLabel: "نشط — L4 Usable v0.1",
+    description:
+      "يحوّل القرار التنفيذي إلى مسار موثق: مشكلة، بدائل، معايير، مخاطر، أدلة، توصية، اعتماد، وسجل مراجعة.",
+    capabilities: [
+      "تحديد المشكلة والسياق",
+      "البدائل والمعايير",
+      "تقييم المخاطر",
+      "توصية مدعومة بالأدلة",
+      "مسار الاعتماد",
+      "تصدير مذكرة القرار",
+    ],
     href: "/products/decision",
-    note: "نظام مجاور نشط داخل AQLIYA، ويُستخدم كطبقة منهجية لحوكمة القرارات.",
-    maturity: "نظام مجاور — نشط",
-    status: "available",
+    hasDemoButton: false,
   },
   {
-    title: "SalesOS | خط نظام الذاكرة التجارية والمبيعات",
-    problem:
-      "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
-    system:
-      "نموذج أولي لنظام ذاكرة تجارية يستكشف كيفية تنظيم التأهيل والترتيب والمتابعة والتعلم المؤسسي.",
-    output:
-      "مسار مبيعات أوضح يربط العملاء المحتملين بالأولوية، المتابعة، والتعلم المؤسسي.",
-    flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة", "تعلم"],
-    href: "/products/sales",
-    note: "خط نظام مستقبلي ضمن عقلية — نموذج أولي بلوحة معلومات ثابتة، بدون خلفية تشغيلية بعد.",
-    maturity: "نموذج أولي — مستقبلي",
-    status: "prototype",
-  },
-  {
-    title: "SimulationOS | خط نظام محاكاة السيناريوهات",
-    problem:
-      "قرارات تُنفذ قبل اختبار أثرها على التكلفة، المخاطر، الأداء، أو النتائج.",
-    system:
-      "يربط المدخلات بالافتراضات والسيناريوهات والمقارنات قبل التنفيذ داخل مسار محاكاة قابل للمراجعة.",
-    output:
-      "رؤية مقارنة تساعد الإدارة على فهم البدائل قبل اعتماد القرار أو تنفيذ الأثر.",
-    flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
-    href: "/products/simulation",
-    note: "خط نظام مستقبلي ضمن عقلية — يُعرَض حاليًا كمفهوم تسويقي لحين تطوير النموذج التشغيلي.",
-    maturity: "مفهوم — مستقبلي",
-    status: "future",
+    id: "localcontentos",
+    name: "LocalContentOS",
+    tagline: "قياس المحتوى المحلي والمنتجات السعودية",
+    status: "active" as const,
+    statusLabel: "نشط — L4 Usable v0.1",
+    description:
+      "يوحّد قياس المحتوى المحلي: الموردون، الإنفاق، التصنيف، نسب الالتزام، الفجوات، ومؤشرات الامتثال — داخل مسار حوكمة واحد.",
+    capabilities: [
+      "سجل الموردين والتصنيف",
+      "تتبع الإنفاق والشراء",
+      "قياس نسبة المحتوى المحلي",
+      "تحديد الفجوات",
+      "رفع الأدلة والمستندات",
+      "التقارير والتصدير",
+    ],
+    href: "/products/local-content",
+    hasDemoButton: false,
+    note: "متاح مع قيود معلنة — راجع صفحة النظام للتفاصيل",
   },
 ];
 
-const coreItems = [
-  { title: "تنسيق الذكاء", english: "AI Orchestration" },
-  { title: "الحوكمة", english: "Governance Engine" },
-  { title: "سير العمل", english: "Workflow Engine" },
-  { title: "ربط الأدلة", english: "Evidence Graph" },
-  { title: "الصلاحيات", english: "RBAC / Permissions" },
-  { title: "سجل التدقيق", english: "Audit Logs" },
-  { title: "التقارير", english: "Reporting Engine" },
+// ─── Core Architecture Items ──────────────────────────────────────────────────
+const coreCapabilities = [
+  { ar: "تنسيق الذكاء", en: "AI Orchestration" },
+  { ar: "محرك الحوكمة", en: "Governance Engine" },
+  { ar: "محرك سير العمل", en: "Workflow Engine" },
+  { ar: "رسم الأدلة", en: "Evidence Graph" },
+  { ar: "الصلاحيات والأدوار", en: "RBAC / Permissions" },
+  { ar: "سجل التدقيق", en: "Audit Logs" },
+  { ar: "ذكاء المستندات", en: "Document Intelligence" },
+  { ar: "محرك التقارير", en: "Reporting Engine" },
 ];
 
 export default function HomePage() {
   return (
     <div className="flex flex-col">
-      <section className="hero-gradient relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:28px_28px]" />
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/6 to-transparent" />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-18 sm:py-24 lg:py-28">
-          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-14">
+      {/* ════════════════════════════════════════════
+          § 1 — HERO
+          القرار: headline يُعبّر عن قيمة المنصة المؤسسية لا وصف تقني
+          CTA: اثنان فقط — executive session (primary) + AuditOS demo (secondary)
+          Trust metrics: 3 إشارات مؤسسية حقيقية بدلاً من أرقام مجردة
+          ════════════════════════════════════════════ */}
+      <section className="hero-gradient relative overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px]" />
+        <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-white/5 to-transparent" />
+
+        <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-26 lg:py-30">
+          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
             <div className="flex flex-col justify-center animate-fade-in-up">
-              <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/6 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/85 backdrop-blur">
-                <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-                منصة ذكاء مؤسسي خاص ومحكوم
-              </span>
-              <p className="text-sm font-semibold tracking-[0.22em] text-aqliya-cyan uppercase">
-                AQLIYA
+
+              {/* Platform Identity Badge */}
+              <div className="mb-7 flex flex-wrap items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/85 backdrop-blur">
+                  <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
+                  منصة ذكاء مؤسسي خاص ومحكوم
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-status-success/30 bg-status-success/10 px-3 py-1 text-[10px] font-medium text-status-success">
+                  <span className="h-1.5 w-1.5 rounded-full bg-status-success animate-pulse" />
+                  AuditOS جاهز للتجربة
+                </span>
+              </div>
+
+              <p className="text-sm font-bold tracking-[0.24em] text-aqliya-cyan uppercase mb-3">
+                AQLIYA — عقلية
               </p>
-              <h1 className="mt-3 text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                الحوكمة الفعلية للعمليات
-                <span className="block text-white/70">
-                  تبدأ بالأدلة. ليس بالآراء.
+
+              {/* Hero Headline — executive framing */}
+              <h1 className="text-4xl font-black leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-[3.2rem]">
+                حين يعمل الذكاء
+                <span className="block mt-1 text-white/75">
+                  داخل حوكمة المؤسسة، لا فوقها
                 </span>
               </h1>
-              <div className="mt-4 space-y-1 text-base font-semibold text-aqliya-cyan/90 sm:text-lg">
-                <p>الذكاء لا يقرر. يساعد.</p>
-                <p>الإنسان يقرر.</p>
-                <p>والدليل يحكم.</p>
+
+              {/* Trust Principle — architectural, not marketing */}
+              <div className="mt-5 rounded-2xl border border-aqliya-cyan/18 bg-aqliya-cyan/[0.05] px-5 py-4 backdrop-blur-sm">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan/80 mb-2">
+                  المبدأ المعماري الأساسي
+                </p>
+                <p className="text-lg font-black text-white">
+                  الذكاء يساعد.{"  "}
+                  <span className="text-aqliya-cyan">الإنسان يقرر.</span>{"  "}
+                  الدليل يحكم.
+                </p>
+                <p className="mt-1.5 text-[11px] text-white/50">
+                  AI assists. Humans decide. Evidence governs.
+                </p>
               </div>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/72 sm:text-xl">
-                عقلية ليست طبقة محادثة فوق المؤسسة. هي منصة تشغيل تربط البيانات،
-                القواعد، الصلاحيات، الأدلة، والمراجعة داخل مسار واحد يمكن الوثوق
-                به.
+
+              <p className="mt-6 max-w-xl text-base leading-8 text-white/68 sm:text-lg">
+                عقلية تبني مسارات تشغيل مؤسسية تربط البيانات، القواعد، الصلاحيات، الأدلة، والمراجعة البشرية داخل بنية واحدة يمكن الوثوق بها — لا أداة ذكاء اصطناعي معزولة.
               </p>
-              <div className="mt-6 space-y-3">
-                {promisePoints.map((point) => (
-                  <div
-                    key={point}
-                    className="flex items-start gap-3 text-white/70"
-                  >
-                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-aqliya-cyan" />
-                    <p className="text-sm leading-7 sm:text-base">{point}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 rounded-2xl border border-aqliya-cyan/20 bg-aqliya-cyan/[0.06] p-4 backdrop-blur-sm">
-                <p className="text-xs font-semibold text-aqliya-cyan">
-                  مبدأ الثقة:
-                </p>
-                <p className="mt-1 text-base font-bold text-white">
-                  الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
-                </p>
-              </div>
-              <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row">
+
+              {/* CTA Pair — two only, clear hierarchy */}
+              <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row">
                 <Link
-                  href="/products"
-                  className="btn-primary h-12 px-8 text-base"
+                  href="/contact"
+                  className="btn-primary h-12 px-8 text-base font-bold"
                 >
-                  استكشف خطوط عقلية
+                  طلب جلسة تنفيذية
                 </Link>
                 <Link
                   href="/auditos"
                   className="btn-secondary h-12 px-8 text-base"
                 >
-                  شاهد AuditOS — أول تطبيق مُثبت
-                </Link>
-                <Link
-                  href="/contact"
-                  className="btn-secondary h-12 px-8 text-base"
-                >
-                  تحدث إلى متخصص
+                  استكشف AuditOS — عرض مباشر
                 </Link>
               </div>
-              <div className="mt-10 grid gap-3 sm:grid-cols-3">
-                {impactMetrics.map((metric) => (
+
+              {/* Trust Signals Row — real system capabilities */}
+              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                {[
+                  {
+                    icon: "🔗",
+                    title: "سلسلة أدلة كاملة",
+                    detail: "كل مخرج مربوط بمصدره، مراجعه، ومعتمده",
+                  },
+                  {
+                    icon: "📋",
+                    title: "سجل تدقيق غير قابل للحذف",
+                    detail: "كل حدث موثق بالهوية والوقت والسياق",
+                  },
+                  {
+                    icon: "👁",
+                    title: "مراجعة بشرية إلزامية",
+                    detail: "الذكاء لا يعتمد — الإنسان يعتمد",
+                  },
+                ].map((sig) => (
                   <div
-                    key={metric.label}
-                    className="rounded-2xl border border-white/15 bg-white/8 p-4 backdrop-blur"
+                    key={sig.title}
+                    className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur"
                   >
-                    <div className="text-2xl font-black text-white">
-                      {metric.value}
-                    </div>
-                    <div className="mt-1 text-sm font-semibold text-white/88">
-                      {metric.label}
-                    </div>
-                    <p className="mt-2 text-xs leading-6 text-white/58">
-                      {metric.detail}
-                    </p>
+                    <div className="text-xl mb-2">{sig.icon}</div>
+                    <div className="text-sm font-bold text-white">{sig.title}</div>
+                    <p className="mt-1.5 text-xs leading-5 text-white/50">{sig.detail}</p>
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* Hero Visual */}
             <div className="animate-scale-in stagger-2">
-              <div className="gradient-border rounded-[28px] bg-white/[0.03] p-3 shadow-[0_24px_80px_-32px_rgba(0,0,0,0.65)] backdrop-blur-xl">
+              <div className="gradient-border rounded-[28px] bg-white/[0.02] p-3 shadow-[0_28px_90px_-36px_rgba(0,0,0,0.7)] backdrop-blur-xl">
                 <OperatingSystemMapVisual className="w-full rounded-[22px] glow-accent" />
               </div>
             </div>
@@ -219,372 +251,290 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ════════════════════════════════════════════
+          § 2 — THE INSTITUTIONAL GAP
+          القرار: سرد المشكلة الحقيقية قبل تقديم الحل
+          ════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <SectionEyebrow
-          label="الوضوح والثقة"
-          title="ليست صناديق سوداء. ليست قرارات آلية. ليست مخرجات بلا دليل."
-          description="داخل المؤسسة، الإجابة وحدها لا تكفي. يجب أن يعرف صاحب القرار: ما البيانات؟ ما الدليل؟ من راجع؟ ومن اعتمد؟ عقلية تجعل كل مخرج مفهومًا، قابلًا للمراجعة، ومرتبطًا بسياقه التشغيلي."
+          label="الفجوة التشغيلية"
+          title="المشكلة ليست في غياب الذكاء — بل في غياب النظام الذي يحكمه"
+          description="حين تعمل البيانات في مكان، والموافقات في آخر، والمراجعة في ثالث — تصبح المخرجات سريعة لكنها ضعيفة الثقة. الأثر: قرارات لا يمكن تفسيرها أو مراجعتها أو الدفاع عنها."
         />
-      </section>
-
-      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
-        <SectionEyebrow
-          label="نماذج التشغيل"
-          title="السحابة متاحة الآن. الخوادم الخاصة قيد التخطيط والتحضير."
-          description="نقدم خيارات تشغيل تناسب درجة حساسية المؤسسة. كل نموذج يحافظ على نفس منطق الحوكمة والتتبع والأدلة."
-        />
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-2xl border border-aqliya-cyan/30 bg-gradient-to-br from-aqliya-cyan/[0.08] to-white p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-foreground">السحابة</h3>
-              <span className="inline-flex rounded-full bg-aqliya-cyan/20 px-2 py-1 text-[9px] font-bold text-aqliya-cyan uppercase">
-                متاح الآن
-              </span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              نسخة سحابية للخصائص الحالية المتاحة، مع تحديثات تشغيلية ونسخ
-              احتياطي. مناسبة للمؤسسات التي تفضل عدم إدارة البنية التحتية.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-muted/30 to-white p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-foreground">خوادم خاصة</h3>
-              <span className="inline-flex rounded-full bg-amber-100 px-2 py-1 text-[9px] font-bold text-amber-700 uppercase">
-                قيد التخطيط والتحضير
-              </span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              تشغيل عقلية داخل البنية التحتية للمؤسسة مع قاعدة بيانات محلية
-              وتحكم كامل. قيد التخطيط والتحضير، وقد يُتاح للمؤسسات الحساسة بعد
-              اكتماله واعتماده.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-muted/30 to-white p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-foreground">
-                بيئة معزولة
-              </h3>
-              <span className="inline-flex rounded-full bg-slate-100 px-2 py-1 text-[9px] font-bold text-slate-600 uppercase">
-                استراتيجي — مستقبلي
-              </span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              نموذج مستقبلي للمؤسسات ذات المتطلبات الأمنية العالية. يعتمد على
-              اكتمال نموذج الخوادم الخاصة أولاً.
-            </p>
-          </div>
+        <div className="mt-12">
+          <BeforeAfterBlock
+            before={[
+              "مخرجات ذكاء منفصلة عن سياق العمل",
+              "اعتمادات تسير عبر البريد والذاكرة",
+              "موافقات غير موثقة بالهوية أو الوقت",
+              "أدلة منفصلة عن القرار الذي استندت إليه",
+              "لا يمكن مساءلة أي خطوة بعد مرورها",
+            ]}
+            after={[
+              "مسار عمل محكوم بقواعد وصلاحيات",
+              "مخرجات مرتبطة بسلسلة أدلة كاملة",
+              "اعتمادات موثقة بالهوية والوقت والسياق",
+              "سجل تدقيق غير قابل للتعديل أو الحذف",
+              "كل خطوة قابلة للمراجعة والتفسير",
+            ]}
+          />
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
-        <SectionEyebrow
-          label="السياق التشغيلي"
-          title="من التحدي إلى السبب إلى الحل"
-        />
-        <div className="mt-10 grid gap-6 sm:grid-cols-3">
-          <div className="rounded-2xl border border-red-500/20 bg-gradient-to-br from-red-500/10 to-white p-6 shadow-sm">
-            <h3 className="text-sm font-black text-red-600">التحدي</h3>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              المؤسسات تتخذ قرارات كل يوم، لكن بدون نظام محكوم: البيانات في
-              مكان، الموافقات في آخر، والأدلة مشتتة. النتيجة: قرارات سريعة، لكن
-              ضعيفة الثقة والقابلية للمراجعة.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-white p-6 shadow-sm">
-            <h3 className="text-sm font-black text-amber-600">السبب الجذري</h3>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              لا توجد طبقة نظام واحدة تجمع البيانات والسير والموافقات والأدلة.
-              كل مؤسسة تعيد بناء هذا اليدوي، مما يؤدي إلى ضعف الثقة والإنفاق غير
-              الضروري.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-white p-6 shadow-sm">
-            <h3 className="text-sm font-black text-emerald-600">الحل</h3>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              عقلية توفر النواة المشتركة: AQLIYA Intelligence Core. طبقة نظام
-              واحدة تدعم السير المحكوم، والأدلة المرتبطة، والموافقات الموثقة —
-              وعائلة من خطوط النظام تبني عليها.
-            </p>
-          </div>
-        </div>
-      </section>
-
+      {/* ════════════════════════════════════════════
+          § 3 — AQLIYA INTELLIGENCE CORE
+          القرار: تقديم المنصة كبنية مؤسسية، لا كمجموعة أدوات
+          ════════════════════════════════════════════ */}
       <section className="section-gradient-light border-t">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <SectionEyebrow
-            label="الفجوة التشغيلية"
-            title="المشكلة ليست في غياب الذكاء فقط، بل في غياب النظام الذي يحكمه"
-            description="حين تعمل البيانات في مكان، والموافقات في مكان، والمراجعة في مكان آخر، تصبح المخرجات سريعة لكنها ضعيفة الثقة. عقلية تعيد جمع المسار كاملًا داخل منطق تشغيلي واحد."
+            label="AQLIYA Intelligence Core"
+            title="نواة مشتركة واحدة — تبني عليها كل الأنظمة"
+            description="بدلاً من شراء أدوات منفصلة لكل نطاق، AQLIYA Intelligence Core يوفر المنطق الحوكمي الموحد: الصلاحيات، الأدلة، سير العمل، والمراجعة — يُعاد استخدامه في كل نظام جديد دون بناء من الصفر."
           />
-          <div className="mt-12">
-            <BeforeAfterBlock
-              before={[
-                "مخرجات ذكاء غير مرتبطة بسياق العمل",
-                "اعتماد عبر البريد والذاكرة",
-                "موافقات غير موثقة",
-                "أدلة منفصلة عن القرار",
-                "صلاحيات لا تحكم المسار كاملًا",
-              ]}
-              after={[
-                "سير عمل محكوم",
-                "مخرجات قابلة للتتبع",
-                "قرارات موثقة",
-                "أدلة مربوطة بكل خطوة",
-                "وضوح تشغيلي قابل للمراجعة",
-              ]}
-            />
-          </div>
-        </div>
-      </section>
 
-      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
-        <SectionEyebrow
-          label="ما بعد الإجابة السريعة"
-          title="معظم أدوات الذكاء تعطي إجابة. عقلية تبني مسارًا."
-          description="الإجابة السريعة قد تساعد فردًا، لكنها لا تكفي داخل مؤسسة. المؤسسة تحتاج مخرجًا يمكن تفسيره، مراجعته، وربطه بالدليل والصلاحية والاعتماد. لذلك لا تتعامل عقلية مع الذكاء كواجهة محادثة، بل كجزء من نظام تشغيل محكوم."
-        />
-      </section>
-
-      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
-        <SectionEyebrow
-          label="AQLIYA Intelligence Core"
-          title="نواة تشغيل واحدة بدل مشاريع متفرقة وأدوات معزولة"
-          description="النواة المشتركة في عقلية لا تعني إعادة تسمية مجموعة خصائص تقنية. هي طبقة تشغيل مؤسسي تجعل كل خط نظام جديد يبنى فوق نفس منطق الحوكمة، لا من الصفر."
-        />
-        <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-          <ExecutiveSurface>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {coreItems.map((item) => (
-                <div
-                  key={item.english}
-                  className="glass-card-light p-4 text-right"
+          <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-start">
+            {/* Core Capabilities Grid */}
+            <ExecutiveSurface>
+              <div className="mb-5 flex items-center justify-between">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-foreground">
+                  AQLIYA Intelligence Core
+                </p>
+                <Link
+                  href="/platform"
+                  className="text-xs font-semibold text-primary hover:underline"
                 >
-                  <p className="text-sm font-bold text-foreground">
-                    {item.title}
-                  </p>
-                  <p className="mt-2 text-xs leading-6 text-muted-foreground">
-                    {item.english}
-                  </p>
+                  استكشف المنصة ←
+                </Link>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {coreCapabilities.map((cap) => (
+                  <div
+                    key={cap.en}
+                    className="glass-card-light p-4 text-right"
+                  >
+                    <p className="text-sm font-bold text-foreground">{cap.ar}</p>
+                    <p className="mt-1 text-[11px] text-muted-foreground">{cap.en}</p>
+                  </div>
+                ))}
+              </div>
+            </ExecutiveSurface>
+
+            {/* Core Value Proposition */}
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.05] to-background p-6">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                  الأثر الاستراتيجي
+                </p>
+                <h3 className="mt-3 text-xl font-black text-foreground leading-snug">
+                  كل نظام جديد يُبنى فوق نفس منطق الحوكمة
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                  هذا يعني أن إضافة نطاق تشغيلي جديد لا يتطلب إعادة بناء حوكمة من الصفر — بل ربط النطاق الجديد بالنواة المشتركة.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-border/60 bg-muted/20 p-5">
+                <p className="text-xs font-semibold text-muted-foreground mb-2">
+                  طبقة النشر
+                </p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground">سحابة عقلية</span>
+                    <span className="rounded-full bg-status-success/15 px-2 py-0.5 text-[10px] font-bold text-status-success">متاح الآن</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground">خوادم خاصة</span>
+                    <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-600">قيد التطوير</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground">بيئة معزولة</span>
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">استراتيجي</span>
+                  </div>
                 </div>
-              ))}
+                <Link href="/governance" className="mt-4 block text-xs font-semibold text-primary hover:underline">
+                  اطلع على بنية الحوكمة والأمان ←
+                </Link>
+              </div>
             </div>
-          </ExecutiveSurface>
-          <div className="rounded-3xl border border-border/70 bg-gradient-to-br from-primary/[0.06] via-background to-aqliya-cyan/[0.04] p-7 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-              الأثر التشغيلي
-            </p>
-            <h3 className="mt-4 text-2xl font-black text-foreground">
-              بدل شراء ذكاء منفصل، تبني المؤسسة قدرة تشغيلية متكررة
-            </h3>
-            <p className="mt-4 text-base leading-8 text-muted-foreground">
-              هذا يعني أن كل نطاق جديد لا يبدأ من سؤال: أي أداة نضيف؟ بل من
-              سؤال: كيف نُدخل هذا النطاق داخل نفس قواعد البيانات، والمراجعة،
-              والصلاحيات، وسلسلة الاعتماد؟
-            </p>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
+      {/* ════════════════════════════════════════════
+          § 4 — ACTIVE SYSTEMS
+          القرار: عرض الأنظمة الحقيقية فقط بالـ tier الصحيح لكل نظام
+          SalesOS/SimulationOS تُحذف من هذا القسم — تظهر في /products فقط
+          ════════════════════════════════════════════ */}
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <SectionEyebrow
-          label="سلسلة التشغيل"
-          title="من البيانات إلى القرار عبر مسار مفهوم ومراجع"
-          description="في عقلية، القيمة لا تأتي من الإجابة نفسها فقط، بل من الطريق الذي أنتجها: من أين جاءت البيانات، من راجعها، وما الذي اعتمدها، وما الذي يمكن الرجوع إليه بعد ذلك."
+          label="الأنظمة النشطة"
+          title="أنظمة مؤسسية تعمل الآن فوق AQLIYA Intelligence Core"
+          description="ثلاثة أنظمة مُبنية ومُشغَّلة. كل نظام يشارك نفس منطق الحوكمة، الأدلة، والمراجعة — ويُضاف إليها باستمرار."
         />
-        <div className="mt-10">
-          <ExecutiveSurface>
-            <WorkflowChain
-              steps={[
-                "البيانات",
-                "سير العمل",
-                "الأدلة",
-                "المراجعة",
-                "الاعتماد",
-                "المخرجات",
-              ]}
-              className="justify-center"
-            />
-          </ExecutiveSurface>
-        </div>
-      </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
-        <SectionEyebrow
-          label="التفعيل المؤسسي"
-          title="وحين لا تكفي الخطوط الجاهزة، يمكن بناء مسارك الخاص فوق النواة نفسها"
-          description="بعض المؤسسات تحتاج ما هو أبعد من منتج جاهز. لذلك تسمح عقلية بتفعيل نظام أو مسار مؤسسي مخصص مع الحفاظ على نفس منطق الحوكمة والتتبع والمراجعة."
-        />
-        <div className="mt-8 text-center">
-          <Link
-            href="/custom-product"
-            className="btn-primary h-12 px-8 text-base"
-          >
-            صمّم نظامك المؤسسي
+        <div className="mt-12 space-y-6">
+          {activeSystems.map((system) => (
+            <div
+              key={system.id}
+              className={`rounded-2xl border p-6 transition-all duration-200 hover:shadow-sm sm:p-7 ${
+                system.status === "proven"
+                  ? "border-aqliya-cyan/25 bg-gradient-to-br from-aqliya-cyan/[0.04] to-background"
+                  : "border-border/70 bg-gradient-to-br from-muted/20 to-background"
+              }`}
+            >
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <h3 className="text-lg font-black text-foreground">
+                      {system.name}
+                    </h3>
+                    <span className="text-sm font-medium text-muted-foreground">
+                      — {system.tagline}
+                    </span>
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${
+                        system.status === "proven"
+                          ? "bg-aqliya-cyan/15 text-aqliya-cyan border border-aqliya-cyan/20"
+                          : "bg-primary/10 text-primary border border-primary/15"
+                      }`}
+                    >
+                      {system.statusLabel}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-7 text-muted-foreground max-w-2xl">
+                    {system.description}
+                  </p>
+                  {system.note && (
+                    <p className="mt-2 text-xs text-amber-600/80 font-medium">
+                      ⚠ {system.note}
+                    </p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-2 shrink-0">
+                  {system.hasDemoButton && system.demoHref && (
+                    <Link
+                      href={system.demoHref}
+                      className="btn-primary h-9 px-5 text-sm"
+                    >
+                      عرض تفاعلي
+                    </Link>
+                  )}
+                  <Link
+                    href={system.href}
+                    className="btn-outline h-9 px-5 text-sm"
+                  >
+                    تفاصيل النظام
+                  </Link>
+                </div>
+              </div>
+
+              {/* Capabilities Grid */}
+              <div className="mt-5 grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+                {system.capabilities.map((cap, i) => (
+                  <div
+                    key={i}
+                    className="rounded-lg border border-border/40 bg-background/60 px-3 py-2 text-center"
+                  >
+                    <p className="text-[11px] font-medium text-muted-foreground leading-5">{cap}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 flex items-center justify-between rounded-2xl border border-border/50 bg-muted/20 p-5">
+          <div>
+            <p className="text-sm font-bold text-foreground">خطوط أنظمة إضافية قيد التطوير</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              SalesOS، SimulationOS — قيد التطوير والتخطيط الاستراتيجي
+            </p>
+          </div>
+          <Link href="/products" className="btn-outline h-9 px-5 text-sm shrink-0">
+            عرض كل الأنظمة
           </Link>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
-        <SectionEyebrow
-          label="عائلة المنتجات"
-          title="كل مستوى نضج يعالج احتياجًا مختلفًا"
-          description="بعض المؤسسات تحتاج حلاً مثبتًا وجاهزًا الآن. وبعضها يحتاج لاستكشاف نظام نشط أو تخطيط خط استراتيجي جديد. عقلية تدعم كل المسارات."
-        />
-        <div className="mt-10 space-y-12">
-          {/* Proven Products / المنتجات المُثبتة */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <h3 className="text-lg font-black text-foreground">
-                المنتجات المُثبتة — جاهزة الآن
-              </h3>
-              <span className="inline-flex rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 text-[11px] font-bold text-emerald-400 uppercase">
-                متاح
-              </span>
-            </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {products
-                .filter((p) => p.status === "active")
-                .map((product) => (
-                  <ProductProofCard
-                    key={product.href}
-                    title={product.title}
-                    problem={product.problem}
-                    system={product.system}
-                    output={product.output}
-                    flow={product.flow}
-                    href={product.href}
-                    note={product.note}
-                    maturity={product.maturity}
-                    status={product.status}
-                  />
-                ))}
-            </div>
-          </div>
-
-          {/* Active Systems / الأنظمة المجاورة النشطة */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <h3 className="text-lg font-black text-foreground">
-                الأنظمة المجاورة — نشطة ومتكاملة
-              </h3>
-              <span className="inline-flex rounded-full bg-blue-500/15 border border-blue-500/30 px-2.5 py-1 text-[11px] font-bold text-blue-400 uppercase">
-                متاح
-              </span>
-            </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {products
-                .filter((p) => p.status === "available")
-                .map((product) => (
-                  <ProductProofCard
-                    key={product.href}
-                    title={product.title}
-                    problem={product.problem}
-                    system={product.system}
-                    output={product.output}
-                    flow={product.flow}
-                    href={product.href}
-                    note={product.note}
-                    maturity={product.maturity}
-                    status={product.status}
-                  />
-                ))}
-            </div>
-          </div>
-
-          {/* Strategic & Future / خطوط النظام الاستراتيجية */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <h3 className="text-lg font-black text-foreground">
-                خطوط النظام الاستراتيجية — قيد التخطيط والتطوير
-              </h3>
-              <span className="inline-flex rounded-full bg-amber-500/15 border border-amber-500/30 px-2.5 py-1 text-[11px] font-bold text-amber-400 uppercase">
-                قيد التخطيط
-              </span>
-            </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {products
-                .filter((p) =>
-                  ["strategic", "prototype", "future"].includes(p.status),
-                )
-                .map((product) => (
-                  <ProductProofCard
-                    key={product.href}
-                    title={product.title}
-                    problem={product.problem}
-                    system={product.system}
-                    output={product.output}
-                    flow={product.flow}
-                    href={product.href}
-                    note={product.note}
-                    maturity={product.maturity}
-                    status={product.status}
-                  />
-                ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ════════════════════════════════════════════
-          PROOF PRODUCT — AuditOS
+          § 5 — AUDITOS PROOF PRODUCT
+          القرار: AuditOS هو "إثبات المنصة" — يُعرض بعمق لأنه الدليل الحقيقي
           ════════════════════════════════════════════ */}
       <section className="section-gradient-dark border-t border-white/5">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto max-w-4xl">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full border border-aqliya-cyan/30 bg-aqliya-cyan/[0.1] px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan">
+            <div className="flex flex-wrap items-center gap-3 mb-5">
+              <span className="inline-flex items-center gap-2 rounded-full border border-aqliya-cyan/30 bg-aqliya-cyan/10 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan">
                 <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-                أول تطبيق مُثبت
+                Proof Product — AuditOS
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-medium text-emerald-300">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                جاهز للتجربة
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-status-success/30 bg-status-success/10 px-3 py-1 text-[10px] font-medium text-status-success">
+                <span className="h-1.5 w-1.5 rounded-full bg-status-success" />
+                جاهز للعرض الآن
               </span>
             </div>
-            <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl">
-              AuditOS — أول منتج مُثبت على AQLIYA Intelligence Core
+
+            <h2 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl">
+              AuditOS — كيف تبدو المنصة المؤسسية حين تعمل فعلاً
             </h2>
-            <p className="mt-4 max-w-3xl text-base leading-8 text-white/62">
-              AuditOS هو أول تطبيق يُظهر كيف تتحول نواة عقلية إلى خط نظام مالي
-              محكوم. يعالج مسار المراجعة المالية بالكامل: من ميزان المراجعة
-              الخام إلى القوائم المالية، الإيضاحات، الأدلة، الملاحظات، المراجعة
-              البشرية، والاعتماد النهائي.
+            <p className="mt-4 text-base leading-8 text-white/62 max-w-3xl">
+              AuditOS ليس مجرد منتج تدقيق مالي — هو الإثبات الحي أن AQLIYA Intelligence Core يمكنه تحويل عملية مؤسسية كاملة إلى مسار محكوم. من ميزان المراجعة الخام إلى الاعتماد النهائي، كل خطوة موثقة، مرتبطة بالأدلة، وقابلة للمراجعة.
             </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan/80">
-                  المسار
-                </span>
-                <p className="mt-2 text-sm leading-7 text-white/70">
-                  ميزان المراجعة ← ربط الحسابات ← القوائم المالية ← الإيضاحات ←
-                  الأدلة ← المراجعة ← الاعتماد ← التصدير
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan/80">
-                  الحوكمة
-                </span>
-                <p className="mt-2 text-sm leading-7 text-white/70">
-                  كل مخرج مربوط بالدليل، كل خطوة تحتاج مراجعة بشرية، كل اعتماد
-                  مسجل في سجل التدقيق.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan/80">
-                  المخرجات
-                </span>
-                <p className="mt-2 text-sm leading-7 text-white/70">
-                  قوائم مالية، إيضاحات، توصيات إعادة تصنيف، تقارير الأدلة، مسار
-                  مراجعة كامل.
-                </p>
-              </div>
+
+            {/* Workflow Chain */}
+            <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan/70 mb-4">
+                مسار العمل الكامل
+              </p>
+              <WorkflowChain
+                steps={[
+                  "ميزان المراجعة",
+                  "ربط الحسابات",
+                  "القوائم المالية",
+                  "الإيضاحات",
+                  "الأدلة",
+                  "المراجعة",
+                  "الاعتماد",
+                  "التصدير",
+                ]}
+                className="justify-start"
+              />
             </div>
-            <div className="mt-6 flex flex-wrap gap-4">
-              <Link href="/auditos" className="btn-primary px-6">
+
+            {/* Proof Points */}
+            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  label: "سلسلة التتبع",
+                  body: "كل مخرج مالي مربوط بالبيانات الأصلية، خطوات المعالجة، ومسار الاعتماد الكامل.",
+                },
+                {
+                  label: "الحوكمة الفعلية",
+                  body: "مراجعة بشرية إلزامية قبل أي تصدير. الذكاء يقترح، المراجع يقرر، الاعتماد موثق.",
+                },
+                {
+                  label: "المخرجات المؤسسية",
+                  body: "قوائم مالية، إيضاحات، توصيات إعادة تصنيف، تقارير الأدلة، سجل المراجعة الكامل.",
+                },
+              ].map((pt) => (
+                <div
+                  key={pt.label}
+                  className="rounded-2xl border border-white/8 bg-white/[0.03] p-5 backdrop-blur"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-aqliya-cyan/75 mb-2">
+                    {pt.label}
+                  </p>
+                  <p className="text-sm leading-6 text-white/65">{pt.body}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-4">
+              <Link href="/auditos" className="btn-primary px-7">
                 شاهد AuditOS — عرض تفاعلي
               </Link>
-              <Link href="/products/audit" className="btn-secondary px-6">
-                استكشف AuditOS
+              <Link href="/products/audit" className="btn-secondary px-7">
+                تفاصيل النظام الكاملة
               </Link>
             </div>
           </div>
@@ -592,180 +542,115 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════
-          STRATEGIC PRODUCT — LocalContentOS
+          § 6 — ENTERPRISE GOVERNANCE LAYER
+          القرار: إظهار بنية الثقة بشكل مرئي — هذا ما يحسم قرار Enterprise buyer
           ════════════════════════════════════════════ */}
-      <section className="border-t border-white/5 bg-gradient-to-b from-background to-muted/20">
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-          <div className="mx-auto max-w-4xl">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                المنتج الاستراتيجي الثاني
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-medium text-white/60">
-                <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
-                مستقبلي — قيد التخطيط
-              </span>
-            </div>
-            <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight text-foreground sm:text-4xl">
-              LocalContentOS — المنتج الاستراتيجي الثاني لسوق المحتوى المحلي
-            </h2>
-            <p className="mt-4 max-w-3xl text-base leading-8 text-muted-foreground">
-              LocalContentOS يستهدف قياس المحتوى المحلي وإدارة الموردين والإنفاق
-              والالتزام داخل مسار حوكمة موحد. صُمم خصيصًا للسوق السعودي، وسيُبنى
-              على AQLIYA Intelligence Core بنفس منطق الحوكمة والأدلة والمراجعة
-              البشرية.
-            </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-border/70 bg-muted/20 p-5">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-600/80">
-                  النطاق
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="بنية الثقة المؤسسية"
+          title="الحوكمة ليست طبقة تُضاف — هي البنية الأساسية"
+          description="كل نظام تحت عقلية مبني فوق نفس بنية الثقة. هذه القدرات ليست ادعاءات — هي مُنفَّذة ومُدمجة في كل مسار عمل."
+        />
+
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {trustPillars.map((pillar) => (
+            <div
+              key={pillar.en}
+              className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6 transition-all duration-200 hover:border-primary/20 hover:shadow-sm"
+            >
+              <div className="mb-3 flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-border/60 bg-muted/40 text-lg">
+                  {pillar.icon}
                 </span>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                  تصنيف الموردين، تحليل الإنفاق، قياس الالتزام، مؤشرات المحتوى
-                  المحلي.
-                </p>
+                <div>
+                  <p className="text-sm font-bold text-foreground">{pillar.title}</p>
+                  <p className="text-[10px] text-muted-foreground">{pillar.en}</p>
+                </div>
               </div>
-              <div className="rounded-2xl border border-border/70 bg-muted/20 p-5">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-600/80">
-                  السوق
-                </span>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                  موجه للمؤسسات السعودية التي تحتاج قياس المحتوى المحلي والتزام
-                  الموردين وفق متطلبات هيئة المحتوى المحلي.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-border/70 bg-muted/20 p-5">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-600/80">
-                  الحالة
-                </span>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                  قيد التخطيط الاستراتيجي — يُعرَض حاليًا كصفحة تعريفية لحين بدء
-                  التطوير.
-                </p>
-              </div>
+              <p className="text-sm leading-6 text-muted-foreground">{pillar.body}</p>
             </div>
-            <div className="mt-6 flex flex-wrap gap-4">
-              <Link href="/products/local-content" className="btn-primary px-6">
-                استكشف LocalContentOS
-              </Link>
-              <Link href="/custom-product" className="btn-outline px-6">
-                ناقش التفعيل المستقبلي
-              </Link>
-            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 flex items-center justify-between rounded-2xl border border-primary/15 bg-primary/[0.04] p-5">
+          <div>
+            <p className="text-sm font-bold text-foreground">بنية الحوكمة والأمان الكاملة</p>
+            <p className="text-xs text-muted-foreground mt-0.5">RBAC، Tenant Isolation، Evidence Graph، AI Boundaries</p>
           </div>
+          <Link href="/governance" className="btn-outline h-9 px-5 text-sm shrink-0">
+            اطلع على بنية الحوكمة
+          </Link>
         </div>
       </section>
 
+      {/* ════════════════════════════════════════════
+          § 7 — PROOF CHAIN VISUAL
+          ════════════════════════════════════════════ */}
       <section className="section-gradient-dark border-t border-white/5">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-aqliya-cyan">
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-              الثقة والإثبات
+              من البيانات إلى القرار
             </span>
             <h2 className="mt-5 text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">
-              الثقة في عقلية لا تُبنى على الوعود، بل على القدرة على الرجوع لكل
-              خطوة
+              كل مخرج يمكن إرجاعه إلى أصله
             </h2>
-            <div className="mt-6 rounded-2xl border border-aqliya-cyan/30 bg-aqliya-cyan/[0.08] p-5 backdrop-blur-sm">
-              <p className="text-sm font-semibold text-aqliya-cyan">
-                المبدأ الأساسي:
-              </p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">
-                الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
-              </p>
-              <p className="mt-2 text-sm leading-6 text-aqliya-cyan/70">
-                هذا ليس شعارًا تسويقيًا. هذا مبدأ معماري داخل عقلية: الذكاء لا
-                يعمل خارج المسار، الإنسان لا يعتمد بلا مراجعة، والدليل لا ينفصل
-                عن المخرج.
-              </p>
-            </div>
-            <p className="mt-4 text-base leading-8 text-white/58">
-              عندما يسأل المدير أو المدقق أو صاحب الصلاحية: كيف وصلنا إلى هذا
-              المخرج؟ يجب أن تكون الإجابة موجودة داخل النظام نفسه، لا في الذاكرة
-              ولا في سلاسل البريد.
+            <p className="mt-4 text-base leading-7 text-white/55">
+              حين يسأل المدير أو المدقق أو المراجع الخارجي: &ldquo;كيف وصلنا إلى هذا القرار؟&rdquo; — الإجابة داخل النظام، لا في الذاكرة ولا في سلاسل البريد.
             </p>
           </div>
           <ProofChainVisual />
         </div>
       </section>
 
+      {/* ════════════════════════════════════════════
+          § 8 — EXECUTIVE CTA
+          القرار: CTA واحد قوي — لا منافسة، لا تشتت
+          ════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
-        <SectionEyebrow
-          label="الوضوح الموضعي"
-          title="عقلية ليست..."
-          description="بعض الأشياء التي عقلية لا تفعلها. هذا يساعد في فهم ما هي في الواقع."
-        />
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-6 backdrop-blur">
-            <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-foreground">
-                ليست صفحة دردشة
-              </h3>
-              <span className="text-lg text-red-400">✕</span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              صفحات الدردشة العامة تعطيك إجابات. عقلية تعطيك مسارات مراجعة
-              محكومة وموثقة تربط الإجابة بالبيانات والسياق والموافقات.
-            </p>
+        <div className="mx-auto max-w-4xl rounded-[28px] border border-border/60 bg-gradient-to-br from-primary/[0.04] via-background to-aqliya-cyan/[0.03] p-8 text-center shadow-sm sm:p-12">
+          <p className="text-sm font-bold uppercase tracking-[0.22em] text-primary">
+            ابدأ من نطاقك المؤسسي
+          </p>
+          <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-foreground sm:text-3xl">
+            إذا كانت لديك عملية مؤسسية تحتاج حوكمة وأدلة وتتبعاً —
+            <span className="block text-primary mt-1">
+              عقلية تحوّلها إلى نظام قابل للمساءلة
+            </span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
+            ابدأ بجلسة تنفيذية: نفهم النطاق، نحدد الأنظمة المناسبة، ونضع مسارًا واضحًا وواقعيًا.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Link href="/contact" className="btn-primary h-12 px-10 text-base font-bold">
+              طلب جلسة تنفيذية
+            </Link>
+            <Link href="/demo" className="btn-secondary h-12 px-10 text-base">
+              مشاهدة الديمو
+            </Link>
+            <Link href="/platform" className="btn-outline h-12 px-10 text-base">
+              استكشف المنصة
+            </Link>
           </div>
-          <div className="rounded-2xl border border-yellow-600/20 bg-yellow-600/[0.05] p-6 backdrop-blur">
-            <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-foreground">
-                ليست SaaS فقط
-              </h3>
-              <span className="text-lg text-yellow-500">✕</span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              عقلية ليست حصرية على السحابة. نقدم نموذج تشغيل مزدوج: سحابة متاحة
-              الآن، وخوادم خاصة ومعزولة قيد التطوير للمؤسسات الحساسة.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-amber-600/20 bg-amber-600/[0.05] p-6 backdrop-blur">
-            <div className="flex items-start justify-between">
-              <h3 className="text-sm font-bold text-foreground">
-                ليست منتجًا واحدًا
-              </h3>
-              <span className="text-lg text-amber-500">✕</span>
-            </div>
-            <p className="mt-3 text-xs leading-6 text-muted-foreground">
-              عقلية ليست AuditOS فقط. هي نواة تشغيلية تسمح ببناء خطوط أنظمة
-              متعددة فوقها حسب احتياج المؤسسة — من التدقيق إلى المحتوى المحلي
-              إلى حوكمة القرارات.
-            </p>
-          </div>
-        </div>
-      </section>
 
-      <section className="section-gradient-dark border-t border-white/5">
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-          <div className="mx-auto max-w-4xl rounded-[28px] border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.02] p-8 text-center shadow-[0_18px_60px_-26px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-12">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
-              ابدأ من النطاق
-            </p>
-            <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">
-              إذا كانت لديك فجوة تشغيلية معقدة، يمكن تحويلها إلى نظام محكوم قابل
-              للتفعيل
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-white/60">
-              ابدأ من خط النظام الأقرب إلى نطاقك، أو اطلب جلسة تصميم إذا كنت
-              تحتاج مسارًا مؤسسيًا خاصًا فوق نواة عقلية.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+          {/* Supporting CTAs */}
+          <div className="mt-8 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4 border-t border-border/40 pt-8">
+            {[
+              { label: "دراسات الحالة", sub: "سيناريوهات موثقة وأدلة", href: "/case-studies" },
+              { label: "نماذج التعاون", sub: "من تشخيص مجاني إلى نشر كامل", href: "/engagement-models" },
+              { label: "حالات الاستخدام", sub: "كيف تستفيد مؤسستك من المنصة", href: "/use-cases" },
+              { label: "للمشترين", sub: "CFO · CIO · شريك التدقيق · حكومة", href: "/buyers/cfo" },
+            ].map((link) => (
               <Link
-                href="/custom-product"
-                className="btn-primary h-12 px-8 text-base"
+                key={link.href}
+                href={link.href}
+                className="rounded-xl border border-border/50 p-4 text-center transition-colors hover:border-primary/25 hover:bg-muted/30"
               >
-                صمّم نظامك المؤسسي
+                <p className="font-semibold text-foreground">{link.label}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{link.sub}</p>
               </Link>
-              <Link
-                href="/contact"
-                className="btn-secondary h-12 px-8 text-base"
-              >
-                تحدث إلى متخصص
-              </Link>
-            </div>
+            ))}
           </div>
         </div>
       </section>

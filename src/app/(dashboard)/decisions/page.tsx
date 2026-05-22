@@ -23,6 +23,8 @@ import { RecentEntitiesPanel } from "@/components/workspace/recent-entities";
 import { WorkspaceStatus } from "@/components/workspace/workspace-status";
 import { Brain, FileText, Clock, CheckCircle2 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 type DecisionListItem = {
   id: string;
   title: string;

@@ -11,7 +11,7 @@ import {
 export const metadata: Metadata = {
   title: "SimulationOS — محاكاة السيناريوهات | AQLIYA",
   description:
-    "SimulationOS مفهوم مستقبلي ضمن عقلية لمحاكاة السيناريوهات ومقارنة أثر القرارات قبل التنفيذ. يُعرَض حاليًا كصفحة تعريفية.",
+    "SimulationOS نظام ضمن عقلية لمحاكاة السيناريوهات ومقارنة أثر القرارات قبل التنفيذ — قيد التخطيط، يُعرَض حاليًا كصفحة تعريفية.",
 };
 
 const outputs = [
@@ -44,14 +44,14 @@ export default function SimulationProductPage() {
               منفصلًا
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              SimulationOS هو مفهوم مستقبلي ضمن عقلية لمحاكاة السيناريوهات
+              SimulationOS ضمن عقلية — نظام قيد التخطيط لمحاكاة السيناريوهات
               ومقارنة أثر الخيارات على النتائج والتكلفة والمخاطر قبل التنفيذ،
               داخل مسار محاكاة قابل للمراجعة والاعتماد. يُعرَض حاليًا كصفحة
-              تعريفية لحين بدء التطوير.
+              تعريفية حتى اكتمال التطوير.
             </p>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/50">
               <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
-              مفهوم — مستقبلي
+              قيد التخطيط
             </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
@@ -62,8 +62,8 @@ export default function SimulationProductPage() {
               </Link>
             </div>
             <p className="mt-4 text-xs leading-6 text-white/35">
-              SimulationOS حاليًا في المرحلة التسويقية فقط. لم يبدأ التطوير
-              التشغيلي بعد.
+              SimulationOS قيد التخطيط. التفعيل يتطلب تنسيقًا مسبقًا
+              مع الفريق الهندسي.
             </p>
           </div>
         </div>

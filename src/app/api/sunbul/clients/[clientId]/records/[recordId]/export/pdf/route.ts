@@ -23,6 +23,9 @@ export async function GET(
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Export failed";
+    if (message === "Unauthenticated") {
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    }
     if (message.includes("Access denied")) {
       return NextResponse.json({ error: message }, { status: 403 });
     }

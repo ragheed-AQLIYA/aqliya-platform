@@ -23,13 +23,16 @@ const coreItems = [
   "التقارير",
 ];
 
-const systemLines = [
-  "AuditOS — نظام التدقيق والذكاء المالي",
-  "LocalContentOS — نظام المحتوى المحلي",
-  "DecisionOS — نظام حوكمة القرارات",
-  "SalesOS — نظام الذاكرة التجارية والمبيعات",
-  "SimulationOS — نظام محاكاة السيناريوهات",
-  "Custom Systems — أنظمة مؤسسية مخصصة",
+const activeSystems = [
+  { name: "AuditOS", desc: "نظام التدقيق والذكاء المالي — L5 جاهز للتجريب" },
+  { name: "DecisionOS", desc: "نظام حوكمة القرارات — L4 نشط v0.1" },
+  { name: "LocalContentOS", desc: "نظام المحتوى المحلي — L4 نشط (12 مسار)" },
+];
+
+const strategicSystems = [
+  { name: "SalesOS", desc: "نظام الذاكرة التجارية — قيد التطوير" },
+  { name: "SimulationOS", desc: "نظام محاكاة السيناريوهات — قيد التخطيط" },
+  { name: "Custom Systems", desc: "أنظمة مؤسسية مخصصة — يُفعّل حسب نطاق المؤسسة" },
 ];
 
 const whatAqliyaIsNot = [
@@ -38,7 +41,7 @@ const whatAqliyaIsNot = [
   "الإنسان هو صاحب القرار النهائي — الذكاء يساعد، لا يقرر",
   "قابلة للتتبع والمراجعة — كل خطوة تُوثَّق وتُربط بالأدلة والصلاحيات",
   "جاهزة للتوسع — تُفعّل حسب نطاق المؤسسة، من خط نظام إلى مسار مؤسسي كامل",
-  "Cloud + Private استراتيجيًا — قدرات On-Prem وAir-Gapped وLocal AI تُعرض كمسارات مستقبلية، ولا تُقدَّم كمنتجات إنتاجية منفذة إلا بعد اكتمالها واعتمادها",
+  "Cloud + Private استراتيجيًا — قدرات On-Prem وAir-Gapped وLocal AI تُعرض كمسارات قيد التخطيط الاستراتيجي، ولا تُقدَّم كمنتجات إنتاجية منفذة إلا بعد اكتمالها واعتمادها",
 ];
 
 const operatingBeliefs = [
@@ -162,7 +165,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="text-3xl font-black text-foreground">
             خطوط الأنظمة ليست أقسامًا تسويقية، بل مجالات تشغيل فعلية
@@ -172,16 +175,35 @@ export default function AboutPage() {
             قرار، مبيعات، محاكاة، أو مسار خاص. الفكرة ليست تنويع المنتجات، بل
             توحيد طريقة بناء الأنظمة المؤسسية المحكومة.
           </p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {systemLines.map((item) => (
-              <div key={item} className="glass-card-light p-5">
-                <p className="text-sm font-bold text-foreground">{item}</p>
-                <p className="mt-2 text-xs leading-6 text-muted-foreground">
-                  خط متخصص ضمن عقلية، قابل للتفعيل حسب نطاق المؤسسة، ويرتبط بسير
-                  العمل، والأدلة، والمراجعة، والاعتماد.
-                </p>
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-600">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                أنظمة نشطة
+              </p>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {activeSystems.map((item) => (
+                  <div key={item.name} className="glass-card-light rounded-2xl p-5">
+                    <p className="text-sm font-black text-foreground">{item.name}</p>
+                    <p className="mt-1.5 text-xs leading-6 text-muted-foreground">{item.desc}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            <div>
+              <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
+                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
+                خطوط استراتيجية
+              </p>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {strategicSystems.map((item) => (
+                  <div key={item.name} className="rounded-2xl border border-border/40 bg-muted/10 p-5">
+                    <p className="text-sm font-black text-foreground/60">{item.name}</p>
+                    <p className="mt-1.5 text-xs leading-6 text-muted-foreground/60">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -209,7 +231,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 border-t">
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-4xl rounded-[28px] border border-border/70 bg-gradient-to-br from-muted/40 via-background to-primary/[0.03] p-8 text-center shadow-sm sm:p-12">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-primary">
             One Core. Multiple Systems.
@@ -222,14 +244,11 @@ export default function AboutPage() {
             خط النظام المناسب أو من جلسة تصميم نظام مؤسسي محكوم فوق عقلية.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href="/products" className="btn-primary h-12 px-8 text-base">
-              استكشف خطوط عقلية
+            <Link href="/contact" className="btn-primary h-12 px-8 text-base">
+              طلب جلسة تنفيذية
             </Link>
-            <Link
-              href="/custom-product"
-              className="btn-outline h-12 px-8 text-base"
-            >
-              صمّم نظامك المؤسسي
+            <Link href="/products" className="btn-outline h-12 px-8 text-base">
+              استكشف الأنظمة
             </Link>
           </div>
         </div>

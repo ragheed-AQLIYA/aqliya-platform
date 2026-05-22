@@ -1,0 +1,55 @@
+- generic [ref=e1]:
+  - link "تخطي إلى المحتوى الرئيسي" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e3]:
+    - link "العودة للمشروع" [ref=e4] [cursor=pointer]:
+      - /url: /local-content/projects/lc-project-demo-001
+      - img [ref=e5]
+      - text: العودة للمشروع
+    - generic [ref=e7]:
+      - heading "التقارير والتصدير / Reports" [level=1] [ref=e8]
+      - paragraph [ref=e9]: توليد وتصدير تقارير المحتوى المحلي
+    - generic [ref=e10]: LocalContentOS قيد التطوير النشط ضمن v0.1. هذه الصفحات حقيقية وتستخدم بيانات محفوظة لكن المنتج لم يكتمل بعد.
+    - generic [ref=e11]:
+      - generic [ref=e13]:
+        - paragraph [ref=e14]: 55.1%
+        - paragraph [ref=e15]: نسبة المحتوى المحلي
+      - generic [ref=e17]:
+        - paragraph [ref=e18]: 87%
+        - paragraph [ref=e19]: تغطية الأدلة
+      - generic [ref=e21]:
+        - paragraph [ref=e22]: "5"
+        - paragraph [ref=e23]: النتائج
+      - generic [ref=e25]:
+        - paragraph [ref=e26]: "0"
+        - paragraph [ref=e27]: التقارير المولدة
+    - generic [ref=e28]:
+      - button "ملخص تقييم المحتوى المحلي توليد" [active] [ref=e30]:
+        - img
+        - generic [ref=e31]: ملخص تقييم المحتوى المحلي
+        - generic [ref=e32]: توليد
+      - button "سجل الموردين توليد" [ref=e34]:
+        - img
+        - generic [ref=e35]: سجل الموردين
+        - generic [ref=e36]: توليد
+      - button "تقرير تصنيف الإنفاق توليد" [ref=e38]:
+        - img
+        - generic [ref=e39]: تقرير تصنيف الإنفاق
+        - generic [ref=e40]: توليد
+      - button "سجل الفجوات والمخاطر توليد" [ref=e42]:
+        - img
+        - generic [ref=e43]: سجل الفجوات والمخاطر
+        - generic [ref=e44]: توليد
+      - button "فهرس الأدلة توليد" [ref=e46]:
+        - img
+        - generic [ref=e47]: فهرس الأدلة
+        - generic [ref=e48]: توليد
+      - button "حزمة التصدير النهائية توليد" [ref=e50]:
+        - img
+        - generic [ref=e51]: حزمة التصدير النهائية
+        - generic [ref=e52]: توليد
+    - generic [ref=e54]: لم يتم توليد أي تقارير بعد. اختر نوع التقرير أعلاه للبدء.
+    - generic [ref=e56]: التقارير المولدة هي تقارير منظمة وليست شهادات امتثال. تصدير الملفات (PDF/XLSX) قيد التطوير. حالياً، يتم حفظ التقارير كسجلات منظمة داخل النظام.
+  - button "Open Next.js Dev Tools" [ref=e62] [cursor=pointer]:
+    - img [ref=e63]
+  - alert [ref=e66]

@@ -1,0 +1,300 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "ديمو AuditOS | AQLIYA",
+  description:
+    "رحلة الديمو الكاملة — ما ستشاهده، ما سيُثبَت، وكيف تمر بسير العمل من رفع الميزان إلى نشر حزمة الارتباط.",
+};
+
+const demoSteps = [
+  {
+    number: "١",
+    title: "رفع ميزان المراجعة",
+    duration: "~٢ دقيقة",
+    what: "ترفع ميزان مراجعة تجريبي (CSV/XLSX). النظام يتحقق من الاتزان فورًا.",
+    proven: "فحص الاتزان + اكتشاف الحسابات تلقائيًا",
+    icon: "⊡",
+  },
+  {
+    number: "٢",
+    title: "توجيه الحسابات",
+    duration: "~٢ دقيقة",
+    what: "النظام يقترح توجيه الحسابات وفق IFRS. أنت تراجع وتعدّل — لا توجيه آلي نهائي.",
+    proven: "IFRS mapping + Human Gate أولى",
+    icon: "◈",
+  },
+  {
+    number: "٣",
+    title: "القوائم المالية",
+    duration: "~٢ دقيقة",
+    what: "مسودة قائمة المركز المالي وقائمة الدخل تُولَّد آليًا. كل رقم مرتبط بمصدره.",
+    proven: "Evidence Chain: الرقم ← الحساب ← القرار",
+    icon: "⊞",
+  },
+  {
+    number: "٤",
+    title: "الإيضاحات والأدلة",
+    duration: "~١ دقيقة",
+    what: "النظام يحدد الإيضاحات المطلوبة والأدلة الداعمة الناقصة لكل بند مادي.",
+    proven: "Evidence Manifest + قائمة النواقص",
+    icon: "⊛",
+  },
+  {
+    number: "٥",
+    title: "الملاحظات والتوصيات",
+    duration: "~١ دقيقة",
+    what: "ملاحظات المراجعة تُصنَّف حسب الخطورة. كل ملاحظة لها دورة حياة: إنشاء → تعيين → مراجعة → تسوية.",
+    proven: "سير عمل الملاحظات + تتبع الحالة",
+    icon: "⊘",
+  },
+  {
+    number: "٦",
+    title: "Audit Trail المباشر",
+    duration: "~١ دقيقة",
+    what: "ترى السجل الحي: كل إجراء قمت به مسجّل بالوقت والمستخدم ونوع الحدث.",
+    proven: "١٨+ نوع حدث — سجل غير قابل للتعديل",
+    icon: "◉",
+  },
+  {
+    number: "٧",
+    title: "بوابة الاعتماد",
+    duration: "~١ دقيقة",
+    what: "تحاول النشر قبل اكتمال الشروط — النظام يرفض. تكمل الشروط — النشر يُتاح.",
+    proven: "٥ شروط إلزامية + Human Gate كامل",
+    icon: "⊙",
+  },
+  {
+    number: "٨",
+    title: "حزمة الارتباط",
+    duration: "~١ دقيقة",
+    what: "تصدير حزمة الارتباط الكاملة: القوائم + الأدلة + سجل التدقيق + تقرير الاعتماد.",
+    proven: "مخرج قابل للتسليم + قابل للتدقيق",
+    icon: "⊡",
+  },
+];
+
+const demoPaths = [
+  {
+    id: "auditos",
+    name: "مسار AuditOS",
+    description: "رحلة التدقيق الكاملة — من ميزان المراجعة إلى حزمة الارتباط.",
+    duration: "١٠-١٣ دقيقة",
+    href: "/auditos",
+    label: "دخول ديمو AuditOS",
+    primary: true,
+    steps: ["رفع الميزان", "توجيه الحسابات", "القوائم المالية", "الأدلة والملاحظات", "الاعتماد والنشر"],
+  },
+  {
+    id: "governance",
+    name: "مسار الحوكمة",
+    description: "التركيز على Audit Trail، RBAC، وسلسلة الأدلة.",
+    duration: "٥-٧ دقائق",
+    href: "/auditos",
+    label: "استكشاف الحوكمة",
+    primary: false,
+    steps: ["تسجيل الدخول بأدوار مختلفة", "مراجعة Audit Trail الحي", "اختبار صلاحيات RBAC", "Evidence Graph"],
+  },
+];
+
+const proofPoints = [
+  {
+    claim: "الاقتراح ≠ القرار",
+    proof: "كل مخرج AI محمّل بتنبيه مسودة. لا إجراء نهائي دون موافقة بشرية.",
+  },
+  {
+    claim: "الرقم ليس عائمًا",
+    proof: "كل رقم في القوائم يمكن تتبعه للحساب المصدر في الميزان.",
+  },
+  {
+    claim: "القرار موثق",
+    proof: "من وافق ومتى وبأي صلاحية — محفوظ ولا يُحذف.",
+  },
+  {
+    claim: "الاعتماد محمي",
+    proof: "لا يمكن النشر إلا بعد اكتمال ٥ شروط — النظام يفرض ذلك تلقائيًا.",
+  },
+];
+
+const importantNotes = [
+  "البيانات في الديمو تجريبية — لا بيانات عملاء حقيقية",
+  "الديمو مفتوح بدون حساب — بدون تسجيل",
+  "كل مخرج يحمل تنبيه مسودة بشكل واضح",
+  "هذا ليس نظام رأي تدقيق — هذا نظام يساعد فريق التدقيق",
+];
+
+export default function DemoPage() {
+  return (
+    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+      {/* Hero */}
+      <section className="hero-gradient py-24">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <div className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-6">
+            الديمو التفاعلي
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+            شاهد سير العمل — لا تقرأه فقط
+          </h1>
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            الديمو التفاعلي يأخذك عبر رحلة تدقيق كاملة على بيانات تجريبية.
+            ١٣ دقيقة، كل خطوة موثقة، كل ادعاء قابل للتحقق.
+          </p>
+
+          {/* Important Notes */}
+          <div className="mt-8 inline-block text-right max-w-lg">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+              {importantNotes.map((n, i) => (
+                <div key={i} className="flex gap-3 text-sm text-slate-400 mb-2 last:mb-0">
+                  <span className="text-cyan-400 shrink-0 mt-0.5">◦</span>
+                  {n}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Paths */}
+      <section className="py-16 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">اختر مسار الديمو</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {demoPaths.map((path) => (
+              <div
+                key={path.id}
+                className={`glass-card rounded-2xl overflow-hidden ${
+                  path.primary ? "border border-cyan-500/20" : ""
+                }`}
+              >
+                {path.primary && (
+                  <div className="bg-cyan-500/10 border-b border-cyan-500/20 px-6 py-2 text-center">
+                    <span className="text-cyan-400 text-xs font-semibold">يُوصى بالبدء هنا</span>
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-2">{path.name}</h3>
+                  <p className="text-slate-300 text-sm mb-3">{path.description}</p>
+                  <p className="text-slate-500 text-xs mb-5">المدة التقريبية: {path.duration}</p>
+
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {path.steps.map((step) => (
+                      <span
+                        key={step}
+                        className="text-xs text-slate-400 bg-white/5 px-2.5 py-1 rounded-full"
+                      >
+                        {step}
+                      </span>
+                    ))}
+                  </div>
+
+                  <Link
+                    href={path.href}
+                    className={`block text-center px-6 py-3 rounded-xl text-sm font-medium transition-all ${
+                      path.primary ? "btn-primary" : "btn-outline"
+                    }`}
+                  >
+                    {path.label}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Step-by-Step Journey */}
+      <section className="py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-14">
+            <h2 className="text-2xl font-bold text-white mb-3">خطوات الديمو — الكامل</h2>
+            <p className="text-slate-400">ما ستشاهده وما سيُثبَت في كل خطوة</p>
+          </div>
+          <div className="space-y-4">
+            {demoSteps.map((step) => (
+              <div key={step.number} className="glass-card rounded-xl overflow-hidden">
+                <div className="flex items-stretch">
+                  {/* Number */}
+                  <div className="w-16 shrink-0 flex items-center justify-center bg-white/3 border-l border-white/5">
+                    <span className="text-cyan-400 font-bold">{step.number}</span>
+                  </div>
+                  {/* Content */}
+                  <div className="p-5 flex-1">
+                    <div className="flex flex-wrap items-center gap-3 mb-2">
+                      <h3 className="text-white font-semibold">{step.title}</h3>
+                      <span className="text-xs text-slate-500">{step.duration}</span>
+                    </div>
+                    <p className="text-slate-300 text-sm mb-2">{step.what}</p>
+                    <div className="flex gap-2 items-center">
+                      <span className="text-xs text-slate-500">يُثبَت:</span>
+                      <span className="text-xs text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">
+                        {step.proven}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Proof Points */}
+      <section className="section-gradient-dark py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="text-2xl font-bold text-white mb-10 text-center">
+            ما يُثبَت في نهاية الديمو
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {proofPoints.map((pp) => (
+              <div key={pp.claim} className="glass-card rounded-xl p-6">
+                <h3 className="text-white font-semibold mb-2">{pp.claim}</h3>
+                <p className="text-slate-300 text-sm leading-relaxed">{pp.proof}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Principle */}
+      <section className="py-16 border-y border-white/5">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <p className="text-2xl font-bold text-white leading-relaxed mb-4">
+            الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
+          </p>
+          <p className="text-slate-400">
+            هذا المبدأ ليس شعارًا — ستره مطبقًا في كل خطوة من الديمو.
+          </p>
+        </div>
+      </section>
+
+      {/* CTAs */}
+      <section className="py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="glass-card rounded-xl p-6 text-center">
+              <h3 className="text-white font-semibold mb-2">ابدأ الديمو الآن</h3>
+              <p className="text-slate-400 text-sm mb-5">بدون حساب، بدون تسجيل</p>
+              <Link href="/auditos" className="btn-primary w-full block py-2.5 rounded-xl text-sm font-medium text-center">
+                دخول الديمو
+              </Link>
+            </div>
+            <div className="glass-card rounded-xl p-6 text-center">
+              <h3 className="text-white font-semibold mb-2">بايلوت على بياناتك</h3>
+              <p className="text-slate-400 text-sm mb-5">٢-٤ أسابيع، مجاني</p>
+              <Link href="/engagement-models" className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center">
+                نماذج التعاون
+              </Link>
+            </div>
+            <div className="glass-card rounded-xl p-6 text-center">
+              <h3 className="text-white font-semibold mb-2">جلسة تنفيذية</h3>
+              <p className="text-slate-400 text-sm mb-5">للقيادة والمدراء</p>
+              <Link href="/contact" className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center">
+                طلب الجلسة
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

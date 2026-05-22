@@ -56,7 +56,7 @@ export default function LocalContentProductPage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
-                ناقش التفعيل المستقبلي
+                ناقش التفعيل
               </Link>
               <Link href="/products" className="btn-secondary px-6">
                 استكشف خطوط عقلية
@@ -64,7 +64,7 @@ export default function LocalContentProductPage() {
             </div>
             <p className="mt-4 text-xs leading-6 text-white/35">
               LocalContentOS مسار منتج استراتيجي يبحث عن شركاء تصميم للتحقق من
-              الاحتياج وتحديد نطاق بايلوت مستقبلي.
+              الاحتياج وتحديد نطاق البايلوت المناسب.
             </p>
           </div>
         </div>

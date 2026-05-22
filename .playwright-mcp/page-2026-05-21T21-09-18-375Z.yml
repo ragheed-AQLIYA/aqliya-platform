@@ -1,0 +1,40 @@
+- generic [active] [ref=e1]:
+  - link "تخطي إلى المحتوى الرئيسي" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e3]:
+    - link "العودة للمشروع" [ref=e4] [cursor=pointer]:
+      - /url: /local-content/projects/lc-project-demo-001
+      - img [ref=e5]
+      - text: العودة للمشروع
+    - generic [ref=e7]:
+      - heading "المراجعة / Review" [level=1] [ref=e8]
+      - paragraph [ref=e9]: مراجعة تقييم المحتوى المحلي قبل الاعتماد
+    - generic [ref=e10]: LocalContentOS قيد التطوير النشط ضمن v0.1. هذه الصفحات حقيقية وتستخدم بيانات محفوظة لكن المنتج لم يكتمل بعد.
+    - generic [ref=e11]:
+      - generic [ref=e13]:
+        - img [ref=e14]
+        - paragraph [ref=e17]: 55.1%
+        - paragraph [ref=e18]: نسبة المحتوى المحلي
+      - generic [ref=e20]:
+        - img [ref=e21]
+        - paragraph [ref=e24]: 87%
+        - paragraph [ref=e25]: تغطية الأدلة
+      - generic [ref=e27]:
+        - img [ref=e28]
+        - paragraph [ref=e30]: "5"
+        - paragraph [ref=e31]: النتائج
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - img [ref=e36]
+          - generic [ref=e39]: Sara Al-Otaibi
+          - generic [ref=e40]: مقدم
+          - generic [ref=e41]: قيد المراجعة
+        - generic [ref=e42]: ٢٢‏/٥‏/٢٠٢٦
+      - paragraph [ref=e43]: تم مراجعة التصنيفات والأدلة. توجد ملاحظات على تصنيف الموردين الأجانب — يرجى تحديث البيانات.
+    - generic [ref=e45]:
+      - img [ref=e46]
+      - text: المراجعة خطوة بشرية حوكمية. الذكاء الاصطناعي لا يتخذ قرار المراجعة. جميع إجراءات المراجعة مسجلة في سجل التدقيق.
+  - button "Open Next.js Dev Tools" [ref=e53] [cursor=pointer]:
+    - img [ref=e54]
+  - alert [ref=e57]

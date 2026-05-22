@@ -11,7 +11,7 @@ import {
 export const metadata: Metadata = {
   title: "SalesOS — الذاكرة التجارية والمبيعات | AQLIYA",
   description:
-    "SalesOS نموذج أولي لنظام الذاكرة التجارية والمبيعات ضمن عقلية، ينظم التأهيل والترتيب والمتابعة والتعلم داخل مسار تجاري محكوم.",
+    "SalesOS نظام الذاكرة التجارية والمبيعات ضمن عقلية، قيد التطوير — ينظم التأهيل والترتيب والمتابعة والتعلم داخل مسار تجاري محكوم.",
 };
 
 const outputs = [
@@ -42,28 +42,28 @@ export default function SalesProductPage() {
             </span>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-              نموذج أولي — مستقبلي
+              قيد التطوير
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               المبيعات ليست فقط Pipeline بل ذاكرة تشغيلية يجب أن تتعلم وتتحسن
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              SalesOS هو نموذج أولي ضمن عقلية لنظام الذاكرة التجارية والمبيعات.
+              SalesOS ضمن عقلية هو نظام الذاكرة التجارية والمبيعات، قيد التطوير.
               يستكشف كيفية تنظيم رحلة المبيعات من تعريف العميل المثالي إلى
-              التأهيل والترتيب والمتابعة والتعلم المؤسسي. حاليًا، يوجد واجهة
-              لوحة معلومات ثابتة بدون خلفية تشغيلية مكتملة.
+              التأهيل والترتيب والمتابعة والتعلم المؤسسي. الخلفية التشغيلية
+              الكاملة لم تكتمل بعد — التفعيل يتم بتنسيق مسبق.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
-                ناقش التفعيل المستقبلي
+                ناقش إمكانية التطوير
               </Link>
               <Link href="/products" className="btn-secondary px-6">
                 استكشف خطوط عقلية
               </Link>
             </div>
             <p className="mt-4 text-xs leading-6 text-white/35">
-              SalesOS حاليًا في مرحلة النموذج الأولي. لا توجد خلفية تشغيلية أو
-              قاعدة بيانات مكتملة بعد.
+              SalesOS قيد التطوير. التفعيل الكامل يتطلب تنسيقًا مسبقًا مع
+              الفريق الهندسي.
             </p>
           </div>
         </div>

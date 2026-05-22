@@ -1,0 +1,217 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "شروط الخدمة | AQLIYA",
+  description:
+    "شروط خدمة مؤسسية لمنصة عقلية — تشمل قيود الذكاء الاصطناعي الإلزامية، متطلبات الموافقة البشرية، ومسؤوليات الاستخدام المؤسسي.",
+};
+
+const termsSections = [
+  {
+    id: "acceptance",
+    title: "قبول الشروط",
+    content:
+      "استخدام منصة عقلية يعني قبول هذه الشروط كاملاً. هذه الشروط مكتوبة للاستخدام المؤسسي حصراً. عقلية لا تقدم خدماتها للأفراد خارج السياق المؤسسي.",
+  },
+  {
+    id: "service-description",
+    title: "وصف الخدمة",
+    content:
+      "عقلية منصة ذكاء مؤسسي مُحكوم تقدم أنظمة تشغيلية متخصصة (AuditOS، DecisionOS، LocalContentOS، وأنظمة مخصصة) فوق AQLIYA Intelligence Core. الخدمة تُقدَّم كـ SaaS مُدار، مع خيارات نشر خاص قيد التخطيط.",
+  },
+  {
+    id: "ai-limitations",
+    title: "قيود الذكاء الاصطناعي — إلزامية",
+    highlight: true,
+    items: [
+      {
+        label: "الذكاء الاصطناعي أداة دعم القرار — لا صانع قرار",
+        detail:
+          "جميع مخرجات الذكاء الاصطناعي داخل عقلية هي توصيات وتحليلات داعمة. القرار النهائي في أي شأن مؤسسي يقع على عاتق الإنسان المعتمَد من مؤسستك. المنصة مُصممة هندسياً لعدم تجاوز هذا المبدأ.",
+      },
+      {
+        label: "لا موافقة تلقائية على أي إجراء حرج",
+        detail:
+          "أي إجراء ذو أثر مؤسسي — تصدير تقرير، إغلاق قضية، إصدار توصية رسمية — يتطلب موافقة بشرية صريحة داخل المنصة. لا يمكن تعطيل هذا الشرط في الإعدادات العادية.",
+      },
+      {
+        label: "عدم الاعتماد الكامل على مخرجات الذكاء الاصطناعي",
+        detail:
+          "المؤسسة مسؤولة عن مراجعة وتحقق جميع مخرجات الذكاء الاصطناعي قبل اتخاذ أي إجراء بناءً عليها. عقلية لا تتحمل مسؤولية قرارات اتُّخِذت بناءً على مخرجات لم تخضع لمراجعة إنسانية.",
+      },
+      {
+        label: "حدود دقة الذكاء الاصطناعي",
+        detail:
+          "نماذج الذكاء الاصطناعي تُخطئ. عقلية تربط كل مخرج بمصادره لتمكين التحقق، لكن لا نضمن دقة 100% في أي تحليل. المراجعة البشرية إلزامية — ليست اختيارية.",
+      },
+    ],
+  },
+  {
+    id: "institutional-use",
+    title: "الاستخدام المؤسسي المسموح",
+    items: [
+      {
+        label: "الاستخدامات المسموح بها",
+        detail:
+          "تحليل الوثائق المؤسسية، دعم قرارات الامتثال، إدارة مشاريع المحتوى المحلي، التدقيق الداخلي والمالي، وبناء أنظمة عمل مؤسسية محكومة.",
+      },
+      {
+        label: "الاستخدامات المحظورة",
+        detail:
+          "استخدام المنصة لإنتاج قرارات نهائية ملزمة دون مراجعة بشرية، أو معالجة بيانات أشخاص خارج نطاق العقد المؤسسي، أو محاولة اختراق حدود العزل بين المستأجرين، أو إعادة بيع الخدمة لأطراف ثالثة دون إذن كتابي.",
+      },
+    ],
+  },
+  {
+    id: "data-ownership",
+    title: "ملكية البيانات",
+    content:
+      "جميع البيانات التي ترفعها مؤسستك أو تُنتجها داخل المنصة ملك مؤسستك حصراً. عقلية لا تدّعي أي حقوق على بياناتك أو مخرجات أنظمتك. سجلات التدقيق التي تُنتجها مؤسستك ملك مؤسستك وتُتاح للتصدير الكامل.",
+  },
+  {
+    id: "uptime-sla",
+    title: "مستوى الخدمة والاستمرارية",
+    content:
+      "نستهدف توفر 99.5% شهرياً للبيئة السحابية المُدارة. حوادث الصيانة المجدولة تُبلَّغ بها مسبقاً. في حالة انقطاع الخدمة، الرجوع إلى SLA المتفق عليه في عقد الخدمة الخاص بمؤسستك.",
+  },
+  {
+    id: "liability",
+    title: "حدود المسؤولية",
+    content:
+      "مسؤولية عقلية محدودة بقيمة الرسوم المدفوعة في آخر 3 أشهر من الخدمة. عقلية غير مسؤولة عن أي قرارات اتُّخِذت بناءً على مخرجات الذكاء الاصطناعي دون مراجعة بشرية، أو أي خسائر غير مباشرة ناتجة عن استخدام الخدمة.",
+  },
+  {
+    id: "termination",
+    title: "إنهاء التعاقد",
+    content:
+      "يمكن لأي طرف إنهاء التعاقد بإشعار كتابي وفق مدة الإشعار المحددة في عقد الخدمة. عند الإنهاء، تُتاح لمؤسستك نافذة 30 يوماً لتصدير جميع بياناتها. بعد ذلك تُحذف البيانات نهائياً مع تقديم شهادة حذف مكتوبة.",
+  },
+  {
+    id: "governing-law",
+    title: "القانون المطبق",
+    content:
+      "تخضع هذه الشروط للقوانين السارية في المملكة العربية السعودية. أي نزاع يُحسم أولاً عبر التفاوض المباشر، ثم التحكيم التجاري إذا لزم الأمر.",
+  },
+  {
+    id: "updates",
+    title: "تعديلات الشروط",
+    content:
+      "أي تعديل جوهري يُبلَّغ به العملاء كتابياً قبل 30 يوماً. التعديلات لا تُطبَّق بأثر رجعي على العقود السارية إلا بموافقة صريحة.",
+  },
+];
+
+export default function TermsPage() {
+  return (
+    <div className="flex flex-col">
+      {/* Hero */}
+      <section className="hero-gradient relative overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px]" />
+        <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
+          <div className="relative mx-auto max-w-3xl text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
+              <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
+              شروط الخدمة
+            </span>
+            <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
+              شروط مكتوبة للمؤسسات
+            </h1>
+            <p className="mt-5 text-base leading-8 text-white/62">
+              لا لغة قانونية مبهمة لإخفاء نقاط ضعف. شروطنا مكتوبة لتكون
+              مفهومة لفريقك القانوني والتقني معاً — مع قيود صريحة على
+              الذكاء الاصطناعي تحمي مؤسستك.
+            </p>
+            <p className="mt-4 text-xs text-white/35">
+              آخر تحديث: مايو 2025 — هذه الشروط للاستخدام المؤسسي حصراً
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Limitations Callout */}
+      <section className="border-b border-rose-500/20 bg-rose-500/5 py-6">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="flex items-start gap-4">
+            <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-rose-400" />
+            <div>
+              <p className="font-bold text-white">
+                قيود الذكاء الاصطناعي — مبدأ غير قابل للتجاوز
+              </p>
+              <p className="mt-1 text-sm text-white/60">
+                الذكاء الاصطناعي داخل عقلية أداة دعم قرار — لا صانع قرار. القرار
+                النهائي دائماً للإنسان المعتمَد من مؤسستك. هذا ليس خياراً في
+                الإعدادات — هو قيد هندسي.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="space-y-12">
+            {termsSections.map((section) => (
+              <div
+                key={section.id}
+                className={`border-b border-white/5 pb-12 last:border-0 ${
+                  section.highlight
+                    ? "rounded-2xl border border-rose-500/15 bg-rose-500/[0.03] p-6"
+                    : ""
+                }`}
+              >
+                <h2 className="text-xl font-black text-foreground">
+                  {section.title}
+                  {section.highlight && (
+                    <span className="mr-3 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
+                      إلزامي
+                    </span>
+                  )}
+                </h2>
+
+                {section.content && (
+                  <p className="mt-4 text-base leading-8 text-muted-foreground">
+                    {section.content}
+                  </p>
+                )}
+
+                {section.items && (
+                  <div className="mt-5 space-y-4">
+                    {section.items.map((item) => (
+                      <div key={item.label} className="glass-card-light rounded-xl p-5">
+                        <p className="font-bold text-foreground">{item.label}</p>
+                        <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
+                          {item.detail}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Contact Block */}
+          <div className="mt-16 rounded-2xl border border-border bg-muted/30 p-8 text-center">
+            <h2 className="text-xl font-black text-foreground">
+              أسئلة قانونية أو تعاقدية؟
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">
+              يمكن لفريقك القانوني التواصل معنا مباشرة لمراجعة الشروط، طلب عقد
+              مخصص، أو مناقشة متطلبات الامتثال الخاصة بقطاعكم.
+            </p>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
+              <Link href="/contact" className="btn-primary px-6">
+                تواصل مع الفريق
+              </Link>
+              <Link href="/privacy" className="btn-outline px-6">
+                سياسة الخصوصية
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+       

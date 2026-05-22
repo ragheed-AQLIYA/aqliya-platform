@@ -1,0 +1,9 @@
+[      61ms] [LOG] {name: LCP, value: 2376, rating: good, delta: 2376, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/13ue_next_dist_11ns46.._.js:2432
+[      61ms] [LOG] {name: CLS, value: 0, rating: good, delta: 0, entries: Array(0)} @ http://localhost:3000/_next/static/chunks/13ue_next_dist_11ns46.._.js:2432
+[      62ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/audit:0
+[     100ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/13ue_next_dist_11ns46.._.js:2432
+[     117ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/13ue_next_dist_11ns46.._.js:2432
+[     149ms] [LOG] {name: FCP, value: 96, rating: good, delta: 96, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/13ue_next_dist_11ns46.._.js:2432
+[     150ms] [LOG] {name: TTFB, value: 52.300000071525574, rating: good, delta: 52.300000071525574, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/13ue_next_dist_11ns46.._.js:2432
+[     278ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/manifest.webmanifest:0
+[     282ms] [ERROR] Manifest fetch from http://localhost:3000/manifest.webmanifest failed, code 404 @ http://localhost:3000/audit:0

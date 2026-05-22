@@ -1,0 +1,291 @@
+- generic [active] [ref=e1]:
+  - link "تخطي إلى المحتوى الرئيسي" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e3]:
+    - link "العودة للمشروع" [ref=e4] [cursor=pointer]:
+      - /url: /local-content/projects/lc-project-demo-001
+      - img [ref=e5]
+      - text: العودة للمشروع
+    - generic [ref=e7]:
+      - heading "سجلات الإنفاق / Spend Records" [level=1] [ref=e8]
+      - paragraph [ref=e9]: 30 سجل — إجمالي ٦٤٬٠٠٠٬٠٠٠ SAR
+    - generic [ref=e10]: LocalContentOS قيد التطوير النشط ضمن v0.1. هذه الصفحات حقيقية وتستخدم بيانات محفوظة لكن المنتج لم يكتمل بعد.
+    - generic [ref=e11]:
+      - button "إضافة سجل إنفاق" [ref=e12]
+      - button "استيراد CSV" [ref=e13]:
+        - img
+        - text: استيراد CSV
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - text: EuroParts Middle East
+            - generic [ref=e18]: PO-2025-033 | Q4
+          - generic [ref=e19]:
+            - generic [ref=e20]: ٨٠٠٬٠٠٠ SAR
+            - generic [ref=e21]: سلع
+        - paragraph [ref=e22]: أدوات قياس ومعايرة
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - text: GlobalTech Solutions Ltd
+            - generic [ref=e26]: PO-2025-003 | Q1
+          - generic [ref=e27]:
+            - generic [ref=e28]: ٤٬٢٠٠٬٠٠٠ SAR
+            - generic [ref=e29]: تقنية
+        - paragraph [ref=e30]: أجهزة حاسب آلي وطابعات
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - text: EuroParts Middle East
+            - generic [ref=e34]: PO-2025-005 | Q1
+          - generic [ref=e35]:
+            - generic [ref=e36]: ٢٬١٠٠٬٠٠٠ SAR
+            - generic [ref=e37]: سلع
+        - paragraph [ref=e38]: قطع غيار معدات أوروبية
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - text: AsiaTrade Import Co
+            - generic [ref=e42]: PO-2025-007 | Q1
+          - generic [ref=e43]:
+            - generic [ref=e44]: ٣٬٥٠٠٬٠٠٠ SAR
+            - generic [ref=e45]: سلع
+        - paragraph [ref=e46]: مواد خام مستوردة
+      - generic [ref=e47]:
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - text: مؤسسة النقل السريع
+            - generic [ref=e50]: CTR-2025-024 | Q2
+          - generic [ref=e51]:
+            - generic [ref=e52]: ٩٠٠٬٠٠٠ SAR
+            - generic [ref=e53]: لوجستي
+        - paragraph [ref=e54]: توصيل سريع
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - text: Global Services Corp
+            - generic [ref=e58]: CTR-2025-012 | Q1
+          - generic [ref=e59]:
+            - generic [ref=e60]: ٢٬٦٠٠٬٠٠٠ SAR
+            - generic [ref=e61]: خدمات
+        - paragraph [ref=e62]: استشارات إدارية
+      - generic [ref=e63]:
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - text: شركة الخدمات اللوجستية
+            - generic [ref=e66]: CTR-2025-004 | Q1
+          - generic [ref=e67]:
+            - generic [ref=e68]: ١٬٨٠٠٬٠٠٠ SAR
+            - generic [ref=e69]: لوجستي
+        - paragraph [ref=e70]: خدمات نقل وشحن
+      - generic [ref=e71]:
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - text: مصنع البلاستيك الوطني
+            - generic [ref=e74]: PO-2025-029 | Q3
+          - generic [ref=e75]:
+            - generic [ref=e76]: ١٬٨٠٠٬٠٠٠ SAR
+            - generic [ref=e77]: سلع
+        - paragraph [ref=e78]: مواد تعبئة وتغليف
+      - generic [ref=e79]:
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - text: مؤسسة النقل السريع
+            - generic [ref=e82]: CTR-2025-009 | Q1
+          - generic [ref=e83]:
+            - generic [ref=e84]: ١٬١٠٠٬٠٠٠ SAR
+            - generic [ref=e85]: لوجستي
+        - paragraph [ref=e86]: نقل داخلي
+      - generic [ref=e87]:
+        - generic [ref=e88]:
+          - generic [ref=e89]:
+            - text: شركة المواد الكيميائية
+            - generic [ref=e90]: PO-2025-026 | Q2
+          - generic [ref=e91]:
+            - generic [ref=e92]: ١٬٤٠٠٬٠٠٠ SAR
+            - generic [ref=e93]: سلع
+        - paragraph [ref=e94]: منظفات ومواد معالجة
+      - generic [ref=e95]:
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - text: GlobalTech Solutions Ltd
+            - generic [ref=e98]: PO-2025-018 | Q2
+          - generic [ref=e99]:
+            - generic [ref=e100]: ١٬٨٠٠٬٠٠٠ SAR
+            - generic [ref=e101]: تقنية
+        - paragraph [ref=e102]: شاشات عرض وأنظمة مؤتمرات
+      - generic [ref=e103]:
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - text: EuroParts Middle East
+            - generic [ref=e106]: PO-2025-020 | Q2
+          - generic [ref=e107]:
+            - generic [ref=e108]: ١٬٦٠٠٬٠٠٠ SAR
+            - generic [ref=e109]: سلع
+        - paragraph [ref=e110]: مكونات هيدروليكية
+      - generic [ref=e111]:
+        - generic [ref=e112]:
+          - generic [ref=e113]:
+            - text: شركة الصيانة المتكاملة
+            - generic [ref=e114]: CTR-2025-008 | Q1
+          - generic [ref=e115]:
+            - generic [ref=e116]: ١٬٤٠٠٬٠٠٠ SAR
+            - generic [ref=e117]: خدمات
+        - paragraph [ref=e118]: صيانة مرافق
+      - generic [ref=e119]:
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - text: TechImport International
+            - generic [ref=e122]: PO-2025-010 | Q1
+          - generic [ref=e123]:
+            - generic [ref=e124]: ١٬٩٠٠٬٠٠٠ SAR
+            - generic [ref=e125]: تقنية
+        - paragraph [ref=e126]: معدات شبكات مستوردة
+      - generic [ref=e127]:
+        - generic [ref=e128]:
+          - generic [ref=e129]:
+            - text: Global Services Corp
+            - generic [ref=e130]: CTR-2025-031 | Q4
+          - generic [ref=e131]:
+            - generic [ref=e132]: ١٬٦٠٠٬٠٠٠ SAR
+            - generic [ref=e133]: خدمات
+        - paragraph [ref=e134]: خدمات تدقيق خارجي
+      - generic [ref=e135]:
+        - generic [ref=e136]:
+          - generic [ref=e137]:
+            - text: شركة الخدمات اللوجستية
+            - generic [ref=e138]: CTR-2025-019 | Q3
+          - generic [ref=e139]:
+            - generic [ref=e140]: ١٬٥٠٠٬٠٠٠ SAR
+            - generic [ref=e141]: لوجستي
+        - paragraph [ref=e142]: تخزين وتوزيع
+      - generic [ref=e143]:
+        - generic [ref=e144]:
+          - generic [ref=e145]:
+            - text: مصنع البلاستيك الوطني
+            - generic [ref=e146]: PO-2025-021 | Q2
+          - generic [ref=e147]:
+            - generic [ref=e148]: ٢٬٢٠٠٬٠٠٠ SAR
+            - generic [ref=e149]: سلع
+        - paragraph [ref=e150]: عبوات وأغطية بلاستيكية
+      - generic [ref=e151]:
+        - generic [ref=e152]:
+          - generic [ref=e153]:
+            - text: شركة الصيانة المتكاملة
+            - generic [ref=e154]: CTR-2025-023 | Q2
+          - generic [ref=e155]:
+            - generic [ref=e156]: ١٬٣٠٠٬٠٠٠ SAR
+            - generic [ref=e157]: خدمات
+        - paragraph [ref=e158]: صيانة أنظمة تكييف
+      - generic [ref=e159]:
+        - generic [ref=e160]:
+          - generic [ref=e161]:
+            - text: شركة المواد الكيميائية
+            - generic [ref=e162]: PO-2025-011 | Q1
+          - generic [ref=e163]:
+            - generic [ref=e164]: ١٬٧٠٠٬٠٠٠ SAR
+            - generic [ref=e165]: سلع
+        - paragraph [ref=e166]: مواد كيميائية صناعية
+      - generic [ref=e167]:
+        - generic [ref=e168]:
+          - generic [ref=e169]:
+            - text: GlobalTech Solutions Ltd
+            - generic [ref=e170]: PO-2025-032 | Q4
+          - generic [ref=e171]:
+            - generic [ref=e172]: ١٬١٠٠٬٠٠٠ SAR
+            - generic [ref=e173]: تقنية
+        - paragraph [ref=e174]: أجهزة لوحية وملحقات
+      - generic [ref=e175]:
+        - generic [ref=e176]:
+          - generic [ref=e177]:
+            - text: شركة الخدمات اللوجستية
+            - generic [ref=e178]: CTR-2025-028 | Q4
+          - generic [ref=e179]:
+            - generic [ref=e180]: ١٬٢٠٠٬٠٠٠ SAR
+            - generic [ref=e181]: لوجستي
+        - paragraph [ref=e182]: خدمات لوجستية متكاملة
+      - generic [ref=e183]:
+        - generic [ref=e184]:
+          - generic [ref=e185]:
+            - text: مصنع البلاستيك الوطني
+            - generic [ref=e186]: PO-2025-006 | Q1
+          - generic [ref=e187]:
+            - generic [ref=e188]: ٢٬٨٠٠٬٠٠٠ SAR
+            - generic [ref=e189]: سلع
+        - paragraph [ref=e190]: مواد بلاستيكية للتغليف
+      - generic [ref=e191]:
+        - generic [ref=e192]:
+          - generic [ref=e193]:
+            - text: AsiaTrade Import Co
+            - generic [ref=e194]: PO-2025-022 | Q3
+          - generic [ref=e195]:
+            - generic [ref=e196]: ٢٬٧٠٠٬٠٠٠ SAR
+            - generic [ref=e197]: سلع
+        - paragraph [ref=e198]: إلكترونيات ومكونات
+      - generic [ref=e199]:
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - text: TechImport International
+            - generic [ref=e202]: PO-2025-025 | Q3
+          - generic [ref=e203]:
+            - generic [ref=e204]: ١٬٥٠٠٬٠٠٠ SAR
+            - generic [ref=e205]: تقنية
+        - paragraph [ref=e206]: أجهزة اتصالات
+      - generic [ref=e207]:
+        - generic [ref=e208]:
+          - generic [ref=e209]:
+            - text: Global Services Corp
+            - generic [ref=e210]: CTR-2025-030 | Q3
+          - generic [ref=e211]:
+            - generic [ref=e212]: ٢٬١٠٠٬٠٠٠ SAR
+            - generic [ref=e213]: خدمات
+        - paragraph [ref=e214]: تدريب وتطوير
+      - generic [ref=e215]:
+        - generic [ref=e216]:
+          - generic [ref=e217]:
+            - text: مؤسسة الأعمال الهندسية
+            - generic [ref=e218]: CTR-2025-015 | Q2
+          - generic [ref=e219]:
+            - generic [ref=e220]: ٢٬٩٠٠٬٠٠٠ SAR
+            - generic [ref=e221]: إنشاءات
+        - paragraph [ref=e222]: تمديدات كهربائية وميكانيكية
+      - generic [ref=e223]:
+        - generic [ref=e224]:
+          - generic [ref=e225]:
+            - text: شركة التقنية المتقدمة
+            - generic [ref=e226]: PO-2025-014 | Q2
+          - generic [ref=e227]:
+            - generic [ref=e228]: ٣٬١٠٠٬٠٠٠ SAR
+            - generic [ref=e229]: تقنية
+        - paragraph [ref=e230]: تراخيص برمجيات وأنظمة تشغيل
+      - generic [ref=e231]:
+        - generic [ref=e232]:
+          - generic [ref=e233]:
+            - text: شركة التقنية المتقدمة
+            - generic [ref=e234]: PO-2025-001 | Q1
+          - generic [ref=e235]:
+            - generic [ref=e236]: ٥٬٢٠٠٬٠٠٠ SAR
+            - generic [ref=e237]: تقنية
+        - paragraph [ref=e238]: خوادم ومعدات شبكات
+      - generic [ref=e239]:
+        - generic [ref=e240]:
+          - generic [ref=e241]:
+            - text: مؤسسة الأعمال الهندسية
+            - generic [ref=e242]: CTR-2025-002 | Q1
+          - generic [ref=e243]:
+            - generic [ref=e244]: ٣٬٨٠٠٬٠٠٠ SAR
+            - generic [ref=e245]: إنشاءات
+        - paragraph [ref=e246]: أعمال إنشائية - مبنى الإدارة
+      - generic [ref=e247]:
+        - generic [ref=e248]:
+          - generic [ref=e249]:
+            - text: شركة التقنية المتقدمة
+            - generic [ref=e250]: PO-2025-027 | Q3
+          - generic [ref=e251]:
+            - generic [ref=e252]: ٢٬٤٠٠٬٠٠٠ SAR
+            - generic [ref=e253]: تقنية
+        - paragraph [ref=e254]: خدمات دعم فني وصيانة
+  - button "Open Next.js Dev Tools" [ref=e260] [cursor=pointer]:
+    - img [ref=e261]
+  - alert [ref=e264]

@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { ContactForm } from "./contact-form";
 
 export const metadata: Metadata = {
-  title: "تواصل معنا | AQLIYA",
+  title: "طلب جلسة تنفيذية | AQLIYA",
   description:
-    "ابدأ من نطاق مؤسستك مع عقلية: حدد خط النظام المناسب، ناقش التفعيل، أو اطلب جلسة تصميم نظام مؤسسي محكوم.",
+    "اطلب جلسة تنفيذية مع عقلية: ناقش فجوتك التشغيلية، حدد خط النظام المناسب، أو صمّم مساراً مؤسسياً محكوماً فوق AQLIYA Intelligence Core.",
 };
 
 export default function ContactPage() {
@@ -17,16 +17,28 @@ export default function ContactPage() {
           <div className="relative mx-auto max-w-4xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-              تواصل
+              طلب جلسة تنفيذية
             </span>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              ابدأ من نطاق مؤسستك، لا من طلب عام غير واضح
+              الجلسة التنفيذية ليست عرضاً تجارياً
             </h1>
             <p className="mt-5 text-base leading-8 text-white/62 sm:text-lg">
-              سواء كنت تريد تفعيل خط نظام تحت عقلية، أو تحديد المسار المؤسسي
-              المناسب، أو تصميم نظام خاص فوق AQLIYA Intelligence Core، فهذه
-              الصفحة هي نقطة البداية العملية للحديث الصحيح.
+              هي حوار مؤسسي لتحديد الفجوة التشغيلية، وتقييم مدى ملاءمة أحد
+              أنظمة عقلية لمعالجتها — أو تصميم مسار مخصص فوق AQLIYA Intelligence
+              Core إذا كان نطاقك مختلفاً.
             </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-white/45">
+              {[
+                "30 دقيقة أولى تشخيصية",
+                "لا التزام مسبق",
+                "محادثة مباشرة مع الفريق التقني",
+              ].map((item) => (
+                <span key={item} className="flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-aqliya-cyan/60" />
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -39,7 +51,7 @@ export default function ContactPage() {
             {
               title: "حدد خط النظام المناسب",
               body: "إذا كنت تعرف المجال الذي تريد تفعيله داخل مؤسستك، ابدأ من استكشاف خطوط عقلية وتحديد الخط الأقرب إلى طبيعة العمل.",
-              cta: "استكشف خطوط عقلية",
+              cta: "استكشف الأنظمة",
               href: "/products",
             },
             {
@@ -49,10 +61,10 @@ export default function ContactPage() {
               href: "/custom-product",
             },
             {
-              title: "شاهد تطبيقًا فعليًا",
-              body: "إذا كنت تريد رؤية كيف تتحول النواة المشتركة إلى تطبيق حي، ابدأ بعرض AuditOS كأول تطبيق واضح تحت عقلية.",
-              cta: "شاهد AuditOS",
-              href: "/products/audit",
+              title: "اطّلع على بنية الحوكمة",
+              body: "إذا كنت مسؤولاً تقنياً أو معنياً بالامتثال، اطّلع على بنية Evidence Chain وRBAC وAudit Trail قبل أي حوار.",
+              cta: "بنية الحوكمة",
+              href: "/governance",
             },
           ].map((item) => (
             <div key={item.title} className="glass-card-light p-6">

@@ -1,0 +1,21 @@
+[     698ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/local-content:0
+[     817ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/node_modules_react-dom_0bruynb._.js:15306
+[     905ms] Error: ENOENT: no such file or directory, open 'C:\Users\PC\Documents\Aqliya\.next\dev\server\edge\chunks\0uz7_@sentry_core_build_esm_05zfuce._.js'
+    at readFileSync (node:fs:440:20)
+    at evaluateInContext (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\web\sandbox\context.js:442:50)
+    at getRuntimeContext (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\web\sandbox\sandbox.js:83:9)
+    at async runWithTaggedErrors (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\web\sandbox\sandbox.js:89:21)
+    at async DevServer.runMiddleware (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\next-server.js:1207:22)
+    at async DevServer.runMiddleware (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\dev\next-dev-server.js:278:28)
+    at async NextNodeServer.handleCatchallMiddlewareRequest (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\next-server.js:392:26)
+    at async DevServer.handleRequestImpl (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\base-server.js:940:28)
+    at async (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\dev\next-dev-server.js:394:20)
+    at async Span.traceAsyncFn (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async handleRoute (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\lib\router-utils\resolve-routes.js:352:33)
+    at async resolveRoutes (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\lib\router-utils\resolve-routes.js:608:28)
+    at async handleRequest (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\lib\router-server.js:314:96)
+    at async requestHandlerImpl (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (file://C:\Users\PC\Documents\Aqliya\node_modules\next\dist\server\lib\start-server.js:225:13)
+[     905ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1227
+[     931ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/favicon.ico:0
