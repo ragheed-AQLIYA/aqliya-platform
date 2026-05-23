@@ -53,12 +53,14 @@ This build plan defines the architecture and execution path for **AQLIYA Cloud P
 ### Scope
 
 This plan covers:
+
 - Cloud Platform multi-organization and workspace model
 - Product integration for AuditOS, LocalContentOS, and Office AI Assistant
 - Shared Core service unification
 - Implementation sprints 1–12
 
 **Out of scope for this phase:**
+
 - On-Prem deployment package
 - Local AI runtime
 - Air-Gapped mode
@@ -72,40 +74,40 @@ This plan covers:
 
 ### What Exists Today
 
-| Capability | Status | Location |
-|---|---|---|
-| Next.js 16 + TypeScript 5 + PostgreSQL + Prisma 7 | Active | Entire codebase |
-| Authentication (NextAuth v5) | Active | `src/app/api/auth/` |
-| DecisionOS workspace | Active | `/(dashboard)/` routes |
-| AuditOS workspace | Pilot-ready | `/audit` routes |
-| AuditOS guided demo | Active | `/auditos` (mock-backed) |
-| SalesOS prototype | Shell only | `/sales` |
-| Governance framework | Active | `src/lib/governance/` |
-| Workflow state machines | Active | `src/lib/governance/workflow-gating.ts` |
-| Evidence linking (AuditOS) | Active | `src/lib/audit/` via notes engine |
-| RBAC (per-organization, per-role) | Active | `tenant-guard.ts`, role checks in actions |
-| Audit logs (AuditEvent, AuditLog) | Active | Separate models for AuditOS and DecisionOS |
-| AI Orchestration | Phase 3B complete | DeterministicAIProvider with 5 handlers |
-| Cloud AI Provider | Stub — throws on call | `src/lib/ai/providers/cloud-provider.ts` |
-| Local AI Provider | Stub — throws on call | `src/lib/ai/providers/local-provider.ts` |
-| File storage (local filesystem) | Active | `src/lib/platform/storage/` |
-| Reporting/Export (PDF/XLSX) | Active | `src/lib/audit/export/` (AuditOS only) |
-| Bilingual data processing | Active | Throughout AuditOS modules |
-| WorkspaceContext abstraction | Active | `src/lib/platform/workspace.ts` |
+| Capability                                        | Status                | Location                                   |
+| ------------------------------------------------- | --------------------- | ------------------------------------------ |
+| Next.js 16 + TypeScript 5 + PostgreSQL + Prisma 7 | Active                | Entire codebase                            |
+| Authentication (NextAuth v5)                      | Active                | `src/app/api/auth/`                        |
+| DecisionOS workspace                              | Active                | `/(dashboard)/` routes                     |
+| AuditOS workspace                                 | Pilot-ready           | `/audit` routes                            |
+| AuditOS guided demo                               | Active                | `/auditos` (mock-backed)                   |
+| SalesOS prototype                                 | Shell only            | `/sales`                                   |
+| Governance framework                              | Active                | `src/lib/governance/`                      |
+| Workflow state machines                           | Active                | `src/lib/governance/workflow-gating.ts`    |
+| Evidence linking (AuditOS)                        | Active                | `src/lib/audit/` via notes engine          |
+| RBAC (per-organization, per-role)                 | Active                | `tenant-guard.ts`, role checks in actions  |
+| Audit logs (AuditEvent, AuditLog)                 | Active                | Separate models for AuditOS and DecisionOS |
+| AI Orchestration                                  | Phase 3B complete     | DeterministicAIProvider with 5 handlers    |
+| Cloud AI Provider                                 | Stub — throws on call | `src/lib/ai/providers/cloud-provider.ts`   |
+| Local AI Provider                                 | Stub — throws on call | `src/lib/ai/providers/local-provider.ts`   |
+| File storage (local filesystem)                   | Active                | `src/lib/platform/storage/`                |
+| Reporting/Export (PDF/XLSX)                       | Active                | `src/lib/audit/export/` (AuditOS only)     |
+| Bilingual data processing                         | Active                | Throughout AuditOS modules                 |
+| WorkspaceContext abstraction                      | Active                | `src/lib/platform/workspace.ts`            |
 
 ### Key Gaps
 
-| Gap | Impact | Addressed In |
-|---|---|---|
-| No cross-product organization model | AuditOS and DecisionOS have separate org hierarchies, no unified tenant | Sprint 2 |
-| No unified RBAC across products | Each product enforces its own role model | Sprint 3 |
-| Cloud AI Provider is a stub | No real LLM integration for AI features | Sprint 4 |
-| Evidence Graph is AuditOS-only | Not a cross-product shared graph | Sprint 5 |
-| Reporting is AuditOS-only | No shared export/reporting service | Sprint 6 |
-| Office AI Assistant not implemented | No shared work assistant exists | Sprint 7 |
-| LocalContentOS has no workspace | Marketing page only | Sprint 10 |
-| File storage is local only | No cloud blob storage (S3/Azure) | Sprint 3 |
-| Sunbul product has separate hierarchy | Third independent org model | Post-phase |
+| Gap                                   | Impact                                                                  | Addressed In |
+| ------------------------------------- | ----------------------------------------------------------------------- | ------------ |
+| No cross-product organization model   | AuditOS and DecisionOS have separate org hierarchies, no unified tenant | Sprint 2     |
+| No unified RBAC across products       | Each product enforces its own role model                                | Sprint 3     |
+| Cloud AI Provider is a stub           | No real LLM integration for AI features                                 | Sprint 4     |
+| Evidence Graph is AuditOS-only        | Not a cross-product shared graph                                        | Sprint 5     |
+| Reporting is AuditOS-only             | No shared export/reporting service                                      | Sprint 6     |
+| Office AI Assistant not implemented   | No shared work assistant exists                                         | Sprint 7     |
+| LocalContentOS has no workspace       | Marketing page only                                                     | Sprint 10    |
+| File storage is local only            | No cloud blob storage (S3/Azure)                                        | Sprint 3     |
+| Sunbul product has separate hierarchy | Third independent org model                                             | Post-phase   |
 
 ---
 
@@ -163,13 +165,13 @@ This plan covers:
 
 ### Architecture Decisions
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| Tenant isolation model | Schema-per-tenant (for Cloud), row-level `organizationId` (for Private-ready) | Schema isolation provides strongest separation for Cloud; row-level simplifies On-Prem single-tenant deployment |
-| Monolith or microservices | Modular monolith (Next.js) | Existing architecture, simpler deployment, single codebase; can extract services later |
-| AI provider model | Provider abstraction (Cloud AI / Deterministic AI / Local AI) | Already designed in Phase 3; extend Cloud AI adapter |
-| File storage | Provider abstraction (Local → S3/Azure Blob) | Already designed; implement cloud adapters |
-| Authentication | NextAuth v5 with org-scoped sessions | Already active; extend for multi-org |
+| Decision                  | Choice                                                                        | Rationale                                                                                                       |
+| ------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Tenant isolation model    | Schema-per-tenant (for Cloud), row-level `organizationId` (for Private-ready) | Schema isolation provides strongest separation for Cloud; row-level simplifies On-Prem single-tenant deployment |
+| Monolith or microservices | Modular monolith (Next.js)                                                    | Existing architecture, simpler deployment, single codebase; can extract services later                          |
+| AI provider model         | Provider abstraction (Cloud AI / Deterministic AI / Local AI)                 | Already designed in Phase 3; extend Cloud AI adapter                                                            |
+| File storage              | Provider abstraction (Local → S3/Azure Blob)                                  | Already designed; implement cloud adapters                                                                      |
+| Authentication            | NextAuth v5 with org-scoped sessions                                          | Already active; extend for multi-org                                                                            |
 
 ---
 
@@ -178,6 +180,7 @@ This plan covers:
 ### Current State
 
 Two independent organization hierarchies exist:
+
 - `Organization` (DecisionOS) — top-level grouping for decisions, users, audit logs
 - `AuditOrganization` (AuditOS) — top-level grouping for audit clients, users, engagements
 - `SunbulClient` (Sunbul) — third independent hierarchy
@@ -204,17 +207,20 @@ PlatformOrganization
 ### Implementation Approach
 
 **Phase 1 (Sprint 1–2):** Create `PlatformOrganization` model as a thin wrapper.
+
 - Add `platformOrganizationId` to existing `Organization` and `AuditOrganization`
 - Create migration: `PlatformOrganization` ← `Organization`, `PlatformOrganization` ← `AuditOrganization`
 - All new signups create a `PlatformOrganization` first
 - Existing data: create `PlatformOrganization` records from existing `Organization`/`AuditOrganization` and link them
 
 **Phase 2 (Sprint 3):** Unify user management.
+
 - `PlatformUser` is the primary user record
 - Legacy `User` (DecisionOS) and `AuditUser` (AuditOS) become role references from `PlatformUser`
 - Auth session carries `platformOrganizationId` for tenant identification
 
 **Backward compatibility:**
+
 - All existing routes continue to work during migration
 - Existing `tenant-guard.ts` checks extended to also validate `platformOrganizationId`
 - Old models remain until full deprecation
@@ -229,12 +235,12 @@ A **client workspace** is a governed operational environment within an organizat
 
 ### Current State
 
-| Product | Workspace Concept | Scope |
-|---|---|---|
-| AuditOS | `AuditClient` → `AuditEngagement` | Organization → Client → Engagement |
-| DecisionOS | `Organization` → `Decision` | Organization → Decision (no client concept) |
-| SalesOS | Static dashboard only | None |
-| LocalContentOS | Not implemented | None |
+| Product        | Workspace Concept                                     | Scope                                                                                                                        |
+| -------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| AuditOS        | `AuditClient` → `AuditEngagement`                     | Organization → Client → Engagement                                                                                           |
+| DecisionOS     | `Organization` → `Decision`                           | Organization → Decision (no client concept)                                                                                  |
+| SalesOS        | Static dashboard only                                 | None                                                                                                                         |
+| LocalContentOS | `LocalContentProject` workspace at `/local-content/*` | L5 pilot-ready with conditions / usable v0.1 (see `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`) |
 
 ### Target State
 
@@ -254,12 +260,12 @@ PlatformOrganization
 
 ### Workspace Types
 
-| Type | Purpose | Example |
-|---|---|---|
-| `audit` | Financial/audit engagements | External audit client workspace |
-| `content` | Local content measurement | Supplier locality analysis |
+| Type       | Purpose                                  | Example                         |
+| ---------- | ---------------------------------------- | ------------------------------- |
+| `audit`    | Financial/audit engagements              | External audit client workspace |
+| `content`  | Local content measurement                | Supplier locality analysis      |
 | `internal` | Internal operations, Office AI Assistant | Employee work assistant context |
-| `decision` | Strategic decision governance | Tender decision workspace |
+| `decision` | Strategic decision governance            | Tender decision workspace       |
 
 ### Key Design Rules
 
@@ -277,11 +283,11 @@ Within a client workspace, data is further separated by **project** (e.g., an au
 
 ### Current State
 
-| Product | Project Model | Isolation Level |
-|---|---|---|
-| AuditOS | `AuditEngagement` | Engagement-level: all data FK'd to `engagementId` |
-| DecisionOS | `Decision` | Decision-level: each decision is independent |
-| Office AI Assistant | Not implemented | N/A |
+| Product             | Project Model     | Isolation Level                                   |
+| ------------------- | ----------------- | ------------------------------------------------- |
+| AuditOS             | `AuditEngagement` | Engagement-level: all data FK'd to `engagementId` |
+| DecisionOS          | `Decision`        | Decision-level: each decision is independent      |
+| Office AI Assistant | Not implemented   | N/A                                               |
 
 ### Target State
 
@@ -319,6 +325,7 @@ ClientWorkspace
 **Current Status:** Pilot-ready, active workspace at `/audit`
 
 **Integration Points:**
+
 - Auth: `AuditUser` → will be linked to `PlatformUser`
 - Org: `AuditOrganization` → will be linked to `PlatformOrganization`
 - Client: `AuditClient` → maps to `ClientWorkspace`
@@ -329,6 +336,7 @@ ClientWorkspace
 - Export: `PDF/XLSX` → will become shared Reporting Engine
 
 **Changes Required:**
+
 - Add `projectId` field to AuditOS models (aliased from `engagementId` initially)
 - Extend `tenant-guard.ts` to validate platform org membership
 - Migrate `AuditEvent` to unified platform `AuditLog` (dual-write during transition)
@@ -341,11 +349,13 @@ ClientWorkspace
 **Current Status:** Marketing-only at `/products/local-content`
 
 **Integration Points:**
+
 - No existing models, workspace, or actions
 - Will build new models on shared Core from day one
 - Will use shared Governance Engine, Workflow, RBAC, Audit Logs, and AI Orchestration
 
 **First Implementation (Sprint 10):**
+
 - Create `ContentProject` model (extends `Project`)
 - Create `SupplierRecord`, `LocalityAssessment`, `SpendClassification` models
 - Build workspace route under shared workspace shell
@@ -360,6 +370,7 @@ ClientWorkspace
 **Position:** Shared application built on AQLIYA Intelligence Core, NOT a standalone product.
 
 **Integration Points:**
+
 - No separate workspace route — operates within existing product workspaces
 - Uses AI Orchestration Engine for all generation tasks
 - Uses Evidence Graph for source linking
@@ -371,6 +382,7 @@ ClientWorkspace
 - Uses Reporting Engine for output generation
 
 **First Implementation (Sprint 7–8):**
+
 - Inline assistant UI component embedded in product pages (no `/office-ai` route)
 - File analysis (PDF, Word, Excel) via existing Document Intelligence
 - Summary generation via AI Orchestration handlers
@@ -379,6 +391,7 @@ ClientWorkspace
 - All actions logged to unified Audit Log
 
 **Boundaries (non-negotiable):**
+
 - Not a chatbot — no free-form conversational interface
 - No autonomous decisions — outputs are suggestions only
 - No cross-client data mixing — scoped to current workspace
@@ -394,6 +407,7 @@ ClientWorkspace
 **Current:** Active at `src/lib/governance/` — approval states, escalation, provenance, retrieval routing
 
 **Cloud Platform Changes:**
+
 - Extend `retrieval-router.ts` to accept `platformOrganizationId` and `projectId` as governance context
 - Add `GovernancePolicy` model for per-organization customizable rules (approval chains, risk thresholds)
 - Make escalation configurable per organization (not just hardcoded)
@@ -406,6 +420,7 @@ ClientWorkspace
 **Current:** Active at `src/lib/governance/workflow-gating.ts` — state machines: Draft → Prepared → Reviewed → Returned → Approved → Locked → Exported → Archived
 
 **Cloud Platform Changes:**
+
 - Generalize the state machine to accept custom state definitions per product
 - Add workflow template system (predefined flows for audit, content, office tasks)
 - Add workflow instance persistence (track which projects are in which state)
@@ -418,6 +433,7 @@ ClientWorkspace
 **Current:** Partial — evidence linking exists in AuditOS via `evidence-requirements.ts` and notes engine, but not cross-product
 
 **Cloud Platform Changes:**
+
 - Create shared `EvidenceNode` model (product-agnostic: can link to any entity)
 - Create shared `EvidenceEdge` model (source → target relationship with type, context, timestamp)
 - Migrate `AuditEvidenceLink` to shared `EvidenceEdge` (dual-write)
@@ -431,6 +447,7 @@ ClientWorkspace
 **Current:** Active — permission model via `tenant-guard.ts`, role-based auth in actions, separate role enums per product
 
 **Cloud Platform Changes:**
+
 - Create unified `PlatformRole` model: `{ organizationId, userId, product, workspaceId?, role }`
 - Define global permission set: `{ canCreate, canRead, canUpdate, canDelete, canReview, canApprove, canExport, canManageUsers, canConfigure }`
 - Map product-specific roles to platform permissions (e.g., `audit_lead` → all audit permissions)
@@ -444,6 +461,7 @@ ClientWorkspace
 **Current:** Two separate models — `AuditEvent` (AuditOS, FK to engagementId) and `AuditLog` (DecisionOS, FK to organizationId)
 
 **Cloud Platform Changes:**
+
 - Create unified `PlatformAuditLog` model: `{ organizationId, workspaceId, projectId, userId, action, targetType, targetId, previousState, newState, metadata, timestamp, aiRelated }`
 - Dual-write to both old and new during transition
 - Add organization-level audit log view (cross-product)
@@ -457,6 +475,7 @@ ClientWorkspace
 **Current:** Active — provider abstraction at `src/lib/platform/storage/`, local filesystem provider only
 
 **Cloud Platform Changes:**
+
 - Implement `S3StorageProvider` (AWS S3)
 - Implement `AzureBlobStorageProvider` (Azure Blob Storage)
 - Add file encryption at rest (AES-256)
@@ -472,6 +491,7 @@ ClientWorkspace
 **Current:** Active — PDF/XLSX export at `src/lib/audit/export/`, AuditOS only
 
 **Cloud Platform Changes:**
+
 - Move export logic to `src/lib/platform/reporting/` with product-agnostic API
 - Add template system (report layouts defined separately from data)
 - Add scheduled report generation
@@ -486,6 +506,7 @@ ClientWorkspace
 **Current:** Phase 3B — DeterministicAIProvider with 5 handlers, CloudAIProvider is a stub, LocalAIProvider is a stub
 
 **Cloud Platform Changes:**
+
 - Implement `CloudAIProvider` — wire to external LLM API (OpenAI/Claude)
 - Implement output validation against provider interface
 - Add prompt registry with versioning (file-based or DB config table)
@@ -503,15 +524,15 @@ ClientWorkspace
 
 ### Current Route Structure
 
-| Route | Purpose | Status |
-|---|---|---|
-| `/` | Company homepage | Active |
-| `/(marketing)/*` | Public content | Active |
+| Route            | Purpose              | Status |
+| ---------------- | -------------------- | ------ |
+| `/`              | Company homepage     | Active |
+| `/(marketing)/*` | Public content       | Active |
 | `/(dashboard)/*` | DecisionOS workspace | Active |
-| `/audit/*` | AuditOS workspace | Active |
-| `/auditos/*` | AuditOS guided demo | Active |
-| `/sales` | SalesOS prototype | Active |
-| `/api/*` | API routes | Active |
+| `/audit/*`       | AuditOS workspace    | Active |
+| `/auditos/*`     | AuditOS guided demo  | Active |
+| `/sales`         | SalesOS prototype    | Active |
+| `/api/*`         | API routes           | Active |
 
 ### Proposed Route Structure
 
@@ -546,6 +567,7 @@ ClientWorkspace
 ### Office AI Assistant Route Strategy
 
 Office AI Assistant does NOT get a top-level workspace route. It is embedded:
+
 - Panel component within existing product pages (`/audit/*`, `/content/*`)
 - Standalone view at `/(dashboard)/[orgSlug]/assistant/` for cross-product queries
 - No separate `/office-ai` or `/assistant` route outside org scope
@@ -556,51 +578,51 @@ Office AI Assistant does NOT get a top-level workspace route. It is embedded:
 
 ### Models That Can Be Reused As-Is
 
-| Model | Product | Reuse Potential | Notes |
-|---|---|---|---|
-| `PlatformUser` (new) | All | Shared | Unified user record |
-| `PlatformAuditLog` (new) | All | Shared | Unified audit trail |
-| `EvidenceNode` (new) | All | Shared | Cross-product evidence graph |
-| `EvidenceEdge` (new) | All | Shared | Evidence relationships |
-| `AuditCanonicalAccount` | AuditOS | Accounting standards | Reusable by any financial product |
+| Model                    | Product | Reuse Potential      | Notes                             |
+| ------------------------ | ------- | -------------------- | --------------------------------- |
+| `PlatformUser` (new)     | All     | Shared               | Unified user record               |
+| `PlatformAuditLog` (new) | All     | Shared               | Unified audit trail               |
+| `EvidenceNode` (new)     | All     | Shared               | Cross-product evidence graph      |
+| `EvidenceEdge` (new)     | All     | Shared               | Evidence relationships            |
+| `AuditCanonicalAccount`  | AuditOS | Accounting standards | Reusable by any financial product |
 
 ### Models That Need Abstraction
 
-| Model | Current Product | Target | Migration |
-|---|---|---|---|
-| `AuditOrganization` | AuditOS | → `PlatformOrganization` | Add FK, dual-write |
-| `Organization` | DecisionOS | → `PlatformOrganization` | Add FK, dual-write |
-| `AuditEvent` | AuditOS | → `PlatformAuditLog` | Dual-write, deprecate |
-| `AuditLog` | DecisionOS | → `PlatformAuditLog` | Dual-write, deprecate |
-| `AuditUser` | AuditOS | → `PlatformUser` | Link via FK, deprecate |
-| `User` | DecisionOS | → `PlatformUser` | Link via FK, deprecate |
+| Model               | Current Product | Target                   | Migration              |
+| ------------------- | --------------- | ------------------------ | ---------------------- |
+| `AuditOrganization` | AuditOS         | → `PlatformOrganization` | Add FK, dual-write     |
+| `Organization`      | DecisionOS      | → `PlatformOrganization` | Add FK, dual-write     |
+| `AuditEvent`        | AuditOS         | → `PlatformAuditLog`     | Dual-write, deprecate  |
+| `AuditLog`          | DecisionOS      | → `PlatformAuditLog`     | Dual-write, deprecate  |
+| `AuditUser`         | AuditOS         | → `PlatformUser`         | Link via FK, deprecate |
+| `User`              | DecisionOS      | → `PlatformUser`         | Link via FK, deprecate |
 
 ### Models That Are Product-Specific (No Reuse)
 
-| Model | Product | Reason |
-|---|---|---|
-| `AuditEngagement` | AuditOS | Audit-specific lifecycle and fields |
-| `AuditTrialBalance` + `AuditTrialBalanceLine` | AuditOS | Financial audit domain |
-| `AuditAccountMapping` | AuditOS | Audit mapping logic |
-| `AuditFinancialStatement` | AuditOS | Financial statement structure |
-| `AuditFinding` + `AuditRecommendation` | AuditOS | Audit findings domain |
-| `AuditDisclosureNote` | AuditOS | Disclosure notes domain |
-| `Decision` + all related models | DecisionOS | Decision governance domain |
-| `ContentProject` (future) | LocalContentOS | Content analysis domain |
+| Model                                         | Product        | Reason                              |
+| --------------------------------------------- | -------------- | ----------------------------------- |
+| `AuditEngagement`                             | AuditOS        | Audit-specific lifecycle and fields |
+| `AuditTrialBalance` + `AuditTrialBalanceLine` | AuditOS        | Financial audit domain              |
+| `AuditAccountMapping`                         | AuditOS        | Audit mapping logic                 |
+| `AuditFinancialStatement`                     | AuditOS        | Financial statement structure       |
+| `AuditFinding` + `AuditRecommendation`        | AuditOS        | Audit findings domain               |
+| `AuditDisclosureNote`                         | AuditOS        | Disclosure notes domain             |
+| `Decision` + all related models               | DecisionOS     | Decision governance domain          |
+| `ContentProject` (future)                     | LocalContentOS | Content analysis domain             |
 
 ### Shared Models to Create (New)
 
-| Model | Purpose | Sprint |
-|---|---|---|
-| `PlatformOrganization` | Unified tenant identity | 1 |
-| `PlatformUser` | Unified user record | 2 |
-| `ClientWorkspace` | Workspace abstraction across products | 2 |
-| `Project` | Base project model for all products | 2 |
-| `PlatformRole` | Unified RBAC permission model | 3 |
-| `PlatformAuditLog` | Unified audit trail | 3 |
-| `EvidenceNode` + `EvidenceEdge` | Cross-product Evidence Graph | 5 |
-| `ReportTemplate` | Shared reporting templates | 6 |
-| `AiActionLog` | AI action registry | 4 |
+| Model                           | Purpose                               | Sprint |
+| ------------------------------- | ------------------------------------- | ------ |
+| `PlatformOrganization`          | Unified tenant identity               | 1      |
+| `PlatformUser`                  | Unified user record                   | 2      |
+| `ClientWorkspace`               | Workspace abstraction across products | 2      |
+| `Project`                       | Base project model for all products   | 2      |
+| `PlatformRole`                  | Unified RBAC permission model         | 3      |
+| `PlatformAuditLog`              | Unified audit trail                   | 3      |
+| `EvidenceNode` + `EvidenceEdge` | Cross-product Evidence Graph          | 5      |
+| `ReportTemplate`                | Shared reporting templates            | 6      |
+| `AiActionLog`                   | AI action registry                    | 4      |
 
 ---
 
@@ -624,6 +646,7 @@ PlatformOrganization {
 ```
 
 **Links from existing orgs:**
+
 - `Organization.platformOrganizationId String?` (DecisionOS FK)
 - `AuditOrganization.platformOrganizationId String?` (AuditOS FK)
 
@@ -685,6 +708,7 @@ Project {
 ```
 
 **Product-specific extensions:**
+
 - `AuditEngagement` extends `Project` (or links via `projectId`)
 - `ContentProject` extends `Project` (LocalContentOS)
 
@@ -825,28 +849,28 @@ PlatformOrganization (owner: platform_admin)
 
 ### Permission Matrix
 
-| Action | Org Admin | Org Manager | Org Member | Ws Admin | Ws Lead | Ws Viewer | Proj Lead | Proj Editor | Proj Viewer |
-|---|---|---|---|---|---|---|---|---|---|
-| View workspaces | All | All | Assigned | All | All | Own | Own | Own | Own |
-| Create workspace | ✓ | ✓ | — | — | — | — | — | — | — |
-| Delete workspace | ✓ | ✓ | — | — | — | — | — | — | — |
-| Manage users | ✓ | ✓ | — | ✓ (ws) | — | — | — | — | — |
-| View project data | All | All | Assigned | All | All | Own | Own | Own | Own |
-| Create project | ✓ | ✓ | — | ✓ | ✓ | — | — | — | — |
-| Edit project data | ✓ | ✓ | — | ✓ | ✓ | — | ✓ | ✓ | — |
-| Approve workflow | ✓ | ✓ | — | ✓ | ✓ | — | ✓ | — | — |
-| Export/report | ✓ | ✓ | — | ✓ | ✓ | — | ✓ | ✓ | — |
-| AI assistant access | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| View audit logs | All | All | Own | All | Own | Own | Own | Own | Own |
-| Configure settings | ✓ | ✓ | — | ✓ (ws) | — | — | — | — | — |
+| Action              | Org Admin | Org Manager | Org Member | Ws Admin | Ws Lead | Ws Viewer | Proj Lead | Proj Editor | Proj Viewer |
+| ------------------- | --------- | ----------- | ---------- | -------- | ------- | --------- | --------- | ----------- | ----------- |
+| View workspaces     | All       | All         | Assigned   | All      | All     | Own       | Own       | Own         | Own         |
+| Create workspace    | ✓         | ✓           | —          | —        | —       | —         | —         | —           | —           |
+| Delete workspace    | ✓         | ✓           | —          | —        | —       | —         | —         | —           | —           |
+| Manage users        | ✓         | ✓           | —          | ✓ (ws)   | —       | —         | —         | —           | —           |
+| View project data   | All       | All         | Assigned   | All      | All     | Own       | Own       | Own         | Own         |
+| Create project      | ✓         | ✓           | —          | ✓        | ✓       | —         | —         | —           | —           |
+| Edit project data   | ✓         | ✓           | —          | ✓        | ✓       | —         | ✓         | ✓           | —           |
+| Approve workflow    | ✓         | ✓           | —          | ✓        | ✓       | —         | ✓         | —           | —           |
+| Export/report       | ✓         | ✓           | —          | ✓        | ✓       | —         | ✓         | ✓           | —           |
+| AI assistant access | ✓         | ✓           | —          | ✓        | ✓       | ✓         | ✓         | ✓           | ✓           |
+| View audit logs     | All       | All         | Own        | All      | Own     | Own       | Own       | Own         | Own         |
+| Configure settings  | ✓         | ✓           | —          | ✓ (ws)   | —       | —         | —         | —           | —           |
 
 ### Enforcement Pattern
 
 ```
-Request → Route Guard (authenticated) → 
-  PlatformOrg Guard (org membership) → 
-    Workspace Guard (workspace access) → 
-      Product Guard (product licensing) → 
+Request → Route Guard (authenticated) →
+  PlatformOrg Guard (org membership) →
+    Workspace Guard (workspace access) →
+      Product Guard (product licensing) →
         Action Guard (role/permission check)
 ```
 
@@ -899,13 +923,13 @@ Example: `s3://aqliya-files/acme-corp/ws-abc/proj-123/evidence/evid-456/fs-repor
 
 ### Retention
 
-| File Type | Retention | Auto-Delete |
-|---|---|---|
+| File Type        | Retention                  | Auto-Delete                         |
+| ---------------- | -------------------------- | ----------------------------------- |
 | Project evidence | Project lifetime + 7 years | After retention period + org config |
-| AI outputs | 1 year | After 1 year unless referenced |
-| Draft exports | 90 days | After 90 days |
-| Approved exports | Project lifetime + 7 years | After retention period |
-| Temp uploads | 24 hours | After 24 hours |
+| AI outputs       | 1 year                     | After 1 year unless referenced      |
+| Draft exports    | 90 days                    | After 90 days                       |
+| Approved exports | Project lifetime + 7 years | After retention period              |
+| Temp uploads     | 24 hours                   | After 24 hours                      |
 
 ### Access Control
 
@@ -947,16 +971,16 @@ AI Orchestration Gateway
 
 ### Query Types and Handlers
 
-| Query Type | Handler | Evidence Source | Provider |
-|---|---|---|---|
-| `summarize_document` | `documentSummaryHandler` | Linked files in project | Cloud AI |
-| `analyze_excel` | `excelAnalysisHandler` | Uploaded Excel files | Cloud AI |
-| `draft_report` | `reportDraftHandler` | Evidence graph + files | Cloud AI |
-| `generate_outline` | `outlineGenerationHandler` | Project context | Cloud AI |
-| `executive_summary` | `executiveSummaryHandler` | Findings, recommendations, decisions | Cloud AI |
-| `answer_question` | `workspaceQaHandler` | All project evidence (scoped) | Cloud AI |
-| `summarize_notes` | `notesSummaryHandler` | Meeting notes, review comments | Cloud AI |
-| `bilingual_draft` | `bilingualDraftHandler` | Source content | Cloud AI |
+| Query Type           | Handler                    | Evidence Source                      | Provider |
+| -------------------- | -------------------------- | ------------------------------------ | -------- |
+| `summarize_document` | `documentSummaryHandler`   | Linked files in project              | Cloud AI |
+| `analyze_excel`      | `excelAnalysisHandler`     | Uploaded Excel files                 | Cloud AI |
+| `draft_report`       | `reportDraftHandler`       | Evidence graph + files               | Cloud AI |
+| `generate_outline`   | `outlineGenerationHandler` | Project context                      | Cloud AI |
+| `executive_summary`  | `executiveSummaryHandler`  | Findings, recommendations, decisions | Cloud AI |
+| `answer_question`    | `workspaceQaHandler`       | All project evidence (scoped)        | Cloud AI |
+| `summarize_notes`    | `notesSummaryHandler`      | Meeting notes, review comments       | Cloud AI |
+| `bilingual_draft`    | `bilingualDraftHandler`    | Source content                       | Cloud AI |
 
 ### Human Review Gate
 
@@ -966,7 +990,7 @@ AI Output → Review Required? → Yes → Hold for human review
                                No → Direct to output (configurable per org)
 
 Review Flow:
-  Output → Assigned Reviewer → Review Page → 
+  Output → Assigned Reviewer → Review Page →
     ├── Accept → Output finalized, logged, evidence-linked
     ├── Edit → Reviewer modifies, then finalized
     └── Reject → Output discarded, logged with reason
@@ -1006,15 +1030,15 @@ ReportingEngine.generate({
 
 ### Report Types
 
-| Type | Product | Format | Template |
-|---|---|---|---|
-| Financial Statements | AuditOS | PDF/XLSX | `financial-statement-v1` |
-| Audit Report | AuditOS | PDF | `audit-report-v1` |
-| Management Letter | AuditOS | PDF/DOCX | `management-letter-v1` |
-| Local Content Report | LocalContentOS | PDF/XLSX | `local-content-report-v1` |
-| Executive Summary | Office AI Assistant | PDF/DOCX | `executive-summary-v1` |
-| Presentation Outline | Office AI Assistant | PPTX | `presentation-outline-v1` |
-| Meeting Notes | Office AI Assistant | PDF/DOCX | `meeting-notes-v1` |
+| Type                 | Product             | Format   | Template                  |
+| -------------------- | ------------------- | -------- | ------------------------- |
+| Financial Statements | AuditOS             | PDF/XLSX | `financial-statement-v1`  |
+| Audit Report         | AuditOS             | PDF      | `audit-report-v1`         |
+| Management Letter    | AuditOS             | PDF/DOCX | `management-letter-v1`    |
+| Local Content Report | LocalContentOS      | PDF/XLSX | `local-content-report-v1` |
+| Executive Summary    | Office AI Assistant | PDF/DOCX | `executive-summary-v1`    |
+| Presentation Outline | Office AI Assistant | PPTX     | `presentation-outline-v1` |
+| Meeting Notes        | Office AI Assistant | PDF/DOCX | `meeting-notes-v1`        |
 
 ### Template Engine
 
@@ -1089,11 +1113,11 @@ Generate report (Reporting Engine) →
 
 ### Watermark Rules
 
-| Status | Watermark Text | Opacity |
-|---|---|---|
-| Draft | "DRAFT — NOT FINAL" | 30% overlay |
-| Under Review | "UNDER REVIEW" | 20% overlay |
-| Approved | (none) | — |
+| Status       | Watermark Text              | Opacity     |
+| ------------ | --------------------------- | ----------- |
+| Draft        | "DRAFT — NOT FINAL"         | 30% overlay |
+| Under Review | "UNDER REVIEW"              | 20% overlay |
+| Approved     | (none)                      | —           |
 | Confidential | "CONFIDENTIAL — [Org Name]" | 40% overlay |
 
 ---
@@ -1102,15 +1126,15 @@ Generate report (Reporting Engine) →
 
 ### Tenant Isolation
 
-| Layer | Isolation Mechanism | Cloud | Private/On-Prem |
-|---|---|---|---|
-| Network | Virtual network per tenant (future) | Enterprise tier | Single-tenant by definition |
-| Compute | Shared (stateless) | Cloud | Single-tenant |
-| Database | `platformOrganizationId` on every row | Row-level security | Single database |
-| File storage | `{orgSlug}` prefix in path | Container/blob prefix | Local filesystem |
-| AI context | `projectId` in governance context | Shared API with context | Local AI |
-| Cache | Key prefix per org | Redis key namespacing | Single-tenant |
-| Sessions | JWT with org claim | Shared auth | Single-tenant |
+| Layer        | Isolation Mechanism                   | Cloud                   | Private/On-Prem             |
+| ------------ | ------------------------------------- | ----------------------- | --------------------------- |
+| Network      | Virtual network per tenant (future)   | Enterprise tier         | Single-tenant by definition |
+| Compute      | Shared (stateless)                    | Cloud                   | Single-tenant               |
+| Database     | `platformOrganizationId` on every row | Row-level security      | Single database             |
+| File storage | `{orgSlug}` prefix in path            | Container/blob prefix   | Local filesystem            |
+| AI context   | `projectId` in governance context     | Shared API with context | Local AI                    |
+| Cache        | Key prefix per org                    | Redis key namespacing   | Single-tenant               |
+| Sessions     | JWT with org claim                    | Shared auth             | Single-tenant               |
 
 ### Authentication & Authorization
 
@@ -1122,14 +1146,14 @@ Generate report (Reporting Engine) →
 
 ### Data Protection
 
-| Measure | Implementation |
-|---|---|
-| Encryption at rest | Database-level encryption (PostgreSQL TDE or disk-level) |
-| Encryption in transit | HTTPS/TLS for all connections |
-| File encryption | AES-256 server-side (S3 SSE or Azure SSE) |
-| Secrets management | Environment variables → vault service (future) |
-| API keys | Hashed storage, rotation support |
-| PII handling | Field-level tagging, restricted export |
+| Measure               | Implementation                                           |
+| --------------------- | -------------------------------------------------------- |
+| Encryption at rest    | Database-level encryption (PostgreSQL TDE or disk-level) |
+| Encryption in transit | HTTPS/TLS for all connections                            |
+| File encryption       | AES-256 server-side (S3 SSE or Azure SSE)                |
+| Secrets management    | Environment variables → vault service (future)           |
+| API keys              | Hashed storage, rotation support                         |
+| PII handling          | Field-level tagging, restricted export                   |
 
 ### Audit & Compliance
 
@@ -1208,55 +1232,55 @@ DATABASE_URL=postgresql://local-postgres
 
 ### Immediate Priority (Sprints 1–6)
 
-| Priority | Item | Rationale |
-|---|---|---|
-| 1 | `PlatformOrganization` model + migration | Foundation for all multi-org features |
-| 2 | `ClientWorkspace` + `Project` base models | Required for workspace isolation |
-| 3 | `PlatformUser` + unified auth session | Required for cross-product identity |
-| 4 | Cloud AI Provider implementation | Required for AI features (Office AI Assistant, AI Abstraction Phase 3) |
-| 5 | `S3StorageProvider` | Required for cloud file storage |
-| 6 | `PlatformAuditLog` (dual-write) | Required for unified audit trail |
-| 7 | Route migration (`[orgSlug]` prefix) | Required for org-scoped workspaces |
-| 8 | `PlatformRole` + extended permission guard | Required for cross-product RBAC |
+| Priority | Item                                       | Rationale                                                              |
+| -------- | ------------------------------------------ | ---------------------------------------------------------------------- |
+| 1        | `PlatformOrganization` model + migration   | Foundation for all multi-org features                                  |
+| 2        | `ClientWorkspace` + `Project` base models  | Required for workspace isolation                                       |
+| 3        | `PlatformUser` + unified auth session      | Required for cross-product identity                                    |
+| 4        | Cloud AI Provider implementation           | Required for AI features (Office AI Assistant, AI Abstraction Phase 3) |
+| 5        | `S3StorageProvider`                        | Required for cloud file storage                                        |
+| 6        | `PlatformAuditLog` (dual-write)            | Required for unified audit trail                                       |
+| 7        | Route migration (`[orgSlug]` prefix)       | Required for org-scoped workspaces                                     |
+| 8        | `PlatformRole` + extended permission guard | Required for cross-product RBAC                                        |
 
 ### Near-Term Priority (Sprints 7–9)
 
-| Priority | Item | Rationale |
-|---|---|---|
-| 9 | Office AI Assistant MVP | First shared governed application |
-| 10 | Shared Evidence Graph (`EvidenceNode` + `EvidenceEdge`) | Required for cross-product evidence |
-| 11 | Shared Reporting Engine | Required for all products |
-| 12 | Office AI Assistant handlers (6 query types) | Core AI assistant capability |
+| Priority | Item                                                    | Rationale                           |
+| -------- | ------------------------------------------------------- | ----------------------------------- |
+| 9        | Office AI Assistant MVP                                 | First shared governed application   |
+| 10       | Shared Evidence Graph (`EvidenceNode` + `EvidenceEdge`) | Required for cross-product evidence |
+| 11       | Shared Reporting Engine                                 | Required for all products           |
+| 12       | Office AI Assistant handlers (6 query types)            | Core AI assistant capability        |
 
 ### Medium-Term Priority (Sprints 10–12)
 
-| Priority | Item | Rationale |
-|---|---|---|
-| 13 | LocalContentOS workspace MVP | Second strategic product |
-| 14 | Scheduled report generation | Enterprise feature |
-| 15 | Azure Blob Storage provider | Private Cloud readiness |
-| 16 | Bilingual report templates | Core platform requirement |
+| Priority | Item                         | Rationale                 |
+| -------- | ---------------------------- | ------------------------- |
+| 13       | LocalContentOS workspace MVP | Second strategic product  |
+| 14       | Scheduled report generation  | Enterprise feature        |
+| 15       | Azure Blob Storage provider  | Private Cloud readiness   |
+| 16       | Bilingual report templates   | Core platform requirement |
 
 ---
 
 ## 20. What to Defer
 
-| Item | Defer To | Rationale |
-|---|---|---|
-| On-Prem deployment package | Phase 8 (roadmap) | Requires Cloud Platform stabilization first |
-| Local AI runtime | Phase 5 (roadmap) | Requires Cloud AI provider first |
-| Air-Gapped mode | Phase 8+ (roadmap) | Requires On-Prem + Local AI |
-| AQLIYA Studio | Phase 9 (roadmap) | Requires Core + Governance + Workflow clarity |
-| Institutional Memory engine | Phase 8+ (roadmap) | Not yet scoped |
-| Model Governance registry | Phase 7 (roadmap) | Governance hardening phase |
-| SSO/LDAP/AD integration | Post-12 sprints | Enterprise requirement, not MVP |
-| SIEM integration | Post-12 sprints | Enterprise requirement, not MVP |
-| Streaming AI responses | Post-Office AI MVP | Nice-to-have, not MVP requirement |
-| Conversational AI memory | Post-Office AI MVP | Stateless is sufficient for MVP |
-| Email integration (Office AI) | Post-Office AI MVP | Requires secure email connector |
-| MFA | Post-12 sprints | Enterprise tier requirement |
-| Custom branding/white-label | Post-12 sprints | Enterprise tier requirement |
-| Public API (REST/GraphQL) | Post-12 sprints | Not yet required by products |
+| Item                          | Defer To           | Rationale                                     |
+| ----------------------------- | ------------------ | --------------------------------------------- |
+| On-Prem deployment package    | Phase 8 (roadmap)  | Requires Cloud Platform stabilization first   |
+| Local AI runtime              | Phase 5 (roadmap)  | Requires Cloud AI provider first              |
+| Air-Gapped mode               | Phase 8+ (roadmap) | Requires On-Prem + Local AI                   |
+| AQLIYA Studio                 | Phase 9 (roadmap)  | Requires Core + Governance + Workflow clarity |
+| Institutional Memory engine   | Phase 8+ (roadmap) | Not yet scoped                                |
+| Model Governance registry     | Phase 7 (roadmap)  | Governance hardening phase                    |
+| SSO/LDAP/AD integration       | Post-12 sprints    | Enterprise requirement, not MVP               |
+| SIEM integration              | Post-12 sprints    | Enterprise requirement, not MVP               |
+| Streaming AI responses        | Post-Office AI MVP | Nice-to-have, not MVP requirement             |
+| Conversational AI memory      | Post-Office AI MVP | Stateless is sufficient for MVP               |
+| Email integration (Office AI) | Post-Office AI MVP | Requires secure email connector               |
+| MFA                           | Post-12 sprints    | Enterprise tier requirement                   |
+| Custom branding/white-label   | Post-12 sprints    | Enterprise tier requirement                   |
+| Public API (REST/GraphQL)     | Post-12 sprints    | Not yet required by products                  |
 
 ---
 
@@ -1266,15 +1290,15 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Create unified tenant identity model.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Create `PlatformOrganization` Prisma model | Schema | None |
+| Task                                                                                     | Type   | Dependencies               |
+| ---------------------------------------------------------------------------------------- | ------ | -------------------------- |
+| Create `PlatformOrganization` Prisma model                                               | Schema | None                       |
 | Create migration: add `platformOrganizationId` to `Organization` and `AuditOrganization` | Schema | PlatformOrganization model |
-| Create seed migration: backfill `PlatformOrganization` from existing orgs | Data | Migration |
-| Add `[orgSlug]` route group (shell only) | Routes | PlatformOrganization |
-| Extend auth session to include `platformOrganizationId` | Auth | PlatformOrganization |
-| Create `org-guard.ts` route guard | Guard | Auth session |
-| Update `tenant-guard.ts` to validate platform org | Guard | Auth session |
+| Create seed migration: backfill `PlatformOrganization` from existing orgs                | Data   | Migration                  |
+| Add `[orgSlug]` route group (shell only)                                                 | Routes | PlatformOrganization       |
+| Extend auth session to include `platformOrganizationId`                                  | Auth   | PlatformOrganization       |
+| Create `org-guard.ts` route guard                                                        | Guard  | Auth session               |
+| Update `tenant-guard.ts` to validate platform org                                        | Guard  | Auth session               |
 
 **Validation:** New signup creates `PlatformOrganization`; existing orgs continue working.
 
@@ -1282,15 +1306,15 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Create shared workspace and project abstraction.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Create `ClientWorkspace` Prisma model | Schema | PlatformOrganization (Sprint 1) |
-| Create `Project` base Prisma model | Schema | ClientWorkspace |
-| Create migration: add `projectId` to applicable models | Schema | Project model |
-| Create workspace manager service (`src/lib/platform/workspace-manager.ts`) | Service | ClientWorkspace |
-| Create workspace guard (`workspace-guard.ts`) | Guard | ClientWorkspace |
-| Create `PlatformUser` Prisma model | Schema | PlatformOrganization |
-| Backfill `PlatformUser` from existing `User` and `AuditUser` | Data | PlatformUser model |
+| Task                                                                       | Type    | Dependencies                    |
+| -------------------------------------------------------------------------- | ------- | ------------------------------- |
+| Create `ClientWorkspace` Prisma model                                      | Schema  | PlatformOrganization (Sprint 1) |
+| Create `Project` base Prisma model                                         | Schema  | ClientWorkspace                 |
+| Create migration: add `projectId` to applicable models                     | Schema  | Project model                   |
+| Create workspace manager service (`src/lib/platform/workspace-manager.ts`) | Service | ClientWorkspace                 |
+| Create workspace guard (`workspace-guard.ts`)                              | Guard   | ClientWorkspace                 |
+| Create `PlatformUser` Prisma model                                         | Schema  | PlatformOrganization            |
+| Backfill `PlatformUser` from existing `User` and `AuditUser`               | Data    | PlatformUser model              |
 
 **Validation:** User can create workspace; projects created within workspace are isolated.
 
@@ -1298,16 +1322,16 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Unified permission model, cloud file storage, and unified audit trail.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Create `PlatformRole` Prisma model | Schema | PlatformUser (Sprint 2) |
-| Create `PlatformAuditLog` Prisma model | Schema | PlatformOrganization (Sprint 1) |
-| Create permission guard (`permission-guard.ts`) | Guard | PlatformRole |
-| Implement `S3StorageProvider` | Service | Storage abstraction (existing) |
-| Add signed URL generation to File Vault | Service | S3StorageProvider |
-| Implement dual-write: `AuditEvent` + `PlatformAuditLog` | Service | PlatformAuditLog |
-| Implement dual-write: `AuditLog` + `PlatformAuditLog` | Service | PlatformAuditLog |
-| Define global permission matrix as TypeScript types | Types | PlatformRole |
+| Task                                                    | Type    | Dependencies                    |
+| ------------------------------------------------------- | ------- | ------------------------------- |
+| Create `PlatformRole` Prisma model                      | Schema  | PlatformUser (Sprint 2)         |
+| Create `PlatformAuditLog` Prisma model                  | Schema  | PlatformOrganization (Sprint 1) |
+| Create permission guard (`permission-guard.ts`)         | Guard   | PlatformRole                    |
+| Implement `S3StorageProvider`                           | Service | Storage abstraction (existing)  |
+| Add signed URL generation to File Vault                 | Service | S3StorageProvider               |
+| Implement dual-write: `AuditEvent` + `PlatformAuditLog` | Service | PlatformAuditLog                |
+| Implement dual-write: `AuditLog` + `PlatformAuditLog`   | Service | PlatformAuditLog                |
+| Define global permission matrix as TypeScript types     | Types   | PlatformRole                    |
 
 **Validation:** S3 upload/download works; audit events written to unified log; RBAC enforced at org/workspace/project level.
 
@@ -1315,16 +1339,16 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Wire Cloud AI provider and complete AI abstraction layer.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Implement `CloudAIProvider.execute()` — wire to external LLM API | Service | Existing provider interface |
-| Create `AiActionLog` Prisma model | Schema | PlatformOrganization |
-| Implement AI action logging | Service | AiActionLog |
-| Add output validation against provider interface | Service | CloudAIProvider |
-| Build prompt registry with versioning (file-based) | Service | Existing prompt-registry.ts |
-| Add AI health check endpoint | API | CloudAIProvider |
-| Add provider fallback chain (Cloud → Deterministic) | Service | Both providers |
-| Deprecate `src/lib/audit/ai-service.ts` | Refactor | CloudAIProvider |
+| Task                                                             | Type     | Dependencies                |
+| ---------------------------------------------------------------- | -------- | --------------------------- |
+| Implement `CloudAIProvider.execute()` — wire to external LLM API | Service  | Existing provider interface |
+| Create `AiActionLog` Prisma model                                | Schema   | PlatformOrganization        |
+| Implement AI action logging                                      | Service  | AiActionLog                 |
+| Add output validation against provider interface                 | Service  | CloudAIProvider             |
+| Build prompt registry with versioning (file-based)               | Service  | Existing prompt-registry.ts |
+| Add AI health check endpoint                                     | API      | CloudAIProvider             |
+| Add provider fallback chain (Cloud → Deterministic)              | Service  | Both providers              |
+| Deprecate `src/lib/audit/ai-service.ts`                          | Refactor | CloudAIProvider             |
 
 **Validation:** Cloud AI calls succeed with validated output; fallback to deterministic works; all AI actions logged.
 
@@ -1332,15 +1356,15 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Create cross-product Evidence Graph.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Create `EvidenceNode` Prisma model | Schema | Project (Sprint 2) |
-| Create `EvidenceEdge` Prisma model | Schema | EvidenceNode |
-| Create evidence graph service (`src/lib/platform/evidence-graph.ts`) | Service | EvidenceNode, EvidenceEdge |
-| Migrate `AuditEvidenceLink` to shared `EvidenceEdge` (dual-write) | Data | EvidenceEdge |
-| Create evidence graph query API | API | Evidence graph service |
-| Create evidence graph visualization component | Component | Evidence graph service |
-| Add evidence linking to governance context in AI Orchestration | Service | Evidence graph service |
+| Task                                                                 | Type      | Dependencies               |
+| -------------------------------------------------------------------- | --------- | -------------------------- |
+| Create `EvidenceNode` Prisma model                                   | Schema    | Project (Sprint 2)         |
+| Create `EvidenceEdge` Prisma model                                   | Schema    | EvidenceNode               |
+| Create evidence graph service (`src/lib/platform/evidence-graph.ts`) | Service   | EvidenceNode, EvidenceEdge |
+| Migrate `AuditEvidenceLink` to shared `EvidenceEdge` (dual-write)    | Data      | EvidenceEdge               |
+| Create evidence graph query API                                      | API       | Evidence graph service     |
+| Create evidence graph visualization component                        | Component | Evidence graph service     |
+| Add evidence linking to governance context in AI Orchestration       | Service   | Evidence graph service     |
 
 **Validation:** Evidence links created cross-product; graph queries return correct relationships.
 
@@ -1348,15 +1372,15 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Refactor AuditOS export into shared reporting engine.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Create `ReportTemplate` Prisma model | Schema | PlatformOrganization |
-| Move `src/lib/audit/export/` → `src/lib/platform/reporting/` | Refactor | None |
-| Create shared `ReportingEngine` with product-agnostic API | Service | Reporting code |
-| Add bilingual (Arabic/English) report support | Service | ReportingEngine |
-| Add watermark support (draft/approved/confidential) | Service | ReportingEngine |
-| Create report distribution service (email, download, shared link) | Service | ReportingEngine |
-| Add export policy framework | Service | ExportControl |
+| Task                                                              | Type     | Dependencies         |
+| ----------------------------------------------------------------- | -------- | -------------------- |
+| Create `ReportTemplate` Prisma model                              | Schema   | PlatformOrganization |
+| Move `src/lib/audit/export/` → `src/lib/platform/reporting/`      | Refactor | None                 |
+| Create shared `ReportingEngine` with product-agnostic API         | Service  | Reporting code       |
+| Add bilingual (Arabic/English) report support                     | Service  | ReportingEngine      |
+| Add watermark support (draft/approved/confidential)               | Service  | ReportingEngine      |
+| Create report distribution service (email, download, shared link) | Service  | ReportingEngine      |
+| Add export policy framework                                       | Service  | ExportControl        |
 
 **Validation:** Reports generate in PDF/XLSX with correct watermarks; bilingual output works.
 
@@ -1364,16 +1388,16 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** First iteration of Office AI Assistant with core capabilities.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Create `documentSummaryHandler` | AI Handler | CloudAIProvider (Sprint 4) |
-| Create `excelAnalysisHandler` | AI Handler | CloudAIProvider |
-| Create `reportDraftHandler` | AI Handler | CloudAIProvider |
-| Create assistant UI component (embedded panel) | Component | Workspace shell |
-| Add human review gate before output finalization | Service | Workflow Engine (existing) |
-| Wire AI outputs to Evidence Graph (source linking) | Service | Evidence Graph (Sprint 5) |
-| Log all assistant actions to AiActionLog + PlatformAuditLog | Service | Sprint 3 + Sprint 4 |
-| Add assistant panel to AuditOS workspace (pilot) | Component | Assistant UI |
+| Task                                                        | Type       | Dependencies               |
+| ----------------------------------------------------------- | ---------- | -------------------------- |
+| Create `documentSummaryHandler`                             | AI Handler | CloudAIProvider (Sprint 4) |
+| Create `excelAnalysisHandler`                               | AI Handler | CloudAIProvider            |
+| Create `reportDraftHandler`                                 | AI Handler | CloudAIProvider            |
+| Create assistant UI component (embedded panel)              | Component  | Workspace shell            |
+| Add human review gate before output finalization            | Service    | Workflow Engine (existing) |
+| Wire AI outputs to Evidence Graph (source linking)          | Service    | Evidence Graph (Sprint 5)  |
+| Log all assistant actions to AiActionLog + PlatformAuditLog | Service    | Sprint 3 + Sprint 4        |
+| Add assistant panel to AuditOS workspace (pilot)            | Component  | Assistant UI               |
 
 **Validation:** Document summary works; report draft generates with evidence links; human review gate functions.
 
@@ -1381,16 +1405,16 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Expand assistant capabilities.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Create `outlineGenerationHandler` | AI Handler | CloudAIProvider |
-| Create `executiveSummaryHandler` | AI Handler | CloudAIProvider |
-| Create `notesSummaryHandler` | AI Handler | CloudAIProvider |
-| Create `bilingualDraftHandler` | AI Handler | CloudAIProvider |
-| Create `workspaceQaHandler` | AI Handler | CloudAIProvider + Evidence Graph |
-| Add DOCX/PPTX export support to Reporting Engine | Service | Reporting Engine (Sprint 6) |
-| Add assistant standalone view at `/(dashboard)/[orgSlug]/assistant/` | Route | Assistant UI |
-| Add RBAC enforcement for assistant actions | Guard | Permission Guard (Sprint 3) |
+| Task                                                                 | Type       | Dependencies                     |
+| -------------------------------------------------------------------- | ---------- | -------------------------------- |
+| Create `outlineGenerationHandler`                                    | AI Handler | CloudAIProvider                  |
+| Create `executiveSummaryHandler`                                     | AI Handler | CloudAIProvider                  |
+| Create `notesSummaryHandler`                                         | AI Handler | CloudAIProvider                  |
+| Create `bilingualDraftHandler`                                       | AI Handler | CloudAIProvider                  |
+| Create `workspaceQaHandler`                                          | AI Handler | CloudAIProvider + Evidence Graph |
+| Add DOCX/PPTX export support to Reporting Engine                     | Service    | Reporting Engine (Sprint 6)      |
+| Add assistant standalone view at `/(dashboard)/[orgSlug]/assistant/` | Route      | Assistant UI                     |
+| Add RBAC enforcement for assistant actions                           | Guard      | Permission Guard (Sprint 3)      |
 
 **Validation:** All 6 query types work; bilingual output correct; workspace-scoped Q&A respects permissions.
 
@@ -1398,15 +1422,15 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Complete route migration and harden shared governance.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Implement `/audit` → `/[orgSlug]/audit` redirect | Route | Sprint 1 org slug |
-| Update all internal links to use org-scoped routes | Refactor | Redirect |
-| Add route backward-compat layer (2 release cycles) | Route | Redirect |
-| Extend Governance Engine for per-organization policies | Service | Governance Engine (existing) |
-| Add workflow template system (predefined flows) | Service | Workflow Engine (existing) |
-| Add governance policy configuration UI | Component | Governance Engine |
-| Harden permission guard with performance caching | Guard | Sprint 3 |
+| Task                                                   | Type      | Dependencies                 |
+| ------------------------------------------------------ | --------- | ---------------------------- |
+| Implement `/audit` → `/[orgSlug]/audit` redirect       | Route     | Sprint 1 org slug            |
+| Update all internal links to use org-scoped routes     | Refactor  | Redirect                     |
+| Add route backward-compat layer (2 release cycles)     | Route     | Redirect                     |
+| Extend Governance Engine for per-organization policies | Service   | Governance Engine (existing) |
+| Add workflow template system (predefined flows)        | Service   | Workflow Engine (existing)   |
+| Add governance policy configuration UI                 | Component | Governance Engine            |
+| Harden permission guard with performance caching       | Guard     | Sprint 3                     |
 
 **Validation:** Legacy `/audit` routes redirect correctly; governance policies per organization work.
 
@@ -1414,15 +1438,15 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Begin second strategic product implementation.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Create `ContentProject` model (extends Project) | Schema | Project (Sprint 2) |
-| Create `SupplierRecord`, `LocalityAssessment`, `SpendClassification` models | Schema | ContentProject |
-| Create LocalContentOS workspace route | Route | Org-scoped routes (Sprint 9) |
-| Create LocalContentOS components | Component | Workspace shell |
-| Reuse file scanner for document intake | Service | Existing `file-scanner.ts` |
-| Wire to shared Governance + Workflow + RBAC + Audit | Integration | All shared Core services |
-| Create local content report template | Template | Reporting Engine (Sprint 6) |
+| Task                                                                        | Type        | Dependencies                 |
+| --------------------------------------------------------------------------- | ----------- | ---------------------------- |
+| Create `ContentProject` model (extends Project)                             | Schema      | Project (Sprint 2)           |
+| Create `SupplierRecord`, `LocalityAssessment`, `SpendClassification` models | Schema      | ContentProject               |
+| Create LocalContentOS workspace route                                       | Route       | Org-scoped routes (Sprint 9) |
+| Create LocalContentOS components                                            | Component   | Workspace shell              |
+| Reuse file scanner for document intake                                      | Service     | Existing `file-scanner.ts`   |
+| Wire to shared Governance + Workflow + RBAC + Audit                         | Integration | All shared Core services     |
+| Create local content report template                                        | Template    | Reporting Engine (Sprint 6)  |
 
 **Validation:** Content project created; documents uploaded; governance workflow functions.
 
@@ -1430,14 +1454,14 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Add scheduled report generation and distribution.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Add scheduled report background job (cron) | Service | Reporting Engine |
-| Add email distribution for scheduled reports | Service | Reporting Engine |
-| Create dashboard widgets (recent exports, scheduled reports) | Component | Reporting Engine |
-| Add report access logging | Service | PlatformAuditLog |
-| Add report sharing (expiring link) | Service | Reporting Engine |
-| Add custom report templates per organization | Template | ReportTemplate model |
+| Task                                                         | Type      | Dependencies         |
+| ------------------------------------------------------------ | --------- | -------------------- |
+| Add scheduled report background job (cron)                   | Service   | Reporting Engine     |
+| Add email distribution for scheduled reports                 | Service   | Reporting Engine     |
+| Create dashboard widgets (recent exports, scheduled reports) | Component | Reporting Engine     |
+| Add report access logging                                    | Service   | PlatformAuditLog     |
+| Add report sharing (expiring link)                           | Service   | Reporting Engine     |
+| Add custom report templates per organization                 | Template  | ReportTemplate model |
 
 **Validation:** Scheduled report generates and delivers; shared link expires correctly.
 
@@ -1445,16 +1469,16 @@ DATABASE_URL=postgresql://local-postgres
 
 **Goal:** Add Azure Blob provider and final security/compliance hardening.
 
-| Task | Type | Dependencies |
-|---|---|---|
-| Implement `AzureBlobStorageProvider` | Service | Storage abstraction |
-| Add client-side encryption option (enterprise tier) | Service | File Vault |
-| Add file retention policy enforcement (background job) | Service | File Vault |
-| Add compliance framework tagging | Service | Governance Engine |
-| Add data export for compliance (GDPR-style) | Service | PlatformAuditLog |
-| Security audit and penetration testing | Security | All services |
-| Performance audit and optimization | Performance | All services |
-| Update all documentation to reflect Cloud Platform | Docs | All |
+| Task                                                   | Type        | Dependencies        |
+| ------------------------------------------------------ | ----------- | ------------------- |
+| Implement `AzureBlobStorageProvider`                   | Service     | Storage abstraction |
+| Add client-side encryption option (enterprise tier)    | Service     | File Vault          |
+| Add file retention policy enforcement (background job) | Service     | File Vault          |
+| Add compliance framework tagging                       | Service     | Governance Engine   |
+| Add data export for compliance (GDPR-style)            | Service     | PlatformAuditLog    |
+| Security audit and penetration testing                 | Security    | All services        |
+| Performance audit and optimization                     | Performance | All services        |
+| Update all documentation to reflect Cloud Platform     | Docs        | All                 |
 
 **Validation:** Azure Blob upload/download works; security audit passes; retention policies enforced.
 
@@ -1464,30 +1488,30 @@ DATABASE_URL=postgresql://local-postgres
 
 ### Per-Sprint Validation
 
-| Sprint | Validation Criteria |
-|---|---|
-| 1 | New org created; existing orgs migrated; auth session carries org ID |
-| 2 | Workspace created; project created; data isolated between workspaces |
-| 3 | S3 upload/download works; unified audit log receives events; RBAC enforced |
-| 4 | Cloud AI call succeeds; fallback to deterministic; AI action logged |
-| 5 | Evidence links created; graph query returns correct relationships |
-| 6 | PDF/XLSX generated from shared engine; bilingual output correct |
-| 7 | Document summary generated; evidence linked; human review gate works |
-| 8 | All 6 assistant handlers work; workspace-scoped Q&A correct |
-| 9 | Legacy routes redirect; org-level governance policy enforced |
-| 10 | Content project lifecycle complete; governance workflow functions |
-| 11 | Scheduled report generates and delivers; shared link expires |
-| 12 | All cloud providers work; security audit passes; retention enforced |
+| Sprint | Validation Criteria                                                        |
+| ------ | -------------------------------------------------------------------------- |
+| 1      | New org created; existing orgs migrated; auth session carries org ID       |
+| 2      | Workspace created; project created; data isolated between workspaces       |
+| 3      | S3 upload/download works; unified audit log receives events; RBAC enforced |
+| 4      | Cloud AI call succeeds; fallback to deterministic; AI action logged        |
+| 5      | Evidence links created; graph query returns correct relationships          |
+| 6      | PDF/XLSX generated from shared engine; bilingual output correct            |
+| 7      | Document summary generated; evidence linked; human review gate works       |
+| 8      | All 6 assistant handlers work; workspace-scoped Q&A correct                |
+| 9      | Legacy routes redirect; org-level governance policy enforced               |
+| 10     | Content project lifecycle complete; governance workflow functions          |
+| 11     | Scheduled report generates and delivers; shared link expires               |
+| 12     | All cloud providers work; security audit passes; retention enforced        |
 
 ### Automated Testing
 
-| Test Type | Scope | Tool |
-|---|---|---|
-| Unit tests | All services, guards, handlers | Jest |
-| Integration tests | API routes, database operations | Jest + Supertest |
-| RBAC tests | All permission combinations | Jest + mock session |
-| AI handler tests | All prompt/handler combinations | Jest + mock provider |
-| E2E tests | Critical user journeys | Playwright (future) |
+| Test Type         | Scope                           | Tool                 |
+| ----------------- | ------------------------------- | -------------------- |
+| Unit tests        | All services, guards, handlers  | Jest                 |
+| Integration tests | API routes, database operations | Jest + Supertest     |
+| RBAC tests        | All permission combinations     | Jest + mock session  |
+| AI handler tests  | All prompt/handler combinations | Jest + mock provider |
+| E2E tests         | Critical user journeys          | Playwright (future)  |
 
 ### Pre-Deployment Gate
 
@@ -1512,18 +1536,18 @@ npm run backup:verify    # Data integrity check
 
 ## 23. Risks and Mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-|---|---|---|---|
-| Data migration from existing org models fails | Medium | High | Dual-write strategy; rollback plan; extensive testing with production-like data |
-| Cloud AI provider latency/cost exceeds budget | Medium | Medium | Deterministic fallback for all handlers; token usage monitoring; cost alerts |
-| Multi-tenant isolation breach | Low | Critical | Row-level security; schema-per-tenant option; regular security audits |
-| Route migration breaks existing links/SEO | Medium | Medium | Backward-compat redirect layer; maintain old routes for 2 release cycles |
-| Office AI Assistant perceived as chatbot | Medium | Medium | UI/UX explicitly labels as governed work assistant; no free-form chat; all outputs reviewable |
-| LocalContentOS workspace dependencies not ready | Medium | Medium | Shared Core services built first; LocalContentOS uses same Governance/Workflow/RBAC/Audit |
-| Performance degradation from multi-tenant queries | Medium | Medium | Indexed `organizationId`/`workspaceId`; query optimization; connection pooling |
-| Developer learning curve for new shared models | Medium | Low | Comprehensive docs; example implementations; pair programming |
-| Scope creep from product teams wanting immediate features | High | Low | Strict sprint scope; Product Owner sign-off per sprint; defer non-critical items |
-| PostgreSQL schema migrations for existing data | Medium | High | Backward-compat migrations; test with full dataset; rollback plan per migration |
+| Risk                                                      | Likelihood | Impact   | Mitigation                                                                                    |
+| --------------------------------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------- |
+| Data migration from existing org models fails             | Medium     | High     | Dual-write strategy; rollback plan; extensive testing with production-like data               |
+| Cloud AI provider latency/cost exceeds budget             | Medium     | Medium   | Deterministic fallback for all handlers; token usage monitoring; cost alerts                  |
+| Multi-tenant isolation breach                             | Low        | Critical | Row-level security; schema-per-tenant option; regular security audits                         |
+| Route migration breaks existing links/SEO                 | Medium     | Medium   | Backward-compat redirect layer; maintain old routes for 2 release cycles                      |
+| Office AI Assistant perceived as chatbot                  | Medium     | Medium   | UI/UX explicitly labels as governed work assistant; no free-form chat; all outputs reviewable |
+| LocalContentOS workspace dependencies not ready           | Medium     | Medium   | Shared Core services built first; LocalContentOS uses same Governance/Workflow/RBAC/Audit     |
+| Performance degradation from multi-tenant queries         | Medium     | Medium   | Indexed `organizationId`/`workspaceId`; query optimization; connection pooling                |
+| Developer learning curve for new shared models            | Medium     | Low      | Comprehensive docs; example implementations; pair programming                                 |
+| Scope creep from product teams wanting immediate features | High       | Low      | Strict sprint scope; Product Owner sign-off per sprint; defer non-critical items              |
+| PostgreSQL schema migrations for existing data            | Medium     | High     | Backward-compat migrations; test with full dataset; rollback plan per migration               |
 
 ---
 

@@ -1,26 +1,27 @@
 # AQLIYA Roadmap v1.1
 
 **Version:** 1.1  
-**Status:** Official execution roadmap aligned to v0.1 release scope work
+**Status:** Official execution roadmap aligned to v0.1 operational baseline  
+**Note:** LocalContentOS phase updated from "Do not start" to "Complete / hardening" to reflect existing pilot-ready implementation.
 
 ---
 
 ## Phase Summary
 
-| Phase | Name                      | Status            | Reality Note                                                                              |
-| ----- | ------------------------- | ----------------- | ----------------------------------------------------------------------------------------- |
-| 1     | AQLIYA Core Stabilization | In Progress       | Identity and architecture are established, but official-doc alignment required completion |
-| 2     | AuditOS                   | Pilot-ready       | Real and included in v0.1 scope                                                           |
-| 3     | DecisionOS Stabilization  | Active            | Real adjacent system and included in v0.1 scope                                           |
-| 4     | Office AI Assistant       | Active foundation | Real governed shared application, not future-only anymore                                 |
-| 5     | Reality Hardening         | Completed         | Sensitive APIs protected, prototypes labeled, test stack repaired                         |
-| 6     | v0.1 Scope Lock           | Current           | Official docs alignment and release-scope definition                                      |
-| 7     | LocalContentOS            | Strategic         | Do not start until v0.1 scope is locked and current systems are stabilized                |
-| 8     | Private / On-Prem Package | Strategic         | Not implemented                                                                           |
-| 9     | AQLIYA Studio             | Strategic         | Not implemented                                                                           |
-| 10    | SalesOS + LocalContactOS  | Future            | Not implemented                                                                           |
-| 11    | RiskOS + ComplianceOS     | Future            | Not implemented                                                                           |
-| 12    | LegalOS + GovOS           | Future            | Not implemented                                                                           |
+| Phase | Name                      | Status               | Reality Note                                                                                                                                                                                                    |
+| ----- | ------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | AQLIYA Core Stabilization | In Progress          | Identity and architecture are established, but official-doc alignment required completion                                                                                                                       |
+| 2     | AuditOS                   | Pilot-ready          | Real and included in v0.1 scope                                                                                                                                                                                 |
+| 3     | DecisionOS Stabilization  | Active               | Real adjacent system and included in v0.1 scope                                                                                                                                                                 |
+| 4     | Office AI Assistant       | Active foundation    | Real governed shared application, not future-only anymore                                                                                                                                                       |
+| 5     | Reality Hardening         | Completed            | Sensitive APIs protected, prototypes labeled, test stack repaired                                                                                                                                               |
+| 6     | v0.1 Scope Lock           | Current              | Official docs alignment and release-scope definition                                                                                                                                                            |
+| 7     | LocalContentOS            | Complete / hardening | L5 pilot-ready with conditions / usable v0.1. Mutation feedback loop verified (2026-05-23). Remaining: clean manual pass for review/approval/report inline forms; binary PDF/XLSX library wiring; L6 hardening. |
+| 8     | Private / On-Prem Package | Strategic            | Not implemented                                                                                                                                                                                                 |
+| 9     | AQLIYA Studio             | Strategic            | Not implemented                                                                                                                                                                                                 |
+| 10    | SalesOS + LocalContactOS  | Future               | Not implemented                                                                                                                                                                                                 |
+| 11    | RiskOS + ComplianceOS     | Future               | Not implemented                                                                                                                                                                                                 |
+| 12    | LegalOS + GovOS           | Future               | Not implemented                                                                                                                                                                                                 |
 
 ---
 
@@ -50,7 +51,7 @@
 
 ## Not Included as Implemented Product Releases
 
-- LocalContentOS
+- SalesOS standalone
 - SalesOS
 - standalone SimulationOS
 - LocalContactOS
@@ -75,7 +76,7 @@
 
 ## What to Avoid
 
-- Starting LocalContentOS implementation before the current scope is locked
-- Treating SalesOS or LocalContentOS marketing pages as released products
+- Treating SalesOS or SimulationOS marketing pages as released products
+- Overclaiming LocalContentOS as production-hardened (L6) when it is L5 with conditions
 - Presenting workflowos as a distinct product without separate domain evidence
 - Claiming On-Prem, Air-Gapped, Local AI, Studio, Model Governance, or Institutional Memory as live

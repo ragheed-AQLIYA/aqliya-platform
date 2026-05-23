@@ -7,6 +7,7 @@
 - Office AI Assistant is deterministic/governed today, not a broad cloud-AI product runtime.
 - Sunbul is real but classified as custom/client-specific, not a general platform product line.
 - workflowos is not a separate domain; it currently duplicates Sunbul implementation patterns.
+- LocalContentOS is a real governed workspace (L5 with conditions / usable v0.1), not marketing-only or unimplemented. Binary PDF/XLSX export is deferred; not L6 production-hardened. Review/approval/report inline forms may still need a clean manual pass after mutation feedback loop verification.
 
 ## 2. AI Limitations
 
@@ -47,6 +48,6 @@
 
 ## 8. Future Roadmap Limitations
 
-- LocalContentOS remains strategic and unimplemented.
+- LocalContentOS L6 production hardening, binary PDF/XLSX library export, and full end-to-end governance mutation browser verification remain open (product is L5 with conditions, not unimplemented).
 - SalesOS remains prototype-only.
 - LocalContactOS, RiskOS, ComplianceOS, LegalOS, GovOS, Studio, Model Governance, and Institutional Memory remain future work and are not release bugs.

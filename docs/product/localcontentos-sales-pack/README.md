@@ -1,7 +1,9 @@
 # LocalContentOS Sales Pack
 
-**Status:** Commercial Sales Pack for Analyst-Led Pilot — not software
-**Version:** 1.0
+> **Status superseded (2026-05-23):** LocalContentOS software workspace exists at `/local-content/*` (L5 pilot-ready with conditions). Use `docs/product/localcontentos-v0.1/pilot-onboarding-pack/` for live pilot/demo sales. This pack describes the original analyst-led pre-software pilot framing.
+
+**Status:** Commercial Sales Pack for Analyst-Led Pilot — pre-software framing (historical)  
+**Version:** 1.0  
 **Depends on:** `docs/product/localcontentos-discovery-pack/`, `docs/product/localcontentos-data-templates/`, `docs/product/localcontentos-pilot-runbook/`, `docs/product/localcontentos-mvp-spec/`
 
 ---
@@ -14,9 +16,9 @@ This pack converts the completed LocalContentOS Discovery, Data Templates, and P
 
 ## Status
 
-- **Product:** Discovery / Planned — not implemented
-- **Sales Pack:** Complete — ready for sales conversations
-- **Software:** None — no code, no schema, no routes, no UI
+- **Product:** L5 pilot-ready with conditions / usable v0.1 — workspace at `/local-content/*` (see `docs/product/localcontentos-v0.1/`)
+- **Sales Pack:** Historical pre-software analyst-led pilot framing — use pilot onboarding pack for live software demos
+- **Software:** Implemented — schema, routes, server actions, seed data, governance workflows
 
 ---
 
@@ -60,9 +62,8 @@ This pack converts the completed LocalContentOS Discovery, Data Templates, and P
 
 ## Product Boundary
 
-This pack describes an **analyst-led pilot service** — not a software product. Every sales conversation must clearly state:
+This pack originally described an **analyst-led pilot service** before software existed. For current sales:
 
-- LocalContentOS is **not implemented as software**
-- The pilot is a **service engagement** using templates and procedures
-- Outputs are **draft management materials**, not regulatory submissions
-- All local content calculations are **conceptual** until validated against official requirements
+- LocalContentOS **is implemented** as a governed workspace (L5 with conditions, not L6)
+- Live demos use `/local-content/*` with seeded data — see `docs/product/localcontentos-v0.1/pilot-onboarding-pack/`
+- Do not claim production-hardened (L6), binary PDF/XLSX export, or regulatory certification

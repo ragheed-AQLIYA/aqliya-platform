@@ -16,6 +16,12 @@
 | Office AI Assistant | Governed shared application, deterministic today, not a generic chatbot     | Overclaiming AI/runtime breadth |
 | Sunbul              | Real custom/client-specific workspace, not a default platform product claim | Product-boundary confusion      |
 
+## Safe to Demo with Explanation (LocalContentOS)
+
+| Area           | Required Explanation                                                                  | Risk                                     |
+| -------------- | ------------------------------------------------------------------------------------- | ---------------------------------------- |
+| LocalContentOS | L5 pilot-ready with conditions; real workspace and mutations; not L6; text/CSV export | Overclaiming production or certification |
+
 ## Internal Only
 
 | Area          | Reason                                                             |
@@ -31,7 +37,7 @@
 | ------------------ | ------------------------------------------------- | ------------------------------------ |
 | auditos demo route | Public guided demo with mock data                 | Live AuditOS workspace               |
 | SalesOS            | Prototype / internal preview                      | Implemented SalesOS product          |
-| LocalContentOS     | Strategic second product                          | Live LocalContentOS workspace        |
+| LocalContentOS L6  | L5 pilot-ready with conditions; text/CSV export   | Production-hardened; binary PDF/XLSX |
 | SimulationOS       | Marketing/category label or DecisionOS capability | Standalone SimulationOS product      |
 | On-Prem            | Strategic deployment direction                    | Available production On-Prem package |
 | Air-Gapped         | Strategic deployment direction                    | Available Air-Gapped deployment      |
@@ -40,20 +46,21 @@
 
 ## Area Reference
 
-| Area                | Safe Status                   |
-| ------------------- | ----------------------------- |
-| AuditOS             | Safe to show                  |
-| DecisionOS          | Safe to show with explanation |
-| Office AI Assistant | Safe to show with explanation |
-| Sunbul              | Safe to show with explanation |
-| workflowos          | Internal only                 |
-| auditos demo route  | Demo only                     |
-| SalesOS             | Do not show as implemented    |
-| organizations       | Internal only                 |
-| settings            | Internal only                 |
-| LocalContentOS      | Do not show as implemented    |
-| SimulationOS        | Do not show as implemented    |
-| On-Prem             | Do not show as implemented    |
-| Air-Gapped          | Do not show as implemented    |
-| Local AI            | Do not show as implemented    |
-| AQLIYA Studio       | Do not show as implemented    |
+| Area                | Safe Status                        |
+| ------------------- | ---------------------------------- |
+| AuditOS             | Safe to show                       |
+| DecisionOS          | Safe to show with explanation      |
+| Office AI Assistant | Safe to show with explanation      |
+| Sunbul              | Safe to show with explanation      |
+| LocalContentOS      | Safe to show with explanation      |
+| workflowos          | Internal only                      |
+| auditos demo route  | Demo only                          |
+| SalesOS             | Do not show as implemented         |
+| organizations       | Internal only                      |
+| settings            | Internal only                      |
+| LocalContentOS L6   | Do not show as production-hardened |
+| SimulationOS        | Do not show as implemented         |
+| On-Prem             | Do not show as implemented         |
+| Air-Gapped          | Do not show as implemented         |
+| Local AI            | Do not show as implemented         |
+| AQLIYA Studio       | Do not show as implemented         |

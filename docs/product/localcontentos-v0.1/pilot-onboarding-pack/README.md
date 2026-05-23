@@ -24,12 +24,14 @@
 
 ## Current Product Status
 
-| Dimension        | Status                                                    |
-| ---------------- | --------------------------------------------------------- |
-| Completion level | L5 Pilot-ready / Demo Ready                               |
-| Browser smoke    | 32/45 PASS                                                |
-| Remaining checks | 13 mutation-only (form fills) before full pilot execution |
-| Customer demo    | Safe to show with explanation                             |
+| Dimension        | Status                                                                                       |
+| ---------------- | -------------------------------------------------------------------------------------------- |
+| Completion level | L5 pilot-ready with conditions / usable v0.1                                                 |
+| Mutation loop    | Verified 2026-05-23 (`revalidatePath` + client refresh; finding create PASS on demo project) |
+| Remaining checks | Clean manual pass for review/approval/report inline forms; binary PDF/XLSX deferred          |
+| Customer demo    | Safe to show with explanation                                                                |
+
+**Evidence reference:** `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`
 
 ## Pack Contents
 

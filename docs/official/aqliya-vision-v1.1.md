@@ -1,8 +1,9 @@
 # AQLIYA v1.1 — Official Vision
 
 **Version:** 1.1  
-**Status:** Official — aligned to hardened repository reality for v0.1 scope lock  
-**Source files:** `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`
+**Status:** Official doctrine — identity, governance, and strategic positioning  
+**Source files:** `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`  
+**Note:** Implementation-status claims in this file reflect v0.1 operational baseline as of 2026-05-22. For current implementation status, see `AQLIYA_MASTER_REFERENCE.md` or inspect code.
 
 ---
 
@@ -62,7 +63,7 @@ AQLIYA is a **Private Governed Institutional Intelligence Platform**.
 | **workflowos**          | Included as custom/internal workspace   | L3 Prototype   | Internal only                 |
 | **auditos demo**        | Included as demo only                   | L1 Marketing   | Demo only                     |
 | **SalesOS**             | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
-| **LocalContentOS**      | Strategic / future                      | L1 Marketing   | Do not show as implemented    |
+| **LocalContentOS**      | Pilot-ready with conditions             | L5 Pilot-ready | Safe to show with explanation |
 
 ---
 
@@ -75,7 +76,7 @@ AQLIYA is a **Private Governed Institutional Intelligence Platform**.
 | **Office AI Assistant** | Governed shared application on AQLIYA Core | Real; not a standalone product                    |
 | **Sunbul**              | Custom/client-specific governed workspace  | Real; not a default core product claim            |
 | **workflowos**          | Custom/internal workflow route family      | Real alias/duplicate surface over Sunbul patterns |
-| **LocalContentOS**      | Strategic second product                   | Not implemented                                   |
+| **LocalContentOS**      | Strategic second product                   | Pilot-ready with conditions (L5)                  |
 | **SalesOS**             | Future governed revenue intelligence       | Prototype only                                    |
 
 ---
@@ -88,7 +89,6 @@ AQLIYA is a **Private Governed Institutional Intelligence Platform**.
 - AQLIYA Studio builder
 - Model Governance registry
 - Institutional Memory engine
-- LocalContentOS workspace
 - SalesOS backend/workflow
 - LocalContactOS backend
 - RiskOS, ComplianceOS, LegalOS, GovOS product implementations

@@ -1,8 +1,9 @@
 # AQLIYA Product Taxonomy v1.1
 
 **Version:** 1.1  
-**Status:** Official — aligned to hardened repository reality  
-**Aligned with:** `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`
+**Status:** Official — aligned to v0.1 operational baseline  
+**Aligned with:** `AQLIYA_MASTER_REFERENCE.md`, `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`  
+**Note:** Implementation-status claims in this file have been corrected to match validated code reality. See `docs/DOCUMENTATION_AUTHORITY.md` for conflict resolution rules.
 
 ---
 
@@ -87,7 +88,7 @@ AQLIYA Company
 | **workflowos**          | Custom / Client-Specific Workspace | Included as custom/internal workspace   | L3 Prototype   | Internal only                 |
 | **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing   | Demo only                     |
 | **SalesOS**             | Product / System                   | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
-| **LocalContentOS**      | Product / System                   | Strategic / future                      | L1 Marketing   | Do not show as implemented    |
+| **LocalContentOS**      | Product / System                   | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |
 | **SimulationOS**        | Marketing capability label         | Do not claim as live                    | L1 Marketing   | Do not show as implemented    |
 | **LocalContactOS**      | Product / System                   | Not implemented                         | L0 Concept     | Do not show as implemented    |
 | **RiskOS**              | Product / System                   | Not implemented                         | L0 Concept     | Do not show as implemented    |
@@ -108,6 +109,15 @@ Shared applications are governed tools built on AQLIYA Intelligence Core. They a
 - Current route family: `/assistant`, `/assistant/[taskId]`
 - Current data backing: `OfficeAiTask`, `OfficeAiOutput`, `OfficeAiFile`
 - Current boundary: deterministic/governed assistant, not a broad autonomous AI runtime
+
+### LocalContentOS
+
+- Current status: pilot-ready with conditions (L5)
+- Current route family: `/local-content/*` (12 workspace routes)
+- Current data backing: `LocalContentProject`, `LocalContentSupplier`, `LocalContentSpendRecord`, `LocalContentClassification`, `LocalContentFinding`, `LocalContentEvidence`, `LocalContentApproval`, seed data
+- Current evidence: mutation feedback loop verified (2026-05-23); local-content tests (30); finding create PASS on `/local-content/projects/lc-project-demo-001/findings`
+- Current limitation: not L6 production-hardened; binary PDF/XLSX export deferred; review/approval/report inline forms may need clean manual pass; no edit/delete UI for all entities
+- Must not be claimed as production-hardened (L6) or AI-autonomous classification
 
 ---
 

@@ -1,5 +1,7 @@
 # AQLIYA Repository Discovery Audit
 
+> **Partial supersession (2026-05-23):** LocalContentOS is now implemented (L5 pilot-ready with conditions / usable v0.1 at `/local-content/*`). Rows in this audit that describe LocalContentOS as marketing-only are historical snapshots. Current authority: `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`.
+
 ## 1. Executive Summary
 
 - What has actually been built: a real Next.js monolith with working backend-heavy implementations for `AuditOS`, `DecisionOS`, a governed `Office AI Assistant`, and a custom/client-specific workspace under `Sunbul` / `workflowos`, plus platform/org/audit-log plumbing.

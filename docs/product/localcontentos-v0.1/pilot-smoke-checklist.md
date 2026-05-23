@@ -1,8 +1,8 @@
 # LocalContentOS v0.1 — Pilot Smoke Checklist
 
-**Status:** 45/45 code-inspection PASS. **32/45 browser PASS. 13/45 mutation-only (requires form fill).**
+**Status:** L5 pilot-ready with conditions. Mutation feedback loop verified (2026-05-23). Item 8 (finding create) **PASS** on `/local-content/projects/lc-project-demo-001/findings`. Review/approval/report inline mutations may still need clean manual pass.
 
-**Key:** ☑ = verified via code inspection / build. ✅ = verified in browser. ⬜ = mutation only (requires human form fill).
+**Key:** ☑ = verified via code inspection / build. ✅ = verified in browser. ⬜ = pending manual verification.
 
 ---
 
@@ -61,7 +61,7 @@
 | #   | Check           | Expected                      | Code | Browser |
 | --- | --------------- | ----------------------------- | ---- | ------- |
 | 21  | Click النتائج   | Findings page loads           | ☑    | ✅      |
-| 22  | Add new finding | Form submits, finding appears | ☑    | ⬜      |
+| 22  | Add new finding | Form submits, finding appears | ☑    | ✅      |
 | 23  | Severity badge  | Color-coded badge visible     | ☑    | ✅      |
 
 ## Review
@@ -115,11 +115,20 @@
 
 ## Execution Records
 
+### Mutation Feedback Loop Verification (2026-05-23)
+
+- **Method:** Code fix + focused browser smoke on `next start -p 3001`
+- **Fix:** `revalidatePath` after write mutations + client `ActionResult` + `router.refresh()`
+- **Verified mutations:** project create, supplier, spend, CSV valid/invalid, evidence metadata, file upload
+- **Finding create:** **PASS** on `/local-content/projects/lc-project-demo-001/findings` (item 22 / checklist item 8 in pilot flow)
+- **CLI:** `prisma generate`, `tsc`, `lint`, `build`, local-content tests (30, 4 suites) — all PASS
+- **Still pending clean manual pass:** review, approval, report generate/download inline server forms
+
 ### Browser Smoke (2026-05-22) — Automated Playwright
 
 - **Method:** Playwright browser automation via Playwright MCP
 - **Browser-verified:** 32/45 PASS (navigation, rendering, data visibility, badges, claims)
-- **Mutation-only (not tested):** 13/45 — requires human form fill (add supplier, spend, evidence, findings, CSV import, generate report, download)
+- **Superseded for mutation status by:** 2026-05-23 mutation feedback loop verification (see above)
 - **Notes:** Login confirmed working. All 12 workspace routes render with real seed data. Audit trail shows 6 events with Arabic labels. Approval shows "ليس شهادة امتثال" non-certification notice. No forbidden claims found in browser.
 - **Defects found:** None blocking. Binary PDF/XLSX remains accepted P2 limitation.
 

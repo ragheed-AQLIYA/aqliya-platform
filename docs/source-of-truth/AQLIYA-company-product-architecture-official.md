@@ -1,4 +1,4 @@
-# AQLIYA Company Product Architecture Official
+# AQLIYA Company Product Architecture
 
 ## Official Definition
 
@@ -15,12 +15,21 @@ AQLIYA Company
 └── Market Solutions
 ```
 
-## Official Products
+## Current Official Products
 
 1. DecisionOS
 2. SimulationOS
 3. SalesOS
-4. Edit OS
-5. Local Content OS
-6. AuditOS / Financial Intelligence
-7. Content Authority OS
+4. Local ContentOS
+5. AuditOS / Financial Intelligence
+
+---
+
+## Pre-v1.1 / Removed Concepts
+
+The following products appeared in earlier versions of the architecture but are not part of the current official taxonomy. They are retained here for historical context only.
+
+- **Edit OS** — Removed from active taxonomy. Not in current code or documentation.
+- **Content Authority OS** — Removed from active taxonomy. Not in current code or documentation.
+
+These concepts must not be presented as current active official products. See `docs/DOCUMENTATION_AUTHORITY.md` for the current documentation hierarchy.

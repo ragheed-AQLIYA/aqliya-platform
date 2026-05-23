@@ -1,5 +1,7 @@
 # LocalContentOS v0.1 Browser Smoke Final Report
 
+> **Status note (2026-05-23):** Mutation feedback loop verification superseded the "13 mutation-only remain" framing. Current authority: `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`. Finding create PASS on `/local-content/projects/lc-project-demo-001/findings`. Review/approval/report inline forms may still need clean manual pass.
+
 ## 1. Executive Verdict
 
 **PASS — LocalContentOS L5 Pilot-ready confirmed for first customer demo.**

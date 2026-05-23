@@ -1,7 +1,9 @@
 # LocalContentOS Discovery & Pilot Pack
 
-**Status:** Discovery / Planned (not implemented)
-**Version:** 1.0
+> **Status superseded (2026-05-23):** LocalContentOS workspace is now implemented at `/local-content/*` (L5 pilot-ready with conditions / usable v0.1). Current authority: `docs/product/localcontentos-v0.1/` and `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`. This discovery pack remains as historical product-design input; do not use it to claim the product is unimplemented.
+
+**Status:** Discovery / Planned (historical — software now exists)  
+**Version:** 1.0  
 **Last Updated:** May 2026
 
 ---
@@ -12,7 +14,7 @@ This pack documents the complete product discovery and pilot preparation for **L
 
 It covers product definition, target customers, workflow design, data requirements, logic model, pilot offer, demo storyline, commercial positioning, and roadmap.
 
-**This is not an implementation document.** No code, database schema, routes, or UI components exist for LocalContentOS. This pack is the product discovery track running in parallel with AuditOS execution.
+**This is not an implementation document.** It captured pre-build discovery. The implemented workspace, schema, routes, and UI are documented in `docs/product/localcontentos-v0.1/`.
 
 ---
 
@@ -60,12 +62,12 @@ It covers product definition, target customers, workflow design, data requiremen
 
 ## Relationship to Official Roadmap
 
-| Document                                        | Relationship                                                                                                                   |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `docs/official/aqliya-roadmap-v1.1.md`          | LocalContentOS is Phase 5 (3–6 months). This pack is the pre-implementation discovery work.                                    |
-| `docs/official/aqliya-product-taxonomy-v1.1.md` | LocalContentOS status: marketing-only, strategic second product. This pack does not change that status.                        |
-| `docs/systems/local-content-os/README.md`       | System documentation for LocalContentOS (status: marketing-only). This pack is a product discovery artifact, not a system doc. |
-| `docs/product/README.md`                        | Product documentation index. This pack is listed there as a product discovery artifact.                                        |
+| Document                                        | Relationship                                                                                |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `docs/official/aqliya-roadmap-v1.1.md`          | LocalContentOS is Phase 5 (3–6 months). This pack is the pre-implementation discovery work. |
+| `docs/official/aqliya-product-taxonomy-v1.1.md` | LocalContentOS status: L5 pilot-ready with conditions / usable v0.1. See truth-sync report. |
+| `docs/systems/local-content-os/README.md`       | System documentation for LocalContentOS workspace status.                                   |
+| `docs/product/README.md`                        | Product documentation index. This pack is listed there as a product discovery artifact.     |
 
 ---
 

@@ -6,37 +6,38 @@ AQLIYA v0.1 is the **first complete usable platform release scope** for the repo
 
 ## 2. Included in v0.1
 
-| System                           | Inclusion Status                        | Maturity       | Customer Demo Status          | Evidence                                                             | Notes                                       |
-| -------------------------------- | --------------------------------------- | -------------- | ----------------------------- | -------------------------------------------------------------------- | ------------------------------------------- |
-| AQLIYA Platform                  | Included in v0.1                        | L4 Usable v0.1 | Safe to show with explanation | Platform routes, auth, governance, docs, validation                  | Platform scope, not one product             |
-| AuditOS                          | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  | `/audit/*`, `Audit*` schema, actions, exports, audit trail           | First proof product                         |
-| DecisionOS                       | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation | `/decisions/*`, decision schema/actions, approvals, reports, signals | Real active adjacent system                 |
-| Office AI Assistant              | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation | `/assistant/*`, `OfficeAi*` models, actions, platform audit logs     | Not a standalone product                    |
-| Sunbul                           | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation | `/sunbul/*`, `Sunbul*` models, export/storage/review flows           | Custom/client-specific workspace            |
-| workflowos                       | Included as custom/internal workspace   | L3 Prototype   | Internal only                 | `/workflowos/*` routes reuse Sunbul implementation                   | Alias/duplicate custom surface              |
-| Platform audit logs / governance | Included in v0.1                        | L4 Usable v0.1 | Internal only                 | `PlatformAuditLog`, governance runtime, diagnostics routes           | Internal operator-facing foundation         |
-| Public marketing site            | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  | `/`, `/products/*`, company pages                                    | Marketing only, not proof of implementation |
-| Custom product inquiry           | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  | `/custom-product`, `/api/custom-product-submit`                      | Commercial funnel                           |
-| auditos guided demo              | Included as demo only                   | L1 Marketing   | Demo only                     | `/auditos/*`, explicit mock/demo data                                | Must stay labeled demo                      |
+| System                           | Inclusion Status                        | Maturity       | Customer Demo Status          | Evidence                                                              | Notes                                       |
+| -------------------------------- | --------------------------------------- | -------------- | ----------------------------- | --------------------------------------------------------------------- | ------------------------------------------- |
+| AQLIYA Platform                  | Included in v0.1                        | L4 Usable v0.1 | Safe to show with explanation | Platform routes, auth, governance, docs, validation                   | Platform scope, not one product             |
+| AuditOS                          | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  | `/audit/*`, `Audit*` schema, actions, exports, audit trail            | First proof product                         |
+| DecisionOS                       | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation | `/decisions/*`, decision schema/actions, approvals, reports, signals  | Real active adjacent system                 |
+| Office AI Assistant              | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation | `/assistant/*`, `OfficeAi*` models, actions, platform audit logs      | Not a standalone product                    |
+| Sunbul                           | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation | `/sunbul/*`, `Sunbul*` models, export/storage/review flows            | Custom/client-specific workspace            |
+| workflowos                       | Included as custom/internal workspace   | L3 Prototype   | Internal only                 | `/workflowos/*` routes reuse Sunbul implementation                    | Alias/duplicate custom surface              |
+| Platform audit logs / governance | Included in v0.1                        | L4 Usable v0.1 | Internal only                 | `PlatformAuditLog`, governance runtime, diagnostics routes            | Internal operator-facing foundation         |
+| Public marketing site            | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  | `/`, `/products/*`, company pages                                     | Marketing only, not proof of implementation |
+| Custom product inquiry           | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  | `/custom-product`, `/api/custom-product-submit`                       | Commercial funnel                           |
+| auditos guided demo              | Included as demo only                   | L1 Marketing   | Demo only                     | `/auditos/*`, explicit mock/demo data                                 | Must stay labeled demo                      |
+| LocalContentOS                   | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation | `/local-content/*`, `LocalContent*` schema, server actions, seed data | Not L6; binary PDF/XLSX deferred            |
 
 ## 3. Not Included as Implemented Products
 
-| System                  | Current Status | Why Not Included                                                | Allowed Claim                             | Forbidden Claim                        |
-| ----------------------- | -------------- | --------------------------------------------------------------- | ----------------------------------------- | -------------------------------------- |
-| LocalContentOS          | L1 Marketing   | No implemented workspace, schema, or workflow                   | Strategic second product                  | LocalContentOS is live                 |
-| SalesOS                 | L3 Prototype   | Static/prototype surface only, no backend workflow              | Prototype / internal preview              | SalesOS product is implemented         |
-| SimulationOS standalone | L1 Marketing   | No standalone product runtime; only category/marketing presence | DecisionOS contains simulation capability | SimulationOS is a live product         |
-| LocalContactOS          | L0 Concept     | No runtime implementation                                       | Future product                            | LocalContactOS is implemented          |
-| RiskOS                  | L0 Concept     | No runtime implementation                                       | Future product                            | RiskOS is implemented                  |
-| ComplianceOS            | L0 Concept     | No runtime implementation                                       | Future product                            | ComplianceOS is implemented            |
-| LegalOS                 | L0 Concept     | No runtime implementation                                       | Future product                            | LegalOS is implemented                 |
-| GovOS                   | L0 Concept     | No runtime implementation                                       | Future product                            | GovOS is implemented                   |
-| AQLIYA Studio           | L0 Concept     | No builder/runtime implementation                               | Strategic layer                           | Studio is live                         |
-| On-Prem                 | L0 Concept     | No production deployment package                                | Strategic deployment direction            | AQLIYA supports production On-Prem now |
-| Air-Gapped              | L0 Concept     | No air-gapped runtime/package                                   | Strategic deployment direction            | Air-Gapped is available                |
-| Local AI                | L0 Concept     | Local provider/runtime not implemented                          | Strategic future capability               | Local AI runtime is available          |
-| Model Governance        | L0 Concept     | No live registry/policy layer                                   | Strategic future capability               | Model Governance is implemented        |
-| Institutional Memory    | L0 Concept     | No implemented memory engine                                    | Strategic future capability               | Institutional Memory is implemented    |
+| System                  | Current Status     | Why Not Included                                                | Allowed Claim                                | Forbidden Claim                           |
+| ----------------------- | ------------------ | --------------------------------------------------------------- | -------------------------------------------- | ----------------------------------------- |
+| LocalContentOS L6 scope | L5 with conditions | Workspace exists; binary PDF/XLSX and L6 hardening not complete | L5 pilot-ready with conditions / usable v0.1 | L6 production-ready; binary PDF/XLSX live |
+| SalesOS                 | L3 Prototype       | Static/prototype surface only, no backend workflow              | Prototype / internal preview                 | SalesOS product is implemented            |
+| SimulationOS standalone | L1 Marketing       | No standalone product runtime; only category/marketing presence | DecisionOS contains simulation capability    | SimulationOS is a live product            |
+| LocalContactOS          | L0 Concept         | No runtime implementation                                       | Future product                               | LocalContactOS is implemented             |
+| RiskOS                  | L0 Concept         | No runtime implementation                                       | Future product                               | RiskOS is implemented                     |
+| ComplianceOS            | L0 Concept         | No runtime implementation                                       | Future product                               | ComplianceOS is implemented               |
+| LegalOS                 | L0 Concept         | No runtime implementation                                       | Future product                               | LegalOS is implemented                    |
+| GovOS                   | L0 Concept         | No runtime implementation                                       | Future product                               | GovOS is implemented                      |
+| AQLIYA Studio           | L0 Concept         | No builder/runtime implementation                               | Strategic layer                              | Studio is live                            |
+| On-Prem                 | L0 Concept         | No production deployment package                                | Strategic deployment direction               | AQLIYA supports production On-Prem now    |
+| Air-Gapped              | L0 Concept         | No air-gapped runtime/package                                   | Strategic deployment direction               | Air-Gapped is available                   |
+| Local AI                | L0 Concept         | Local provider/runtime not implemented                          | Strategic future capability                  | Local AI runtime is available             |
+| Model Governance        | L0 Concept         | No live registry/policy layer                                   | Strategic future capability                  | Model Governance is implemented           |
+| Institutional Memory    | L0 Concept         | No implemented memory engine                                    | Strategic future capability                  | Institutional Memory is implemented       |
 
 ## 4. v0.1 Product Boundaries
 
@@ -46,7 +47,8 @@ AQLIYA v0.1 is the **first complete usable platform release scope** for the repo
 - Office AI Assistant is a governed shared application.
 - Sunbul is a custom/client workflow workspace.
 - workflowos is an internal/custom workflow route family reusing Sunbul implementation.
-- SalesOS and LocalContentOS are not to be sold as implemented products yet.
+- SalesOS is prototype only and must not be sold as an implemented product.
+- LocalContentOS is included as L5 pilot-ready with conditions (usable v0.1 workspace). Do not claim L6 production-hardened or binary PDF/XLSX export as live.
 
 ## 5. v0.1 Readiness Level
 
@@ -66,11 +68,13 @@ Can say:
 - DecisionOS is real and active.
 - Office AI Assistant is a governed shared application.
 - Sunbul is a real custom/client-specific workflow workspace.
+- LocalContentOS is a real L5 pilot-ready workspace (usable v0.1 with conditions; text/CSV export).
 - AQLIYA Cloud is active.
 
 Cannot say:
 
-- SalesOS or LocalContentOS are implemented products.
+- LocalContentOS is L6 production-hardened or has live binary PDF/XLSX export.
+- SalesOS is an implemented product.
 - workflowos is a separate product from Sunbul.
 - On-Prem, Air-Gapped, or Local AI are live.
 - AQLIYA Studio, Model Governance, or Institutional Memory are implemented.

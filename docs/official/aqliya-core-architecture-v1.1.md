@@ -1,8 +1,9 @@
 # AQLIYA Core Architecture v1.1
 
 **Version:** 1.1  
-**Status:** Official architecture baseline aligned to v0.1 scope lock  
-**Current tech stack:** Next.js + TypeScript + PostgreSQL + Prisma
+**Status:** Official architecture baseline aligned to v0.1 operational baseline  
+**Current tech stack:** Next.js + TypeScript + PostgreSQL + Prisma  
+**Note:** Implementation-status claims updated to match code reality. LocalContentOS is now included under active domain surfaces.
 
 ---
 
@@ -60,6 +61,7 @@
 | **Office AI Assistant**          | Governed shared application         | `/assistant/*`                            | Real, usable v0.1                              |
 | **Sunbul**                       | Custom/client-specific workspace    | `/sunbul/*`                               | Real, usable v0.1                              |
 | **workflowos**                   | Alias / duplicate custom workspace  | `/workflowos/*`                           | Real route family, internal/custom duplication |
+| **LocalContentOS**               | Product workspace                   | `/local-content/*`                        | Real, pilot-ready with conditions (L5)         |
 | **auditos**                      | Demo family                         | `/auditos/*`                              | Public mock/demo only                          |
 | **organizations/settings/sales** | Prototype/internal preview surfaces | `/organizations/*`, `/settings`, `/sales` | Not v0.1-complete operational modules          |
 
@@ -75,6 +77,7 @@
 | `(dashboard)/settings/*`  | Platform diagnostics + generic settings preview | Internal platform / prototype |
 | `audit/*`                 | AuditOS governed workspace                      | Product workspace             |
 | `auditos/*`               | AuditOS guided demo                             | Demo                          |
+| `local-content/*`         | LocalContentOS workspace                        | Product workspace             |
 | `sunbul/*`                | Sunbul custom workspace                         | Custom workspace              |
 | `workflowos/*`            | workflowos alias route family                   | Custom workspace alias        |
 | `api/*`                   | Route handlers and operational endpoints        | Internal/public API as scoped |
@@ -86,5 +89,5 @@
 1. AuditOS and DecisionOS are the main real system domains currently included in v0.1 scope.
 2. Office AI Assistant is real, but belongs under shared applications, not the product family.
 3. Sunbul and workflowos are real, but belong under custom/internal workspace classification.
-4. SalesOS and LocalContentOS are not implemented operational systems.
+4. LocalContentOS is implemented as L5 pilot-ready with conditions / usable v0.1 after mutation feedback loop verification (2026-05-23). SalesOS is not implemented as an operational system.
 5. On-Prem, Air-Gapped, Local AI runtime, Model Governance, Institutional Memory, and Studio are architectural direction only.

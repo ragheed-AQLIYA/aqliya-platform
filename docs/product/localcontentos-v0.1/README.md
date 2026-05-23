@@ -1,8 +1,22 @@
-# LocalContentOS v0.1 — Product Scope Lock
+# LocalContentOS v0.1 — Product Pack
 
-**Status:** Scope locked — ready for implementation
-**Classification:** Strategic second product under AQLIYA
-**Current maturity:** L1 Marketing → targeting L4 Usable v0.1
+**Status:** L5 pilot-ready with conditions / usable v0.1 (after mutation feedback loop verification)  
+**Classification:** Strategic second product under AQLIYA  
+**Current maturity:** L5 with conditions — not L6 production-hardened
+
+## Evidence (2026-05-23)
+
+- Mutation feedback loop fix: `revalidatePath` after write mutations + client `ActionResult` handling + `router.refresh()`.
+- Focused verification on clean `next start` (:3001): project, supplier, spend, CSV, evidence mutations; isolated finding create **PASS** on `/local-content/projects/lc-project-demo-001/findings` (no hard refresh; form closes on success).
+- CLI validation passed: `npx prisma generate`, `npx tsc --noEmit`, `npm run lint`, `npm run build`, `npm test -- --testPathPatterns=local-content` (30 tests, 4 suites).
+
+## Remaining limitations
+
+- Not L6 production-hardened.
+- Binary PDF/XLSX export deferred (text/CSV only).
+- Review/approval/report inline server forms may still need clean manual pass.
+- No full edit/delete UI for all entities.
+- No AI autonomous classification.
 
 ## Pack Contents
 
@@ -17,6 +31,8 @@
 | `ai-boundaries.md`             | AI allowed/forbidden actions                        |
 | `seed-data-plan.md`            | Demo dataset for development and pilot              |
 | `implementation-plan.md`       | Phased implementation sequence                      |
+| `pilot-smoke-checklist.md`     | Pilot browser smoke checklist                       |
+| `pilot-onboarding-pack/`       | Customer pilot onboarding documents                 |
 
 ## Design Principles
 
@@ -29,5 +45,5 @@
 
 ## Target Release
 
-- v0.1 = first complete usable product, not production-hardened.
-- Scope locked before Phase 1 implementation begins.
+- v0.1 = first complete usable product, not production-hardened (L6).
+- Workspace implemented at `/local-content/*` (12 routes + 1 download API).

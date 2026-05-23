@@ -10,6 +10,11 @@ depth_level: Level 2 - Domain Theory
 related_documents: 00.02, 21.01, 21.04, 21.05, 21.09
 ---
 
+> **Status:** Theoretical background — governs source-of-truth rules within the theoretical reference system only.  
+> **Authority:** Level 7 — see `docs/DOCUMENTATION_AUTHORITY.md`.  
+> **This file does NOT govern product implementation status, route decisions, or documentation hierarchy outside the theoretical reference system.**  
+> For overall documentation authority, see `docs/DOCUMENTATION_AUTHORITY.md`.
+
 # Source of Truth Rules
 
 ## 1. Purpose
@@ -160,18 +165,18 @@ As the system grows, source of truth rules become more important. More documents
 
 ## 19. Related Documents
 
-| ID | Document | Relationship |
-|---|---|---|
-| 00.02 | 00-governance-rules.md | Governance rules that source of truth rules support |
-| 21.01 | Documentation Writing Standards | Writing standards for clear, unambiguous positions |
-| 21.04 | Versioning Rules | Version determines current authoritative version |
-| 21.05 | Ownership Rules | Owner responds to contradiction escalations |
-| 21.09 | Relationship Between Docs | Cross-document relationship mapping |
+| ID    | Document                        | Relationship                                        |
+| ----- | ------------------------------- | --------------------------------------------------- |
+| 00.02 | 00-governance-rules.md          | Governance rules that source of truth rules support |
+| 21.01 | Documentation Writing Standards | Writing standards for clear, unambiguous positions  |
+| 21.04 | Versioning Rules                | Version determines current authoritative version    |
+| 21.05 | Ownership Rules                 | Owner responds to contradiction escalations         |
+| 21.09 | Relationship Between Docs       | Cross-document relationship mapping                 |
 
 ## 20. Version History
 
-| Version | Date | Author | Changes |
-|---|---|---|---|
-| 1.0 | 2026-05-08 | Founding Team | Approved as part of AQLIYA Core Doctrine v1.0 |
-| 0.2 | 2026-05-08 | Founding Team | Reviewed for documentation governance consistency and promoted to Reviewed |
-| 0.1 | 2026-05-08 | Founding Team | Initial draft |
+| Version | Date       | Author        | Changes                                                                    |
+| ------- | ---------- | ------------- | -------------------------------------------------------------------------- |
+| 1.0     | 2026-05-08 | Founding Team | Approved as part of AQLIYA Core Doctrine v1.0                              |
+| 0.2     | 2026-05-08 | Founding Team | Reviewed for documentation governance consistency and promoted to Reviewed |
+| 0.1     | 2026-05-08 | Founding Team | Initial draft                                                              |

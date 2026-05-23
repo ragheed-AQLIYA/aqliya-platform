@@ -1,5 +1,8 @@
 # AQLIYA Theoretical Reference System
 
+> **Status:** Level 7 — Background only. See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
+> This system provides intellectual foundation and domain theory. It does not govern implementation status, product taxonomy, route decisions, or documentation hierarchy.
+
 ## What This Is
 
 This is the structured intellectual foundation of AQLIYA. It is not generic documentation — it is a long-term reference system that defines the company's theory, philosophy, and principles across 21 parts.
@@ -21,6 +24,7 @@ Every document here exists to anchor product decisions, architecture choices, ma
 AQLIYA is not building a feature. AQLIYA is building a company platform of AI operating systems, with Enterprise Decision Intelligence remaining one important strategic doctrine inside that broader architecture.
 
 Without a structured theoretical foundation, the company risks:
+
 - Drifting into random feature-building
 - Losing coherence across product, engineering, and GTM
 - Being unable to defend its positioning with enterprise buyers
@@ -60,10 +64,12 @@ Follow the 8-phase writing agenda defined in `00-writing-agenda.md`.
 This 21-part system supports the broader AQLIYA documentation architecture through a conceptual alignment layer.
 
 ### Phase 1 — Architecture Overview
+
 - `theoretical-documentation-system.md` — Architecture overview and role definition
 - `theoretical-reference-mapping.md` — Detailed mapping from the 21-part structure to the 13-section conceptual model
 
 ### Phase 2 — Compatibility Gateways and Concept Indexes
+
 - `gateways/` — Topic gateways organized by the 13-section conceptual model
   - `financial-intelligence-gateway.md`
   - `audit-methodology-gateway.md`

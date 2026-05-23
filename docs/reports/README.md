@@ -1,5 +1,8 @@
 # Reports
 
+> **Status:** Level 6 — Evidence only. See `docs/DOCUMENTATION_AUTHORITY.md`.  
+> Reports provide evidence of implementation progress and validation results. They do not define doctrine, product taxonomy, or highest authority.
+
 Repository for stabilization, audit, documentation, and QA reports.
 
 | Directory        | Description                                                                               |

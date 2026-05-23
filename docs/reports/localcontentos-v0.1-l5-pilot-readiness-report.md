@@ -1,5 +1,7 @@
 # LocalContentOS v0.1 — L5 Pilot Readiness Report
 
+> **Status note (2026-05-23):** Mutation feedback loop verified; usable v0.1 status updated. See `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md` for current authority. Sections below record the 2026-05-21 CLI readiness pass.
+
 ## 1. Executive Summary
 
 L5 pilot-readiness pass is complete. Evidence file upload is implemented using the shared platform storage. File export (text/CSV) is implemented with authenticated download API route. Evidence status update and download buttons are wired in the UI. A 45-item pilot smoke checklist is created. No schema changes were needed.

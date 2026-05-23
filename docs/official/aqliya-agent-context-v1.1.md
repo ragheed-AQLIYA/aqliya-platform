@@ -2,7 +2,8 @@
 
 **Purpose:** Mandatory context for any coding or documentation agent working on the AQLIYA repository.  
 **Version:** 1.1  
-**Status:** Official — aligned to hardened v0.1 reality
+**Status:** Official — agent context for v0.1 operational baseline  
+**Note:** LocalContentOS status corrected from "not implemented" to "pilot-ready with conditions (L5)". For current status, see `AQLIYA_MASTER_REFERENCE.md`.
 
 ---
 
@@ -28,7 +29,9 @@
 4. Office AI Assistant is a real governed shared application, not a standalone product.
 5. Sunbul is a real custom/client-specific governed workspace.
 6. workflowos is a real route family but currently an alias/duplicate custom workflow surface, not a separate product.
-7. SalesOS and LocalContentOS are not implemented operational products.
+
+- LocalContentOS is implemented as L5 pilot-ready with conditions / usable v0.1 after mutation feedback loop verification (2026-05-23). SalesOS is not implemented as an operational product.
+
 8. Private/On-Prem, Air-Gapped, Local AI, Studio, Model Governance, and Institutional Memory are not implemented.
 
 ---
@@ -52,16 +55,16 @@ Use these exact labels when classifying repository reality:
 
 ## Current v0.1 Scope Baseline
 
-| Area                | Status                                  |
-| ------------------- | --------------------------------------- |
-| AuditOS             | Included as pilot-ready product         |
-| DecisionOS          | Included as active adjacent system      |
-| Office AI Assistant | Included as governed shared application |
-| Sunbul              | Included as custom/internal workspace   |
-| workflowos          | Included as custom/internal workspace   |
-| auditos             | Included as demo only                   |
-| SalesOS             | Prototype / internal preview            |
-| LocalContentOS      | Strategic / future                      |
+| Area                | Status                                         |
+| ------------------- | ---------------------------------------------- |
+| AuditOS             | Included as pilot-ready product                |
+| DecisionOS          | Included as active adjacent system             |
+| Office AI Assistant | Included as governed shared application        |
+| Sunbul              | Included as custom/internal workspace          |
+| workflowos          | Included as custom/internal workspace          |
+| auditos             | Included as demo only                          |
+| SalesOS             | Prototype / internal preview                   |
+| LocalContentOS      | Pilot-ready with conditions / usable v0.1 (L5) |
 
 ---
 
@@ -75,7 +78,7 @@ Do not claim these as live unless code, validation, and routes prove them:
 - AQLIYA Studio builder
 - Model Governance registry
 - Institutional Memory engine
-- LocalContentOS workspace
+- LocalContactOS backend
 - SalesOS backend
 - LocalContactOS backend
 - RiskOS / ComplianceOS / LegalOS / GovOS product implementations

@@ -6,20 +6,21 @@ This document defines what can and cannot be claimed during pilot customer discu
 
 These claims are true and verifiable from the repository:
 
-| Claim                                                           | Evidence                                                                                                               |
-| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| LocalContentOS is a governed local content assessment workspace | All 12 workspace routes render with real data. RBAC, audit trail, review, approval are implemented.                    |
-| Supplier register with locality classification                  | Suppliers page shows locality badges (محلي/غير محلي/مشترك) with ownership and workforce data.                          |
-| Spend records with category and supplier links                  | Spend page renders records with amounts, categories, and supplier references.                                          |
-| Evidence vault with type and status badges                      | Evidence page renders items with type badges (شهادة, عقد, فاتورة, etc.) and status badges (مرفوع, مرتبط, مراجع, etc.). |
-| Rule-based classification display                               | Classification page shows supplier-level local content percentages.                                                    |
-| Findings register with severity levels                          | Findings page shows items with severity badges (منخفض, متوسط, مرتفع, شديد).                                            |
-| Human review workflow                                           | Review page with submit/comment/return cycle. Governance notice: "خطوة بشرية حوكمية".                                  |
-| Approval workflow with governance record                        | Approval page with approve/reject, decision badge, identity + timestamp. Non-certification notice: "ليس شهادة امتثال". |
-| Report generation with disclaimer                               | Reports page with generated records, disclaimer text, download support.                                                |
-| Full audit trail                                                | Audit trail page with 17 Arabic action labels, actor names, timestamps, expandable details.                            |
-| Text/CSV export is available                                    | Current export generator produces text/CSV output with disclaimer and governance metadata.                             |
-| Built on AQLIYA Intelligence Core                               | Reuses shared governance, RBAC, audit, storage, and tenant isolation from the platform Core.                           |
+| Claim                                                           | Evidence                                                                                                                                                           |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| LocalContentOS is a governed local content assessment workspace | All 12 workspace routes render with real data. RBAC, audit trail, review, approval are implemented.                                                                |
+| Supplier register with locality classification                  | Suppliers page shows locality badges (محلي/غير محلي/مشترك) with ownership and workforce data.                                                                      |
+| Spend records with category and supplier links                  | Spend page renders records with amounts, categories, and supplier references.                                                                                      |
+| Evidence vault with type and status badges                      | Evidence page renders items with type badges (شهادة, عقد, فاتورة, etc.) and status badges (مرفوع, مرتبط, مراجع, etc.).                                             |
+| Rule-based classification display                               | Classification page shows supplier-level local content percentages.                                                                                                |
+| Findings register with severity levels                          | Findings page shows items with severity badges (منخفض, متوسط, مرتفع, شديد).                                                                                        |
+| Human review workflow                                           | Review page with submit/comment/return cycle. Governance notice: "خطوة بشرية حوكمية".                                                                              |
+| Approval workflow with governance record                        | Approval page with approve/reject, decision badge, identity + timestamp. Non-certification notice: "ليس شهادة امتثال".                                             |
+| Report generation with disclaimer                               | Reports page with generated records, disclaimer text, download support.                                                                                            |
+| Full audit trail                                                | Audit trail page with 17 Arabic action labels, actor names, timestamps, expandable details.                                                                        |
+| Text/CSV export is available                                    | Current export generator produces text/CSV output with disclaimer and governance metadata.                                                                         |
+| Mutation feedback loop (forms refresh after write)              | Verified 2026-05-23: `revalidatePath` + client `ActionResult` + `router.refresh()`. Finding create PASS on `/local-content/projects/lc-project-demo-001/findings`. |
+| Built on AQLIYA Intelligence Core                               | Reuses shared governance, RBAC, audit, storage, and tenant isolation from the platform Core.                                                                       |
 
 ## Forbidden Claims
 

@@ -68,6 +68,6 @@ Allowed examples:
 Forbidden examples:
 
 - SalesOS is live.
-- LocalContentOS workspace is implemented.
+- LocalContentOS is production-hardened (L6).
 - AQLIYA has a production On-Prem package.
 - AQLIYA has Local AI runtime, Studio, Model Governance, or Institutional Memory live.

@@ -25,25 +25,26 @@ AQLIYA v0.1 is the **first scope-locked usable platform release candidate** for 
 | Public marketing site          | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  |
 | Custom product inquiry         | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  |
 | auditos guided demo            | Included as demo only                   | L1 Marketing   | Demo only                     |
+| LocalContentOS                 | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |
 
-## 4. Not Included as Implemented
+## 4. Not Included as Fully Production-Hardened
 
-| Area                    | Current Classification       | Correct Claim                             | Forbidden Claim                           |
-| ----------------------- | ---------------------------- | ----------------------------------------- | ----------------------------------------- |
-| LocalContentOS          | Strategic / future           | Strategic second product                  | LocalContentOS is implemented             |
-| SalesOS                 | Prototype / internal preview | Prototype only                            | SalesOS is implemented                    |
-| SimulationOS standalone | Do not claim as live         | DecisionOS includes simulation capability | SimulationOS is a live standalone product |
-| LocalContactOS          | Not implemented              | Future product                            | LocalContactOS is implemented             |
-| RiskOS                  | Not implemented              | Future product                            | RiskOS is implemented                     |
-| ComplianceOS            | Not implemented              | Future product                            | ComplianceOS is implemented               |
-| LegalOS                 | Not implemented              | Future product                            | LegalOS is implemented                    |
-| GovOS                   | Not implemented              | Future product                            | GovOS is implemented                      |
-| AQLIYA Studio           | Strategic / future           | Strategic custom systems layer            | AQLIYA Studio is live                     |
-| On-Prem                 | Not implemented              | Strategic deployment direction            | Production On-Prem package exists         |
-| Air-Gapped              | Not implemented              | Strategic deployment direction            | Air-Gapped deployment is available        |
-| Local AI                | Not implemented              | Strategic runtime direction               | Local AI runtime is live                  |
-| Model Governance        | Not implemented              | Strategic future capability               | Model Governance is implemented           |
-| Institutional Memory    | Not implemented              | Strategic future capability               | Institutional Memory is implemented       |
+| Area                     | Current Classification       | Correct Claim                             | Forbidden Claim                           |
+| ------------------------ | ---------------------------- | ----------------------------------------- | ----------------------------------------- |
+| LocalContentOS L6 export | L5 with conditions           | Usable v0.1 workspace; text/CSV export    | Production-hardened; binary PDF/XLSX live |
+| SalesOS                  | Prototype / internal preview | Prototype only                            | SalesOS is implemented                    |
+| SimulationOS standalone  | Do not claim as live         | DecisionOS includes simulation capability | SimulationOS is a live standalone product |
+| LocalContactOS           | Not implemented              | Future product                            | LocalContactOS is implemented             |
+| RiskOS                   | Not implemented              | Future product                            | RiskOS is implemented                     |
+| ComplianceOS             | Not implemented              | Future product                            | ComplianceOS is implemented               |
+| LegalOS                  | Not implemented              | Future product                            | LegalOS is implemented                    |
+| GovOS                    | Not implemented              | Future product                            | GovOS is implemented                      |
+| AQLIYA Studio            | Strategic / future           | Strategic custom systems layer            | AQLIYA Studio is live                     |
+| On-Prem                  | Not implemented              | Strategic deployment direction            | Production On-Prem package exists         |
+| Air-Gapped               | Not implemented              | Strategic deployment direction            | Air-Gapped deployment is available        |
+| Local AI                 | Not implemented              | Strategic runtime direction               | Local AI runtime is live                  |
+| Model Governance         | Not implemented              | Strategic future capability               | Model Governance is implemented           |
+| Institutional Memory     | Not implemented              | Strategic future capability               | Institutional Memory is implemented       |
 
 ## 5. What Changed Before Release
 
@@ -76,6 +77,7 @@ AQLIYA v0.1 is the **first scope-locked usable platform release candidate** for 
 - workflowos remains an internal/custom alias over Sunbul implementation.
 - Build and lint warnings remain documented and accepted.
 - Prototype/internal routes such as `/sales`, `/organizations`, `/settings`, and `/monitoring` remain present and must keep their restricted framing.
+- LocalContentOS is L5 pilot-ready with conditions (usable v0.1). Binary PDF/XLSX export is deferred; review/approval/report inline forms may still need clean manual pass.
 
 ## 8. Demo and Commercial Safety
 
@@ -85,11 +87,13 @@ Allowed positioning:
 - DecisionOS is real and active.
 - Office AI Assistant is a governed shared application.
 - Sunbul is a real custom/client-specific workspace.
+- LocalContentOS is a real L5 pilot-ready workspace (usable v0.1 with conditions; text/CSV export).
 - AQLIYA Cloud is active.
 
 Forbidden positioning:
 
-- SalesOS or LocalContentOS are implemented products.
+- LocalContentOS is a real L5 pilot-ready workspace with conditions (usable v0.1). Do not claim L6 production-hardened or binary PDF/XLSX export as live.
+- SalesOS is not an implemented product.
 - workflowos is a separate product from Sunbul.
 - On-Prem, Air-Gapped, or Local AI are live.
 - AQLIYA Studio, Model Governance, or Institutional Memory are implemented.
@@ -106,7 +110,7 @@ After release tagging, the next phase should be chosen deliberately:
 
 - final customer demo preparation
 - first customer pilot
-- LocalContentOS product implementation
+- LocalContentOS L6 hardening and binary PDF/XLSX export wiring
 - AI abstraction hardening
 - deployment/on-prem preparation
 

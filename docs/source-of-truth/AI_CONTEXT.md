@@ -1,6 +1,7 @@
 # AQLIYA AI Context
 
 Before any AI/agent task, read these files in order:
+
 1. AGENTS.md
 2. docs/official/aqliya-vision-v1.1.md (highest authority — platform identity)
 3. docs/official/aqliya-implementation-rules-v1.1.md (mandatory rules)
@@ -14,10 +15,11 @@ Before any AI/agent task, read these files in order:
 11. docs/source-of-truth/READINESS_GATES.md
 
 Operating rules:
+
 - Do not guess. Do not change route strategy unless explicitly instructed.
 - /audit is the governed AuditOS workspace. AuditOS is the first proof product.
 - /auditos is the guided demo.
-- AuditOS is active primary. DecisionOS is active adjacent. LocalContentOS is strategic second product (currently marketing-only). SalesOS is prototype.
+- AuditOS is active primary. DecisionOS is active adjacent. LocalContentOS is strategic second product with real workspace at `/local-content/*` (L5 pilot-ready with conditions / usable v0.1). SalesOS is prototype.
 - SimulationOS is marketing-only.
 - AQLIYA is a Private Governed Institutional Intelligence Platform — NOT AuditOS only, NOT SaaS only, NOT an AI chatbot.
 - Private/On-Prem and Air-Gapped are strategic future deployment models — not yet implemented.

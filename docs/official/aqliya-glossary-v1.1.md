@@ -1,7 +1,8 @@
 # AQLIYA Glossary v1.1
 
 **Version:** 1.1  
-**Status:** Official terminology reference aligned to v0.1 scope lock
+**Status:** Official terminology reference aligned to v0.1 operational baseline  
+**Note:** LocalContentOS definition updated to reflect current implementation status.
 
 ---
 
@@ -32,21 +33,21 @@
 
 ## Product and System Terms
 
-| Term                    | Definition                                                                                                     |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------- |
-| **AuditOS**             | The first proof product under AQLIYA. Real, governed, and pilot-ready candidate.                               |
-| **DecisionOS**          | Real active adjacent decision-governance system under AQLIYA.                                                  |
-| **Office AI Assistant** | Real governed shared application for work-assistant tasks. Not a standalone product and not a generic chatbot. |
-| **Sunbul**              | Real custom/client-specific governed workspace.                                                                |
-| **workflowos**          | Real alias/duplicate custom workflow surface over Sunbul patterns. Not a separate product/domain today.        |
-| **SalesOS**             | Future governed revenue intelligence product. Current repo surface is prototype only.                          |
-| **LocalContentOS**      | Strategic second product. Current repo presence is marketing/docs only.                                        |
-| **SimulationOS**        | Marketing/category label today; not a standalone implemented product.                                          |
-| **LocalContactOS**      | Future institutional relationship intelligence system. Not implemented.                                        |
-| **RiskOS**              | Future risk intelligence system. Not implemented.                                                              |
-| **ComplianceOS**        | Future compliance system. Not implemented.                                                                     |
-| **LegalOS**             | Future legal intelligence assistant. Not implemented.                                                          |
-| **GovOS**               | Future government institutional intelligence system. Not implemented.                                          |
+| Term                    | Definition                                                                                                                                                                                                                                                                                                                   |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **AuditOS**             | The first proof product under AQLIYA. Real, governed, and pilot-ready candidate.                                                                                                                                                                                                                                             |
+| **DecisionOS**          | Real active adjacent decision-governance system under AQLIYA.                                                                                                                                                                                                                                                                |
+| **Office AI Assistant** | Real governed shared application for work-assistant tasks. Not a standalone product and not a generic chatbot.                                                                                                                                                                                                               |
+| **Sunbul**              | Real custom/client-specific governed workspace.                                                                                                                                                                                                                                                                              |
+| **workflowos**          | Real alias/duplicate custom workflow surface over Sunbul patterns. Not a separate product/domain today.                                                                                                                                                                                                                      |
+| **SalesOS**             | Future governed revenue intelligence product. Current repo surface is prototype only.                                                                                                                                                                                                                                        |
+| **LocalContentOS**      | Strategic second product. Pilot-ready with conditions / usable v0.1 (L5). Workspace at `/local-content/*` (12 routes), server actions, seed data, bilingual UI, evidence upload, review/approval, text/CSV exports, audit trail. Mutation feedback loop verified (2026-05-23). See `AQLIYA_MASTER_REFERENCE.md` for details. |
+| **SimulationOS**        | Marketing/category label today; not a standalone implemented product.                                                                                                                                                                                                                                                        |
+| **LocalContactOS**      | Future institutional relationship intelligence system. Not implemented.                                                                                                                                                                                                                                                      |
+| **RiskOS**              | Future risk intelligence system. Not implemented.                                                                                                                                                                                                                                                                            |
+| **ComplianceOS**        | Future compliance system. Not implemented.                                                                                                                                                                                                                                                                                   |
+| **LegalOS**             | Future legal intelligence assistant. Not implemented.                                                                                                                                                                                                                                                                        |
+| **GovOS**               | Future government institutional intelligence system. Not implemented.                                                                                                                                                                                                                                                        |
 
 ---
 
