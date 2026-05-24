@@ -1,14 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+type ActionResult = { ok: boolean; error?: string; code?: string };
+
+function formatActionError(error: string, code?: string): string {
+  if (code === "FORBIDDEN" || error === "Access denied") {
+    return "لا تملك صلاحية تنفيذ هذا الإجراء";
+  }
+  return error || "حدث خطأ";
+}
+
 interface FindingFormProps {
   projectId: string;
-  createAction: (projectId: string, formData: FormData) => Promise<unknown>;
+  createAction: (
+    projectId: string,
+    formData: FormData,
+  ) => Promise<ActionResult>;
   onSuccess?: () => void;
 }
 
@@ -17,17 +30,27 @@ export function FindingForm({
   createAction,
   onSuccess,
 }: FindingFormProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(formData: FormData) {
     setError(null);
+    setPending(true);
     try {
-      await createAction(projectId, formData);
+      const res = await createAction(projectId, formData);
+      if (!res.ok) {
+        setError(formatActionError(res.error ?? "", res.code));
+        return;
+      }
       setOpen(false);
+      router.refresh();
       onSuccess?.();
     } catch (e) {
       setError(e instanceof Error ? e.message : "حدث خطأ");
+    } finally {
+      setPending(false);
     }
   }
 
@@ -92,8 +115,8 @@ export function FindingForm({
           </div>
           {error && <p className="text-xs text-red-600">{error}</p>}
           <div className="flex gap-2">
-            <Button type="submit" size="sm">
-              حفظ
+            <Button type="submit" size="sm" disabled={pending}>
+              {pending ? "جارٍ الحفظ..." : "حفظ"}
             </Button>
             <Button
               type="button"

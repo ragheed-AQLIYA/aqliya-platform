@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,7 +9,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createLocalContentProjectAction } from "@/actions/localcontent-actions";
 import { Plus, XCircle, CheckCircle2, Building2 } from "lucide-react";
 
+function formatActionError(error: string, code?: string): string {
+  if (code === "FORBIDDEN" || error === "Access denied") {
+    return "لا تملك صلاحية تنفيذ هذا الإجراء";
+  }
+  return error || "حدث خطأ في إنشاء المشروع";
+}
+
 export function ProjectCreateForm({ onSuccess }: { onSuccess?: () => void }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,9 +33,10 @@ export function ProjectCreateForm({ onSuccess }: { onSuccess?: () => void }) {
       if (res.ok) {
         const project = res.data as { id: string; name: string };
         setCreated(project.name);
+        router.refresh();
         onSuccess?.();
       } else {
-        setError(res.error);
+        setError(formatActionError(res.error, res.code));
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "حدث خطأ في إنشاء المشروع");

@@ -3,11 +3,7 @@
 import crypto from "crypto";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import {
-  requireUserContext,
-  getCurrentUser,
-  isExpectedAccessDeniedError,
-} from "@/lib/auth";
+import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { getStorageProvider } from "@/lib/platform/storage";
 import {
@@ -19,7 +15,6 @@ import {
   createSupplier,
   listSpendRecords,
   createSpendRecord,
-  listClassifications,
   createClassification,
   listEvidence,
   createEvidenceEntry,
@@ -39,14 +34,13 @@ import {
   resolveProjectContext,
   ProjectAccessError,
 } from "@/lib/local-content/guards";
-import {
-  parseLocalContentCSV,
-  type ValidImportRow,
-} from "@/lib/local-content/import";
+import { parseLocalContentCSV } from "@/lib/local-content/import";
 import {
   validateRequired,
   validatePositiveNumber,
   validatePercentage,
+  validateSupplierLocality,
+  validateOwnershipType,
 } from "@/lib/local-content/validation";
 
 // ─── Result types ───
@@ -70,6 +64,30 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
     console.error("[LocalContentOS Action]", message);
     return { ok: false, error: message };
   }
+}
+
+function getOptionalTrimmedValue(
+  formData: FormData,
+  key: string,
+): string | null {
+  const value = formData.get(key);
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function parseOptionalPercentageField(
+  formData: FormData,
+  key: string,
+): number | null {
+  const raw = getOptionalTrimmedValue(formData, key);
+  if (raw === null) return null;
+  const value = Number(raw);
+  if (!Number.isFinite(value)) {
+    throw new Error(`LocalContentOS validation: ${key} must be a valid number`);
+  }
+  validatePercentage(value, key);
+  return value;
 }
 
 // ─── Platform audit helper ───
@@ -162,6 +180,7 @@ export async function createLocalContentProjectAction(
       },
     });
 
+    revalidateLocalContentPaths(project.id);
     return project;
   });
 }
@@ -184,6 +203,11 @@ export async function updateLocalContentProjectAction(
       targetId: projectId,
       metadata: { newStatus: status },
     });
+    revalidateLocalContentPaths(projectId, [
+      "review",
+      "approval",
+      "audit-trail",
+    ]);
     return project;
   });
 }
@@ -208,20 +232,32 @@ export async function createLocalContentSupplierAction(
     const name = formData.get("name") as string;
     validateRequired(name, "name");
 
+    const localityClassification = getOptionalTrimmedValue(
+      formData,
+      "localityClassification",
+    );
+    if (localityClassification) {
+      validateSupplierLocality(localityClassification);
+    }
+
+    const ownershipType = getOptionalTrimmedValue(formData, "ownershipType");
+    if (ownershipType) {
+      validateOwnershipType(ownershipType);
+    }
+
     const supplier = await createSupplier(
       {
         projectId,
         name,
-        crNumber: (formData.get("crNumber") as string) || undefined,
-        localityClassification:
-          (formData.get("localityClassification") as string) || undefined,
-        localContentPercentage: formData.get("localContentPercentage")
-          ? parseFloat(formData.get("localContentPercentage") as string)
-          : undefined,
-        ownershipType: (formData.get("ownershipType") as string) || undefined,
-        workforceLocalPct: formData.get("workforceLocalPct")
-          ? parseFloat(formData.get("workforceLocalPct") as string)
-          : undefined,
+        crNumber: getOptionalTrimmedValue(formData, "crNumber") || undefined,
+        localityClassification: localityClassification || undefined,
+        localContentPercentage:
+          parseOptionalPercentageField(formData, "localContentPercentage") ??
+          undefined,
+        ownershipType: ownershipType || undefined,
+        workforceLocalPct:
+          parseOptionalPercentageField(formData, "workforceLocalPct") ??
+          undefined,
       },
       { id: user.id, name: user.name },
     );
@@ -235,6 +271,7 @@ export async function createLocalContentSupplierAction(
       metadata: { supplierName: supplier.name },
     });
 
+    revalidateLocalContentPaths(projectId, ["suppliers", "classification"]);
     return supplier;
   });
 }
@@ -253,24 +290,40 @@ export async function updateLocalContentSupplierAction(
       throw new ProjectAccessError("Supplier not found", "NOT_FOUND");
     }
 
+    const name = (formData.get("name") as string | null)?.trim() || "";
+    validateRequired(name, "name");
+
+    const localityClassification = getOptionalTrimmedValue(
+      formData,
+      "localityClassification",
+    );
+    if (localityClassification) {
+      validateSupplierLocality(localityClassification);
+    }
+
+    const ownershipType = getOptionalTrimmedValue(formData, "ownershipType");
+    if (ownershipType) {
+      validateOwnershipType(ownershipType);
+    }
+
     const supplier = await prisma.localContentSupplier.update({
       where: { id: supplierId },
       data: {
-        name: (formData.get("name") as string) || existing.name,
-        crNumber: formData.get("crNumber")
-          ? (formData.get("crNumber") as string)
+        name,
+        crNumber: formData.has("crNumber")
+          ? getOptionalTrimmedValue(formData, "crNumber")
           : existing.crNumber,
-        localityClassification: formData.get("localityClassification")
-          ? (formData.get("localityClassification") as string)
+        localityClassification: formData.has("localityClassification")
+          ? localityClassification
           : existing.localityClassification,
-        localContentPercentage: formData.get("localContentPercentage")
-          ? parseFloat(formData.get("localContentPercentage") as string)
+        localContentPercentage: formData.has("localContentPercentage")
+          ? parseOptionalPercentageField(formData, "localContentPercentage")
           : existing.localContentPercentage,
-        ownershipType: formData.get("ownershipType")
-          ? (formData.get("ownershipType") as string)
+        ownershipType: formData.has("ownershipType")
+          ? ownershipType
           : existing.ownershipType,
-        workforceLocalPct: formData.get("workforceLocalPct")
-          ? parseFloat(formData.get("workforceLocalPct") as string)
+        workforceLocalPct: formData.has("workforceLocalPct")
+          ? parseOptionalPercentageField(formData, "workforceLocalPct")
           : existing.workforceLocalPct,
       },
     });
@@ -284,6 +337,7 @@ export async function updateLocalContentSupplierAction(
       metadata: { supplierName: supplier.name },
     });
 
+    revalidateLocalContentPaths(projectId, ["suppliers", "classification"]);
     return supplier;
   });
 }
@@ -332,6 +386,7 @@ export async function createLocalContentSpendRecordAction(
       metadata: { amount: record.amount, category: record.category },
     });
 
+    revalidateLocalContentPaths(projectId, ["spend", "classification"]);
     return record;
   });
 }
@@ -409,6 +464,11 @@ export async function importLocalContentSpendCsvAction(
       },
     });
 
+    revalidateLocalContentPaths(projectId, [
+      "spend",
+      "suppliers",
+      "classification",
+    ]);
     return {
       created,
       rejected: result.rejectedRows.length + errors.length,
@@ -453,6 +513,7 @@ export async function classifyLocalContentSpendRecordAction(
       metadata: { localPercentage, basis: classification.classificationBasis },
     });
 
+    revalidateLocalContentPaths(projectId, ["classification"]);
     return classification;
   });
 }
@@ -499,6 +560,7 @@ export async function createLocalContentEvidenceAction(
       metadata: { filename, evidenceType: evidence.evidenceType },
     });
 
+    revalidateLocalContentPaths(projectId, ["evidence"]);
     return evidence;
   });
 }
@@ -531,6 +593,7 @@ export async function updateLocalContentEvidenceStatusAction(
       metadata: { newStatus: status },
     });
 
+    revalidateLocalContentPaths(projectId, ["evidence"]);
     return { id: updated.id, status: updated.status };
   });
 }
@@ -616,6 +679,7 @@ export async function uploadLocalContentEvidenceFileAction(
       metadata: { filename: resolvedFilename, storageKey, sizeBytes },
     });
 
+    revalidateLocalContentPaths(projectId, ["evidence"]);
     return {
       id: evidence.id,
       filename: evidence.filename,
@@ -738,6 +802,7 @@ export async function createLocalContentFindingAction(
       },
     });
 
+    revalidateLocalContentPaths(projectId, ["findings"]);
     return finding;
   });
 }
@@ -767,6 +832,11 @@ export async function submitLocalContentReviewAction(
       metadata: { action: review.action },
     });
 
+    revalidateLocalContentPaths(projectId, [
+      "review",
+      "approval",
+      "audit-trail",
+    ]);
     return review;
   });
 }
@@ -804,6 +874,11 @@ export async function submitLocalContentApprovalAction(
       );
     }
 
+    revalidateLocalContentPaths(projectId, [
+      "approval",
+      "review",
+      "audit-trail",
+    ]);
     return approval;
   });
 }
@@ -906,13 +981,37 @@ export async function generateLocalContentReportAction(
       metadata: { reportType, format },
     });
 
+    revalidateLocalContentPaths(projectId, ["reports"]);
     return report;
   });
 }
 
 // ─── Revalidation helper ───
 
-export async function revalidateLocalContentProject(projectId: string) {
+type LocalContentPathSegment =
+  | "suppliers"
+  | "spend"
+  | "classification"
+  | "evidence"
+  | "findings"
+  | "review"
+  | "approval"
+  | "reports"
+  | "audit-trail";
+
+function revalidateLocalContentPaths(
+  projectId: string,
+  segments: LocalContentPathSegment[] = [],
+) {
   revalidatePath("/local-content");
+  revalidatePath("/local-content/projects");
   revalidatePath(`/local-content/projects/${projectId}`);
+  for (const segment of segments) {
+    revalidatePath(`/local-content/projects/${projectId}/${segment}`);
+  }
+}
+
+/** @deprecated Prefer revalidateLocalContentPaths — kept for existing callers */
+export async function revalidateLocalContentProject(projectId: string) {
+  revalidateLocalContentPaths(projectId);
 }

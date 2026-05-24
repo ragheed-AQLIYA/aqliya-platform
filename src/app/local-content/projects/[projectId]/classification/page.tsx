@@ -14,7 +14,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { ArrowLeft, BarChart3, TrendingUp } from "lucide-react";
+import { ArrowLeft, BarChart3 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -93,10 +93,16 @@ export default async function ClassificationPage({
         />
       ) : (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
             <Badge variant="outline" className="bg-amber-50 text-amber-700">
               تصنيف قاعدي — ليس ذكاءً اصطناعياً. التصنيف بشري ومراجع.
             </Badge>
+            <Link
+              href={`/local-content/projects/${projectId}/suppliers`}
+              className="text-xs font-medium text-primary hover:underline"
+            >
+              تحديث بيانات الموردين والتصنيف
+            </Link>
           </div>
           <div className="grid gap-2">
             {spendRecords.map((sr) => {

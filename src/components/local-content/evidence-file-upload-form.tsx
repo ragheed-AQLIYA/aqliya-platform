@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +13,13 @@ interface EvidenceFileUploadFormProps {
   projectId: string;
   suppliers: { id: string; name: string }[];
   onSuccess?: () => void;
+}
+
+function formatActionError(error: string, code?: string): string {
+  if (code === "FORBIDDEN" || error === "Access denied") {
+    return "لا تملك صلاحية تنفيذ هذا الإجراء";
+  }
+  return error || "حدث خطأ في الرفع";
 }
 
 const EVIDENCE_TYPE_LABELS: Record<string, string> = {
@@ -28,6 +36,7 @@ export function EvidenceFileUploadForm({
   suppliers,
   onSuccess,
 }: EvidenceFileUploadFormProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,9 +75,12 @@ export function EvidenceFileUploadForm({
           fileHash: undefined,
           evidenceType: (formData.get("evidenceType") as string) || "other",
         });
+        setOpen(false);
+        setResult(null);
+        router.refresh();
         onSuccess?.();
       } else {
-        setError(res.error);
+        setError(formatActionError(res.error, res.code));
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "حدث خطأ في الرفع");

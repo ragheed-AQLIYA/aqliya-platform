@@ -3,19 +3,19 @@ import {
   getLocalContentProjectAction,
   listLocalContentSuppliersAction,
   createLocalContentSupplierAction,
+  updateLocalContentSupplierAction,
 } from "@/actions/localcontent-actions";
 import {
   DashboardLayout,
   PageHeader,
   EmptyState,
   DevPhaseBadge,
-  LocalContentStatusBadge,
 } from "@/components/local-content/local-content-shell";
 import { SupplierForm } from "@/components/local-content/supplier-form";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { ArrowLeft, Building2, Users, TrendingUp } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -116,6 +116,25 @@ export default async function SuppliersPage({
                   )}
                 </div>
               )}
+              <div className="mt-3">
+                <SupplierForm
+                  projectId={projectId}
+                  supplierId={s.id}
+                  updateAction={updateLocalContentSupplierAction}
+                  initialValues={{
+                    name: s.name,
+                    crNumber: s.crNumber,
+                    localityClassification: s.localityClassification,
+                    ownershipType: s.ownershipType,
+                    localContentPercentage: s.localContentPercentage,
+                    workforceLocalPct: s.workforceLocalPct,
+                  }}
+                  buttonLabel="تعديل بيانات المورد"
+                  title={`تحديث بيانات المورد: ${s.name}`}
+                  submitLabel="حفظ التعديلات"
+                  triggerVariant="outline"
+                />
+              </div>
             </Card>
           ))}
         </div>

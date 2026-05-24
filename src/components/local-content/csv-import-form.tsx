@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,13 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { importLocalContentSpendCsvAction } from "@/actions/localcontent-actions";
 import { Upload, CheckCircle2, XCircle } from "lucide-react";
+
+function formatActionError(error: string, code?: string): string {
+  if (code === "FORBIDDEN" || error === "Access denied") {
+    return "لا تملك صلاحية تنفيذ هذا الإجراء";
+  }
+  return error || "حدث خطأ في الاستيراد";
+}
 
 interface CsvImportFormProps {
   projectId: string;
@@ -18,6 +26,7 @@ export function CsvImportForm({
   projectId,
   onImportComplete,
 }: CsvImportFormProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{
@@ -40,9 +49,10 @@ export function CsvImportForm({
     const res = await importLocalContentSpendCsvAction(projectId, csvText);
     if (res.ok) {
       setResult(res.data);
+      router.refresh();
       onImportComplete?.();
     } else {
-      setError(res.error);
+      setError(formatActionError(res.error, res.code));
     }
     setLoading(false);
   }
