@@ -13,6 +13,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ReportGenerationButton } from "@/components/local-content/report-generation-button";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -125,25 +126,13 @@ export default async function ReportsPage({
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
         {REPORT_TYPES.map(({ type, label, icon }) => (
-          <form
+          <ReportGenerationButton
             key={type}
-            action={async () => {
-              "use server";
-              await generateLocalContentReportAction(projectId, type, "pdf");
-            }}
-          >
-            <Button
-              type="submit"
-              variant="outline"
-              className="w-full h-auto py-4 flex flex-col items-center gap-2"
-            >
-              {icon}
-              <span className="text-sm">{label}</span>
-              <Badge variant="outline" className="text-[9px]">
-                توليد
-              </Badge>
-            </Button>
-          </form>
+            projectId={projectId}
+            type={type}
+            label={label}
+            icon={icon}
+          />
         ))}
       </div>
 

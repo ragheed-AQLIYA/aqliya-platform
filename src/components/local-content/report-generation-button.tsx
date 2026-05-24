@@ -1,0 +1,74 @@
+"use client";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { generateLocalContentReportAction } from "@/actions/localcontent-actions";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { AlertCircle } from "lucide-react";
+
+interface ReportGenerationButtonProps {
+  projectId: string;
+  type: string;
+  label: string;
+  icon: React.ReactNode;
+}
+
+export function ReportGenerationButton({
+  projectId,
+  type,
+  label,
+  icon,
+}: ReportGenerationButtonProps) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = React.useState<string | null>(null);
+
+  const handleClick = () => {
+    setError(null);
+    startTransition(async () => {
+      const result = await generateLocalContentReportAction(
+        projectId,
+        type,
+        "pdf",
+      );
+      if (!result.ok) {
+        setError(result.error?.message || "فشل في توليد التقرير");
+      } else {
+        router.refresh();
+      }
+    });
+  };
+
+  return (
+    <div className="w-full">
+      <Button
+        onClick={handleClick}
+        disabled={pending}
+        variant="outline"
+        className="w-full h-auto py-4 flex flex-col items-center gap-2"
+      >
+        {pending ? (
+          <>
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-muted-foreground border-t-foreground" />
+            <span className="text-sm">جارٍ التوليد...</span>
+          </>
+        ) : (
+          <>
+            {icon}
+            <span className="text-sm">{label}</span>
+            <Badge variant="outline" className="text-[9px]">
+              توليد
+            </Badge>
+          </>
+        )}
+      </Button>
+      {error && (
+        <div className="mt-1 flex items-center gap-1 text-[10px] text-red-600">
+          <AlertCircle className="h-3 w-3" />
+          <span>{error}</span>
+        </div>
+      )}
+    </div>
+  );
+}
