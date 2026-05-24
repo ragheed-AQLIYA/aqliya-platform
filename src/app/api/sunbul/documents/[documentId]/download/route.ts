@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/auth";
 import { retrieveSunbulDocument } from "@/lib/sunbul/storage";
 
 export async function GET(
@@ -8,6 +9,8 @@ export async function GET(
   const { documentId } = await params;
 
   try {
+    await getCurrentUser();
+
     const docRecord = await import("@/lib/prisma").then((m) =>
       m.prisma.sunbulDocument.findUnique({
         where: { id: documentId },
@@ -41,6 +44,12 @@ export async function GET(
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to serve file";
+    if (message === "Unauthenticated") {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 },
+      );
+    }
     if (message.includes("not found") || message.includes("not stored")) {
       return NextResponse.json({ error: message }, { status: 404 });
     }

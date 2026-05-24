@@ -38,9 +38,5 @@ export function checkRateLimit(
   };
 }
 
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, entry] of rateMap.entries()) {
-    if (entry.resetAt < now) rateMap.delete(key);
-  }
-}, 60_000);
+// No periodic cleanup — entries are checked lazily in checkRateLimit.
+// This avoids setInterval which is unavailable in Edge runtime.

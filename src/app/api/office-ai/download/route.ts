@@ -13,17 +13,18 @@ function getAllowedDownloadFormat(
 }
 
 export async function GET(request: NextRequest) {
-  const outputId = request.nextUrl.searchParams.get("outputId");
-  const format = getAllowedDownloadFormat(
-    request.nextUrl.searchParams.get("format"),
-  );
-
-  if (!outputId) {
-    return new NextResponse("Missing outputId parameter", { status: 400 });
-  }
-
   try {
     const user = await requireUserContext("VIEWER");
+
+    const outputId = request.nextUrl.searchParams.get("outputId");
+    const format = getAllowedDownloadFormat(
+      request.nextUrl.searchParams.get("format"),
+    );
+
+    if (!outputId) {
+      return new NextResponse("Missing outputId parameter", { status: 400 });
+    }
+
     const output = await prisma.officeAiOutput.findUnique({
       where: { id: outputId },
       include: {
