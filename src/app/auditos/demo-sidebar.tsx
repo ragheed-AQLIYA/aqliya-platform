@@ -19,37 +19,37 @@ const steps = [
     label: "نظرة عامة",
     href: "/auditos",
     icon: Sparkles,
-    desc: "Gulf Trading Co. FY2025",
+    desc: "مسار عرض ثابت",
   },
   {
     label: "ميزان المراجعة",
     href: "/auditos/trial-balance",
     icon: FileSpreadsheet,
-    desc: "استيراد البيانات",
+    desc: "بيانات عرض ثابتة",
   },
   {
     label: "تصنيف الحسابات",
     href: "/auditos/mapping",
     icon: GitBranch,
-    desc: "الربط بالمعايير",
+    desc: "ربط توضيحي بالمعايير",
   },
   {
     label: "القوائم المالية",
     href: "/auditos/statements",
     icon: FileText,
-    desc: "الدخل والمركز المالي",
+    desc: "مخرجات تجريبية فقط",
   },
   {
     label: "الأدلة والملاحظات",
     href: "/auditos/evidence",
     icon: FolderOpen,
-    desc: "المستندات والنتائج",
+    desc: "أدلة معقمة للعرض",
   },
   {
     label: "التتبع",
     href: "/auditos/traceability",
     icon: Link2,
-    desc: "المسار الكامل",
+    desc: "سجل عرض ثابت",
   },
 ];
 
@@ -74,10 +74,10 @@ export function DemoSidebar() {
       <div className="flex-1 space-y-1 overflow-y-auto p-3">
         <div className="mb-2 rounded-md bg-muted/50 px-3 py-2">
           <p className="text-xs font-bold text-muted-foreground">
-            تجربة نظام المراجعة
+            تجربة AuditOS العامة
           </p>
           <p className="text-[10px] text-muted-foreground/70">
-            عرض AuditOS الإرشادي
+            بيانات ثابتة، قراءة فقط، بلا تنزيلات
           </p>
         </div>
 

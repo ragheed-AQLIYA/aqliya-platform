@@ -1,4 +1,4 @@
-import { getDemoAuditEvents, getDemoAiOutputs } from "@/lib/audit/demo-data";
+import { getDemoAuditEvents, getDemoAiOutputs } from "../demo-data";
 import { StepNav } from "../step-nav";
 import {
   GuidedDemoPanel,
@@ -6,18 +6,24 @@ import {
   MetricCard,
   TraceabilityChain,
 } from "@/components/enterprise";
+import {
+  getSafeDemoActorLabel,
+  getSafeDemoModelLabel,
+  getSafeDemoEventDescription,
+  sanitizeDemoNarrative,
+} from "../demo-safety";
 
 const eventTypeLabels: Record<string, { label: string; color: string }> = {
   "engagement.created": {
-    label: "إنشاء الارتباط",
+    label: "تهيئة السيناريو",
     color: "bg-gray-100 text-gray-700",
   },
   "team.assigned": {
-    label: "تعيين الفريق",
+    label: "تجهيز الأدوار",
     color: "bg-gray-100 text-gray-700",
   },
   "trial_balance.uploaded": {
-    label: "رفع ميزان المراجعة",
+    label: "إدراج ميزان العرض",
     color: "bg-blue-100 text-blue-700",
   },
   "mapping.ai_suggested": {
@@ -25,7 +31,7 @@ const eventTypeLabels: Record<string, { label: string; color: string }> = {
     color: "bg-purple-100 text-purple-700",
   },
   "mapping.confirmed": {
-    label: "تأكيد التصنيف",
+    label: "اعتماد التصنيف",
     color: "bg-green-100 text-green-700",
   },
   "validation.completed": {
@@ -33,11 +39,11 @@ const eventTypeLabels: Record<string, { label: string; color: string }> = {
     color: "bg-blue-100 text-blue-700",
   },
   "evidence.uploaded": {
-    label: "رفع دليل",
+    label: "ربط دليل تجريبي",
     color: "bg-teal-100 text-teal-700",
   },
   "evidence.accepted": {
-    label: "قبول دليل",
+    label: "مراجعة دليل",
     color: "bg-green-100 text-green-700",
   },
   "signal.generated": {
@@ -57,7 +63,7 @@ const eventTypeLabels: Record<string, { label: string; color: string }> = {
     color: "bg-purple-100 text-purple-700",
   },
   "recommendation.created": {
-    label: "إنشاء توصية",
+    label: "مراجعة توصية",
     color: "bg-teal-100 text-teal-700",
   },
   "recommendation.state_changed": {
@@ -69,7 +75,7 @@ const eventTypeLabels: Record<string, { label: string; color: string }> = {
     color: "bg-amber-100 text-amber-700",
   },
   "engagement.state_changed": {
-    label: "تغيير حالة الارتباط",
+    label: "تقدم سيناريو العرض",
     color: "bg-indigo-100 text-indigo-700",
   },
 };
@@ -88,8 +94,8 @@ export default function AuditosTraceability() {
           مسار التدقيق من البداية إلى المخرجات
         </h1>
         <p className="mt-2 text-muted-foreground">
-          {events.length} حدثًا مسجلًا · كل قرار موثق ومرتبط بالبيانات التي بُني
-          عليها
+          {events.length} حدثًا معروضًا · تسلسل توضيحي ثابت يشرح الربط بين
+          البيانات والمراجعة والقرار
         </p>
       </div>
 
@@ -106,7 +112,7 @@ export default function AuditosTraceability() {
 
       {/* Insight Callout */}
       <InsightCallout
-        text="16 حدث تتبع مسجل. كل مخرج مرتبط بمصدره. هذا الإيضاح مرتبط بدليل محدد."
+        text="هذا سجل عرض ثابت يوضح قابلية التتبع داخل AuditOS. لا تظهر هنا بيانات عميل حي أو سجل تشغيلي فعلي."
         type="success"
         className="mb-8"
       />
@@ -165,13 +171,18 @@ export default function AuditosTraceability() {
                         </span>
                         {e.aiRelated && (
                           <span className="text-[10px] font-medium text-purple-600">
-                            AI
+                            مساعد
                           </span>
                         )}
                       </div>
-                      <p className="mt-1 text-sm leading-5">{e.description}</p>
+                      <p className="mt-1 text-sm leading-5">
+                        {getSafeDemoEventDescription(
+                          e.eventType,
+                          e.description,
+                        )}
+                      </p>
                       <p className="mt-0.5 text-xs text-muted-foreground">
-                        {e.actorName} ·{" "}
+                        {getSafeDemoActorLabel(e.actorName)} ·{" "}
                         {new Date(e.timestamp).toLocaleDateString("ar-SA", {
                           year: "numeric",
                           month: "short",
@@ -189,7 +200,9 @@ export default function AuditosTraceability() {
         </div>
 
         <div>
-          <h2 className="mb-4 text-lg font-semibold">مساهمات الذكاء المؤسسي</h2>
+          <h2 className="mb-4 text-lg font-semibold">
+            مساهمات الذكاء المؤسسي في العرض
+          </h2>
           <div className="space-y-3">
             {aiOutputs.map((ai) => (
               <div
@@ -209,7 +222,7 @@ export default function AuditosTraceability() {
                   </span>
                 </div>
                 <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                  {ai.outputContent}
+                  {sanitizeDemoNarrative(ai.outputContent)}
                 </p>
                 <div className="mt-2 flex items-center gap-2 text-[10px]">
                   <span
@@ -226,7 +239,7 @@ export default function AuditosTraceability() {
                     {ai.status === "rejected_by_human" && "مرفوض"}
                   </span>
                   <span className="text-muted-foreground">
-                    · {ai.modelVersion}
+                    · {getSafeDemoModelLabel(ai.modelVersion)}
                   </span>
                 </div>
               </div>

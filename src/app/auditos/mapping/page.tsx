@@ -1,4 +1,4 @@
-import { getDemoMappings } from "@/lib/audit/demo-data";
+import { getDemoMappings } from "../demo-data";
 import { StepNav } from "../step-nav";
 import {
   GuidedDemoPanel,
@@ -19,8 +19,8 @@ export default function AuditosMapping() {
         </p>
         <h1 className="mt-2 text-2xl font-black sm:text-3xl">تصنيف الحسابات</h1>
         <p className="mt-2 text-muted-foreground">
-          {confirmed} حسابًا مصنفًا · {pending} معلق · الربط بدليل الحسابات
-          المعياري IFRS for SMEs
+          {confirmed} حسابًا مصنفًا · {pending} معلق · ربط توضيحي ضمن نسخة عرض
+          ثابتة على دليل IFRS for SMEs
         </p>
       </div>
 
@@ -35,7 +35,7 @@ export default function AuditosMapping() {
       />
 
       <InsightCallout
-        text="تم تصنيف 21 من 22 حسابًا تلقائيًا بمساعدة الذكاء المؤسسي. حساب واحد معلق للمراجعة البشرية."
+        text="يعرض هذا السيناريو تصنيف 21 من 22 حسابًا بمساعدة الذكاء المؤسسي. حساب واحد يبقى معلقًا للمراجعة البشرية داخل العرض."
         type="info"
         className="mb-8"
       />

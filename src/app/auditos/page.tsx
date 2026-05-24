@@ -3,7 +3,7 @@ import {
   getDemoDashboardSummary,
   getDemoEngagement,
   getDemoAuditEvents,
-} from "@/lib/audit/demo-data";
+} from "./demo-data";
 import { StepNav } from "./step-nav";
 import {
   GuidedDemoPanel,
@@ -11,6 +11,10 @@ import {
   MetricCard,
   TraceabilityChain,
 } from "@/components/enterprise";
+import {
+  getSafeDemoActorLabel,
+  getSafeDemoEventDescription,
+} from "./demo-safety";
 
 export default function AuditosOverview() {
   const summary = getDemoDashboardSummary();
@@ -26,14 +30,14 @@ export default function AuditosOverview() {
               AuditOS — أول تطبيق مثبت / عرض إرشادي
             </p>
             <h1 className="mt-2 text-3xl font-black sm:text-4xl">
-              شركة الخليج التجارية — FY2025
+              سيناريو عرض محكوم — FY2025
             </h1>
             <p className="mt-2 text-white/60">مدة الاستعراض: 4 دقائق</p>
           </div>
           <div className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
             <div className="h-2 w-2 rounded-full bg-aqliya-cyan animate-pulse" />
             <span className="text-xs font-semibold text-aqliya-cyan">
-              عرض إرشادي عام
+              عرض عام ببيانات معقمة
             </span>
           </div>
         </div>
@@ -76,18 +80,15 @@ export default function AuditosOverview() {
 
       {/* Metrics */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          label="إجمالي الارتباطات"
-          value={summary.totalEngagements}
-        />
-        <MetricCard label="نشطة" value={summary.activeEngagements} />
-        <MetricCard label="مراجعات معلقة" value={summary.pendingReviews} />
-        <MetricCard label="ملاحظات مفتوحة" value={summary.openFindings} />
+        <MetricCard label="سيناريوهات العرض" value={summary.totalEngagements} />
+        <MetricCard label="خطوات معروضة" value={summary.activeEngagements} />
+        <MetricCard label="نقاط مراجعة" value={summary.pendingReviews} />
+        <MetricCard label="ملاحظات توضيحية" value={summary.openFindings} />
       </div>
 
       {/* Insight Callout */}
       <InsightCallout
-        text="تم تصنيف 21 من 22 حسابًا. حساب واحد يحتاج مراجعة بشرية قبل الاعتماد. الذكاء الاصطناعي يساعد. الإنسان يقرر."
+        text="يعرض هذا السيناريو تصنيف 21 من 22 حسابًا. حساب واحد يبقى للمراجعة البشرية قبل الاعتماد. الذكاء الاصطناعي يساعد. الإنسان يقرر."
         type="success"
         className="mb-8"
       />
@@ -97,19 +98,16 @@ export default function AuditosOverview() {
         <div className="rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold">الارتباط التجريبي</h2>
           <div className="space-y-3">
-            <Row label="العميل" value={engagement.client?.name ?? "-"} />
+            <Row label="الجهة المعروضة" value="سيناريو تجريبي" />
             <Row label="الفترة المالية" value={engagement.fiscalPeriod} />
-            <Row label="نوع الارتباط" value="مراجعة كاملة" />
+            <Row label="نوع المسار" value="عرض عام للقراءة فقط" />
             <Row label="الإطار المحاسبي" value="IFRS for SMEs" />
             <Row
               label="الحالة"
-              value="قيد التنفيذ"
+              value="عرض محكوم"
               badgeColor="bg-blue-50 text-blue-700"
             />
-            <Row
-              label="الفريق"
-              value={engagement.team?.map((t) => t.userName).join(" · ") ?? "-"}
-            />
+            <Row label="الفريق" value="فريق عرض داخلي" />
           </div>
         </div>
 
@@ -120,9 +118,11 @@ export default function AuditosOverview() {
               <div key={e.id} className="flex items-start gap-3">
                 <div className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-primary/40" />
                 <div>
-                  <p className="text-sm leading-5">{e.description}</p>
+                  <p className="text-sm leading-5">
+                    {getSafeDemoEventDescription(e.eventType, e.description)}
+                  </p>
                   <p className="text-xs text-muted-foreground">
-                    {e.actorName} ·{" "}
+                    {getSafeDemoActorLabel(e.actorName)} ·{" "}
                     {new Date(e.timestamp).toLocaleDateString("ar-SA")}
                   </p>
                 </div>
@@ -149,6 +149,7 @@ export default function AuditosOverview() {
         <p className="mt-4 text-sm leading-7 text-muted-foreground">
           هذا هو جوهر AuditOS كأول تطبيق تحت عقلية: لا يكتفي بإخراج نتيجة، بل
           يحافظ على مسار الدليل والمراجعة والقرار داخل بيئة واحدة قابلة للتتبع.
+          ما يظهر هنا نسخة عرض ثابتة لهذا المسار، وليس سجل عميل حي.
         </p>
       </div>
 

@@ -43,6 +43,18 @@ export default function AuditosLayout({
             ))}
           </nav>
         </div>
+        <div className="border-b border-amber-200/70 bg-amber-50/90">
+          <div className="mx-auto max-w-6xl px-6 py-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-800">
+              Demo Only
+            </p>
+            <p className="mt-1 text-sm leading-6 text-amber-950">
+              هذا المسار عرض عام لـ AuditOS ببيانات تجريبية ثابتة فقط. لا توجد
+              هنا بيانات عميل، ولا يمكن رفع ملفات أو تنزيل مخرجات أو حفظ
+              تغييرات، ولا يصلح كمساحة عمل تشغيلية أو مسار عميل فعلي.
+            </p>
+          </div>
+        </div>
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>

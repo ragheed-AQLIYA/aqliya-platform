@@ -1,13 +1,17 @@
 import {
   getDemoFinancialStatements,
   getDemoDisclosureNotes,
-} from "@/lib/audit/demo-data";
+} from "../demo-data";
 import { StepNav } from "../step-nav";
 import {
   GuidedDemoPanel,
   InsightCallout,
   MetricCard,
 } from "@/components/enterprise";
+import {
+  getSafeDemoStatementTitle,
+  sanitizeDemoNarrative,
+} from "../demo-safety";
 
 function formatSAR(n: number) {
   if (n === 0) return "—";
@@ -34,7 +38,8 @@ export default function AuditosStatements() {
           القوائم المالية
         </h1>
         <p className="mt-2 text-muted-foreground">
-          قائمة الدخل والمركز المالي مُولّدة تلقائيًا من تصنيف الحسابات
+          قائمة الدخل والمركز المالي المعروضتان هنا ناتجتان عن سيناريو ثابت
+          للشرح فقط
         </p>
       </div>
 
@@ -49,7 +54,7 @@ export default function AuditosStatements() {
       />
 
       <InsightCallout
-        text="تم توليد القوائم المالية تلقائيًا. 7 إيضاحات مسودة، بعضها يحتاج معلومات إضافية."
+        text="يعرض هذا السيناريو قوائم مالية تجريبية مع 7 إيضاحات مسودة. بعضها ما زال يحتاج معلومات إضافية داخل العرض فقط."
         type="info"
         className="mb-8"
       />
@@ -62,7 +67,12 @@ export default function AuditosStatements() {
       <div className="mb-8 grid gap-8 lg:grid-cols-2">
         {incomeStmt && (
           <div className="rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
-            <h2 className="mb-1 text-lg font-bold">{incomeStmt.title}</h2>
+            <h2 className="mb-1 text-lg font-bold">
+              {getSafeDemoStatementTitle(
+                incomeStmt.statementType,
+                incomeStmt.title,
+              )}
+            </h2>
             <p className="mb-4 text-xs text-muted-foreground">
               للسنة المنتهية في 31 ديسمبر 2025 — بالريال السعودي
             </p>
@@ -88,7 +98,12 @@ export default function AuditosStatements() {
 
         {balanceSheet && (
           <div className="rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
-            <h2 className="mb-1 text-lg font-bold">{balanceSheet.title}</h2>
+            <h2 className="mb-1 text-lg font-bold">
+              {getSafeDemoStatementTitle(
+                balanceSheet.statementType,
+                balanceSheet.title,
+              )}
+            </h2>
             <p className="mb-4 text-xs text-muted-foreground">
               كما في 31 ديسمبر 2025 — بالريال السعودي
             </p>
@@ -114,7 +129,9 @@ export default function AuditosStatements() {
       </div>
 
       <div className="mb-8 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-bold">الإيضاحات ({notes.length})</h2>
+        <h2 className="mb-4 text-lg font-bold">
+          الإيضاحات التجريبية ({notes.length})
+        </h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {notes.map((note) => (
             <div
@@ -123,7 +140,7 @@ export default function AuditosStatements() {
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold">
-                  إيضاح {note.noteNumber}: {note.title}
+                  إيضاح {note.noteNumber}: {sanitizeDemoNarrative(note.title)}
                 </h3>
                 {note.aiDrafted && (
                   <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-medium text-purple-700">
@@ -132,7 +149,7 @@ export default function AuditosStatements() {
                 )}
               </div>
               <p className="mt-2 text-xs leading-5 text-muted-foreground line-clamp-3">
-                {note.content}
+                {sanitizeDemoNarrative(note.content)}
               </p>
               {note.missingInformation &&
                 note.missingInformation.length > 0 && (

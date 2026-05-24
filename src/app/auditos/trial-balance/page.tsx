@@ -1,4 +1,4 @@
-import { getDemoTrialBalance } from "@/lib/audit/demo-data";
+import { getDemoTrialBalance } from "../demo-data";
 import { StepNav } from "../step-nav";
 import {
   GuidedDemoPanel,
@@ -19,18 +19,18 @@ export default function AuditosTrialBalance() {
     <div className="mx-auto max-w-6xl px-6 py-8">
       <div className="mb-8 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-          المرحلة 1 — استيراد البيانات
+          المرحلة 1 — استعراض البيانات
         </p>
         <h1 className="mt-2 text-2xl font-black sm:text-3xl">ميزان المراجعة</h1>
         <p className="mt-2 text-muted-foreground">
-          تم استيراد {lines.length} حسابًا من ملف Excel —
-          gulf_trading_tb_fy2025.xlsx
+          نستعرض {lines.length} حسابًا ضمن ملف تجريبي ثابت مرفق مع هذا العرض،
+          بدون رفع ملفات أو حفظ بيانات من الزائر.
         </p>
       </div>
 
       <GuidedDemoPanel
         questions={[
-          "ما الذي تراه؟ ميزان المراجعة المستورد بجميع الحسابات والأرصدة.",
+          "ما الذي تراه؟ نسخة ثابتة من ميزان المراجعة تعرض الحسابات والأرصدة.",
           "لماذا هذا مهم؟ هذه هي البيانات الخام التي سيُبنى عليها كل شيء لاحقًا.",
           "ما المخرج؟ قائمة حسابات مصنفة مبدئيًا مع أرصدة المدين والدائن.",
           "ما القرار التالي؟ مراجعة التصنيف والانتقال إلى ربط الحسابات بالقوائم.",
@@ -39,7 +39,7 @@ export default function AuditosTrialBalance() {
       />
 
       <InsightCallout
-        text="تم استيراد 22 حسابًا بنجاح. الفرق بين المدين والدائن صفر — الميزان متوازن."
+        text="يعرض هذا السيناريو 22 حسابًا داخل ملف تجريبي ثابت. الفرق بين المدين والدائن صفر، لذا الميزان متوازن ضمن العرض."
         type="success"
         className="mb-8"
       />

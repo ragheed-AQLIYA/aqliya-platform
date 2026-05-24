@@ -2,13 +2,19 @@ import {
   getDemoEvidence,
   getDemoFindings,
   getDemoRecommendations,
-} from "@/lib/audit/demo-data";
+} from "../demo-data";
 import { StepNav } from "../step-nav";
 import {
   GuidedDemoPanel,
   InsightCallout,
   MetricCard,
 } from "@/components/enterprise";
+import {
+  getSafeDemoActorLabel,
+  getSafeDemoEvidenceLinkLabel,
+  getSafeDemoFileLabel,
+  sanitizeDemoNarrative,
+} from "../demo-safety";
 
 const severityColors: Record<string, string> = {
   high: "bg-red-50 text-red-700",
@@ -20,7 +26,17 @@ const stateLabels: Record<string, string> = {
   accepted: "مقبول",
   reviewed: "تمت مراجعته",
   missing: "ناقص",
-  uploaded: "مُرفوع",
+  uploaded: "مُدرج ضمن العرض",
+};
+
+const findingTypeLabels: Record<string, string> = {
+  observation: "ملاحظة",
+  disclosure_gap: "فجوة إفصاح",
+};
+
+const materialityLabels: Record<string, string> = {
+  material: "جوهري",
+  immaterial: "غير جوهري",
 };
 
 export default function AuditosEvidence() {
@@ -39,7 +55,8 @@ export default function AuditosEvidence() {
         </h1>
         <p className="mt-2 text-muted-foreground">
           {evidence.length} مستند · {findings.length} ملاحظة ·{" "}
-          {recommendations.length} توصية
+          {recommendations.length} توصية · جميع الأسماء المعروضة معقمة للعرض
+          العام
         </p>
       </div>
 
@@ -54,7 +71,7 @@ export default function AuditosEvidence() {
       />
 
       <InsightCallout
-        text="هذا الإيضاح مرتبط بدليل محدد. كل مخرج مرتبط بمصدره."
+        text="الروابط الظاهرة هنا توضيحية ضمن سيناريو عرض ثابت. كل مخرج معروض مرتبط بمرجع تجريبي فقط."
         type="success"
         className="mb-8"
       />
@@ -71,7 +88,7 @@ export default function AuditosEvidence() {
             الأدلة ({evidence.length})
           </h2>
           <div className="space-y-3">
-            {evidence.map((ev) => (
+            {evidence.map((ev, index) => (
               <div
                 key={ev.id}
                 className="flex items-start gap-3 rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/20 p-4 shadow-sm"
@@ -82,21 +99,25 @@ export default function AuditosEvidence() {
                   }`}
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium truncate">{ev.filename}</p>
+                  <p className="text-sm font-medium truncate">
+                    {getSafeDemoFileLabel(index, ev.fileType, ev.state)}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {ev.fileType?.toUpperCase()} ·{" "}
                     {ev.state === "missing"
                       ? "—"
                       : `${(ev.fileSize / 1000).toFixed(0)} KB`}
                     {" · "}
-                    {ev.uploadedBy || "غير مرفوع"}
+                    {ev.uploadedBy
+                      ? getSafeDemoActorLabel(ev.uploadedBy)
+                      : "غير متاح"}
                   </p>
-                  {ev.linkedEntities?.map((link) => (
+                  {ev.linkedEntities?.map((link, linkIndex) => (
                     <p
                       key={link.id}
                       className="text-[10px] text-muted-foreground"
                     >
-                      مرتبط بـ: {link.targetLabel}
+                      مرتبط بـ: {getSafeDemoEvidenceLinkLabel(linkIndex)}
                     </p>
                   ))}
                 </div>
@@ -127,7 +148,9 @@ export default function AuditosEvidence() {
                 className="rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/20 p-4 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="text-sm font-semibold">{f.title}</h3>
+                  <h3 className="text-sm font-semibold">
+                    {sanitizeDemoNarrative(f.title)}
+                  </h3>
                   <span
                     className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${severityColors[f.severity] ?? ""}`}
                   >
@@ -137,14 +160,16 @@ export default function AuditosEvidence() {
                   </span>
                 </div>
                 <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                  {f.description}
+                  {sanitizeDemoNarrative(f.description)}
                 </p>
                 <div className="mt-2 flex items-center gap-2 text-[10px] text-muted-foreground">
                   <span className="rounded bg-muted px-1.5 py-0.5">
-                    {f.findingType}
+                    {findingTypeLabels[f.findingType] ?? f.findingType}
                   </span>
                   <span>·</span>
-                  <span>{f.materiality}</span>
+                  <span>
+                    {materialityLabels[f.materiality] ?? f.materiality}
+                  </span>
                   {f.aiSuggested && (
                     <span className="text-purple-600">· AI</span>
                   )}
@@ -157,10 +182,10 @@ export default function AuditosEvidence() {
                       className="mt-2 rounded-xl bg-muted/30 px-3 py-2"
                     >
                       <p className="text-xs font-medium text-primary">
-                        توصية: {r.title}
+                        توصية: {sanitizeDemoNarrative(r.title)}
                       </p>
                       <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                        {r.recommendedAction}
+                        {sanitizeDemoNarrative(r.recommendedAction)}
                       </p>
                     </div>
                   ))}
