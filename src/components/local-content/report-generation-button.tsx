@@ -33,7 +33,7 @@ export function ReportGenerationButton({
         "pdf",
       );
       if (!result.ok) {
-        setError(result.error?.message || "فشل في توليد التقرير");
+        setError(result.error || "فشل في توليد التقرير");
       } else {
         router.refresh();
       }
