@@ -1,4 +1,4 @@
-import { permanentRedirect } from "next/navigation";
+import { WorkflowRecordDetail } from "@/components/workflowos/workflow-record-detail";
 
 export default async function WorkflowosRecordDetailPage({
   params,
@@ -6,5 +6,5 @@ export default async function WorkflowosRecordDetailPage({
   params: Promise<{ clientId: string; recordId: string }>;
 }) {
   const { clientId, recordId } = await params;
-  permanentRedirect(`/sunbul/clients/${clientId}/records/${recordId}`);
+  return <WorkflowRecordDetail clientId={clientId} recordId={recordId} />;
 }

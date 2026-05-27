@@ -144,6 +144,7 @@ export const config = {
     "/api/office-ai/:path*",
     "/api/local-content/:path*",
     "/api/sunbul/:path*",
+    "/api/workflowos/:path*",
     "/api/metrics",
     "/api/custom-product-submit",
   ],

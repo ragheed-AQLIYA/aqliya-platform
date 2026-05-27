@@ -1,5 +1,5 @@
-import { permanentRedirect } from "next/navigation";
+import { WorkflowDashboard } from "@/components/workflowos/workflow-dashboard";
 
 export default function WorkflowosPage() {
-  permanentRedirect("/sunbul");
+  return <WorkflowDashboard />;
 }

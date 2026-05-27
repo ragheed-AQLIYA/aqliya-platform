@@ -1,5 +1,5 @@
-import { SunbulDashboard } from "@/components/sunbul/sunbul-dashboard";
+import { permanentRedirect } from "next/navigation";
 
 export default function SunbulPage() {
-  return <SunbulDashboard />;
+  permanentRedirect("/workflowos");
 }

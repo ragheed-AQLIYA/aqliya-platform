@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-05-23 — Route governance cleanup after P0 auth hardening
+> **Last updated:** 2026-05-28 — Phase 2 code rename: WorkflowOS canonical, Sunbul legacy alias
 
 ---
 
@@ -203,21 +203,21 @@
 | `/settings/audit-logs`            | Platform       | Settings/admin | Protected        | Active (L4)           | Real audit log viewer             |
 | `/monitoring`                     | Platform       | Settings/admin | Protected        | Active (L4)           | Real aggregate counts             |
 
-### Sunbul — Custom Workspace
+### WorkflowOS — Governed Workspace
 
-| Route                                           | Product/System | Route Type       | Public/Protected | Implementation Status | Notes                  |
-| ----------------------------------------------- | -------------- | ---------------- | ---------------- | --------------------- | ---------------------- |
-| `/sunbul`                                       | Sunbul         | Custom workspace | Protected        | Custom workspace (L4) | Real governed workflow |
-| `/sunbul/admin`                                 | Sunbul         | Custom workspace | Protected        | Custom workspace (L4) |                        |
-| `/sunbul/clients/[clientId]/records/[recordId]` | Sunbul         | Custom workspace | Protected        | Custom workspace (L4) | Record detail          |
+| Route                                               | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                  |
+| --------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------- |
+| `/workflowos`                                       | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Real governed workflow |
+| `/workflowos/admin`                                 | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      |                        |
+| `/workflowos/clients/[clientId]/records/[recordId]` | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Record detail          |
 
-### workflowos — Redirect Alias to Sunbul
+### Sunbul — Redirect Alias to WorkflowOS
 
-| Route                                               | Product/System | Route Type        | Public/Protected | Implementation Status | Notes                                                                    |
-| --------------------------------------------------- | -------------- | ----------------- | ---------------- | --------------------- | ------------------------------------------------------------------------ |
-| `/workflowos`                                       | workflowos     | Route alias (302) | Protected        | Redirect alias        | `permanentRedirect` to `/sunbul`. No components, no data, no UI.         |
-| `/workflowos/admin`                                 | workflowos     | Route alias (302) | Protected        | Redirect alias        | `permanentRedirect` to `/sunbul/admin`.                                  |
-| `/workflowos/clients/[clientId]/records/[recordId]` | workflowos     | Route alias (302) | Protected        | Redirect alias        | `permanentRedirect` to matching `/sunbul/clients/.../records/...` route. |
+| Route                                           | Product/System | Route Type        | Public/Protected | Implementation Status | Notes                                                                  |
+| ----------------------------------------------- | -------------- | ----------------- | ---------------- | --------------------- | ---------------------------------------------------------------------- |
+| `/sunbul`                                       | Sunbul         | Route alias (302) | Protected        | Redirect alias        | `permanentRedirect` to `/workflowos`. No components, no data, no UI.   |
+| `/sunbul/admin`                                 | Sunbul         | Route alias (302) | Protected        | Redirect alias        | `permanentRedirect` to `/workflowos/admin`.                            |
+| `/sunbul/clients/[clientId]/records/[recordId]` | Sunbul         | Route alias (302) | Protected        | Redirect alias        | `permanentRedirect` to matching `/workflowos/clients/.../records/...`. |
 
 ### Legacy Routes
 
@@ -229,18 +229,18 @@
 
 ## API Routes
 
-| Route                                                                 | Product/System      | Route Type     | Public/Protected | Implementation Status | Notes                                           |
-| --------------------------------------------------------------------- | ------------------- | -------------- | ---------------- | --------------------- | ----------------------------------------------- |
-| `/api/auth/[...nextauth]`                                             | AQLIYA Platform     | API — auth     | Public           | Active                | NextAuth v5                                     |
-| `/api/health`                                                         | AQLIYA Platform     | API — health   | Public           | Active                | Safe health check                               |
-| `/api/custom-product-submit`                                          | AQLIYA Platform     | API — form     | Public           | Active                | Custom product inquiry                          |
-| `/api/metrics`                                                        | AQLIYA Platform     | API — metrics  | Protected        | Active                | Admin-only                                      |
-| `/api/audit/evidence/[evidenceId]/download`                           | AuditOS             | API — download | Protected        | Active                | Authenticated + engagement access + audit log   |
-| `/api/audit/engagements/[engagementId]/exports/[format]`              | AuditOS             | API — export   | Protected        | Active                | Authenticated + engagement access               |
-| `/api/office-ai/download`                                             | Office AI Assistant | API — download | Protected        | Active                | Authenticated + platform-org access + audit log |
-| `/api/local-content/projects/[projectId]/reports/[reportId]/download` | LocalContentOS      | API — download | Protected        | Active                | Authenticated + project access + audit log      |
-| `/api/sunbul/clients/[clientId]/records/[recordId]/export/pdf`        | Sunbul              | API — export   | Protected        | Active                |                                                 |
-| `/api/sunbul/documents/[documentId]/download`                         | Sunbul              | API — download | Protected        | Active                | Authenticated + client access + audit log       |
+| Route                                                                 | Product/System      | Route Type     | Public/Protected | Implementation Status | Notes                                                           |
+| --------------------------------------------------------------------- | ------------------- | -------------- | ---------------- | --------------------- | --------------------------------------------------------------- |
+| `/api/auth/[...nextauth]`                                             | AQLIYA Platform     | API — auth     | Public           | Active                | NextAuth v5                                                     |
+| `/api/health`                                                         | AQLIYA Platform     | API — health   | Public           | Active                | Safe health check                                               |
+| `/api/custom-product-submit`                                          | AQLIYA Platform     | API — form     | Public           | Active                | Custom product inquiry                                          |
+| `/api/metrics`                                                        | AQLIYA Platform     | API — metrics  | Protected        | Active                | Admin-only                                                      |
+| `/api/audit/evidence/[evidenceId]/download`                           | AuditOS             | API — download | Protected        | Active                | Authenticated + engagement access + audit log                   |
+| `/api/audit/engagements/[engagementId]/exports/[format]`              | AuditOS             | API — export   | Protected        | Active                | Authenticated + engagement access                               |
+| `/api/office-ai/download`                                             | Office AI Assistant | API — download | Protected        | Active                | Authenticated + platform-org access + audit log                 |
+| `/api/local-content/projects/[projectId]/reports/[reportId]/download` | LocalContentOS      | API — download | Protected        | Active                | Authenticated + project access + audit log                      |
+| `/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf`    | WorkflowOS          | API — export   | Protected        | Active                | Permissioned PDF export. Canonical WorkflowOS API route.        |
+| `/api/workflowos/documents/[documentId]/download`                     | WorkflowOS          | API — download | Protected        | Active                | Permissioned document download. Canonical WorkflowOS API route. |
 
 ---
 
@@ -290,8 +290,8 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
    `/auditos/*` is intentionally public because it is a sanitized, mock-only, read-only guided demo. It must not use customer data, uploads, mutations, exports/downloads, tenant state, or operational audit workflows. If any of these are introduced, the route must move behind authentication/gating before release.
 3. `/assistant/*` = governed shared application on AQLIYA Core. Do not market it as a standalone product unless explicitly reclassified.
 4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). Pilot-ready with conditions (L5). See limitations in route table above.
-5. `/sunbul/*` = real custom/client-specific workspace. It exists in code and docs must not hide it, but it is not a default platform product claim.
-6. `/workflowos/*` = redirect alias family over Sunbul implementation, not a distinct domain or prototype. Every route is a `permanentRedirect(302)` wrapper. Do not describe as a prototype — it is purely a route alias.
+5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). WorkflowOS is the canonical product name.
+6. `/sunbul/*` = redirect alias family over WorkflowOS implementation. Every route is a `permanentRedirect(302)` wrapper.
 7. `/organizations/*`, `/settings`, and `/sales` must be labeled prototype/internal preview until they have real persistence and workflow backing.
 8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/local-content/*/download`) must remain permissioned.
 9. Do not create `/simulation` top-level routes until that system has a real workspace implementation.
@@ -301,4 +301,4 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 13. `/published/recommendation/*` is protected in current code reality because the backing action requires an authenticated user from the same organization.
 14. `/executive-brief` is the canonical executive brief route. `/executive-briefing` is preserved only as a redirect alias.
 
-15. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/sunbul/documents/*/download`.
+15. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`.

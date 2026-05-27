@@ -29,18 +29,18 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/workflowos",
-        destination: "/sunbul",
+        source: "/sunbul",
+        destination: "/workflowos",
         permanent: true,
       },
       {
-        source: "/workflowos/admin",
-        destination: "/sunbul/admin",
+        source: "/sunbul/admin",
+        destination: "/workflowos/admin",
         permanent: true,
       },
       {
-        source: "/workflowos/clients/:clientId/records/:recordId",
-        destination: "/sunbul/clients/:clientId/records/:recordId",
+        source: "/sunbul/clients/:clientId/records/:recordId",
+        destination: "/workflowos/clients/:clientId/records/:recordId",
         permanent: true,
       },
       {

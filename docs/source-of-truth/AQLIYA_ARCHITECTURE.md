@@ -26,14 +26,13 @@ AQLIYA Company
 │   ├── SimulationOS            (marketing-only label)
 │   └── LocalContentOS          (workspace at /local-content/*, L5 pilot-ready with conditions, strategic second product)
 ├── Custom / Client-Specific Workspaces
-│   ├── Sunbul                  (/sunbul) — real governed custom workflow workspace
-│   └── workflowos              (/workflowos) — route alias/duplicate over Sunbul implementation
+│   └── WorkflowOS              (/workflowos) — real governed custom workflow workspace (canonical)
 ├── Workspaces (execution environments)
 │   ├── AuditOS Workspace       (/audit)  — governed operational environment
 │   ├── DecisionOS Workspace    (/decisions, /intelligence/sectors)
 │   ├── Office AI Workspace     (/assistant) — shared application workspace
-│   ├── Sunbul Workspace        (/sunbul) — custom client-specific execution environment
-│   ├── workflowos Workspace    (/workflowos) — duplicated alias workspace
+│   ├── WorkflowOS Workspace    (/workflowos) — canonical custom client-specific execution environment
+│   ├── Sunbul Workspace        (/sunbul) — legacy redirect alias to /workflowos
 │   ├── Organizations Surface   (/organizations) — protected prototype only
 │   ├── Generic Settings        (/settings) — protected prototype only
 │   └── SalesOS Workspace       (/sales)  — prototype/dashboard only
@@ -61,6 +60,7 @@ Deployment models: Cloud (active), Private/On-Prem (strategic — not yet implem
 - **System**: A named product or product line with its own route, data model, and purpose.
 - **Shared Application**: A governed application built on AQLIYA Core that is real in code but not a standalone product category.
 - **Custom Workspace**: A real governed implementation for a client-specific or custom workflow that should not be overpromoted into a platform-wide product claim.
+- **Custom Workspace Alias**: A legacy redirect alias to a custom workspace. No independent components, data, or UI.
 - **Workspace**: A governed operational execution environment with auth, access control, and durable data.
 - **Demo**: A guided, read-only, mock-backed walkthrough. Must be explicitly labeled as a demo.
 - **Marketing Page**: Public-facing content describing a capability. OK to exist without a workspace.
@@ -74,8 +74,8 @@ Deployment models: Cloud (active), Private/On-Prem (strategic — not yet implem
 | `/auditos`                               | AuditOS guided demo                         | Demo                   |
 | `/decisions`                             | DecisionOS workspace                        | Workspace              |
 | `/assistant`                             | Office AI Assistant shared workspace        | Shared Application     |
-| `/sunbul`                                | Sunbul custom governed workspace            | Custom Workspace       |
-| `/workflowos`                            | workflowos alias over Sunbul implementation | Custom Workspace Alias |
+| `/workflowos`                            | WorkflowOS governed workspace               | Custom Workspace       |
+| `/sunbul`                                | Sunbul legacy redirect alias to /workflowos | Custom Workspace Alias |
 | `/organizations`                         | Protected mock organizations surface        | Workspace/Prototype    |
 | `/settings`                              | Protected generic settings preview          | Workspace/Prototype    |
 | `/sales`                                 | SalesOS prototype dashboard                 | Workspace/Prototype    |

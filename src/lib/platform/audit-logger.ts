@@ -19,6 +19,7 @@ export const Product = {
   OFFICE_AI_ASSISTANT: "office_ai_assistant",
   LOCAL_CONTENT: "local_content",
   SUNBUL: "sunbul",
+  WORKFLOWOS: "workflowos",
   DECISION_OS: "decision_os",
   PLATFORM: "platform",
 } as const;

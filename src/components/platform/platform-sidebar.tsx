@@ -54,11 +54,11 @@ const modules = [
     borderActive: "border-l-module-sales",
   },
   {
-    id: "sunbul",
-    name: "Sunbul",
-    nameAr: "سنبل",
+    id: "workflowos",
+    name: "WorkflowOS",
+    nameAr: "سير العمل الذكي",
     icon: KanbanSquare,
-    href: "/sunbul",
+    href: "/workflowos",
     color: "text-aqliya-cyan",
     bgActive: "bg-aqliya-cyan/10",
     borderActive: "border-l-aqliya-cyan",
@@ -177,8 +177,8 @@ function getActiveModule(pathname: string | null) {
   if (pathname.startsWith("/audit")) return "audit";
   if (pathname.startsWith("/local-content")) return "localContent";
   if (pathname.startsWith("/sales")) return "sales";
-  if (pathname.startsWith("/sunbul") || pathname.startsWith("/workflowos"))
-    return "sunbul";
+  if (pathname.startsWith("/workflowos") || pathname.startsWith("/sunbul"))
+    return "workflowos";
   if (
     pathname.startsWith("/decisions") ||
     pathname.startsWith("/organizations") ||
@@ -194,8 +194,8 @@ function getModuleNav(moduleId: string) {
       return auditNav;
     case "sales":
       return salesNav;
-    case "sunbul":
-      return sunbulNav;
+    case "workflowos":
+      return workflowosNav;
     case "localContent":
       return localContentNav;
     case "decision":
@@ -240,23 +240,23 @@ const salesNav = [
   },
 ];
 
-const sunbulNav = [
+const workflowosNav = [
   {
     name: "Dashboard",
     nameAr: "لوحة التحكم",
-    href: "/sunbul",
+    href: "/workflowos",
     icon: LayoutDashboard,
   },
   {
     name: "Review Queue",
     nameAr: "قائمة المراجعة",
-    href: "/sunbul",
+    href: "/workflowos",
     icon: ShieldCheck,
   },
   {
-    name: "Sunbul Admin",
-    nameAr: "إدارة سنبل",
-    href: "/sunbul/admin",
+    name: "WorkflowOS Admin",
+    nameAr: "إدارة سير العمل",
+    href: "/workflowos/admin",
     icon: Settings,
   },
 ];

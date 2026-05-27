@@ -1,0 +1,465 @@
+"use server";
+
+import {
+  createWorkflowClient,
+  listWorkflowClientsForUser,
+  getWorkflowClient,
+  updateWorkflowClientStatus,
+  createWorkflowMembership,
+  listWorkflowMemberships,
+  updateWorkflowMembershipRole,
+  updateWorkflowMembershipStatus,
+  findUserByEmail,
+  createWorkflowRecord,
+  listWorkflowRecords,
+  getWorkflowRecord,
+  updateWorkflowRecord,
+  submitWorkflowRecordForReview,
+  approveWorkflowRecord,
+  returnWorkflowRecord,
+  archiveWorkflowRecord,
+  createWorkflowDocumentMetadata,
+  listWorkflowDocuments,
+  deleteWorkflowDocument,
+  createWorkflowReview,
+  listWorkflowReviews,
+} from "@/lib/workflowos/services";
+import {
+  uploadWorkflowDocument,
+  deleteStoredWorkflowDocument,
+} from "@/lib/workflowos/storage";
+import { listWorkflowAuditEvents } from "@/lib/workflowos/audit";
+import { getUserWorkflowRole } from "@/lib/workflowos/tenant-guard";
+import { isExpectedAccessDeniedError } from "@/lib/auth";
+
+function mapAuthError(error: unknown): string {
+  const msg = error instanceof Error ? error.message : "";
+  if (msg === "Unauthenticated") return "يجب تسجيل الدخول أولاً";
+  if (msg.startsWith("Access denied:"))
+    return "لا تملك صلاحية تنفيذ هذا الإجراء";
+  if (msg.includes("slug already exists"))
+    return "الرابط المختصر مستخدم بالفعل";
+  return msg || "فشل العملية";
+}
+
+// ─── Clients ───────────────────────────────────────────
+
+export async function workflow_createClient(data: {
+  name: string;
+  slug: string;
+}) {
+  try {
+    const client = await createWorkflowClient(data);
+    return { success: true, data: client };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error creating Workflow client:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+export async function workflow_listClients() {
+  try {
+    const clients = await listWorkflowClientsForUser();
+    return { success: true, data: clients };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error listing Workflow clients:", error);
+    return { success: false, error: "Failed to list clients" };
+  }
+}
+
+export async function workflow_getClient(clientId: string) {
+  try {
+    const client = await getWorkflowClient(clientId);
+    return { success: true, data: client };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error getting Workflow client:", error);
+    return { success: false, error: "Failed to get client" };
+  }
+}
+
+export async function workflow_updateClientStatus(
+  clientId: string,
+  status: string,
+) {
+  try {
+    const client = await updateWorkflowClientStatus(clientId, status);
+    return { success: true, data: client };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error updating Workflow client status:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+// ─── Memberships ───────────────────────────────────────
+
+export async function workflow_createMembership(data: {
+  clientId: string;
+  userId: string;
+  role: string;
+}) {
+  try {
+    const membership = await createWorkflowMembership(data);
+    return { success: true, data: membership };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error creating Workflow membership:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+export async function workflow_listMemberships(clientId: string) {
+  try {
+    const memberships = await listWorkflowMemberships(clientId);
+    return { success: true, data: memberships };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error listing Workflow memberships:", error);
+    return { success: false, error: "Failed to list memberships" };
+  }
+}
+
+export async function workflow_addMembershipByEmail(data: {
+  clientId: string;
+  email: string;
+  role: string;
+}) {
+  try {
+    const user = await findUserByEmail(data.email);
+    if (!user) {
+      return { success: false, error: "المستخدم غير موجود حالياً" };
+    }
+    const membership = await createWorkflowMembership({
+      clientId: data.clientId,
+      userId: user.id,
+      role: data.role,
+    });
+    return { success: true, data: membership };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error adding Workflow membership:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+export async function workflow_updateMembershipRole(
+  membershipId: string,
+  role: string,
+) {
+  try {
+    const membership = await updateWorkflowMembershipRole(membershipId, role);
+    return { success: true, data: membership };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error updating Workflow membership role:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+export async function workflow_updateMembershipStatus(
+  membershipId: string,
+  status: string,
+) {
+  try {
+    const membership = await updateWorkflowMembershipStatus(
+      membershipId,
+      status,
+    );
+    return { success: true, data: membership };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error updating Workflow membership status:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+// ─── Records ───────────────────────────────────────────
+
+export async function workflow_createRecord(
+  clientId: string,
+  data: {
+    title: string;
+    description?: string;
+    type?: string;
+    priority?: string;
+  },
+) {
+  try {
+    const record = await createWorkflowRecord(clientId, data);
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error creating Workflow record:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to create record",
+    };
+  }
+}
+
+export async function workflow_listRecords(clientId: string) {
+  try {
+    const records = await listWorkflowRecords(clientId);
+    return { success: true, data: records };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error listing Workflow records:", error);
+    return { success: false, error: "Failed to list records" };
+  }
+}
+
+export async function workflow_getRecord(clientId: string, recordId: string) {
+  try {
+    const record = await getWorkflowRecord(clientId, recordId);
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error getting Workflow record:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to get record",
+    };
+  }
+}
+
+export async function workflow_updateRecord(
+  clientId: string,
+  recordId: string,
+  data: { title?: string; description?: string; priority?: string },
+) {
+  try {
+    const record = await updateWorkflowRecord(clientId, recordId, data);
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error updating Workflow record:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to update record",
+    };
+  }
+}
+
+// ─── Workflow ──────────────────────────────────────────
+
+export async function workflow_submitRecord(
+  clientId: string,
+  recordId: string,
+) {
+  try {
+    const record = await submitWorkflowRecordForReview(clientId, recordId);
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error submitting Workflow record:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to submit record",
+    };
+  }
+}
+
+export async function workflow_approveRecord(
+  clientId: string,
+  recordId: string,
+) {
+  try {
+    const record = await approveWorkflowRecord(clientId, recordId);
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error approving Workflow record:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to approve record",
+    };
+  }
+}
+
+export async function workflow_returnRecord(
+  clientId: string,
+  recordId: string,
+  notes?: string,
+) {
+  try {
+    const record = await returnWorkflowRecord(clientId, recordId, notes);
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error returning Workflow record:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to return record",
+    };
+  }
+}
+
+export async function workflow_archiveRecord(
+  clientId: string,
+  recordId: string,
+) {
+  try {
+    const record = await archiveWorkflowRecord(clientId, recordId);
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error archiving Workflow record:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to archive record",
+    };
+  }
+}
+
+// ─── Documents ─────────────────────────────────────────
+
+export async function workflow_createDocumentMetadata(
+  clientId: string,
+  recordId: string,
+  data: {
+    fileName: string;
+    fileType: string;
+    fileSize: number;
+    storageKey: string;
+  },
+) {
+  try {
+    const doc = await createWorkflowDocumentMetadata(clientId, recordId, data);
+    return { success: true, data: doc };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error creating Workflow document metadata:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to create document metadata",
+    };
+  }
+}
+
+export async function workflow_listDocuments(
+  clientId: string,
+  recordId: string,
+) {
+  try {
+    const docs = await listWorkflowDocuments(clientId, recordId);
+    return { success: true, data: docs };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error listing Workflow documents:", error);
+    return { success: false, error: "Failed to list documents" };
+  }
+}
+
+export async function workflow_uploadDocument(
+  clientId: string,
+  recordId: string,
+  data: { fileName: string; fileType: string; contentBase64: string },
+) {
+  try {
+    const content = Buffer.from(data.contentBase64, "base64");
+    const doc = await uploadWorkflowDocument({
+      clientId,
+      recordId,
+      fileName: data.fileName,
+      fileType: data.fileType,
+      content,
+    });
+    return { success: true, data: doc };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error uploading Workflow document:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to upload document",
+    };
+  }
+}
+
+export async function workflow_deleteDocument(
+  clientId: string,
+  recordId: string,
+  documentId: string,
+) {
+  try {
+    await deleteStoredWorkflowDocument(clientId, recordId, documentId);
+    return { success: true, data: null };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error deleting Workflow document:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to delete document",
+    };
+  }
+}
+
+// ─── Reviews ───────────────────────────────────────────
+
+export async function workflow_createReview(
+  clientId: string,
+  recordId: string,
+  data: { status: "Approved" | "Returned"; notes?: string },
+) {
+  try {
+    const review = await createWorkflowReview(clientId, recordId, data);
+    return { success: true, data: review };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error creating Workflow review:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to create review",
+    };
+  }
+}
+
+export async function workflow_listReviews(clientId: string, recordId: string) {
+  try {
+    const reviews = await listWorkflowReviews(clientId, recordId);
+    return { success: true, data: reviews };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error listing Workflow reviews:", error);
+    return { success: false, error: "Failed to list reviews" };
+  }
+}
+
+// ─── Audit ─────────────────────────────────────────────
+
+export async function workflow_getUserRole(clientId: string) {
+  try {
+    const role = await getUserWorkflowRole(clientId);
+    return { success: true, data: role };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error getting Workflow user role:", error);
+    return { success: false, error: "Failed to get user role" };
+  }
+}
+
+export async function workflow_listAuditEvents(
+  clientId: string,
+  options?: { recordId?: string; limit?: number; offset?: number },
+) {
+  try {
+    const result = await listWorkflowAuditEvents({
+      clientId,
+      ...(options ?? {}),
+    });
+    return { success: true, data: result };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error listing Workflow audit events:", error);
+    return { success: false, error: "Failed to list audit events" };
+  }
+}
