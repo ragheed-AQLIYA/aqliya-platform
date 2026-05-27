@@ -22,11 +22,14 @@ export function SunbulReviewPanel({
 }) {
   const [reviews, setReviews] = useState<ReviewItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     sunbul_listReviews(clientId, recordId).then((result) => {
       if (result.success && result.data) {
         setReviews(result.data as ReviewItem[]);
+      } else {
+        setError(result.error ?? "فشل تحميل المراجعات");
       }
       setLoading(false);
     });
@@ -36,6 +39,14 @@ export function SunbulReviewPanel({
     return (
       <div className="flex items-center justify-center py-6">
         <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg border border-status-error/20 bg-status-error/5 p-4 text-sm text-status-error">
+        {error}
       </div>
     );
   }

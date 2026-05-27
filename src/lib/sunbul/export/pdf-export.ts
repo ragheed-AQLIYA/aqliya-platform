@@ -55,8 +55,12 @@ const actionLabels: Record<string, string> = {
   RECORD_APPROVED: "اعتماد القضية",
   RECORD_RETURNED: "إرجاع القضية",
   RECORD_ARCHIVED: "أرشفة القضية",
+  RECORD_EXPORTED: "تصدير القضية",
   REVIEW_CREATED: "إضافة مراجعة",
   DOCUMENT_CREATED: "إضافة مستند",
+  DOCUMENT_DELETED: "حذف مستند",
+  MEMBERSHIP_ROLE_CHANGED: "تغيير دور العضو",
+  MEMBERSHIP_STATUS_CHANGED: "تغيير حالة العضوية",
 };
 
 function formatKB(bytes: number): string {

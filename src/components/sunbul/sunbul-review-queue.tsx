@@ -17,12 +17,16 @@ interface UnderReviewRecord {
 export function SunbulReviewQueue({ clientId }: { clientId: string | null }) {
   const [records, setRecords] = useState<UnderReviewRecord[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!clientId) return;
     sunbul_listRecords(clientId).then((result) => {
+      setError(null);
       if (result.success && result.data) {
         setRecords(result.data as UnderReviewRecord[]);
+      } else {
+        setError(result.error ?? "فشل تحميل القائمة");
       }
       setLoading(false);
     });
@@ -33,6 +37,14 @@ export function SunbulReviewQueue({ clientId }: { clientId: string | null }) {
     return (
       <div className="flex items-center justify-center py-6">
         <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg border border-status-error/20 bg-status-error/5 p-4 text-sm text-status-error">
+        {error}
       </div>
     );
   }

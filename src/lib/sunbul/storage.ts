@@ -143,7 +143,7 @@ export async function deleteStoredSunbulDocument(
     clientId,
     recordId,
     actorId: ctx.id,
-    action: "DOCUMENT_CREATED",
+    action: "DOCUMENT_DELETED",
     entityType: "SunbulDocument",
     entityId: documentId,
     metadata: { action: "deleted", fileName: doc.fileName },

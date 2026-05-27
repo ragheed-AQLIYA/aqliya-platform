@@ -46,14 +46,18 @@ export function SunbulDocumentPanel({
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const isPlatformAdmin = userRole === "PlatformAdmin";
   const canDelete = isPlatformAdmin;
 
   useEffect(() => {
     sunbul_listDocuments(clientId, recordId).then((result) => {
+      setLoadError(null);
       if (result.success && result.data) {
         setDocs(result.data as DocItem[]);
+      } else {
+        setLoadError(result.error ?? "فشل تحميل المستندات");
       }
       setLoading(false);
     });
@@ -83,6 +87,10 @@ export function SunbulDocumentPanel({
       {loading ? (
         <div className="flex items-center justify-center py-6">
           <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : loadError ? (
+        <div className="rounded-lg border border-status-error/20 bg-status-error/5 p-4 text-sm text-status-error">
+          {loadError}
         </div>
       ) : docs.length === 0 ? (
         <div className="rounded-lg border bg-card p-4 text-center">

@@ -161,7 +161,7 @@ export async function updateSunbulMembershipRole(
   await createSunbulAuditEvent({
     clientId: membership.clientId,
     actorId: user.id,
-    action: "MEMBERSHIP_CREATED",
+    action: "MEMBERSHIP_ROLE_CHANGED",
     entityType: "SunbulUserMembership",
     entityId: membership.id,
     metadata: { action: "role_changed", newRole: role },
@@ -188,7 +188,7 @@ export async function updateSunbulMembershipStatus(
   await createSunbulAuditEvent({
     clientId: membership.clientId,
     actorId: user.id,
-    action: "MEMBERSHIP_CREATED",
+    action: "MEMBERSHIP_STATUS_CHANGED",
     entityType: "SunbulUserMembership",
     entityId: membership.id,
     metadata: { action: "status_changed", newStatus: status },
@@ -527,7 +527,7 @@ export async function deleteSunbulDocument(
     clientId,
     recordId,
     actorId: ctx.id,
-    action: "DOCUMENT_CREATED",
+    action: "DOCUMENT_DELETED",
     entityType: "SunbulDocument",
     entityId: documentId,
     metadata: { action: "deleted", fileName: doc.fileName },

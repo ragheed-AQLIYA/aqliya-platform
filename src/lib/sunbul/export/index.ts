@@ -114,7 +114,7 @@ export async function exportSunbulRecord(
     clientId: input.clientId,
     recordId: input.recordId,
     actorId: ctx.id,
-    action: "RECORD_UPDATED",
+    action: "RECORD_EXPORTED",
     entityType: "SunbulRecord",
     entityId: input.recordId,
     metadata: {

@@ -24,10 +24,12 @@ export function SunbulClientSelector({
   const [clients, setClients] = useState<SunbulClient[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
+      setError(null);
       const result = await sunbul_listClients();
       if (result.success && result.data) {
         const list = result.data as SunbulClient[];
@@ -35,6 +37,8 @@ export function SunbulClientSelector({
         if (list.length > 0 && !clientId) {
           onClientChange(list[0].id);
         }
+      } else {
+        setError(result.error ?? "فشل تحميل العملاء");
       }
       setLoading(false);
     }
@@ -53,6 +57,19 @@ export function SunbulClientSelector({
       >
         <Loader2 className="h-4 w-4 animate-spin" />
         <span>جاري تحميل العملاء...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        className={cn(
+          "flex items-center gap-2 text-xs text-status-error",
+          className,
+        )}
+      >
+        {error}
       </div>
     );
   }

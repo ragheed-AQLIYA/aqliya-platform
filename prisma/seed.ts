@@ -38,10 +38,24 @@ async function main() {
 
   console.log("Seeding database...");
 
+  // Create PlatformOrganization (bridge between Organization and AuditOrganization)
+  // Upsert by slug so both seed.ts and seed-audit.ts share the same record
+  const platformOrg = await prisma.platformOrganization.upsert({
+    where: { slug: "aqliya-demo" },
+    update: {},
+    create: {
+      slug: "aqliya-demo",
+      name: "AQLIYA Demo",
+      displayName: "AQLIYA Demo Organization",
+    },
+  });
+  console.log(`Platform organization: ${platformOrg.slug} (${platformOrg.id})`);
+
   // Create Organization
   const org = await prisma.organization.create({
     data: {
       name: "AQLIYA Demo Organization",
+      platformOrganizationId: platformOrg.id,
     },
   });
   console.log(`Created organization: ${org.name}`);

@@ -11,10 +11,14 @@ const actionLabels: Record<string, string> = {
   RECORD_APPROVED: "تم اعتماد القضية",
   RECORD_RETURNED: "تم إرجاع القضية",
   RECORD_ARCHIVED: "تم أرشفة القضية",
+  RECORD_EXPORTED: "تم تصدير القضية",
   REVIEW_CREATED: "تم إضافة مراجعة",
   DOCUMENT_CREATED: "تم إضافة مستند",
+  DOCUMENT_DELETED: "تم حذف مستند",
   CLIENT_CREATED: "تم إنشاء العميل",
   MEMBERSHIP_CREATED: "تم إضافة عضوية",
+  MEMBERSHIP_ROLE_CHANGED: "تم تغيير دور العضو",
+  MEMBERSHIP_STATUS_CHANGED: "تم تغيير حالة العضوية",
 };
 
 interface AuditEventItem {
@@ -34,11 +38,14 @@ export function SunbulAuditTrail({
 }) {
   const [events, setEvents] = useState<AuditEventItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     sunbul_listAuditEvents(clientId, { recordId }).then((result) => {
       if (result.success && result.data) {
         setEvents(result.data.events as AuditEventItem[]);
+      } else {
+        setError(result.error ?? "فشل تحميل سجل الأثر");
       }
       setLoading(false);
     });
@@ -48,6 +55,14 @@ export function SunbulAuditTrail({
     return (
       <div className="flex items-center justify-center py-6">
         <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg border border-status-error/20 bg-status-error/5 p-4 text-sm text-status-error">
+        {error}
       </div>
     );
   }
