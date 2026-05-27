@@ -40,7 +40,12 @@ export default function LoginPage() {
 
         if (session?.user) {
           const url = new URL(window.location.href);
-          const callbackUrl = url.searchParams.get("callbackUrl") || "/";
+          const rawCallback = url.searchParams.get("callbackUrl") || "/";
+          // Prevent open redirects: accept only relative, same-origin paths.
+          const callbackUrl =
+            rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+              ? rawCallback
+              : "/";
           window.location.href = callbackUrl;
         } else {
           setError("تم تسجيل الدخول ولكن الجلسة لم تُنشأ. حاول مرة أخرى.");
@@ -95,6 +100,28 @@ export default function LoginPage() {
               {loading ? "جارٍ تسجيل الدخول..." : "تسجيل الدخول"}
             </Button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card className="w-full max-w-sm mt-4 border-dashed border-muted-foreground/30">
+        <CardHeader className="text-center pb-2">
+          <CardTitle className="text-sm text-muted-foreground">
+            🎬 حسابات العرض التجريبي
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="text-xs text-muted-foreground space-y-1.5">
+          <div className="flex justify-between gap-4">
+            <span className="font-medium">مدير</span>
+            <span dir="ltr">admin@aqliya.com / admin123</span>
+          </div>
+          <div className="flex justify-between gap-4">
+            <span className="font-medium">مشغّل</span>
+            <span dir="ltr">sara@aqliya.com / operator123</span>
+          </div>
+          <div className="flex justify-between gap-4">
+            <span className="font-medium">مشاهد</span>
+            <span dir="ltr">mohammad@aqliya.com / viewer123</span>
+          </div>
         </CardContent>
       </Card>
     </main>

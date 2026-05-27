@@ -1,11 +1,19 @@
 import { PlatformSidebar } from "@/components/platform/platform-sidebar";
 import { PlatformHeader } from "@/components/platform/platform-header";
+import { getCurrentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function WorkflowosLayout({
+export default async function WorkflowosLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  try {
+    await getCurrentUser();
+  } catch {
+    redirect("/login");
+  }
+
   return (
     <div className="flex h-screen overflow-hidden" dir="rtl">
       <PlatformSidebar />

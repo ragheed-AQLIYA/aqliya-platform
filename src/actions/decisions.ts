@@ -293,7 +293,7 @@ export async function updateDecisionIntake(
   },
 ) {
   try {
-    await requireUserContext("OPERATOR");
+    await requireDecisionAccess(id, "OPERATOR");
     await prisma.decision.update({
       where: { id },
       data: {
