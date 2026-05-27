@@ -2,6 +2,25 @@
 
 # This is NOT the Next.js you know
 
+Before any other file, read `docs/DOCUMENTATION_AUTHORITY.md`.
+
+This file defines the documentation hierarchy, conflict resolution rules, and the distinction between doctrine authority and implementation reality.
+
+Before coding or changing docs, determine whether the issue is:
+
+- doctrine/identity
+- product status
+- route status
+- implementation reality
+- report/evidence
+- archived history
+
+Then follow the correct authority source from `docs/DOCUMENTATION_AUTHORITY.md`.
+
+---
+
+# This is NOT the Next.js you know
+
 This repository uses a modern Next.js version with breaking changes. APIs, conventions, routing behavior, server/client boundaries, middleware/proxy behavior, metadata, and build constraints may differ from older knowledge.
 
 Before writing or changing any Next.js code:
@@ -99,14 +118,16 @@ Before making any code, data, route, copy, product, or architecture change, read
 
 ### Load in this order
 
-1. `docs/official/aqliya-vision-v1.1.md`
-2. `docs/official/aqliya-implementation-rules-v1.1.md`
-3. `docs/official/aqliya-product-taxonomy-v1.1.md`
-4. `docs/official/aqliya-core-architecture-v1.1.md`
-5. `docs/official/aqliya-skill-context-v1.1.md`
-6. `docs/official/aqliya-glossary-v1.1.md`
-7. `docs/official/aqliya-roadmap-v1.1.md`
-8. `docs/official/aqliya-agent-context-v1.1.md`
+1. `docs/DOCUMENTATION_AUTHORITY.md` — Conflict-resolution authority
+2. `docs/official/AQLIYA_MASTER_REFERENCE.md` — Current master reference
+3. `docs/official/aqliya-vision-v1.1.md`
+4. `docs/official/aqliya-implementation-rules-v1.1.md`
+5. `docs/official/aqliya-product-taxonomy-v1.1.md`
+6. `docs/official/aqliya-core-architecture-v1.1.md`
+7. `docs/official/aqliya-skill-context-v1.1.md`
+8. `docs/official/aqliya-glossary-v1.1.md`
+9. `docs/official/aqliya-roadmap-v1.1.md`
+10. `docs/official/aqliya-agent-context-v1.1.md`
 
 ### Supporting source-of-truth documents
 
@@ -119,11 +140,14 @@ Before making any code, data, route, copy, product, or architecture change, read
 
 If documents conflict:
 
-1. Prefer `docs/official/` v1.1.
-2. Then use `docs/source-of-truth/`.
-3. Then use current code behavior.
-4. Document the conflict in the final report.
-5. Do not silently choose an interpretation.
+1. For identity, naming, trust principles, governance boundaries, and strategic positioning: follow `docs/official/` doctrine docs.
+2. For implementation status: inspect current code, schema, routes, actions, seeds, tests, and latest validation reports.
+3. If official docs conflict with proven code reality, update the stale official docs and document the correction.
+4. Reports are evidence, not doctrine.
+5. Theoretical docs are background, not authority.
+6. Archived docs are historical only.
+7. Do not silently choose a third interpretation.
+8. Document the conflict resolution in the final report.
 
 ---
 
@@ -154,6 +178,7 @@ Use these assumptions unless the repository proves otherwise.
 - `src/lib/` contains business logic, services, and engines.
 - `src/lib/governance/` should be reused for shared governance patterns.
 - `prisma/schema.prisma` is the canonical database schema.
+- `.skills/aqliya/` contains agent operating skills — auto-load when task matches skill description.
 - `docs/` must be updated when architecture, product status, route strategy, or identity changes.
 
 ### Known caution areas
@@ -1044,10 +1069,12 @@ If something fails, do not hide it.
 
 ### If docs conflict
 
-1. Prefer official v1.1.
-2. Document inconsistency.
-3. Align changed docs to official v1.1.
-4. Do not silently introduce a third interpretation.
+1. Check `docs/DOCUMENTATION_AUTHORITY.md` for hierarchy and rules.
+2. For identity/governance: follow `docs/official/` doctrine docs.
+3. For implementation status: inspect code, routes, actions, tests, reports.
+4. If doctrine contradicts code reality on status, update the stale docs.
+5. Document the inconsistency and correction in the final report.
+6. Do not silently introduce a third interpretation.
 
 ### If scope is too large
 
@@ -1288,7 +1315,7 @@ If a change does not improve any of these, reconsider it.
 
 ---
 
-## Cursor Cloud specific instructions
+## 30. Cursor Cloud specific instructions
 
 ### Services
 
@@ -1321,3 +1348,244 @@ Integration tests use a **separate** DB on port **5433**: `npm run test:integrat
 - Source `.env` before `npm install` / `npm run build` if the shell has no env vars.
 - `npm run test:integration` needs the test compose DB, not only dev `db`.
 - File uploads use local `./uploads` by default (`STORAGE_PROVIDER=local`).
+
+---
+
+## 31. Adopted Operational Patterns (from gstack review)
+
+These lightweight conversation patterns are adopted internally by this agent. They complement existing governance (sections 8, 11, 25) without adding shell infrastructure, config files, or state.
+
+### 31.1 Decision Brief Format
+
+For any choice with non-trivial stakes, use this structure before asking:
+
+```
+D<N> — <title>
+Context: <1 sentence grounding>
+ELI10: <plain English explanation, names the stakes>
+Recommendation: <choice> because <reason>
+Options:
+A) <label> (recommended) — <pro>, <con>
+B) <label> — <pro>, <con>
+```
+
+Applied when: scope decisions, architecture forks, destructive operations, permission model choices, export/review gate decisions.
+
+### 31.2 Confusion Protocol
+
+When encountering high-stakes ambiguity (architecture, data model, destructive scope, missing context), STOP. Name the ambiguity in one sentence, present 2-3 options with tradeoffs, and ask. Do not use for routine coding or obvious changes.
+
+### 31.3 Pre-Flight Audit
+
+Before any review or non-trivial change, gather context:
+
+- `git log --oneline -10` (recent history)
+- `git diff --stat` (what's changed)
+- Design doc / official docs lookup
+- TODO/FIXME/XXX scan in affected area
+- Existing patterns inspection in neighboring files
+
+Context before judgment. Do not review or build without knowing what exists.
+
+### 31.4 Completion Status
+
+At the end of any task or sub-task, report explicit status:
+
+| Status             | Meaning                                          |
+| ------------------ | ------------------------------------------------ |
+| DONE               | Completed with evidence                          |
+| DONE_WITH_CONCERNS | Completed, but list concerns                     |
+| BLOCKED            | Cannot proceed; state blocker and what was tried |
+| NEEDS_CONTEXT      | Missing info; state exactly what is needed       |
+
+Used within final reports (section 25) and as handoff between stages.
+
+### 31.5 Boil the Lake (Completeness Principle)
+
+AI makes completeness cheap. When evaluating approaches:
+
+- A complete approach (full test coverage, all edge cases, all error paths) costs ~same as a shortcut when AI writes the code
+- Default to the complete version
+- Flag only "oceans" (rewrites, multi-quarter migrations, cross-system overhauls) as scope concerns
+- Express effort tradeoffs with dual-scale labels where useful: `(human: ~2d / CC: ~15min)`
+
+These five patterns require zero config, zero state files, zero shell infrastructure. They are conversation-level heuristics that operate within existing AGENTS.md governance.
+
+---
+
+## 32. Skill Selection and Auto-Load Rules
+
+OpenCode must auto-select and load the appropriate skill from `.skills/aqliya/` based on task description matching.
+
+### Skill Map
+
+| Skill File                     | Auto-Load When Task Involves                                              |
+| ------------------------------ | ------------------------------------------------------------------------- |
+| `aqliya-low-load-dev.md`       | Heavy commands, permission gates, RAM issues, build failures              |
+| `aqliya-security-gate.md`      | Auth, security, middleware, API routes, downloads, RBAC, tenant isolation |
+| `aqliya-docs-authority.md`     | Documentation updates, conflicts, status matrix, authority hierarchy      |
+| `aqliya-demo-safety.md`        | `/auditos` demo route, public access, mock data, no-auth pages            |
+| `aqliya-product-completion.md` | Product completion, v0.1 gates, DoD enforcement, filling gaps             |
+| `aqliya-release-checklist.md`  | Release, deployment, pre-flight verification, Go/No-Go                    |
+| `aqliya-opencode-agent.md`     | Agent behavior, task classification, starting a task, reporting           |
+
+### Selection Algorithm
+
+1. Parse task description for keywords matching skill descriptions
+2. If multiple skills match, load all that apply (load order: most specific first)
+3. If no skill matches, load `aqliya-opencode-agent.md` as default
+4. Always load `aqliya-security-gate.md` if the task touches routes, auth, or data
+5. Apply skill rules as constraints during execution
+6. Reference loaded skills in the final report
+
+### Skill Format
+
+Every skill at `.skills/aqliya/*.md` follows this frontmatter format (derived from mimiclaw/nanobot skill system):
+
+```yaml
+---
+name: <skill-name>
+description: <one-line description for auto-matching>
+---
+```
+
+---
+
+## 33. Low-Load Execution Protocol
+
+Before running any command, classify it:
+
+### Light (always allowed)
+
+- `npx tsc --noEmit`
+- `npm run lint -- --quiet`
+- `npx prettier --check`
+- `npx prisma validate`
+- `git status`, `git diff`, `git log`
+- File read, grep, glob
+
+### Medium (justify)
+
+- `npm run build` — after feature completion affecting server code
+- `npm test -- <specific-file>` — when testing a specific module
+- `npx prisma generate` — after schema changes
+
+### Heavy (require approval)
+
+- `npm run build` (full) — unless explicitly requested
+- `npm run lint` (full) — unless explicitly requested
+- `npm test` (full suite) — unless explicitly requested
+- `npx prisma migrate dev` — destructive, requires explicit approval
+- `npx prisma migrate deploy` — production-impacting
+- `npm install <package>` — dependency change
+
+### RAM vs Code Issue Distinction
+
+- RAM issue: same code worked before, error mentions `heap`/`allocation failure`, only on large builds
+- Code issue: stack trace to specific code, TypeScript/lint message, consistent across environments
+- Fix: RAM → `node --max-old-space-size=4096`; Code → fix the error
+- Never blame RAM for code errors
+
+### Heavy Command Pre-Flight
+
+Before any heavy command, run: `git status`, `git diff --stat`, read affected files, check for pre-existing errors.
+
+For full detail, load `.skills/aqliya/aqliya-low-load-dev.md`.
+
+---
+
+## 34. Module Classification Before Every Task
+
+Before ANY implementation, classify the task using this header:
+
+```md
+Task:
+Product/System:
+Task Type: (Identity/copy | Bug fix | Feature | Product completion | Data/schema | AI feature | Infrastructure | Refactor | Documentation)
+Current Level: (L0-L6)
+Target Level: (L0-L6)
+Data Impact: (Schema change | No schema change | Read-only)
+Route Impact: (New route | Route change | No route change)
+Governance Impact: (Auth change | RBAC change | Audit change | None)
+Docs Impact: (Which docs must update)
+Validation Plan: (Which commands to run)
+Primary Risk: (What could break)
+```
+
+### Task Type Determination
+
+| If task sounds like...    | Classify as                   |
+| ------------------------- | ----------------------------- |
+| "Add a page for..."       | Feature or Product completion |
+| "Fix the login..."        | Bug fix                       |
+| "Update the README..."    | Documentation                 |
+| "Change the brand..."     | Identity/copy                 |
+| "Add a model..."          | Data/schema                   |
+| "Make AI review..."       | AI feature                    |
+| "Set up Docker..."        | Infrastructure                |
+| "Move files..."           | Refactor                      |
+| "Complete the product..." | Product completion            |
+
+Do not proceed without classification.
+
+---
+
+## 35. Security/Demo/Docs Gates Quick Reference
+
+### Security Gate (load `aqliya-security-gate.md`)
+
+Before touching any route, action, middleware, or data:
+
+- Check auth coverage
+- Check tenant isolation (organizationId)
+- Check RBAC server-side
+- Check audit trail
+- Check download/export permissions
+
+### Demo Gate (load `aqliya-demo-safety.md`)
+
+Before touching any demo route (`/auditos`):
+
+- No auth required
+- No real customer data
+- No mutations (read-only)
+- No uploads
+- No downloads (or client-side only)
+- No real API keys
+
+### Docs Gate (load `aqliya-docs-authority.md`)
+
+Before changing any doc:
+
+- Check authority hierarchy
+- Check for conflicting higher-authority docs
+- Verify claims against code reality
+- Sync related docs
+- Archive old docs before replacing
+
+### Release Gate (load `aqliya-release-checklist.md`)
+
+Before any release/deployment:
+
+- Route verification
+- Security check
+- Data integrity
+- Docs check
+- Light validation
+- Go/No-Go decision
+- Report
+
+### Failure: if any gate fails, STOP, report, and fix before proceeding.
+
+---
+
+## 36. Modified Sections Index
+
+| Section             | Change                                   | Date       |
+| ------------------- | ---------------------------------------- | ---------- |
+| §3 (Known patterns) | Added `.skills/aqliya/` reference        | 2026-05-27 |
+| §30 (new)           | Cursor Cloud specific instructions       | 2026-05-28 |
+| §32 (new)           | Skill Selection and Auto-Load Rules      | 2026-05-27 |
+| §33 (new)           | Low-Load Execution Protocol              | 2026-05-27 |
+| §34 (new)           | Module Classification Before Every Task  | 2026-05-27 |
+| §35 (new)           | Security/Demo/Docs Gates Quick Reference | 2026-05-27 |
