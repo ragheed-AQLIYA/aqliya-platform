@@ -24,7 +24,7 @@ AQLIYA Company
 │   ├── DecisionOS              (active, workspace, adjacent system)
 │   ├── SalesOS                 (prototype only)
 │   ├── SimulationOS            (marketing-only label)
-│   └── Local Content OS        (strategic second product, scope locked for v0.1, not yet implemented)
+│   └── LocalContentOS          (workspace at /local-content/*, L5 pilot-ready with conditions, strategic second product)
 ├── Custom / Client-Specific Workspaces
 │   ├── Sunbul                  (/sunbul) — real governed custom workflow workspace
 │   └── workflowos              (/workflowos) — route alias/duplicate over Sunbul implementation
@@ -80,11 +80,24 @@ Deployment models: Cloud (active), Private/On-Prem (strategic — not yet implem
 | `/settings`                              | Protected generic settings preview          | Workspace/Prototype    |
 | `/sales`                                 | SalesOS prototype dashboard                 | Workspace/Prototype    |
 | `/products/simulation`                   | SimulationOS marketing page                 | Marketing              |
+| `/local-content`                         | LocalContentOS governed workspace           | Workspace              |
 | `/products/local-content`                | Local Content OS marketing page             | Marketing              |
 | `/products/*`                            | Product detail pages                        | Marketing              |
 | `/custom-product`                        | Custom product inquiry                      | Company                |
 | `/login`, `/access-denied`               | Auth                                        | Internal               |
 | `/published/recommendation/[decisionId]` | Legacy published decision view              | Legacy                 |
+
+## Download Security Standard
+
+Every file download API route must implement these three layers in order:
+
+1. **Authentication** — Require valid session at entry (`requireUserContext`, `getCurrentUser`, or `getAuditActor`).
+2. **Tenant-safe access** — Return **404 on any failure** (not found, wrong org, no storage key). Never return 403 for "exists but not yours" — this leaks record existence.
+3. **Audit trail** — Log successful downloads via `writePlatformAuditLog` with fields: `productKey`, `action`, `platformOrganizationId`, `actorId`, `actorType`, `actorName`, `targetType`, `targetId`, `targetLabel`, `sourceSystem`, `status: "success"`.
+
+Response headers must include `Cache-Control: private, no-store` and `X-Content-Type-Options: nosniff`.
+
+**Enforced on**: Sunbul documents, Office AI outputs, AuditOS evidence.
 
 ## Reality Alignment Notes
 
@@ -92,3 +105,4 @@ Deployment models: Cloud (active), Private/On-Prem (strategic — not yet implem
 - `Sunbul` and `workflowos` are real route families and must remain visible in architecture documentation; however, they are currently best classified as custom/client-specific workspace surfaces rather than core AQLIYA product-family products.
 - `workflowos` does not have a distinct domain schema. It currently reuses Sunbul components, actions, and models.
 - `/organizations`, `/settings`, and `/sales` are protected surfaces but do not yet meet v0.1 workspace completeness requirements.
+- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 12 routes, server actions, seed data, bilingual UI, evidence upload, review/approval, binary PDF/XLSX exports (pdfkit + xlsx), and audit trail. Status: L5 pilot-ready with conditions — not L6 production-hardened. Arabic PDF font rendering is P2 quality gap. See `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for current maturity details.
