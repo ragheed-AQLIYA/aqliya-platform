@@ -63,6 +63,30 @@ Reports provide evidence of implementation progress and validation results. They
 
 → `reports/` for validation reports, smoke tests, readiness reviews, and audit evidence.
 
+**Current Release Lock:**
+
+- `reports/aqliya-controlled-pilot-release-lock-2026-05-25.md` — Phases 0–5 completion, product status, validation evidence, commercial claim boundaries, and recommended next work. Tag: `controlled-pilot-lock-2026-05-25`.
+
+## Public Claim Alignment Authority
+
+Current Reference for Public Facing Claims:
+
+- `reports/public-claim-alignment-2026-05-24.md`
+
+Authority & Constraints:
+
+- This report is the current reference for the status of public-facing claims in marketing, product positioning, and customer communications.
+- Any future modifications to marketing copy or public product positioning must review this report.
+- Claims about production-readiness, security certifications, customer proof, or autonomous capabilities must be supported by explicit, current evidence.
+
+Authority applies to:
+
+- Marketing pages and landing pages
+- Product documentation and positioning statements
+- Case studies and customer proof claims
+- Security and compliance statements
+- Demo and trial claim accuracy
+
 ## Theoretical Reference (Level 7 — Background Only)
 
 Full 21-part theoretical foundation: foundational doctrine, enterprise decision intelligence, market theory, financial intelligence, audit intelligence, audit firm operating theory, workflow intelligence, governance & trust, data trust, human-AI model, organizational memory, deployment & sovereignty, product philosophy, commercialization, responsible intelligence, system design principles, terminology, anti-patterns, strategic narratives, reference models, and documentation maintenance system.

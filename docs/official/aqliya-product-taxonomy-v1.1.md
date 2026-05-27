@@ -85,7 +85,7 @@ AQLIYA Company
 | **DecisionOS**          | Product / System                   | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
 | **Office AI Assistant** | Shared Application                 | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
 | **Sunbul**              | Custom / Client-Specific Workspace | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation |
-| **workflowos**          | Custom / Client-Specific Workspace | Included as custom/internal workspace   | L3 Prototype   | Internal only                 |
+| **workflowos**          | Custom / Client-Specific Workspace | Included as redirect alias to Sunbul    | N/A            | Internal only                 |
 | **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing   | Demo only                     |
 | **SalesOS**             | Product / System                   | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
 | **LocalContentOS**      | Product / System                   | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |
@@ -116,7 +116,7 @@ Shared applications are governed tools built on AQLIYA Intelligence Core. They a
 - Current route family: `/local-content/*` (12 workspace routes)
 - Current data backing: `LocalContentProject`, `LocalContentSupplier`, `LocalContentSpendRecord`, `LocalContentClassification`, `LocalContentFinding`, `LocalContentEvidence`, `LocalContentApproval`, seed data
 - Current evidence: mutation feedback loop verified (2026-05-23); local-content tests (30); finding create PASS on `/local-content/projects/lc-project-demo-001/findings`
-- Current limitation: not L6 production-hardened; binary PDF/XLSX export deferred; review/approval/report inline forms may need clean manual pass; no edit/delete UI for all entities
+- Current limitation: not L6 production-hardened; Arabic PDF font rendering is P2 quality gap; review/approval/report inline forms may need clean manual pass; no edit/delete UI for all entities
 - Must not be claimed as production-hardened (L6) or AI-autonomous classification
 
 ---
@@ -131,9 +131,9 @@ Shared applications are governed tools built on AQLIYA Intelligence Core. They a
 
 ### workflowos
 
-- Real route family
-- Currently reuses Sunbul components, actions, and Prisma models
-- Must be treated as alias/duplicate/internal workflow surface until a distinct domain exists
+- Redirect alias family — every route is a `permanentRedirect(302)` to the matching `/sunbul/*` route
+- No components, no data, no UI, no persistence, no Prisma models
+- Pure redirect — not a prototype or distinct domain
 
 ---
 

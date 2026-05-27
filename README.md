@@ -70,6 +70,8 @@ npm run audit:health # AuditOS health check
 npm run backup:verify # Data integrity check
 ```
 
+**Jest config note:** `jest.config.js` `testMatch` includes both `*.test.ts` and `*.test.tsx`. Component smoke tests are lightweight export-only checks (no `@testing-library/react` dependency).
+
 ## Documentation
 
 See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.

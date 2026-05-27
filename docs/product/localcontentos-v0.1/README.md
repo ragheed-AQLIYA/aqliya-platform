@@ -13,7 +13,7 @@
 ## Remaining limitations
 
 - Not L6 production-hardened.
-- Binary PDF/XLSX export deferred (text/CSV only).
+- Binary PDF/XLSX export implemented (pdfkit + xlsx). Arabic PDF font rendering is P2 quality gap.
 - Review/approval/report inline server forms may still need clean manual pass.
 - No full edit/delete UI for all entities.
 - No AI autonomous classification.

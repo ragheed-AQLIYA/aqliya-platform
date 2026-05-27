@@ -31,19 +31,20 @@ interface OrgData {
 export function OrganizationWorkspace({ data }: { data: OrgData }) {
   const products = [
     {
-      name: "WorkflowOS",
-      nameAr: "نظام سير العمل",
+      name: "Sunbul",
+      nameAr: "سنبل",
       icon: KanbanSquare,
       status: data.workflowosStatus,
       statusColor: "text-status-success",
       statusBg: "bg-status-success/10",
-      href: "/workflowos",
-      adminHref: "/workflowos/admin",
+      href: "/sunbul",
+      adminHref: "/sunbul/admin",
       note:
         data.workflowosRecordCount > 0
           ? `${data.workflowosClientCount} عملاء، ${data.workflowosRecordCount} قضية`
           : "جاهز للتفعيل — شغّل البذرة التجريبية أولاً",
-      routeNote: "المسار /workflowos هو المسار الرسمي للمنتج",
+      routeNote:
+        "المسار الرسمي هو /sunbul بينما /workflowos محفوظ كـ alias داخلي.",
     },
     {
       name: "AuditOS",
@@ -223,7 +224,7 @@ export function OrganizationWorkspace({ data }: { data: OrgData }) {
         </div>
         {data.workflowosMembershipCount > 0 && (
           <p className="text-xs text-muted-foreground mt-2">
-            {data.workflowosMembershipCount} عضوية في WorkflowOS عبر{" "}
+            {data.workflowosMembershipCount} عضوية في سنبل عبر{" "}
             {data.workflowosClientCount} عميل
           </p>
         )}
@@ -234,18 +235,18 @@ export function OrganizationWorkspace({ data }: { data: OrgData }) {
         <h2 className="text-lg font-semibold mb-4">إجراءات المؤسسة</h2>
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/workflowos/admin"
+            href="/sunbul/admin"
             className="inline-flex items-center gap-2 rounded-lg border bg-card px-4 py-2.5 text-sm font-medium hover:bg-muted transition-colors"
           >
             <Settings className="h-4 w-4" />
-            إدارة WorkflowOS
+            إدارة سنبل
           </Link>
           <Link
-            href="/workflowos"
+            href="/sunbul"
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             <ExternalLink className="h-4 w-4" />
-            فتح WorkflowOS
+            فتح سنبل
           </Link>
           <button
             disabled

@@ -1579,13 +1579,169 @@ Before any release/deployment:
 
 ---
 
+## 37. External Toolchain Policy
+
+**Status:** Active  
+**Purpose:** Govern the use of external AI coding tools, MCP servers, and model providers within the AQLIYA repository.  
+**Effective date:** 2026-05-27
+
+---
+
+### 37.1 Approved Phase 1 Tools
+
+These are the only external toolchain tools approved for Phase 1. No others may be installed or configured without a new decision.
+
+| Tool                    | Purpose                                                                                                                  | Version                                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| Claude Code Router      | Model provider routing (Anthropic primary, OpenRouter secondary). Package: `@musistudio/claude-code-router`. CLI: `ccr`. | Latest stable                             |
+| filesystem MCP          | Read-only file access for `src/` and `docs/`                                                                             | `@modelcontextprotocol/server-filesystem` |
+| postgres MCP            | Read-only database schema inspection                                                                                     | `@anthropic/mcp-postgres`                 |
+| github MCP              | Repository read + pull request operations                                                                                | `@modelcontextprotocol/server-github`     |
+| sequential-thinking MCP | Multi-step structured reasoning                                                                                          | `@anthropic/mcp-sequential-thinking`      |
+
+### 37.2 Explicitly Rejected for Phase 1
+
+The following tools are explicitly rejected. Do not install, configure, or reference them:
+
+- **SuperClaude Framework** — Too heavy (30 commands, 20 agents, 8 MCPs). Overlaps with existing AGENTS.md governance. Architecture changes frequently.
+- **Claude Engineer** — Self-modifying tool generation violates §12 (AI Feature Rules) and §24 (Governance anti-patterns). The "self-improving" pattern conflicts with AQLIYA's trust principle.
+- **Claude Task Master** — MIT + Commons Clause is a restrictive license. Full npm dependency for functionality already covered in AGENTS.md (§8 Execution Lifecycle, §25 Report Format).
+
+### 37.3 MCP Permission Rules
+
+Each MCP operates with least-privilege permissions:
+
+| MCP                 | Default Scope          | Read                    | Write                     | Notes                                                                                   |
+| ------------------- | ---------------------- | ----------------------- | ------------------------- | --------------------------------------------------------------------------------------- |
+| filesystem          | `src/`, `docs/`        | Yes                     | By explicit approval only | No access outside these paths                                                           |
+| postgres            | Connected database     | Yes (SELECT only)       | No                        | No INSERT/UPDATE/DELETE/DDL. No migrations. No production DB without explicit approval. |
+| github              | Configured repository  | Yes (code, issues, PRs) | PR creation only          | No admin, no secret access                                                              |
+| sequential-thinking | None (local reasoning) | N/A                     | N/A                       | No external access. Safe by design.                                                     |
+
+### 37.4 Claude Code Router Policy
+
+#### Provider Mapping
+
+| Task Type                                    | Provider               | Model           | Rationale                               |
+| -------------------------------------------- | ---------------------- | --------------- | --------------------------------------- |
+| Architecture, security, governance, database | Anthropic (primary)    | Claude Opus 4   | Strongest reasoning for high-risk tasks |
+| Normal implementation, features, bug fixes   | Anthropic (primary)    | Claude Sonnet 4 | Balanced quality/cost                   |
+| Long-context non-sensitive analysis          | OpenRouter (secondary) | Gemini 2.5 Pro  | Cost-effective for large contexts       |
+| Lightweight non-sensitive tasks              | OpenRouter (secondary) | DeepSeek Chat   | Lower cost for simple work              |
+
+#### Allowed External Routing
+
+External providers (non-Anthropic) may only be used for:
+
+- Docs cleanup
+- Small UI tasks (non-sensitive)
+- Long-context non-sensitive analysis
+- Non-sensitive refactor suggestions
+
+#### Forbidden External Routing
+
+External providers must NOT receive:
+
+- Auth logic, session handling, tokens
+- RBAC or tenant isolation code
+- Database schema or migration contents
+- Secrets, API keys, environment variables
+- Production data or customer records
+- Security-sensitive route logic
+- Evidence files, customer uploads, audit trails
+- AuditOS workspace or protected data
+- LocalContentOS customer/source data
+
+#### Schema Uncertainty
+
+The Claude Code Router config schema was resolved against the official documentation at `https://musistudio.github.io/claude-code-router/`. Findings:
+
+- **Both `baseUrl`/`apiKey` (camelCase) and `api_base_url`/`api_key` (snake_case) are documented on the official site.** The Quick Start page shows `api_base_url`/`api_key`; the Basic Configuration page shows `baseUrl`/`apiKey` as the canonical format with all provider examples.
+- **Recommendation:** Use `baseUrl`/`apiKey` (camelCase) as the canonical format. It is the primary format in the detailed configuration reference, supports all providers, and uses clean base URLs (e.g., `https://api.anthropic.com/v1`) instead of full endpoints.
+- **`api_base_url`/`api_key` (snake_case) is also supported** for backward compatibility but appears only in the Quick Start example.
+
+The draft config at `docs/config-drafts/claude-code-router-config.json` has been updated to use the camelCase format.
+
+**Rule:** Do not activate the router config without review. Schema is now confirmed.
+
+### 37.5 New MCP Addition Rule
+
+Before adding any new MCP server, the following workflow must execute:
+
+```
+STOP → REVIEW → APPROVAL → MINIMAL INSTALL → DOCUMENT PERMISSIONS
+```
+
+1. **STOP** — Do not install or configure without review
+2. **REVIEW** — Assess security, RAM, governance impact
+3. **APPROVAL** — Explicit approval required (documented decision)
+4. **MINIMAL INSTALL** — Install only the required capability, not the full package
+5. **DOCUMENT PERMISSIONS** — Update this section with the new MCP's scope and restrictions
+
+### 37.6 Command Restrictions (Low-Load)
+
+Before running any of these commands, explicit approval is required:
+
+| Command                       | Reason                                                                                                                        |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `npm run build`               | Heavy. CPU/RAM intensive                                                                                                      |
+| `npm run lint` (full)         | Broad scope may uncover pre-existing issues                                                                                   |
+| `npm test` (full suite)       | Long-running                                                                                                                  |
+| `npx prisma generate`         | Schema-dependent                                                                                                              |
+| `npx prisma migrate dev`      | Destructive — can alter database                                                                                              |
+| `npm install <package>`       | Dependency change — requires review                                                                                           |
+| `ccr start`                   | Activates router via `claude-code-router` CLI (package `@musistudio/claude-code-router`) — requires config verification first |
+| Any MCP start/install command | Must pass New MCP Addition Rule first                                                                                         |
+
+### 37.7 Security Boundaries
+
+Mandatory security rules for all toolchain operations:
+
+- **No secret inspection** — Never read, log, or display `.env`, secrets, or API keys
+- **No production DB access** — postgres MCP must target development/staging only
+- **No broad filesystem permissions** — filesystem MCP paths must be explicitly listed
+- **No write DB MCP** — postgres MCP is read-only only
+- **No unreviewed provider routing** — every new provider or model addition requires review
+- **No external routing of sensitive tasks** — auth, RBAC, data, security stay on Anthropic
+- **No client-only validation** — server-side enforcement always required
+- **No uncontrolled agents** — no self-modifying code or autonomous tool creation
+- **No bypassing middleware** — proxy/auth layers must remain intact
+
+### 37.8 Final Report Requirements for Toolchain Tasks
+
+Every toolchain or infrastructure task must end with a report containing:
+
+1. **Files inspected** — which configs, docs, and code were reviewed
+2. **Files changed** — exact paths and changes made
+3. **Commands run** — every shell command executed
+4. **Heavy commands avoided** — which heavy commands were deliberately skipped and why
+5. **RAM risk** — whether any operation could cause memory pressure
+6. **Security risk** — whether any change introduces new attack surface
+7. **Schema uncertainties** — any config schemas that were not verified
+8. **Next approval needed** — what requires explicit approval before proceeding
+
+### 37.9 Enforcement
+
+This policy is enforced by:
+
+- Pre-flight audit (AGENTS.md §31.3) before changes
+- Self-review by OpenCode agent before any toolchain operation
+- Explicit approval gates for all sensitive actions
+- Final reports documenting compliance
+
+Violations must be reported and corrected before proceeding.
+
+---
+
 ## 36. Modified Sections Index
 
-| Section             | Change                                   | Date       |
-| ------------------- | ---------------------------------------- | ---------- |
-| §3 (Known patterns) | Added `.skills/aqliya/` reference        | 2026-05-27 |
-| §30 (new)           | Cursor Cloud specific instructions       | 2026-05-28 |
-| §32 (new)           | Skill Selection and Auto-Load Rules      | 2026-05-27 |
-| §33 (new)           | Low-Load Execution Protocol              | 2026-05-27 |
-| §34 (new)           | Module Classification Before Every Task  | 2026-05-27 |
-| §35 (new)           | Security/Demo/Docs Gates Quick Reference | 2026-05-27 |
+| Section             | Change                                           | Date       |
+| ------------------- | ------------------------------------------------ | ---------- |
+| §3 (Known patterns) | Added `.skills/aqliya/` reference                | 2026-05-27 |
+| §30 (new)           | Cursor Cloud specific instructions               | 2026-05-28 |
+| §31 (new)           | Adopted Operational Patterns (from gstack review) | 2026-05-27 |
+| §32 (new)           | Skill Selection and Auto-Load Rules              | 2026-05-27 |
+| §33 (new)           | Low-Load Execution Protocol                      | 2026-05-27 |
+| §34 (new)           | Module Classification Before Every Task          | 2026-05-27 |
+| §35 (new)           | Security/Demo/Docs Gates Quick Reference         | 2026-05-27 |
+| §37 (new)           | External Toolchain Policy                        | 2026-05-27 |

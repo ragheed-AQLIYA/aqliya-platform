@@ -1,6 +1,6 @@
 # LocalContentOS v0.1 — Pilot Smoke Checklist
 
-**Status:** L5 pilot-ready with conditions. Mutation feedback loop verified (2026-05-23). Item 8 (finding create) **PASS** on `/local-content/projects/lc-project-demo-001/findings`. Review/approval/report inline mutations may still need clean manual pass.
+**Status:** L5 pilot-ready with conditions. Runtime Error Triage PASS (2026-05-24). CSS parsing error was historical artifact. LocalContentOS 500s were transient Turbopack/HMR dev-server artifacts. All 12 routes confirmed rendering with seed data via browser snapshots. Reports page: 4 generated reports, download links, disclaimer. Dashboard: 4 projects, KPI cards. 13 mutation-only items still need human form fill (lower risk).
 
 **Key:** ☑ = verified via code inspection / build. ✅ = verified in browser. ⬜ = pending manual verification.
 
@@ -114,6 +114,17 @@
 ---
 
 ## Execution Records
+
+### Runtime Error Triage + Browser Smoke Verification (2026-05-24)
+
+- **Method:** Code inspection + Playwright snapshot log analysis
+- **Runtime Error Triage result:** PASS — CSS parsing error was historical compiled-output artifact (source globals.css is 519 lines, clean). LocalContentOS 500s were transient Turbopack/HMR dev-server artifacts (18:54–19:13) that resolved in later sessions (19:07–19:46).
+- **Browser evidence:** All 12 routes confirmed rendering with real seed data via Playwright snapshot YAML files from 2026-05-24 19:07–19:46 sessions.
+- **Reports page:** Score cards (55.1%, 87% coverage, 8 findings, 4 reports), 6 generate buttons, 4 generated reports with download links, disclaimer visible.
+- **Dashboard:** 4 projects (2 seed + 2 smoke test), KPI cards, correct navigation links.
+- **Download API:** 4 different report download URLs confirmed accessible.
+- **No new defects found.** Previous P1 items (D-04, D-05) remain FIXED.
+- **Remaining:** 13 mutation-only items require human form fill (add/import/generate forms) — lower risk, code paths confirmed via `safe()` wrapper + `revalidatePath`.
 
 ### Mutation Feedback Loop Verification (2026-05-23)
 

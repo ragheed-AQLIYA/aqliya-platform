@@ -5,6 +5,8 @@
 **Auditor Role:** Security Architect  
 **Platform:** AQLIYA Private Governed Institutional Intelligence — AuditOS, LocalContentOS, DecisionOS, SalesOS, Sunbul, WorkflowOS
 
+> Status update (2026-05-24): This audit is preserved as historical evidence, but two headline findings are no longer current code reality. Next.js 16 in this repository uses `src/proxy.ts` rather than requiring `middleware.ts`, and `src/app/api/sunbul/documents/[documentId]/download/route.ts` now authenticates before its document lookup. Use `docs/reports/security-auth-coverage-lock-2026-05-24.md` for the current auth-coverage verdict.
+
 ---
 
 ## A. Executive Security Summary
