@@ -6,11 +6,14 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { getStorageProvider } from "@/lib/platform/storage";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { parse } from "csv-parse/sync";
 import * as XLSX from "xlsx";
 import * as mammoth from "mammoth";
 import { PDFParse, VerbosityLevel } from "pdf-parse";
+
+// ─── Module-level audit logger ───
+const alog = auditLogger({ productKey: Product.OFFICE_AI_ASSISTANT });
 
 // ─── Constants ───
 
@@ -271,17 +274,19 @@ export async function extractOfficeAiFileContent(
   }
 
   // Audit: started
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.file.extraction_started",
-    targetType: "OfficeAiFile",
-    targetId: fileId,
-    severity: "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiFile",
-    sourceId: fileId,
-    metadata: { fileType: file.fileType, filename: file.filename },
-  });
+  await alog.record(
+    "office_ai.file.extraction_started",
+    {
+      type: "OfficeAiFile",
+      id: fileId,
+    },
+    {
+      severity: "info",
+      sourceModel: "OfficeAiFile",
+      sourceId: fileId,
+      metadata: { fileType: file.fileType, filename: file.filename },
+    },
+  );
 
   try {
     let buffer: Buffer;
@@ -365,21 +370,23 @@ export async function extractOfficeAiFileContent(
     });
 
     // Audit: completed
-    await writePlatformAuditLog({
-      productKey: "office_ai_assistant",
-      action: "office_ai.file.extraction_completed",
-      targetType: "OfficeAiFile",
-      targetId: fileId,
-      severity: "info",
-      sourceSystem: "office_ai_assistant",
-      sourceModel: "OfficeAiFile",
-      sourceId: fileId,
-      metadata: {
-        fileType: file.fileType,
-        extractionType: extractType,
-        ...extractionMeta,
+    await alog.record(
+      "office_ai.file.extraction_completed",
+      {
+        type: "OfficeAiFile",
+        id: fileId,
       },
-    });
+      {
+        severity: "info",
+        sourceModel: "OfficeAiFile",
+        sourceId: fileId,
+        metadata: {
+          fileType: file.fileType,
+          extractionType: extractType,
+          ...extractionMeta,
+        },
+      },
+    );
 
     return { success: true, text: extractedContent, meta: extractionMeta };
   } catch (err) {
@@ -390,17 +397,19 @@ export async function extractOfficeAiFileContent(
       data: { extractionStatus: "failed", extractedAt: new Date() },
     });
 
-    await writePlatformAuditLog({
-      productKey: "office_ai_assistant",
-      action: "office_ai.file.extraction_failed",
-      targetType: "OfficeAiFile",
-      targetId: fileId,
-      severity: "warning",
-      sourceSystem: "office_ai_assistant",
-      sourceModel: "OfficeAiFile",
-      sourceId: fileId,
-      metadata: { fileType: file.fileType, error: msg },
-    });
+    await alog.record(
+      "office_ai.file.extraction_failed",
+      {
+        type: "OfficeAiFile",
+        id: fileId,
+      },
+      {
+        severity: "warning",
+        sourceModel: "OfficeAiFile",
+        sourceId: fileId,
+        metadata: { fileType: file.fileType, error: msg },
+      },
+    );
 
     return { success: false, error: msg };
   }
@@ -445,19 +454,21 @@ export async function reExtractFileContent(
   const result = await extractOfficeAiFileContent(fileId);
 
   if (result.success && actor) {
-    await writePlatformAuditLog({
-      productKey: "office_ai_assistant",
-      action: "office_ai.file.reextracted",
-      targetType: "OfficeAiFile",
-      targetId: fileId,
-      severity: "info",
-      actorId: actor.id,
-      actorName: actor.name,
-      sourceSystem: "office_ai_assistant",
-      sourceModel: "OfficeAiFile",
-      sourceId: fileId,
-      metadata: { fileType: file.fileType, filename: file.filename },
-    });
+    await alog.record(
+      "office_ai.file.reextracted",
+      {
+        type: "OfficeAiFile",
+        id: fileId,
+      },
+      {
+        severity: "info",
+        actorId: actor.id,
+        actorName: actor.name,
+        sourceModel: "OfficeAiFile",
+        sourceId: fileId,
+        metadata: { fileType: file.fileType, filename: file.filename },
+      },
+    );
   }
 
   return result;

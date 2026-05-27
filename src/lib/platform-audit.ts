@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { AuditAction as PrismaAuditAction } from "@prisma/client";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 export type AuditAction =
   | "DECISION_CREATED"
@@ -86,8 +87,6 @@ export async function logAudit(
 
   // Dual-write to PlatformAuditLog (safe mode — never blocks)
   try {
-    const { writePlatformAuditLog } = await import("@/lib/platform/audit-log");
-
     let platformOrgId: string | undefined;
     try {
       const org = await prisma.organization.findUnique({
@@ -110,28 +109,32 @@ export async function logAudit(
       // Best-effort: use userId as fallback name
     }
 
-    await writePlatformAuditLog({
-      productKey: "decision_os",
-      action: action.toString(),
-      platformOrganizationId: platformOrgId,
-      actorId: userId,
-      actorType: "user",
-      actorName,
-      targetType: entity,
-      targetId: decisionId,
-      severity: "info",
-      status: "recorded",
+    const alog = auditLogger({
+      productKey: Product.DECISION_OS,
       sourceSystem: "decision_os",
-      sourceModel: "AuditLog",
-      sourceId: auditLog.id,
-      metadata: {
-        originalId: auditLog.id,
-        dualWrite: true,
-        decisionId,
-        before: before ? before : undefined,
-        after: after ? after : undefined,
-      },
+      organization: { platformOrganizationId: platformOrgId },
+      actor: { id: userId, type: "user", name: actorName },
     });
+    await alog.record(
+      action.toString(),
+      {
+        type: entity,
+        id: decisionId,
+      },
+      {
+        severity: "info",
+        status: "recorded",
+        sourceModel: "AuditLog",
+        sourceId: auditLog.id,
+        metadata: {
+          originalId: auditLog.id,
+          dualWrite: true,
+          decisionId,
+          before: before ? before : undefined,
+          after: after ? after : undefined,
+        },
+      },
+    );
   } catch {
     // Dual-write failure must never affect the primary action
   }
