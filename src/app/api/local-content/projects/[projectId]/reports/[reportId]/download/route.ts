@@ -8,7 +8,7 @@ import {
   buildSpendClassificationXLSX,
   buildEvidenceIndexXLSX,
 } from "@/lib/local-content/export";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 export async function GET(
   _request: NextRequest,
@@ -69,19 +69,21 @@ export async function GET(
         break;
     }
 
-    await writePlatformAuditLog({
-      productKey: "local_content",
-      action: "report.download",
-      platformOrganizationId: user.platformOrganizationId,
-      actorId: user.id,
-      actorType: user.role,
-      actorName: user.name,
-      targetType: "local_content_report",
-      targetId: reportId,
-      targetLabel: result.filename,
+    const alog = auditLogger({
+      productKey: Product.LOCAL_CONTENT,
       sourceSystem: "local_content_download",
-      status: "success",
+      organization: { platformOrganizationId: user.platformOrganizationId },
+      actor: { id: user.id, name: user.name, type: user.role },
     });
+    await alog.record(
+      "report.download",
+      {
+        type: "local_content_report",
+        id: reportId,
+        label: result.filename,
+      },
+      { status: "success" },
+    );
 
     const body: BodyInit =
       typeof result.content === "string"

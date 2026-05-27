@@ -2,17 +2,43 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getStorageProvider } from "@/lib/audit/storage";
 import { getAuditActor } from "@/lib/audit/actor-context";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
+import { verifyDownloadToken } from "@/lib/download-token";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ evidenceId: string }> },
 ) {
   const { evidenceId } = await params;
 
   try {
-    const actor = await getAuditActor();
+    const tokenParam = request.nextUrl.searchParams.get("token");
+    let actor: {
+      actorId: string;
+      actorName: string;
+      actorRole: string;
+      organizationId: string;
+    };
+
+    if (tokenParam) {
+      const payload = await verifyDownloadToken(tokenParam);
+      if (payload.type !== "audit_evidence" || payload.file !== evidenceId) {
+        return NextResponse.json(
+          { error: "Download not found" },
+          { status: 404 },
+        );
+      }
+      actor = {
+        actorId: payload.sub,
+        actorName: "token",
+        actorRole: "viewer",
+        organizationId: payload.org,
+      };
+    } else {
+      actor = await getAuditActor();
+    }
+
     enforceAuditRateLimit(actor, "evidence.download", "download");
 
     const evidence = await prisma.auditEvidence.findUnique({
@@ -41,19 +67,25 @@ export async function GET(
       );
     }
 
-    await writePlatformAuditLog({
-      productKey: "audit",
-      action: "evidence.download",
-      platformOrganizationId: actor.organizationId,
-      actorId: actor.actorId,
-      actorType: actor.actorRole,
-      actorName: actor.actorName,
-      targetType: "audit_evidence",
-      targetId: evidenceId,
-      targetLabel: evidence.filename,
+    const alog = auditLogger({
+      productKey: Product.AUDIT,
       sourceSystem: "audit_evidence_download",
-      status: "success",
+      organization: { platformOrganizationId: actor.organizationId },
+      actor: {
+        id: actor.actorId,
+        name: actor.actorName,
+        type: actor.actorRole,
+      },
     });
+    await alog.record(
+      "evidence.download",
+      {
+        type: "audit_evidence",
+        id: evidenceId,
+        label: evidence.filename,
+      },
+      { status: "success" },
+    );
 
     const body = new Uint8Array(file.content);
     return new NextResponse(body, {

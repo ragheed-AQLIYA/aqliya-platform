@@ -39,6 +39,7 @@ const publicExact = new Set([
   "/use-cases",
   "/case-studies",
   "/auditos",
+  "/api/custom-product-submit",
 ]);
 
 const publicPrefixes = [
@@ -144,5 +145,6 @@ export const config = {
     "/api/local-content/:path*",
     "/api/sunbul/:path*",
     "/api/metrics",
+    "/api/custom-product-submit",
   ],
 };

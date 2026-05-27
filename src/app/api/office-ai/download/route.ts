@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireUserContext } from "@/lib/auth";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 // ─── Per-user in-memory rate limiter for downloads ───
+// Note: per-instance only. In multi-instance deployments, rate limiting
+// is not shared across instances. Acceptable for v0.1; revisit with Redis.
 const downloadRateMap = new Map<string, { count: number; resetAt: number }>();
 const DOWNLOAD_WINDOW_MS = 60_000;
 const DOWNLOAD_MAX = 30;
@@ -22,16 +24,6 @@ function checkDownloadRateLimit(userId: string): void {
     throw new Error("Download rate limit exceeded. Please try again later.");
   }
   entry.count++;
-}
-
-// Periodic cleanup
-if (typeof setInterval !== "undefined") {
-  setInterval(() => {
-    const now = Date.now();
-    for (const [k, v] of downloadRateMap) {
-      if (now > v.resetAt) downloadRateMap.delete(k);
-    }
-  }, DOWNLOAD_WINDOW_MS);
 }
 
 function escapeHtml(str: string): string {
@@ -87,27 +79,34 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    if (!user.platformOrganizationId) {
+      return new NextResponse("User not associated with an organization", {
+        status: 400,
+      });
+    }
+
     if (
       !output ||
-      !user.platformOrganizationId ||
       output.task.platformOrganizationId !== user.platformOrganizationId
     ) {
       return new NextResponse("Output not found", { status: 404 });
     }
 
-    await writePlatformAuditLog({
-      productKey: "office_ai",
-      action: "output.download",
-      platformOrganizationId: user.platformOrganizationId,
-      actorId: user.id,
-      actorType: user.role,
-      actorName: user.name,
-      targetType: "office_ai_output",
-      targetId: outputId,
-      targetLabel: output.task.title || output.task.taskType || "output",
+    const alog = auditLogger({
+      productKey: Product.OFFICE_AI,
       sourceSystem: "office_ai_download",
-      status: "success",
+      organization: { platformOrganizationId: user.platformOrganizationId },
+      actor: { id: user.id, name: user.name, type: user.role },
     });
+    await alog.record(
+      "output.download",
+      {
+        type: "office_ai_output",
+        id: outputId,
+        label: output.task.title || output.task.taskType || "output",
+      },
+      { status: "success" },
+    );
 
     const filename = output.task.title || output.task.taskType || "output";
     const safeName = filename.replace(/[^a-zA-Z0-9_\-\u0600-\u06FF]/g, "_");

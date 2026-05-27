@@ -5,12 +5,16 @@
 
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import {
   generateDeterministicOfficeAiOutput,
   type FileWithContent,
 } from "./deterministic-generators";
 import { extractAllTaskFiles } from "./file-extraction-service";
+
+// ─── Module-level audit logger ───
+// All calls share productKey + sourceSystem.
+const alog = auditLogger({ productKey: Product.OFFICE_AI_ASSISTANT });
 
 // ─── Types ───
 
@@ -118,26 +122,27 @@ export async function createOfficeAiTask(
   });
 
   // Audit event
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.task.created",
-    platformOrganizationId: task.platformOrganizationId,
-    clientWorkspaceId: task.clientWorkspaceId ?? undefined,
-    projectId: task.projectId ?? undefined,
-    actorId: input.createdById,
-    actorName: input.createdByName,
-    targetType: "OfficeAiTask",
-    targetId: task.id,
-    severity: "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiTask",
-    sourceId: task.id,
-    metadata: {
-      governedSharedApplication: true,
-      taskType: task.taskType,
-      status: task.status,
+  await alog.record(
+    "office_ai.task.created",
+    {
+      type: "OfficeAiTask",
+      id: task.id,
     },
-  });
+    {
+      platformOrganizationId: task.platformOrganizationId,
+      clientWorkspaceId: task.clientWorkspaceId ?? undefined,
+      projectId: task.projectId ?? undefined,
+      actorId: input.createdById,
+      actorName: input.createdByName,
+      sourceModel: "OfficeAiTask",
+      sourceId: task.id,
+      metadata: {
+        governedSharedApplication: true,
+        taskType: task.taskType,
+        status: task.status,
+      },
+    },
+  );
 
   return { success: true, data: task };
 }
@@ -213,24 +218,25 @@ export async function addOfficeAiFile(
   });
 
   // Audit event
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.file.attached",
-    platformOrganizationId: undefined, // resolved from task if needed
-    actorId: input.uploadedById,
-    targetType: "OfficeAiFile",
-    targetId: file.id,
-    severity: "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiFile",
-    sourceId: file.id,
-    metadata: {
-      governedSharedApplication: true,
-      taskId,
-      filename: input.filename,
-      fileType: input.fileType,
+  await alog.record(
+    "office_ai.file.attached",
+    {
+      type: "OfficeAiFile",
+      id: file.id,
     },
-  });
+    {
+      actorId: input.uploadedById,
+      severity: "info",
+      sourceModel: "OfficeAiFile",
+      sourceId: file.id,
+      metadata: {
+        governedSharedApplication: true,
+        taskId,
+        filename: input.filename,
+        fileType: input.fileType,
+      },
+    },
+  );
 
   return { success: true, data: file };
 }
@@ -263,26 +269,27 @@ export async function addOfficeAiOutput(
   });
 
   // Audit event
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.output.created",
-    actorId: undefined,
-    targetType: "OfficeAiOutput",
-    targetId: output.id,
-    severity: "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiOutput",
-    sourceId: output.id,
-    aiProvider: input.aiProvider,
-    aiModel: input.aiModel,
-    aiPromptVersion: input.aiPromptVersion,
-    metadata: {
-      governedSharedApplication: true,
-      taskId,
-      format: output.format,
-      status: output.status,
+  await alog.record(
+    "office_ai.output.created",
+    {
+      type: "OfficeAiOutput",
+      id: output.id,
     },
-  });
+    {
+      severity: "info",
+      sourceModel: "OfficeAiOutput",
+      sourceId: output.id,
+      aiProvider: input.aiProvider,
+      aiModel: input.aiModel,
+      aiPromptVersion: input.aiPromptVersion,
+      metadata: {
+        governedSharedApplication: true,
+        taskId,
+        format: output.format,
+        status: output.status,
+      },
+    },
+  );
 
   return { success: true, data: output };
 }
@@ -315,27 +322,29 @@ export async function updateOfficeAiTaskStatus(
     },
   });
 
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.task.status_changed",
-    platformOrganizationId: task.platformOrganizationId,
-    clientWorkspaceId: task.clientWorkspaceId ?? undefined,
-    projectId: task.projectId ?? undefined,
-    actorId: actor?.id,
-    actorName: actor?.name,
-    targetType: "OfficeAiTask",
-    targetId: task.id,
-    severity: status === "rejected" ? "warning" : "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiTask",
-    sourceId: task.id,
-    metadata: {
-      governedSharedApplication: true,
-      previousStatus,
-      newStatus: status,
-      taskType: task.taskType,
+  await alog.record(
+    "office_ai.task.status_changed",
+    {
+      type: "OfficeAiTask",
+      id: task.id,
     },
-  });
+    {
+      platformOrganizationId: task.platformOrganizationId,
+      clientWorkspaceId: task.clientWorkspaceId ?? undefined,
+      projectId: task.projectId ?? undefined,
+      actorId: actor?.id,
+      actorName: actor?.name,
+      severity: status === "rejected" ? "warning" : "info",
+      sourceModel: "OfficeAiTask",
+      sourceId: task.id,
+      metadata: {
+        governedSharedApplication: true,
+        previousStatus,
+        newStatus: status,
+        taskType: task.taskType,
+      },
+    },
+  );
 
   return { success: true, data: task };
 }
@@ -372,26 +381,28 @@ export async function updateOfficeAiTaskDetails(
     data: data as never,
   });
 
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.task.updated",
-    platformOrganizationId: task.platformOrganizationId,
-    clientWorkspaceId: task.clientWorkspaceId ?? undefined,
-    projectId: task.projectId ?? undefined,
-    actorId: actor?.id,
-    actorName: actor?.name,
-    targetType: "OfficeAiTask",
-    targetId: task.id,
-    severity: "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiTask",
-    sourceId: task.id,
-    metadata: {
-      governedSharedApplication: true,
-      updatedFields: Object.keys(data),
-      taskType: task.taskType,
+  await alog.record(
+    "office_ai.task.updated",
+    {
+      type: "OfficeAiTask",
+      id: task.id,
     },
-  });
+    {
+      platformOrganizationId: task.platformOrganizationId,
+      clientWorkspaceId: task.clientWorkspaceId ?? undefined,
+      projectId: task.projectId ?? undefined,
+      actorId: actor?.id,
+      actorName: actor?.name,
+      severity: "info",
+      sourceModel: "OfficeAiTask",
+      sourceId: task.id,
+      metadata: {
+        governedSharedApplication: true,
+        updatedFields: Object.keys(data),
+        taskType: task.taskType,
+      },
+    },
+  );
 
   return { success: true, data: task };
 }
@@ -412,26 +423,28 @@ export async function archiveOfficeAiTask(
     data: { status: "archived" },
   });
 
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.task.archived",
-    platformOrganizationId: task.platformOrganizationId,
-    clientWorkspaceId: task.clientWorkspaceId ?? undefined,
-    projectId: task.projectId ?? undefined,
-    actorId: actor?.id,
-    actorName: actor?.name,
-    targetType: "OfficeAiTask",
-    targetId: task.id,
-    severity: "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiTask",
-    sourceId: task.id,
-    metadata: {
-      governedSharedApplication: true,
-      previousStatus: existing.status,
-      taskType: task.taskType,
+  await alog.record(
+    "office_ai.task.archived",
+    {
+      type: "OfficeAiTask",
+      id: task.id,
     },
-  });
+    {
+      platformOrganizationId: task.platformOrganizationId,
+      clientWorkspaceId: task.clientWorkspaceId ?? undefined,
+      projectId: task.projectId ?? undefined,
+      actorId: actor?.id,
+      actorName: actor?.name,
+      severity: "info",
+      sourceModel: "OfficeAiTask",
+      sourceId: task.id,
+      metadata: {
+        governedSharedApplication: true,
+        previousStatus: existing.status,
+        taskType: task.taskType,
+      },
+    },
+  );
 
   return { success: true, data: task };
 }
@@ -460,23 +473,25 @@ export async function updateOfficeAiOutputContent(
     },
   });
 
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.output.edited",
-    actorId: actor?.id,
-    actorName: actor?.name,
-    targetType: "OfficeAiOutput",
-    targetId: output.id,
-    severity: "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiOutput",
-    sourceId: output.id,
-    metadata: {
-      governedSharedApplication: true,
-      taskId: output.taskId,
-      format: output.format,
+  await alog.record(
+    "office_ai.output.edited",
+    {
+      type: "OfficeAiOutput",
+      id: output.id,
     },
-  });
+    {
+      actorId: actor?.id,
+      actorName: actor?.name,
+      severity: "info",
+      sourceModel: "OfficeAiOutput",
+      sourceId: output.id,
+      metadata: {
+        governedSharedApplication: true,
+        taskId: output.taskId,
+        format: output.format,
+      },
+    },
+  );
 
   return { success: true, data: output };
 }
@@ -498,23 +513,25 @@ export async function updateOfficeAiOutputStatus(
     },
   });
 
-  await writePlatformAuditLog({
-    productKey: "office_ai_assistant",
-    action: "office_ai.output.status_changed",
-    actorId: actor?.id,
-    actorName: actor?.name,
-    targetType: "OfficeAiOutput",
-    targetId: output.id,
-    severity: status === "rejected" ? "warning" : "info",
-    sourceSystem: "office_ai_assistant",
-    sourceModel: "OfficeAiOutput",
-    sourceId: output.id,
-    metadata: {
-      governedSharedApplication: true,
-      newStatus: status,
-      taskId: output.taskId,
+  await alog.record(
+    "office_ai.output.status_changed",
+    {
+      type: "OfficeAiOutput",
+      id: output.id,
     },
-  });
+    {
+      actorId: actor?.id,
+      actorName: actor?.name,
+      severity: status === "rejected" ? "warning" : "info",
+      sourceModel: "OfficeAiOutput",
+      sourceId: output.id,
+      metadata: {
+        governedSharedApplication: true,
+        newStatus: status,
+        taskId: output.taskId,
+      },
+    },
+  );
 
   return { success: true, data: output };
 }

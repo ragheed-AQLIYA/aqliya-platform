@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { retrieveSunbulDocument } from "@/lib/sunbul/storage";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 export async function GET(
   _request: NextRequest,
@@ -34,19 +34,21 @@ export async function GET(
       documentId,
     );
 
-    await writePlatformAuditLog({
-      productKey: "sunbul",
-      action: "document.download",
-      platformOrganizationId: user.platformOrganizationId,
-      actorId: user.id,
-      actorType: user.role,
-      actorName: user.name,
-      targetType: "sunbul_document",
-      targetId: documentId,
-      targetLabel: docRecord.fileName,
+    const alog = auditLogger({
+      productKey: Product.SUNBUL,
       sourceSystem: "sunbul_download",
-      status: "success",
+      organization: { platformOrganizationId: user.platformOrganizationId },
+      actor: { id: user.id, name: user.name, type: user.role },
     });
+    await alog.record(
+      "document.download",
+      {
+        type: "sunbul_document",
+        id: documentId,
+        label: docRecord.fileName,
+      },
+      { status: "success" },
+    );
 
     const body = new Uint8Array(file.content);
     return new NextResponse(body, {
