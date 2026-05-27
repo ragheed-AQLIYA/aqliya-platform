@@ -5,12 +5,13 @@
 
 Documents here are supporting references for AQLIYA's architecture, product definition, system taxonomy, and company identity.
 
-| Document                                          | Description                                                           |
-| ------------------------------------------------- | --------------------------------------------------------------------- |
-| `AQLIYA-company-product-architecture-official.md` | Official company architecture, product lines, and approved definition |
-| `AQLIYA_ARCHITECTURE.md`                          | System architecture and design                                        |
-| `AQLIYA_SYSTEM_TAXONOMY.md`                       | System taxonomy and component classification                          |
-| `PRODUCT_STATUS_MATRIX.md`                        | Current product status across all dimensions                          |
-| `ROUTE_STRATEGY.md`                               | Route model and workspace/demo separation                             |
+| Document                                          | Description                                                            |
+| ------------------------------------------------- | ---------------------------------------------------------------------- |
+| `AQLIYA-company-product-architecture-official.md` | Official company architecture, product lines, and approved definition  |
+| `AQLIYA_ARCHITECTURE.md`                          | System architecture and design                                         |
+| `AQLIYA_SYSTEM_TAXONOMY.md`                       | System taxonomy and component classification                           |
+| `CORE_PLATFORM_ARCHITECTURE.md`                   | Core platform primitives (AuditLogger, DownloadService, ExportService) |
+| `PRODUCT_STATUS_MATRIX.md`                        | Current product status across all dimensions                           |
+| `ROUTE_STRATEGY.md`                               | Route model and workspace/demo separation                              |
 
 For conflict resolution, see `docs/DOCUMENTATION_AUTHORITY.md`.
