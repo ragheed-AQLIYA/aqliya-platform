@@ -55,15 +55,27 @@ const concerns = [
 
 const workflowRoles = [
   { role: "Admin", permissions: "إدارة المستخدمين وإعداد النظام" },
-  { role: "Auditor", permissions: "تنفيذ سير العمل، رفع الملفات، إنشاء الملاحظات" },
-  { role: "Reviewer", permissions: "مراجعة العمل، الموافقة المرحلية، توجيه التعديلات" },
-  { role: "Partner", permissions: "الاعتماد النهائي، إغلاق الارتباط، النشر الرسمي" },
-  { role: "Viewer", permissions: "قراءة فقط — بدون صلاحية التعديل أو الاعتماد" },
+  {
+    role: "Auditor",
+    permissions: "تنفيذ سير العمل، رفع الملفات، إنشاء الملاحظات",
+  },
+  {
+    role: "Reviewer",
+    permissions: "مراجعة العمل، الموافقة المرحلية، توجيه التعديلات",
+  },
+  {
+    role: "Partner",
+    permissions: "الاعتماد النهائي، إغلاق الارتباط، النشر الرسمي",
+  },
+  {
+    role: "Viewer",
+    permissions: "قراءة فقط — بدون صلاحية التعديل أو الاعتماد",
+  },
 ];
 
 export default function BuyerAuditPartnerPage() {
   return (
-    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+    <div className="min-h-screen bg-aqliya-deep" dir="rtl">
       {/* Hero */}
       <section className="hero-gradient py-24">
         <div className="max-w-5xl mx-auto px-6">
@@ -90,7 +102,9 @@ export default function BuyerAuditPartnerPage() {
                   <span className="text-cyan-400 text-xl mt-0.5">{v.icon}</span>
                   <div>
                     <h3 className="text-white font-semibold mb-2">{v.title}</h3>
-                    <p className="text-slate-300 text-sm leading-relaxed">{v.body}</p>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      {v.body}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -102,14 +116,22 @@ export default function BuyerAuditPartnerPage() {
       {/* Role Matrix */}
       <section className="section-gradient-dark py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-white mb-4 text-center">مصفوفة الأدوار والصلاحيات</h2>
-          <p className="text-slate-400 text-center mb-10">فصل واضح بين من ينفذ ومن يراجع ومن يعتمد</p>
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">
+            مصفوفة الأدوار والصلاحيات
+          </h2>
+          <p className="text-slate-400 text-center mb-10">
+            فصل واضح بين من ينفذ ومن يراجع ومن يعتمد
+          </p>
           <div className="overflow-hidden rounded-xl border border-white/10">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-white/5 border-b border-white/10">
-                  <th className="text-right px-6 py-3 text-slate-400 font-medium">الدور</th>
-                  <th className="text-right px-6 py-3 text-slate-400 font-medium">الصلاحيات</th>
+                  <th className="text-right px-6 py-3 text-slate-400 font-medium">
+                    الدور
+                  </th>
+                  <th className="text-right px-6 py-3 text-slate-400 font-medium">
+                    الصلاحيات
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -129,7 +151,9 @@ export default function BuyerAuditPartnerPage() {
                         {r.role}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-slate-300">{r.permissions}</td>
+                    <td className="px-6 py-4 text-slate-300">
+                      {r.permissions}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -151,7 +175,9 @@ export default function BuyerAuditPartnerPage() {
                   <p className="text-white font-medium text-sm">{c.fear}</p>
                 </div>
                 <div className="p-5">
-                  <p className="text-slate-300 text-sm leading-relaxed">{c.response}</p>
+                  <p className="text-slate-300 text-sm leading-relaxed">
+                    {c.response}
+                  </p>
                 </div>
               </div>
             ))}
@@ -166,13 +192,20 @@ export default function BuyerAuditPartnerPage() {
             شاهد بوابة الاعتماد في الديمو
           </h2>
           <p className="text-slate-300 mb-8">
-            في الديمو التفاعلي، ستمر بدور الشريك وتشاهد بوابة الاعتماد وكيف تعمل شروط الإغلاق.
+            في الديمو التفاعلي، ستمر بدور الشريك وتشاهد بوابة الاعتماد وكيف تعمل
+            شروط الإغلاق.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/demo" className="btn-primary px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/demo"
+              className="btn-primary px-8 py-3 rounded-xl text-sm font-medium"
+            >
               مشاهدة الديمو
             </Link>
-            <Link href="/contact" className="btn-outline px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/contact"
+              className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+            >
               طلب جلسة تنفيذية
             </Link>
           </div>
@@ -184,13 +217,33 @@ export default function BuyerAuditPartnerPage() {
         <div className="max-w-5xl mx-auto px-6 text-center">
           <p className="text-slate-500 text-sm mb-4">صفحات مخصصة لأدوار أخرى</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link href="/buyers/cfo" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">المدير المالي</Link>
+            <Link
+              href="/buyers/cfo"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              المدير المالي
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/cio" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">مدير التقنية</Link>
+            <Link
+              href="/buyers/cio"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              مدير التقنية
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/government" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">الجهات الحكومية</Link>
+            <Link
+              href="/buyers/government"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              الجهات الحكومية
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/procurement" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">المشتريات</Link>
+            <Link
+              href="/buyers/procurement"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              المشتريات
+            </Link>
           </div>
         </div>
       </section>

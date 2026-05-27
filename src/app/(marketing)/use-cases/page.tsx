@@ -136,8 +136,7 @@ const useCases = [
       "قراءة يدوية، ملاحظات شخصية، ومقارنات في جداول يبنيها كل عضو لجنة بطريقته.",
     aqliyaApproach:
       "نظام يُحلل وثائق العروض ويستخرج نقاط المقارنة المحددة في معايير التقييم، يُنشئ مصفوفة مقارنة موثقة، ويُنبّه على الانحرافات أو الثغرات.",
-    outcome:
-      "قرار ترسية مدعوم بأدلة موثقة، قابل للمراجعة، ومحمي من الطعن.",
+    outcome: "قرار ترسية مدعوم بأدلة موثقة، قابل للمراجعة، ومحمي من الطعن.",
     systemLink: "/custom-product",
     systemLabel: "تصميم نظام مخصص",
   },
@@ -198,19 +197,25 @@ export default function UseCasesPage() {
                     <p className="mb-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-red-400">
                       المشكلة
                     </p>
-                    <p className="text-sm leading-7 text-white/65">{uc.problem}</p>
+                    <p className="text-sm leading-7 text-white/65">
+                      {uc.problem}
+                    </p>
                   </div>
                   <div className="rounded-xl border border-white/8 bg-white/[0.02] p-5">
                     <p className="mb-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
                       الوضع التقليدي
                     </p>
-                    <p className="text-sm leading-7 text-white/55">{uc.traditionalState}</p>
+                    <p className="text-sm leading-7 text-white/55">
+                      {uc.traditionalState}
+                    </p>
                   </div>
                   <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-5">
                     <p className="mb-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-400">
                       مسار عقلية
                     </p>
-                    <p className="text-sm leading-7 text-white/65">{uc.aqliyaApproach}</p>
+                    <p className="text-sm leading-7 text-white/65">
+                      {uc.aqliyaApproach}
+                    </p>
                   </div>
                 </div>
 
@@ -246,8 +251,8 @@ export default function UseCasesPage() {
               الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
             </p>
             <p className="mt-2 text-sm text-white/45">
-              عقلية لا تتخذ قرارات نهائية. كل إجراء ذو أثر مؤسسي يتطلب
-              موافقة بشرية صريحة — هذا قيد هندسي لا خيار في الإعدادات.
+              عقلية لا تتخذ قرارات نهائية. كل إجراء ذو أثر مؤسسي يتطلب موافقة
+              بشرية صريحة — هذا قيد هندسي لا خيار في الإعدادات.
             </p>
           </div>
 
@@ -256,15 +261,21 @@ export default function UseCasesPage() {
               لا ترى مؤسستك في القائمة؟
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-white/60">
-              إذا كانت تحديات مؤسستك لا تنطبق على أي من الفئات أعلاه، فهذا
-              لا يعني أن عقلية ليست مناسبة. يمكننا تصميم نظام مخصص فوق
-              AQLIYA Intelligence Core يعالج سياقك بالضبط.
+              إذا كانت تحديات مؤسستك لا تنطبق على أي من الفئات أعلاه، فهذا لا
+              يعني أن عقلية ليست مناسبة. يمكننا تصميم نظام مخصص فوق AQLIYA
+              Intelligence Core يعالج سياقك بالضبط.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-              <Link href="/executive-briefing" className="btn-primary px-8 py-3.5 text-base">
+              <Link
+                href="/executive-brief"
+                className="btn-primary px-8 py-3.5 text-base"
+              >
                 طلب إحاطة تنفيذية
               </Link>
-              <Link href="/custom-product" className="btn-outline px-8 py-3.5 text-base">
+              <Link
+                href="/custom-product"
+                className="btn-outline px-8 py-3.5 text-base"
+              >
                 تصميم نظام مخصص
               </Link>
             </div>

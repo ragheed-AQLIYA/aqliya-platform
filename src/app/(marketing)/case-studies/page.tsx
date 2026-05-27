@@ -36,11 +36,31 @@ const scenarios = [
       "تسلسل الموافقات محفوظ — من وافق ومتى ولماذا",
     ],
     workflow: [
-      { step: "١", label: "رفع الميزان", detail: "CSV/XLSX — التحقق الفوري من الاتزان" },
-      { step: "٢", label: "توجيه الحسابات", detail: "اقتراح ذكي + مراجعة المدقق" },
-      { step: "٣", label: "القوائم المالية", detail: "مسودة آلية + مراجعة بشرية إلزامية" },
-      { step: "٤", label: "الإيضاحات والأدلة", detail: "تحديد النواقص + ربط المستندات" },
-      { step: "٥", label: "الملاحظات والتوصيات", detail: "تصنيف تلقائي حسب الخطورة" },
+      {
+        step: "١",
+        label: "رفع الميزان",
+        detail: "CSV/XLSX — التحقق الفوري من الاتزان",
+      },
+      {
+        step: "٢",
+        label: "توجيه الحسابات",
+        detail: "اقتراح ذكي + مراجعة المدقق",
+      },
+      {
+        step: "٣",
+        label: "القوائم المالية",
+        detail: "مسودة آلية + مراجعة بشرية إلزامية",
+      },
+      {
+        step: "٤",
+        label: "الإيضاحات والأدلة",
+        detail: "تحديد النواقص + ربط المستندات",
+      },
+      {
+        step: "٥",
+        label: "الملاحظات والتوصيات",
+        detail: "تصنيف تلقائي حسب الخطورة",
+      },
       { step: "٦", label: "مراجعة الشريك", detail: "بوابة اعتماد + سجل موقّع" },
       { step: "٧", label: "النشر", detail: "حزمة ارتباط كاملة مع Audit Trail" },
     ],
@@ -74,13 +94,33 @@ const scenarios = [
       "Human Gates: لا يمكن النشر دون اكتمال شروط الاعتماد",
     ],
     workflow: [
-      { step: "١", label: "إنشاء الارتباط", detail: "تحديد النطاق والفريق والصلاحيات" },
-      { step: "٢", label: "تحميل البيانات", detail: "مستندات الارتباط والبيانات المالية" },
+      {
+        step: "١",
+        label: "إنشاء الارتباط",
+        detail: "تحديد النطاق والفريق والصلاحيات",
+      },
+      {
+        step: "٢",
+        label: "تحميل البيانات",
+        detail: "مستندات الارتباط والبيانات المالية",
+      },
       { step: "٣", label: "تخصيص العمل", detail: "تعيين المهام حسب الدور" },
-      { step: "٤", label: "إجراءات المراجعة", detail: "التنفيذ مع التوثيق الآني" },
-      { step: "٥", label: "مراجعة المشرف", detail: "فحص الجودة + توجيه التعديلات" },
+      {
+        step: "٤",
+        label: "إجراءات المراجعة",
+        detail: "التنفيذ مع التوثيق الآني",
+      },
+      {
+        step: "٥",
+        label: "مراجعة المشرف",
+        detail: "فحص الجودة + توجيه التعديلات",
+      },
       { step: "٦", label: "اعتماد المسؤول", detail: "بوابة الاعتماد الرسمية" },
-      { step: "٧", label: "الأرشفة والتصدير", detail: "حزمة كاملة للتوثيق الرسمي" },
+      {
+        step: "٧",
+        label: "الأرشفة والتصدير",
+        detail: "حزمة كاملة للتوثيق الرسمي",
+      },
     ],
     note: "هذا السيناريو يعكس قدرات RBAC وAudit Trail المبنية في AuditOS. يُوصى بتشغيل بايلوت تقييمي لتحديد مدى الملاءمة للسياق المؤسسي.",
   },
@@ -106,7 +146,7 @@ const trustPoints = [
 
 export default function CaseStudiesPage() {
   return (
-    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+    <div className="min-h-screen bg-aqliya-deep" dir="rtl">
       {/* Hero */}
       <section className="hero-gradient py-24">
         <div className="max-w-5xl mx-auto px-6 text-center">
@@ -121,7 +161,8 @@ export default function CaseStudiesPage() {
             إلى منهجية موحدة قابلة للتتبع والاعتماد.
           </p>
           <p className="mt-4 text-sm text-amber-400/80">
-            ملاحظة: جميع السيناريوهات المعروضة تجريبية ببيانات محاكاة. لا يوجد مراجعة عملاء حقيقيين في هذه الصفحة.
+            ملاحظة: جميع السيناريوهات المعروضة تجريبية ببيانات محاكاة. لا يوجد
+            مراجعة عملاء حقيقيين في هذه الصفحة.
           </p>
         </div>
       </section>
@@ -149,11 +190,15 @@ export default function CaseStudiesPage() {
               {/* Header */}
               <div className="p-8 border-b border-white/5">
                 <div className="flex flex-wrap items-center gap-3 mb-4">
-                  <span className={`text-xs font-medium px-3 py-1 rounded-full ${s.badgeColor}`}>
+                  <span
+                    className={`text-xs font-medium px-3 py-1 rounded-full ${s.badgeColor}`}
+                  >
                     {s.badge}
                   </span>
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-3">{s.label}</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">
+                  {s.label}
+                </h2>
                 <p className="text-slate-300 leading-relaxed">{s.context}</p>
               </div>
 
@@ -165,7 +210,10 @@ export default function CaseStudiesPage() {
                   </h3>
                   <ul className="space-y-3">
                     {s.before.map((item, i) => (
-                      <li key={i} className="flex gap-3 text-slate-300 text-sm leading-relaxed">
+                      <li
+                        key={i}
+                        className="flex gap-3 text-slate-300 text-sm leading-relaxed"
+                      >
                         <span className="text-red-400 mt-0.5 shrink-0">✕</span>
                         {item}
                       </li>
@@ -178,8 +226,13 @@ export default function CaseStudiesPage() {
                   </h3>
                   <ul className="space-y-3">
                     {s.after.map((item, i) => (
-                      <li key={i} className="flex gap-3 text-slate-300 text-sm leading-relaxed">
-                        <span className="text-emerald-400 mt-0.5 shrink-0">✓</span>
+                      <li
+                        key={i}
+                        className="flex gap-3 text-slate-300 text-sm leading-relaxed"
+                      >
+                        <span className="text-emerald-400 mt-0.5 shrink-0">
+                          ✓
+                        </span>
                         {item}
                       </li>
                     ))}
@@ -194,10 +247,17 @@ export default function CaseStudiesPage() {
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {s.workflow.map((w) => (
-                    <div key={w.step} className="flex items-center gap-2 bg-white/5 rounded-lg px-4 py-2.5">
-                      <span className="text-cyan-400 font-bold text-sm">{w.step}</span>
+                    <div
+                      key={w.step}
+                      className="flex items-center gap-2 bg-white/5 rounded-lg px-4 py-2.5"
+                    >
+                      <span className="text-cyan-400 font-bold text-sm">
+                        {w.step}
+                      </span>
                       <div>
-                        <p className="text-white text-sm font-medium">{w.label}</p>
+                        <p className="text-white text-sm font-medium">
+                          {w.label}
+                        </p>
                         <p className="text-slate-400 text-xs">{w.detail}</p>
                       </div>
                     </div>
@@ -212,7 +272,10 @@ export default function CaseStudiesPage() {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {s.evidence.map((e, i) => (
-                    <div key={i} className="flex gap-3 items-center bg-cyan-500/5 border border-cyan-500/10 rounded-lg px-4 py-3">
+                    <div
+                      key={i}
+                      className="flex gap-3 items-center bg-cyan-500/5 border border-cyan-500/10 rounded-lg px-4 py-3"
+                    >
                       <span className="text-cyan-400 text-sm shrink-0">◈</span>
                       <span className="text-slate-300 text-sm">{e}</span>
                     </div>
@@ -239,14 +302,20 @@ export default function CaseStudiesPage() {
             شاهد سير العمل الكامل
           </h2>
           <p className="text-slate-300 mb-8 leading-relaxed">
-            في الديمو التفاعلي، ستمر بكل خطوة من رفع الميزان إلى نشر حزمة الارتباط —
-            على بيانات تجريبية حقيقية.
+            في الديمو التفاعلي، ستمر بكل خطوة من رفع الميزان إلى نشر حزمة
+            الارتباط — على بيانات تجريبية حقيقية.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/demo" className="btn-primary px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/demo"
+              className="btn-primary px-8 py-3 rounded-xl text-sm font-medium"
+            >
               مشاهدة الديمو الكامل
             </Link>
-            <Link href="/contact" className="btn-outline px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/contact"
+              className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+            >
               طلب جلسة تنفيذية
             </Link>
           </div>

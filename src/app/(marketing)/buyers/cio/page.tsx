@@ -32,9 +32,15 @@ const concerns = [
 
 const techSpecs = [
   { label: "البنية الأساسية", value: "Next.js · PostgreSQL · REST API" },
-  { label: "نموذج البيانات", value: "عزل على مستوى الارتباط — لا مشاركة بين العملاء في البايلوت" },
+  {
+    label: "نموذج البيانات",
+    value: "عزل على مستوى الارتباط — لا مشاركة بين العملاء في البايلوت",
+  },
   { label: "المصادقة", value: "NextAuth — إدارة يدوية في البايلوت" },
-  { label: "تدفق LLM", value: "API calls per session — لا تخزين في نماذج خارجية" },
+  {
+    label: "تدفق LLM",
+    value: "API calls per session — لا تخزين في نماذج خارجية",
+  },
   { label: "التصدير", value: "JSON / XLSX — PDF عربي قيد التطوير" },
   { label: "Audit Log", value: "DB-backed — immutable — قابل للتصدير" },
 ];
@@ -52,7 +58,7 @@ const readinessGate = [
 
 export default function BuyerCIOPage() {
   return (
-    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+    <div className="min-h-screen bg-aqliya-deep" dir="rtl">
       {/* Hero */}
       <section className="hero-gradient py-24">
         <div className="max-w-5xl mx-auto px-6">
@@ -72,10 +78,15 @@ export default function BuyerCIOPage() {
       {/* Tech Specs */}
       <section className="py-16 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-xl font-bold text-white mb-6">المواصفات التقنية — البايلوت</h2>
+          <h2 className="text-xl font-bold text-white mb-6">
+            المواصفات التقنية — البايلوت
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {techSpecs.map((s) => (
-              <div key={s.label} className="bg-white/5 border border-white/5 rounded-xl p-4">
+              <div
+                key={s.label}
+                className="bg-white/5 border border-white/5 rounded-xl p-4"
+              >
                 <p className="text-slate-500 text-xs mb-1">{s.label}</p>
                 <p className="text-white text-sm font-medium">{s.value}</p>
               </div>
@@ -95,14 +106,20 @@ export default function BuyerCIOPage() {
               <div key={i} className="glass-card rounded-xl overflow-hidden">
                 <div className="p-6 border-b border-white/5">
                   <div className="flex gap-3 items-start">
-                    <span className="text-amber-400 text-sm mt-0.5 shrink-0">؟</span>
+                    <span className="text-amber-400 text-sm mt-0.5 shrink-0">
+                      ؟
+                    </span>
                     <p className="text-white font-medium">{c.fear}</p>
                   </div>
                 </div>
                 <div className="p-6">
                   <div className="flex gap-3 items-start">
-                    <span className="text-cyan-400 text-sm mt-0.5 shrink-0">◈</span>
-                    <p className="text-slate-300 text-sm leading-relaxed">{c.response}</p>
+                    <span className="text-cyan-400 text-sm mt-0.5 shrink-0">
+                      ◈
+                    </span>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      {c.response}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -122,7 +139,10 @@ export default function BuyerCIOPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {readinessGate.map((r) => (
-              <div key={r.item} className="glass-card rounded-xl p-4 flex gap-4 items-center justify-between">
+              <div
+                key={r.item}
+                className="glass-card rounded-xl p-4 flex gap-4 items-center justify-between"
+              >
                 <p className="text-slate-300 text-sm">{r.item}</p>
                 <span
                   className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${
@@ -146,16 +166,26 @@ export default function BuyerCIOPage() {
             للاطلاع على الوثائق التقنية
           </h2>
           <p className="text-slate-300 mb-8">
-            في الجلسة التنفيذية، نوفر الوثائق التقنية الكاملة لمراجعة فريقك قبل اتخاذ القرار.
+            في الجلسة التنفيذية، نوفر الوثائق التقنية الكاملة لمراجعة فريقك قبل
+            اتخاذ القرار.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/contact" className="btn-primary px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/contact"
+              className="btn-primary px-8 py-3 rounded-xl text-sm font-medium"
+            >
               طلب جلسة تقنية
             </Link>
-            <Link href="/security" className="btn-outline px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/security"
+              className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+            >
               وثيقة الأمن
             </Link>
-            <Link href="/deployment" className="btn-outline px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/deployment"
+              className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+            >
               نماذج النشر
             </Link>
           </div>
@@ -167,13 +197,33 @@ export default function BuyerCIOPage() {
         <div className="max-w-5xl mx-auto px-6 text-center">
           <p className="text-slate-500 text-sm mb-4">صفحات مخصصة لأدوار أخرى</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link href="/buyers/cfo" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">المدير المالي</Link>
+            <Link
+              href="/buyers/cfo"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              المدير المالي
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/audit-partner" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">شريك التدقيق</Link>
+            <Link
+              href="/buyers/audit-partner"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              شريك التدقيق
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/government" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">الجهات الحكومية</Link>
+            <Link
+              href="/buyers/government"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              الجهات الحكومية
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/procurement" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">المشتريات</Link>
+            <Link
+              href="/buyers/procurement"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              المشتريات
+            </Link>
           </div>
         </div>
       </section>

@@ -74,7 +74,7 @@ const useCaseGov = [
 
 export default function BuyerGovernmentPage() {
   return (
-    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+    <div className="min-h-screen bg-aqliya-deep" dir="rtl">
       {/* Hero */}
       <section className="hero-gradient py-24">
         <div className="max-w-5xl mx-auto px-6">
@@ -85,8 +85,8 @@ export default function BuyerGovernmentPage() {
             حوكمة مؤسسية لمتطلبات القطاع الحكومي
           </h1>
           <p className="text-xl text-slate-300 max-w-2xl leading-relaxed">
-            سيادة البيانات، توثيق المساءلة، وسير عمل مراجعة موثوق —
-            مبني على مبدأ أن القرار البشري المختص هو السلطة النهائية.
+            سيادة البيانات، توثيق المساءلة، وسير عمل مراجعة موثوق — مبني على
+            مبدأ أن القرار البشري المختص هو السلطة النهائية.
           </p>
         </div>
       </section>
@@ -101,7 +101,9 @@ export default function BuyerGovernmentPage() {
                   <span className="text-cyan-400 text-xl mt-0.5">{v.icon}</span>
                   <div>
                     <h3 className="text-white font-semibold mb-2">{v.title}</h3>
-                    <p className="text-slate-300 text-sm leading-relaxed">{v.body}</p>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      {v.body}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -113,8 +115,12 @@ export default function BuyerGovernmentPage() {
       {/* Use Cases */}
       <section className="section-gradient-dark py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-white mb-4 text-center">حالات الاستخدام الحكومية</h2>
-          <p className="text-slate-400 text-center mb-10">القطاعات التي تستفيد من منهجية AQLIYA</p>
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">
+            حالات الاستخدام الحكومية
+          </h2>
+          <p className="text-slate-400 text-center mb-10">
+            القطاعات التي تستفيد من منهجية AQLIYA
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {useCaseGov.map((uc) => (
               <div key={uc.title} className="glass-card rounded-xl p-6">
@@ -139,7 +145,9 @@ export default function BuyerGovernmentPage() {
                   <p className="text-white font-medium text-sm">{c.fear}</p>
                 </div>
                 <div className="p-5">
-                  <p className="text-slate-300 text-sm leading-relaxed">{c.response}</p>
+                  <p className="text-slate-300 text-sm leading-relaxed">
+                    {c.response}
+                  </p>
                 </div>
               </div>
             ))}
@@ -154,13 +162,20 @@ export default function BuyerGovernmentPage() {
             ابدأ بجلسة استشارية مخصصة
           </h2>
           <p className="text-slate-300 mb-8">
-            للجهات الحكومية، الجلسة الأولى استشارية بالكامل — نفهم متطلباتكم ونقيّم الملاءمة قبل أي التزام.
+            للجهات الحكومية، الجلسة الأولى استشارية بالكامل — نفهم متطلباتكم
+            ونقيّم الملاءمة قبل أي التزام.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/contact" className="btn-primary px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/contact"
+              className="btn-primary px-8 py-3 rounded-xl text-sm font-medium"
+            >
               طلب جلسة استشارية
             </Link>
-            <Link href="/executive-brief" className="btn-outline px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/executive-brief"
+              className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+            >
               الإحاطة التنفيذية
             </Link>
           </div>
@@ -172,13 +187,33 @@ export default function BuyerGovernmentPage() {
         <div className="max-w-5xl mx-auto px-6 text-center">
           <p className="text-slate-500 text-sm mb-4">صفحات مخصصة لأدوار أخرى</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link href="/buyers/cfo" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">المدير المالي</Link>
+            <Link
+              href="/buyers/cfo"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              المدير المالي
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/cio" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">مدير التقنية</Link>
+            <Link
+              href="/buyers/cio"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              مدير التقنية
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/audit-partner" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">شريك التدقيق</Link>
+            <Link
+              href="/buyers/audit-partner"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              شريك التدقيق
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/procurement" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">المشتريات</Link>
+            <Link
+              href="/buyers/procurement"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              المشتريات
+            </Link>
           </div>
         </div>
       </section>

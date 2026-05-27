@@ -83,7 +83,13 @@ const demoPaths = [
     href: "/auditos",
     label: "دخول ديمو AuditOS",
     primary: true,
-    steps: ["رفع الميزان", "توجيه الحسابات", "القوائم المالية", "الأدلة والملاحظات", "الاعتماد والنشر"],
+    steps: [
+      "رفع الميزان",
+      "توجيه الحسابات",
+      "القوائم المالية",
+      "الأدلة والملاحظات",
+      "الاعتماد والنشر",
+    ],
   },
   {
     id: "governance",
@@ -93,7 +99,12 @@ const demoPaths = [
     href: "/auditos",
     label: "استكشاف الحوكمة",
     primary: false,
-    steps: ["تسجيل الدخول بأدوار مختلفة", "مراجعة Audit Trail الحي", "اختبار صلاحيات RBAC", "Evidence Graph"],
+    steps: [
+      "تسجيل الدخول بأدوار مختلفة",
+      "مراجعة Audit Trail الحي",
+      "اختبار صلاحيات RBAC",
+      "Evidence Graph",
+    ],
   },
 ];
 
@@ -125,7 +136,7 @@ const importantNotes = [
 
 export default function DemoPage() {
   return (
-    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+    <div className="min-h-screen bg-aqliya-deep" dir="rtl">
       {/* Hero */}
       <section className="hero-gradient py-24">
         <div className="max-w-5xl mx-auto px-6 text-center">
@@ -136,15 +147,18 @@ export default function DemoPage() {
             شاهد سير العمل — لا تقرأه فقط
           </h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            الديمو التفاعلي يأخذك عبر رحلة تدقيق كاملة على بيانات تجريبية.
-            ١٣ دقيقة، كل خطوة موثقة، كل ادعاء قابل للتحقق.
+            الديمو التفاعلي يأخذك عبر رحلة تدقيق كاملة على بيانات تجريبية. ١٣
+            دقيقة، كل خطوة موثقة، كل ادعاء قابل للتحقق.
           </p>
 
           {/* Important Notes */}
           <div className="mt-8 inline-block text-right max-w-lg">
             <div className="bg-white/5 border border-white/10 rounded-xl p-4">
               {importantNotes.map((n, i) => (
-                <div key={i} className="flex gap-3 text-sm text-slate-400 mb-2 last:mb-0">
+                <div
+                  key={i}
+                  className="flex gap-3 text-sm text-slate-400 mb-2 last:mb-0"
+                >
                   <span className="text-cyan-400 shrink-0 mt-0.5">◦</span>
                   {n}
                 </div>
@@ -157,7 +171,9 @@ export default function DemoPage() {
       {/* Demo Paths */}
       <section className="py-16 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-white mb-8 text-center">اختر مسار الديمو</h2>
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">
+            اختر مسار الديمو
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {demoPaths.map((path) => (
               <div
@@ -168,13 +184,21 @@ export default function DemoPage() {
               >
                 {path.primary && (
                   <div className="bg-cyan-500/10 border-b border-cyan-500/20 px-6 py-2 text-center">
-                    <span className="text-cyan-400 text-xs font-semibold">يُوصى بالبدء هنا</span>
+                    <span className="text-cyan-400 text-xs font-semibold">
+                      يُوصى بالبدء هنا
+                    </span>
                   </div>
                 )}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-2">{path.name}</h3>
-                  <p className="text-slate-300 text-sm mb-3">{path.description}</p>
-                  <p className="text-slate-500 text-xs mb-5">المدة التقريبية: {path.duration}</p>
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    {path.name}
+                  </h3>
+                  <p className="text-slate-300 text-sm mb-3">
+                    {path.description}
+                  </p>
+                  <p className="text-slate-500 text-xs mb-5">
+                    المدة التقريبية: {path.duration}
+                  </p>
 
                   <div className="flex flex-wrap gap-2 mb-6">
                     {path.steps.map((step) => (
@@ -206,22 +230,31 @@ export default function DemoPage() {
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <h2 className="text-2xl font-bold text-white mb-3">خطوات الديمو — الكامل</h2>
+            <h2 className="text-2xl font-bold text-white mb-3">
+              خطوات الديمو — الكامل
+            </h2>
             <p className="text-slate-400">ما ستشاهده وما سيُثبَت في كل خطوة</p>
           </div>
           <div className="space-y-4">
             {demoSteps.map((step) => (
-              <div key={step.number} className="glass-card rounded-xl overflow-hidden">
+              <div
+                key={step.number}
+                className="glass-card rounded-xl overflow-hidden"
+              >
                 <div className="flex items-stretch">
                   {/* Number */}
                   <div className="w-16 shrink-0 flex items-center justify-center bg-white/3 border-l border-white/5">
-                    <span className="text-cyan-400 font-bold">{step.number}</span>
+                    <span className="text-cyan-400 font-bold">
+                      {step.number}
+                    </span>
                   </div>
                   {/* Content */}
                   <div className="p-5 flex-1">
                     <div className="flex flex-wrap items-center gap-3 mb-2">
                       <h3 className="text-white font-semibold">{step.title}</h3>
-                      <span className="text-xs text-slate-500">{step.duration}</span>
+                      <span className="text-xs text-slate-500">
+                        {step.duration}
+                      </span>
                     </div>
                     <p className="text-slate-300 text-sm mb-2">{step.what}</p>
                     <div className="flex gap-2 items-center">
@@ -248,7 +281,9 @@ export default function DemoPage() {
             {proofPoints.map((pp) => (
               <div key={pp.claim} className="glass-card rounded-xl p-6">
                 <h3 className="text-white font-semibold mb-2">{pp.claim}</h3>
-                <p className="text-slate-300 text-sm leading-relaxed">{pp.proof}</p>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  {pp.proof}
+                </p>
               </div>
             ))}
           </div>
@@ -270,25 +305,52 @@ export default function DemoPage() {
       {/* CTAs */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="glass-card rounded-xl p-6 text-center">
-              <h3 className="text-white font-semibold mb-2">ابدأ الديمو الآن</h3>
-              <p className="text-slate-400 text-sm mb-5">بدون حساب، بدون تسجيل</p>
-              <Link href="/auditos" className="btn-primary w-full block py-2.5 rounded-xl text-sm font-medium text-center">
+              <h3 className="text-white font-semibold mb-2">
+                ابدأ الديمو الآن
+              </h3>
+              <p className="text-slate-400 text-sm mb-5">
+                بدون حساب، بدون تسجيل
+              </p>
+              <Link
+                href="/auditos"
+                className="btn-primary w-full block py-2.5 rounded-xl text-sm font-medium text-center"
+              >
                 دخول الديمو
               </Link>
             </div>
             <div className="glass-card rounded-xl p-6 text-center">
-              <h3 className="text-white font-semibold mb-2">بايلوت على بياناتك</h3>
+              <h3 className="text-white font-semibold mb-2">مكتبة الإثبات</h3>
+              <p className="text-slate-400 text-sm mb-5">
+                مخرجات فعلية من النظام
+              </p>
+              <Link
+                href="/proof-library"
+                className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center"
+              >
+                استعرض المخرجات
+              </Link>
+            </div>
+            <div className="glass-card rounded-xl p-6 text-center">
+              <h3 className="text-white font-semibold mb-2">
+                بايلوت على بياناتك
+              </h3>
               <p className="text-slate-400 text-sm mb-5">٢-٤ أسابيع، مجاني</p>
-              <Link href="/engagement-models" className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center">
+              <Link
+                href="/engagement-models"
+                className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center"
+              >
                 نماذج التعاون
               </Link>
             </div>
             <div className="glass-card rounded-xl p-6 text-center">
               <h3 className="text-white font-semibold mb-2">جلسة تنفيذية</h3>
               <p className="text-slate-400 text-sm mb-5">للقيادة والمدراء</p>
-              <Link href="/contact" className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center">
+              <Link
+                href="/contact"
+                className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center"
+              >
                 طلب الجلسة
               </Link>
             </div>

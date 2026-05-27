@@ -78,7 +78,7 @@ const evaluationCriteria = [
 
 export default function BuyerProcurementPage() {
   return (
-    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+    <div className="min-h-screen bg-aqliya-deep" dir="rtl">
       {/* Hero */}
       <section className="hero-gradient py-24">
         <div className="max-w-5xl mx-auto px-6">
@@ -89,8 +89,8 @@ export default function BuyerProcurementPage() {
             كل ما تحتاجه لعملية التقييم والمشتريات
           </h1>
           <p className="text-xl text-slate-300 max-w-2xl leading-relaxed">
-            وثائق التقييم، نماذج التعاون، متطلبات التشغيل، ومسار الحصول على عرض رسمي —
-            مرتبة لتسهيل عملية المشتريات.
+            وثائق التقييم، نماذج التعاون، متطلبات التشغيل، ومسار الحصول على عرض
+            رسمي — مرتبة لتسهيل عملية المشتريات.
           </p>
         </div>
       </section>
@@ -98,7 +98,9 @@ export default function BuyerProcurementPage() {
       {/* Procurement Docs */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-white mb-4 text-center">وثائق التقييم المتاحة</h2>
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">
+            وثائق التقييم المتاحة
+          </h2>
           <p className="text-slate-400 text-center mb-10">
             جميع الوثائق التقنية والتعاقدية متاحة للمراجعة قبل أي التزام
           </p>
@@ -119,7 +121,9 @@ export default function BuyerProcurementPage() {
       {/* Engagement Models */}
       <section className="section-gradient-dark py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-white mb-4 text-center">نماذج التعاون</h2>
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">
+            نماذج التعاون
+          </h2>
           <p className="text-slate-400 text-center mb-10">
             من جلسة تشخيص مجانية إلى نظام مؤسسي مخصص
           </p>
@@ -127,16 +131,29 @@ export default function BuyerProcurementPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-white/5 border-b border-white/10">
-                  <th className="text-right px-5 py-3 text-slate-400 font-medium">نموذج التعاون</th>
-                  <th className="text-right px-5 py-3 text-slate-400 font-medium">المدة</th>
-                  <th className="text-right px-5 py-3 text-slate-400 font-medium">التكلفة</th>
-                  <th className="text-right px-5 py-3 text-slate-400 font-medium">المخرج</th>
+                  <th className="text-right px-5 py-3 text-slate-400 font-medium">
+                    نموذج التعاون
+                  </th>
+                  <th className="text-right px-5 py-3 text-slate-400 font-medium">
+                    المدة
+                  </th>
+                  <th className="text-right px-5 py-3 text-slate-400 font-medium">
+                    التكلفة
+                  </th>
+                  <th className="text-right px-5 py-3 text-slate-400 font-medium">
+                    المخرج
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {engagementModels.map((m, i) => (
-                  <tr key={m.name} className={`border-b border-white/5 ${i === 1 ? "bg-cyan-500/5" : ""}`}>
-                    <td className={`px-5 py-4 font-medium ${i === 1 ? "text-cyan-400" : "text-white"}`}>
+                  <tr
+                    key={m.name}
+                    className={`border-b border-white/5 ${i === 1 ? "bg-cyan-500/5" : ""}`}
+                  >
+                    <td
+                      className={`px-5 py-4 font-medium ${i === 1 ? "text-cyan-400" : "text-white"}`}
+                    >
                       {m.name}
                     </td>
                     <td className="px-5 py-4 text-slate-300">{m.duration}</td>
@@ -149,7 +166,10 @@ export default function BuyerProcurementPage() {
           </div>
           <p className="text-slate-500 text-xs text-center mt-4">
             تفاصيل كاملة في صفحة{" "}
-            <Link href="/engagement-models" className="text-cyan-500 hover:text-cyan-400 transition-colors">
+            <Link
+              href="/engagement-models"
+              className="text-cyan-500 hover:text-cyan-400 transition-colors"
+            >
               نماذج التعاون
             </Link>
           </p>
@@ -159,10 +179,15 @@ export default function BuyerProcurementPage() {
       {/* Evaluation Criteria */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-white mb-10 text-center">معايير التقييم المقترحة</h2>
+          <h2 className="text-2xl font-bold text-white mb-10 text-center">
+            معايير التقييم المقترحة
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
             {evaluationCriteria.map((c, i) => (
-              <div key={i} className="flex gap-3 items-start glass-card rounded-lg px-5 py-4">
+              <div
+                key={i}
+                className="flex gap-3 items-start glass-card rounded-lg px-5 py-4"
+              >
                 <span className="text-cyan-400 mt-0.5 shrink-0">◈</span>
                 <p className="text-slate-300 text-sm">{c}</p>
               </div>
@@ -170,8 +195,8 @@ export default function BuyerProcurementPage() {
           </div>
           <div className="mt-8 glass-card rounded-xl p-6 border border-cyan-500/10 max-w-3xl mx-auto">
             <p className="text-slate-300 text-sm text-center leading-relaxed">
-              البايلوت التقييمي المجاني (٢-٤ أسابيع) مصمم للإجابة على هذه الأسئلة بالكامل
-              قبل أي قرار اشتراك.
+              البايلوت التقييمي المجاني (٢-٤ أسابيع) مصمم للإجابة على هذه
+              الأسئلة بالكامل قبل أي قرار اشتراك.
             </p>
           </div>
         </div>
@@ -187,10 +212,16 @@ export default function BuyerProcurementPage() {
             تواصل معنا لتلقي حزمة وثائق التقييم الكاملة وجدولة الجلسة التنفيذية.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/contact" className="btn-primary px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/contact"
+              className="btn-primary px-8 py-3 rounded-xl text-sm font-medium"
+            >
               طلب حزمة التقييم
             </Link>
-            <Link href="/engagement-models" className="btn-outline px-8 py-3 rounded-xl text-sm font-medium">
+            <Link
+              href="/engagement-models"
+              className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+            >
               نماذج التعاون
             </Link>
           </div>
@@ -202,13 +233,33 @@ export default function BuyerProcurementPage() {
         <div className="max-w-5xl mx-auto px-6 text-center">
           <p className="text-slate-500 text-sm mb-4">صفحات مخصصة لأدوار أخرى</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link href="/buyers/cfo" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">المدير المالي</Link>
+            <Link
+              href="/buyers/cfo"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              المدير المالي
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/cio" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">مدير التقنية</Link>
+            <Link
+              href="/buyers/cio"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              مدير التقنية
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/audit-partner" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">شريك التدقيق</Link>
+            <Link
+              href="/buyers/audit-partner"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              شريك التدقيق
+            </Link>
             <span className="text-slate-600">·</span>
-            <Link href="/buyers/government" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">الجهات الحكومية</Link>
+            <Link
+              href="/buyers/government"
+              className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+            >
+              الجهات الحكومية
+            </Link>
           </div>
         </div>
       </section>
