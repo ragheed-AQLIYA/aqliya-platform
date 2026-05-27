@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   FileSpreadsheet,
@@ -16,25 +16,31 @@ import {
   Eye,
   CheckCircle2,
   FileOutput,
+  Download,
   History,
   Rocket,
   Lock,
-} from "lucide-react"
-import type { WorkflowContext } from "@/lib/audit/workflow-gating"
-import { evaluateAllTabGates } from "@/lib/audit/workflow-gating"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+} from "lucide-react";
+import type { WorkflowContext } from "@/lib/audit/workflow-gating";
+import { evaluateAllTabGates } from "@/lib/audit/workflow-gating";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TabCount {
-  key: string
-  count?: number
+  key: string;
+  count?: number;
 }
 
 interface EngagementTabsProps {
-  engagementId: string
-  basePath?: string
-  counts?: TabCount[]
-  workflowContext?: WorkflowContext
-  className?: string
+  engagementId: string;
+  basePath?: string;
+  counts?: TabCount[];
+  workflowContext?: WorkflowContext;
+  className?: string;
 }
 
 const tabDefs = [
@@ -50,9 +56,10 @@ const tabDefs = [
   { key: "review", label: "المراجعات", icon: Eye },
   { key: "approval", label: "Approval", icon: CheckCircle2 },
   { key: "publication", label: "Publication", icon: FileOutput },
+  { key: "exports", label: "التصدير", icon: Download },
   { key: "audit-trail", label: "سجل التدقيق", icon: History },
   { key: "pilot", label: "Pilot", icon: Rocket },
-]
+];
 
 function EngagementTabs({
   engagementId,
@@ -61,39 +68,46 @@ function EngagementTabs({
   workflowContext,
   className,
 }: EngagementTabsProps) {
-  const pathname = usePathname()
-  const base = basePath ?? `/audit/engagements/${engagementId}`
+  const pathname = usePathname();
+  const base = basePath ?? `/audit/engagements/${engagementId}`;
 
-  const countMap = new Map<string, number>()
-  counts.forEach((c) => countMap.set(c.key, c.count ?? 0))
+  const countMap = new Map<string, number>();
+  counts.forEach((c) => countMap.set(c.key, c.count ?? 0));
 
-  const tabGates = workflowContext ? evaluateAllTabGates(workflowContext) : null
+  const tabGates = workflowContext
+    ? evaluateAllTabGates(workflowContext)
+    : null;
 
   return (
     <TooltipProvider delayDuration={300}>
       <div className={cn("w-full overflow-x-auto", className)}>
         <div className="flex gap-0.5 min-w-max border-b">
           {tabDefs.map((tab) => {
-            const gate = tabGates ? tabGates[tab.key] : null
-            const locked = gate?.locked ?? false
-            const reason = gate?.reason
+            const gate = tabGates ? tabGates[tab.key] : null;
+            const locked = gate?.locked ?? false;
+            const reason = gate?.reason;
 
-            const href = tab.key === "overview" ? base : `${base}/${tab.key}`
-            const isActive = tab.key === "overview"
-              ? (pathname === base)
-              : (pathname === href || pathname?.startsWith(href + "/") || false)
-            const tabCount = countMap.get(tab.key)
+            const href = tab.key === "overview" ? base : `${base}/${tab.key}`;
+            const isActive =
+              tab.key === "overview"
+                ? pathname === base
+                : pathname === href ||
+                  pathname?.startsWith(href + "/") ||
+                  false;
+            const tabCount = countMap.get(tab.key);
 
             const linkContent = (
               <Link
                 key={tab.key}
-                href={locked ? '#' : href}
+                href={locked ? "#" : href}
                 onClick={locked ? (e) => e.preventDefault() : undefined}
                 className={cn(
                   "relative inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-2.5 text-sm font-medium transition-colors",
                   locked && "cursor-not-allowed opacity-50",
                   isActive && !locked && "text-primary",
-                  !isActive && !locked && "text-muted-foreground hover:text-foreground",
+                  !isActive &&
+                    !locked &&
+                    "text-muted-foreground hover:text-foreground",
                   locked && "text-muted-foreground",
                 )}
                 aria-disabled={locked}
@@ -108,7 +122,9 @@ function EngagementTabs({
                   <span
                     className={cn(
                       "inline-flex items-center justify-center rounded-full px-1.5 py-0 text-[10px] font-bold leading-none",
-                      isActive && !locked && "bg-primary text-primary-foreground",
+                      isActive &&
+                        !locked &&
+                        "bg-primary text-primary-foreground",
                       !isActive && "bg-muted text-muted-foreground",
                     )}
                   >
@@ -119,28 +135,26 @@ function EngagementTabs({
                   <span className="absolute bottom-0 start-0 end-0 h-0.5 bg-primary rounded-full" />
                 )}
               </Link>
-            )
+            );
 
             if (locked && reason) {
               return (
                 <Tooltip key={tab.key}>
-                  <TooltipTrigger asChild>
-                    {linkContent}
-                  </TooltipTrigger>
+                  <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-xs text-xs">
                     <p>{reason}</p>
                   </TooltipContent>
                 </Tooltip>
-              )
+              );
             }
 
-            return linkContent
+            return linkContent;
           })}
         </div>
       </div>
     </TooltipProvider>
-  )
+  );
 }
 
-export { EngagementTabs, tabDefs }
-export type { EngagementTabsProps, TabCount }
+export { EngagementTabs, tabDefs };
+export type { EngagementTabsProps, TabCount };

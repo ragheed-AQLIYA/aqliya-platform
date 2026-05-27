@@ -12,11 +12,13 @@ import {
   getEngagementWorkflowStatus,
   getAuditEvents,
   getAISuggestions,
+  getMissingEvidence,
 } from "@/lib/audit/services";
 import { getAuditActor } from "@/lib/audit/actor-context";
 import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
 import { ArrowLeft, Circle } from "lucide-react";
 import { AIOutputsPanel } from "@/components/audit/ai/ai-outputs-panel";
+import { ArchiveEngagementButton } from "@/components/audit/engagement/archive-engagement-button";
 
 export default async function EngagementDetailPage({
   params,
@@ -26,13 +28,19 @@ export default async function EngagementDetailPage({
   const { engagementId } = await params;
   const actor = await getAuditActor();
 
-  const [engagement, workflowStatusRaw, auditEvents, aiOutputs] =
-    await Promise.all([
-      getEngagement(actor.organizationId, engagementId),
-      getEngagementWorkflowStatus(engagementId).catch(() => null),
-      getAuditEvents(engagementId).catch(() => []),
-      getAISuggestions(engagementId).catch(() => []),
-    ]);
+  const [
+    engagement,
+    workflowStatusRaw,
+    auditEvents,
+    aiOutputs,
+    missingEvidence,
+  ] = await Promise.all([
+    getEngagement(actor.organizationId, engagementId),
+    getEngagementWorkflowStatus(engagementId).catch(() => null),
+    getAuditEvents(engagementId).catch(() => []),
+    getAISuggestions(engagementId).catch(() => []),
+    getMissingEvidence(engagementId).catch(() => []),
+  ]);
 
   if (!engagement) {
     notFound();
@@ -49,14 +57,23 @@ export default async function EngagementDetailPage({
 
   const recentEvents = auditEvents.slice(-5).reverse();
 
+  const canArchive = ["admin", "partner"].includes(actor.actorRole);
+
   return (
     <div className="space-y-6" dir="rtl">
-      <Link href="/audit">
-        <Button variant="outline" size="sm">
-          <ArrowLeft className="ml-1 h-4 w-4" />
-          العودة إلى لوحة AuditOS
-        </Button>
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link href="/audit">
+          <Button variant="outline" size="sm">
+            <ArrowLeft className="ml-1 h-4 w-4" />
+            العودة إلى لوحة AuditOS
+          </Button>
+        </Link>
+        <ArchiveEngagementButton
+          engagementId={engagementId}
+          engagementStatus={engagement.status}
+          canArchive={canArchive}
+        />
+      </div>
 
       <EngagementHeader engagement={engagement} status={workflowStatus} />
 
@@ -107,10 +124,19 @@ export default async function EngagementDetailPage({
                   الروابط الناقصة
                 </h3>
                 <ul className="mt-2 space-y-1 text-xs text-blue-600 dark:text-blue-300">
-                  <li className="flex items-center gap-1">
-                    <Circle className="h-2 w-2" />
-                    دليل المخزون لم يُرفع بعد
-                  </li>
+                  {missingEvidence.length === 0 ? (
+                    <li className="flex items-center gap-1">
+                      <Circle className="h-2 w-2" />
+                      لا توجد عناصر دليل مفقودة مسجلة
+                    </li>
+                  ) : (
+                    missingEvidence.slice(0, 3).map((item) => (
+                      <li key={item.id} className="flex items-center gap-1">
+                        <Circle className="h-2 w-2" />
+                        {item.filename}
+                      </li>
+                    ))
+                  )}
                 </ul>
               </div>
             </div>

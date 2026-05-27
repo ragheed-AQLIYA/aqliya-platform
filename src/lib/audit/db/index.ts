@@ -570,6 +570,37 @@ function toAuditUser(u: {
   };
 }
 
+function emptyDashboardSummary(): DashboardSummary {
+  return {
+    totalEngagements: 0,
+    activeEngagements: 0,
+    pendingReviews: 0,
+    openFindings: 0,
+    missingEvidence: 0,
+    readyForApproval: 0,
+    publishedCount: 0,
+    recentActivity: [],
+    engagements: [],
+  };
+}
+
+function protectedAuditReadUnavailable(scope: string, error?: unknown): never {
+  if (error) {
+    console.error(
+      `[AuditDB] ${scope} failed. Mock fallback disabled for protected /audit workspace.`,
+      error,
+    );
+  } else {
+    console.error(
+      `[AuditDB] ${scope} failed. Mock fallback disabled for protected /audit workspace.`,
+    );
+  }
+
+  throw new Error(
+    `AuditOS protected read unavailable: ${scope}. Mock fallback disabled for protected /audit workspace.`,
+  );
+}
+
 export async function getDashboardSummary(
   organizationId?: string,
 ): Promise<DashboardSummary> {
@@ -606,10 +637,7 @@ export async function getDashboardSummary(
         }),
       ]);
     if (engagements.length === 0) {
-      console.warn(
-        "[AuditDB] getDashboardSummary: no engagements found, falling back to mock",
-      );
-      return mock.mockDashboardSummary;
+      return emptyDashboardSummary();
     }
     const activeEngagements = engagements.filter(
       (e) => e.status !== "archived" && e.status !== "published",
@@ -635,11 +663,7 @@ export async function getDashboardSummary(
       engagements: engagements.map(toEngagement),
     };
   } catch (error) {
-    console.warn(
-      "[AuditDB] getDashboardSummary error, falling back to mock",
-      error,
-    );
-    return mock.mockDashboardSummary;
+    protectedAuditReadUnavailable("getDashboardSummary", error);
   }
 }
 
@@ -652,16 +676,10 @@ export async function getEngagements(
       where: orgFilter,
       include: { client: true },
     });
-    if (engagements.length === 0) {
-      console.warn(
-        "[AuditDB] getEngagements: no engagements found, falling back to mock",
-      );
-      return mock.mockDashboardSummary.engagements;
-    }
+    if (engagements.length === 0) return [];
     return engagements.map(toEngagement);
   } catch (error) {
-    console.warn("[AuditDB] getEngagements error, falling back to mock", error);
-    return mock.mockDashboardSummary.engagements;
+    protectedAuditReadUnavailable("getEngagements", error);
   }
 }
 
@@ -677,25 +695,10 @@ export async function getEngagement(
       where: where as { id: string },
       include: { client: true },
     });
-    if (!engagement) {
-      console.warn(
-        `[AuditDB] getEngagement: engagement ${id} not found, falling back to mock`,
-      );
-      if (id === mock.mockEngagement.id) return mock.mockEngagement;
-      return (
-        mock.mockDashboardSummary.engagements.find((e) => e.id === id) ?? null
-      );
-    }
+    if (!engagement) return null;
     return toEngagement(engagement);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getEngagement(${id}) error, falling back to mock`,
-      error,
-    );
-    if (id === mock.mockEngagement.id) return mock.mockEngagement;
-    return (
-      mock.mockDashboardSummary.engagements.find((e) => e.id === id) ?? null
-    );
+    protectedAuditReadUnavailable(`getEngagement(${id})`, error);
   }
 }
 
@@ -716,25 +719,11 @@ export async function getEngagementWorkflowStatus(
       }),
     ]);
     if (!engagement) {
-      console.warn(
-        `[AuditDB] getEngagementWorkflowStatus: engagement ${engagementId} not found, falling back to mock`,
-      );
-      if (engagementId !== mock.mockEngagement.id) {
-        return {
-          currentState: "setup",
-          availableTransitions: ["in_progress"],
-          blockingIssues: [],
-          completionPercentage: 10,
-        };
-      }
       return {
-        currentState: mock.mockEngagement.status,
-        availableTransitions: ["under_review", "awaiting_client"],
-        blockingIssues: [
-          "Sundry Income (5100) not mapped",
-          "Inventory evidence missing",
-        ],
-        completionPercentage: 45,
+        currentState: "setup",
+        availableTransitions: ["in_progress"],
+        blockingIssues: [],
+        completionPercentage: 10,
       };
     }
     const blockingIssues: string[] = [];
@@ -773,27 +762,10 @@ export async function getEngagementWorkflowStatus(
       completionPercentage,
     };
   } catch (error) {
-    console.warn(
-      `[AuditDB] getEngagementWorkflowStatus(${engagementId}) error, falling back to mock`,
+    protectedAuditReadUnavailable(
+      `getEngagementWorkflowStatus(${engagementId})`,
       error,
     );
-    if (engagementId !== mock.mockEngagement.id) {
-      return {
-        currentState: "setup",
-        availableTransitions: ["in_progress"],
-        blockingIssues: [],
-        completionPercentage: 10,
-      };
-    }
-    return {
-      currentState: mock.mockEngagement.status,
-      availableTransitions: ["under_review", "awaiting_client"],
-      blockingIssues: [
-        "Sundry Income (5100) not mapped",
-        "Inventory evidence missing",
-      ],
-      completionPercentage: 45,
-    };
   }
 }
 
@@ -806,21 +778,10 @@ export async function getTrialBalance(
       include: { lines: true },
       orderBy: { createdAt: "desc" },
     });
-    if (!tb) {
-      console.warn(
-        `[AuditDB] getTrialBalance: no trial balance for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id) return mock.mockTrialBalance;
-      return null;
-    }
+    if (!tb) return null;
     return toTrialBalance(tb);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getTrialBalance(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id) return mock.mockTrialBalance;
-    return null;
+    protectedAuditReadUnavailable(`getTrialBalance(${engagementId})`, error);
   }
 }
 
@@ -833,21 +794,13 @@ export async function getTrialBalanceLines(
       orderBy: { createdAt: "desc" },
       include: { lines: true },
     });
-    if (!tb || tb.lines.length === 0) {
-      console.warn(
-        `[AuditDB] getTrialBalanceLines: no lines for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id) return mock.mockTBLines;
-      return [];
-    }
+    if (!tb || tb.lines.length === 0) return [];
     return tb.lines.map(toTrialBalanceLine);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getTrialBalanceLines(${engagementId}) error, falling back to mock`,
+    protectedAuditReadUnavailable(
+      `getTrialBalanceLines(${engagementId})`,
       error,
     );
-    if (engagementId === mock.mockEngagement.id) return mock.mockTBLines;
-    return [];
   }
 }
 
@@ -860,21 +813,10 @@ export async function getMappings(
       include: { canonicalAccount: true },
       orderBy: { createdAt: "asc" },
     });
-    if (mappings.length === 0) {
-      console.warn(
-        `[AuditDB] getMappings: no mappings for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id) return mock.mockMappings;
-      return [];
-    }
+    if (mappings.length === 0) return [];
     return mappings.map(toAccountMapping);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getMappings(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id) return mock.mockMappings;
-    return [];
+    protectedAuditReadUnavailable(`getMappings(${engagementId})`, error);
   }
 }
 
@@ -1482,20 +1424,12 @@ export async function getUnmappedAccounts(
       where: { engagementId, status: "pending" },
       include: { canonicalAccount: true },
     });
-    if (mappings.length === 0 && engagementId === mock.mockEngagement.id) {
-      const pending = mock.mockMappings.filter((m) => m.status === "pending");
-      if (pending.length === 0) return [];
-      return pending;
-    }
     return mappings.map(toAccountMapping);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getUnmappedAccounts(${engagementId}) error, falling back to mock`,
+    protectedAuditReadUnavailable(
+      `getUnmappedAccounts(${engagementId})`,
       error,
     );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockMappings.filter((m) => m.status === "pending");
-    return [];
   }
 }
 
@@ -1541,12 +1475,7 @@ export async function getValidationRun(
       })),
     };
   } catch (error) {
-    console.warn(
-      `[AuditDB] getValidationRun(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id) return mock.mockValidationRun;
-    return null;
+    protectedAuditReadUnavailable(`getValidationRun(${engagementId})`, error);
   }
 }
 
@@ -1878,14 +1807,7 @@ export async function getFinancialStatements(
       where: { engagementId },
       orderBy: { createdAt: "asc" },
     });
-    if (statements.length === 0) {
-      console.warn(
-        `[AuditDB] getFinancialStatements: no statements for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id)
-        return mock.mockFinancialStatements;
-      return [];
-    }
+    if (statements.length === 0) return [];
     const [mappings, reviewComments] = await Promise.all([
       prisma.auditAccountMapping.findMany({
         where: { engagementId },
@@ -1918,13 +1840,10 @@ export async function getFinancialStatements(
       };
     });
   } catch (error) {
-    console.warn(
-      `[AuditDB] getFinancialStatements(${engagementId}) error, falling back to mock`,
+    protectedAuditReadUnavailable(
+      `getFinancialStatements(${engagementId})`,
       error,
     );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockFinancialStatements;
-    return [];
   }
 }
 
@@ -1936,12 +1855,7 @@ export async function getEquityStatementLines(): Promise<
       where: { statementType: "equity" },
       orderBy: { createdAt: "desc" },
     });
-    if (!eq) {
-      console.warn(
-        "[AuditDB] getEquityStatementLines: no equity statement found, falling back to mock",
-      );
-      return mock.mockEquityStatementLines;
-    }
+    if (!eq) return [];
     const lines: FinancialStatementLine[] =
       typeof eq.lines === "string"
         ? JSON.parse(eq.lines)
@@ -1950,11 +1864,7 @@ export async function getEquityStatementLines(): Promise<
           : [];
     return lines.map(toFinancialStatementLine);
   } catch (error) {
-    console.warn(
-      "[AuditDB] getEquityStatementLines error, falling back to mock",
-      error,
-    );
-    return mock.mockEquityStatementLines;
+    protectedAuditReadUnavailable("getEquityStatementLines", error);
   }
 }
 
@@ -1965,14 +1875,7 @@ export async function getDisclosureNotes(
     const notes = await prisma.auditDisclosureNote.findMany({
       where: { engagementId },
     });
-    if (notes.length === 0) {
-      console.warn(
-        `[AuditDB] getDisclosureNotes: no notes for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id)
-        return mock.mockDisclosureNotes;
-      return [];
-    }
+    if (notes.length === 0) return [];
     const reviewComments = await prisma.auditReviewComment.findMany({
       where: { engagementId, targetType: "note" },
     });
@@ -1984,13 +1887,7 @@ export async function getDisclosureNotes(
       ),
     );
   } catch (error) {
-    console.warn(
-      `[AuditDB] getDisclosureNotes(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockDisclosureNotes;
-    return [];
+    protectedAuditReadUnavailable(`getDisclosureNotes(${engagementId})`, error);
   }
 }
 
@@ -2003,21 +1900,10 @@ export async function getEvidence(
       include: { links: true },
       orderBy: { createdAt: "desc" },
     });
-    if (evidence.length === 0) {
-      console.warn(
-        `[AuditDB] getEvidence: no evidence for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id) return mock.mockEvidence;
-      return [];
-    }
+    if (evidence.length === 0) return [];
     return evidence.map(toEvidenceObject);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getEvidence(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id) return mock.mockEvidence;
-    return [];
+    protectedAuditReadUnavailable(`getEvidence(${engagementId})`, error);
   }
 }
 
@@ -2042,42 +1928,12 @@ export async function getEvidencePaginated(
       }),
       prisma.auditEvidence.count({ where: { engagementId } }),
     ]);
-    if (
-      evidence.length === 0 &&
-      total === 0 &&
-      engagementId === mock.mockEngagement.id
-    ) {
-      return paginate(
-        mock.mockEvidence.slice(skip, skip + pageSize),
-        mock.mockEvidence.length,
-        { page, pageSize },
-      );
-    }
     return paginate(evidence.map(toEvidenceObject), total, { page, pageSize });
   } catch (error) {
-    console.warn(
-      `[AuditDB] getEvidencePaginated(${engagementId}) error, falling back to mock`,
+    protectedAuditReadUnavailable(
+      `getEvidencePaginated(${engagementId})`,
       error,
     );
-    if (engagementId === mock.mockEngagement.id) {
-      const all = mock.mockEvidence;
-      const skip = offsetFromPage(
-        params.page ?? 1,
-        params.pageSize ?? DEFAULT_PAGE_SIZE,
-      );
-      return paginate(
-        all.slice(skip, skip + (params.pageSize ?? DEFAULT_PAGE_SIZE)),
-        all.length,
-        {
-          page: params.page ?? 1,
-          pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE,
-        },
-      );
-    }
-    return paginate([], 0, {
-      page: params.page ?? 1,
-      pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE,
-    });
   }
 }
 
@@ -2089,20 +1945,9 @@ export async function getMissingEvidence(
       where: { engagementId, state: "missing" },
       include: { links: true },
     });
-    if (evidence.length === 0 && engagementId === mock.mockEngagement.id) {
-      const missing = mock.mockEvidence.filter((e) => e.state === "missing");
-      if (missing.length === 0) return [];
-      return missing;
-    }
     return evidence.map(toEvidenceObject);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getMissingEvidence(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockEvidence.filter((e) => e.state === "missing");
-    return [];
+    protectedAuditReadUnavailable(`getMissingEvidence(${engagementId})`, error);
   }
 }
 
@@ -2111,21 +1956,10 @@ export async function getFindings(engagementId: string): Promise<Finding[]> {
     const findings = await prisma.auditFinding.findMany({
       where: { engagementId },
     });
-    if (findings.length === 0) {
-      console.warn(
-        `[AuditDB] getFindings: no findings for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id) return mock.mockFindings;
-      return [];
-    }
+    if (findings.length === 0) return [];
     return findings.map(toFinding);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getFindings(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id) return mock.mockFindings;
-    return [];
+    protectedAuditReadUnavailable(`getFindings(${engagementId})`, error);
   }
 }
 
@@ -2148,42 +1982,12 @@ export async function getFindingsPaginated(
       }),
       prisma.auditFinding.count({ where: { engagementId } }),
     ]);
-    if (
-      findings.length === 0 &&
-      total === 0 &&
-      engagementId === mock.mockEngagement.id
-    ) {
-      return paginate(
-        mock.mockFindings.slice(skip, skip + pageSize),
-        mock.mockFindings.length,
-        { page, pageSize },
-      );
-    }
     return paginate(findings.map(toFinding), total, { page, pageSize });
   } catch (error) {
-    console.warn(
-      `[AuditDB] getFindingsPaginated(${engagementId}) error, falling back to mock`,
+    protectedAuditReadUnavailable(
+      `getFindingsPaginated(${engagementId})`,
       error,
     );
-    if (engagementId === mock.mockEngagement.id) {
-      const all = mock.mockFindings;
-      const skip = offsetFromPage(
-        params.page ?? 1,
-        params.pageSize ?? DEFAULT_PAGE_SIZE,
-      );
-      return paginate(
-        all.slice(skip, skip + (params.pageSize ?? DEFAULT_PAGE_SIZE)),
-        all.length,
-        {
-          page: params.page ?? 1,
-          pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE,
-        },
-      );
-    }
-    return paginate([], 0, {
-      page: params.page ?? 1,
-      pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE,
-    });
   }
 }
 
@@ -2195,23 +1999,10 @@ export async function getFinding(
     const finding = await prisma.auditFinding.findUnique({
       where: { id: findingId },
     });
-    if (!finding || finding.engagementId !== engagementId) {
-      console.warn(
-        `[AuditDB] getFinding: finding ${findingId} not found for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id)
-        return mock.mockFindings.find((f) => f.id === findingId) ?? null;
-      return null;
-    }
+    if (!finding || finding.engagementId !== engagementId) return null;
     return toFinding(finding);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getFinding(${findingId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockFindings.find((f) => f.id === findingId) ?? null;
-    return null;
+    protectedAuditReadUnavailable(`getFinding(${findingId})`, error);
   }
 }
 
@@ -2223,23 +2014,10 @@ export async function getRecommendations(
       where: { engagementId },
       include: { finding: true },
     });
-    if (recs.length === 0) {
-      console.warn(
-        `[AuditDB] getRecommendations: no recs for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id)
-        return mock.mockRecommendations;
-      return [];
-    }
+    if (recs.length === 0) return [];
     return recs.map(toRecommendation);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getRecommendations(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockRecommendations;
-    return [];
+    protectedAuditReadUnavailable(`getRecommendations(${engagementId})`, error);
   }
 }
 
@@ -2263,42 +2041,12 @@ export async function getRecommendationsPaginated(
       }),
       prisma.auditRecommendation.count({ where: { engagementId } }),
     ]);
-    if (
-      recs.length === 0 &&
-      total === 0 &&
-      engagementId === mock.mockEngagement.id
-    ) {
-      return paginate(
-        mock.mockRecommendations.slice(skip, skip + pageSize),
-        mock.mockRecommendations.length,
-        { page, pageSize },
-      );
-    }
     return paginate(recs.map(toRecommendation), total, { page, pageSize });
   } catch (error) {
-    console.warn(
-      `[AuditDB] getRecommendationsPaginated(${engagementId}) error, falling back to mock`,
+    protectedAuditReadUnavailable(
+      `getRecommendationsPaginated(${engagementId})`,
       error,
     );
-    if (engagementId === mock.mockEngagement.id) {
-      const all = mock.mockRecommendations;
-      const skip = offsetFromPage(
-        params.page ?? 1,
-        params.pageSize ?? DEFAULT_PAGE_SIZE,
-      );
-      return paginate(
-        all.slice(skip, skip + (params.pageSize ?? DEFAULT_PAGE_SIZE)),
-        all.length,
-        {
-          page: params.page ?? 1,
-          pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE,
-        },
-      );
-    }
-    return paginate([], 0, {
-      page: params.page ?? 1,
-      pageSize: params.pageSize ?? DEFAULT_PAGE_SIZE,
-    });
   }
 }
 
@@ -2310,23 +2058,10 @@ export async function getRecommendation(
     const rec = await prisma.auditRecommendation.findUnique({
       where: { id: recId },
     });
-    if (!rec || rec.engagementId !== engagementId) {
-      console.warn(
-        `[AuditDB] getRecommendation: rec ${recId} not found for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id)
-        return mock.mockRecommendations.find((r) => r.id === recId) ?? null;
-      return null;
-    }
+    if (!rec || rec.engagementId !== engagementId) return null;
     return toRecommendation(rec);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getRecommendation(${recId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockRecommendations.find((r) => r.id === recId) ?? null;
-    return null;
+    protectedAuditReadUnavailable(`getRecommendation(${recId})`, error);
   }
 }
 
@@ -2337,22 +2072,10 @@ export async function getReviewComments(
     const comments = await prisma.auditReviewComment.findMany({
       where: { engagementId },
     });
-    if (comments.length === 0) {
-      console.warn(
-        `[AuditDB] getReviewComments: no comments for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id)
-        return mock.mockReviewComments;
-      return [];
-    }
+    if (comments.length === 0) return [];
     return comments.map(toReviewComment);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getReviewComments(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id) return mock.mockReviewComments;
-    return [];
+    protectedAuditReadUnavailable(`getReviewComments(${engagementId})`, error);
   }
 }
 
@@ -2365,13 +2088,7 @@ export async function getOpenReviewCount(
     });
     return count;
   } catch (error) {
-    console.warn(
-      `[AuditDB] getOpenReviewCount(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockReviewComments.filter((c) => c.status === "open").length;
-    return 0;
+    protectedAuditReadUnavailable(`getOpenReviewCount(${engagementId})`, error);
   }
 }
 
@@ -2382,23 +2099,10 @@ export async function getApprovalRecords(
     const records = await prisma.auditApprovalRecord.findMany({
       where: { engagementId },
     });
-    if (records.length === 0) {
-      console.warn(
-        `[AuditDB] getApprovalRecords: no records for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id)
-        return mock.mockApprovalRecords;
-      return [];
-    }
+    if (records.length === 0) return [];
     return records.map(toApprovalRecord);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getApprovalRecords(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockApprovalRecords;
-    return [];
+    protectedAuditReadUnavailable(`getApprovalRecords(${engagementId})`, error);
   }
 }
 
@@ -2521,12 +2225,7 @@ export async function getApprovalStatus(engagementId: string): Promise<{
       checklist,
     } as const;
   } catch (error) {
-    console.warn(`[AuditDB] getApprovalStatus(${engagementId}) error`, error);
-    return {
-      status: "not_ready",
-      blockingIssues: ["Unable to determine readiness"],
-      checklist: [],
-    };
+    protectedAuditReadUnavailable(`getApprovalStatus(${engagementId})`, error);
   }
 }
 
@@ -2538,14 +2237,7 @@ export async function getPublicationPackage(
       where: { engagementId },
       orderBy: { createdAt: "desc" },
     });
-    if (!pkg) {
-      console.warn(
-        `[AuditDB] getPublicationPackage: no package for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id)
-        return mock.mockPublicationPackage;
-      return null;
-    }
+    if (!pkg) return null;
     const [
       statements,
       notes,
@@ -2624,13 +2316,10 @@ export async function getPublicationPackage(
       lockedAt: pkg.lockedAt?.toISOString() ?? undefined,
     };
   } catch (error) {
-    console.warn(
-      `[AuditDB] getPublicationPackage(${engagementId}) error, falling back to mock`,
+    protectedAuditReadUnavailable(
+      `getPublicationPackage(${engagementId})`,
       error,
     );
-    if (engagementId === mock.mockEngagement.id)
-      return mock.mockPublicationPackage;
-    return null;
   }
 }
 
@@ -2642,21 +2331,10 @@ export async function getAuditEvents(
       where: { engagementId },
       orderBy: { timestamp: "desc" },
     });
-    if (events.length === 0) {
-      console.warn(
-        `[AuditDB] getAuditEvents: no events for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId === mock.mockEngagement.id) return mock.mockAuditEvents;
-      return [];
-    }
+    if (events.length === 0) return [];
     return events.map(toAuditEvent);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getAuditEvents(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId === mock.mockEngagement.id) return mock.mockAuditEvents;
-    return [];
+    protectedAuditReadUnavailable(`getAuditEvents(${engagementId})`, error);
   }
 }
 
@@ -2671,27 +2349,10 @@ export async function getAISuggestions(
       where,
       orderBy: { createdAt: "desc" },
     });
-    if (suggestions.length === 0) {
-      console.warn(
-        `[AuditDB] getAISuggestions: no suggestions for ${engagementId}, falling back to mock`,
-      );
-      if (engagementId !== mock.mockEngagement.id) return [];
-      let results = mock.mockAiOutputs;
-      if (suggestionType)
-        results = results.filter((a) => a.suggestionType === suggestionType);
-      return results;
-    }
+    if (suggestions.length === 0) return [];
     return suggestions.map(toAiOutput);
   } catch (error) {
-    console.warn(
-      `[AuditDB] getAISuggestions(${engagementId}) error, falling back to mock`,
-      error,
-    );
-    if (engagementId !== mock.mockEngagement.id) return [];
-    let results = mock.mockAiOutputs;
-    if (suggestionType)
-      results = results.filter((a) => a.suggestionType === suggestionType);
-    return results;
+    protectedAuditReadUnavailable(`getAISuggestions(${engagementId})`, error);
   }
 }
 
@@ -3805,8 +3466,8 @@ export async function getPilotFeedback(
       orderBy: { createdAt: "desc" },
     });
     return items.map(toPilotFeedback);
-  } catch {
-    return [];
+  } catch (error) {
+    protectedAuditReadUnavailable(`getPilotFeedback(${engagementId})`, error);
   }
 }
 
@@ -3862,8 +3523,11 @@ export async function getProductionBlockers(
       orderBy: { createdAt: "desc" },
     });
     return items.map(toProductionBlocker);
-  } catch {
-    return [];
+  } catch (error) {
+    protectedAuditReadUnavailable(
+      `getProductionBlockers(${engagementId ?? "all"})`,
+      error,
+    );
   }
 }
 
@@ -3916,8 +3580,11 @@ export async function getPilotSignoffChecklist(
       orderBy: { createdAt: "asc" },
     });
     return items.map(toPilotSignoff);
-  } catch {
-    return [];
+  } catch (error) {
+    protectedAuditReadUnavailable(
+      `getPilotSignoffChecklist(${engagementId})`,
+      error,
+    );
   }
 }
 
@@ -3929,16 +3596,10 @@ export async function getAuditUsers(
       where: organizationId ? { organizationId } : {},
       orderBy: { name: "asc" },
     });
-    if (users.length === 0) {
-      console.warn(
-        "[AuditDB] getAuditUsers: no users found, falling back to mock",
-      );
-      return mock.mockUsers;
-    }
+    if (users.length === 0) return [];
     return users.map(toAuditUser);
   } catch (error) {
-    console.warn("[AuditDB] getAuditUsers error, falling back to mock", error);
-    return mock.mockUsers;
+    protectedAuditReadUnavailable("getAuditUsers", error);
   }
 }
 

@@ -1,6 +1,6 @@
 // ─── AuditOS MVP Data Services ───
-// Hybrid layer: tries database first, falls back to mock data.
-// UI components import from here and never know if data is mock or real.
+// Protected AuditOS workspace reads are database-first.
+// Mock fallback is disabled by default and must be explicitly enabled.
 
 import type {
   Engagement,
@@ -34,6 +34,8 @@ import "@/lib/ai/handlers/register-handlers";
 import { aiOrchestrator } from "@/lib/ai/orchestrator";
 
 const USE_DATABASE = true;
+const ALLOW_PROTECTED_AUDIT_MOCK_FALLBACK =
+  process.env.AUDIT_ALLOW_MOCK_FALLBACK === "true";
 
 const delay = (ms = 30) => new Promise((r) => setTimeout(r, ms));
 
@@ -44,15 +46,33 @@ async function getDb() {
 async function tryDb<T>(
   fallback: () => Promise<T>,
   dbFn: (db: typeof import("./db")) => Promise<T>,
+  label = "protected AuditOS read",
 ): Promise<T> {
   if (USE_DATABASE) {
     try {
       const db = await getDb();
       return await dbFn(db);
     } catch (e) {
-      console.warn("[AuditServices] DB failed, using mock:", e);
+      if (!ALLOW_PROTECTED_AUDIT_MOCK_FALLBACK) {
+        const reason = e instanceof Error ? e.message : "unknown error";
+        throw new Error(
+          `[AuditServices] ${label} failed. Mock fallback is disabled for protected /audit workspace. ${reason}`,
+        );
+      }
+
+      console.warn(
+        `[AuditServices] ${label} failed; explicit mock fallback enabled:`,
+        e,
+      );
     }
   }
+
+  if (!ALLOW_PROTECTED_AUDIT_MOCK_FALLBACK) {
+    throw new Error(
+      `[AuditServices] ${label} unavailable. Mock fallback is disabled for protected /audit workspace.`,
+    );
+  }
+
   await delay();
   return fallback();
 }
@@ -63,6 +83,7 @@ export async function getDashboardSummary(
   return tryDb(
     () => Promise.resolve(mock.mockDashboardSummary),
     (db) => db.getDashboardSummary(organizationId),
+    "dashboard summary",
   );
 }
 
@@ -72,6 +93,7 @@ export async function getEngagements(
   return tryDb(
     () => Promise.resolve(mock.mockDashboardSummary.engagements),
     (db) => db.getEngagements(organizationId),
+    "engagement list",
   );
 }
 
@@ -85,6 +107,7 @@ export async function getEngagement(
       return Promise.resolve(e ?? null);
     },
     (db) => db.getEngagement(organizationId, id),
+    `engagement ${id}`,
   );
 }
 
@@ -104,6 +127,7 @@ export async function getEngagementWorkflowStatus(
       };
     },
     (db) => db.getEngagementWorkflowStatus(engagementId),
+    `workflow status for ${engagementId}`,
   );
 }
 
@@ -116,6 +140,7 @@ export async function getTrialBalance(
         ? Promise.resolve(mock.mockTrialBalance)
         : Promise.resolve(null),
     (db) => db.getTrialBalance(engagementId),
+    `trial balance for ${engagementId}`,
   );
 }
 
@@ -140,6 +165,7 @@ export async function getMappings(
         ? Promise.resolve(mock.mockMappings)
         : Promise.resolve([]),
     (db) => db.getMappings(engagementId),
+    `account mappings for ${engagementId}`,
   );
 }
 
@@ -195,6 +221,7 @@ export async function getValidationRun(
         ? Promise.resolve(mock.mockValidationRun)
         : Promise.resolve(null),
     (db) => db.getValidationRun(engagementId),
+    `validation run for ${engagementId}`,
   );
 }
 
@@ -247,6 +274,7 @@ export async function getFinancialStatements(
         ? Promise.resolve(mock.mockFinancialStatements)
         : Promise.resolve([]),
     (db) => db.getFinancialStatements(engagementId),
+    `financial statements for ${engagementId}`,
   );
 }
 

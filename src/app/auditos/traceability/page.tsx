@@ -239,7 +239,7 @@ export default function AuditosTraceability() {
                     {ai.status === "rejected_by_human" && "مرفوض"}
                   </span>
                   <span className="text-muted-foreground">
-                    · {getSafeDemoModelLabel(ai.modelVersion)}
+                    · {getSafeDemoModelLabel()}
                   </span>
                 </div>
               </div>

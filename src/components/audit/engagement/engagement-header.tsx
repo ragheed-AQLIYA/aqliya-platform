@@ -1,8 +1,6 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Settings, ExternalLink, MoreHorizontal } from "lucide-react";
 import type { Engagement, WorkflowStatus } from "@/types/audit";
 
 const statusLabels: Record<
@@ -83,19 +81,6 @@ export function EngagementHeader({
               </span>
             </span>
           </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Settings className="me-1 h-4 w-4" />
-            الإعدادات
-          </Button>
-          <Button variant="outline" size="sm">
-            <ExternalLink className="me-1 h-4 w-4" />
-            فتح
-          </Button>
-          <Button variant="ghost" size="icon">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
         </div>
       </div>
     </div>

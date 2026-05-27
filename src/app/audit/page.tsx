@@ -1,15 +1,11 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { KPICard } from "@/components/enterprise/kpi-card";
 import { SectionHeader } from "@/components/enterprise/section-header";
 import {
   EnterpriseCard,
-  EnterpriseCardHeader,
-  EnterpriseCardTitle,
   EnterpriseCardContent,
-  EnterpriseCardFooter,
 } from "@/components/enterprise/enterprise-card";
 import { StatusBadge } from "@/components/enterprise/status-badge";
 import {
@@ -17,8 +13,6 @@ import {
   AIInsightCard,
 } from "@/components/enterprise/ai-indicator";
 import { IntelligenceSummaryPanel } from "@/components/intelligence/intelligence-summary-panel";
-import { EntityTimeline } from "@/components/entity/entity-timeline";
-import { RecentEntitiesPanel } from "@/components/workspace/recent-entities";
 import { WorkspaceStatus } from "@/components/workspace/workspace-status";
 import { EngagementFormWrapper } from "@/components/audit/dashboard/engagement-form-wrapper";
 import { RecentActivity } from "@/components/audit/dashboard/recent-activity";
@@ -80,6 +74,35 @@ export default async function AuditDashboardPage() {
     getDashboardSummary(actor.organizationId),
     getEngagements(actor.organizationId),
   ]);
+
+  const reviewDepthScore =
+    summary.totalEngagements === 0
+      ? 0
+      : Math.max(
+          0,
+          Math.min(
+            100,
+            100 - summary.openFindings * 6 - summary.missingEvidence * 8,
+          ),
+        );
+  const evidenceStrength =
+    summary.totalEngagements === 0
+      ? "partial"
+      : summary.missingEvidence > 0
+        ? "partial"
+        : "strong";
+  const evidenceConfidence =
+    summary.totalEngagements === 0
+      ? 0.4
+      : summary.missingEvidence > 0
+        ? 0.62
+        : 0.82;
+  const insightConfidence =
+    summary.totalEngagements === 0
+      ? 0.45
+      : summary.missingEvidence > 0 || summary.openFindings > 0
+        ? 0.68
+        : 0.85;
 
   // Batch-fetch project context for engagements
   const engagementProjectIds = engagements
@@ -204,17 +227,17 @@ export default async function AuditDashboardPage() {
         title="ذكاء التدقيق"
         module="audit"
         signals={[
-          { type: "score", label: "عمق المراجعة", value: 74 },
+          { type: "score", label: "عمق المراجعة", value: reviewDepthScore },
           {
             type: "risk",
             label: "الأهمية المالية",
             value: summary.openFindings > 5 ? "high" : "medium",
           },
           {
-            type: "confidence",
+            type: "evidence",
             label: "قوة الأدلة",
-            value: summary.missingEvidence > 0 ? "partial" : "strong",
-            confidence: 0.82,
+            value: evidenceStrength,
+            confidence: evidenceConfidence,
           },
           {
             type: "readiness",
@@ -226,11 +249,11 @@ export default async function AuditDashboardPage() {
 
       {/* AI Insight */}
       {summary.openFindings > 0 && (
-        <AIInsightCard confidence={0.85}>
+        <AIInsightCard confidence={insightConfidence}>
           {summary.openFindings} نتيجة مفتوحة مكتشفة عبر{" "}
           {summary.activeEngagements} مهمة نشطة.
           {summary.missingEvidence > 0 &&
-            ` {summary.missingEvidence} عنصر دليل ما زال مفقوداً. يُوصى بجمع الأدلة قبل المراجعة.`}
+            ` ${summary.missingEvidence} عنصر دليل ما زال مفقوداً. يُوصى بجمع الأدلة قبل المراجعة.`}
         </AIInsightCard>
       )}
 
@@ -317,54 +340,6 @@ export default async function AuditDashboardPage() {
           <RecentActivity events={summary.recentActivity} />
         </EnterpriseCardContent>
       </EnterpriseCard>
-
-      {/* Cross-module Recent */}
-      <SectionHeader
-        eyebrow="المنصة"
-        title="آخر النشاطات"
-        description="نشاطك الأخير عبر جميع الأنظمة"
-      />
-      <RecentEntitiesPanel entities={mockRecentEntities} />
     </div>
   );
 }
-
-// Mock cross-module recent entities
-const mockRecentEntities = [
-  {
-    id: "1",
-    type: "engagement" as const,
-    module: "audit" as const,
-    title: "Acme Corp — FY2025",
-    status: "in_progress",
-    accessedAt: new Date().toISOString(),
-    href: "/audit",
-  },
-  {
-    id: "2",
-    type: "decision" as const,
-    module: "decision" as const,
-    title: "Q3 Investment Decision",
-    status: "active",
-    accessedAt: new Date(Date.now() - 3600000).toISOString(),
-    href: "/decisions",
-  },
-  {
-    id: "3",
-    type: "deal" as const,
-    module: "sales" as const,
-    title: "Global Finance Deal",
-    status: "active",
-    accessedAt: new Date(Date.now() - 7200000).toISOString(),
-    href: "/sales",
-  },
-  {
-    id: "4",
-    type: "engagement" as const,
-    module: "audit" as const,
-    title: "TechStart Inc — Q4",
-    status: "under_review",
-    accessedAt: new Date(Date.now() - 86400000).toISOString(),
-    href: "/audit",
-  },
-];
