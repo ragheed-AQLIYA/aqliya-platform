@@ -26,10 +26,13 @@ const tier1Systems = [
       "بيانات مالية متفرقة، تصنيفات يدوية، أدلة غير مرتبطة، ومراجعة يصعب تتبعها.",
     system:
       "أول تطبيق مُثبت على AQLIYA Intelligence Core. يربط البيانات المالية بالتصنيف الذكي، القوائم، الأدلة، الملاحظات، ومسار المراجعة الكامل من المصدر حتى الاعتماد البشري.",
-    output:
-      "مخرجات مراجعة منظمة وقابلة للتتبع الكامل — كل قرار مرتبط بمصدره.",
+    output: "مخرجات مراجعة منظمة وقابلة للتتبع الكامل — كل قرار مرتبط بمصدره.",
     flow: ["بيانات", "تصنيف", "مخرجات", "أدلة", "مراجعة", "اعتماد"],
-    highlights: ["مسار أدلة كامل", "اعتماد بشري إلزامي", "سجل تدقيق لا يُعدَّل"],
+    highlights: [
+      "مسار أدلة كامل",
+      "اعتماد بشري إلزامي",
+      "سجل تدقيق لا يُعدَّل",
+    ],
     href: "/products/audit",
     visual: AuditTraceVisual,
     proofNote: "أول تطبيق مُثبت — قائم ومُختبر",
@@ -46,7 +49,11 @@ const tier1Systems = [
       "يحوّل القرار المؤسسي إلى مسار محكوم: بدائل موثقة، معايير مقيّمة، مخاطر مُحللة، توصية ذكاء اصطناعي، واعتماد بشري نهائي.",
     output: "مذكرة قرار موثقة كاملة — قابلة للمراجعة والتدقيق في أي وقت.",
     flow: ["مشكلة", "بدائل", "معايير", "مخاطر", "توصية", "اعتماد"],
-    highlights: ["توصية AI مع مسوّغات", "كل قرار مرتبط بأدلته", "مسار لا يقبل التعديل بعد الاعتماد"],
+    highlights: [
+      "توصية AI مع مسوّغات",
+      "كل قرار مرتبط بأدلته",
+      "مسار لا يقبل التعديل بعد الاعتماد",
+    ],
     href: "/products/decision",
     visual: DecisionMatrixVisual,
     proofNote: "نشط — نظام مجاور في الإنتاج",
@@ -55,15 +62,19 @@ const tier1Systems = [
     id: "localcontentos",
     title: "LocalContentOS",
     subtitle: "نظام المحتوى المحلي",
-    maturity: "L4 — Usable v0.1",
-    statusLabel: "نشط — v0.1 (12 مسار)",
+    maturity: "L5 — Pilot-ready بشروط",
+    statusLabel: "نشط — Pilot-ready (12 مسار)",
     problem:
       "بيانات موردين، إنفاق، التزام، وتصنيفات موزعة بين فرق ومصادر متعددة.",
     system:
       "يربط الموردين بالإنفاق، التصنيف، نسب الالتزام، والفجوات. 12 مسار تشغيلي جاهزة. يُنشر بالتنسيق مع الجهة لضمان جودة البيانات وتحديد نطاق البايلوت.",
     output: "رؤية واضحة لمؤشرات المحتوى المحلي وأثر القرارات الشرائية.",
     flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات", "تقارير"],
-    highlights: ["12 مسار تشغيلي جاهز", "ربط المورد بالإنفاق الفعلي", "مؤشرات الالتزام تلقائياً"],
+    highlights: [
+      "12 مسار تشغيلي جاهز",
+      "ربط المورد بالإنفاق الفعلي",
+      "مؤشرات الالتزام تلقائياً",
+    ],
     href: "/products/local-content",
     visual: LocalContentMapVisual,
     proofNote: "v0.1 جاهز — النشر بالتنسيق مع الجهة",
@@ -114,8 +125,8 @@ export default function ProductsPage() {
               أنظمة مؤسسية مبنية على نواة واحدة
             </h1>
             <p className="mt-5 text-base leading-8 text-white/62 sm:text-lg">
-              كل نظام من أنظمة عقلية يعالج مساراً مؤسسياً محدداً، لكن جميعها تشترك
-              في نفس طبقة الحوكمة، سجل التدقيق، وآلية الاعتماد البشري.
+              كل نظام من أنظمة عقلية يعالج مساراً مؤسسياً محدداً، لكن جميعها
+              تشترك في نفس طبقة الحوكمة، سجل التدقيق، وآلية الاعتماد البشري.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-white/45">
               <span className="flex items-center gap-2">
@@ -183,7 +194,9 @@ export default function ProductsPage() {
                       <p
                         className={cn(
                           "mt-0.5 text-sm font-medium",
-                          i % 2 === 0 ? "text-muted-foreground" : "text-white/50",
+                          i % 2 === 0
+                            ? "text-muted-foreground"
+                            : "text-white/50",
                         )}
                       >
                         {system.subtitle}
@@ -218,7 +231,9 @@ export default function ProductsPage() {
                       <span
                         className={cn(
                           "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                          i % 2 === 0 ? "text-destructive/70" : "text-red-300/70",
+                          i % 2 === 0
+                            ? "text-destructive/70"
+                            : "text-red-300/70",
                         )}
                       >
                         الفجوة التشغيلية
@@ -226,7 +241,9 @@ export default function ProductsPage() {
                       <p
                         className={cn(
                           "mt-1.5 text-sm leading-7",
-                          i % 2 === 0 ? "text-muted-foreground" : "text-white/60",
+                          i % 2 === 0
+                            ? "text-muted-foreground"
+                            : "text-white/60",
                         )}
                       >
                         {system.problem}
@@ -236,7 +253,9 @@ export default function ProductsPage() {
                       <span
                         className={cn(
                           "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                          i % 2 === 0 ? "text-primary/70" : "text-aqliya-cyan/75",
+                          i % 2 === 0
+                            ? "text-primary/70"
+                            : "text-aqliya-cyan/75",
                         )}
                       >
                         كيف يعمل النظام
@@ -254,7 +273,9 @@ export default function ProductsPage() {
                       <span
                         className={cn(
                           "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                          i % 2 === 0 ? "text-emerald-600/70" : "text-emerald-300/70",
+                          i % 2 === 0
+                            ? "text-emerald-600/70"
+                            : "text-emerald-300/70",
                         )}
                       >
                         القيمة الناتجة
@@ -386,7 +407,8 @@ export default function ProductsPage() {
                 كل نظام نشط يعمل داخل نفس بنية الحوكمة
               </p>
               <p className="mt-1 text-xs leading-6 text-muted-foreground">
-                Evidence Chain · RBAC متعدد المستويات · Audit Trail لا يُعدَّل · اعتماد بشري إلزامي
+                Evidence Chain · RBAC متعدد المستويات · Audit Trail لا يُعدَّل ·
+                اعتماد بشري إلزامي
               </p>
             </div>
             <div className="flex shrink-0 gap-3">
@@ -432,7 +454,9 @@ export default function ProductsPage() {
                     <h3 className="text-xl font-black text-white/80">
                       {system.title}
                     </h3>
-                    <p className="mt-0.5 text-xs text-white/40">{system.subtitle}</p>
+                    <p className="mt-0.5 text-xs text-white/40">
+                      {system.subtitle}
+                    </p>
                   </div>
                   <span className="shrink-0 rounded-full border border-amber-500/25 bg-amber-500/8 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-amber-400/70">
                     {system.statusLabel}
@@ -493,8 +517,8 @@ export default function ProductsPage() {
               </h2>
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
                 يمكن بناء نظام مؤسسي خاص فوق AQLIYA Intelligence Core — يربط سير
-                العمل، الصلاحيات، البيانات، والمخرجات داخل منطق الحوكمة نفسه. تبدأ
-                بجلسة تصميم مؤسسية لتحديد النطاق والمتطلبات.
+                العمل، الصلاحيات، البيانات، والمخرجات داخل منطق الحوكمة نفسه.
+                تبدأ بجلسة تصميم مؤسسية لتحديد النطاق والمتطلبات.
               </p>
               <div className="mt-5 space-y-2.5">
                 {[
@@ -537,8 +561,9 @@ export default function ProductsPage() {
               أو ابدأ بجلسة تنفيذية
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-8 text-white/55">
-              إذا كان لديك فجوة تشغيلية محددة، سنساعدك على ربطها بالنظام المناسب.
-              إذا كان النطاق مختلفاً، يمكن تصميم مسار خاص فوق نفس النواة.
+              إذا كان لديك فجوة تشغيلية محددة، سنساعدك على ربطها بالنظام
+              المناسب. إذا كان النطاق مختلفاً، يمكن تصميم مسار خاص فوق نفس
+              النواة.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link href="/contact" className="btn-primary h-12 px-8 text-sm">

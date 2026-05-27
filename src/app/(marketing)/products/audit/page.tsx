@@ -5,7 +5,6 @@ import {
   BeforeAfterBlock,
   WorkflowChain,
   OutputCard,
-  EnterpriseCTA,
   InsightCallout,
   ExecutiveSurface,
 } from "@/components/enterprise";
@@ -110,34 +109,58 @@ export default function AuditProductPage() {
             </span>
 
             <h1 className="text-4xl font-black leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              من ميزان المراجعة إلى مخرجات مالية قابلة للمراجعة والاعتماد
+              AuditOS — مسار عمل محكوم لإعداد وعرض ومراجعة التقارير المالية
             </h1>
 
             <p className="mt-5 text-base leading-8 text-white/65 sm:text-lg">
-              AuditOS هو أول تطبيق مُثبت تحت عقلية في مجال التدقيق والذكاء
-              المالي. يبني مسارًا منظمًا فوق AQLIYA Intelligence Core يبدأ من
-              ميزان المراجعة الخام وينتهي إلى القوائم والإيضاحات والأدلة
-              والمراجعة والاعتماد، دون أن يستبدل الحكم المهني.
+              AuditOS هو أول نظام مُثبت على AQLIYA Intelligence Core في مجال
+              التدقيق والذكاء المالي. يساعد فرق المراجعة والمالية على تحويل
+              ميزان المراجعة، التصنيفات، القوائم، الإيضاحات، الأدلة، والملاحظات
+              إلى مسار قابل للمراجعة والتتبع — دون أن يستبدل الحكم المهني.
             </p>
 
+            <p className="mt-3 text-sm leading-6 text-white/45">
+              ليس أداة ذكاء اصطناعي عامة، ولا جدولة Excel. —{" "}
+              <strong className="text-white/70">
+                مساحة عمل حوكمة وإعداد محكومة، مصممة خصيصًا لأعمال المراجعة
+                والتقارير المالية.
+              </strong>
+            </p>
+
+            {/* Trust Principle — visible from the hero */}
+            <div className="mt-6 rounded-2xl border border-aqliya-cyan/18 bg-aqliya-cyan/[0.05] px-5 py-4 backdrop-blur-sm">
+              <p className="text-lg font-black text-white">
+                الذكاء يساعد.{"  "}
+                <span className="text-aqliya-cyan">الإنسان يقرر.</span>
+                {"  "}
+                الدليل يحكم.
+              </p>
+              <p className="mt-1 text-[11px] text-white/50">
+                AI assists. Humans decide. Evidence governs.
+              </p>
+            </div>
+
             <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row">
-              <Link
-                href="/custom-product"
-                className="btn-primary h-12 px-8 text-base"
-              >
-                ناقش تفعيل النظام
+              <Link href="/auditos" className="btn-primary h-12 px-8 text-base">
+                شاهد العرض التفاعلي
               </Link>
               <Link
-                href="/auditos"
+                href="/custom-product"
                 className="btn-secondary h-12 px-8 text-base"
               >
-                شاهد AuditOS — عرض تفاعلي
+                طلب تجربة بايلوت
+              </Link>
+              <Link
+                href="/proof-library"
+                className="btn-outline border-white/15 text-white/70 hover:bg-white/5 h-12 px-8 text-base"
+              >
+                شاهد سير العمل
               </Link>
             </div>
 
             <p className="mt-5 text-xs text-white/30">
-              مبني على نواة عقلية · سير عمل محكوم · مخرجات مدعومة بالأدلة ·
-              مراجعة بشرية
+              مبني على AQLIYA Intelligence Core · سير عمل محكوم · مخرجات مدعومة
+              بالأدلة · مراجعة بشرية إلزامية
             </p>
           </div>
         </div>
@@ -195,11 +218,13 @@ export default function AuditProductPage() {
           <ExecutiveSurface>
             <WorkflowChain
               steps={[
+                "الارتباط",
                 "ميزان المراجعة",
-                "ربط الحسابات",
-                "مسودة القوائم المالية",
-                "مسودة الإيضاحات",
-                "متطلبات الأدلة",
+                "الربط",
+                "القوائم",
+                "الإيضاحات",
+                "الأدلة",
+                "الملاحظات",
                 "المراجعة",
                 "الاعتماد",
               ]}
@@ -212,38 +237,48 @@ export default function AuditProductPage() {
           {[
             {
               step: "01",
-              label: "ميزان المراجعة",
-              desc: "إدخال البيانات المالية الخام",
+              label: "الارتباط",
+              desc: "تحديد نطاق العمل، الجهة، الفترة، المسؤوليات، ومعايير النجاح",
             },
             {
               step: "02",
-              label: "ربط الحسابات",
-              desc: "تصنيف الحسابات في نموذج مالي منظم",
+              label: "ميزان المراجعة",
+              desc: "إدخال أو مراجعة ميزان المراجعة كنقطة بداية مالية",
             },
             {
               step: "03",
-              label: "مسودة القوائم",
-              desc: "إنتاج مسودة القوائم للمراجعة",
+              label: "الربط",
+              desc: "ربط الحسابات بتصنيفات وقوائم مالية قابلة للمراجعة",
             },
             {
               step: "04",
-              label: "مسودة الإيضاحات",
-              desc: "إنتاج إيضاحات الإفصاح حسب الحسابات",
+              label: "القوائم",
+              desc: "إعداد مخرجات القوائم المالية بناءً على الربط المعتمد",
             },
             {
               step: "05",
-              label: "متطلبات الأدلة",
-              desc: "تحديد الأدلة الداعمة المطلوبة",
+              label: "الإيضاحات",
+              desc: "تنظيم الإيضاحات وربطها بالبند المالي والسياق المهني",
             },
             {
               step: "06",
-              label: "المراجعة",
-              desc: "مراجعة مهنية مع ملاحظات ونتائج",
+              label: "الأدلة",
+              desc: "ربط المستندات والمراجع الداعمة بالمخرجات",
             },
             {
               step: "07",
+              label: "الملاحظات",
+              desc: "توثيق ملاحظات المراجعة، الفجوات، أو نقاط المتابعة",
+            },
+            {
+              step: "08",
+              label: "المراجعة",
+              desc: "مراجعة بشرية للمخرجات قبل الاعتماد",
+            },
+            {
+              step: "09",
               label: "الاعتماد",
-              desc: "اعتماد نهائي ببوابة حوكمة",
+              desc: "اعتماد مضبوط مع أثر تتبع واضح",
             },
           ].map((item) => (
             <div key={item.step} className="rounded-lg border bg-muted/30 p-4">
@@ -260,38 +295,20 @@ export default function AuditProductPage() {
       </section>
 
       {/* ════════════════════════════════════════════
-          5. GOVERNANCE
-          ════════════════════════════════════════════ */}
+           5. GOVERNANCE — 4 Pillars
+           ════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="الحوكمة"
-          title="الذكاء الاصطناعي يساعد. البشر يقررون. الأدلة تحكم."
+          title="أربع ركائز تحكم كل مسار في AuditOS"
+          description="كل مخرج، كل قرار، كل خطوة في AuditOS مبنية على هذه الركائز الأربع. ليست طبقة تُضاف — هي بنية النظام الأساسية."
         />
-        <div className="mt-10 grid gap-6 sm:grid-cols-3">
-          <ExecutiveSurface className="text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Pillar 1: Human Review */}
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6">
+            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-border/60 bg-muted/40">
               <svg
-                className="h-6 w-6 text-primary"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                <path d="M2 17l10 5 10-5" />
-                <path d="M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-bold">الذكاء الاصطناعي يساعد</h3>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              مسودات، تصنيفات، اقتراحات، مؤشرات أدلة، تنبيهات النواقص
-            </p>
-          </ExecutiveSurface>
-
-          <ExecutiveSurface className="text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-              <svg
-                className="h-6 w-6 text-primary"
+                className="h-5 w-5 text-primary"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -299,20 +316,70 @@ export default function AuditProductPage() {
               >
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
             </div>
-            <h3 className="text-lg font-bold">البشر يقررون</h3>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              مراجعة، تعديل، اعتماد، رفض، تعديل التصنيفات
+            <p className="text-sm font-black text-foreground">
+              مراجعة بشرية إلزامية
             </p>
-          </ExecutiveSurface>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">
+              الذكاء يقترح — المراجع يقرر. كل مخرج يمر عبر مراجعة إنسانية قبل
+              الاعتماد. لا استثناءات.
+            </p>
+          </div>
 
-          <ExecutiveSurface className="text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+          {/* Pillar 2: Evidence-linked Outputs */}
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6">
+            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-border/60 bg-muted/40">
               <svg
-                className="h-6 w-6 text-primary"
+                className="h-5 w-5 text-primary"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+              </svg>
+            </div>
+            <p className="text-sm font-black text-foreground">
+              مخرجات مرتبطة بالأدلة
+            </p>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">
+              كل بند في القوائم المالية مربوط بالأدلة الداعمة. لا مخرج بدون مصدر
+              يمكن الرجوع إليه.
+            </p>
+          </div>
+
+          {/* Pillar 3: Traceability */}
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6">
+            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-border/60 bg-muted/40">
+              <svg
+                className="h-5 w-5 text-primary"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <p className="text-sm font-black text-foreground">
+              إمكانية التتبع الكامل
+            </p>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">
+              كل تغيير، مراجعة، واعتماد مسجل بالهوية والوقت والسياق. يمكن إرجاع
+              أي مخرج إلى مصدره.
+            </p>
+          </div>
+
+          {/* Pillar 4: Controlled Approval */}
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6">
+            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-border/60 bg-muted/40">
+              <svg
+                className="h-5 w-5 text-primary"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -322,21 +389,141 @@ export default function AuditProductPage() {
                 <path d="m9 12 2 2 4-4" />
               </svg>
             </div>
-            <h3 className="text-lg font-bold">الأدلة تحكم</h3>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              كل مخرج متتبع، كل قرار مسجل، كل اعتماد مرتبط ببوابة
+            <p className="text-sm font-black text-foreground">
+              اعتماد محكوم ببوابات
             </p>
-          </ExecutiveSurface>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">
+              لا تصدير بدون موافقة. بوابات اعتماد في كل مرحلة: المراجعة،
+              التعديل، الاعتماد النهائي.
+            </p>
+          </div>
         </div>
 
         <div className="mt-10">
-          <OutputCard title="مبادئ الحوكمة" items={governanceFeatures} />
+          <OutputCard
+            title="مبادئ الحوكمة في AuditOS"
+            items={governanceFeatures}
+          />
         </div>
       </section>
 
       {/* ════════════════════════════════════════════
-          6. WHY NOT EXCEL / CHATGPT
-          ════════════════════════════════════════════ */}
+           6. WHAT AuditOS IS / IS NOT
+           ════════════════════════════════════════════ */}
+      <section className="mx-auto max-w-7xl border-t border-border/50 px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="ما هو AuditOS وما ليس"
+          title="التحديد الواضح يحمي الثقة — نعم، هناك حدود"
+          description="لأن الثقة المؤسسية تبدأ من الصدق في تحديد ما يفعله النظام وما لا يفعله."
+        />
+        <div className="mt-10 grid gap-8 lg:grid-cols-2">
+          {/* Is */}
+          <div className="rounded-2xl border border-status-success/30 bg-gradient-to-br from-status-success/[0.04] to-background p-6 sm:p-8">
+            <span className="mb-4 inline-flex rounded-full bg-status-success/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-status-success">
+              ✓ AuditOS هو
+            </span>
+            <ul className="space-y-4">
+              {[
+                {
+                  title: "مساحة عمل إعداد مراجعة محكومة",
+                  desc: "بيئة منظمة تربط البيانات، الأدلة، المراجعة، والاعتماد في مسار واحد.",
+                },
+                {
+                  title: "طبقة دعم لإعداد التقارير المالية",
+                  desc: "تساعد في تحويل ميزان المراجعة إلى قوائم وإيضاحات ضمن قوالب محكومة.",
+                },
+                {
+                  title: "مسار أدلة ومراجعة",
+                  desc: "كل مخرج مربوط بمصدره. الأدلة منظمة. المراجعة موثقة.",
+                },
+                {
+                  title: "منتج مُثبت جاهز للتجربة",
+                  desc: "L5 Pilot-ready — يعمل على بيانات حقيقية مع فرق مراجعة حالية.",
+                },
+              ].map((item) => (
+                <li key={item.title} className="flex gap-3">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-status-success/15">
+                    <span className="text-[10px] text-status-success">✓</span>
+                  </span>
+                  <div>
+                    <p className="text-sm font-bold text-foreground">
+                      {item.title}
+                    </p>
+                    <p className="text-xs leading-5 text-muted-foreground">
+                      {item.desc}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Is Not */}
+          <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.03] to-background p-6 sm:p-8">
+            <span className="mb-4 inline-flex rounded-full bg-amber-500/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-amber-600">
+              ✗ AuditOS ليس
+            </span>
+            <ul className="space-y-4">
+              {[
+                {
+                  title: "بديلًا عن المراجع البشري",
+                  desc: "الحكم المهني أساسي. الذكاء يساعد، لا يقرر.",
+                },
+                {
+                  title: "صندوق أسود للذكاء الاصطناعي",
+                  desc: "كل مخرج قابل للتفسير والتتبع. لا مخرجات بدون مصدر.",
+                },
+                {
+                  title: "محرك تدقيق آلي بالكامل",
+                  desc: "النظام يدعم التحضير والمراجعة — لا يقوم بالتدقيق نيابة عن المراجع.",
+                },
+                {
+                  title: "ضمان امتثال أو اعتماد",
+                  desc: "المخرجات أداة مساعدة للمراجع. المسؤولية القانونية تبقى على عاتق الفريق المهني.",
+                },
+                {
+                  title: "شات بوت غير محكوم",
+                  desc: "لا تفاعل مفتوح بدون صلاحيات. كل إجراء ضمن حدود الحوكمة والأدوار.",
+                },
+              ].map((item) => (
+                <li key={item.title} className="flex gap-3">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15">
+                    <span className="text-[10px] text-amber-600">✗</span>
+                  </span>
+                  <div>
+                    <p className="text-sm font-bold text-foreground">
+                      {item.title}
+                    </p>
+                    <p className="text-xs leading-5 text-muted-foreground">
+                      {item.desc}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-8 flex items-center justify-between rounded-2xl border border-border/50 bg-muted/20 p-5">
+          <div>
+            <p className="text-sm font-bold text-foreground">المبدأ الأساسي</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              الذكاء يساعد. الإنسان يقرر. الدليل يحكم. — AI assists. Humans
+              decide. Evidence governs.
+            </p>
+          </div>
+          <Link
+            href="/auditos"
+            className="btn-outline h-9 px-5 text-sm shrink-0"
+          >
+            شاهد بنفسك — العرض التفاعلي
+          </Link>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════
+           7. COMPARISON: WHY NOT EXCEL / CHATGPT
+           ════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="المقارنة"
@@ -394,31 +581,159 @@ export default function AuditProductPage() {
       </section>
 
       {/* ════════════════════════════════════════════
-          7. PILOT CTA
-          ════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6">
+           8. PILOT READINESS
+           ════════════════════════════════════════════ */}
+      <section className="mx-auto max-w-7xl border-t border-border/50 px-6 py-16 sm:py-20">
         <SectionEyebrow
-          label="ابدأ الآن"
-          title="ابدأ بميزان مراجعة واحد. شاهد الفرق."
-          description="ارفع ميزان مراجعة حقيقي واحد. في تجربتك، سينتج AuditOS كل هذه المخرجات ضمن مسار عمل محكوم:"
+          label="جاهزية التفعيل التجريبي"
+          title="AuditOS جاهز لتجربة بايلوت محكومة — الآن"
+          description="لا نبدأ بعقود ضخمة. نبدأ بنطاق واحد، مجموعة بيانات واحدة، ومعايير نجاح واضحة. هذه هي شروط التفعيل التجريبي:"
         />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              num: "01",
+              title: "نطاق واحد",
+              desc: "اختيار engagement واحد فقط — ميزان مراجعة حقيقي لفترة مالية واحدة.",
+            },
+            {
+              num: "02",
+              title: "مجموعة بيانات محدودة",
+              desc: "البيانات الحقيقية للفترة المختارة. لا نحتاج إلى سنوات سابقة للتجربة.",
+            },
+            {
+              num: "03",
+              title: "معايير نجاح واضحة",
+              desc: "نحدد معًا قبل البداية: ماذا نختبر، كيف نقيس النجاح، وما هي المخرجات المتوقعة.",
+            },
+            {
+              num: "04",
+              title: "مراجعة بشرية في كل خطوة",
+              desc: "كل مخرج في التجربة يمر عبر مراجعة إنسانية. الذكاء يقترح — الفريق يقرر.",
+            },
+            {
+              num: "05",
+              title: "مخرجات قابلة للقياس",
+              desc: "قوائم مالية، إيضاحات، متطلبات أدلة، توصيات إعادة تصنيف — ضمن مسار محكوم.",
+            },
+            {
+              num: "06",
+              title: "تتبع أدلة كامل",
+              desc: "كل مخرج مربوط بمصدره. يمكن تتبع أي توصية أو تعديل عبر سلسلة الأدلة.",
+            },
+          ].map((item) => (
+            <div
+              key={item.num}
+              className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-5"
+            >
+              <span className="text-[10px] font-bold tracking-widest text-primary/40">
+                {item.num}
+              </span>
+              <p className="mt-1 text-sm font-black text-foreground">
+                {item.title}
+              </p>
+              <p className="mt-2 text-xs leading-5 text-muted-foreground">
+                {item.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+
         <div className="mt-10">
-          <OutputCard title="مخرجات التفعيل الأولي" items={pilotOutputs} />
+          <OutputCard
+            title="مخرجات التفعيل الأولي المتوقعة"
+            items={pilotOutputs}
+          />
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <Link
+            href="/pilot-proof"
+            className="text-sm font-semibold text-aqliya-cyan underline-offset-4 hover:underline"
+          >
+            ← شاهد دليل البايلوت: مخرجات AuditOS على بيانات حقيقية
+          </Link>
+          <Link
+            href="/proof-library"
+            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            ← مكتبة الإثبات: نماذج مخرجات قابلة للتصدير
+          </Link>
         </div>
       </section>
 
       {/* ════════════════════════════════════════════
-          8. FINAL CTA
-          ════════════════════════════════════════════ */}
+           9. FINAL CTA — Pilot-oriented
+           القرار: CTA يركز على البايلوت — لا وعود كبيرة
+           ════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
-        <EnterpriseCTA
-          title="هل تريد تجربة AuditOS على بيانات مؤسستك؟"
-          description="ابدأ من ميزان مراجعة واحد، وشاهد كيف يُفعّل AuditOS مسارًا ماليًا محكومًا فوق AQLIYA Intelligence Core من البيانات إلى المراجعة والاعتماد."
-          primaryLabel="ناقش تفعيل النظام"
-          primaryHref="/custom-product"
-          secondaryLabel="شاهد AuditOS — عرض تفاعلي"
-          secondaryHref="/auditos"
-        />
+        <div className="mx-auto max-w-4xl rounded-[28px] border border-border/60 bg-gradient-to-br from-primary/[0.04] via-background to-aqliya-cyan/[0.03] p-8 text-center shadow-sm sm:p-12">
+          <p className="text-sm font-bold uppercase tracking-[0.22em] text-primary">
+            ابدأ من engagement واحد
+          </p>
+          <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-foreground sm:text-3xl">
+            ميزان مراجعة واحد. سلسلة أدلة واحدة.
+            <span className="block text-primary mt-1">
+              معايير مراجعة واضحة. مخرجات مدعومة بالأدلة.
+            </span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
+            لا نبدأ بتطبيق كامل. نبدأ بنطاق محدود: نحمّل ميزان المراجعة الحقيقي
+            لفترة واحدة، نفعّل مسار العمل، ونقيّم النتائج مع فريقك. الشفافية
+            والتتبع مضمونان.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Link
+              href="/executive-brief"
+              className="btn-primary h-12 px-10 text-base font-bold"
+              data-event="click_read_executive_brief"
+            >
+              قراءة الإحاطة التنفيذية ←
+            </Link>
+            <Link
+              href="/contact"
+              className="btn-secondary h-12 px-10 text-base"
+              data-event="click_request_pilot_review"
+            >
+              طلب مراجعة Pilot
+            </Link>
+            <Link
+              href="/proof-library"
+              className="btn-outline h-12 px-10 text-base"
+              data-event="click_view_proof_library"
+            >
+              مكتبة الإثبات
+            </Link>
+          </div>
+
+          {/* Supporting links */}
+          <div className="mt-8 grid gap-3 text-sm sm:grid-cols-2 border-t border-border/40 pt-8">
+            {[
+              {
+                label: "دليل البايلوت",
+                sub: "مخرجات AuditOS على بيانات حقيقية",
+                href: "/pilot-proof",
+                event: "click_view_pilot_proof",
+              },
+              {
+                label: "مكتبة الإثبات",
+                sub: "نماذج مخرجات قابلة للتصدير",
+                href: "/proof-library",
+                event: "click_view_proof_library",
+              },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-xl border border-border/50 p-4 text-center transition-colors hover:border-primary/25 hover:bg-muted/30"
+                data-event={link.event}
+              >
+                <p className="font-semibold text-foreground">{link.label}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{link.sub}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );

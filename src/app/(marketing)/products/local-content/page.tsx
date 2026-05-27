@@ -43,7 +43,7 @@ export default function LocalContentProductPage() {
             </span>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-              استراتيجي — مرحلة التخطيط
+              استراتيجي — مساحة عمل تجريبية متاحة
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               قياس المحتوى المحلي يجب أن يكون مسارًا تشغيليًا لا تقريرًا متأخرًا
@@ -63,8 +63,8 @@ export default function LocalContentProductPage() {
               </Link>
             </div>
             <p className="mt-4 text-xs leading-6 text-white/35">
-              LocalContentOS مسار منتج استراتيجي يبحث عن شركاء تصميم للتحقق من
-              الاحتياج وتحديد نطاق البايلوت المناسب.
+              LocalContentOS مساحة عمل رقمية متاحة للتفعيل التجريبي لمنتجات
+              المحتوى المحلي وإدارة الموردين والإنفاق.
             </p>
           </div>
         </div>
@@ -196,11 +196,11 @@ export default function LocalContentProductPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="هل تحتاج نظام محتوى محلي لمؤسستك؟"
-          description="LocalContentOS في مرحلة التخطيط. نبحث عن شركاء تصميم للتحقق من الاحتياج وتحديد نطاق البايلوت. إذا كانت مؤسستك مهتمة بهذا المسار، دعنا نناقش احتياجاتك."
-          primaryLabel="ناقش شراكة التصميم"
-          primaryHref="/custom-product"
-          secondaryLabel="استكشف خطوط عقلية"
-          secondaryHref="/products"
+          description="LocalContentOS متاح كمساحة عمل رقمية تجريبية لمنتجات المحتوى المحلي وإدارة الموردين والإنفاق. غير جاهز للبيئة الإنتاجية الكاملة بعد. يمكنك استكشاف مساحة العمل أو التواصل معنا للتفعيل."
+          primaryLabel="اطلع على مساحة العمل"
+          primaryHref="/local-content"
+          secondaryLabel="ناقش التفعيل"
+          secondaryHref="/custom-product"
         />
       </section>
     </div>
