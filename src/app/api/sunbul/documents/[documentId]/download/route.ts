@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { retrieveSunbulDocument } from "@/lib/sunbul/storage";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
+import { buildDownloadResponse } from "@/lib/platform/download";
 
 export async function GET(
   _request: NextRequest,
@@ -50,16 +51,11 @@ export async function GET(
       { status: "success" },
     );
 
-    const body = new Uint8Array(file.content);
-    return new NextResponse(body, {
-      status: 200,
-      headers: {
-        "Content-Type": file.mimeType,
-        "Content-Disposition": `attachment; filename="${document.fileName.replace(/["\r\n]/g, "_")}"`,
-        "Content-Length": String(file.sizeBytes),
-        "X-Content-Type-Options": "nosniff",
-        "Cache-Control": "private, no-store",
-      },
+    return buildDownloadResponse({
+      content: file.content,
+      filename: document.fileName,
+      mimeType: file.mimeType,
+      sizeBytes: file.sizeBytes,
     });
   } catch (error) {
     const message =

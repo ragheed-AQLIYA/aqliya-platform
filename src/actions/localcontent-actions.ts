@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { auditLogger } from "@/lib/platform/audit-logger";
 import { getStorageProvider } from "@/lib/platform/storage";
 import {
   listProjectsByOrganization,
@@ -124,25 +124,35 @@ async function logToPlatform(params: {
 }) {
   try {
     const context = await resolveProjectContext(params.projectId);
-    await writePlatformAuditLog({
+    const alog = auditLogger({
       productKey: "localcontent",
-      action: params.action,
-      platformOrganizationId: context?.platformOrganizationId ?? undefined,
-      clientWorkspaceId: context?.clientWorkspaceId ?? undefined,
-      projectId: context?.projectId ?? undefined,
-      actorId: params.user.id,
-      actorName: params.user.name,
-      actorEmail: params.user.email,
-      actorType: "user",
-      targetType: params.targetType,
-      targetId: params.targetId,
-      severity: "info",
-      status: "recorded",
       sourceSystem: "localcontent",
-      sourceModel: params.targetType,
-      sourceId: params.targetId,
-      metadata: params.metadata,
+      organization: {
+        platformOrganizationId: context?.platformOrganizationId ?? undefined,
+        clientWorkspaceId: context?.clientWorkspaceId ?? undefined,
+        projectId: context?.projectId ?? undefined,
+      },
+      actor: {
+        id: params.user.id,
+        name: params.user.name,
+        email: params.user.email,
+        type: "user",
+      },
     });
+    await alog.record(
+      params.action,
+      {
+        type: params.targetType,
+        id: params.targetId,
+      },
+      {
+        severity: "info",
+        status: "recorded",
+        sourceModel: params.targetType,
+        sourceId: params.targetId,
+        metadata: params.metadata,
+      },
+    );
   } catch {
     // Dual-write must not block the primary action
   }
