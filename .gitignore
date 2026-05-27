@@ -32,6 +32,17 @@
 .playwright-mcp/
 .tmp.*
 
+# temp scripts
+scripts/_tmp-*
+
+# drafts and collateral (not source of truth)
+docs/config-drafts/
+docs/commercial-pack/
+docs/demo/
+
+# report evidence (prevents future contamination; already-tracked reports still visible)
+docs/reports/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
