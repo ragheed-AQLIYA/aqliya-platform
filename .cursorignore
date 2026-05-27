@@ -1,0 +1,33 @@
+﻿# Dependencies and build output
+node_modules/
+.next/
+out/
+build/
+.vercel/
+
+# Git internals (large history / objects)
+.git/
+
+# Runtime uploads and backups (can grow large; watched by Next if inside project root)
+uploads/
+backups/
+
+# Generated / cache
+src/generated/
+src/generated/prisma/
+*.tsbuildinfo
+next-env.d.ts
+
+# Test artifacts
+coverage/
+cypress/videos/
+cypress/screenshots/
+
+# Reports and tooling cache
+lighthouse-reports/
+.opencode/
+
+# Env files (secrets; no indexing value)
+.env
+.env.*
+!.env.example
