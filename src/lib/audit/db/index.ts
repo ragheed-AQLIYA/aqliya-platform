@@ -1366,16 +1366,13 @@ export async function confirmMapping(
     await rebuildFinancialStatementsForEngagement(engagementId);
     return toAccountMapping(updated);
   } catch (error) {
-    console.warn(
-      `[AuditDB] confirmMapping(${mappingId}) error, falling back to mock`,
+    console.error(
+      `[AuditDB] confirmMapping(${mappingId}) failed. Mock fallback disabled for mutation path.`,
       error,
     );
-    const mapping = mock.mockMappings.find((m) => m.id === mappingId);
-    if (mapping) {
-      mapping.status = "confirmed";
-      mapping.mappingType = "human_mapped";
-    }
-    return mapping ?? null;
+    throw new Error(
+      `AuditOS mutation unavailable: confirmMapping(${mappingId}). Mock fallback disabled.`,
+    );
   }
 }
 
@@ -1733,11 +1730,13 @@ export async function runValidation(
     // Return the persisted run
     return (await getValidationRun(engagementId))!;
   } catch (error) {
-    console.warn(
-      `[AuditDB] runValidation(${engagementId}) error, falling back to mock`,
+    console.error(
+      `[AuditDB] runValidation(${engagementId}) failed. Mock fallback disabled for mutation path.`,
       error,
     );
-    return mock.mockValidationRun;
+    throw new Error(
+      `AuditOS mutation unavailable: runValidation(${engagementId}). Mock fallback disabled.`,
+    );
   }
 }
 
@@ -2370,16 +2369,13 @@ export async function acceptAISuggestion(
       },
     });
   } catch (error) {
-    console.warn(
-      `[AuditDB] acceptAISuggestion(${suggestionId}) error, falling back to mock`,
+    console.error(
+      `[AuditDB] acceptAISuggestion(${suggestionId}) failed. Mock fallback disabled for mutation path.`,
       error,
     );
-    const suggestion = mock.mockAiOutputs.find((a) => a.id === suggestionId);
-    if (suggestion) {
-      suggestion.status = "accepted_by_human";
-      suggestion.acceptedBy = userId;
-      suggestion.acceptedAt = new Date().toISOString();
-    }
+    throw new Error(
+      `AuditOS mutation unavailable: acceptAISuggestion(${suggestionId}). Mock fallback disabled.`,
+    );
   }
 }
 

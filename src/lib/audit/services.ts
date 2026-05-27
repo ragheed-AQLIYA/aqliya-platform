@@ -173,17 +173,10 @@ export async function confirmMapping(
   engagementId: string,
   mappingId: string,
 ): Promise<AccountMapping | null> {
-  return tryDb(
-    () => {
-      const m = mock.mockMappings.find((m) => m.id === mappingId);
-      if (m) {
-        m.status = "confirmed";
-        m.mappingType = "human_mapped";
-      }
-      return Promise.resolve(m ?? null);
-    },
-    (db) => db.confirmMapping(engagementId, mappingId),
-  );
+  const db = await getDb().catch(() => {
+    throw new Error("Database not available for confirmMapping");
+  });
+  return db.confirmMapping(engagementId, mappingId);
 }
 
 export async function updateManualMapping(data: {
@@ -557,17 +550,10 @@ export async function acceptAISuggestion(
   suggestionId: string,
   userId: string,
 ): Promise<void> {
-  return tryDb(
-    async () => {
-      const s = mock.mockAiOutputs.find((a) => a.id === suggestionId);
-      if (s) {
-        s.status = "accepted_by_human";
-        s.acceptedBy = userId;
-        s.acceptedAt = new Date().toISOString();
-      }
-    },
-    (db) => db.acceptAISuggestion(suggestionId, userId),
-  );
+  const db = await getDb().catch(() => {
+    throw new Error("Database not available for acceptAISuggestion");
+  });
+  return db.acceptAISuggestion(suggestionId, userId);
 }
 
 export async function createAIOutput(data: {
