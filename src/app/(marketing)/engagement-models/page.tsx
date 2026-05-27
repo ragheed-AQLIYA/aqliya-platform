@@ -149,9 +149,103 @@ const models = [
   },
 ];
 
+const fitGuide = [
+  {
+    situation: "عندك فكرة فقط",
+    model: "التشخيص التنفيذي",
+    color: "text-cyan-400",
+  },
+  {
+    situation: "عندك workflow واضح",
+    model: "البايلوت التقييمي",
+    color: "text-emerald-400",
+  },
+  {
+    situation: "عندك فريق جاهز",
+    model: "نشر المنتج",
+    color: "text-cyan-400",
+  },
+  {
+    situation: "عندك احتياج خاص",
+    model: "النظام المؤسسي المخصص",
+    color: "text-indigo-400",
+  },
+];
+
+const whatWeNeed = [
+  {
+    label: "مالك use case",
+    detail: "من المسؤول عن سير العمل الذي نريد تفعيله؟",
+  },
+  {
+    label: "نموذج بيانات أو وصف",
+    detail: "عينة أو وصف للبيانات التي سيدخلها النظام.",
+  },
+  {
+    label: "صاحب القرار",
+    detail: "من يقرر بدء التجربة وتقييم النتائج؟",
+  },
+  {
+    label: "معايير النجاح",
+    detail: "كيف نقيس أن التجربة نجحت؟ وما المخرجات المتوقعة؟",
+  },
+  {
+    label: "مسار المراجعة والاعتماد",
+    detail: "من يراجع المخرجات قبل اعتمادها؟ وما مسار الموافقات؟",
+  },
+  {
+    label: "قيود الأمان والبيانات",
+    detail: "هل توجد متطلبات خصوصية أو حساسية بيانات يجب مراعاتها؟",
+  },
+];
+
+const boundaries = [
+  "لا نعد بنتيجة pilot مضمونة — التقييم يحدد الوضع، لا النتيجة النهائية.",
+  "لا deployment بدون تقييم نطاق كامل — البايلوت لا يلزم بنشر إنتاجي.",
+  "لا استخدام بيانات حساسة بدون ترتيبات مناسبة — نحدد معًا متطلبات الأمان قبل البدء.",
+  "لا استبدال للفرق المهنية — النظام يدعم الحكم البشري، لا يحل محله.",
+  "لا ادعاء امتثال أو اعتماد غير موثق — المخرجات أداة مساعدة، المسؤولية المهنية تبقى على عاتق الفريق.",
+];
+
+const recommendedProducts = [
+  {
+    name: "AuditOS",
+    match: "التدقيق والمراجعة المالية",
+    description:
+      "سير عمل المراجعة المالية: ميزان المراجعة، القوائم، الأدلة، المراجعة، والاعتماد.",
+    href: "/products/audit",
+    status: "Pilot-ready L5",
+    statusColor: "text-emerald-400",
+  },
+  {
+    name: "LocalContentOS",
+    match: "المحتوى المحلي والموردين",
+    description: "إدارة المحتوى المحلي: الموردين، العقود، الأدلة، والتقارير.",
+    href: "/products/local-content",
+    status: "Pilot-ready L5",
+    statusColor: "text-emerald-400",
+  },
+  {
+    name: "DecisionOS",
+    match: "حوكمة القرارات",
+    description: "توثيق القرارات: سيناريوهات، مخاطر، أدلة، مراجعة، واعتماد.",
+    href: "/products/decision",
+    status: "Usable v0.1 L4",
+    statusColor: "text-amber-400",
+  },
+  {
+    name: "Office AI Assistant",
+    match: "المساعد المؤسسي المحكوم",
+    description: "المعرفة الداخلية والإنتاجية ضمن بيئة حوكمة وأدلة ومراجعة.",
+    href: "/products/office-ai",
+    status: "Usable v0.1 L4",
+    statusColor: "text-amber-400",
+  },
+];
+
 export default function EngagementModelsPage() {
   return (
-    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+    <div className="min-h-screen bg-aqliya-deep" dir="rtl">
       {/* Hero */}
       <section className="hero-gradient py-24">
         <div className="max-w-5xl mx-auto px-6 text-center">
@@ -159,11 +253,11 @@ export default function EngagementModelsPage() {
             نماذج التعاون
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-            ابدأ من حيث أنت الآن
+            نماذج التعاون مع AQLIYA
           </h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            لا التزام مبكر، لا سعر مخفي. خمسة نماذج مصممة لمراحل مختلفة من قرار الاشتراك.
-            الخطوة الصحيحة تبدأ بفهم سياقك.
+            ابدأ بمراجعة محدودة، أثبت القيمة على سير عمل واحد، ثم قرر التوسع
+            بناءً على الأدلة.
           </p>
         </div>
       </section>
@@ -175,10 +269,18 @@ export default function EngagementModelsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-right px-4 py-3 text-slate-400 font-medium w-28">النموذج</th>
-                  <th className="text-right px-4 py-3 text-slate-400 font-medium">لمن</th>
-                  <th className="text-right px-4 py-3 text-slate-400 font-medium">المدة</th>
-                  <th className="text-right px-4 py-3 text-slate-400 font-medium">التكلفة</th>
+                  <th className="text-right px-4 py-3 text-slate-400 font-medium w-28">
+                    النموذج
+                  </th>
+                  <th className="text-right px-4 py-3 text-slate-400 font-medium">
+                    لمن
+                  </th>
+                  <th className="text-right px-4 py-3 text-slate-400 font-medium">
+                    المدة
+                  </th>
+                  <th className="text-right px-4 py-3 text-slate-400 font-medium">
+                    التكلفة
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -189,11 +291,17 @@ export default function EngagementModelsPage() {
                       m.featured ? "bg-cyan-500/5" : ""
                     }`}
                   >
-                    <td className={`px-4 py-3 font-medium ${m.featured ? "text-cyan-400" : "text-white"}`}>
+                    <td
+                      className={`px-4 py-3 font-medium ${m.featured ? "text-cyan-400" : "text-white"}`}
+                    >
                       {m.name}
                     </td>
-                    <td className="px-4 py-3 text-slate-300 text-xs">{m.whoFor}</td>
-                    <td className="px-4 py-3 text-slate-300 text-xs">{m.duration}</td>
+                    <td className="px-4 py-3 text-slate-300 text-xs">
+                      {m.whoFor}
+                    </td>
+                    <td className="px-4 py-3 text-slate-300 text-xs">
+                      {m.duration}
+                    </td>
                     <td className="px-4 py-3">
                       <span
                         className={`text-xs font-medium px-2 py-0.5 rounded-full ${
@@ -225,13 +333,17 @@ export default function EngagementModelsPage() {
             >
               {m.featured && (
                 <div className="bg-cyan-500/10 border-b border-cyan-500/20 px-8 py-2 text-center">
-                  <span className="text-cyan-400 text-xs font-semibold">الخطوة الموصى بها — ابدأ هنا</span>
+                  <span className="text-cyan-400 text-xs font-semibold">
+                    الخطوة الموصى بها — ابدأ هنا
+                  </span>
                 </div>
               )}
 
               <div className="p-8 border-b border-white/5">
                 <div className="flex flex-wrap items-center gap-4 mb-4">
-                  <span className="text-slate-600 font-bold text-2xl">{m.number}</span>
+                  <span className="text-slate-600 font-bold text-2xl">
+                    {m.number}
+                  </span>
                   <div>
                     <h2 className="text-2xl font-bold text-white">{m.name}</h2>
                     <p className="text-slate-400 text-sm">{m.tagline}</p>
@@ -258,7 +370,9 @@ export default function EngagementModelsPage() {
                   </div>
                 </div>
 
-                <p className="mt-6 text-slate-300 leading-relaxed">{m.description}</p>
+                <p className="mt-6 text-slate-300 leading-relaxed">
+                  {m.description}
+                </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 border-b border-white/5">
@@ -285,7 +399,9 @@ export default function EngagementModelsPage() {
                   <ul className="space-y-2.5">
                     {m.clientRequirements.map((r, i) => (
                       <li key={i} className="flex gap-3 text-slate-300 text-sm">
-                        <span className="text-slate-500 mt-0.5 shrink-0">◦</span>
+                        <span className="text-slate-500 mt-0.5 shrink-0">
+                          ◦
+                        </span>
                         {r}
                       </li>
                     ))}
@@ -301,7 +417,10 @@ export default function EngagementModelsPage() {
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {m.limitations.map((l, i) => (
-                      <p key={i} className="text-amber-300/60 text-xs flex gap-2">
+                      <p
+                        key={i}
+                        className="text-amber-300/60 text-xs flex gap-2"
+                      >
                         <span className="shrink-0 mt-0.5">⊘</span>
                         {l}
                       </p>
@@ -322,9 +441,7 @@ export default function EngagementModelsPage() {
                 <Link
                   href={m.nextStepHref}
                   className={`px-6 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                    m.featured
-                      ? "btn-primary"
-                      : "btn-outline"
+                    m.featured ? "btn-primary" : "btn-outline"
                   }`}
                 >
                   {m.nextStep}
@@ -336,22 +453,159 @@ export default function EngagementModelsPage() {
         </div>
       </section>
 
-      {/* Decision Guide */}
-      <section className="section-gradient-dark py-20">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            غير متأكد من أين تبدأ؟
-          </h2>
-          <p className="text-slate-300 mb-8 leading-relaxed">
-            ابدأ بجلسة التشخيص التنفيذي — مجانية، بدون التزام، تنتهي بتوصية واضحة.
+      {/* Which Model Fits You? */}
+      <section className="section-gradient-dark py-20 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
+            دليل الاختيار
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/contact" className="btn-primary px-8 py-3 rounded-xl text-sm font-medium">
-              طلب جلسة التشخيص
-            </Link>
-            <Link href="/how-we-work" className="btn-outline px-8 py-3 rounded-xl text-sm font-medium">
-              كيف نعمل
-            </Link>
+          <h2 className="text-2xl font-bold text-white mt-4 mb-10 text-center">
+            أي نموذج يناسبك؟
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {fitGuide.map((item) => (
+              <div
+                key={item.situation}
+                className="glass-card rounded-xl p-5 text-center"
+              >
+                <p className="text-slate-400 text-sm mb-2">{item.situation}</p>
+                <p className={`text-lg font-bold ${item.color}`}>
+                  {item.model}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What We Need From You */}
+      <section className="py-20 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
+            متطلبات البداية
+          </p>
+          <h2 className="text-2xl font-bold text-white mt-4 mb-4 text-center">
+            ما نحتاجه منك
+          </h2>
+          <p className="text-slate-400 text-center mb-10 max-w-2xl mx-auto">
+            ستة عناصر نسأل عنها قبل أي engagement — لتحديد النطاق والتوقعات
+            بدقة.
+          </p>
+          <div className="max-w-3xl mx-auto space-y-3">
+            {whatWeNeed.map((item) => (
+              <div
+                key={item.label}
+                className="glass-card rounded-xl p-5 flex items-start gap-4"
+              >
+                <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-cyan-400" />
+                <div>
+                  <p className="text-white font-semibold text-sm mb-0.5">
+                    {item.label}
+                  </p>
+                  <p className="text-slate-400 text-sm">{item.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What We Do Not Promise */}
+      <section className="py-20 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="max-w-3xl mx-auto rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-amber-400 text-center">
+              حدود واضحة
+            </p>
+            <h2 className="text-2xl font-bold text-white mt-3 mb-8 text-center">
+              ما لا نعدك به
+            </h2>
+            <div className="space-y-3">
+              {boundaries.map((item) => (
+                <div key={item} className="flex items-start gap-3">
+                  <span className="mt-0.5 shrink-0 text-amber-400/60">⊘</span>
+                  <p className="text-slate-300 text-sm leading-relaxed">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Recommended Starting Points */}
+      <section className="py-20 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
+            نقطة البداية حسب المنتج
+          </p>
+          <h2 className="text-2xl font-bold text-white mt-4 mb-4 text-center">
+            ما المنتج المناسب لسير عملك؟
+          </h2>
+          <p className="text-slate-400 text-center mb-10 max-w-2xl mx-auto">
+            كل منتج مبني على AQLIYA Intelligence Core — الحوكمة، الأدلة، وسجل
+            التدقيق مشتركة بينهم.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {recommendedProducts.map((p) => (
+              <div key={p.name} className="glass-card rounded-xl p-6">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-xl font-bold text-white">{p.name}</h3>
+                  <span className={`text-xs font-medium ${p.statusColor}`}>
+                    {p.status}
+                  </span>
+                </div>
+                <p className="text-cyan-400/80 text-sm mb-2">{p.match}</p>
+                <p className="text-slate-400 text-sm leading-relaxed mb-4">
+                  {p.description}
+                </p>
+                <Link
+                  href={p.href}
+                  className="inline-flex items-center gap-1 text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  عرض الصفحة التعريفية ←
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="section-gradient-dark py-20">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="glass-card rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-3">
+              ابدأ بمراجعة محدودة. لا توسّع قبل الدليل.
+            </h2>
+            <p className="text-slate-400 mb-8 max-w-xl mx-auto">
+              الخطوة الصحيحة تبدأ بفهم سياقك — جدولة جلسة تشخيص أو مراجعة
+              المنتجات أولاً.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link
+                href="/contact"
+                className="btn-primary px-8 py-3 rounded-xl text-sm font-medium"
+                data-event="click_request_pilot_review"
+              >
+                طلب جلسة تشخيص
+              </Link>
+              <Link
+                href="/pilot-proof"
+                className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+                data-event="click_view_pilot_proof"
+              >
+                إطار إثبات الـ Pilot ←
+              </Link>
+              <Link
+                href="/executive-brief"
+                className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+                data-event="click_read_executive_brief"
+              >
+                الملخص التنفيذي
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -30,7 +30,8 @@ const proofScenarios = [
         detail: "Evidence Graph يربط: الرقم ← الحساب ← القرار ← الدليل ← الشخص",
       },
     ],
-    verifiable: "يمكن التحقق في الديمو: ارفع ميزان تجريبي وتتبع أي رقم في القائمة إلى مصدره",
+    verifiable:
+      "يمكن التحقق في الديمو: ارفع ميزان تجريبي وتتبع أي رقم في القائمة إلى مصدره",
   },
   {
     title: "إثبات ٢: Audit Trail غير قابل للتعديل",
@@ -39,11 +40,13 @@ const proofScenarios = [
     steps: [
       {
         label: "ما يُسجَّل",
-        detail: "١٨+ نوع حدث: رفع ملف، توجيه حساب، إنشاء ملاحظة، اعتماد، رفض، نشر",
+        detail:
+          "١٨+ نوع حدث: رفع ملف، توجيه حساب، إنشاء ملاحظة، اعتماد، رفض، نشر",
       },
       {
         label: "كيف يُسجَّل",
-        detail: "User ID + Timestamp + Action Type + الكيان المتأثر + الحالة قبل وبعد",
+        detail:
+          "User ID + Timestamp + Action Type + الكيان المتأثر + الحالة قبل وبعد",
       },
       {
         label: "من يرى ماذا",
@@ -54,7 +57,8 @@ const proofScenarios = [
         detail: "سجل التدقيق قابل للتصدير بصيغة JSON/XLSX مع كل حزمة ارتباط",
       },
     ],
-    verifiable: "يمكن التحقق في الديمو: أنجز خطوة في سير العمل ثم راجع Audit Trail المباشر",
+    verifiable:
+      "يمكن التحقق في الديمو: أنجز خطوة في سير العمل ثم راجع Audit Trail المباشر",
   },
   {
     title: "إثبات ٣: بوابة الاعتماد البشري",
@@ -82,7 +86,8 @@ const proofScenarios = [
         detail: "اعتماد الشريك/المسؤول النهائي بتوقيع رقمي مسجّل",
       },
     ],
-    verifiable: "يمكن التحقق في الديمو: حاول النشر قبل اكتمال الشروط — سيرفض النظام",
+    verifiable:
+      "يمكن التحقق في الديمو: حاول النشر قبل اكتمال الشروط — سيرفض النظام",
   },
   {
     title: "إثبات ٤: RBAC — فصل الصلاحيات",
@@ -103,51 +108,231 @@ const proofScenarios = [
       },
       {
         label: "الأثر",
-        detail: "الشريك يعتمد — المدقق ينفذ — المراجع يفحص — لا تداخل في الأدوار",
+        detail:
+          "الشريك يعتمد — المدقق ينفذ — المراجع يفحص — لا تداخل في الأدوار",
       },
     ],
-    verifiable: "يمكن التحقق في الديمو: سجّل الدخول بأدوار مختلفة وراقب الصلاحيات",
+    verifiable:
+      "يمكن التحقق في الديمو: سجّل الدخول بأدوار مختلفة وراقب الصلاحيات",
   },
 ];
 
 const pilotCriteria = [
-  { category: "اكتمال سير العمل", items: ["رفع الميزان وفحصه", "توجيه الحسابات", "توليد القوائم", "إدارة الملاحظات", "الاعتماد والنشر"] },
-  { category: "منهجية التدقيق", items: ["التوافق مع IFRS", "الأدلة الداعمة", "التوثيق الرسمي", "سجل القرارات"] },
-  { category: "قابلية الاستخدام", items: ["وضوح الواجهة", "سهولة الاستخدام", "دعم العربية", "الأداء العام"] },
-  { category: "قبول أصحاب المصلحة", items: ["ثقة المدقق بالمخرجات", "تقبّل الشريك للمنهجية", "الاستعداد للاعتماد"] },
+  {
+    category: "اكتمال سير العمل",
+    items: [
+      "رفع الميزان وفحصه",
+      "توجيه الحسابات",
+      "توليد القوائم",
+      "إدارة الملاحظات",
+      "الاعتماد والنشر",
+    ],
+  },
+  {
+    category: "منهجية التدقيق",
+    items: [
+      "التوافق مع IFRS",
+      "الأدلة الداعمة",
+      "التوثيق الرسمي",
+      "سجل القرارات",
+    ],
+  },
+  {
+    category: "قابلية الاستخدام",
+    items: ["وضوح الواجهة", "سهولة الاستخدام", "دعم العربية", "الأداء العام"],
+  },
+  {
+    category: "قبول أصحاب المصلحة",
+    items: [
+      "ثقة المدقق بالمخرجات",
+      "تقبّل الشريك للمنهجية",
+      "الاستعداد للاعتماد",
+    ],
+  },
+];
+
+const proofDimensions = [
+  {
+    dimension: "وضوح سير العمل",
+    question:
+      "هل سير العمل المحدد مناسب للتشغيل على المنصة؟ هل الخطوات واضحة وقابلة للتنفيذ؟",
+  },
+  {
+    dimension: "جاهزية البيانات",
+    question:
+      "هل البيانات متوفرة؟ هل هي بالجودة والصيغة المطلوبة لبدء البايلوت؟",
+  },
+  {
+    dimension: "إمكانية تتبع الأدلة",
+    question: "هل يمكن ربط كل مخرج بمصدره؟ هل مسار الإثبات واضح وقابل للتدقيق؟",
+  },
+  {
+    dimension: "جودة المراجعة البشرية",
+    question:
+      "هل فهم الفريق المخرجات؟ هل استطاعوا مراجعتها واتخاذ قرارات بناءً عليها؟",
+  },
+  {
+    dimension: "فائدة المخرجات",
+    question:
+      "هل المخرجات قابلة للاستخدام فعليًا؟ هل تخدم سير العمل الفعلي للفريق؟",
+  },
+  {
+    dimension: "ثقة القرار",
+    question:
+      "هل يثق الفريق في المخرجات؟ هل يمكن اتخاذ قرار go/no-go بناءً على التجربة؟",
+  },
+];
+
+const pilotDecisionOutputs = [
+  {
+    outcome: "Proceed — توسّع",
+    detail:
+      "الـ pilot أثبت القيمة. الانتقال إلى Product Workspace Deployment مع النطاق نفسه.",
+  },
+  {
+    outcome: "Revise Scope — تعديل النطاق",
+    detail:
+      "الـ pilot أظهر فجوة في اختيار سير العمل أو البيانات. نعدّل ونعيد التقييم.",
+  },
+  {
+    outcome: "Extend Pilot — تمديد التجربة",
+    detail: "النتائج واعدة لكنها تحتاج نطاقًا أوسع أو فترة أطول لتأكيد القرار.",
+  },
+  {
+    outcome: "Stop — إيقاف",
+    detail:
+      "الـ pilot بيّن أن هذا السير أو النطاق غير مناسب. نوصي ببديل أو نغلق الملف.",
+  },
+  {
+    outcome: "Custom Build — بناء مخصص",
+    detail:
+      "الاحتياج يتجاوز المنتجات الجاهزة. ننتقل إلى جلسة تصميم نظام مؤسسي مخصص.",
+  },
+];
+
+const productProofExamples = [
+  {
+    product: "AuditOS",
+    examples: [
+      "ميزان مراجعة واحد ← mapping واضح ← evidence chain ← review notes",
+    ],
+    href: "/products/audit",
+  },
+  {
+    product: "LocalContentOS",
+    examples: ["قاعدة مورّدين/عقود ← evidence checklist ← تقرير محتوى محلي"],
+    href: "/products/local-content",
+  },
+  {
+    product: "DecisionOS",
+    examples: ["قرار مؤسسي واحد ← سيناريوهات ← مخاطر ← توصية مع أثر أدلة"],
+    href: "/products/decision",
+  },
+  {
+    product: "Office AI Assistant",
+    examples: ["حالة معرفة داخلية ← Q&A محكوم ← مراجعة وملاحظات"],
+    href: "/products/office-ai",
+  },
 ];
 
 export default function PilotProofPage() {
   return (
-    <div className="min-h-screen bg-[var(--aqliya-deep)]" dir="rtl">
+    <div className="min-h-screen bg-aqliya-deep" dir="rtl">
       {/* Hero */}
       <section className="hero-gradient py-24">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <div className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-6">
-            دليل البايلوت
+            إطار إثبات القيمة
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-            ما يمكن إثباته — وكيف
+            إطار إثبات قيمة الـ Pilot
           </h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            قبل الالتزام بأي اشتراك، نعطيك الأدوات للتحقق بنفسك.
-            كل ادعاء قابل للاختبار في بيئة بايلوت فعلية.
+            لا نبدأ بتوسّع واسع. نبدأ بسير عمل واحد، نلتقط الأدلة، نقيس النتائج،
+            ثم نقرر بناءً على proof واضح.
           </p>
         </div>
       </section>
 
-      {/* Proof Scenarios */}
+      {/* What Pilot Proof Means */}
+      <section className="py-20 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400">
+              ما يعنيه الإثبات
+            </p>
+            <h2 className="text-2xl font-bold text-white mt-4 mb-6">
+              Pilot proof ليس وعدًا تجاريًا — هو طريقة منظمة للإجابة
+            </h2>
+          </div>
+          <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              "هل workflow مناسب للمنصة؟",
+              "هل البيانات كافية ومتوافقة؟",
+              "هل المخرجات قابلة للمراجعة والاعتماد؟",
+              "هل الفريق قادر على استخدام النظام؟",
+              "هل يوجد أثر أدلة وتتبّع قابل للتدقيق؟",
+            ].map((q) => (
+              <div
+                key={q}
+                className="glass-card rounded-xl p-5 flex items-center gap-3"
+              >
+                <span className="h-2 w-2 shrink-0 rounded-full bg-cyan-400" />
+                <p className="text-slate-300 text-sm leading-relaxed">{q}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Proof Dimensions */}
+      <section className="section-gradient-dark py-20 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
+            أبعاد الإثبات
+          </p>
+          <h2 className="text-2xl font-bold text-white mt-4 mb-10 text-center">
+            ستة أبعاد نقيس بها الـ pilot
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {proofDimensions.map((pd) => (
+              <div key={pd.dimension} className="glass-card rounded-xl p-5">
+                <p className="text-white font-semibold text-sm mb-2">
+                  {pd.dimension}
+                </p>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  {pd.question}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Evidence Captured During Pilot */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <h2 className="text-2xl font-bold text-white mb-3">سيناريوهات الإثبات</h2>
-            <p className="text-slate-400">أربعة محاور يمكنك التحقق منها بشكل مستقل</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400">
+              الأدلة الملتقطة
+            </p>
+            <h2 className="text-2xl font-bold text-white mt-4 mb-3">
+              ما نلتقطه أثناء الـ Pilot
+            </h2>
+            <p className="text-slate-400">
+              أمثلة على الأدلة التي توثقها كل تجربة — قابلة للمراجعة والتصدير
+            </p>
           </div>
           <div className="space-y-8">
             {proofScenarios.map((ps) => (
-              <div key={ps.title} className="glass-card rounded-2xl overflow-hidden">
+              <div
+                key={ps.title}
+                className="glass-card rounded-2xl overflow-hidden"
+              >
                 <div className="p-8 border-b border-white/5">
-                  <h3 className="text-xl font-bold text-white mb-2">{ps.title}</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    {ps.title}
+                  </h3>
                   <p className="text-slate-300">{ps.description}</p>
                 </div>
                 <div className="p-8 border-b border-white/5">
@@ -157,7 +342,9 @@ export default function PilotProofPage() {
                         <p className="text-cyan-400 text-xs font-semibold uppercase tracking-wide mb-1">
                           {step.label}
                         </p>
-                        <p className="text-slate-300 text-sm leading-relaxed">{step.detail}</p>
+                        <p className="text-slate-300 text-sm leading-relaxed">
+                          {step.detail}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -178,9 +365,15 @@ export default function PilotProofPage() {
       <section className="section-gradient-dark py-20">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <h2 className="text-2xl font-bold text-white mb-3">معايير نجاح البايلوت</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400">
+              معايير التقييم
+            </p>
+            <h2 className="text-2xl font-bold text-white mt-4 mb-3">
+              كيف نقيّم نجاح الـ Pilot
+            </h2>
             <p className="text-slate-400">
               البايلوت ليس إثباتًا أعمى — له معايير واضحة ومتفق عليها مسبقًا
+              تُجيب على: هل ننتقل أم نعدّل أم نوقف؟
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -189,7 +382,10 @@ export default function PilotProofPage() {
                 <h3 className="text-white font-semibold mb-4">{pc.category}</h3>
                 <ul className="space-y-2">
                   {pc.items.map((item) => (
-                    <li key={item} className="flex gap-3 text-slate-300 text-sm">
+                    <li
+                      key={item}
+                      className="flex gap-3 text-slate-300 text-sm"
+                    >
                       <span className="text-cyan-400 mt-0.5 shrink-0">◈</span>
                       {item}
                     </li>
@@ -200,9 +396,76 @@ export default function PilotProofPage() {
           </div>
           <div className="mt-8 glass-card rounded-xl p-6 border border-cyan-500/10">
             <p className="text-slate-300 text-sm leading-relaxed text-center">
-              في نهاية البايلوت، تحصل على تقرير Go/No-Go يوثق النتائج ويحدد الخطوة التالية —
-              سواء كانت التوسع أو التعديل أو إغلاق التجربة.
+              في نهاية البايلوت، تحصل على تقرير Go/No-Go يوثق النتائج ويحدد
+              الخطوة التالية — سواء كانت التوسع أو التعديل أو إغلاق التجربة.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Product-Specific Proof Examples */}
+      <section className="py-20 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
+            أمثلة حسب المنتج
+          </p>
+          <h2 className="text-2xl font-bold text-white mt-4 mb-4 text-center">
+            نموذج الإثبات لكل منتج
+          </h2>
+          <p className="text-slate-400 text-center mb-10 max-w-2xl mx-auto">
+            كل منتج له مسار إثبات مختلف. هذه أمثلة على ما نختبره في pilot نموذجي
+            — بدون نتائج موثقة مسبقًا.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {productProofExamples.map((p) => (
+              <div key={p.product} className="glass-card rounded-xl p-6">
+                <h3 className="text-lg font-bold text-white mb-3">
+                  {p.product}
+                </h3>
+                <ul className="space-y-2">
+                  {p.examples.map((ex, i) => (
+                    <li key={i} className="flex gap-3 text-slate-300 text-sm">
+                      <span className="text-cyan-400 mt-0.5 shrink-0">◈</span>
+                      <span className="leading-relaxed">{ex}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={p.href}
+                  className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  عرض الصفحة التعريفية ←
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pilot Decision Output */}
+      <section className="section-gradient-dark py-20 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
+            مخرجات القرار
+          </p>
+          <h2 className="text-2xl font-bold text-white mt-4 mb-4 text-center">
+            نهاية الـ Pilot — مخرج واحد من خمسة
+          </h2>
+          <p className="text-slate-400 text-center mb-10 max-w-2xl mx-auto">
+            البايلوت لا ينتهي بـ &ldquo;ناجح&rdquo; أو &ldquo;فاشل&rdquo; فقط.
+            له خمسة مخرجات ممكنة، كلها مفيدة.
+          </p>
+          <div className="max-w-3xl mx-auto space-y-3">
+            {pilotDecisionOutputs.map((d) => (
+              <div key={d.outcome} className="glass-card rounded-xl p-5">
+                <p className="text-white font-semibold text-sm mb-1">
+                  {d.outcome}
+                </p>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  {d.detail}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -211,7 +474,9 @@ export default function PilotProofPage() {
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
           <div className="glass-card rounded-2xl p-8 border border-amber-500/10">
-            <h2 className="text-xl font-bold text-white mb-6">ما لا يُدّعى في البايلوت</h2>
+            <h2 className="text-xl font-bold text-white mb-6">
+              ما لا يُدّعى في البايلوت
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 "لا ندّعي أن النظام يستبدل المدقق أو المحاسب",
@@ -231,22 +496,40 @@ export default function PilotProofPage() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* Final CTA */}
       <section className="section-gradient-dark py-20">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            جاهز للتحقق بنفسك؟
-          </h2>
-          <p className="text-slate-300 mb-8">
-            ابدأ بالديمو التفاعلي — لا حاجة لإنشاء حساب، لا بيانات حقيقية.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/demo" className="btn-primary px-8 py-3 rounded-xl text-sm font-medium">
-              مشاهدة الديمو
-            </Link>
-            <Link href="/engagement-models" className="btn-outline px-8 py-3 rounded-xl text-sm font-medium">
-              نماذج التعاون
-            </Link>
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="glass-card rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-3">
+              حوّل أول use case إلى proof قابل للمراجعة
+            </h2>
+            <p className="text-slate-400 mb-8 max-w-xl mx-auto">
+              جلسة تشخيص مجانية تحدد سير العمل المناسب، معايير النجاح، والخطوة
+              التالية.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link
+                href="/contact"
+                className="btn-primary px-8 py-3 rounded-xl text-sm font-medium"
+                data-event="click_request_pilot_review"
+              >
+                طلب جلسة تشخيص
+              </Link>
+              <Link
+                href="/proof-library"
+                className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+                data-event="click_view_proof_library"
+              >
+                مكتبة الإثبات ←
+              </Link>
+              <Link
+                href="/engagement-models"
+                className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
+                data-event="click_view_engagement_models"
+              >
+                نماذج التعاون
+              </Link>
+            </div>
           </div>
         </div>
       </section>
