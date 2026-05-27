@@ -41,6 +41,8 @@ import {
   validatePercentage,
   validateSupplierLocality,
   validateOwnershipType,
+  validateFindingType,
+  validateFindingSeverity,
 } from "@/lib/local-content/validation";
 
 // ─── Result types ───
@@ -48,6 +50,14 @@ import {
 type ActionResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: string; code?: string };
+
+const VALID_FINDING_STATUSES = [
+  "draft",
+  "submitted",
+  "reviewed",
+  "resolved",
+  "dismissed",
+] as const;
 
 async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
   try {
@@ -88,6 +98,18 @@ function parseOptionalPercentageField(
   }
   validatePercentage(value, key);
   return value;
+}
+
+function validateFindingStatus(value: string): void {
+  if (
+    !VALID_FINDING_STATUSES.includes(
+      value as (typeof VALID_FINDING_STATUSES)[number],
+    )
+  ) {
+    throw new Error(
+      `LocalContentOS validation: status must be one of: ${VALID_FINDING_STATUSES.join(", ")}`,
+    );
+  }
 }
 
 // ─── Platform audit helper ───
@@ -688,73 +710,6 @@ export async function uploadLocalContentEvidenceFileAction(
   });
 }
 
-// ─── Export Action ───
-
-export async function exportLocalContentReportFileAction(
-  projectId: string,
-  reportId: string,
-): Promise<
-  ActionResult<{ filename: string; mimeType: string; content: string }>
-> {
-  return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "view");
-    const {
-      buildAssessmentSummaryPDF,
-      buildSpendClassificationXLSX,
-      buildEvidenceIndexXLSX,
-    } = await import("@/lib/local-content/export");
-
-    const report = await prisma.localContentReport.findUnique({
-      where: { id: reportId },
-    });
-    if (!report || report.projectId !== projectId)
-      throw new ProjectAccessError("Report not found", "NOT_FOUND");
-
-    const score = await calculateProjectScore(projectId);
-
-    const input = {
-      projectName:
-        (
-          await prisma.localContentProject.findUnique({
-            where: { id: projectId },
-            select: { name: true },
-          })
-        )?.name || "Unknown",
-      reportingPeriod: "FY2025",
-      generatedBy: user.name,
-      generatedAt: new Date().toISOString(),
-      reviewStatus: "Pending",
-      approvalStatus: "Pending",
-      score,
-      disclaimer: report.disclaimer || "",
-    };
-
-    let result: { filename: string; mimeType: string; content: string };
-    switch (report.reportType) {
-      case "spend_classification":
-        result = buildSpendClassificationXLSX(input);
-        break;
-      case "evidence_index":
-        result = buildEvidenceIndexXLSX(input);
-        break;
-      default:
-        result = buildAssessmentSummaryPDF(input);
-        break;
-    }
-
-    await logToPlatform({
-      projectId,
-      user,
-      action: "localcontent.report.downloaded",
-      targetType: "LocalContentReport",
-      targetId: report.id,
-      metadata: { reportType: report.reportType },
-    });
-
-    return result;
-  });
-}
-
 // ─── Findings Actions ───
 
 export async function listLocalContentFindingsAction(
@@ -772,17 +727,31 @@ export async function createLocalContentFindingAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof createFinding>>>> {
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "manage_findings");
+    const type = (formData.get("type") as string | null)?.trim() || "";
+    const title = (formData.get("title") as string | null)?.trim() || "";
+    const description =
+      (formData.get("description") as string | null)?.trim() || "";
+    const severity = getOptionalTrimmedValue(formData, "severity");
+
+    validateRequired(type, "type");
+    validateRequired(title, "title");
+    validateRequired(description, "description");
+    validateFindingType(type);
+    if (severity) {
+      validateFindingSeverity(severity);
+    }
+
     const finding = await createFinding(
       {
         projectId,
-        type: formData.get("type") as string,
-        severity: (formData.get("severity") as string) || undefined,
-        title: formData.get("title") as string,
-        description: formData.get("description") as string,
+        type,
+        severity: severity || undefined,
+        title,
+        description,
         linkedSupplierId:
-          (formData.get("linkedSupplierId") as string) || undefined,
+          getOptionalTrimmedValue(formData, "linkedSupplierId") || undefined,
         linkedSpendRecordId:
-          (formData.get("linkedSpendRecordId") as string) || undefined,
+          getOptionalTrimmedValue(formData, "linkedSpendRecordId") || undefined,
         createdById: user.id,
         createdByName: user.name,
       },
@@ -803,6 +772,82 @@ export async function createLocalContentFindingAction(
     });
 
     revalidateLocalContentPaths(projectId, ["findings"]);
+    return finding;
+  });
+}
+
+export async function updateLocalContentFindingAction(
+  projectId: string,
+  findingId: string,
+  formData: FormData,
+): Promise<ActionResult<Awaited<ReturnType<typeof createFinding>>>> {
+  return safe(async () => {
+    const { user } = await assertProjectAccess(projectId, "manage_findings");
+    const existing = await prisma.localContentFinding.findUnique({
+      where: { id: findingId },
+    });
+
+    if (!existing || existing.projectId !== projectId) {
+      throw new ProjectAccessError("Finding not found", "NOT_FOUND");
+    }
+
+    const type = (formData.get("type") as string | null)?.trim() || "";
+    const title = (formData.get("title") as string | null)?.trim() || "";
+    const description =
+      (formData.get("description") as string | null)?.trim() || "";
+    const severity = getOptionalTrimmedValue(formData, "severity");
+    const status =
+      getOptionalTrimmedValue(formData, "status") || existing.status;
+
+    validateRequired(type, "type");
+    validateRequired(title, "title");
+    validateRequired(description, "description");
+    validateFindingType(type);
+    if (severity) {
+      validateFindingSeverity(severity);
+    }
+    validateFindingStatus(status);
+
+    const finding = await prisma.localContentFinding.update({
+      where: { id: findingId },
+      data: {
+        type,
+        title,
+        description,
+        severity: formData.has("severity")
+          ? (severity ?? undefined)
+          : (existing.severity ?? undefined),
+        status,
+        linkedSupplierId: formData.has("linkedSupplierId")
+          ? (getOptionalTrimmedValue(formData, "linkedSupplierId") ?? undefined)
+          : (existing.linkedSupplierId ?? undefined),
+        linkedSpendRecordId: formData.has("linkedSpendRecordId")
+          ? (getOptionalTrimmedValue(formData, "linkedSpendRecordId") ??
+            undefined)
+          : (existing.linkedSpendRecordId ?? undefined),
+      },
+    });
+
+    await logToPlatform({
+      projectId,
+      user,
+      action: "localcontent.finding.updated",
+      targetType: "LocalContentFinding",
+      targetId: findingId,
+      metadata: {
+        title: finding.title,
+        type: finding.type,
+        severity: finding.severity,
+        status: finding.status,
+      },
+    });
+
+    revalidateLocalContentPaths(projectId, [
+      "findings",
+      "review",
+      "approval",
+      "audit-trail",
+    ]);
     return finding;
   });
 }

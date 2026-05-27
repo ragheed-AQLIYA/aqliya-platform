@@ -1,5 +1,5 @@
 "use client";
-import { useTransition } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { generateLocalContentReportAction } from "@/actions/localcontent-actions";
@@ -21,12 +21,13 @@ export function ReportGenerationButton({
   icon,
 }: ReportGenerationButtonProps) {
   const router = useRouter();
-  const [pending, startTransition] = useTransition();
+  const [pending, setPending] = useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setError(null);
-    startTransition(async () => {
+    setPending(true);
+    try {
       const result = await generateLocalContentReportAction(
         projectId,
         type,
@@ -37,7 +38,9 @@ export function ReportGenerationButton({
       } else {
         router.refresh();
       }
-    });
+    } finally {
+      setPending(false);
+    }
   };
 
   return (

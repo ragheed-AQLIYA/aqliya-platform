@@ -3,6 +3,7 @@ import {
   getLocalContentProjectAction,
   listLocalContentFindingsAction,
   createLocalContentFindingAction,
+  updateLocalContentFindingAction,
 } from "@/actions/localcontent-actions";
 import {
   DashboardLayout,
@@ -14,7 +15,7 @@ import { FindingForm } from "@/components/local-content/finding-form";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { ArrowLeft, AlertTriangle, ShieldCheck } from "lucide-react";
+import { ArrowLeft, AlertTriangle } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -130,6 +131,24 @@ export default async function FindingsPage({
                   {new Date(f.createdAt).toLocaleDateString("ar-SA")}
                 </div>
               )}
+              <div className="mt-3">
+                <FindingForm
+                  projectId={projectId}
+                  findingId={f.id}
+                  updateAction={updateLocalContentFindingAction}
+                  initialValues={{
+                    title: f.title,
+                    description: f.description,
+                    type: f.type,
+                    severity: f.severity,
+                    status: f.status,
+                  }}
+                  buttonLabel="تعديل النتيجة"
+                  title={`تحديث النتيجة: ${f.title}`}
+                  submitLabel="حفظ التعديلات"
+                  triggerVariant="outline"
+                />
+              </div>
             </Card>
           ))}
         </div>

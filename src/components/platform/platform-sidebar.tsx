@@ -18,6 +18,7 @@ import {
   ChevronRight,
   ScrollText,
   Bot,
+  Globe,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -54,13 +55,23 @@ const modules = [
   },
   {
     id: "sunbul",
-    name: "WorkflowOS",
-    nameAr: "نظام سير العمل",
+    name: "Sunbul",
+    nameAr: "سنبل",
     icon: KanbanSquare,
-    href: "/workflowos",
+    href: "/sunbul",
     color: "text-aqliya-cyan",
     bgActive: "bg-aqliya-cyan/10",
     borderActive: "border-l-aqliya-cyan",
+  },
+  {
+    id: "localContent",
+    name: "LocalContentOS",
+    nameAr: "المحتوى المحلي",
+    icon: Globe,
+    href: "/local-content",
+    color: "text-module-localcontent",
+    bgActive: "bg-module-localcontent/10",
+    borderActive: "border-l-module-localcontent",
   },
 ];
 
@@ -164,6 +175,7 @@ const auditNav = [
 function getActiveModule(pathname: string | null) {
   if (!pathname) return "decision";
   if (pathname.startsWith("/audit")) return "audit";
+  if (pathname.startsWith("/local-content")) return "localContent";
   if (pathname.startsWith("/sales")) return "sales";
   if (pathname.startsWith("/sunbul") || pathname.startsWith("/workflowos"))
     return "sunbul";
@@ -184,6 +196,8 @@ function getModuleNav(moduleId: string) {
       return salesNav;
     case "sunbul":
       return sunbulNav;
+    case "localContent":
+      return localContentNav;
     case "decision":
       return platformNav;
     default:
@@ -230,20 +244,59 @@ const sunbulNav = [
   {
     name: "Dashboard",
     nameAr: "لوحة التحكم",
-    href: "/workflowos",
+    href: "/sunbul",
     icon: LayoutDashboard,
   },
   {
     name: "Review Queue",
     nameAr: "قائمة المراجعة",
-    href: "/workflowos",
+    href: "/sunbul",
     icon: ShieldCheck,
   },
   {
-    name: "WorkflowOS Admin",
-    nameAr: "إدارة WorkflowOS",
-    href: "/workflowos/admin",
+    name: "Sunbul Admin",
+    nameAr: "إدارة سنبل",
+    href: "/sunbul/admin",
     icon: Settings,
+  },
+];
+
+const localContentNav = [
+  {
+    name: "Dashboard",
+    nameAr: "لوحة التحكم",
+    href: "/local-content",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Projects",
+    nameAr: "المشاريع",
+    href: "/local-content/projects",
+    icon: Globe,
+  },
+  {
+    name: "Platform Organization",
+    nameAr: "منظمة المنصة",
+    href: "/settings/platform-organization",
+    icon: ShieldCheck,
+  },
+  {
+    name: "Client Workspaces",
+    nameAr: "مساحات العملاء",
+    href: "/settings/workspaces",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Platform Audit Logs",
+    nameAr: "سجلات تدقيق المنصة",
+    href: "/settings/audit-logs",
+    icon: ScrollText,
+  },
+  {
+    name: "Office AI Assistant",
+    nameAr: "مساعد العمل الذكي",
+    href: "/assistant",
+    icon: Bot,
   },
 ];
 
@@ -376,7 +429,7 @@ export function PlatformSidebar() {
             pathname === item.href || pathname?.startsWith(item.href + "/");
           return (
             <Link
-              key={item.href}
+              key={item.name}
               href={item.href}
               className={cn(
                 "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring",

@@ -184,11 +184,18 @@ export default async function ReportsPage({
         </Card>
       )}
 
-      <Card className="border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950">
-        <CardContent className="p-4 text-sm text-amber-900 dark:text-amber-200">
-          التقارير المولدة هي تقارير منظمة وليست شهادات امتثال. تصدير الملفات
-          (PDF/XLSX) قيد التطوير. حالياً، يتم حفظ التقارير كسجلات منظمة داخل
-          النظام.
+      <Card className="border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
+        <CardContent className="p-4 text-sm text-blue-900 dark:text-blue-200">
+          <p className="font-semibold mb-1">Export notes</p>
+          <ul className="list-disc list-inside space-y-0.5">
+            <li>
+              PDF exports are generated at download time from live project data.
+            </li>
+            <li>
+              XLSX exports include raw classification data for further analysis.
+            </li>
+            <li>Exports are not compliance certificates.</li>
+          </ul>
         </CardContent>
       </Card>
     </DashboardLayout>

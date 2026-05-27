@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+@import "./aqliya-animations.css";
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -56,6 +56,7 @@
   --color-module-audit: var(--module-audit);
   --color-module-sales: var(--module-sales);
   --color-module-decision: var(--module-decision);
+  --color-module-localcontent: var(--module-localcontent);
 
   /* Status Colors */
   --color-status-success: var(--status-success);
@@ -82,6 +83,7 @@
   --module-audit: #1e3a8a;
   --module-sales: #0ea5e9;
   --module-decision: #2563eb;
+  --module-localcontent: #d97706;
 
   /* Status Colors */
   --status-success: #10b981;
@@ -452,13 +454,13 @@
 
 @layer components {
   .border-module-audit {
-    @apply border-l-[--module-audit];
+    @apply border-l-4 border-l-module-audit;
   }
   .border-module-sales {
-    @apply border-l-[--module-sales];
+    @apply border-l-4 border-l-module-sales;
   }
   .border-module-decision {
-    @apply border-l-[--module-decision];
+    @apply border-l-4 border-l-module-decision;
   }
 }
 

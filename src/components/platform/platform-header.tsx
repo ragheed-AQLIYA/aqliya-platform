@@ -15,10 +15,10 @@ function getWorkspaceInfo(pathname: string | null) {
       moduleAr: "حوكمة القرارات",
       accent: "text-module-decision",
     };
-  if (pathname.startsWith("/workflowos"))
+  if (pathname.startsWith("/workflowos") || pathname.startsWith("/sunbul"))
     return {
-      module: "WorkflowOS",
-      moduleAr: "نظام سير العمل",
+      module: "Sunbul",
+      moduleAr: "سنبل",
       accent: "text-aqliya-cyan",
     };
   if (pathname.startsWith("/audit"))
@@ -26,6 +26,12 @@ function getWorkspaceInfo(pathname: string | null) {
       module: "AuditOS",
       moduleAr: "نظام التدقيق المالي",
       accent: "text-module-audit",
+    };
+  if (pathname.startsWith("/local-content"))
+    return {
+      module: "LocalContentOS",
+      moduleAr: "نظام المحتوى المحلي",
+      accent: "text-module-localcontent",
     };
   if (pathname.startsWith("/sales"))
     return {
@@ -92,6 +98,7 @@ function getPageTitle(pathname: string | null) {
     simulation: "المحاكاة",
     tender: "المنافسة",
     "what-to-do": "الإجراء المقترح",
+    projects: "المشاريع",
     engagements: "الارتباطات",
     approval: "الاعتماد",
     "audit-trail": "سجل التدقيق",
