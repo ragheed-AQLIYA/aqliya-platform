@@ -38,6 +38,18 @@ async function main() {
 
   console.log("Seeding AuditOS demo data for Gulf Trading Co. FY2025...");
 
+  // ─── PlatformOrganization Bridge ───
+  // Find or create the bridge so User → Organization → PlatformOrganization → AuditOrganization flows correctly
+  const platformAuditOrg = await prisma.platformOrganization.upsert({
+    where: { slug: "aqliya-demo" },
+    update: {},
+    create: {
+      slug: "aqliya-demo",
+      name: "AQLIYA Demo",
+      displayName: "AQLIYA Demo Organization",
+    },
+  });
+
   // ─── Organization ───
   const org = await prisma.auditOrganization.create({
     data: {
@@ -51,6 +63,7 @@ async function main() {
         maxApprovalDays: 14,
       },
       status: "active",
+      platformOrganizationId: platformAuditOrg.id,
     },
   });
   console.log(`  Organization: ${org.name}`);
@@ -111,7 +124,7 @@ async function main() {
       data: {
         id: "usr-admin",
         organizationId: org.id,
-        email: "admin@aqliya.sa",
+        email: "admin@aqliya.com",
         name: "Admin User",
         role: "admin",
         status: "active",

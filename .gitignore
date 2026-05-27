@@ -21,6 +21,7 @@
 
 # production
 /backups/
+/uploads/
 /build
 
 # misc
@@ -28,12 +29,18 @@
 *.pem
 .opencode/
 /lighthouse-reports/
+.playwright-mcp/
+.tmp.*
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+dev*.log
+
+# test artifacts
+/test-results/
 
 # env files — ignore sensitive/private envs, keep templates committable
 .env

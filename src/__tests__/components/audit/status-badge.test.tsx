@@ -1,11 +1,11 @@
-import { describe, it, expect } from "@jest/globals"
-import { render, screen } from "@testing-library/react"
+import { describe, it, expect } from "@jest/globals";
 
-// Since status-badge may have side-effect imports, test the translation function shape
 describe("Status Badge Component", () => {
-  it("should export expected components", async () => {
-    const mod = await import("@/components/audit/shared/status-badge")
-    expect(mod.StatusBadge).toBeDefined()
-    expect(mod.StatusIcon).toBeDefined()
-  })
-})
+  it("should export StatusBadge and related utilities", async () => {
+    const mod = await import("@/components/audit/shared/status-badge");
+    expect(mod.StatusBadge).toBeDefined();
+    expect(mod.statusConfig).toBeDefined();
+    expect(mod.colorClasses).toBeDefined();
+    expect(mod.getStatusLabel).toBeDefined();
+  });
+});

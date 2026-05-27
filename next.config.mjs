@@ -21,8 +21,58 @@ const bundleAnalyzer = withBundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  turbopack: {
-    root: "C:/Users/PC/Documents/Aqliya",
+  async redirects() {
+    return [
+      {
+        source: "/executive-briefing",
+        destination: "/executive-brief",
+        permanent: true,
+      },
+      {
+        source: "/workflowos",
+        destination: "/sunbul",
+        permanent: true,
+      },
+      {
+        source: "/workflowos/admin",
+        destination: "/sunbul/admin",
+        permanent: true,
+      },
+      {
+        source: "/workflowos/clients/:clientId/records/:recordId",
+        destination: "/sunbul/clients/:clientId/records/:recordId",
+        permanent: true,
+      },
+    ]
+  },
+
+  poweredByHeader: false,
+
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self';",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+        ],
+      },
+    ]
   },
 
   serverExternalPackages: [

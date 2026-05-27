@@ -6,7 +6,7 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   maxWorkers: 1,
-  testMatch: ["**/__tests__/**/*.test.ts"],
+  testMatch: ["**/__tests__/**/*.test.ts", "**/__tests__/**/*.test.tsx"],
   setupFiles: [path.join(__dirname, "src/__tests__/setup.ts")],
   moduleNameMapper: {
     "^@/(.*)$": path.join(__dirname, "src", "$1"),
