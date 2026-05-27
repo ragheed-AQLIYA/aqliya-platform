@@ -104,7 +104,7 @@ const activeSystems = [
     name: "LocalContentOS",
     tagline: "قياس المحتوى المحلي والمنتجات السعودية",
     status: "active" as const,
-    statusLabel: "نشط — L4 Usable v0.1",
+    statusLabel: "نشط — Pilot-ready بشروط",
     description:
       "يوحّد قياس المحتوى المحلي: الموردون، الإنفاق، التصنيف، نسب الالتزام، الفجوات، ومؤشرات الامتثال — داخل مسار حوكمة واحد.",
     capabilities: [
@@ -118,6 +118,26 @@ const activeSystems = [
     href: "/products/local-content",
     hasDemoButton: false,
     note: "متاح مع قيود معلنة — راجع صفحة النظام للتفاصيل",
+  },
+  {
+    id: "officeai",
+    name: "Office AI Assistant",
+    tagline: "مساعد مؤسسي محكوم",
+    status: "active" as const,
+    statusLabel: "نشط — L4 Usable v0.1",
+    description:
+      "مساعد ذكاء مؤسسي محكوم للمهام الداخلية: تلخيص، بحث، صياغة — ضمن صلاحيات وسجل تدقيق كامل. الذكاء يقترح، الإنسان يعتمد.",
+    capabilities: [
+      "تلخيص المستندات",
+      "البحث المؤسسي",
+      "صياغة النصوص",
+      "سجل تدقيق كامل",
+      "مراجعة بشرية إلزامية",
+      "حدود صلاحيات وصول",
+    ],
+    href: "/products",
+    hasDemoButton: false,
+    note: "تطبيق مشترك على Core — ليس منتجًا مستقلًا",
   },
 ];
 
@@ -136,7 +156,6 @@ const coreCapabilities = [
 export default function HomePage() {
   return (
     <div className="flex flex-col">
-
       {/* ════════════════════════════════════════════
           § 1 — HERO
           القرار: headline يُعبّر عن قيمة المنصة المؤسسية لا وصف تقني
@@ -150,7 +169,6 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-26 lg:py-30">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
             <div className="flex flex-col justify-center animate-fade-in-up">
-
               {/* Platform Identity Badge */}
               <div className="mb-7 flex flex-wrap items-center gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/85 backdrop-blur">
@@ -163,8 +181,11 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <p className="text-sm font-bold tracking-[0.24em] text-aqliya-cyan uppercase mb-3">
+              <p className="text-sm font-bold tracking-[0.24em] text-aqliya-cyan uppercase mb-2">
                 AQLIYA — عقلية
+              </p>
+              <p className="text-[11px] font-semibold tracking-[0.28em] text-white/45 mb-4">
+                Private Governed Institutional Intelligence Platform
               </p>
 
               {/* Hero Headline — executive framing */}
@@ -175,6 +196,25 @@ export default function HomePage() {
                 </span>
               </h1>
 
+              {/* What AQLIYA builds — answer in first 10 seconds */}
+              <p className="mt-4 text-base leading-7 text-white/65 sm:text-lg">
+                <strong className="text-white/85">
+                  منصة ذكاء مؤسسي خاص، محكوم، قابل للتدقيق
+                </strong>{" "}
+                — تساعد المؤسسات على تحويل البيانات والقرارات والأدلة إلى أنظمة
+                تشغيل ذكية يمكن مراجعتها، تتبعها، والاعتماد عليها.
+              </p>
+
+              {/* NOT messaging — concise, no ambiguity */}
+              <p className="mt-3 text-sm leading-6 text-white/50">
+                ليست أداة ذكاء اصطناعي معزولة، ولا منصة SaaS عامة، ولا مجرد نظام
+                تدقيق. —{" "}
+                <strong className="text-white/70">
+                  بنية مؤسسية متكاملة تجمع الذكاء، الحوكمة، الأدلة، الصلاحيات،
+                  وسير العمل داخل نظام واحد.
+                </strong>
+              </p>
+
               {/* Trust Principle — architectural, not marketing */}
               <div className="mt-5 rounded-2xl border border-aqliya-cyan/18 bg-aqliya-cyan/[0.05] px-5 py-4 backdrop-blur-sm">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan/80 mb-2">
@@ -182,7 +222,8 @@ export default function HomePage() {
                 </p>
                 <p className="text-lg font-black text-white">
                   الذكاء يساعد.{"  "}
-                  <span className="text-aqliya-cyan">الإنسان يقرر.</span>{"  "}
+                  <span className="text-aqliya-cyan">الإنسان يقرر.</span>
+                  {"  "}
                   الدليل يحكم.
                 </p>
                 <p className="mt-1.5 text-[11px] text-white/50">
@@ -190,23 +231,25 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <p className="mt-6 max-w-xl text-base leading-8 text-white/68 sm:text-lg">
-                عقلية تبني مسارات تشغيل مؤسسية تربط البيانات، القواعد، الصلاحيات، الأدلة، والمراجعة البشرية داخل بنية واحدة يمكن الوثوق بها — لا أداة ذكاء اصطناعي معزولة.
-              </p>
-
-              {/* CTA Pair — two only, clear hierarchy */}
+              {/* CTA — executive hierarchy */}
               <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row">
                 <Link
-                  href="/contact"
+                  href="/auditos"
                   className="btn-primary h-12 px-8 text-base font-bold"
                 >
-                  طلب جلسة تنفيذية
+                  استكشف AuditOS — ديمو تفاعلي
                 </Link>
                 <Link
-                  href="/auditos"
+                  href="/executive-brief"
                   className="btn-secondary h-12 px-8 text-base"
                 >
-                  استكشف AuditOS — عرض مباشر
+                  التنفيذي الموجز
+                </Link>
+                <Link
+                  href="/contact"
+                  className="btn-outline border-white/15 text-white/70 hover:bg-white/5 h-12 px-8 text-base"
+                >
+                  طلب جلسة تنفيذية
                 </Link>
               </div>
 
@@ -234,8 +277,12 @@ export default function HomePage() {
                     className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur"
                   >
                     <div className="text-xl mb-2">{sig.icon}</div>
-                    <div className="text-sm font-bold text-white">{sig.title}</div>
-                    <p className="mt-1.5 text-xs leading-5 text-white/50">{sig.detail}</p>
+                    <div className="text-sm font-bold text-white">
+                      {sig.title}
+                    </div>
+                    <p className="mt-1.5 text-xs leading-5 text-white/50">
+                      {sig.detail}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -309,12 +356,13 @@ export default function HomePage() {
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {coreCapabilities.map((cap) => (
-                  <div
-                    key={cap.en}
-                    className="glass-card-light p-4 text-right"
-                  >
-                    <p className="text-sm font-bold text-foreground">{cap.ar}</p>
-                    <p className="mt-1 text-[11px] text-muted-foreground">{cap.en}</p>
+                  <div key={cap.en} className="glass-card-light p-4 text-right">
+                    <p className="text-sm font-bold text-foreground">
+                      {cap.ar}
+                    </p>
+                    <p className="mt-1 text-[11px] text-muted-foreground">
+                      {cap.en}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -330,7 +378,8 @@ export default function HomePage() {
                   كل نظام جديد يُبنى فوق نفس منطق الحوكمة
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                  هذا يعني أن إضافة نطاق تشغيلي جديد لا يتطلب إعادة بناء حوكمة من الصفر — بل ربط النطاق الجديد بالنواة المشتركة.
+                  هذا يعني أن إضافة نطاق تشغيلي جديد لا يتطلب إعادة بناء حوكمة
+                  من الصفر — بل ربط النطاق الجديد بالنواة المشتركة.
                 </p>
               </div>
               <div className="rounded-2xl border border-border/60 bg-muted/20 p-5">
@@ -339,19 +388,34 @@ export default function HomePage() {
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">سحابة عقلية</span>
-                    <span className="rounded-full bg-status-success/15 px-2 py-0.5 text-[10px] font-bold text-status-success">متاح الآن</span>
+                    <span className="text-sm font-medium text-foreground">
+                      سحابة عقلية
+                    </span>
+                    <span className="rounded-full bg-status-success/15 px-2 py-0.5 text-[10px] font-bold text-status-success">
+                      متاح الآن
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">خوادم خاصة</span>
-                    <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-600">قيد التطوير</span>
+                    <span className="text-sm font-medium text-foreground">
+                      خوادم خاصة
+                    </span>
+                    <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-600">
+                      قيد التطوير
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">بيئة معزولة</span>
-                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">استراتيجي</span>
+                    <span className="text-sm font-medium text-foreground">
+                      بيئة معزولة
+                    </span>
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
+                      استراتيجي
+                    </span>
                   </div>
                 </div>
-                <Link href="/governance" className="mt-4 block text-xs font-semibold text-primary hover:underline">
+                <Link
+                  href="/governance"
+                  className="mt-4 block text-xs font-semibold text-primary hover:underline"
+                >
                   اطلع على بنية الحوكمة والأمان ←
                 </Link>
               </div>
@@ -369,7 +433,7 @@ export default function HomePage() {
         <SectionEyebrow
           label="الأنظمة النشطة"
           title="أنظمة مؤسسية تعمل الآن فوق AQLIYA Intelligence Core"
-          description="ثلاثة أنظمة مُبنية ومُشغَّلة. كل نظام يشارك نفس منطق الحوكمة، الأدلة، والمراجعة — ويُضاف إليها باستمرار."
+          description="أربعة أنظمة مُبنية ومُشغَّلة. كل نظام يشارك نفس منطق الحوكمة، الأدلة، والمراجعة — ويُضاف إليها باستمرار."
         />
 
         <div className="mt-12 space-y-6">
@@ -435,7 +499,9 @@ export default function HomePage() {
                     key={i}
                     className="rounded-lg border border-border/40 bg-background/60 px-3 py-2 text-center"
                   >
-                    <p className="text-[11px] font-medium text-muted-foreground leading-5">{cap}</p>
+                    <p className="text-[11px] font-medium text-muted-foreground leading-5">
+                      {cap}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -445,12 +511,17 @@ export default function HomePage() {
 
         <div className="mt-8 flex items-center justify-between rounded-2xl border border-border/50 bg-muted/20 p-5">
           <div>
-            <p className="text-sm font-bold text-foreground">خطوط أنظمة إضافية قيد التطوير</p>
+            <p className="text-sm font-bold text-foreground">
+              خطوط أنظمة إضافية قيد التطوير
+            </p>
             <p className="text-xs text-muted-foreground mt-0.5">
               SalesOS، SimulationOS — قيد التطوير والتخطيط الاستراتيجي
             </p>
           </div>
-          <Link href="/products" className="btn-outline h-9 px-5 text-sm shrink-0">
+          <Link
+            href="/products"
+            className="btn-outline h-9 px-5 text-sm shrink-0"
+          >
             عرض كل الأنظمة
           </Link>
         </div>
@@ -478,7 +549,10 @@ export default function HomePage() {
               AuditOS — كيف تبدو المنصة المؤسسية حين تعمل فعلاً
             </h2>
             <p className="mt-4 text-base leading-8 text-white/62 max-w-3xl">
-              AuditOS ليس مجرد منتج تدقيق مالي — هو الإثبات الحي أن AQLIYA Intelligence Core يمكنه تحويل عملية مؤسسية كاملة إلى مسار محكوم. من ميزان المراجعة الخام إلى الاعتماد النهائي، كل خطوة موثقة، مرتبطة بالأدلة، وقابلة للمراجعة.
+              AuditOS ليس مجرد منتج تدقيق مالي — هو الإثبات الحي أن AQLIYA
+              Intelligence Core يمكنه تحويل عملية مؤسسية كاملة إلى مسار محكوم.
+              من ميزان المراجعة الخام إلى الاعتماد النهائي، كل خطوة موثقة،
+              مرتبطة بالأدلة، وقابلة للمراجعة.
             </p>
 
             {/* Workflow Chain */}
@@ -563,21 +637,34 @@ export default function HomePage() {
                   {pillar.icon}
                 </span>
                 <div>
-                  <p className="text-sm font-bold text-foreground">{pillar.title}</p>
-                  <p className="text-[10px] text-muted-foreground">{pillar.en}</p>
+                  <p className="text-sm font-bold text-foreground">
+                    {pillar.title}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {pillar.en}
+                  </p>
                 </div>
               </div>
-              <p className="text-sm leading-6 text-muted-foreground">{pillar.body}</p>
+              <p className="text-sm leading-6 text-muted-foreground">
+                {pillar.body}
+              </p>
             </div>
           ))}
         </div>
 
         <div className="mt-8 flex items-center justify-between rounded-2xl border border-primary/15 bg-primary/[0.04] p-5">
           <div>
-            <p className="text-sm font-bold text-foreground">بنية الحوكمة والأمان الكاملة</p>
-            <p className="text-xs text-muted-foreground mt-0.5">RBAC، Tenant Isolation، Evidence Graph، AI Boundaries</p>
+            <p className="text-sm font-bold text-foreground">
+              بنية الحوكمة والأمان الكاملة
+            </p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              RBAC، Tenant Isolation، Evidence Graph، AI Boundaries
+            </p>
           </div>
-          <Link href="/governance" className="btn-outline h-9 px-5 text-sm shrink-0">
+          <Link
+            href="/governance"
+            className="btn-outline h-9 px-5 text-sm shrink-0"
+          >
             اطلع على بنية الحوكمة
           </Link>
         </div>
@@ -597,7 +684,9 @@ export default function HomePage() {
               كل مخرج يمكن إرجاعه إلى أصله
             </h2>
             <p className="mt-4 text-base leading-7 text-white/55">
-              حين يسأل المدير أو المدقق أو المراجع الخارجي: &ldquo;كيف وصلنا إلى هذا القرار؟&rdquo; — الإجابة داخل النظام، لا في الذاكرة ولا في سلاسل البريد.
+              حين يسأل المدير أو المدقق أو المراجع الخارجي: &ldquo;كيف وصلنا إلى
+              هذا القرار؟&rdquo; — الإجابة داخل النظام، لا في الذاكرة ولا في
+              سلاسل البريد.
             </p>
           </div>
           <ProofChainVisual />
@@ -605,42 +694,180 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════
-          § 8 — EXECUTIVE CTA
-          القرار: CTA واحد قوي — لا منافسة، لا تشتت
+          § 8 — MATURITY TRANSPARENCY
+          القرار: إظهار النضج الحقيقي لكل نظام بصدق — لا تضخيم
+          ════════════════════════════════════════════ */}
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <SectionEyebrow
+          label="شفافية النضج"
+          title="كل نظام في مرحلته الحقيقية — ولا شيء غير ذلك"
+          description="نعرض مستوى نضج كل نظام كما هو، دون تجميل. هذه المصداقية هي أساس الثقة المؤسسية."
+        />
+
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {/* L5 Pilot-ready */}
+          <div className="rounded-2xl border border-status-success/30 bg-gradient-to-br from-status-success/[0.04] to-background p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-status-success/15 text-sm">
+                🚀
+              </span>
+              <span className="rounded-full bg-status-success/15 px-2 py-0.5 text-[10px] font-bold text-status-success">
+                L5
+              </span>
+            </div>
+            <p className="text-sm font-black text-foreground">Pilot-ready</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              AuditOS · LocalContentOS
+            </p>
+            <p className="mt-2 text-[11px] leading-5 text-muted-foreground/70">
+              جاهز للاستخدام مع عميل تحت ظروف حقيقية. يشمل سير العمل، الحوكمة،
+              والأدلة.
+            </p>
+          </div>
+
+          {/* L4 Usable v0.1 */}
+          <div className="rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/[0.04] to-background p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15 text-sm">
+                ⚙️
+              </span>
+              <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary">
+                L4
+              </span>
+            </div>
+            <p className="text-sm font-black text-foreground">Usable v0.1</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              DecisionOS · Office AI Assistant · Sunbul
+            </p>
+            <p className="mt-2 text-[11px] leading-5 text-muted-foreground/70">
+              قابل للاستخدام مع تحفظات. يعمل بنفس بنية الحوكمة مع نطاق أضيق.
+            </p>
+          </div>
+
+          {/* L3 Prototype */}
+          <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.03] to-background p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/15 text-sm">
+                🔧
+              </span>
+              <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-600">
+                L3
+              </span>
+            </div>
+            <p className="text-sm font-black text-foreground">Prototype</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              SalesOS · Organizations
+            </p>
+            <p className="mt-2 text-[11px] leading-5 text-muted-foreground/70">
+              واجهات ونماذج أولية فقط. لا قاعدة بيانات، ولا صلاحيات، ولا سير
+              عمل.
+            </p>
+          </div>
+
+          {/* L0 Concept */}
+          <div className="rounded-2xl border border-border/50 bg-muted/20 p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted/50 text-sm">
+                📐
+              </span>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
+                L0
+              </span>
+            </div>
+            <p className="text-sm font-black text-foreground">Concept</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              LocalContactOS · RiskOS · ComplianceOS · LegalOS · GovOS · Studio
+              · On-Prem · Air-Gapped
+            </p>
+            <p className="mt-2 text-[11px] leading-5 text-muted-foreground/70">
+              مفاهيم مستقبلية وإستراتيجية. غير منفذة — تُذكر في خارطة الطريق
+              فقط.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 flex items-center justify-between rounded-2xl border border-border/50 bg-muted/20 p-5">
+          <div>
+            <p className="text-sm font-bold text-foreground">
+              خريطة الطريق الكاملة
+            </p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              للمزيد عن نضج كل نظام، توقعات الإطلاق، والمخاطر — راجع وثائق
+              المنصة
+            </p>
+          </div>
+          <Link
+            href="/products"
+            className="btn-outline h-9 px-5 text-sm shrink-0"
+          >
+            استعرض كل الأنظمة
+          </Link>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════
+          § 9 — EXECUTIVE CTA
+          القرار: تجربة تجريبية محكومة — نقطة بداية واحدة واضحة
           ════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-4xl rounded-[28px] border border-border/60 bg-gradient-to-br from-primary/[0.04] via-background to-aqliya-cyan/[0.03] p-8 text-center shadow-sm sm:p-12">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-primary">
-            ابدأ من نطاقك المؤسسي
+            ابدأ بتجربة تجريبية محكومة
           </p>
           <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-foreground sm:text-3xl">
-            إذا كانت لديك عملية مؤسسية تحتاج حوكمة وأدلة وتتبعاً —
+            سير عمل واحد. مجموعة بيانات واحدة.
             <span className="block text-primary mt-1">
-              عقلية تحوّلها إلى نظام قابل للمساءلة
+              معايير نجاح واضحة. مراجعة بشرية. مخرجات مدعومة بالأدلة.
             </span>
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-            ابدأ بجلسة تنفيذية: نفهم النطاق، نحدد الأنظمة المناسبة، ونضع مسارًا واضحًا وواقعيًا.
+            لا نبدأ بعقود ضخمة. نبدأ بنطاق محدود: نفهم عمليتك، نبني النموذج،
+            نختبر مع فريقك، ونقيّم النتائج معاً. الشفافية مضمونة.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href="/contact" className="btn-primary h-12 px-10 text-base font-bold">
-              طلب جلسة تنفيذية
+            <Link
+              href="/contact"
+              className="btn-primary h-12 px-10 text-base font-bold"
+            >
+              طلب تجربة تجريبية
             </Link>
-            <Link href="/demo" className="btn-secondary h-12 px-10 text-base">
-              مشاهدة الديمو
+            <Link
+              href="/auditos"
+              className="btn-secondary h-12 px-10 text-base"
+            >
+              استكشف AuditOS — ديمو تفاعلي
             </Link>
-            <Link href="/platform" className="btn-outline h-12 px-10 text-base">
-              استكشف المنصة
+            <Link
+              href="/proof-library"
+              className="btn-outline h-12 px-10 text-base"
+            >
+              مكتبة الإثبات
             </Link>
           </div>
 
           {/* Supporting CTAs */}
           <div className="mt-8 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4 border-t border-border/40 pt-8">
             {[
-              { label: "دراسات الحالة", sub: "سيناريوهات موثقة وأدلة", href: "/case-studies" },
-              { label: "نماذج التعاون", sub: "من تشخيص مجاني إلى نشر كامل", href: "/engagement-models" },
-              { label: "حالات الاستخدام", sub: "كيف تستفيد مؤسستك من المنصة", href: "/use-cases" },
-              { label: "للمشترين", sub: "CFO · CIO · شريك التدقيق · حكومة", href: "/buyers/cfo" },
+              {
+                label: "التنفيذي الموجز",
+                sub: "قراءة سريعة للمنصة",
+                href: "/executive-brief",
+              },
+              {
+                label: "نماذج التعاون",
+                sub: "من تشخيص مجاني إلى نشر كامل",
+                href: "/engagement-models",
+              },
+              {
+                label: "حالات الاستخدام",
+                sub: "كيف تستفيد مؤسستك من المنصة",
+                href: "/use-cases",
+              },
+              {
+                label: "للمشترين",
+                sub: "CFO · CIO · شريك التدقيق · حكومة",
+                href: "/buyers/cfo",
+              },
             ].map((link) => (
               <Link
                 key={link.href}
