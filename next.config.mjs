@@ -43,6 +43,11 @@ const nextConfig = {
         destination: "/sunbul/clients/:clientId/records/:recordId",
         permanent: true,
       },
+      {
+        source: "/products/office-ai",
+        destination: "/products",
+        permanent: true,
+      },
     ]
   },
 
