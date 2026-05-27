@@ -22,10 +22,10 @@ interface OrgData {
     viewer: number;
     total: number;
   };
-  workflowosClientCount: number;
-  workflowosMembershipCount: number;
-  workflowosRecordCount: number;
-  workflowosStatus: string;
+  sunbulClientCount: number;
+  sunbulMembershipCount: number;
+  sunbulRecordCount: number;
+  sunbulStatus: string;
 }
 
 export function OrganizationWorkspace({ data }: { data: OrgData }) {
@@ -34,14 +34,14 @@ export function OrganizationWorkspace({ data }: { data: OrgData }) {
       name: "Sunbul",
       nameAr: "سنبل",
       icon: KanbanSquare,
-      status: data.workflowosStatus,
+      status: data.sunbulStatus,
       statusColor: "text-status-success",
       statusBg: "bg-status-success/10",
       href: "/sunbul",
       adminHref: "/sunbul/admin",
       note:
-        data.workflowosRecordCount > 0
-          ? `${data.workflowosClientCount} عملاء، ${data.workflowosRecordCount} قضية`
+        data.sunbulRecordCount > 0
+          ? `${data.sunbulClientCount} عملاء، ${data.sunbulRecordCount} قضية`
           : "جاهز للتفعيل — شغّل البذرة التجريبية أولاً",
       routeNote:
         "المسار الرسمي هو /sunbul بينما /workflowos محفوظ كـ alias داخلي.",
@@ -222,10 +222,10 @@ export function OrganizationWorkspace({ data }: { data: OrgData }) {
             </span>
           </div>
         </div>
-        {data.workflowosMembershipCount > 0 && (
+        {data.sunbulMembershipCount > 0 && (
           <p className="text-xs text-muted-foreground mt-2">
-            {data.workflowosMembershipCount} عضوية في سنبل عبر{" "}
-            {data.workflowosClientCount} عميل
+            {data.sunbulMembershipCount} عضوية في سنبل عبر{" "}
+            {data.sunbulClientCount} عميل
           </p>
         )}
       </section>

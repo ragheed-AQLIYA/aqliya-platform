@@ -15,15 +15,13 @@ export function SunbulAdminPage() {
       <WorkspaceStatus
         module="platform"
         status="healthy"
-        message="إدارة WorkflowOS — إنشاء العملاء وإدارة العضويات"
+        message="إدارة سنبل — إنشاء العملاء وإدارة العضويات"
       />
 
       <div className="flex items-center gap-3">
         <Settings className="h-5 w-5 text-primary" />
         <div>
-          <h1 className="text-h2 font-black text-foreground">
-            إدارة WorkflowOS
-          </h1>
+          <h1 className="text-h2 font-black text-foreground">إدارة سنبل</h1>
           <p className="text-body-sm text-muted-foreground">
             إدارة العملاء والعضويات في نظام سير العمل
           </p>

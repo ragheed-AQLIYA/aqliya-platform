@@ -18,12 +18,11 @@ export default async function SunbulOrganizationPage() {
   const operatorCount = allUsers.filter((u) => u.role === "OPERATOR").length;
   const viewerCount = allUsers.filter((u) => u.role === "VIEWER").length;
 
-  const workflowosClientCount = await prisma.sunbulClient.count();
-  const workflowosMembershipCount = await prisma.sunbulUserMembership.count();
-  const workflowosRecordCount = await prisma.sunbulRecord.count();
+  const sunbulClientCount = await prisma.sunbulClient.count();
+  const sunbulMembershipCount = await prisma.sunbulUserMembership.count();
+  const sunbulRecordCount = await prisma.sunbulRecord.count();
 
-  const workflowosStatus =
-    workflowosRecordCount > 0 ? "جاهز للتشغيل" : "نموذج أولي";
+  const sunbulStatus = sunbulRecordCount > 0 ? "جاهز للتشغيل" : "نموذج أولي";
 
   return (
     <OrganizationWorkspace
@@ -36,10 +35,10 @@ export default async function SunbulOrganizationPage() {
           viewer: viewerCount,
           total: allUsers.length,
         },
-        workflowosClientCount,
-        workflowosMembershipCount,
-        workflowosRecordCount,
-        workflowosStatus,
+        sunbulClientCount,
+        sunbulMembershipCount,
+        sunbulRecordCount,
+        sunbulStatus,
       }}
     />
   );
