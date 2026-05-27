@@ -1649,3 +1649,14 @@ function classifyAccount(code: string): string | undefined {
     return "expense";
   return undefined;
 }
+
+export async function archiveEngagement(
+  engagementId: string,
+  actorId: string,
+  actorName: string,
+): Promise<void> {
+  const db = await getDb().catch(() => {
+    throw new Error("Database not available");
+  });
+  await db.archiveEngagement(engagementId, actorId, actorName);
+}

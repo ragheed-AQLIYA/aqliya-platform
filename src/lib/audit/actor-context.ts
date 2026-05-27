@@ -30,15 +30,24 @@ export async function getAuditActor(): Promise<AuditActor> {
     const { getCurrentUser } = await import("@/lib/auth");
     const sessionUser = await getCurrentUser();
 
-    // Map session user to AuditUser by email + organization
-    const auditUser = await prisma.auditUser.findUnique({
-      where: {
-        organizationId_email: {
-          organizationId: sessionUser.organizationId,
-          email: sessionUser.email,
-        },
-      },
-    });
+    // Bridge through PlatformOrganization to find the correct AuditOrganization
+    let auditUser = null;
+    if (sessionUser.platformOrganizationId) {
+      const auditOrg = await prisma.auditOrganization.findFirst({
+        where: { platformOrganizationId: sessionUser.platformOrganizationId },
+        select: { id: true },
+      });
+      if (auditOrg) {
+        auditUser = await prisma.auditUser.findUnique({
+          where: {
+            organizationId_email: {
+              organizationId: auditOrg.id,
+              email: sessionUser.email,
+            },
+          },
+        });
+      }
+    }
 
     if (!auditUser) {
       throw new Error("Audit user not provisioned");
