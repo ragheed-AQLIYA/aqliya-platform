@@ -25,6 +25,8 @@ export async function GET(
         "Content-Type": result.mimeType,
         "Content-Disposition": `attachment; filename="${result.filename}"`,
         "Content-Length": String(result.sizeBytes),
+        "X-Content-Type-Options": "nosniff",
+        "Cache-Control": "private, no-store",
       },
     });
   } catch (error) {

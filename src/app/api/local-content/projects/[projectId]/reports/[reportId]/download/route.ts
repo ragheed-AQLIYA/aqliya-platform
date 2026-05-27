@@ -8,6 +8,7 @@ import {
   buildSpendClassificationXLSX,
   buildEvidenceIndexXLSX,
 } from "@/lib/local-content/export";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 
 export async function GET(
   _request: NextRequest,
@@ -51,20 +52,42 @@ export async function GET(
       disclaimer: report.disclaimer || "",
     };
 
-    let result: { filename: string; mimeType: string; content: string };
+    let result: {
+      filename: string;
+      mimeType: string;
+      content: string | Buffer;
+    };
     switch (report.reportType) {
       case "spend_classification":
-        result = buildSpendClassificationXLSX(input);
+        result = await buildSpendClassificationXLSX(input);
         break;
       case "evidence_index":
-        result = buildEvidenceIndexXLSX(input);
+        result = await buildEvidenceIndexXLSX(input);
         break;
       default:
-        result = buildAssessmentSummaryPDF(input);
+        result = await buildAssessmentSummaryPDF(input);
         break;
     }
 
-    return new NextResponse(result.content, {
+    await writePlatformAuditLog({
+      productKey: "local_content",
+      action: "report.download",
+      platformOrganizationId: user.platformOrganizationId,
+      actorId: user.id,
+      actorType: user.role,
+      actorName: user.name,
+      targetType: "local_content_report",
+      targetId: reportId,
+      targetLabel: result.filename,
+      sourceSystem: "local_content_download",
+      status: "success",
+    });
+
+    const body: BodyInit =
+      typeof result.content === "string"
+        ? result.content
+        : new Uint8Array(result.content);
+    return new NextResponse(body, {
       status: 200,
       headers: {
         "Content-Type": result.mimeType,

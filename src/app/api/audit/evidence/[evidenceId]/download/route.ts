@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getStorageProvider } from "@/lib/audit/storage";
 import { getAuditActor } from "@/lib/audit/actor-context";
-import {
-  assertEngagementAccess,
-  TenantAccessError,
-} from "@/lib/audit/tenant-guard";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
 
 export async function GET(
   _request: NextRequest,
@@ -15,19 +13,23 @@ export async function GET(
 
   try {
     const actor = await getAuditActor();
+    enforceAuditRateLimit(actor, "evidence.download", "download");
+
     const evidence = await prisma.auditEvidence.findUnique({
       where: { id: evidenceId },
-      include: { engagement: { select: { id: true } } },
+      include: { engagement: { select: { organizationId: true } } },
     });
 
-    if (!evidence || !evidence.storageKey) {
+    if (
+      !evidence ||
+      !evidence.storageKey ||
+      evidence.engagement.organizationId !== actor.organizationId
+    ) {
       return NextResponse.json(
         { error: "Evidence not found or no file stored" },
         { status: 404 },
       );
     }
-
-    await assertEngagementAccess(evidence.engagement.id, actor);
 
     const storage = getStorageProvider();
     const file = await storage.retrieve(evidence.storageKey);
@@ -39,6 +41,20 @@ export async function GET(
       );
     }
 
+    await writePlatformAuditLog({
+      productKey: "audit",
+      action: "evidence.download",
+      platformOrganizationId: actor.organizationId,
+      actorId: actor.actorId,
+      actorType: actor.actorRole,
+      actorName: actor.actorName,
+      targetType: "audit_evidence",
+      targetId: evidenceId,
+      targetLabel: evidence.filename,
+      sourceSystem: "audit_evidence_download",
+      status: "success",
+    });
+
     const body = new Uint8Array(file.content);
     return new NextResponse(body, {
       status: 200,
@@ -47,16 +63,10 @@ export async function GET(
         "Content-Disposition": `attachment; filename="${evidence.filename.replace(/["\r\n]/g, "_")}"`,
         "Content-Length": String(file.sizeBytes),
         "X-Content-Type-Options": "nosniff",
-        "Cache-Control": "private, max-age=3600",
+        "Cache-Control": "private, no-store",
       },
     });
   } catch (error) {
-    if (
-      error instanceof TenantAccessError ||
-      (error instanceof Error && error.message.startsWith("Access denied:"))
-    ) {
-      return NextResponse.json({ error: "Access denied" }, { status: 403 });
-    }
     if (error instanceof Error && error.message === "Unauthenticated") {
       return NextResponse.json(
         { error: "Authentication required" },

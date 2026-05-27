@@ -135,6 +135,8 @@ export const config = {
     "/intelligence/:path*",
     "/monitoring",
     "/monitoring/:path*",
+    "/published/recommendation",
+    "/published/recommendation/:path*",
     "/settings",
     "/settings/:path*",
     "/api/audit/:path*",

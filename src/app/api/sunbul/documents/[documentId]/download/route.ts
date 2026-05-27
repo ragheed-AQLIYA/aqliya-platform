@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { retrieveSunbulDocument } from "@/lib/sunbul/storage";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 
 export async function GET(
   _request: NextRequest,
@@ -9,14 +10,13 @@ export async function GET(
   const { documentId } = await params;
 
   try {
-    await getCurrentUser();
+    const user = await getCurrentUser();
 
-    const docRecord = await import("@/lib/prisma").then((m) =>
-      m.prisma.sunbulDocument.findUnique({
-        where: { id: documentId },
-        select: { clientId: true, recordId: true, fileName: true },
-      }),
-    );
+    const prisma = (await import("@/lib/prisma")).prisma;
+    const docRecord = await prisma.sunbulDocument.findUnique({
+      where: { id: documentId },
+      select: { clientId: true, recordId: true, fileName: true },
+    });
     if (!docRecord) {
       return NextResponse.json(
         { error: "Document not found" },
@@ -24,11 +24,29 @@ export async function GET(
       );
     }
 
+    // Authorize before returning any document metadata
+    const { requireClientAccess } = await import("@/lib/sunbul/tenant-guard");
+    await requireClientAccess(docRecord.clientId);
+
     const { document, file } = await retrieveSunbulDocument(
       docRecord.clientId,
       docRecord.recordId,
       documentId,
     );
+
+    await writePlatformAuditLog({
+      productKey: "sunbul",
+      action: "document.download",
+      platformOrganizationId: user.platformOrganizationId,
+      actorId: user.id,
+      actorType: user.role,
+      actorName: user.name,
+      targetType: "sunbul_document",
+      targetId: documentId,
+      targetLabel: docRecord.fileName,
+      sourceSystem: "sunbul_download",
+      status: "success",
+    });
 
     const body = new Uint8Array(file.content);
     return new NextResponse(body, {
@@ -38,7 +56,7 @@ export async function GET(
         "Content-Disposition": `attachment; filename="${document.fileName.replace(/["\r\n]/g, "_")}"`,
         "Content-Length": String(file.sizeBytes),
         "X-Content-Type-Options": "nosniff",
-        "Cache-Control": "private, max-age=3600",
+        "Cache-Control": "private, no-store",
       },
     });
   } catch (error) {
