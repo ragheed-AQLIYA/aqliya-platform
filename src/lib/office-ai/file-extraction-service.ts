@@ -3,6 +3,8 @@
 // No external APIs, no Cloud AI, no OCR.
 // Extraction failure never blocks the caller.
 
+import "server-only";
+
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { getStorageProvider } from "@/lib/platform/storage";

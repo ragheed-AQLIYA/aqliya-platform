@@ -44,21 +44,21 @@ interface EngagementTabsProps {
 }
 
 const tabDefs = [
-  { key: "overview", label: "Overview", icon: LayoutDashboard },
+  { key: "overview", label: "نظرة عامة", icon: LayoutDashboard },
   { key: "trial-balance", label: "ميزان المراجعة", icon: FileSpreadsheet },
-  { key: "mapping", label: "Mapping", icon: GitCompareArrows },
-  { key: "validation", label: "Validation", icon: ShieldCheck },
-  { key: "statements", label: "Statements", icon: FileText },
-  { key: "notes", label: "Notes", icon: StickyNote },
-  { key: "evidence", label: "Evidence", icon: FolderOpen },
-  { key: "findings", label: "Findings", icon: SearchCheck },
-  { key: "recommendations", label: "Recommendations", icon: ListChecks },
-  { key: "review", label: "المراجعات", icon: Eye },
-  { key: "approval", label: "Approval", icon: CheckCircle2 },
-  { key: "publication", label: "Publication", icon: FileOutput },
+  { key: "mapping", label: "تعيين الحسابات", icon: GitCompareArrows },
+  { key: "validation", label: "التحقق", icon: ShieldCheck },
+  { key: "statements", label: "القوائم المالية", icon: FileText },
+  { key: "notes", label: "الإيضاحات", icon: StickyNote },
+  { key: "evidence", label: "الأدلة", icon: FolderOpen },
+  { key: "findings", label: "النتائج", icon: SearchCheck },
+  { key: "recommendations", label: "التوصيات", icon: ListChecks },
+  { key: "review", label: "المراجعة", icon: Eye },
+  { key: "approval", label: "الاعتماد", icon: CheckCircle2 },
+  { key: "publication", label: "النشر", icon: FileOutput },
   { key: "exports", label: "التصدير", icon: Download },
   { key: "audit-trail", label: "سجل التدقيق", icon: History },
-  { key: "pilot", label: "Pilot", icon: Rocket },
+  { key: "pilot", label: "تجريبي", icon: Rocket },
 ];
 
 function EngagementTabs({

@@ -711,6 +711,7 @@
     "engagement": {
       "errors": {
         "engagementNotLinked": "Engagement not linked to a Project",
+        "engagementNotLinkedHint": "Allowed in seed and internal pilot — does not block audit workflow.",
         "workspaceNotFound": "Project's workspace not found",
         "platformOrgNotFound": "Workspace's platform org not found",
         "unknown": "Unknown error"

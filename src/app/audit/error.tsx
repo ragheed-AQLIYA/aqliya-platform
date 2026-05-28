@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { AuditErrorCard } from "@/components/audit/error/audit-error-card"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { AuditErrorCard } from "@/components/audit/error/audit-error-card";
 
 export default function AuditError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[AuditOS Error Boundary]", error)
-  }, [error])
+    console.error("[AuditOS Error Boundary]", error);
+  }, [error]);
 
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <AuditErrorCard
-      title="AuditOS Workspace Error"
+      title="خطأ في مساحة AuditOS"
       message={
         process.env.NODE_ENV === "development"
-          ? `${error.message} (reload to retry)`
-          : "Something went wrong in this AuditOS workspace. The workflow data could not be loaded safely. No audit data has been deleted."
+          ? `${error.message} (أعد التحميل للمحاولة)`
+          : "حدث خطأ في مساحة AuditOS. تعذر تحميل بيانات سير العمل بأمان — لم تُحذف بيانات التدقيق."
       }
       onRetry={reset}
       onBack={() => router.push("/audit")}
       variant="page"
     />
-  )
+  );
 }

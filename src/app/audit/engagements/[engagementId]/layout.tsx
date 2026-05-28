@@ -1,5 +1,6 @@
 import { EngagementTabs } from "@/components/audit/engagement/engagement-tabs";
 import { PlatformContextCard } from "@/components/audit/engagement/platform-context-card";
+import { EngagementWorkflowShell } from "@/components/audit/layout/engagement-workflow-shell";
 import { getWorkflowReadinessAction } from "@/actions/audit-read-actions";
 
 export default async function EngagementLayout({
@@ -26,7 +27,9 @@ export default async function EngagementLayout({
         engagementId={engagementId}
         workflowContext={workflowContext}
       />
-      {children}
+      <EngagementWorkflowShell engagementId={engagementId}>
+        {children}
+      </EngagementWorkflowShell>
     </div>
   );
 }

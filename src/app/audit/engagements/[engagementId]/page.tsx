@@ -7,6 +7,7 @@ import { AlertsBar } from "@/components/audit/engagement/alerts-bar";
 import { OverviewTab } from "@/components/audit/engagement/overview-tab";
 import { RecentActivity } from "@/components/audit/dashboard/recent-activity";
 import { WorkflowProgress } from "@/components/audit/layout/workflow-progress";
+import { getWorkflowReadinessAction } from "@/actions/audit-read-actions";
 import {
   getEngagement,
   getEngagementWorkflowStatus,
@@ -34,12 +35,14 @@ export default async function EngagementDetailPage({
     auditEvents,
     aiOutputs,
     missingEvidence,
+    readiness,
   ] = await Promise.all([
     getEngagement(actor.organizationId, engagementId),
     getEngagementWorkflowStatus(engagementId).catch(() => null),
     getAuditEvents(engagementId).catch(() => []),
     getAISuggestions(engagementId).catch(() => []),
     getMissingEvidence(engagementId).catch(() => []),
+    getWorkflowReadinessAction(engagementId).catch(() => null),
   ]);
 
   if (!engagement) {
@@ -77,7 +80,15 @@ export default async function EngagementDetailPage({
 
       <EngagementHeader engagement={engagement} status={workflowStatus} />
 
-      <WorkflowProgress status={engagement.status} />
+      <WorkflowProgress
+        engagementId={engagementId}
+        workflowContext={readiness?.context}
+        blockingIssues={
+          readiness?.workflowStatus.blockingIssues ??
+          workflowStatus.blockingIssues
+        }
+        status={engagement.status}
+      />
 
       {engagement.alerts && engagement.alerts.length > 0 && (
         <AlertsBar alerts={engagement.alerts} />

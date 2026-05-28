@@ -21,6 +21,8 @@ import {
   Bot,
   Sparkles,
   Loader2,
+  Shield,
+  Trash2,
 } from "lucide-react";
 import {
   Card,
@@ -81,6 +83,7 @@ import {
   getEngagementAction,
   getFindingsAction,
 } from "@/actions/audit-read-actions";
+import { EvidenceStorageStatusBadge } from "@/components/audit/evidence/evidence-storage-status";
 
 const stateColors: Record<string, string> = {
   missing: "bg-red-100 text-red-700 border-red-300",
@@ -144,6 +147,11 @@ export default function EvidencePage() {
   const [evHasMore, setEvHasMore] = useState(false);
   const [evTotal, setEvTotal] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
+  const [rejectError, setRejectError] = useState<string | null>(null);
+  const [linkError, setLinkError] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const EVIDENCE_PAGE_SIZE = 20;
   const stateLabel: Record<string, string> = {
     missing: t("missingState"),
@@ -174,14 +182,6 @@ export default function EvidencePage() {
       <div className="flex h-64 items-center justify-center">
         <div className="size-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
       </div>
-    );
-  if (evidence.length === 0)
-    return (
-      <Card className="rounded-[24px] border-border/70 shadow-sm">
-        <CardContent className="p-6 text-muted-foreground">
-          {t("noEvidence")}
-        </CardContent>
-      </Card>
     );
 
   const missingCount = evidence.filter((e) => e.state === "missing").length;
@@ -241,6 +241,21 @@ export default function EvidencePage() {
           </Button>
         </div>
       </div>
+
+      <Card className="rounded-[24px] border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
+        <CardContent className="flex gap-3 pt-4">
+          <Shield className="mt-0.5 h-5 w-5 shrink-0 text-blue-600 dark:text-blue-400" />
+          <div className="space-y-1 text-sm">
+            <p className="font-semibold text-blue-800 dark:text-blue-300">
+              الأدلة مادة داعمة — لا تُعد اعتماداً تلقائياً
+            </p>
+            <p className="text-blue-700 dark:text-blue-400">
+              رفع الدليل أو قبوله لا يغني عن المراجعة والاعتماد البشري. سجّل
+              الروابط مع النتائج قبل الانتقال إلى المراجعة النهائية.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
       {aiSuggestions.length > 0 && (
         <Card className="rounded-[24px] border-violet-200 shadow-sm">
@@ -397,65 +412,94 @@ export default function EvidencePage() {
                   <TableHead>{t("uploadedByCol")}</TableHead>
                   <TableHead>{t("uploadDateCol")}</TableHead>
                   <TableHead>{t("stateCol")}</TableHead>
+                  <TableHead>التخزين</TableHead>
                   <TableHead>{t("linkedToCol")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.map((ev) => (
-                  <TableRow
-                    key={ev.id}
-                    className="cursor-pointer"
-                    onClick={() => setSelectedEv(ev)}
-                  >
-                    <TableCell className="flex items-center gap-2">
-                      {fileIcons[ev.fileType] || <File className="size-4" />}
-                      <span className="font-medium">{ev.filename}</span>
-                      {ev.state === "missing" && (
-                        <Badge
-                          variant="outline"
-                          className="bg-red-600 text-white border-red-600 text-[10px]"
+                {filtered.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="py-10 text-center">
+                      <p className="text-sm text-muted-foreground">
+                        {evidence.length === 0
+                          ? t("noEvidence")
+                          : "لا توجد أدلة مطابقة للتصفية."}
+                      </p>
+                      {evidence.length === 0 && (
+                        <Button
+                          className="mt-3"
+                          size="sm"
+                          onClick={() => setShowRequest(true)}
                         >
-                          {t("missingState")}
-                        </Badge>
+                          <Upload className="size-4 me-1" />
+                          {t("requestEvidence")}
+                        </Button>
                       )}
                     </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {ev.fileType.toUpperCase()}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{ev.uploadedBy || "-"}</TableCell>
-                    <TableCell>
-                      {ev.uploadedAt
-                        ? new Date(ev.uploadedAt).toLocaleDateString("ar-SA", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })
-                        : "-"}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={`${stateColors[ev.state] || ""} flex items-center gap-1 w-fit`}
-                      >
-                        {stateIcons[ev.state]}
-                        {stateLabel[ev.state] || t("rejectedState")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="max-w-[200px] truncate">
-                      {ev.linkedEntities.map((le, i) => (
-                        <Badge
-                          key={i}
-                          variant="outline"
-                          className="mr-1 text-[10px]"
-                        >
-                          {le.targetLabel}
-                        </Badge>
-                      ))}
-                    </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  filtered.map((ev) => (
+                    <TableRow
+                      key={ev.id}
+                      className="cursor-pointer"
+                      onClick={() => setSelectedEv(ev)}
+                    >
+                      <TableCell className="flex items-center gap-2">
+                        {fileIcons[ev.fileType] || <File className="size-4" />}
+                        <span className="font-medium">{ev.filename}</span>
+                        {ev.state === "missing" && (
+                          <Badge
+                            variant="outline"
+                            className="bg-red-600 text-white border-red-600 text-[10px]"
+                          >
+                            {t("missingState")}
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">
+                          {ev.fileType.toUpperCase()}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{ev.uploadedBy || "-"}</TableCell>
+                      <TableCell>
+                        {ev.uploadedAt
+                          ? new Date(ev.uploadedAt).toLocaleDateString(
+                              "ar-SA",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )
+                          : "-"}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant="outline"
+                          className={`${stateColors[ev.state] || ""} flex items-center gap-1 w-fit`}
+                        >
+                          {stateIcons[ev.state]}
+                          {stateLabel[ev.state] || t("rejectedState")}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <EvidenceStorageStatusBadge evidence={ev} />
+                      </TableCell>
+                      <TableCell className="max-w-[200px] truncate">
+                        {ev.linkedEntities.map((le, i) => (
+                          <Badge
+                            key={i}
+                            variant="outline"
+                            className="mr-1 text-[10px]"
+                          >
+                            {le.targetLabel}
+                          </Badge>
+                        ))}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
@@ -647,6 +691,12 @@ export default function EvidencePage() {
                 />
               </div>
             )}
+            {linkError && (
+              <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700">
+                <AlertTriangle className="size-3 shrink-0" />
+                {linkError}
+              </div>
+            )}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowLinkDialog(false)}>
@@ -656,6 +706,7 @@ export default function EvidencePage() {
               disabled={!linkTargetId || linkSubmitting}
               onClick={async () => {
                 setLinkSubmitting(true);
+                setLinkError(null);
                 try {
                   await linkEvidenceToEntityAction({
                     engagementId,
@@ -671,13 +722,90 @@ export default function EvidencePage() {
                       updated.find((e) => e.id === selectedEv.id) ?? null,
                     );
                   setShowLinkDialog(false);
-                } catch {
+                } catch (e: unknown) {
+                  setLinkError(
+                    e instanceof Error ? e.message : t("updateFailed"),
+                  );
                 } finally {
                   setLinkSubmitting(false);
                 }
               }}
             >
               {linkSubmitting ? t("linking") : t("link")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={showRejectDialog}
+        onOpenChange={(open) => {
+          if (!open) {
+            setShowRejectDialog(false);
+            setRejectError(null);
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>رفض الدليل</DialogTitle>
+            <DialogDescription>
+              سيتم تغيير حالة &ldquo;{selectedEv?.filename}&rdquo; إلى{" "}
+              <strong>مرفوض</strong>. يُسجَّل الإجراء في سجل التدقيق. لا يُحذف
+              الملف من التخزين تلقائياً — يمكن الرجوع للسجل عند الحاجة.
+            </DialogDescription>
+          </DialogHeader>
+          {rejectError && (
+            <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700">
+              <AlertTriangle className="size-3 shrink-0" />
+              {rejectError}
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowRejectDialog(false);
+                setRejectError(null);
+              }}
+              disabled={rejecting}
+            >
+              {t("cancel")}
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={rejecting || !selectedEv}
+              onClick={async () => {
+                if (!selectedEv) return;
+                setRejecting(true);
+                setRejectError(null);
+                try {
+                  const result = await updateEvidenceStateWithEventAction(
+                    selectedEv.id,
+                    "rejected",
+                    engagementId,
+                  );
+                  if (result.evidence) {
+                    setEvidence((prev) =>
+                      prev.map((e) =>
+                        e.id === selectedEv.id
+                          ? { ...e, state: "rejected" }
+                          : e,
+                      ),
+                    );
+                    setSelectedEv({ ...selectedEv, state: "rejected" });
+                  }
+                  setShowRejectDialog(false);
+                } catch (e: unknown) {
+                  setRejectError(
+                    e instanceof Error ? e.message : t("updateFailed"),
+                  );
+                } finally {
+                  setRejecting(false);
+                }
+              }}
+            >
+              {rejecting ? "جارٍ الرفض..." : "تأكيد الرفض"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -790,16 +918,19 @@ export default function EvidencePage() {
                 </div>
               </div>
               <div>
-                <div className="text-muted-foreground text-xs uppercase tracking-wide">
+                <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">
                   {t("stateCol")}
                 </div>
-                <Badge
-                  variant="outline"
-                  className={`${stateColors[selectedEv.state]} flex items-center gap-1 w-fit`}
-                >
-                  {stateIcons[selectedEv.state]}
-                  {stateLabel[selectedEv.state] || t("rejectedState")}
-                </Badge>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className={`${stateColors[selectedEv.state]} flex items-center gap-1 w-fit`}
+                  >
+                    {stateIcons[selectedEv.state]}
+                    {stateLabel[selectedEv.state] || t("rejectedState")}
+                  </Badge>
+                  <EvidenceStorageStatusBadge evidence={selectedEv} size="md" />
+                </div>
               </div>
               <div>
                 <div className="text-muted-foreground text-xs uppercase tracking-wide mb-1">
@@ -892,26 +1023,52 @@ export default function EvidencePage() {
                   />
                 </>
               )}
-              {selectedEv.fileHash && selectedEv.storageKey && (
+              {selectedEv.storageKey && selectedEv.fileHash && (
                 <Button
                   size="sm"
                   variant="outline"
                   className="w-full"
+                  disabled={downloadingId === selectedEv.id}
                   onClick={async () => {
+                    setDownloadingId(selectedEv.id);
+                    setActionError(null);
                     try {
                       const info = await getEvidenceDownloadUrlAction(
                         selectedEv.id,
                         engagementId,
                       );
-                      if (info) window.open(info.url, "_blank");
-                    } catch {
-                      setActionError(t("downloadFailed"));
+                      if (info) {
+                        window.open(info.url, "_blank");
+                      } else {
+                        setActionError(
+                          "الملف غير متوفر للتنزيل — قد يكون محذوفاً من التخزين أو لم يُرفع بعد.",
+                        );
+                      }
+                    } catch (e: unknown) {
+                      setActionError(
+                        e instanceof Error ? e.message : t("downloadFailed"),
+                      );
+                    } finally {
+                      setDownloadingId(null);
                     }
                   }}
                 >
-                  <FileText className="size-4 me-1" />
-                  {t("download", { hash: selectedEv.fileHash.substring(0, 8) })}
+                  {downloadingId === selectedEv.id ? (
+                    <Loader2 className="size-4 me-1 animate-spin" />
+                  ) : (
+                    <FileText className="size-4 me-1" />
+                  )}
+                  {downloadingId === selectedEv.id
+                    ? "جارٍ التحقق..."
+                    : t("download", {
+                        hash: selectedEv.fileHash.substring(0, 8),
+                      })}
                 </Button>
+              )}
+              {!selectedEv.storageKey && (
+                <p className="text-xs text-muted-foreground rounded-md border border-dashed p-2">
+                  لم يُرفع ملف بعد — هذا سجل طلب دليل فقط.
+                </p>
               )}
               {actionError && (
                 <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700">
@@ -927,6 +1084,7 @@ export default function EvidencePage() {
                   onClick={async () => {
                     setLinkTargetId("");
                     setLinkTargetType("finding");
+                    setLinkError(null);
                     try {
                       const f = await getFindingsAction(engagementId);
                       setFindingsList(f);
@@ -1006,6 +1164,21 @@ export default function EvidencePage() {
                   {t("markReviewed")}
                 </Button>
               </div>
+              {selectedEv.state !== "rejected" &&
+                selectedEv.state !== "accepted" && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full text-destructive border-destructive/30 hover:bg-destructive/5"
+                    onClick={() => {
+                      setRejectError(null);
+                      setShowRejectDialog(true);
+                    }}
+                  >
+                    <Trash2 className="size-4 me-1" />
+                    رفض الدليل
+                  </Button>
+                )}
             </div>
           </div>
         </div>

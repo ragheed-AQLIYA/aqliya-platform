@@ -354,7 +354,7 @@ export function PlatformSidebar() {
             )}
           >
             <currentModule.icon className="h-4 w-4 shrink-0" />
-            <span className="truncate">{currentModule.name}</span>
+            <span className="truncate">{currentModule.nameAr}</span>
             <ChevronDown
               className={cn(
                 "h-3.5 w-3.5 mr-auto transition-transform",
@@ -379,7 +379,7 @@ export function PlatformSidebar() {
                     )}
                   >
                     <module.icon className="h-4 w-4 shrink-0" />
-                    <span className="truncate">{module.name}</span>
+                    <span className="truncate">{module.nameAr}</span>
                   </Link>
                 );
               })}
@@ -429,7 +429,11 @@ export function PlatformSidebar() {
               title={collapsed ? item.name : undefined}
             >
               <item.icon className="h-4 w-4 shrink-0" />
-              {!collapsed && <span className="truncate">{item.name}</span>}
+              {!collapsed && (
+                <span className="truncate">
+                  {"nameAr" in item && item.nameAr ? item.nameAr : item.name}
+                </span>
+              )}
             </Link>
           );
         })}

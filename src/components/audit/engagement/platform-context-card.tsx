@@ -19,6 +19,7 @@ export async function PlatformContextCard({
   let workspace = null;
   let platformOrg = null;
   const errors: string[] = [];
+  let engagementNotLinkedOnly = false;
   const t = await getTranslations("audit.engagement");
 
   try {
@@ -31,6 +32,7 @@ export async function PlatformContextCard({
     const msg = e instanceof Error ? e.message : t("errors.unknown");
     if (msg.includes("AuditEngagement")) {
       errors.push(t("errors.engagementNotLinked"));
+      engagementNotLinkedOnly = true;
     } else if (msg.includes("ClientWorkspace")) {
       errors.push(t("errors.workspaceNotFound"));
     } else if (msg.includes("PlatformOrganization")) {
@@ -46,29 +48,39 @@ export async function PlatformContextCard({
   }
 
   const hasFullContext = project && workspace && platformOrg;
-  const hasWarning = errors.length > 0;
+  const hasWarning = errors.length > 0 && !engagementNotLinkedOnly;
+  const showPilotContextNote = engagementNotLinkedOnly && !hasFullContext;
 
   return (
     <div
       className={`rounded-md border p-3 text-xs ${
-        hasWarning
-          ? "border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950"
-          : hasFullContext
-            ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30"
-            : "border-muted bg-muted/30"
+        showPilotContextNote
+          ? "border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30"
+          : hasWarning
+            ? "border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950"
+            : hasFullContext
+              ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30"
+              : "border-muted bg-muted/30"
       }`}
     >
       <div className="flex items-center gap-1.5 mb-2">
         <Shield className="h-3 w-3 text-muted-foreground" />
-        <span className="font-medium text-muted-foreground">
-          سياق المنصة / Platform Context
-        </span>
+        <span className="font-medium text-muted-foreground">سياق المنصة</span>
         {hasWarning && (
           <AlertTriangle className="h-3 w-3 text-yellow-600 mr-auto" />
         )}
       </div>
 
-      {errors.length > 0 && (
+      {showPilotContextNote && (
+        <p className="text-blue-800 dark:text-blue-300 leading-relaxed">
+          {t("errors.engagementNotLinked")}{" "}
+          <span className="text-blue-700/80 dark:text-blue-400/80">
+            {t("errors.engagementNotLinkedHint")}
+          </span>
+        </p>
+      )}
+
+      {hasWarning && (
         <div className="space-y-1 mb-2">
           {errors.map((err, i) => (
             <div

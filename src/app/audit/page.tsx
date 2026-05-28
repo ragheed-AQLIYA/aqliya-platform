@@ -1,13 +1,11 @@
 export const dynamic = "force-dynamic";
 
-import Link from "next/link";
 import { KPICard } from "@/components/enterprise/kpi-card";
 import { SectionHeader } from "@/components/enterprise/section-header";
 import {
   EnterpriseCard,
   EnterpriseCardContent,
 } from "@/components/enterprise/enterprise-card";
-import { StatusBadge } from "@/components/enterprise/status-badge";
 import {
   AIIndicator,
   AIInsightCard,
@@ -15,7 +13,10 @@ import {
 import { IntelligenceSummaryPanel } from "@/components/intelligence/intelligence-summary-panel";
 import { WorkspaceStatus } from "@/components/workspace/workspace-status";
 import { EngagementFormWrapper } from "@/components/audit/dashboard/engagement-form-wrapper";
+import { EngagementListItem } from "@/components/audit/dashboard/engagement-list-item";
 import { RecentActivity } from "@/components/audit/dashboard/recent-activity";
+import { getWorkflowReadinessAction } from "@/actions/audit-read-actions";
+import { getNextWorkflowAction } from "@/lib/audit/workflow-next-action";
 import {
   getDashboardSummary,
   getEngagements,
@@ -29,17 +30,28 @@ import {
   AlertCircle,
   CheckCircle2,
   Clock,
-  Users,
-  Building2,
 } from "lucide-react";
 
-function daysSince(dateStr: string): string {
-  const diff = Math.floor(
-    (Date.now() - new Date(dateStr).getTime()) / 86400000,
+async function getEngagementOperatorSummaries(engagementIds: string[]) {
+  const summaries = await Promise.all(
+    engagementIds.map(async (id) => {
+      try {
+        const readiness = await getWorkflowReadinessAction(id);
+        return {
+          id,
+          nextAction: getNextWorkflowAction(
+            id,
+            readiness.context,
+            readiness.workflowStatus.blockingIssues,
+          ),
+          blockingIssues: readiness.workflowStatus.blockingIssues,
+        };
+      } catch {
+        return { id, nextAction: null, blockingIssues: [] as string[] };
+      }
+    }),
   );
-  if (diff === 0) return "اليوم";
-  if (diff === 1) return "منذ يوم";
-  return `منذ ${diff} أيام`;
+  return new Map(summaries.map((s) => [s.id, s]));
 }
 
 type EngagementWithPlatformContext = Awaited<
@@ -133,6 +145,10 @@ export default async function AuditDashboardPage() {
         })
       : [];
   const workspaceMap = new Map(workspaces.map((w) => [w.id, w]));
+
+  const operatorSummaries = await getEngagementOperatorSummaries(
+    engagements.map((eng) => eng.id),
+  );
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -261,7 +277,7 @@ export default async function AuditDashboardPage() {
       <SectionHeader
         eyebrow="المهام"
         title="المهام النشطة"
-        description="إدارة مهام التدقيق وتتبّع التقدّم"
+        description="كل مهمة تعرض الخطوة التالية المطلوبة — بدون مقاييس وهمية"
       />
 
       <EnterpriseCard>
@@ -279,51 +295,30 @@ export default async function AuditDashboardPage() {
           </EnterpriseCardContent>
         ) : (
           <div className="divide-y">
-            {engagements.map((eng) => (
-              <Link
-                key={eng.id}
-                href={`/audit/engagements/${eng.id}`}
-                className="flex items-start gap-4 px-5 py-4 transition-colors hover:bg-muted/50 first:pt-4 last:pb-4"
-              >
-                <div className="flex min-w-0 flex-1 flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-foreground">
-                      {eng.client?.name || "غير معروف"}
-                    </span>
-                    <StatusBadge status={eng.status} size="sm" />
-                    {getEngagementProjectId(eng) &&
-                      projectMap.has(getEngagementProjectId(eng)!) && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-950 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                          <Building2 className="h-2.5 w-2.5" />
-                          {projectMap.get(getEngagementProjectId(eng)!)!.name}
-                        </span>
-                      )}
-                    {getClientWorkspaceId(eng) &&
-                      workspaceMap.has(getClientWorkspaceId(eng)!) && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-green-50 dark:bg-green-950 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800">
-                          {workspaceMap.get(getClientWorkspaceId(eng)!)!.name}
-                        </span>
-                      )}
-                  </div>
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <span>{eng.fiscalPeriod}</span>
-                    <span className="flex items-center gap-1">
-                      <Users className="h-3 w-3" />
-                      {eng.team.length} فريق
-                    </span>
-                    {eng.alerts && eng.alerts.length > 0 && (
-                      <span className="text-status-warning flex items-center gap-1">
-                        <AlertCircle className="h-3 w-3" />
-                        {eng.alerts.length} تنبيه
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="shrink-0 text-xs text-muted-foreground">
-                  {daysSince(eng.updatedAt)}
-                </div>
-              </Link>
-            ))}
+            {engagements.map((eng) => {
+              const summary = operatorSummaries.get(eng.id);
+              const projectId = getEngagementProjectId(eng);
+              const workspaceId = getClientWorkspaceId(eng);
+
+              return (
+                <EngagementListItem
+                  key={eng.id}
+                  engagement={eng}
+                  nextAction={summary?.nextAction ?? null}
+                  blockingIssues={summary?.blockingIssues ?? []}
+                  projectName={
+                    projectId && projectMap.has(projectId)
+                      ? projectMap.get(projectId)!.name
+                      : null
+                  }
+                  workspaceName={
+                    workspaceId && workspaceMap.has(workspaceId)
+                      ? workspaceMap.get(workspaceId)!.name
+                      : null
+                  }
+                />
+              );
+            })}
           </div>
         )}
       </EnterpriseCard>

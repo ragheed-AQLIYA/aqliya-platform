@@ -62,7 +62,7 @@ describe("evaluateTabGate", () => {
     it("is locked without trial balance", () => {
       const result = evaluateTabGate("mapping", emptyContext());
       expect(result.locked).toBe(true);
-      expect(result.reason).toContain("trial balance");
+      expect(result.reason).toContain("ميزان المراجعة");
     });
 
     it("is unlocked with trial balance", () => {
@@ -174,7 +174,7 @@ describe("evaluateTabGate", () => {
         }),
       );
       expect(result.locked).toBe(true);
-      expect(result.reason).toContain("Approval");
+      expect(result.reason).toContain("الاعتماد");
     });
 
     it("is unlocked when approved and governance allows", () => {
@@ -191,7 +191,7 @@ describe("evaluateTabGate", () => {
         fullContext({ isPublished: true }),
       );
       expect(result.locked).toBe(true);
-      expect(result.reason).toContain("already published");
+      expect(result.reason).toContain("نشر");
     });
   });
 
@@ -206,7 +206,7 @@ describe("evaluateTabGate", () => {
         fullContext({ isApproved: true }),
       );
       expect(result.locked).toBe(true);
-      expect(result.reason).toContain("already approved");
+      expect(result.reason).toContain("اعتماد");
     });
 
     it("is unlocked with review activity", () => {
@@ -232,9 +232,9 @@ describe("evaluateTabGate", () => {
 });
 
 describe("evaluateAllTabGates", () => {
-  it("returns results for all 14 tabs", () => {
+  it("returns results for all 15 tabs", () => {
     const results = evaluateAllTabGates(emptyContext());
-    expect(Object.keys(results).length).toBe(14);
+    expect(Object.keys(results).length).toBe(15);
   });
 
   it("locks intermediate tabs in empty context", () => {
@@ -242,6 +242,7 @@ describe("evaluateAllTabGates", () => {
     expect(results.overview.locked).toBe(false);
     expect(results.mapping.locked).toBe(true);
     expect(results.statements.locked).toBe(true);
+    expect(results.exports.locked).toBe(true);
     expect(results.publication.locked).toBe(true);
   });
 

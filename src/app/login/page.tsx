@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -39,6 +40,7 @@ export default function LoginPage() {
         const session = await verifyRes.json();
 
         if (session?.user) {
+          setRedirecting(true);
           const url = new URL(window.location.href);
           const rawCallback = url.searchParams.get("callbackUrl") || "/";
           // Prevent open redirects: accept only relative, same-origin paths.
@@ -96,10 +98,27 @@ export default function LoginPage() {
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "جارٍ تسجيل الدخول..." : "تسجيل الدخول"}
+            {redirecting && (
+              <p className="text-sm text-muted-foreground">
+                جارٍ التوجيه إلى مساحة العمل...
+              </p>
+            )}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading || redirecting}
+            >
+              {redirecting
+                ? "جارٍ التوجيه..."
+                : loading
+                  ? "جارٍ تسجيل الدخول..."
+                  : "تسجيل الدخول"}
             </Button>
           </form>
+          <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
+            بعد تحديث التطبيق أو إعادة نشر Docker: نفّذ تحديثاً قسرياً للصفحة
+            (Ctrl+Shift+R) إذا ظهرت شاشة تحميل بدون نهاية.
+          </p>
         </CardContent>
       </Card>
 

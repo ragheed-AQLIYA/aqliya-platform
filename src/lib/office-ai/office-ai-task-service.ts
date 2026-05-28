@@ -10,7 +10,6 @@ import {
   generateDeterministicOfficeAiOutput,
   type FileWithContent,
 } from "./deterministic-generators";
-import { extractAllTaskFiles } from "./file-extraction-service";
 
 // ─── Module-level audit logger ───
 // All calls share productKey + sourceSystem.
@@ -541,6 +540,7 @@ export async function generateOfficeAiTaskOutput(
   actor?: { id?: string; name?: string },
 ): Promise<OfficeAiOutputResult> {
   // Extract all task files first (safe mode — never blocks)
+  const { extractAllTaskFiles } = await import("./file-extraction-service");
   await extractAllTaskFiles(taskId).catch(() => {});
 
   const task = await prisma.officeAiTask.findUnique({

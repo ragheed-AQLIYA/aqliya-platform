@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
@@ -151,6 +152,12 @@ export default function FindingsPage() {
   );
   const [createSubmitting, setCreateSubmitting] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
+  const [evidenceCount, setEvidenceCount] = useState(0);
+  const [linkedEvidenceCount, setLinkedEvidenceCount] = useState(0);
+  const [showDismissDialog, setShowDismissDialog] = useState(false);
+  const [dismissTarget, setDismissTarget] = useState<Finding | null>(null);
+  const [dismissing, setDismissing] = useState(false);
+  const [dismissError, setDismissError] = useState<string | null>(null);
   const [findPage, setFindPage] = useState(1);
   const [findHasMore, setFindHasMore] = useState(false);
   const [findTotal, setFindTotal] = useState(0);
@@ -190,12 +197,17 @@ export default function FindingsPage() {
     Promise.all([
       getFindingsPaginatedAction(engagementId, 1, FINDINGS_PAGE_SIZE),
       getEngagementAction(engagementId),
-    ]).then(([r, e]) => {
+      getEvidenceAction(engagementId).catch(() => []),
+    ]).then(([r, e, ev]) => {
       setFindings(r.items);
       setFindTotal(r.total);
       setFindHasMore(r.hasMore);
       setFindPage(1);
       setEngagement(e);
+      setEvidenceCount(ev.length);
+      setLinkedEvidenceCount(
+        ev.filter((item) => item.linkedEntities.length > 0).length,
+      );
       setLoading(false);
     });
   }, [engagementId]);
@@ -244,7 +256,7 @@ export default function FindingsPage() {
         impact: "",
       });
     } catch {
-      setCreateError("Failed to create finding");
+      setCreateError("تعذر إنشاء النتيجة. حاول مرة أخرى.");
     } finally {
       setCreateSubmitting(false);
     }
@@ -289,6 +301,37 @@ export default function FindingsPage() {
           </Button>
         </div>
       </div>
+
+      {evidenceCount === 0 && (
+        <Card className="rounded-[24px] border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950">
+          <CardContent className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1 text-sm">
+              <p className="font-semibold text-amber-800 dark:text-amber-300">
+                النتائج تتطلب أدلة داعمة
+              </p>
+              <p className="text-amber-700 dark:text-amber-400">
+                أضف أدلة في تبويب الأدلة قبل تسجيل نتائج قابلة للمراجعة. قبول
+                الدليل لا يُعد اعتماداً — المراجعة البشرية مطلوبة.
+              </p>
+            </div>
+            <Link href={`/audit/engagements/${engagementId}/evidence`}>
+              <Button size="sm" variant="outline">
+                <FileText className="size-4 me-1" />
+                الانتقال إلى الأدلة
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
+
+      {evidenceCount > 0 && linkedEvidenceCount === 0 && (
+        <Card className="rounded-[24px] border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
+          <CardContent className="pt-4 text-sm text-blue-800 dark:text-blue-300">
+            توجد {evidenceCount} أدلة بدون روابط. اربط الأدلة بالنتائج من تبويب
+            الأدلة قبل طلب الاعتماد.
+          </CardContent>
+        </Card>
+      )}
 
       {aiDrafts.length > 0 && (
         <Card className="rounded-[24px] border-violet-200 shadow-sm">
@@ -654,24 +697,11 @@ export default function FindingsPage() {
                                     size="xs"
                                     variant="outline"
                                     className="text-red-600 border-red-300"
-                                    onClick={async (e) => {
+                                    onClick={(e) => {
                                       e.stopPropagation();
-                                      try {
-                                        const r =
-                                          await updateFindingStatusAction(
-                                            finding.id,
-                                            "dismissed",
-                                            engagementId,
-                                          );
-                                        if (r.finding)
-                                          setFindings((prev) =>
-                                            prev.map((f) =>
-                                              f.id === finding.id
-                                                ? { ...f, status: "dismissed" }
-                                                : f,
-                                            ),
-                                          );
-                                      } catch {}
+                                      setDismissTarget(finding);
+                                      setDismissError(null);
+                                      setShowDismissDialog(true);
                                     }}
                                   >
                                     <XCircle className="size-3 me-1" />
@@ -771,6 +801,19 @@ export default function FindingsPage() {
                             {finding.aiSuggested && (
                               <div className="mt-2 rounded border border-purple-200 bg-purple-50 p-2 text-xs text-purple-700">
                                 {t("requiresHumanConfirmation")}
+                              </div>
+                            )}
+                            {(finding.relatedEvidenceIds?.length ?? 0) ===
+                              0 && (
+                              <div className="mt-2 rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-800">
+                                لا توجد أدلة مرتبطة بهذه النتيجة.{" "}
+                                <Link
+                                  href={`/audit/engagements/${engagementId}/evidence`}
+                                  className="font-medium underline underline-offset-2"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  اربط دليلاً من تبويب الأدلة
+                                </Link>
                               </div>
                             )}
                           </div>
@@ -919,6 +962,71 @@ export default function FindingsPage() {
         forwardTrace={traceData.forward}
         backwardTrace={traceData.backward}
       />
+
+      <Dialog open={showDismissDialog} onOpenChange={setShowDismissDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>تأكيد تجاهل النتيجة</DialogTitle>
+            <DialogDescription>
+              سيتم تغيير حالة &ldquo;{dismissTarget?.title}&rdquo; إلى{" "}
+              <strong>متجاهلة</strong>. يُسجَّل الإجراء في سجل التدقيق ولا يُحذف
+              السجل من قاعدة البيانات.
+            </DialogDescription>
+          </DialogHeader>
+          {dismissError && (
+            <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              <AlertTriangle className="size-4 shrink-0" />
+              <span>{dismissError}</span>
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowDismissDialog(false);
+                setDismissTarget(null);
+                setDismissError(null);
+              }}
+              disabled={dismissing}
+            >
+              {t("cancel")}
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={dismissing || !dismissTarget}
+              onClick={async () => {
+                if (!dismissTarget) return;
+                setDismissing(true);
+                setDismissError(null);
+                try {
+                  const r = await updateFindingStatusAction(
+                    dismissTarget.id,
+                    "dismissed",
+                    engagementId,
+                  );
+                  if (r.finding) {
+                    setFindings((prev) =>
+                      prev.map((f) =>
+                        f.id === dismissTarget.id
+                          ? { ...f, status: "dismissed" }
+                          : f,
+                      ),
+                    );
+                  }
+                  setShowDismissDialog(false);
+                  setDismissTarget(null);
+                } catch {
+                  setDismissError("تعذر تجاهل النتيجة. حاول مرة أخرى.");
+                } finally {
+                  setDismissing(false);
+                }
+              }}
+            >
+              {dismissing ? "جارٍ التجاهل..." : t("dismissFinding")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent className="max-w-lg">

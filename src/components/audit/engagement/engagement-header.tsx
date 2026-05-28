@@ -1,31 +1,7 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import type { Engagement, WorkflowStatus } from "@/types/audit";
-
-const statusLabels: Record<
-  string,
-  {
-    label: string;
-    variant:
-      | "default"
-      | "secondary"
-      | "outline"
-      | "destructive"
-      | "ghost"
-      | "link";
-  }
-> = {
-  draft: { label: "مسودة", variant: "secondary" },
-  setup: { label: "إعداد", variant: "secondary" },
-  in_progress: { label: "قيد التنفيذ", variant: "default" },
-  under_review: { label: "قيد المراجعة", variant: "outline" },
-  awaiting_client: { label: "بانتظار العميل", variant: "outline" },
-  ready_for_approval: { label: "جاهز للاعتماد", variant: "default" },
-  approved: { label: "معتمد", variant: "default" },
-  published: { label: "منشور", variant: "default" },
-  archived: { label: "مؤرشف", variant: "ghost" },
-};
+import { AuditEngagementStatusBadge } from "@/components/audit/engagement/audit-engagement-status-badge";
 
 const typeLabels: Record<string, string> = {
   full_audit: "تدقيق كامل",
@@ -42,10 +18,7 @@ export function EngagementHeader({
   engagement,
   status,
 }: EngagementHeaderProps) {
-  const statusConfig = statusLabels[engagement.status] || {
-    label: engagement.status,
-    variant: "secondary" as const,
-  };
+  const blockingIssues = status.blockingIssues ?? [];
 
   return (
     <div
@@ -58,7 +31,11 @@ export function EngagementHeader({
             <h1 className="text-2xl font-black tracking-tight">
               {engagement.client?.name || "عميل غير معروف"}
             </h1>
-            <Badge variant={statusConfig.variant}>{statusConfig.label}</Badge>
+            <AuditEngagementStatusBadge
+              engagementStatus={engagement.status}
+              blockingIssues={blockingIssues}
+              size="md"
+            />
           </div>
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span>

@@ -49,7 +49,13 @@ import {
   getApprovalRecordsAction,
   getApprovalStatusAction,
   getEngagementAction,
+  getWorkflowReadinessAction,
 } from "@/actions/audit-read-actions";
+import {
+  getNextWorkflowAction,
+  getApprovalStatusLabel,
+} from "@/lib/audit/workflow-next-action";
+import Link from "next/link";
 
 const statusColors: Record<string, string> = {
   not_ready: "bg-gray-100 text-gray-600",
@@ -90,13 +96,17 @@ export default function ApprovalPage() {
     forward: TraceabilityNode[];
     backward: TraceabilityNode[];
   }>({ forward: [], backward: [] });
+  const [nextActionHref, setNextActionHref] = useState<string | null>(null);
+  const [nextActionLabel, setNextActionLabel] = useState<string | null>(null);
+  const [nextActionReason, setNextActionReason] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
       getApprovalRecordsAction(engagementId),
       getApprovalStatusAction(engagementId),
       getEngagementAction(engagementId),
-    ]).then(([r, a, e]) => {
+      getWorkflowReadinessAction(engagementId).catch(() => null),
+    ]).then(([r, a, e, readiness]) => {
       setRecords(r);
       setApprovalInfo({
         status: a.status,
@@ -104,6 +114,18 @@ export default function ApprovalPage() {
         checklist: a.checklist,
       });
       setEngagement(e);
+      if (readiness && a.status !== "approved") {
+        const next = getNextWorkflowAction(
+          engagementId,
+          readiness.context,
+          readiness.workflowStatus.blockingIssues,
+        );
+        if (!next.href.endsWith("/approval")) {
+          setNextActionHref(next.href);
+          setNextActionLabel(next.label);
+          setNextActionReason(next.reason ?? null);
+        }
+      }
       setLoading(false);
     });
   }, [engagementId]);
@@ -130,6 +152,44 @@ export default function ApprovalPage() {
         </div>
       </div>
 
+      <Card className="rounded-[24px] border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
+        <CardContent className="flex gap-3 pt-4">
+          <Shield className="mt-0.5 h-5 w-5 shrink-0 text-blue-600 dark:text-blue-400" />
+          <div className="space-y-1 text-sm">
+            <p className="font-semibold text-blue-800 dark:text-blue-300">
+              قرار بشري — لا اعتماد تلقائي
+            </p>
+            <p className="text-blue-700 dark:text-blue-400">
+              الذكاء الاصطناعي يساعد فقط. الاعتماد النهائي يتطلب مراجعاً/شريكاً
+              بشرياً مع تسجيل في سجل التدقيق.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {!canApprove && !isApproved && nextActionHref && nextActionLabel && (
+        <Card className="rounded-[24px] border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950">
+          <CardContent className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
+                المتطلب التالي قبل الاعتماد: {nextActionLabel}
+              </p>
+              {nextActionReason && (
+                <p className="text-xs text-amber-700 dark:text-amber-400">
+                  {nextActionReason}
+                </p>
+              )}
+            </div>
+            <Link href={nextActionHref}>
+              <Button size="sm" variant="outline">
+                {nextActionLabel}
+                <ArrowRight className="mr-1 h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
+
       <Card className="rounded-[24px] border-border/70 shadow-sm">
         <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
@@ -146,7 +206,9 @@ export default function ApprovalPage() {
                     ? t("statusApproved")
                     : approvalInfo.status === "blocked"
                       ? t("statusBlocked")
-                      : t("statusReady")}
+                      : approvalInfo.status === "ready"
+                        ? t("statusReady")
+                        : getApprovalStatusLabel(approvalInfo.status)}
             </Badge>
           </div>
           <div className="flex items-center gap-2">
@@ -225,11 +287,19 @@ export default function ApprovalPage() {
               <ul className="text-xs text-red-600 space-y-1">
                 {approvalInfo.blockingIssues.map((issue, i) => (
                   <li key={i} className="flex items-center gap-1">
-                    <XCircle className="size-3" />
-                    {issue}
+                    <XCircle className="size-3 shrink-0" />
+                    <span>{issue}</span>
                   </li>
                 ))}
               </ul>
+              {nextActionHref && nextActionLabel && (
+                <Link
+                  href={nextActionHref}
+                  className="mt-2 inline-flex text-xs font-medium text-red-700 underline underline-offset-2"
+                >
+                  الانتقال إلى: {nextActionLabel}
+                </Link>
+              )}
             </div>
           )}
         </CardContent>

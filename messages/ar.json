@@ -761,7 +761,8 @@
     },
     "engagement": {
       "errors": {
-        "engagementNotLinked": "الارتباط التدقيقي غير مرتبط بمشروع",
+        "engagementNotLinked": "هذا التكليف غير مربوط بمشروع منصة.",
+        "engagementNotLinkedHint": "مسموح في البذرة والبيلوت الداخلي — لا يؤثر على سير عمل التدقيق.",
         "workspaceNotFound": "مساحة عمل المشروع غير موجودة",
         "platformOrgNotFound": "المؤسسة المنصة لمساحة العمل غير موجودة",
         "unknown": "خطأ غير معروف"

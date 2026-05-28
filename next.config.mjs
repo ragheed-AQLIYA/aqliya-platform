@@ -21,6 +21,7 @@ const bundleAnalyzer = withBundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   async redirects() {
     return [
       {
@@ -85,6 +86,8 @@ const nextConfig = {
     "@prisma/adapter-pg",
     "pg",
     "pdfkit",
+    "pdf-parse",
+    "pdfjs-dist",
   ],
 
   images: {

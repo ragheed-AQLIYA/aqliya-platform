@@ -394,20 +394,27 @@ export async function getApprovalStatus(decisionId: string) {
   try {
     await requireDecisionAccess(decisionId, "VIEWER");
 
-    const decision = await prisma.decision.findUnique({
-      where: { id: decisionId },
-      include: {
-        approvals: {
-          include: { approver: true, recommendation: true },
-          orderBy: { createdAt: "desc" },
+    const [decision, evidenceStats] = await Promise.all([
+      prisma.decision.findUnique({
+        where: { id: decisionId },
+        include: {
+          approvals: {
+            include: { approver: true, recommendation: true },
+            orderBy: { createdAt: "desc" },
+          },
+          recommendation: true,
+          auditLogs: {
+            include: { user: true },
+            orderBy: { createdAt: "desc" },
+          },
         },
-        recommendation: true,
-        auditLogs: {
-          include: { user: true },
-          orderBy: { createdAt: "desc" },
-        },
-      },
-    });
+      }),
+      prisma.decisionEvidence.aggregate({
+        where: { decisionId },
+        _count: { _all: true },
+        _max: { createdAt: true },
+      }),
+    ]);
 
     if (!decision) {
       return { success: false, error: "Decision not found" };
@@ -508,12 +515,18 @@ export async function getApprovalStatus(decisionId: string) {
           createdAt: log.createdAt,
           details: log.after ? JSON.parse(log.after) : null,
         })),
+        evidenceCount: evidenceStats._count._all,
+        latestEvidenceAt: evidenceStats._max.createdAt,
         hasRecommendation: !!decision.recommendation,
         recommendationSummary: decision.recommendation
           ? {
               id: decision.recommendation.id,
               action: decision.recommendation.recommendedAction,
               rationale: decision.recommendation.rationale,
+              humanReviewRequired: decision.recommendation.humanReviewRequired,
+              isClientVisible: decision.recommendation.isClientVisible,
+              publishedFromSnapshot:
+                decision.recommendation.publishedFromSnapshot,
               updatedAt: decision.recommendation.updatedAt,
             }
           : null,
