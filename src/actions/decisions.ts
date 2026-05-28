@@ -1077,6 +1077,7 @@ export async function getDashboardMetrics() {
         owner: true,
         recommendation: true,
         approvals: { include: { approver: true } },
+        evidence: { select: { id: true } },
         objectives: true,
         constraints: true,
         alternatives: true,
@@ -1170,6 +1171,32 @@ export async function getDashboardMetrics() {
           )
         : 0;
 
+    const evidenceBackedCount = decisions.filter(
+      (d) => d.evidence.length > 0,
+    ).length;
+    const missingEvidenceCount = totalDecisions - evidenceBackedCount;
+    const inReviewWithoutEvidence = decisions.filter(
+      (d) => d.status === "IN_REVIEW" && d.evidence.length === 0,
+    ).length;
+    const humanReviewRequiredCount = decisions.filter(
+      (d) => d.recommendation?.humanReviewRequired,
+    ).length;
+    const readyForReviewCount = decisions.filter(
+      (d) =>
+        d.status === "DRAFT" && !!d.recommendation && d.evidence.length > 0,
+    ).length;
+    const publishedWithoutSnapshotCount = decisions.filter(
+      (d) =>
+        d.recommendation?.isClientVisible &&
+        !d.recommendation.publishedFromSnapshot,
+    ).length;
+    const highPriorityPendingApprovalCount = decisions.filter(
+      (d) =>
+        !!d.recommendation &&
+        !d.approvals.some((a) => a.status === "APPROVED") &&
+        ["HIGH", "CRITICAL"].includes(d.priority || ""),
+    ).length;
+
     const recentDecisions = decisions.slice(0, 5).map((d) => ({
       id: d.id,
       title: d.title,
@@ -1179,6 +1206,8 @@ export async function getDashboardMetrics() {
       createdAt: d.createdAt,
       hasRecommendation: !!d.recommendation,
       hasApproval: d.approvals.some((a) => a.status === "APPROVED"),
+      hasEvidence: d.evidence.length > 0,
+      humanReviewRequired: Boolean(d.recommendation?.humanReviewRequired),
       stageCount: [
         !!d.title,
         d.objectives.length > 0,
@@ -1251,6 +1280,15 @@ export async function getDashboardMetrics() {
         draftCount,
         inProgressCount,
         avgCompletion,
+        governanceMetrics: {
+          evidenceBackedCount,
+          missingEvidenceCount,
+          inReviewWithoutEvidence,
+          humanReviewRequiredCount,
+          readyForReviewCount,
+          publishedWithoutSnapshotCount,
+          highPriorityPendingApprovalCount,
+        },
         recentDecisions,
         bottlenecks,
         outcomeMetrics,

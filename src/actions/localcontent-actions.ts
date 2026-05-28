@@ -686,16 +686,33 @@ export async function deleteLocalContentEvidenceAction(
 ): Promise<ActionResult<void>> {
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_evidence");
-    await deleteEvidence(projectId, evidenceId, {
+    const deletedEvidence = await deleteEvidence(projectId, evidenceId, {
       id: user.id,
       name: user.name ?? "",
     });
+
+    let storageDeleted: boolean | null = null;
+    if (deletedEvidence?.storageKey) {
+      try {
+        storageDeleted = await getStorageProvider().delete(
+          deletedEvidence.storageKey,
+        );
+      } catch {
+        storageDeleted = false;
+      }
+    }
+
     await logToPlatform({
       projectId,
       user,
       action: "localcontent.evidence.deleted",
       targetType: "LocalContentEvidence",
       targetId: evidenceId,
+      metadata: {
+        filename: deletedEvidence?.filename,
+        storageCleanupAttempted: Boolean(deletedEvidence?.storageKey),
+        storageDeleted,
+      },
     });
     revalidateLocalContentPaths(projectId, ["evidence"]);
   });

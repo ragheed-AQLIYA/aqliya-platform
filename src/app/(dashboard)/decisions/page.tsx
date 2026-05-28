@@ -23,6 +23,14 @@ import { RecentEntitiesPanel } from "@/components/workspace/recent-entities";
 import { WorkspaceStatus } from "@/components/workspace/workspace-status";
 import { Brain, FileText, Clock, CheckCircle2 } from "lucide-react";
 
+function getDecisionEvidenceStrength(ratio: number) {
+  if (ratio === 0) return "none" as const;
+  if (ratio < 0.35) return "weak" as const;
+  if (ratio < 0.7) return "partial" as const;
+  if (ratio < 0.9) return "strong" as const;
+  return "complete" as const;
+}
+
 export const dynamic = "force-dynamic";
 
 type DecisionListItem = {
@@ -69,6 +77,27 @@ export default async function DecisionsPage() {
   const decisions =
     decisionsResult.success && decisionsResult.data ? decisionsResult.data : [];
   const metrics = metricsResult.success ? metricsResult.data : null;
+  const evidenceRatio =
+    metrics && metrics.totalDecisions > 0
+      ? metrics.governanceMetrics.evidenceBackedCount / metrics.totalDecisions
+      : 0;
+  const readinessState = !metrics
+    ? "not-ready"
+    : metrics.governanceMetrics.inReviewWithoutEvidence > 0
+      ? "blocked"
+      : metrics.pendingApproval > 0
+        ? "needs-review"
+        : metrics.approvedCount > 0
+          ? "approved"
+          : "not-ready";
+  const riskLevel = !metrics
+    ? "medium"
+    : metrics.governanceMetrics.highPriorityPendingApprovalCount > 0 ||
+        metrics.governanceMetrics.inReviewWithoutEvidence > 0
+      ? "high"
+      : metrics.pendingApproval > 0
+        ? "medium"
+        : "low";
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -138,27 +167,35 @@ export default async function DecisionsPage() {
       <IntelligenceSummaryPanel
         title="ذكاء القرارات"
         module="decision"
-        signals={[
-          { type: "score", label: "جاهزية القرار", value: 68 },
-          { type: "risk", label: "مخاطر الخيارات", value: "medium" },
-          {
-            type: "confidence",
-            label: "جودة الأدلة",
-            value: "high",
-            confidence: 0.75,
-          },
-          {
-            type: "readiness",
-            label: "توافق أصحاب المصلحة",
-            value: "needs-review",
-          },
-        ]}
+        signals={
+          metrics
+            ? [
+                {
+                  type: "score",
+                  label: "جاهزية القرار",
+                  value: metrics.avgCompletion,
+                },
+                { type: "risk", label: "مخاطر الاعتماد", value: riskLevel },
+                {
+                  type: "evidence",
+                  label: "قوة الأدلة",
+                  value: getDecisionEvidenceStrength(evidenceRatio),
+                },
+                {
+                  type: "readiness",
+                  label: "جاهزية التشغيل",
+                  value: readinessState,
+                },
+              ]
+            : []
+        }
       />
 
       {/* AI Insight */}
       <AIInsightCard confidence={0.78}>
-        قراران جاهزان للاعتماد. قرار واحد يتطلب تحليل سيناريوهات إضافي. يُوصى
-        بمراجعة تحليل المخاطر للقرارات المعلّقة قبل المتابعة.
+        {metrics
+          ? `يوجد ${metrics.pendingApproval} قرارًا بانتظار الاعتماد، و${metrics.governanceMetrics.inReviewWithoutEvidence} قرارًا قيد المراجعة دون أدلة داعمة، و${metrics.governanceMetrics.readyForReviewCount} قرارًا يمكن تجهيزه للإرسال للمراجعة بعد استكمال الخطوة التشغيلية التالية.`
+          : "تحميل مؤشرات التشغيل الحالية..."}
       </AIInsightCard>
 
       {/* All Decisions */}

@@ -4,13 +4,16 @@ import {
   listLocalContentSuppliersAction,
   createLocalContentSupplierAction,
   updateLocalContentSupplierAction,
+  deleteLocalContentSupplierAction,
 } from "@/actions/localcontent-actions";
 import {
   DashboardLayout,
   PageHeader,
   EmptyState,
   DevPhaseBadge,
+  InlineNotice,
 } from "@/components/local-content/local-content-shell";
+import { LocalContentDeleteButton } from "@/components/local-content/local-content-delete-button";
 import { SupplierForm } from "@/components/local-content/supplier-form";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -65,7 +68,15 @@ export default async function SuppliersPage({
         createAction={createLocalContentSupplierAction}
       />
 
-      {suppliers.length === 0 ? (
+      {!suppliersRes.ok ? (
+        <InlineNotice
+          variant="error"
+          title="تعذر تحميل الموردين"
+          description={
+            suppliersRes.error || "تعذر تحميل قائمة الموردين لهذا المشروع."
+          }
+        />
+      ) : suppliers.length === 0 ? (
         <EmptyState
           title="لا يوجد موردين"
           description="أضف المورد الأول للمشروع."
@@ -116,7 +127,7 @@ export default async function SuppliersPage({
                   )}
                 </div>
               )}
-              <div className="mt-3">
+              <div className="mt-3 flex flex-wrap gap-2">
                 <SupplierForm
                   projectId={projectId}
                   supplierId={s.id}
@@ -133,6 +144,13 @@ export default async function SuppliersPage({
                   title={`تحديث بيانات المورد: ${s.name}`}
                   submitLabel="حفظ التعديلات"
                   triggerVariant="outline"
+                />
+                <LocalContentDeleteButton
+                  projectId={projectId}
+                  entityId={s.id}
+                  entityLabel={`المورد ${s.name}`}
+                  action={deleteLocalContentSupplierAction}
+                  confirmText={`سيتم حذف المورد ${s.name} وكل سجلات الإنفاق التابعة له من هذا المشروع. لا يمكن التراجع عن هذا الإجراء.`}
                 />
               </div>
             </Card>

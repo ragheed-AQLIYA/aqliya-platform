@@ -4,19 +4,22 @@ import {
   listLocalContentSpendRecordsAction,
   listLocalContentSuppliersAction,
   createLocalContentSpendRecordAction,
+  deleteLocalContentSpendRecordAction,
 } from "@/actions/localcontent-actions";
 import {
   DashboardLayout,
   PageHeader,
   EmptyState,
   DevPhaseBadge,
+  InlineNotice,
 } from "@/components/local-content/local-content-shell";
+import { LocalContentDeleteButton } from "@/components/local-content/local-content-delete-button";
 import { SpendForm } from "@/components/local-content/spend-form";
 import { CsvImportForm } from "@/components/local-content/csv-import-form";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { ArrowLeft, FileText } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -43,8 +46,12 @@ export default async function SpendPage({
   ]);
   const spendRecords = spendRes.ok ? spendRes.data : [];
   const suppliers = suppliersRes.ok ? suppliersRes.data : [];
-  const supplierMap = new Map(suppliers.map((s) => [s.id, s]));
   const totalSpend = spendRecords.reduce((sum, s) => sum + s.amount, 0);
+  const loadError = !suppliersRes.ok
+    ? suppliersRes.error || "تعذر تحميل الموردين لهذا المشروع."
+    : !spendRes.ok
+      ? spendRes.error || "تعذر تحميل سجلات الإنفاق لهذا المشروع."
+      : null;
 
   return (
     <DashboardLayout>
@@ -60,21 +67,39 @@ export default async function SpendPage({
       />
       <DevPhaseBadge />
 
-      <div className="flex items-center gap-2 mb-4">
-        <SpendForm
-          projectId={projectId}
-          suppliers={suppliers.map((s) => ({ id: s.id, name: s.name }))}
-          createAction={createLocalContentSpendRecordAction}
+      {loadError ? (
+        <InlineNotice
+          variant="error"
+          title="تعذر تحميل قسم الإنفاق"
+          description={loadError}
         />
+      ) : null}
+
+      {!loadError && suppliers.length === 0 ? (
+        <InlineNotice
+          variant="warning"
+          title="الإدخال اليدوي يتطلب موردًا واحدًا على الأقل"
+          description="أضف موردًا أولاً قبل إنشاء سجل إنفاق يدوي، أو استخدم استيراد CSV إذا كانت لديك بيانات جاهزة وسيقوم النظام بإنشاء الموردين المفقودين أثناء الاستيراد."
+        />
+      ) : null}
+
+      <div className="flex items-center gap-2 mb-4">
+        {suppliers.length > 0 ? (
+          <SpendForm
+            projectId={projectId}
+            suppliers={suppliers.map((s) => ({ id: s.id, name: s.name }))}
+            createAction={createLocalContentSpendRecordAction}
+          />
+        ) : null}
         <CsvImportForm projectId={projectId} />
       </div>
 
-      {spendRecords.length === 0 ? (
+      {!loadError && spendRecords.length === 0 ? (
         <EmptyState
           title="لا توجد سجلات إنفاق"
           description="أضف أول سجل إنفاق للمشروع."
         />
-      ) : (
+      ) : !loadError ? (
         <div className="space-y-1">
           {spendRecords.map((s) => {
             const supplier = s.supplier;
@@ -104,11 +129,20 @@ export default async function SpendPage({
                     {s.description}
                   </p>
                 )}
+                <div className="mt-3 flex justify-end">
+                  <LocalContentDeleteButton
+                    projectId={projectId}
+                    entityId={s.id}
+                    entityLabel={`سجل الإنفاق ${supplier?.name || s.id}`}
+                    action={deleteLocalContentSpendRecordAction}
+                    confirmText={`سيتم حذف سجل الإنفاق الخاص بـ ${supplier?.name || "هذا المورد"} للفترة ${s.period}. سيبقى أي تصنيف أو دليل مرتبط كسجل غير مربوط داخل المشروع.`}
+                  />
+                </div>
               </Card>
             );
           })}
         </div>
-      )}
+      ) : null}
     </DashboardLayout>
   );
 }

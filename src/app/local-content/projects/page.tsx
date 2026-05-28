@@ -5,6 +5,7 @@ import {
   ProjectList,
   EmptyState,
   DevPhaseBadge,
+  InlineNotice,
 } from "@/components/local-content/local-content-shell";
 import { ProjectCreateForm } from "@/components/local-content/project-create-form";
 
@@ -21,15 +22,25 @@ export default async function ProjectsPage() {
         subtitle="مشاريع تقييم المحتوى المحلي"
       />
       <DevPhaseBadge />
+
+      {!res.ok ? (
+        <InlineNotice
+          variant="error"
+          title="تعذر تحميل المشاريع"
+          description={res.error || "حدث خطأ أثناء تحميل قائمة المشاريع."}
+        />
+      ) : null}
+
       <ProjectCreateForm />
-      {projects.length === 0 ? (
+
+      {res.ok && projects.length === 0 ? (
         <EmptyState
           title="لا توجد مشاريع"
           description="لم يتم إنشاء أي مشروع تقييم محتوى محلي بعد."
         />
-      ) : (
+      ) : res.ok ? (
         <ProjectList projects={projects} />
-      )}
+      ) : null}
     </DashboardLayout>
   );
 }

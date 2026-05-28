@@ -4,13 +4,16 @@ import {
   listLocalContentFindingsAction,
   createLocalContentFindingAction,
   updateLocalContentFindingAction,
+  deleteLocalContentFindingAction,
 } from "@/actions/localcontent-actions";
 import {
   DashboardLayout,
   PageHeader,
   EmptyState,
   DevPhaseBadge,
+  InlineNotice,
 } from "@/components/local-content/local-content-shell";
+import { LocalContentDeleteButton } from "@/components/local-content/local-content-delete-button";
 import { FindingForm } from "@/components/local-content/finding-form";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -81,7 +84,15 @@ export default async function FindingsPage({
         createAction={createLocalContentFindingAction}
       />
 
-      {findings.length === 0 ? (
+      {!findingsRes.ok ? (
+        <InlineNotice
+          variant="error"
+          title="تعذر تحميل النتائج"
+          description={
+            findingsRes.error || "تعذر تحميل النتائج والفجوات لهذا المشروع."
+          }
+        />
+      ) : findings.length === 0 ? (
         <EmptyState
           title="لا توجد نتائج"
           description="لم يتم تسجيل أي نتيجة أو فجوة حتى الآن."
@@ -131,7 +142,7 @@ export default async function FindingsPage({
                   {new Date(f.createdAt).toLocaleDateString("ar-SA")}
                 </div>
               )}
-              <div className="mt-3">
+              <div className="mt-3 flex flex-wrap gap-2">
                 <FindingForm
                   projectId={projectId}
                   findingId={f.id}
@@ -147,6 +158,13 @@ export default async function FindingsPage({
                   title={`تحديث النتيجة: ${f.title}`}
                   submitLabel="حفظ التعديلات"
                   triggerVariant="outline"
+                />
+                <LocalContentDeleteButton
+                  projectId={projectId}
+                  entityId={f.id}
+                  entityLabel={`النتيجة ${f.title}`}
+                  action={deleteLocalContentFindingAction}
+                  confirmText={`سيتم حذف النتيجة ${f.title} من هذا المشروع. ستبقى أي أدلة مرتبطة محفوظة ولكن بدون ربط بهذه النتيجة.`}
                 />
               </div>
             </Card>

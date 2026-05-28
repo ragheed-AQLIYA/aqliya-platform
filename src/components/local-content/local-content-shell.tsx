@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Building2, TrendingUp } from "lucide-react";
+import { AlertTriangle, Building2, Info, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -94,6 +93,50 @@ export function EmptyState({
       <Building2 className="mx-auto h-12 w-12 text-muted-foreground/40 mb-4" />
       <h3 className="text-base font-semibold">{title}</h3>
       <p className="text-sm text-muted-foreground mt-1">{description}</p>
+    </div>
+  );
+}
+
+const NOTICE_STYLES = {
+  info: {
+    wrapper:
+      "border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-200",
+    icon: Info,
+  },
+  warning: {
+    wrapper:
+      "border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200",
+    icon: AlertTriangle,
+  },
+  error: {
+    wrapper:
+      "border-red-200 bg-red-50 text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-200",
+    icon: AlertTriangle,
+  },
+} as const;
+
+export function InlineNotice({
+  title,
+  description,
+  variant = "info",
+}: {
+  title: string;
+  description: string;
+  variant?: keyof typeof NOTICE_STYLES;
+}) {
+  const Icon = NOTICE_STYLES[variant].icon;
+
+  return (
+    <div
+      className={`mb-4 rounded-lg border p-3 text-sm ${NOTICE_STYLES[variant].wrapper}`}
+    >
+      <div className="flex items-start gap-2">
+        <Icon className="mt-0.5 h-4 w-4 shrink-0" />
+        <div>
+          <p className="font-medium">{title}</p>
+          <p className="mt-1 text-xs/6 opacity-90">{description}</p>
+        </div>
+      </div>
     </div>
   );
 }

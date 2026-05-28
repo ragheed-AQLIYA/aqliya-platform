@@ -1,8 +1,9 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser, requireDecisionAccess } from "@/lib/auth";
+import { requireDecisionAccess } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
+import { getStorageProvider } from "@/lib/platform/storage";
 import { createHash } from "crypto";
 
 const ALLOWED_FILE_TYPES = [
@@ -19,6 +20,27 @@ const ALLOWED_FILE_TYPES = [
 ];
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 const MAX_EVIDENCE_PER_DECISION = 50;
+
+const MIME_TYPES: Record<string, string> = {
+  pdf: "application/pdf",
+  xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  xls: "application/vnd.ms-excel",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  doc: "application/msword",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  csv: "text/csv",
+  txt: "text/plain",
+};
+
+function sanitizeStoredFilename(name: string): string {
+  return name.replace(/[^a-zA-Z0-9._\u0600-\u06FF-]/g, "_");
+}
+
+function mimeTypeForFileType(fileType: string): string {
+  return MIME_TYPES[fileType.toLowerCase()] ?? "application/octet-stream";
+}
 
 export async function getDecisionEvidenceAction(decisionId: string) {
   try {
@@ -41,10 +63,11 @@ export async function uploadDecisionEvidenceAction(params: {
   description?: string;
 }) {
   try {
-    const user = await getCurrentUser();
-    await requireDecisionAccess(params.decisionId, "OPERATOR");
+    const { user } = await requireDecisionAccess(params.decisionId, "OPERATOR");
 
-    if (!ALLOWED_FILE_TYPES.includes(params.fileType.toLowerCase())) {
+    const normalizedFileType = params.fileType.toLowerCase();
+
+    if (!ALLOWED_FILE_TYPES.includes(normalizedFileType)) {
       return {
         success: false,
         error: `نوع الملف غير مدعوم: ${params.fileType}. الأنواع المسموحة: ${ALLOWED_FILE_TYPES.join(", ")}`,
@@ -70,23 +93,37 @@ export async function uploadDecisionEvidenceAction(params: {
     }
 
     const fileHash = createHash("sha256").update(content).digest("hex");
+    const storageKey = `decisions/${params.decisionId}/evidence/${Date.now()}-${sanitizeStoredFilename(params.filename)}`;
+    const provider = getStorageProvider();
 
-    const evidence = await prisma.decisionEvidence.create({
-      data: {
-        decisionId: params.decisionId,
-        organizationId: user.organizationId,
-        filename: params.filename,
-        fileType: params.fileType.toLowerCase(),
-        fileSize: content.length,
-        fileHash,
-        storageKey: `decisions/${params.decisionId}/evidence/${Date.now()}-${params.filename}`,
-        uploadedById: user.id,
-        description: params.description || null,
-        metadata: {
-          uploadedAt: new Date().toISOString(),
-        },
-      },
+    await provider.store(storageKey, {
+      filename: params.filename,
+      mimeType: mimeTypeForFileType(normalizedFileType),
+      content,
     });
+
+    let evidence;
+    try {
+      evidence = await prisma.decisionEvidence.create({
+        data: {
+          decisionId: params.decisionId,
+          organizationId: user.organizationId,
+          filename: params.filename,
+          fileType: normalizedFileType,
+          fileSize: content.length,
+          fileHash,
+          storageKey,
+          uploadedById: user.id,
+          description: params.description || null,
+          metadata: {
+            uploadedAt: new Date().toISOString(),
+          },
+        },
+      });
+    } catch (error) {
+      await provider.delete(storageKey);
+      throw error;
+    }
 
     const alog = auditLogger({
       productKey: Product.DECISION_OS,
@@ -110,9 +147,10 @@ export async function uploadDecisionEvidenceAction(params: {
         sourceId: evidence.id,
         metadata: {
           decisionId: params.decisionId,
-          fileType: params.fileType,
+          fileType: normalizedFileType,
           fileSize: content.length,
           fileHash: fileHash.substring(0, 12),
+          storageKey,
         },
       },
     );
@@ -138,12 +176,23 @@ export async function deleteDecisionEvidenceAction(evidenceId: string) {
       return { success: false, error: "المستند غير موجود" };
     }
 
-    const user = await getCurrentUser();
-    await requireDecisionAccess(evidence.decisionId, "OPERATOR");
+    const { user } = await requireDecisionAccess(
+      evidence.decisionId,
+      "OPERATOR",
+    );
 
     await prisma.decisionEvidence.delete({
       where: { id: evidenceId },
     });
+
+    let storageDeleted: boolean | null = null;
+    if (evidence.storageKey) {
+      try {
+        storageDeleted = await getStorageProvider().delete(evidence.storageKey);
+      } catch {
+        storageDeleted = false;
+      }
+    }
 
     const alog = auditLogger({
       productKey: Product.DECISION_OS,
@@ -168,6 +217,8 @@ export async function deleteDecisionEvidenceAction(evidenceId: string) {
           decisionId: evidence.decisionId,
           filename: evidence.filename,
           fileType: evidence.fileType,
+          storageCleanupAttempted: Boolean(evidence.storageKey),
+          storageDeleted,
         },
       },
     );

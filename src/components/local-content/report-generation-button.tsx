@@ -12,6 +12,7 @@ interface ReportGenerationButtonProps {
   type: string;
   label: string;
   icon: React.ReactNode;
+  format: "pdf" | "xlsx";
 }
 
 export function ReportGenerationButton({
@@ -19,6 +20,7 @@ export function ReportGenerationButton({
   type,
   label,
   icon,
+  format,
 }: ReportGenerationButtonProps) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
@@ -31,7 +33,7 @@ export function ReportGenerationButton({
       const result = await generateLocalContentReportAction(
         projectId,
         type,
-        "pdf",
+        format,
       );
       if (!result.ok) {
         setError(result.error || "فشل في توليد التقرير");
@@ -61,7 +63,7 @@ export function ReportGenerationButton({
             {icon}
             <span className="text-sm">{label}</span>
             <Badge variant="outline" className="text-[9px]">
-              توليد
+              {format.toUpperCase()}
             </Badge>
           </>
         )}

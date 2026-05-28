@@ -1,16 +1,14 @@
-import {
-  listLocalContentProjectsAction,
-  getLocalContentScoreAction,
-} from "@/actions/localcontent-actions";
+import { listLocalContentProjectsAction } from "@/actions/localcontent-actions";
 import {
   DashboardLayout,
   PageHeader,
   ProjectList,
   EmptyState,
   DevPhaseBadge,
+  InlineNotice,
 } from "@/components/local-content/local-content-shell";
 import { Card, CardContent } from "@/components/ui/card";
-import { FileText, TrendingUp, Users, ShieldCheck } from "lucide-react";
+import { FileText, ShieldCheck } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +23,16 @@ export default async function LocalContentDashboardPage() {
         subtitle="نظام المحتوى المحلي — المنتج الاستراتيجي الثاني"
       />
       <DevPhaseBadge />
+
+      {!res.ok ? (
+        <InlineNotice
+          variant="error"
+          title="تعذر تحميل ملخص المشاريع"
+          description={
+            res.error || "حدث خطأ أثناء تحميل مشاريع المحتوى المحلي."
+          }
+        />
+      ) : null}
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         {[
@@ -61,14 +69,14 @@ export default async function LocalContentDashboardPage() {
         ))}
       </div>
 
-      {projects.length === 0 ? (
+      {res.ok && projects.length === 0 ? (
         <EmptyState
           title="لا توجد مشاريع"
           description="لم يتم إنشاء أي مشروع تقييم محتوى محلي بعد."
         />
-      ) : (
+      ) : res.ok ? (
         <ProjectList projects={projects} />
-      )}
+      ) : null}
 
       <div className="mt-8 p-4 rounded-lg border bg-muted/50 text-sm text-muted-foreground">
         جميع صفحات المشروع متاحة حالياً: الموردين، الإنفاق، الأدلة، التصنيف،

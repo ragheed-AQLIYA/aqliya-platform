@@ -3,7 +3,7 @@ import {
   getLocalContentProjectAction,
   listLocalContentEvidenceAction,
   createLocalContentEvidenceAction,
-  updateLocalContentEvidenceStatusAction,
+  deleteLocalContentEvidenceAction,
   listLocalContentSuppliersAction,
 } from "@/actions/localcontent-actions";
 import {
@@ -11,29 +11,21 @@ import {
   PageHeader,
   EmptyState,
   DevPhaseBadge,
+  InlineNotice,
 } from "@/components/local-content/local-content-shell";
 import {
   EvidenceForm,
   EvidenceStatusBadge,
   EvidenceTypeBadge,
 } from "@/components/local-content/evidence-form";
+import { LocalContentDeleteButton } from "@/components/local-content/local-content-delete-button";
 import { EvidenceFileUploadForm } from "@/components/local-content/evidence-file-upload-form";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, FileText, FileBarChart } from "lucide-react";
+import { ArrowLeft, Download, FileText } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_LABELS: Record<string, string> = {
-  uploaded: "مرفوع",
-  linked: "مرتبط",
-  reviewed: "مراجع",
-  verified: "موثق",
-  rejected: "مرفوض",
-  missing: "مفقود",
-};
 
 export default async function EvidencePage({
   params,
@@ -50,6 +42,11 @@ export default async function EvidencePage({
   ]);
   const evidence = evidenceRes.ok ? evidenceRes.data : [];
   const suppliers = suppliersRes.ok ? suppliersRes.data : [];
+  const loadError = !suppliersRes.ok
+    ? suppliersRes.error || "تعذر تحميل الموردين لهذا المشروع."
+    : !evidenceRes.ok
+      ? evidenceRes.error || "تعذر تحميل الأدلة لهذا المشروع."
+      : null;
 
   return (
     <DashboardLayout>
@@ -65,6 +62,20 @@ export default async function EvidencePage({
       />
       <DevPhaseBadge />
 
+      <InlineNotice
+        variant="info"
+        title="رفع الملف لا يعني اعتماده"
+        description="كل ملف مرفوع هنا يبدأ كدليل تشغيلي ويظل بحاجة إلى مراجعة بشرية قبل اعتباره موثقًا أو صالحًا للاعتماد ضمن الحزمة النهائية."
+      />
+
+      {loadError ? (
+        <InlineNotice
+          variant="error"
+          title="تعذر تحميل الأدلة"
+          description={loadError}
+        />
+      ) : null}
+
       <EvidenceForm
         projectId={projectId}
         suppliers={suppliers.map((s) => ({ id: s.id, name: s.name }))}
@@ -75,9 +86,9 @@ export default async function EvidencePage({
         suppliers={suppliers.map((s) => ({ id: s.id, name: s.name }))}
       />
 
-      {evidence.length === 0 ? (
+      {!loadError && evidence.length === 0 ? (
         <EmptyState title="لا توجد أدلة" description="أضف أول دليل للمشروع." />
-      ) : (
+      ) : !loadError ? (
         <div className="space-y-2">
           {evidence.map((e) => (
             <Card key={e.id} className="p-3">
@@ -116,10 +127,32 @@ export default async function EvidencePage({
                   </span>
                 )}
               </div>
+              <div className="mt-3 flex items-center justify-between gap-3">
+                {e.storageKey ? (
+                  <a
+                    href={`/api/local-content/projects/${projectId}/evidence/${e.id}/download`}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    تنزيل الملف المرفوع
+                  </a>
+                ) : (
+                  <span className="text-[11px] text-muted-foreground">
+                    هذا السجل يوثق دليلًا بدون ملف مخزن للتنزيل.
+                  </span>
+                )}
+                <LocalContentDeleteButton
+                  projectId={projectId}
+                  entityId={e.id}
+                  entityLabel={`الدليل ${e.filename}`}
+                  action={deleteLocalContentEvidenceAction}
+                  confirmText={`سيتم حذف الدليل ${e.filename} من هذا المشروع. إذا كان مرتبطًا بملف مرفوع فسيحاول النظام إزالة الملف المخزن أيضًا.`}
+                />
+              </div>
             </Card>
           ))}
         </div>
-      )}
+      ) : null}
     </DashboardLayout>
   );
 }

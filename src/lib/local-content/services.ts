@@ -401,7 +401,12 @@ export async function deleteEvidence(
 ) {
   const ev = await prisma.localContentEvidence.findUnique({
     where: { id: evidenceId },
-    select: { projectId: true, filename: true, evidenceType: true },
+    select: {
+      projectId: true,
+      filename: true,
+      evidenceType: true,
+      storageKey: true,
+    },
   });
   if (!ev || ev.projectId !== projectId) {
     throw new Error("Evidence not found");
@@ -425,6 +430,8 @@ export async function deleteEvidence(
       }),
     });
   }
+
+  return ev;
 }
 
 // ─── Finding CRUD ───
