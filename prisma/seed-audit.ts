@@ -78,6 +78,7 @@ async function main() {
         name: "Khalid Al Saud",
         role: "partner",
         status: "active",
+        createdById: "usr-admin",
       },
     }),
     prisma.auditUser.create({
@@ -88,6 +89,7 @@ async function main() {
         name: "Farida Al Zamil",
         role: "manager",
         status: "active",
+        createdById: "usr-admin",
       },
     }),
     prisma.auditUser.create({
@@ -98,6 +100,7 @@ async function main() {
         name: "Sarah Al Otaibi",
         role: "reviewer",
         status: "active",
+        createdById: "usr-admin",
       },
     }),
     prisma.auditUser.create({
@@ -108,6 +111,7 @@ async function main() {
         name: "Ahmed Al Ghamdi",
         role: "operator",
         status: "active",
+        createdById: "usr-admin",
       },
     }),
     prisma.auditUser.create({
@@ -118,6 +122,7 @@ async function main() {
         name: "Faisal Al Harbi",
         role: "viewer",
         status: "active",
+        createdById: "usr-admin",
       },
     }),
     prisma.auditUser.create({
@@ -128,6 +133,7 @@ async function main() {
         name: "Admin User",
         role: "admin",
         status: "active",
+        createdById: "usr-admin",
       },
     }),
   ]);
@@ -1837,6 +1843,7 @@ async function main() {
         relatedAccountIds: ["tb-line-14"],
         relatedEvidenceIds: [],
         aiSuggested: true,
+        createdById: "usr-admin",
       },
       {
         id: "find-2",
@@ -1853,6 +1860,7 @@ async function main() {
         relatedAccountIds: ["tb-line-10"],
         relatedEvidenceIds: ["ev-5"],
         aiSuggested: true,
+        createdById: "usr-admin",
       },
       {
         id: "find-3",
@@ -1870,6 +1878,7 @@ async function main() {
         relatedEvidenceIds: [],
         aiSuggested: false,
         assignedTo: "client@gulf-trading.sa",
+        createdById: "usr-admin",
       },
       {
         id: "find-4",
@@ -1886,6 +1895,7 @@ async function main() {
         relatedAccountIds: ["tb-line-21"],
         relatedEvidenceIds: [],
         aiSuggested: true,
+        createdById: "usr-admin",
       },
       {
         id: "find-5",
@@ -1902,6 +1912,7 @@ async function main() {
         relatedAccountIds: ["tb-line-11"],
         relatedEvidenceIds: ["ev-5"],
         aiSuggested: true,
+        createdById: "usr-admin",
       },
     ],
   });
@@ -2362,6 +2373,7 @@ async function main() {
         name: "Ahmed Org2",
         role: "operator",
         status: "active",
+        createdById: "usr-admin",
       },
       {
         id: "usr-sarah-org2",
@@ -2370,6 +2382,7 @@ async function main() {
         name: "Sarah Org2",
         role: "reviewer",
         status: "active",
+        createdById: "usr-admin",
       },
       {
         id: "usr-khalid-org2",
@@ -2378,6 +2391,7 @@ async function main() {
         name: "Khalid Org2",
         role: "partner",
         status: "active",
+        createdById: "usr-admin",
       },
     ],
   });

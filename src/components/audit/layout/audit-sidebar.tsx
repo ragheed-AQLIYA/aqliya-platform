@@ -140,10 +140,10 @@ function AuditSidebar() {
           <Image
             src="/brand/aqliya-logo-approved.png"
             alt="AQLIYA"
-            width={32}
-            height={32}
+            width={116}
+            height={34}
             priority
-            className="shrink-0"
+            className="h-8 w-auto shrink-0"
           />
           <div className="min-w-0 leading-tight">
             <div className="text-sm font-black tracking-wide text-primary truncate">

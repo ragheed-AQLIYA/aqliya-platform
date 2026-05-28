@@ -98,14 +98,14 @@ model PlatformOrganization {
   displayName String?
   status      String   @default("active")
   metadata    Json?
+  createdById String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   organizations      Organization[]      @relation("OrgPlatformOrg")
   auditOrganizations AuditOrganization[] @relation("AuditOrgPlatformOrg")
   clientWorkspaces   ClientWorkspace[]
-
-  @@index([status])
+  sunbulClients      SunbulClient[]
   @@index([createdAt])
 }
 
@@ -121,6 +121,7 @@ model ClientWorkspace {
   status                 String               @default("active") // active | archived | suspended
   productAccess          Json?
   metadata               Json?
+  createdById            String?
   createdAt              DateTime             @default(now())
   updatedAt              DateTime             @updatedAt
   deletedAt              DateTime?
@@ -144,6 +145,7 @@ model Project {
   status      String          @default("active") // active | archived | completed
   team        Json?
   metadata    Json?
+  createdById String?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
@@ -361,6 +363,7 @@ model Decision {
   sector            Sector?                    @relation(fields: [sectorId], references: [id])
   decisionPatterns  DecisionPattern?
   sectorPatterns    SectorPattern[] // Added opposite relation for SectorPattern
+  evidence          DecisionEvidence[]
   createdAt         DateTime                   @default(now())
   updatedAt         DateTime                   @updatedAt
 
@@ -831,6 +834,28 @@ model DecisionReport {
   @@index([organizationId])
 }
 
+// ==================== Decision Evidence ====================
+
+model DecisionEvidence {
+  id             String    @id @default(cuid())
+  decisionId     String
+  decision       Decision  @relation(fields: [decisionId], references: [id], onDelete: Cascade)
+  organizationId String
+  filename       String
+  fileType       String
+  fileSize       Int       @default(0)
+  fileHash       String?
+  storageKey     String?
+  uploadedById   String?
+  description    String?
+  metadata       Json?
+  createdAt      DateTime  @default(now())
+
+  @@index([decisionId])
+  @@index([organizationId])
+  @@index([createdAt])
+}
+
 // ==================== AuditOS Models ====================
 
 model AuditOrganization {
@@ -844,6 +869,7 @@ model AuditOrganization {
   status              String        @default("active")
   clients             AuditClient[]
   users               AuditUser[]
+  createdById         String?
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 
@@ -864,6 +890,7 @@ model AuditUser {
   role           String            @default("operator")
   status         String            @default("active")
   lastLoginAt    DateTime?
+  createdById    String?
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
@@ -886,6 +913,7 @@ model AuditClient {
   contactEmail       String?
   contactPhone       String?
   engagements        AuditEngagement[]
+  createdById        String?
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
   deletedAt          DateTime?
@@ -905,10 +933,11 @@ model AuditEngagement {
   client                 AuditClient                  @relation(fields: [clientId], references: [id])
   fiscalPeriod           String
   engagementType         String                       @default("full_audit")
-  status                 String                       @default("draft")
+  status                 String         @default("draft")
   team                   Json?
   alerts                 Json?
   governanceRules        Json?
+  createdById            String?
   accountMappings        AuditAccountMapping[]
   trialBalances          AuditTrialBalance[]
   evidences              AuditEvidence[]
@@ -945,7 +974,7 @@ model AuditTrialBalance {
   importTimestamp DateTime                @default(now())
   sourceFile      String
   fileHash        String?
-  trustState      String                  @default("pending")
+  trustState      String @default("pending")
   totalDebits     Float                   @default(0)
   totalCredits    Float                   @default(0)
   variance        Float                   @default(0)
@@ -1000,7 +1029,7 @@ model AuditAccountMapping {
   canonicalAccount        AuditCanonicalAccount? @relation(fields: [canonicalAccountId], references: [id])
   confidence              Float?
   mappingType             String                 @default("ai_suggested")
-  status                  String                 @default("pending")
+  status                  String @default("pending")
   statementClassification String?
   mappedBy                String?
   mappedAt                DateTime?
@@ -1016,7 +1045,7 @@ model AuditFinancialStatement {
   engagementId  String
   statementType String
   title         String
-  status        String   @default("draft")
+  status        String @default("draft")
   lines         Json?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -1034,7 +1063,7 @@ model AuditDisclosureNote {
   linkedStatementLine String?
   missingInformation  Json?
   aiDrafted           Boolean  @default(false)
-  status              String   @default("draft")
+  status              String @default("draft")
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
@@ -1052,7 +1081,7 @@ model AuditEvidence {
   storageKey   String?
   uploadedBy   String?
   uploadedAt   DateTime?
-  state        String              @default("missing")
+  state        String   @default("missing")
   links        AuditEvidenceLink[]
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
@@ -1085,11 +1114,12 @@ model AuditFinding {
   description        String
   rootCause          String?
   impact             String?
-  status             String                @default("draft")
+  status             String     @default("draft")
   relatedAccountIds  Json?
   relatedEvidenceIds Json?
   aiSuggested        Boolean               @default(false)
   assignedTo         String?
+  createdById        String?
   recommendations    AuditRecommendation[]
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
@@ -1110,7 +1140,7 @@ model AuditRecommendation {
   recommendedAction String
   impactAssessment  String?
   riskLevel         String          @default("medium")
-  status            String          @default("suggested")
+  status            String @default("suggested")
   aiContributed     Boolean         @default(false)
   aiSuggestionId    String?
   reviewerDecision  String?
@@ -1132,7 +1162,7 @@ model AuditReviewComment {
   comment        String
   requiredAction String          @default("none")
   resolution     String?
-  status         String          @default("open")
+  status         String @default("open")
   createdAt      DateTime        @default(now())
   resolvedAt     DateTime?
 
@@ -1159,7 +1189,7 @@ model AuditPublicationPackage {
   id           String          @id @default(cuid())
   engagementId String
   engagement   AuditEngagement @relation(fields: [engagementId], references: [id])
-  status       String          @default("draft")
+  status       String @default("draft")
   publishedAt  DateTime?
   publishedBy  String?
   lockedAt     DateTime?
@@ -1199,7 +1229,7 @@ model AuditAiOutput {
   outputContent    String
   confidence       Float?
   modelVersion     String?
-  status           String          @default("suggested")
+  status           String @default("suggested")
   acceptedBy       String?
   acceptedAt       DateTime?
   rejectedBy       String?
@@ -1221,7 +1251,7 @@ model PilotFeedback {
   source       String
   category     String
   severity     String          @default("medium")
-  status       String          @default("open")
+  status       String @default("open")
   decision     String?
   owner        String?
   nextAction   String?
@@ -1256,7 +1286,7 @@ model PilotSignoff {
   engagementId  String
   engagement    AuditEngagement @relation(fields: [engagementId], references: [id])
   checklistItem String
-  status        String          @default("pending")
+  status        String @default("pending")
   signedBy      String?
   signedAt      DateTime?
   notes         String?
@@ -1272,7 +1302,7 @@ model AuditValidationRun {
   engagementId   String
   engagement     AuditEngagement        @relation(fields: [engagementId], references: [id])
   validationType String
-  status         String                 @default("completed")
+  status     String                 @default("completed") // completed | failed | running
   trustState     String                 @default("conditional")
   summary        String?
   issueCount     Int                    @default(0)
@@ -1298,7 +1328,7 @@ model AuditValidationIssue {
   engagement      AuditEngagement              @relation(fields: [engagementId], references: [id])
   checkType       String
   severity        String
-  status          String                       @default("open")
+  status          String    @default("open")
   title           String
   description     String
   message         String
@@ -1376,22 +1406,25 @@ enum SunbulAuditAction {
 }
 
 model SunbulClient {
-  id        String   @id @default(cuid())
-  name      String
-  slug      String   @unique
-  status    String   @default("active")
-  config    Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     String   @id @default(cuid())
+  name                   String
+  slug                   String   @unique
+  status                 String   @default("active")
+  config                 Json?
+  platformOrganizationId String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
-  memberships SunbulUserMembership[]
-  records     SunbulRecord[]
-  documents   SunbulDocument[]
-  reviews     SunbulReview[]
-  auditEvents SunbulAuditEvent[]
+  platformOrganization PlatformOrganization? @relation(fields: [platformOrganizationId], references: [id])
+  memberships          SunbulUserMembership[]
+  records              SunbulRecord[]
+  documents            SunbulDocument[]
+  reviews              SunbulReview[]
+  auditEvents          SunbulAuditEvent[]
 
   @@index([status])
   @@index([createdAt])
+  @@index([platformOrganizationId])
 }
 
 model SunbulUserMembership {
@@ -1538,6 +1571,7 @@ model LocalContentSupplier {
   workforceLocalPct      Float?
   status                 String              @default("active") // active, inactive, under_review
   metadata               Json?
+  createdById            String?
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
 
@@ -1563,6 +1597,7 @@ model LocalContentSpendRecord {
   period            String
   description       String?
   metadata          Json?
+  createdById       String?
   createdAt         DateTime             @default(now())
   updatedAt         DateTime             @updatedAt
 

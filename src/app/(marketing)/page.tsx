@@ -829,7 +829,7 @@ export default function HomePage() {
               href="/contact"
               className="btn-primary h-12 px-10 text-base font-bold"
             >
-              طلب تجربة تجريبية
+              طلب مراجعة Pilot
             </Link>
             <Link
               href="/auditos"

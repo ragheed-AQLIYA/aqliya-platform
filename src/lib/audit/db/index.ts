@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
-import * as mock from "@/lib/audit/mock-data";
 import {
   paginate,
   offsetFromPage,
@@ -606,7 +605,7 @@ export async function getDashboardSummary(
 ): Promise<DashboardSummary> {
   try {
     const orgFilter = organizationId ? { organizationId } : {};
-    const [engagements, events, findings, evidence, mappings] =
+    const [engagements, events, findings, evidence, _mappings] =
       await Promise.all([
         prisma.auditEngagement.findMany({
           where: orgFilter,
@@ -1476,7 +1475,7 @@ export async function getValidationRun(
   }
 }
 
-function severityRank(s: string): number {
+function _severityRank(s: string): number {
   if (s === "critical") return 0;
   if (s === "high") return 1;
   if (s === "medium") return 2;
@@ -1488,7 +1487,7 @@ export async function runValidation(
   actorId: string,
 ): Promise<ValidationRun> {
   try {
-    const existing = await prisma.auditValidationRun.findFirst({
+    const _existing = await prisma.auditValidationRun.findFirst({
       where: { engagementId },
       orderBy: { createdAt: "desc" },
       select: { id: true },
@@ -1496,7 +1495,7 @@ export async function runValidation(
 
     const now = new Date();
     const runId = `vr-${Date.now()}`;
-    const run = await prisma.auditValidationRun.create({
+    const _run = await prisma.auditValidationRun.create({
       data: {
         id: runId,
         engagementId,

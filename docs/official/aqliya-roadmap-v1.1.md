@@ -30,7 +30,7 @@
 1. Lock the official product/system classifications to match repository reality.
 2. Preserve AuditOS pilot-readiness and DecisionOS usability.
 3. Treat Office AI Assistant as a real governed shared application.
-4. Keep Sunbul/workflowos visible but accurately scoped as custom/internal workspace surfaces.
+4. Keep WorkflowOS (canonical governed workspace) and Sunbul (legacy redirect alias) visible but accurately scoped.
 5. Keep prototype, demo, and future surfaces clearly separated from the v0.1 claim set.
 
 ---
@@ -41,8 +41,8 @@
 - AuditOS
 - DecisionOS
 - Office AI Assistant
-- Sunbul
-- workflowos as internal/custom alias surface
+- WorkflowOS as canonical governed workspace
+- Sunbul as legacy redirect alias to WorkflowOS
 - Platform audit logs and platform diagnostics foundations
 - Custom product inquiry funnel
 - auditos guided demo as demo-only surface

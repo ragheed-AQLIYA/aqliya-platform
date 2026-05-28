@@ -20,8 +20,8 @@ const products = [
     name: "LocalContentOS",
     description: "للمحتوى المحلي، الموردين، الأدلة، والتقارير.",
     href: "/products/local-content",
-    status: "Pilot-ready L5",
-    statusColor: "text-emerald-400",
+    status: "Pilot-ready بشروط",
+    statusColor: "text-amber-400",
   },
   {
     name: "DecisionOS",

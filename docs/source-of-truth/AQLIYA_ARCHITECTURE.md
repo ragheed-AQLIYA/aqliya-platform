@@ -106,3 +106,9 @@ Response headers must include `Cache-Control: private, no-store` and `X-Content-
 - `workflowos` does not have a distinct domain schema. It currently reuses Sunbul components, actions, and models.
 - `/organizations`, `/settings`, and `/sales` are protected surfaces but do not yet meet v0.1 workspace completeness requirements.
 - `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 12 routes, server actions, seed data, bilingual UI, evidence upload, review/approval, binary PDF/XLSX exports (pdfkit + xlsx), and audit trail. Status: L5 pilot-ready with conditions — not L6 production-hardened. Arabic PDF font rendering is P2 quality gap. See `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for current maturity details.
+- **Schema v0.2 (2026-05-28)**:
+  - `createdById: String?` added to 10 models: PlatformOrganization, ClientWorkspace, Project, AuditOrganization, AuditUser, AuditClient, AuditEngagement, AuditFinding, LocalContentSupplier, LocalContentSpendRecord
+  - `DecisionEvidence` model added with document fields linked to Decision (rbac check + DecisionEvidence.organizationId for tenant isolation)
+  - `platformOrganizationId: String?` added to SunbulClient for tenant isolation from platform organizations
+  - Migration applied: `add_governance_fields_v0_2`
+  - 14 AuditOS Prisma enums attempted but reverted to `String @default(...)` due to value mismatch with existing codebase; application-level types in `src/types/audit/index.ts` continue to provide type safety

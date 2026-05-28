@@ -308,7 +308,11 @@
       "accept": "Accept",
       "ai": "AI",
       "human": "Human",
-      "manualMap": "Manual map..."
+      "manualMap": "Manual map...",
+      "mappingConfirmed": "Mapping confirmed for {accountName}",
+      "manualMappingSaved": "Manual mapping saved for {accountName}",
+      "failedToConfirm": "Failed to confirm mapping",
+      "failedToSaveManual": "Failed to save manual mapping"
     },
     "notes": {
       "title": "Disclosure Notes",
@@ -703,6 +707,14 @@
       "draftRecommendation": "Recommendation is marked as draft and needs human review before adoption.",
       "draftApproval": "Approval workflow is in draft mode. Final approval requires human sign-off.",
       "draftPublication": "Publication content is draft-only and must be approved before release."
+    },
+    "engagement": {
+      "errors": {
+        "engagementNotLinked": "Engagement not linked to a Project",
+        "workspaceNotFound": "Project's workspace not found",
+        "platformOrgNotFound": "Workspace's platform org not found",
+        "unknown": "Unknown error"
+      }
     }
   }
 }

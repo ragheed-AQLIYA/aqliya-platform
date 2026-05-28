@@ -140,9 +140,10 @@ export function PlatformHeader() {
               <Image
                 src="/brand/aqliya-logo-approved.png"
                 alt="AQLIYA"
-                width={28}
-                height={28}
+                width={116}
+                height={34}
                 priority
+                className="h-7 w-auto shrink-0"
               />
               <span className="font-bold text-primary">AQLIYA</span>
             </Link>

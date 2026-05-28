@@ -308,7 +308,11 @@
       "accept": "قبول",
       "ai": "ذكاء",
       "human": "بشري",
-      "manualMap": "تصنيف يدوي..."
+      "manualMap": "تصنيف يدوي...",
+      "mappingConfirmed": "تم تأكيد التصنيف لـ {accountName}",
+      "manualMappingSaved": "تم حفظ التصنيف اليدوي لـ {accountName}",
+      "failedToConfirm": "فشل تأكيد التصنيف",
+      "failedToSaveManual": "فشل حفظ التصنيف اليدوي"
     },
     "notes": {
       "title": "إيضاحات القوائم المالية",
@@ -754,6 +758,14 @@
       "draftRecommendation": "التوصية مصنفة كمسودة وتحتاج إلى مراجعة بشرية قبل التبني.",
       "draftApproval": "سير اعتماد العمل في وضع المسودة. الاعتماد النهائي يتطلب توقيعاً بشرياً.",
       "draftPublication": "محتوى النشر هو مسودة فقط ويجب اعتماده قبل الإصدار."
+    },
+    "engagement": {
+      "errors": {
+        "engagementNotLinked": "الارتباط التدقيقي غير مرتبط بمشروع",
+        "workspaceNotFound": "مساحة عمل المشروع غير موجودة",
+        "platformOrgNotFound": "المؤسسة المنصة لمساحة العمل غير موجودة",
+        "unknown": "خطأ غير معروف"
+      }
     }
   }
 }

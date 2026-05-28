@@ -20,7 +20,6 @@ import {
   archiveWorkflowRecord,
   createWorkflowDocumentMetadata,
   listWorkflowDocuments,
-  deleteWorkflowDocument,
   createWorkflowReview,
   listWorkflowReviews,
 } from "@/lib/workflowos/services";

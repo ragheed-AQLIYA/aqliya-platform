@@ -6,6 +6,7 @@
 import { getProjectByEngagementId } from "@/lib/platform/project-context";
 import { getClientWorkspaceById } from "@/lib/platform/client-workspace-context";
 import { getPlatformOrganizationById } from "@/lib/platform/platform-organization-context";
+import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Layers, Building2, AlertTriangle } from "lucide-react";
 
@@ -18,6 +19,7 @@ export async function PlatformContextCard({
   let workspace = null;
   let platformOrg = null;
   const errors: string[] = [];
+  const t = await getTranslations("audit.engagement");
 
   try {
     project = await getProjectByEngagementId(engagementId);
@@ -26,14 +28,13 @@ export async function PlatformContextCard({
       workspace.platformOrganizationId,
     );
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Unknown error";
-    // Prefix helps identify which resolution failed
+    const msg = e instanceof Error ? e.message : t("errors.unknown");
     if (msg.includes("AuditEngagement")) {
-      errors.push("Engagement not linked to a Project");
+      errors.push(t("errors.engagementNotLinked"));
     } else if (msg.includes("ClientWorkspace")) {
-      errors.push("Project's workspace not found");
+      errors.push(t("errors.workspaceNotFound"));
     } else if (msg.includes("PlatformOrganization")) {
-      errors.push("Workspace's platform org not found");
+      errors.push(t("errors.platformOrgNotFound"));
     } else {
       errors.push(msg);
     }

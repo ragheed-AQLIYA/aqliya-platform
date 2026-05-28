@@ -84,8 +84,8 @@ AQLIYA Company
 | **AuditOS**             | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
 | **DecisionOS**          | Product / System                   | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
 | **Office AI Assistant** | Shared Application                 | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
-| **Sunbul**              | Custom / Client-Specific Workspace | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation |
-| **workflowos**          | Custom / Client-Specific Workspace | Included as redirect alias to Sunbul    | N/A            | Internal only                 |
+| **Sunbul**              | Custom / Client-Specific Workspace | Legacy alias / redirect to WorkflowOS   | N/A            | Internal only                 |
+| **WorkflowOS**          | Custom / Client-Specific Workspace | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
 | **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing   | Demo only                     |
 | **SalesOS**             | Product / System                   | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
 | **LocalContentOS**      | Product / System                   | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |
@@ -123,17 +123,19 @@ Shared applications are governed tools built on AQLIYA Intelligence Core. They a
 
 ## Custom / Client-Specific Workspaces
 
+### WorkflowOS
+
+- Canonical governed workspace
+- Real CRUD, workflow states, audit trail, PDF export
+- Routes at `/workflowos/*`
+- Should be presented as a custom/client-specific governed workspace, not as a default core AQLIYA product claim
+
 ### Sunbul
 
-- Real implemented workspace
-- Governed multi-client workflow surface
-- Should be presented as custom/client-specific, not as a default core AQLIYA product claim
-
-### workflowos
-
-- Redirect alias family — every route is a `permanentRedirect(302)` to the matching `/sunbul/*` route
-- No components, no data, no UI, no persistence, no Prisma models
-- Pure redirect — not a prototype or distinct domain
+- Legacy redirect alias to WorkflowOS
+- Every route is a `permanentRedirect(302)` to the matching `/workflowos/*` route
+- No standalone components, no data, no UI, no persistence
+- Pure redirect — preserved for backward compatibility
 
 ---
 

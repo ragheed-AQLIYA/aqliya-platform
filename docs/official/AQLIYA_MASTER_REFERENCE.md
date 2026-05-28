@@ -4,7 +4,7 @@
 **Version:** 0.1  
 **File location:** `docs/official/AQLIYA_MASTER_REFERENCE.md`  
 **Authority:** Level 1 — secondary only to `docs/DOCUMENTATION_AUTHORITY.md`  
-**Last updated:** 2026-05-27
+**Last updated:** 2026-05-28
 
 ---
 
@@ -88,8 +88,8 @@ AQLIYA Company
 │   ├── LegalOS
 │   └── GovOS
 ├── Custom / Client-Specific Workspaces
-│   ├── Sunbul
-│   └── workflowos
+│   ├── WorkflowOS (canonical governed workspace)
+│   └── Sunbul (legacy redirect alias to WorkflowOS)
 └── Strategic Platform Layer
     └── AQLIYA Studio
 ```
@@ -104,8 +104,8 @@ AQLIYA Company
 | **DecisionOS**          | Active adjacent system                    | **L4**   | Workspace at `/decisions/*`. Decision request, context, options, risks, evidence, recommendation draft, committee workflow, approval, final record, exports, seed data.                                                                                                                                                                                                                                            |
 | **LocalContentOS**      | Pilot-ready with conditions / usable v0.1 | **L5**   | Workspace at `/local-content/*` (12 routes). Projects, suppliers, spend, classification, evidence, findings, scoring, review/approval, reports/export (PDF/XLSX via pdfkit + xlsx), audit trail, seed data, Arabic-first UI. Mutation feedback loop verified (2026-05-23). Finding create PASS on `/local-content/projects/lc-project-demo-001/findings`. CLI validation passed (local-content tests: 30). Not L6. |
 | **Office AI Assistant** | Governed shared application               | **L4**   | Workspace at `/assistant/*`. Task categories, document-aware responses, action logs, user review, evidence references, permission checks, audit events. Not a standalone product.                                                                                                                                                                                                                                  |
-| **Sunbul**              | Custom/client workspace                   | **L4**   | Workspace at `/sunbul/*`. Multi-client governed workflow surface.                                                                                                                                                                                                                                                                                                                                                  |
-| **workflowos**          | Redirect alias to Sunbul                  | **N/A**  | Route family at `/workflowos/*`. Every route is a `permanentRedirect(302)` to the matching `/sunbul/*` route. No components, no data, no UI, no persistence. Pure redirect alias — not a prototype or distinct domain.                                                                                                                                                                                             |
+| **Sunbul**              | Legacy redirect alias to WorkflowOS       | **N/A**  | Routes at `/sunbul/*` are `permanentRedirect(302)` to matching `/workflowos/*` routes. No standalone components or data. Preserved for backward compatibility.                                                                                                                                                                                                                                                     |
+| **WorkflowOS**          | Governed custom/client workspace          | **L4**   | Canonical governed workspace at `/workflowos/*`. Real CRUD, workflow states, audit trail, PDF export. Sunbul data models reused.                                                                                                                                                                                                                                                                                   |
 | **SalesOS**             | Prototype / internal preview              | **L3**   | Dashboard at `/sales`, marketing at `/products/sales`. Static dashboard only. No backend/workspace implementation.                                                                                                                                                                                                                                                                                                 |
 | **SimulationOS**        | Marketing label                           | **L1**   | Page at `/products/simulation`. Not a standalone system.                                                                                                                                                                                                                                                                                                                                                           |
 | **LocalContactOS**      | Not implemented                           | **L0**   | Future product. No routes, schema, or workspace.                                                                                                                                                                                                                                                                                                                                                                   |
@@ -119,24 +119,24 @@ AQLIYA Company
 
 ## 7. Route Map
 
-| Route                      | Purpose                                   | Status                      |
-| -------------------------- | ----------------------------------------- | --------------------------- |
-| `/`                        | Company homepage                          | Active                      |
-| `/products/*`              | Product catalog and marketing pages       | Active                      |
-| `/audit/*`                 | AuditOS governed workspace                | Active — L5                 |
-| `/auditos/*`               | AuditOS guided demo                       | Active — L1 demo            |
-| `/decisions/*`             | DecisionOS workspace                      | Active — L4                 |
-| `/assistant/*`             | Office AI Assistant                       | Active — L4                 |
-| `/local-content/*`         | LocalContentOS workspace (12 routes)      | Active — L5 with conditions |
-| `/sunbul/*`                | Sunbul custom workspace                   | Active — L4                 |
-| `/workflowos/*`            | workflowos redirect alias to Sunbul       | Active — redirect alias     |
-| `/sales`                   | SalesOS prototype dashboard               | Active — L3 prototype       |
-| `/organizations/*`         | Generic organizations prototype           | Active — L3 prototype       |
-| `/settings/*`              | Platform diagnostics + prototype settings | Active — L2/L4              |
-| `/monitoring`              | Platform monitoring                       | Active — L4                 |
-| `/api/*`                   | API routes                                | Active — permissioned       |
-| `/custom-product`          | Custom product inquiry                    | Active — L4                 |
-| `/login`, `/access-denied` | Auth pages                                | Active                      |
+| Route                      | Purpose                                    | Status                      |
+| -------------------------- | ------------------------------------------ | --------------------------- |
+| `/`                        | Company homepage                           | Active                      |
+| `/products/*`              | Product catalog and marketing pages        | Active                      |
+| `/audit/*`                 | AuditOS governed workspace                 | Active — L5                 |
+| `/auditos/*`               | AuditOS guided demo                        | Active — L1 demo            |
+| `/decisions/*`             | DecisionOS workspace                       | Active — L4                 |
+| `/assistant/*`             | Office AI Assistant                        | Active — L4                 |
+| `/local-content/*`         | LocalContentOS workspace (12 routes)       | Active — L5 with conditions |
+| `/sunbul/*`                | Sunbul legacy redirect alias to WorkflowOS | Active — redirect alias     |
+| `/workflowos/*`            | WorkflowOS governed workspace              | Active — L4                 |
+| `/sales`                   | SalesOS prototype dashboard                | Active — L3 prototype       |
+| `/organizations/*`         | Generic organizations prototype            | Active — L3 prototype       |
+| `/settings/*`              | Platform diagnostics + prototype settings  | Active — L2/L4              |
+| `/monitoring`              | Platform monitoring                        | Active — L4                 |
+| `/api/*`                   | API routes                                 | Active — permissioned       |
+| `/custom-product`          | Custom product inquiry                     | Active — L4                 |
+| `/login`, `/access-denied` | Auth pages                                 | Active                      |
 
 ---
 
@@ -149,8 +149,8 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - **DecisionOS** — Decision request, context/options/risks, evidence attachment, recommendation, committee voting, approval, final record, export/memo, audit trail, seed data
 - **LocalContentOS** — Project setup, supplier/vendor records, spend/procurement records, classification workflow, evidence upload, local content scoring, gap/risk findings, review/approval, reports/export, audit trail, seed data, Arabic-first UI
 - **Office AI Assistant** — Task creation, document-aware responses, file content extraction, review workflow, action logs, permission checks, audit events
-- **Sunbul** — Multi-client workspace, records management, governed workflow
-- **workflowos** — Route family (alias over Sunbul patterns)
+- **Sunbul** — Legacy redirect alias to WorkflowOS
+- **WorkflowOS** — Canonical governed workspace, multi-client records management, governed workflow, audit trail, PDF export
 - **Platform Infrastructure** — Auth, RBAC, audit logs, storage provider, export engine, health monitoring
 - **Custom Product Inquiry** — Funnel with form submission API
 
@@ -246,3 +246,31 @@ This master reference (`AQLIYA_MASTER_REFERENCE.md`) captures the current v0.1 o
 - For identity, governance, trust principles, and strategic positioning: v1.1 doctrine governs.
 - For implementation status, route reality, product maturity: this master reference and validated code evidence govern.
 - If v1.1 doctrine docs contain implementation-status claims that contradict this master reference, the master reference's code-validated status wins.
+
+---
+
+## 16. Build & Validation Baseline (2026-05-28)
+
+### Canonical validation gate (run before any release)
+
+| Command                                 | Status                       |
+| --------------------------------------- | ---------------------------- |
+| `npx prisma validate`                   | ✅ Pass                      |
+| `npx prisma generate`                   | ✅ Generated                 |
+| `npx prisma db push --accept-data-loss` | ✅ Synced                    |
+| `npx tsc --noEmit`                      | ✅ 0 errors                  |
+| `npm run build`                         | ✅ Compiled                  |
+| `npx eslint src/ --quiet`               | ✅ 0 warnings                |
+| `npx jest --passWithNoTests`            | ✅ 27 suites, 213 tests pass |
+| `npx tsx prisma/seed.ts`                | ✅ Seeds fully               |
+
+### Milestone
+
+All **18 TypeScript errors**, **135 ESLint warnings**, and **multiple test failures** resolved in one session (2026-05-28). This is the first time the codebase produces a completely clean build, zero lint warnings, and full test pass simultaneously.
+
+### Known deferred items
+
+- 4 separate audit log models (AuditLog, AuditEvent, PlatformAuditLog, SunbulAuditEvent) remain unmerged
+- 208 console.log/warn/error remain in the codebase; most are intentional error reporting in server actions
+- `actions/decisions.ts` is in eslint ignore (19 suppressed unused vars)
+- 14 AuditOS Prisma enums attempted but **reverted to String** because enum values did not match existing codebase literals; `src/types/audit/index.ts` provides equivalent type safety

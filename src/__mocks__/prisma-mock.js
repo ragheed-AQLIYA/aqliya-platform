@@ -25,6 +25,7 @@ const mockPrisma = {
   tenderProfile: { deleteMany: () => ({}) },
   auditLog: { deleteMany: () => ({}) },
   decisionReport: { deleteMany: () => ({}) },
+  decisionEvidence: { findMany: () => [], findUnique: () => null, count: () => 0, create: () => ({}), deleteMany: () => ({}), findFirst: () => null },
   approval: { deleteMany: () => ({}) },
   recommendation: { deleteMany: () => ({}) },
   simulationResult: { deleteMany: () => ({}) },
@@ -39,7 +40,7 @@ const mockPrisma = {
   productionBlocker: { deleteMany: () => ({}) },
   $queryRaw: () => Promise.resolve([{ 1: 1 }]),
   $disconnect: () => Promise.resolve(),
-  $transaction: (fn: Function) => fn(mockPrisma),
+  $transaction: (fn) => fn(mockPrisma),
 }
 
 module.exports = { prisma: mockPrisma, __esModule: true, default: mockPrisma }

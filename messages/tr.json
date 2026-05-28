@@ -308,7 +308,11 @@
       "accept": "Kabul Et",
       "ai": "YZ",
       "human": "İnsan",
-      "manualMap": "Manuel Sınıflandır..."
+      "manualMap": "Manuel Sınıflandır...",
+      "mappingConfirmed": "{accountName} için sınıflandırma onaylandı",
+      "manualMappingSaved": "{accountName} için manuel sınıflandırma kaydedildi",
+      "failedToConfirm": "Sınıflandırma onaylanamadı",
+      "failedToSaveManual": "Manuel sınıflandırma kaydedilemedi"
     },
     "notes": {
       "title": "Finansal Tablo Dipnotları",
@@ -754,6 +758,14 @@
       "draftRecommendation": "Tavsiye taslak olarak işaretlenmiştir ve benimsenmeden önce insan incelemesi gerektirir.",
       "draftApproval": "Onay iş akışı taslak modundadır. Nihai onay insan imzası gerektirir.",
       "draftPublication": "Yayın içeriği yalnızca taslaktır ve yayınlanmadan önce onaylanmalıdır."
+    },
+    "engagement": {
+      "errors": {
+        "engagementNotLinked": "Denetim bağlantısı bir projeye bağlı değil",
+        "workspaceNotFound": "Projenin çalışma alanı bulunamadı",
+        "platformOrgNotFound": "Çalışma alanının platform kuruluşu bulunamadı",
+        "unknown": "Bilinmeyen hata"
+      }
     }
   }
 }

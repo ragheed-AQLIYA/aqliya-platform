@@ -40,6 +40,8 @@ export function ContactForm() {
     goal: "",
   });
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const started = useRef(false);
 
   const handleChange = (field: string, value: string) => {
@@ -52,12 +54,43 @@ export function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
+    setError(null);
+    setSubmitting(true);
     trackEvent("submit_pilot_review_form");
+
     try {
+      const res = await fetch("/api/pilot-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          organization: form.organization,
+          role: form.role,
+          productInterest: form.product,
+          interest: form.interest,
+          useCase: form.useCase,
+          dataType: form.dataType,
+          currentWorkflow: form.currentWorkflow,
+          goal: form.goal,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Request failed.");
+      }
+
       setSent(true);
       trackEvent("pilot_review_form_success");
-    } catch {
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "حدث خطأ غير متوقع.";
+      setError(msg);
       trackEvent("pilot_review_form_error");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -377,12 +410,22 @@ export function ContactForm() {
                   />
                 </div>
 
+                {error && (
+                  <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 text-center">
+                    {error}
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  disabled={sent}
+                  disabled={sent || submitting}
                   className="btn-primary h-12 w-full disabled:opacity-50 disabled:hover:scale-100"
                 >
-                  {sent ? "تم الإرسال ✓" : "إرسال طلب مراجعة Pilot"}
+                  {submitting
+                    ? "جاري الإرسال..."
+                    : sent
+                      ? "تم الإرسال ✓"
+                      : "إرسال طلب مراجعة Pilot"}
                 </button>
               </form>
             )}

@@ -59,8 +59,8 @@ AQLIYA is a **Private Governed Institutional Intelligence Platform**.
 | **AuditOS**             | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
 | **DecisionOS**          | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
 | **Office AI Assistant** | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
-| **Sunbul**              | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation |
-| **workflowos**          | Included as custom/internal workspace   | L3 Prototype   | Internal only                 |
+| **Sunbul**              | Legacy redirect alias to WorkflowOS     | N/A            | Internal only                 |
+| **WorkflowOS**          | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
 | **auditos demo**        | Included as demo only                   | L1 Marketing   | Demo only                     |
 | **SalesOS**             | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
 | **LocalContentOS**      | Pilot-ready with conditions             | L5 Pilot-ready | Safe to show with explanation |
@@ -69,15 +69,15 @@ AQLIYA is a **Private Governed Institutional Intelligence Platform**.
 
 ## Product Family and Boundaries
 
-| Area                    | Official Position                          | Current Reality                                   |
-| ----------------------- | ------------------------------------------ | ------------------------------------------------- |
-| **AuditOS**             | First proof product under AQLIYA           | Real and pilot-ready candidate                    |
-| **DecisionOS**          | Active adjacent decision governance system | Real and included in v0.1 scope                   |
-| **Office AI Assistant** | Governed shared application on AQLIYA Core | Real; not a standalone product                    |
-| **Sunbul**              | Custom/client-specific governed workspace  | Real; not a default core product claim            |
-| **workflowos**          | Custom/internal workflow route family      | Real alias/duplicate surface over Sunbul patterns |
-| **LocalContentOS**      | Strategic second product                   | Pilot-ready with conditions (L5)                  |
-| **SalesOS**             | Future governed revenue intelligence       | Prototype only                                    |
+| Area                    | Official Position                          | Current Reality                      |
+| ----------------------- | ------------------------------------------ | ------------------------------------ |
+| **AuditOS**             | First proof product under AQLIYA           | Real and pilot-ready candidate       |
+| **DecisionOS**          | Active adjacent decision governance system | Real and included in v0.1 scope      |
+| **Office AI Assistant** | Governed shared application on AQLIYA Core | Real; not a standalone product       |
+| **Sunbul**              | Legacy redirect alias to WorkflowOS        | Preserved for backward compatibility |
+| **WorkflowOS**          | Custom/client-specific governed workspace  | Real governed workspace (L4)         |
+| **LocalContentOS**      | Strategic second product                   | Pilot-ready with conditions (L5)     |
+| **SalesOS**             | Future governed revenue intelligence       | Prototype only                       |
 
 ---
 

@@ -16,7 +16,7 @@ const MODEL_NAMES = [
   'decisionFramework', 'decisionScenario', 'decisionRiskAnalysis', 'decisionRiskAlert',
   'decisionMonitoringSignal', 'decisionPattern', 'sectorPattern', 'pilotFeedback',
   'pilotSignoff', 'productionBlocker', 'sector', 'sectorBenchmark', 'sectorPlaybook',
-  'sectorRule', 'decisionOutcome', 'sunbulClient', 'sunbulUserMembership', 'sunbulRecord',
+  'sectorRule', 'decisionOutcome', 'decisionEvidence', 'sunbulClient', 'sunbulUserMembership', 'sunbulRecord',
   'sunbulDocument', 'sunbulReview', 'sunbulAuditEvent'
 ]
 
@@ -115,6 +115,7 @@ function applyDefaults(model, data) {
     case 'platformOrganization':
     case 'clientWorkspace':
     case 'project':
+    case 'decisionEvidence':
     case 'sunbulClient':
     case 'sunbulUserMembership':
     case 'sunbulRecord':

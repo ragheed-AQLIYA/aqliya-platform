@@ -44,16 +44,6 @@ const modules = [
     borderActive: "border-l-module-decision",
   },
   {
-    id: "sales",
-    name: "SalesOS",
-    nameAr: "نظام المبيعات",
-    icon: TrendingUp,
-    href: "/sales",
-    color: "text-module-sales",
-    bgActive: "bg-module-sales/10",
-    borderActive: "border-l-module-sales",
-  },
-  {
     id: "workflowos",
     name: "WorkflowOS",
     nameAr: "سير العمل الذكي",
@@ -82,7 +72,6 @@ const platformNav = [
     href: "/decisions",
     icon: LayoutDashboard,
   },
-  { name: "المنظمات", href: "/organizations", icon: Users },
   {
     name: "Sunbul Company",
     nameAr: "شركة سنبل",
@@ -176,7 +165,6 @@ function getActiveModule(pathname: string | null) {
   if (!pathname) return "decision";
   if (pathname.startsWith("/audit")) return "audit";
   if (pathname.startsWith("/local-content")) return "localContent";
-  if (pathname.startsWith("/sales")) return "sales";
   if (pathname.startsWith("/workflowos") || pathname.startsWith("/sunbul"))
     return "workflowos";
   if (
@@ -327,10 +315,10 @@ export function PlatformSidebar() {
           <Image
             src="/brand/aqliya-logo-approved.png"
             alt="AQLIYA"
-            width={28}
-            height={28}
+            width={116}
+            height={34}
             priority
-            className="shrink-0"
+            className="h-7 w-auto shrink-0"
           />
           {!collapsed && (
             <div className="min-w-0 leading-tight">

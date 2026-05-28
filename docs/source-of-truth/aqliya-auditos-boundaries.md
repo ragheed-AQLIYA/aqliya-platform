@@ -6,12 +6,13 @@ This document defines the boundary between **DecisionOS** and **AuditOS**, both 
 
 ## Product Separation
 
-| Product | Route Prefix | Description |
-|---------|-------------|-------------|
-| **DecisionOS** | `/` → `/decisions`, `/organizations`, etc. | Decision workflows including tender decision use cases. |
-| **AuditOS** | `/audit` → `/audit/engagements/...` | Governed financial & audit intelligence — first proof product under AQLIYA. |
+| Product        | Route Prefix                               | Description                                                                 |
+| -------------- | ------------------------------------------ | --------------------------------------------------------------------------- |
+| **DecisionOS** | `/` → `/decisions`, `/organizations`, etc. | Decision workflows including tender decision use cases.                     |
+| **AuditOS**    | `/audit` → `/audit/engagements/...`        | Governed financial & audit intelligence — first proof product under AQLIYA. |
 
 Both products share:
+
 - `src/components/ui/` (shadcn component library)
 - `src/lib/prisma.ts` (Prisma client)
 - `src/lib/auth.ts` / `src/lib/auth-next.ts` (authentication)
@@ -60,13 +61,13 @@ Originally named `src/lib/audit.ts`. Renamed to `platform-audit.ts` to eliminate
 
 **This directory belongs entirely to AuditOS.**
 
-| File | Purpose |
-|------|---------|
-| `services.ts` | Public API — hybrid mock/DB service layer |
-| `mock-data.ts` | Pre-seeded Gulf Trading Co. FY2025 demo dataset |
-| `ai-service.ts` | Mock AI assistance with governance wrapper |
-| `audit-events.ts` | In-memory append-only audit event store |
-| `db/index.ts` | Prisma-backed service layer (31 functions) |
+| File              | Purpose                                                                                       |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| `services.ts`     | Public API — hybrid mock/DB service layer                                                     |
+| `mock-data.ts`    | Pre-seeded Gulf Trading Co. FY2025 demo dataset                                               |
+| `ai-service.ts`   | Mock AI assistance with governance wrapper                                                    |
+| `audit-events.ts` | In-memory append-only audit event store                                                       |
+| `db/index.ts`     | Prisma-backed service layer (~31 functions, full CRUD + validation + AI review + publication) |
 
 **Do not confuse with `src/lib/platform-audit.ts`** (Decision OS workflow audit logging).
 
@@ -74,43 +75,43 @@ Originally named `src/lib/audit.ts`. Renamed to `platform-audit.ts` to eliminate
 
 All routes under `/audit` are AuditOS-specific:
 
-| Route | Screen |
-|-------|--------|
-| `/audit` | Dashboard |
-| `/audit/engagements/[engagementId]` | Engagement workspace |
-| `/audit/engagements/[engagementId]/trial-balance` | Trial Balance |
-| `/audit/engagements/[engagementId]/mapping` | Account Mapping |
-| `/audit/engagements/[engagementId]/validation` | Validation |
-| `/audit/engagements/[engagementId]/statements` | Financial Statements |
-| `/audit/engagements/[engagementId]/notes` | Disclosure Notes |
-| `/audit/engagements/[engagementId]/evidence` | Evidence |
-| `/audit/engagements/[engagementId]/findings` | Findings |
-| `/audit/engagements/[engagementId]/recommendations` | Recommendations |
-| `/audit/engagements/[engagementId]/review` | Review Queue |
-| `/audit/engagements/[engagementId]/approval` | Approval |
-| `/audit/engagements/[engagementId]/publication` | Publication |
-| `/audit/engagements/[engagementId]/audit-trail` | Audit Trail |
+| Route                                               | Screen               |
+| --------------------------------------------------- | -------------------- |
+| `/audit`                                            | Dashboard            |
+| `/audit/engagements/[engagementId]`                 | Engagement workspace |
+| `/audit/engagements/[engagementId]/trial-balance`   | Trial Balance        |
+| `/audit/engagements/[engagementId]/mapping`         | Account Mapping      |
+| `/audit/engagements/[engagementId]/validation`      | Validation           |
+| `/audit/engagements/[engagementId]/statements`      | Financial Statements |
+| `/audit/engagements/[engagementId]/notes`           | Disclosure Notes     |
+| `/audit/engagements/[engagementId]/evidence`        | Evidence             |
+| `/audit/engagements/[engagementId]/findings`        | Findings             |
+| `/audit/engagements/[engagementId]/recommendations` | Recommendations      |
+| `/audit/engagements/[engagementId]/review`          | Review Queue         |
+| `/audit/engagements/[engagementId]/approval`        | Approval             |
+| `/audit/engagements/[engagementId]/publication`     | Publication          |
+| `/audit/engagements/[engagementId]/audit-trail`     | Audit Trail          |
 
 **Note:** `/audit` is the governed workspace. `/auditos` is the guided demo route. Both are active and serve distinct purposes. No route rename is planned.
 
 ## Prisma Model Separation
 
-| Prefix | Product | Examples |
-|--------|---------|---------|
-| (no prefix) | DecisionOS shared workflow models | `Organization`, `User`, `Decision`, `Recommendation`, `Approval`, `AuditLog` |
-| `Audit` | AuditOS | `AuditOrganization`, `AuditUser`, `AuditEngagement`, `AuditFinding`, `AuditEvent` |
+| Prefix      | Product                           | Examples                                                                          |
+| ----------- | --------------------------------- | --------------------------------------------------------------------------------- |
+| (no prefix) | DecisionOS shared workflow models | `Organization`, `User`, `Decision`, `Recommendation`, `Approval`, `AuditLog`      |
+| `Audit`     | AuditOS                           | `AuditOrganization`, `AuditUser`, `AuditEngagement`, `AuditFinding`, `AuditEvent` |
 
 While some model names overlap semantically (e.g. `Recommendation` vs `AuditRecommendation`, `Approval` vs `AuditApprovalRecord`, `AuditLog` vs `AuditEvent`), they are distinct Prisma models with different schemas and are never confused at the type level.
 
 ## Do Not Confuse
 
-| This | With This | Because |
-|------|-----------|---------|
-| `src/lib/platform-audit.ts` | `src/lib/audit/` | platform-audit = Decision OS audit log; audit/ = AuditOS services |
-| `@prisma/client.AuditLog` | `@prisma/client.AuditEvent` | AuditLog = Decision OS events; AuditEvent = AuditOS events |
-| `PrismaModel.Recommendation` | `PrismaModel.AuditRecommendation` | Recommendation = Decision OS; AuditRecommendation = AuditOS |
-| `/published/recommendation/[decisionId]` | `/audit/.../publication` | published/ = Decision OS view; audit/ = AuditOS workflow |
-| `components/layout/header.tsx` | AuditOS should have own header | Current AuditOS layout imports platform header (legacy) |
+| This                                     | With This                         | Because                                                           |
+| ---------------------------------------- | --------------------------------- | ----------------------------------------------------------------- |
+| `src/lib/platform-audit.ts`              | `src/lib/audit/`                  | platform-audit = Decision OS audit log; audit/ = AuditOS services |
+| `@prisma/client.AuditLog`                | `@prisma/client.AuditEvent`       | AuditLog = Decision OS events; AuditEvent = AuditOS events        |
+| `PrismaModel.Recommendation`             | `PrismaModel.AuditRecommendation` | Recommendation = Decision OS; AuditRecommendation = AuditOS       |
+| `/published/recommendation/[decisionId]` | `/audit/.../publication`          | published/ = Decision OS view; audit/ = AuditOS workflow          |
+| `components/layout/header.tsx`           | AuditOS should have own header    | Current AuditOS layout imports platform header (legacy)           |
 
 ## Safe Future Refactor Sequence
 

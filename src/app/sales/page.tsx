@@ -14,25 +14,11 @@ import {
   AIInsightCard,
 } from "@/components/enterprise/ai-indicator";
 import { IntelligenceSummaryPanel } from "@/components/intelligence/intelligence-summary-panel";
-import { EntityIntelligencePanel } from "@/components/entity/entity-intelligence";
 import { EntityTimeline } from "@/components/entity/entity-timeline";
 import { ContextualActions } from "@/components/workspace/contextual-actions";
 import { RecentEntitiesPanel } from "@/components/workspace/recent-entities";
 import { WorkspaceStatus } from "@/components/workspace/workspace-status";
-import {
-  TrendingUp,
-  Users,
-  DollarSign,
-  Target,
-  ShieldCheck,
-  FileText,
-  AlertCircle,
-  CheckCircle2,
-  Clock,
-  BarChart3,
-  Plus,
-  Download,
-} from "lucide-react";
+import { TrendingUp, Users, DollarSign, Target } from "lucide-react";
 
 // Mock data for demonstration (would come from API in production)
 const mockRecentEntities = [

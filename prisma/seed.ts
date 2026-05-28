@@ -90,6 +90,12 @@ async function main() {
       passwordHash: await bcrypt.hash("viewer123", 10),
     },
   });
+  // Update platform organization with the admin as creator
+  await prisma.platformOrganization.update({
+    where: { id: platformOrg.id },
+    data: { createdById: admin.id },
+  });
+
   console.log("Created 3 users");
 
   // Create Decision - TENDER
@@ -585,6 +591,120 @@ async function main() {
   });
 
   console.log("Created hiring decision data");
+
+  // ─── AuditOS Engagement (for cross-product routes) ───
+  // Ensure eng-gulf-2025 exists so tenant-guard and workspace-guard pass
+  // even when seed-audit.ts has not been run separately.
+  const auditOrg = await prisma.auditOrganization.upsert({
+    where: { slug: "aqliya-audit" },
+    update: {},
+    create: {
+      id: "org-aqliya",
+      name: "Aqliya Audit Firm",
+      slug: "aqliya-audit",
+      jurisdiction: "Saudi Arabia",
+      regulatoryFramework: "IFRS for SMEs",
+      governanceRules: {
+        requireEvidenceForMaterialFindings: true,
+        maxApprovalDays: 14,
+      },
+      status: "active",
+      createdById: admin.id,
+      platformOrganizationId: platformOrg.id,
+    },
+  });
+
+  const auditClient = await prisma.auditClient.upsert({
+    where: { id: "cli-gulf-trading" },
+    update: {},
+    create: {
+      id: "cli-gulf-trading",
+      organizationId: auditOrg.id,
+      name: "Gulf Trading Co.",
+      registrationNumber: "CR-2021-88432",
+      industry: "Wholesale Trade",
+      reportingFramework: "ifrs_for_smes",
+      fiscalPeriodEnd: "12-31",
+      currencyCode: "SAR",
+      status: "active",
+      contactEmail: "finance@gulf-trading.sa",
+      contactPhone: "+966 55 123 4567",
+      createdById: admin.id,
+    },
+  });
+
+  await prisma.auditEngagement.upsert({
+    where: { id: "eng-gulf-2025" },
+    update: {},
+    create: {
+      id: "eng-gulf-2025",
+      organizationId: auditOrg.id,
+      clientId: auditClient.id,
+      fiscalPeriod: "FY2025",
+      engagementType: "full_audit",
+      status: "in_progress",
+      createdById: admin.id,
+      team: [
+        {
+          userId: "usr-khalid",
+          userName: "Khalid Al Saud",
+          role: "partner",
+          assignedAt: "2025-03-01T00:00:00Z",
+        },
+        {
+          userId: "usr-farida",
+          userName: "Farida Al Zamil",
+          role: "manager",
+          assignedAt: "2025-03-01T00:00:00Z",
+        },
+        {
+          userId: "usr-sarah",
+          userName: "Sarah Al Otaibi",
+          role: "reviewer",
+          assignedAt: "2025-03-02T00:00:00Z",
+        },
+        {
+          userId: "usr-ahmed",
+          userName: "Ahmed Al Ghamdi",
+          role: "operator",
+          assignedAt: "2025-03-02T00:00:00Z",
+        },
+      ],
+      alerts: [
+        {
+          id: "alert-1",
+          type: "warning",
+          message: "Inventory count sheet not yet uploaded",
+          source: "Evidence",
+          createdAt: "2025-05-01T00:00:00Z",
+        },
+        {
+          id: "alert-2",
+          type: "info",
+          message: "Short-term Loan classification review pending",
+          source: "Finding",
+          createdAt: "2025-05-02T00:00:00Z",
+        },
+        {
+          id: "alert-3",
+          type: "warning",
+          message: "Revenue concentration analysis recommended",
+          source: "AI",
+          createdAt: "2025-05-03T00:00:00Z",
+        },
+        {
+          id: "alert-4",
+          type: "info",
+          message: "Finance Cost disclosure note incomplete",
+          source: "Notes",
+          createdAt: "2025-05-03T00:00:00Z",
+        },
+      ],
+    },
+  });
+  console.log(
+    `  AuditOS engagement: eng-gulf-2025 (${auditOrg.name} / ${auditClient.name})`,
+  );
 
   console.log("Seeding completed successfully!");
 }

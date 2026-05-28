@@ -94,9 +94,11 @@ export default function MappingPage() {
     const result = await confirmMappingAction(engagementId, mappingId);
     if (result) {
       setMappings((prev) => prev.map((m) => (m.id === mappingId ? result : m)));
-      showToast(`Mapping confirmed for ${result.sourceAccountName}`);
+      showToast(
+        t("mappingConfirmed", { accountName: result.sourceAccountName }),
+      );
     } else {
-      showToast("Failed to confirm mapping", "error");
+      showToast(t("failedToConfirm"), "error");
     }
   };
 
@@ -111,9 +113,11 @@ export default function MappingPage() {
     });
     if (result) {
       setMappings((prev) => prev.map((m) => (m.id === mappingId ? result : m)));
-      showToast(`Manual mapping saved for ${result.sourceAccountName}`);
+      showToast(
+        t("manualMappingSaved", { accountName: result.sourceAccountName }),
+      );
     } else {
-      showToast("Failed to save manual mapping", "error");
+      showToast(t("failedToSaveManual"), "error");
     }
   };
 
