@@ -20,16 +20,12 @@ import type {
 export async function listWorkflowClientsForUser() {
   const user = await getCurrentUser();
 
-  const isPlatformAdmin =
-    (
-      await prisma.user.findUnique({
-        where: { id: user.id },
-        select: { role: true },
-      })
-    )?.role === "ADMIN";
-
-  if (isPlatformAdmin) {
+  if (user.role === "ADMIN") {
+    const filter = user.platformOrganizationId
+      ? { platformOrganizationId: user.platformOrganizationId }
+      : {};
     return prisma.sunbulClient.findMany({
+      where: filter,
       orderBy: { createdAt: "desc" },
     });
   }
@@ -63,6 +59,7 @@ export async function createWorkflowClient(input: CreateWorkflowClientInput) {
     data: {
       name: input.name,
       slug: input.slug,
+      platformOrganizationId: user.platformOrganizationId ?? undefined,
     },
   });
 
@@ -83,6 +80,22 @@ export async function updateWorkflowClientStatus(
   status: string,
 ) {
   const user = await requireWorkflowAdmin();
+
+  const existing = await prisma.sunbulClient.findUnique({
+    where: { id: clientId },
+    select: { platformOrganizationId: true },
+  });
+  if (!existing) {
+    throw new Error("Client not found");
+  }
+  if (
+    existing.platformOrganizationId &&
+    existing.platformOrganizationId !== user.platformOrganizationId
+  ) {
+    throw new Error(
+      "Access denied: client belongs to a different organization",
+    );
+  }
 
   const client = await prisma.sunbulClient.update({
     where: { id: clientId },

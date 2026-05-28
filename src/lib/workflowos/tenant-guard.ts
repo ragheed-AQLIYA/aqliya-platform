@@ -68,12 +68,21 @@ export async function requireClientAccess(
 ) {
   const user = await getCurrentUser();
 
-  const platformAdminCheck = await prisma.user.findUnique({
-    where: { id: user.id },
-    select: { role: true },
-  });
-
-  if (platformAdminCheck?.role === "ADMIN") {
+  if (user.role === "ADMIN") {
+    if (user.platformOrganizationId) {
+      const client = await prisma.sunbulClient.findUnique({
+        where: { id: clientId },
+        select: { platformOrganizationId: true },
+      });
+      if (
+        client?.platformOrganizationId &&
+        client.platformOrganizationId !== user.platformOrganizationId
+      ) {
+        throw new Error(
+          "Access denied: client belongs to a different organization",
+        );
+      }
+    }
     return { ...user, workflowRole: "PlatformAdmin" as WorkflowUserRole };
   }
 

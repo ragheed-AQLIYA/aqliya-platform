@@ -166,6 +166,36 @@ export async function createSupplier(
   return supplier;
 }
 
+export async function deleteSupplier(
+  projectId: string,
+  supplierId: string,
+  actor?: { id: string; name: string },
+) {
+  const supplier = await prisma.localContentSupplier.findUnique({
+    where: { id: supplierId },
+    select: { projectId: true, name: true },
+  });
+  if (!supplier || supplier.projectId !== projectId) {
+    throw new Error("Supplier not found");
+  }
+
+  await prisma.localContentSupplier.delete({
+    where: { id: supplierId },
+  });
+
+  if (actor) {
+    await createLocalContentAuditEvent({
+      projectId,
+      actorId: actor.id,
+      actorName: actor.name,
+      action: AuditActions.SUPPLIER_DELETED,
+      entityType: "LocalContentSupplier",
+      entityId: supplierId,
+      before: JSON.stringify({ name: supplier.name }),
+    });
+  }
+}
+
 // ─── Spend Record CRUD ───
 
 export async function listSpendRecords(projectId: string) {
@@ -220,6 +250,39 @@ export async function createSpendRecord(
   }
 
   return record;
+}
+
+export async function deleteSpendRecord(
+  projectId: string,
+  recordId: string,
+  actor?: { id: string; name: string },
+) {
+  const record = await prisma.localContentSpendRecord.findUnique({
+    where: { id: recordId },
+    select: { projectId: true, amount: true, category: true },
+  });
+  if (!record || record.projectId !== projectId) {
+    throw new Error("Spend record not found");
+  }
+
+  await prisma.localContentSpendRecord.delete({
+    where: { id: recordId },
+  });
+
+  if (actor) {
+    await createLocalContentAuditEvent({
+      projectId,
+      actorId: actor.id,
+      actorName: actor.name,
+      action: AuditActions.SPEND_DELETED,
+      entityType: "LocalContentSpendRecord",
+      entityId: recordId,
+      before: JSON.stringify({
+        amount: record.amount,
+        category: record.category,
+      }),
+    });
+  }
 }
 
 // ─── Classification CRUD ───
@@ -331,6 +394,39 @@ export async function createEvidenceEntry(
   return evidence;
 }
 
+export async function deleteEvidence(
+  projectId: string,
+  evidenceId: string,
+  actor?: { id: string; name: string },
+) {
+  const ev = await prisma.localContentEvidence.findUnique({
+    where: { id: evidenceId },
+    select: { projectId: true, filename: true, evidenceType: true },
+  });
+  if (!ev || ev.projectId !== projectId) {
+    throw new Error("Evidence not found");
+  }
+
+  await prisma.localContentEvidence.delete({
+    where: { id: evidenceId },
+  });
+
+  if (actor) {
+    await createLocalContentAuditEvent({
+      projectId,
+      actorId: actor.id,
+      actorName: actor.name,
+      action: AuditActions.EVIDENCE_DELETED,
+      entityType: "LocalContentEvidence",
+      entityId: evidenceId,
+      before: JSON.stringify({
+        filename: ev.filename,
+        evidenceType: ev.evidenceType,
+      }),
+    });
+  }
+}
+
 // ─── Finding CRUD ───
 
 export async function listFindings(projectId: string) {
@@ -338,6 +434,39 @@ export async function listFindings(projectId: string) {
     where: { projectId },
     orderBy: { createdAt: "desc" },
   });
+}
+
+export async function deleteFinding(
+  projectId: string,
+  findingId: string,
+  actor?: { id: string; name: string },
+) {
+  const finding = await prisma.localContentFinding.findUnique({
+    where: { id: findingId },
+    select: { projectId: true, title: true, type: true },
+  });
+  if (!finding || finding.projectId !== projectId) {
+    throw new Error("Finding not found");
+  }
+
+  await prisma.localContentFinding.delete({
+    where: { id: findingId },
+  });
+
+  if (actor) {
+    await createLocalContentAuditEvent({
+      projectId,
+      actorId: actor.id,
+      actorName: actor.name,
+      action: AuditActions.FINDING_DELETED,
+      entityType: "LocalContentFinding",
+      entityId: findingId,
+      before: JSON.stringify({
+        title: finding.title,
+        type: finding.type,
+      }),
+    });
+  }
 }
 
 export async function createFinding(

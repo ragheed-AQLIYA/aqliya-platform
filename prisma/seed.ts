@@ -592,6 +592,88 @@ async function main() {
 
   console.log("Created hiring decision data");
 
+  // ─── DecisionEvidence seeds ───
+  await prisma.decisionEvidence.create({
+    data: {
+      decisionId: tenderDecision.id,
+      organizationId: org.id,
+      filename: "tender-evaluation-matrix.xlsx",
+      fileType: "xlsx",
+      fileSize: 245760,
+      fileHash: "a1b2c3d4e5f6",
+      storageKey: `decisions/${tenderDecision.id}/evidence/tender-evaluation-matrix.xlsx`,
+      uploadedById: admin.id,
+      description: "مصفوفة تقييم العطاءات",
+      metadata: { uploadedAt: "2026-05-20T10:00:00Z" },
+    },
+  });
+  await prisma.decisionEvidence.create({
+    data: {
+      decisionId: tenderDecision.id,
+      organizationId: org.id,
+      filename: "vendor-qualification-report.pdf",
+      fileType: "pdf",
+      fileSize: 512000,
+      fileHash: "b2c3d4e5f6a7",
+      storageKey: `decisions/${tenderDecision.id}/evidence/vendor-qualification-report.pdf`,
+      uploadedById: admin.id,
+      description: "تقرير تأهيل الموردين",
+    },
+  });
+  await prisma.decisionEvidence.create({
+    data: {
+      decisionId: investmentDecision.id,
+      organizationId: org.id,
+      filename: "financial-analysis.xlsx",
+      fileType: "xlsx",
+      fileSize: 389120,
+      fileHash: "c3d4e5f6a7b8",
+      storageKey: `decisions/${investmentDecision.id}/evidence/financial-analysis.xlsx`,
+      uploadedById: admin.id,
+      description: "تحليل مالي للاستثمار",
+    },
+  });
+  await prisma.decisionEvidence.create({
+    data: {
+      decisionId: strategicDecision.id,
+      organizationId: org.id,
+      filename: "market-research-summary.pdf",
+      fileType: "pdf",
+      fileSize: 1048576,
+      fileHash: "d4e5f6a7b8c9",
+      storageKey: `decisions/${strategicDecision.id}/evidence/market-research-summary.pdf`,
+      uploadedById: admin.id,
+      description: "ملخص أبحاث السوق",
+    },
+  });
+  console.log("Created DecisionEvidence seed data");
+
+  // ─── WorkflowOS (Sunbul) seed data ───
+  const workflowClient = await prisma.sunbulClient.upsert({
+    where: { slug: "aqliya-demo" },
+    update: {},
+    create: {
+      id: "wfc-aqliya-demo",
+      name: "Aqliya Demo Org",
+      slug: "aqliya-demo",
+      status: "Active",
+      platformOrganizationId: platformOrg.id,
+    },
+  });
+  await prisma.sunbulUserMembership.upsert({
+    where: {
+      clientId_userId: { clientId: workflowClient.id, userId: admin.id },
+    },
+    update: {},
+    create: {
+      clientId: workflowClient.id,
+      userId: admin.id,
+      role: "PlatformAdmin",
+      status: "Active",
+    },
+  });
+  console.log("Created WorkflowOS seed data");
+
   // ─── AuditOS Engagement (for cross-product routes) ───
   // Ensure eng-gulf-2025 exists so tenant-guard and workspace-guard pass
   // even when seed-audit.ts has not been run separately.

@@ -13,13 +13,17 @@ import {
   updateProjectStatus,
   listSuppliers,
   createSupplier,
+  deleteSupplier,
   listSpendRecords,
   createSpendRecord,
+  deleteSpendRecord,
   createClassification,
   listEvidence,
   createEvidenceEntry,
+  deleteEvidence,
   listFindings,
   createFinding,
+  deleteFinding,
   listReviews,
   createReview,
   listApprovals,
@@ -374,6 +378,31 @@ export async function updateLocalContentSupplierAction(
   });
 }
 
+export async function deleteLocalContentSupplierAction(
+  projectId: string,
+  supplierId: string,
+): Promise<ActionResult<void>> {
+  return safe(async () => {
+    const { user } = await assertProjectAccess(projectId, "create_supplier");
+    await deleteSupplier(projectId, supplierId, {
+      id: user.id,
+      name: user.name ?? "",
+    });
+    await logToPlatform({
+      projectId,
+      user,
+      action: "localcontent.supplier.deleted",
+      targetType: "LocalContentSupplier",
+      targetId: supplierId,
+    });
+    revalidateLocalContentPaths(projectId, [
+      "suppliers",
+      "classification",
+      "spend",
+    ]);
+  });
+}
+
 // ─── Spend Actions ───
 
 export async function listLocalContentSpendRecordsAction(
@@ -550,6 +579,27 @@ export async function classifyLocalContentSpendRecordAction(
   });
 }
 
+export async function deleteLocalContentSpendRecordAction(
+  projectId: string,
+  recordId: string,
+): Promise<ActionResult<void>> {
+  return safe(async () => {
+    const { user } = await assertProjectAccess(projectId, "create_spend");
+    await deleteSpendRecord(projectId, recordId, {
+      id: user.id,
+      name: user.name ?? "",
+    });
+    await logToPlatform({
+      projectId,
+      user,
+      action: "localcontent.spend.deleted",
+      targetType: "LocalContentSpendRecord",
+      targetId: recordId,
+    });
+    revalidateLocalContentPaths(projectId, ["spend", "classification"]);
+  });
+}
+
 // ─── Evidence Actions ───
 
 export async function listLocalContentEvidenceAction(
@@ -627,6 +677,27 @@ export async function updateLocalContentEvidenceStatusAction(
 
     revalidateLocalContentPaths(projectId, ["evidence"]);
     return { id: updated.id, status: updated.status };
+  });
+}
+
+export async function deleteLocalContentEvidenceAction(
+  projectId: string,
+  evidenceId: string,
+): Promise<ActionResult<void>> {
+  return safe(async () => {
+    const { user } = await assertProjectAccess(projectId, "create_evidence");
+    await deleteEvidence(projectId, evidenceId, {
+      id: user.id,
+      name: user.name ?? "",
+    });
+    await logToPlatform({
+      projectId,
+      user,
+      action: "localcontent.evidence.deleted",
+      targetType: "LocalContentEvidence",
+      targetId: evidenceId,
+    });
+    revalidateLocalContentPaths(projectId, ["evidence"]);
   });
 }
 
@@ -859,6 +930,32 @@ export async function updateLocalContentFindingAction(
       "audit-trail",
     ]);
     return finding;
+  });
+}
+
+export async function deleteLocalContentFindingAction(
+  projectId: string,
+  findingId: string,
+): Promise<ActionResult<void>> {
+  return safe(async () => {
+    const { user } = await assertProjectAccess(projectId, "manage_findings");
+    await deleteFinding(projectId, findingId, {
+      id: user.id,
+      name: user.name ?? "",
+    });
+    await logToPlatform({
+      projectId,
+      user,
+      action: "localcontent.finding.deleted",
+      targetType: "LocalContentFinding",
+      targetId: findingId,
+    });
+    revalidateLocalContentPaths(projectId, [
+      "findings",
+      "review",
+      "approval",
+      "audit-trail",
+    ]);
   });
 }
 
