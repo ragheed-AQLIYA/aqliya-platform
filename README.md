@@ -38,16 +38,18 @@ AQLIYA IS:
 
 ## Products (built on AQLIYA Intelligence Core)
 
-| Product            | Status                            | Route                                                                 |
-| ------------------ | --------------------------------- | --------------------------------------------------------------------- |
-| **AuditOS**        | Pilot-ready (first proof product) | `/audit` (workspace), `/auditos` (demo)                               |
-| **LocalContentOS** | L5 Pilot-ready with conditions    | `/local-content/*` (workspace), `/products/local-content` (marketing) |
-| **DecisionOS**     | Active adjacent system            | `/decisions`                                                          |
-| **SalesOS**        | Prototype dashboard               | `/sales`                                                              |
-| **SimulationOS**   | Marketing-only                    | `/products/simulation`                                                |
-| **AQLIYA Studio**  | Future (custom systems builder)   | —                                                                     |
+| Product            | Status                               | Route                                                                 |
+| ------------------ | ------------------------------------ | --------------------------------------------------------------------- |
+| **AuditOS**        | L5 pilot-ready / v0.1 conditional go | `/audit` (workspace), `/auditos` (demo)                               |
+| **LocalContentOS** | L5 Pilot-ready with conditions       | `/local-content/*` (workspace), `/products/local-content` (marketing) |
+| **DecisionOS**     | Active adjacent system               | `/decisions`                                                          |
+| **SalesOS**        | Prototype dashboard                  | `/sales`                                                              |
+| **SimulationOS**   | Marketing-only                       | `/products/simulation`                                                |
+| **AQLIYA Studio**  | Future (custom systems builder)      | —                                                                     |
 
 **LocalContentOS evidence (2026-05-23):** Real workspace at `/local-content/*` with server-action mutations. Mutation feedback loop verified (`revalidatePath` + client refresh). Focused smoke **PASS** on finding create at `/local-content/projects/lc-project-demo-001/findings`. CLI validation passed (`prisma generate`, `tsc`, `lint`, `build`, local-content tests). Not L6 production-hardened; binary PDF/XLSX export deferred.
+
+**AuditOS v0.1 Real Program (2026-05-28):** Waves A–F complete. Build + test gate passed (27 suites / 213 tests). Go/No-Go: **Conditional GO** for controlled internal / limited pilot — not production-certified. See `docs/reports/auditos-v0.1-go-no-go-review-2026-05-28.md`.
 
 ---
 

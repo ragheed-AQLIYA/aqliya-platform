@@ -112,6 +112,7 @@
     "husky": "^9.1.7",
     "jest": "^30.3.0",
     "lint-staged": "^17.0.4",
+    "prettier": "^3.8.3",
     "prisma": "^7.8.0",
     "shadcn": "^4.6.0",
     "tailwindcss": "^4",

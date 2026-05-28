@@ -10,8 +10,13 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/aqliya
+      - AUTH_SECRET=change-me-in-production-use-openssl-rand-base64-32
       - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=change-me-in-production
+      - DOWNLOAD_TOKEN_SECRET=change-me-in-production-use-openssl-rand-base64-32
+      - LOCAL_STORAGE_DIR=/app/uploads
+      - STORAGE_PROVIDER=local
+    volumes:
+      - uploads:/app/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -35,3 +40,4 @@ services:
 
 volumes:
   pgdata:
+  uploads:
