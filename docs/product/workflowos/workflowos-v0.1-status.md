@@ -50,7 +50,7 @@
 
 ## Security / Auth / Audit
 
-- All route pages protected by `proxy.ts` middleware (JWT required)
+- All route pages protected by `src/middleware.ts` auth middleware (JWT required)
 - Layout-level auth guard in `/workflowos/layout.tsx`
 - Admin route additionally checks `user.role === "ADMIN"`
 - API routes: `getCurrentUser()` + `requireClientAccess()` (tenant isolation)

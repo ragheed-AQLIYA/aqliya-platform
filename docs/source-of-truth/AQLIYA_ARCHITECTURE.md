@@ -97,7 +97,7 @@ Every file download API route must implement these three layers in order:
 
 Response headers must include `Cache-Control: private, no-store` and `X-Content-Type-Options: nosniff`.
 
-**Enforced on**: Sunbul documents, Office AI outputs, AuditOS evidence.
+**Enforced on**: Sunbul documents, Office AI outputs, AuditOS evidence, DecisionOS evidence, LocalContentOS evidence.
 
 ## Reality Alignment Notes
 
@@ -105,7 +105,8 @@ Response headers must include `Cache-Control: private, no-store` and `X-Content-
 - `Sunbul` and `workflowos` are real route families and must remain visible in architecture documentation; however, they are currently best classified as custom/client-specific workspace surfaces rather than core AQLIYA product-family products.
 - `workflowos` does not have a distinct domain schema. It currently reuses Sunbul components, actions, and models.
 - `/organizations`, `/settings`, and `/sales` are protected surfaces but do not yet meet v0.1 workspace completeness requirements.
-- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 12 routes, server actions, seed data, bilingual UI, evidence upload, review/approval, binary PDF/XLSX exports (pdfkit + xlsx), and audit trail. Status: L5 pilot-ready with conditions — not L6 production-hardened. Arabic PDF font rendering is P2 quality gap. See `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for current maturity details.
+- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 12 routes, server actions, seed data, bilingual UI, evidence upload, protected evidence/report downloads, review/approval, binary PDF/XLSX exports (pdfkit + xlsx), and audit trail. Status: L5 pilot-ready with conditions — not L6 production-hardened. Arabic PDF font rendering is P2 quality gap. See `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for current maturity details.
+- `DecisionOS` now includes stored evidence files plus protected evidence download routes under `/api/decisions/[decisionId]/evidence/[evidenceId]/download`, in addition to governed export preparation inside the workspace.
 - **Schema v0.2 (2026-05-28)**:
   - `createdById: String?` added to 10 models: PlatformOrganization, ClientWorkspace, Project, AuditOrganization, AuditUser, AuditClient, AuditEngagement, AuditFinding, LocalContentSupplier, LocalContentSpendRecord
   - `DecisionEvidence` model added with document fields linked to Decision (rbac check + DecisionEvidence.organizationId for tenant isolation)

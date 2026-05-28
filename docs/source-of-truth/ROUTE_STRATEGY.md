@@ -149,7 +149,7 @@
 | `/local-content/projects/[projectId]/suppliers`      | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Supplier/vendor records                              |
 | `/local-content/projects/[projectId]/spend`          | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Spend/procurement records                            |
 | `/local-content/projects/[projectId]/classification` | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Local content classification workflow                |
-| `/local-content/projects/[projectId]/evidence`       | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Evidence upload with file storage                    |
+| `/local-content/projects/[projectId]/evidence`       | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Evidence upload + protected file download            |
 | `/local-content/projects/[projectId]/findings`       | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Gap/risk findings                                    |
 | `/local-content/projects/[projectId]/review`         | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Review workflow                                      |
 | `/local-content/projects/[projectId]/approval`       | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Approval workflow                                    |
@@ -162,7 +162,7 @@
 - Mutation feedback loop verified (2026-05-23); finding create PASS on `/local-content/projects/lc-project-demo-001/findings`
 - Review/approval/report inline server forms may still need clean manual pass
 - PDF/XLSX binary generation implemented using pdfkit + xlsx libraries
-- No project/finding edit-delete UI in v0.1
+- Delete UI now exists for suppliers, spend records, evidence, and findings
 - See `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`
 
 ### Office AI Assistant — Shared Application
@@ -229,24 +229,26 @@
 
 ## API Routes
 
-| Route                                                                 | Product/System      | Route Type     | Public/Protected | Implementation Status | Notes                                                           |
-| --------------------------------------------------------------------- | ------------------- | -------------- | ---------------- | --------------------- | --------------------------------------------------------------- |
-| `/api/auth/[...nextauth]`                                             | AQLIYA Platform     | API — auth     | Public           | Active                | NextAuth v5                                                     |
-| `/api/health`                                                         | AQLIYA Platform     | API — health   | Public           | Active                | Safe health check                                               |
-| `/api/custom-product-submit`                                          | AQLIYA Platform     | API — form     | Public           | Active                | Custom product inquiry                                          |
-| `/api/metrics`                                                        | AQLIYA Platform     | API — metrics  | Protected        | Active                | Admin-only                                                      |
-| `/api/audit/evidence/[evidenceId]/download`                           | AuditOS             | API — download | Protected        | Active                | Authenticated + engagement access + audit log                   |
-| `/api/audit/engagements/[engagementId]/exports/[format]`              | AuditOS             | API — export   | Protected        | Active                | Authenticated + engagement access                               |
-| `/api/office-ai/download`                                             | Office AI Assistant | API — download | Protected        | Active                | Authenticated + platform-org access + audit log                 |
-| `/api/local-content/projects/[projectId]/reports/[reportId]/download` | LocalContentOS      | API — download | Protected        | Active                | Authenticated + project access + audit log                      |
-| `/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf`    | WorkflowOS          | API — export   | Protected        | Active                | Permissioned PDF export. Canonical WorkflowOS API route.        |
-| `/api/workflowos/documents/[documentId]/download`                     | WorkflowOS          | API — download | Protected        | Active                | Permissioned document download. Canonical WorkflowOS API route. |
+| Route                                                                    | Product/System      | Route Type     | Public/Protected | Implementation Status | Notes                                                           |
+| ------------------------------------------------------------------------ | ------------------- | -------------- | ---------------- | --------------------- | --------------------------------------------------------------- |
+| `/api/auth/[...nextauth]`                                                | AQLIYA Platform     | API — auth     | Public           | Active                | NextAuth v5                                                     |
+| `/api/health`                                                            | AQLIYA Platform     | API — health   | Public           | Active                | Safe health check                                               |
+| `/api/custom-product-submit`                                             | AQLIYA Platform     | API — form     | Public           | Active                | Custom product inquiry                                          |
+| `/api/metrics`                                                           | AQLIYA Platform     | API — metrics  | Protected        | Active                | Admin-only                                                      |
+| `/api/audit/evidence/[evidenceId]/download`                              | AuditOS             | API — download | Protected        | Active                | Authenticated + engagement access + audit log                   |
+| `/api/audit/engagements/[engagementId]/exports/[format]`                 | AuditOS             | API — export   | Protected        | Active                | Authenticated + engagement access                               |
+| `/api/decisions/[decisionId]/evidence/[evidenceId]/download`             | DecisionOS          | API — download | Protected        | Active                | Authenticated + tenant-safe decision access + audit log         |
+| `/api/office-ai/download`                                                | Office AI Assistant | API — download | Protected        | Active                | Authenticated + platform-org access + audit log                 |
+| `/api/local-content/projects/[projectId]/evidence/[evidenceId]/download` | LocalContentOS      | API — download | Protected        | Active                | Authenticated + tenant-safe project access + audit log          |
+| `/api/local-content/projects/[projectId]/reports/[reportId]/download`    | LocalContentOS      | API — download | Protected        | Active                | Authenticated + project access + audit log                      |
+| `/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf`       | WorkflowOS          | API — export   | Protected        | Active                | Permissioned PDF export. Canonical WorkflowOS API route.        |
+| `/api/workflowos/documents/[documentId]/download`                        | WorkflowOS          | API — download | Protected        | Active                | Permissioned document download. Canonical WorkflowOS API route. |
 
 ---
 
 ## Proxy Auth Protection
 
-Next.js 16 uses `src/proxy.ts` (proxy middleware) for route protection. It uses `getToken` from `next-auth/jwt` (Edge-compatible) to validate JWT session tokens before allowing access to protected routes.
+Current code reality uses `src/middleware.ts` for route protection. It uses `getToken` from `next-auth/jwt` to validate session tokens before allowing access to protected routes. Next.js 16 documentation deprecates the `middleware` filename in favor of `proxy`, but this repository currently runs the auth perimeter through `src/middleware.ts` and must not be re-renamed casually without validating runtime behavior.
 
 ### Protected Route Prefixes
 
@@ -293,7 +295,7 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). WorkflowOS is the canonical product name.
 6. `/sunbul/*` = redirect alias family over WorkflowOS implementation. Every route is a `permanentRedirect(302)` wrapper.
 7. `/organizations/*`, `/settings`, and `/sales` must be labeled prototype/internal preview until they have real persistence and workflow backing.
-8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/local-content/*/download`) must remain permissioned.
+8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/download`) must remain permissioned.
 9. Do not create `/simulation` top-level routes until that system has a real workspace implementation.
 10. Product marketing pages belong under `/products/*`.
 11. Company and marketing pages must not imply future products are already implemented.
@@ -301,4 +303,4 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 13. `/published/recommendation/*` is protected in current code reality because the backing action requires an authenticated user from the same organization.
 14. `/executive-brief` is the canonical executive brief route. `/executive-briefing` is preserved only as a redirect alias.
 
-15. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`.
+15. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`.
