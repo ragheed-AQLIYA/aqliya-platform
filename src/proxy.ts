@@ -40,6 +40,7 @@ const publicExact = new Set([
   "/case-studies",
   "/auditos",
   "/api/custom-product-submit",
+  "/api/pilot-review",
 ]);
 
 const publicPrefixes = [
@@ -147,5 +148,6 @@ export const config = {
     "/api/workflowos/:path*",
     "/api/metrics",
     "/api/custom-product-submit",
+    "/api/pilot-review",
   ],
 };

@@ -74,12 +74,24 @@ export async function getAuditActor(): Promise<AuditActor> {
     };
   } catch (error) {
     // DEV ONLY: Demo fallback used when no auth session or no AuditUser mapping.
-    // Only available in development mode — never in test or production.
-    if (process.env.NODE_ENV !== "development") {
+    // Only available when BOTH:
+    //   - NODE_ENV is NOT "production"
+    //   - AUDIT_DEV_FALLBACK_ENABLED === "true"
+    // Never enabled by accident against staging/shared databases.
+    const devFallbackAllowed =
+      process.env.NODE_ENV !== "production" &&
+      process.env.AUDIT_DEV_FALLBACK_ENABLED === "true";
+
+    if (!devFallbackAllowed) {
       const message =
         error instanceof Error ? error.message : "Authentication required";
       throw new Error(message);
     }
+
+    console.warn(
+      "[AuditActor] DEV FALLBACK ACTIVE — using hardcoded demo actor. " +
+        "Set AUDIT_DEV_FALLBACK_ENABLED=false or run in production to disable.",
+    );
     demoFallbackActive = true;
     return {
       actorId: "usr-ahmed",

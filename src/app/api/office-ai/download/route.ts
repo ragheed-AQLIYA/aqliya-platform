@@ -10,6 +10,16 @@ const downloadRateMap = new Map<string, { count: number; resetAt: number }>();
 const DOWNLOAD_WINDOW_MS = 60_000;
 const DOWNLOAD_MAX = 30;
 
+// Periodic cleanup to prevent memory leak on long-running instances.
+if (typeof setInterval !== "undefined") {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [k, v] of downloadRateMap) {
+      if (now > v.resetAt) downloadRateMap.delete(k);
+    }
+  }, 60_000);
+}
+
 function checkDownloadRateLimit(userId: string): void {
   const now = Date.now();
   const entry = downloadRateMap.get(userId);

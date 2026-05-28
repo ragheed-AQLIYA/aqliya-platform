@@ -9,6 +9,7 @@ import {
   buildEvidenceIndexXLSX,
 } from "@/lib/local-content/export";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
+import { sanitizeFilename } from "@/lib/platform/download";
 
 export async function GET(
   _request: NextRequest,
@@ -93,7 +94,7 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": result.mimeType,
-        "Content-Disposition": `attachment; filename="${result.filename}"`,
+        "Content-Disposition": `attachment; filename="${sanitizeFilename(result.filename) || "local-content-report"}"`,
         "X-Content-Type-Options": "nosniff",
         "Cache-Control": "private, no-store",
       },
