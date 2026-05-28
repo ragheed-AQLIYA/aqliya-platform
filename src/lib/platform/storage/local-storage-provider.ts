@@ -8,6 +8,8 @@ import type {
 
 const DEFAULT_UPLOAD_DIR = path.join(process.cwd(), "uploads");
 
+const TRAVERSAL_PATTERN = /[/\\]\.\.[/\\]|\.\.[/\\]|[/\\]\.\.$/;
+
 const MIME_MAP: Record<string, string> = {
   ".pdf": "application/pdf",
   ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -84,8 +86,19 @@ export class LocalStorageProvider implements StorageProvider {
   }
 
   private resolvePath(key: string): string {
+    if (TRAVERSAL_PATTERN.test(key)) {
+      throw new Error("Path traversal detected in storage key");
+    }
     const normalized = key.replace(/^[/\\]+/, "").replace(/[/\\]+/g, path.sep);
-    return path.join(this.baseDir, normalized);
+    const joined = path.join(this.baseDir, normalized);
+    const resolved = path.resolve(joined);
+    const baseResolved = path.resolve(this.baseDir);
+    if (!resolved.startsWith(baseResolved)) {
+      throw new Error(
+        "Path traversal detected: storage key escapes base directory",
+      );
+    }
+    return resolved;
   }
 
   private ensureDir(dir: string): void {
