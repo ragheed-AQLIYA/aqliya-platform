@@ -98,7 +98,7 @@ export async function PlatformContextCard({
         {workspace && (
           <div className="flex items-center gap-2">
             <Layers className="h-3 w-3 text-muted-foreground shrink-0" />
-            <span className="text-muted-foreground">Workspace:</span>
+            <span className="text-muted-foreground">مساحة العمل:</span>
             <span className="font-medium">{workspace.name}</span>
             <Badge variant="outline" className="text-[10px] h-4 px-1.5">
               {workspace.workspaceType}
@@ -115,7 +115,7 @@ export async function PlatformContextCard({
         {project && (
           <div className="flex items-center gap-2">
             <Shield className="h-3 w-3 text-muted-foreground shrink-0" />
-            <span className="text-muted-foreground">Project:</span>
+            <span className="text-muted-foreground">المشروع:</span>
             <span className="font-medium">{project.name}</span>
             <Badge variant="outline" className="text-[10px] h-4 px-1.5">
               {project.projectType}
@@ -126,7 +126,7 @@ export async function PlatformContextCard({
         {platformOrg && (
           <div className="flex items-center gap-2">
             <Building2 className="h-3 w-3 text-muted-foreground shrink-0" />
-            <span className="text-muted-foreground">Org:</span>
+            <span className="text-muted-foreground">المنظمة:</span>
             <span className="font-medium">{platformOrg.name}</span>
             <span className="text-muted-foreground">({platformOrg.slug})</span>
           </div>
