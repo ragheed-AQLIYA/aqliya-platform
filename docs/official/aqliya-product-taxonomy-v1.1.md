@@ -79,23 +79,23 @@ AQLIYA Company
 
 ## Current Classification Matrix
 
-| Area                    | Taxonomy Layer                     | Release Inclusion Status                | Maturity       | Customer Demo Status          |
-| ----------------------- | ---------------------------------- | --------------------------------------- | -------------- | ----------------------------- |
-| **AuditOS**             | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
-| **DecisionOS**          | Product / System                   | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
-| **Office AI Assistant** | Shared Application                 | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
-| **Sunbul**              | Custom / Client-Specific Workspace | Legacy alias / redirect to WorkflowOS   | N/A            | Internal only                 |
-| **WorkflowOS**          | Custom / Client-Specific Workspace | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
-| **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing   | Demo only                     |
-| **SalesOS**             | Product / System                   | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
-| **LocalContentOS**      | Product / System                   | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |
-| **SimulationOS**        | Marketing capability label         | Do not claim as live                    | L1 Marketing   | Do not show as implemented    |
-| **LocalContactOS**      | Product / System                   | Not implemented                         | L0 Concept     | Do not show as implemented    |
-| **RiskOS**              | Product / System                   | Not implemented                         | L0 Concept     | Do not show as implemented    |
-| **ComplianceOS**        | Product / System                   | Not implemented                         | L0 Concept     | Do not show as implemented    |
-| **LegalOS**             | Product / System                   | Not implemented                         | L0 Concept     | Do not show as implemented    |
-| **GovOS**               | Product / System                   | Not implemented                         | L0 Concept     | Do not show as implemented    |
-| **AQLIYA Studio**       | Strategic platform layer           | Strategic / future                      | L0 Concept     | Do not show as implemented    |
+| Area                    | Taxonomy Layer                     | Release Inclusion Status                | Maturity                       | Customer Demo Status          |
+| ----------------------- | ---------------------------------- | --------------------------------------- | ------------------------------ | ----------------------------- |
+| **AuditOS**             | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready                 | Safe to show                  |
+| **DecisionOS**          | Product / System                   | Included as active adjacent system      | L4 Usable v0.1                 | Safe to show with explanation |
+| **Office AI Assistant** | Shared Application                 | Included as governed shared application | L4 Usable v0.1                 | Safe to show with explanation |
+| **Sunbul**              | Custom / Client-Specific Workspace | Legacy alias / redirect to WorkflowOS   | N/A                            | Internal only                 |
+| **WorkflowOS**          | Custom / Client-Specific Workspace | Included as governed workspace          | L4 Usable v0.1                 | Safe to show with explanation |
+| **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing                   | Demo only                     |
+| **SalesOS**             | Product / System                   | Prototype / internal preview            | L3 Prototype                   | Do not show as implemented    |
+| **LocalContentOS**      | Product / System                   | Included as pilot-ready with conditions | L5 Pilot-ready with conditions | Safe to show with explanation |
+| **SimulationOS**        | Marketing capability label         | Do not claim as live                    | L1 Marketing                   | Do not show as implemented    |
+| **LocalContactOS**      | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
+| **RiskOS**              | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
+| **ComplianceOS**        | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
+| **LegalOS**             | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
+| **GovOS**               | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
+| **AQLIYA Studio**       | Strategic platform layer           | Strategic / future                      | L0 Concept                     | Do not show as implemented    |
 
 ---
 
@@ -105,14 +105,14 @@ Shared applications are governed tools built on AQLIYA Intelligence Core. They a
 
 ### Office AI Assistant
 
-- Current status: real governed shared application
+- Current status: Shared application, not primary product
 - Current route family: `/assistant`, `/assistant/[taskId]`
 - Current data backing: `OfficeAiTask`, `OfficeAiOutput`, `OfficeAiFile`
 - Current boundary: deterministic/governed assistant, not a broad autonomous AI runtime
 
 ### LocalContentOS
 
-- Current status: pilot-ready with conditions (L5)
+- Current status: L5 Pilot-ready with conditions
 - Current route family: `/local-content/*` (12 workspace routes)
 - Current data backing: `LocalContentProject`, `LocalContentSupplier`, `LocalContentSpendRecord`, `LocalContentClassification`, `LocalContentFinding`, `LocalContentEvidence`, `LocalContentApproval`, seed data
 - Current evidence: mutation feedback loop verified (2026-05-23); local-content tests (30); finding create PASS on `/local-content/projects/lc-project-demo-001/findings`
