@@ -1,0 +1,40 @@
+---
+description: UI, Arabic copy, and positioning quality for AQLIYA
+alwaysApply: false
+globs:
+  - "src/app/**"
+  - "src/components/**"
+  - "docs/**"
+---
+
+# UI and Content Quality
+
+Arabic-first public pages must be:
+- clear
+- institutional
+- not hype-driven
+- not vague
+- not overclaiming AI autonomy
+
+Avoid:
+- "AI replaces your team"
+- "fully automated audit"
+- "guaranteed compliance"
+- generic SaaS language
+- empty enterprise buzzwords
+
+Preferred language:
+- private institutional intelligence
+- governed AI
+- evidence-linked workflows
+- human review
+- controlled pilots
+- auditability
+- traceability
+- operational proof
+
+For UI changes:
+- preserve accessibility
+- avoid layout regressions
+- keep bilingual consistency where relevant
+- avoid fake links or inactive product claims

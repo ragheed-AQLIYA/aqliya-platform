@@ -1,0 +1,37 @@
+---
+description: AQLIYA product boundary protection
+alwaysApply: true
+---
+
+# Product Boundaries
+
+AQLIYA products have separate boundaries:
+
+AuditOS:
+- audit workflow, trial balance, mapping, statements, notes, evidence, findings, review, approval, audit trail
+- never claim full autonomous audit
+- AI drafts, humans approve
+
+LocalContentOS:
+- local content intelligence and publishing workflow
+- do not mix with AuditOS evidence model unless through shared platform primitives
+
+DecisionOS:
+- decision workflows, tenders, evidence-linked decisions
+- not a generic CRM
+
+SalesOS:
+- sales intelligence and pipeline support
+- not a full CRM unless explicitly requested
+- keep data model controlled and staged
+
+SimulationOS:
+- currently marketing/future unless real implementation exists
+
+AQLIYA Intelligence Core:
+- shared governance, evidence, activity, audit logs, AI execution, review/approval, task center, platform signals
+
+When editing:
+- State affected product.
+- Do not rename products casually.
+- Do not move routes without checking `docs/source-of-truth/ROUTE_STRATEGY.md`.

@@ -1,0 +1,36 @@
+---
+description: Core AQLIYA project identity and development rules
+alwaysApply: true
+---
+
+# AQLIYA Core Rule
+
+AQLIYA is a Private Governed Institutional Intelligence Platform.
+
+Do not describe it as:
+- a chatbot
+- SaaS only
+- AuditOS only
+- a demo-only app
+- an automated replacement for auditors, operators, or decision makers
+
+Always preserve:
+- private institutional intelligence
+- governed AI
+- evidence traceability
+- human review and approval
+- product boundaries
+- bilingual Arabic/English where relevant
+
+Core trust principle:
+AI assists. Humans decide. Evidence governs.
+
+Before making changes:
+1. Identify product/module affected.
+2. Identify files likely affected.
+3. Check existing patterns before creating new architecture.
+4. Prefer extending current primitives over inventing new ones.
+5. Avoid fake production claims.
+
+Official references (read when relevant): `docs/official/` v1.1, then `docs/source-of-truth/`.
+Full operating contract: root `AGENTS.md`.

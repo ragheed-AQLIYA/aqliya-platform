@@ -1,0 +1,28 @@
+---
+description: Security, governance, and sensitive action guardrails
+alwaysApply: true
+---
+
+# Security and Governance
+
+Never:
+- expose secrets
+- edit .env files without explicit approval
+- weaken auth, CSRF, permission checks, audit logging, or evidence traceability
+- bypass governance gates to make tests pass
+- add public endpoints without access control review
+- add destructive scripts without confirmation
+
+For AI features:
+- use governed AI execution paths where available
+- log actor/context where required
+- preserve human approval gates
+- avoid black-box output claims
+
+For downloads/exports:
+- check authorization
+- check audit logging
+- check token expiry if tokenized
+- check file path traversal risk
+
+Reuse shared patterns in `src/lib/governance/` where applicable.
