@@ -1,7 +1,7 @@
 # Phase 7 — Safe Patch Plan
 
 **Audit date:** 2026-05-31  
-**Execution policy:** Category A executed (2026-06-01). Category B **fully executed** (2026-06-01, including B5/B7/B9/B10). Category C out of scope.
+**Execution policy:** Category A executed (2026-06-01). Category B **fully executed** (2026-06-01). Category C doc-only items **complete** (2026-06-01); code/schema items remain future.
 
 ---
 
@@ -42,16 +42,16 @@
 
 ---
 
-## Category C — Not This Task
+## Category C — Doc-Only Items (Complete 2026-06-01)
 
-| ID | Scope | Reason |
-|----|-------|--------|
-| C1 | Any `src/`, `prisma/`, `package.json`, tests | Hard rule — not doc governance |
-| C2 | Sunbul → Workflow Prisma model rename | Code/schema change |
-| C3 | Merge duplicate pilot pack trees | Large content merge — separate project |
-| C4 | `npm run build/lint/test` validation | Low-load protocol |
-| C5 | Delete any file | Archive-only policy |
-| C6 | Update official v1.1 doctrine content (except casing fix) | Requires documented decision per authority |
+| ID | Scope | Reason | Status |
+|----|-------|--------|--------|
+| C1 | Any `src/`, `prisma/`, `package.json`, tests | Hard rule — not doc governance | **Future** — out of scope |
+| C2 | Sunbul → Workflow Prisma model rename | Code/schema change | **Future** — requires approval |
+| C3 | Merge duplicate pilot pack trees | Large content merge | **Done (pointer-only)** — `docs/pilot/PILOT-PACK-INDEX.md` + README updates; no deletes |
+| C4 | `npm run build/lint/test` validation | Low-load protocol | **Future** — release gate |
+| C5 | Delete any file | Archive-only policy | **Policy preserved** — no deletes |
+| C6 | Update official v1.1 doctrine content (except casing fix) | Requires documented decision per authority | **Future** — other agent |
 
 ---
 
@@ -73,4 +73,4 @@
 |----------|---------|----------|
 | A | 7 | 7 (all Category A items) |
 | B | 10 | 10 (all Category B items) |
-| C | 6 | 0 (respected) |
+| C | 6 | 1 doc-only (C3 pointers); C1/C2/C4/C5/C6 remain future |

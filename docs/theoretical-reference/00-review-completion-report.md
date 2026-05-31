@@ -7,6 +7,8 @@ version: 1.0
 last_updated: 2026-05-08
 ---
 
+> **This is background/theoretical reference, not implementation authority.** See `docs/official/` and `docs/source-of-truth/` for product status, routes, and governance.
+
 # Review Completion Report
 
 ## Legacy Context Note

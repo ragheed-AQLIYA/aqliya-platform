@@ -45,10 +45,10 @@
 
 ## Known Duplicates / Archive Candidates
 
-| Path                                      | Reason                                                          | Current Handling                                                |
-| ----------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| `../commercial/demo-storyline-auditos.md` | Superseded by modular `../commercial/demo-storyline/`           | Do not use as primary. Keep in place until future archive pass. |
-| `../commercial/pilot-pack/`               | Near-duplicate of `../commercial-pack/`                         | Do not use as primary. Keep in place until future archive pass. |
+| Path                                                         | Reason                                                | Current Handling                                      |
+| ------------------------------------------------------------ | ----------------------------------------------------- | ----------------------------------------------------- |
+| `../archive/commercial-legacy/demo-storyline-auditos.md`     | Superseded by modular `../commercial/demo-storyline/` | Archived — historical reference only                  |
+| `../archive/commercial-legacy/pilot-pack/`                   | Near-duplicate of `../commercial-pack/`               | Archived — historical reference only                  |
 | `../pilot/PILOT-SUCCESS-CRITERIA.md`      | Superseded by `../commercial-pack/07-pilot-success-criteria.md` | Do not use as primary. Keep in place until future archive pass. |
 | `auditos-phase-1-completion.md`           | Historical phase completion doc                                 | Do not use as primary. Keep in place until future archive pass. |
 | `auditos-phase-2-plan.md`                 | Historical phase plan                                           | Do not use as primary. Keep in place until future archive pass. |

@@ -1,7 +1,8 @@
 # Commercial Documentation Duplication Review
 
-**Date:** 2026-05-16
-**Status:** ✅ Phase 2 actions completed (partial archive)
+**Date:** 2026-05-16  
+**Status:** ✅ Phase 2 actions completed (partial archive)  
+**Navigation:** → `docs/pilot/PILOT-PACK-INDEX.md` (canonical pilot pack map, 2026-06-01)
 
 ## Folders Compared
 

@@ -57,19 +57,18 @@
 
 ---
 
-## Overlap Notice
+## Pilot Pack Navigation
 
-This directory overlaps with:
+→ **`docs/pilot/PILOT-PACK-INDEX.md`** — canonical map of all pilot pack trees.
 
-- `docs/commercial/pilot-pack/` — near-duplicate pilot pack (10 files)
-- AuditOS commercial packages under `docs/product/auditos-*`
+| Tree | Role |
+|------|------|
+| **`docs/commercial-pack/`** (this directory) | Primary AuditOS **commercial / sales** pack |
+| `docs/pilot/execution-pack/` | Primary AuditOS **operational execution** pack (post-agreement) |
+| `docs/archive/commercial-legacy/pilot-pack/` | Archived legacy commercial pack — historical reference only |
+| `docs/product/localcontentos-v0.1/pilot-onboarding-pack/` | LocalContentOS pilot pack (separate product) |
 
-**Guidance:**
-
-- Use this pack for historical/reference comparison until consolidation is approved.
-- Do not treat as the only active commercial source.
-- Do not delete yet.
-- See `docs/reports/product-commercial-docs-structure-review.md` for the full overlap analysis.
+**Guidance:** This pack is the primary commercial source for AuditOS pilots. Operational checklists live in `docs/pilot/execution-pack/`. Do not delete archived trees. See `docs/archive/commercial-legacy/COMMERCIAL_DUPLICATION_REVIEW.md` for overlap analysis.
 
 ## AuditOS Commercial Master Index
 

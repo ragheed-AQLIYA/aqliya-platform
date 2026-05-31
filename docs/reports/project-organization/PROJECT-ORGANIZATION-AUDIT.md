@@ -162,9 +162,11 @@ Full table: `03-archive-candidates.md`
 
 ## 10. Next Recommended Steps
 
-1. **Commit:** Stage `.gitignore` + `docs/` only; triage `.data/`, `.next/`, tool artifacts (see §12).
-2. **Optional hygiene:** Theoretical doc banners; Sunbul taxonomy in official doctrine; `content-drafts` filename typo; fix Cursor hook blocking agent git.
-3. **Category C (future):** Consolidate duplicate pilot pack trees (C3) — separate project.
+1. ~~**Commit:** Stage `.gitignore` + `docs/` only~~ — **Done** (Category A/B/C doc passes committed 2026-06-01).
+2. ~~**Optional hygiene:** Theoretical doc banners; Sunbul taxonomy; content-drafts typo~~ — **Done** (see §12).
+3. ~~**Category C3:** Pilot pack tree pointers~~ — **Done** — `docs/pilot/PILOT-PACK-INDEX.md`.
+
+**Remaining (explicit future, non-blocking):** C1 code/schema, C2 Prisma rename, C4 validation gate, C6 official doctrine — see `09-final-closure.md`.
 
 ---
 
@@ -182,31 +184,35 @@ Full table: `03-archive-candidates.md`
 
 ---
 
-## 12. Post-completion status (2026-05-31)
+## 12. Post-completion status (2026-06-01)
 
-**Classification:** CLEAN_AND_CONTROLLED
+**Classification:** CLEAN_AND_CONTROLLED — **all safe doc cleanup COMPLETE**
 
-### Completed in this pass
+### Completed
 
 - Category A/B project-organization work (7/7 Category A, 10/10 Category B)
+- Category C doc-only: C3 pilot pack index (`docs/pilot/PILOT-PACK-INDEX.md`) + README pointer consolidation
 - Archive consolidation: agent-reports, Sunbul product tree, Notion pack, Eid waves 1–9, historical strategy plans
 - Stale guard archived: `docs/execution/architecture-guards.md` → `docs/archive/execution-stale/`
 - Pilot-pack sync; LocalContentOS PDF/XLSX export claims aligned with `PRODUCT_STATUS_MATRIX.md`
 - Navigation and archive README updates; `.gitignore` hygiene (`.data/`, `.understand-anything/`, tmp patterns)
+- Sunbul ↔ WorkflowOS taxonomy aligned across source-of-truth, releases, product/workflowos docs
+- Theoretical doc banners: 5 high-risk files stamped
+- Content-drafts typo rename; broken pilot/commercial links fixed
 - Project-organization audit reports indexed under `docs/reports/project-organization/`
+- Closure: `09-final-closure.md` — all safe items marked complete
 
-### Remaining (non-blocking)
+### Explicit future items (not blocking v0.1 doc governance)
 
-- **Official v1.1 doctrine:** Sunbul/WorkflowOS wording in `docs/official/*` may still use pre-redirect framing — update only with documented decision (Category C6)
-- **Cursor hook:** `block-heavy-commands.ps1` invalid JSON blocks agent-driven git/shell
-- **Lint-staged stashes / tool artifacts:** Triage `.data/`, `.next/`, `.understand-anything/` before broad commits
-
-### Main cleanup completed (2026-06-01)
-
-- **Sunbul ↔ WorkflowOS taxonomy:** Aligned `AQLIYA_SYSTEM_TAXONOMY.md`, `AQLIYA_ARCHITECTURE.md`, release scope/notes/limitations/demo-safety, and `docs/product/workflowos/` with `PRODUCT_STATUS_MATRIX.md` canonical (WorkflowOS = governed workspace; Sunbul = redirect alias)
-- **Theoretical doc banners:** Added authority disclaimer to 4 high-risk theoretical files
-- **Content-drafts typo:** Renamed `website-content-rewrite-v1- chatGPT.md` → `website-content-rewrite-v1-chatGPT.md` (and matching opencode draft)
-- **Closure:** `09-final-closure.md` created/updated
+| ID | Item |
+|----|------|
+| C1 | Code/schema/test changes — separate governance |
+| C2 | Sunbul → Workflow Prisma model rename |
+| C4 | Full build/lint/test validation at release gate |
+| C6 | Official v1.1 Sunbul/WorkflowOS wording in `docs/official/*` — other agent |
+| — | Cursor hook blocking agent git |
+| — | Tool artifact triage (`.data/`, `.next/`, `.understand-anything/`) |
+| — | Optional content merge across pilot trees (pointer index sufficient) |
 
 ---
 

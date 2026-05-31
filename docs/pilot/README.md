@@ -50,12 +50,13 @@ Start here for current pilot operations:
 - `dry-run/` — Dry-run reports and session plans
 - `runs/` — Pilot run records
 
-## Known Overlaps
+## Pilot Pack Navigation
 
-- Pilot success criteria appears in multiple places:
-  - `PILOT-SUCCESS-CRITERIA.md` (this directory)
-  - `execution-pack/09-pilot-success-criteria.md`
-  - `docs/commercial-pack/07-pilot-success-criteria.md`
-  - `docs/commercial/pilot-pack/05-success-criteria.md`
-- Future cleanup should choose a primary pilot success criteria source.
-- `CLIENT-DEMO-SCRIPT.md` overlaps with `docs/commercial/demo-storyline/` and `docs/commercial/demo-storyline-auditos.md`.
+→ **`PILOT-PACK-INDEX.md`** — canonical map of all AuditOS and LocalContentOS pilot pack trees (commercial, execution, archive, product-specific).
+
+## Known Overlaps (resolved — see index)
+
+- **Success criteria primary:** `docs/commercial-pack/07-pilot-success-criteria.md`
+- **Operational mirror:** `execution-pack/09-pilot-success-criteria.md`
+- **Legacy (archived):** `docs/archive/commercial-legacy/pilot-pack/05-success-criteria.md`
+- **Demo scripts:** `CLIENT-DEMO-SCRIPT.md` overlaps with `docs/commercial/demo-storyline/` (primary) and archived `docs/archive/commercial-legacy/demo-storyline-auditos.md`

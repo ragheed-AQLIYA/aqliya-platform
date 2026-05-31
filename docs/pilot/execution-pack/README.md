@@ -4,6 +4,8 @@
 **Date:** May 12, 2026  
 **Status:** Ready to use
 
+> **Navigation:** This is the **operational execution** pack (post-agreement). For commercial/sales materials use `docs/commercial-pack/`. For the full pilot pack map see `docs/pilot/PILOT-PACK-INDEX.md`.
+
 ---
 
 ## Purpose

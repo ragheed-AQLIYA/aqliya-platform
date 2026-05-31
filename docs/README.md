@@ -114,10 +114,11 @@ These README files provide navigation and recommended reading order for each doc
 | ------------------ | ------------------------------------------------------------------------------------ |
 | `product/`         | `product/README.md` — Product definitions and commercial chain                       |
 | `commercial/`      | `commercial/README.md` — Commercial and go-to-market materials (demo storyline)      |
+| `commercial-pack/` | `commercial-pack/README.md` — Primary AuditOS pilot commercial pack (Arabic-first) |
 | `releases/`        | Release scope, known limitations, release notes                                      |
 | `reports/project-organization/` | Repo documentation governance audits (latest: `PROJECT-ORGANIZATION-AUDIT.md`) |
 | `systems/`         | `systems/README.md` — System and operator documentation                              |
-| `pilot/`           | `pilot/README.md` — Pilot execution, readiness, operational docs                     |
+| `pilot/`           | `pilot/README.md` — Pilot execution, readiness, operational docs; pack index: `pilot/PILOT-PACK-INDEX.md` |
 | `reports/`         | `reports/README.md` — Stabilization, audit, documentation, QA reports                |
 
 ## Archive (Level 8 — Historical Only)

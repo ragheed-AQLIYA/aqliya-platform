@@ -35,6 +35,8 @@
 
 ## Pack Contents
 
+> **Navigation:** AuditOS pilot packs are separate — see `docs/pilot/PILOT-PACK-INDEX.md`.
+
 | File                                  | Purpose                                                                   |
 | ------------------------------------- | ------------------------------------------------------------------------- |
 | `pilot-scope.md`                      | Pilot objectives, included/excluded workflows, timeline, success criteria |

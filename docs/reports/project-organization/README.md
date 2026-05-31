@@ -1,7 +1,7 @@
 # Project Organization Audit — Index
 
 **Audit date:** 2026-05-31  
-**Classification:** CLEAN_AND_CONTROLLED  
+**Classification:** CLEAN_AND_CONTROLLED — all safe cleanup complete (2026-06-01)  
 **Scope:** Documentation governance, structure, archival control — no code changes
 
 ---
@@ -37,5 +37,6 @@ This pass supersedes for **2026-05-31** governance status.
 
 1. ~~Category A stale-claim patches~~ — **Done 2026-06-01**
 2. ~~Category B archive (all 10 items)~~ — **Done 2026-06-01** — see [08-category-b-completion.md](./08-category-b-completion.md)
-3. Pilot-pack export alignment — **Done 2026-06-01** (`pilot-onboarding-pack/`)
-4. Commit doc/archive changes after triage of tool artifacts (`.data/`, `.next/`) — see [09-final-closure.md](./09-final-closure.md)
+3. ~~Pilot-pack export alignment~~ — **Done 2026-06-01** (`pilot-onboarding-pack/`, `PILOT-PACK-INDEX.md`)
+4. ~~Category C3 pilot pack pointers~~ — **Done 2026-06-01** — see [09-final-closure.md](./09-final-closure.md)
+5. **Future (non-blocking):** C1/C2/C4/C6 code/schema/official-doctrine items — see closure doc
