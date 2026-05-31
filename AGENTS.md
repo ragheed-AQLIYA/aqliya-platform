@@ -1285,3 +1285,39 @@ Every change should increase at least one of:
 - readiness for real customers
 
 If a change does not improve any of these, reconsider it.
+
+---
+
+## Cursor Cloud specific instructions
+
+### Services
+
+| Service | Required for full-stack dev? | Start |
+|--------|------------------------------|--------|
+| PostgreSQL 16 | Yes | `sudo docker compose up -d db` (port **5432**, credentials in `.env.example`) |
+| Next.js app | Yes | See **Run** below |
+| Prisma | Generated on install | `npx prisma generate` (also runs via `postinstall`) |
+
+Integration tests use a **separate** DB on port **5433**: `npm run test:integration:setup` (`docker-compose.test.yml`).
+
+### First-time / after clone
+
+1. `cp .env.example .env` (or rely on the VM update script to create `.env`).
+2. Set **`AUTH_SECRET`** to the same value as **`NEXTAUTH_SECRET`** in `.env` (runtime auth reads `AUTH_SECRET`; `scripts/validate-env.mjs` only checks `NEXTAUTH_SECRET`).
+3. `sudo docker compose up -d db`, then `npx prisma db push` and `npx prisma db seed` (seed users: `admin@aqliya.com` / `admin123`, etc. in `prisma/seed.ts`).
+4. `npm install` must run with env loaded (`postinstall` runs `validate-env.mjs`).
+
+### Run
+
+- **Production server (reliable in Cloud VM):** `npm run build` then `npm run start` → http://localhost:3000
+- **`npm run dev` (Turbopack):** May panic in Linux/Cloud VMs because `next.config.mjs` sets `turbopack.root` to a Windows path. Use **`npx next dev --webpack`** (e.g. port 3001) until that config is fixed for the repo.
+
+### Validate (see README)
+
+`npx tsc --noEmit`, `npm run lint` (warnings are pre-existing), `npm test`, `npm run build`. CI does not start Postgres; local E2E needs the DB container.
+
+### Gotchas
+
+- Source `.env` before `npm install` / `npm run build` if the shell has no env vars.
+- `npm run test:integration` needs the test compose DB, not only dev `db`.
+- File uploads use local `./uploads` by default (`STORAGE_PROVIDER=local`).
