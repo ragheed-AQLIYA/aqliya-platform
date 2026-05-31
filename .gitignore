@@ -50,6 +50,8 @@ docs/demo/
 
 # report evidence (prevents future contamination; already-tracked reports still visible)
 docs/reports/
+!docs/reports/project-organization/
+!docs/reports/project-organization/**
 
 # debug
 npm-debug.log*
