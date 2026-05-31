@@ -13,7 +13,12 @@ function Emit-HookResult {
     $payload = [ordered]@{ permission = $Permission }
     if ($UserMessage) { $payload['user_message'] = $UserMessage }
     if ($AgentMessage) { $payload['agent_message'] = $AgentMessage }
-    [Console]::Out.WriteLine(($payload | ConvertTo-Json -Compress))
+    $json = ($payload | ConvertTo-Json -Compress)
+    $utf8 = [System.Text.UTF8Encoding]::new($false)
+    $stdout = [Console]::OpenStandardOutput()
+    $bytes = $utf8.GetBytes($json + [Environment]::NewLine)
+    $stdout.Write($bytes, 0, $bytes.Length)
+    $stdout.Flush()
     exit 0
 }
 
@@ -28,25 +33,24 @@ try {
     }
 }
 catch {
-    # Fail open so light git/docs work is not blocked by malformed hook input
     Emit-HookResult -Permission 'allow'
 }
 
 $cmd = $command.Trim()
 
-# Light git — always allow (project-organization pass + routine inspection)
 $lightGitPatterns = @(
     '(?i)\bgit\s+status\b',
     '(?i)\bgit\s+add\b',
     '(?i)\bgit\s+commit\b',
     '(?i)\bgit\s+diff\b',
     '(?i)\bgit\s+log\b',
+    '(?i)\bgit\s+push\b',
     '(?i)\bgit\s+ls-files\b',
     '(?i)\bgit\s+branch\b',
     '(?i)\bgit\s+check-ignore\b',
     '(?i)\bgit\s+show\b',
     '(?i)\bgit\s+rev-parse\b',
-    '(?i)\bgit\s+-C\s+[^\s]+\s+(status|add|commit|diff|log|ls-files|branch)\b'
+    '(?i)\bgit\s+-C\s+[^\s]+\s+(status|add|commit|diff|log|ls-files|branch|push)\b'
 )
 foreach ($pattern in $lightGitPatterns) {
     if ($cmd -match $pattern) {
@@ -54,7 +58,6 @@ foreach ($pattern in $lightGitPatterns) {
     }
 }
 
-# Other light inspection
 $lightOtherPatterns = @(
     '(?i)\bnpx\s+tsc\s+--noEmit\b',
     '(?i)\bnpx\s+prisma\s+validate\b',
@@ -71,7 +74,6 @@ foreach ($pattern in $lightOtherPatterns) {
     }
 }
 
-# Heavy commands — deny (low-load protocol)
 $heavyPatterns = @(
     '(?i)\bnpm\s+run\s+build\b',
     '(?i)\bnpm\s+run\s+lint\b',

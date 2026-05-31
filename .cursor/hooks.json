@@ -3,7 +3,7 @@
   "hooks": {
     "beforeShellExecution": [
       {
-        "command": "powershell -ExecutionPolicy Bypass -File .cursor/hooks/block-heavy-commands.ps1"
+        "command": "powershell -ExecutionPolicy Bypass -NoProfile -File .cursor/hooks/block-heavy-commands.ps1"
       }
     ]
   }
