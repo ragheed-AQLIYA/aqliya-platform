@@ -19,8 +19,8 @@ AQLIYA v0.1 is the **first scope-locked usable platform release candidate** for 
 | AuditOS                        | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
 | DecisionOS                     | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
 | Office AI Assistant            | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
-| Sunbul                         | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation |
-| workflowos                     | Included as custom/internal workspace   | L3 Prototype   | Internal only                 |
+| WorkflowOS                     | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
+| Sunbul                         | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 |
 | Platform audit logs/governance | Included in v0.1                        | L4 Usable v0.1 | Internal/operator use         |
 | Public marketing site          | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  |
 | Custom product inquiry         | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  |
@@ -73,8 +73,8 @@ AQLIYA v0.1 is the **first scope-locked usable platform release candidate** for 
 - AuditOS still contains some mixed mock/deterministic internals in non-blocking helper paths.
 - DecisionOS includes some mixed dashboard filler and is not yet production-hardened.
 - Office AI Assistant is deterministic/governed today, not a full cloud/local AI platform runtime.
-- Sunbul is real but positioned as custom/client-specific rather than a general product line.
-- workflowos remains an internal/custom alias over Sunbul implementation.
+- WorkflowOS is the canonical governed workflow workspace (L4 Usable v0.1), positioned as custom/client-specific rather than a general product line.
+- Sunbul is a legacy redirect alias only (`/sunbul/*` → `/workflowos/*`); Prisma models retain `Sunbul*` prefixes.
 - Build and lint warnings remain documented and accepted.
 - Prototype/internal routes such as `/sales`, `/organizations`, `/settings`, and `/monitoring` remain present and must keep their restricted framing.
 - LocalContentOS is L5 pilot-ready with conditions (usable v0.1). Binary PDF/XLSX export implemented (2026-05-25); not L6. Review/approval/report inline forms may still need clean manual pass.
@@ -86,7 +86,7 @@ Allowed positioning:
 - AuditOS is real and pilot-ready.
 - DecisionOS is real and active.
 - Office AI Assistant is a governed shared application.
-- Sunbul is a real custom/client-specific workspace.
+- WorkflowOS is a real governed workflow workspace.
 - LocalContentOS is a real L5 pilot-ready workspace (usable v0.1 with conditions; text/CSV export).
 - AQLIYA Cloud is active.
 
@@ -94,7 +94,7 @@ Forbidden positioning:
 
 - LocalContentOS is a real L5 pilot-ready workspace with conditions (usable v0.1). Do not claim L6 production-hardened or binary PDF/XLSX export as live.
 - SalesOS is not an implemented product.
-- workflowos is a separate product from Sunbul.
+- Sunbul is a separate product or workspace (it is a redirect alias only).
 - On-Prem, Air-Gapped, or Local AI are live.
 - AQLIYA Studio, Model Governance, or Institutional Memory are implemented.
 

@@ -12,8 +12,8 @@ AQLIYA v0.1 is the **first complete usable platform release scope** for the repo
 | AuditOS                          | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  | `/audit/*`, `Audit*` schema, actions, exports, audit trail            | First proof product                         |
 | DecisionOS                       | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation | `/decisions/*`, decision schema/actions, approvals, reports, signals  | Real active adjacent system                 |
 | Office AI Assistant              | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation | `/assistant/*`, `OfficeAi*` models, actions, platform audit logs      | Not a standalone product                    |
-| Sunbul                           | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation | `/sunbul/*`, `Sunbul*` models, export/storage/review flows            | Custom/client-specific workspace            |
-| workflowos                       | Included as custom/internal workspace   | L3 Prototype   | Internal only                 | `/workflowos/*` routes reuse Sunbul implementation                    | Alias/duplicate custom surface              |
+| WorkflowOS                       | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation | `/workflowos/*`, `Sunbul*` Prisma models, export/storage/review flows | Canonical governed workflow workspace       |
+| Sunbul                           | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 | `/sunbul/*` → `permanentRedirect(302)` to `/workflowos/*`             | Not a separate product or workspace         |
 | Platform audit logs / governance | Included in v0.1                        | L4 Usable v0.1 | Internal only                 | `PlatformAuditLog`, governance runtime, diagnostics routes            | Internal operator-facing foundation         |
 | Public marketing site            | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  | `/`, `/products/*`, company pages                                     | Marketing only, not proof of implementation |
 | Custom product inquiry           | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  | `/custom-product`, `/api/custom-product-submit`                       | Commercial funnel                           |
@@ -45,8 +45,8 @@ AQLIYA v0.1 is the **first complete usable platform release scope** for the repo
 - AuditOS is the first proof product.
 - DecisionOS is an active adjacent system.
 - Office AI Assistant is a governed shared application.
-- Sunbul is a custom/client workflow workspace.
-- workflowos is an internal/custom workflow route family reusing Sunbul implementation.
+- WorkflowOS is the canonical governed workflow workspace.
+- Sunbul is a legacy redirect alias to WorkflowOS (`/sunbul/*` → `/workflowos/*`).
 - SalesOS is prototype only and must not be sold as an implemented product.
 - LocalContentOS is included as L5 pilot-ready with conditions (usable v0.1 workspace). Binary PDF/XLSX export is implemented (2026-05-25). Do not claim L6 production-hardened or regulator-certified export.
 
@@ -67,7 +67,7 @@ Can say:
 - AuditOS is real and pilot-ready.
 - DecisionOS is real and active.
 - Office AI Assistant is a governed shared application.
-- Sunbul is a real custom/client-specific workflow workspace.
+- WorkflowOS is a real governed workflow workspace (L4 Usable v0.1).
 - LocalContentOS is a real L5 pilot-ready workspace (usable v0.1 with conditions; text/CSV and binary PDF/XLSX export).
 - AQLIYA Cloud is active.
 
@@ -75,7 +75,7 @@ Cannot say:
 
 - LocalContentOS is L6 production-hardened or regulator-certified.
 - SalesOS is an implemented product.
-- workflowos is a separate product from Sunbul.
+- Sunbul is a separate product or workspace (it is a redirect alias only).
 - On-Prem, Air-Gapped, or Local AI are live.
 - AQLIYA Studio, Model Governance, or Institutional Memory are implemented.
 

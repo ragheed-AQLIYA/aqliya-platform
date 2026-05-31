@@ -1,3 +1,5 @@
+> **This is background/theoretical reference, not implementation authority.** See `docs/official/` and `docs/source-of-truth/` for product status, routes, and governance.
+
 # AQLIYA Theoretical Documentation System — Architecture Overview
 
 ## Role of Theoretical Documentation

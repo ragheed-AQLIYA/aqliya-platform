@@ -197,10 +197,16 @@ Full table: `03-archive-candidates.md`
 
 ### Remaining (non-blocking)
 
-- **Theoretical docs:** Ensure banner/disclaimer consistency where not yet stamped
-- **Sunbul taxonomy:** Align legacy alias vs WorkflowOS wording in official doctrine docs
-- **`content-drafts` typo:** Rename `website-content-rewrite-v1- chatGPT.md` if still present
+- **Official v1.1 doctrine:** Sunbul/WorkflowOS wording in `docs/official/*` may still use pre-redirect framing — update only with documented decision (Category C6)
 - **Cursor hook:** `block-heavy-commands.ps1` invalid JSON blocks agent-driven git/shell
+- **Lint-staged stashes / tool artifacts:** Triage `.data/`, `.next/`, `.understand-anything/` before broad commits
+
+### Main cleanup completed (2026-06-01)
+
+- **Sunbul ↔ WorkflowOS taxonomy:** Aligned `AQLIYA_SYSTEM_TAXONOMY.md`, `AQLIYA_ARCHITECTURE.md`, release scope/notes/limitations/demo-safety, and `docs/product/workflowos/` with `PRODUCT_STATUS_MATRIX.md` canonical (WorkflowOS = governed workspace; Sunbul = redirect alias)
+- **Theoretical doc banners:** Added authority disclaimer to 4 high-risk theoretical files
+- **Content-drafts typo:** Renamed `website-content-rewrite-v1- chatGPT.md` → `website-content-rewrite-v1-chatGPT.md` (and matching opencode draft)
+- **Closure:** `09-final-closure.md` created/updated
 
 ---
 

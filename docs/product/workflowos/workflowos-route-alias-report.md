@@ -1,7 +1,9 @@
+> **Historical report (2026-05-19).** Superseded by canonical WorkflowOS identity: `/workflowos/*` is the governed workspace; `/sunbul/*` is a legacy redirect alias. See `docs/product/workflowos/README.md` and `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`.
+
 # WorkflowOS Route Alias Report
 
 **Date:** 2026-05-19
-**Status:** Route aliases added — `/workflowos/*` currently duplicates the Sunbul implementation and is not a separate product/domain
+**Status:** Historical — documents the initial route-alias phase before Sunbul became redirect-only
 
 ---
 

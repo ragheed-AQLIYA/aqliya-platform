@@ -102,8 +102,8 @@ Response headers must include `Cache-Control: private, no-store` and `X-Content-
 ## Reality Alignment Notes
 
 - `Office AI Assistant` is implemented in code today as a governed shared application, even though some official v1.1 documents still describe it as planned.
-- `Sunbul` and `workflowos` are real route families and must remain visible in architecture documentation; however, they are currently best classified as custom/client-specific workspace surfaces rather than core AQLIYA product-family products.
-- `workflowos` does not have a distinct domain schema. It currently reuses Sunbul components, actions, and models.
+- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L4 Usable v0.1). It is a real workspace but best classified as a custom/client-specific surface rather than a core AQLIYA product-family product.
+- `Sunbul` is a legacy redirect alias only: `/sunbul/*` routes are `permanentRedirect(302)` to matching `/workflowos/*` routes. Prisma models retain `Sunbul*` prefixes for schema compatibility.
 - `/organizations`, `/settings`, and `/sales` are protected surfaces but do not yet meet v0.1 workspace completeness requirements.
 - `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 12 routes, server actions, seed data, bilingual UI, evidence upload, protected evidence/report downloads, review/approval, binary PDF/XLSX exports (pdfkit + xlsx), and audit trail. Status: L5 pilot-ready with conditions — not L6 production-hardened. Arabic PDF font rendering is P2 quality gap. See `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for current maturity details.
 - `DecisionOS` now includes stored evidence files plus protected evidence download routes under `/api/decisions/[decisionId]/evidence/[evidenceId]/download`, in addition to governed export preparation inside the workspace.

@@ -1,3 +1,5 @@
+> **This is background/theoretical reference, not implementation authority.** See `docs/official/` and `docs/source-of-truth/` for product status, routes, and governance.
+
 # Product Doctrine Lookup Map
 
 This document maps each AQLIYA product line to its governing doctrine layers, principles, decision boundaries, and related system-intelligence documentation from Phase 3.

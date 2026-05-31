@@ -5,8 +5,8 @@
 - AuditOS is strong but still has some mixed mock/deterministic internals in service and AI helper paths.
 - DecisionOS includes some mixed dashboard filler and is not yet positioned as fully production-hardened.
 - Office AI Assistant is deterministic/governed today, not a broad cloud-AI product runtime.
-- Sunbul is real but classified as custom/client-specific, not a general platform product line.
-- workflowos is not a separate domain; it currently duplicates Sunbul implementation patterns.
+- WorkflowOS is the canonical governed workflow workspace (L4 Usable v0.1), classified as custom/client-specific rather than a general platform product line.
+- Sunbul is a legacy redirect alias over WorkflowOS only; `/sunbul/*` routes redirect to `/workflowos/*`. Prisma models retain `Sunbul*` prefixes for schema compatibility.
 - LocalContentOS is a real governed workspace (L5 with conditions / usable v0.1), not marketing-only or unimplemented. Binary PDF/XLSX export implemented (2026-05-25, pdfkit + xlsx); not L6 production-hardened. Arabic PDF font rendering is a P2 quality gap. Review/approval/report inline forms may still need a clean manual pass after mutation feedback loop verification.
 
 ## 2. AI Limitations

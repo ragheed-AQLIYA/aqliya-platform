@@ -8,8 +8,8 @@
 | **Platform Layer**               | Shared underlying technical/governance foundation                                | AQLIYA Intelligence Core                | Use for cross-product/shared foundations                | Do not market as a finished product                 |
 | **Product / System**             | Named operational system with route, data, workflow, and governance purpose      | AuditOS, DecisionOS                     | Use for real operational systems                        | Do not apply to marketing-only pages                |
 | **Shared Application**           | Governed application built on the Core but not a standalone product family       | Office AI Assistant                     | Use for real shared work-assistant style applications   | Do not reframe as product without explicit decision |
-| **Custom Workspace**             | Real governed workspace tailored to a client-specific or custom workflow         | Sunbul                                  | Use when code exists but positioning is custom/internal | Do not hide if it exists                            |
-| **Custom Workspace Alias**       | Duplicate or alias route family over an existing custom workspace implementation | workflowos                              | Use when routes exist without a separate domain         | Do not describe as separate product                 |
+| **Custom Workspace**             | Real governed workspace tailored to a client-specific or custom workflow         | WorkflowOS                              | Use for the canonical governed workflow workspace       | Do not hide if it exists                            |
+| **Legacy Redirect Alias**        | Permanent redirect route family to a canonical workspace                         | Sunbul                                  | Use only for legacy `/sunbul/*` redirect compatibility  | Do not describe as separate product or workspace     |
 | **Demo**                         | Guided, read-only, mock-backed walkthrough                                       | `/auditos`                              | Use only for explicit demo surfaces                     | Do not present as live workspace                    |
 | **Prototype / Internal Preview** | Incomplete or local-state-only workspace-like surface                            | `/sales`, `/organizations`, `/settings` | Use to label real but incomplete surfaces               | Do not present as v0.1-complete product             |
 | **Marketing-only Product Page**  | Product description with no operational implementation                           | SimulationOS, SalesOS marketing page    | Use on `/products/*`                                    | Do not claim as working product                     |
@@ -35,11 +35,12 @@
 - Real routes at `/assistant/*`
 - Not a standalone product claim
 
-### Sunbul and workflowos
+### WorkflowOS and Sunbul
 
-- `Sunbul` = real custom workspace
-- `workflowos` = real alias/duplicate route family over Sunbul patterns
-- Neither should be hidden, and neither should be promoted into a general AQLIYA product claim without further product decisions
+- `WorkflowOS` = canonical governed workspace at `/workflowos/*` (L4 Usable v0.1)
+- `Sunbul` = legacy redirect alias only; `/sunbul/*` routes are `permanentRedirect(302)` to matching `/workflowos/*` routes
+- Prisma models retain `Sunbul*` prefixes for schema compatibility; product identity is WorkflowOS
+- Neither should be hidden, and WorkflowOS should not be promoted into a general AQLIYA product claim without further product decisions
 
 ### SalesOS, organizations, settings
 
@@ -60,8 +61,8 @@
 | AuditOS             | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
 | DecisionOS          | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
 | Office AI Assistant | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
-| Sunbul              | Included as custom/internal workspace   | L4 Usable v0.1 | Safe to show with explanation |
-| workflowos          | Included as custom/internal workspace   | L3 Prototype   | Internal only                 |
+| WorkflowOS          | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
+| Sunbul              | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 |
 | auditos             | Included as demo only                   | L1 Marketing   | Demo only                     |
 | SalesOS             | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
 | LocalContentOS      | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |

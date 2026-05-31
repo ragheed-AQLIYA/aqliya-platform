@@ -36,9 +36,9 @@
 | B9 | `docs/reports/aqliya-full-platform-build-program-plan.md` and similar v02 aspirational plans | Archive → `docs/archive/historical-strategy/` | Large files; still referenced? | Planning context loss | **Done 2026-06-01** — 5 files + README |
 | B10 | Rename `docs/product/localcontentos-v0.1/pilot-onboarding-pack/limitsations-and-safe-claims.md` | → `limitations-and-safe-claims.md` | Typo in pilot pack | Broken links | **Done 2026-06-01** |
 
-**Category B execution:** **Complete 2026-06-01** — all 10 Category B items executed. (Original audit also listed content-drafts space typo — still optional; not in user-approved B10 scope.)
+**Category B execution:** **Complete 2026-06-01** — all 10 Category B items executed. Content-drafts space typo rename also done in main cleanup pass (2026-06-01).
 
-**Note:** B10 in original audit listed `content-drafts/website-content-rewrite-v1- chatGPT.md`; user-approved scope was LocalContentOS `limitations-and-safe-claims.md` rename only.
+**Note:** B10 in original audit listed `content-drafts/website-content-rewrite-v1- chatGPT.md`; user-approved B10 scope was LocalContentOS `limitations-and-safe-claims.md` rename. Content-drafts rename completed separately in main cleanup pass.
 
 ---
 

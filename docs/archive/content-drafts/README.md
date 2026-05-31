@@ -15,8 +15,8 @@ These files are previous versions of the AQLIYA website content, all superseded 
 
 | File | Reason |
 |------|--------|
-| `website-content-rewrite-v1- chatGPT.md` | Superseded by v3 hybrid |
-| `website-content-rewrite-v1- opencode.md` | Superseded by v3 hybrid |
+| `website-content-rewrite-v1-chatGPT.md` | Superseded by v3 hybrid |
+| `website-content-rewrite-v1-opencode.md` | Superseded by v3 hybrid |
 | `website-content-rewrite-v2.md` | Superseded by v3 hybrid |
 | `website-content-rewrite-v2-chatGPT.md` | Superseded by v3 hybrid |
 | `AQLIYA_Website_Content_Rewrite.docx` | Binary format; content captured in v3 hybrid |

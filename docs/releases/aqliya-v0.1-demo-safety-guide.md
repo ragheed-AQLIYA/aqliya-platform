@@ -14,7 +14,8 @@
 | ------------------- | --------------------------------------------------------------------------- | ------------------------------- |
 | DecisionOS          | Real active adjacent system; some areas are stronger than others            | Overstating production maturity |
 | Office AI Assistant | Governed shared application, deterministic today, not a generic chatbot     | Overclaiming AI/runtime breadth |
-| Sunbul              | Real custom/client-specific workspace, not a default platform product claim | Product-boundary confusion      |
+| WorkflowOS        | Real governed workflow workspace; custom/client-specific framing required   | Product-boundary confusion      |
+| Sunbul            | Legacy redirect alias only — do not demo as separate workspace              | Treating redirect as live product |
 
 ## Safe to Demo with Explanation (LocalContentOS)
 
@@ -26,7 +27,7 @@
 
 | Area          | Reason                                                             |
 | ------------- | ------------------------------------------------------------------ |
-| workflowos    | Alias/duplicate custom workflow surface over Sunbul implementation |
+| Sunbul            | Legacy `/sunbul/*` redirect alias to WorkflowOS — internal reference only   |
 | organizations | Protected prototype/internal preview only                          |
 | settings      | Generic local-state preview only                                   |
 | monitoring    | Internal diagnostics/operator surface                              |
