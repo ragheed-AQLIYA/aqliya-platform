@@ -1,0 +1,35 @@
+---
+description: Validation and reporting policy
+alwaysApply: true
+---
+
+# Validation Policy
+
+Never report "done", "ready", "production-ready", or "fixed" without evidence.
+
+Use these classifications:
+- Code patched, not validated
+- Light validated
+- TypeScript validated
+- Route smoke validated
+- Build validated
+- Pilot-ready with conditions
+- Production no-go
+- Production candidate
+- Production-ready
+
+When validation is not run, say:
+"Not run: <command>. Reason: <reason>."
+
+For every final report include:
+1. Summary
+2. Files changed
+3. Commands run
+4. Results
+5. Known risks
+6. Next step
+
+Do not hide skipped tests.
+Do not claim browser verification unless actually performed in browser.
+
+Use the final report format in root `AGENTS.md` section 25 when completing product work.

@@ -1,0 +1,48 @@
+---
+description: Low-load execution protocol for limited local machine resources
+alwaysApply: true
+---
+
+# Low-Load Execution Protocol
+
+The user's machine has limited resources. Do not run heavy commands automatically.
+
+Heavy commands requiring explicit approval:
+- npm run build
+- npm run lint
+- npm test
+- npx jest without targeted path
+- npx prisma migrate
+- npx prisma generate
+- broad file scans
+- whole-project refactors
+- starting multiple dev servers
+- indexing or dependency reinstall
+
+Preferred light checks:
+- npx tsc --noEmit only when needed and approved
+- npx eslint <specific files>
+- npx jest <specific test file>
+- git diff -- <specific files>
+- targeted grep/search
+- route-specific manual verification
+
+On Windows/PowerShell, prefer:
+$env:NODE_OPTIONS="--max-old-space-size=4096"
+
+If memory problems appear:
+- Do not assume code bug.
+- Identify whether issue is RAM, stuck process, cache, or actual error.
+- Suggest safe cleanup only:
+  taskkill /F /IM node.exe
+  wsl --shutdown
+
+At task end, report:
+- files changed
+- commands run
+- light/heavy classification
+- validation result
+- RAM risk
+- next lowest-load step
+
+Cloud Agent VMs may run full validation when explicitly tasked for environment setup or release gates.

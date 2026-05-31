@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "powershell -ExecutionPolicy Bypass -File .cursor/hooks/block-heavy-commands.ps1",
+        "timeout": 10
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "powershell -ExecutionPolicy Bypass -File .cursor/hooks/after-edit-light-check.ps1",
+        "timeout": 20
+      },
+      {
+        "command": "powershell -ExecutionPolicy Bypass -File .cursor/hooks/protect-env-files.ps1",
+        "timeout": 10
+      }
+    ]
+  }
+}

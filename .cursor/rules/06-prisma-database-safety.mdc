@@ -1,0 +1,34 @@
+---
+description: Prisma, database, and migration safety
+alwaysApply: false
+globs:
+  - "prisma/**"
+  - "src/lib/**/db/**"
+  - "src/actions/**"
+---
+
+# Prisma and Database Safety
+
+Do not run migrations automatically.
+
+Before schema changes:
+1. Explain affected models.
+2. Identify product scope.
+3. Check whether model belongs to platform core or product-specific area.
+4. Propose migration name.
+5. Wait for approval.
+
+Do not:
+- add broad nullable fields without reason
+- create duplicate models for existing concepts
+- weaken relations
+- remove audit/evidence/user context
+- run prisma generate/migrate without explicit approval
+
+Prefer:
+- narrow model additions
+- repository/service layer consistency
+- seed updates only when needed
+- rollback notes
+
+Canonical schema: `prisma/schema.prisma`.

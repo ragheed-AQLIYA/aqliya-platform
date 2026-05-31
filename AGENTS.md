@@ -1321,3 +1321,4 @@ Integration tests use a **separate** DB on port **5433**: `npm run test:integrat
 - Source `.env` before `npm install` / `npm run build` if the shell has no env vars.
 - `npm run test:integration` needs the test compose DB, not only dev `db`.
 - File uploads use local `./uploads` by default (`STORAGE_PROVIDER=local`).
+- On Linux/Cloud, use `.cursor/hooks.linux.json` for AQLIYA low-load hooks if PowerShell is unavailable.
