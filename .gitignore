@@ -40,7 +40,8 @@ tmp-*.txt
 tmp_write_*.py
 gen_v02_test.py
 
-# temp scripts
+# temp scripts (agent one-offs and scratch)
+scripts/_*
 scripts/_tmp-*
 
 # drafts and collateral (not source of truth)
