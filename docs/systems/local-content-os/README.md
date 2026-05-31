@@ -2,7 +2,7 @@
 
 **Status:** L5 pilot-ready with conditions / usable v0.1  
 **Routes:** `/local-content/*` (12 workspace routes), `/products/local-content` (marketing)  
-**Current maturity:** Real governed workspace with server actions, seed data, mutations, review/approval, text/CSV export, audit trail. Not L6 production-hardened.
+**Current maturity:** Real governed workspace with server actions, seed data, mutations, review/approval, text/CSV and binary PDF/XLSX export (2026-05-25), audit trail. Not L6 production-hardened.
 
 **Current authority:** `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`
 
@@ -15,7 +15,6 @@
 
 ## What Is Deferred
 
-- Binary PDF/XLSX export (text/CSV available)
 - L6 production hardening
 - AI autonomous classification
 - Full edit/delete UI for all entities
@@ -25,11 +24,11 @@
 - Governed local content assessment workspace (pilot-ready with conditions)
 - Human review and approval workflows
 - Evidence-backed supplier/spend classification display
-- Text/CSV export with disclaimer metadata
+- Text/CSV and binary PDF/XLSX export with disclaimer metadata (pdfkit + xlsx; not regulator-certified)
 
 ## Forbidden Claims
 
 - Production-hardened (L6) or regulator-certified compliance
-- Binary PDF/XLSX export as live
+- Claiming binary PDF/XLSX export is L6-certified or regulator-approved
 - AI autonomous classification
 - On-Prem / Air-Gapped deployment as available today

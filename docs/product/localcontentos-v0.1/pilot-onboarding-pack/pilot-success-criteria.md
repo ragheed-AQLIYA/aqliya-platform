@@ -32,5 +32,5 @@ The pilot is successful when the customer can demonstrate understanding of the g
 
 - Customer signs a contract (that is conversion, not pilot success)
 - All 13 mutation-only QA items are tested (desirable but not blocking)
-- Binary PDF export is functional (accepted P2 limitation)
+- Regulator-certified PDF/XLSX or L6 export hardening (binary export exists; Arabic font P2; not official compliance)
 - Full ERP integration is live (excluded from scope)

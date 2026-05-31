@@ -18,7 +18,7 @@
 | Run weekly founder review              | [`auditos-pilot-command-center.md`](auditos-pilot-command-center.md)                                                                                                |
 | Prepare or run customer meetings       | [`auditos-pilot-meeting-workflow.md`](auditos-pilot-meeting-workflow.md)                                                                                            |
 | Capture proof before go/no-go          | [`auditos-pilot-proof-capture.md`](auditos-pilot-proof-capture.md)                                                                                                  |
-| Review Eid build wave history          | [`../reports/eid-continuous-build-index-2026-05-28.md`](../reports/eid-continuous-build-index-2026-05-28.md)                                                        |
+| Review Eid build wave history          | [`../reports/eid-continuous-build-index-2026-05-28.md`](../reports/eid-continuous-build-index-2026-05-28.md) (waves 1–9 in [`../archive/old-reports/`](../archive/old-reports/README.md)) |
 
 **Trust principle:** AI assists. Humans decide. Evidence governs.
 
@@ -146,4 +146,4 @@ Tracker remains a **CSV/spreadsheet + docs** surface until a future wave approve
 ## Related Reports
 
 - Eid Continuous Build index: `docs/reports/eid-continuous-build-index-2026-05-28.md`
-- Wave 7 report: `docs/reports/eid-continuous-build-wave-7-2026-05-28.md`
+- Wave 7 report: `docs/archive/old-reports/eid-continuous-build-wave-7-2026-05-28.md`

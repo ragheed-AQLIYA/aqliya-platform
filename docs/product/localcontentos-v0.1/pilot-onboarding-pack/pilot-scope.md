@@ -19,7 +19,7 @@ All workflows are implemented, browser-verified, and ready for pilot use:
 | Findings register      | Findings with severity badges and types                       | ✅               |
 | Review                 | Submit and track review with comments and history             | ✅               |
 | Approval               | Approve/reject with decision badge and governance record      | ✅               |
-| Reports                | Report generation records with disclaimer                     | ✅               |
+| Reports                | Report generation with text/CSV and binary PDF/XLSX export (disclaimer; not regulator-certified) | ✅               |
 | Audit trail            | Full event log with Arabic action labels, actors, timestamps  | ✅               |
 
 ## Excluded Workflows
@@ -30,7 +30,7 @@ These capabilities are NOT included in the pilot and must not be claimed:
 | ----------------------------- | ---------------------------------------------------------------------------------- |
 | Regulatory certification      | Not implemented — platform produces governed assessments, not certified compliance |
 | Official authority submission | No integration with Saudi authorities (LCGPA, etc.)                                |
-| Binary PDF/XLSX export        | Current export is text/CSV format                                                  |
+| Regulator-certified PDF/XLSX  | Binary PDF/XLSX export exists; not an official compliance submission; Arabic PDF font P2 |
 | Production deployment         | Pilot runs on AQLIYA cloud workspace, not customer infrastructure                  |
 | On-prem/private deployment    | Not implemented                                                                    |
 | AI autonomous decisions       | AI is not wired for this product — all workflows are human-governed                |

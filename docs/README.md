@@ -19,6 +19,13 @@ See `DOCUMENTATION_AUTHORITY.md` for the definitive documentation hierarchy, con
 | `systems/*`                           | System and operator documentation                    | Level 5           | Active — supporting |
 | `pilot/*`                             | Pilot execution and readiness                        | Level 5           | Active — supporting |
 | `reports/*`                           | Validation reports and implementation evidence       | Level 6           | Evidence only       |
+| `reports/project-organization/`       | Documentation governance and repo organization audits  | Level 6           | Evidence only       |
+| `releases/*`                          | v0.1 release scope, limitations, release notes       | Level 5           | Active — supporting |
+| `deployment/*`                        | Deployment posture and environment inventory         | Level 5           | Active — supporting |
+| `clients/*`                           | Client organization profiles (not product docs)       | Level 5           | Active — supporting |
+| `execution/*`                         | Engineering prompts and guards                       | Level 5           | **Review before use** — some files stale |
+| `archive/notion-export-2026/`         | Notion OS planning annex (archived reference)          | Level 8           | Historical — not product status          |
+| `notion/README.md`                    | Redirect stub to archived Notion pack                  | Level 8           | See `archive/notion-export-2026/`        |
 | `theoretical-reference/*`             | Intellectual foundation and domain theory            | Level 7           | Background only     |
 | `archive/*`                           | Historical and superseded documents                  | Level 8           | Historical only     |
 
@@ -106,8 +113,9 @@ These README files provide navigation and recommended reading order for each doc
 | Directory          | README                                                                               |
 | ------------------ | ------------------------------------------------------------------------------------ |
 | `product/`         | `product/README.md` — Product definitions and commercial chain                       |
-| `commercial/`      | `commercial/README.md` — Commercial and go-to-market materials (pilot-pack archived) |
-| `commercial-pack/` | `commercial-pack/README.md` — Pilot commercial pack (active, primary)                |
+| `commercial/`      | `commercial/README.md` — Commercial and go-to-market materials (demo storyline)      |
+| `releases/`        | Release scope, known limitations, release notes                                      |
+| `reports/project-organization/` | Repo documentation governance audits (latest: `PROJECT-ORGANIZATION-AUDIT.md`) |
 | `systems/`         | `systems/README.md` — System and operator documentation                              |
 | `pilot/`           | `pilot/README.md` — Pilot execution, readiness, operational docs                     |
 | `reports/`         | `reports/README.md` — Stabilization, audit, documentation, QA reports                |

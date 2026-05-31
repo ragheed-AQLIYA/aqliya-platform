@@ -77,7 +77,7 @@ AQLIYA v0.1 is the **first scope-locked usable platform release candidate** for 
 - workflowos remains an internal/custom alias over Sunbul implementation.
 - Build and lint warnings remain documented and accepted.
 - Prototype/internal routes such as `/sales`, `/organizations`, `/settings`, and `/monitoring` remain present and must keep their restricted framing.
-- LocalContentOS is L5 pilot-ready with conditions (usable v0.1). Binary PDF/XLSX export is deferred; review/approval/report inline forms may still need clean manual pass.
+- LocalContentOS is L5 pilot-ready with conditions (usable v0.1). Binary PDF/XLSX export implemented (2026-05-25); not L6. Review/approval/report inline forms may still need clean manual pass.
 
 ## 8. Demo and Commercial Safety
 

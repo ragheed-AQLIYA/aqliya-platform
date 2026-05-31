@@ -73,7 +73,7 @@
 
 | #   | Item                              | Owner                 | Status | Notes                                     |
 | --- | --------------------------------- | --------------------- | ------ | ----------------------------------------- |
-| 7.1 | Generate report (text/CSV format) | AQLIYA technical lead | ⬜     |                                           |
+| 7.1 | Generate report (text/CSV or PDF/XLSX) | AQLIYA technical lead | ⬜     | Confirm disclaimer; not regulator-certified |
 | 7.2 | Customer reviews report content   | Customer              | ⬜     |                                           |
 | 7.3 | Customer reviews disclaimer       | Customer              | ⬜     | Confirm no regulatory certification claim |
 | 7.4 | Customer reviews audit trail      | Customer              | ⬜     |                                           |

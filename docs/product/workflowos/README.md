@@ -53,7 +53,7 @@ The organization reference page at `/organizations/sunbul` still uses Sunbul ter
 
 ### Historical docs (preserved)
 
-Archive docs under `docs/product/sunbul/` and `docs/reports/security-audit-2026-05-23.md` reference the old Sunbul API routes (`/api/sunbul/...`). These are preserved as historical records. The `/api/sunbul/*` routes no longer exist in the codebase.
+Archive docs under `docs/archive/sunbul-product-legacy/` and `docs/reports/security-audit-2026-05-23.md` reference the old Sunbul API routes (`/api/sunbul/...`). These are preserved as historical records. The `/api/sunbul/*` routes no longer exist in the codebase.
 
 ---
 

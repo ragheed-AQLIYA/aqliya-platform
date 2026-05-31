@@ -32,6 +32,14 @@
 .playwright-mcp/
 .tmp.*
 
+# local runtime / tool artifacts (Category B8 — project-organization 2026-06-01)
+.data/
+.understand-anything/
+tmp-*.md
+tmp-*.txt
+tmp_write_*.py
+gen_v02_test.py
+
 # temp scripts
 scripts/_tmp-*
 

@@ -141,7 +141,7 @@
 - **Browser-verified:** 32/45 PASS (navigation, rendering, data visibility, badges, claims)
 - **Superseded for mutation status by:** 2026-05-23 mutation feedback loop verification (see above)
 - **Notes:** Login confirmed working. All 12 workspace routes render with real seed data. Audit trail shows 6 events with Arabic labels. Approval shows "ليس شهادة امتثال" non-certification notice. No forbidden claims found in browser.
-- **Defects found:** None blocking. Binary PDF/XLSX remains accepted P2 limitation.
+- **Defects found:** None blocking. Arabic PDF font rendering remains P2 quality gap (binary PDF/XLSX export implemented 2026-05-25).
 
 ### L5 Completion Patch (2026-05-21)
 

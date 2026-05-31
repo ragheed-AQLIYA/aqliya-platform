@@ -121,7 +121,7 @@ Website copy authority (in order of precedence):
 
 1. `docs/official/aqliya-vision-v1.1.md` — Identity and positioning
 2. `docs/official/aqliya-product-taxonomy-v1.1.md` — Product claims
-3. `docs/official/aqliya-master-reference.md` — Current reality
+3. `docs/official/AQLIYA_MASTER_REFERENCE.md` — Current reality
 4. `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` — Detailed status
 
 Marketing copy must not claim capabilities that are not validated in code.

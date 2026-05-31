@@ -18,13 +18,13 @@ AQLIYA v0.1 is the **first complete usable platform release scope** for the repo
 | Public marketing site            | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  | `/`, `/products/*`, company pages                                     | Marketing only, not proof of implementation |
 | Custom product inquiry           | Included in v0.1                        | L4 Usable v0.1 | Safe to show                  | `/custom-product`, `/api/custom-product-submit`                       | Commercial funnel                           |
 | auditos guided demo              | Included as demo only                   | L1 Marketing   | Demo only                     | `/auditos/*`, explicit mock/demo data                                 | Must stay labeled demo                      |
-| LocalContentOS                   | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation | `/local-content/*`, `LocalContent*` schema, server actions, seed data | Not L6; binary PDF/XLSX deferred            |
+| LocalContentOS                   | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation | `/local-content/*`, `LocalContent*` schema, server actions, seed data | Not L6; binary PDF/XLSX implemented (2026-05-25) |
 
 ## 3. Not Included as Implemented Products
 
 | System                  | Current Status     | Why Not Included                                                | Allowed Claim                                | Forbidden Claim                           |
 | ----------------------- | ------------------ | --------------------------------------------------------------- | -------------------------------------------- | ----------------------------------------- |
-| LocalContentOS L6 scope | L5 with conditions | Workspace exists; binary PDF/XLSX and L6 hardening not complete | L5 pilot-ready with conditions / usable v0.1 | L6 production-ready; binary PDF/XLSX live |
+| LocalContentOS L6 scope | L5 with conditions | Workspace and binary PDF/XLSX export exist; L6 hardening not complete | L5 pilot-ready with conditions / usable v0.1 | L6 production-ready; regulator-certified compliance export |
 | SalesOS                 | L3 Prototype       | Static/prototype surface only, no backend workflow              | Prototype / internal preview                 | SalesOS product is implemented            |
 | SimulationOS standalone | L1 Marketing       | No standalone product runtime; only category/marketing presence | DecisionOS contains simulation capability    | SimulationOS is a live product            |
 | LocalContactOS          | L0 Concept         | No runtime implementation                                       | Future product                               | LocalContactOS is implemented             |
@@ -48,7 +48,7 @@ AQLIYA v0.1 is the **first complete usable platform release scope** for the repo
 - Sunbul is a custom/client workflow workspace.
 - workflowos is an internal/custom workflow route family reusing Sunbul implementation.
 - SalesOS is prototype only and must not be sold as an implemented product.
-- LocalContentOS is included as L5 pilot-ready with conditions (usable v0.1 workspace). Do not claim L6 production-hardened or binary PDF/XLSX export as live.
+- LocalContentOS is included as L5 pilot-ready with conditions (usable v0.1 workspace). Binary PDF/XLSX export is implemented (2026-05-25). Do not claim L6 production-hardened or regulator-certified export.
 
 ## 5. v0.1 Readiness Level
 
@@ -68,12 +68,12 @@ Can say:
 - DecisionOS is real and active.
 - Office AI Assistant is a governed shared application.
 - Sunbul is a real custom/client-specific workflow workspace.
-- LocalContentOS is a real L5 pilot-ready workspace (usable v0.1 with conditions; text/CSV export).
+- LocalContentOS is a real L5 pilot-ready workspace (usable v0.1 with conditions; text/CSV and binary PDF/XLSX export).
 - AQLIYA Cloud is active.
 
 Cannot say:
 
-- LocalContentOS is L6 production-hardened or has live binary PDF/XLSX export.
+- LocalContentOS is L6 production-hardened or regulator-certified.
 - SalesOS is an implemented product.
 - workflowos is a separate product from Sunbul.
 - On-Prem, Air-Gapped, or Local AI are live.
