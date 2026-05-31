@@ -9,6 +9,9 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/aqliya_ci
+      AUTH_SECRET: ci-auth-secret-minimum-32-characters
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
