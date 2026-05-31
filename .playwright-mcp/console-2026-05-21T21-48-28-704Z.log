@@ -1,2 +1,0 @@
-[     175ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3000/login:0
-[  343757ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ http://localhost:3000/manifest.webmanifest:0

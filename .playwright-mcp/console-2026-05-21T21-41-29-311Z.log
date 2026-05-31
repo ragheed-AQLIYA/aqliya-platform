@@ -1,6 +1,0 @@
-[  101701ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[  101756ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[  101784ms] [LOG] {name: FCP, value: 1364, rating: good, delta: 1364, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[  101784ms] [LOG] {name: TTFB, value: 1165.8999999761581, rating: needs-improvement, delta: 1165.8999999761581, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[  101873ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[  101959ms] [LOG] [Fast Refresh] done in 187ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432

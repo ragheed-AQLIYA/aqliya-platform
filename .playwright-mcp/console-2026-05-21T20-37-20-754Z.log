@@ -1,8 +1,0 @@
-[     102ms] [LOG] {name: LCP, value: 476, rating: good, delta: 476, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     102ms] [LOG] {name: CLS, value: 0, rating: good, delta: 0, entries: Array(0)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     125ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3000/login:0
-[     138ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     151ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     175ms] [LOG] {name: FCP, value: 128, rating: good, delta: 128, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     175ms] [LOG] {name: TTFB, value: 85.30000007152557, rating: good, delta: 85.30000007152557, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     201ms] [LOG] {name: LCP, value: 128, rating: good, delta: 128, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432

@@ -1,7 +1,0 @@
-[      65ms] [LOG] {name: LCP, value: 100, rating: good, delta: 100, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[      66ms] [LOG] {name: CLS, value: 0, rating: good, delta: 0, entries: Array(0)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[      66ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/assistant:0
-[      96ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     110ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     128ms] [LOG] {name: FCP, value: 100, rating: good, delta: 100, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[     128ms] [LOG] {name: TTFB, value: 57.300000071525574, rating: good, delta: 57.300000071525574, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432

@@ -1,2 +1,0 @@
-[  104827ms] [LOG] {name: LCP, value: 396, rating: good, delta: 396, entries: Array(1)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432
-[  104828ms] [LOG] {name: CLS, value: 0, rating: good, delta: 0, entries: Array(0)} @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2432

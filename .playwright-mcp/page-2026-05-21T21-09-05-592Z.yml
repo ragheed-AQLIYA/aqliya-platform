@@ -1,7 +1,0 @@
-- generic [active] [ref=e1]:
-  - link "تخطي إلى المحتوى الرئيسي" [ref=e2] [cursor=pointer]:
-    - /url: "#main-content"
-  - generic [ref=e6]: جاري التحميل...
-  - button "Open Next.js Dev Tools" [ref=e12] [cursor=pointer]:
-    - img [ref=e13]
-  - alert [ref=e16]
