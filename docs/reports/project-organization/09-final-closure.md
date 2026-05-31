@@ -33,6 +33,21 @@ Project-organization audit work is **fully closed for v0.1 doc governance**. All
 
 ---
 
+## Parallel Completion (2026-05-31)
+
+Four parallel cleanup streams finished. **Classification remains `CLEAN_AND_CONTROLLED`.**
+
+| Stream | Scope | Commit / result |
+|--------|-------|-----------------|
+| 1 — Official docs C6 | Sunbul as WorkflowOS redirect alias in `docs/official/*` | `19239a4` pushed |
+| 2 — Stash triage | Review local stashes | 4 dropped, 2 kept (`lint-staged` backups); `.gitignore` already OK |
+| 3 — Category C doc-only | `PILOT-PACK-INDEX.md` + README pointers | `5dbaa14` pushed |
+| 4 — CI fix | Required env for install validation | `a986056` — full PASS (all steps) |
+
+**Remaining future items (code/product — not blocking doc closure):** C1, C2, C4 only — see `07-safe-patch-plan.md`. C3, C5, and C6 are complete within this pass.
+
+---
+
 ## Completed in Final Category C Pass (2026-06-01)
 
 | Item | Result |
@@ -63,7 +78,7 @@ Project-organization audit work is **fully closed for v0.1 doc governance**. All
 | C2 | Sunbul → Workflow Prisma model rename | Schema/code change — requires approval |
 | C4 | `npm run build/lint/test` validation | Low-load protocol — run at release gate |
 | C5 | Delete any file | Archive-only policy preserved |
-| C6 | Official v1.1 doctrine content updates | `docs/official/*` — other agent / documented decision |
+| C6 | Official v1.1 doctrine content updates | ✅ Complete 2026-05-31 — `19239a4` (Sunbul redirect alias) |
 | — | Cursor hook JSON | Agent git/shell may block on some commands |
 | — | Tool artifacts | `.data/`, `.next/`, `.understand-anything/` — triage before wide commits |
 | — | Content merge across pilot trees | Optional future; pointer index sufficient for v0.1 |
