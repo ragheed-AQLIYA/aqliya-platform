@@ -59,8 +59,8 @@
 | **AuditOS**                      | Product workspace                   | `/audit/*`                                | Real, pilot-ready candidate                    |
 | **DecisionOS**                   | Adjacent product workspace          | `/decisions/*`, `/intelligence/sectors/*` | Real, usable v0.1                              |
 | **Office AI Assistant**          | Governed shared application         | `/assistant/*`                            | Real, usable v0.1                              |
-| **Sunbul**                       | Custom/client-specific workspace    | `/sunbul/*`                               | Real, usable v0.1                              |
-| **workflowos**                   | Alias / duplicate custom workspace  | `/workflowos/*`                           | Real route family, internal/custom duplication |
+| **WorkflowOS**                   | Governed custom/client workspace    | `/workflowos/*`                           | Real, usable v0.1 (L4)                         |
+| **Sunbul**                       | Legacy redirect alias to WorkflowOS | `/sunbul/*`                               | Redirect only (N/A); no standalone surface     |
 | **LocalContentOS**               | Product workspace                   | `/local-content/*`                        | Real, pilot-ready with conditions (L5)         |
 | **auditos**                      | Demo family                         | `/auditos/*`                              | Public mock/demo only                          |
 | **organizations/settings/sales** | Prototype/internal preview surfaces | `/organizations/*`, `/settings`, `/sales` | Not v0.1-complete operational modules          |
@@ -78,8 +78,8 @@
 | `audit/*`                 | AuditOS governed workspace                      | Product workspace             |
 | `auditos/*`               | AuditOS guided demo                             | Demo                          |
 | `local-content/*`         | LocalContentOS workspace                        | Product workspace             |
-| `sunbul/*`                | Sunbul custom workspace                         | Custom workspace              |
-| `workflowos/*`            | workflowos alias route family                   | Custom workspace alias        |
+| `workflowos/*`            | WorkflowOS governed workspace                   | Governed workspace (L4)       |
+| `sunbul/*`                | Sunbul legacy redirect to WorkflowOS            | Redirect alias                |
 | `api/*`                   | Route handlers and operational endpoints        | Internal/public API as scoped |
 
 ---
@@ -88,7 +88,7 @@
 
 1. AuditOS and DecisionOS are the main real system domains currently included in v0.1 scope.
 2. Office AI Assistant is real, but belongs under shared applications, not the product family.
-3. Sunbul and workflowos are real, but belong under custom/internal workspace classification.
+3. WorkflowOS is the canonical governed workspace at `/workflowos/*` (L4). Sunbul is a legacy redirect alias only (`/sunbul/*` → `/workflowos/*`); not a separate product.
 4. LocalContentOS is implemented as L5 pilot-ready with conditions / usable v0.1 after mutation feedback loop verification (2026-05-23). SalesOS is not implemented as an operational system.
 5. On-Prem, Air-Gapped, Local AI runtime, Model Governance, Institutional Memory, and Studio are architectural direction only.
 6. **Schema v0.2** (2026-05-28): `createdById` added to 10 models (PlatformOrganization, ClientWorkspace, Project, AuditOrganization, AuditUser, AuditClient, AuditEngagement, AuditFinding, LocalContentSupplier, LocalContentSpendRecord). `DecisionEvidence` model added with file/document support linked to Decision. `platformOrganizationId` added to SunbulClient for tenant isolation. Migration `add_governance_fields_v0_2` applied. 14 AuditOS Prisma enums were attempted but reverted to `String` due to value mismatch with existing codebase — application-level types in `src/types/audit/index.ts` provide equivalent type safety.

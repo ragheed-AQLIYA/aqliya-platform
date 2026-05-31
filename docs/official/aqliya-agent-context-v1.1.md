@@ -27,8 +27,8 @@
 2. AuditOS is the first proof product, not the whole platform.
 3. DecisionOS is a real active adjacent system.
 4. Office AI Assistant is a real governed shared application, not a standalone product.
-5. Sunbul is a real custom/client-specific governed workspace.
-6. workflowos is a real route family but currently an alias/duplicate custom workflow surface, not a separate product.
+5. WorkflowOS is the canonical governed workspace at `/workflowos/*` (L4 usable v0.1).
+6. Sunbul is a legacy redirect alias to WorkflowOS only (`/sunbul/*` → `/workflowos/*`); not a separate product or workspace.
 
 - LocalContentOS is implemented as L5 pilot-ready with conditions / usable v0.1 after mutation feedback loop verification (2026-05-23). SalesOS is not implemented as an operational product.
 
@@ -60,8 +60,8 @@ Use these exact labels when classifying repository reality:
 | AuditOS             | Included as pilot-ready product                |
 | DecisionOS          | Included as active adjacent system             |
 | Office AI Assistant | Included as governed shared application        |
-| Sunbul              | Included as custom/internal workspace          |
-| workflowos          | Included as custom/internal workspace          |
+| WorkflowOS          | Included as governed workspace (L4)            |
+| Sunbul              | Redirect alias only (not separate surface)     |
 | auditos             | Included as demo only                          |
 | SalesOS             | Prototype / internal preview                   |
 | LocalContentOS      | Pilot-ready with conditions / usable v0.1 (L5) |

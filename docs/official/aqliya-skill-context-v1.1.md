@@ -41,7 +41,8 @@ Every implemented area must be classified using the official release model:
 | Marketing                  | `/products/*`, public pages               | Describe, do not overclaim                          |
 | Governed product workspace | `/audit/*`, `/decisions/*`                | Real product surfaces                               |
 | Shared application         | `/assistant/*`                            | Governed shared application, not standalone product |
-| Custom workspace           | `/sunbul/*`, `/workflowos/*`              | Real but custom/internal classification             |
+| Governed workspace         | `/workflowos/*`                           | WorkflowOS L4; canonical custom/client workspace    |
+| Legacy redirect alias      | `/sunbul/*`                               | Sunbul redirects to WorkflowOS; not separate product  |
 | Demo                       | `/auditos/*`                              | Demo only                                           |
 | Prototype preview          | `/sales`, `/organizations/*`, `/settings` | Must be labeled honestly                            |
 
@@ -63,7 +64,8 @@ Allowed examples:
 - AuditOS is real and pilot-ready.
 - DecisionOS is real and active.
 - Office AI Assistant is a governed shared application.
-- Sunbul is a custom/client-specific workspace.
+- WorkflowOS is the governed custom/client-specific workspace (L4).
+- Sunbul is a legacy redirect alias to WorkflowOS, not a separate product.
 
 Forbidden examples:
 

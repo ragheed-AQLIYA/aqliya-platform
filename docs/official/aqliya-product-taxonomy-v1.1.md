@@ -34,8 +34,8 @@ AQLIYA Company
 │   ├── LegalOS
 │   └── GovOS
 ├── Custom / Client-Specific Workspaces
-│   ├── Sunbul
-│   └── workflowos
+│   ├── WorkflowOS (canonical governed workspace)
+│   └── Sunbul (legacy redirect alias to WorkflowOS)
 └── Strategic Platform Layer
     └── AQLIYA Studio
 ```
