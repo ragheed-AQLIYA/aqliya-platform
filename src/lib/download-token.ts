@@ -104,15 +104,17 @@ export async function verifyDownloadToken(
   const secret = getSecret();
   const key = await importKey(secret);
 
-  const expectedSigBuf = new TextEncoder().encode(payloadStr);
-  const expectedSig = await crypto.subtle.sign(
+  // Constant-time HMAC verification via Web Crypto. Avoids the timing
+  // side-channel of manually comparing signature strings with !==.
+  const signatureBytes = base64urlDecode(sigEncoded);
+  const isValid = await crypto.subtle.verify(
     ALGORITHM,
     key,
-    expectedSigBuf as unknown as ArrayBuffer,
+    signatureBytes as unknown as ArrayBuffer,
+    payloadBytes as unknown as ArrayBuffer,
   );
-  const expectedSigEncoded = base64url(expectedSig);
 
-  if (sigEncoded !== expectedSigEncoded) {
+  if (!isValid) {
     throw new Error("Invalid token signature");
   }
 

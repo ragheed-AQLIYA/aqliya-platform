@@ -142,6 +142,8 @@ export const config = {
     "/settings",
     "/settings/:path*",
     "/api/audit/:path*",
+    "/api/decisions",
+    "/api/decisions/:path*",
     "/api/office-ai/:path*",
     "/api/local-content/:path*",
     "/api/sunbul/:path*",
