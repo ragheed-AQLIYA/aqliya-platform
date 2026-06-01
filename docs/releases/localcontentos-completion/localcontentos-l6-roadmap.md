@@ -49,7 +49,7 @@ L7+ Ops hardening       ← Out of scope unless requested (monitoring, scale, ba
 
 ---
 
-## 2. Current state snapshot (2026-06-01 — post-smoke integrator)
+## 2. Current state snapshot (2026-06-01 — post-B4 integrator)
 
 | Signal | Status |
 |--------|--------|
@@ -57,16 +57,17 @@ L7+ Ops hardening       ← Out of scope unless requested (monitoring, scale, ba
 | Content Studio workflow | Implemented (Idea→Output) |
 | Unit tests | **25/25 PASS** |
 | Smoke 1–6 | **ALL PASS** (Worker 2 closure; `crev_mpulmiwi_nzagcrh`) |
-| Honest product level | **L5 with conditions — NOT L6** |
+| Honest product level | **L5 with conditions — NOT L6** (B1 + PO sign-off remain) |
 | LocalContentOS migration on localhost | **Applied** (`20260601120000`) |
 | Migration history | **Drift** with SalesOS (**B1 OPEN**) |
-| Dual persistence | Mitigated; Prisma-only guard not signed (**B3 OPEN**) |
-| Git | Uncommitted (**B4 OPEN**; see `localcontentos-commit-plan.md`) |
+| Dual persistence | Prisma-only guard **CLOSED** (**B3 CLOSED** — `repository-instance.ts`) |
+| Git | **Committed** — 6 commits on `main` (`fcfe9d5`..`cb7df84`; HEAD `cb7df84`) — **B4 CLOSED** |
+| Program blockers open | **B1** only (+ PO sign-off) |
 | Governed AI | Deterministic template, `reviewRequired` |
 | Validation class | **Light validated** |
 | Production claim | **NO** |
 
-Detail: `localcontentos-l6-program-closure.md`, `agent-14-smoke-results.md`, `localcontentos-l6-gap-matrix.md`.
+Detail: `localcontentos-l6-program-closure.md`, `localcontentos-l6-completion-status.md`, `agent-14-smoke-results.md`, `localcontentos-l6-gap-matrix.md`.
 
 ---
 
@@ -282,7 +283,7 @@ Execute workers **in parallel** where dependencies allow. Worker 10 integrates a
 | R2 | Dual backend singleton drift | Medium | High | Prisma-only guard; test env isolation | W3 |
 | R3 | Glass browser stale auth | High | Medium | curl SSR + DB as authoritative; pilot login guide | W8 |
 | R4 | Export without approved content confuses auditors | Medium | Medium | Policy doc + UI flag enforcement | W2 |
-| R5 | Uncommitted code — irreproducible pilot | High | High | User-approved commit per `localcontentos-commit-plan.md` | W10 |
+| R5 | Uncommitted code — irreproducible pilot | ~~High~~ **Closed** (B4) | ~~High~~ — mitigated | 6 commits on `main` (`fcfe9d5`..`cb7df84`) | W10 / user |
 | R6 | Overclaiming “Production Ready” | Medium | High | L6 naming discipline; docs gate | W7 |
 | R7 | SalesOS tsc corruption blocks CI | High | Low for LC | LC-scoped validation in reports | Platform |
 

@@ -1,13 +1,13 @@
 # LocalContentOS L6 Program Closure
 
-**Date:** 2026-06-01 (post-B3 closure sync)  
+**Date:** 2026-06-01 (post-B4 closure sync)  
 **Program:** LocalContentOS L4 → L6 Institutional Pilot-Ready  
-**Integrator:** Post-L6 Smoke Integrator (reconciled after B3 engineering closure)  
+**Integrator:** Post-B4 L6 Integrator (reconciled after B3 engineering + B4 git landing)  
 **Program status:** **WORKERS COMPLETE** — **L6 gate NOT closed**  
 **Honest product level:** **L5 with conditions** (NOT L6)  
 **Production claim:** **NO**
 
-> **Sync note:** Post-smoke integrator ran before B3 engineering finished; earlier artifacts may list B3 **OPEN**. This closure pack reflects B3 **CLOSED** (Prisma-only guard in `repository-instance.ts`).
+> **Sync note:** B4 **CLOSED** — six commits on `main` (`fcfe9d5`..`cb7df84`). B2 and B3 **CLOSED**. **NOT L6** until **B1 + PO sign-off**.
 
 ---
 
@@ -37,6 +37,19 @@
 
 Full detail: `agent-14-smoke-results.md`
 
+### Git baseline (B4 closure)
+
+| SHA | Message |
+|-----|---------|
+| `fcfe9d5` | feat(local-content): domain and service layer |
+| `f3ef830` | feat(local-content): server actions |
+| `0c59456` | feat(local-content): workspace routes and components |
+| `cf4472f` | feat(local-content): product registry adoption |
+| `c6cda2b` | feat(local-content): prisma ContentStudio schema and migration |
+| `cb7df84` | docs(local-content): completion pass and L6 documentation |
+
+HEAD: `cb7df84` — reproducible pilot build from git.
+
 ### Documentation pack
 
 - `localcontentos-l6-readiness-scorecard.md` — reconciled scorecard
@@ -53,7 +66,7 @@ Full detail: `agent-14-smoke-results.md`
 | Institutional pilot-ready sign-off | **NOT MET** |
 | Clean `migrate status` on shared pilot DB | **NOT MET** (B1) |
 | Prisma-only pilot path (engineering guard) | **MET** (B3 **CLOSED**) — PO institutional sign-off still pending on scorecard |
-| Reproducible git baseline | **NOT MET** (B4) |
+| Reproducible git baseline | **MET** (B4 **CLOSED** — `cb7df84`) |
 | PRODUCT_STATUS_MATRIX L6 row | **NOT UPDATED** |
 | Human PO scorecard signature | **NOT SIGNED** |
 | Production Ready | **NO** — explicitly not authorized |
@@ -67,7 +80,7 @@ Full detail: `agent-14-smoke-results.md`
 | **B1** | SalesOS migration history drift | **OPEN** | Shared DB `migrate deploy`; institutional pilot DB parity | Platform/DBA baseline or scoped pilot DB — see `localcontentos-migration-readiness.md` |
 | **B2** | Review dimension smoke gap | **CLOSED** | — | Worker 2: `crev_mpulmiwi_nzagcrh` |
 | **B3** | Dual persistence (file vs Prisma) | **CLOSED** | — | Worker 3: `repository-instance.ts` — `guardFileBackendResolution()` throws on explicit file / Prisma-without-DB in production-like env; file backend test-only via `resetContentRepositoryForTests()`; see `localcontentos-l6-governance-checklist.md` §B3 |
-| **B4** | Uncommitted LocalContentOS changes | **OPEN** | Reproducible pilot build | User explicit **commit** → `localcontentos-commit-plan.md` |
+| **B4** | Uncommitted LocalContentOS changes | **CLOSED** | — | Six commits on `main` (`fcfe9d5`..`cb7df84`, 2026-06-01) |
 | **B5** | Repo-wide tsc / CI (SalesOS binary) | **OPEN** (platform) | Monorepo CI gate | Platform — out of LC L6 scope |
 
 ---
@@ -82,7 +95,7 @@ Full detail: `agent-14-smoke-results.md`
 
 **L6** in this program = one **external institution** can run a governed, time-bounded pilot with signed operator docs — **not achieved**.
 
-**L6 gate score (8 dimensions):** **3/8 PASS**, **5 PARTIAL** — **NOT ACHIEVED**. **L6 checklist:** **4/8** satisfied. Open program blockers: **B1**, **B4**. PO scorecard sign-off pending.
+**L6 gate score (8 dimensions):** **3/8 PASS**, **5 PARTIAL** — **NOT ACHIEVED**. **L6 checklist:** **4/8** satisfied. Open program blocker: **B1**. PO scorecard sign-off pending.
 
 ---
 
@@ -92,8 +105,8 @@ Full detail: `agent-14-smoke-results.md`
 Current: L5 with conditions (internal pilot OK with waivers)
     │
     ├─► ~~Close B3 (Prisma-only guard)~~ ─────────► **DONE** (2026-06-01)
+    ├─► ~~Close B4 (commit landing)~~ ─────────────► **DONE** (2026-06-01, cb7df84)
     ├─► Close B1 (migration drift) ────────────────► shared pilot DB safe
-    ├─► Close B4 (commit landing) ───────────────► reproducible baseline
     ├─► PO sign scorecard + onboarding pack ─────► institutional authorization
     └─► Optional: build/lint/integration (user) ──► heavier validation
     │
@@ -104,9 +117,8 @@ Target: L6 institutional pilot-ready (still NOT Production Ready)
 ### Recommended sequence (human)
 
 1. **Platform/DBA** — Resolve B1 (SalesOS drift) or provision LC-scoped pilot DB with documented baseline.
-2. **User** — Explicit **commit** request to land LocalContentOS changes (B4).
-3. **Product owner** — Sign `localcontentos-l6-readiness-scorecard.md` and institutional onboarding waivers.
-4. **Optional** — `npm run build`, full lint, integration tests after commit (user approval).
+2. **Product owner** — Sign `localcontentos-l6-readiness-scorecard.md` and institutional onboarding waivers.
+3. **Optional** — `npm run build`, full lint, integration tests (user approval).
 
 ---
 
@@ -117,6 +129,7 @@ Target: L6 institutional pilot-ready (still NOT Production Ready)
 | Unit tests | **Light validated** — 25/25 targeted |
 | TypeScript (LC) | **Light validated** — 0 errors on product paths |
 | Browser smoke | **Light validated** — 6/6 PASS (Worker 2) |
+| Git reproducibility | **Light validated** — B4 commits on `main` at `cb7df84` |
 | Build / lint / migrate deploy | **Not validated** — not run (low-load) |
 | **Overall** | **L5 pilot-ready with conditions** — **NOT Production Ready** |
 
@@ -126,7 +139,7 @@ Target: L6 institutional pilot-ready (still NOT Production Ready)
 
 **B1 — SalesOS migration drift resolution** (or scoped pilot DB baseline)
 
-Until B1 is resolved, do not run blind `migrate deploy` on a shared institutional pilot database. B3 (Prisma-only guard) is **CLOSED** — persistence architecture no longer blocks on dual-backend drift. Parallel track: user may request **commit** (B4) to lock reproducible LC code while migration is scoped separately.
+Until B1 is resolved, do not run blind `migrate deploy` on a shared institutional pilot database. B3 (Prisma-only guard) and B4 (git baseline) are **CLOSED**. Parallel track: **PO sign-off** on scorecard and onboarding pack.
 
 ---
 
