@@ -1,5 +1,7 @@
 import type { SalesOpportunity } from "../types";
 
+export type OpportunityScoreResult = ReturnType<typeof scoreOpportunity>;
+
 export function scoreOpportunity(opportunity: SalesOpportunity): {
   score: number;
   factors: string[];

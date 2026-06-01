@@ -383,13 +383,21 @@ export async function createSalesSignalAction(formData: FormData) {
 
 export async function linkDealEvidenceAction(
   dealId: string,
-  evidenceId: string,
+  evidenceIdOrForm: string | FormData,
   label?: string,
 ) {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:update");
     await assertSalesDealAccess(dealId);
+    const evidenceId =
+      evidenceIdOrForm instanceof FormData
+        ? String(evidenceIdOrForm.get("evidenceId") ?? "").trim()
+        : String(evidenceIdOrForm ?? "").trim();
+    if (!evidenceId) {
+      throw new SalesAccessError("Evidence id is required", "VALIDATION");
+    }
     const { linkEvidenceToDeal } = await import("@/lib/sales/evidence-links");
+    void label;
     const link = await linkEvidenceToDeal(
       scopeFromCtx(ctx),
       { dealId, evidenceId },
@@ -400,25 +408,18 @@ export async function linkDealEvidenceAction(
   });
 }
 
-export async function unlinkDealEvidenceAction(linkId: string) {
+export async function unlinkDealEvidenceAction(dealId: string, linkId: string) {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:update");
-    const { prisma } = await import("@/lib/prisma");
-    const existing = await prisma.salesEvidenceLink.findFirst({
-      where: { id: linkId, organizationId: ctx.organizationId },
-      select: { id: true, targetId: true },
-    });
-    if (!existing?.targetId) {
-      throw new SalesAccessError("Evidence link not found", "NOT_FOUND");
-    }
+    await assertSalesDealAccess(dealId);
     const { unlinkEvidenceFromDeal } = await import("@/lib/sales/evidence-links");
     await unlinkEvidenceFromDeal(
       scopeFromCtx(ctx),
-      { dealId: existing.targetId, linkId: existing.id },
+      { dealId, linkId },
       actorFromCtx(ctx),
     );
-    revalidateSales({ dealId: existing.targetId });
-    return { dealId: existing.targetId, linkId: existing.id };
+    revalidateSales({ dealId });
+    return { dealId, linkId };
   });
 }
 

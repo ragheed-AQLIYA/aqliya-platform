@@ -1,5 +1,15 @@
 import type { SalesAccount, SalesOpportunity } from "../types";
 
+export interface InteractionTimelineEntry {
+  id: string;
+  at: string;
+  loggedAt: string;
+  summary: string;
+  type: string;
+  labelAr: string;
+  kind?: string;
+}
+
 export function buildAccountHealthScore(input: {
   account: SalesAccount;
   opportunities: SalesOpportunity[];

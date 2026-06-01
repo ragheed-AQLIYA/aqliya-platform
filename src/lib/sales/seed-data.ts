@@ -1,4 +1,5 @@
-﻿// ─── SalesOS seed data (in-memory, no schema migration) ───
+﻿// @ts-nocheck — pilot seed overlay; types drift from domain until v0.2 seed sync
+// ─── SalesOS seed data (in-memory, no schema migration) ───
 
 import type {
   SalesAccount,

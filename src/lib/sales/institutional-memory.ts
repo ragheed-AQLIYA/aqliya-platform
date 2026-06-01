@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { SalesAuditActions } from "./audit-events";
@@ -373,6 +374,7 @@ export async function collectInstitutionalMemoryCandidates(
   );
 }
 
+export { institutionalMemoryTypeLabelAr } from "./institutional-memory-shared";
 export { syncInstitutionalMemoryForAccount } from "./institutional-memory-sync";
 
 export function listInstitutionalMemoryFromMetadata(

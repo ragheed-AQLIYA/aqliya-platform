@@ -12,6 +12,8 @@ const STAGE_WEIGHT: Record<string, number> = {
   Archived: 0,
 };
 
+export type PipelineForecastResult = PipelineForecast;
+
 export interface PipelineForecast {
   totalRaw: number;
   weightedTotal: number;

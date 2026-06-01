@@ -108,7 +108,7 @@ export async function submitSalesOpportunityForReview(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.PROPOSAL_SUBMITTED,
     targetType: "SalesDeal",
     targetId: deal.id,
@@ -198,7 +198,7 @@ export async function approveSalesOpportunity(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.GOVERNANCE_APPROVAL_GRANTED,
     targetType: "SalesDeal",
     targetId: deal.id,
@@ -262,7 +262,7 @@ export async function rejectSalesOpportunity(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.GOVERNANCE_APPROVAL_REJECTED,
     targetType: "SalesDeal",
     targetId: deal.id,
@@ -340,7 +340,7 @@ export async function listPendingOpportunityReviews(organizationId: string) {
       platformOrganizationId: null,
     });
   } catch {
-    return [];
+    return [] as Awaited<ReturnType<typeof listPendingSalesReviews>>;
   }
 }
 

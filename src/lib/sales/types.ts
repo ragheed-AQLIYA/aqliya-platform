@@ -63,6 +63,21 @@ export const SALES_OPPORTUNITY_STAGES_LEGACY = [
 export type SalesOpportunityStageLegacy =
   (typeof SALES_OPPORTUNITY_STAGES_LEGACY)[number];
 
+/** Pipeline board stage labels (UI). */
+export const PIPELINE_STAGE_LABELS: Record<
+  string,
+  { ar: string; en?: string }
+> = {
+  Draft: { ar: "مسودة", en: "Draft" },
+  Qualification: { ar: "تأهيل", en: "Qualification" },
+  InReview: { ar: "قيد المراجعة", en: "In review" },
+  Approved: { ar: "معتمد", en: "Approved" },
+  ClosedWon: { ar: "فوز", en: "Closed won" },
+  ClosedLost: { ar: "خسارة", en: "Closed lost" },
+  Rejected: { ar: "مرفوض", en: "Rejected" },
+  Archived: { ar: "مؤرشف", en: "Archived" },
+};
+
 export const SALES_OPPORTUNITY_STAGES = [
   ...SALES_OPPORTUNITY_STAGES_V01,
   ...SALES_OPPORTUNITY_STAGES_LEGACY,

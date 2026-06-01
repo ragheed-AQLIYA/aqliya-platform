@@ -20,6 +20,12 @@ export const KG_EDGE_TYPES = [
 
 export type KnowledgeGraphEdgeType = (typeof KG_EDGE_TYPES)[number];
 
+/** UI alias for KG_NODE_TYPES */
+export const KNOWLEDGE_GRAPH_NODE_KINDS = KG_NODE_TYPES;
+
+/** UI alias for KG_EDGE_TYPES */
+export const KNOWLEDGE_GRAPH_EDGE_KINDS = KG_EDGE_TYPES;
+
 export interface KnowledgeGraphNode {
   id: string;
   type: KnowledgeGraphNodeType;

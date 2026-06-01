@@ -260,6 +260,10 @@ export function buildWaveCInstitutionalLearningSnapshot(
   );
 }
 
+export function institutionalLearningRowElementId(rowId: string): string {
+  return `institutional-learning-row-${rowId}`;
+}
+
 export {
   buildInstitutionalLearningSnapshot,
   INSTITUTIONAL_LEARNING_LABEL,
