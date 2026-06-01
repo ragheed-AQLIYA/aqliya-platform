@@ -1769,6 +1769,7 @@ model LocalContentAuditEvent {
   @@index([entityType, entityId])
   @@index([createdAt])
 }
+
 // ─── LocalContentOS Content Studio (governed workflow — separate from compliance LocalContent*) ───
 
 model ContentStudioProject {
@@ -1924,4 +1925,285 @@ model ContentStudioOutput {
   @@index([campaignId])
   @@index([organizationId, status])
   @@index([status])
+}
+
+// ==================== SalesOS (P0 Core — v0.3 PR-1) ====================
+// Migration: `salesos_p0_core` — apply via `prisma migrate dev` after drift resolution (not executed in PR-1).
+
+model SalesPipeline {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  slug                   String
+  isDefault              Boolean  @default(false)
+  status                 String   @default("active") // active, archived
+  metadata               Json?
+  createdById            String?
+  updatedById            String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  stages SalesPipelineStage[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([status])
+}
+
+model SalesPipelineStage {
+  id                     String        @id @default(cuid())
+  pipelineId             String
+  pipeline               SalesPipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  slug                   String
+  sortOrder              Int           @default(0)
+  isClosed               Boolean       @default(false)
+  status                 String        @default("active")
+  metadata               Json?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  deals SalesDeal[]
+
+  @@unique([pipelineId, slug])
+  @@index([pipelineId, sortOrder])
+  @@index([organizationId])
+  @@index([platformOrganizationId])
+}
+
+model SalesAccount {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  status                 String   @default("active") // active, inactive, archived
+  industry               String?
+  isDemo                 Boolean  @default(false)
+  metadata               Json?
+  createdById            String?
+  updatedById            String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  deals          SalesDeal[]
+  evidenceLinks  SalesEvidenceLink[]
+  interactions   SalesInteraction[]
+  contacts       SalesContact[]
+
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([organizationId, isDemo])
+  @@index([status])
+}
+
+model SalesDeal {
+  id                     String              @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  accountId              String
+  account                SalesAccount          @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  stageId                String?
+  stage                  SalesPipelineStage? @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  title                  String
+  status                 String              @default("open") // open, won, lost, archived
+  amount                 Float?
+  currency               String              @default("SAR")
+  probability            Float?
+  expectedCloseDate      DateTime?
+  isDemo                 Boolean             @default(false)
+  metadata               Json?
+  createdById            String?
+  updatedById            String?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  evidenceLinks SalesEvidenceLink[]
+  interactions  SalesInteraction[]
+  proposals     SalesProposal[]
+  reviews       SalesReview[]
+  approvals     SalesApproval[]
+
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, updatedAt])
+  @@index([accountId])
+  @@index([stageId])
+  @@index([platformOrganizationId, updatedAt])
+  @@index([isDemo])
+}
+
+// SalesOS P1 — evidence reference links (stub join to Core evidence records)
+model SalesEvidenceLink {
+  id                     String        @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  targetType             String // SalesDeal, SalesAccount
+  targetId               String
+  dealId                 String?
+  deal                   SalesDeal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  accountId              String?
+  account                SalesAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  evidenceId             String
+  evidenceSource         String        @default("platform") // decision, local_content, audit, external
+  label                  String?
+  evidenceType           String?
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime      @default(now())
+
+  @@unique([targetType, targetId, evidenceId])
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([dealId])
+  @@index([accountId])
+  @@index([evidenceId])
+  @@index([targetType, targetId])
+}
+
+// SalesOS P1 — logged interactions (calls, meetings, notes; no sync/send)
+model SalesInteraction {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  accountId              String
+  account                SalesAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  dealId                 String?
+  deal                   SalesDeal?   @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  type                   String // call, email, meeting, note, other
+  subject                String?
+  summary                String?
+  occurredAt             DateTime
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([organizationId, occurredAt])
+  @@index([platformOrganizationId, occurredAt])
+  @@index([accountId, occurredAt])
+  @@index([dealId, occurredAt])
+  @@index([organizationId, accountId])
+}
+
+// SalesOS P1 — account contacts (read-only list; no CRM sync)
+model SalesContact {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  accountId              String
+  account                SalesAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name                   String
+  email                  String?
+  role                   String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([organizationId, accountId])
+  @@index([platformOrganizationId, accountId])
+  @@index([accountId])
+}
+
+// SalesOS L5 — governed proposal / review / approval (relational; metadata dual-write)
+model SalesProposal {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  dealId                 String
+  deal                   SalesDeal @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  version                Int      @default(1)
+  status                 String   @default("draft")
+  title                  String?
+  draft                  String   @default("")
+  pilotCriteria          String   @default("")
+  evidenceRefs           Json?
+  exportReady            Boolean  @default(false)
+  metadata               Json?
+  createdById            String?
+  updatedById            String?
+  submittedAt            DateTime?
+  decidedAt              DateTime?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  reviews                SalesReview[]
+  approvals              SalesApproval[]
+
+  @@index([organizationId, dealId])
+  @@index([organizationId, status])
+  @@index([platformOrganizationId, updatedAt])
+}
+
+model SalesReview {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  reviewType             String
+  targetType             String
+  targetId               String
+  dealId                 String?
+  deal                   SalesDeal? @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  proposalId             String?
+  proposal               SalesProposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+  status                 String   @default("pending")
+  reason                 String
+  stageSlug              String?
+  reviewerId             String
+  reviewerName           String?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  approvals              SalesApproval[]
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, status])
+  @@index([targetType, targetId])
+  @@index([dealId])
+  @@index([proposalId])
+}
+
+model SalesApproval {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  reviewId               String
+  review                 SalesReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  proposalId             String?
+  proposal               SalesProposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+  dealId                 String?
+  deal                   SalesDeal? @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  kind                   String
+  status                 String   @default("approved")
+  approverId             String
+  approverName           String?
+  note                   String?
+  expiresAt              DateTime?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([reviewId])
+  @@index([dealId])
+  @@index([proposalId])
+}
+
+model SalesAuditEvent {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  actorId                String
+  actorName              String?
+  action                 String
+  targetType             String
+  targetId               String
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([actorId, createdAt])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt])
 }

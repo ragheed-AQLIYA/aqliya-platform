@@ -1,6 +1,5 @@
-import { unstable_noStore as noStore } from "next/cache";
 import { listLocalContentProjectsAction } from "@/actions/localcontent-actions";
-import { getContentStudioSummaryAction } from "@/actions/local-content-workspace-actions";
+import { listContentStudioSummaryAction } from "@/actions/local-content-content-actions";
 import {
   DashboardLayout,
   PageHeader,
@@ -17,10 +16,9 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export default async function LocalContentDashboardPage() {
-  noStore();
   const [res, studioRes] = await Promise.all([
     listLocalContentProjectsAction(),
-    getContentStudioSummaryAction(),
+    listContentStudioSummaryAction(),
   ]);
   const projects = res.ok ? res.data : [];
   const studio = studioRes.ok ? studioRes.data : null;
@@ -44,14 +42,6 @@ export default async function LocalContentDashboardPage() {
         />
       ) : null}
 
-      {!studioRes.ok ? (
-        <InlineNotice
-          variant="error"
-          title="تعذر تحميل ملخص Content Studio"
-          description={studioRes.error}
-        />
-      ) : null}
-
       {studio ? (
         <>
           <h2 className="text-sm font-semibold mb-3">Content Studio</h2>
@@ -68,43 +58,26 @@ export default async function LocalContentDashboardPage() {
                 value: studio.reviewQueueCount,
                 icon: ClipboardCheck,
                 href: "/local-content/review",
-                hint:
-                  studio.reviewQueueCount > 0
-                    ? "عناصر بانتظار المراجعة"
-                    : undefined,
               },
               {
                 label: "المصادر",
                 value: studio.sourceCount,
                 icon: FileText,
                 href: "/local-content/campaigns",
-                hint:
-                  studio.verifiedSourceCount > 0
-                    ? `${studio.verifiedSourceCount} موثّق`
-                    : undefined,
               },
               {
                 label: "المخرجات الجاهزة",
                 value: studio.outputReadyCount,
                 icon: Package,
-                href: "/local-content/outputs?refresh=1",
-                hint:
-                  studio.approvalQueueCount > 0
-                    ? `${studio.approvalQueueCount} بانتظار الاعتماد`
-                    : undefined,
+                href: "/local-content/outputs",
               },
-            ].map(({ label, value, icon: Icon, href, hint }) => (
+            ].map(({ label, value, icon: Icon, href }) => (
               <Link key={label} href={href}>
                 <Card className="hover:border-primary transition-colors">
                   <CardContent className="p-4 text-center">
                     <Icon className="h-5 w-5 text-muted-foreground mx-auto mb-1" />
                     <p className="text-2xl font-bold">{value}</p>
                     <p className="text-xs text-muted-foreground">{label}</p>
-                    {hint ? (
-                      <p className="text-[10px] text-muted-foreground/80 mt-1">
-                        {hint}
-                      </p>
-                    ) : null}
                   </CardContent>
                 </Card>
               </Link>
@@ -112,6 +85,7 @@ export default async function LocalContentDashboardPage() {
           </div>
         </>
       ) : null}
+
       <h2 className="text-sm font-semibold mb-3">مشاريع الامتثال (Prisma)</h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         {[
@@ -151,9 +125,7 @@ export default async function LocalContentDashboardPage() {
       {res.ok && projects.length === 0 ? (
         <EmptyState
           title="لا توجد مشاريع امتثال"
-          description="لم يتم إنشاء أي مشروع تقييم محتوى محلي بعد. ابدأ من مشاريع الامتثال أو Content Studio."
-          actionHref="/local-content/projects"
-          actionLabel="إنشاء مشروع امتثال"
+          description="لم يتم إنشاء أي مشروع تقييم محتوى محلي بعد."
         />
       ) : res.ok ? (
         <ProjectList projects={projects} />

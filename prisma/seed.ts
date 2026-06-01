@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+import { execSync } from "child_process";
 import { resolve } from "path";
 import bcrypt from "bcryptjs";
 import {
@@ -787,6 +788,39 @@ async function main() {
   console.log(
     `  AuditOS engagement: eng-gulf-2025 (${auditOrg.name} / ${auditClient.name})`,
   );
+
+  await prisma.auditUser.upsert({
+    where: {
+      organizationId_email: {
+        organizationId: auditOrg.id,
+        email: admin.email,
+      },
+    },
+    update: { status: "active", role: "admin" },
+    create: {
+      id: "usr-admin",
+      organizationId: auditOrg.id,
+      email: admin.email,
+      name: admin.name ?? "Admin User",
+      role: "admin",
+      status: "active",
+      createdById: admin.id,
+    },
+  });
+  console.log(`  AuditUser provisioned: ${admin.email}`);
+
+  // SalesOS demo (optional, idempotent): set SEED_SALES_DEMO=1 before `npx prisma db seed`
+  if (process.env.SEED_SALES_DEMO === "1") {
+    console.log("  SalesOS: running scripts/seed-sales-demo.ts (SEED_SALES_DEMO=1)...");
+    execSync("npx tsx scripts/seed-sales-demo.ts", {
+      stdio: "inherit",
+      cwd: resolve(__dirname, ".."),
+    });
+  } else {
+    console.log(
+      "  SalesOS demo skipped (set SEED_SALES_DEMO=1 to include, or run: tsx scripts/seed-sales-demo.ts)",
+    );
+  }
 
   console.log("Seeding completed successfully!");
 }

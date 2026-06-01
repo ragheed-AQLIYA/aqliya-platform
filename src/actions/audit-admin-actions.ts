@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context"
-import { assertOrganizationAccess } from "@/lib/audit/tenant-guard"
+import { requireAccess, requireMutationAccess } from "@/core/access"
 
 // Inline DB access via prisma to avoid circular dependencies
 import { prisma } from "@/lib/prisma"
@@ -56,6 +56,7 @@ async function recordOrgEvent(actor: { actorId: string; actorName: string; actor
 }
 
 export async function getAuditUsersAdminAction(): Promise<AuditUserResult[]> {
+  await requireAccess({ resource: "user", action: "read", minRole: "ADMIN" })
   const actor = await getAuditActor()
   requireRole(actor, ["admin"])
   const users = await prisma.auditUser.findMany({
@@ -68,6 +69,7 @@ export async function getAuditUsersAdminAction(): Promise<AuditUserResult[]> {
 export async function createAuditUserAction(params: {
   email: string; name: string; role: string;
 }) {
+  await requireMutationAccess("user", "create", { minRole: "ADMIN" })
   const actor = await getAuditActor()
   requireRole(actor, ["admin"])
   const existing = await prisma.auditUser.findUnique({
@@ -96,6 +98,7 @@ export async function createAuditUserAction(params: {
 }
 
 export async function updateAuditUserRoleAction(userId: string, role: string) {
+  await requireMutationAccess("user", "update", { minRole: "ADMIN" })
   const actor = await getAuditActor()
   requireRole(actor, ["admin"])
   const user = await prisma.auditUser.findUnique({ where: { id: userId } })
@@ -116,6 +119,7 @@ export async function updateAuditUserRoleAction(userId: string, role: string) {
 }
 
 export async function deactivateAuditUserAction(userId: string) {
+  await requireMutationAccess("user", "update", { minRole: "ADMIN" })
   const actor = await getAuditActor()
   requireRole(actor, ["admin"])
   const user = await prisma.auditUser.findUnique({ where: { id: userId } })

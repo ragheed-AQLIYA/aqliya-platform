@@ -10,6 +10,7 @@ import {
   DashboardLayout,
   PageHeader,
   DevPhaseBadge,
+  LocalContentStatusBadge,
 } from "@/components/local-content/local-content-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,8 +44,15 @@ export default async function ApprovalPage({
   const score = scoreRes.ok ? scoreRes.data : null;
   const approvals = approvalsRes.ok ? approvalsRes.data : [];
   const reviews = reviewsRes.ok ? reviewsRes.data : [];
-  const hasReview = reviews.length > 0;
+  const lastReview = reviews[0];
   const lastApproval = approvals[0];
+  const hasSubmittedReview = lastReview?.action === "submitted";
+  const canSubmitApproval =
+    project.status === "InReview" &&
+    hasSubmittedReview &&
+    !lastApproval;
+  const isApproved = project.status === "Approved" || lastApproval?.decision === "approved";
+  const isRejected = project.status === "Rejected" || lastApproval?.decision === "rejected";
 
   return (
     <DashboardLayout>
@@ -54,17 +62,70 @@ export default async function ApprovalPage({
       >
         <ArrowLeft className="h-4 w-4" /> العودة للمشروع
       </Link>
-      <PageHeader
-        title="الاعتماد / Approval"
-        subtitle="اعتماد تقييم المحتوى المحلي"
-      />
+      <div className="flex items-center gap-2 mb-1">
+        <PageHeader
+          title="الاعتماد / Approval"
+          subtitle="اعتماد تقييم المحتوى المحلي"
+        />
+        <LocalContentStatusBadge status={project.status} />
+      </div>
       <DevPhaseBadge />
 
-      {!hasReview && (
+      {!lastReview && (
         <Card className="mb-6 border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950">
           <CardContent className="p-4 text-sm text-yellow-900 dark:text-yellow-200">
             <AlertTriangle className="h-4 w-4 inline mr-1" />
-            لا يمكن الاعتماد قبل إكمال المراجعة. يرجى تقديم المراجعة أولاً.
+            لا يمكن الاعتماد قبل إكمال المراجعة.{" "}
+            <Link
+              href={`/local-content/projects/${projectId}/review`}
+              className="font-medium underline"
+            >
+              تقديم المراجعة أولاً
+            </Link>
+            .
+          </CardContent>
+        </Card>
+      )}
+
+      {lastReview && !hasSubmittedReview && (
+        <Card className="mb-6 border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950">
+          <CardContent className="p-4 text-sm text-yellow-900 dark:text-yellow-200">
+            <AlertTriangle className="h-4 w-4 inline mr-1" />
+            آخر مراجعة ليست تقديماً للاعتماد. يجب تقديم مراجعة بحالة «تقديم
+            للاعتماد» قبل الاعتماد.
+          </CardContent>
+        </Card>
+      )}
+
+      {isApproved && (
+        <Card className="mb-6 border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950">
+          <CardContent className="p-4 text-sm text-green-900 dark:text-green-200">
+            <CheckCircle2 className="h-4 w-4 inline mr-1" />
+            المشروع معتمد. حالة المشروع: Approved. يمكن توليد تقارير التصدير
+            من{" "}
+            <Link
+              href={`/local-content/projects/${projectId}/reports`}
+              className="font-medium underline"
+            >
+              صفحة التقارير
+            </Link>
+            .
+          </CardContent>
+        </Card>
+      )}
+
+      {isRejected && (
+        <Card className="mb-6 border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950">
+          <CardContent className="p-4 text-sm text-red-900 dark:text-red-200">
+            <XCircle className="h-4 w-4 inline mr-1" />
+            المشروع مرفوض. حالة المشروع: Rejected. يمكن إعادة التقديم عبر{" "}
+            <Link
+              href={`/local-content/projects/${projectId}/review`}
+              className="font-medium underline"
+            >
+              صفحة المراجعة
+            </Link>
+            .
           </CardContent>
         </Card>
       )}
@@ -87,7 +148,7 @@ export default async function ApprovalPage({
               value: `${score.evidenceStats.coveragePercentage.toFixed(0)}%`,
               icon: ShieldCheck,
             },
-            { label: "الحالة", value: project.status, icon: ShieldCheck },
+            { label: "حالة المشروع", value: project.status, icon: ShieldCheck },
           ].map(({ label, value, icon: Icon }) => (
             <Card key={label}>
               <div className="p-3 text-center">
@@ -100,12 +161,16 @@ export default async function ApprovalPage({
         </div>
       )}
 
-      {hasReview && !lastApproval && (
+      {canSubmitApproval && (
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-base">قرار الاعتماد</CardTitle>
           </CardHeader>
           <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              المشروع في حالة InReview مع مراجعة مقدمة. قرار الاعتماد بشري
+              وموثّق.
+            </p>
             <form
               action={async (formData: FormData) => {
                 "use server";
@@ -122,8 +187,8 @@ export default async function ApprovalPage({
                     name="decision"
                     className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm mt-1"
                   >
-                    <option value="approved">اعتماد</option>
-                    <option value="rejected">رفض</option>
+                    <option value="approved">اعتماد — Approved</option>
+                    <option value="rejected">رفض — Rejected</option>
                   </select>
                 </div>
                 <div>
@@ -153,6 +218,7 @@ export default async function ApprovalPage({
 
       {approvals.length > 0 ? (
         <div className="space-y-2 mb-6">
+          <h3 className="text-sm font-semibold">سجل الاعتماد</h3>
           {approvals.map((a) => (
             <Card
               key={a.id}
@@ -174,7 +240,7 @@ export default async function ApprovalPage({
                         : "bg-red-100 text-red-700"
                     }
                   >
-                    {a.decision === "approved" ? "معتمد" : "مرفوض"}
+                    {a.decision === "approved" ? "معتمد / Approved" : "مرفوض / Rejected"}
                   </Badge>
                 </div>
                 <span className="text-[10px] text-muted-foreground">
@@ -189,7 +255,7 @@ export default async function ApprovalPage({
             </Card>
           ))}
         </div>
-      ) : !hasReview ? null : null}
+      ) : null}
 
       <Card className="border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950">
         <CardContent className="p-4 text-sm text-red-900 dark:text-red-200">
