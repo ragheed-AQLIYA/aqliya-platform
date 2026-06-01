@@ -104,10 +104,10 @@ export async function requireServerActionAccess(
 /** Read-only actions: authenticate + core read permission without throwing on missing session in callers that catch. */
 export async function requireServerActionRead(
   resource: AccessResource,
-  options?: Omit<ServerActionAccessOptions, "role">,
+  options?: ServerActionAccessOptions,
 ): Promise<CurrentUser> {
   return requireServerActionAccess(resource, "read", {
-    ...options,
+    ...(options ?? {}),
     role: options?.role ?? "VIEWER",
   });
 }

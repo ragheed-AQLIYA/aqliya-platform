@@ -31,8 +31,6 @@ const EDGE_KIND_LABELS: Record<
   mentions: "يذكر",
   wins_with: "يفوز مع",
   loses_with: "يخسر مع",
-  supports: "يدعم",
-  blocks: "يعيق",
   related_to: "مرتبط بـ",
 };
 
@@ -147,9 +145,9 @@ export function CommercialKnowledgeGraphView({
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <p className="font-medium">
-                          {NODE_KIND_LABELS[row.sourceKind]} →{" "}
-                          {EDGE_KIND_LABELS[row.edgeKind]} →{" "}
-                          {NODE_KIND_LABELS[row.targetKind]}
+                          {NODE_KIND_LABELS[row.sourceKind as keyof typeof NODE_KIND_LABELS]} →{" "}
+                          {EDGE_KIND_LABELS[row.edgeKind as keyof typeof EDGE_KIND_LABELS]} →{" "}
+                          {NODE_KIND_LABELS[row.targetKind as keyof typeof NODE_KIND_LABELS]}
                         </p>
                         <span className="text-xs text-muted-foreground">
                           ×{row.count}

@@ -1,4 +1,4 @@
-# AQLIYA Production Readiness Checklist (honest gates)
+﻿# AQLIYA Production Readiness Checklist (honest gates)
 
 **Status:** production **no-go** as of 2026-06-01  
 **Branch:** `feature/salesos-l6-unblock`  
@@ -10,7 +10,7 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| `npx next build --webpack` | **PASS** | Phase 14 (2026-06-01): TS 0 errors, static gen 70/70, exit 0 |
+| `npx next build --webpack` | **PASS** | Phase 14 (2026-06-01): TS phase PASS, static gen 72 routes, **exit 0** |
 | `npx tsc --noEmit` (full repo) | **PASS** | 0 errors after test exclude + incremental fixes |
 | Dev compile (sales/auth routes) | **PASS** | Authenticated curl smoke 6/6 |
 

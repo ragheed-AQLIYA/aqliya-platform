@@ -81,7 +81,7 @@ export function AccountResearchPanel({
     setReviewing(true);
     setError(null);
     try {
-      const res = await markAccountResearchReviewedAction(accountId);
+      const res = await markAccountResearchReviewedAction(accountId, true);
       if (res.ok) {
         router.refresh();
       } else {
