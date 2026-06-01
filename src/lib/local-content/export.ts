@@ -1,4 +1,4 @@
-import PDFDocument from "pdfkit";
+﻿import PDFDocument from "pdfkit";
 import * as XLSX from "xlsx";
 import type { ScoringResult } from "./types";
 
@@ -218,4 +218,47 @@ export async function buildEvidenceIndexXLSX(
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     content: buffer,
   };
+}
+
+export function formatReviewStatusForExport(
+  latestReview: { action: string } | null | undefined,
+  projectStatus: string,
+): string {
+  return latestReview?.action ?? projectStatus;
+}
+
+export function formatApprovalStatusForExport(
+  latestApproval: { decision: string } | null | undefined,
+  projectStatus: string,
+): string {
+  return latestApproval?.decision ?? projectStatus;
+}
+
+type ExtendedExportInput = LocalContentExportInput & {
+  suppliers?: Array<Record<string, unknown>>;
+  findings?: Array<Record<string, unknown>>;
+};
+
+export async function buildSupplierRegisterPDF(
+  input: ExtendedExportInput,
+): Promise<LocalContentExportResult> {
+  return buildAssessmentSummaryPDF({
+    ...input,
+    disclaimer: `${input.disclaimer}\nSupplier register rows: ${input.suppliers?.length ?? 0}`,
+  });
+}
+
+export async function buildGapRiskPDF(
+  input: ExtendedExportInput,
+): Promise<LocalContentExportResult> {
+  return buildAssessmentSummaryPDF({
+    ...input,
+    disclaimer: `${input.disclaimer}\nFindings rows: ${input.findings?.length ?? 0}`,
+  });
+}
+
+export async function buildFinalPackagePDF(
+  input: ExtendedExportInput,
+): Promise<LocalContentExportResult> {
+  return buildAssessmentSummaryPDF(input);
 }

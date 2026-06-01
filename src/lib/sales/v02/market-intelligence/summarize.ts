@@ -1,139 +1,142 @@
+﻿import { countSignalsByCategory } from "./categorize";
 import type {
   CompetitorSignal,
   IndustrySignal,
   MarketInsight,
-  MarketIntelligenceInput,
-  MarketIntelligenceSnapshot,
-  MARKET_INTEL_LABEL,
+  MarketInsightType,
+  MarketSignal,
 } from "./types";
-import {
-  MARKET_INTEL_DISCLAIMER_AR,
-  MARKET_INTEL_DISCLAIMER_EN,
-  MARKET_INTEL_LABEL as INSIGHT_LABEL,
-} from "./types";
-import { collectMarketSignals } from "./collect";
-import { categorizeMarketSignals } from "./categorize";
-import {
-  computeOverallMarketScore,
-  scoreMarketSignals,
-  type ScoredMarketSignal,
-} from "./score";
 
-function insightRow(
-  partial: Omit<MarketInsight, "insightLabel" | "outputStatus">,
+export interface SummarizeMarketIntelligenceInput {
+  organizationId: string;
+  marketSignals: MarketSignal[];
+  industrySignals: IndustrySignal[];
+  competitorSignals: CompetitorSignal[];
+}
+
+function clampConfidence(value: number): number {
+  return Math.max(0.35, Math.min(0.95, value));
+}
+
+function buildInsight(
+  organizationId: string,
+  insightType: MarketInsightType,
+  title: string,
+  titleAr: string,
+  summary: string,
+  summaryAr: string,
+  score: number,
+  confidence: number,
+  evidence: string[],
 ): MarketInsight {
   return {
-    ...partial,
-    insightLabel: INSIGHT_LABEL,
-    outputStatus: "draft",
+    id: `mi-insight-${insightType}-${title.slice(0, 24).replace(/\s+/g, "-").toLowerCase()}`,
+    organizationId,
+    insightType,
+    title,
+    titleAr,
+    summary,
+    summaryAr,
+    score,
+    confidence: clampConfidence(confidence),
+    outputStatus: "recommendation",
+    evidence: evidence.slice(0, 5),
   };
 }
 
-function buildIndustryInsight(
-  signal: IndustrySignal & { score: number; severity: MarketInsight["severity"] },
-): MarketInsight {
-  const trendAr =
-    signal.trend === "expanding"
-      ? "توسع"
-      : signal.trend === "contracting"
-        ? "انكماش"
-        : "مستقر";
-  return insightRow({
-    id: `mi-insight-ind-${signal.industry}`,
-    title: `${signal.industry} segment momentum`,
-    titleAr: `زخم قطاع ${signal.labelAr}`,
-    summary: `${signal.accountCount} accounts, pipeline ${signal.pipelineValue}, trend ${signal.trend}`,
-    summaryAr: `${signal.accountCount} حساب · مسار ${signal.pipelineValue} · ${trendAr}`,
-    category: "industry",
-    score: signal.score,
-    confidence: Math.min(0.55 + signal.accountCount * 0.08 + signal.wonCount * 0.05, 0.92),
-    severity: signal.severity,
-    signalIds: [signal.id],
-    recommendation: `Prioritize ${signal.industry} accounts while trend is ${signal.trend} — draft only.`,
-    recommendationAr: `أولِّ حسابات ${signal.labelAr} بينما الاتجاه ${trendAr} — مسودة فقط.`,
-  });
-}
-
-function buildCompetitorInsight(
-  signal: CompetitorSignal & { score: number; severity: MarketInsight["severity"] },
-): MarketInsight {
-  return insightRow({
-    id: `mi-insight-comp-${signal.competitorName}`,
-    title: `Competitive pressure: ${signal.competitorName}`,
-    titleAr: `ضغط تنافسي: ${signal.competitorName}`,
-    summary: `${signal.mentionCount} mentions · threat ${signal.threatLevel}`,
-    summaryAr: `${signal.mentionCount} إشارة · تهديد ${signal.threatLevel}`,
-    category: "competitor",
-    score: signal.score,
-    confidence: Math.min(0.5 + signal.mentionCount * 0.1, 0.9),
-    severity: signal.severity,
-    signalIds: [signal.id],
-    recommendation: `Prepare proof assets and human review for ${signal.competitorName} deals — recommendation only.`,
-    recommendationAr: `جهّز أصول الإثبات ومراجعة بشرية لصفقات ${signal.competitorName} — توصية فقط.`,
-  });
-}
-
-function buildGeneralInsight(signal: ScoredMarketSignal): MarketInsight {
-  return insightRow({
-    id: `mi-insight-gen-${signal.id}`,
-    title: signal.label,
-    titleAr: signal.labelAr,
-    summary: signal.description,
-    summaryAr: signal.descriptionAr,
-    category: signal.category,
-    score: signal.score,
-    confidence: Math.min(0.45 + signal.score / 200, 0.85),
-    severity: signal.severity,
-    signalIds: [signal.id],
-    recommendation: "Validate with account owner before adjusting market motion — draft only.",
-    recommendationAr: "تحقق مع مالك الحساب قبل تعديل حركة السوق — مسودة فقط.",
-  });
-}
-
+/** Summarize scored signals into draft market insights (rules only). */
 export function summarizeMarketIntelligence(
-  scored: ReturnType<typeof scoreMarketSignals>,
+  input: SummarizeMarketIntelligenceInput,
 ): MarketInsight[] {
   const insights: MarketInsight[] = [];
+  const categoryCounts = countSignalsByCategory(input.marketSignals);
 
-  for (const industry of scored.industrySignals.slice(0, 4)) {
-    insights.push(buildIndustryInsight(industry));
+  const topIndustry = input.industrySignals[0];
+  if (topIndustry && topIndustry.score >= 45) {
+    insights.push(
+      buildInsight(
+        input.organizationId,
+        "industry_momentum",
+        `${topIndustry.industry} shows strongest pipeline momentum`,
+        `${topIndustry.labelAr} — أقوى زخم في خط الأنابيب`,
+        `${topIndustry.accountCount} accounts, ${topIndustry.activeOpportunityCount} active opportunities, pipeline ${topIndustry.pipelineValue.toLocaleString()}.`,
+        `${topIndustry.accountCount} حسابات، ${topIndustry.activeOpportunityCount} فرص نشطة.`,
+        topIndustry.score,
+        0.55 + topIndustry.winCount * 0.05,
+        topIndustry.evidence,
+      ),
+    );
   }
-  for (const competitor of scored.competitorSignals.slice(0, 4)) {
-    insights.push(buildCompetitorInsight(competitor));
+
+  const topCompetitor = input.competitorSignals[0];
+  if (topCompetitor && topCompetitor.mentionCount >= 1) {
+    insights.push(
+      buildInsight(
+        input.organizationId,
+        "competitive_pressure",
+        `Competitive pressure: ${topCompetitor.competitorName}`,
+        `ضغط تنافسي: ${topCompetitor.competitorName}`,
+        `${topCompetitor.mentionCount} mentions across ${topCompetitor.accountIds.length} accounts (${topCompetitor.threatLevel} threat).`,
+        `${topCompetitor.mentionCount} إشارة عبر ${topCompetitor.accountIds.length} حسابات.`,
+        topCompetitor.score,
+        0.5 + topCompetitor.mentionCount * 0.06,
+        topCompetitor.contexts,
+      ),
+    );
   }
-  for (const signal of scored.general
-    .filter((s) => s.severity !== "low")
-    .slice(0, 6)) {
-    insights.push(buildGeneralInsight(signal));
+
+  const timingSignals = categoryCounts.timing + categoryCounts.buying;
+  if (timingSignals >= 2) {
+    const evidence = input.marketSignals
+      .filter((s) => s.category === "timing" || s.category === "buying")
+      .map((s) => s.label)
+      .slice(0, 4);
+    insights.push(
+      buildInsight(
+        input.organizationId,
+        "market_timing",
+        "Active buying and timing signals cluster",
+        "تجمع إشارات التوقيت والشراء",
+        `${timingSignals} buying/timing signals detected — prioritize follow-up while motion is active.`,
+        `${timingSignals} إشارات شراء/توقيت — أولوية المتابعة أثناء الحركة النشطة.`,
+        Math.min(90, 40 + timingSignals * 8),
+        0.52 + timingSignals * 0.04,
+        evidence,
+      ),
+    );
   }
 
-  return insights.sort((a, b) => b.score - a.score).slice(0, 12);
-}
+  const riskSignals = categoryCounts.risk + categoryCounts.budget;
+  const riskyIndustry = input.industrySignals.find((i) => i.lossCount >= 1);
+  if (riskSignals >= 2 || riskyIndustry) {
+    const evidence = [
+      ...input.marketSignals
+        .filter((s) => s.category === "risk" || s.category === "budget")
+        .map((s) => s.label),
+      ...(riskyIndustry ? riskyIndustry.evidence : []),
+    ].slice(0, 4);
+    insights.push(
+      buildInsight(
+        input.organizationId,
+        "sector_risk",
+        riskyIndustry
+          ? `${riskyIndustry.industry} sector shows loss friction`
+          : "Budget and competitive risk signals elevated",
+        riskyIndustry
+          ? `قطاع ${riskyIndustry.industry} — احتكاك خسارة`
+          : "إشارات مخاطر ميزانية وتنافسية مرتفعة",
+        riskyIndustry
+          ? `${riskyIndustry.lossCount} losses vs ${riskyIndustry.winCount} wins in sector.`
+          : `${riskSignals} risk/budget signals — validate qualification gates.`,
+        riskyIndustry
+          ? `${riskyIndustry.lossCount} خسائر مقابل ${riskyIndustry.winCount} انتصارات.`
+          : `${riskSignals} إشارات مخاطر — تحقق من بوابات التأهيل.`,
+        riskyIndustry ? riskyIndustry.score - 10 : 50 + riskSignals * 5,
+        0.58,
+        evidence,
+      ),
+    );
+  }
 
-export function buildMarketIntelligenceSnapshot(
-  input: MarketIntelligenceInput,
-): MarketIntelligenceSnapshot {
-  const collected = collectMarketSignals(input);
-  const categorized = categorizeMarketSignals(collected, {
-    accounts: input.accounts,
-    opportunities: input.opportunities,
-    competitorMentions: input.competitorMentions,
-  });
-  const scored = scoreMarketSignals(categorized);
-  const insights = summarizeMarketIntelligence(scored);
-  const overallScore = computeOverallMarketScore(scored);
-
-  return {
-    organizationId: input.organizationId,
-    collectedAt: new Date().toISOString(),
-    signals: collected,
-    industrySignals: scored.industrySignals,
-    competitorSignals: scored.competitorSignals,
-    insights,
-    overallScore,
-    topIndustry: scored.industrySignals[0],
-    topCompetitor: scored.competitorSignals[0],
-    disclaimerAr: MARKET_INTEL_DISCLAIMER_AR,
-    disclaimerEn: MARKET_INTEL_DISCLAIMER_EN,
-  };
+  return insights.sort((a, b) => b.score - a.score);
 }

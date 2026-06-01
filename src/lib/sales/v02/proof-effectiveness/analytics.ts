@@ -1,423 +1,448 @@
-import { suggestProofAssetsForObjection } from "../../proof-linkage-service";
-import type {
-  SalesActivity,
-  SalesObjection,
-  SalesOpportunity,
-  SalesProofAsset,
-  SalesWinLossInsight,
-} from "../../types";
+﻿import { suggestProofAssetsForObjection } from "../../proof-linkage-service";
 import {
   canonicalizeOpportunityStage,
-  isClosedOpportunityStage,
+  type SalesObjection,
+  type SalesOpportunity,
+  type SalesProofAsset,
+  type SalesWinLossInsight,
+  type SalesInteractionLog,
 } from "../../types";
 import type {
-  ProofAssetEffectiveness,
-  ProofEffectivenessReport,
-  ProofObjectionResolution,
-  ProofOpportunityInfluence,
+  ObjectionResolutionMetrics,
+  OppInfluenceMetrics,
+  ProofAssetEffectivenessRow,
+  ProofEffectivenessEvidenceItem,
+  ProofEffectivenessSnapshot,
+  ProofEffectivenessSummary,
   ProofUsageMetrics,
-  ProofWinContribution,
+  WinContributionMetrics,
 } from "./types";
-import { PROOF_EFFECTIVENESS_DISCLAIMER } from "./types";
-import type { ProofEffectivenessStoreSnapshot } from "./store-reader";
+import {
+  PROOF_EFFECTIVENESS_DISCLAIMER_AR,
+  PROOF_EFFECTIVENESS_DISCLAIMER_EN,
+} from "./types";
 
-const EFFECTIVENESS_WEIGHTS = {
-  usage: 0.2,
-  winContribution: 0.35,
-  objectionResolution: 0.25,
-  opportunityInfluence: 0.2,
-} as const;
+const LATE_STAGES = new Set([
+  "proposal",
+  "pilot",
+  "negotiation",
+  "closed_won",
+  "in_review",
+]);
 
-const STAGE_INFLUENCE_WEIGHT: Record<string, number> = {
-  new: 10,
-  qualified: 20,
-  discovery: 30,
-  in_review: 45,
-  proposal: 50,
-  pilot: 60,
-  negotiation: 70,
-  closed_won: 100,
-  closed_lost: 0,
-};
+const PROOF_KEYWORDS =
+  /\b(proof|evidence|case study|pilot|proposal|reference|roi|benchmark|objection)\b/i;
 
-function unique<T>(values: T[]): T[] {
-  return [...new Set(values)];
+export interface ProofEffectivenessInput {
+  organizationId: string;
+  proofAssets: SalesProofAsset[];
+  opportunities: SalesOpportunity[];
+  objections: SalesObjection[];
+  winLossInsights: SalesWinLossInsight[];
+  interactions: SalesInteractionLog[];
 }
 
-function clampScore(value: number): number {
-  return Math.max(0, Math.min(100, Math.round(value)));
+function linkedOpportunityIds(asset: SalesProofAsset): string[] {
+  const ids = new Set<string>();
+  if (asset.opportunityId) ids.add(asset.opportunityId);
+  for (const id of asset.linkedOpportunityIds ?? []) ids.add(id);
+  return [...ids];
 }
 
-function normalizeRelative(values: number[]): number[] {
-  const max = Math.max(...values, 0);
-  if (max === 0) return values.map(() => 0);
-  return values.map((v) => clampScore((v / max) * 100));
+function linkedAccountIds(asset: SalesProofAsset): string[] {
+  const ids = new Set<string>();
+  if (asset.accountId) ids.add(asset.accountId);
+  for (const id of asset.linkedAccountIds ?? []) ids.add(id);
+  return [...ids];
 }
 
-export function getLinkedOpportunityIds(asset: SalesProofAsset): string[] {
-  const ids: string[] = [];
-  if (asset.opportunityId) ids.push(asset.opportunityId);
-  if (asset.linkedOpportunityIds?.length) ids.push(...asset.linkedOpportunityIds);
-  return unique(ids);
-}
-
-export function getLinkedAccountIds(asset: SalesProofAsset): string[] {
-  const ids: string[] = [];
-  if (asset.accountId) ids.push(asset.accountId);
-  if (asset.linkedAccountIds?.length) ids.push(...asset.linkedAccountIds);
-  return unique(ids);
-}
-
-function activityReferencesForAsset(
-  assetId: string,
-  activities: SalesActivity[],
-): SalesActivity[] {
-  return activities.filter((activity) =>
-    activity.evidenceLinkage?.proofAssetIds?.includes(assetId),
-  );
-}
-
-function opportunityById(
-  opportunities: SalesOpportunity[],
-): Map<string, SalesOpportunity> {
-  return new Map(opportunities.map((opp) => [opp.id, opp]));
-}
-
-function winLossByOpportunity(
-  insights: SalesWinLossInsight[],
-): Map<string, SalesWinLossInsight> {
-  return new Map(insights.map((insight) => [insight.opportunityId, insight]));
-}
-
-function isWonOpportunity(
+function opportunityOutcome(
   opp: SalesOpportunity,
-  winLoss?: SalesWinLossInsight,
-): boolean {
-  if (winLoss?.outcome === "won") return true;
-  return canonicalizeOpportunityStage(opp.stage) === "closed_won";
+  winLossByOpp: Map<string, SalesWinLossInsight>,
+): "won" | "lost" | "open" {
+  const wl = winLossByOpp.get(opp.id);
+  if (wl?.outcome === "won") return "won";
+  if (wl?.outcome === "lost") return "lost";
+  const canonical = canonicalizeOpportunityStage(opp.stage);
+  if (canonical === "closed_won") return "won";
+  if (canonical === "closed_lost") return "lost";
+  return "open";
 }
 
-function isLostOpportunity(
-  opp: SalesOpportunity,
-  winLoss?: SalesWinLossInsight,
-): boolean {
-  if (winLoss?.outcome === "lost") return true;
-  return canonicalizeOpportunityStage(opp.stage) === "closed_lost";
-}
-
-function computeUsageMetrics(
-  asset: SalesProofAsset,
-  activities: SalesActivity[],
-): Omit<ProofUsageMetrics, "score"> {
-  const opportunityIds = getLinkedOpportunityIds(asset);
-  const accountIds = getLinkedAccountIds(asset);
-  const activityRefs = activityReferencesForAsset(asset.id, activities);
+function computeUsageMetrics(asset: SalesProofAsset): ProofUsageMetrics {
+  const linkedOpportunityCount = linkedOpportunityIds(asset).length;
+  const linkedAccountCount = linkedAccountIds(asset).length;
+  const hasEvidenceRef = Boolean(asset.evidenceRef);
+  const usageScore =
+    linkedOpportunityCount * 2 +
+    linkedAccountCount +
+    (hasEvidenceRef ? 1 : 0) +
+    (asset.status === "active" ? 0.5 : 0);
 
   return {
-    opportunityLinkCount: opportunityIds.length,
-    accountLinkCount: accountIds.length,
-    activityReferenceCount: activityRefs.length,
-    opportunityIds,
-    accountIds,
+    linkedOpportunityCount,
+    linkedAccountCount,
+    hasEvidenceRef,
+    usageScore,
   };
 }
 
 function computeWinContribution(
   asset: SalesProofAsset,
   opportunities: SalesOpportunity[],
-  winLossInsights: SalesWinLossInsight[],
-): Omit<ProofWinContribution, "score"> {
-  const oppMap = opportunityById(opportunities);
-  const winLossMap = winLossByOpportunity(winLossInsights);
-  const linkedIds = getLinkedOpportunityIds(asset);
+  winLossByOpp: Map<string, SalesWinLossInsight>,
+  maxWinValue: number,
+): {
+  metrics: WinContributionMetrics;
+  evidence: ProofEffectivenessEvidenceItem[];
+} {
+  const oppMap = new Map(opportunities.map((o) => [o.id, o]));
+  const evidence: ProofEffectivenessEvidenceItem[] = [];
+  let linkedWonCount = 0;
+  let linkedLostCount = 0;
+  let linkedOpenCount = 0;
+  let attributedWonValue = 0;
 
-  const wonOpportunityIds: string[] = [];
-  const lostOpportunityIds: string[] = [];
-  let wonValueTotal = 0;
-
-  for (const oppId of linkedIds) {
+  for (const oppId of linkedOpportunityIds(asset)) {
     const opp = oppMap.get(oppId);
     if (!opp) continue;
-    const winLoss = winLossMap.get(oppId);
-    if (isWonOpportunity(opp, winLoss)) {
-      wonOpportunityIds.push(oppId);
-      wonValueTotal += opp.valueEstimate ?? 0;
-    } else if (isLostOpportunity(opp, winLoss)) {
-      lostOpportunityIds.push(oppId);
+    const outcome = opportunityOutcome(opp, winLossByOpp);
+    if (outcome === "won") {
+      linkedWonCount += 1;
+      attributedWonValue += opp.valueEstimate ?? 0;
+      const wl = winLossByOpp.get(oppId);
+      evidence.push({
+        text: `Linked to won opportunity "${opp.name}"`,
+        textAr: `مرتبط بفرصة فائزة "${opp.name}"`,
+        source: wl ? "win_loss" : "opportunity",
+      });
+    } else if (outcome === "lost") {
+      linkedLostCount += 1;
+      evidence.push({
+        text: `Linked to lost opportunity "${opp.name}"`,
+        textAr: `مرتبط بفرصة خاسرة "${opp.name}"`,
+        source: "opportunity",
+      });
+    } else {
+      linkedOpenCount += 1;
     }
   }
 
-  const closedCount = wonOpportunityIds.length + lostOpportunityIds.length;
-  const winRate =
-    closedCount === 0
-      ? null
-      : Math.round((wonOpportunityIds.length / closedCount) * 100);
+  const closed = linkedWonCount + linkedLostCount;
+  const winRate = closed > 0 ? linkedWonCount / closed : null;
+  const winContributionScore =
+    (winRate ?? 0) * 0.6 +
+    (maxWinValue > 0 ? Math.min(attributedWonValue / maxWinValue, 1) * 0.4 : 0);
 
   return {
-    wonOpportunityIds,
-    wonDealCount: wonOpportunityIds.length,
-    wonValueTotal,
-    lostOpportunityIds,
-    winRate,
+    metrics: {
+      linkedWonCount,
+      linkedLostCount,
+      linkedOpenCount,
+      winRate,
+      attributedWonValue,
+      winContributionScore,
+    },
+    evidence,
   };
 }
 
 function computeObjectionResolution(
   asset: SalesProofAsset,
   objections: SalesObjection[],
-  proofAssets: SalesProofAsset[],
-): Omit<ProofObjectionResolution, "score"> {
-  const linkedOppIds = new Set(getLinkedOpportunityIds(asset));
-  const scopedObjections = objections.filter(
-    (obj) => obj.opportunityId && linkedOppIds.has(obj.opportunityId),
+): {
+  metrics: ObjectionResolutionMetrics;
+  evidence: ProofEffectivenessEvidenceItem[];
+} {
+  const evidence: ProofEffectivenessEvidenceItem[] = [];
+  const oppIds = new Set(linkedOpportunityIds(asset));
+  const accountIds = new Set(linkedAccountIds(asset));
+
+  const relatedObjections = objections.filter(
+    (o) =>
+      o.status !== "archived" &&
+      ((o.opportunityId && oppIds.has(o.opportunityId)) ||
+        (o.accountId && accountIds.has(o.accountId))),
   );
 
-  const addressable = scopedObjections.filter((obj) =>
-    suggestProofAssetsForObjection(proofAssets, obj.category).some(
-      (candidate) => candidate.id === asset.id,
-    ),
-  );
-
-  const resolvedObjectionIds = addressable
-    .filter((obj) => obj.resolved === true)
-    .map((obj) => obj.id);
-  const unresolvedObjectionIds = addressable
-    .filter((obj) => obj.resolved !== true)
-    .map((obj) => obj.id);
-
-  const resolutionRate =
-    addressable.length === 0
-      ? null
-      : Math.round((resolvedObjectionIds.length / addressable.length) * 100);
-
-  return {
-    addressableObjectionIds: addressable.map((obj) => obj.id),
-    resolvedObjectionIds,
-    unresolvedObjectionIds,
-    resolutionRate,
-    categories: unique(addressable.map((obj) => obj.category)),
-  };
-}
-
-function computeOpportunityInfluence(
-  asset: SalesProofAsset,
-  opportunities: SalesOpportunity[],
-): Omit<ProofOpportunityInfluence, "score"> {
-  const oppMap = opportunityById(opportunities);
-  const linkedIds = getLinkedOpportunityIds(asset);
-
-  const influencedOpportunityIds: string[] = [];
-  let openInfluenceCount = 0;
-  let advancedStageCount = 0;
-  let totalPipelineValue = 0;
-
-  for (const oppId of linkedIds) {
-    const opp = oppMap.get(oppId);
-    if (!opp) continue;
-
-    influencedOpportunityIds.push(oppId);
-    const canonical = canonicalizeOpportunityStage(opp.stage);
-
-    if (!isClosedOpportunityStage(opp.stage)) {
-      openInfluenceCount += 1;
-      totalPipelineValue += opp.valueEstimate ?? 0;
-    }
-
+  const linkedObjections = relatedObjections.filter((obj) => {
+    if (asset.assetType === "objection_response") return true;
     if (
-      canonical === "proposal" ||
-      canonical === "pilot" ||
-      canonical === "negotiation" ||
-      canonical === "in_review"
+      obj.evidenceRef &&
+      asset.evidenceRef &&
+      obj.evidenceRef === asset.evidenceRef
     ) {
-      advancedStageCount += 1;
+      return true;
     }
+    return suggestProofAssetsForObjection([asset], obj.category).some(
+      (p) => p.id === asset.id,
+    );
+  });
+
+  // Proof on a linked opp/account addresses objections on that same context.
+  const contextualObjections =
+    linkedObjections.length > 0 ? linkedObjections : relatedObjections;
+
+  const resolvedObjectionCount = contextualObjections.filter(
+    (o) => o.resolved,
+  ).length;
+  const categoriesAddressed = [
+    ...new Set(contextualObjections.map((o) => o.category)),
+  ];
+  const resolutionRate =
+    contextualObjections.length > 0
+      ? resolvedObjectionCount / contextualObjections.length
+      : null;
+
+  for (const obj of contextualObjections.slice(0, 3)) {
+    evidence.push({
+      text: `Addresses ${obj.category} objection${obj.resolved ? " (resolved)" : ""}`,
+      textAr: `يعالج اعتراض ${obj.category}${obj.resolved ? " (تم الحل)" : ""}`,
+      source: "objection",
+    });
   }
 
+  const objectionResolutionScore =
+    contextualObjections.length > 0
+      ? (resolutionRate ?? 0) * 0.5 +
+        Math.min(contextualObjections.length / 3, 1) * 0.3 +
+        (asset.assetType === "objection_response" ? 0.2 : 0)
+      : asset.assetType === "objection_response"
+        ? 0.15
+        : 0;
+
   return {
-    influencedOpportunityIds,
-    openInfluenceCount,
-    advancedStageCount,
-    totalPipelineValue,
+    metrics: {
+      linkedObjectionCount: contextualObjections.length,
+      resolvedObjectionCount,
+      resolutionRate,
+      categoriesAddressed,
+      objectionResolutionScore,
+    },
+    evidence,
   };
 }
 
-function rawUsageScore(metrics: Omit<ProofUsageMetrics, "score">): number {
-  return (
-    metrics.opportunityLinkCount * 3 +
-    metrics.accountLinkCount * 2 +
-    metrics.activityReferenceCount * 4
-  );
-}
-
-function rawWinScore(metrics: Omit<ProofWinContribution, "score">): number {
-  return metrics.wonDealCount * 40 + metrics.wonValueTotal / 25000;
-}
-
-function rawObjectionScore(
-  metrics: Omit<ProofObjectionResolution, "score">,
-): number {
-  if (metrics.addressableObjectionIds.length === 0) return 0;
-  return (
-    metrics.resolvedObjectionIds.length * 30 +
-    (metrics.resolutionRate ?? 0) * 0.5
-  );
-}
-
-function rawInfluenceScore(
+function computeOppInfluence(
   asset: SalesProofAsset,
-  metrics: Omit<ProofOpportunityInfluence, "score">,
   opportunities: SalesOpportunity[],
-): number {
-  const oppMap = opportunityById(opportunities);
-  let stagePoints = 0;
+  interactions: SalesInteractionLog[],
+  maxPipelineValue: number,
+): {
+  metrics: OppInfluenceMetrics;
+  evidence: ProofEffectivenessEvidenceItem[];
+} {
+  const evidence: ProofEffectivenessEvidenceItem[] = [];
+  const oppMap = new Map(opportunities.map((o) => [o.id, o]));
+  const oppIds = linkedOpportunityIds(asset);
 
-  for (const oppId of metrics.influencedOpportunityIds) {
+  let lateStageOpportunityCount = 0;
+  let influencedPipelineValue = 0;
+  let stageAdvancementSignals = 0;
+
+  for (const oppId of oppIds) {
     const opp = oppMap.get(oppId);
     if (!opp) continue;
     const canonical = canonicalizeOpportunityStage(opp.stage);
-    stagePoints += STAGE_INFLUENCE_WEIGHT[canonical] ?? 15;
+    if (LATE_STAGES.has(canonical)) {
+      lateStageOpportunityCount += 1;
+      influencedPipelineValue += opp.valueEstimate ?? 0;
+      evidence.push({
+        text: `Influenced late-stage opp "${opp.name}" (${opp.stage})`,
+        textAr: `تأثير على فرصة متقدمة "${opp.name}" (${opp.stage})`,
+        source: "opportunity",
+      });
+    }
   }
 
-  return (
-    stagePoints +
-    metrics.openInfluenceCount * 5 +
-    metrics.advancedStageCount * 10 +
-    (asset.status === "active" ? 10 : 0)
-  );
-}
-
-function buildRankedAssetRow(
-  asset: SalesProofAsset,
-  usageScore: number,
-  winScore: number,
-  objectionScore: number,
-  influenceScore: number,
-  usage: Omit<ProofUsageMetrics, "score">,
-  winContribution: Omit<ProofWinContribution, "score">,
-  objectionResolution: Omit<ProofObjectionResolution, "score">,
-  opportunityInfluence: Omit<ProofOpportunityInfluence, "score">,
-): ProofAssetEffectiveness {
-  const effectivenessScore = clampScore(
-    usageScore * EFFECTIVENESS_WEIGHTS.usage +
-      winScore * EFFECTIVENESS_WEIGHTS.winContribution +
-      objectionScore * EFFECTIVENESS_WEIGHTS.objectionResolution +
-      influenceScore * EFFECTIVENESS_WEIGHTS.opportunityInfluence,
-  );
-
-  return {
-    assetId: asset.id,
-    title: asset.title,
-    assetType: asset.assetType,
-    status: asset.status,
-    usage: { ...usage, score: usageScore },
-    winContribution: { ...winContribution, score: winScore },
-    objectionResolution: { ...objectionResolution, score: objectionScore },
-    opportunityInfluence: { ...opportunityInfluence, score: influenceScore },
-    effectivenessScore,
-    rank: 0,
-  };
-}
-
-export function computeProofAssetEffectiveness(
-  snapshot: ProofEffectivenessStoreSnapshot,
-): ProofAssetEffectiveness[] {
-  const activeAssets = snapshot.proofAssets.filter(
-    (asset) => asset.organizationId === snapshot.organizationId,
-  );
-
-  if (activeAssets.length === 0) return [];
-
-  const usageRaw = activeAssets.map((asset) =>
-    rawUsageScore(
-      computeUsageMetrics(asset, snapshot.activities),
-    ),
-  );
-  const winRaw = activeAssets.map((asset) =>
-    rawWinScore(
-      computeWinContribution(
-        asset,
-        snapshot.opportunities,
-        snapshot.winLossInsights,
-      ),
-    ),
-  );
-  const objectionRaw = activeAssets.map((asset) =>
-    rawObjectionScore(
-      computeObjectionResolution(
-        asset,
-        snapshot.objections,
-        snapshot.proofAssets,
-      ),
-    ),
-  );
-  const influenceRaw = activeAssets.map((asset) =>
-    rawInfluenceScore(
-      asset,
-      computeOpportunityInfluence(asset, snapshot.opportunities),
-      snapshot.opportunities,
-    ),
-  );
-
-  const usageScores = normalizeRelative(usageRaw);
-  const winScores = normalizeRelative(winRaw);
-  const objectionScores = normalizeRelative(objectionRaw);
-  const influenceScores = normalizeRelative(influenceRaw);
-
-  const rows = activeAssets.map((asset, index) =>
-    buildRankedAssetRow(
-      asset,
-      usageScores[index] ?? 0,
-      winScores[index] ?? 0,
-      objectionScores[index] ?? 0,
-      influenceScores[index] ?? 0,
-      computeUsageMetrics(asset, snapshot.activities),
-      computeWinContribution(
-        asset,
-        snapshot.opportunities,
-        snapshot.winLossInsights,
-      ),
-      computeObjectionResolution(
-        asset,
-        snapshot.objections,
-        snapshot.proofAssets,
-      ),
-      computeOpportunityInfluence(asset, snapshot.opportunities),
-    ),
-  );
-
-  rows.sort((a, b) => {
-    if (b.effectivenessScore !== a.effectivenessScore) {
-      return b.effectivenessScore - a.effectivenessScore;
+  const assetCreatedAt = new Date(asset.createdAt).getTime();
+  for (const interaction of interactions) {
+    if (
+      !interaction.opportunityId ||
+      !oppIds.includes(interaction.opportunityId)
+    ) {
+      continue;
     }
-    return a.title.localeCompare(b.title);
-  });
+    const loggedAt = new Date(interaction.loggedAt).getTime();
+    if (Number.isNaN(loggedAt) || loggedAt < assetCreatedAt) continue;
+    if (
+      PROOF_KEYWORDS.test(interaction.summary) ||
+      interaction.evidenceRef === asset.evidenceRef
+    ) {
+      stageAdvancementSignals += 1;
+    }
+  }
 
-  return rows.map((row, index) => ({ ...row, rank: index + 1 }));
-}
+  if (stageAdvancementSignals > 0) {
+    evidence.push({
+      text: `${stageAdvancementSignals} post-link interaction signal(s)`,
+      textAr: `${stageAdvancementSignals} إشارة تفاعل بعد الربط`,
+      source: "interaction",
+    });
+  }
 
-export function buildProofEffectivenessReport(
-  snapshot: ProofEffectivenessStoreSnapshot,
-  options?: { generatedAt?: string; outputStatus?: "draft" | "recommendation" },
-): ProofEffectivenessReport {
-  const rankedAssets = computeProofAssetEffectiveness(snapshot);
+  const oppInfluenceScore =
+    Math.min(lateStageOpportunityCount / 2, 1) * 0.45 +
+    (maxPipelineValue > 0
+      ? Math.min(influencedPipelineValue / maxPipelineValue, 1) * 0.35
+      : 0) +
+    Math.min(stageAdvancementSignals / 2, 1) * 0.2;
 
   return {
-    organizationId: snapshot.organizationId,
-    generatedAt: options?.generatedAt ?? new Date().toISOString(),
-    outputStatus: options?.outputStatus ?? "draft",
-    disclaimer: PROOF_EFFECTIVENESS_DISCLAIMER,
-    assetCount: rankedAssets.length,
-    rankedAssets,
-    topAssetIds: rankedAssets.slice(0, 5).map((asset) => asset.assetId),
+    metrics: {
+      lateStageOpportunityCount,
+      influencedPipelineValue,
+      stageAdvancementSignals,
+      oppInfluenceScore,
+    },
+    evidence,
   };
 }
 
-export function buildOrgProofEffectivenessReport(
-  organizationId: string,
-  snapshot: ProofEffectivenessStoreSnapshot,
-): ProofEffectivenessReport {
-  return buildProofEffectivenessReport({
-    ...snapshot,
-    organizationId,
+function normalizeScores(
+  rows: ProofAssetEffectivenessRow[],
+): ProofAssetEffectivenessRow[] {
+  const maxUsage = Math.max(...rows.map((r) => r.usage.usageScore), 1);
+  const maxWin = Math.max(
+    ...rows.map((r) => r.winContribution.winContributionScore),
+    0.01,
+  );
+  const maxObjection = Math.max(
+    ...rows.map((r) => r.objectionResolution.objectionResolutionScore),
+    0.01,
+  );
+  const maxInfluence = Math.max(
+    ...rows.map((r) => r.oppInfluence.oppInfluenceScore),
+    0.01,
+  );
+
+  return rows.map((row) => {
+    const usageNorm = row.usage.usageScore / maxUsage;
+    const winNorm = row.winContribution.winContributionScore / maxWin;
+    const objectionNorm =
+      row.objectionResolution.objectionResolutionScore / maxObjection;
+    const influenceNorm = row.oppInfluence.oppInfluenceScore / maxInfluence;
+
+    const effectivenessScore = Math.round(
+      (usageNorm * 0.2 +
+        winNorm * 0.35 +
+        objectionNorm * 0.25 +
+        influenceNorm * 0.2) *
+        100,
+    );
+
+    return { ...row, effectivenessScore };
   });
+}
+
+function buildSummary(
+  rows: ProofAssetEffectivenessRow[],
+  allAssets: SalesProofAsset[],
+): ProofEffectivenessSummary {
+  const activeAssets = allAssets.filter((a) => a.status === "active");
+  const top = rows[0];
+
+  return {
+    totalAssets: allAssets.length,
+    activeAssets: activeAssets.length,
+    topAssetId: top?.assetId ?? null,
+    topAssetTitle: top?.title ?? null,
+    aggregateAttributedWonValue: rows.reduce(
+      (sum, r) => sum + r.winContribution.attributedWonValue,
+      0,
+    ),
+    aggregateResolvedObjections: rows.reduce(
+      (sum, r) => sum + r.objectionResolution.resolvedObjectionCount,
+      0,
+    ),
+  };
+}
+
+export function buildProofEffectivenessSnapshot(
+  input: ProofEffectivenessInput,
+): ProofEffectivenessSnapshot {
+  const activeAssets = input.proofAssets.filter(
+    (a) => a.organizationId === input.organizationId && a.status !== "archived",
+  );
+
+  const winLossByOpp = new Map(
+    input.winLossInsights.map((w) => [w.opportunityId, w]),
+  );
+
+  const maxWinValue = Math.max(
+    ...input.opportunities
+      .filter((o) => opportunityOutcome(o, winLossByOpp) === "won")
+      .map((o) => o.valueEstimate ?? 0),
+    1,
+  );
+
+  const maxPipelineValue = Math.max(
+    ...input.opportunities.map((o) => o.valueEstimate ?? 0),
+    1,
+  );
+
+  const rows: ProofAssetEffectivenessRow[] = activeAssets.map((asset) => {
+    const usage = computeUsageMetrics(asset);
+    const win = computeWinContribution(
+      asset,
+      input.opportunities,
+      winLossByOpp,
+      maxWinValue,
+    );
+    const objection = computeObjectionResolution(asset, input.objections);
+    const influence = computeOppInfluence(
+      asset,
+      input.opportunities,
+      input.interactions,
+      maxPipelineValue,
+    );
+
+    const evidence = (
+      [
+        {
+          text: `${usage.linkedOpportunityCount} linked opportunity(ies), ${usage.linkedAccountCount} account(s)`,
+          textAr: `${usage.linkedOpportunityCount} فرصة مرتبطة، ${usage.linkedAccountCount} حساب`,
+          source: "proof_asset" as const,
+        },
+        ...win.evidence,
+        ...objection.evidence,
+        ...influence.evidence,
+      ] satisfies ProofEffectivenessEvidenceItem[]
+    ).slice(0, 8);
+
+    return {
+      assetId: asset.id,
+      title: asset.title,
+      assetType: asset.assetType,
+      status: asset.status,
+      usage,
+      winContribution: win.metrics,
+      objectionResolution: objection.metrics,
+      oppInfluence: influence.metrics,
+      effectivenessScore: 0,
+      rank: 0,
+      evidence,
+      outputStatus: "recommendation",
+    };
+  });
+
+  const scored = normalizeScores(rows)
+    .sort((a, b) => b.effectivenessScore - a.effectivenessScore)
+    .map((row, idx) => ({ ...row, rank: idx + 1 }));
+
+  return {
+    organizationId: input.organizationId,
+    generatedAt: new Date().toISOString(),
+    rankedAssets: scored,
+    summary: buildSummary(scored, input.proofAssets),
+    disclaimerEn: PROOF_EFFECTIVENESS_DISCLAIMER_EN,
+    disclaimerAr: PROOF_EFFECTIVENESS_DISCLAIMER_AR,
+  };
+}
+
+export function getMostEffectiveProofAssets(
+  snapshot: ProofEffectivenessSnapshot,
+  limit = 10,
+): ProofAssetEffectivenessRow[] {
+  return snapshot.rankedAssets.slice(0, limit);
 }

@@ -1,266 +1,218 @@
-import type {
-  SalesAccount,
+﻿import type {
   SalesCompetitorMention,
-  SalesICPInsight,
   SalesInteractionLog,
   SalesOpportunity,
   SalesSignal,
   SalesWinLossInsight,
 } from "../../types";
-import { isClosedOpportunityStage } from "../../types";
+import {
+  isClosedOpportunityStage,
+  canonicalizeOpportunityStage,
+} from "../../types";
 import type { MarketSignal, MarketSignalSource } from "./types";
 
-const NOW = () => new Date().toISOString();
+export interface CollectMarketSignalsInput {
+  organizationId: string;
+  storedSignals?: SalesSignal[];
+  interactions?: SalesInteractionLog[];
+  opportunities?: SalesOpportunity[];
+  winLossInsights?: SalesWinLossInsight[];
+  competitorMentions?: SalesCompetitorMention[];
+}
 
-const INTERACTION_RULES: Array<{
+const INTERACTION_KEYWORD_RULES: ReadonlyArray<{
   keys: string[];
-  category: MarketSignal["category"];
   label: string;
   labelAr: string;
 }> = [
   {
-    keys: ["rfp", "procurement", "tender"],
-    category: "macro",
-    label: "Procurement / RFP activity",
-    labelAr: "نشاط مشتريات / RFP",
-  },
-  {
-    keys: ["budget freeze", "budget_freeze", "frozen budget"],
-    category: "macro",
-    label: "Budget freeze signal",
-    labelAr: "إشارة تجميد ميزانية",
-  },
-  {
     keys: ["renewal", "renew"],
-    category: "buying",
-    label: "Renewal momentum",
-    labelAr: "زخم تجديد",
+    label: "Renewal intent detected",
+    labelAr: "نية تجديد مكتشفة",
   },
   {
-    keys: ["regulation", "compliance", "governance review"],
-    category: "regulatory",
-    label: "Regulatory / governance review",
-    labelAr: "مراجعة تنظيمية / حوكمة",
+    keys: ["rfp", "proposal", "procurement"],
+    label: "Active buying motion",
+    labelAr: "حركة شراء نشطة",
   },
   {
-    keys: ["pilot", "proof of concept"],
-    category: "buying",
-    label: "Pilot / POC motion",
-    labelAr: "حركة pilot / POC",
+    keys: ["budget freeze", "budget approved", "budget"],
+    label: "Budget signal",
+    labelAr: "إشارة ميزانية",
   },
   {
-    keys: ["executive sponsor", "cfo", "ceo"],
-    category: "buying",
+    keys: ["governance", "security", "compliance", "data residency"],
+    label: "Regulatory review signal",
+    labelAr: "إشارة مراجعة تنظيمية",
+  },
+  {
+    keys: ["executive sponsor", "sponsor", "cfo", "vp"],
     label: "Executive engagement",
     labelAr: "مشاركة تنفيذية",
   },
+  {
+    keys: ["competitor", "competitive", "incumbent"],
+    label: "Competitive mention",
+    labelAr: "ذكر منافس",
+  },
+  {
+    keys: ["expansion", "upsell", "cross-sell"],
+    label: "Expansion opportunity",
+    labelAr: "فرصة توسع",
+  },
+  {
+    keys: ["pilot", "poc", "proof of concept"],
+    label: "Pilot momentum",
+    labelAr: "زخم تجريبي",
+  },
 ];
 
-function isWon(stage: SalesOpportunity["stage"]): boolean {
-  return stage === "ClosedWon" || stage === "Closed Won";
+const STRENGTH_SCORE: Record<SalesSignal["strength"], number> = {
+  weak: 35,
+  moderate: 55,
+  strong: 75,
+};
+
+function matchKeywords(text: string, keys: string[]): boolean {
+  const lower = text.toLowerCase();
+  return keys.some((key) => lower.includes(key));
 }
 
-function baseSignal(
-  partial: Omit<MarketSignal, "collectedAt">,
-  source: MarketSignalSource,
-): MarketSignal {
-  return { ...partial, source, collectedAt: NOW() };
+function pushSignal(
+  bucket: MarketSignal[],
+  organizationId: string,
+  partial: Omit<MarketSignal, "organizationId" | "score" | "outputStatus"> & {
+    score?: number;
+  },
+): void {
+  bucket.push({
+    organizationId,
+    score: partial.score ?? 50,
+    outputStatus: "recommendation",
+    ...partial,
+  });
 }
 
-export function collectMarketSignals(input: {
-  accounts: SalesAccount[];
-  opportunities: SalesOpportunity[];
-  interactions: SalesInteractionLog[];
-  signals: SalesSignal[];
-  competitorMentions: SalesCompetitorMention[];
-  icpInsights: SalesICPInsight[];
-  winLossInsights: SalesWinLossInsight[];
-}): MarketSignal[] {
-  const collected: MarketSignal[] = [];
-  const accountById = new Map(input.accounts.map((a) => [a.id, a]));
+/** Collect raw market signals from store entities and interaction text. */
+export function collectMarketSignals(
+  input: CollectMarketSignalsInput,
+): MarketSignal[] {
+  const signals: MarketSignal[] = [];
+  const { organizationId } = input;
 
-  for (const signal of input.signals) {
-    const category =
-      signal.signalType === "timing"
-        ? "timing"
-        : signal.signalType === "buying" || signal.signalType === "budget"
-          ? "buying"
-          : "macro";
-    collected.push(
-      baseSignal(
-        {
-          id: `mi-collect-sig-${signal.id}`,
-          category,
-          label: signal.signalType,
-          labelAr:
-            category === "timing"
-              ? "توقيت"
-              : category === "buying"
-                ? "إشارة شراء"
-                : "إشارة سوق",
-          description: signal.description,
-          descriptionAr: signal.description,
-          sourceRef: signal.id,
-          accountId: signal.accountId,
-          opportunityId: signal.opportunityId,
-          industry: signal.accountId
-            ? accountById.get(signal.accountId)?.industry
-            : undefined,
-        },
-        "stored_signal",
-      ),
-    );
+  for (const stored of input.storedSignals ?? []) {
+    pushSignal(signals, organizationId, {
+      id: `mi-collect-stored-${stored.id}`,
+      label: stored.description,
+      labelAr: stored.description,
+      category: "buying",
+      source: "stored",
+      accountId: stored.accountId,
+      opportunityId: stored.opportunityId,
+      evidenceRef: stored.evidenceRef,
+      rawText: stored.description,
+      score: STRENGTH_SCORE[stored.strength],
+    });
   }
 
-  for (const mention of input.competitorMentions) {
-    collected.push(
-      baseSignal(
-        {
-          id: `mi-collect-comp-${mention.id}`,
-          category: "competitor",
-          label: mention.competitorName,
-          labelAr: mention.competitorName,
-          description: mention.context,
-          descriptionAr: mention.context,
-          sourceRef: mention.id,
-          accountId: mention.accountId,
-          opportunityId: mention.opportunityId,
-        },
-        "stored_competitor",
-      ),
-    );
-  }
-
-  for (const insight of input.icpInsights) {
-    if (insight.dimension !== "industry" && insight.dimension !== "region") {
-      continue;
-    }
-    collected.push(
-      baseSignal(
-        {
-          id: `mi-collect-icp-${insight.id}`,
-          category: insight.dimension === "region" ? "regulatory" : "industry",
-          label: insight.hypothesis.slice(0, 80),
-          labelAr: insight.hypothesis.slice(0, 80),
-          description: insight.evidenceSummary,
-          descriptionAr: insight.evidenceSummary,
-          sourceRef: insight.id,
-          accountId: insight.accountId,
-        },
-        "icp_insight",
-      ),
-    );
-  }
-
-  for (const wl of input.winLossInsights) {
-    collected.push(
-      baseSignal(
-        {
-          id: `mi-collect-wl-${wl.id}`,
-          category: wl.competitorInvolved ? "competitor" : "macro",
-          label: wl.primaryReason,
-          labelAr: wl.primaryReason,
-          description: (wl.contributingFactors ?? []).join(", ") || wl.outcome,
-          descriptionAr: (wl.contributingFactors ?? []).join(", ") || wl.outcome,
-          sourceRef: wl.id,
-          accountId: wl.accountId,
-          opportunityId: wl.opportunityId,
-        },
-        "win_loss",
-      ),
-    );
-  }
-
-  for (const interaction of input.interactions) {
-    const lower = interaction.summary.toLowerCase();
-    for (const rule of INTERACTION_RULES) {
-      if (rule.keys.some((k) => lower.includes(k))) {
-        collected.push(
-          baseSignal(
-            {
-              id: `mi-collect-int-${interaction.id}-${rule.label}`,
-              category: rule.category,
-              label: rule.label,
-              labelAr: rule.labelAr,
-              description: interaction.summary.slice(0, 120),
-              descriptionAr: interaction.summary.slice(0, 120),
-              sourceRef: interaction.id,
-              accountId: interaction.accountId,
-              opportunityId: interaction.opportunityId,
-              industry: accountById.get(interaction.accountId)?.industry,
-            },
-            "interaction",
-          ),
-        );
-      }
+  for (const interaction of input.interactions ?? []) {
+    for (const rule of INTERACTION_KEYWORD_RULES) {
+      if (!matchKeywords(interaction.summary, rule.keys)) continue;
+      pushSignal(signals, organizationId, {
+        id: `mi-collect-int-${interaction.id}-${rule.label}`,
+        label: rule.label,
+        labelAr: rule.labelAr,
+        category: "buying",
+        source: "interaction",
+        accountId: interaction.accountId,
+        opportunityId: interaction.opportunityId,
+        evidenceRef: interaction.evidenceRef,
+        rawText: interaction.summary,
+        score: 45,
+      });
+      break;
     }
   }
 
-  const industryBuckets = new Map<
-    string,
-    { accounts: SalesAccount[]; pipeline: number; wins: number }
-  >();
-  for (const account of input.accounts) {
-    const industry = account.industry ?? "Unknown";
-    const bucket = industryBuckets.get(industry) ?? {
-      accounts: [],
-      pipeline: 0,
-      wins: 0,
-    };
-    bucket.accounts.push(account);
-    industryBuckets.set(industry, bucket);
-  }
-  for (const opp of input.opportunities) {
-    const industry = accountById.get(opp.accountId)?.industry ?? "Unknown";
-    const bucket = industryBuckets.get(industry);
-    if (!bucket) continue;
-    if (!isClosedOpportunityStage(opp.stage)) {
-      bucket.pipeline += opp.valueEstimate ?? 0;
-    }
-    if (isWon(opp.stage)) {
-      bucket.wins += 1;
-    }
-  }
-  for (const [industry, bucket] of industryBuckets) {
-    if (bucket.accounts.length === 0) continue;
-    collected.push(
-      baseSignal(
-        {
-          id: `mi-collect-ind-${industry.replace(/\s+/g, "-").toLowerCase()}`,
-          category: "industry",
-          label: industry,
-          labelAr: industry,
-          description: `${bucket.accounts.length} accounts · pipeline ${bucket.pipeline}`,
-          descriptionAr: `${bucket.accounts.length} حساب · مسار ${bucket.pipeline}`,
-          industry,
-        },
-        "account_industry",
-      ),
-    );
-  }
-
-  for (const opp of input.opportunities) {
+  for (const opp of input.opportunities ?? []) {
     if (isClosedOpportunityStage(opp.stage)) continue;
-    if ((opp.valueEstimate ?? 0) < 100_000) continue;
-    const industry = accountById.get(opp.accountId)?.industry;
-    collected.push(
-      baseSignal(
-        {
-          id: `mi-collect-opp-${opp.id}`,
-          category: "macro",
-          label: `Active pipeline: ${opp.name}`,
-          labelAr: `مسار نشط: ${opp.name}`,
-          description: `${opp.stage} · ${opp.valueEstimate ?? 0}`,
-          descriptionAr: `${opp.stage} · ${opp.valueEstimate ?? 0}`,
-          sourceRef: opp.id,
-          accountId: opp.accountId,
-          opportunityId: opp.id,
-          industry,
-        },
-        "opportunity",
-      ),
-    );
+    if ((opp.valueEstimate ?? 0) >= 250_000) {
+      pushSignal(signals, organizationId, {
+        id: `mi-collect-opp-value-${opp.id}`,
+        label: `High-value pipeline: ${opp.name}`,
+        labelAr: `خط أنابيب عالي القيمة: ${opp.name}`,
+        category: "expansion",
+        source: "opportunity",
+        accountId: opp.accountId,
+        opportunityId: opp.id,
+        rawText: opp.name,
+        score: 60,
+      });
+    }
+    const stage = canonicalizeOpportunityStage(opp.stage);
+    if (stage === "proposal" || stage === "negotiation") {
+      pushSignal(signals, organizationId, {
+        id: `mi-collect-opp-stage-${opp.id}`,
+        label: `Late-stage motion: ${opp.stage}`,
+        labelAr: `حركة متأخرة: ${opp.stage}`,
+        category: "buying",
+        source: "opportunity",
+        accountId: opp.accountId,
+        opportunityId: opp.id,
+        rawText: `${opp.name} — ${opp.stage}`,
+        score: 65,
+      });
+    }
   }
 
-  return collected;
+  for (const wl of input.winLossInsights ?? []) {
+    pushSignal(signals, organizationId, {
+      id: `mi-collect-wl-${wl.id}`,
+      label: `${wl.outcome} pattern: ${wl.primaryReason}`,
+      labelAr: `نمط ${wl.outcome}: ${wl.primaryReason}`,
+      category: wl.outcome === "lost" ? "risk" : "expansion",
+      source: "win_loss",
+      accountId: wl.accountId,
+      opportunityId: wl.opportunityId,
+      evidenceRef: wl.evidenceRef,
+      rawText: wl.primaryReason,
+      score: wl.outcome === "won" ? 70 : 55,
+    });
+  }
+
+  for (const mention of input.competitorMentions ?? []) {
+    pushSignal(signals, organizationId, {
+      id: `mi-collect-comp-${mention.id}`,
+      label: `Competitor: ${mention.competitorName}`,
+      labelAr: `منافس: ${mention.competitorName}`,
+      category: "risk",
+      source: "stored",
+      accountId: mention.accountId,
+      opportunityId: mention.opportunityId,
+      evidenceRef: mention.evidenceRef,
+      rawText: mention.context,
+      score:
+        mention.threatLevel === "high"
+          ? 80
+          : mention.threatLevel === "medium"
+            ? 60
+            : 40,
+    });
+  }
+
+  return signals;
 }
+
+export function dedupeCollectedSignals(
+  signals: MarketSignal[],
+): MarketSignal[] {
+  const seen = new Set<string>();
+  return signals.filter((signal) => {
+    const key = `${signal.source}:${signal.label}:${signal.accountId ?? ""}:${signal.opportunityId ?? ""}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+export type { MarketSignalSource };

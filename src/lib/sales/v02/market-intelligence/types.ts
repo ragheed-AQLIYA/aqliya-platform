@@ -1,101 +1,103 @@
-export const MARKET_INTEL_LABEL =
-  "AI-assisted / evidence-based recommendation" as const;
+﻿/** SalesOS v0.2 - market intelligence entity contracts (rule-based, draft only). */
 
-export const MARKET_INTEL_DISCLAIMER_AR =
-  "ذكاء السوق — مسودة مساعدة مبنية على قواعد وأدلة تشغيلية. المراجعة البشرية مطلوبة قبل أي قرار go-to-market.";
+export const MARKET_SIGNAL_CATEGORIES = [
+  "buying",
+  "timing",
+  "budget",
+  "regulatory",
+  "expansion",
+  "risk",
+] as const;
 
-export const MARKET_INTEL_DISCLAIMER_EN =
-  "Market intelligence — rule-based draft assistant grounded in operational evidence. Human review required before go-to-market decisions.";
-
-export type MarketSignalCategory =
-  | "industry"
-  | "competitor"
-  | "macro"
-  | "buying"
-  | "timing"
-  | "regulatory";
+export type MarketSignalCategory = (typeof MARKET_SIGNAL_CATEGORIES)[number];
 
 export type MarketSignalSource =
-  | "stored_signal"
-  | "stored_competitor"
+  | "stored"
   | "interaction"
-  | "icp_insight"
-  | "win_loss"
-  | "account_industry"
-  | "opportunity";
+  | "opportunity"
+  | "win_loss";
 
-export type MarketSignalSeverity = "low" | "medium" | "high";
+export type MarketIntelligenceOutputStatus = "draft" | "recommendation";
 
 export interface MarketSignal {
   id: string;
-  category: MarketSignalCategory;
+  organizationId: string;
   label: string;
   labelAr: string;
-  description: string;
-  descriptionAr: string;
+  category: MarketSignalCategory;
   source: MarketSignalSource;
-  sourceRef?: string;
   accountId?: string;
   opportunityId?: string;
-  industry?: string;
-  collectedAt: string;
+  evidenceRef?: string;
+  rawText?: string;
+  score: number;
+  outputStatus: MarketIntelligenceOutputStatus;
 }
 
-export interface IndustrySignal extends MarketSignal {
-  category: "industry";
+export interface IndustrySignal {
+  id: string;
+  organizationId: string;
   industry: string;
+  label: string;
+  labelAr: string;
   accountCount: number;
+  activeOpportunityCount: number;
   pipelineValue: number;
-  wonCount: number;
-  trend: "expanding" | "stable" | "contracting";
+  winCount: number;
+  lossCount: number;
+  score: number;
+  outputStatus: MarketIntelligenceOutputStatus;
+  evidence: string[];
 }
 
-export interface CompetitorSignal extends MarketSignal {
-  category: "competitor";
+export interface CompetitorSignal {
+  id: string;
+  organizationId: string;
   competitorName: string;
   mentionCount: number;
   threatLevel: "low" | "medium" | "high";
-  affectedOpportunityIds: string[];
+  contexts: string[];
+  score: number;
+  outputStatus: MarketIntelligenceOutputStatus;
+  accountIds: string[];
 }
+
+export type MarketInsightType =
+  | "industry_momentum"
+  | "competitive_pressure"
+  | "market_timing"
+  | "sector_risk";
 
 export interface MarketInsight {
   id: string;
+  organizationId: string;
+  insightType: MarketInsightType;
   title: string;
   titleAr: string;
   summary: string;
   summaryAr: string;
-  category: MarketSignalCategory;
   score: number;
   confidence: number;
-  severity: MarketSignalSeverity;
-  signalIds: string[];
-  recommendation: string;
-  recommendationAr: string;
-  insightLabel: typeof MARKET_INTEL_LABEL;
-  outputStatus: "draft" | "recommendation";
+  outputStatus: MarketIntelligenceOutputStatus;
+  evidence: string[];
 }
 
 export interface MarketIntelligenceSnapshot {
   organizationId: string;
-  collectedAt: string;
-  signals: MarketSignal[];
+  marketSignals: MarketSignal[];
   industrySignals: IndustrySignal[];
   competitorSignals: CompetitorSignal[];
   insights: MarketInsight[];
   overallScore: number;
-  topIndustry?: IndustrySignal;
-  topCompetitor?: CompetitorSignal;
+  disclaimer: string;
   disclaimerAr: string;
-  disclaimerEn: string;
 }
 
-export interface MarketIntelligenceInput {
-  organizationId: string;
-  accounts: import("../../types").SalesAccount[];
-  opportunities: import("../../types").SalesOpportunity[];
-  interactions: import("../../types").SalesInteractionLog[];
-  signals: import("../../types").SalesSignal[];
-  competitorMentions: import("../../types").SalesCompetitorMention[];
-  icpInsights: import("../../types").SalesICPInsight[];
-  winLossInsights: import("../../types").SalesWinLossInsight[];
-}
+export const MARKET_INTELLIGENCE_RECOMMENDATION_LABEL =
+  "Rule-based market intelligence - draft recommendation";
+
+export const MARKET_INTELLIGENCE_DISCLAIMER_EN =
+  "Market signals are rule-derived from logged activity - not external market data or autonomous AI.";
+
+export const MARKET_INTELLIGENCE_DISCLAIMER_AR =
+  "\u0625\u0634\u0627\u0631\u0627\u062a \u0627\u0644\u0633\u0648\u0642 \u0645\u0633\u062a\u062e\u0631\u062c\u0629 \u0628\u0642\u0648\u0627\u0639\u062f \u0645\u0646 \u0627\u0644\u0646\u0634\u0627\u0637 \u0627\u0644\u0645\u0633\u062c\u0644 \u2014 \u0644\u064a\u0633\u062a \u0628\u064a\u0627\u0646\u0627\u062a \u0633\u0648\u0642 \u062e\u0627\u0631\u062c\u064a\u0629 \u0648\u0644\u0627 \u0630\u0643\u0627\u0621\u0627\u064b \u0645\u0633\u062a\u0642\u0644\u0627\u064b. \u0627\u0644\u0645\u0631\u0627\u062c\u0639\u0629 \u0627\u0644\u0628\u0634\u0631\u064a\u0629 \u0645\u0637\u0644\u0648\u0628\u0629.";

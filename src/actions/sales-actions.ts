@@ -392,7 +392,7 @@ export async function linkDealEvidenceAction(
     const { linkEvidenceToDeal } = await import("@/lib/sales/evidence-links");
     const link = await linkEvidenceToDeal(
       scopeFromCtx(ctx),
-      { dealId, evidenceId, label },
+      { dealId, evidenceId },
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
@@ -403,14 +403,22 @@ export async function linkDealEvidenceAction(
 export async function unlinkDealEvidenceAction(linkId: string) {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:update");
+    const { prisma } = await import("@/lib/prisma");
+    const existing = await prisma.salesEvidenceLink.findFirst({
+      where: { id: linkId, organizationId: ctx.organizationId },
+      select: { id: true, targetId: true },
+    });
+    if (!existing?.targetId) {
+      throw new SalesAccessError("Evidence link not found", "NOT_FOUND");
+    }
     const { unlinkEvidenceFromDeal } = await import("@/lib/sales/evidence-links");
-    const result = await unlinkEvidenceFromDeal(
+    await unlinkEvidenceFromDeal(
       scopeFromCtx(ctx),
-      linkId,
+      { dealId: existing.targetId, linkId: existing.id },
       actorFromCtx(ctx),
     );
-    revalidateSales({ dealId: result.dealId });
-    return result;
+    revalidateSales({ dealId: existing.targetId });
+    return { dealId: existing.targetId, linkId: existing.id };
   });
 }
 
@@ -462,8 +470,8 @@ export async function updateSalesInteractionAction(
       ? String(formData.get("summary") ?? "").trim()
       : undefined;
     const interaction = await updateSalesInteraction(
-      scopeFromCtx(ctx),
       interactionId,
+      scopeFromCtx(ctx),
       { subject, summary },
       actorFromCtx(ctx),
     );
@@ -480,8 +488,8 @@ export async function deleteSalesInteractionAction(interactionId: string) {
     const ctx = await requireSalesPermission("salesos:update");
     const { deleteSalesInteraction } = await import("@/lib/sales/interactions");
     const interaction = await deleteSalesInteraction(
-      scopeFromCtx(ctx),
       interactionId,
+      scopeFromCtx(ctx),
       actorFromCtx(ctx),
     );
     revalidateSales({
@@ -533,7 +541,7 @@ export async function getSalesFounderReportAction() {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:read");
     const { getSalesFounderReport } = await import("@/lib/sales/reporting");
-    const report = await getSalesFounderReport(scopeFromCtx(ctx));
+    const report = await getSalesFounderReport(ctx.organizationId);
     await recordSalesAuditEvent({
       organizationId: ctx.organizationId,
       platformOrganizationId: ctx.platformOrganizationId,
@@ -547,16 +555,19 @@ export async function getSalesFounderReportAction() {
   });
 }
 
-export async function createOutreachDraftAction(formData: FormData) {
+export async function createOutreachDraftAction(
+  dealId: string,
+  formData: FormData,
+) {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:create");
     const { createOutreachDraft } = await import("@/lib/sales/outreach");
-    const dealId = String(formData.get("dealId") ?? "");
     const subject = String(formData.get("subject") ?? "").trim();
     const body = String(formData.get("body") ?? "").trim();
     const draft = await createOutreachDraft(
       scopeFromCtx(ctx),
-      { dealId, subject, body },
+      dealId,
+      { subject, body },
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
@@ -564,37 +575,38 @@ export async function createOutreachDraftAction(formData: FormData) {
   });
 }
 
-export async function submitOutreachDraftAction(draftId: string) {
+export async function submitOutreachDraftAction(dealId: string, draftId: string) {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:update");
     const { submitOutreachDraftForReview } = await import("@/lib/sales/outreach");
     const draft = await submitOutreachDraftForReview(
       scopeFromCtx(ctx),
+      dealId,
       draftId,
       actorFromCtx(ctx),
     );
-    revalidateSales({ dealId: draft.dealId });
+    revalidateSales({ dealId });
     return draft;
   });
 }
 
 export async function reviewOutreachDraftAction(
+  dealId: string,
   draftId: string,
-  formData: FormData,
+  decision: "approved" | "rejected",
+  note?: string,
 ) {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:update");
     const { reviewOutreachDraft } = await import("@/lib/sales/outreach");
-    const decision = String(formData.get("decision") ?? "approved") as
-      | "approved"
-      | "rejected";
-    const note = String(formData.get("note") ?? "").trim() || undefined;
     const draft = await reviewOutreachDraft(
       scopeFromCtx(ctx),
-      { draftId, decision, note },
+      dealId,
+      draftId,
+      { decision, reviewNote: note },
       actorFromCtx(ctx),
     );
-    revalidateSales({ dealId: draft.dealId });
+    revalidateSales({ dealId });
     return draft;
   });
 }
@@ -656,10 +668,9 @@ export async function analyzeDealObjectionAction(
       "@/lib/sales/agents/objection-analysis"
     );
     return runObjectionAnalysisStub(
+      { scope: scopeFromCtx(ctx), actor: actorFromCtx(ctx) },
       dealId,
-      scopeFromCtx(ctx),
-      input,
-      actorFromCtx(ctx),
+      { pastedText: input.objectionText },
     );
   });
 }
@@ -672,9 +683,8 @@ export async function generateAccountResearchAction(accountId: string) {
       "@/lib/sales/agents/account-research"
     );
     const result = await runAccountResearchStub(
+      { scope: scopeFromCtx(ctx), actor: actorFromCtx(ctx) },
       accountId,
-      scopeFromCtx(ctx),
-      actorFromCtx(ctx),
     );
     revalidateSales({ accountId });
     return result;
@@ -691,11 +701,16 @@ export async function markAccountResearchReviewedAction(
     const { markAccountResearchReviewed } = await import(
       "@/lib/sales/agents/account-research"
     );
+    if (!reviewed) {
+      const account = await getSalesAccount(accountId, ctx.organizationId);
+      if (!account) {
+        throw new SalesAccessError("Account not found", "NOT_FOUND");
+      }
+      return account;
+    }
     const account = await markAccountResearchReviewed(
+      { scope: scopeFromCtx(ctx), actor: actorFromCtx(ctx) },
       accountId,
-      scopeFromCtx(ctx),
-      actorFromCtx(ctx),
-      reviewed,
     );
     revalidateSales({ accountId });
     return account;
@@ -843,16 +858,24 @@ export async function linkEvidenceAction(
 
 export async function requestClaimReviewAction(opportunityId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
-    await requireSalesPermission("salesos:update");
+    const ctx = await requireSalesPermission("salesos:update");
+    await assertSalesDealAccess(opportunityId);
+    const deal = await getSalesDeal(opportunityId, ctx.organizationId);
+    if (!deal) {
+      throw new SalesAccessError("Deal not found", "NOT_FOUND");
+    }
     const { flagCommercialClaimIfNeeded } = await import(
       "@/lib/sales/commercial-claims"
     );
     return flagCommercialClaimIfNeeded({
-      organizationId: user.organizationId,
-      dealId: opportunityId,
-      actor: { id: user.id, name: user.name },
-      claimText: "AI-assisted commercial claim review requested",
+      scope: scopeFromCtx(ctx),
+      actor: actorFromCtx(ctx),
+      targetType: "SalesDeal",
+      targetId: opportunityId,
+      existingMetadata: deal.metadata,
+      sourceType: "outreach_draft",
+      sourceId: opportunityId,
+      text: "AI-assisted commercial claim review requested",
     });
   });
 }
@@ -869,5 +892,25 @@ export async function submitOpportunityReviewActionPrisma(
       { dealId, reason },
       actorFromCtx(ctx),
     );
+  });
+}
+
+/** Legacy alias used by sales workspace inline server actions */
+export const createAccountAction = createSalesAccountAction;
+
+export async function createOpportunityFromAccountAction(
+  accountId: string,
+  formData: FormData,
+) {
+  const name = String(formData.get("name") ?? "").trim();
+  const valueRaw = formData.get("valueEstimate");
+  const amount =
+    valueRaw != null && String(valueRaw).trim() !== ""
+      ? Number(valueRaw)
+      : null;
+  return createSalesDealAction({
+    title: name,
+    accountId,
+    amount: Number.isFinite(amount) ? amount : null,
   });
 }

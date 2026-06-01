@@ -1,4 +1,4 @@
-import type { KnowledgeGraphEdgeKind, KnowledgeGraphNodeKind } from "./types";
+import type { KnowledgeGraphEdgeType, KnowledgeGraphNodeType } from "./types";
 
 export function industryRefId(industryLabel: string): string {
   return industryLabel
@@ -8,7 +8,7 @@ export function industryRefId(industryLabel: string): string {
 }
 
 export function graphNodeId(
-  kind: KnowledgeGraphNodeKind,
+  kind: KnowledgeGraphNodeType,
   refId: string,
 ): string {
   return `${kind}:${refId}`;
@@ -19,7 +19,7 @@ export function contentRefId(key: string): string {
 }
 
 export function graphEdgeId(
-  kind: KnowledgeGraphEdgeKind,
+  kind: KnowledgeGraphEdgeType,
   sourceId: string,
   targetId: string,
   suffix?: string,

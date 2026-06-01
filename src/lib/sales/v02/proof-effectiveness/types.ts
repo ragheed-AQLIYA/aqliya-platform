@@ -1,74 +1,99 @@
-import type {
-  SalesEntityStatus,
-  SalesProofAssetType,
-} from "../../types";
+﻿import type { SalesProofAssetType } from "../../types";
+
+export const PROOF_EFFECTIVENESS_DISCLAIMER_EN =
+  "Evidence-based proof effectiveness ranking - recommendation only. Correlation does not imply causation. Human review required before changing proof strategy.";
+
+export const PROOF_EFFECTIVENESS_DISCLAIMER_AR =
+  "Proof effectiveness ranking - recommendation only. Human review required before changing proof strategy.";
+
+export interface ProofEffectivenessEvidenceItem {
+  text: string;
+  textAr: string;
+  source:
+    | "proof_asset"
+    | "objection"
+    | "opportunity"
+    | "win_loss"
+    | "interaction";
+}
 
 export interface ProofUsageMetrics {
-  /** Distinct opportunities where the asset is linked or referenced. */
-  opportunityLinkCount: number;
-  /** Distinct accounts where the asset is linked. */
-  accountLinkCount: number;
-  /** Activity rows referencing the asset via evidence linkage. */
-  activityReferenceCount: number;
-  opportunityIds: string[];
-  accountIds: string[];
-  /** 0–100 normalized usage score for ranking. */
-  score: number;
+  linkedOpportunityCount: number;
+  linkedAccountCount: number;
+  hasEvidenceRef: boolean;
+  usageScore: number;
 }
 
-export interface ProofWinContribution {
-  wonOpportunityIds: string[];
-  wonDealCount: number;
-  wonValueTotal: number;
-  lostOpportunityIds: string[];
-  /** Wins / (wins + losses) among linked closed opps; null when no closed deals. */
+export interface WinContributionMetrics {
+  linkedWonCount: number;
+  linkedLostCount: number;
+  linkedOpenCount: number;
   winRate: number | null;
-  /** 0–100 normalized win contribution score. */
-  score: number;
+  attributedWonValue: number;
+  winContributionScore: number;
 }
 
-export interface ProofObjectionResolution {
-  addressableObjectionIds: string[];
-  resolvedObjectionIds: string[];
-  unresolvedObjectionIds: string[];
+export interface ObjectionResolutionMetrics {
+  linkedObjectionCount: number;
+  resolvedObjectionCount: number;
   resolutionRate: number | null;
-  categories: string[];
-  /** 0–100 normalized objection-resolution score. */
-  score: number;
+  categoriesAddressed: string[];
+  objectionResolutionScore: number;
 }
 
-export interface ProofOpportunityInfluence {
-  influencedOpportunityIds: string[];
-  openInfluenceCount: number;
-  advancedStageCount: number;
-  totalPipelineValue: number;
-  /** 0–100 normalized influence score. */
-  score: number;
+export interface OppInfluenceMetrics {
+  lateStageOpportunityCount: number;
+  influencedPipelineValue: number;
+  stageAdvancementSignals: number;
+  oppInfluenceScore: number;
 }
 
-export interface ProofAssetEffectiveness {
+export interface ProofAssetEffectivenessRow {
   assetId: string;
   title: string;
   assetType: SalesProofAssetType;
-  status: SalesEntityStatus;
+  status: string;
   usage: ProofUsageMetrics;
-  winContribution: ProofWinContribution;
-  objectionResolution: ProofObjectionResolution;
-  opportunityInfluence: ProofOpportunityInfluence;
-  /** Weighted composite score used for ranking (0–100). */
+  winContribution: WinContributionMetrics;
+  objectionResolution: ObjectionResolutionMetrics;
+  oppInfluence: OppInfluenceMetrics;
   effectivenessScore: number;
   rank: number;
+  evidence: ProofEffectivenessEvidenceItem[];
+  outputStatus: "recommendation";
 }
 
-export interface ProofEffectivenessReport {
+export interface ProofEffectivenessSummary {
+  totalAssets: number;
+  activeAssets: number;
+  topAssetId: string | null;
+  topAssetTitle: string | null;
+  aggregateAttributedWonValue: number;
+  aggregateResolvedObjections: number;
+}
+
+export interface ProofEffectivenessSnapshot {
   organizationId: string;
   generatedAt: string;
-  outputStatus: "draft" | "recommendation";
-  disclaimer: string;
-  assetCount: number;
-  rankedAssets: ProofAssetEffectiveness[];
-  topAssetIds: string[];
+  rankedAssets: ProofAssetEffectivenessRow[];
+  summary: ProofEffectivenessSummary;
+  disclaimerEn: string;
+  disclaimerAr: string;
 }
 
-export const PROOF_EFFECTIVENESS_DISCLAIMER =
-  "Proof effectiveness rankings are draft analytics derived from linked store entities — not causal win predictions.";
+export interface ProofEffectivenessWidgetSummary {
+  organizationId: string;
+  generatedAt: string;
+  topAssets: Array<{
+    rank: number;
+    assetId: string;
+    title: string;
+    assetType: SalesProofAssetType;
+    effectivenessScore: number;
+    winRate: number | null;
+    linkedOpportunityCount: number;
+  }>;
+  disclaimerEn: string;
+  disclaimerAr: string;
+  outputStatus: "recommendation";
+}

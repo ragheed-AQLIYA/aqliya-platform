@@ -90,3 +90,9 @@ export interface ProofNetworkBuildInput {
   objections: Array<{ id: string; category: string; accountId?: string; opportunityId?: string }>;
   industries: string[];
 }
+
+export const PROOF_NETWORK_DISCLAIMER_EN =
+  "Proof network recommendations are rule-based drafts from linked assets — human review required.";
+
+export const PROOF_NETWORK_DISCLAIMER_AR =
+  "توصيات شبكة الإثبات مسودات قائمة على القواعد من الأصول المرتبطة — المراجعة البشرية مطلوبة.";

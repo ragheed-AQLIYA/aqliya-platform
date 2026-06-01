@@ -1,11 +1,6 @@
-// ─── SalesOS proof linkage service (extends commercial-evidence patterns) ───
-
-import { validateProductEvidenceType } from "@/lib/platform/registry/runtime";
-import { SALESOS_PRODUCT_KEY } from "./core-adoption";
-import {
+﻿import {
   computeEvidenceCoverage,
   DEFAULT_COMMERCIAL_EVIDENCE_REQUIREMENTS,
-  type CommercialEvidenceCategory,
   type CommercialEvidenceRecord,
 } from "./vnext/commercial-evidence";
 import type { SalesProofAsset, SalesProofAssetType } from "./types";
@@ -33,10 +28,6 @@ export const STAGE_PROOF_REQUIREMENTS: Partial<
   Negotiation: ["customer_quote", "benchmark"],
 };
 
-export function validateProofAssetRef(typeId: string): boolean {
-  return validateProductEvidenceType(SALESOS_PRODUCT_KEY, typeId);
-}
-
 export function listProofAssetsForOpportunity(
   proofAssets: SalesProofAsset[],
   organizationId: string,
@@ -51,6 +42,45 @@ export function listProofAssetsForOpportunity(
   );
 }
 
+export function listProofAssetsForAccount(
+  proofAssets: SalesProofAsset[],
+  organizationId: string,
+  accountId: string,
+): SalesProofAsset[] {
+  return proofAssets.filter(
+    (p) =>
+      p.organizationId === organizationId &&
+      p.status === "active" &&
+      (p.linkedAccountIds?.includes(accountId) ?? false),
+  );
+}
+
+export function linkProofAssetToOpportunity(
+  asset: SalesProofAsset,
+  opportunityId: string,
+): SalesProofAsset {
+  const linked = new Set(asset.linkedOpportunityIds ?? []);
+  linked.add(opportunityId);
+  return {
+    ...asset,
+    linkedOpportunityIds: [...linked],
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export function linkProofAssetToAccount(
+  asset: SalesProofAsset,
+  accountId: string,
+): SalesProofAsset {
+  const linked = new Set(asset.linkedAccountIds ?? []);
+  linked.add(accountId);
+  return {
+    ...asset,
+    linkedAccountIds: [...linked],
+    updatedAt: new Date().toISOString(),
+  };
+}
+
 export function buildProofLinkageSummary(
   input: ProofLinkageInput,
   stage?: string,
@@ -61,11 +91,21 @@ export function buildProofLinkageSummary(
         input.organizationId,
         input.opportunityId,
       )
-    : input.proofAssets.filter((p) => p.organizationId === input.organizationId);
+    : input.accountId
+      ? listProofAssetsForAccount(
+          input.proofAssets,
+          input.organizationId,
+          input.accountId,
+        )
+      : input.proofAssets.filter(
+          (p) => p.organizationId === input.organizationId,
+        );
 
   const presentTypes = new Set(linkedAssets.map((a) => a.assetType));
   const requiredForStage = stage ? (STAGE_PROOF_REQUIREMENTS[stage] ?? []) : [];
-  const missingAssetTypes = requiredForStage.filter((t) => !presentTypes.has(t));
+  const missingAssetTypes = requiredForStage.filter(
+    (t) => !presentTypes.has(t),
+  );
 
   const evidenceCoverage = computeEvidenceCoverage(
     input.commercialEvidence ?? [],
@@ -104,5 +144,3 @@ export function suggestProofAssetsForObjection(
       (p.description?.toLowerCase().includes(categoryLower) ?? false),
   );
 }
-
-export type { CommercialEvidenceCategory };

@@ -1,135 +1,102 @@
-import { unstable_noStore as noStore } from "next/cache";
 import {
-  listContentStudioOutputsAction,
+  createContentStudioOutputFormAction,
+  exportOutputFormAction,
   listContentStudioCampaignsAction,
-  exportContentStudioOutputFormAction,
+  listContentStudioOutputsAction,
 } from "@/actions/local-content-workspace-actions";
+import { ContentStudioNav } from "@/components/local-content/content-studio-nav";
 import {
   DashboardLayout,
-  PageHeader,
   DevPhaseBadge,
-  InlineNotice,
   EmptyState,
+  InlineNotice,
+  PageHeader,
 } from "@/components/local-content/local-content-shell";
-import { ContentStudioNav } from "@/components/local-content/content-studio-nav";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CreateContentOutputForm } from "@/components/local-content/create-content-output-form";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const dynamic = "force-dynamic";
 
-export default async function ContentOutputsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ refresh?: string }>;
-}) {
-  const { refresh } = await searchParams;
-  if (refresh === "1") {
-    noStore();
-  }
-
+export default async function ContentOutputsPage() {
   const [outputsRes, campaignsRes] = await Promise.all([
     listContentStudioOutputsAction(),
     listContentStudioCampaignsAction(),
   ]);
-
   const outputs = outputsRes.ok ? outputsRes.data : [];
   const campaigns = campaignsRes.ok ? campaignsRes.data : [];
-  const firstCampaignId = campaigns[0]?.id;
 
   return (
     <DashboardLayout>
       <PageHeader
         title="حزم المخرجات"
-        subtitle="حزمة الحملة، التقويم، المحتوى المعتمد، مذكرة الامتثال"
+        subtitle="Campaign package, calendar, approved content, compliance memo"
       />
-      <DevPhaseBadge />
       <ContentStudioNav />
+      <DevPhaseBadge />
 
       {!outputsRes.ok ? (
-        <InlineNotice variant="error" title="خطأ" description={outputsRes.error} />
+        <InlineNotice variant="error" title="تعذر التحميل" description={outputsRes.error} />
       ) : null}
 
-      {!campaignsRes.ok ? (
-        <InlineNotice
-          variant="warning"
-          title="تعذر تحميل الحملات"
-          description={campaignsRes.error}
-        />
-      ) : null}
-
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          {outputs.length === 0 ? (
-            <EmptyState
-              title="لا توجد حزم مخرجات"
-              description={
-                firstCampaignId
-                  ? "أنشئ حزمة من الحملة بعد اعتماد عناصر المحتوى. استخدم النموذج على اليمين أو انتقل إلى الحملة لإكمال مسار المراجعة."
-                  : "أنشئ مشروع محتوى وحملة أولاً، ثم أرسل عناصر للمراجعة والاعتماد قبل تجميع حزمة المخرجات."
-              }
-              actionHref={
-                firstCampaignId
-                  ? undefined
-                  : "/local-content/campaigns"
-              }
-              actionLabel={
-                firstCampaignId ? undefined : "الانتقال إلى الحملات"
-              }
-            />
-          ) : (
-            outputs.map((pkg) => (
-              <Card key={pkg.id}>
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-start gap-2">
-                    <div>
-                      <p className="font-medium">{pkg.title}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(pkg.createdAt).toLocaleDateString("ar-SA")}
-                      </p>
-                    </div>
-                    <Badge variant="outline">{pkg.status}</Badge>
-                  </div>
-                  <ul className="text-xs mt-2 space-y-0.5 text-muted-foreground">
-                    {pkg.includes.campaignSummary && <li>✓ ملخص الحملة</li>}
-                    {pkg.includes.contentCalendar && <li>✓ تقويم المحتوى</li>}
-                    {pkg.includes.approvedContent && <li>✓ المحتوى المعتمد</li>}
-                    {pkg.includes.complianceMemo && <li>✓ مذكرة الامتثال</li>}
-                  </ul>
-                  {pkg.status !== "exported" ? (
-                    <form action={exportContentStudioOutputFormAction} className="mt-3">
-                      <input type="hidden" name="packageId" value={pkg.id} />
-                      <Button type="submit" size="sm" variant="secondary">
-                        تصدير (ADMIN)
-                      </Button>
-                    </form>
-                  ) : (
-                    <p className="text-xs text-green-600 mt-2">مُصدّر</p>
-                  )}
-                </CardContent>
-              </Card>
-            ))
-          )}
+      <form
+        action={createContentStudioOutputFormAction}
+        className="mb-6 rounded-lg border p-4 space-y-3"
+      >
+        <h3 className="font-semibold text-sm">إنشاء حزمة مخرجات</h3>
+        <div className="grid gap-3 md:grid-cols-2">
+          <div>
+            <Label htmlFor="campaignId">الحملة</Label>
+            <select
+              id="campaignId"
+              name="campaignId"
+              required
+              className="flex h-9 w-full rounded-md border px-3 text-sm"
+            >
+              <option value="">اختر الحملة</option>
+              {campaigns.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <Label htmlFor="title">عنوان الحزمة</Label>
+            <Input id="title" name="title" defaultValue="Output Package" />
+          </div>
         </div>
+        <Button type="submit" disabled={campaigns.length === 0}>
+          إنشاء حزمة
+        </Button>
+      </form>
 
-        {firstCampaignId ? (
-          <CreateContentOutputForm campaignId={firstCampaignId} />
-        ) : (
-          <Card>
-            <CardContent className="p-4 text-sm text-muted-foreground">
-              <p className="font-medium text-foreground mb-1">إنشاء حزمة</p>
-              <p>
-                أنشئ حملة من{" "}
-                <a href="/local-content/campaigns" className="underline">
-                  صفحة الحملات
-                </a>{" "}
-                لتتمكن من تجميع حزمة المخرجات.
-              </p>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+      {outputs.length === 0 ? (
+        <EmptyState title="لا توجد حزم" description="أنشئ حزمة مخرجات من حملة معتمدة." />
+      ) : (
+        <div className="space-y-3">
+          {outputs.map((o) => (
+            <Card key={o.id} className="p-4 flex items-center justify-between gap-3">
+              <div>
+                <h3 className="font-semibold">{o.title}</h3>
+                <p className="text-xs text-muted-foreground">Campaign: {o.campaignId}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">{o.status}</Badge>
+                {o.status !== "exported" ? (
+                  <form action={exportOutputFormAction.bind(null, o.id)}>
+                    <Button size="sm" type="submit">
+                      تصدير (ADMIN)
+                    </Button>
+                  </form>
+                ) : null}
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </DashboardLayout>
   );
 }
