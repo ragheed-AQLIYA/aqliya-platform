@@ -8,6 +8,17 @@
 
 ---
 
+## 0. Start pilot runtime / تشغيل بيئة التجريب
+
+| Step | English | العربية |
+|------|---------|---------|
+| 1 | From repo root, start dev against pilot DB `aqliya_lc_pilot`: `npm run dev:localcontent-pilot` **or** `powershell -ExecutionPolicy Bypass -File scripts/run-localcontent-pilot.ps1` | من جذر المستودع: `npm run dev:localcontent-pilot` أو السكربت أعلاه |
+| 2 | Script reads `.env.local` or `.env`, swaps **dbname only** to `aqliya_lc_pilot`, sets `LOCALCONTENT_CONTENT_BACKEND=prisma`. Does **not** edit `.env`. | يقرأ `.env` ويستبدل اسم قاعدة البيانات فقط؛ لا يعدّل الملف |
+| 3 | Open **http://localhost:3000** (or `-Port 3001` if 3000 is busy). | افتح **http://localhost:3000** |
+| 4 | Full setup: `localcontentos-pilot-runtime-guide.md` | التفاصيل: `localcontentos-pilot-runtime-guide.md` |
+
+---
+
 ## 1. What this is / ما هذا
 
 | English | العربية |

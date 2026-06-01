@@ -1,5 +1,8 @@
 # LocalContentOS — PO Sign-off Handoff Executive Pack
 
+> **PO decision document:** Open [`localcontentos-po-final-handoff-package.md`](./localcontentos-po-final-handoff-package.md) — single consolidated pack with checklist, evidence index, and **AUTHORIZE / DEFER / REJECT** decision box.  
+> **This file** remains the executive evidence summary and document index; do **not** use it as the sign-off form.
+
 **Date / التاريخ:** 2026-06-01  
 **Product:** LocalContentOS (Content Studio) on AQLIYA Core  
 **Program:** L4 → L6 Institutional Pilot-Ready (engineering complete; gates open)  
@@ -16,7 +19,7 @@ LocalContentOS Content Studio has completed engineering closure for the L6 progr
 
 Engineering evidence is strong: **6/6 smoke PASS**, **25/25 unit tests PASS**, **six commits on `main`** (B4 closed), **12 audit mutation paths** verified, and **B3 Prisma-only guard** closed. Two human gates remain: **B1** (SalesOS migration drift on shared DB) and **PO sign-off** on this pack.
 
-**Your action:** Complete [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md) and record one decision — **AUTHORIZE**, **DEFER**, or **REJECT**.
+**Your action:** Open [`localcontentos-po-final-handoff-package.md`](./localcontentos-po-final-handoff-package.md), complete Section C checklist, and record one decision in Section D — **AUTHORIZE**, **DEFER**, or **REJECT**. Optional extended attestation: [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md).
 
 ### العربية
 
@@ -24,7 +27,7 @@ Engineering evidence is strong: **6/6 smoke PASS**, **25/25 unit tests PASS**, *
 
 الأدلة الهندسية قوية: **6/6 دخان ناجح**، **25/25 اختبار وحدة**، **ستة commits على `main`** (B4 مغلق)، **12 مسار تدقيق للتغييرات**، و**حارس B3 لـ Prisma فقط** مغلق. يبقى بوابتان بشرية: **B1** (انحراف ترحيل SalesOS على قاعدة مشتركة) و**اعتماد مالك المنتج** على هذه الحزمة.
 
-**إجراؤك:** أكمل [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md) وسجّل قراراً واحداً — **AUTHORIZE** أو **DEFER** أو **REJECT**.
+**إجراؤك:** افتح [`localcontentos-po-final-handoff-package.md`](./localcontentos-po-final-handoff-package.md)، أكمل قائمة التحقق في القسم C، وسجّل قراراً واحداً في القسم D — **AUTHORIZE** أو **DEFER** أو **REJECT**. اعتماد موسّع اختياري: [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md).
 
 ---
 
@@ -142,12 +145,12 @@ Sign the L5 template after reviewing this pack and the readiness scorecard. Deci
 
 ## PO action checklist / قائمة إجراءات مالك المنتج
 
-1. **Read** this executive pack and [`localcontentos-l6-readiness-scorecard.md`](./localcontentos-l6-readiness-scorecard.md).
-2. **Review** smoke evidence in [`agent-14-smoke-results.md`](./agent-14-smoke-results.md).
-3. **Fill** every applicable section in [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md) (Sections A–I).
-4. **Record** one decision: **AUTHORIZE** / **DEFER** / **REJECT** (Section H).
-5. **If AUTHORIZE:** distribute [`localcontentos-l5-pilot-operator-quickstart.md`](./localcontentos-l5-pilot-operator-quickstart.md); coordinate DBA on B1 or scoped DB per [`localcontentos-lc-pilot-db-runbook.md`](./localcontentos-lc-pilot-db-runbook.md).
-6. **Do not** mark Production Ready or update PRODUCT_STATUS_MATRIX to L6 without closing B1 and institutional onboarding.
+1. **Open** [`localcontentos-po-final-handoff-package.md`](./localcontentos-po-final-handoff-package.md) — **primary decision document**.
+2. **Read** evidence linked in Section A of the final package (start with [`agent-14-smoke-results.md`](./agent-14-smoke-results.md) and [`localcontentos-l6-readiness-scorecard.md`](./localcontentos-l6-readiness-scorecard.md)).
+3. **Complete** Section C checklist (smoke, tests, commits, B1 pilot, governance, AI boundary).
+4. **Record** one decision in Section D: **AUTHORIZE** / **DEFER** / **REJECT** (PO fills sign-off fields — no pre-filled signatures).
+5. **If AUTHORIZE:** engineering runs doc updates in final pack Section E; distribute [`localcontentos-l5-pilot-operator-quickstart.md`](./localcontentos-l5-pilot-operator-quickstart.md); confirm pilot DB per [`localcontentos-lc-pilot-db-runbook.md`](./localcontentos-lc-pilot-db-runbook.md).
+6. **Do not** mark Production Ready. Optional deep attestation: [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md).
 
 ---
 
@@ -157,8 +160,9 @@ Sign the L5 template after reviewing this pack and the readiness scorecard. Deci
 
 | Document | Purpose |
 |----------|---------|
-| [`localcontentos-po-signoff-handoff.md`](./localcontentos-po-signoff-handoff.md) | **This file** — executive handoff |
-| [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md) | **PO fills and signs** — AUTHORIZE/DEFER/REJECT |
+| [`localcontentos-po-final-handoff-package.md`](./localcontentos-po-final-handoff-package.md) | **PO opens this** — decision box + consolidated checklist |
+| [`localcontentos-po-signoff-handoff.md`](./localcontentos-po-signoff-handoff.md) | **This file** — executive evidence summary and index |
+| [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md) | Optional extended attestation (Sections A–I) |
 | [`localcontentos-l6-readiness-scorecard.md`](./localcontentos-l6-readiness-scorecard.md) | L6 gate dimensions; honest level assessment |
 | [`localcontentos-l6-program-closure.md`](./localcontentos-l6-program-closure.md) | Program closure — workers complete, L6 gate open |
 
@@ -265,4 +269,4 @@ Target: L6 institutional pilot-ready (still NOT Production Ready)
 
 **Pack version:** PO-HANDOFF-2026-06-01  
 **Prepared by:** Engineering integrator (docs only — no commit, no migrate this session)  
-**Next human gate:** PO decision on [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md)
+**Next human gate:** PO decision on [`localcontentos-po-final-handoff-package.md`](./localcontentos-po-final-handoff-package.md) (Section D)

@@ -155,7 +155,7 @@ The seed command has been executed.
 
 ## Known limitations / follow-ups
 
-1. **Migration SQL encoding** — BOM and UTF-16 fixes applied on disk but **not committed**; fresh clones may fail deploy until committed or DBA applies hotfix.
+1. **Migration SQL encoding** — **CLOSED in git** (`9f52cfc`); fresh clones should deploy after pull.
 2. **Pilot app `DATABASE_URL`** — Operator must point runtime at `aqliya_lc_pilot` (deployment secret / local env); agent did not edit committed `.env`.
 3. **`LOCALCONTENT_CONTENT_BACKEND=prisma`** — Confirm on pilot process before institutional smoke.
 4. **Duplicate `_prisma_migrations` rows** — Failed attempts left rolled-back rows for `20260601150000` / `20260601170000`; final applied rows exist; status is clean.
@@ -166,7 +166,26 @@ The seed command has been executed.
 
 | Item | Value |
 |------|-------|
-| Git commit | **Not requested** |
+| Git commit | **See § Documentation closure** (9f52cfc, 1bbc3ec, + integrator pack) |
 | `.env` edited | **No** |
 | Shared `aqliya` migrate deploy | **No** |
 | Production claim | **NO** |
+
+---
+
+## Documentation closure (full program pack)
+
+**Date:** 2026-06-01  
+**Operator approval:** User explicit approval for commits and remediation (full closure execution).
+
+| Commit | Message | Scope |
+|--------|---------|-------|
+| `9f52cfc` | fix(migrations): UTF-8 encoding for deploy reproducibility | SalesOS P0/P1 migration SQL encoding only (B1 pilot unblock) |
+| `1bbc3ec` | docs(localcontentos): B1 Option A execution evidence | B1 execution log, gate appendix, L6 completion + program closure sync |
+| _(this commit)_ | docs(localcontentos): full closure plan and integrator pack | Closure plan, PO next steps, scorecard, one-pager, migration-fix commit-ready recipe |
+
+**Known limitation resolved in `9f52cfc`:** Migration SQL BOM/UTF-16 fixes previously on disk only — fresh clones can deploy after pull.
+
+**Excluded from LC doc commits:** `prisma/schema.prisma` Sales hunks, SalesOS app WIP, `tmp-*`, website soft-launch pack.
+
+**Production claim:** **NO**
