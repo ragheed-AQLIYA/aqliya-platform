@@ -1,25 +1,36 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+const MAX_BODY_BYTES = 50_000;
+const MAX_ARRAY_ITEMS = 50;
+const MAX_FIELD = 2000;
+
 const schema = z.object({
-  orgName: z.string().min(1, "مطلوب"),
-  industry: z.string().min(1),
-  orgSize: z.string().min(1),
-  country: z.string().min(1),
-  systemCategory: z.string().min(1),
-  challenges: z.array(z.string()),
-  environment: z.array(z.string()),
-  outcomes: z.array(z.string()),
-  intent: z.string().min(1),
-  contactName: z.string().min(1),
-  contactRole: z.string(),
-  contactEmail: z.string().email(),
-  contactPhone: z.string().min(1),
-  notes: z.string(),
+  orgName: z.string().min(1, "مطلوب").max(MAX_FIELD),
+  industry: z.string().min(1).max(MAX_FIELD),
+  orgSize: z.string().min(1).max(MAX_FIELD),
+  country: z.string().min(1).max(MAX_FIELD),
+  systemCategory: z.string().min(1).max(MAX_FIELD),
+  challenges: z.array(z.string().max(MAX_FIELD)).max(MAX_ARRAY_ITEMS),
+  environment: z.array(z.string().max(MAX_FIELD)).max(MAX_ARRAY_ITEMS),
+  outcomes: z.array(z.string().max(MAX_FIELD)).max(MAX_ARRAY_ITEMS),
+  intent: z.string().min(1).max(MAX_FIELD),
+  contactName: z.string().min(1).max(MAX_FIELD),
+  contactRole: z.string().max(MAX_FIELD),
+  contactEmail: z.string().email().max(MAX_FIELD),
+  contactPhone: z.string().min(1).max(MAX_FIELD),
+  notes: z.string().max(5000),
 });
 
 export async function POST(request: Request) {
   try {
+    const contentLength = request.headers.get("content-length");
+    if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        { error: "الحمولة كبيرة جدًا." },
+        { status: 413 },
+      );
+    }
     const body = await request.json();
     const data = schema.parse(body);
 
