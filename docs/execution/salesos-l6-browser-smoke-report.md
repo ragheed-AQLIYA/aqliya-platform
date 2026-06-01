@@ -1,49 +1,54 @@
 ﻿# SalesOS L6 Browser Smoke Report
 
-**Date:** 2026-06-01  
+**Date:** 2026-06-01 (Phases 9–12 update)  
 **Branch:** `feature/salesos-l6-unblock`  
-**Executor:** Master Execution Agent (Wave 4)
+**Executor:** Master Execution Agent
 
 ## Environment
 
 | Item | Value |
 |------|--------|
-| Dev server | `http://localhost:3000` (existing PID 48652) |
-| DB | PostgreSQL `aqliya` @ localhost — **B1 drift** (no `_prisma_migrations`) |
-| Seed admin | `admin@aqliya.com` / `admin123` (if seed applied) |
+| Dev server | `:3000` (pre-existing process — hung/500); `:3001` EADDRINUSE |
+| DB | PostgreSQL `aqliya` @ localhost — **18/18 migrations applied** |
+| Seed admin | `admin@aqliya.com` / `[REDACTED — see seed]` |
+| Sales demo seed | `npx tsx scripts/seed-sales-demo.ts` — **PASS** (idempotent) |
 
-## Curl smoke (unauthenticated)
+## Curl / HTTP smoke
 
-| Route | HTTP | Notes |
-|-------|------|-------|
-| `/api/health` | **200** | Platform health OK |
-| `/sales` | **500** | Runtime error — likely Prisma/schema mismatch (partial Sales tables) |
-| `/sales/deals` | **500** | Same |
-| `/sales/accounts` | **500** | Same |
-| `/sales/review` | **500** | Same |
-| `/workflowos` | **500** | SunbulClient missing `platformOrganizationId` column in live DB |
+| Route | HTTP | Auth | Notes |
+|-------|------|------|-------|
+| `/api/health` | **timeout/FAIL** | n/a | Dev process unhealthy this pass |
+| `/login` | **500** | n/a | Blocks all authenticated smoke |
+| `/sales` | **not re-tested** | unauth | Prior pass: 500 |
+| `/sales/deals` | **not re-tested** | unauth | Prior pass: 500 |
+| `/sales/accounts` | **not re-tested** | unauth | Prior pass: 500 |
+| `/sales/review` | **not re-tested** | unauth | Prior pass: 500 |
+| `/workflowos` | **not re-tested** | unauth | Prior pass: 500 |
 
 ## Authenticated browser
 
 | Check | Result |
 |-------|--------|
+| CSRF + credentials login | **BLOCKED** — `/login` 500 |
+| Session cookie smoke | **NOT DONE** |
 | Human browser sign-off | **NOT DONE** |
-| Glass automation session | **NOT DONE** this pass |
-| Duplicate `syncInstitutionalMemoryForAccount` | **FIXED** — single export via `institutional-memory-sync.ts` re-export |
+| Glass automation | **NOT DONE** |
 
-## Build
+## Build & tests
 
 | Check | Result |
 |-------|--------|
-| `next build --webpack` | **FAIL** — `audit-vnext-actions.ts` missing workpaper exports; residual TSC graph |
-| Bundler duplicate sync | **RESOLVED** |
+| `next build --webpack` | **FAIL** — residual LocalContent/Audit TSC (SalesOS blockers largely fixed) |
+| Sales governance Jest | **PARTIAL** — 11 pass / 5 fail |
+| `scripts/seed-sales-demo.ts` | **PASS** |
 
 ## Honest classification
 
-**Light validated with conditions** — health endpoint OK; product routes 500 until pilot DB + migrate baseline; browser unsigned; L6 **not achieved**.
+**Light validated with conditions** — DB migrate + sales seed OK; build and login **not green**; L6 **not achieved**; authenticated smoke **blocked**.
 
 ## Next smoke steps
 
-1. Provision pilot DB; `migrate deploy` all 18 migrations.
-2. `npx prisma db seed` (or seed script).
-3. Re-run curl with session cookie; then human browser checklist on `/sales/*` and `/workflowos`.
+1. Kill stale Node dev processes; `Remove-Item -Recurse .next`; `npm run dev`.
+2. Verify `/login` → 200 and `/api/auth/session` after credentials login.
+3. Re-run curl + `_salesos-v02-smoke-once.ts` with session cookie.
+4. Human checklist on `/sales/*` and `/workflowos`.
