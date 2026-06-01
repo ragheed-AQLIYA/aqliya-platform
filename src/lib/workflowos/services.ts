@@ -21,11 +21,13 @@ export async function listWorkflowClientsForUser() {
   const user = await getCurrentUser();
 
   if (user.role === "ADMIN") {
-    const filter = user.platformOrganizationId
-      ? { platformOrganizationId: user.platformOrganizationId }
-      : {};
+    // Fail closed: an ADMIN without a platformOrganizationId cannot be scoped
+    // to an organization, so return nothing rather than every org's clients.
+    if (!user.platformOrganizationId) {
+      return [];
+    }
     return prisma.sunbulClient.findMany({
-      where: filter,
+      where: { platformOrganizationId: user.platformOrganizationId },
       orderBy: { createdAt: "desc" },
     });
   }
@@ -48,6 +50,15 @@ export async function getWorkflowClient(clientId: string) {
 export async function createWorkflowClient(input: CreateWorkflowClientInput) {
   const user = await requireWorkflowAdmin();
 
+  // Fail closed: never create an org-less client — it would otherwise be
+  // reachable by any ADMIN via the tenant guard. The admin must be linked
+  // to a platform organization.
+  if (!user.platformOrganizationId) {
+    throw new Error(
+      "Cannot create client: admin is not linked to a platform organization",
+    );
+  }
+
   const existing = await prisma.sunbulClient.findUnique({
     where: { slug: input.slug },
   });
@@ -59,7 +70,7 @@ export async function createWorkflowClient(input: CreateWorkflowClientInput) {
     data: {
       name: input.name,
       slug: input.slug,
-      platformOrganizationId: user.platformOrganizationId ?? undefined,
+      platformOrganizationId: user.platformOrganizationId,
     },
   });
 
@@ -88,8 +99,10 @@ export async function updateWorkflowClientStatus(
   if (!existing) {
     throw new Error("Client not found");
   }
+  // Fail closed: deny when the organization cannot be confirmed on either side.
   if (
-    existing.platformOrganizationId &&
+    !user.platformOrganizationId ||
+    !existing.platformOrganizationId ||
     existing.platformOrganizationId !== user.platformOrganizationId
   ) {
     throw new Error(

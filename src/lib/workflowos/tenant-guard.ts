@@ -69,19 +69,24 @@ export async function requireClientAccess(
   const user = await getCurrentUser();
 
   if (user.role === "ADMIN") {
-    if (user.platformOrganizationId) {
-      const client = await prisma.sunbulClient.findUnique({
-        where: { id: clientId },
-        select: { platformOrganizationId: true },
-      });
-      if (
-        client?.platformOrganizationId &&
-        client.platformOrganizationId !== user.platformOrganizationId
-      ) {
-        throw new Error(
-          "Access denied: client belongs to a different organization",
-        );
-      }
+    const client = await prisma.sunbulClient.findUnique({
+      where: { id: clientId },
+      select: { platformOrganizationId: true },
+    });
+    if (!client) {
+      throw new Error("Access denied: client not found");
+    }
+    // Fail closed: an org-scoped ADMIN must have a platformOrganizationId and
+    // the client must belong to the same org. Null on either side
+    // (unmigrated/orphan data) is denied, not granted.
+    if (
+      !user.platformOrganizationId ||
+      !client.platformOrganizationId ||
+      client.platformOrganizationId !== user.platformOrganizationId
+    ) {
+      throw new Error(
+        "Access denied: client belongs to a different organization",
+      );
     }
     return { ...user, workflowRole: "PlatformAdmin" as WorkflowUserRole };
   }
