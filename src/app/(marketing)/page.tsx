@@ -77,7 +77,7 @@ const activeSystems = [
       "تصدير النتائج",
     ],
     href: "/products/audit",
-    demoHref: "/auditos",
+    demoHref: "/products/audit",
     hasDemoButton: true,
   },
   {
@@ -234,7 +234,7 @@ export default function HomePage() {
               {/* CTA — executive hierarchy */}
               <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row">
                 <Link
-                  href="/auditos"
+                  href="/products/audit"
                   className="btn-primary h-12 px-8 text-base font-bold"
                 >
                   استكشف AuditOS — ديمو تفاعلي
@@ -604,7 +604,7 @@ export default function HomePage() {
             </div>
 
             <div className="mt-7 flex flex-wrap gap-4">
-              <Link href="/auditos" className="btn-primary px-7">
+              <Link href="/products/audit" className="btn-primary px-7">
                 شاهد AuditOS — عرض تفاعلي
               </Link>
               <Link href="/products/audit" className="btn-secondary px-7">
@@ -832,7 +832,7 @@ export default function HomePage() {
               طلب مراجعة Pilot
             </Link>
             <Link
-              href="/auditos"
+              href="/products/audit"
               className="btn-secondary h-12 px-10 text-base"
             >
               استكشف AuditOS — ديمو تفاعلي
