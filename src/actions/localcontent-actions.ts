@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
-import { auditLogger } from "@/lib/platform/audit-logger";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { getStorageProvider } from "@/lib/platform/storage";
 import {
   listProjectsByOrganization,
@@ -129,8 +129,8 @@ async function logToPlatform(params: {
   try {
     const context = await resolveProjectContext(params.projectId);
     const alog = auditLogger({
-      productKey: "localcontent",
-      sourceSystem: "localcontent",
+      productKey: Product.LOCAL_CONTENT,
+      sourceSystem: "localcontent_compliance",
       organization: {
         platformOrganizationId: context?.platformOrganizationId ?? undefined,
         clientWorkspaceId: context?.clientWorkspaceId ?? undefined,
