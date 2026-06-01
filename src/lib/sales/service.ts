@@ -320,7 +320,22 @@ export async function getSalesIntelligenceMemory(user: CurrentUser) {
       source: "derived" as const,
     })),
     competitors: listCompetitorMentions(orgId),
-    signals: listSignals(orgId),
+    signals: listSignals(orgId).map((s) => ({
+      id: s.id,
+      dimension: "pipeline_quality" as const,
+      level:
+        s.strength === "strong"
+          ? ("high" as const)
+          : s.strength === "moderate"
+            ? ("medium" as const)
+            : ("low" as const),
+      value: s.strength === "strong" ? 80 : s.strength === "moderate" ? 50 : 25,
+      confidence: 0.7,
+      label: s.description.slice(0, 80),
+      module: "sales",
+      timestamp: new Date(s.createdAt),
+      source: "derived" as const,
+    })),
     auditRecent: listAuditEntries(orgId).slice(0, 10),
     interactionCount: listAllInteractions(orgId).length,
     disclaimerAr: "مسودة — ذاكرة مؤسسية للعرض فقط. AI assists. Humans decide.",

@@ -11,6 +11,11 @@ import {
   validateCreateSalesDealInput,
   validateUpdateSalesDealInput,
 } from "./validation";
+import {
+  assertStageChangeGovernance,
+  countDealEvidenceLinks,
+} from "./governance";
+import type { UserRole } from "@prisma/client";
 
 export interface SalesOrgScope {
   organizationId: string;
@@ -191,10 +196,21 @@ export async function createSalesDeal(
 
 export async function updateSalesDeal(
   dealId: string,
-  organizationId: string,
+  scope: SalesOrgScope | string,
   input: UpdateSalesDealInput,
-  actor: { id: string; name?: string; platformOrganizationId?: string | null },
+  actor: {
+    id: string;
+    name?: string;
+    role?: UserRole;
+    platformOrganizationId?: string | null;
+  },
 ) {
+  const organizationId =
+    typeof scope === "string" ? scope : scope.organizationId;
+  const platformOrganizationId =
+    typeof scope === "string"
+      ? actor.platformOrganizationId
+      : scope.platformOrganizationId;
   const validated = validateUpdateSalesDealInput(input);
 
   const existing = await prisma.salesDeal.findFirst({
@@ -214,17 +230,46 @@ export async function updateSalesDeal(
     }
   }
 
+  let targetStage: { id: string; slug: string } | null = null;
   if (validated.stageId) {
-    const stage = await prisma.salesPipelineStage.findFirst({
+    targetStage = await prisma.salesPipelineStage.findFirst({
       where: { id: validated.stageId, organizationId },
+      select: { id: true, slug: true },
     });
-    if (!stage) {
+    if (!targetStage) {
       throw new Error("Pipeline stage not found for this organization");
     }
   }
 
   const stageChanged =
     validated.stageId !== undefined && validated.stageId !== existing.stageId;
+
+  if (stageChanged && targetStage) {
+    const evidenceLinkCount = await countDealEvidenceLinks(organizationId, dealId);
+    const governance = assertStageChangeGovernance({
+      dealId,
+      toStageSlug: targetStage.slug,
+      evidenceLinkCount,
+      governanceOverrideReason: validated.governanceOverrideReason,
+      actorRole: actor.role,
+    });
+
+    if (governance.usedOverride && governance.overrideReason) {
+      await recordSalesAuditEvent({
+        organizationId,
+        platformOrganizationId,
+        actorId: actor.id,
+        actorName: actor.name,
+        action: SalesAuditActions.GOVERNANCE_OVERRIDE,
+        targetType: "SalesDeal",
+        targetId: dealId,
+        metadata: {
+          toStageSlug: targetStage.slug,
+          reason: governance.overrideReason,
+        },
+      });
+    }
+  }
 
   const deal = await prisma.salesDeal.update({
     where: { id: dealId },

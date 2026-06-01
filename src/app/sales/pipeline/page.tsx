@@ -84,7 +84,11 @@ export default async function SalesPipelinePage() {
           variant="error"
           title="تعذر تحميل المسار"
           description={
-            dealsRes.ok ? stagesRes.error : dealsRes.error || "تحقق من migration و seed"
+            !dealsRes.ok
+              ? dealsRes.error
+              : !stagesRes.ok
+                ? stagesRes.error
+                : "تحقق من migration و seed"
           }
         />
       ) : null}

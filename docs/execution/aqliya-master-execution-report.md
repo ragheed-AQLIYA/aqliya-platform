@@ -313,3 +313,81 @@ Prior commits on branch: `8278377`, `ae81360`, `f39c820`, `b321e83`.
 ---
 
 *Phases 9–12 complete at maximum autonomous progress. Production: **no-go**. Pilot rehearsal: **conditional go** on `aqliya_pilot` with curl smoke evidence only.*
+
+---
+
+## 16. Phase 13 Final Push (2026-06-01)
+
+### Environment
+
+| Check | Result |
+|-------|--------|
+| Stale node on :3000/:3001 | Cleared |
+| `.next` cache | Removed between runs |
+| `prisma migrate status` | **18/18 up to date** (`aqliya_pilot`) |
+
+### Login (`/login` HTTP 500 → 200)
+
+| Item | Result |
+|------|--------|
+| Root cause | Stale dev processes + missing `SessionProvider` for client auth |
+| Fix | Added `AuthProvider` (`next-auth/react`) in root layout; clean dev restart |
+| `curl /login` | **PASS 200** |
+
+### Build (`npx next build --webpack`)
+
+| Stage | Result |
+|-------|--------|
+| Webpack compile | **PASS with warnings** (jose Edge runtime, Sentry token) |
+| TypeScript (app routes) | Fixed: missing vNext export stubs, `intelligence` memory types, `pipeline/page` ActionResult narrowing |
+| Full exit 0 | **not re-confirmed** — build worker interrupted in agent environment after compile; last TS failure (`pipeline/page.tsx:87`) patched |
+
+**Stubs / aliases added (minimal):** `getProductRegistryEntry`, `validateProductActionAccess`, `getRequiredEvidenceForApproval`, `buildPublishingGate`, `buildContentGovernanceRuntime`, `getWorkflowProgressStep`, `readAccountResearchRun`, `salesBuildProofEffectivenessWaveB`, `salesGetProofEffectivenessForOpportunity`; renamed conflicting `intelligence-hub-tabs.tsx` → `intelligence-hub-tabs-panel.tsx`.
+
+### Governance tests
+
+| Suite | Result |
+|-------|--------|
+| `sales-governance.test.ts` | **11/11 PASS** |
+| `sales-l5-governance.test.ts` | **5/5 PASS** |
+| Fix | `updateSalesDeal` accepts `SalesOrgScope`; prisma mock includes `salesPipelineStage` |
+
+### Authenticated smoke (curl CSRF, `admin@aqliya.com`, password redacted)
+
+| Route | HTTP | Result |
+|-------|------|--------|
+| `/login` | 200 | PASS (unauthenticated) |
+| `/sales` | 200 | PASS |
+| `/sales/deals` | 200 | PASS |
+| `/sales/accounts` | 200 | PASS |
+| `/sales/review` | 200 | PASS |
+| `/workflowos` | 200 | PASS |
+| `/audit` | 200 | PASS |
+
+Session cookie established via `/api/auth/callback/credentials`; `/api/auth/session` returned user object.
+
+### Phase 13 validation summary
+
+| Area | Label |
+|------|-------|
+| Login | **light validated** — HTTP 200 |
+| Authenticated curl smoke (6 product routes) | **light validated** — all 200 |
+| Governance tests | **light validated** — 16/16 targeted |
+| Next production build | **not validated** — compile OK, exit 0 not re-run to completion |
+| Production readiness | **production no-go** |
+
+### Phase 13 commits
+
+| Commit | Message (this pass) |
+|--------|---------------------|
+| *(pending)* | `fix(phase13): login SessionProvider, build stubs, governance tests green, smoke PASS` |
+
+Prior branch commits: `b321e83`, `dcd5d7c`, `3e63fa9`, `a3b0bb5`, `8278377`, `ae81360`, `f39c820`, `8f60514`.
+
+### Remaining human gates
+
+1. Re-run `npx next build --webpack` locally to confirm exit 0 (agent environment killed worker mid-run).
+2. Browser human sign-off on authenticated flows (curl-only evidence this pass).
+3. External pilot session + pen test scope per Week 1–4 ops plan.
+
+*Phase 13: maximum autonomous progress. Production: **no-go**. Pilot rehearsal: **conditional go** on `aqliya_pilot` with curl smoke + governance tests green.*

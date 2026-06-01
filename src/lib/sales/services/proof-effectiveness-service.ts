@@ -1,6 +1,8 @@
 import {
   buildProofEffectivenessAnalysis,
   buildProofEffectivenessSnapshot,
+  buildProofEffectivenessWaveBSnapshot,
+  filterProofEffectivenessForOpportunity,
   loadProofEffectivenessSnapshot,
   readProofEffectivenessInput,
   toProofEffectivenessWidgetSummary,
@@ -8,7 +10,7 @@ import {
   PROOF_EFFECTIVENESS_DISCLAIMER_EN,
   PROOF_EFFECTIVENESS_RECOMMENDATION_LABEL,
 } from "../vnext/proof-effectiveness";
-import { listAccounts } from "../store";
+import { listAccounts, listProofAssetsForOpportunity } from "../store";
 
 export type {
   ProofEffectivenessAnalysis,
@@ -36,6 +38,18 @@ export function salesBuildProofEffectivenessAnalysis(organizationId: string) {
     ...input,
     accounts: listAccounts(organizationId),
   });
+}
+
+export const salesBuildProofEffectivenessWaveB = salesBuildProofEffectivenessAnalysis;
+
+export function salesGetProofEffectivenessForOpportunity(
+  organizationId: string,
+  opportunityId: string,
+) {
+  const waveB = salesBuildProofEffectivenessWaveB(organizationId);
+  const linked = listProofAssetsForOpportunity(organizationId, opportunityId);
+  const linkedAssetIds = new Set(linked.map((asset) => asset.id));
+  return filterProofEffectivenessForOpportunity(waveB, linkedAssetIds);
 }
 
 export function salesLoadProofEffectivenessSnapshot(organizationId: string) {

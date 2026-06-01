@@ -126,6 +126,8 @@ function parseAccountResearchRun(raw: unknown): AccountResearchRun | null {
   };
 }
 
+export const readAccountResearchRun = readAccountResearchFromMetadata;
+
 export function readAccountResearchFromMetadata(
   metadata: unknown,
 ): AccountResearchRun | null {

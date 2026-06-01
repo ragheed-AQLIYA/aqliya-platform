@@ -191,3 +191,22 @@ export function getNextWorkflowAction(
     urgent: false,
   }
 }
+
+/** Maps workflow readiness to the 0–11 step index used by WorkflowProgress UI. */
+export function getWorkflowProgressStep(
+  _engagementId: string,
+  ctx: WorkflowContext,
+  blockingIssues: readonly string[],
+): number {
+  if (ctx.isPublished) return 11
+  if (blockingIssues.length > 0) return 9
+  if (ctx.isApproved) return 10
+  if (ctx.hasReviewActivity) return 8
+  if (ctx.hasRecommendations) return 7
+  if (ctx.hasFindings) return 6
+  if (ctx.hasEvidence) return 5
+  if (ctx.hasNotes || ctx.hasFinancialStatements) return 4
+  if (ctx.hasConfirmedMappings) return 3
+  if (ctx.hasMappings || ctx.hasTrialBalance) return ctx.hasTrialBalance ? 1 : 2
+  return 0
+}
