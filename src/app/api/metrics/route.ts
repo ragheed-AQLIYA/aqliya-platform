@@ -1,10 +1,64 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireUserContext } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+const OPS_TOKEN_HEADER = "x-aqliya-ops-token";
+
+/**
+ * Constant-time UTF-8 comparison so response timing does not reveal how many
+ * leading characters of the ops token matched. Length is checked up-front
+ * (standard for constant-time string compares); leaking only the length of a
+ * high-entropy secret is negligible. Uses no external dependency.
+ */
+function constantTimeEqual(a: string, b: string): boolean {
+  const enc = new TextEncoder();
+  const aBytes = enc.encode(a);
+  const bBytes = enc.encode(b);
+  if (aBytes.length !== bBytes.length) return false;
+  let diff = 0;
+  for (let i = 0; i < aBytes.length; i++) {
+    diff |= aBytes[i] ^ bBytes[i];
+  }
+  return diff === 0;
+}
+
+/**
+ * Internal-ops gate for /api/metrics. This endpoint exposes platform-wide
+ * aggregate counts and must NOT be reachable merely because a user is an org
+ * ADMIN. Access requires the shared internal ops token supplied via the
+ * `x-aqliya-ops-token` header and matched against AQLIYA_INTERNAL_METRICS_TOKEN.
+ * Every rejection (env unset, header missing, or mismatch) returns 404 — not
+ * 401/403 — to avoid disclosing that the endpoint exists. Returns null when
+ * access is granted.
+ */
+function rejectIfNotInternalOps(request: NextRequest): NextResponse | null {
+  const expected = process.env.AQLIYA_INTERNAL_METRICS_TOKEN;
+  const provided = request.headers.get(OPS_TOKEN_HEADER);
+
+  const granted =
+    typeof expected === "string" &&
+    expected.length > 0 &&
+    typeof provided === "string" &&
+    constantTimeEqual(provided, expected);
+
+  if (granted) return null;
+
+  return NextResponse.json(
+    {
+      success: false,
+      error: { code: "NOT_FOUND", message: "Not found" },
+      meta: { timestamp: new Date().toISOString() },
+    },
+    { status: 404 },
+  );
+}
+
+export async function GET(request: NextRequest) {
+  const opsRejection = rejectIfNotInternalOps(request);
+  if (opsRejection) return opsRejection;
+
   try {
     await requireUserContext("ADMIN");
 

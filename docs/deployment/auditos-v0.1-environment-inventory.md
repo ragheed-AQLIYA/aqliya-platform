@@ -71,6 +71,7 @@ These must be set for the application to start and authenticate users.
 | `AUDIT_DEV_FALLBACK_ENABLED`            | `false`                                 | Dev actor fallback (`src/lib/audit/actor-context.ts`)                                                          |
 | `PILOT_REVIEW_WEBHOOK_URL`              | —                                       | Optional pilot review webhook                                                                                  |
 | `RESEND_API_KEY`                        | —                                       | Custom product form email (not AuditOS core)                                                                   |
+| `AQLIYA_INTERNAL_METRICS_TOKEN`         | —                                       | Internal ops token gating `GET /api/metrics`. Caller sends it via the `x-aqliya-ops-token` header. Unset / missing / mismatch ⇒ **404**. Additional ops gate; does **not** replace the session + ADMIN check. Use a high-entropy secret. |
 | `ANALYZE`                               | `false`                                 | Bundle analyzer toggle                                                                                         |
 
 ---
