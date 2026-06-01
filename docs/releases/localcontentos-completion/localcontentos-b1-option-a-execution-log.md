@@ -166,7 +166,7 @@ The seed command has been executed.
 
 | Item | Value |
 |------|-------|
-| Git commit | **See § Documentation closure** (9f52cfc, 1bbc3ec, + integrator pack) |
+| Git commit | **See § Documentation closure** (9f52cfc, 1bbc3ec, + integrator pack, ``d910ffa``) |
 | `.env` edited | **No** |
 | Shared `aqliya` migrate deploy | **No** |
 | Production claim | **NO** |
@@ -182,7 +182,7 @@ The seed command has been executed.
 |--------|---------|-------|
 | `9f52cfc` | fix(migrations): UTF-8 encoding for deploy reproducibility | SalesOS P0/P1 migration SQL encoding only (B1 pilot unblock) |
 | `1bbc3ec` | docs(localcontentos): B1 Option A execution evidence | B1 execution log, gate appendix, L6 completion + program closure sync |
-| _(this commit)_ | docs(localcontentos): full closure plan and integrator pack | Closure plan, PO next steps, scorecard, one-pager, migration-fix commit-ready recipe |
+| ``d910ffa`` | docs(localcontentos): full closure plan and integrator pack | Closure plan, PO next steps, scorecard, one-pager, migration-fix commit-ready recipe |
 
 **Known limitation resolved in `9f52cfc`:** Migration SQL BOM/UTF-16 fixes previously on disk only — fresh clones can deploy after pull.
 
