@@ -380,7 +380,7 @@ Prior commits on branch: `8278377`, `ae81360`, `f39c820`, `b321e83`.
 
 | Commit | Message (this pass) |
 |--------|---------------------|
-| *(pending)* | `fix(phase13): sales governance green, login/smoke PASS, build TS fixes` |
+| *(this pass)* | `8834691` — `fix(phase13): governance green, smoke PASS, build TS incremental fixes` |
 
 Prior branch commits: `b321e83`, `dcd5d7c`, `3e63fa9`, `a3b0bb5`, `8278377`, `ae81360`, `f39c820`, `8f60514`.
 
