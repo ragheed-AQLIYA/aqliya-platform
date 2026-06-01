@@ -204,47 +204,65 @@ Everything else (code fixes, migrate on pilot, commits, docs) can continue auton
 
 ---
 
-## 11. Phases 9–12 Execution (2026-06-01 continuation)
+## 11. Phases 9–12 Execution (2026-06-01 — COMPLETE at max autonomous progress)
 
-### Phase 9 — Build + Login + Seeds
-
-| Item | Result |
-|------|--------|
-| `/login` diagnosis | **500** on existing `:3000` dev process; auth config (`auth-config.ts`) structurally OK — runtime/server hang suspected |
-| `scripts/seed-sales-demo.ts` | **CREATED/FIXED** — idempotent pipeline, accounts, deals; `loggedById` → `createdById` |
-| `npx tsx scripts/seed-sales-demo.ts` | **PASS** |
-| Audit vNext build blockers | **FIXED** — workpaper + sampling link stubs; `collectProductTasks` / `collectProductActivities` |
-| Sales module graph | **PARTIAL FIX** — store exports, market-intelligence index, proof-network disclaimers, sales-actions signature fixes |
-| `next build --webpack` | **FAIL** — residual LocalContent form/TSC + classification export graph |
-| Sales governance Jest | **PARTIAL** — 11 pass / 5 fail |
-
-### Phase 10 — Authenticated Smoke
+### Phase 9 — Pilot DB + migrate + backfill
 
 | Item | Result |
 |------|--------|
-| Clear `.next` + dev | Attempted; ports 3000/3001 conflicted or hung |
-| Login smoke | **BLOCKED** — `/login` 500 |
-| Authenticated `/sales/*` | **NOT DONE** |
-| Smoke report updated | `docs/execution/salesos-l6-browser-smoke-report.md` |
+| `CREATE DATABASE aqliya_pilot` | **PASS** — via `scripts/create-pilot-db.mjs` |
+| `.env` → `aqliya_pilot` | **PASS** — DATABASE_URL updated |
+| `npx prisma migrate deploy` | **PASS** — 18/18 migrations applied |
+| `npx prisma db seed` | **PASS** — platform org, users, AuditOS engagement, WorkflowOS |
+| `backfill-platform-organizations.ts --apply` | **PASS** — 2 records already linked |
+| `backfill-sunbul-platform-org.ts --apply` | **PASS** — SunbulClient linked |
+| `scripts/check-db-drift.ts` | **PASS** — `platformOrganizationId` present; 11 Sales tables; 18 migration rows |
 
-### Phase 11 — Multi-product hardening
-
-| Product | Result |
-|---------|--------|
-| WorkflowOS | **light validated** — migrations applied; `SunbulClient.platformOrganizationId` in schema (no live query evidence this pass) |
-| AuditOS | **grep-only** — audit-trail page fixed to match client component API; core L5 not destructively edited |
-| Intelligence Core | Gaps documented below |
-| PRODUCT_STATUS_MATRIX | Updated in this pass (SalesOS + WorkflowOS rows) |
-
-### Phase 12 — Platform closure
+### Phase 10 — Build + TSC fixes
 
 | Item | Result |
 |------|--------|
-| `cursor-development-workflow.md` | Present + complete |
-| `.cursor/rules/aqliya-core.mdc` | Present from prior waves |
-| Master report | This section |
-| `aqliya-production-readiness-checklist.md` | Created |
-| Git | Commit pending this pass |
+| Sales action aliases (`createAccountAction`, `createOpportunityFromAccountAction`) | **FIXED** |
+| Sales validation exports (`OPEN_DEAL_STATUSES`, interaction validators) | **FIXED** |
+| `SalesViewerReadOnlyNotice`, `SalesPhaseBadge` props | **FIXED** |
+| Audit `getOperatorStatusDisplay` / `OperatorStatusTone` | **FIXED** (minimal stub — AuditOS protected) |
+| LocalContent form actions (`activateCampaignFormAction` FormData signature) | **FIXED** |
+| `reporting.ts` import path (`services/reporting-helpers`) | **FIXED** |
+| `npx next build --webpack` | **FAIL** — residual LocalContent vnext + platform access graph (see build-log2.txt) |
+| `npx tsc --noEmit` | **FAIL** — non-critical paths remain; critical sales/auth routes compile in dev |
+
+### Phase 11 — Login + authenticated smoke
+
+| Item | Result |
+|------|--------|
+| `/login` unauthenticated | **PASS 200** (after pilot DB + dev restart) |
+| `/api/health` | **PASS 200** |
+| Auth session (`admin@aqliya.com`) | **PASS** — credentials from seed (redacted in reports) |
+| `scripts/smoke-auth-routes.ts` | **6/6 PASS** on core product routes |
+
+### Authenticated smoke table (curl, pilot DB, 2026-06-01)
+
+| Route | HTTP | Auth | Notes |
+|-------|------|------|-------|
+| `/api/health` | 200 | n/a | OK |
+| `/login` | 200 | n/a | OK |
+| `/sales` | 200 | admin | Dashboard |
+| `/sales/deals` | 200 | admin | OK |
+| `/sales/accounts` | 200 | admin | OK |
+| `/sales/review` | 200 | admin | OK after SalesViewerReadOnlyNotice |
+| `/workflowos` | 200 | admin | OK |
+| `/audit` | 200 | admin | OK after getOperatorStatusDisplay |
+
+Browser human sign-off: **NOT DONE** (curl-only evidence this pass)
+
+### Phase 12 — Tests + docs + commits
+
+| Item | Result |
+|------|--------|
+| `sales-governance.test.ts` + `sales-l5-governance.test.ts` | **11 pass / 5 fail** — prisma mock gaps |
+| `aqliya-production-readiness-checklist.md` | **UPDATED** |
+| `PRODUCT_STATUS_MATRIX.md` | **UPDATED** |
+| Git commits | See §15 below |
 
 ---
 
@@ -252,32 +270,46 @@ Everything else (code fixes, migrate on pilot, commits, docs) can continue auton
 
 | Area | Label |
 |------|-------|
-| Prisma migrate (local) | **light validated** — 18/18 |
-| Sales demo seed | **light validated** |
-| Next production build | **not validated** — FAIL |
-| Login page | **not validated** — 500 |
-| Authenticated product smoke | **not validated** — blocked |
-| Sales governance tests | **light validated with conditions** — 11/16 |
+| Pilot DB migrate deploy | **light validated** — 18/18 + drift check |
+| Pilot DB seed + backfill | **light validated** |
+| Next production build | **not validated** — FAIL (LocalContent/platform graph) |
+| Login page | **light validated** — 200 |
+| Authenticated curl smoke (7 routes) | **light validated with conditions** — curl only, no browser |
+| Sales governance tests (targeted) | **light validated with conditions** — 11/16 |
 | Production readiness | **production no-go** |
 
 ---
 
 ## 13. Intelligence Core gaps (brief)
 
-- Governed AI contract stubs exist (`src/lib/ai/governed-*`) but end-to-end traceability not smoke-validated.
-- Cross-product task/activity runtime reconnected (in-memory bridges) — not production persistence.
-- Institutional operating snapshot depends on in-memory sales store for some signals.
+- Governed AI contract stubs exist but end-to-end traceability not smoke-validated.
+- Cross-product task runtime uses in-memory bridges — not production persistence.
+- `buildPublishingGate`, `validateProductActionAccess` missing — blocks full production build.
 
 ---
 
-## 14. Commits (Phases 9–12 session)
+## 14. Week 1–4 ops plan (human gates)
+
+| Week | Focus | Owner |
+|------|-------|-------|
+| 1 | Stabilize `next build --webpack` (LocalContent vnext + platform access stubs); keep pilot DB only | Platform agent |
+| 2 | Browser smoke sign-off on `/sales/*`, `/workflowos`, `/audit`; seed sales demo (`SEED_SALES_DEMO=1`) | QA / operator |
+| 3 | CI gate: migrate deploy on pilot + targeted Jest; fix 5 L5 governance mock failures | Platform agent |
+| 4 | PO sign-off, pen test scope, SSO decision — **production still no-go until build green + human sign-off** | Leadership |
+
+---
+
+## 15. Commits (Phases 9–12 session)
 
 | Commit | Message |
 |--------|---------|
-| `b321e83` | fix(salesos): restore store/intel modules, seed script, and action signatures |
+| *(this pass)* | `fix(db): provision aqliya_pilot, migrate deploy, backfill scripts` |
+| *(this pass)* | `fix(salesos): validation exports, action aliases, shell components` |
+| *(this pass)* | `fix(audit): add getOperatorStatusDisplay stub for engagement badge` |
+| *(this pass)* | `docs: complete Phases 9–12 execution report and readiness checklist` |
 
-Docs commit pending: production checklist + smoke report + master report update.
+Prior commits on branch: `8278377`, `ae81360`, `f39c820`, `b321e83`.
 
 ---
 
-*Phases 1–12 complete at maximum autonomous progress. External gates: PO signature, pen test, SSO, clean build + browser sign-off.*
+*Phases 9–12 complete at maximum autonomous progress. Production: **no-go**. Pilot rehearsal: **conditional go** on `aqliya_pilot` with curl smoke evidence only.*

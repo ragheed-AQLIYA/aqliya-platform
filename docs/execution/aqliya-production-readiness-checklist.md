@@ -10,8 +10,9 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| `npx next build --webpack` | **FAIL / in progress** | TSC progressed through sales-actions; remaining LocalContent + webpack graph errors possible; parallel build+dev can corrupt `.next` |
-| `npx tsc --noEmit` (full repo) | **FAIL** | Residual errors in audit-vnext pages, platform org actions, non-critical paths |
+| `npx next build --webpack` | **FAIL** | Residual LocalContent vnext (`buildPublishingGate`), platform access (`validateProductActionAccess`), sales brief export graph |
+| `npx tsc --noEmit` (full repo) | **FAIL** | Dev compiles core routes; full repo has audit/local-content/platform debt |
+| Dev compile (Turbopack) | **PASS** | `/sales/*`, `/workflowos`, `/audit` render after fixes |
 
 **Human action:** Run build alone after `Remove-Item .next -Recurse`; do not run `npm run dev` concurrently.
 
@@ -21,9 +22,10 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| `npx prisma migrate deploy` on shared DB | **BLOCKED** | B1 drift — no `_prisma_migrations` history |
-| Pilot DB (`aqliya_pilot`) | **Recommended** | `migrate deploy` + `db seed` + backfill scripts |
-| `scripts/seed-sales-demo.ts` | **PASS** | Idempotent — pipeline, 3 accounts, 3 deals seeded |
+| Shared DB `aqliya` migrate | **BLOCKED** | B1 drift — use pilot only |
+| Pilot DB `aqliya_pilot` | **PASS** | 18/18 migrations, seed, backfills |
+| `scripts/check-db-drift.ts` | **PASS** | `SunbulClient.platformOrganizationId`; 11 Sales tables |
+| `scripts/create-pilot-db.mjs` | **ADDED** | Idempotent CREATE DATABASE helper |
 
 ---
 
@@ -31,11 +33,12 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| `/login` page | **BLOCKED** (env) | 500 when `.next/dev` corrupted by parallel build; auth config OK in repo |
-| Authenticated `/sales/*` | **NOT VALIDATED** | Session curl blocked by dev instability |
-| `/api/health` | **FAIL** during corruption | 500 with missing routes-manifest |
+| `/login` | **PASS 200** | Client page loads |
+| `/api/health` | **PASS 200** | |
+| Authenticated curl smoke | **PASS 6/6** | `scripts/smoke-auth-routes.ts` — `/sales`, `/sales/deals`, `/sales/accounts`, `/sales/review`, `/workflowos`, `/audit` |
+| Browser human sign-off | **NOT DONE** | Required for L6 |
 
-**Pilot credentials:** seed user `admin@aqliya.com` — password in seed only (not committed).
+**Pilot credentials:** seed user `admin@aqliya.com` — password in `prisma/seed.ts` only (not repeated here).
 
 ---
 
@@ -43,8 +46,8 @@
 
 | Suite | Status | Evidence |
 |-------|--------|----------|
-| `sales-governance.test.ts` | **Partial** | Core governance rules pass; prisma mocks vary |
-| `sales-l5-governance.test.ts` | **Partial** | 11 pass / 5 fail (mock/table-missing cases) |
+| `sales-governance.test.ts` | **Partial** | Included in 11/16 aggregate |
+| `sales-l5-governance.test.ts` | **Partial** | 11 pass / 5 fail — prisma mock gaps |
 
 ---
 
@@ -52,11 +55,11 @@
 
 | Product | Pilot-ready? | Production? |
 |---------|--------------|-------------|
-| AuditOS L5 | Yes (protect) | No — build/tsc debt |
-| SalesOS L5 | Conditional | No |
-| WorkflowOS | Conditional | No — Sunbul column drift on shared DB |
-| LocalContentOS | Conditional | No |
-| Platform Core | Partial stubs | No |
+| AuditOS L5 | Yes (protect) | **No** — build graph + browser sign-off pending |
+| SalesOS L5 | **Conditional** on pilot DB | **No** — build red |
+| WorkflowOS | **Conditional** on pilot DB | **No** |
+| LocalContentOS | Conditional | **No** — build blockers |
+| Platform Core | Partial stubs | **No** |
 
 ---
 
@@ -67,19 +70,21 @@
 - [ ] SSO / IdP integration decision
 - [ ] Production infra + backup DR drill
 - [ ] Bilingual UX human review
+- [ ] Browser smoke sign-off (not curl-only)
 
 ---
 
 ## Recommended pilot DB bootstrap
 
 ```powershell
-# Create DB: CREATE DATABASE aqliya_pilot;
-# Point .env DATABASE_URL to aqliya_pilot
+node scripts/create-pilot-db.mjs
+# Update .env DATABASE_URL to postgresql://.../aqliya_pilot?schema=public
 npx prisma migrate deploy
 npx prisma db seed
-$env:SEED_SALES_DEMO="1"; npx prisma db seed   # or: npx tsx scripts/seed-sales-demo.ts
 npx tsx scripts/backfill-platform-organizations.ts --apply
 npx tsx scripts/backfill-sunbul-platform-org.ts --apply
+npx tsx scripts/check-db-drift.ts
 Remove-Item .next -Recurse -Force -ErrorAction SilentlyContinue
 npm run dev
+npx tsx scripts/smoke-auth-routes.ts
 ```
