@@ -10,11 +10,11 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| `npx next build --webpack` | **FAIL** | Residual LocalContent vnext (`buildPublishingGate`), platform access (`validateProductActionAccess`), sales brief export graph |
-| `npx tsc --noEmit` (full repo) | **FAIL** | Dev compiles core routes; full repo has audit/local-content/platform debt |
-| Dev compile (Turbopack) | **PASS** | `/sales/*`, `/workflowos`, `/audit` render after fixes |
+| `npx next build --webpack` | **FAIL** | Webpack compile OK; TypeScript phase fails (~169 errors in LocalContent/platform graph) |
+| `npx tsc --noEmit` (full repo) | **FAIL** | Residual non-critical paths |
+| Dev compile (sales/auth routes) | **PASS** | Authenticated curl smoke 6/6 |
 
-**Human action:** Run build alone after `Remove-Item .next -Recurse`; do not run `npm run dev` concurrently.
+**Human action:** Run build alone after `Remove-Item .next\lock`; do not run `npm run dev` concurrently.
 
 ---
 
@@ -22,10 +22,9 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| Shared DB `aqliya` migrate | **BLOCKED** | B1 drift — use pilot only |
+| Shared DB `aqliya` drift | **BLOCKED** | Use pilot only |
 | Pilot DB `aqliya_pilot` | **PASS** | 18/18 migrations, seed, backfills |
 | `scripts/check-db-drift.ts` | **PASS** | `SunbulClient.platformOrganizationId`; 11 Sales tables |
-| `scripts/create-pilot-db.mjs` | **ADDED** | Idempotent CREATE DATABASE helper |
 
 ---
 
@@ -33,12 +32,12 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| `/login` | **PASS 200** | Client page loads |
+| `/login` | **PASS 200** | Unauthenticated |
 | `/api/health` | **PASS 200** | |
-| Authenticated curl smoke | **PASS 6/6** | `scripts/smoke-auth-routes.ts` — `/sales`, `/sales/deals`, `/sales/accounts`, `/sales/review`, `/workflowos`, `/audit` |
+| Authenticated curl (`scripts/smoke-auth-routes.ts`) | **PASS 6/6** | `/sales`, `/sales/deals`, `/sales/accounts`, `/sales/review`, `/workflowos`, `/audit` |
 | Browser human sign-off | **NOT DONE** | Required for L6 |
 
-**Pilot credentials:** seed user `admin@aqliya.com` — password in `prisma/seed.ts` only (not repeated here).
+**Pilot credentials:** seed user `admin@aqliya.com` — password in `prisma/seed.ts` (redact in reports).
 
 ---
 
@@ -46,8 +45,7 @@
 
 | Suite | Status | Evidence |
 |-------|--------|----------|
-| `sales-governance.test.ts` | **Partial** | Included in 11/16 aggregate |
-| `sales-l5-governance.test.ts` | **Partial** | 11 pass / 5 fail — prisma mock gaps |
+| `sales-governance.test.ts` + `sales-l5-governance.test.ts` | **11 pass / 5 fail** | Prisma mock gaps |
 
 ---
 
@@ -55,36 +53,32 @@
 
 | Product | Pilot-ready? | Production? |
 |---------|--------------|-------------|
-| AuditOS L5 | Yes (protect) | **No** — build graph + browser sign-off pending |
-| SalesOS L5 | **Conditional** on pilot DB | **No** — build red |
-| WorkflowOS | **Conditional** on pilot DB | **No** |
-| LocalContentOS | Conditional | **No** — build blockers |
+| SalesOS | Conditional (pilot DB + curl) | **No** (build red, browser unsigned) |
+| WorkflowOS | Conditional (pilot DB + curl) | **No** |
+| AuditOS | Protected L5 | **No** (build graph) |
+| LocalContentOS | L5 with conditions | **No** (build blockers) |
 | Platform Core | Partial stubs | **No** |
 
 ---
 
-## Gate 6 — External-only (never automated)
+## Gate 6 — External-only (never automate)
 
 - [ ] PO / institutional sign-off per product
-- [ ] Penetration test / security review
-- [ ] SSO / IdP integration decision
-- [ ] Production infra + backup DR drill
-- [ ] Bilingual UX human review
-- [ ] Browser smoke sign-off (not curl-only)
+- [ ] Pen test / security review scope
+- [ ] SSO + backup automation decision
+- [ ] Production infra provisioning
 
 ---
 
-## Recommended pilot DB bootstrap
+## Recommended pilot bootstrap
 
 ```powershell
 node scripts/create-pilot-db.mjs
-# Update .env DATABASE_URL to postgresql://.../aqliya_pilot?schema=public
+# Point DATABASE_URL to aqliya_pilot in .env
 npx prisma migrate deploy
 npx prisma db seed
 npx tsx scripts/backfill-platform-organizations.ts --apply
 npx tsx scripts/backfill-sunbul-platform-org.ts --apply
 npx tsx scripts/check-db-drift.ts
-Remove-Item .next -Recurse -Force -ErrorAction SilentlyContinue
-npm run dev
 npx tsx scripts/smoke-auth-routes.ts
 ```

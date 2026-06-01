@@ -228,8 +228,8 @@ Everything else (code fixes, migrate on pilot, commits, docs) can continue auton
 | Audit `getOperatorStatusDisplay` / `OperatorStatusTone` | **FIXED** (minimal stub — AuditOS protected) |
 | LocalContent form actions (`activateCampaignFormAction` FormData signature) | **FIXED** |
 | `reporting.ts` import path (`services/reporting-helpers`) | **FIXED** |
-| `npx next build --webpack` | **FAIL** — residual LocalContent vnext + platform access graph (see build-log2.txt) |
-| `npx tsc --noEmit` | **FAIL** — non-critical paths remain; critical sales/auth routes compile in dev |
+| `npx next build --webpack` | **FAIL** — webpack **compile OK**; TypeScript phase fails (~169 repo errors; LocalContent/platform graph) |
+| `npx tsc --noEmit` | **FAIL** — down from prior pass; critical sales/auth routes validated via curl smoke |
 
 ### Phase 11 — Login + authenticated smoke
 
