@@ -380,7 +380,7 @@ Session cookie established via `/api/auth/callback/credentials`; `/api/auth/sess
 
 | Commit | Message (this pass) |
 |--------|---------------------|
-| *(pending)* | `fix(phase13): login SessionProvider, build stubs, governance tests green, smoke PASS` |
+| *(this pass)* | `d5a8e3e` — `fix(phase13): login SessionProvider, build export stubs, governance green, smoke PASS` |
 
 Prior branch commits: `b321e83`, `dcd5d7c`, `3e63fa9`, `a3b0bb5`, `8278377`, `ae81360`, `f39c820`, `8f60514`.
 
