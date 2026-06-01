@@ -18,7 +18,6 @@ import {
   createSpendRecord,
   deleteSpendRecord,
   createClassification,
-  listClassifications,
   listEvidence,
   createEvidenceEntry,
   deleteEvidence,
@@ -412,15 +411,6 @@ export async function listLocalContentSpendRecordsAction(
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
     return listSpendRecords(projectId);
-  });
-}
-
-export async function listLocalContentClassificationsAction(
-  projectId: string,
-): Promise<ActionResult<Awaited<ReturnType<typeof listClassifications>>>> {
-  return safe(async () => {
-    await assertProjectAccess(projectId, "view");
-    return listClassifications(projectId);
   });
 }
 
@@ -1193,19 +1183,4 @@ function revalidateLocalContentPaths(
 /** @deprecated Prefer revalidateLocalContentPaths — kept for existing callers */
 export async function revalidateLocalContentProject(projectId: string) {
   revalidateLocalContentPaths(projectId);
-}
-
-export async function advanceEditorialStageAction(
-  projectId: string,
-  targetStage: import("@/lib/local-content/vnext/editorial-runtime").EditorialLifecycleStage,
-): Promise<ActionResult<{ projectId: string; stage: string }>> {
-  return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "admin");
-    await updateProjectStatus(projectId, targetStage, {
-      id: user.id,
-      name: user.name,
-    });
-    revalidateLocalContentPaths(projectId);
-    return { projectId, stage: targetStage };
-  });
 }

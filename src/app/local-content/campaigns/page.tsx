@@ -1,70 +1,97 @@
-import Link from "next/link";
-import { getCurrentUser } from "@/lib/auth";
-import { listCampaignOperations } from "@/lib/local-content/campaign-operations";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  listContentStudioCampaignsAction,
+  listContentStudioProjectsAction,
+} from "@/actions/local-content-workspace-actions";
+import {
+  DashboardLayout,
+  PageHeader,
+  DevPhaseBadge,
+  InlineNotice,
+  EmptyState,
+} from "@/components/local-content/local-content-shell";
+import { ContentStudioNav } from "@/components/local-content/content-studio-nav";
+import { CreateContentProjectForm } from "@/components/local-content/create-content-project-form";
+import { CreateCampaignForm } from "@/components/local-content/create-campaign-form";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
-export default async function LocalContentCampaignsPage() {
-  const user = await getCurrentUser();
-  const campaigns = await listCampaignOperations(user.organizationId);
+export const dynamic = "force-dynamic";
+
+export default async function ContentCampaignsPage() {
+  const [campaignsRes, projectsRes] = await Promise.all([
+    listContentStudioCampaignsAction(),
+    listContentStudioProjectsAction(),
+  ]);
+
+  const campaigns = campaignsRes.ok ? campaignsRes.data : [];
+  const projects = projectsRes.ok ? projectsRes.data : [];
+  const firstProjectId = projects[0]?.id;
 
   return (
-    <div className="space-y-6" dir="rtl">
-      <div>
-        <Link
-          href="/local-content/command-center"
-          className="text-sm text-muted-foreground hover:underline"
-        >
-          ← مركز القيادة
-        </Link>
-        <h1 className="mt-2 text-h2 font-black">عمليات الحملات</h1>
-        <p className="text-sm text-muted-foreground">
-          تنسيق دورة الحملة — مسودة تشغيلية، المراجعة البشرية مطلوبة
-        </p>
-      </div>
+    <DashboardLayout>
+      <PageHeader
+        title="الحملات"
+        subtitle="Content Studio — إدارة حملات المحتوى المحلي"
+      />
+      <DevPhaseBadge />
+      <ContentStudioNav />
 
-      <Card className="rounded-[24px]">
-        <CardHeader>
-          <CardTitle className="text-base">
-            الحملات ({campaigns.length})
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
+      {!campaignsRes.ok ? (
+        <InlineNotice
+          variant="error"
+          title="تعذر تحميل الحملات"
+          description={campaignsRes.error}
+        />
+      ) : null}
+
+      {!projectsRes.ok ? (
+        <InlineNotice
+          variant="error"
+          title="تعذر تحميل مشاريع المحتوى"
+          description={projectsRes.error}
+        />
+      ) : null}
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-4">
           {campaigns.length === 0 ? (
-            <p className="text-sm text-muted-foreground">لا حملات</p>
+            <EmptyState
+              title="لا توجد حملات بعد"
+              description="أنشئ مشروع محتوى من النموذج على اليمين، ثم أضف حملة لبدء Content Studio."
+              actionHref="/local-content"
+              actionLabel="العودة إلى مركز القيادة"
+            />
           ) : (
             campaigns.map((c) => (
-              <div
-                key={c.projectId}
-                className="rounded-lg border px-3 py-2 text-sm"
-              >
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <Link
-                    href={c.href}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {c.projectName}
-                  </Link>
-                  <Badge variant="outline">{c.status}</Badge>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  مرحلة: {c.orchestration.currentStage}
-                  {c.orchestration.nextStage
-                    ? ` → ${c.orchestration.nextStage}`
-                    : ""}
-                </p>
-                {c.orchestration.blockers.length > 0 && (
-                  <ul className="mt-1 list-inside list-disc text-xs text-amber-600">
-                    {c.orchestration.blockers.map((b) => (
-                      <li key={b}>{b}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              <Link key={c.id} href={`/local-content/campaigns/${c.id}`}>
+                <Card className="hover:border-primary transition-colors">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <h2 className="font-semibold">{c.name}</h2>
+                      <Badge variant="outline">{c.status}</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {c.channels.join(", ") || "—"}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             ))
           )}
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+
+        <div className="space-y-4">
+          <CreateContentProjectForm />
+          {firstProjectId ? (
+            <CreateCampaignForm contentProjectId={firstProjectId} />
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              أنشئ مشروع محتوى أولاً لتتمكن من إنشاء حملة.
+            </p>
+          )}
+        </div>
+      </div>
+    </DashboardLayout>
   );
 }

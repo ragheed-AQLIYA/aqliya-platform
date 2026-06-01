@@ -8,7 +8,6 @@ import { jsonLd } from "@/components/platform/json-ld";
 import { SkipToContent } from "@/components/platform/skip-to-content";
 import { ServiceWorkerRegister } from "@/components/platform/service-worker-register";
 import { A11yProvider } from "@/components/platform/a11y-provider";
-import { AuthProvider } from "@/components/platform/auth-provider";
 import "./globals.css";
 
 const notoSansArabic = Noto_Sans_Arabic({
@@ -75,13 +74,11 @@ export default async function RootLayout({
           }}
         />
         <NextIntlClientProvider messages={messages}>
-          <AuthProvider>
-            <A11yProvider>
-              <WebVitals />
-              <Analytics />
-              {children}
-            </A11yProvider>
-          </AuthProvider>
+          <A11yProvider>
+            <WebVitals />
+            <Analytics />
+            {children}
+          </A11yProvider>
         </NextIntlClientProvider>
       </body>
     </html>

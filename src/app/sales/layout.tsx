@@ -1,6 +1,5 @@
 import { PlatformSidebar } from "@/components/platform/platform-sidebar";
 import { PlatformHeader } from "@/components/platform/platform-header";
-import { SalesNav } from "@/components/sales/sales-nav";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -21,10 +20,7 @@ export default async function SalesLayout({
       <div className="flex flex-1 min-w-0 flex-col overflow-hidden">
         <PlatformHeader />
         <main className="flex-1 overflow-y-auto">
-          <div className="p-4 sm:p-6 lg:p-8">
-            <SalesNav />
-            {children}
-          </div>
+          <div className="p-4 sm:p-6 lg:p-8">{children}</div>
         </main>
       </div>
     </div>

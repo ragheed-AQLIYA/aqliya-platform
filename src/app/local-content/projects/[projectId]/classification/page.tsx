@@ -3,9 +3,7 @@ import {
   getLocalContentProjectAction,
   listLocalContentSpendRecordsAction,
   listLocalContentSuppliersAction,
-  listLocalContentClassificationsAction,
   getLocalContentScoreAction,
-  classifyLocalContentSpendRecordAction,
 } from "@/actions/localcontent-actions";
 import {
   DashboardLayout,
@@ -13,7 +11,6 @@ import {
   EmptyState,
   DevPhaseBadge,
 } from "@/components/local-content/local-content-shell";
-import { ClassificationForm } from "@/components/local-content/classification-form";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -29,13 +26,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   logistics: "لوجستي",
 };
 
-const BASIS_LABELS: Record<string, string> = {
-  certificate: "شهادة",
-  self_declaration: "إقرار ذاتي",
-  contract_term: "بند تعاقدي",
-  analyst_estimate: "تقدير محلل",
-};
-
 export default async function ClassificationPage({
   params,
 }: {
@@ -45,25 +35,17 @@ export default async function ClassificationPage({
   const projectRes = await getLocalContentProjectAction(projectId);
   if (!projectRes.ok || !projectRes.data) notFound();
 
-  const [spendRes, suppliersRes, scoreRes, classificationsRes] =
-    await Promise.all([
-      listLocalContentSpendRecordsAction(projectId),
-      listLocalContentSuppliersAction(projectId),
-      getLocalContentScoreAction(projectId),
-      listLocalContentClassificationsAction(projectId),
-    ]);
+  const [spendRes, suppliersRes, scoreRes] = await Promise.all([
+    listLocalContentSpendRecordsAction(projectId),
+    listLocalContentSuppliersAction(projectId),
+    getLocalContentScoreAction(projectId),
+  ]);
 
   const spendRecords = spendRes.ok ? spendRes.data : [];
   const suppliers = suppliersRes.ok ? suppliersRes.data : [];
   const score = scoreRes.ok ? scoreRes.data : null;
-  const classifications = classificationsRes.ok ? classificationsRes.data : [];
 
   const supplierMap = new Map(suppliers.map((s) => [s.id, s]));
-  const classificationBySpend = new Map(
-    classifications
-      .filter((c) => c.spendRecordId)
-      .map((c) => [c.spendRecordId!, c]),
-  );
 
   return (
     <DashboardLayout>
@@ -119,13 +101,12 @@ export default async function ClassificationPage({
               href={`/local-content/projects/${projectId}/suppliers`}
               className="text-xs font-medium text-primary hover:underline"
             >
-              تحديث بيانات الموردين
+              تحديث بيانات الموردين والتصنيف
             </Link>
           </div>
           <div className="grid gap-2">
             {spendRecords.map((sr) => {
               const supplier = supplierMap.get(sr.supplierId);
-              const existing = classificationBySpend.get(sr.id);
               const localityLabel =
                 supplier?.localityClassification === "local"
                   ? "محلي"
@@ -134,8 +115,7 @@ export default async function ClassificationPage({
                     : supplier?.localityClassification === "mixed"
                       ? "مشترك"
                       : "غير مصنف";
-              const pct =
-                existing?.localPercentage ?? supplier?.localContentPercentage;
+              const pct = supplier?.localContentPercentage;
               return (
                 <Card key={sr.id} className="p-3">
                   <div className="flex items-start justify-between gap-3">
@@ -170,14 +150,6 @@ export default async function ClassificationPage({
                       </Badge>
                     </div>
                   </div>
-                  {existing && (
-                    <p className="mt-1 text-[10px] text-muted-foreground">
-                      تصنيف مسجّل: {existing.localPercentage}% —{" "}
-                      {BASIS_LABELS[existing.classificationBasis] ||
-                        existing.classificationBasis}
-                      {existing.notes ? ` — ${existing.notes}` : ""}
-                    </p>
-                  )}
                   <div className="mt-1 flex items-center gap-2 text-[10px] text-muted-foreground">
                     <span>
                       نوع الملكية:{" "}
@@ -193,13 +165,6 @@ export default async function ClassificationPage({
                       <span>السعودة: {supplier.workforceLocalPct}%</span>
                     )}
                   </div>
-                  <ClassificationForm
-                    projectId={projectId}
-                    spendRecordId={sr.id}
-                    supplierId={sr.supplierId}
-                    supplierName={supplier?.name || sr.supplierId}
-                    classifyAction={classifyLocalContentSpendRecordAction}
-                  />
                 </Card>
               );
             })}

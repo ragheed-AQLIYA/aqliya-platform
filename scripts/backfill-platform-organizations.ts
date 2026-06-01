@@ -47,7 +47,6 @@ interface Summary {
   platformOrgsCreated: number;
   decisionOrgsLinked: number;
   auditOrgsLinked: number;
-  sunbulClientsLinked: number;
   errors: string[];
 }
 
@@ -102,7 +101,6 @@ async function main() {
     platformOrgsCreated: 0,
     decisionOrgsLinked: 0,
     auditOrgsLinked: 0,
-    sunbulClientsLinked: 0,
     errors: [],
   };
 
@@ -130,22 +128,11 @@ async function main() {
       orderBy: { createdAt: "asc" },
     });
 
-    const sunbulClients = await prisma.sunbulClient.findMany({
-      select: {
-        id: true,
-        name: true,
-        platformOrganizationId: true,
-        createdAt: true,
-      },
-      orderBy: { createdAt: "asc" },
-    });
-
     summary.totalDecisionOrgs = decisionOrgs.length;
     summary.totalAuditOrgs = auditOrgs.length;
 
     console.log(`Found ${decisionOrgs.length} DecisionOS organizations`);
-    console.log(`Found ${auditOrgs.length} AuditOS organizations`);
-    console.log(`Found ${sunbulClients.length} SunbulClient records\n`);
+    console.log(`Found ${auditOrgs.length} AuditOS organizations\n`);
 
     // ─── Check already linked ───
 
@@ -331,39 +318,6 @@ async function main() {
           summary.auditOrgsLinked++;
         }
       }
-
-      // SunbulClient backfill: link by normalized name to PlatformOrganization
-      const platformOrgs = await prisma.platformOrganization.findMany({
-        select: { id: true, name: true, slug: true },
-      });
-      const platformByName = new Map(
-        platformOrgs.map((po) => [normalizeName(po.name), po.id]),
-      );
-
-      for (const client of sunbulClients) {
-        if (client.platformOrganizationId) continue;
-        const key = normalizeName(client.name);
-        let platformOrgId = platformByName.get(key);
-        if (!platformOrgId) {
-          const slug = slugify(client.name, new Set(platformOrgs.map((p) => p.slug)));
-          const created = await prisma.platformOrganization.create({
-            data: {
-              slug,
-              name: client.name,
-              status: "active",
-            },
-          });
-          platformOrgId = created.id;
-          platformOrgs.push(created);
-          platformByName.set(key, created.id);
-          summary.platformOrgsCreated++;
-        }
-        await prisma.sunbulClient.update({
-          where: { id: client.id },
-          data: { platformOrganizationId: platformOrgId },
-        });
-        summary.sunbulClientsLinked++;
-      }
     }
 
     // ─── Print summary ───
@@ -397,9 +351,6 @@ async function main() {
       );
       console.log(
         `  AuditOS organizations linked:    ${summary.auditOrgsLinked}`,
-      );
-      console.log(
-        `  SunbulClient records linked:     ${summary.sunbulClientsLinked}`,
       );
     }
 

@@ -1,33 +1,37 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { listContentStudioReviewQueueAction } from "@/actions/local-content-workspace-actions";
-import { ContentReviewPanel } from "@/components/local-content/content-review-panel";
-import { ContentStudioNav } from "@/components/local-content/content-studio-nav";
 import {
   DashboardLayout,
-  DevPhaseBadge,
-  InlineNotice,
   PageHeader,
+  DevPhaseBadge,
 } from "@/components/local-content/local-content-shell";
+import { ContentStudioNav } from "@/components/local-content/content-studio-nav";
+import { ContentReviewQueue } from "@/components/local-content/content-review-queue";
 
 export const dynamic = "force-dynamic";
 
 export default async function ContentReviewPage() {
+  noStore();
   const res = await listContentStudioReviewQueueAction();
-  const items = res.ok ? res.data : [];
+  const queue = res.ok ? res.data : [];
 
   return (
     <DashboardLayout>
       <PageHeader
         title="قائمة المراجعة"
-        subtitle="مراجعة المصادر، الهوية، الامتثال، والجودة اللغوية"
+        subtitle="مراجعة المحتوى — مصادر، امتثال، جودة لغوية"
       />
-      <ContentStudioNav />
       <DevPhaseBadge />
+      <ContentStudioNav />
 
-      {!res.ok ? (
-        <InlineNotice variant="error" title="تعذر التحميل" description={res.error} />
-      ) : (
-        <ContentReviewPanel items={items} />
-      )}
+      <p className="text-xs text-muted-foreground mb-4">
+        AI assists. Humans decide. لا نشر تلقائي — الموافقة البشرية مطلوبة.
+      </p>
+
+      <ContentReviewQueue
+        initialQueue={queue}
+        initialError={res.ok ? undefined : res.error}
+      />
     </DashboardLayout>
   );
 }

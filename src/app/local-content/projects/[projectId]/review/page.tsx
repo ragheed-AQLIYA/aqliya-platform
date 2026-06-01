@@ -9,7 +9,6 @@ import {
   DashboardLayout,
   PageHeader,
   DevPhaseBadge,
-  LocalContentStatusBadge,
 } from "@/components/local-content/local-content-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,21 +19,12 @@ import {
   ShieldCheck,
   AlertTriangle,
   CheckCircle2,
+  XCircle,
+  Clock,
   FileText,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-
-function canSubmitReview(
-  projectStatus: string,
-  reviews: { action: string }[],
-): boolean {
-  if (projectStatus === "Approved") return false;
-  if (reviews.length === 0) return true;
-  if (projectStatus === "Returned" || projectStatus === "Rejected") return true;
-  const lastReview = reviews[0];
-  return lastReview?.action === "returned";
-}
 
 export default async function ReviewPage({
   params,
@@ -52,9 +42,6 @@ export default async function ReviewPage({
   const project = projectRes.data;
   const score = scoreRes.ok ? scoreRes.data : null;
   const reviews = reviewsRes.ok ? reviewsRes.data : [];
-  const showReviewForm = canSubmitReview(project.status, reviews);
-  const awaitingApproval =
-    project.status === "InReview" && reviews.length > 0 && !showReviewForm;
 
   return (
     <DashboardLayout>
@@ -64,39 +51,11 @@ export default async function ReviewPage({
       >
         <ArrowLeft className="h-4 w-4" /> العودة للمشروع
       </Link>
-      <div className="flex items-center gap-2 mb-1">
-        <PageHeader
-          title="المراجعة / Review"
-          subtitle="مراجعة تقييم المحتوى المحلي قبل الاعتماد"
-        />
-        <LocalContentStatusBadge status={project.status} />
-      </div>
+      <PageHeader
+        title="المراجعة / Review"
+        subtitle="مراجعة تقييم المحتوى المحلي قبل الاعتماد"
+      />
       <DevPhaseBadge />
-
-      {awaitingApproval && (
-        <Card className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
-          <CardContent className="p-4 text-sm text-blue-900 dark:text-blue-200">
-            <ShieldCheck className="h-4 w-4 inline mr-1" />
-            تم تقديم المراجعة. حالة المشروع: قيد المراجعة (InReview). انتقل إلى{" "}
-            <Link
-              href={`/local-content/projects/${projectId}/approval`}
-              className="font-medium underline"
-            >
-              صفحة الاعتماد
-            </Link>{" "}
-            لاتخاذ قرار المعتمد.
-          </CardContent>
-        </Card>
-      )}
-
-      {project.status === "Rejected" && showReviewForm && (
-        <Card className="mb-6 border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950">
-          <CardContent className="p-4 text-sm text-amber-900 dark:text-amber-200">
-            <AlertTriangle className="h-4 w-4 inline mr-1" />
-            تم رفض المشروع سابقاً. يمكنك تقديم مراجعة جديدة بعد المعالجة.
-          </CardContent>
-        </Card>
-      )}
 
       {score && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
@@ -128,20 +87,14 @@ export default async function ReviewPage({
         </div>
       )}
 
-      {showReviewForm ? (
+      {reviews.length === 0 ? (
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-base">
-              {reviews.length === 0
-                ? "لا توجد مراجعات بعد"
-                : "تقديم مراجعة جديدة"}
-            </CardTitle>
+            <CardTitle className="text-base">لا توجد مراجعات بعد</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              {reviews.length === 0
-                ? "لم يتم تقديم أي مراجعة لهذا المشروع حتى الآن."
-                : "المشروع مرتجع أو مرفوض — يمكن تقديم مراجعة محدّثة."}
+              لم يتم تقديم أي مراجعة لهذا المشروع حتى الآن.
             </p>
             <form
               action={async (formData: FormData) => {
@@ -187,11 +140,8 @@ export default async function ReviewPage({
             </form>
           </CardContent>
         </Card>
-      ) : null}
-
-      {reviews.length > 0 ? (
+      ) : (
         <div className="space-y-2 mb-6">
-          <h3 className="text-sm font-semibold">سجل المراجعات</h3>
           {reviews.map((r) => (
             <Card key={r.id} className="p-3">
               <div className="flex items-center justify-between gap-3">
@@ -203,9 +153,7 @@ export default async function ReviewPage({
                       ? "مقدم"
                       : r.action === "returned"
                         ? "مرتجع"
-                        : r.action === "commented"
-                          ? "تعليق"
-                          : r.action}
+                        : r.action}
                   </Badge>
                   <Badge variant="outline" className="bg-muted/50">
                     {r.status === "in_review"
@@ -227,7 +175,7 @@ export default async function ReviewPage({
             </Card>
           ))}
         </div>
-      ) : null}
+      )}
 
       <Card className="mb-6 border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950">
         <CardContent className="p-4 text-sm text-amber-900 dark:text-amber-200">
