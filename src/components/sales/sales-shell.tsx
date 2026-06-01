@@ -20,7 +20,7 @@ export function SalesPageHeader({
   );
 }
 
-export function SalesPhaseBadge() {
+export function SalesPhaseBadge(_props?: { phase?: string }) {
   return (
     <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
       SalesOS v0.3 PR-2 — واجهة الصفقات P0. لا إرسال تلقائي ولا مزامنة بريد/تقويم.
@@ -72,8 +72,24 @@ export function SalesInlineNotice({
   );
 }
 
-export function SalesNavLinks({ active }: { active?: "dashboard" | "deals" }) {
-  const linkClass = (key: "dashboard" | "deals") =>
+export function SalesViewerReadOnlyNotice({ action }: { action: string }) {
+  return (
+    <SalesInlineNotice
+      variant="info"
+      title="عرض فقط"
+      description={`دور المشاهد لا يسمح بـ: ${action}.`}
+    />
+  );
+}
+
+export function SalesNavLinks({
+  active,
+  canCreate: _canCreate,
+}: {
+  active?: string;
+  canCreate?: boolean;
+}) {
+  const linkClass = (key: string) =>
     key === active
       ? "text-primary font-medium"
       : "text-muted-foreground hover:text-foreground";

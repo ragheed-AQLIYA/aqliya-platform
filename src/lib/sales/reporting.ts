@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import {
   buildDueNextActions,
   partitionPipelineDeals,
-} from "./services";
+} from "./services/reporting-helpers";
 import {
   icpBandLabelAr,
   readAccountIcpScore,

@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/auth";
 import { SalesAuditActions } from "@/lib/sales/audit-events";
 import { getSalesPermissionsForRole } from "@/lib/sales/permissions";
+import { parseSalesAuditTrailFilters } from "@/lib/sales/audit-trail";
 import { History, User } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -70,14 +71,16 @@ export default async function SalesAuditTrailPage({
   const user = await getCurrentUser();
   const { canCreate } = getSalesPermissionsForRole(user.role);
 
-  const res = await listOrgSalesAuditEventsAction({
-    targetType: sp.targetType,
-    action: sp.action,
-    from: sp.from,
-    to: sp.to,
-    limit: sp.limit,
-    cursor: sp.cursor,
-  });
+  const res = await listOrgSalesAuditEventsAction(
+    parseSalesAuditTrailFilters({
+      targetType: sp.targetType,
+      action: sp.action,
+      from: sp.from,
+      to: sp.to,
+      limit: sp.limit,
+      cursor: sp.cursor,
+    }),
+  );
 
   if (!res.ok) {
     return (
