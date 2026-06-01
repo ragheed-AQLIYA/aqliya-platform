@@ -84,15 +84,29 @@ export function ProjectList({ projects }: { projects: ProjectListItem[] }) {
 export function EmptyState({
   title,
   description,
+  actionHref,
+  actionLabel,
 }: {
   title: string;
   description: string;
+  actionHref?: string;
+  actionLabel?: string;
 }) {
   return (
     <div className="py-16 text-center">
       <Building2 className="mx-auto h-12 w-12 text-muted-foreground/40 mb-4" />
       <h3 className="text-base font-semibold">{title}</h3>
-      <p className="text-sm text-muted-foreground mt-1">{description}</p>
+      <p className="text-sm text-muted-foreground mt-1 max-w-md mx-auto">
+        {description}
+      </p>
+      {actionHref && actionLabel ? (
+        <Link
+          href={actionHref}
+          className="inline-block mt-4 text-sm font-medium text-primary hover:underline"
+        >
+          {actionLabel}
+        </Link>
+      ) : null}
     </div>
   );
 }
