@@ -448,6 +448,62 @@ Prior branch commits: `b321e83`, `dcd5d7c`, `3e63fa9`, `a3b0bb5`, `8278377`, `ae
 
 ## 18. Phase 15 — Browser Sign-off + CI Scaffold (2026-06-01)
 
+### Browser smoke (agent evidence)
+
+| Route | Browser | Curl |
+|-------|---------|------|
+| `/login` | **PASS** | — |
+| `/sales` | **PASS** (SalesOS dashboard snapshot) | **200** |
+| `/sales/deals` | PARTIAL (MCP session) | **200** |
+| `/sales/accounts` | PARTIAL | **200** |
+| `/sales/review` | PARTIAL | **200** |
+| `/workflowos` | PARTIAL | **200** |
+| `/audit` | **PASS** (AuditOS + Gulf Trading engagement) | **200** |
+| `/local-content` | PARTIAL | **200** |
+
+**Label:** agent browser evidence — human institutional sign-off **pending**. React login form MCP automation failed; credentials API + in-page nav used.
+
+### AuditUser provisioning
+
+- `admin@aqliya.com` **MISSING** on pilot before Phase 15
+- Fixed via idempotent `scripts/ensure-audit-user-admin.ts` → `usr-admin` role `admin`
+- `/audit` dashboard renders Gulf Trading Co. FY2025 after fix
+
+### Regression (Phase 15 re-run)
+
+| Check | Result |
+|-------|--------|
+| `npx next build --webpack` | **PASS exit 0** |
+| `scripts/smoke-auth-routes.ts` | **6/6 PASS** |
+| `sales-governance` + `sales-l5-governance` | **16/16 PASS** |
+
+### CI scaffold
+
+- Added `.github/workflows/pilot-ci.yml` — postgres service, `migrate deploy`, seed, `ensure-audit-user-admin`, build, jest 16, `next start` + smoke
+- **Not validated** on GitHub Actions until first run
+
+### Validation
+
+| Area | Label |
+|------|-------|
+| Browser smoke | **light validated with conditions** — partial MCP + curl 6/6 |
+| CI pipeline | **scaffold only** — not run on GitHub |
+| Production readiness | **production no-go** |
+
+### Phase 16 recommendation
+
+1. Human PO browser walkthrough on all six product routes (agent ≠ institutional sign-off).
+2. First green `pilot-ci.yml` run on PR; fix any CI-only failures.
+3. Fix React login MCP/automation gap or add E2E (Playwright) for browser gate.
+4. Replace `@ts-nocheck` stubs; tighten signal producers.
+5. Run `seed-audit` or merge AuditUser into main seed for full AuditOS demo data on fresh pilot.
+
+*Phase 15: CI scaffold + agent browser evidence. Production: **no-go**.*
+
+---
+
+## 18. Phase 15 — Browser Sign-off + CI Scaffold (2026-06-01)
+
 ### Browser (agent MCP + curl)
 
 | Route | Browser | Curl (`smoke-auth-routes`) |

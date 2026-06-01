@@ -2,29 +2,29 @@
 
 **Title:** feat(phase15): browser smoke evidence and CI pilot pipeline
 
-**Branch:** `feature/salesos-l6-unblock` -> `main`
+**Base:** `main`  
+**Head:** `feature/salesos-l6-unblock`
+
+---
 
 ## Summary
 
-- Agent browser smoke on `/login` and `/sales` with curl-backed **6/6** authenticated route pass (`scripts/smoke-auth-routes.ts`).
-- Pilot CI workflow: Postgres service, `prisma migrate deploy`, seed + `seed:audit`, `next build --webpack`, sales governance Jest (16), production server + auth smoke.
-- Idempotent `AuditUser` upsert for `admin@aqliya.com` in `prisma/seed.ts`.
-- Docs: Phase 15 sections in master execution report, browser smoke report, production readiness checklist (CI + browser rows).
+- Agent browser smoke evidence for `/login`, `/sales`, `/audit` on `aqliya_pilot` (human sign-off still pending).
+- Idempotent `scripts/ensure-audit-user-admin.ts` — provisions `AuditUser` for `admin@aqliya.com` so AuditOS dashboard renders fully.
+- New `.github/workflows/pilot-ci.yml` — postgres, migrate deploy, seed, build, governance jest (16), authenticated curl smoke via `next start`.
+- Updated execution docs: browser smoke report, master execution report Phase 15, production readiness checklist (CI + browser rows).
 
 ## Test plan
 
 - [ ] `npx next build --webpack` — exit 0
-- [ ] `npx jest src/lib/sales/__tests__/sales-governance.test.ts src/lib/sales/__tests__/sales-l5-governance.test.ts` — 16/16
-- [ ] `npx tsx scripts/smoke-auth-routes.ts` (dev or `next start`) — 6/6 PASS
-- [ ] GitHub Actions `Pilot CI` workflow — first run green on PR
-- [ ] Human browser sign-off on `/sales/*`, `/workflowos`, `/audit`, `/local-content` (not agent substitute)
-- [ ] Pilot DB: `npx prisma db seed` after merge if AuditUser row missing
+- [ ] `npm test -- --testPathPatterns="sales-governance|sales-l5-governance"` — 16/16
+- [ ] `npx tsx scripts/smoke-auth-routes.ts` — 6/6 (dev or `next start`)
+- [ ] `npx tsx scripts/ensure-audit-user-admin.ts` — idempotent on pilot
+- [ ] Human browser walkthrough: `/sales/*`, `/workflowos`, `/audit`, `/local-content`
+- [ ] GitHub Actions: first `Pilot CI` workflow run green on PR
 
-## Production
+## Honest gates
 
-**No-go** until human browser sign-off, CI green, and external gates (pen test / pilot SOP) per checklist.
-
-## Honest labels
-
-- Agent browser != human institutional sign-off
-- CI scaffold != validated until Actions run succeeds
+- **Production:** no-go
+- **Pilot rehearsal:** conditional go on `aqliya_pilot` with curl + jest green
+- Agent browser evidence ≠ human institutional sign-off

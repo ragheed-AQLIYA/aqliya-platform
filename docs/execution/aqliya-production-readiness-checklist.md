@@ -10,7 +10,7 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| `npx next build --webpack` | **PASS** | Phase 14 (2026-06-01): TS phase PASS, static gen 72 routes, **exit 0** |
+| `npx next build --webpack` | **PASS** | Phase 15 re-run: exit 0 (~98s); 70 static routes |
 | `npx tsc --noEmit` (full repo) | **PASS** | 0 errors after test exclude + incremental fixes |
 | Dev compile (sales/auth routes) | **PASS** | Authenticated curl smoke 6/6 |
 
@@ -35,7 +35,7 @@
 | `/login` | **PASS 200** | Unauthenticated |
 | `/api/health` | **PASS 200** | |
 | Authenticated curl (`scripts/smoke-auth-routes.ts`) | **PASS 6/6** | `/sales`, `/sales/deals`, `/sales/accounts`, `/sales/review`, `/workflowos`, `/audit` |
-| Browser human sign-off | **NOT DONE** | Agent browser + curl 6/6 (Phase 15); human PO pending |
+| Browser agent evidence | **PARTIAL** | `/login`, `/sales`, `/audit` snapshots; curl 6/6; human PO pending |
 
 **Pilot credentials:** seed user `admin@aqliya.com` — password in `prisma/seed.ts` (redact in reports).
 
@@ -54,7 +54,7 @@
 
 | Suite | Status | Evidence |
 |-------|--------|----------|
-| `sales-governance.test.ts` + `sales-l5-governance.test.ts` | **11 pass / 5 fail** | Prisma mock gaps |
+| `sales-governance.test.ts` + `sales-l5-governance.test.ts` | **16/16 PASS** | Phase 15 re-run |
 
 ---
 
@@ -62,10 +62,10 @@
 
 | Product | Pilot-ready? | Production? |
 |---------|--------------|-------------|
-| SalesOS | Conditional (pilot DB + curl) | **No** (build red, browser unsigned) |
+| SalesOS | Conditional (pilot DB + curl + partial browser) | **No** (human sign-off pending) |
 | WorkflowOS | Conditional (pilot DB + curl) | **No** |
-| AuditOS | Protected L5 | **No** (build graph) |
-| LocalContentOS | L5 with conditions | **No** (build blockers) |
+| AuditOS | Conditional (pilot DB + curl + browser `/audit`) | **No** (human sign-off pending) |
+| LocalContentOS | L5 with conditions | **No** (curl only) |
 | Platform Core | Partial stubs | **No** |
 
 ---
@@ -89,5 +89,6 @@ npx prisma db seed
 npx tsx scripts/backfill-platform-organizations.ts --apply
 npx tsx scripts/backfill-sunbul-platform-org.ts --apply
 npx tsx scripts/check-db-drift.ts
+npx tsx scripts/ensure-audit-user-admin.ts
 npx tsx scripts/smoke-auth-routes.ts
 ```
