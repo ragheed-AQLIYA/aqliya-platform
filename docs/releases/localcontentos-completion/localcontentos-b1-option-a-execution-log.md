@@ -59,7 +59,7 @@
 
 ## Verbatim output — before deploy (`npx prisma migrate status`)
 
-```text
+``text
 === prisma migrate status (pilot) ===
 Loaded Prisma config from prisma.config.ts.
 Prisma schema loaded from prisma\schema.prisma.
@@ -87,7 +87,7 @@ Following migrations have not yet been applied:
 
 To apply migrations in development run prisma migrate dev.
 To apply migrations in production run prisma migrate deploy.
-```
+``
 
 (Exit code **1** — expected when pending migrations exist on empty DB.)
 
@@ -95,30 +95,30 @@ To apply migrations in production run prisma migrate deploy.
 
 ## Verbatim output — after deploy (`npx prisma migrate status`)
 
-```text
+``text
 Datasource "db": PostgreSQL database "aqliya_lc_pilot", schema "public" at "localhost:5432"
 17 migrations found in prisma/migrations
 Database schema is up to date!
-```
+``
 
 ---
 
 ## Verbatim output — deploy success (final)
 
-```text
+``text
 Applying migration `20260601170000_salesos_p1_contacts`
 The following migration(s) have been applied:
 migrations/
   └─ 20260601170000_salesos_p1_contacts/
     └─ migration.sql
 All migrations have been successfully applied.
-```
+``
 
 ---
 
 ## Verbatim output — Content Studio tables (7)
 
-```text
+``text
 === ContentStudio tables: 7
 ContentStudioApproval
 ContentStudioCampaign
@@ -127,19 +127,19 @@ ContentStudioOutput
 ContentStudioProject
 ContentStudioReview
 ContentStudioSource
-```
+``
 
 ---
 
 ## Verbatim output — seed
 
-```text
+``text
 Running seed command `tsx prisma/seed.ts` ...
 Seeding database...
 ...
 Seeding completed successfully!
 The seed command has been executed.
-```
+``
 
 ---
 
@@ -166,7 +166,7 @@ The seed command has been executed.
 
 | Item | Value |
 |------|-------|
-| Git commit | **See § Documentation closure** (9f52cfc, 1bbc3ec, + integrator pack, ``d910ffa``) |
+| Git commit | **See § Documentation closure** (9f52cfc, 1bbc3ec, d910ffa, 5731276) |
 | `.env` edited | **No** |
 | Shared `aqliya` migrate deploy | **No** |
 | Production claim | **NO** |
@@ -182,7 +182,8 @@ The seed command has been executed.
 |--------|---------|-------|
 | `9f52cfc` | fix(migrations): UTF-8 encoding for deploy reproducibility | SalesOS P0/P1 migration SQL encoding only (B1 pilot unblock) |
 | `1bbc3ec` | docs(localcontentos): B1 Option A execution evidence | B1 execution log, gate appendix, L6 completion + program closure sync |
-| ``d910ffa`` | docs(localcontentos): full closure plan and integrator pack | Closure plan, PO next steps, scorecard, one-pager, migration-fix commit-ready recipe |
+| `d910ffa` | docs(localcontentos): full closure plan and integrator pack | Closure plan, PO next steps, scorecard, one-pager, migration-fix commit-ready recipe |
+| 5731276 | docs(localcontentos): record closure commit SHA and L6 sync | Execution log SHA row, L6 completion/final report, quality gates, closure report |
 
 **Known limitation resolved in `9f52cfc`:** Migration SQL BOM/UTF-16 fixes previously on disk only — fresh clones can deploy after pull.
 
