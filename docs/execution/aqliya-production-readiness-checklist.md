@@ -35,9 +35,18 @@
 | `/login` | **PASS 200** | Unauthenticated |
 | `/api/health` | **PASS 200** | |
 | Authenticated curl (`scripts/smoke-auth-routes.ts`) | **PASS 6/6** | `/sales`, `/sales/deals`, `/sales/accounts`, `/sales/review`, `/workflowos`, `/audit` |
-| Browser human sign-off | **NOT DONE** | Required for L6 |
+| Browser human sign-off | **NOT DONE** | Agent browser + curl 6/6 (Phase 15); human PO pending |
 
 **Pilot credentials:** seed user `admin@aqliya.com` — password in `prisma/seed.ts` (redact in reports).
+
+---
+
+## Gate 3b — CI (pilot)
+
+| Check | Status | Evidence |
+|-------|--------|----------|
+| .github/workflows/pilot-ci.yml | **SCAFFOLD** | migrate deploy + seed + build + jest 16 + smoke-auth-routes (next start) |
+| GitHub Actions run | **NOT VALIDATED** | Workflow added Phase 15; await first green run |
 
 ---
 

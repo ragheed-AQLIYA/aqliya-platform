@@ -8,32 +8,51 @@
 
 ## Environment
 
-- Dev server: `npm run dev` (port 3000)
-- DB: local PostgreSQL with seed + `scripts/seed-sales-demo.ts` applied
-- Note: parallel `next build` + `dev` caused `.next/dev` corruption (ENOENT routes-manifest) — **clear `.next` before smoke**
+- Dev server: `npm run dev` on port 3000 (pre-existing listener)
+- DB: pilot/local PostgreSQL (`aqliya_pilot` per ops checklist)
+- Credentials: `admin@aqliya.com` / password from `prisma/seed.ts` (**redacted** in reports; seed default)
+- Parallel build: completed `npx next build --webpack` **exit 0** after lock cleared (Phase 15)
 
 ---
 
-## Unauthenticated smoke
+## Phase 15 — Browser smoke (cursor-ide-browser MCP)
+
+**Label:** agent browser evidence — **not** human institutional sign-off.
+
+| Step | Result | Evidence |
+|------|--------|----------|
+| `/login` page load | **PASS** | Snapshot: login form (email, password, submit) |
+| Admin login (browser) | **PARTIAL** | Form submit observed; Glass session did not retain cookies on deep-link navigation to `/sales/deals` (redirect to login) |
+| `/sales` (authenticated) | **PASS** | Snapshot: `SalesOS` heading, pipeline sections |
+| `/sales/deals` | **FAIL** (browser session) / **PASS** (curl) | Browser: redirect to `/login?callbackUrl=...`; curl smoke **200** |
+| `/sales/accounts` | **PASS** (curl) | `scripts/smoke-auth-routes.ts` **200** |
+| `/sales/review` | **PASS** (curl) | curl **200** |
+| `/workflowos` | **PASS** (curl) | curl **200** |
+| `/audit` | **PASS** (curl) | curl **200** |
+| `/local-content` | **NOT RUN** (browser) | Route exists; extend smoke script in Phase 16 |
+
+### Authenticated curl smoke (authoritative for CI)
+
+`npx tsx scripts/smoke-auth-routes.ts` — **6/6 PASS**; session user `admin@aqliya.com`.
+
+| Route | HTTP | Result |
+|-------|------|--------|
+| `/sales` | 200 | PASS |
+| `/sales/deals` | 200 | PASS |
+| `/sales/accounts` | 200 | PASS |
+| `/sales/review` | 200 | PASS |
+| `/workflowos` | 200 | PASS |
+| `/audit` | 200 | PASS |
+
+---
+
+## Unauthenticated smoke (historical — Phase 12)
 
 | Route | HTTP | Result | Notes |
 |-------|------|--------|-------|
 | `/api/health` | 500 | **FAIL** | During `.next` corruption from parallel build |
 | `/login` | 500 | **FAIL** | Same — not auth logic verified broken |
 | `/sales` | 302→login | **BLOCKED** | Expected redirect when unauth |
-
----
-
-## Authenticated smoke
-
-| Route | HTTP | Auth | Result |
-|-------|------|------|--------|
-| Session via `/api/auth/callback/credentials` | — | — | **NOT COMPLETED** — dev instability / timeout |
-| `/sales` | — | admin | **NOT VALIDATED** |
-| `/sales/deals` | — | admin | **NOT VALIDATED** |
-| `/sales/accounts` | — | admin | **NOT VALIDATED** |
-| `/sales/review` | — | admin | **NOT VALIDATED** |
-| `/workflowos` | — | admin | **NOT VALIDATED** |
 
 ---
 
@@ -45,10 +64,10 @@ See `docs/execution/aqliya-production-readiness-checklist.md` — use `aqliya_pi
 
 ## Human sign-off
 
-**NOT DONE** — browser PO signature required after clean build + stable dev.
+**NOT DONE** — institutional PO browser sign-off pending. Phase 15 adds **agent browser + curl** evidence only.
 
 ---
 
 ## Verdict
 
-**BLOCKED** — fix build stability, run smoke on clean `.next`, then re-run authenticated curl/browser pass.
+**CONDITIONAL** — curl authenticated smoke **6/6 PASS**; production build **exit 0**; browser UI pass on `/sales` with session retention gap on subsequent navigations in Glass. Re-run human sign-off on stable dev after `Remove-Item -Recurse .next` if dev corrupts.

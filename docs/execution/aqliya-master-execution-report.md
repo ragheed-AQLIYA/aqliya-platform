@@ -443,3 +443,59 @@ Prior branch commits: `b321e83`, `dcd5d7c`, `3e63fa9`, `a3b0bb5`, `8278377`, `ae
 4. AuditOS `AuditUser` provisioning for full operator dashboard.
 
 *Phase 14: build green achieved. Production: **no-go** until browser + external gates.*
+
+---
+
+## 18. Phase 15 — Browser Sign-off + CI Scaffold (2026-06-01)
+
+### Browser (agent MCP + curl)
+
+| Route | Browser | Curl (`smoke-auth-routes`) |
+|-------|---------|----------------------------|
+| `/login` | PASS | — |
+| `/sales` | PASS (SalesOS UI) | PASS 200 |
+| `/sales/deals` | FAIL (session lost) | PASS 200 |
+| `/sales/accounts` | — | PASS 200 |
+| `/sales/review` | — | PASS 200 |
+| `/workflowos` | — | PASS 200 |
+| `/audit` | — | PASS 200 |
+| `/local-content` | NOT RUN | — |
+
+**Label:** agent browser evidence — human institutional sign-off **pending**.
+
+### Regression
+
+| Check | Result |
+|-------|--------|
+| `npx next build --webpack` | **PASS** exit 0 |
+| `scripts/smoke-auth-routes.ts` | **6/6 PASS** |
+| `sales-governance` + `sales-l5-governance` | **16/16 PASS** |
+
+### AuditUser provisioning
+
+- `prisma/seed.ts`: upsert `AuditUser` for `admin@aqliya.com` → `org-aqliya` / `usr-admin` (idempotent).
+- Pilot DB: re-run `npx prisma db seed` (+ `seed:audit` if full AuditOS demo needed).
+
+### CI
+
+- Added `.github/workflows/pilot-ci.yml` — postgres, migrate deploy, seed, seed:audit, build, jest, `next start` + curl wait + smoke script.
+- **Not validated** until first GitHub Actions run.
+
+### Validation
+
+| Area | Label |
+|------|-------|
+| Production build | **build validated** — exit 0 (re-run Phase 15) |
+| Curl authenticated smoke | **light validated** — 6/6 |
+| Agent browser smoke | **light validated with conditions** — session retention gap |
+| CI workflow | **not validated** — scaffold only |
+| Production readiness | **production no-go** |
+
+### Phase 16 recommendation
+
+1. Human browser sign-off on stable dev (no parallel build).
+2. First green `pilot-ci.yml` run on PR.
+3. Extend `smoke-auth-routes.ts` with `/local-content`.
+4. Reduce `@ts-nocheck` debt; pen test scope per ops plan.
+
+*Phase 15: CI scaffold + agent browser/curl evidence. Production: **no-go**.*
