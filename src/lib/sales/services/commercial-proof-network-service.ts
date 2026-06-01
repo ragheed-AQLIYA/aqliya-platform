@@ -8,12 +8,14 @@ import {
   type ProofNetworkBundle,
   type ProofSearchQuery,
 } from "../vnext/commercial-proof-network";
+import { buildCommercialProofNetworkOverview } from "../vnext/commercial-proof-network-overview";
 import {
   getAccount,
   getOpportunity,
   listAccounts,
   listEvidenceForOpportunity,
   listObjections,
+  listOpportunities,
   listProofAssets,
 } from "../store";
 
@@ -85,5 +87,28 @@ export function salesSearchCommercialProofNetwork(
   return searchProofAssets(listProofAssets(organizationId), {
     organizationId,
     ...query,
+  });
+}
+
+export function salesBuildCommercialProofNetworkOverview(
+  organizationId: string,
+  options?: { focusOpportunityId?: string },
+) {
+  const opportunities = listOpportunities(organizationId);
+  const proofAssets = listProofAssets(organizationId);
+  const objections = listObjections(organizationId);
+  const opportunityBundles = opportunities
+    .map((opp) =>
+      salesGetCommercialProofNetworkForOpportunity(organizationId, opp.id),
+    )
+    .filter((bundle): bundle is ProofNetworkBundle => Boolean(bundle));
+
+  return buildCommercialProofNetworkOverview({
+    organizationId,
+    proofAssets,
+    opportunities,
+    objections,
+    opportunityBundles,
+    focusOpportunityId: options?.focusOpportunityId,
   });
 }

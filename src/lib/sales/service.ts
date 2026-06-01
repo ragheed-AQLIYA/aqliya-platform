@@ -300,3 +300,33 @@ function recordSalesMutation(
     metadata: details,
   });
 }
+
+export async function getSalesIntelligenceMemory(user: CurrentUser) {
+  initSalesWorkspace(user);
+  const orgId = user.organizationId;
+  const {
+    listObjections,
+    listCompetitorMentions,
+    listSignals,
+    listAuditEntries,
+    listAllInteractions,
+  } = await import("./store");
+  const rawObjections = listObjections(orgId);
+  return {
+    objections: rawObjections.map((o) => ({
+      id: o.id,
+      labelAr: o.category || o.description.slice(0, 60),
+      count: o.frequency ?? 1,
+      source: "derived" as const,
+    })),
+    competitors: listCompetitorMentions(orgId),
+    signals: listSignals(orgId),
+    auditRecent: listAuditEntries(orgId).slice(0, 10),
+    interactionCount: listAllInteractions(orgId).length,
+    disclaimerAr: "مسودة — ذاكرة مؤسسية للعرض فقط. AI assists. Humans decide.",
+    opportunityInsights: [] as Array<{
+      opportunity: import("./types").SalesOpportunity;
+      intelligence: import("./vnext/opportunity-intelligence").OpportunityIntelligenceSummary;
+    }>,
+  };
+}

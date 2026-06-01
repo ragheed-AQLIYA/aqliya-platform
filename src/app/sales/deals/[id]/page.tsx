@@ -65,7 +65,7 @@ export default async function SalesDealDetailPage({
   const timeline = auditRes.ok
     ? mapSalesAuditEventsToTimeline(auditRes.data)
     : [];
-  const stages = stagesRes.ok ? stagesRes.data.stages : [];
+  const stages = stagesRes.ok ? stagesRes.data : [];
 
   return (
     <div dir="rtl">

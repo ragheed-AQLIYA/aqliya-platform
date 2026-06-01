@@ -69,8 +69,8 @@ export default async function SalesActivitiesPage() {
                     </span>
                   </div>
                   <p className="mt-1 text-muted-foreground">
-                    {item.account.name}
-                    {item.deal ? ` · ${item.deal.title}` : ""}
+                    {item.accountId}
+                    {item.dealId ? ` · ${item.dealId}` : ""}
                   </p>
                   {item.summary ? (
                     <p className="mt-1 text-xs">{item.summary}</p>
@@ -80,10 +80,10 @@ export default async function SalesActivitiesPage() {
                   <time dateTime={item.occurredAt.toISOString()}>
                     {item.occurredAt.toLocaleString("ar-SA")}
                   </time>
-                  {item.deal ? (
+                  {item.dealId ? (
                     <p className="mt-1">
                       <Link
-                        href={`/sales/deals/${item.deal.id}`}
+                        href={`/sales/deals/${item.dealId}`}
                         className="text-primary hover:underline"
                       >
                         فتح الصفقة

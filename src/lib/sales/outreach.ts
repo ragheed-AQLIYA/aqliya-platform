@@ -414,3 +414,14 @@ export async function listPendingReviewDrafts(
       new Date(b.submittedAt ?? b.createdAt).getTime(),
   );
 }
+
+/** Legacy alias — accepts org id string or SalesOrgScope. */
+export async function listPendingReviewOutreachDrafts(
+  organizationIdOrScope: string | SalesOrgScope,
+): Promise<OutreachDraftQueueItem[]> {
+  const scope =
+    typeof organizationIdOrScope === "string"
+      ? { organizationId: organizationIdOrScope, platformOrganizationId: null }
+      : organizationIdOrScope;
+  return listPendingReviewDrafts(scope);
+}

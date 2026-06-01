@@ -1,61 +1,28 @@
-/**
- * SalesOS vNext - Commercial Knowledge Graph facade (Wave C over v0.2).
- * In-memory graph only - no graph DB, no Prisma.
- */
+﻿import { loadKnowledgeGraph, getAccountSubgraph, getProofUsagePaths, getIndustryCluster, readKnowledgeGraphStoreSnapshot, buildKnowledgeGraphFromSnapshot, type KnowledgeGraph } from "../v02/knowledge-graph";
 
-import "server-only";
+export type CommercialKnowledgeGraph = KnowledgeGraph;
+export type { KnowledgeGraphStoreSnapshot } from "../v02/knowledge-graph/store-reader";
 
-import {
-  buildKnowledgeGraphFromSnapshot,
-  getAccountSubgraph,
-  getNode,
-  readKnowledgeGraphStoreSnapshot,
-} from "../v02/knowledge-graph";
-import {
-  KG_EDGE_TYPES,
-  KG_NODE_TYPES,
-} from "../v02/knowledge-graph/types";
-import type {
-  CommercialKnowledgeGraph,
-  KnowledgeGraphEdgeKind,
-  KnowledgeGraphNodeKind,
-  KnowledgeGraphStoreSnapshot,
-  SubgraphResult,
-} from "../v02/knowledge-graph";
+export function industryRefId(industryLabel: string): string {
+  return industryLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
 
-export const KNOWLEDGE_GRAPH_EDGE_KINDS = KG_EDGE_TYPES;
-export const KNOWLEDGE_GRAPH_NODE_KINDS = KG_NODE_TYPES;
+export function resolveCommercialKnowledgeGraph(organizationId: string): KnowledgeGraph {
+  return loadKnowledgeGraph(organizationId);
+}
 
-export {
-  buildKnowledgeGraphFromSnapshot,
-  getAccountSubgraph,
-  getNode,
-  readKnowledgeGraphStoreSnapshot,
-};
+export function readKnowledgeGraphSnapshot(organizationId: string) {
+  return readKnowledgeGraphStoreSnapshot(organizationId);
+}
 
-export type {
-  CommercialKnowledgeGraph,
-  KnowledgeGraphEdge,
-  KnowledgeGraphEdgeKind,
-  KnowledgeGraphNode,
-  KnowledgeGraphNodeKind,
-  KnowledgeGraphStoreSnapshot,
-  SubgraphResult,
-} from "../v02/knowledge-graph";
-
-export const COMMERCIAL_KNOWLEDGE_GRAPH_DISCLAIMER_EN =
-  "Commercial knowledge graph - derived structure for analytics only. Human review required.";
-
-export const COMMERCIAL_KNOWLEDGE_GRAPH_DISCLAIMER_AR =
-  "Commercial knowledge graph - analytics structure only. Human review required.";
-
-export const COMMERCIAL_KNOWLEDGE_GRAPH_WAVE_C_LABEL =
-  "Commercial knowledge graph recommendation";
+export const COMMERCIAL_KNOWLEDGE_GRAPH_DISCLAIMER_EN = "Commercial knowledge graph - derived structure for analytics only. Human review required.";
+export const COMMERCIAL_KNOWLEDGE_GRAPH_DISCLAIMER_AR = "Commercial knowledge graph - analytics structure only. Human review required.";
+export const COMMERCIAL_KNOWLEDGE_GRAPH_WAVE_C_LABEL = "Commercial knowledge graph recommendation";
 
 export interface KnowledgeGraphRelationshipPattern {
-  edgeKind: KnowledgeGraphEdgeKind;
-  sourceKind: KnowledgeGraphNodeKind;
-  targetKind: KnowledgeGraphNodeKind;
+  edgeKind: string;
+  sourceKind: string;
+  targetKind: string;
   count: number;
   sampleEdgeIds: string[];
 }
@@ -65,8 +32,8 @@ export interface CommercialKnowledgeGraphSnapshot {
   builtAt: string;
   totalNodes: number;
   totalEdges: number;
-  nodeCounts: CommercialKnowledgeGraph["stats"]["nodeCounts"];
-  edgeCounts: CommercialKnowledgeGraph["stats"]["edgeCounts"];
+  nodeCounts: KnowledgeGraph["stats"]["nodeCounts"];
+  edgeCounts: KnowledgeGraph["stats"]["edgeCounts"];
   topRelationships: KnowledgeGraphRelationshipPattern[];
   disclaimerEn: string;
   disclaimerAr: string;
@@ -74,62 +41,38 @@ export interface CommercialKnowledgeGraphSnapshot {
   outputStatus: "recommendation";
 }
 
-export function buildCommercialKnowledgeGraphFromSnapshot(
-  snapshot: KnowledgeGraphStoreSnapshot,
-): CommercialKnowledgeGraph {
+export type SubgraphResult = NonNullable<ReturnType<typeof getAccountSubgraph>>;
+
+export function buildCommercialKnowledgeGraphFromSnapshot(snapshot: Parameters<typeof buildKnowledgeGraphFromSnapshot>[0]): KnowledgeGraph {
   return buildKnowledgeGraphFromSnapshot(snapshot);
 }
 
-export function getTopRelationships(
-  graph: CommercialKnowledgeGraph,
-  limit = 10,
-): KnowledgeGraphRelationshipPattern[] {
-  const buckets = new Map<
-    string,
-    KnowledgeGraphRelationshipPattern & { edgeIds: string[] }
-  >();
-
+export function getTopRelationships(graph: KnowledgeGraph, limit = 10): KnowledgeGraphRelationshipPattern[] {
+  const buckets = new Map<string, KnowledgeGraphRelationshipPattern & { edgeIds: string[] }>();
   for (const edge of graph.edges) {
-    const source = getNode(graph, edge.sourceId);
-    const target = getNode(graph, edge.targetId);
+    const source = graph.indexes.nodesById.get(edge.from);
+    const target = graph.indexes.nodesById.get(edge.to);
     if (!source || !target) continue;
-
-    const key = `${edge.kind}|${source.kind}|${target.kind}`;
+    const key = `${edge.type}|${source.type}|${target.type}`;
     const existing = buckets.get(key);
     if (existing) {
       existing.count += 1;
-      if (existing.edgeIds.length < 3) existing.edgeIds.push(edge.id);
+      if (existing.sampleEdgeIds.length < 3) existing.sampleEdgeIds.push(edge.id);
       continue;
     }
-
-    buckets.set(key, {
-      edgeKind: edge.kind,
-      sourceKind: source.kind,
-      targetKind: target.kind,
-      count: 1,
-      sampleEdgeIds: [edge.id],
-      edgeIds: [edge.id],
-    });
+    buckets.set(key, { edgeKind: edge.type, sourceKind: source.type, targetKind: target.type, count: 1, sampleEdgeIds: [edge.id], edgeIds: [edge.id] });
   }
-
-  return [...buckets.values()]
-    .map(({ edgeIds: _edgeIds, ...row }) => row)
-    .sort((a, b) => b.count - a.count || a.edgeKind.localeCompare(b.edgeKind))
-    .slice(0, limit);
+  return [...buckets.values()].map(({ edgeIds: _e, ...row }) => row).sort((a, b) => b.count - a.count).slice(0, limit);
 }
 
-export function buildCommercialKnowledgeGraphSnapshot(
-  graph: CommercialKnowledgeGraph,
-  topRelationshipLimit = 10,
-): CommercialKnowledgeGraphSnapshot {
-  const summary = summarizeGraph(graph);
+export function buildCommercialKnowledgeGraphSnapshot(graph: KnowledgeGraph, topRelationshipLimit = 10): CommercialKnowledgeGraphSnapshot {
   return {
     organizationId: graph.organizationId,
     builtAt: graph.builtAt,
-    totalNodes: summary.totalNodes,
-    totalEdges: summary.totalEdges,
-    nodeCounts: summary.nodeCounts,
-    edgeCounts: summary.edgeCounts,
+    totalNodes: graph.nodes.length,
+    totalEdges: graph.edges.length,
+    nodeCounts: graph.stats.nodeCounts,
+    edgeCounts: graph.stats.edgeCounts,
     topRelationships: getTopRelationships(graph, topRelationshipLimit),
     disclaimerEn: COMMERCIAL_KNOWLEDGE_GRAPH_DISCLAIMER_EN,
     disclaimerAr: COMMERCIAL_KNOWLEDGE_GRAPH_DISCLAIMER_AR,
@@ -138,37 +81,23 @@ export function buildCommercialKnowledgeGraphSnapshot(
   };
 }
 
-export function buildCommercialKnowledgeGraphView(
-  organizationId: string,
-  topRelationshipLimit = 10,
-): {
-  graph: CommercialKnowledgeGraph;
-  snapshot: CommercialKnowledgeGraphSnapshot;
-} {
-  const graph = buildOrgKnowledgeGraph(organizationId);
-  return {
-    graph,
-    snapshot: buildCommercialKnowledgeGraphSnapshot(graph, topRelationshipLimit),
-  };
+export function buildCommercialKnowledgeGraphView(organizationId: string, topRelationshipLimit = 10) {
+  const graph = resolveCommercialKnowledgeGraph(organizationId);
+  return { graph, snapshot: buildCommercialKnowledgeGraphSnapshot(graph, topRelationshipLimit) };
 }
 
-export function getAccountKnowledgeSubgraph(
-  graph: CommercialKnowledgeGraph,
-  accountRefId: string,
-): SubgraphResult | undefined {
-  return getAccountSubgraph(graph, accountRefId);
+export function getAccountKnowledgeSubgraph(graph: KnowledgeGraph, accountRefId: string) {
+  return getAccountSubgraph(graph, accountRefId) ?? undefined;
 }
 
-export function getIndustryKnowledgeSubgraph(
-  graph: CommercialKnowledgeGraph,
-  industryRefIdValue: string,
-): SubgraphResult | undefined {
-  return getIndustrySubgraph(graph, industryRefIdValue);
+export function getIndustryKnowledgeSubgraph(graph: KnowledgeGraph, industryRefIdValue: string) {
+  const nodes = getIndustryCluster(graph, industryRefIdValue.replace(/-/g, " "));
+  if (!nodes.length) return undefined;
+  return { account: nodes[0], nodes, edges: [] as KnowledgeGraph["edges"] };
 }
 
-export function getProofKnowledgeSubgraph(
-  graph: CommercialKnowledgeGraph,
-  proofRefId: string,
-): SubgraphResult | undefined {
-  return getProofUsageNetwork(graph, proofRefId);
+export function getProofKnowledgeSubgraph(graph: KnowledgeGraph, proofRefId: string) {
+  const edges = getProofUsagePaths(graph, proofRefId);
+  if (!edges.length) return undefined;
+  return { account: graph.nodes[0], nodes: graph.nodes.filter((n) => edges.some((e) => e.from === n.id || e.to === n.id)), edges };
 }

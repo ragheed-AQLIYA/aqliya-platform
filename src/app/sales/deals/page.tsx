@@ -10,8 +10,9 @@ import {
   SalesEmptyState,
   SalesInlineNotice,
 } from "@/components/sales/sales-shell";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -29,12 +30,13 @@ export default async function SalesDealsPage() {
       <SalesPhaseBadge />
 
       <div className="mb-6">
-        <Button size="sm" asChild>
-          <Link href="/sales/deals/new" className="flex items-center gap-1">
-            <Plus className="h-4 w-4" />
-            صفقة جديدة
-          </Link>
-        </Button>
+        <Link
+          href="/sales/deals/new"
+          className={cn(buttonVariants({ size: "sm" }), "inline-flex items-center gap-1")}
+        >
+          <Plus className="h-4 w-4" />
+          صفقة جديدة
+        </Link>
       </div>
 
       {!res.ok ? (

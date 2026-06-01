@@ -53,7 +53,7 @@ export default async function SalesPipelinePage() {
   ]);
 
   const deals = dealsRes.ok ? dealsRes.data : [];
-  const stages = stagesRes.ok ? stagesRes.data.stages : [];
+  const stages = stagesRes.ok ? stagesRes.data : [];
   const openDeals = deals.filter((d) => d.status === "open");
   const closedDeals = deals.filter((d) => d.status === "won" || d.status === "lost");
   const activeStages = stages.filter((s) => !s.isClosed);
@@ -177,4 +177,4 @@ export default async function SalesPipelinePage() {
     </div>
   );
 }
-
+

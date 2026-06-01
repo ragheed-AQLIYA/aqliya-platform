@@ -30,7 +30,7 @@ export default async function SalesCommandCenterPage() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-2 text-sm">
-            {snapshot.topOpportunities.map((o) => (
+            {snapshot.topOpportunities.map((o: { id: string; name: string; valueEstimate?: number | null }) => (
               <li key={o.id}>
                 <Link
                   href={`/sales/opportunities/${o.id}`}

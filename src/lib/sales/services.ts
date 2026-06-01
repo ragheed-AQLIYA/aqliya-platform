@@ -580,3 +580,6 @@ export async function updateDealNextAction(
   });
   return readDealNextAction(nextMeta);
 }
+
+export { partitionPipelineDeals, buildDueNextActions } from "./services/reporting-helpers";
+export type { DueNextActionItem } from "./services/reporting-helpers";

@@ -8,13 +8,13 @@ import {
   getTopRelationships,
   industryRefId,
   resolveCommercialKnowledgeGraph,
+  readKnowledgeGraphSnapshot,
   type CommercialKnowledgeGraph,
   type CommercialKnowledgeGraphSnapshot,
   type KnowledgeGraphRelationshipPattern,
   type KnowledgeGraphStoreSnapshot,
   type SubgraphResult,
 } from "../vnext/commercial-knowledge-graph";
-import { readKnowledgeGraphSnapshot } from "../v02/knowledge-graph/store-reader";
 
 export type {
   CommercialKnowledgeGraph,

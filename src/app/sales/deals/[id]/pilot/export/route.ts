@@ -6,7 +6,7 @@ import {
   SalesAccessError,
 } from "@/lib/sales/guards";
 import {
-  buildPilotHandoffExportHtml,
+  renderPilotHandoffExportHtml as buildPilotHandoffExportHtml,
   loadPilotHandoffPack,
 } from "@/lib/sales/pilot-handoff-pack";
 
@@ -32,7 +32,7 @@ export async function GET(
     }
 
     const html = buildPilotHandoffExportHtml(pack);
-    const safeName = pack.dealTitle.replace(/[^a-zA-Z0-9_\-\u0600-\u06FF]/g, "_");
+    const safeName = pack.deal.title.replace(/[^a-zA-Z0-9_\-\u0600-\u06FF]/g, "_");
 
     return new NextResponse(html, {
       headers: {

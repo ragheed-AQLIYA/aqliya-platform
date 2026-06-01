@@ -346,3 +346,25 @@ export function renderPilotHandoffExportHtml(pack: PilotHandoffPack): string {
 </body>
 </html>`;
 }
+
+export async function loadPilotHandoffPack(
+  dealId: string,
+  scope: { organizationId: string; platformOrganizationId?: string | null },
+): Promise<PilotHandoffPack | null> {
+  const { getSalesDeal } = await import("./services");
+  const { listEvidenceLinksForDeal } = await import("./evidence-links");
+  const deal = await getSalesDeal(dealId, scope.organizationId);
+  if (!deal) return null;
+  const evidenceLinks = await listEvidenceLinksForDeal(
+    {
+      organizationId: scope.organizationId,
+      platformOrganizationId: scope.platformOrganizationId,
+    },
+    dealId,
+  );
+  return buildPilotHandoffPack({
+    deal,
+    accountMetadata: deal.account?.metadata ?? null,
+    evidenceLinks,
+  });
+}

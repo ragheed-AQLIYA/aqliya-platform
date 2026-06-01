@@ -21,7 +21,7 @@ export default async function NewSalesDealPage() {
   ]);
 
   const accounts = accountsRes.ok ? accountsRes.data : [];
-  const stages = stagesRes.ok ? stagesRes.data.stages : [];
+  const stages = stagesRes.ok ? stagesRes.data : [];
   const loadError =
     !accountsRes.ok
       ? accountsRes.error

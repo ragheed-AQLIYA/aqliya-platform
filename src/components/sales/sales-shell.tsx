@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Briefcase, Building2, Info, AlertTriangle } from "lucide-react";
@@ -8,7 +9,7 @@ export function SalesPageHeader({
   subtitle,
 }: {
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
 }) {
   return (
     <div className="mb-6">
