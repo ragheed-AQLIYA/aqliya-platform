@@ -1,4 +1,4 @@
-generator client {
+﻿generator client {
   provider = "prisma-client-js"
 }
 
@@ -1768,4 +1768,160 @@ model LocalContentAuditEvent {
   @@index([action])
   @@index([entityType, entityId])
   @@index([createdAt])
+}
+// ─── LocalContentOS Content Studio (governed workflow — separate from compliance LocalContent*) ───
+
+model ContentStudioProject {
+  id                     String                  @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  title                  String
+  objective              String?
+  audience               String?
+  language               String                  @default("ar")
+  status                 String                  @default("draft")
+  createdById            String?
+  createdByName          String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  campaigns              ContentStudioCampaign[]
+
+  @@index([organizationId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioCampaign {
+  id               String                @id @default(cuid())
+  contentProjectId String
+  organizationId   String
+  name             String
+  objective        String?
+  audience         String?
+  channels         Json                  @default("[]")
+  startDate        String?
+  endDate          String?
+  status           String                @default("draft")
+  createdById      String?
+  createdByName    String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  project          ContentStudioProject  @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+  sources          ContentStudioSource[]
+  contentItems     ContentStudioItem[]
+  outputs          ContentStudioOutput[]
+
+  @@index([organizationId])
+  @@index([contentProjectId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioSource {
+  id               String                 @id @default(cuid())
+  organizationId   String
+  campaignId       String?
+  contentItemId    String?
+  title            String
+  type             String
+  url              String?
+  note             String?
+  fileRef          String?
+  credibility      String                 @default("unverified")
+  status           String                 @default("proposed")
+  evidenceMetadata Json?
+  createdById      String?
+  createdByName    String?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  campaign         ContentStudioCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  contentItem      ContentStudioItem?     @relation(fields: [contentItemId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([campaignId])
+  @@index([contentItemId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioItem {
+  id                  String                  @id @default(cuid())
+  campaignId          String
+  organizationId      String
+  title               String
+  format              String
+  body                String?
+  sourceRefIds        Json                    @default("[]")
+  status              String                  @default("idea")
+  aiGenerated         Boolean                 @default(false)
+  reviewRequired      Boolean                 @default(false)
+  draftAssistMetadata Json?
+  createdById         String?
+  createdByName       String?
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+  campaign            ContentStudioCampaign   @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  sources             ContentStudioSource[]
+  reviews             ContentStudioReview[]
+  approvals           ContentStudioApproval[]
+
+  @@index([organizationId])
+  @@index([campaignId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioReview {
+  id             String            @id @default(cuid())
+  contentItemId  String
+  organizationId String
+  status         String            @default("pending")
+  dimensions     Json              @default("{}")
+  notes          String?
+  reviewerId     String?
+  reviewerName   String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  contentItem    ContentStudioItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([contentItemId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioApproval {
+  id             String            @id @default(cuid())
+  contentItemId  String
+  organizationId String
+  approved       Boolean
+  notes          String?
+  approverId     String?
+  approverName   String?
+  createdAt      DateTime          @default(now())
+  contentItem    ContentStudioItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([contentItemId])
+}
+
+model ContentStudioOutput {
+  id             String                @id @default(cuid())
+  campaignId     String
+  organizationId String
+  title          String
+  status         String                @default("draft")
+  includes       Json
+  exportMetadata Json?
+  exportedAt     DateTime?
+  createdById    String?
+  createdByName  String?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  campaign       ContentStudioCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([campaignId])
+  @@index([organizationId, status])
+  @@index([status])
 }
