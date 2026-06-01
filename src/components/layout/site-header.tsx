@@ -19,7 +19,7 @@ const navItems = [
   { label: "المنصة", href: "/platform", description: "AQLIYA Intelligence Core" },
   { label: "الأنظمة", href: "/products", description: "خطوط الأنظمة المؤسسية" },
   { label: "الحوكمة", href: "/governance", description: "بنية الثقة والأدلة" },
-  { label: "الإثبات", href: "/case-studies", description: "دراسات الحالة والدليل" },
+  { label: "الإثبات", href: "/proof-library", description: "دراسات الحالة والدليل" },
   { label: "من نحن", href: "/about", description: "" },
   { label: "تواصل", href: "/contact", description: "" },
 ];
