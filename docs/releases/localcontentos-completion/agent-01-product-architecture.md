@@ -1,0 +1,1 @@
+Hybrid: Prisma compliance + file Content Studio. Routes under /local-content/*.
