@@ -49,9 +49,13 @@
 - Created `prisma/migrations/20260601180000_salesos_l5_governance/migration.sql` (SalesProposal, SalesReview, SalesApproval)
 - **Not applied** on shared DB — B1 waiver documented
 
-### Git commits
+### Git commits (this pass)
 
-See Wave 6 — commits created in logical chunks on `feature/salesos-l6-unblock`.
+| Commit | Message |
+|--------|---------|
+| `8278377` | feat(salesos): restore L5 actions, core stubs, and migration baseline |
+| `ae81360` | feat(salesos): restore L5 workspace and fix L6 bundler blockers |
+| `f39c820` | docs: add SalesOS L6 browser smoke report under execution |
 
 ---
 
