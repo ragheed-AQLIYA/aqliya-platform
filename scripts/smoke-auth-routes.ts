@@ -10,6 +10,8 @@ const routes = [
   "/sales/review",
   "/workflowos",
   "/audit",
+  "/local-content",
+  "/local-content/command-center",
 ];
 
 async function main() {
@@ -59,12 +61,16 @@ async function main() {
   console.log("Session user:", session?.user?.email ?? "none");
 
   console.log("\nRoute smoke (authenticated):");
+  let passed = 0;
   for (const route of routes) {
     const res = await fetchWithCookies(route, { redirect: "manual" });
     const status = res.status;
-    const pass = status >= 200 && status < 400;
-    console.log(`${pass ? "PASS" : "FAIL"} ${route} -> ${status}`);
+    const ok = status >= 200 && status < 400;
+    if (ok) passed++;
+    console.log(`${ok ? "PASS" : "FAIL"} ${route} -> ${status}`);
   }
+  console.log(`\nSmoke: ${passed}/${routes.length}`);
+  if (passed < routes.length) process.exit(1);
 }
 
 main().catch((e) => {

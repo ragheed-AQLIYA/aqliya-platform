@@ -555,3 +555,76 @@ Prior branch commits: `b321e83`, `dcd5d7c`, `3e63fa9`, `a3b0bb5`, `8278377`, `ae
 4. Reduce `@ts-nocheck` debt; pen test scope per ops plan.
 
 *Phase 15: CI scaffold + agent browser/curl evidence. Production: **no-go**.*
+
+---
+
+## 19. Phase 16 — CI Green + Smoke Extension + Pilot Hardening (2026-06-01)
+
+### Smoke extension
+
+| Route | Curl |
+|-------|------|
+| `/sales` … `/audit` (6 legacy) | **PASS 200** |
+| `/local-content` | **PASS 200** |
+| `/local-content/command-center` | **PASS 200** |
+
+**`scripts/smoke-auth-routes.ts`:** **8/8 PASS** (exit summary + `process.exit(1)` on failure).
+
+### Pilot DB re-seed (`aqliya_pilot`)
+
+| Step | Result |
+|------|--------|
+| `npx prisma migrate deploy` | **PASS** — no pending migrations |
+| `npx prisma db seed` | **PASS** — `AuditUser provisioned: admin@aqliya.com` |
+| `npm run seed:audit` | **PASS** — Gulf Trading `eng-gulf-2025` |
+| `scripts/ensure-audit-user-admin.ts` | **PASS** — `usr-admin` exists |
+
+### CI local simulation (pilot-ci.yml steps)
+
+| Step | Result |
+|------|--------|
+| `npx prisma migrate deploy` | **PASS** |
+| `npx prisma db seed` + `seed:audit` | **PASS** |
+| `npx next build --webpack` | **PASS** exit 0 (~89s) |
+| `npm test -- sales-governance\|sales-l5-governance` | **16/16 PASS** |
+| `npx tsx scripts/smoke-auth-routes.ts` | **8/8 PASS** (existing `localhost:3000`) |
+
+**Workflow file:** `.github/workflows/pilot-ci.yml` committed (was documented in Phase 15 but missing from tree). **GitHub Actions:** **not validated** until first remote run.
+
+### Browser (agent MCP)
+
+| Route | Browser | Notes |
+|-------|---------|-------|
+| `/login` | **FAIL** | React form: `browser_fill` → invalid credentials; known MCP gap |
+| `/audit` | **PASS** | AuditOS dashboard (engagement tasks visible) |
+| `/sales/deals` | **FAIL** | Redirect `login?callbackUrl=%2Fsales%2Fdeals` — session not retained |
+| `/local-content` | **PASS** | LocalContentOS shell (empty projects — seed optional) |
+| `/workflowos`, `/sales/review` | **NOT RUN** | Session gap after deals redirect |
+
+**Label:** agent browser evidence — **not** human institutional sign-off.
+
+### Integrator checklist
+
+- `docs/execution/integrator-browser-checklist.md` — route matrix + human signature column
+
+### Validation
+
+| Area | Label |
+|------|-------|
+| Build | **build validated** |
+| Curl smoke | **light validated** — 8/8 |
+| Pilot DB / AuditUser | **light validated** — seed + verify |
+| CI local simulation | **light validated** — all steps green locally |
+| CI GitHub | **not validated** |
+| Agent browser | **light validated with conditions** — partial routes, login MCP gap |
+| Production readiness | **production no-go** |
+
+### Phase 17 recommendation
+
+1. Human PO browser sign-off using integrator checklist (stable server, no parallel build).
+2. First green **Pilot CI** on GitHub; fix CI-only drift if any.
+3. Playwright E2E for login + cross-route session (replace fragile MCP form fill).
+4. `SEED_SALES_DEMO=1` or local-content seed for non-empty LCO pilot tiles.
+5. Pen test scope + reduce `@ts-nocheck` debt per ops plan.
+
+*Phase 16: 8/8 curl smoke, local pilot-ci simulation green, production **no-go**.*

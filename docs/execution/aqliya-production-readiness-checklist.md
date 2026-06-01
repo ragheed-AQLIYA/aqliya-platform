@@ -34,8 +34,9 @@
 |-------|--------|----------|
 | `/login` | **PASS 200** | Unauthenticated |
 | `/api/health` | **PASS 200** | |
-| Authenticated curl (`scripts/smoke-auth-routes.ts`) | **PASS 6/6** | `/sales`, `/sales/deals`, `/sales/accounts`, `/sales/review`, `/workflowos`, `/audit` |
-| Browser agent evidence | **PARTIAL** | `/login`, `/sales`, `/audit` snapshots; curl 6/6; human PO pending |
+| Authenticated curl (`scripts/smoke-auth-routes.ts`) | **PASS 8/8** | Phase 16: + `/local-content`, `/local-content/command-center` |
+| Browser agent evidence | **PARTIAL** | `/audit`, `/local-content` PASS; login MCP FAIL; `/sales/deals` session lost; human PO pending |
+| Integrator checklist | **ADDED** | `docs/execution/integrator-browser-checklist.md` |
 
 **Pilot credentials:** seed user `admin@aqliya.com` — password in `prisma/seed.ts` (redact in reports).
 
@@ -45,8 +46,8 @@
 
 | Check | Status | Evidence |
 |-------|--------|----------|
-| .github/workflows/pilot-ci.yml | **SCAFFOLD** | migrate deploy + seed + build + jest 16 + smoke-auth-routes (next start) |
-| GitHub Actions run | **NOT VALIDATED** | Workflow added Phase 15; await first green run |
+| .github/workflows/pilot-ci.yml | **COMMITTED** | Phase 16: file present; local simulation **PASS** (migrate, seed, build, jest, smoke 8/8) |
+| GitHub Actions run | **NOT VALIDATED** | Await first green run on PR |
 
 ---
 
