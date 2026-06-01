@@ -13,7 +13,7 @@
 - Committed `.github/workflows/pilot-ci.yml` (postgres, migrate deploy, seed, seed:audit, build, jest 16, `next start` + smoke).
 - Pilot DB re-seed on `aqliya_pilot` — `AuditUser` for `admin@aqliya.com` verified after seed + `seed:audit`.
 - Local pilot-ci simulation: all steps green (build, jest, curl smoke).
-- Integrator browser checklist: `docs/reports/salesos-l6-integrator-checklist.md`.
+- Integrator browser checklist: `docs/execution/integrator-browser-checklist.md`.
 - Agent browser evidence: `/audit`, `/local-content` PASS; login form MCP gap persists.
 
 ## Test plan

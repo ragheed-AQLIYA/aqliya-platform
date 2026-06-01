@@ -10,15 +10,15 @@
 
 | Route | Curl smoke | Agent browser | Human evidence (screenshot / notes) | Human signature |
 |-------|------------|---------------|-------------------------------------|-----------------|
-| `/login` | — | | | |
-| `/sales` | | | | |
-| `/sales/deals` | | | | |
-| `/sales/accounts` | | | | |
-| `/sales/review` | | | | |
-| `/workflowos` | | | | |
-| `/audit` | | | | |
-| `/local-content` | | | | |
-| `/local-content/command-center` | | | | |
+| `/login` | — | FAIL (MCP form fill) | | |
+| `/sales` | PASS 8/8 batch | NOT RUN | | |
+| `/sales/deals` | PASS 8/8 batch | FAIL (session redirect) | | |
+| `/sales/accounts` | PASS 8/8 batch | NOT RUN | | |
+| `/sales/review` | PASS 8/8 batch | NOT RUN | | |
+| `/workflowos` | PASS 8/8 batch | NOT RUN | | |
+| `/audit` | PASS 8/8 batch | PASS (engagement tasks) | | |
+| `/local-content` | PASS 8/8 batch | PASS (empty projects OK) | | |
+| `/local-content/command-center` | PASS 8/8 batch | NOT RUN | | |
 
 ---
 

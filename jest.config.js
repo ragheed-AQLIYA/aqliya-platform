@@ -6,6 +6,16 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   maxWorkers: 1,
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/.next/",
+    "<rootDir>/.claude/worktrees/",
+  ],
+  modulePathIgnorePatterns: [
+    "<rootDir>/.next/",
+    "<rootDir>/.claude/worktrees/",
+    "<rootDir>/.git/worktrees/",
+  ],
   testMatch: ["**/__tests__/**/*.test.ts", "**/__tests__/**/*.test.tsx"],
   setupFiles: [path.join(__dirname, "src/__tests__/setup.ts")],
   moduleNameMapper: {
