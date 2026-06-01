@@ -14,6 +14,13 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts")
 
 const analyze = process.env.ANALYZE === "true"
 
+// CSP script-src: drop 'unsafe-eval' in production, keep it in dev for HMR.
+// 'unsafe-inline' is retained for now (full removal needs a nonce-based CSP).
+const cspScriptSrc =
+  process.env.NODE_ENV === "production"
+    ? "script-src 'self' 'unsafe-inline'"
+    : "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: analyze,
   openAnalyzer: false,
@@ -61,8 +68,7 @@ const nextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self';",
+            value: `default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; ${cspScriptSrc}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self';`,
           },
           {
             key: "X-Frame-Options",
