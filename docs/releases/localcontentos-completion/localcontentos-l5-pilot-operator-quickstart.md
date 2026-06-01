@@ -171,6 +171,8 @@ Compliance writes: `localcontent_compliance`.
 
 ## 10. Related docs
 
+- `localcontentos-pilot-runtime-guide.md`
+- `localcontentos-lc-pilot-db-runbook.md`
 - `localcontentos-l5-po-signoff-template.md`
 - `localcontentos-human-smoke-checklist.md`
 - `localcontentos-l6-program-closure.md`

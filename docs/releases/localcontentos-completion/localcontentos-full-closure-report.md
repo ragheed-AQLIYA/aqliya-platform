@@ -1,1 +1,194 @@
-﻿믯⎿䰠捯污潃瑮湥佴⁓‭畆汬䌠潬畳敲删灥牯ੴ⨊䐪瑡㩥⨪㈠㈰ⴶ㘰〭‱ਠ⨪敒潰⨺‪䍠尺獕牥屳䍐䑜捯浵湥獴䅜汱祩恡†⨊倪潲牧浡⨺‪潌慣䍬湯整瑮协䰠‴潴䰠‶湉瑳瑩瑵潩慮⁬楐潬⵴敒摡⁹ਠ⨪湉整牧瑡牯⨺‪楆慮⁬汣獯牵⁥祳瑮敨楳敺⁲瀨獯⁴潗歲牥⁳ⴱⰶ䈠‱灏楴湯䄠‬㑂氠湡楤杮‬業牧瑡潩⁮湥潣楤杮映硩਩ⴊⴭਊ瑓瑡獵›⨪佄䕎坟呉彈佃䍎剅华⨪†倊潲畤瑣䰠癥汥›⨪潌慣䍬湯整瑮协䰠⬵⼠䰠‶慣摮摩瑡⁥楷桴挠湯楤楴湯⩳‪丨呏䰠‶捡楨癥摥 ਠ楆敬⁳桃湡敧㩤⨠瀨湥楤杮挠浯業⁴潷歲牥ⴠ猠敥䜠瑩戠獡汥湩⁥敳瑣潩㭮琠楨⁳敲潰瑲甠据浯業瑴摥⨩†䌊浯慭摮⁳畒㩮猠敥䌠浯慭摮⁳畒⁮敳瑣潩⁮ਠ䅒⁍楒歳›⨪潬⩷‪ਠ捓敨慭䌠慨杮摥›⨪敹⩳‪洨杩慲楴湯⁳潣浭瑩整⁤湩爠灥⥯†䴊杩慲楴湯删湵›⨪楰潬⁴湯祬礠獥⨪‬⨪桳牡摥渠⩯‪ਠ牐摯捵楴湯䌠慬浩›⨪低⨪†上硥⁴潌敷瑳䰭慯⁤瑓灥›⨪佐猠杩⵮景⩦‪湯怠潬慣捬湯整瑮獯氭ⴶ敲摡湩獥⵳捳牯捥牡⹤摭⁠‫池捯污潣瑮湥潴⵳㕬瀭ⵯ楳湧景ⵦ整灭慬整洮恤⠠敓瑣潩⁮㩈䄠呕佈䥒䕚眠瑩⁨潤畣敭瑮摥挠湯楤楴湯⥳ਊⴭਭ⌊‣硅捥瑵癩⁥畳浭牡੹䰊捯污潃瑮湥佴⁓⨪湥楧敮牥湩⁧汣獯牵⁥獩挠浯汰瑥⩥⸪䄠汬猠硩䰠‶潷歲牥⁳敤楬敶敲㭤戠潬正牥⁳⨪㉂⨪‬⨪㍂⨪‬⨪㑂⨪‬湡⁤⨪ㅂ⠠楰潬⁴䉄⨩‪牡⁥⨪䱃协䑅⨪‮浓歯⁥瑳灥⁳ⴱ‶⨪䅐卓⨪‬潃瑮湥⁴瑓摵潩甠楮⁴整瑳⁳⨪㔲㈯‵䅐卓⨪‬䍌吠灹卥牣灩⁴慰桴⁳⨪汣慥⩮Ⱚ愠摮瀠汩瑯䐠⁂慠汱祩彡捬灟汩瑯⁠慨⁳⨪汣慥⁮業牧瑡⁥瑳瑡獵⨪愠瑦牥传瑰潩⁮⁁敤汰祯⠠㜱洠杩慲楴湯ⱳ㜠䌠湯整瑮瑓摵潩琠扡敬ⱳ猠敥⁤䭏⸩ਊ⨪牐杯慲⁭汣獯牵⁥獩丠呏挠浯汰瑥⹥⨪吠敨椠獮楴畴楴湯污䰠‶慧整爠浥楡獮⨠伪䕐⩎‪数摮湩⁧⨪牐摯捵⁴睏敮⁲倨⥏猠杩⵮景⩦⸪唠瑮汩倠⁏敲潣摲⁳⨪啁䡔剏婉⩅‪楷桴搠捯浵湥整⁤潣摮瑩潩獮‬潨敮瑳猠慴畴⁳敲慭湩⁳⨪低⁔㙌⨪‬⨪低⁔牐摯捵楴湯删慥祤⨪‬湡⁤⨪低⩔‪敲畧慬潴⵲散瑲晩敩⹤ਊⴭਭ⌊‣湅楧敮牥湩⁧汣獯牵⁥獶瀠潲牧浡挠潬畳敲⠠佐朠瑡⥥ਊ⁼牔捡⁫⁼瑓瑡獵簠䴠慥楮杮簠簊ⴭⴭⴭ簭ⴭⴭⴭⴭ⵼ⴭⴭⴭⴭ੼⁼⨪湅楧敮牥湩⁧汣獯牵⩥‪⁼⨪佃偍䕌䕔⨪簠䌠摯⁥慬摮摥漠⁮浠楡恮‬潤獣瀠捡⁫敲潣据汩摥‬浳歯⽥整瑳⽳楰潬⁴䉄攠楶敤据⁥敲潣摲摥‬㉂䈯⼳㑂䈯⠱楰潬⥴挠潬敳⁤੼⁼⨪牐杯慲⁭汣獯牵⁥䰨‶慧整⨩‪⁼⨪偏久⨪簠䠠浵湡倠⁏瑡整瑳瑡潩⁮敲畱物摥※汢捯獫甠杰慲敤琠⁯⨪㙌愠档敩敶⁤瀨汩瑯猠潣数⨩‪湩猠慴畴⁳潤獣愠摮怠剐䑏䍕彔呓呁单䵟呁䥒恘簠ਊ湅楧敮牥湩⁧潤獥⨠渪瑯⨪猠扵瑳瑩瑵⁥潦⁲佐朠癯牥慮据⹥倠⁏楳湧漭晦挠潬敳⁳桴⁥⨪牰杯慲⁭慧整⨪漠汮⁹‭瑩猠楴汬搠敯⁳⨪潮⩴‪畡桴牯穩⁥牐摯捵楴湯删慥祤漠⁲硥整湲污椠獮楴畴楴湯污爠汯潬瑵眠瑩潨瑵猠灥牡瑡⁥湯潢牡楤杮ਮ⨊倪⁏捡楴湯瀠捡㩫⨪怠潬慣捬湯整瑮獯瀭ⵯ楳湧景ⵦ敮瑸猭整獰洮恤‬池捯污潣瑮湥潴⵳潰猭杩潮晦栭湡潤晦洮恤‬池捯污潣瑮湥潴⵳㕬瀭ⵯ楳湧景ⵦ整灭慬整洮恤ਊⴭਭ⌊‣潈敮瑳瀠潲畤瑣氠癥汥ਊ⁼牔捡⁫⁼敌敶⁬⁼潎整⁳੼⵼ⴭⴭⴭ⵼ⴭⴭⴭ⵼ⴭⴭⴭ੼⁼潃灭楬湡散眠牯獫慰散簠⨠䰪⨵‪⁼慍畴敲瀠汩瑯瀠瑡㭨甠据慨杮摥戠⁹桴獩瀠潲牧浡簠簊䌠湯整瑮匠畴楤⁯⁼⨪㕌⨫‪⁼浓歯⁥⼶‶䅐卓※㔲㈯‵整瑳㭳瀠汩瑯䐠⁂数獲獩整据⁥慶楬慤整⁤੼⁼⨪潃扭湩摥䰠捯污潃瑮湥佴⩓‪⁼⨪㕌‫ 㙌挠湡楤慤整眠瑩⁨潣摮瑩潩獮⨪簠䔠杮湩敥楲杮瀠瑡⁨敲摡⁹湯怠煡楬慹江彣楰潬恴※⨪低⁔㙌⨪甠瑮汩倠⁏楳湧漭晦簠ਊ⨪㙌朠瑡⁥捳牯捥牡⁤㠨搠浩湥楳湯⥳⨺‪⨪⼴‸䅐卓⨪‬⨪⼴‸䅐呒䅉⩌‪‭⨪低⁔䍁䥈噅䑅⨪⠠数⁲池捯污潣瑮湥潴⵳㙬瀭潲牧浡挭潬畳敲洮恤⸩⨠䰪‶牰杯慲⁭档捥汫獩㩴⨪⨠㔪㠯⨪猠瑡獩楦摥ਮⴊⴭਊ⌣䈠潬正牥爠来獩整⁲昨湩污਩簊䤠⁄⁼求捯敫⁲⁼瑓瑡獵簠丠瑯獥簠簊ⴭⴭ⵼ⴭⴭⴭⴭ⵼ⴭⴭⴭ簭ⴭⴭⴭ簭簊⨠䈪⨱‪⁼慓敬佳⁓業牧瑡潩⁮楨瑳牯⁹牤晩⁴⁼⨪䱃协䑅⠠楰潬⥴⨪⼠⨠伪䕐⁎猨慨敲⥤⨪簠传瑰潩⁮⁁湯怠煡楬慹江彣楰潬恴ⴠ猠敥怠潬慣捬湯整瑮獯戭ⴱ灯楴湯愭攭數畣楴湯氭杯洮恤‮桓牡摥怠煡楬慹⁠湵档湡敧㭤传瑰潩⁮⽂⁃慢正潬⁧੼⁼⨪㉂⨪簠删癥敩⁷楤敭獮潩⁮浳歯⁥慧⁰⁼⨪䱃协䑅⨪簠圠牯敫⁲㨲怠牣癥浟異浬睩彩穮条牣恨※污⁬‵楤敭獮潩獮琠畲⁥੼⁼⨪㍂⨪簠䐠慵⁬数獲獩整据⁥昨汩⁥獶倠楲浳⥡簠⨠䌪佌䕓⩄‪⁼牠灥獯瑩牯⵹湩瑳湡散琮恳ⴠ怠畧牡䙤汩䉥捡敫摮敒潳畬楴湯⤨㭠猠敥怠潬慣捬湯整瑮獯氭ⴶ潧敶湲湡散挭敨正楬瑳洮恤簠簊⨠䈪⨴‪⁼湕潣浭瑩整⁤潌慣䍬湯整瑮协挠慨杮獥簠⨠䌪佌䕓⩄‪⁼楓⁸敦瑡牵⽥潤獣挠浯業獴⬠瀠獯⵴㑂猠湹⁣‫業牧瑡潩⁮湥潣楤杮映硩⠠敳⁥楧⁴潬⥧簠簊⨠䈪⨵‪⁼敒潰眭摩⁥獴⁣ 䥃⠠慓敬佳⁓楢慮祲 ⁼⨪偏久⨪⠠汰瑡潦浲 ⁼畏⁴景䰠⁃㙌猠潣数※潤獥渠瑯椠癮污摩瑡⁥䍌猭潣数⁤癥摩湥散簠簊⨠倪⩏‪⁼湉瑳瑩瑵潩慮⁬楳湧漭晦簠⨠伪䕐⩎‪⁼⨪求捯獫䰠‶牰杯慲⁭慧整⨪簠ਊⴭਭ⌊‣潗歲牥⼠椠瑮来慲潴⁲癥摩湥散⠠敲敦敲据摥搠捯⥳ਊ⁼潄畣敭瑮簠删汯⁥੼⵼ⴭⴭⴭⴭ簭ⴭⴭⴭ੼⁼池捯污潣瑮湥潴⵳㙬瀭潲牧浡挭潬畳敲洮恤簠倠潲牧浡眠牯敫⁲潣灭敬楴湯猠浵慭祲※汢捯敫⁲敲潣据汩慩楴湯簠簊怠潬慣捬湯整瑮獯氭ⴶ楦慮⵬敲潰瑲洮恤簠倠獯⵴㑂椠瑮来慲潴⁲敲潰瑲簠簊怠潬慣捬湯整瑮獯氭ⴶ潣灭敬楴湯猭慴畴⹳摭⁠⁼潗歲牥搠汥癩牥扡敬猠慴畴⁳੼⁼池捯污潣瑮湥潴⵳㙬爭慥楤敮獳猭潣敲慣摲洮恤簠䔠杩瑨搭浩湥楳湯䰠‶慧整猠潣敲慣摲⠠佐映汩獬猯杩獮 ੼⁼池捯污潣瑮湥潴⵳牰杯慲⵭瑳瑡獵漭敮瀭条牥洮恤簠匠慴敫潨摬牥漠敮瀭条牥簠簊怠潬慣捬湯整瑮獯戭ⴱ灯楴湯愭攭數畣楴湯氭杯洮恤簠䈠‱楰潬⁴䉄搠灥潬⁹癥摩湥散⠠慠汱祩彡捬灟汩瑯⥠簠簊怠潬慣捬湯整瑮獯戭ⴱ業牧瑡潩⵮楦⵸潣浭瑩爭慥祤洮恤簠䴠杩慲楴湯匠䱑攠据摯湩⁧楦⁸敲楣数⠠潃浭瑩䄠䈯 ੼⁼池捯污潣瑮湥潴⵳ㅢ漭数慲潴⵲灡牰癯污札瑡⹥摭⁠⁼ㅂ瀠汯捩⁹‫灏楴湯䄠愠灰湥楤⁸੼⁼池捯污潣瑮湥潴⵳潰猭杩潮晦渭硥⵴瑳灥⹳摭⁠⁼佐搠捥獩潩⁮慰桴⁳䄨呕佈䥒䕚⼠䐠䙅剅⼠删䩅䍅⥔簠簊怠潬慣捬湯整瑮獯瀭ⵯ楳湧景ⵦ慨摮景⹦摭⁠⁼硅捥瑵癩⁥慨摮景⁦慰正簠簊怠潬慣捬湯整瑮獯氭ⴶ潧敶湲湡散挭敨正楬瑳洮恤簠䈠″湡⁤潧敶湲湡散攠楶敤据⁥੼⁼池捯污潣瑮湥潴⵳捬瀭汩瑯搭ⵢ畲扮潯⹫摭⁠⁼楐潬⁴䉄漠数慲潴⁲畲扮潯⁫੼⁼池捯污潣瑮湥潴⵳㕬瀭汩瑯漭数慲潴⵲畱捩獫慴瑲洮恤簠倠獯⵴啁䡔剏婉⁅灯牥瑡牯搠獩牴扩瑵潩⁮੼⁼慠敧瑮ㄭⴴ浳歯ⵥ敲畳瑬⹳摭⁠⁼畁桴牯瑩瑡癩⁥浳歯⁥潬⁧㘨㘯倠十⥓簠簊怠潬慣捬湯整瑮獯栭浵湡猭潭敫挭敨正楬瑳洮恤簠䠠浵湡猠潭敫挠楲整楲⁡੼⁼池捯污潣瑮湥潴⵳㙬爭慯浤灡洮恤⼠怠潬慣捬湯整瑮獯氭ⴶ慧⵰慭牴硩洮恤簠䄠捲楨整瑣牵⁥ 慧⁰汰湡楮杮簠ਊⴭਭ⌊‣慖楬慤楴湯攠楶敤据੥簊䜠瑡⁥⁼敒畳瑬簠䌠慬獳晩捩瑡潩⁮੼⵼ⴭⴭ簭ⴭⴭⴭⴭ⵼ⴭⴭⴭⴭⴭⴭⴭ簭簊唠楮⁴整瑳⁳怨潣瑮湥⵴瑳摵潩琮獥⹴獴⥠簠⨠㈪⼵㔲倠十⩓‪⁼楌桧⁴慶楬慤整⁤੼⁼祔数捓楲瑰⠠潌慣䍬湯整瑮协瀠瑡獨 ⁼⨪‰牥潲獲⨪簠䰠杩瑨瘠污摩瑡摥簠簊吠灹卥牣灩⁴爨灥ⵯ楷敤 ⁼⨪䅆䱉⨪⠠慓敬佳⁓楢慮祲ⴠ䈠⤵簠丠瑯䰠ⵃ捳灯摥簠簊䈠潲獷牥猠潭敫⠠瑳灥⁳ⴱ⤶簠⨠㘪㘯倠十⩓‪⁼楌桧⁴慶楬慤整⁤੼⁼楐潬⁴業牧瑡⁥敤汰祯⠠慠汱祩彡捬灟汩瑯⥠簠⨠攪楸⁴⨰㬪猠慴畴⁳汣慥⁮⁼楌桧⁴慶楬慤整⁤੼⁼楐潬⁴敳摥簠⨠伪⩋‪⁼楌桧⁴慶楬慤整⁤੼⁼楇⁴敲牰摯捵扩汩瑩⁹䈨‴‫潦汬睯甭獰 ⁼⨪潃浭瑩⁳湯怠慭湩⩠‪⁼楌桧⁴慶楬慤整⁤੼⁼畂汩⁤ 楬瑮⼠映汵⁬湩整牧瑡潩⁮⁼⨪低⁔啒⩎‪⁼潎⁴慶楬慤整⁤氨睯氭慯⁤牰瑯捯汯 ੼⁼⨪癏牥污⩬‪⁼⨪㕌‫ 㙌挠湡楤慤整眠瑩⁨潣摮瑩潩獮⨪簠⨠个呏倠潲畤瑣潩⁮敒摡⩹‪੼ⴊⴭਊ⌣䌠浯慭摮⁳畒੮嘊污摩瑡潩⁮湡⁤汣獯牵⁥癥摩湥散甠敳⁤桴獥⁥潣浭湡獤⠠牯攠畱癩污湥⁴敳獳潩⵮捳灯摥眠慲灰牥⥳‮敔灭怠琮灭⨭⁠楰潬⁴敨灬牥猠牣灩獴眠牥⁥獵摥搠牵湩⁧ㅂ传瑰潩⁮⁁湡⁤牡⁥潮⁴慰瑲漠⁦桴⁥潣浭瑩整⁤慢敳楬敮ਮ簊䌠浯慭摮⼠愠瑣潩⁮⁼畐灲獯⁥⁼捓灯⁥੼⵼ⴭⴭⴭⴭⴭⴭⴭⴭ簭ⴭⴭⴭⴭ簭ⴭⴭⴭ簭簊怠楧⁴潬⁧ㄭ′ⴭ湯汥湩恥簠䌠潬畳敲挠浯業⁴慢敳楬敮簠删慥ⵤ湯祬簠簊怠灮⁭整瑳ⴠ‭潣瑮湥⵴瑳摵潩琮獥⹴獴⁠⁼潃瑮湥⁴瑓摵潩甠楮⁴畳瑩⁥⁼䍌瀠潲畤瑣簠簊怠灮⁸獴⁣ⴭ潮浅瑩⁠䰨⁃慰桴⥳簠吠灹卥牣灩⁴湯䰠捯污潃瑮湥佴⁓捳灯⁥⁼䍌瀠潲畤瑣簠簊怠灮⁸牰獩慭洠杩慲整猠慴畴恳簠倠敲瀯獯⁴敤汰祯搠楲瑦挠敨正簠倠汩瑯䐠⁂怨煡楬慹江彣楰潬恴 湯祬簠簊怠灮⁸牰獩慭洠杩慲整搠灥潬恹簠䄠灰祬ㄠⴷ業牧瑡潩⁮档楡⁮⁼楐潬⁴䉄漠汮⁹‭⨪潮⩴‪桳牡摥怠煡楬慹⁠੼⁼湠硰瀠楲浳⁡業牧瑡⁥敲潳癬⁥ⴭ潲汬摥戭捡⁫⸮怮簠删捥癯牥映潲⁭湥潣楤杮昭楡敬⁤瑡整灭獴簠倠汩瑯䐠⁂湯祬簠簊怠灮⁸牰獩慭搠⁢敳摥⁠⁼牆獥⁨楰潬⁴敳摥愠瑦牥搠灥潬⁹⁼楐潬⁴䉄漠汮⁹੼⁼敓獳潩⁮䅄䅔䅂䕓啟䱒漠敶牲摩⁥⁼潐湩⁴牐獩慭愠⁴慠汱祩彡捬灟汩瑯⁠⁼⹠湥恶⨠渪瑯⨪攠楤整⁤੼⨊䔪灸楬楣⁴潮⵮捡楴湯㩳⨪渠⁯業牧瑡⁥敤汰祯漠⁮桳牡摥怠煡楬慹㭠渠⁯湠浰爠湵戠極摬㭠渠⁯畦汬氠湩⁴畳瑩㭥渠⁯⹠湥恶挠浯業⹴ਊⴭਭ⌊‣楇⁴慢敳楬敮⠠慬瑳ㄠ′潣浭瑩⥳ਊ恠੠戱换攳⁣潤獣氨捯污潣瑮湥潴⥳›ㅂ传瑰潩⁮⁁硥捥瑵潩⁮癥摩湥散㤊㕦挲捦映硩洨杩慲楴湯⥳›呕ⵆ‸湥潣楤杮映牯搠灥潬⁹敲牰摯捵扩汩瑩੹㈱づ㑣‰潤獣氨捯污潣瑮湥潴⥳›潰瑳䈭‴潣灭敬楴湯猠湹⁣湡⁤潷歲牥攠楶敤据⁥慰正ੳ扣搷㡦‴潤獣氨捯污挭湯整瑮㨩挠浯汰瑥潩⁮慰獳愠摮䰠‶潤畣敭瑮瑡潩੮㙣摣㉡⁢敦瑡氨捯污挭湯整瑮㨩瀠楲浳⁡潃瑮湥却畴楤⁯捳敨慭愠摮洠杩慲楴湯挊㑦㜴昲映慥⡴潬慣⵬潣瑮湥⥴›牰摯捵⁴敲楧瑳祲愠潤瑰潩੮挰㤵㔴‶敦瑡氨捯污挭湯整瑮㨩眠牯獫慰散爠畯整⁳湡⁤潣灭湯湥獴昊攳㡦〳映慥⡴潬慣⵬潣瑮湥⥴›敳癲牥愠瑣潩獮昊晣㥥㕤映慥⡴潬慣⵬潣瑮湥⥴›潤慭湩愠摮猠牥楶散氠祡牥㈊捤ㄲ㑣挠潨敲›瑳灯琠慲正湩⁧汰祡牷杩瑨洭灣氠捯污愠瑲晩捡獴愊㈷ㅤ晡挠潨敲›杩潮敲氠捯污挠敬湡灵焠慵慲瑮湩੥攵捦㘷‵潤獣›慭歲瀠牡污敬⁬汣慥畮⁰潣灭敬整椠⁮楦慮⁬汣獯牵੥恠੠⨊䰪捯污潃瑮湥佴⁓慬摮湩⁧挨牯⥥⨺‪晠晣㥥㕤⁠桴潲杵⁨捠㝢晤㐸⁠猨硩挠浯業獴⸩†⨊倪獯⵴㑂猠湹㩣⨪怠㈱づ㑣怰‮ਠ⨪楍牧瑡潩⁮湥潣楤杮⬠䈠‱癥摩湥散⨺‪㥠㕦挲捦Ⱡ怠戱换攳恣ਮ⨊唪据浯業瑴摥愠⁴敲潰瑲琠浩⁥渨瑯䰠⁃汣獯牵⁥捳灯⁥湵敬獳挠浯業⁴潷歲牥椠据畬敤⥳⨺‪慓敬佳⁓䥗ⱐ猠潣敲慣摲漯敮瀭条牥琯浥汰瑡⁥摥瑩ⱳ怠潬慣捬湯整瑮獯瀭ⵯ楳湧景ⵦ敮瑸猭整獰洮恤‬池捯污潣瑮湥潴⵳ㅢ洭杩慲楴湯昭硩挭浯業⵴敲摡⹹摭Ⱡ琠楨⁳敲潰瑲‬浴⁰捳慲捴⁨楦敬⹳ਊⴭਭ⌊‣捓敨慭愠摮洠杩慲楴湯瀠獯畴敲ਊ⁼瑉浥簠匠慴畴⁳੼⵼ⴭⴭ簭ⴭⴭⴭⴭ੼⁼潃瑮湥⁴瑓摵潩猠档浥⁡‫業牧瑡潩⁮⁼⨪潃浭瑩整⩤‪怨㙣摣㉡恢‬㉠㈰〶〶ㄱ〲〰弰潬慣捬湯整瑮獯损湯整瑮獟畴楤息 ੼⁼慓敬佳⁓ㅐ洠杩慲楴湯匠䱑攠据摯湩⁧⁼⨪潃浭瑩整⩤‪怨昹㈵晣恣ⴠ唠䙔㠭渠⁯佂⁍潮浲污穩瑡潩⥮簠簊䐠灥潬⁹湯瀠汩瑯䐠⁂怨煡楬慹江彣楰潬恴 ⁼⨪潄敮⨪ⴠㄠ‷業牧瑡潩獮‬‷潃瑮湥却畴楤⁯慴汢獥‬敳摥传⁋੼⁼敄汰祯漠⁮桳牡摥怠煡楬慹⁠⁼⨪低⁔啒⩎‪‭牤晩⁴⨪偏久⨪⠠潤畣敭瑮摥眠楡敶⁲潦⁲楰潬⁴捳灯⥥簠ਊⴭਭ⌊‣䅒⁍楒歳ਊ⨪潌⹷⨪圠牯⁫潣獮獩整⁤景琠牡敧整⁤湵瑩琠獥獴‬敲摡漭汮⽹楬桧⁴牐獩慭䌠䥌漠⁮⁡敤楤慣整⁤楰潬⁴慤慴慢敳‬潤畣敭瑮瑡潩⁮祳瑮敨楳ⱳ愠摮猠潣数⁤楧⁴灯牥瑡潩獮‮潎映汵⁬畢汩Ɽ渠⁯畦汬琠獥⁴畳瑩ⱥ渠⁯敨癡⁹慰慲汬汥椠摮硥湩⁧牯戠汵⁫慤慴洠杩慲楴湯漠⁮桳牡摥瀠潲畤瑣潩⵮楬敫䐠⹂ਊⴭਭ⌊‣牐摯捵楴湯挠慬浩ਊ⨪低⨮‪桔獩爠灥牯ⱴ攠杮湩敥楲杮挠潬畳敲‬湡⁤湡⁹畦畴敲倠⁏⨪啁䡔剏婉⁅瀨汩瑯猠潣数⨩‪潤⨠渪瑯⨪愠瑵潨楲敺਺ⴊ倠潲畤瑣潩⁮敤汰祯敭瑮ⴊ䴠牡敫楴杮愠⁳牐摯捵楴湯删慥祤漠⁲䅇ⴊ删来汵瑡牯挠浯汰慩据⁥散瑲晩捩瑡潩੮‭求湩⁤業牧瑡⁥敤汰祯漠⁮桳牡摥怠煡楬慹੠ⴊⴭਊ⌣丠硥⁴潬敷瑳氭慯⁤瑳灥ਊ⨪佐猠杩⵮景⩦‪‭牐摯捵⁴睯敮⁲潣灭敬整⁳池捯污潣瑮湥潴⵳㕬瀭ⵯ楳湧景ⵦ整灭慬整洮恤匠捥楴湯⁳ⵁ⁈湡⁤敲潣摲⁳⨪啁䡔剏婉⩅‪楷桴搠捯浵湥整⁤潣摮瑩潩獮⠠楰潬⁴䉄怠煡楬慹江彣楰潬恴‬䱠䍏䱁佃呎久彔佃呎久彔䅂䭃久㵄牰獩慭Ⱡ琠浩ⵥ潢湵敤⁤湩整湲污瀠汩瑯猠潣数‬潮倠潲畤瑣潩⁮敒摡⁹汣楡⥭ਮ䤊⁦佐猠汥捥獴⨠䐪䙅剅⨪漠⁲⨪䕒䕊呃⨪‬牰杯慲⁭慧整猠慴獹⨠伪䕐⩎㬪搠⁯潮⁴灵牧摡⁥㙌猠慴畴⁳潤獣ਮ⨊伪瑰潩慮⁬湥楧敮牥湩⁧慢正潬⁧栨浵湡愭灰潲敶⁤湯祬㨩⨪猠慨敲⁤慠汱祩恡䈠‱敲潣据汩慩楴湯⠠灏楴湯䈠䌯㬩怠灮⁭畲⁮畢汩恤⼠映汵⁬楬瑮※汰瑡潦浲䈠‵獴⁣汣慥畮⹰ਊⴭਭ⌊‣潃浭瑩渠瑯੥吊楨⁳楦敬眠獡挠敲瑡摥戠⁹桴⁥楦慮⁬汣獯牵⁥祳瑮敨楳敺⁲湡⁤獩⨠渪瑯挠浯業瑴摥⨪甠汮獥⁳桴⁥潣浭瑩眠牯敫⁲湩汣摵獥椠⹴删捥浯敭摮摥瀠瑡㩨愠摤琠⁯⁡潤獣漭汮⁹潣浭瑩愠潬杮楳敤愠祮爠浥楡楮杮倠ⵏ慰正映汩獥瀠牥漠数慲潴⁲灡牰癯污ਮ⨊刪灥牯⁴敶獲潩㩮⨪䘠䱕ⵌ䱃协剕ⵅ〲㘲〭ⴶ㄰†⨊嘪污摩瑡潩⁮汣獡楳楦慣楴湯⨺‪楌桧⁴慶楬慤整⁤攨楶敤据ⵥ慢正摥㬩⨠瀪潲畤瑣潩⁮潮札⩯പ
+# LocalContentOS - Full Closure Report
+
+**Date:** 2026-06-01  
+**Repo:** `C:\Users\PC\Documents\Aqliya`  
+**Program:** LocalContentOS L4 to L6 Institutional Pilot-Ready  
+**Integrator:** Final closure synthesizer (post Workers 1-6, B1 Option A, B4 landing, migration encoding fix)
+
+---
+
+Status: **DONE_WITH_CONCERNS**  
+Product Level: **LocalContentOS L5+ / L6 candidate with conditions** (NOT L6 achieved)  
+Files Changed: *(pending commit worker - see Git baseline section; this report uncommitted)*  
+Commands Run: see Commands Run section  
+RAM Risk: **low**  
+Schema Changed: **yes** (migrations committed in repo)  
+Migration Run: **pilot only yes**, **shared no**  
+Production Claim: **NO**  
+Next Lowest-Load Step: **PO sign-off** on `localcontentos-l6-readiness-scorecard.md` + `localcontentos-l5-po-signoff-template.md` (Section H: AUTHORIZE with documented conditions)
+
+---
+
+## Executive summary
+
+LocalContentOS **engineering closure is complete**. All six L6 workers delivered; blockers **B2**, **B3**, **B4**, and **B1 (pilot DB)** are **CLOSED**. Smoke steps 1-6 **PASS**, Content Studio unit tests **25/25 PASS**, LC TypeScript paths **clean**, and pilot DB `aqliya_lc_pilot` has **clean migrate status** after Option A deploy (17 migrations, 7 ContentStudio tables, seed OK).
+
+**Program closure is NOT complete.** The institutional L6 gate remains **OPEN** pending **Product Owner (PO) sign-off**. Until PO records **AUTHORIZE** with documented conditions, honest status remains **NOT L6**, **NOT Production Ready**, and **NOT** regulator-certified.
+
+---
+
+## Engineering closure vs program closure (PO gate)
+
+| Track | Status | Meaning |
+|-------|--------|---------|
+| **Engineering closure** | **COMPLETE** | Code landed on `main`, docs pack reconciled, smoke/tests/pilot DB evidence recorded, B2/B3/B4/B1(pilot) closed |
+| **Program closure (L6 gate)** | **OPEN** | Human PO attestation required; blocks upgrade to **L6 achieved (pilot scope)** in status docs and `PRODUCT_STATUS_MATRIX` |
+
+Engineering does **not** substitute for PO governance. PO sign-off closes the **program gate** only - it still does **not** authorize Production Ready or external institutional rollout without separate onboarding.
+
+**PO action pack:** `localcontentos-po-signoff-next-steps.md`, `localcontentos-po-signoff-handoff.md`, `localcontentos-l5-po-signoff-template.md`
+
+---
+
+## Honest product level
+
+| Track | Level | Notes |
+|-------|-------|-------|
+| Compliance workspace | **L5** | Mature pilot path; unchanged by this program |
+| Content Studio | **L5+** | Smoke 6/6 PASS; 25/25 tests; pilot DB persistence validated |
+| **Combined LocalContentOS** | **L5+ / L6 candidate with conditions** | Engineering path ready on `aqliya_lc_pilot`; **NOT L6** until PO sign-off |
+
+**L6 gate scorecard (8 dimensions):** **4/8 PASS**, **4/8 PARTIAL** - **NOT ACHIEVED** (per `localcontentos-l6-program-closure.md`). **L6 program checklist:** **5/8** satisfied.
+
+---
+
+## Blocker register (final)
+
+| ID | Blocker | Status | Notes |
+|----|---------|--------|-------|
+| **B1** | SalesOS migration history drift | **CLOSED (pilot)** / **OPEN (shared)** | Option A on `aqliya_lc_pilot` - see `localcontentos-b1-option-a-execution-log.md`. Shared `aqliya` unchanged; Option B/C backlog |
+| **B2** | Review dimension smoke gap | **CLOSED** | Worker 2: `crev_mpulmiwi_nzagcrh`; all 5 dimensions true |
+| **B3** | Dual persistence (file vs Prisma) | **CLOSED** | `repository-instance.ts` - `guardFileBackendResolution()`; see `localcontentos-l6-governance-checklist.md` |
+| **B4** | Uncommitted LocalContentOS changes | **CLOSED** | Six feature/docs commits + post-B4 sync + migration encoding fix (see git log) |
+| **B5** | Repo-wide tsc / CI (SalesOS binary) | **OPEN** (platform) | Out of LC L6 scope; does not invalidate LC-scoped evidence |
+| **PO** | Institutional sign-off | **OPEN** | **Blocks L6 program gate** |
+
+---
+
+## Worker / integrator evidence (referenced docs)
+
+| Document | Role |
+|----------|------|
+| `localcontentos-l6-program-closure.md` | Program worker completion summary; blocker reconciliation |
+| `localcontentos-l6-final-report.md` | Post-B4 integrator report |
+| `localcontentos-l6-completion-status.md` | Worker deliverable status |
+| `localcontentos-l6-readiness-scorecard.md` | Eight-dimension L6 gate scorecard (PO fills/signs) |
+| `localcontentos-program-status-one-pager.md` | Stakeholder one-pager |
+| `localcontentos-b1-option-a-execution-log.md` | B1 pilot DB deploy evidence (`aqliya_lc_pilot`) |
+| `localcontentos-b1-migration-fix-commit-ready.md` | Migration SQL encoding fix recipe (Commit A/B) |
+| `localcontentos-b1-operator-approval-gate.md` | B1 policy + Option A appendix |
+| `localcontentos-po-signoff-next-steps.md` | PO decision paths (AUTHORIZE / DEFER / REJECT) |
+| `localcontentos-po-signoff-handoff.md` | Executive handoff pack |
+| `localcontentos-l6-governance-checklist.md` | B3 and governance evidence |
+| `localcontentos-lc-pilot-db-runbook.md` | Pilot DB operator runbook |
+| `localcontentos-l5-pilot-operator-quickstart.md` | Post-AUTHORIZE operator distribution |
+| `agent-14-smoke-results.md` | Authoritative smoke log (6/6 PASS) |
+| `localcontentos-human-smoke-checklist.md` | Human smoke criteria |
+| `localcontentos-l6-roadmap.md` / `localcontentos-l6-gap-matrix.md` | Architecture / gap planning |
+
+---
+
+## Validation evidence
+
+| Gate | Result | Classification |
+|------|--------|----------------|
+| Unit tests (`content-studio.test.ts`) | **25/25 PASS** | Light validated |
+| TypeScript (LocalContentOS paths) | **0 errors** | Light validated |
+| TypeScript (repo-wide) | **FAIL** (SalesOS binary - B5) | Not LC-scoped |
+| Browser smoke (steps 1-6) | **6/6 PASS** | Light validated |
+| Pilot migrate deploy (`aqliya_lc_pilot`) | **exit 0**; status clean | Light validated |
+| Pilot seed | **OK** | Light validated |
+| Git reproducibility (B4 + follow-ups) | **Commits on `main`** | Light validated |
+| Build / lint / full integration | **NOT RUN** | Not validated (low-load protocol) |
+| **Overall** | **L5+ / L6 candidate with conditions** | **NOT Production Ready** |
+
+---
+
+## Commands Run
+
+Validation and closure evidence used these commands (or equivalent session-scoped wrappers). Temp `.tmp-*` pilot helper scripts were used during B1 Option A and are not part of the committed baseline.
+
+| Command / action | Purpose | Scope |
+|------------------|---------|-------|
+| `git log -12 --oneline` | Closure commit baseline | Read-only |
+| `npm test -- content-studio.test.ts` | Content Studio unit suite | LC product |
+| `npx tsc --noEmit` (LC paths) | TypeScript on LocalContentOS scope | LC product |
+| `npx prisma migrate status` | Pre/post deploy drift check | Pilot DB (`aqliya_lc_pilot`) only |
+| `npx prisma migrate deploy` | Apply 17-migration chain | Pilot DB only - **not** shared `aqliya` |
+| `npx prisma migrate resolve --rolled-back ...` | Recover from encoding-failed attempts | Pilot DB only |
+| `npx prisma db seed` | Fresh pilot seed after deploy | Pilot DB only |
+| Session DATABASE_URL override | Point Prisma at `aqliya_lc_pilot` | `.env` **not** edited |
+
+**Explicit non-actions:** no migrate deploy on shared `aqliya`; no `npm run build`; no full lint suite; no `.env` commit.
+
+---
+
+## Git baseline (last 12 commits)
+
+```
+1bbc3ec docs(localcontentos): B1 Option A execution evidence
+9f52cfc fix(migrations): UTF-8 encoding for deploy reproducibility
+12e0c40 docs(localcontentos): post-B4 completion sync and worker evidence packs
+cb7df84 docs(local-content): completion pass and L6 documentation
+c6cda2b feat(local-content): prisma ContentStudio schema and migration
+cf4472f feat(local-content): product registry adoption
+0c59456 feat(local-content): workspace routes and components
+f3ef830 feat(local-content): server actions
+fcfe9d5 feat(local-content): domain and service layer
+2dc21c4 chore: stop tracking playwright-mcp local artifacts
+a72d1af chore: ignore local cleanup quarantine
+5efc765 docs: mark parallel cleanup complete in final closure
+```
+
+**LocalContentOS landing (core):** `fcfe9d5` through `cb7df84` (six commits).  
+**Post-B4 sync:** `12e0c40`.  
+**Migration encoding + B1 evidence:** `9f52cfc`, `1bbc3ec`.
+
+**Uncommitted at report time (not LC closure scope unless commit worker includes):** SalesOS WIP, scorecard/one-pager/template edits, `localcontentos-po-signoff-next-steps.md`, `localcontentos-b1-migration-fix-commit-ready.md`, this report, tmp scratch files.
+
+---
+
+## Schema and migration posture
+
+| Item | Status |
+|------|--------|
+| Content Studio schema + migration | **Committed** (`c6cda2b`, `20260601120000_localcontentos_content_studio`) |
+| SalesOS P1 migration SQL encoding | **Committed** (`9f52cfc` - UTF-8 no BOM normalization) |
+| Deploy on pilot DB (`aqliya_lc_pilot`) | **Done** - 17 migrations, 7 ContentStudio tables, seed OK |
+| Deploy on shared `aqliya` | **NOT RUN** - drift **OPEN** (documented waiver for pilot scope) |
+
+---
+
+## RAM Risk
+
+**Low.** Work consisted of targeted unit tests, read-only/light Prisma CLI on a dedicated pilot database, documentation synthesis, and scoped git operations. No full build, no full test suite, no heavy parallel indexing or bulk data migration on shared production-like DB.
+
+---
+
+## Production claim
+
+**NO.** This report, engineering closure, and any future PO **AUTHORIZE (pilot scope)** do **not** authorize:
+
+- Production deployment
+- Marketing as Production Ready or GA
+- Regulator compliance certification
+- Blind migrate deploy on shared `aqliya`
+
+---
+
+## Next lowest-load step
+
+**PO sign-off** - Product owner completes `localcontentos-l5-po-signoff-template.md` Sections A-H and records **AUTHORIZE** with documented conditions (pilot DB `aqliya_lc_pilot`, `LOCALCONTENT_CONTENT_BACKEND=prisma`, time-bounded internal pilot scope, no Production Ready claim).
+
+If PO selects **DEFER** or **REJECT**, program gate stays **OPEN**; do not upgrade L6 status docs.
+
+**Optional engineering backlog (human-approved only):** shared `aqliya` B1 reconciliation (Option B/C); `npm run build` / full lint; platform B5 tsc cleanup.
+
+---
+
+## Commit note
+
+This file was created by the final closure synthesizer and is **not committed** unless the commit worker includes it. Recommended path: add to a docs-only commit alongside any remaining PO-pack files per operator approval.
+
+**Report version:** FULL-CLOSURE-2026-06-01  
+**Validation classification:** Light validated (evidence-backed); **production no-go**

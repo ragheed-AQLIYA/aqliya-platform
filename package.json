@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:localcontent-pilot": "powershell -ExecutionPolicy Bypass -File scripts/run-localcontent-pilot.ps1",
     "dev:safe": "node --max-old-space-size=4096 ./node_modules/next/dist/bin/next dev --webpack",
     "build": "prisma generate && next build --webpack",
     "build:safe": "node --max-old-space-size=6144 ./node_modules/next/dist/bin/next build --webpack",

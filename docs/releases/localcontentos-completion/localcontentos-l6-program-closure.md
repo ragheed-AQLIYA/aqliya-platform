@@ -72,7 +72,6 @@ HEAD: `1bbc3ec` — reproducible pilot build from git.
 - `localcontentos-l6-final-report.md` — integrator report
 - `localcontentos-l6-completion-status.md` — worker status
 - `localcontentos-l6-program-closure.md` — this file
-- `localcontentos-engineering-closure-complete.md` — engineering vs PO gate boundary
 
 ---
 

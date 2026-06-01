@@ -2,11 +2,11 @@
 
 **Date / التاريخ:** 2026-06-01  
 **Product:** LocalContentOS (Content Studio) on AQLIYA Core  
-**Program:** L6 Institutional Pilot-Ready — human attestation gate  
+**Program gate:** L6 institutional pilot-ready **program** gate (human attestation)  
 **Validation class:** Light validated — **NOT** build/lint/full-suite validated  
 **Production claim:** **NO / لا**
 
-> **This is the single document the Product Owner opens to decide.** All evidence links are consolidated below. Detailed section attestation (Sections A–I) remains in [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md) if you need row-by-row initials.
+> **Note:** This is the **single document** the Product Owner opens to decide.
 
 ---
 
@@ -36,7 +36,7 @@ Two items require your explicit acknowledgment: **B1 on shared `aqliya`** remain
 |-------|--------------|------------------|
 | Content Studio | **L5+ with conditions** | **NO** |
 | Combined LocalContentOS | **L5+ / L6 candidate with conditions** | **NO** |
-| L6 institutional pilot-ready (program gate) | **NOT ACHIEVED** until PO AUTHORIZE | **NO** |
+| L6 institutional pilot-ready (program gate) | **NOT L6** — gate **OPEN** until AUTHORIZE | **NO** |
 
 **L6 gate score:** 4/8 PASS, 4 PARTIAL — institutional gate blocked by **PO sign-off** ([`localcontentos-l6-readiness-scorecard.md`](./localcontentos-l6-readiness-scorecard.md)).
 
@@ -44,20 +44,16 @@ Two items require your explicit acknowledgment: **B1 on shared `aqliya`** remain
 
 ## PO decision box / صندوق قرار مالك المنتج
 
-**Select exactly one:**
+**Select exactly one (check one box):**
 
-| Decision | Meaning |
-|----------|---------|
-| ☐ **AUTHORIZE** | Close L6 program gate — **L6 achieved (pilot scope)** with documented conditions. Internal/institutional pilot on scoped DB permitted. **NOT Production Ready.** |
-| ☐ **DEFER** | Gate stays open. List blockers in conditions field. Docs remain at L5+. No pilot promotion. |
-| ☐ **REJECT** | Gate stays open (failed attestation). Do not proceed with pilot. Record reason below. |
+- [ ] **AUTHORIZE** — Close L6 program gate; **L6 achieved (pilot scope)** with documented conditions. Pilot on qliya_lc_pilot permitted. **NOT Production Ready.**
+- [ ] **DEFER** — Gate stays **OPEN**; remains **NOT L6** in docs. List blockers in conditions block.
+- [ ] **REJECT** — Gate stays **OPEN** (failed attestation). Do not proceed with pilot. Record reason in conditions block.
 
-**Conditions (required if AUTHORIZE; list blockers if DEFER):**
+**Conditions (required if AUTHORIZE; list blockers if DEFER or reason if REJECT):**
 
 ```
-1.
-2.
-3.
+
 ```
 
 **Authorization matrix (check if AUTHORIZE):**
@@ -297,75 +293,96 @@ Reference: [`agent-06-governed-ai-integration.md`](./agent-06-governed-ai-integr
 
 ---
 
-## Evidence index / فهرس الأدلة
+## Evidence index / فهرس الأدلة — `docs/releases/localcontentos-completion/`
 
-### Primary (read for decision)
+### PO decision and sign-off
 
-| Document | Purpose |
-|----------|---------|
-| [`agent-14-smoke-results.md`](./agent-14-smoke-results.md) | Authoritative 6/6 smoke log |
-| [`localcontentos-b1-option-a-execution-log.md`](./localcontentos-b1-option-a-execution-log.md) | B1 pilot DB Option A |
-| [`localcontentos-l6-readiness-scorecard.md`](./localcontentos-l6-readiness-scorecard.md) | Eight L6 dimensions + program checklist |
-| [`localcontentos-l6-governance-checklist.md`](./localcontentos-l6-governance-checklist.md) | RBAC, B3 guard, audit integration |
-| [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md) | Optional row-by-row attestation (Sections A–I) |
+| Document | Link |
+|----------|------|
+| `localcontentos-po-signoff-handoff.md` | [`localcontentos-po-signoff-handoff.md`](./localcontentos-po-signoff-handoff.md) |
+| `localcontentos-po-signoff-next-steps.md` | [`localcontentos-po-signoff-next-steps.md`](./localcontentos-po-signoff-next-steps.md) |
+| `localcontentos-l5-po-signoff-template.md` | [`localcontentos-l5-po-signoff-template.md`](./localcontentos-l5-po-signoff-template.md) |
 
-### Validation and status
+### Smoke and human validation
 
-| Document | Purpose |
-|----------|---------|
-| [`localcontentos-human-smoke-checklist.md`](./localcontentos-human-smoke-checklist.md) | Human smoke criteria |
-| [`localcontentos-smoke-steps-3-6-manual.md`](./localcontentos-smoke-steps-3-6-manual.md) | Manual smoke guide |
-| [`agent-12-targeted-tests.md`](./agent-12-targeted-tests.md) | Targeted test evidence |
-| [`agent-l6-backend-hardening.md`](./agent-l6-backend-hardening.md) | B3 guard implementation |
-| [`localcontentos-l6-completion-status.md`](./localcontentos-l6-completion-status.md) | Worker completion matrix |
-| [`localcontentos-l6-final-report.md`](./localcontentos-l6-final-report.md) | Integrator final report |
-| [`localcontentos-completion-status.md`](./localcontentos-completion-status.md) | v0.1 completion status |
-| [`localcontentos-v01-readiness-scorecard.md`](./localcontentos-v01-readiness-scorecard.md) | v0.1 baseline |
+| Document | Link |
+|----------|------|
+| `agent-14-smoke-results.md` | [`agent-14-smoke-results.md`](./agent-14-smoke-results.md) |
+| `localcontentos-human-smoke-checklist.md` | [`localcontentos-human-smoke-checklist.md`](./localcontentos-human-smoke-checklist.md) |
+| `localcontentos-smoke-steps-3-6-manual.md` | [`localcontentos-smoke-steps-3-6-manual.md`](./localcontentos-smoke-steps-3-6-manual.md) |
+| `localcontentos-manual-smoke-steps-3-6.md` | [`localcontentos-manual-smoke-steps-3-6.md`](./localcontentos-manual-smoke-steps-3-6.md) |
 
-### Pilot operations (post-AUTHORIZE)
+### Tests and TypeScript
 
-| Document | Purpose |
-|----------|---------|
-| [`localcontentos-l5-pilot-operator-quickstart.md`](./localcontentos-l5-pilot-operator-quickstart.md) | Operator quickstart |
-| [`localcontentos-lc-pilot-db-runbook.md`](./localcontentos-lc-pilot-db-runbook.md) | Pilot DB provisioning |
-| [`localcontentos-pilot-handoff.md`](./localcontentos-pilot-handoff.md) | L5 pilot conditions and escalation |
+| Document | Link |
+|----------|------|
+| `agent-12-targeted-tests.md` | [`agent-12-targeted-tests.md`](./agent-12-targeted-tests.md) |
+| `agent-13-typescript-validation.md` | [`agent-13-typescript-validation.md`](./agent-13-typescript-validation.md) |
 
-### Migration and blockers
+### L6 program status and scorecards
 
-| Document | Purpose |
-|----------|---------|
-| [`localcontentos-b1-drift-reconciliation-plan.md`](./localcontentos-b1-drift-reconciliation-plan.md) | B1 shared DB reconciliation |
-| [`localcontentos-b1-operator-approval-gate.md`](./localcontentos-b1-operator-approval-gate.md) | B1 policy reference |
-| [`localcontentos-migration-readiness.md`](./localcontentos-migration-readiness.md) | Migration deploy gates |
+| Document | Link |
+|----------|------|
+| `localcontentos-l6-readiness-scorecard.md` | [`localcontentos-l6-readiness-scorecard.md`](./localcontentos-l6-readiness-scorecard.md) |
+| `localcontentos-l6-completion-status.md` | [`localcontentos-l6-completion-status.md`](./localcontentos-l6-completion-status.md) |
+| `localcontentos-l6-program-closure.md` | [`localcontentos-l6-program-closure.md`](./localcontentos-l6-program-closure.md) |
+| `localcontentos-l6-final-report.md` | [`localcontentos-l6-final-report.md`](./localcontentos-l6-final-report.md) |
+| `localcontentos-l6-roadmap.md` | [`localcontentos-l6-roadmap.md`](./localcontentos-l6-roadmap.md) |
+| `localcontentos-l6-gap-matrix.md` | [`localcontentos-l6-gap-matrix.md`](./localcontentos-l6-gap-matrix.md) |
+| `localcontentos-l6-governance-checklist.md` | [`localcontentos-l6-governance-checklist.md`](./localcontentos-l6-governance-checklist.md) |
+| `localcontentos-program-status-one-pager.md` | [`localcontentos-program-status-one-pager.md`](./localcontentos-program-status-one-pager.md) |
+| `localcontentos-completion-status.md` | [`localcontentos-completion-status.md`](./localcontentos-completion-status.md) |
+| `localcontentos-v01-readiness-scorecard.md` | [`localcontentos-v01-readiness-scorecard.md`](./localcontentos-v01-readiness-scorecard.md) |
+| `localcontentos-engineering-closure-complete.md` | [`localcontentos-engineering-closure-complete.md`](./localcontentos-engineering-closure-complete.md) |
+| `localcontentos-full-closure-plan.md` | [`localcontentos-full-closure-plan.md`](./localcontentos-full-closure-plan.md) |
+| `localcontentos-full-closure-report.md` | [`localcontentos-full-closure-report.md`](./localcontentos-full-closure-report.md) |
+| `localcontentos-final-quality-gates.md` | [`localcontentos-final-quality-gates.md`](./localcontentos-final-quality-gates.md) |
 
-### Program planning
+### Pilot operations and runtime
 
-| Document | Purpose |
-|----------|---------|
-| [`localcontentos-l6-program-closure.md`](./localcontentos-l6-program-closure.md) | Program closure status |
-| [`localcontentos-l6-roadmap.md`](./localcontentos-l6-roadmap.md) | L6 roadmap |
-| [`localcontentos-l6-gap-matrix.md`](./localcontentos-l6-gap-matrix.md) | Gap matrix |
-| [`localcontentos-po-signoff-next-steps.md`](./localcontentos-po-signoff-next-steps.md) | Extended PO workflow reference |
+| Document | Link |
+|----------|------|
+| `localcontentos-l5-pilot-operator-quickstart.md` | [`localcontentos-l5-pilot-operator-quickstart.md`](./localcontentos-l5-pilot-operator-quickstart.md) |
+| `localcontentos-lc-pilot-db-runbook.md` | [`localcontentos-lc-pilot-db-runbook.md`](./localcontentos-lc-pilot-db-runbook.md) |
+| `localcontentos-pilot-handoff.md` | [`localcontentos-pilot-handoff.md`](./localcontentos-pilot-handoff.md) |
+| `localcontentos-pilot-runtime-guide.md` | [`localcontentos-pilot-runtime-guide.md`](./localcontentos-pilot-runtime-guide.md) |
+
+### Migration, B1, and commit evidence
+
+| Document | Link |
+|----------|------|
+| `localcontentos-b1-option-a-execution-log.md` | [`localcontentos-b1-option-a-execution-log.md`](./localcontentos-b1-option-a-execution-log.md) |
+| `localcontentos-b1-drift-reconciliation-plan.md` | [`localcontentos-b1-drift-reconciliation-plan.md`](./localcontentos-b1-drift-reconciliation-plan.md) |
+| `localcontentos-b1-operator-approval-gate.md` | [`localcontentos-b1-operator-approval-gate.md`](./localcontentos-b1-operator-approval-gate.md) |
+| `localcontentos-b1-migration-fix-commit-ready.md` | [`localcontentos-b1-migration-fix-commit-ready.md`](./localcontentos-b1-migration-fix-commit-ready.md) |
+| `localcontentos-migration-readiness.md` | [`localcontentos-migration-readiness.md`](./localcontentos-migration-readiness.md) |
+| `localcontentos-commit-plan.md` | [`localcontentos-commit-plan.md`](./localcontentos-commit-plan.md) |
+| `localcontentos-commit-recommendation.md` | [`localcontentos-commit-recommendation.md`](./localcontentos-commit-recommendation.md) |
+| `localcontentos-commit-execution-ready.md` | [`localcontentos-commit-execution-ready.md`](./localcontentos-commit-execution-ready.md) |
+| `localcontentos-followup-commit-ready.md` | [`localcontentos-followup-commit-ready.md`](./localcontentos-followup-commit-ready.md) |
+| `localcontentos-pre-commit-gates.md` | [`localcontentos-pre-commit-gates.md`](./localcontentos-pre-commit-gates.md) |
+| `localcontentos-schema-proposal.md` | [`localcontentos-schema-proposal.md`](./localcontentos-schema-proposal.md) |
 
 ### Worker agent reports
 
-| Document | Worker |
-|----------|--------|
-| [`agent-00-gatekeeper.md`](./agent-00-gatekeeper.md) | Gatekeeper |
-| [`agent-01-product-architecture.md`](./agent-01-product-architecture.md) | Product architecture |
-| [`agent-02-domain-contracts.md`](./agent-02-domain-contracts.md) | Domain contracts |
-| [`agent-03-service-layer.md`](./agent-03-service-layer.md) | Service layer |
-| [`agent-04-workflow-integration.md`](./agent-04-workflow-integration.md) | Workflow |
-| [`agent-05-evidence-source-integration.md`](./agent-05-evidence-source-integration.md) | Evidence / sources |
-| [`agent-06-governed-ai-integration.md`](./agent-06-governed-ai-integration.md) | Governed AI |
-| [`agent-07-review-approval.md`](./agent-07-review-approval.md) | Review / approval |
-| [`agent-08-output-engine.md`](./agent-08-output-engine.md) | Output engine |
-| [`agent-09-server-actions.md`](./agent-09-server-actions.md) | Server actions |
-| [`agent-10-workspace-ui.md`](./agent-10-workspace-ui.md) | Workspace UI |
-| [`agent-11-navigation-registry.md`](./agent-11-navigation-registry.md) | Navigation |
-| [`agent-13-typescript-validation.md`](./agent-13-typescript-validation.md) | TypeScript |
-| [`agent-l6-workspace-ui.md`](./agent-l6-workspace-ui.md) | L6 workspace UI |
-| [`final-integrator-report.md`](./final-integrator-report.md) | Final integrator |
+| Document | Link |
+|----------|------|
+| `agent-00-gatekeeper.md` | [`agent-00-gatekeeper.md`](./agent-00-gatekeeper.md) |
+| `agent-01-product-architecture.md` | [`agent-01-product-architecture.md`](./agent-01-product-architecture.md) |
+| `agent-02-domain-contracts.md` | [`agent-02-domain-contracts.md`](./agent-02-domain-contracts.md) |
+| `agent-03-service-layer.md` | [`agent-03-service-layer.md`](./agent-03-service-layer.md) |
+| `agent-04-workflow-integration.md` | [`agent-04-workflow-integration.md`](./agent-04-workflow-integration.md) |
+| `agent-05-evidence-source-integration.md` | [`agent-05-evidence-source-integration.md`](./agent-05-evidence-source-integration.md) |
+| `agent-06-governed-ai-integration.md` | [`agent-06-governed-ai-integration.md`](./agent-06-governed-ai-integration.md) |
+| `agent-07-review-approval.md` | [`agent-07-review-approval.md`](./agent-07-review-approval.md) |
+| `agent-08-output-engine.md` | [`agent-08-output-engine.md`](./agent-08-output-engine.md) |
+| `agent-09-server-actions.md` | [`agent-09-server-actions.md`](./agent-09-server-actions.md) |
+| `agent-10-workspace-ui.md` | [`agent-10-workspace-ui.md`](./agent-10-workspace-ui.md) |
+| `agent-11-navigation-registry.md` | [`agent-11-navigation-registry.md`](./agent-11-navigation-registry.md) |
+| `agent-l6-backend-hardening.md` | [`agent-l6-backend-hardening.md`](./agent-l6-backend-hardening.md) |
+| `agent-l6-workspace-ui.md` | [`agent-l6-workspace-ui.md`](./agent-l6-workspace-ui.md) |
+| `final-integrator-report.md` | [`final-integrator-report.md`](./final-integrator-report.md) |
+
 
 ---
 
