@@ -2,6 +2,7 @@
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     salesDeal: { findFirst: jest.fn(), update: jest.fn() },
+    salesPipelineStage: { findFirst: jest.fn() },
     salesEvidenceLink: { count: jest.fn() },
     salesAuditEvent: { create: jest.fn() },
   },
@@ -202,7 +203,7 @@ describe("SalesOS governance (PR-10)", () => {
 
       await updateSalesDeal(
         "deal-1",
-        { organizationId: "org-a", platformOrganizationId: "plat-1" },
+        "org-a",
         {
           stageId: "stage-won",
           governanceOverrideReason: "Contract signed — evidence upload tomorrow",
@@ -232,12 +233,28 @@ describe("SalesOS governance (PR-10)", () => {
         id: "stage-pilot",
         slug: "pilot_active",
       });
+      prisma.salesDeal.update.mockResolvedValue({
+        id: "deal-1",
+        title: "Deal",
+        status: "open",
+        stageId: "stage-pilot",
+        accountId: "acc-1",
+        amount: null,
+        currency: "SAR",
+        account: { id: "acc-1", name: "Acct" },
+        stage: {
+          id: "stage-pilot",
+          name: "Pilot",
+          slug: "pilot_active",
+          sortOrder: 5,
+        },
+      });
       prisma.salesEvidenceLink.count.mockResolvedValue(0);
 
       await expect(
         updateSalesDeal(
           "deal-1",
-          { organizationId: "org-a", platformOrganizationId: "plat-1" },
+          "org-a",
           { stageId: "stage-pilot" },
           { id: "user-1", role: "OPERATOR" },
         ),

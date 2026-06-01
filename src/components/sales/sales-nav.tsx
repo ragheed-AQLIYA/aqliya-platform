@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -7,7 +10,9 @@ const links = [
   { href: "/sales/deals/new", label: "صفقة جديدة" },
 ] as const;
 
-export function SalesNav({ activePath }: { activePath: string }) {
+export function SalesNav({ activePath }: { activePath?: string }) {
+  const pathname = usePathname();
+  const currentPath = activePath ?? pathname ?? "/sales";
   return (
     <nav
       className="flex flex-wrap gap-2 border-b pb-3 mb-6"
@@ -15,8 +20,8 @@ export function SalesNav({ activePath }: { activePath: string }) {
     >
       {links.map((link) => {
         const active =
-          activePath === link.href ||
-          (link.href !== "/sales" && activePath.startsWith(link.href));
+          currentPath === link.href ||
+          (link.href !== "/sales" && currentPath.startsWith(link.href));
         return (
           <Link
             key={link.href}

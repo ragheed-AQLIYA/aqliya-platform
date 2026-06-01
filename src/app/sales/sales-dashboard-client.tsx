@@ -199,7 +199,7 @@ export function SalesDashboardClient({
         title="ذكاء المسار البيعي"
         module="sales"
         signals={[
-          { type: "score", label: "جودة المسار", value: hasDbData ? 72 : "—" },
+          { type: "score", label: "جودة المسار", value: hasDbData ? 72 : 0 },
           { type: "risk", label: "مخاطر التحويل", value: "medium" },
           {
             type: "confidence",

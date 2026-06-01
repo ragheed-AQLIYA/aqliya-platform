@@ -20,6 +20,7 @@ export interface UpdateSalesDealInput {
   expectedCloseDate?: Date | null;
   status?: string;
   metadata?: Record<string, unknown>;
+  governanceOverrideReason?: string | null;
 }
 
 export interface SalesStageTransitionInput {
@@ -188,7 +189,10 @@ export function validateUpdateSalesDealInput(
   if (input.status) {
     validateDealStatus(input.status);
   }
-  return input;
+  return {
+    ...input,
+    governanceOverrideReason: input.governanceOverrideReason?.trim() || undefined,
+  };
 }
 
 export function validateSalesStageTransitionInput(

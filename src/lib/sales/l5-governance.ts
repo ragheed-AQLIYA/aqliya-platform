@@ -309,25 +309,33 @@ export async function decideOpportunityReview(
       : "Opportunity rejected");
 
   if (params.decision === "approved") {
-    return approveSalesOpportunity(scope, {
+    return approveSalesOpportunity(
+      scope,
+      {
+        dealId: params.dealId,
+        reviewId: params.reviewId,
+        reason,
+        note: params.note,
+      },
+      actor,
+    );
+  }
+
+  return rejectSalesOpportunity(
+    scope,
+    {
       dealId: params.dealId,
       reviewId: params.reviewId,
       reason,
       note: params.note,
-    });
-  }
-
-  return rejectSalesOpportunity(scope, {
-    dealId: params.dealId,
-    reviewId: params.reviewId,
-    reason,
-    note: params.note,
-  });
+    },
+    actor,
+  );
 }
 
 export async function listPendingOpportunityReviews(organizationId: string) {
   try {
-    return listPendingSalesReviews({
+    return await listPendingSalesReviews({
       organizationId,
       platformOrganizationId: null,
     });

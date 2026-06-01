@@ -78,6 +78,12 @@ describe("SalesOS L5 governance", () => {
         metadata: {},
         stage: null,
       });
+      prisma.salesReview.findFirst.mockResolvedValue({
+        id: "rev-1",
+        organizationId: ORG_A,
+        dealId: "deal-1",
+        proposalId: null,
+      });
       prisma.salesReview.update.mockResolvedValue({ id: "rev-1", status: "approved" });
       prisma.salesApproval.create.mockResolvedValue({ id: "appr-1" });
       prisma.salesDeal.update.mockResolvedValue({ id: "deal-1" });
@@ -102,20 +108,25 @@ describe("SalesOS L5 governance", () => {
   describe("tenant isolation (account CRUD)", () => {
     it("denies cross-org account read via services", async () => {
       prisma.salesAccount.findFirst.mockResolvedValue(null);
+      prisma.salesAccount.create.mockResolvedValue({
+        id: "acc-a",
+        name: "Acme",
+        status: "prospect",
+        industry: null,
+        isDemo: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
 
       await expect(
         createSalesAccount(scopeA, { name: "Acme" }, actor),
       ).resolves.toBeDefined();
 
-      prisma.salesAccount.findFirst.mockResolvedValue({
-        id: "acc-b",
-        name: "Other Org Account",
-        platformOrganizationId: null,
-      });
+      prisma.salesAccount.findFirst.mockResolvedValue(null);
 
       await expect(
         createSalesDeal(
-          scopeA,
+          ORG_A,
           { title: "X", accountId: "acc-b" },
           actor,
         ),

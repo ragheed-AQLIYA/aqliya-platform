@@ -326,23 +326,23 @@ Prior commits on branch: `8278377`, `ae81360`, `f39c820`, `b321e83`.
 | `.next` cache | Removed between runs |
 | `prisma migrate status` | **18/18 up to date** (`aqliya_pilot`) |
 
-### Login (`/login` HTTP 500 → 200)
+### Login (`/login`)
 
 | Item | Result |
 |------|--------|
-| Root cause | Stale dev processes + missing `SessionProvider` for client auth |
-| Fix | Added `AuthProvider` (`next-auth/react`) in root layout; clean dev restart |
+| Root cause (prior pass) | Stale dev processes on :3000/:3001 |
+| Fix (this pass) | Environment cleanup; no auth-config changes required |
 | `curl /login` | **PASS 200** |
 
 ### Build (`npx next build --webpack`)
 
 | Stage | Result |
 |-------|--------|
-| Webpack compile | **PASS with warnings** (jose Edge runtime, Sentry token) |
-| TypeScript (app routes) | Fixed: missing vNext export stubs, `intelligence` memory types, `pipeline/page` ActionResult narrowing |
-| Full exit 0 | **not re-confirmed** — build worker interrupted in agent environment after compile; last TS failure (`pipeline/page.tsx:87`) patched |
+| Webpack compile | **PASS with warnings** (~70s; jose Edge runtime, Sentry token, import warnings) |
+| TypeScript | **FAIL** — sequential fixes applied; build stops at next error (last seen: `organization-members-panel` missing exports → stubbed in `platform-org-actions.ts`) |
+| Full exit 0 | **FAIL** — ~759 `tsc` errors repo-wide; Next reports first blocking error per run |
 
-**Stubs / aliases added (minimal):** `getProductRegistryEntry`, `validateProductActionAccess`, `getRequiredEvidenceForApproval`, `buildPublishingGate`, `buildContentGovernanceRuntime`, `getWorkflowProgressStep`, `readAccountResearchRun`, `salesBuildProofEffectivenessWaveB`, `salesGetProofEffectivenessForOpportunity`; renamed conflicting `intelligence-hub-tabs.tsx` → `intelligence-hub-tabs-panel.tsx`.
+**Fixes applied this pass:** `SalesNav` client `usePathname`; `updateSalesDeal` governance gate; `pipeline/page` ActionResult narrowing; `sales-dashboard-client` score type; Button `asChild` → `Link`+`buttonVariants`; LocalContent form actions return `void`; L5 `decideOpportunityReview` passes `actor`; platform org member action stubs.
 
 ### Governance tests
 
@@ -350,7 +350,7 @@ Prior commits on branch: `8278377`, `ae81360`, `f39c820`, `b321e83`.
 |-------|--------|
 | `sales-governance.test.ts` | **11/11 PASS** |
 | `sales-l5-governance.test.ts` | **5/5 PASS** |
-| Fix | `updateSalesDeal` accepts `SalesOrgScope`; prisma mock includes `salesPipelineStage` |
+| Fix | Governance wired in `updateSalesDeal`; prisma mocks + L5 actor pass |
 
 ### Authenticated smoke (curl CSRF, `admin@aqliya.com`, password redacted)
 
@@ -364,7 +364,7 @@ Prior commits on branch: `8278377`, `ae81360`, `f39c820`, `b321e83`.
 | `/workflowos` | 200 | PASS |
 | `/audit` | 200 | PASS |
 
-Session cookie established via `/api/auth/callback/credentials`; `/api/auth/session` returned user object.
+`npx tsx scripts/smoke-auth-routes.ts` — **6/6 PASS**; session user `admin@aqliya.com`.
 
 ### Phase 13 validation summary
 
@@ -373,21 +373,22 @@ Session cookie established via `/api/auth/callback/credentials`; `/api/auth/sess
 | Login | **light validated** — HTTP 200 |
 | Authenticated curl smoke (6 product routes) | **light validated** — all 200 |
 | Governance tests | **light validated** — 16/16 targeted |
-| Next production build | **not validated** — compile OK, exit 0 not re-run to completion |
+| Next production build | **not validated** — webpack OK, TS phase FAIL |
 | Production readiness | **production no-go** |
 
 ### Phase 13 commits
 
 | Commit | Message (this pass) |
 |--------|---------------------|
-| *(this pass)* | `d5a8e3e` — `fix(phase13): login SessionProvider, build export stubs, governance green, smoke PASS` |
+| *(pending)* | `fix(phase13): sales governance green, login/smoke PASS, build TS fixes` |
 
 Prior branch commits: `b321e83`, `dcd5d7c`, `3e63fa9`, `a3b0bb5`, `8278377`, `ae81360`, `f39c820`, `8f60514`.
 
 ### Remaining human gates
 
-1. Re-run `npx next build --webpack` locally to confirm exit 0 (agent environment killed worker mid-run).
+1. Continue `npx next build --webpack` fix loop (platform settings exports, Sales vNext types, LocalContent content module).
 2. Browser human sign-off on authenticated flows (curl-only evidence this pass).
-3. External pilot session + pen test scope per Week 1–4 ops plan.
+3. Audit user provisioning for full AuditOS dashboard (admin platform user may lack `AuditUser` row).
+4. External pilot session + pen test scope per Week 1–4 ops plan.
 
 *Phase 13: maximum autonomous progress. Production: **no-go**. Pilot rehearsal: **conditional go** on `aqliya_pilot` with curl smoke + governance tests green.*

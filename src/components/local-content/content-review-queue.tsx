@@ -1,12 +1,14 @@
-import Link from "next/link";
+"use client";
+
 import {
-  completeContentStudioReviewFormAction,
-  approveContentStudioItemFormAction,
+  completeContentStudioReviewAction,
+  approveContentStudioItemAction,
 } from "@/actions/local-content-workspace-actions";
 import type { ContentItem } from "@/lib/local-content/content/types";
-import { EmptyState } from "@/components/local-content/local-content-shell";
+import { EmptyState, InlineNotice } from "@/components/local-content/local-content-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 type Props = {
@@ -16,18 +18,14 @@ type Props = {
 
 export function ContentReviewQueue({ initialQueue, initialError }: Props) {
   if (initialError) {
-    return (
-      <p className="text-sm text-destructive" role="alert">
-        {initialError}
-      </p>
-    );
+    return <InlineNotice variant="error" title="خطأ" description={initialError} />;
   }
 
   if (initialQueue.length === 0) {
     return (
       <EmptyState
         title="قائمة المراجعة فارغة"
-        description="أرسل عناصر المحتوى من صفحة الحملة بعد مساعدة المسودة. العناصر ذات الحالة in_review تظهر هنا للمراجعة البشرية."
+        description="أرسل عناصر المحتوى من صفحة الحملة بعد المساعدة على المسودة. لا نشر تلقائي — الموافقة البشرية مطلوبة."
         actionHref="/local-content/campaigns"
         actionLabel="الانتقال إلى الحملات"
       />
@@ -36,9 +34,6 @@ export function ContentReviewQueue({ initialQueue, initialError }: Props) {
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-muted-foreground">
-        {initialQueue.length} عنصر في قائمة المراجعة
-      </p>
       {initialQueue.map((item) => (
         <Card key={item.id}>
           <CardContent className="p-4">
@@ -48,20 +43,14 @@ export function ContentReviewQueue({ initialQueue, initialError }: Props) {
                 <p className="text-xs text-muted-foreground">
                   {item.format} · {item.status}
                 </p>
-                {item.campaignId ? (
-                  <Link
-                    href={`/local-content/campaigns/${item.campaignId}`}
-                    className="text-xs text-primary underline mt-1 inline-block"
-                  >
-                    عرض الحملة
-                  </Link>
-                ) : null}
               </div>
               <Badge variant="outline">{item.status}</Badge>
             </div>
 
             <form
-              action={completeContentStudioReviewFormAction}
+              action={async (fd) => {
+                await completeContentStudioReviewAction(fd);
+              }}
               className="border-t pt-3 space-y-2"
             >
               <input type="hidden" name="contentItemId" value={item.id} />
@@ -69,14 +58,14 @@ export function ContentReviewQueue({ initialQueue, initialError }: Props) {
               <p className="text-xs font-medium">أبعاد المراجعة</p>
               <div className="flex flex-wrap gap-3 text-xs">
                 {[
-                  ["sourceGrounding", "مرتبط بالمصادر"],
+                  ["sourceGrounding", "ت grounded بالمصادر"],
                   ["brand", "العلامة"],
                   ["compliance", "الامتثال"],
                   ["factualClaims", "الادعاءات"],
                   ["languageQuality", "اللغة"],
                 ].map(([name, label]) => (
                   <label key={name} className="flex items-center gap-1">
-                    <input type="checkbox" name={name} defaultChecked />
+                    <input type="checkbox" name={name} />
                     {label}
                   </label>
                 ))}
@@ -86,44 +75,40 @@ export function ContentReviewQueue({ initialQueue, initialError }: Props) {
                 name="notes"
                 className="w-full text-sm border rounded p-2 min-h-[60px]"
                 dir="auto"
-                defaultValue="L6 smoke review dimensions verified"
               />
               <div className="flex gap-2">
-                <button
-                  type="submit"
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 bg-primary text-primary-foreground"
-                >
+                <Button type="submit" size="sm">
                   تسجيل مراجعة
-                </button>
+                </Button>
               </div>
             </form>
 
             <div className="flex gap-2 mt-3 border-t pt-3">
-              <form action={approveContentStudioItemFormAction}>
-                <input type="hidden" name="contentItemId" value={item.id} />
-                <input type="hidden" name="approved" value="true" />
-                <input
-                  type="hidden"
-                  name="notes"
-                  value="Approved via L6 smoke"
-                />
-                <button
-                  type="submit"
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 bg-primary text-primary-foreground"
-                >
+              <form
+                action={async () => {
+                  await approveContentStudioItemAction(
+                    item.id,
+                    true,
+                    "Approved via review queue",
+                  );
+                }}
+              >
+                <Button type="submit" size="sm" variant="default">
                   موافقة (ADMIN)
-                </button>
+                </Button>
               </form>
-              <form action={approveContentStudioItemFormAction}>
-                <input type="hidden" name="contentItemId" value={item.id} />
-                <input type="hidden" name="approved" value="false" />
-                <input type="hidden" name="notes" value="Changes requested" />
-                <button
-                  type="submit"
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 border bg-background"
-                >
+              <form
+                action={async () => {
+                  await approveContentStudioItemAction(
+                    item.id,
+                    false,
+                    "Changes requested",
+                  );
+                }}
+              >
+                <Button type="submit" size="sm" variant="outline">
                   طلب تعديلات
-                </button>
+                </Button>
               </form>
             </div>
           </CardContent>
