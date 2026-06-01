@@ -64,11 +64,11 @@ Human must record **one** option before any deploy approval. Platform recommenda
 | **Runbook** | `localcontentos-lc-pilot-db-runbook.md` | `localcontentos-b1-drift-reconciliation-plan.md` § Option B | Waive pilot handoff #2; open ticket for A or B |
 | **Risk** | Low on fresh DB | **High** on shared DB | Medium (accidental deploy) |
 
-**Selected option (operator fills in):** ☐ A ☐ B ☐ C
+**Selected option (operator fills in):** ☑ **A** ☐ B ☐ C
 
-**Ticket / change ID:** _________________________  
-**Decision owner:** _________________________  
-**Date:** _________________________
+**Ticket / change ID:** `localcontentos-b1-option-a-execution-log.md` (chat **"1"**)  
+**Decision owner:** LC operator (user selection **"1"**)  
+**Date:** 2026-06-01
 
 ---
 
@@ -78,7 +78,7 @@ Human must record **one** option before any deploy approval. Platform recommenda
 
 ### Gate 0 — Decision recorded
 
-- [ ] Option **A**, **B**, or **C** selected above with owner and date
+- [x] Option **A**, **B**, or **C** selected above with owner and date
 - [ ] If **C:** LC product owner + Platform lead waiver recorded; B1 remains OPEN on scorecard
 - [ ] If **B:** DBA ticket opened; LC agent **not** executing reconciliation
 
@@ -288,3 +288,42 @@ The migrations from the database are not found locally in prisma/migrations:
 | Production claim | **NO** |
 
 **Classification:** Operator gate documentation — **not validated** beyond localhost status capture.
+---
+
+## Option A execution — evidence appendix (2026-06-01)
+
+| Item | Result |
+|------|--------|
+| **Option** | **A — Fresh pilot DB** (`aqliya_lc_pilot`) |
+| **Approval** | User chat selection **"1"** |
+| **Pilot `migrate deploy`** | **Executed** — exit **0** (after migration SQL encoding fixes on disk) |
+| **Pilot `migrate status`** | **Database schema is up to date!** |
+| **Content Studio tables** | **7/7** present on pilot |
+| **Seed on pilot** | **Executed** — success |
+| **Shared `aqliya` drift** | **OPEN** — no deploy on shared DB |
+| **Execution log** | `localcontentos-b1-option-a-execution-log.md` |
+| **B1 pilot scope** | **CLOSED** |
+| **B1 shared scope** | **OPEN** |
+| **Production claim** | **NO** |
+
+### Gate 0–4 sign-off (Option A)
+
+All Gate 0–4 checkboxes **SATISFIED** for Option A with deploy approval via selection **"1"**. Detail: execution log.
+
+**Deploy approved:** ☑ Yes (pilot database only)
+
+---
+
+## Document record (updated post Option A)
+
+| Item | Status |
+|------|--------|
+| `migrate deploy` on **pilot** `aqliya_lc_pilot` | **Yes** (2026-06-01) |
+| `migrate deploy` on shared `aqliya` | **No** |
+| `.env` edited in agent session | **No** |
+| Git commit | **Not requested** |
+| Read-only `npx prisma migrate status` (pilot) | **Done** — up to date |
+| Migration SQL fixes (BOM / UTF-16) | **On disk, uncommitted** |
+| Production claim | **NO** |
+
+**Classification:** Operator gate + pilot execution — **light validated** (localhost); **not production-ready**.

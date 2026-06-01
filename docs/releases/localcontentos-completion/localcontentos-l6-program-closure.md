@@ -1,13 +1,13 @@
 # LocalContentOS L6 Program Closure
 
-**Date:** 2026-06-01 (post-B4 closure sync)  
+**Date:** 2026-06-01 (post-B1 Option A pilot DB closure)  
 **Program:** LocalContentOS L4 → L6 Institutional Pilot-Ready  
-**Integrator:** Post-B4 L6 Integrator (reconciled after B3 engineering + B4 git landing)  
+**Integrator:** L6 Post-B1 Pilot Integrator (docs only; reconciles B1 Option A + B2/B3/B4 closure)  
 **Program status:** **WORKERS COMPLETE** — **L6 gate NOT closed**  
-**Honest product level:** **L5 with conditions** (NOT L6)  
+**Honest product level:** **L5+ / L6 candidate with conditions** (NOT L6 achieved)  
 **Production claim:** **NO**
 
-> **Sync note:** B4 **CLOSED** — six commits on `main` (`fcfe9d5`..`cb7df84`). B2 and B3 **CLOSED**. **NOT L6** until **B1 + PO sign-off**.
+> **Sync note:** B1 **CLOSED on pilot DB** (`aqliya_lc_pilot`, Option A — 17 migrations, 7 ContentStudio tables, seed OK). B1 **OPEN on shared `aqliya` drift**. B4 **CLOSED** (`fcfe9d5`..`cb7df84`). B2 and B3 **CLOSED**. **NOT L6** until **PO sign-off** on scorecard. Evidence: `localcontentos-b1-option-a-execution-log.md`.
 
 ---
 
@@ -37,6 +37,19 @@
 
 Full detail: `agent-14-smoke-results.md`
 
+### B1 pilot DB (Option A — CLOSED)
+
+| Item | Result | Evidence |
+|------|--------|----------|
+| Target DB | `aqliya_lc_pilot` @ `localhost:5432` | Dedicated pilot — shared `aqliya` unchanged |
+| Migrations | **17** applied; status **clean** | `npx prisma migrate deploy` exit 0; `localcontentos-b1-option-a-execution-log.md` |
+| Content Studio tables | **7** (`ContentStudio*`) | Post-deploy verification in execution log |
+| Seed | **OK** | `npx prisma db seed` — Seeding completed successfully |
+| `.env` edited | **No** | Pilot `DATABASE_URL` via session override only |
+| Shared `aqliya` | **No deploy** | B1 shared drift **OPEN** (Option B/C backlog) |
+
+Full detail: `localcontentos-b1-option-a-execution-log.md`
+
 ### Git baseline (B4 closure)
 
 | SHA | Message |
@@ -53,6 +66,7 @@ HEAD: `cb7df84` — reproducible pilot build from git.
 ### Documentation pack
 
 - `localcontentos-l6-readiness-scorecard.md` — reconciled scorecard
+- `localcontentos-b1-option-a-execution-log.md` — B1 pilot DB deploy evidence
 - `localcontentos-l6-final-report.md` — integrator report
 - `localcontentos-l6-completion-status.md` — worker status
 - `localcontentos-l6-program-closure.md` — this file
@@ -63,10 +77,11 @@ HEAD: `cb7df84` — reproducible pilot build from git.
 
 | L6 requirement | Status |
 |----------------|--------|
-| Institutional pilot-ready sign-off | **NOT MET** |
-| Clean `migrate status` on shared pilot DB | **NOT MET** (B1) |
+| Institutional pilot-ready sign-off | **NOT MET** — PO sign-off **OPEN** |
+| Clean `migrate status` on LC pilot DB | **MET** (B1 pilot **CLOSED** — `aqliya_lc_pilot`; see execution log) |
+| Clean `migrate status` on shared `aqliya` | **NOT MET** — B1 shared drift **OPEN** (Option B/C backlog) |
 | Prisma-only pilot path (engineering guard) | **MET** (B3 **CLOSED**) — PO institutional sign-off still pending on scorecard |
-| Reproducible git baseline | **MET** (B4 **CLOSED** — `cb7df84`) |
+| Reproducible git baseline | **MET** (B4 **CLOSED** — `cb7df84`; migration SQL encoding fixes uncommitted) |
 | PRODUCT_STATUS_MATRIX L6 row | **NOT UPDATED** |
 | Human PO scorecard signature | **NOT SIGNED** |
 | Production Ready | **NO** — explicitly not authorized |
@@ -77,7 +92,7 @@ HEAD: `cb7df84` — reproducible pilot build from git.
 
 | ID | Blocker | Status | Blocks | Resolution |
 |----|---------|--------|--------|------------|
-| **B1** | SalesOS migration history drift | **OPEN** | Shared DB `migrate deploy`; institutional pilot DB parity | Platform/DBA baseline or scoped pilot DB — see `localcontentos-migration-readiness.md` |
+| **B1** | SalesOS migration history drift | **CLOSED (pilot)** / **OPEN (shared)** | Pilot: Option A — `aqliya_lc_pilot` deploy exit 0, 17 migrations, 7 ContentStudio tables, seed OK (`localcontentos-b1-option-a-execution-log.md`). Shared `aqliya`: unchanged; Option B/C backlog |
 | **B2** | Review dimension smoke gap | **CLOSED** | — | Worker 2: `crev_mpulmiwi_nzagcrh` |
 | **B3** | Dual persistence (file vs Prisma) | **CLOSED** | — | Worker 3: `repository-instance.ts` — `guardFileBackendResolution()` throws on explicit file / Prisma-without-DB in production-like env; file backend test-only via `resetContentRepositoryForTests()`; see `localcontentos-l6-governance-checklist.md` §B3 |
 | **B4** | Uncommitted LocalContentOS changes | **CLOSED** | — | Six commits on `main` (`fcfe9d5`..`cb7df84`, 2026-06-01) |
@@ -90,24 +105,25 @@ HEAD: `cb7df84` — reproducible pilot build from git.
 | Track | Level | Notes |
 |-------|-------|-------|
 | Compliance workspace | **L5** | Unchanged; mature pilot path |
-| Content Studio | **L5** | Upgraded from L4+L — smoke 6/6 PASS, 25/25 tests |
-| **Combined LocalContentOS** | **L5 with conditions** | **NOT L6** |
+| Content Studio | **L5+** | Smoke 6/6 PASS, 25/25 tests; pilot DB persistence validated (`aqliya_lc_pilot`) |
+| **Combined LocalContentOS** | **L5+ / L6 candidate with conditions** | Engineering path ready on dedicated pilot DB; **NOT L6** until PO sign-off |
 
-**L6** in this program = one **external institution** can run a governed, time-bounded pilot with signed operator docs — **not achieved**.
+**L6** in this program = one **external institution** can run a governed, time-bounded pilot with signed operator docs — **not achieved** (PO sign-off **OPEN**).
 
-**L6 gate score (8 dimensions):** **3/8 PASS**, **5 PARTIAL** — **NOT ACHIEVED**. **L6 checklist:** **4/8** satisfied. Open program blocker: **B1**. PO scorecard sign-off pending.
+**L6 gate score (8 dimensions):** **4/8 PASS**, **4 PARTIAL** — **NOT ACHIEVED**. **L6 checklist:** **5/8** satisfied. Open institutional gate: **PO sign-off**. Shared DB drift remains documented waiver (B1 shared **OPEN**).
 
 ---
 
 ## Path to true L6
 
 ```
-Current: L5 with conditions (internal pilot OK with waivers)
+Current: L5+ / L6 candidate with conditions (pilot DB validated; PO gate open)
     │
     ├─► ~~Close B3 (Prisma-only guard)~~ ─────────► **DONE** (2026-06-01)
     ├─► ~~Close B4 (commit landing)~~ ─────────────► **DONE** (2026-06-01, cb7df84)
-    ├─► Close B1 (migration drift) ────────────────► shared pilot DB safe
+    ├─► ~~Close B1 (pilot DB)~~ ───────────────────► **DONE** (2026-06-01, Option A — aqliya_lc_pilot)
     ├─► PO sign scorecard + onboarding pack ─────► institutional authorization
+    ├─► Optional: shared `aqliya` drift (Option B/C) ► platform canonical DB parity
     └─► Optional: build/lint/integration (user) ──► heavier validation
     │
     ▼
@@ -116,9 +132,10 @@ Target: L6 institutional pilot-ready (still NOT Production Ready)
 
 ### Recommended sequence (human)
 
-1. **Platform/DBA** — Resolve B1 (SalesOS drift) or provision LC-scoped pilot DB with documented baseline.
-2. **Product owner** — Sign `localcontentos-l6-readiness-scorecard.md` and institutional onboarding waivers.
-3. **Optional** — `npm run build`, full lint, integration tests (user approval).
+1. **Product owner** — Sign `localcontentos-l6-readiness-scorecard.md` and institutional onboarding waivers (pilot `DATABASE_URL` → `aqliya_lc_pilot`).
+2. **Platform/DBA (optional backlog)** — Reconcile shared `aqliya` drift if single canonical DB required (Option B/C).
+3. **Engineering (optional)** — Commit migration SQL encoding fixes (BOM / UTF-16) for reproducible fresh deploys.
+4. **Optional** — `npm run build`, full lint, integration tests (user approval).
 
 ---
 
@@ -130,16 +147,17 @@ Target: L6 institutional pilot-ready (still NOT Production Ready)
 | TypeScript (LC) | **Light validated** — 0 errors on product paths |
 | Browser smoke | **Light validated** — 6/6 PASS (Worker 2) |
 | Git reproducibility | **Light validated** — B4 commits on `main` at `cb7df84` |
-| Build / lint / migrate deploy | **Not validated** — not run (low-load) |
-| **Overall** | **L5 pilot-ready with conditions** — **NOT Production Ready** |
+| Pilot DB migrate deploy | **Light validated** — Option A on `aqliya_lc_pilot`; 17 migrations, status clean, seed OK (`localcontentos-b1-option-a-execution-log.md`) |
+| Build / lint | **Not validated** — not run (low-load) |
+| **Overall** | **L5+ / L6 candidate with conditions** — **NOT Production Ready** |
 
 ---
 
 ## Next human gate (single priority)
 
-**B1 — SalesOS migration drift resolution** (or scoped pilot DB baseline)
+**PO sign-off** on `localcontentos-l6-readiness-scorecard.md` and institutional onboarding pack
 
-Until B1 is resolved, do not run blind `migrate deploy` on a shared institutional pilot database. B3 (Prisma-only guard) and B4 (git baseline) are **CLOSED**. Parallel track: **PO sign-off** on scorecard and onboarding pack.
+B1 pilot path **CLOSED** on dedicated `aqliya_lc_pilot` (Option A). Do **not** run blind `migrate deploy` on shared `aqliya` until Option B/C reconciliation. B2, B3, B4, and B1 (pilot) are **CLOSED**. Institutional L6 gate remains **OPEN** pending human PO signature.
 
 ---
 
