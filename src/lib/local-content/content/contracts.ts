@@ -3,6 +3,7 @@
 import type {
   CampaignStatus,
   ContentFormat,
+  ContentGovernanceAudit,
   ContentItemStatus,
   ContentProjectStatus,
   ContentReviewStatus,
@@ -84,6 +85,7 @@ export interface SubmitReviewInput {
     compliance?: boolean;
     factualClaims?: boolean;
     languageQuality?: boolean;
+    governance?: ContentGovernanceAudit;
   };
   notes?: string;
   reviewerId?: string;
