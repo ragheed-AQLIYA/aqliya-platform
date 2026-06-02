@@ -273,6 +273,40 @@ export async function prismaCreateAccount(
   });
 }
 
+export async function prismaCreateOpportunity(
+  opportunity: SalesOpportunity,
+): Promise<void> {
+  await prisma.salesDeal.create({
+    data: {
+      id: opportunity.id,
+      organizationId: opportunity.organizationId,
+      accountId: opportunity.accountId,
+      title: opportunity.name,
+      amount: opportunity.valueEstimate,
+      status: "open",
+      createdById: opportunity.createdById,
+    },
+  });
+}
+
+export async function prismaCreateInteraction(
+  interaction: SalesInteractionLog,
+): Promise<void> {
+  await prisma.salesInteraction.create({
+    data: {
+      id: interaction.id,
+      organizationId: interaction.organizationId,
+      accountId: interaction.accountId,
+      dealId: interaction.opportunityId,
+      type: interaction.type,
+      summary: interaction.summary,
+      subject: interaction.summary,
+      occurredAt: new Date(interaction.loggedAt),
+      createdById: interaction.loggedById,
+    },
+  });
+}
+
 export async function prismaUpdateOpportunity(
   organizationId: string,
   opportunityId: string,
