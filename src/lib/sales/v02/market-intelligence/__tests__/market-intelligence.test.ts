@@ -11,7 +11,7 @@ import {
   scoreMarketSignals,
   summarizeMarketIntelligence,
 } from "../index";
-import { ensureSalesSeed, resetSalesStoreForTests } from "../../store";
+import { ensureSalesSeed, resetSalesStoreForTests } from "../../../store";
 import {
   listAccounts,
   listAllInteractions,
@@ -19,7 +19,7 @@ import {
   listOpportunities,
   listSignals,
   listWinLossInsights,
-} from "../../store";
+} from "../../../store";
 
 const ORG = "org-salesos-v01";
 const OWNER = "user-seed-001";

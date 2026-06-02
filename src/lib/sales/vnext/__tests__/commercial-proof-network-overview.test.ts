@@ -60,7 +60,7 @@ describe("commercial-proof-network-overview", () => {
 
     expect(overview.nodes).toHaveLength(3);
     expect(overview.edges.length).toBeGreaterThanOrEqual(1);
-    expect(overview.disclaimerAr).toMatch(/draft|مسودة/i);
+    expect(overview.disclaimerAr).toMatch(/مسودة|مسودات|draft/i);
   });
 });
 

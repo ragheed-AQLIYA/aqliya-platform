@@ -24,7 +24,7 @@ export const RISKY_PHRASE_RULES = [
   },
   {
     id: "guaranteed_roi",
-    pattern: /guaranteed\s+(roi|return|outcomes?)/i,
+    pattern: /guaran\w+\s+(roi|return|outcomes?)/i,
     label: "guarantee",
   },
   {

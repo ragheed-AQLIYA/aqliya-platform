@@ -36,6 +36,11 @@ function seedInput(orgId: string) {
 }
 
 describe("vnext market-intelligence Wave B facade", () => {
+  beforeEach(async () => {
+    resetSalesStoreForTests();
+    await ensureSalesSeed(ORG, OWNER);
+  });
+
   it("uses AI-assisted evidence-based recommendation label", () => {
     expect(MARKET_INTELLIGENCE_WAVE_B_RECOMMENDATION_LABEL).toBe(
       "AI-assisted / evidence-based recommendation",

@@ -43,9 +43,12 @@ interface PrismaTierARepository {
   ): Promise<TierAIntelligenceMaps | TierAIntelligenceArrays | null>;
 }
 
-const PRISMA_PERSISTENCE_ENABLED =
-  process.env.SALESOS_PRISMA_PERSISTENCE === "1" ||
-  process.env.SALESOS_PRISMA_PERSISTENCE === "true";
+function isPrismaPersistenceEnabled(): boolean {
+  return (
+    process.env.SALESOS_PRISMA_PERSISTENCE === "1" ||
+    process.env.SALESOS_PRISMA_PERSISTENCE === "true"
+  );
+}
 
 export function emptyTierAMaps(): TierAIntelligenceMaps {
   return {
@@ -152,7 +155,7 @@ function tierAHasRows(maps: TierAIntelligenceMaps): boolean {
 export async function loadTierAIntelligenceFromPrisma(
   organizationId: string,
 ): Promise<TierAIntelligenceMaps | null> {
-  if (!PRISMA_PERSISTENCE_ENABLED) return null;
+  if (!isPrismaPersistenceEnabled()) return null;
 
   try {
     const repo = (await import(

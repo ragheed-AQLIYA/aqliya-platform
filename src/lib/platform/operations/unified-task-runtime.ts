@@ -226,7 +226,7 @@ export function countTasksByStatus(
 
 export function deriveWorkflowTasks(
   signals: Array<{
-    productSlug: V1ProductKey;
+    productSlug: string;
     resourceType: string;
     resourceId: string;
     organizationId: string;
@@ -280,7 +280,7 @@ export function deriveWorkflowTasks(
 export function deriveReviewTasks(
   reviewSignals: Array<{
     organizationId: string;
-    productSlug: V1ProductKey;
+    productSlug: string;
     resourceType: string;
     resourceId: string;
     summaryAr?: string;
@@ -309,7 +309,7 @@ export function deriveReviewTasks(
 export function deriveApprovalTasks(
   approvalSignals: Array<{
     organizationId: string;
-    productSlug: V1ProductKey;
+    productSlug: string;
     resourceType: string;
     resourceId: string;
     summaryAr?: string;

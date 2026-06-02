@@ -85,7 +85,8 @@ function recordAuditEventSafe(_input: {
 }
 
 function validateProductEvidenceType(_productSlug: string, _typeId: string): boolean {
-  return true;
+  const validTypes = ["qualification_note", "proposal", "poc_report", "reference_call"];
+  return validTypes.includes(_typeId);
 }
 
 export function initSalesWorkspace(user: CurrentUser): void {

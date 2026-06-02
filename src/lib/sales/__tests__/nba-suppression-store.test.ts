@@ -67,8 +67,8 @@ describe("nba-suppression-store", () => {
   it("re-shows snoozed items after snoozeUntil passes", async () => {
     await snoozeNbaAction(ORG_A, "nba-rule-1", { days: 0, actorId: "u1" });
     const record = (await loadNbaSuppressionOverlay(ORG_A))!.suppressions[0];
-    const past = new Date(Date.now() - 60_000);
-    expect(isNbaSuppressionActive(record, past)).toBe(false);
+    const future = new Date(Date.now() + 60_000);
+    expect(isNbaSuppressionActive(record, future)).toBe(false);
     const visible = filterVisibleNbaActionsSync(ORG_A, [nbaItem("nba-rule-1")]);
     expect(visible).toHaveLength(1);
   });

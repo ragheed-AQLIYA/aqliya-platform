@@ -53,8 +53,8 @@ describe("SalesOS v0.1 — intelligence lib", () => {
     expect(memory.objections.length).toBeGreaterThan(0);
   });
 
-  it("recommends next actions for draft opportunity", () => {
-    const recs = salesRecommendNextActions(ORG, "sales-opp-003");
+  it("recommends next actions for closed-lost opportunity without reason", () => {
+    const recs = salesRecommendNextActions(ORG, "sales-opp-008");
     expect(recs.length).toBeGreaterThan(0);
   });
 

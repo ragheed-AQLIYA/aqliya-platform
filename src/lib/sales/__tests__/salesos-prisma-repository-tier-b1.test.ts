@@ -140,7 +140,7 @@ describe("salesos-prisma-repository-tier-b1", () => {
   });
 
   it("hydrates Tier B1 maps with tenant-scoped rows mapped to types.ts", async () => {
-    tierB1Mocks.salesMarketSignal.findMany.mockResolvedValue([
+    const allSignals = [
       snapshotRow("mkt-a", ORG_A, {
         label: "Budget confirmed",
         labelAr: null,
@@ -160,25 +160,40 @@ describe("salesos-prisma-repository-tier-b1", () => {
         outputStatus: "draft",
         snapshotAt: NOW,
       }),
-    ]);
-    tierB1Mocks.salesCommercialRecommendation.findMany.mockResolvedValue([
-      snapshotRow("rec-a", ORG_A, {
-        category: "proof",
-        ruleId: "proof_gap",
-        title: "Add proof",
-        titleAr: null,
-        reasoning: "Gap detected",
-        reasoningAr: null,
-        recommendedAction: "Upload case study",
-        recommendedActionAr: null,
-        priority: "high",
-        confidence: 0.8,
-        evidence: [{ text: "win without proof" }],
-        outputStatus: "recommendation",
-        notAutonomous: true,
-        snapshotAt: NOW,
-      }),
-    ]);
+    ];
+    tierB1Mocks.salesMarketSignal.findMany.mockImplementation(
+      ({ where }: any) =>
+        Promise.resolve(
+          where?.organizationId
+            ? allSignals.filter((s: any) => s.organizationId === where.organizationId)
+            : allSignals,
+        ),
+    );
+    tierB1Mocks.salesCommercialRecommendation.findMany.mockImplementation(
+      ({ where }: any) =>
+        Promise.resolve(
+          where?.organizationId === ORG_A
+            ? [
+                snapshotRow("rec-a", ORG_A, {
+                  category: "proof",
+                  ruleId: "proof_gap",
+                  title: "Add proof",
+                  titleAr: null,
+                  reasoning: "Gap detected",
+                  reasoningAr: null,
+                  recommendedAction: "Upload case study",
+                  recommendedActionAr: null,
+                  priority: "high",
+                  confidence: 0.8,
+                  evidence: [{ text: "win without proof" }],
+                  outputStatus: "recommendation",
+                  notAutonomous: true,
+                  snapshotAt: NOW,
+                }),
+              ]
+            : [],
+        ),
+    );
 
     const repo = await loadModule();
     const maps = await repo.prismaLoadTierB1Intelligence(ORG_A);

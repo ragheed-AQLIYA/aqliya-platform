@@ -142,3 +142,26 @@ export function evaluateOrgNextActions(input: {
   const order = { urgent: 0, high: 1, medium: 2, low: 3 };
   return all.sort((a, b) => order[a.priority] - order[b.priority]);
 }
+
+/** Flat-input wrapper for test compatibility. */
+export function generateNextActions(input: {
+  organizationId: string;
+  opportunities: SalesOpportunity[];
+  activities: SalesActivity[];
+  meetings: unknown[];
+  outreach: unknown[];
+  objections: unknown[];
+  proofAssets: unknown[];
+}): NextActionRecommendation[] {
+  const all: NextActionRecommendation[] = [];
+  for (const opp of input.opportunities) {
+    all.push(
+      ...evaluateNextActionRules({
+        opportunity: opp,
+        activities: input.activities,
+        evidence: [],
+      }),
+    );
+  }
+  return all;
+}

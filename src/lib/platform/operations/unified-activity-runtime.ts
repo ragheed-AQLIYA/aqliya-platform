@@ -111,13 +111,13 @@ export function listActivitiesForOrg(
   enforceCoreOnMutation({ productSlug: "audit", operation: "read" });
 
   const trail =
-    sources.auditTrail ??
-    getRecentAuditBuffer(200).filter(
+    (sources.auditTrail as readonly AuditEventContract[]) ??
+    (getRecentAuditBuffer(200).filter(
       (e: { organizationId?: string }) => e.organizationId === organizationId || !e.organizationId,
-    );
+    ) as unknown as AuditEventContract[]);
 
   const streams: ActivityStreamEntry[][] = [
-    trail.map(mapAuditTrailToActivity),
+    (trail as AuditEventContract[]).map(mapAuditTrailToActivity),
     (sources.salesAudit ?? [])
       .filter((e: { organizationId?: string }) => e.organizationId === organizationId)
       .map(mapSalesAuditToActivity),
@@ -140,7 +140,8 @@ export function countActivitiesByProduct(
     number
   >;
   for (const e of entries) {
-    counts[e.productSlug] = (counts[e.productSlug] ?? 0) + 1;
+    const key = e.productSlug as V1ProductKey;
+    counts[key] = (counts[key] ?? 0) + 1;
   }
   return counts;
 }
@@ -148,7 +149,7 @@ export function countActivitiesByProduct(
 function runtimeSignalToActivity(signal: {
   id: string;
   organizationId: string;
-  productSlug: V1ProductKey;
+  productSlug: string;
   action: string;
   resourceType: string;
   resourceId: string;

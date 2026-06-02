@@ -56,7 +56,7 @@ describe("SalesOS governed outreach (PR-9)", () => {
           body: "Body",
           channel: "fax",
         }),
-      ).toThrow(/channel must be email/);
+      ).toThrow(/channel must be one of/);
     });
   });
 

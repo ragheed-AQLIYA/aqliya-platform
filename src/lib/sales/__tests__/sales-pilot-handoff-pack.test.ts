@@ -19,6 +19,7 @@ const BASE_DEAL = {
       pilotCriteria: "3 workshops; NPS >= 8",
       evidenceRefs: ["link-1"],
       decidedAt: null,
+      updatedById: "user-1",
       updatedAt: "2026-06-01T10:00:00.000Z",
       submittedAt: "2026-06-01T11:00:00.000Z",
     },
@@ -72,10 +73,10 @@ describe("SalesOS pilot handoff pack (PR-19)", () => {
       evidenceLinks: EVIDENCE_LINKS,
     });
 
-    expect(pack.dealTitle).toBe("Pilot ACME");
+    expect(pack.deal.title).toBe("Pilot ACME");
     expect(pack.conversionMemo?.status).toBe("submitted");
-    expect(pack.memoEvidenceLinks).toHaveLength(1);
-    expect(pack.latestReview?.decision).toBe("approved");
+    expect(pack.evidenceLinks).toHaveLength(1);
+    expect(pack.reviewDecisions[0]?.decision).toBe("approved");
     expect(pack.icpAssessment.score?.fitScore).toBe(82);
     expect(pack.checklist.length).toBeGreaterThan(0);
   });
@@ -87,8 +88,8 @@ describe("SalesOS pilot handoff pack (PR-19)", () => {
       evidenceLinks: [],
     });
 
-    const memoItem = pack.checklist.find((c) => c.id === "memo-draft");
-    expect(memoItem?.status).toBe("incomplete");
+    const memoItem = pack.checklist.find((c) => c.id === "conversion-memo-draft");
+    expect(memoItem?.checked).toBe(false);
   });
 
   it("builds export HTML with checklist and memo", () => {
@@ -102,7 +103,7 @@ describe("SalesOS pilot handoff pack (PR-19)", () => {
     expect(html).toContain("<!DOCTYPE html>");
     expect(html).toContain("Pilot ACME");
     expect(html).toContain("Pilot succeeded.");
-    expect(html).toContain("قائمة التحقق");
+    expect(html).toContain("قائمة تحقق التسليم");
   });
 
   it("marks ICP review na when not agent-generated", () => {
@@ -118,6 +119,6 @@ describe("SalesOS pilot handoff pack (PR-19)", () => {
       ...pack,
       checklist: [],
     }).find((c) => c.id === "icp-reviewed");
-    expect(icpReview?.status).toBe("na");
+    expect(icpReview?.checked).toBe(false);
   });
 });

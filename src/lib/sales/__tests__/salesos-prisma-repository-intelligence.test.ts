@@ -126,7 +126,7 @@ describe("salesos-prisma-repository-intelligence", () => {
   });
 
   it("hydrates Tier A maps with tenant-scoped rows mapped to types.ts", async () => {
-    tierAMocks.salesSignal.findMany.mockResolvedValue([
+    const sigRows = [
       intelligenceRow("sig-a", ORG_A, {
         signalType: "buying",
         description: "budget confirmed",
@@ -137,15 +137,23 @@ describe("salesos-prisma-repository-intelligence", () => {
         description: "other org",
         strength: "weak",
       }),
-    ]);
-    tierAMocks.salesObjection.findMany.mockResolvedValue([
+    ];
+    tierAMocks.salesSignal.findMany.mockImplementation((args?: any) => {
+      const orgId = args?.where?.organizationId;
+      return Promise.resolve(orgId ? sigRows.filter((r) => r.organizationId === orgId) : sigRows);
+    });
+    const objRows = [
       intelligenceRow("obj-a", ORG_A, {
         category: "price",
         description: "too expensive",
         frequency: 2,
         resolved: false,
       }),
-    ]);
+    ];
+    tierAMocks.salesObjection.findMany.mockImplementation((args?: any) => {
+      const orgId = args?.where?.organizationId;
+      return Promise.resolve(orgId ? objRows.filter((r) => r.organizationId === orgId) : objRows);
+    });
 
     const repo = await loadModule();
     const maps = await repo.prismaLoadTierAIntelligence(ORG_A);
@@ -295,7 +303,7 @@ describe("salesos-prisma-repository-intelligence", () => {
     expect(tierAMocks.salesNextAction.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
         title: "Send proposal",
-        dueAt: NOW,
+        dueAt: NOW.toISOString(),
       }),
     });
 

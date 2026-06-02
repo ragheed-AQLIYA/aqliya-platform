@@ -1,16 +1,57 @@
 // ─── SalesOS deal review via review-approval contract ───
 
-import {
-  createReviewState,
-  getRequiredApprovers,
-  transitionReviewState,
-  validateApprovalAction,
-} from "@/lib/platform/contracts/review-approval-runtime";
-import type {
-  ReviewApprovalActor,
-  ReviewApprovalPackage,
-} from "@/lib/platform/contracts/review-approval-contract";
 import { SALESOS_PRODUCT_KEY } from "../core-adoption";
+
+// SALESOS_VNEXT_PLACEHOLDER: inline type — replace when @/lib/platform/contracts/review-approval-contract exists
+interface ReviewApprovalActor {
+  id: string;
+  role: string;
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline type — replace when @/lib/platform/contracts/review-approval-contract exists
+interface ReviewApprovalPackage {
+  id: string;
+  productSlug: string;
+  resourceType: string;
+  resourceId: string;
+  organizationId: string;
+  ownerId: string;
+  evidenceComplete: boolean;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  reviewerRoles: string[];
+  approverRoles: string[];
+  currentApprovers: { id: string; role: string }[];
+  actions: { action: string; actorId: string; timestamp: string }[];
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
+function createReviewState(input: {
+  productSlug: string;
+  resourceType: string;
+  resourceId: string;
+  organizationId: string;
+  ownerId: string;
+  evidenceComplete: boolean;
+}): ReviewApprovalPackage {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
+function getRequiredApprovers(productSlug: string): { reviewerRoles: string[]; approverRoles: string[] } {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
+function transitionReviewState(pkg: ReviewApprovalPackage, action: string, actor: ReviewApprovalActor): unknown {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
+function validateApprovalAction(pkg: ReviewApprovalPackage, actor: ReviewApprovalActor, decision: string): { allowed: boolean; reason?: string } {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+}
 
 export interface DealReviewContext {
   package: ReviewApprovalPackage;

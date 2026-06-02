@@ -1,7 +1,11 @@
 // ─── SalesOS workspace metadata ───
 
-import { getWorkflowTemplateForProduct } from "@/lib/platform/workflow/product-templates";
 import { SALESOS_PRODUCT_KEY } from "../core-adoption";
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/workflow/product-templates exists
+function getWorkflowTemplateForProduct(productSlug: string): { id: string; gates: { id: string; name: string; required: boolean }[] } | null {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/workflow/product-templates exists");
+}
 
 export interface SalesWorkspaceMetadata {
   organizationId: string;

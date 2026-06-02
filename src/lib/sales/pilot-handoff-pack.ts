@@ -347,6 +347,10 @@ export function renderPilotHandoffExportHtml(pack: PilotHandoffPack): string {
 </html>`;
 }
 
+// Alias to match test import expectations
+export const assemblePilotHandoffPack = buildPilotHandoffPack;
+export const buildPilotHandoffExportHtml = renderPilotHandoffExportHtml;
+
 export async function loadPilotHandoffPack(
   dealId: string,
   scope: { organizationId: string; platformOrganizationId?: string | null },

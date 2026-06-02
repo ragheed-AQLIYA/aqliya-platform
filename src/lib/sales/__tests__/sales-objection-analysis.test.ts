@@ -138,7 +138,7 @@ describe("SalesOS objection analysis agent (PR-16)", () => {
       expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
-            action: SalesAuditActions.AGENT_OBJECTION_ANALYZED,
+            action: SalesAuditActions.OBJECTION_ANALYZED,
             targetId: "deal-1",
           }),
         }),

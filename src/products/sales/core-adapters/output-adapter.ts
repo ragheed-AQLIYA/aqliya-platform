@@ -6,8 +6,32 @@ import {
   type OutputDocument,
   type OutputFormat,
 } from "@/core/output"
-import { getOutputsByProduct, getRequiredApprovalForOutput } from "@/lib/platform/output/engine"
-import { registerOutputQueueEntry } from "@/lib/platform/operations/unified-output-queue"
+// SALESOS_PLACEHOLDER: TODO: implement when @/lib/platform/output/engine exists
+function getOutputsByProduct(_productKey: string): { id: string; labelEn?: string; labelAr?: string }[] {
+  return []
+}
+
+// SALESOS_PLACEHOLDER: TODO: implement when @/lib/platform/output/engine exists
+function getRequiredApprovalForOutput(_productSlug: string, _outputTypeId: string): boolean {
+  return false
+}
+
+// SALESOS_PLACEHOLDER: TODO: implement when @/lib/platform/operations/unified-output-queue exists
+function registerOutputQueueEntry(_entry: {
+  id: string;
+  organizationId: string;
+  productSlug: string;
+  outputTypeId: string;
+  labelAr: string;
+  labelEn: string;
+  resourceType: string;
+  resourceId: string;
+  status: string;
+  requiresApproval: boolean;
+  href: string;
+}): Promise<string> {
+  return Promise.resolve("todo-registered")
+}
 import { writeCoreSalesAuditEvent } from "./audit-adapter"
 
 const OUTPUT_CORE_PRODUCT_KEY = "salesos"

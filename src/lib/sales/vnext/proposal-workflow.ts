@@ -1,12 +1,34 @@
 // ─── SalesOS proposal workflow on Core workflow engine ───
 
-import { getWorkflowTemplateForProduct } from "@/lib/platform/workflow/product-templates";
-import {
-  createReviewState,
-  transitionReviewState,
-} from "@/lib/platform/contracts/review-approval-runtime";
-import type { ReviewApprovalActor } from "@/lib/platform/contracts/review-approval-contract";
 import { SALESOS_PRODUCT_KEY } from "../core-adoption";
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/workflow/product-templates exists
+function getWorkflowTemplateForProduct(productSlug: string): { id: string; gates: { id: string; name: string; required: boolean }[] } | null {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/workflow/product-templates exists");
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline type — replace when @/lib/platform/contracts/review-approval-contract exists
+interface ReviewApprovalActor {
+  id: string;
+  role: string;
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
+function createReviewState(input: {
+  productSlug: string;
+  resourceType: string;
+  resourceId: string;
+  organizationId: string;
+  ownerId: string;
+  evidenceComplete: boolean;
+}): { id: string; evidenceComplete: boolean; status: string; productSlug: string; resourceType: string; resourceId: string } {
+  return { id: `review-${input.resourceId}`, evidenceComplete: input.evidenceComplete, status: "draft", productSlug: input.productSlug, resourceType: input.resourceType, resourceId: input.resourceId };
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
+function transitionReviewState(pkg: { evidenceComplete?: boolean; status?: string }, action: string, actor: ReviewApprovalActor): { evidenceComplete?: boolean; status: string } {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+}
 
 export type ProposalWorkflowStage =
   | "draft"

@@ -21,8 +21,9 @@ export interface DealRiskAssessment {
   riskFlags: DealRiskFlag[];
   severity: DealRiskSeverity;
   computedAt: string;
+  source?: "rules-agent";
   agentGenerated: true;
-  advisory: true;
+  advisoryOnly: true;
   notes?: string;
 }
 
@@ -74,7 +75,7 @@ export function parseDealRiskAssessment(raw: unknown): DealRiskAssessment | null
   ) {
     return null;
   }
-  if (row.agentGenerated !== true || row.advisory !== true) return null;
+  if (row.agentGenerated !== true || row.advisoryOnly !== true) return null;
 
   const riskFlags: DealRiskFlag[] = [];
   if (Array.isArray(row.riskFlags)) {
@@ -89,7 +90,7 @@ export function parseDealRiskAssessment(raw: unknown): DealRiskAssessment | null
     severity: row.severity,
     computedAt: row.computedAt.trim(),
     agentGenerated: true,
-    advisory: true,
+    advisoryOnly: true,
     notes: typeof row.notes === "string" ? row.notes : undefined,
   };
 }

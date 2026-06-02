@@ -13,6 +13,9 @@ const SEVERITY_LABELS: Record<
   critical: { label: "حرج", variant: "destructive" },
   warning: { label: "تحذير", variant: "default" },
   info: { label: "معلومة", variant: "secondary" },
+  high: { label: "عالي", variant: "destructive" },
+  low: { label: "منخفض", variant: "secondary" },
+  medium: { label: "متوسط", variant: "default" },
 };
 
 const SOURCE_LABELS: Record<WaveAInstitutionalSignal["sourceProduct"], string> =

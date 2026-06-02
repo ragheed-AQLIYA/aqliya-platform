@@ -150,7 +150,7 @@ function mergeOutreachDraftsMetadata(
   };
 }
 
-function validateCreateOutreachDraftInput(
+export function validateCreateOutreachDraftInput(
   input: CreateOutreachDraftInput,
 ): CreateOutreachDraftInput {
   const subject = input.subject?.trim();
@@ -169,7 +169,7 @@ function validateCreateOutreachDraftInput(
   };
 }
 
-function validateReviewOutreachDraftInput(
+export function validateReviewOutreachDraftInput(
   input: ReviewOutreachDraftInput,
 ): ReviewOutreachDraftInput {
   if (input.decision !== "approved" && input.decision !== "rejected") {
@@ -246,13 +246,31 @@ export async function createOutreachDraft(
   };
 
   const drafts = [draft, ...readOutreachDrafts(deal.metadata)];
-  await persistOutreachDrafts(
-    dealId,
-    scope.organizationId,
-    deal.metadata,
-    drafts,
+
+  const { flagCommercialClaimIfNeeded } = await import("./commercial-claims");
+  const flagResult = await flagCommercialClaimIfNeeded({
+    scope,
     actor,
-  );
+    targetType: "SalesDeal",
+    targetId: dealId,
+    existingMetadata: deal.metadata,
+    sourceType: "outreach_draft",
+    sourceId: draft.id,
+    text: `${validated.subject}\n${validated.body}`,
+  });
+
+  const mergedMetadata = {
+    ...flagResult.metadata,
+    outreachDrafts: drafts,
+  };
+
+  await prisma.salesDeal.update({
+    where: { id: dealId },
+    data: {
+      metadata: mergedMetadata as unknown as Prisma.InputJsonValue,
+      updatedById: actor.id,
+    },
+  });
 
   await recordSalesAuditEvent({
     organizationId: scope.organizationId,
@@ -290,6 +308,19 @@ export async function submitOutreachDraftForReview(
   if (existing.status !== "draft") {
     throw new Error(
       "SalesOS validation: only draft outreach can be submitted for review",
+    );
+  }
+
+  const { getOutreachDraftClaimState } = await import("./commercial-claims");
+  const claimState = getOutreachDraftClaimState(
+    deal.metadata,
+    draftId,
+    existing.subject,
+    existing.body,
+  );
+  if (claimState.pendingClaimReview) {
+    throw new Error(
+      "SalesOS validation: claim review before submit",
     );
   }
 
@@ -424,4 +455,8 @@ export async function listPendingReviewOutreachDrafts(
       ? { organizationId: organizationIdOrScope, platformOrganizationId: null }
       : organizationIdOrScope;
   return listPendingReviewDrafts(scope);
+}
+
+export function assertNoOutreachSend(): never {
+  throw new Error("send is not implemented");
 }

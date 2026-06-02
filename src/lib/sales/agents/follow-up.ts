@@ -462,6 +462,10 @@ export async function rejectFollowUpDraft(
 }
 
 /** Governed follow-up: humans approve to copy nextAction only — no send API exists. */
+export function assertNoSend(): never {
+  throw new Error("send is not implemented");
+}
+
 export function assertNoFollowUpSend(): never {
   throw new Error(
     "SalesOS: follow-up send is not implemented — governed draft and approve-to-nextAction only",

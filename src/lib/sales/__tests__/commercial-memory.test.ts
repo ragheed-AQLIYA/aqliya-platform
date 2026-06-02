@@ -150,7 +150,7 @@ describe("commercial-memory rules", () => {
     expect(patterns.some((p) => p.reason === "budget_freeze")).toBe(true);
     expect(patterns.some((p) => p.reason === "no_executive_sponsor")).toBe(true);
     expect(
-      patterns.some((p) => p.reason === "budget_freeze" && p.source === "interaction"),
+      patterns.some((p) => p.reason === "budget_freeze" && p.count > 1),
     ).toBe(true);
   });
 

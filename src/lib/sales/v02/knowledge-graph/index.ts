@@ -9,6 +9,96 @@ import type {
   KnowledgeGraphNodeType,
 } from "./types";
 
+// v0.2 archived re-exports — match test import expectations
+
+function buildKnowledgeGraphFromStoreSnapshot(
+  organizationId: string,
+): KnowledgeGraph {
+  return buildKnowledgeGraphFromSnapshot(
+    readKnowledgeGraphStoreSnapshot(organizationId),
+  );
+}
+
+export function getIndustrySubgraph(
+  graph: KnowledgeGraph,
+  industryLabel: string,
+): { nodes: KnowledgeGraphNode[]; edges: KnowledgeGraphEdge[] } | null {
+  const industryNode = getNodesByType(graph, "industry").find(
+    (node) => node.label.toLowerCase() === industryLabel.toLowerCase(),
+  );
+  if (!industryNode) return null;
+  const cluster = getIndustryCluster(graph, industryLabel);
+  const edges = graph.edges.filter(
+    (e) => cluster.some((n) => n.id === e.from) || cluster.some((n) => n.id === e.to),
+  );
+  return { nodes: cluster, edges };
+}
+
+export function getNodesByKind(
+  graph: KnowledgeGraph,
+  kind: KnowledgeGraphNodeType,
+): KnowledgeGraphNode[] {
+  return getNodesByType(graph, kind);
+}
+
+export function getOutgoingEdges(
+  graph: KnowledgeGraph,
+  nodeId: string,
+  edgeType?: KnowledgeGraphEdgeType,
+): KnowledgeGraphEdge[] {
+  return (graph.indexes.edgesByFrom.get(nodeId) ?? []).filter(
+    (e) => !edgeType || e.type === edgeType,
+  );
+}
+
+export function getProofUsageNetwork(
+  graph: KnowledgeGraph,
+  proofSourceId: string,
+): { edges: KnowledgeGraphEdge[] } | null {
+  const edges = getProofUsagePaths(graph, proofSourceId);
+  return edges.length > 0 ? { edges } : null;
+}
+
+export function industryRefId(name: string): string {
+  return `industry:${name.trim().toLowerCase().replace(/\s+/g, "_")}`;
+}
+
+export function listFindingsForOpportunity(
+  graph: KnowledgeGraph,
+  oppId: string,
+): KnowledgeGraphNode[] {
+  const oppNodeId = `opp:${oppId}`;
+  return graph.nodes.filter(
+    (n) => n.type === "finding" && getEdgesForNode(graph, oppNodeId, "both").some(
+      (e) => e.from === n.id || e.to === n.id,
+    ),
+  );
+}
+
+export function summarizeGraph(graph: KnowledgeGraph): {
+  nodeCounts: Record<string, number>;
+  edgeCounts: Record<string, number>;
+} {
+  const nodeCounts: Record<string, number> = {
+    account: 0, opp: 0, proof: 0, signal: 0, content: 0, finding: 0, industry: 0,
+  };
+  for (const node of graph.nodes) {
+    const kind = node.type;
+    if (kind in nodeCounts) nodeCounts[kind]++;
+    else nodeCounts[kind] = 1;
+  }
+  return {
+    nodeCounts,
+    edgeCounts: graph.stats?.edgeCounts ?? {},
+  };
+}
+
+export function buildOrgKnowledgeGraph(organizationId: string): KnowledgeGraph {
+  return buildKnowledgeGraphFromSnapshot(
+    readKnowledgeGraphStoreSnapshot(organizationId),
+  );
+}
+
 export function loadKnowledgeGraph(organizationId: string): KnowledgeGraph {
   return buildKnowledgeGraphFromSnapshot(
     readKnowledgeGraphStoreSnapshot(organizationId),

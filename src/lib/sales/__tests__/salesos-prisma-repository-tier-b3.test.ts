@@ -127,7 +127,7 @@ describe("salesos-prisma-repository-tier-b3", () => {
   });
 
   it("hydrates Tier B3 maps with tenant-scoped rows mapped to types.ts", async () => {
-    tierB3Mocks.salesKnowledgeGraphNode.findMany.mockResolvedValue([
+    const allNodes = [
       snapshotRow("node-a", ORG_A, {
         kind: "account",
         refId: "acct-1",
@@ -138,14 +138,29 @@ describe("salesos-prisma-repository-tier-b3", () => {
         refId: "acct-2",
         label: "Other org",
       }),
-    ]);
-    tierB3Mocks.salesKnowledgeGraphEdge.findMany.mockResolvedValue([
-      snapshotRow("edge-a", ORG_A, {
-        kind: "related_to",
-        sourceNodeId: "node-a",
-        targetNodeId: "node-z",
-      }),
-    ]);
+    ];
+    tierB3Mocks.salesKnowledgeGraphNode.findMany.mockImplementation(
+      ({ where }: any) =>
+        Promise.resolve(
+          where?.organizationId
+            ? allNodes.filter((n: any) => n.organizationId === where.organizationId)
+            : allNodes,
+        ),
+    );
+    tierB3Mocks.salesKnowledgeGraphEdge.findMany.mockImplementation(
+      ({ where }: any) =>
+        Promise.resolve(
+          where?.organizationId === ORG_A
+            ? [
+                snapshotRow("edge-a", ORG_A, {
+                  kind: "related_to",
+                  sourceNodeId: "node-a",
+                  targetNodeId: "node-z",
+                }),
+              ]
+            : [],
+        ),
+    );
 
     const repo = await loadModule();
     const maps = await repo.prismaLoadTierB3Intelligence(ORG_A);

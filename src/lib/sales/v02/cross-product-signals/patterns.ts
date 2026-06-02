@@ -1,7 +1,21 @@
 // @ts-nocheck
 // ─── Pure pattern detectors for institutional commercial signals ───
 
-import type { RuntimeSignal } from "@/lib/platform/signals/types";
+// TODO: platform/signals/types — inline for TS2307 resolution
+interface RuntimeSignal {
+  id: string;
+  organizationId: string;
+  productSlug: string;
+  action: string;
+  severity: string;
+  summaryEn?: string;
+  summaryAr?: string;
+  resourceId: string;
+  resourceType?: string;
+  kind?: string;
+  timestamp: string;
+  metadata?: Record<string, unknown>;
+}
 import type {
   CrossProductCommercialSignal,
   InstitutionalCommercialKind,

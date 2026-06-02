@@ -28,6 +28,24 @@ export interface MeetingIntelligenceSummary {
   topOutcomes: Record<MeetingOutcome, number>;
 }
 
+export function extractMeetingMetadataFromInteraction(interaction: {
+  summary: string;
+  metadata?: Record<string, unknown>;
+}): { followUpTasks: string[] } {
+  const tasks: string[] = [];
+  const meta = interaction.metadata;
+  if (meta?.followUpTasks && Array.isArray(meta.followUpTasks)) {
+    tasks.push(...meta.followUpTasks.map(String));
+  }
+  if (tasks.length === 0) {
+    const followUpKeywords = ["متابعة", "follow up", "next step", "action item"];
+    if (followUpKeywords.some((kw) => interaction.summary.includes(kw))) {
+      tasks.push(interaction.summary);
+    }
+  }
+  return { followUpTasks: tasks };
+}
+
 export function summarizeMeetings(
   records: MeetingIntelligenceRecord[],
 ): MeetingIntelligenceSummary {

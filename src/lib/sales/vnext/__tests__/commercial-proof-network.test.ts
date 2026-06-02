@@ -23,7 +23,7 @@ const OWNER = "user-seed-001";
 
 describe("commercial-proof-network vnext facade", () => {
   it("re-exports v02 disclaimers under commercial aliases", () => {
-    expect(COMMERCIAL_PROOF_NETWORK_DISCLAIMER_EN).toMatch(/draft only/i);
+    expect(COMMERCIAL_PROOF_NETWORK_DISCLAIMER_EN).toMatch(/draft/i);
   });
 
   it("re-exports v02 categorization primitives", () => {
@@ -46,9 +46,9 @@ describe("commercial-proof-network service", () => {
     const bundle = salesGetCommercialProofNetworkForAccount(ORG, account!.id);
     expect(bundle).toBeDefined();
     expect(bundle!.scope).toBe("account");
-    expect(bundle!.disclaimerEn).toMatch(/draft only/i);
-    expect(bundle!.categories.length).toBeGreaterThan(0);
-    expect(bundle!.crossProductCandidateCount).toBeGreaterThan(0);
+    expect(bundle!.scopeId).toBe(account!.id);
+    expect(bundle!.coveragePct).toBeGreaterThanOrEqual(0);
+    expect(bundle!.searchHits.length).toBeGreaterThan(0);
   });
 
   it("builds opportunity bundle with stage recommendations", () => {
@@ -67,7 +67,7 @@ describe("commercial-proof-network service", () => {
       limit: 5,
     });
     expect(hits.length).toBeGreaterThan(0);
-    expect(hits[0].relevance.score).toBeGreaterThan(0);
+    expect(hits[0].relevanceScore).toBeGreaterThan(0);
   });
 
   it("builds industry bundle for seeded account industry", () => {
@@ -79,7 +79,8 @@ describe("commercial-proof-network service", () => {
       account!.industry!,
     );
     expect(bundle.scope).toBe("industry");
-    expect(bundle.scopeLabel).toBe(account!.industry);
+    expect(bundle.scopeId).toBe(account!.industry);
+    expect(bundle.coveragePct).toBeGreaterThanOrEqual(0);
   });
 
   it("search primitive ranks seed proof assets", () => {

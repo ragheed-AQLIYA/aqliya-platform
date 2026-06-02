@@ -1,7 +1,8 @@
 // @ts-nocheck
 // ─── SalesOS v0.2 cross-product commercial signal contracts ───
 
-import type { RuntimeSignalSeverity } from "@/lib/platform/signals/types";
+// TODO: platform/signals/types — inline for TS2307 resolution
+type RuntimeSignalSeverity = "critical" | "warning" | "info" | "high" | "low" | "medium";
 
 /** v0.2 sources wired in Agent 8 (AuditOS + LocalContentOS + SalesOS). */
 export type CrossProductSourceProduct =

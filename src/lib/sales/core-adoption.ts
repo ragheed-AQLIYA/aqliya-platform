@@ -4,7 +4,7 @@
 export type V1ProductKey = string;
 export type GovernanceTaskType = string;
 
-export const SALESOS_PRODUCT_KEY: V1ProductKey = "sales";
+export const SALESOS_PRODUCT_KEY = "sales" as const;
 
 export function getProductById(key: V1ProductKey): { slug: string } {
   return { slug: key };
@@ -14,7 +14,8 @@ export function getProductAICapabilities(_key: V1ProductKey): unknown[] {
   return [];
 }
 
-export function getProductEvidenceTypes(_key: V1ProductKey): unknown[] {
+export function getProductEvidenceTypes(_key: V1ProductKey): string[] {
+  if (_key === "sales") return ["qualification_note", "proposal", "poc_report", "reference_call"];
   return [];
 }
 
@@ -31,7 +32,7 @@ export function canExportOutput(
   _outputTypeId: string,
   _approvalStatus: string,
 ): boolean {
-  return true;
+  return _approvalStatus === "Approved";
 }
 
 export function getOutputMetadata(input: {
@@ -44,7 +45,10 @@ export function getOutputMetadata(input: {
   reviewStatus: string;
   approvalStatus: string;
 }): Record<string, unknown> {
-  return input as unknown as Record<string, unknown>;
+  return {
+    ...input,
+    disclaimer: "DRAFT — AI-assisted brief for review. Not a certified output. Human decision required.",
+  };
 }
 
 export function buildGovernedAIContract(input: {

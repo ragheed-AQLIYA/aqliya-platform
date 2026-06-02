@@ -14,6 +14,7 @@ describe("opportunity-scoring", () => {
       valueEstimate: 1_000_000,
       ownerId: "u1",
       createdById: "u1",
+      risks: ["unreviewed_high_value"],
     });
     expect(result.blockers.length).toBeGreaterThan(0);
     expect(result.riskIndicators).toContain("high_value_unreviewed");

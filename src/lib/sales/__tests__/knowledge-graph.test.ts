@@ -46,8 +46,8 @@ describe("SalesOS v0.2 knowledge graph", () => {
     const graph = buildOrgKnowledgeGraph(ORG);
     const account = listAccounts(ORG)[0];
     const industryNeighbors = getNeighbors(graph, `account:${account.id}`, {
-      nodeKind: "industry",
-      edgeKind: "related_to",
+      nodeType: "industry",
+      edgeType: "related_to",
     });
 
     expect(account.industry).toBeTruthy();
@@ -60,8 +60,10 @@ describe("SalesOS v0.2 knowledge graph", () => {
     const proof = listProofAssets(ORG).find((p) => p.linkedOpportunityIds?.length);
     expect(proof).toBeTruthy();
 
-    const usesEdges = getOutgoingEdges(graph, `proof:${proof!.id}`, "uses");
-    expect(usesEdges.some((e) => e.targetId.startsWith("opp:"))).toBe(true);
+    const usesEdges = graph.edges.filter(
+      (e) => e.type === "uses" && e.to === `proof:${proof!.id}`,
+    );
+    expect(usesEdges.some((e) => e.from.startsWith("opp:"))).toBe(true);
   });
 
   it("materializes win/loss edges for closed opportunities", () => {
@@ -71,7 +73,7 @@ describe("SalesOS v0.2 knowledge graph", () => {
     expect(graph.stats.edgeCounts.loses_with).toBeGreaterThan(0);
 
     const findings = listFindingsForOpportunity(graph, "sales-opp-008");
-    expect(findings.some((f) => f.meta?.findingType === "win_loss")).toBe(true);
+    expect(findings.some((f) => f.meta?.findingKind === "win_loss")).toBe(true);
   });
 
   it("returns account neighborhood subgraph with signals and findings", () => {
@@ -79,9 +81,9 @@ describe("SalesOS v0.2 knowledge graph", () => {
     const subgraph = getAccountSubgraph(graph, "sales-acct-001");
 
     expect(subgraph).toBeDefined();
-    expect(subgraph!.nodes.some((n) => n.kind === "opp")).toBe(true);
+    expect(subgraph!.nodes.some((n) => n.type === "opp")).toBe(true);
     expect(
-      subgraph!.nodes.some((n) => n.kind === "signal" || n.kind === "finding"),
+      subgraph!.nodes.some((n) => n.type === "signal" || n.type === "finding"),
     ).toBe(true);
     expect(subgraph!.edges.length).toBeGreaterThan(0);
   });
@@ -90,12 +92,12 @@ describe("SalesOS v0.2 knowledge graph", () => {
     const graph = buildOrgKnowledgeGraph(ORG);
     const cluster = getIndustrySubgraph(
       graph,
-      industryRefId("Financial Services"),
+      "Financial Services",
     );
 
     expect(cluster).toBeDefined();
-    expect(cluster!.nodes.some((n) => n.kind === "industry")).toBe(true);
-    expect(cluster!.nodes.some((n) => n.kind === "account")).toBe(true);
+    expect(cluster!.nodes.some((n) => n.type === "industry")).toBe(true);
+    expect(cluster!.nodes.some((n) => n.type === "account")).toBe(true);
     expect(cluster!.nodes.length).toBeGreaterThan(2);
   });
 
@@ -105,6 +107,6 @@ describe("SalesOS v0.2 knowledge graph", () => {
     const network = getProofUsageNetwork(graph, proof.id);
 
     expect(network).toBeDefined();
-    expect(network!.edges.some((edge) => edge.kind === "uses")).toBe(true);
+    expect(network!.edges.some((edge) => edge.type === "uses")).toBe(true);
   });
 });

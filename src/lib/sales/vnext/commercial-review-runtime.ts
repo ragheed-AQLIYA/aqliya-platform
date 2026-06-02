@@ -1,11 +1,31 @@
 // ─── SalesOS commercial review runtime — opportunity ↔ review ↔ approval ↔ outputs ↔ audit ───
 
 import type { CurrentUser } from "@/lib/auth";
-import { routeIntelligenceRequest } from "@/lib/ai/intelligence-runtime";
-import { recordAuditEventSafe } from "@/lib/platform/contracts/audit-trail-runtime";
-import { enforceCoreOnMutation } from "@/lib/platform/integration/core-adoption-enforcer";
 import { validateProductActionAccess } from "@/lib/platform/access/workspace-access";
 import { SALESOS_PRODUCT_KEY } from "../core-adoption";
+import { routeIntelligenceRequest } from "@/lib/ai/intelligence-runtime";
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/audit-trail-runtime exists
+function recordAuditEventSafe(input: {
+  category: string;
+  productSlug: string;
+  action: string;
+  actorId: string;
+  organizationId: string;
+  targetType: string;
+  targetId: string;
+  metadata?: Record<string, unknown>;
+}): void {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/audit-trail-runtime exists");
+}
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/integration/core-adoption-enforcer exists
+function enforceCoreOnMutation(input: {
+  productSlug: string;
+  operation: string;
+}): void {
+  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/integration/core-adoption-enforcer exists");
+}
 import type { SalesOpportunity } from "../types";
 import {
   createDealReviewPackage,

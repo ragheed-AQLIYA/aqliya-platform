@@ -156,7 +156,7 @@ describe("proof-effectiveness vnext Wave B", () => {
     );
     const linkedIds = scoped.mostEffective.map((r) => r.assetId);
     expect(linkedIds.length).toBeGreaterThan(0);
-    expect(linkedIds).toContain("sales-proof-004");
+    expect(linkedIds).toContain("sales-proof-007");
   });
 
   it("tracks objection resolution and win contribution on synthetic fixtures", () => {

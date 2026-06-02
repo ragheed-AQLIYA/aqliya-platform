@@ -112,7 +112,7 @@ describe("salesos-prisma-repository-tier-b2", () => {
   });
 
   it("hydrates Tier B2 maps with tenant-scoped rows mapped to types.ts", async () => {
-    tierB2Mocks.salesInstitutionalLearningInsight.findMany.mockResolvedValue([
+    const allInsights = [
       snapshotRow("ins-a", ORG_A, {
         dimension: "engagement",
         title: "Engagement lift",
@@ -133,7 +133,15 @@ describe("salesos-prisma-repository-tier-b2", () => {
         outputStatus: "recommendation",
         snapshotAt: NOW,
       }),
-    ]);
+    ];
+    tierB2Mocks.salesInstitutionalLearningInsight.findMany.mockImplementation(
+      ({ where }: any) =>
+        Promise.resolve(
+          where?.organizationId
+            ? allInsights.filter((i: any) => i.organizationId === where.organizationId)
+            : allInsights,
+        ),
+    );
 
     const repo = await loadModule();
     const maps = await repo.prismaLoadTierB2Intelligence(ORG_A);

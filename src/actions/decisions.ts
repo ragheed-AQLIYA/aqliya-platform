@@ -1413,3 +1413,147 @@ export async function getWorkflowReadiness(decisionId: string) {
     return { success: false, error: "Failed to fetch workflow readiness" };
   }
 }
+
+// --- Export Decision Report (PDF) ---
+export async function exportDecisionReport(decisionId: string) {
+  try {
+    const user = await requireUserContext("OPERATOR");
+    const decision = (await prisma.decision.findUnique({
+      where: { id: decisionId },
+      include: {
+        owner: true,
+        organization: true,
+        tenderProfile: true,
+        scenarios: {
+          include: { simulation: true },
+        },
+        recommendation: true,
+        auditLogs: {
+          include: { user: true },
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    })) as unknown as {
+      id: string;
+      title: string;
+      status: string;
+      organizationId: string;
+      owner: { name: string | null } | null;
+      organization: { name: string | null } | null;
+      createdAt: Date;
+      tenderProfile: {
+        clientName: string;
+        estimatedContractValue: number;
+        estimatedCost: number;
+        durationMonths: number;
+        marginEstimate: number;
+        riskLevel: string;
+        requiredCapacity: number;
+        internalAvailableCapacity: number;
+        strategicFitScore: number;
+      } | null;
+      recommendation: {
+        type: string;
+        confidenceScore: number | null;
+        reasoning: string | null;
+        conditions: string | null;
+        riskNotes: string | null;
+      } | null;
+      scenarios: {
+        type: string;
+        simulation: {
+          feasibilityScore: number;
+          financialScore: number;
+          capacityScore: number;
+          riskScore: number;
+          strategicFitScore: number;
+          overallDecisionScore: number;
+        } | null;
+      }[];
+      auditLogs: {
+        action: string;
+        user: { name: string | null } | null;
+        createdAt: Date;
+      }[];
+    };
+
+    if (!decision) {
+      return { success: false, error: "Decision not found" };
+    }
+
+    if (decision.organizationId !== user.organizationId) {
+      return { success: false, error: "Access denied" };
+    }
+
+    const { buildDecisionReportPDF } = await import("@/lib/decisions/export");
+
+    const pdfResult = await buildDecisionReportPDF({
+      decisionId,
+      title: decision.title,
+      status: decision.status,
+      ownerName: decision.owner?.name ?? null,
+      organizationName: decision.organization?.name ?? null,
+      createdAt: decision.createdAt,
+      recommendation: decision.recommendation
+        ? {
+            type: decision.recommendation.type,
+            confidenceScore: decision.recommendation.confidenceScore,
+            reasoning: decision.recommendation.reasoning,
+            conditions: decision.recommendation.conditions,
+            riskNotes: decision.recommendation.riskNotes,
+          }
+        : null,
+      tenderProfile: decision.tenderProfile
+        ? {
+            clientName: decision.tenderProfile.clientName,
+            estimatedContractValue: decision.tenderProfile.estimatedContractValue,
+            estimatedCost: decision.tenderProfile.estimatedCost,
+            durationMonths: decision.tenderProfile.durationMonths,
+            marginEstimate: decision.tenderProfile.marginEstimate,
+            riskLevel: String(decision.tenderProfile.riskLevel),
+            requiredCapacity: String(decision.tenderProfile.requiredCapacity),
+            internalAvailableCapacity: String(decision.tenderProfile.internalAvailableCapacity),
+            strategicFitScore: decision.tenderProfile.strategicFitScore,
+          }
+        : null,
+      scenarios: decision.scenarios.map((s) => ({
+        type: s.type,
+        feasibilityScore: s.simulation?.feasibilityScore ?? null,
+        financialScore: s.simulation?.financialScore ?? null,
+        capacityScore: s.simulation?.capacityScore ?? null,
+        riskScore: s.simulation?.riskScore ?? null,
+        strategicFitScore: s.simulation?.strategicFitScore ?? null,
+        overallDecisionScore: s.simulation?.overallDecisionScore ?? null,
+      })),
+      auditLogs: decision.auditLogs.map((log) => ({
+        action: log.action,
+        userName: log.user?.name ?? null,
+        createdAt: log.createdAt,
+      })),
+      exportedAt: new Date(),
+      exportedById: user.id,
+    });
+
+    await logAudit(
+      user.id,
+      decisionId,
+      "OUTPUT_PUBLISHED",
+      "DecisionReport",
+      undefined,
+      JSON.stringify({ format: "pdf", exportedAt: new Date().toISOString() }),
+      user.organizationId,
+    );
+
+    return {
+      success: true,
+      content: pdfResult.content.toString("base64"),
+      mimeType: pdfResult.mimeType,
+      filename: pdfResult.filename,
+    };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error exporting decision report:", error);
+    }
+    return { success: false, error: "Failed to export decision report" };
+  }
+}

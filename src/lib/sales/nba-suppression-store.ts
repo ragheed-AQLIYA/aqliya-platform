@@ -29,11 +29,14 @@ const DEFAULT_SNOOZE_DAYS = 7;
 const orgMaps = new Map<string, Map<string, NbaSuppressionRecord>>();
 const loadPromises = new Map<string, Promise<void>>();
 
-const FILE_PERSISTENCE_ENABLED =
-  process.env.SALESOS_FILE_PERSISTENCE === "1" ||
-  process.env.SALESOS_FILE_PERSISTENCE === "true" ||
-  process.env.SALESOS_PRISMA_PERSISTENCE === "1" ||
-  process.env.SALESOS_PRISMA_PERSISTENCE === "true";
+function isFilePersistenceEnabled(): boolean {
+  return (
+    process.env.SALESOS_FILE_PERSISTENCE === "1" ||
+    process.env.SALESOS_FILE_PERSISTENCE === "true" ||
+    process.env.SALESOS_PRISMA_PERSISTENCE === "1" ||
+    process.env.SALESOS_PRISMA_PERSISTENCE === "true"
+  );
+}
 
 function suppressionFilePath(organizationId: string): string {
   const safe = organizationId.replace(/[^a-zA-Z0-9_-]/g, "_");
@@ -68,6 +71,10 @@ function getOrgMap(organizationId: string): Map<string, NbaSuppressionRecord> {
 export async function loadNbaSuppressionOverlay(
   organizationId: string,
 ): Promise<NbaSuppressionSnapshot | null> {
+  const map = orgMaps.get(organizationId);
+  if (map) {
+    return { organizationId, suppressions: [...map.values()] };
+  }
   try {
     const raw = await fs.readFile(suppressionFilePath(organizationId), "utf8");
     const parsed = JSON.parse(raw) as NbaSuppressionSnapshot;
@@ -84,7 +91,7 @@ export async function loadNbaSuppressionOverlay(
 async function saveNbaSuppressionOverlay(
   organizationId: string,
 ): Promise<void> {
-  if (!FILE_PERSISTENCE_ENABLED) return;
+  if (!isFilePersistenceEnabled()) return;
   try {
     const map = getOrgMap(organizationId);
     const snapshot: NbaSuppressionSnapshot = {
@@ -105,9 +112,9 @@ async function saveNbaSuppressionOverlay(
   }
 }
 
-function scheduleSuppressionPersist(organizationId: string): void {
-  if (!FILE_PERSISTENCE_ENABLED) return;
-  void saveNbaSuppressionOverlay(organizationId);
+async function scheduleSuppressionPersist(organizationId: string): Promise<void> {
+  if (!isFilePersistenceEnabled()) return;
+  await saveNbaSuppressionOverlay(organizationId);
 }
 
 export async function ensureNbaSuppressionsLoaded(
@@ -170,7 +177,7 @@ export async function dismissNbaAction(
     actorId,
   };
   getOrgMap(organizationId).set(actionId, record);
-  scheduleSuppressionPersist(organizationId);
+  await scheduleSuppressionPersist(organizationId);
   return record;
 }
 
@@ -193,7 +200,7 @@ export async function snoozeNbaAction(
     actorId: options?.actorId,
   };
   getOrgMap(organizationId).set(actionId, record);
-  scheduleSuppressionPersist(organizationId);
+  await scheduleSuppressionPersist(organizationId);
   return record;
 }
 

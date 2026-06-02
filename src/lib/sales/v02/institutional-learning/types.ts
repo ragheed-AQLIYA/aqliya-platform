@@ -50,6 +50,8 @@ export interface InstitutionalLearningInput {
   proofAssets: SalesProofAsset[];
   objections: SalesObjection[];
   contentAssetRefs?: ContentAssetRef[];
+  wonDeals?: Array<{ opportunityId: string; name: string; reason?: string }>;
+  lostDeals?: Array<{ opportunityId: string; name: string; reason?: string }>;
 }
 
 export interface InstitutionalLearningPattern {

@@ -3,7 +3,8 @@
 export type DealRiskFlagId =
   | "activity_gap"
   | "no_response"
-  | "missing_stakeholder";
+  | "missing_stakeholder"
+  | "missing_stakeholder_hint";
 
 export type DealRiskFlagSeverity = "low" | "medium" | "high";
 
@@ -80,7 +81,8 @@ function parseAssessment(raw: unknown): DealRiskAssessment | null {
       if (
         flag.id !== "activity_gap" &&
         flag.id !== "no_response" &&
-        flag.id !== "missing_stakeholder"
+        flag.id !== "missing_stakeholder" &&
+        flag.id !== "missing_stakeholder_hint"
       ) {
         continue;
       }

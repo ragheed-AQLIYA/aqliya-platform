@@ -178,24 +178,26 @@ export function computeDealRiskStub(
   }
 
   if (
+    open &&
     !hasStakeholderHints(deal.metadata, context.accountMetadata)
   ) {
     pushFlag(
       flags,
-      "missing_stakeholder",
+      "missing_stakeholder_hint",
       "low",
-      "لا توجد تلميحات أصحاب مصلحة في بيانات الصفقة أو الحساب (stakeholderHints / stakeholders / contacts).",
+      "No stakeholder hints in deal/account metadata (stakeholderHints / stakeholders / contacts).",
     );
   }
 
   const severity = aggregateDealRiskSeverity(flags);
-  const assessment: DealRiskAssessment = {
+  const assessment: DealRiskAssessment & { notes?: string } = {
     riskFlags: flags,
     severity,
     computedAt: now.toISOString(),
     source: "rules-agent",
     advisoryOnly: true,
     agentGenerated: true,
+    notes: "Stub PR-17 — rule-based risk assessment, no LLM.",
   };
 
   return { assessment };
@@ -267,7 +269,7 @@ export async function recalculateDealRisk(
       metadata: deal.metadata,
     },
     interactions,
-    { accountMetadata: deal.account.metadata },
+    { accountMetadata: deal.account?.metadata },
   );
 
   const existingMeta = parseMetadata(deal.metadata);
@@ -309,3 +311,5 @@ export async function recalculateDealRisk(
 
   return { deal: updated, result };
 }
+
+export { readDealRiskAssessment } from "./deal-risk-shared";

@@ -17,7 +17,21 @@ import {
 } from "@/lib/sales/store";
 import type { SalesEvidenceRef } from "@/lib/sales/store";
 import type { SalesProofAsset } from "@/lib/sales/types";
-import type { RuntimeSignal } from "@/lib/platform/signals/types";
+// SALESOS_PLACEHOLDER: inline type — implement when @/lib/platform/signals/types exists
+interface RuntimeSignal {
+  id: string;
+  organizationId: string;
+  productSlug: string;
+  kind?: string;
+  action: string;
+  severity: string;
+  summaryEn?: string;
+  summaryAr?: string;
+  resourceId: string;
+  resourceType?: string;
+  timestamp: string;
+  metadata?: Record<string, unknown>;
+}
 
 const STALE_PROOF_MS = 180 * 24 * 60 * 60 * 1000;
 

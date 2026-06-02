@@ -27,6 +27,7 @@ const BASE_DEAL = {
   status: "open",
   metadata: {},
   createdAt: new Date("2026-05-01T10:00:00.000Z"),
+  updatedAt: new Date("2026-05-01T10:00:00.000Z"),
 };
 
 describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
@@ -46,7 +47,7 @@ describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
       const result = computeDealRiskStub(
         {
           status: "open",
-          createdAt: new Date("2026-05-01T10:00:00.000Z"),
+          updatedAt: new Date("2026-05-01T10:00:00.000Z"),
           metadata: {},
         },
         [],
@@ -57,7 +58,7 @@ describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
         result.assessment.riskFlags.some((f) => f.id === "activity_gap"),
       ).toBe(true);
       expect(result.assessment.severity).toBe("high");
-      expect(result.assessment.advisory).toBe(true);
+      expect(result.assessment.advisoryOnly).toBe(true);
       expect(result.assessment.agentGenerated).toBe(true);
     });
 
@@ -65,7 +66,7 @@ describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
       const result = computeDealRiskStub(
         {
           status: "open",
-          createdAt: new Date("2026-05-20T10:00:00.000Z"),
+          updatedAt: new Date("2026-05-20T10:00:00.000Z"),
           metadata: {
             nextActionAt: "2026-05-25T10:00:00.000Z",
             nextAction: "Follow up",
@@ -89,7 +90,7 @@ describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
       const result = computeDealRiskStub(
         {
           status: "open",
-          createdAt: new Date("2026-05-28T10:00:00.000Z"),
+          updatedAt: new Date("2026-05-28T10:00:00.000Z"),
           metadata: {},
         },
         [
@@ -112,7 +113,7 @@ describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
       const result = computeDealRiskStub(
         {
           status: "won",
-          createdAt: new Date("2026-05-01T10:00:00.000Z"),
+          updatedAt: new Date("2026-05-01T10:00:00.000Z"),
           metadata: {},
         },
         [],
@@ -127,7 +128,7 @@ describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
       const result = computeDealRiskStub(
         {
           status: "open",
-          createdAt: new Date("2026-05-01T10:00:00.000Z"),
+          updatedAt: new Date("2026-05-01T10:00:00.000Z"),
           metadata: {},
         },
         [],
@@ -135,7 +136,7 @@ describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
       );
 
       expect(result.assessment.agentGenerated).toBe(true);
-      expect(result.assessment.advisory).toBe(true);
+      expect(result.assessment.advisoryOnly).toBe(true);
       expect(result.assessment.notes).toContain("Stub PR-17");
     });
   });

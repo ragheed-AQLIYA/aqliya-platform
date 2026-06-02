@@ -9,12 +9,34 @@
 
 import "server-only";
 
-import {
-  collectCrossProductCommercialSignals,
-  deriveInstitutionalCommercialSignals,
-  collectCrossProductRuntimeInputs,
-} from "@/lib/platform/signals/cross-product-commercial";
 import type { CrossProductSignalAggregation } from "./types";
+
+// ─── Phantom imports (commented out — module does not exist) ───
+// import {
+//   collectCrossProductCommercialSignals,
+//   deriveInstitutionalCommercialSignals,
+//   collectCrossProductRuntimeInputs,
+// } from "@/lib/platform/signals/cross-product-commercial";
+
+// TODO: implement when platform/signals/cross-product-commercial exists
+async function collectCrossProductCommercialSignals(
+  _organizationId: string,
+  _ownerId: string,
+): Promise<CrossProductSignalAggregation> {
+  throw new Error(
+    "TODO: implement when platform/signals/cross-product-commercial exists",
+  );
+}
+async function deriveInstitutionalCommercialSignals(): Promise<void> {
+  throw new Error(
+    "TODO: implement when platform/signals/cross-product-commercial exists",
+  );
+}
+async function collectCrossProductRuntimeInputs(): Promise<void> {
+  throw new Error(
+    "TODO: implement when platform/signals/cross-product-commercial exists",
+  );
+}
 
 export {
   collectCrossProductCommercialSignals,

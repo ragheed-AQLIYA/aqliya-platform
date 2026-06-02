@@ -79,7 +79,7 @@ function deriveWinLossPatterns(
 ): InstitutionalLearningPattern[] {
   const patterns: InstitutionalLearningPattern[] = [];
 
-  for (const [reason, ev] of bucketReasons(input.wonDeals, "won")) {
+  for (const [reason, ev] of bucketReasons((input.wonDeals ?? []), "won")) {
     if (ev.length < PATTERN_MIN_COUNT) continue;
     patterns.push({
       id: `pattern-win-${reason}`,
@@ -95,7 +95,7 @@ function deriveWinLossPatterns(
     });
   }
 
-  for (const [reason, ev] of bucketReasons(input.lostDeals, "lost")) {
+  for (const [reason, ev] of bucketReasons((input.lostDeals ?? []), "lost")) {
     if (ev.length < PATTERN_MIN_COUNT) continue;
     patterns.push({
       id: `pattern-loss-${reason}`,
@@ -142,7 +142,7 @@ function deriveWinLossPatterns(
     });
   }
 
-  const wonOppIds = new Set(input.wonDeals.map((d) => d.opportunityId));
+  const wonOppIds = new Set((input.wonDeals ?? []).map((d) => d.opportunityId));
   const proofHits = new Map<string, InstitutionalLearningEvidence[]>();
   for (const asset of input.proofAssets) {
     const linked = (asset.linkedOpportunityIds ?? []).filter((id) =>
@@ -307,8 +307,8 @@ function deriveTrends(
     outputStatus: "recommendation",
   });
 
-  const won = input.wonDeals.length;
-  const lost = input.lostDeals.length;
+  const won = (input.wonDeals ?? []).length;
+  const lost = (input.lostDeals ?? []).length;
   const total = won + lost;
   const winRate = total > 0 ? won / total : 0;
   trends.push({
@@ -325,7 +325,7 @@ function deriveTrends(
     unit: "percent",
     confidence: total >= 3 ? 0.7 : 0.4,
     evidence: [
-      ...input.wonDeals.slice(0, 3).map((d) =>
+      ...(input.wonDeals ?? []).slice(0, 3).map((d) =>
         evidence({
           source: "won_deal",
           refId: d.opportunityId,
@@ -333,7 +333,7 @@ function deriveTrends(
           summaryAr: `فوز: ${d.name}`,
         }),
       ),
-      ...input.lostDeals.slice(0, 3).map((d) =>
+      ...(input.lostDeals ?? []).slice(0, 3).map((d) =>
         evidence({
           source: "lost_deal",
           refId: d.opportunityId,
@@ -508,8 +508,8 @@ function deriveRecommendations(
     });
   }
 
-  if (input.lostDeals.length > input.wonDeals.length && input.lostDeals.length >= 2) {
-    const lossEv = input.lostDeals.slice(0, 4).map((d) =>
+  if ((input.lostDeals ?? []).length > (input.wonDeals ?? []).length && (input.lostDeals ?? []).length >= 2) {
+    const lossEv = (input.lostDeals ?? []).slice(0, 4).map((d) =>
       evidence({
         source: "lost_deal",
         refId: d.opportunityId,
@@ -522,8 +522,8 @@ function deriveRecommendations(
       priority: "high",
       title: "Schedule institutional loss review",
       titleAr: "جدولة مراجعة خسارة مؤسسية",
-      reasoning: `Loss count (${input.lostDeals.length}) exceeds wins (${input.wonDeals.length}) in current snapshot.`,
-      reasoningAr: `الخسائر (${input.lostDeals.length}) تتجاوز الفوز (${input.wonDeals.length}) في هذه اللقطة.`,
+      reasoning: `Loss count (${(input.lostDeals ?? []).length}) exceeds wins (${(input.wonDeals ?? []).length}) in current snapshot.`,
+      reasoningAr: `الخسائر (${(input.lostDeals ?? []).length}) تتجاوز الفوز (${(input.wonDeals ?? []).length}) في هذه اللقطة.`,
       confidence: 0.72,
       evidence: lossEv,
       outputStatus: "recommendation",
@@ -565,8 +565,8 @@ export function buildInstitutionalLearningSnapshot(
     disclaimerAr: INSTITUTIONAL_LEARNING_DISCLAIMER_AR,
     insightLabel: INSTITUTIONAL_LEARNING_LABEL,
     overallConfidence: overallConfidence(patterns, insights),
-    closedWonCount: input.wonDeals.length,
-    closedLostCount: input.lostDeals.length,
+    closedWonCount: (input.wonDeals ?? []).length,
+    closedLostCount: (input.lostDeals ?? []).length,
     insights,
     patterns,
     trends,

@@ -26,6 +26,7 @@ const FLAG_LABELS: Record<DealRiskFlag["id"], string> = {
   activity_gap: "فجوة نشاط",
   no_response: "بدون رد",
   missing_stakeholder: "أصحاب مصلحة",
+  missing_stakeholder_hint: "تلميح أصحاب مصلحة",
 };
 
 function formatActionError(error: string, code?: string): string {

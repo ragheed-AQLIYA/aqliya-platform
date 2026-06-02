@@ -29,6 +29,9 @@ jest.mock("@/lib/prisma", () => ({
     salesAuditEvent: {
       create: jest.fn(),
     },
+    salesEvidenceLink: {
+      count: jest.fn(),
+    },
     organization: {
       findUnique: jest.fn(),
     },
@@ -82,9 +85,9 @@ describe("SalesOS services", () => {
     prisma.salesAuditEvent.create.mockResolvedValue({ id: "audit-1" });
 
     await createSalesDeal(
-      { organizationId: ORG_A, platformOrganizationId: "plat-1" },
+      ORG_A,
       { accountId: "acct-1", title: "Test Deal", stageId: "stage-1" },
-      ACTOR,
+      { ...ACTOR, platformOrganizationId: "plat-1" },
     );
 
     expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
@@ -192,6 +195,6 @@ describe("SalesOS guards", () => {
     });
 
     const result = await assertSalesDealAccess("deal-1");
-    expect(result.deal.id).toBe("deal-1");
+    expect(result.dealId).toBe("deal-1");
   });
 });

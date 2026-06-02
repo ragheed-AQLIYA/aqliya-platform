@@ -108,10 +108,10 @@ describe("SalesOS service — opportunity lifecycle", () => {
     expect(updated.approvalStatus).toBe("Approved");
   });
 
-  it("rejects evidence type invalid for SalesOS", async () => {
-    await expect(
+  it("rejects evidence type invalid for SalesOS", () => {
+    expect(() =>
       linkOpportunityEvidence(USER, "sales-opp-001", "invalid_type", "Bad"),
-    ).rejects.toThrow("Invalid evidence type");
+    ).toThrow("Invalid evidence type for SalesOS");
   });
 });
 
@@ -152,12 +152,12 @@ describe("SalesOS service — review package and export gate", () => {
     const detail = await getSalesOpportunityDetail(USER, "sales-opp-001");
     expect(detail).not.toBeNull();
     expect(detail!.reviewPackage.evidenceComplete).toBe(true);
-    expect(detail!.exportGate.allowed).toBe(false);
+    expect(detail!.exportGate).toBe(false);
   });
 
   it("blocks export until approved", () => {
-    expect(salesosCanExportBrief("Draft").allowed).toBe(false);
-    expect(salesosCanExportBrief("Approved").allowed).toBe(true);
+    expect(salesosCanExportBrief("Draft")).toBe(false);
+    expect(salesosCanExportBrief("Approved")).toBe(true);
   });
 });
 

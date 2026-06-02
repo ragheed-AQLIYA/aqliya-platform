@@ -4,8 +4,37 @@ import type {
   AuditEventCategory,
   AuditEventSeverity,
 } from "@/core/audit/types";
-import type { AuditEventCategory as PlatformAuditCategory } from "@/lib/platform/contracts/audit-event-contract";
-import { recordAuditEventSafe } from "@/lib/platform/contracts/audit-trail-runtime";
+// SALESOS_PLACEHOLDER: inline type — implement when @/lib/platform/contracts/audit-event-contract exists
+type PlatformAuditCategory =
+  | "financial"
+  | "compliance"
+  | "operational"
+  | "security"
+  | "workflow_transition"
+  | "data_change"
+  | "ai_action"
+  | "user_action"
+  | "ai_execution"
+  | "evidence"
+  | "output"
+  | "review"
+  | "approval";
+
+// SALESOS_PLACEHOLDER: TODO: implement when @/lib/platform/contracts/audit-trail-runtime exists
+async function recordAuditEventSafe(_input: {
+  category: string;
+  productSlug: string;
+  action: string;
+  actorId: string;
+  organizationId: string;
+  platformOrganizationId?: string;
+  targetType: string;
+  targetId: string;
+  metadata?: Record<string, unknown>;
+  persist?: boolean;
+}): Promise<void> {
+  // noop
+}
 import { SALESOS_PRODUCT_KEY } from "@/products/sales/product-definition";
 
 const ledger = new PrismaAuditLedger();

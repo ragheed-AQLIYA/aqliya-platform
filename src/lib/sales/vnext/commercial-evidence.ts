@@ -1,7 +1,12 @@
 // ─── SalesOS commercial evidence tracking ───
 
-import { validateProductEvidenceType } from "@/lib/platform/registry/runtime";
 import { SALESOS_PRODUCT_KEY } from "../core-adoption";
+
+// SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/registry/runtime exists
+function validateProductEvidenceType(productSlug: string, typeId: string): boolean {
+  // TODO: SalesOS vnext placeholder — implement when @/lib/platform/registry/runtime exists
+  return false;
+}
 
 export type CommercialEvidenceCategory =
   | "qualification_note"

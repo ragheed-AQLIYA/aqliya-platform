@@ -1,4 +1,17 @@
 // @ts-nocheck
+jest.mock("next-auth", () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    auth: jest.fn(),
+    signIn: jest.fn(),
+    signOut: jest.fn(),
+    handlers: { GET: jest.fn(), POST: jest.fn() },
+  })),
+}));
+jest.mock("next-auth/providers/credentials", () =>
+  jest.fn(() => ({ id: "credentials", name: "Credentials", type: "credentials" })),
+);
+
 import type { UserRole } from "@prisma/client";
 import {
   assertSalesPermission,
