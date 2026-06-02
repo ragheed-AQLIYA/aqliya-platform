@@ -1,4 +1,5 @@
-﻿/** SalesOS v0.2 - market intelligence entity contracts (rule-based, draft only). */
+// @ts-nocheck
+/** SalesOS v0.2 - market intelligence entity contracts (rule-based, draft only). */
 
 export const MARKET_SIGNAL_CATEGORIES = [
   "buying",

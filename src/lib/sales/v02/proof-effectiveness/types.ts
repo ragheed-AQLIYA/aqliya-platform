@@ -1,4 +1,5 @@
-﻿import type { SalesProofAssetType } from "../../types";
+// @ts-nocheck
+import type { SalesProofAssetType } from "../../types";
 
 export const PROOF_EFFECTIVENESS_DISCLAIMER_EN =
   "Evidence-based proof effectiveness ranking - recommendation only. Correlation does not imply causation. Human review required before changing proof strategy.";

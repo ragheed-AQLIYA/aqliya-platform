@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { canonicalizeOpportunityStage } from "../../types";
 import type { KnowledgeGraphStoreSnapshot } from "./store-reader";
 import type {

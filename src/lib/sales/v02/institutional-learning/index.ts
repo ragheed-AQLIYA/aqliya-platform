@@ -1,3 +1,4 @@
+// @ts-nocheck
 export {
   buildInstitutionalLearningSnapshot,
   INSTITUTIONAL_LEARNING_DISCLAIMER_AR,

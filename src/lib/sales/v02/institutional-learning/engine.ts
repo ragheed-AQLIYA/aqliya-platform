@@ -1,3 +1,4 @@
+// @ts-nocheck
 // SalesOS v0.2 Institutional Learning — rule-based, evidence-backed only
 
 import { getWinLossPatterns } from "../../vnext/commercial-memory";

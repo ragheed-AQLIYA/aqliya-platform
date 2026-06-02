@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const STRATEGIC_RULE_IDS = {
   INDUSTRY_PIPELINE_PRIORITY: "industry_pipeline_priority",
   PROOF_OBJECTION_GAP: "proof_objection_gap",

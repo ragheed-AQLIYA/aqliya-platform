@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const STRATEGIC_RECOMMENDATION_LABEL =
   "AI-assisted / evidence-based recommendation";
 

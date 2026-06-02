@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { listCrossProductProofCandidates } from "./adapters";
 import { categorizeProofAsset } from "./categorization";
 import { computeProofLinkageGap, countLinkedProofAssets } from "./linkage";

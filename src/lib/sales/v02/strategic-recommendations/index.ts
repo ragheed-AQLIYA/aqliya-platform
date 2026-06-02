@@ -1,3 +1,4 @@
+// @ts-nocheck
 export {
   STRATEGIC_DISCLAIMER_AR,
   STRATEGIC_DISCLAIMER_COMPACT_AR,

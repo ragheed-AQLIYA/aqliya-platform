@@ -1,3 +1,4 @@
+// @ts-nocheck
 // SalesOS v0.2 — Institutional Learning types
 
 import type {

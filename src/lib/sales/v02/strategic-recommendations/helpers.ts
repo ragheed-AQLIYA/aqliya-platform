@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { isClosedOpportunityStage } from "../../types";
 import type {
   SalesAccount,

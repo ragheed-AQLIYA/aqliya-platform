@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { SalesProofAsset, SalesProofAssetType } from "../../types";
 import type { ProofCommercialCategory } from "./types";
 

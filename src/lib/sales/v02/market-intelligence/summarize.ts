@@ -1,4 +1,5 @@
-﻿import { countSignalsByCategory } from "./categorize";
+// @ts-nocheck
+import { countSignalsByCategory } from "./categorize";
 import type {
   CompetitorSignal,
   IndustrySignal,

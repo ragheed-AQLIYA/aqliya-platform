@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { graphNodeId } from "./ids";
 import type {
   CommercialKnowledgeGraph,

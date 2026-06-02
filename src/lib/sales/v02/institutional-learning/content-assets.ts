@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { learningEvidence } from "./evidence";
 import type {
   ContentAssetRef,

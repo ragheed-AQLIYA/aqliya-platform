@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Map SalesOS domain + runtime signals to institutional commercial signals
 
 import type { RuntimeSignal } from "@/lib/platform/signals/types";

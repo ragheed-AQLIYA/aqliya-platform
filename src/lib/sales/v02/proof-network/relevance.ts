@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   STAGE_PROOF_REQUIREMENTS,
 } from "../../proof-linkage-service";

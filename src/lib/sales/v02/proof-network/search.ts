@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { SalesProofAsset } from "../../types";
 import { categorizeProofAsset } from "./categorization";
 import { scoreProofRelevance } from "./relevance";

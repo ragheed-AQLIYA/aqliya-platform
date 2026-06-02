@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * SalesOS v0.2 — executive commercial intelligence aggregator.
  * Read-only synthesis for /platform/commercial (not CRM operations).

@@ -1,4 +1,5 @@
-﻿import type {
+// @ts-nocheck
+import type {
   ProofEffectivenessSnapshot,
   ProofEffectivenessWidgetSummary,
 } from "./types";

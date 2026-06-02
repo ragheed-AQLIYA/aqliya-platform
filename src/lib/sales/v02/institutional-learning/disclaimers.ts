@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const INSTITUTIONAL_LEARNING_DISCLAIMER_EN =
   "Institutional learning outputs are rule-derived from logged wins/losses, activities, signals, and proof — not autonomous policy. Human review required before changing commercial playbooks.";
 

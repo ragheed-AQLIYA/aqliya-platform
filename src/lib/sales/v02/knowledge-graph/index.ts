@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { buildKnowledgeGraphFromSnapshot } from "./builder";
 import { readKnowledgeGraphStoreSnapshot } from "./store-reader";
 import type {

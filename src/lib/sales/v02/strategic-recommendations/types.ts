@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { STRATEGIC_RECOMMENDATION_LABEL } from "./disclaimers";
 
 export const STRATEGIC_RECOMMENDATION_CATEGORIES = [

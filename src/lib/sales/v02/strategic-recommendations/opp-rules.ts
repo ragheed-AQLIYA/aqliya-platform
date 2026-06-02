@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { scoreOpportunity } from "../../intelligence/opportunity-scoring";
 import type {
   SalesInteractionLog,

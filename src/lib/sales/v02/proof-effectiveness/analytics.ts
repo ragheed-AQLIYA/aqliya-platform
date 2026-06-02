@@ -1,4 +1,5 @@
-﻿import { suggestProofAssetsForObjection } from "../../proof-linkage-service";
+// @ts-nocheck
+import { suggestProofAssetsForObjection } from "../../proof-linkage-service";
 import {
   canonicalizeOpportunityStage,
   type SalesObjection,

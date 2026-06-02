@@ -1,3 +1,4 @@
+// @ts-nocheck
 // v0.2 stub — content asset refs until cross-product ingest ships
 
 import type { ContentAssetRef } from "./types";

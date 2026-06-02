@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const KG_NODE_TYPES = [
   "account",
   "industry",

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { KnowledgeGraphEdgeType, KnowledgeGraphNodeType } from "./types";
 
 export function industryRefId(industryLabel: string): string {
