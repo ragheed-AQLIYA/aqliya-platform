@@ -21,6 +21,7 @@ export const Product = {
   SUNBUL: "sunbul",
   WORKFLOWOS: "workflowos",
   DECISION_OS: "decision_os",
+  SALES_OS: "sales_os",
   PLATFORM: "platform",
 } as const;
 

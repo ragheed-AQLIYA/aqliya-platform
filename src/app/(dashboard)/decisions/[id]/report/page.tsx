@@ -4,15 +4,18 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Printer } from "lucide-react"
+import { Printer, FileDown } from "lucide-react"
 import { DecisionTabs } from "@/components/decisions/decision-tabs"
-import { getDecisionById } from "@/actions/decisions"
+import { getDecisionById, exportDecisionReport } from "@/actions/decisions"
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 
 export default function ReportPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = useTranslations("decisions.report")
   const [id, setId] = useState<string | null>(null)
   const [decision, setDecision] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [exporting, setExporting] = useState(false)
 
   // Extract id from params Promise
   useEffect(() => {
@@ -39,11 +42,36 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
 
   const handlePrint = () => window.print()
 
+  const handleExportPDF = async () => {
+    if (!id) return
+    setExporting(true)
+    try {
+      const result = await exportDecisionReport(id)
+      if (result.success && result.content) {
+        const byteChars = atob(result.content)
+        const byteNums = new Array(byteChars.length)
+        for (let i = 0; i < byteChars.length; i++) {
+          byteNums[i] = byteChars.charCodeAt(i)
+        }
+        const byteArray = new Uint8Array(byteNums)
+        const blob = new Blob([byteArray], { type: result.mimeType })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = result.filename
+        a.click()
+        URL.revokeObjectURL(url)
+      }
+    } finally {
+      setExporting(false)
+    }
+  }
+
   if (loading || !id) {
     return (
       <div>
         <DecisionTabs decisionId={id || ""} />
-        <div className="mt-6 text-center">Loading...</div>
+        <div className="mt-6 text-center">{t("loading")}</div>
       </div>
     )
   }
@@ -52,7 +80,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
     return (
       <div>
         <DecisionTabs decisionId={id} />
-        <div className="mt-6 text-center text-muted-foreground">Decision not found</div>
+        <div className="mt-6 text-center text-muted-foreground">{t("decisionNotFound")}</div>
       </div>
     )
   }
@@ -85,27 +113,33 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
       <DecisionTabs decisionId={id} />
       <div className="mt-6 max-w-4xl mx-auto print:p-0">
         <div className="flex items-center justify-between mb-6 print:hidden">
-          <h2 className="text-xl font-bold">Decision Report</h2>
-          <Button onClick={handlePrint} variant="outline">
-            <Printer className="w-4 h-4 mr-2" />
-            Print Report
-          </Button>
+          <h2 className="text-xl font-bold">{t("title")}</h2>
+          <div className="flex gap-2">
+            <Button onClick={handleExportPDF} variant="outline" disabled={exporting}>
+              <FileDown className="w-4 h-4 mr-2" />
+              {exporting ? t("loading") : t("exportPDF")}
+            </Button>
+            <Button onClick={handlePrint} variant="outline">
+              <Printer className="w-4 h-4 mr-2" />
+              {t("printReport")}
+            </Button>
+          </div>
         </div>
 
         <div className="space-y-8 print:space-y-6">
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Decision Header</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("decisionHeader")}</h3>
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <div><span className="text-muted-foreground">Title:</span> {decision.title}</div>
-              <div><span className="text-muted-foreground">Status:</span> <Badge>{decision.status}</Badge></div>
-              <div><span className="text-muted-foreground">Owner:</span> {decision.owner?.name || 'Unassigned'}</div>
-              <div><span className="text-muted-foreground">Date:</span> {new Date(decision.createdAt).toLocaleDateString()}</div>
-              <div><span className="text-muted-foreground">Organization:</span> {decision.organization?.name || 'N/A'}</div>
+              <div><span className="text-muted-foreground">{t("titleLabel")}</span> {decision.title}</div>
+              <div><span className="text-muted-foreground">{t("statusLabel")}</span> <Badge>{decision.status}</Badge></div>
+              <div><span className="text-muted-foreground">{t("ownerLabel")}</span> {decision.owner?.name || t("unassigned")}</div>
+              <div><span className="text-muted-foreground">{t("dateLabel")}</span> {new Date(decision.createdAt).toLocaleDateString()}</div>
+              <div><span className="text-muted-foreground">{t("organizationLabel")}</span> {decision.organization?.name || t("notAvailable")}</div>
             </div>
           </section>
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Executive Summary</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("executiveSummary")}</h3>
             <Card className="p-4">
               <p className="text-sm">
                 {recommendation ? (
@@ -114,7 +148,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                     The decision is recommended as <Badge>{recommendation.type}</Badge> {recommendation.conditions ? 'pending conditions fulfillment.' : '.'}
                   </>
                 ) : (
-                  'No recommendation generated yet. Please run simulation first.'
+                  t("noRecommendation")
                 )}
               </p>
             </Card>
@@ -122,23 +156,23 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
 
           {tender && (
             <section>
-              <h3 className="text-lg font-bold mb-4 border-b pb-2">Tender Context</h3>
+              <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("tenderContext")}</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <div><span className="text-muted-foreground">Client:</span> {tender.clientName}</div>
-                <div><span className="text-muted-foreground">Contract Value:</span> SAR {tender.estimatedContractValue?.toLocaleString()}</div>
-                <div><span className="text-muted-foreground">Est. Cost:</span> SAR {tender.estimatedCost?.toLocaleString()}</div>
-                <div><span className="text-muted-foreground">Duration:</span> {tender.durationMonths} months</div>
-                <div><span className="text-muted-foreground">Margin:</span> {tender.marginEstimate}%</div>
-                <div><span className="text-muted-foreground">Risk Level:</span> <Badge variant="outline">{tender.riskLevel}</Badge></div>
-                <div><span className="text-muted-foreground">Required Capacity:</span> {tender.requiredCapacity}</div>
-                <div><span className="text-muted-foreground">Available Capacity:</span> {tender.internalAvailableCapacity}</div>
-                <div><span className="text-muted-foreground">Strategic Fit:</span> {tender.strategicFitScore}/100</div>
+                <div><span className="text-muted-foreground">{t("clientLabel")}</span> {tender.clientName}</div>
+                <div><span className="text-muted-foreground">{t("contractValue")}</span> SAR {tender.estimatedContractValue?.toLocaleString()}</div>
+                <div><span className="text-muted-foreground">{t("estimatedCost")}</span> SAR {tender.estimatedCost?.toLocaleString()}</div>
+                <div><span className="text-muted-foreground">{t("duration")}</span> {tender.durationMonths} months</div>
+                <div><span className="text-muted-foreground">{t("margin")}</span> {tender.marginEstimate}%</div>
+                <div><span className="text-muted-foreground">{t("riskLevel")}</span> <Badge variant="outline">{tender.riskLevel}</Badge></div>
+                <div><span className="text-muted-foreground">{t("requiredCapacity")}</span> {tender.requiredCapacity}</div>
+                <div><span className="text-muted-foreground">{t("availableCapacity")}</span> {tender.internalAvailableCapacity}</div>
+                <div><span className="text-muted-foreground">{t("strategicFit")}</span> {tender.strategicFitScore}/100</div>
               </div>
             </section>
           )}
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Objectives</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("objectives")}</h3>
             {decision.objectives?.length > 0 ? (
               <ul className="list-disc pl-5 text-sm space-y-1">
                 {decision.objectives.map((obj: any) => (
@@ -146,12 +180,12 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">No objectives defined</p>
+              <p className="text-sm text-muted-foreground">{t("noObjectives")}</p>
             )}
           </section>
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Constraints</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("constraints")}</h3>
             {decision.constraints?.length > 0 ? (
               <ul className="list-disc pl-5 text-sm space-y-1">
                 {decision.constraints.map((con: any) => (
@@ -159,12 +193,12 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">No constraints defined</p>
+              <p className="text-sm text-muted-foreground">{t("noConstraints")}</p>
             )}
           </section>
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Assumptions</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("assumptions")}</h3>
             {decision.assumptions?.length > 0 ? (
               <ul className="list-disc pl-5 text-sm space-y-1">
                 {decision.assumptions.map((ass: any) => (
@@ -172,12 +206,12 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">No assumptions defined</p>
+              <p className="text-sm text-muted-foreground">{t("noAssumptions")}</p>
             )}
           </section>
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Alternatives</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("alternatives")}</h3>
             {decision.alternatives?.length > 0 ? (
               <ul className="list-disc pl-5 text-sm space-y-1">
                 {decision.alternatives.map((alt: any) => (
@@ -185,16 +219,16 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">No alternatives defined</p>
+              <p className="text-sm text-muted-foreground">{t("noAlternatives")}</p>
             )}
           </section>
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Risk Map</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("riskMap")}</h3>
             {decision.risks?.length > 0 ? (
               <div className="space-y-2">
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div><span className="text-muted-foreground">Risk Level:</span> <Badge variant="outline">{tender?.riskLevel || 'N/A'}</Badge></div>
+                  <div><span className="text-muted-foreground">{t("riskLevel")}</span> <Badge variant="outline">{tender?.riskLevel || t("notAvailable")}</Badge></div>
                 </div>
                 <div>
                   <span className="text-muted-foreground">Identified Risks:</span>
@@ -206,12 +240,12 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No risks identified</p>
+              <p className="text-sm text-muted-foreground">{t("noRisks")}</p>
             )}
           </section>
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Scenario Comparison</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("scenarioComparison")}</h3>
             {scenarios.length > 0 ? (
               <Table>
                 <TableHeader>
@@ -240,12 +274,12 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 </TableBody>
               </Table>
             ) : (
-              <p className="text-sm text-muted-foreground">No simulation results yet. Please run simulation first.</p>
+              <p className="text-sm text-muted-foreground">{t("noSimulation")}</p>
             )}
           </section>
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Score Breakdown</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("scoreBreakdown")}</h3>
             {scenarios.length > 0 ? (
               <div className="grid grid-cols-3 gap-4">
                 {(() => {
@@ -273,33 +307,33 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
 
           {recommendation && (
             <section>
-              <h3 className="text-lg font-bold mb-4 border-b pb-2">Final Recommendation</h3>
+              <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("finalRecommendation")}</h3>
               <Card className="p-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">Recommendation:</span>
+                  <span className="text-muted-foreground">{t("recommendationLabel")}</span>
                   <Badge>{recommendation.type}</Badge>
                 </div>
                 {recommendation.confidenceScore && (
                   <div>
-                    <span className="text-sm text-muted-foreground">Confidence Score:</span>
+                    <span className="text-sm text-muted-foreground">{t("confidenceScore")}</span>
                     <span className="ml-2 font-medium">{recommendation.confidenceScore}%</span>
                   </div>
                 )}
                 {recommendation.reasoning && (
                   <div>
-                    <span className="text-sm text-muted-foreground">Reasoning:</span>
+                    <span className="text-sm text-muted-foreground">{t("reasoning")}</span>
                     <p className="text-sm mt-1">{recommendation.reasoning}</p>
                   </div>
                 )}
                 {recommendation.conditions && (
                   <div>
-                    <span className="text-sm text-muted-foreground">Conditions:</span>
+                    <span className="text-sm text-muted-foreground">{t("conditions")}</span>
                     <p className="text-sm mt-1">{recommendation.conditions}</p>
                   </div>
                 )}
                 {recommendation.riskNotes && (
                   <div>
-                    <span className="text-sm text-muted-foreground">Risk Notes:</span>
+                    <span className="text-sm text-muted-foreground">{t("riskNotes")}</span>
                     <p className="text-sm mt-1">{recommendation.riskNotes}</p>
                   </div>
                 )}
@@ -308,14 +342,14 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
           )}
 
           <section>
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Governance Trail</h3>
+            <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("governanceTrail")}</h3>
             {auditLogs.length > 0 ? (
                 <div className="space-y-2">
                   {auditLogs.map((log: any) => (
                     <div key={log.id} className="flex items-center gap-4 text-sm border-l-2 pl-4 pb-2">
                       <span className="text-muted-foreground w-36">{new Date(log.createdAt).toLocaleString()}</span>
                       <Badge variant="outline">{log.action}</Badge>
-                      <span className="font-medium w-40">{log.user?.name || 'Unknown'}</span>
+                      <span className="font-medium w-40">{log.user?.name || t("unassigned")}</span>
                       <span className="text-muted-foreground">
                         {log.entity && log.entity !== 'undefined' ? `${log.entity} ` : ''}
                         {log.after && Object.keys(parseJson(log.after) || {}).join(', ')}
@@ -324,7 +358,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                   ))}
                 </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No audit logs yet.</p>
+              <p className="text-sm text-muted-foreground">{t("noAuditLogs")}</p>
             )}
           </section>
         </div>
