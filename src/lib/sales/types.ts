@@ -321,6 +321,7 @@ export interface SalesObjection {
   updatedAt: string;
   status: SalesEntityStatus;
   source: SalesRecordSource;
+  labelAr?: string;
 }
 
 export interface SalesCompetitorMention {
@@ -353,6 +354,7 @@ export type SalesProofAssetType = (typeof SALES_PROOF_ASSET_TYPES)[number];
 export interface SalesProofAsset {
   id: string;
   organizationId: string;
+  accountId?: string;
   assetType: SalesProofAssetType;
   title: string;
   description?: string;
@@ -360,6 +362,7 @@ export interface SalesProofAsset {
   linkedOpportunityIds?: string[];
   opportunityId?: string;
   externalRef?: string;
+  evidenceRef?: string;
   createdById: string;
   createdAt: string;
   updatedAt: string;
@@ -384,6 +387,7 @@ export interface SalesICPInsight {
   dimension: SalesICPDimension;
   hypothesis: string;
   evidenceSummary: string;
+  evidenceRef?: string;
   recommendation?: string;
   createdById: string;
   createdAt: string;

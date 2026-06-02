@@ -43,6 +43,10 @@ export interface SalesOrgSnapshot {
   icpInsights?: SalesICPInsight[];
   nextActions?: SalesNextAction[];
   winLossInsights?: SalesWinLossInsight[];
+  /** vnext intelligence snapshots — forward-compatible */
+  commercialRecommendations?: unknown[];
+  institutionalLearningInsights?: unknown[];
+  marketSignals?: unknown[];
 }
 
 const DATA_DIR = path.join(process.cwd(), ".data", "sales");
