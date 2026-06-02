@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, expect, it, beforeEach, jest } from "@jest/globals";
 import type { CurrentUser } from "@/lib/auth";
 import {

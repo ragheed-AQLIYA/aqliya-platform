@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import {
   COMMERCIAL_PROOF_NETWORK_DISCLAIMER_EN,

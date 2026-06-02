@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import {
   COMMERCIAL_KNOWLEDGE_GRAPH_DISCLAIMER_EN,

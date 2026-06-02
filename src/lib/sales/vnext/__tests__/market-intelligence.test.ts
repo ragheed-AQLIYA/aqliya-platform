@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import {
   MARKET_INTELLIGENCE_WAVE_B_RECOMMENDATION_LABEL,

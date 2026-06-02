@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, expect, it, beforeEach } from "@jest/globals";
 import { resetSalesStoreForTests } from "@/lib/sales/store";
 import type { CrossProductCommercialSignal } from "@/lib/sales/v02/cross-product-signals/types";

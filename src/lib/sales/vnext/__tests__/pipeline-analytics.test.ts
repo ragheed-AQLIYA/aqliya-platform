@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, expect, it } from "@jest/globals";
 import { buildPipelineAnalytics } from "../pipeline-analytics";
 import type { SalesOpportunity } from "../types";

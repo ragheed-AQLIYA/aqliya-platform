@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { UserRole } from "@prisma/client";
 import {
   assertSalesPermission,

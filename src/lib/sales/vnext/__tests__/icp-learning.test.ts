@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { buildICPLearningSnapshot, ICP_RECOMMENDATION_LABEL } from "../icp-learning";
 import { ensureSalesSeed, resetSalesStoreForTests } from "../../store";

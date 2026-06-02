@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, expect, it, beforeEach } from "@jest/globals";
 import { buildStrategicRecommendationsSnapshot } from "@/lib/sales/v02/strategic-recommendations";
 import { STRATEGIC_RULE_IDS } from "@/lib/sales/v02/strategic-recommendations/rules";

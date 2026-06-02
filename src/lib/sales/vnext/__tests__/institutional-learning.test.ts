@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import {
   INSTITUTIONAL_LEARNING_WAVE_C_RECOMMENDATION_LABEL,

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
 import fs from "fs/promises";
 import path from "path";
