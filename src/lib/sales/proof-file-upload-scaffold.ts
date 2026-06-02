@@ -1,9 +1,14 @@
 import "server-only";
 
 import { getProofAsset, updateProofAsset } from "@/lib/sales/store";
+import type { SalesProofAsset } from "@/lib/sales/types";
 // Stub — replace when src/products/ directory is created
 const SALESOS_PRODUCT_KEY = "sales" as const;
-function syncSalesProofAssetToCore(_assetId: string): void {
+async function syncSalesProofAssetToCore(_params: {
+  tenantId: string;
+  proofAsset: SalesProofAsset;
+  createdById: string;
+}): Promise<void> {
   // no-op until product adapter module exists
 }
 

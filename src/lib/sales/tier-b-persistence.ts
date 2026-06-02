@@ -159,8 +159,8 @@ export async function loadTierB1IntelligenceOverlay(
   if (!snapshot) return null;
 
   const maps = tierB1MapsFromPayload(organizationId, {
-    marketSignals: snapshot.marketSignals,
-    commercialRecommendations: snapshot.commercialRecommendations,
+    marketSignals: snapshot.marketSignals as SalesMarketSignal[] | undefined,
+    commercialRecommendations: snapshot.commercialRecommendations as SalesCommercialRecommendation[] | undefined,
   });
 
   return tierB1HasRows(maps) ? maps : null;
@@ -282,7 +282,7 @@ export async function loadTierB2IntelligenceOverlay(
   if (!snapshot) return null;
 
   const maps = tierB2MapsFromPayload(organizationId, {
-    institutionalLearningInsights: snapshot.institutionalLearningInsights,
+    institutionalLearningInsights: snapshot.institutionalLearningInsights as SalesInstitutionalLearningInsight[] | undefined,
   });
 
   return tierB2HasRows(maps) ? maps : null;

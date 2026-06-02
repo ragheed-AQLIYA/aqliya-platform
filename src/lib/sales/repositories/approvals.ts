@@ -24,8 +24,9 @@ export async function createSalesApproval(
   }
 
   return prisma.salesApproval.create({
-    data: withPlatformOrg(scope, {
+    data: {
       organizationId: scope.organizationId,
+      platformOrganizationId: scope.platformOrganizationId ?? null,
       reviewId: input.reviewId,
       kind: input.kind,
       status: input.status,
@@ -35,7 +36,7 @@ export async function createSalesApproval(
       proposalId: input.proposalId ?? review.proposalId ?? null,
       dealId: input.dealId ?? review.dealId ?? null,
       metadata: (input.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
-    }),
+    },
   });
 }
 

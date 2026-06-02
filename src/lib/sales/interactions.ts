@@ -204,7 +204,7 @@ export async function createSalesInteraction(
       type: validated.type,
       subject: validated.subject ?? null,
       summary: validated.summary ?? null,
-      occurredAt: (validated.occurredAt ?? undefined) as Date | undefined,
+      occurredAt: validated.occurredAt ?? new Date(),
       metadata: (validated.metadata ?? undefined) as
         | Prisma.InputJsonValue
         | undefined,

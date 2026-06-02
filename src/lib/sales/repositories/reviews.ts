@@ -25,8 +25,9 @@ export async function createSalesReview(
   }
 
   return prisma.salesReview.create({
-    data: withPlatformOrg(scope, {
+    data: {
       organizationId: scope.organizationId,
+      platformOrganizationId: scope.platformOrganizationId ?? null,
       reviewType: input.reviewType,
       targetType: input.targetType,
       targetId: input.targetId,
@@ -38,7 +39,7 @@ export async function createSalesReview(
       reviewerName: actor.name ?? null,
       status: input.status ?? "pending",
       metadata: (input.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
-    }),
+    },
   });
 }
 

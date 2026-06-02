@@ -26,6 +26,12 @@ export default async function SalesIntelligencePage() {
   const user = await getCurrentUser();
   initSalesWorkspace(user);
   const memory = await getSalesIntelligenceMemory(user);
+  const competitorsView = memory.competitors.map((c) => ({
+    id: c.id,
+    name: c.competitorName,
+    accountId: c.accountId,
+    contextAr: c.context,
+  }));
 
   return (
     <IntelligenceHub
@@ -34,7 +40,7 @@ export default async function SalesIntelligencePage() {
       memoryPanel={
         <IntelligenceMemoryView
           objections={memory.objections}
-          competitors={memory.competitors}
+          competitors={competitorsView}
           signals={memory.signals}
           auditRecent={memory.auditRecent}
           interactionCount={memory.interactionCount}

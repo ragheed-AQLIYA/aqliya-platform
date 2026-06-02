@@ -18,8 +18,9 @@ export async function createSalesProposal(
   await assertDealInOrg(input.dealId, scope);
 
   return prisma.salesProposal.create({
-    data: withPlatformOrg(scope, {
+    data: {
       organizationId: scope.organizationId,
+      platformOrganizationId: scope.platformOrganizationId ?? null,
       dealId: input.dealId,
       title: input.title ?? null,
       draft: input.draft ?? "",
@@ -28,7 +29,7 @@ export async function createSalesProposal(
       createdById: actor.id,
       updatedById: actor.id,
       status: "draft",
-    }),
+    },
   });
 }
 

@@ -621,7 +621,7 @@ export async function updateDealNextAction(
     action: SalesAuditActions.DEAL_NEXT_ACTION_SET,
     targetType: "SalesDeal",
     targetId: dealId,
-    metadata: readDealNextAction(nextMeta) as Record<string, unknown>,
+    metadata: readDealNextAction(nextMeta) as unknown as Record<string, unknown>,
   });
   return readDealNextAction(nextMeta);
 }

@@ -26,7 +26,6 @@ export {
   listEvidenceLinksForAccount,
   linkEvidenceToDeal,
   unlinkEvidenceFromDeal,
-  listEvidenceLinksForOrganization,
 } from "../evidence-links";
 
 export { listOrgSalesAuditEvents } from "../audit-trail";

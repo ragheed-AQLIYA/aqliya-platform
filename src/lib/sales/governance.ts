@@ -195,7 +195,7 @@ export async function recordReviewDecision(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: params.actor.id,
-    actorName: params.actor.name,
+    actorName: params.actor.name ?? undefined,
     action: SalesAuditActions.GOVERNANCE_REVIEW_DECISION,
     targetType: "SalesDeal",
     targetId: deal.id,

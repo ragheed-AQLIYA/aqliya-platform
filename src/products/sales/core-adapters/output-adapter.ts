@@ -95,7 +95,7 @@ function resolveOutputService(): InMemoryOutputService {
 }
 
 function getSalesOutputDefinition(outputTypeId: SalesOutputTypeId) {
-  return getOutputsByProduct("sales").find((output) => output.id === outputTypeId)
+  return getOutputsByProduct("sales").find((output: { id: string }) => output.id === outputTypeId)
 }
 
 function isApprovedStatus(status?: string | null): boolean {
@@ -359,7 +359,7 @@ export async function syncApprovedSalesOutputsToCore(params: {
   }
 
   await Promise.all(
-    outputTypes.map(async (outputType) => {
+    outputTypes.map(async (outputType: { id: string }) => {
       const outputTypeId = outputType.id as SalesOutputTypeId
       if (!OUTPUT_SPECS[outputTypeId]) return
 
