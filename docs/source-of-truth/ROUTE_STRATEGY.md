@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-05-28 — Phase 2 code rename: WorkflowOS canonical, Sunbul legacy alias
+> **Last updated:** 2026-06-02 — Phase 10: SalesOS test suite fix (0 failures), DecisionOS L4 report i18n + PDF, AI Governance real engines
 
 ---
 
@@ -211,7 +211,7 @@
 | `/sales/review`                        | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Review queue                                     |
 | `/sales/signals`                       | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Signal feed                                      |
 
-**SalesOS maturity notes:** Builds and compiles (2026-06-02) after Phantom Imports Gate. Real Prisma schema, server actions, RBAC, audit trail, evidence links. Not yet L4 production-usable — pending seed data verification and browser smoke test.
+**SalesOS maturity notes:** Builds and compiles (2026-06-02) after Phantom Imports Gate. Real Prisma schema, server actions, RBAC, audit trail, evidence links. Test suite: 138 suites, 1069 tests, 0 failed. Not yet L4 production-usable — pending seed data verification and browser smoke test.
 
 ### Organizations — Prototype Surface
 
