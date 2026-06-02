@@ -229,7 +229,7 @@ export async function recalculateAccountIcpFit(
       metadata: {
         ...existingMeta,
         icpScore: result.score,
-      } as Prisma.InputJsonValue,
+      } as unknown as Prisma.InputJsonValue,
     },
     select: {
       id: true,
@@ -247,7 +247,7 @@ export async function recalculateAccountIcpFit(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.AGENT_ICP_SCORED,
     targetType: "SalesAccount",
     targetId: accountId,
@@ -301,7 +301,7 @@ export async function setAccountIcpReviewed(
       metadata: {
         ...existingMeta,
         icpScore: updatedScore,
-      } as Prisma.InputJsonValue,
+      } as unknown as Prisma.InputJsonValue,
     },
     select: {
       id: true,

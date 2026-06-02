@@ -567,7 +567,7 @@ export async function runObjectionAnalysisStub(
     organizationId: context.scope.organizationId,
     platformOrganizationId: context.scope.platformOrganizationId,
     actorId: context.actor.id,
-    actorName: context.actor.name,
+    actorName: context.actor.name ?? undefined,
     action: SalesAuditActions.OBJECTION_ANALYZED,
     targetType: "SalesDeal",
     targetId: deal.id,

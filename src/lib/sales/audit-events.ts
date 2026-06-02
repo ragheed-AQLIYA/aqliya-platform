@@ -36,6 +36,7 @@ export const SalesAuditActions = {
   RESEARCH_GENERATED: "sales.research.generated",
   RESEARCH_REVIEWED: "sales.research.reviewed",
   REPORTS_VIEWED: "sales.reports.viewed",
+  OBJECTION_ANALYZED: "sales.objection.analyzed",
 } as const;
 
 export interface SalesAuditEventInput {

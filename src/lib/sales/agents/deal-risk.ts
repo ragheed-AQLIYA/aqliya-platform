@@ -277,7 +277,7 @@ export async function recalculateDealRisk(
       metadata: {
         ...existingMeta,
         riskAssessment: result.assessment,
-      } as Prisma.InputJsonValue,
+      } as unknown as Prisma.InputJsonValue,
     },
     select: {
       id: true,
@@ -294,7 +294,7 @@ export async function recalculateDealRisk(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.AGENT_DEAL_RISK_COMPUTED,
     targetType: "SalesDeal",
     targetId: dealId,
