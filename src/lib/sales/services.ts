@@ -42,7 +42,7 @@ const dealListSelect = {
   metadata: true,
   createdAt: true,
   updatedAt: true,
-  account: { select: { id: true, name: true } },
+  account: { select: { id: true, name: true, metadata: true } },
   stage: { select: { id: true, name: true, slug: true, sortOrder: true } },
 } as const;
 
@@ -93,7 +93,7 @@ export async function getSalesAccount(
       createdAt: true,
       updatedAt: true,
       deals: {
-        select: { id: true, title: true, status: true, amount: true },
+        select: { id: true, title: true, status: true, amount: true, currency: true, updatedAt: true, stage: { select: { name: true } } },
         orderBy: { updatedAt: "desc" },
         take: 20,
       },
@@ -169,7 +169,7 @@ export async function createSalesDeal(
       currency: validated.currency ?? "SAR",
       probability: validated.probability ?? null,
       expectedCloseDate: validated.expectedCloseDate ?? null,
-      metadata: validated.metadata ?? undefined,
+      metadata: (validated.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
       createdById: actor.id,
       updatedById: actor.id,
     },
@@ -180,7 +180,7 @@ export async function createSalesDeal(
     organizationId,
     platformOrganizationId: actor.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.DEAL_CREATED,
     targetType: "SalesDeal",
     targetId: deal.id,
@@ -259,7 +259,7 @@ export async function updateSalesDeal(
         organizationId,
         platformOrganizationId,
         actorId: actor.id,
-        actorName: actor.name,
+        actorName: actor.name ?? undefined,
         action: SalesAuditActions.GOVERNANCE_OVERRIDE,
         targetType: "SalesDeal",
         targetId: dealId,
@@ -288,7 +288,7 @@ export async function updateSalesDeal(
         ? { expectedCloseDate: validated.expectedCloseDate }
         : {}),
       ...(validated.status !== undefined ? { status: validated.status } : {}),
-      ...(validated.metadata !== undefined ? { metadata: validated.metadata } : {}),
+      ...(validated.metadata !== undefined ? { metadata: validated.metadata as Prisma.InputJsonValue } : {}),
       updatedById: actor.id,
     },
     select: dealListSelect,
@@ -298,7 +298,7 @@ export async function updateSalesDeal(
     organizationId,
     platformOrganizationId: actor.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.DEAL_UPDATED,
     targetType: "SalesDeal",
     targetId: deal.id,
@@ -306,11 +306,11 @@ export async function updateSalesDeal(
   });
 
   if (stageChanged) {
-    await recordSalesAuditEvent({
-      organizationId,
-      platformOrganizationId: actor.platformOrganizationId,
-      actorId: actor.id,
-      actorName: actor.name,
+  await recordSalesAuditEvent({
+    organizationId,
+    platformOrganizationId: actor.platformOrganizationId,
+    actorId: actor.id,
+    actorName: actor.name ?? undefined,
       action: SalesAuditActions.DEAL_STAGE_CHANGED,
       targetType: "SalesDeal",
       targetId: deal.id,
@@ -491,7 +491,7 @@ export async function createSalesAccount(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.ACCOUNT_CREATED,
     targetType: "SalesAccount",
     targetId: account.id,
@@ -543,7 +543,7 @@ export async function updateSalesAccount(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.ACCOUNT_UPDATED,
     targetType: "SalesAccount",
     targetId: account.id,
@@ -617,11 +617,11 @@ export async function updateDealNextAction(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.DEAL_NEXT_ACTION_SET,
     targetType: "SalesDeal",
     targetId: dealId,
-    metadata: readDealNextAction(nextMeta),
+    metadata: readDealNextAction(nextMeta) as Record<string, unknown>,
   });
   return readDealNextAction(nextMeta);
 }

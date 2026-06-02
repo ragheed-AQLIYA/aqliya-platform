@@ -32,7 +32,9 @@ export function SalesSubNav() {
       dir="rtl"
       aria-label="SalesOS navigation"
     >
-      {NAV_ITEMS.map(({ href, labelAr, icon: Icon, exact }) => {
+      {NAV_ITEMS.map((item) => {
+        const { href, labelAr, icon: Icon } = item;
+        const exact = "exact" in item ? item.exact : false;
         const active = exact
           ? pathname === href
           : pathname === href || pathname.startsWith(`${href}/`);

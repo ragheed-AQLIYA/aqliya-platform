@@ -60,8 +60,8 @@ export function OpportunityIntelligencePanel({
           {scoring ? (
             <div className="mt-2 space-y-1 border-t pt-2">
               <p>
-                درجة الفرصة: <strong>{scoring.score}</strong> (ثقة{" "}
-                {Math.round(scoring.confidence * 100)}%)
+                درجة الفرصة:                 <strong>{scoring.score}</strong> (عوامل{" "}
+                {scoring.factors.length})
               </p>
               {scoring.blockers.map((b) => (
                 <Badge key={b} variant="outline" className="me-1 text-[10px]">

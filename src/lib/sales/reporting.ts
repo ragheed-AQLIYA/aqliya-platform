@@ -124,8 +124,8 @@ async function resolvePendingOutreachReviewCount(
   if (moduleAvailable) {
     try {
       const outreach = await import("./outreach");
-      if (typeof outreach.countPendingOutreachReviewDrafts === "function") {
-        const count = await outreach.countPendingOutreachReviewDrafts(organizationId);
+      if (typeof (outreach as Record<string, unknown>).countPendingOutreachReviewDrafts === "function") {
+        const count = await (outreach as any).countPendingOutreachReviewDrafts(organizationId);
         return { count, moduleAvailable: true };
       }
       if (typeof outreach.listPendingReviewOutreachDrafts === "function") {

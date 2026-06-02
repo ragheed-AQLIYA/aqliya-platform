@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createSalesDealAction } from "@/actions/sales-actions";
+import type { CreateSalesDealInput } from "@/lib/sales/validation";
 
 export interface SalesAccountOption {
   id: string;
@@ -33,7 +34,15 @@ export function CreateDealForm({
     setLoading(true);
     setError(null);
     try {
-      const res = await createSalesDealAction(new FormData(e.currentTarget));
+      const fd = new FormData(e.currentTarget);
+      const input: CreateSalesDealInput = {
+        title: String(fd.get("title") ?? ""),
+        accountId: String(fd.get("accountId") ?? ""),
+        stageId: String(fd.get("stageId") || "").trim() || null,
+        amount: fd.get("amount") ? Number(fd.get("amount")) : null,
+        currency: String(fd.get("currency") ?? "SAR"),
+      };
+      const res = await createSalesDealAction(input);
       if (res.ok) {
         router.push(`/sales/deals/${res.data.id}`);
         router.refresh();

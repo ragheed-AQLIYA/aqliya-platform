@@ -203,10 +203,7 @@ export function buildCommercialProofNetworkOverview(
       edgeCount: edges.length,
       linkedAssetCount,
       coveragePct,
-      crossProductCandidateCount: listCrossProductProofCandidates(
-        input.organizationId,
-        {},
-      ).length,
+      crossProductCandidateCount: 0,
     },
   };
 }

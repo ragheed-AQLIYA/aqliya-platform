@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createSalesDealAction } from "@/actions/sales-actions";
+import type { CreateSalesDealInput } from "@/lib/sales/validation";
 import { Plus, XCircle, Briefcase } from "lucide-react";
 
 type AccountOption = { id: string; name: string };
@@ -40,7 +41,14 @@ export function DealCreateForm({
     setError(null);
 
     try {
-      const res = await createSalesDealAction(formData);
+      const input: CreateSalesDealInput = {
+        title: String(formData.get("title") ?? ""),
+        accountId: String(formData.get("accountId") ?? ""),
+        stageId: String(formData.get("stageId") || "").trim() || null,
+        amount: formData.get("amount") ? Number(formData.get("amount")) : null,
+        currency: String(formData.get("currency") ?? "SAR"),
+      };
+      const res = await createSalesDealAction(input);
       if (res.ok) {
         if (redirectOnSuccess) {
           router.push(`/sales/deals/${res.data.id}`);

@@ -204,7 +204,7 @@ export async function createSalesInteraction(
       type: validated.type,
       subject: validated.subject ?? null,
       summary: validated.summary ?? null,
-      occurredAt: validated.occurredAt,
+      occurredAt: (validated.occurredAt ?? undefined) as Date | undefined,
       metadata: (validated.metadata ?? undefined) as
         | Prisma.InputJsonValue
         | undefined,
@@ -217,7 +217,7 @@ export async function createSalesInteraction(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.INTERACTION_CREATED,
     targetType: validated.dealId ? "SalesDeal" : "SalesAccount",
     targetId: validated.dealId ?? validated.accountId,
@@ -261,7 +261,7 @@ export async function updateSalesInteraction(
         ? { summary: validated.summary }
         : {}),
       ...(validated.occurredAt !== undefined
-        ? { occurredAt: validated.occurredAt }
+        ? { occurredAt: validated.occurredAt as Date }
         : {}),
       ...(validated.metadata !== undefined
         ? { metadata: metadata as Prisma.InputJsonValue }
@@ -274,7 +274,7 @@ export async function updateSalesInteraction(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.INTERACTION_UPDATED,
     targetType: existing.dealId ? "SalesDeal" : "SalesAccount",
     targetId: existing.dealId ?? existing.accountId,
@@ -317,7 +317,7 @@ export async function deleteSalesInteraction(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.INTERACTION_DELETED,
     targetType: existing.dealId ? "SalesDeal" : "SalesAccount",
     targetId: existing.dealId ?? existing.accountId,

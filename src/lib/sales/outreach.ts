@@ -233,7 +233,7 @@ export async function createOutreachDraft(
     id: randomUUID(),
     subject: validated.subject,
     body: validated.body,
-    channel: validated.channel ?? null,
+    channel: (validated.channel ?? null) as OutreachChannel | null,
     status,
     createdById: actor.id,
     createdByName: actor.name ?? null,
@@ -258,7 +258,7 @@ export async function createOutreachDraft(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.OUTREACH_DRAFT_CREATED,
     targetType: "SalesDeal",
     targetId: dealId,
@@ -341,7 +341,7 @@ export async function reviewOutreachDraft(
     reviewedById: actor.id,
     reviewedByName: actor.name ?? null,
     reviewedAt: now,
-    reviewNote: validated.reviewNote,
+    reviewNote: validated.reviewNote ?? null,
   };
   drafts[index] = updated;
 
@@ -357,7 +357,7 @@ export async function reviewOutreachDraft(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.OUTREACH_REVIEWED,
     targetType: "SalesDeal",
     targetId: dealId,

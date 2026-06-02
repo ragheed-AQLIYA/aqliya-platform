@@ -85,7 +85,12 @@ export function mergeICPInsightFromLearning(
     createdById,
     status: "active",
     source: "ai_draft",
-    confidence: draftAIConfidence(learning.confidence, learning.evidenceSummary),
+    confidence: {
+      score: draftAIConfidence(learning.confidence),
+      rationale: learning.evidenceSummary.slice(0, 500),
+      generatedAt: new Date().toISOString(),
+      outputStatus: "recommendation",
+    },
   };
 }
 

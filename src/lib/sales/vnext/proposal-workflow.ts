@@ -34,7 +34,7 @@ export function initProposalWorkflow(opportunityId: string, organizationId: stri
 
   return {
     reviewPackage,
-    templateGates: template?.gates.map((g) => g.id) ?? [],
+    templateGates: template?.gates.map((g: { id: string }) => g.id) ?? [],
   };
 }
 

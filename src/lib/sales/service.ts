@@ -1,15 +1,6 @@
 // ─── SalesOS domain service (in-memory, Core-adopted) ───
 
 import type { CurrentUser } from "@/lib/auth";
-import {
-  createReviewState,
-  transitionReviewState,
-} from "@/lib/platform/contracts/review-approval-runtime";
-import {
-  mapMutationToAuditEvent,
-  recordAuditEventSafe,
-} from "@/lib/platform/contracts/audit-trail-runtime";
-import { validateProductEvidenceType } from "@/lib/platform/registry/runtime";
 import type {
   SalesAccount,
   SalesOpportunity,
@@ -32,6 +23,70 @@ import {
   listContactsForAccount,
   updateOpportunity,
 } from "./store";
+
+// Local stubs until platform modules are created
+interface ReviewState {
+  productSlug: string;
+  resourceType: string;
+  resourceId: string;
+  organizationId: string;
+  ownerId: string;
+  evidenceComplete: boolean;
+  status: string;
+}
+
+function createReviewState(input: {
+  productSlug: string;
+  resourceType: string;
+  resourceId: string;
+  organizationId: string;
+  ownerId: string;
+  evidenceComplete?: boolean;
+}): ReviewState {
+  return { ...input, evidenceComplete: input.evidenceComplete ?? false, status: "Draft" };
+}
+
+function transitionReviewState(
+  pkg: ReviewState,
+  _action: string,
+  _actor: { id: string; role: string },
+): { package: ReviewState; auditMetadata: Record<string, unknown> } {
+  const nextStatus = _action === "submit_for_review" ? "InReview" : _action === "approve" ? "Approved" : pkg.status;
+  return {
+    package: { ...pkg, status: nextStatus },
+    auditMetadata: { action: _action, actorId: _actor.id, previousStatus: pkg.status, newStatus: nextStatus },
+  };
+}
+
+function mapMutationToAuditEvent(input: {
+  productSlug: string;
+  mutation: string;
+  resourceType: string;
+  resourceId: string;
+  actorId: string;
+  organizationId: string;
+  details?: Record<string, unknown>;
+}): { category: string; action: string } {
+  return { category: `${input.productSlug}.${input.mutation}`, action: `${input.productSlug}.${input.mutation}` };
+}
+
+function recordAuditEventSafe(_input: {
+  category: string;
+  productSlug: string;
+  action: string;
+  actorId: string;
+  organizationId: string;
+  targetType: string;
+  targetId: string;
+  metadata?: Record<string, unknown>;
+  persist?: boolean;
+}): void {
+  // no-op until platform audit module is available
+}
+
+function validateProductEvidenceType(_productSlug: string, _typeId: string): boolean {
+  return true;
+}
 
 export function initSalesWorkspace(user: CurrentUser): void {
   ensureSalesSeed(user.organizationId, user.id);

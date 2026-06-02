@@ -93,7 +93,7 @@ function parseCommercialClaimReview(raw: unknown): CommercialClaimReview | null 
   if (typeof row.flaggedAt !== "string" || !row.flaggedAt.trim()) return null;
 
   const flaggedPhrases = Array.isArray(row.flaggedPhrases)
-    ? row.flaggedPhrases.filter((p): p is string => typeof p === "string" && p.trim())
+    ? row.flaggedPhrases.filter((p): p is string => typeof p === "string" && p.trim().length > 0)
     : [];
 
   return {
@@ -215,7 +215,7 @@ export async function flagCommercialClaimIfNeeded(input: {
       organizationId: input.scope.organizationId,
       platformOrganizationId: input.scope.platformOrganizationId,
       actorId: input.actor.id,
-      actorName: input.actor.name,
+      actorName: input.actor.name ?? undefined,
       action: SalesAuditActions.CLAIM_FLAGGED,
       targetType: input.targetType,
       targetId: input.targetId,
@@ -300,7 +300,7 @@ export async function markCommercialClaimReviewed(input: {
     organizationId: input.scope.organizationId,
     platformOrganizationId: input.scope.platformOrganizationId,
     actorId: input.actor.id,
-    actorName: input.actor.name,
+    actorName: input.actor.name ?? undefined,
     action: SalesAuditActions.CLAIM_REVIEWED,
     targetType: input.targetType,
     targetId: input.targetId,

@@ -33,7 +33,7 @@ export function salesLearnICPForAccount(
   });
   if (!persist) return { learning, insight: null };
   const insight = createICPInsight(
-    mergeICPInsightFromLearning(organizationId, createdById, learning),
+    mergeICPInsightFromLearning(organizationId, createdById, accountId, learning),
   );
   return { learning, insight };
 }

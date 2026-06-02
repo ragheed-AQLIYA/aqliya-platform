@@ -35,7 +35,7 @@ export function RevenueSummary({
         <Metric label="توقع مرجّح" value={Math.round(forecast.weightedTotal)} />
         <Metric
           label="ثقة التوقع"
-          value={`${Math.round(forecast.forecastConfidence * 100)}%`}
+          value={forecast.forecastConfidence}
           raw
         />
       </div>

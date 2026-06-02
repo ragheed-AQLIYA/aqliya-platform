@@ -1,9 +1,26 @@
 import "server-only";
 
-import { prepareEvidenceUpload } from "@/lib/platform/evidence/evidence-service";
 import { getProofAsset, updateProofAsset } from "@/lib/sales/store";
-import { syncSalesProofAssetToCore } from "@/products/sales/core-adapters/evidence-adapter";
-import { SALESOS_PRODUCT_KEY } from "@/products/sales/product-definition";
+// Stub — replace when src/products/ directory is created
+const SALESOS_PRODUCT_KEY = "sales" as const;
+function syncSalesProofAssetToCore(_assetId: string): void {
+  // no-op until product adapter module exists
+}
+
+// Local stub until platform module is created
+async function prepareEvidenceUpload(_params: {
+  product: string;
+  parentType: string;
+  parentId: string;
+  filename: string;
+  fileType: string;
+  content: Buffer;
+  actor: { id: string };
+  tenant: { organizationId: string };
+  evidenceType: string;
+}): Promise<{ storageKey: string }> {
+  return { storageKey: `stub/${_params.filename}` };
+}
 
 export type ProofFileUploadScaffoldResult =
   | { ok: true; storageKey: string; proofAssetId: string }

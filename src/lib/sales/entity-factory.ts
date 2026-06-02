@@ -1,6 +1,6 @@
 // ─── SalesOS entity factory (governed defaults, no UI) ───
 
-import type { SalesDataSource, SalesRecordStatus } from "./types";
+import type { SalesRecordSource, SalesEntityStatus } from "./types";
 
 export function salesEntityId(prefix: string): string {
   return `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
@@ -14,12 +14,12 @@ export function salesTimestamps(now = new Date().toISOString()): {
 }
 
 export function governedDefaults(input?: {
-  source?: SalesDataSource;
-  status?: SalesRecordStatus;
+  source?: SalesRecordSource;
+  status?: SalesEntityStatus;
   confidence?: number;
 }): {
-  source: SalesDataSource;
-  status: SalesRecordStatus;
+  source: SalesRecordSource;
+  status: SalesEntityStatus;
   confidence?: number;
   createdAt: string;
   updatedAt: string;

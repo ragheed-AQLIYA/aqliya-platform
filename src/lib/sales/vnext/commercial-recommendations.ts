@@ -93,7 +93,7 @@ export type CommercialRecommendationsInput = StrategicRecommendationsInput;
 const V02_SOURCE = "v02/strategic-recommendations";
 
 export const CATEGORY_MAP: Record<
-  StrategicRecommendationCategory,
+  StrategicRecommendationCategory | "messaging_themes",
   CommercialRecommendationCategory
 > = {
   industry_priority: "industries",

@@ -17,7 +17,7 @@ export function salesGetCommercialMemory(organizationId: string) {
   const opportunities = listOpportunities(organizationId);
   return {
     objectionSignals: extractObjectionsFromInteractions(interactions),
-    derivedCompetitors: deriveCompetitorMentions(interactions),
+    derivedCompetitors: deriveCompetitorMentions([], interactions),
     objections: listObjections(organizationId),
     signals: listSignals(organizationId),
     competitors: listCompetitorMentions(organizationId),

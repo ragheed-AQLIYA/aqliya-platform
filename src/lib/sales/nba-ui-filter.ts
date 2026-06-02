@@ -1,8 +1,12 @@
-import type {
-  SalesNbaSnoozePreset,
-  SalesNbaUiState,
-  SalesNextBestActionItem,
-} from "./types";
+import type { SalesNextBestActionItem } from "./types";
+
+// Types defined locally until promoted to types.ts
+export type SalesNbaSnoozePreset = "1d" | "3d" | "1w";
+export interface SalesNbaUiState {
+  actionKey: string;
+  disposition: "dismissed" | "snoozed";
+  snoozedUntil?: string;
+}
 
 export const NBA_SNOOZE_HOURS: Record<SalesNbaSnoozePreset, number> = {
   "1d": 24,

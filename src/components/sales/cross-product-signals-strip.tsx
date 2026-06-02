@@ -42,10 +42,9 @@ export function CrossProductSignalsStrip({
               <Badge
                 variant="outline"
                 className="max-w-[220px] truncate text-[11px] font-normal"
-                title={signal.labelAr}
+                title={signal.titleAr}
               >
-                {signal.labelAr}
-                {signal.count != null ? ` (${signal.count})` : ""}
+                {signal.titleAr}
               </Badge>
             </li>
           ))}

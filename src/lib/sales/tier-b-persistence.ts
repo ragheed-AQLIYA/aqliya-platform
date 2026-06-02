@@ -3,12 +3,41 @@
 // B2: SalesInstitutionalLearningInsight (institutional learning insight snapshots)
 
 import "server-only";
-import type {
-  SalesCommercialRecommendation,
-  SalesInstitutionalLearningInsight,
-  SalesMarketSignal,
-} from "./types";
 import { loadSalesOrgSnapshot } from "./persistence";
+
+// Types defined locally until promoted to types.ts
+export interface SalesMarketSignal {
+  id: string;
+  organizationId: string;
+  type: string;
+  description: string;
+  severity?: string;
+  source?: string;
+  detectedAt: string;
+  createdById?: string;
+  createdAt: string;
+}
+export interface SalesCommercialRecommendation {
+  id: string;
+  organizationId: string;
+  dealId?: string;
+  recommendation: string;
+  rationale: string;
+  confidence: number;
+  status: string;
+  createdById: string;
+  createdAt: string;
+}
+export interface SalesInstitutionalLearningInsight {
+  id: string;
+  organizationId: string;
+  insight: string;
+  evidenceRef?: string;
+  category?: string;
+  confidence?: number;
+  createdById: string;
+  createdAt: string;
+}
 
 /** Tier B1 entity maps merged on Prisma load after Tier A hydrate. */
 export interface TierB1IntelligenceMaps {

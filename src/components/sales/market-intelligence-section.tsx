@@ -13,10 +13,10 @@ function severityStatus(severity: "high" | "medium" | "low"): string {
   return "draft";
 }
 
-function trendLabelAr(trend: "expanding" | "stable" | "contracting"): string {
-  if (trend === "expanding") return "توسع";
-  if (trend === "contracting") return "انكماش";
-  return "مستقر";
+function scoreToSeverity(score: number): "high" | "medium" | "low" {
+  if (score >= 70) return "high";
+  if (score >= 40) return "medium";
+  return "low";
 }
 
 export function MarketIntelligenceSection({
@@ -29,7 +29,7 @@ export function MarketIntelligenceSection({
       <div>
         <h2 className="text-lg font-bold">ذكاء السوق (v0.2)</h2>
         <p className="text-xs text-muted-foreground">
-          إشارات صناعة، منافسة، وماكرو — {snapshot.signals.length} إشارة مجمّعة
+          إشارات صناعة، منافسة، وماكرو — {snapshot.industrySignals.length} إشارة مجمّعة
         </p>
         <p className="mt-1 text-xs text-amber-800 dark:text-amber-200">
           {snapshot.disclaimerAr}
@@ -47,7 +47,7 @@ export function MarketIntelligenceSection({
           <EnterpriseCardContent className="pt-6">
             <p className="text-xs text-muted-foreground">أقوى قطاع</p>
             <p className="text-sm font-semibold">
-              {snapshot.topIndustry?.labelAr ?? "—"}
+              {snapshot.industrySignals[0]?.labelAr ?? "—"}
             </p>
           </EnterpriseCardContent>
         </EnterpriseCard>
@@ -55,7 +55,7 @@ export function MarketIntelligenceSection({
           <EnterpriseCardContent className="pt-6">
             <p className="text-xs text-muted-foreground">أبرز منافس</p>
             <p className="text-sm font-semibold">
-              {snapshot.topCompetitor?.competitorName ?? "—"}
+              {snapshot.competitorSignals[0]?.competitorName ?? "—"}
             </p>
           </EnterpriseCardContent>
         </EnterpriseCard>
@@ -75,11 +75,11 @@ export function MarketIntelligenceSection({
                   <li key={s.id} className="rounded border px-2 py-1">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-medium">{s.labelAr}</span>
-                      <StatusBadge status={severityStatus(s.severity)} size="sm" />
+                      <StatusBadge status={severityStatus(scoreToSeverity(s.score))} size="sm" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {s.accountCount} حساب · مسار {s.pipelineValue.toLocaleString("ar-SA")} ·{" "}
-                      {trendLabelAr(s.trend)} · {s.score}/100
+                      {s.score}/100
                     </p>
                   </li>
                 ))}
@@ -101,7 +101,7 @@ export function MarketIntelligenceSection({
                   <li key={s.id} className="rounded border px-2 py-1">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-medium">{s.competitorName}</span>
-                      <StatusBadge status={severityStatus(s.severity)} size="sm" />
+                      <StatusBadge status={severityStatus(s.threatLevel)} size="sm" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {s.mentionCount} إشارة · تهديد {s.threatLevel} · {s.score}/100
@@ -127,15 +127,15 @@ export function MarketIntelligenceSection({
                 <li key={insight.id} className="rounded border px-3 py-2">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="font-medium">{insight.titleAr}</span>
-                    <StatusBadge status={severityStatus(insight.severity)} size="sm" />
+                    <StatusBadge status={severityStatus(scoreToSeverity(insight.score))} size="sm" />
                     <span className="text-xs text-muted-foreground">
                       {insight.score}/100 · ثقة {Math.round(insight.confidence * 100)}%
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">{insight.summaryAr}</p>
-                  <p className="text-xs mt-1">{insight.recommendationAr}</p>
+                  <p className="text-xs mt-1">{insight.summaryAr}</p>
                   <p className="text-[10px] text-amber-800 dark:text-amber-200 mt-1">
-                    {insight.insightLabel} · {insight.outputStatus}
+                    {insight.insightType} · {insight.outputStatus}
                   </p>
                 </li>
               ))}

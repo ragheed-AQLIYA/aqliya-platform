@@ -96,7 +96,7 @@ export function DealFollowUpPanel({
     setReviewingId(draftId);
     setError(null);
     try {
-      const res = await rejectFollowUpDraftAction(dealId, draftId);
+      const res = await rejectFollowUpDraftAction(dealId, draftId, undefined);
       if (res.ok) {
         router.refresh();
       } else {

@@ -25,7 +25,7 @@ export function buildDueNextActions(
 ): DueNextActionItem[] {
   const now = Date.now();
   return deals
-    .map((deal) => {
+    .map((deal): DueNextActionItem | null => {
       const dueAt = readNextActionDue(deal.metadata);
       if (!dueAt) return null;
       const dueMs = Date.parse(dueAt);

@@ -48,6 +48,7 @@ export interface CreateSalesInteractionInput {
   subject?: string | null;
   summary?: string | null;
   occurredAt?: Date | null;
+  metadata?: Record<string, unknown>;
 }
 
 export interface UpdateSalesInteractionInput {
@@ -55,6 +56,7 @@ export interface UpdateSalesInteractionInput {
   subject?: string | null;
   summary?: string | null;
   occurredAt?: Date | null;
+  metadata?: Record<string, unknown>;
 }
 
 export function validateInteractionType(type: string): string {
@@ -86,6 +88,7 @@ export function validateCreateSalesInteractionInput(
     subject: input.subject?.trim() || null,
     summary: input.summary?.trim() || null,
     occurredAt: input.occurredAt ?? null,
+    metadata: input.metadata,
   };
 }
 
@@ -113,6 +116,9 @@ export function validateUpdateSalesInteractionInput(
   }
   if (input.occurredAt !== undefined) {
     next.occurredAt = input.occurredAt;
+  }
+  if (input.metadata !== undefined) {
+    next.metadata = input.metadata;
   }
   return next;
 }

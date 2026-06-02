@@ -19,8 +19,12 @@ import {
 import { OpportunityWinLossCapture } from "@/components/sales/opportunity-win-loss-capture";
 import type { SalesAccount, SalesOpportunity } from "@/lib/sales/types";
 import type { SalesEvidenceRef } from "@/lib/sales/store";
-import type { ReviewApprovalPackage } from "@/lib/platform/contracts/review-approval-contract";
 import type { ProofLinkageSummary } from "@/lib/sales/proof-linkage-service";
+
+interface ReviewApprovalPackage {
+  status: string;
+  evidenceComplete: boolean;
+}
 
 interface OpportunityDetailProps {
   opportunity: SalesOpportunity;
@@ -193,7 +197,7 @@ export function OpportunityDetailView({
             <EnterpriseCardTitle>أصول الإثبات (proof linkage)</EnterpriseCardTitle>
             <p className="text-xs text-muted-foreground">
               تغطية أدلة:{" "}
-              {Math.round(proofLinkage.evidenceCoverage.coverageRatio * 100)}%
+              {proofLinkage.evidenceCoverage.coveragePct}%
               — مسودة توصيات
             </p>
           </EnterpriseCardHeader>

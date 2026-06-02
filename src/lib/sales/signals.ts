@@ -259,7 +259,7 @@ export async function createSalesSignal(
   await prisma.salesAccount.update({
     where: { id: account.id },
     data: {
-      metadata: nextMetadata as Prisma.InputJsonValue,
+      metadata: nextMetadata as unknown as Prisma.InputJsonValue,
     },
   });
 
@@ -267,7 +267,7 @@ export async function createSalesSignal(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.SIGNAL_CREATED,
     targetType: "SalesAccount",
     targetId: account.id,

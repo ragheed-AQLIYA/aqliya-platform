@@ -22,5 +22,10 @@ export function salesLogActivity(
     "id" | "loggedAt" | "createdAt" | "updatedAt" | "status" | "source"
   >,
 ): SalesActivity {
-  return createActivity(input);
+  return createActivity({
+    ...input,
+    loggedAt: new Date().toISOString(),
+    status: "active" as const,
+    source: "manual" as const,
+  });
 }

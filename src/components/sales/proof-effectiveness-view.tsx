@@ -45,8 +45,6 @@ function AssetRow({ row }: { row: ProofEffectivenessEnrichedRow }) {
       <p className="text-xs text-muted-foreground">
         {row.assetType} · {row.usage.linkedOpportunityCount} فرص ·{" "}
         {row.winContribution.linkedWonCount}W/{row.winContribution.linkedLostCount}L
-        {row.primaryIndustry ? ` · ${row.primaryIndustry}` : ""}
-        {row.primaryStage ? ` · ${row.primaryStage}` : ""}
       </p>
     </li>
   );
@@ -61,7 +59,7 @@ function GapList({ gaps }: { gaps: ProofEffectivenessGap[] }) {
       {gaps.map((gap) => (
         <li key={gap.id} className="rounded border px-2 py-1 space-y-0.5">
           <p className="font-medium">{gap.titleAr}</p>
-          <p className="text-xs text-muted-foreground">{gap.descriptionAr}</p>
+          <p className="text-xs text-muted-foreground">{gap.recommendationAr}</p>
         </li>
       ))}
     </ul>
@@ -80,7 +78,7 @@ function RecommendationList({ items }: { items: ProofEffectivenessRecommendation
             <span className="font-medium">{rec.titleAr}</span>
             <span className="text-[10px] text-muted-foreground">{rec.priority}</span>
           </div>
-          <p className="text-xs text-muted-foreground">{rec.rationaleAr}</p>
+          <p className="text-xs text-muted-foreground">{rec.recommendationAr}</p>
         </li>
       ))}
     </ul>
@@ -91,7 +89,7 @@ export function ProofEffectivenessView({
   analysis,
   compact = false,
 }: ProofEffectivenessViewProps) {
-  const { snapshot, mostEffective, underused, gaps, recommendations } = analysis;
+  const { snapshot, industryStageSummary, mostEffective, underused, gaps, recommendations } = analysis;
   const limit = compact ? 3 : 5;
 
   return (
@@ -152,20 +150,17 @@ export function ProofEffectivenessView({
               <EnterpriseCardTitle>ملاءمة القطاع</EnterpriseCardTitle>
             </EnterpriseCardHeader>
             <EnterpriseCardContent>
-              {analysis.industryCoverage.length === 0 ? (
+              {industryStageSummary.topIndustriesWithoutProof.length === 0 ? (
                 <p className="text-sm text-muted-foreground">لا بيانات قطاعية</p>
               ) : (
                 <ul className="space-y-2 text-sm">
-                  {analysis.industryCoverage.slice(0, 6).map((row) => (
+                  {industryStageSummary.topIndustriesWithoutProof.slice(0, 6).map((industry) => (
                     <li
-                      key={row.industry}
+                      key={industry}
                       className="flex justify-between rounded border px-2 py-1"
                     >
-                      <span>{row.industry}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {row.coveredOpportunityCount}/{row.activeOpportunityCount} فرص ·{" "}
-                        {row.assetCount} أصل
-                      </span>
+                      <span>{industry}</span>
+                      <span className="text-xs text-muted-foreground">بدون أدلة</span>
                     </li>
                   ))}
                 </ul>
@@ -178,19 +173,17 @@ export function ProofEffectivenessView({
               <EnterpriseCardTitle>ملاءمة المرحلة</EnterpriseCardTitle>
             </EnterpriseCardHeader>
             <EnterpriseCardContent>
-              {analysis.stageCoverage.length === 0 ? (
+              {industryStageSummary.topStagesWithoutProof.length === 0 ? (
                 <p className="text-sm text-muted-foreground">لا بيانات مراحل</p>
               ) : (
                 <ul className="space-y-2 text-sm">
-                  {analysis.stageCoverage.slice(0, 6).map((row) => (
+                  {industryStageSummary.topStagesWithoutProof.slice(0, 6).map((stage) => (
                     <li
-                      key={row.stage}
+                      key={stage}
                       className="flex justify-between rounded border px-2 py-1"
                     >
-                      <span>{row.stage}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {row.coveredOpportunityCount}/{row.opportunityCount} مغطاة
-                      </span>
+                      <span>{stage}</span>
+                      <span className="text-xs text-muted-foreground">بدون أدلة</span>
                     </li>
                   ))}
                 </ul>

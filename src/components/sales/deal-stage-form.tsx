@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { updateSalesDealAction } from "@/actions/sales-actions";
+import type { UpdateSalesDealInput } from "@/lib/sales/validation";
 import { XCircle, RefreshCw } from "lucide-react";
 
 type StageOption = { id: string; name: string };
@@ -37,7 +38,10 @@ export function DealStageForm({
     setError(null);
 
     try {
-      const res = await updateSalesDealAction(dealId, formData);
+      const input: UpdateSalesDealInput = {
+        stageId: String(formData.get("stageId") ?? "").trim() || null,
+      };
+      const res = await updateSalesDealAction(dealId, input);
       if (res.ok) {
         router.refresh();
       } else {

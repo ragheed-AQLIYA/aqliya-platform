@@ -138,12 +138,12 @@ export function salesRecommendNextActions(
   const outreachByOpp = groupByOpportunityId(listOutreach(organizationId));
   return evaluateOrgNextActions({
     opportunities,
-    accountsById,
+    accounts: [...accountsById.values()],
     activitiesByOpp,
     evidenceByOpp,
-    objectionsByOpp,
-    meetingsByOpp,
-    outreachByOpp,
+    objections: [...objectionsByOpp.values()].flat(),
+    meetings: [...meetingsByOpp.values()].flat(),
+    outreach: [...outreachByOpp.values()].flat(),
     proofAssets: listProofAssets(organizationId),
   });
 }

@@ -10,6 +10,7 @@ import {
   PROOF_EFFECTIVENESS_DISCLAIMER_EN,
   PROOF_EFFECTIVENESS_RECOMMENDATION_LABEL,
 } from "../vnext/proof-effectiveness";
+import type { ProofEffectivenessWidgetSummary } from "../v02/proof-effectiveness";
 import { listAccounts, listProofAssetsForOpportunity } from "../store";
 
 export type {
@@ -54,4 +55,12 @@ export function salesGetProofEffectivenessForOpportunity(
 
 export function salesLoadProofEffectivenessSnapshot(organizationId: string) {
   return loadProofEffectivenessSnapshot(organizationId);
+}
+
+export function salesGetProofEffectivenessWidget(
+  organizationId: string,
+  limit = 5,
+): ProofEffectivenessWidgetSummary {
+  const snapshot = salesLoadProofEffectivenessSnapshot(organizationId);
+  return toProofEffectivenessWidgetSummary(snapshot, limit);
 }

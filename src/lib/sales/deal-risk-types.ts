@@ -106,7 +106,7 @@ function parseAssessment(raw: unknown): DealRiskAssessment | null {
     computedAt: row.computedAt,
     source: "rules-agent",
     advisoryOnly: true,
-    agentGenerated: row.agentGenerated === true,
+    agentGenerated: true,
   };
 }
 

@@ -535,7 +535,6 @@ export function createActivity(
   const ts = governedDefaults({
     source: input.source,
     status: input.status,
-    confidence: input.confidence,
   });
   const activity: SalesActivity = {
     ...input,
@@ -544,12 +543,7 @@ export function createActivity(
     updatedAt: input.updatedAt ?? ts.updatedAt,
     source: input.source ?? ts.source,
     status: input.status ?? ts.status,
-    confidence:
-      typeof input.confidence === "object"
-        ? input.confidence
-        : typeof ts.confidence === "object"
-          ? ts.confidence
-          : undefined,
+    confidence: input.confidence,
   };
   store.activities.set(activity.id, activity);
   const interaction = activityToInteraction(activity);

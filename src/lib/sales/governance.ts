@@ -65,7 +65,7 @@ export function readReviewDecisions(metadata: unknown): ReviewDecisionRecord[] {
           ? row.createdAt
           : new Date().toISOString(),
       stageSlug:
-        typeof row.stageSlug === "string" ? row.stageSlug : row.stageSlug ?? null,
+        typeof row.stageSlug === "string" ? row.stageSlug : null,
     });
   }
   return decisions.sort(

@@ -93,9 +93,9 @@ export function InstitutionalLearningPanel({
         <div className="flex flex-wrap items-center gap-2">
           <RecommendationBadge label={data.recommendationLabel} />
           <ConfidenceBadge value={data.overallConfidence} />
-          {data.marketInsightCount > 0 ? (
+          {data.insights.length > 0 ? (
             <span className="rounded bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
-              {data.marketInsightCount} رؤية سوق
+              {data.insights.length} رؤية
             </span>
           ) : null}
         </div>

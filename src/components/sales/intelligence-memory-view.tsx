@@ -7,7 +7,7 @@ import {
 } from "@/components/enterprise/enterprise-card";
 import type {
   SalesObjectionSignal,
-  SalesCompetitorMention,
+  SalesCompetitorMentionView,
   SalesOpportunity,
 } from "@/lib/sales/types";
 import type { IntelligenceSignal } from "@/lib/platform/intelligence";
@@ -16,7 +16,7 @@ import type { OpportunityIntelligenceSummary } from "@/lib/sales/vnext/opportuni
 
 interface IntelligenceMemoryViewProps {
   objections: SalesObjectionSignal[];
-  competitors: SalesCompetitorMention[];
+  competitors: SalesCompetitorMentionView[];
   signals: IntelligenceSignal[];
   auditRecent: SalesAuditEntry[];
   interactionCount: number;

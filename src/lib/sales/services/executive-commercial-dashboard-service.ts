@@ -326,7 +326,7 @@ function buildProofSection(orgId: string): ExecutiveCommercialSection<ExecutiveC
         linkedOpportunityCount: linkedOppIds.size,
         assetTypes,
         coverageGapHintAr,
-        topEffectiveAssets: widget.topAssets.map((row) => ({
+        topEffectiveAssets: widget.topAssets.map((row: { title: string; effectivenessScore: number; linkedOpportunityCount: number }) => ({
           title: row.title,
           score: row.effectivenessScore,
           linkedCount: row.linkedOpportunityCount,

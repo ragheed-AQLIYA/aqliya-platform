@@ -57,7 +57,7 @@ function isConversionMemoStatus(
 function parseStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   return value
-    .filter((item): item is string => typeof item === "string" && item.trim())
+    .filter((item): item is string => typeof item === "string" && item.trim().length > 0)
     .map((item) => item.trim());
 }
 
@@ -217,7 +217,7 @@ async function persistConversionMemo(
     organizationId: scope.organizationId,
     platformOrganizationId: scope.platformOrganizationId,
     actorId: actor.id,
-    actorName: actor.name,
+    actorName: actor.name ?? undefined,
     action: SalesAuditActions.CONVERSION_MEMO_UPDATED,
     targetType: "SalesDeal",
     targetId: dealId,

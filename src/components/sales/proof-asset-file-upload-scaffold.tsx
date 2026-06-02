@@ -31,7 +31,6 @@ export function ProofAssetFileUploadScaffold({
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<{
     storageKey: string;
-    adopted: boolean;
   } | null>(null);
 
   const fileBacked = (
@@ -72,14 +71,15 @@ export function ProofAssetFileUploadScaffold({
         fileDataBase64: base64,
       });
 
-      if (res.ok) {
+      if (!res.ok) {
+        setError(res.error);
+      } else if (res.data.ok) {
         setResult({
           storageKey: res.data.storageKey,
-          adopted: res.data.adopted,
         });
         router.refresh();
       } else {
-        setError(res.error);
+        setError(res.data.error);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "فشل الرفع");
@@ -134,7 +134,7 @@ export function ProofAssetFileUploadScaffold({
 
         {result && (
           <p className="text-[10px] font-mono text-green-700 dark:text-green-300">
-            {result.adopted ? "تم التبنّي" : "مُخزَّن"}: {result.storageKey}
+            مُخزَّن: {result.storageKey}
           </p>
         )}
 

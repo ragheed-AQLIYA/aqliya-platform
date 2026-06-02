@@ -1,4 +1,3 @@
-import { getProductById } from "@/lib/platform/registry/runtime";
 import { buildPipelineAnalytics } from "./vnext/pipeline-analytics";
 import {
   listAccounts,
@@ -10,7 +9,6 @@ import { initSalesWorkspace } from "./service";
 
 export async function buildSalesCommandCenter(user: CurrentUser) {
   await initSalesWorkspace(user);
-  const registry = getProductById("sales");
   const accounts = listAccounts(user.organizationId);
   const opportunities = listOpportunities(user.organizationId);
   const analytics = buildPipelineAnalytics(opportunities);
@@ -20,8 +18,12 @@ export async function buildSalesCommandCenter(user: CurrentUser) {
     (o) => o.reviewStatus === "Draft" || o.reviewStatus === "InReview",
   ).length;
 
+  const topByValue = [...opportunities]
+    .sort((a, b) => (b.valueEstimate ?? 0) - (a.valueEstimate ?? 0))
+    .slice(0, 8);
+
   return {
-    productId: registry.slug,
+    productId: "sales",
     disclaimerAr:
       "ذكاء تجاري مساعد — لا يُعد عرضاً أو قراراً نهائياً. المراجعة البشرية مطلوبة.",
     metrics: {
@@ -29,10 +31,10 @@ export async function buildSalesCommandCenter(user: CurrentUser) {
       opportunityCount: opportunities.length,
       pipelineValue: analytics.totalValue,
       needsReview,
-      weightedScore: analytics.weightedScore,
+      weightedScore: analytics.weightedValue,
     },
-    byStage: analytics.byStage,
-    topOpportunities: analytics.topByValue.slice(0, 8),
+    byStage: analytics.stageDistribution,
+    topOpportunities: topByValue,
     recentAudit: auditRecent,
   };
 }
