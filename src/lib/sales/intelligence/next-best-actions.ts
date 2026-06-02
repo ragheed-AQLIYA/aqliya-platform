@@ -1,12 +1,22 @@
 import type {
   SalesAccount,
   SalesInteractionLog,
-  SalesNextBestAction,
   SalesOpportunity,
 } from "../types";
 import { buildAccountIntelligence } from "../vnext/account-intelligence";
 import { buildOpportunityIntelligence } from "../vnext/opportunity-intelligence";
 import { scoreOpportunity } from "./opportunity-scoring";
+
+interface SalesNextBestAction {
+  id: string;
+  priority: "high" | "medium" | "low";
+  labelAr: string;
+  labelEn: string;
+  href: string;
+  entityType: string;
+  entityId?: string;
+  rationaleAr: string;
+}
 
 export function buildNextBestActions(input: {
   accounts: SalesAccount[];
@@ -133,7 +143,7 @@ export function buildNextBestActions(input: {
     }
   }
 
-  const priorityOrder = { high: 0, medium: 1, low: 2 };
+  const priorityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
   return actions
     .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
     .slice(0, scope ? 8 : 12);

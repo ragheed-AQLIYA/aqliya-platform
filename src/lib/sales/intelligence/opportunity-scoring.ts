@@ -5,6 +5,8 @@ export type OpportunityScoreResult = ReturnType<typeof scoreOpportunity>;
 export function scoreOpportunity(opportunity: SalesOpportunity): {
   score: number;
   factors: string[];
+  blockers: string[];
+  riskIndicators: string[];
 } {
   const factors: string[] = [];
   let score = 40;
@@ -32,5 +34,10 @@ export function scoreOpportunity(opportunity: SalesOpportunity): {
     factors.push("in_review");
   }
 
-  return { score: Math.min(100, score), factors };
+  const blockers = opportunity.risks ?? [];
+  const riskIndicators: string[] = [];
+  if (score < 50) riskIndicators.push("low_score");
+  if (opportunity.reviewStatus !== "Approved" && (opportunity.valueEstimate ?? 0) >= 250_000) riskIndicators.push("high_value_unreviewed");
+
+  return { score: Math.min(100, score), factors, blockers, riskIndicators };
 }

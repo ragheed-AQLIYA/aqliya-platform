@@ -3,10 +3,10 @@
 import type {
   SalesAccount,
   SalesInteractionLog,
-  SalesNextAction,
+  SalesNextBestActionItem,
   SalesICPHypothesis,
   SalesObjectionSignal,
-  SalesCompetitorMention,
+  SalesCompetitorMentionView,
   SalesAIBriefDraft,
   SalesOpportunity,
 } from "../types";
@@ -53,9 +53,9 @@ export function extractObjectionsFromInteractions(
 export function deriveCompetitorMentions(
   accounts: SalesAccount[],
   interactions: SalesInteractionLog[],
-): SalesCompetitorMention[] {
+): SalesCompetitorMentionView[] {
   const competitors = ["SAP", "Oracle", "Salesforce", "Microsoft"];
-  const mentions: SalesCompetitorMention[] = [];
+  const mentions: SalesCompetitorMentionView[] = [];
   for (const i of interactions) {
     for (const c of competitors) {
       if (i.summary.includes(c)) {
@@ -128,8 +128,8 @@ export function buildNextBestActions(input: {
   opportunities: SalesOpportunity[];
   interactions: SalesInteractionLog[];
   accountIntelligence?: Map<string, AccountIntelligenceSummary>;
-}): SalesNextAction[] {
-  const actions: SalesNextAction[] = [];
+}): SalesNextBestActionItem[] {
+  const actions: SalesNextBestActionItem[] = [];
   const now = Date.now();
   const weekMs = 7 * 86400000;
 
@@ -223,7 +223,7 @@ export function buildNextBestActions(input: {
     }
   }
 
-  const priorityOrder = { high: 0, medium: 1, low: 2 };
+  const priorityOrder: Record<string, number> = { high: 0, medium: 1, low: 2, urgent: 0 };
   return actions
     .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
     .slice(0, 12);

@@ -83,11 +83,13 @@ export function buildICPHypothesis(input: {
     0.4 + matchingTarget / Math.max(accounts.length, 1) * 0.3 + avgQual / 200,
   );
 
+  const topSegment = topIndustry?.[0] ?? "Multiple";
   return {
+    id: `icp-${topSegment.slice(0, 8).toLowerCase()}`,
+    segment: topSegment,
+    segmentAr: topSegment,
     hypothesisAr:
       "العملاء المثاليون: مؤسسات متوسطة-كبيرة في الخدمات المالية والتقنية تبحث عن حوكمة الإيرادات والامتثال — دورة بيع 60–120 يوم.",
-    hypothesisEn:
-      "Ideal customers: mid-to-large financial services and technology firms seeking governed revenue intelligence — 60–120 day sales cycle.",
     evidenceAr,
     confidence: Math.round(confidence * 100) / 100,
     recommendedAdjustmentsAr: [
@@ -95,8 +97,5 @@ export function buildICPHypothesis(input: {
       "تقليل جهود outbound على حسابات prospect بدون تفاعل",
       "إضافة معيار ICP: وجود متطلبات حوكمة/امتثال مؤكدة",
     ],
-    disclaimerAr:
-      "فرضية ICP — ليست حقيقة نهائية. تتطلب تحققاً ميدانياً ومزامنة مع فريق GTM.",
-    fitDistribution,
   };
 }

@@ -78,9 +78,9 @@ export function buildAccountProfileEnrichment(input: {
   )[0];
 
   const aiBriefDraft: SalesAIBriefDraft = {
+    accountId: account.id,
     status: "DRAFT",
     generatedAt: new Date().toISOString(),
-    summaryAr: `مسودة ذكاء تجاري لـ ${account.nameAr ?? account.name} — صحة ${intel.healthScore}%، ${opportunities.length} فرص، ${interactions.length} تفاعلات.`,
     sections: [
       {
         titleAr: "نظرة عامة",

@@ -1,13 +1,30 @@
 import type {
   SalesAccount,
   SalesInteractionLog,
-  SalesObjectionInsight,
   SalesOpportunity,
-  SalesSignalInsight,
 } from "../types";
 import { buildAccountIntelligence } from "../vnext/account-intelligence";
 import { buildOpportunityIntelligence } from "../vnext/opportunity-intelligence";
 import { scoreOpportunity } from "./opportunity-scoring";
+
+interface SalesObjectionInsight {
+  id: string;
+  label: string;
+  labelAr: string;
+  count: number;
+  severity: string;
+}
+
+interface SalesSignalInsight {
+  id: string;
+  label: string;
+  labelAr: string;
+  value: number;
+  confidence: number;
+  entityId: string;
+  entityType: string;
+  count?: number;
+}
 
 const ACTIVE_ACCOUNT_STATUSES = new Set(["qualified", "active"]);
 const ACTIVE_OPP_STAGES = new Set([

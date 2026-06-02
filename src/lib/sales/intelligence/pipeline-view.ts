@@ -1,8 +1,22 @@
-import type { SalesContact, SalesOpportunity, SalesPipelineItemView } from "../types";
+import type { SalesContact, SalesOpportunity } from "../types";
 import type { SalesAccount } from "../types";
 import type { SalesEvidenceRef } from "../store";
 import { buildOpportunityIntelligence } from "../vnext/opportunity-intelligence";
 import { scoreOpportunity } from "./opportunity-scoring";
+
+interface SalesPipelineItemView {
+  opportunity: SalesOpportunity;
+  accountName: string;
+  accountNameAr?: string;
+  probability?: number;
+  closeDate: string;
+  risks: string[];
+  nextAction?: string;
+  ownerLabel: string;
+  contactNames: string[];
+  proofCount: number;
+  winLossReason?: string;
+}
 
 function estimateCloseDate(opp: SalesOpportunity): string {
   const base = new Date();
