@@ -1326,6 +1326,7 @@ Integration tests use a **separate** DB on port **5433**: `npm run test:integrat
 
 ### Gotchas
 
+- **Docker:** Some Cloud VMs ship without Docker. Install Docker Engine + Compose before `sudo docker compose up -d db` (see Docker install docs for Ubuntu if `docker` is missing).
 - Source `.env` before `npm install` / `npm run build` if the shell has no env vars.
 - `npm run test:integration` needs the test compose DB, not only dev `db`.
 - File uploads use local `./uploads` by default (`STORAGE_PROVIDER=local`).
