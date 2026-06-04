@@ -10,7 +10,7 @@
 
 | Field | Value | Status |
 | ----- | ----- | ------ |
-| `smoke_execution_timestamp` | 2026-06-06 (offline smoke run) | Partial |
+| `smoke_execution_timestamp` | 2026-06-06 (offline); proxy re-verify 2026-06-06 | Partial |
 | `commit_sha` | `4d24afd` | OK |
 | `staging_base_url` | **TBD** — `https://staging.aqliya.ai` not exercised | BLOCKED |
 | `database_url_host` | `localhost:5434` (local proxy only) | Proxy only |
@@ -24,7 +24,7 @@
 | `embedding_count` | **TBD** (FF_AI_RAG off on proxy run) | BLOCKED |
 | `vector_search_result` | **TBD** | BLOCKED |
 | `ic_smoke_metrics_json` | `docs/validation/cycle-6/evidence/ic-smoke-cycle5-offline.json` | Offline PASS |
-| `pgvector_verify_json` | `evidence/pgvector-verify-output.txt` | OK (proxy) |
+| `pgvector_verify_json` | `evidence/pgvector-verify-output.txt` — `tableExists=true` after IC01 SQL on `:5434` | OK (proxy) |
 | `flags_snapshot` | `FF_AI_RAG=false`, `FF_AI_REAL_PROVIDERS=false` (local shell) | Not staging |
 | `human_review_required` | **true** (by design for AuditOS) | N/A until live |
 | `screenshots_or_logs` | `evidence/` folder | Partial |
@@ -49,3 +49,5 @@
 | **Live staging smoke (G6-2)** | **BLOCKED** — incomplete Required Evidence |
 
 **Cycle 6 cannot close on G6-2 until live row is filled with staging-only flags and real IDs.**
+
+**Operator runbook:** `docs/operations/cycle-6-staging-operator-checklist.md`

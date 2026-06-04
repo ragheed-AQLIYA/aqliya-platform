@@ -105,10 +105,10 @@ AQLIYA Company
 | **LocalContentOS**      | Pilot-ready with conditions         | **L5 Pilot-ready with conditions** | Workspace at `/local-content/*` (12 routes). Projects, suppliers, spend, classification, evidence, findings, scoring, review/approval, reports/export (PDF/XLSX via pdfkit + xlsx), audit trail, seed data, Arabic-first UI. Mutation feedback loop verified (2026-05-23). Finding create PASS on `/local-content/projects/lc-project-demo-001/findings`. CLI validation passed (local-content tests: 30). Not L6.   |
 | **Office AI Assistant** | Governed shared application         | **L4**                             | Workspace at `/assistant/*`. Task categories, document-aware responses, action logs, user review, evidence references, permission checks, audit events. Shared application, not primary product.                                                                                                                                                                                                                     |
 | **Sunbul**              | Legacy redirect alias to WorkflowOS | **N/A**                            | Routes at `/sunbul/*` are `permanentRedirect(302)` to matching `/workflowos/*` routes. No standalone components or data. Preserved for backward compatibility.                                                                                                                                                                                                                                                       |
-| **WorkflowOS**          | Governed custom/client workspace    | **L4**                             | Canonical governed workspace at `/workflowos/*`. Real CRUD, workflow states, audit trail, PDF export. Sunbul data models reused.                                                                                                                                                                                                                                                                                     |
+| **WorkflowOS**          | Governed custom/client workspace    | **L4**                             | Canonical governed workspace at `/workflowos/*`. Real CRUD, workflow states, evidence upload, audit trail, dashboard metrics, review queue, PDF export. Sunbul data models reused.                                                                                                                                                                                                                                     |
 | **SalesOS**             | Prototype / internal preview        | **L3**                             | Dashboard at `/sales`, marketing at `/products/sales`. Static dashboard only. No backend/workspace implementation.                                                                                                                                                                                                                                                                                                   |
 | **SimulationOS**        | Marketing label                     | **L1**                             | Page at `/products/simulation`. Not a standalone system.                                                                                                                                                                                                                                                                                                                                                             |
-| **LocalContactOS**      | Not implemented                     | **L0**                             | Future product. No routes, schema, or workspace.                                                                                                                                                                                                                                                                                                                                                                     |
+| **LocalContactOS**      | Governed contact workspace          | **L4**                             | Workspace at `/contacts/*` (4 routes). Contact registry (name, email, phone, position, department), relations (colleague/report etc.), interactions (meeting/call/email), evidence upload, review/approval cycle, export profile, sensitivity levels, RBAC, audit trail. Arabic-first. Not full L5 (no export approval gate).                                                                                      |
 | **RiskOS**              | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **ComplianceOS**        | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **LegalOS**             | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -129,6 +129,7 @@ AQLIYA Company
 | `/assistant/*`             | Office AI Assistant                        | Active — L4                 |
 | `/local-content/*`         | LocalContentOS workspace (12 routes)       | Active — L5 with conditions |
 | `/sunbul/*`                | Sunbul legacy redirect alias to WorkflowOS | Active — redirect alias     |
+| `/contacts/*`              | LocalContactOS governed contact workspace  | Active — L4                 |
 | `/workflowos/*`            | WorkflowOS governed workspace              | Active — L4                 |
 | `/sales`                   | SalesOS prototype dashboard                | Active — L3 prototype       |
 | `/organizations/*`         | Generic organizations prototype            | Active — L3 prototype       |
@@ -148,9 +149,10 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - **AuditOS** — Full engagement lifecycle, trial balance upload, account mapping, financial statements, notes/evidence, findings, AI review, review/approval, exports (PDF/XLSX), audit trail
 - **DecisionOS** — Decision request, context/options/risks, evidence attachment, recommendation, committee voting, approval, final record, export/memo, audit trail, seed data
 - **LocalContentOS** — Project setup, supplier/vendor records, spend/procurement records, classification workflow, evidence upload, local content scoring, gap/risk findings, review/approval, reports/export, audit trail, seed data, Arabic-first UI
+- **LocalContactOS** — Contact registry, relations (colleague/report to/etc.), interactions (meeting/call/email), evidence upload, review/approval cycle, export profile, sensitivity levels, RBAC, audit trail
 - **Office AI Assistant** — Task creation, document-aware responses, file content extraction, review workflow, action logs, permission checks, audit events
 - **Sunbul** — Legacy redirect alias to WorkflowOS
-- **WorkflowOS** — Canonical governed workspace, multi-client records management, governed workflow, audit trail, PDF export
+- **WorkflowOS** — Canonical governed workspace, multi-client records management, governed workflow, evidence management, audit trail, dashboard with real metrics, review queue, PDF export
 - **Platform Infrastructure** — Auth, RBAC, audit logs, storage provider, export engine, health monitoring
 - **Custom Product Inquiry** — Funnel with form submission API
 
@@ -169,7 +171,6 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - Institutional Memory engine
 - AQLIYA Studio builder
 - SalesOS backend/workspace
-- LocalContactOS backend
 - RiskOS, ComplianceOS, LegalOS, GovOS implementations
 - Fully autonomous AI decisions (AI is assistive only)
 - Automated backup/restore
@@ -200,7 +201,6 @@ All surfaces with active routes, server actions, database models, seed data, tes
 
 ## 13. What Is Strategic / Future (L0)
 
-- **LocalContactOS**
 - **RiskOS**
 - **ComplianceOS**
 - **LegalOS**

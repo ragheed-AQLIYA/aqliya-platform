@@ -7,3 +7,13 @@ PASS: DocumentChunk table and pgvector extension present.
 
 Recorded: 2026-06-06
 Host: localhost:5434 (local proxy — not remote staging)
+
+> aqliya-app@0.1.0 db:verify-pgvector
+> tsx scripts/verify-pgvector-staging.ts
+
+{
+  "staging": true,
+  "pgvector": true,
+  "tableExists": true
+}
+PASS: DocumentChunk table and pgvector extension present.

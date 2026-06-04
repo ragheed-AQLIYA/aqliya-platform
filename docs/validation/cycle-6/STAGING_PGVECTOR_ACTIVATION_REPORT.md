@@ -23,11 +23,11 @@
 | Step | Command | Result |
 | ---- | ------- | ------ |
 | 1 | Docker `aqliya-db-1` running | OK |
-| 2 | `npx prisma migrate deploy` | OK — 26 migrations including `20260606140000_add_l5_workflow_contact_models` |
+| 2 | `npx prisma migrate deploy` | P3005 on non-baselined `:5434`; IC01 applied via `prisma db execute` on `20260605000001_ic01_pgvector_document_chunk` |
 | 3 | `npm run db:pgvector-health` | `pgvector_extension=true`, `document_chunk_table=true` |
 | 4 | `npm run db:verify-pgvector` | PASS JSON: `pgvector=true`, `tableExists=true` |
 
-**Database host (redacted):** `localhost:5434` / database `aqliya_pilot`
+**Database host (redacted):** `localhost:5434` / database `aqliya`
 
 ---
 

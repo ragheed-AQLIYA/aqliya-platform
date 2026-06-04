@@ -9,6 +9,8 @@
 
 **Authority:** `docs/DOCUMENTATION_AUTHORITY.md` → `PRODUCT_STATUS_MATRIX.md` → `program-execution-state.md` → this plan
 
+**Operator unblock (G6-2):** `docs/operations/cycle-6-staging-operator-checklist.md`
+
 ---
 
 ## Executive summary

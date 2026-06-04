@@ -194,22 +194,32 @@ export function WorkflowDashboard() {
               </div>
 
               <Link
-                href="/workflowos"
+                href="/workflowos/records"
                 className="block rounded-lg border bg-card p-4 text-center hover:bg-muted/30 transition-colors"
               >
                 <FolderKanban className="mx-auto h-8 w-8 text-muted-foreground/50" />
                 <p className="mt-2 text-xs text-muted-foreground">
-                  يمكن رفع المستندات في القضايا المسودة
+                  عرض جميع القضايا وإدارة الأدلة
                 </p>
               </Link>
 
               <Link
-                href="/workflowos"
+                href="/workflowos/records"
                 className="block rounded-lg border bg-card p-4 text-center hover:bg-muted/30 transition-colors"
               >
                 <Download className="mx-auto h-8 w-8 text-muted-foreground/50" />
                 <p className="mt-2 text-xs text-muted-foreground">
-                  تصدير PDF متاح بعد اعتماد القضية
+                  تصدير PDF — متاح بعد اعتماد القضية
+                </p>
+              </Link>
+
+              <Link
+                href="/workflowos/admin"
+                className="block rounded-lg border bg-card p-4 text-center hover:bg-muted/30 transition-colors"
+              >
+                <ShieldCheck className="mx-auto h-8 w-8 text-muted-foreground/50" />
+                <p className="mt-2 text-xs text-muted-foreground">
+                  إدارة القوالب والإعدادات
                 </p>
               </Link>
             </div>
