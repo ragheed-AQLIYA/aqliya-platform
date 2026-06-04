@@ -3,7 +3,7 @@
 **Authority:** `docs/execution-backlog/v1.2-execution-backlog.md`, `docs/official/AQLIYA_ROADMAP_v1.2.md`  
 **Branch:** `main`  
 **Report date:** 2026-06-07  
-**Latest roadmap commit:** `3bf3734` (slice 9)
+**Latest program commit:** `903c820` (slices 10–19 on Track B / hygiene) · Phase 3 product slices through `3bf3734`
 
 ---
 
@@ -54,6 +54,9 @@ Detail log: `docs/operations/parallel-execution-cycle-2026-06-07-roadmap-phase3.
 | Migration | Product |
 | --------- | ------- |
 | `20260607100000_audit_evidence_version` | A1-05 evidence versioning |
+| `20260606140000_add_l5_workflow_contact_models` | Track B L5 |
+| `20260608000001_add_embedding_json_fallback` | IC embedding JSON fallback |
+| `20260608000002_add_ingestion_batch_document` | IC ingestion tables |
 
 Run on each environment after review:
 
