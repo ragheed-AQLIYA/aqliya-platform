@@ -312,3 +312,243 @@ export async function listContactInteractions(contactId: string) {
     return interactions;
   });
 }
+
+// ─── Evidence ──────────────────────────────────────────
+
+export async function uploadContactEvidence(params: {
+  contactId: string;
+  filename: string;
+  fileType: string;
+  storageKey?: string;
+  fileHash?: string;
+  sizeBytes?: number;
+  description?: string;
+  evidenceType?: string;
+}) {
+  return safe(async () => {
+    const user = await requireUserContext("OPERATOR");
+    const contact = await prisma.localContact.findUnique({
+      where: { id: params.contactId },
+      select: { organizationId: true },
+    });
+    if (!contact || contact.organizationId !== user.organizationId) {
+      throw new Error("Contact not found or access denied");
+    }
+
+    const evidence = await prisma.contactEvidence.create({
+      data: {
+        organizationId: user.organizationId,
+        contactId: params.contactId,
+        filename: params.filename,
+        fileType: params.fileType,
+        storageKey: params.storageKey,
+        fileHash: params.fileHash,
+        sizeBytes: params.sizeBytes,
+        description: params.description,
+        evidenceType: params.evidenceType ?? "document",
+        uploadedById: user.id,
+      },
+    });
+
+    revalidatePath(`/contacts/${params.contactId}`);
+    return evidence;
+  });
+}
+
+export async function listContactEvidence(contactId: string) {
+  return safe(async () => {
+    const user = await requireUserContext("VIEWER");
+    return prisma.contactEvidence.findMany({
+      where: { organizationId: user.organizationId, contactId },
+      orderBy: { createdAt: "desc" },
+    });
+  });
+}
+
+// ─── Review & Approval ─────────────────────────────────
+
+export async function createContactReview(params: {
+  contactId: string;
+  reviewType?: string;
+  reviewerId: string;
+  reviewerName?: string;
+  reason?: string;
+  findings?: string;
+}) {
+  return safe(async () => {
+    const user = await requireUserContext("OPERATOR");
+    const contact = await prisma.localContact.findUnique({
+      where: { id: params.contactId },
+      select: { organizationId: true },
+    });
+    if (!contact || contact.organizationId !== user.organizationId) {
+      throw new Error("Contact not found or access denied");
+    }
+
+    const review = await prisma.contactReview.create({
+      data: {
+        organizationId: user.organizationId,
+        contactId: params.contactId,
+        reviewType: params.reviewType ?? "sensitivity",
+        status: "pending",
+        reviewerId: params.reviewerId,
+        reviewerName: params.reviewerName,
+        reason: params.reason,
+        findings: params.findings ? JSON.parse(params.findings) : [],
+      },
+    });
+
+    revalidatePath(`/contacts/${params.contactId}`);
+    return review;
+  });
+}
+
+export async function listContactReviews(contactId: string) {
+  return safe(async () => {
+    const user = await requireUserContext("VIEWER");
+    return prisma.contactReview.findMany({
+      where: { organizationId: user.organizationId, contactId },
+      include: { approvals: true },
+      orderBy: { createdAt: "desc" },
+    });
+  });
+}
+
+export async function approveContactReview(reviewId: string, note?: string) {
+  return safe(async () => {
+    const user = await requireUserContext("OPERATOR");
+    const review = await prisma.contactReview.findUnique({
+      where: { id: reviewId },
+      select: { organizationId: true, id: true, contactId: true },
+    });
+    if (!review || review.organizationId !== user.organizationId) {
+      throw new Error("Review not found or access denied");
+    }
+
+    const [updatedReview] = await prisma.$transaction([
+      prisma.contactReview.update({
+        where: { id: reviewId },
+        data: { status: "approved" },
+      }),
+      prisma.contactApproval.create({
+        data: {
+          organizationId: user.organizationId,
+          reviewId,
+          approverId: user.id,
+          approverName: user.name,
+          status: "approved",
+          note,
+        },
+      }),
+    ]);
+
+    revalidatePath(`/contacts/${review.contactId}`);
+    return updatedReview;
+  });
+}
+
+export async function rejectContactReview(reviewId: string, note?: string) {
+  return safe(async () => {
+    const user = await requireUserContext("OPERATOR");
+    const review = await prisma.contactReview.findUnique({
+      where: { id: reviewId },
+      select: { organizationId: true, id: true, contactId: true },
+    });
+    if (!review || review.organizationId !== user.organizationId) {
+      throw new Error("Review not found or access denied");
+    }
+
+    const [updatedReview] = await prisma.$transaction([
+      prisma.contactReview.update({
+        where: { id: reviewId },
+        data: { status: "rejected" },
+      }),
+      prisma.contactApproval.create({
+        data: {
+          organizationId: user.organizationId,
+          reviewId,
+          approverId: user.id,
+          approverName: user.name,
+          status: "rejected",
+          note,
+        },
+      }),
+    ]);
+
+    revalidatePath(`/contacts/${review.contactId}`);
+    return updatedReview;
+  });
+}
+
+// ─── Export ────────────────────────────────────────────
+
+import { format } from "date-fns";
+
+export async function exportContactProfile(contactId: string) {
+  return safe(async () => {
+    const user = await requireUserContext("VIEWER");
+    const contact = await prisma.localContact.findUnique({
+      where: { id: contactId },
+      include: {
+        evidence: { orderBy: { createdAt: "desc" } },
+        reviews: { include: { approvals: true }, orderBy: { createdAt: "desc" } },
+        interactions: { orderBy: { occurredAt: "desc" }, take: 50 },
+        outgoingRelations: { include: { targetContact: { select: { name: true } } } },
+        incomingRelations: { include: { sourceContact: { select: { name: true } } } },
+      },
+    });
+    if (!contact || contact.organizationId !== user.organizationId) {
+      throw new Error("Contact not found or access denied");
+    }
+
+    return {
+      exportedAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX"),
+      exportedBy: user.name ?? user.email,
+      organizationId: user.organizationId,
+      contact: {
+        id: contact.id,
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        position: contact.position,
+        department: contact.department,
+        organizationName: contact.organizationName,
+        sensitivityLevel: contact.sensitivityLevel,
+        notes: contact.notes,
+        tags: contact.tags,
+        isActive: contact.isActive,
+        createdAt: contact.createdAt,
+        updatedAt: contact.updatedAt,
+      },
+      interactions: contact.interactions,
+      evidence: contact.evidence.map((e) => ({
+        id: e.id,
+        filename: e.filename,
+        fileType: e.fileType,
+        evidenceType: e.evidenceType,
+        description: e.description,
+        createdAt: e.createdAt,
+      })),
+      reviews: contact.reviews.map((r) => ({
+        id: r.id,
+        reviewType: r.reviewType,
+        status: r.status,
+        reviewerName: r.reviewerName,
+        reason: r.reason,
+        createdAt: r.createdAt,
+        approvals: r.approvals.map((a) => ({
+          approverName: a.approverName,
+          status: a.status,
+          note: a.note,
+          createdAt: a.createdAt,
+        })),
+      })),
+      metadata: {
+        disclaimer:
+          "This export is generated by AQLIYA LocalContactOS. It does not constitute an official record. Verify accuracy before use.",
+        generatedBy: "AQLIYA LocalContactOS v0.1",
+        retentionDays: 730,
+      },
+    };
+  });
+}

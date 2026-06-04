@@ -6,6 +6,8 @@ import { getContact } from "@/actions/contact-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -20,6 +22,12 @@ import {
   Link2,
   MessageSquare,
   Calendar,
+  Upload,
+  CheckCircle,
+  XCircle,
+  Shield,
+  Download,
+  Eye,
 } from "lucide-react";
 
 interface PageProps {
@@ -234,6 +242,12 @@ export default async function ContactDetailPage({ params }: PageProps) {
                 )}
               </CardContent>
             </Card>
+
+            {/* Evidence Section */}
+            <EvidenceSection contactId={contact.id} orgId={user.organizationId} />
+
+            {/* Reviews Section */}
+            <ReviewsSection contactId={contact.id} orgId={user.organizationId} userId={user.id} userRole={user.role} />
           </div>
 
           <div className="space-y-4">
@@ -260,9 +274,337 @@ export default async function ContactDetailPage({ params }: PageProps) {
   );
 }
 
+// ─── Evidence Section ──────────────────────────────────
+
+async function EvidenceSection({
+  contactId,
+  orgId,
+}: {
+  contactId: string;
+  orgId: string;
+}) {
+  const evidence = await prisma.contactEvidence.findMany({
+    where: { organizationId: orgId, contactId },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Upload className="h-5 w-5" />
+          الأدلة والملفات
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <details className="border rounded-lg p-3">
+          <summary className="cursor-pointer font-medium text-sm text-muted-foreground hover:text-foreground">
+            رفع دليل جديد
+          </summary>
+          <form action={uploadEvidenceAction} className="mt-3 space-y-3">
+            <input type="hidden" name="contactId" value={contactId} />
+            <div>
+              <label className="text-sm font-medium">اسم الملف</label>
+              <Input name="filename" required placeholder="اسم الملف" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">نوع الملف</label>
+              <Input name="fileType" required placeholder="pdf, docx, xlsx, image..." />
+            </div>
+            <div>
+              <label className="text-sm font-medium">نوع الدليل</label>
+              <select
+                name="evidenceType"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                defaultValue="document"
+              >
+                <option value="document">مستند</option>
+                <option value="note">ملاحظة</option>
+                <option value="reference">مرجع</option>
+                <option value="attachment">مرفق</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium">وصف</label>
+              <Textarea name="description" placeholder="وصف الملف" />
+            </div>
+            <Button type="submit" size="sm">
+              <Upload className="ml-1 h-4 w-4" />
+              رفع
+            </Button>
+          </form>
+        </details>
+
+        {evidence.length === 0 ? (
+          <p className="text-muted-foreground text-sm">لا توجد أدلة مرفوعة</p>
+        ) : (
+          <div className="space-y-2">
+            {evidence.map((e) => (
+              <div
+                key={e.id}
+                className="flex items-center justify-between p-3 border rounded-lg"
+              >
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium text-sm">{e.filename}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {e.evidenceType} • {e.fileType}
+                      {e.sizeBytes && ` • ${(e.sizeBytes / 1024).toFixed(1)} KB`}
+                    </p>
+                    {e.description && (
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {e.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <Badge variant="outline" className="text-xs">
+                  {new Date(e.createdAt).toLocaleDateString("ar-SA")}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─── Reviews Section ───────────────────────────────────
+
+async function ReviewsSection({
+  contactId,
+  orgId,
+  userId,
+  userRole,
+}: {
+  contactId: string;
+  orgId: string;
+  userId: string;
+  userRole: string;
+}) {
+  const reviews = await prisma.contactReview.findMany({
+    where: { organizationId: orgId, contactId },
+    include: { approvals: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const REVIEW_STATUS_LABELS: Record<string, string> = {
+    pending: "قيد المراجعة",
+    approved: "معتمد",
+    changes_requested: "تعديلات مطلوبة",
+    rejected: "مرفوض",
+  };
+
+  const REVIEW_STATUS_COLORS: Record<string, string> = {
+    pending: "bg-yellow-100 text-yellow-800",
+    approved: "bg-green-100 text-green-800",
+    changes_requested: "bg-blue-100 text-blue-800",
+    rejected: "bg-red-100 text-red-800",
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Shield className="h-5 w-5" />
+          المراجعات والموافقات
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {(userRole === "ADMIN" || userRole === "OPERATOR") && (
+          <details className="border rounded-lg p-3">
+            <summary className="cursor-pointer font-medium text-sm text-muted-foreground hover:text-foreground">
+              إنشاء مراجعة جديدة
+            </summary>
+            <form action={createReviewAction} className="mt-3 space-y-3">
+              <input type="hidden" name="contactId" value={contactId} />
+              <div>
+                <label className="text-sm font-medium">نوع المراجعة</label>
+                <select
+                  name="reviewType"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  defaultValue="sensitivity"
+                >
+                  <option value="sensitivity">مراجعة حساسية</option>
+                  <option value="accuracy">مراجعة دقة</option>
+                  <option value="completeness">مراجعة اكتمال</option>
+                  <option value="custom">مخصص</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-sm font-medium">السبب</label>
+                <Textarea name="reason" placeholder="سبب المراجعة" />
+              </div>
+              <Button type="submit" size="sm">
+                <Shield className="ml-1 h-4 w-4" />
+                إنشاء مراجعة
+              </Button>
+            </form>
+          </details>
+        )}
+
+        {reviews.length === 0 ? (
+          <p className="text-muted-foreground text-sm">لا توجد مراجعات</p>
+        ) : (
+          <div className="space-y-3">
+            {reviews.map((review) => (
+              <div key={review.id} className="border rounded-lg p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Badge className={REVIEW_STATUS_COLORS[review.status] ?? ""}>
+                      {REVIEW_STATUS_LABELS[review.status] ?? review.status}
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      {review.reviewType}
+                    </Badge>
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(review.createdAt).toLocaleDateString("ar-SA")}
+                  </span>
+                </div>
+                {review.reviewerName && (
+                  <p className="text-sm">
+                    المراجع: {review.reviewerName}
+                  </p>
+                )}
+                {review.reason && (
+                  <p className="text-sm text-muted-foreground">{review.reason}</p>
+                )}
+
+                {review.approvals.length > 0 && (
+                  <div className="space-y-1 mt-2 border-t pt-2">
+                    <p className="text-xs font-medium text-muted-foreground">
+                      الموافقات:
+                    </p>
+                    {review.approvals.map((a) => (
+                      <div
+                        key={a.id}
+                        className="flex items-center justify-between text-xs"
+                      >
+                        <span>
+                          {a.approverName ?? "مستخدم"}:{" "}
+                          {a.status === "approved" ? (
+                            <span className="text-green-600">✓ معتمد</span>
+                          ) : (
+                            <span className="text-red-600">✗ مرفوض</span>
+                          )}
+                        </span>
+                        <span className="text-muted-foreground">
+                          {new Date(a.createdAt).toLocaleDateString("ar-SA")}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {review.status === "pending" &&
+                  (userRole === "ADMIN" || userRole === "OPERATOR") && (
+                    <div className="flex gap-2 mt-2">
+                      <form action={approveReviewAction}>
+                        <input type="hidden" name="reviewId" value={review.id} />
+                        <input
+                          type="hidden"
+                          name="contactId"
+                          value={contactId}
+                        />
+                        <Button
+                          type="submit"
+                          size="sm"
+                          variant="default"
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          <CheckCircle className="ml-1 h-4 w-4" />
+                          اعتماد
+                        </Button>
+                      </form>
+                      <form action={rejectReviewAction}>
+                        <input type="hidden" name="reviewId" value={review.id} />
+                        <input
+                          type="hidden"
+                          name="contactId"
+                          value={contactId}
+                        />
+                        <Button
+                          type="submit"
+                          size="sm"
+                          variant="destructive"
+                        >
+                          <XCircle className="ml-1 h-4 w-4" />
+                          رفض
+                        </Button>
+                      </form>
+                    </div>
+                  )}
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 async function deleteAction(id: string) {
   "use server";
   const { deleteContact } = await import("@/actions/contact-actions");
   await deleteContact(id);
   redirect("/contacts");
+}
+
+async function uploadEvidenceAction(formData: FormData) {
+  "use server";
+  const { uploadContactEvidence } = await import("@/actions/contact-actions");
+  const contactId = formData.get("contactId") as string;
+  const filename = formData.get("filename") as string;
+  const fileType = formData.get("fileType") as string;
+  const description = formData.get("description") as string;
+  const evidenceType = formData.get("evidenceType") as string;
+
+  await uploadContactEvidence({
+    contactId,
+    filename,
+    fileType,
+    description: description || undefined,
+    evidenceType: evidenceType || "document",
+  });
+}
+
+async function createReviewAction(formData: FormData) {
+  "use server";
+  const { createContactReview } = await import("@/actions/contact-actions");
+  const { getCurrentUser } = await import("@/lib/auth");
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not authenticated");
+
+  const contactId = formData.get("contactId") as string;
+  const reviewType = formData.get("reviewType") as string;
+
+  await createContactReview({
+    contactId,
+    reviewType: reviewType || "sensitivity",
+    reviewerId: formData.get("reviewerId") as string || user.id,
+    reviewerName: user.name,
+    reason: (formData.get("reason") as string) || undefined,
+  });
+  redirect(`/contacts/${contactId}`);
+}
+
+async function approveReviewAction(formData: FormData) {
+  "use server";
+  const { approveContactReview } = await import("@/actions/contact-actions");
+  const reviewId = formData.get("reviewId") as string;
+  const note = formData.get("note") as string;
+  await approveContactReview(reviewId, note || undefined);
+  redirect(`/contacts/${formData.get("contactId") as string}`);
+}
+
+async function rejectReviewAction(formData: FormData) {
+  "use server";
+  const { rejectContactReview } = await import("@/actions/contact-actions");
+  const reviewId = formData.get("reviewId") as string;
+  const note = formData.get("note") as string;
+  await rejectContactReview(reviewId, note || undefined);
+  redirect(`/contacts/${formData.get("contactId") as string}`);
 }

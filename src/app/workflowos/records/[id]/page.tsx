@@ -1,4 +1,5 @@
 import { requireUserContext } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import {
   workflow_getRecordById,
   updateWorkflowRecordStatus,
@@ -6,7 +7,15 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { notFound, redirect } from "next/navigation";
+import {
+  FileText,
+  History,
+  Upload,
+  Shield,
+} from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +72,34 @@ export default async function WorkflowRecordDetailPage({
     await updateWorkflowRecordStatus(id, "rejected");
     redirect(`/workflowos/records/${id}`);
   }
+
+  async function uploadEvidenceAction(formData: FormData) {
+    "use server";
+    const { uploadWorkflowEvidence } = await import("@/actions/workflowos-actions");
+    const filename = formData.get("filename") as string;
+    const fileType = formData.get("fileType") as string;
+    const description = formData.get("description") as string;
+    const stepIndexStr = formData.get("stepIndex") as string;
+
+    await uploadWorkflowEvidence({
+      recordId: id,
+      filename,
+      fileType,
+      description: description || undefined,
+      stepIndex: stepIndexStr ? parseInt(stepIndexStr) : undefined,
+    });
+    redirect(`/workflowos/records/${id}`);
+  }
+
+  const evidence = await prisma.workflowEvidence.findMany({
+    where: { organizationId: record.organizationId, recordId: id },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const auditEvents = await prisma.workflowAuditEvent.findMany({
+    where: { organizationId: record.organizationId, recordId: id },
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <div dir="rtl" className="max-w-3xl mx-auto">
@@ -234,6 +271,129 @@ export default async function WorkflowRecordDetailPage({
           </CardContent>
         </Card>
       )}
+
+      {/* Evidence Section */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            الأدلة والملفات
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <details className="border rounded-lg p-3">
+            <summary className="cursor-pointer font-medium text-sm text-muted-foreground hover:text-foreground">
+              رفع دليل جديد
+            </summary>
+            <form action={uploadEvidenceAction} className="mt-3 space-y-3">
+              <div>
+                <label className="text-sm font-medium">اسم الملف</label>
+                <Input name="filename" required placeholder="اسم الملف" />
+              </div>
+              <div>
+                <label className="text-sm font-medium">نوع الملف</label>
+                <Input name="fileType" required placeholder="pdf, docx, xlsx..." />
+              </div>
+              <div>
+                <label className="text-sm font-medium">رقم الخطوة (اختياري)</label>
+                <Input name="stepIndex" type="number" placeholder="0" />
+              </div>
+              <div>
+                <label className="text-sm font-medium">وصف</label>
+                <Textarea name="description" placeholder="وصف الملف" />
+              </div>
+              <Button type="submit" size="sm">
+                <Upload className="ml-1 h-4 w-4" />
+                رفع
+              </Button>
+            </form>
+          </details>
+
+          {evidence.length === 0 ? (
+            <p className="text-muted-foreground text-sm">لا توجد أدلة مرفوعة</p>
+          ) : (
+            <div className="space-y-2">
+              {evidence.map((e) => (
+                <div
+                  key={e.id}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium text-sm">{e.filename}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {e.fileType}
+                        {e.stepIndex !== null && ` • خطوة ${e.stepIndex}`}
+                        {e.sizeBytes && ` • ${(e.sizeBytes / 1024).toFixed(1)} KB`}
+                      </p>
+                      {e.description && (
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {e.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {new Date(e.createdAt).toLocaleDateString("ar-SA")}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Audit Trail Section */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <History className="h-5 w-5" />
+            سجل التدقيق
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {auditEvents.length === 0 ? (
+            <p className="text-muted-foreground text-sm">لا توجد أحداث مسجلة</p>
+          ) : (
+            <div className="space-y-2">
+              {auditEvents.map((event) => (
+                <div
+                  key={event.id}
+                  className="flex items-start gap-3 p-2 border-b last:border-b-0 text-sm"
+                >
+                  <Shield className="h-4 w-4 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-xs">
+                        {event.action}
+                      </Badge>
+                      {event.actorName && (
+                        <span className="text-muted-foreground">
+                          {event.actorName}
+                        </span>
+                      )}
+                    </div>
+                    {event.fromStatus && event.toStatus && (
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {event.fromStatus} → {event.toStatus}
+                      </p>
+                    )}
+                    {event.comment && (
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {event.comment}
+                      </p>
+                    )}
+                  </div>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">
+                    {new Date(event.createdAt).toLocaleString("ar-SA")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

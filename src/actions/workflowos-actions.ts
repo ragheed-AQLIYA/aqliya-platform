@@ -668,3 +668,165 @@ export async function workflow_getRecordById(id: string) {
     return { success: false, error: mapAuthError(error) };
   }
 }
+
+// ─── Audit ─────────────────────────────────────────────
+
+export async function logWorkflowAuditEvent(params: {
+  recordId: string;
+  organizationId: string;
+  actorId: string;
+  actorName?: string;
+  action: string;
+  fromStatus?: string;
+  toStatus?: string;
+  comment?: string;
+}) {
+  try {
+    await prisma.workflowAuditEvent.create({
+      data: {
+        organizationId: params.organizationId,
+        recordId: params.recordId,
+        actorId: params.actorId,
+        actorName: params.actorName,
+        action: params.action,
+        fromStatus: params.fromStatus,
+        toStatus: params.toStatus,
+        comment: params.comment,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error logging audit event:", error);
+    return { success: false, error: "Failed to log audit event" };
+  }
+}
+
+// ─── Evidence ──────────────────────────────────────────
+
+export async function uploadWorkflowEvidence(params: {
+  recordId: string;
+  filename: string;
+  fileType: string;
+  storageKey?: string;
+  fileHash?: string;
+  sizeBytes?: number;
+  description?: string;
+  stepIndex?: number;
+}) {
+  try {
+    const user = await requireUserContext();
+    const record = await prisma.workflowRecord.findUnique({
+      where: { id: params.recordId },
+      select: { organizationId: true },
+    });
+    if (!record) return { success: false, error: "Record not found" };
+    if (record.organizationId !== user.organizationId)
+      return { success: false, error: "Access denied" };
+
+    const evidence = await prisma.workflowEvidence.create({
+      data: {
+        organizationId: record.organizationId,
+        recordId: params.recordId,
+        filename: params.filename,
+        fileType: params.fileType,
+        storageKey: params.storageKey,
+        fileHash: params.fileHash,
+        sizeBytes: params.sizeBytes,
+        description: params.description,
+        stepIndex: params.stepIndex,
+        uploadedById: user.id,
+      },
+    });
+    revalidatePath(`/workflowos/records/${params.recordId}`);
+    return { success: true, data: evidence };
+  } catch (error) {
+    console.error("Error uploading workflow evidence:", error);
+    return { success: false, error: "Failed to upload evidence" };
+  }
+}
+
+export async function listWorkflowEvidence(recordId: string) {
+  try {
+    const user = await requireUserContext();
+    const evidence = await prisma.workflowEvidence.findMany({
+      where: { organizationId: user.organizationId, recordId },
+      orderBy: { createdAt: "desc" },
+    });
+    return { success: true, data: evidence };
+  } catch (error) {
+    console.error("Error listing workflow evidence:", error);
+    return { success: false, error: "Failed to list evidence" };
+  }
+}
+
+// ─── Dashboard Stats ───────────────────────────────────
+
+export async function getWorkflowDashboardStats(organizationId: string) {
+  try {
+    const user = await requireUserContext();
+    if (user.organizationId !== organizationId)
+      return { success: false, error: "Access denied" };
+
+    const [
+      totalTemplates,
+      totalRecords,
+      activeRecords,
+      completedToday,
+      overdueRecords,
+      statusDistribution,
+      priorityDistribution,
+      recentRecords,
+    ] = await Promise.all([
+      prisma.workflowTemplate.count({ where: { organizationId, status: "active" } }),
+      prisma.workflowRecord.count({ where: { organizationId } }),
+      prisma.workflowRecord.count({ where: { organizationId, status: { notIn: ["completed", "cancelled"] } } }),
+      prisma.workflowRecord.count({
+        where: {
+          organizationId,
+          status: "completed",
+          completedAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
+        },
+      }),
+      prisma.workflowRecord.count({
+        where: {
+          organizationId,
+          dueDate: { lt: new Date() },
+          status: { notIn: ["completed", "cancelled"] },
+        },
+      }),
+      prisma.workflowRecord.groupBy({
+        by: ["status"],
+        where: { organizationId },
+        _count: true,
+      }),
+      prisma.workflowRecord.groupBy({
+        by: ["priority"],
+        where: { organizationId },
+        _count: true,
+      }),
+      prisma.workflowRecord.findMany({
+        where: { organizationId },
+        orderBy: { updatedAt: "desc" },
+        take: 10,
+        select: { id: true, title: true, status: true, priority: true, updatedAt: true },
+      }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        totalTemplates,
+        totalRecords,
+        activeRecords,
+        completedToday,
+        overdueRecords,
+        statusDistribution,
+        priorityDistribution,
+        recentRecords,
+      },
+    };
+  } catch (error) {
+    console.error("Error getting dashboard stats:", error);
+    return { success: false, error: "Failed to get dashboard stats" };
+  }
+}

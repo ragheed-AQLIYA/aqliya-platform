@@ -235,7 +235,7 @@
 
 | Route                                               | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                  |
 | --------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------- |
-| `/workflowos`                                       | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Real governed workflow |
+| `/workflowos`                                       | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Dashboard with real metrics via WorkflowDashboard + getWorkflowDashboardStats |
 | `/workflowos/admin`                                 | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      |                        |
 | `/workflowos/clients/[clientId]/records/[recordId]` | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Record detail          |
 | `/workflowos/templates`                             | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Template list          |
