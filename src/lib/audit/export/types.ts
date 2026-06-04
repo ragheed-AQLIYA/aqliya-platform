@@ -16,6 +16,7 @@ export interface ExportMetadata {
     draftWarning: string
     approvalInfo: string | null
   }
+  locale?: "en" | "ar" | "bilingual"
 }
 
 export interface ExportInput {

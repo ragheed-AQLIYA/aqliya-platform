@@ -1,5 +1,6 @@
 import * as svc from "./services"
 import type { FinancialStatement, DisclosureNote, Finding, Recommendation, ReviewComment, ApprovalRecord, AuditEvent, EvidenceObject } from "@/types/audit"
+import { isArabicText } from "./arabic-pdf-support"
 
 export interface ExportPackage {
   engagementId: string
@@ -18,6 +19,7 @@ export interface ExportPackage {
   statements: FinancialStatementExport[]
   notes: DisclosureNote[]
   auditFile?: AuditFileExport
+  locale?: "en" | "ar" | "bilingual"
 }
 
 export interface FinancialStatementExport {
@@ -68,9 +70,11 @@ export async function exportFinancialStatements(engagementId: string): Promise<E
     lines: fs.lines.map(l => ({ label: l.label, amount: l.amount, isTotal: l.isTotal, indentLevel: l.indentLevel })),
     notes: notes.filter(n => n.linkedStatementLine === fs.title).map(n => `${n.noteNumber}. ${n.title}`),
   }))
+  const clientName = engagement.client?.name ?? ""
+  const locale = isArabicText(clientName) || notes.some(n => isArabicText(n.title) || isArabicText(n.content)) ? "bilingual" : "en"
   return {
     engagementId,
-    clientName: engagement.client?.name ?? "",
+    clientName,
     fiscalPeriod: engagement.fiscalPeriod,
     reportingFramework: engagement.client?.reportingFramework ?? "IFRS for SMEs",
     currency: engagement.client?.currencyCode ?? "SAR",
@@ -79,6 +83,7 @@ export async function exportFinancialStatements(engagementId: string): Promise<E
     labels: buildLabels(engagement.status, approvalRecords),
     statements: statementExports,
     notes,
+    locale,
   }
 }
 
@@ -107,14 +112,70 @@ export async function exportAuditFile(engagementId: string): Promise<ExportPacka
   }
 }
 
-export async function exportBilingual(engagementId: string, locale: "en" | "ar"): Promise<ExportPackage> {
+export async function generateArabicAuditReport(engagementId: string): Promise<ExportPackage> {
   const pkg = await exportFinancialStatements(engagementId)
-  const prefix = locale === "ar" ? "بيان" : "Statement"
+  const [findings, recommendations, evidence, auditEvents] = await Promise.all([
+    svc.getFindings(engagementId).catch(() => []),
+    svc.getRecommendations(engagementId).catch(() => []),
+    svc.getEvidence(engagementId).catch(() => []),
+    svc.getAuditEvents(engagementId).catch(() => []),
+  ])
+  const approvalRecords = await svc.getApprovalRecords(engagementId)
+  const now = new Date().toISOString()
+  const arTitle: Record<string, string> = {
+    balance_sheet: "قائمة المركز المالي",
+    income_statement: "قائمة الدخل",
+    equity: "قائمة التغيرات في حقوق الملكية",
+    cash_flow: "قائمة التدفقات النقدية",
+  }
   return {
     ...pkg,
+    locale: "ar",
     statements: pkg.statements.map(s => ({
       ...s,
-      title: locale === "ar" ? `${prefix}: ${s.title}` : s.title,
+      title: arTitle[s.statementType] ?? s.title,
+    })),
+    auditFile: {
+      exportedAt: now,
+      evidenceChecklist: evidence.map(e => ({ ...e, exportedAt: now })),
+      findings,
+      recommendations,
+      reviewComments: [],
+      approvalRecords: approvalRecords.map(a => ({ ...a, exportedAt: now })),
+      auditTrail: auditEvents,
+    },
+  }
+}
+
+export async function exportBilingual(engagementId: string, locale: "ar" | "en" | "bilingual"): Promise<ExportPackage> {
+  const pkg = await exportFinancialStatements(engagementId)
+  if (locale === "en") return { ...pkg, locale: "en" }
+  const arPrefix: Record<string, string> = {
+    balance_sheet: "قائمة المركز المالي",
+    income_statement: "قائمة الدخل",
+    equity: "قائمة التغيرات في حقوق الملكية",
+    cash_flow: "قائمة التدفقات النقدية",
+  }
+  const enPrefix: Record<string, string> = {
+    balance_sheet: "Statement of Financial Position",
+    income_statement: "Statement of Income",
+    equity: "Statement of Changes in Equity",
+    cash_flow: "Statement of Cash Flows",
+  }
+  return {
+    ...pkg,
+    locale,
+    statements: pkg.statements.map(s => {
+      const arTitle = arPrefix[s.statementType] ?? s.title
+      const enTitle = enPrefix[s.statementType] ?? s.title
+      if (locale === "ar") {
+        return { ...s, title: arTitle }
+      }
+      return { ...s, title: `${arTitle} / ${enTitle}` }
+    }),
+    notes: locale === "bilingual" ? pkg.notes : pkg.notes.map(n => ({
+      ...n,
+      title: locale === "ar" ? n.title : n.title,
     })),
   }
 }

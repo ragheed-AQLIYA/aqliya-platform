@@ -1111,7 +1111,7 @@ export async function exportAuditFileAction(engagementId: string) {
 
 export async function exportBilingualAction(
   engagementId: string,
-  locale: "en" | "ar",
+  locale: "en" | "ar" | "bilingual",
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "operator", "reviewer", "partner"]);

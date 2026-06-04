@@ -65,3 +65,5 @@ export function buildExportResponse(output: ExportOutput) {
     sizeBytes: output.sizeBytes,
   });
 }
+
+export { buildExportMetadata, type ExportMetadata } from "./production-export";

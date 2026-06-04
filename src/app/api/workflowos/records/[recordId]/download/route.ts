@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireUserContext } from "@/lib/auth";
 import { buildDownloadResponse } from "@/lib/platform/download";
+import { buildExportMetadata } from "@/lib/platform/production-export";
 
 export async function GET(
   _request: NextRequest,
@@ -55,9 +56,15 @@ export async function GET(
       },
     });
 
-    const exportData = {
-      exportedAt: new Date().toISOString(),
+    const exportHeader = buildExportMetadata({
       exportedBy: user.name ?? user.id,
+      exportType: "workflow_record",
+      organizationId: record.organizationId,
+      source: "workflowos",
+    });
+
+    const exportData = {
+      ...exportHeader,
       record: {
         id: record.id,
         title: record.title,
@@ -84,7 +91,8 @@ export async function GET(
         createdAt: e.createdAt.toISOString(),
       })),
       governance: {
-        disclaimer:
+        disclaimer: exportHeader.disclaimer,
+        localeNotice:
           "هذا التقرير يعرض بيانات السجل والأدلة وسجل التدقيق كما هي محفوظة داخل المنصة وقت التصدير. لا يُعد هذا التقرير قراراً آلياً.",
         aiAssists: true,
         humanDecides: true,
