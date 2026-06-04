@@ -1,4 +1,4 @@
-﻿-- SalesOS L5 — governed proposal / review / approval (relational)
+-- SalesOS L5 — governed proposal / review / approval (relational)
 -- Apply: npx prisma migrate deploy
 
 CREATE TABLE "SalesProposal" (

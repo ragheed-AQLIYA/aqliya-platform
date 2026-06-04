@@ -1,6 +1,9 @@
 # Optional local override — pgvector for IC-01 dev verify (not production).
 # Usage: docker compose -f docker-compose.yml -f docker-compose.pgvector.yml up -d db
+# Port 5434 avoids conflict with a local PostgreSQL install on 5432.
 
 services:
   db:
     image: pgvector/pgvector:pg16
+    ports:
+      - "5434:5432"
