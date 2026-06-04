@@ -11,9 +11,8 @@ export interface ScimAuthResult {
   response?: NextResponse;
 }
 
-const SCIM_API_KEY = process.env.SCIM_API_KEY;
-
 export function authenticateScimRequest(request: Request): ScimAuthResult {
+  const scimApiKey = process.env.SCIM_API_KEY;
   const authHeader = request.headers.get("authorization");
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -29,7 +28,7 @@ export function authenticateScimRequest(request: Request): ScimAuthResult {
 
   const token = authHeader.slice(7);
 
-  if (!SCIM_API_KEY || token !== SCIM_API_KEY) {
+  if (!scimApiKey || token !== scimApiKey) {
     return {
       authenticated: false,
       organizationId: null,

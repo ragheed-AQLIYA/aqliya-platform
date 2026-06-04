@@ -2807,26 +2807,26 @@ model ScimProvisioningEvent {
   @@index([organizationId, resourceType, operation])
 }
 
-// ==================== CRM Integration (S7-03) ====================
+// ==================== CRM Integration (S7-03) — schema only; not in L0-05 migration ====================
 
 model CrmConnection {
   id              String   @id @default(cuid())
   organizationId  String
-  provider        String   // hubspot | salesforce | apollo | custom
-  label           String   // display name
-  apiEndpoint     String?  // base API URL
-  accessToken     String?  // encrypted via PlatformSecret
-  refreshToken    String?  // encrypted via PlatformSecret
+  provider        String
+  label           String
+  apiEndpoint     String?
+  accessToken     String?
+  refreshToken    String?
   tokenExpiresAt  DateTime?
-  apiKey          String?  // encrypted via PlatformSecret
+  apiKey          String?
   apiVersion      String?  @default("v1")
   syncEnabled     Boolean  @default(false)
   syncIntervalMin Int?     @default(60)
   lastSyncAt      DateTime?
-  lastSyncStatus  String?  // success | partial | failed
+  lastSyncStatus  String?
   lastSyncError   String?
-  fieldMapping    Json?    // {salesField: crmField} mapping
-  conflictPolicy  String?  @default("crm_wins") // crm_wins | local_wins | manual
+  fieldMapping    Json?
+  conflictPolicy  String?  @default("crm_wins")
   metadata        Json?
   createdById     String?
   updatedAt       DateTime @updatedAt
@@ -2844,9 +2844,9 @@ model CrmSyncLog {
   connectionId   String
   connection     CrmConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   organizationId String
-  resourceType   String   // account | contact | opportunity | interaction
-  direction      String   // import | export
-  status         String   // running | success | partial | failed
+  resourceType   String
+  direction      String
+  status         String
   totalRecords   Int      @default(0)
   createdRecords Int      @default(0)
   updatedRecords Int      @default(0)
@@ -2860,27 +2860,27 @@ model CrmSyncLog {
   @@index([organizationId, status, createdAt])
 }
 
-// ==================== ERP Integration (LC-08) ====================
+// ==================== ERP Integration (LC-08) — schema only; not in L0-05 migration ====================
 
 model ErpConnection {
   id                String   @id @default(cuid())
   organizationId    String
-  provider          String   // sap | oracle | microsoft-dynamics | csv-upload | custom
+  provider          String
   label             String
-  connectionType    String   @default("api") // api | file_drop | sftp | custom
+  connectionType    String   @default("api")
   apiEndpoint       String?
-  apiKey            String?  // encrypted via PlatformSecret
-  apiSecret         String?  // encrypted via PlatformSecret
+  apiKey            String?
+  apiSecret         String?
   sftpHost          String?
   sftpPort          Int?
   sftpUsername      String?
-  sftpKey           String?  // encrypted via PlatformSecret
+  sftpKey           String?
   syncEnabled       Boolean  @default(false)
-  syncIntervalMin   Int?     @default(1440) // daily default
+  syncIntervalMin   Int?     @default(1440)
   lastSyncAt        DateTime?
   lastSyncStatus    String?
-  fieldMapping      Json?    // {localField: erpField}
-  sourceSystem      String?  // SAP ERP | Oracle EBS | IFusion
+  fieldMapping      Json?
+  sourceSystem      String?
   defaultCurrency   String?  @default("SAR")
   metadata          Json?
   createdById       String?
@@ -2899,14 +2899,14 @@ model ErpSyncLog {
   connectionId   String
   connection     ErpConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   organizationId String
-  direction      String   @default("import") // import | export
-  status         String   // running | success | partial | failed
+  direction      String   @default("import")
+  status         String
   totalRecords   Int      @default(0)
   importedRecords Int     @default(0)
   failedRecords  Int      @default(0)
   skippedRecords Int      @default(0)
-  sourceFile     String?  // if file-based import
-  fileHash       String?  // SHA-256 for evidence
+  sourceFile     String?
+  fileHash       String?
   errorDetails   Json?
   createdAt      DateTime @default(now())
   completedAt    DateTime?
@@ -2920,13 +2920,13 @@ model ErpImportBatch {
   connectionId   String
   connection     ErpConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   organizationId String
-  status         String   // pending | validated | needs_review | approved | rejected | imported
-  sourceType     String   // api | csv | excel | sftp | manual
+  status         String
+  sourceType     String
   totalLines     Int      @default(0)
   validLines     Int      @default(0)
   errorLines     Int      @default(0)
-  fileHash       String?  // SHA-256 evidence
-  originalFile   String?  // stored file path
+  fileHash       String?
+  originalFile   String?
   reviewNotes    String?
   reviewedById   String?
   reviewedBy     User?    @relation("BatchReviewer", fields: [reviewedById], references: [id])

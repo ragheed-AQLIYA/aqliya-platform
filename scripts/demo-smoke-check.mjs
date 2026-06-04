@@ -158,6 +158,12 @@ async function main() {
     "src/lib/audit/__tests__/sampling-engine.test.ts",
     "audit sampling engine tests",
   );
+  await mustExist("src/app/api/scim/v2/Users/route.ts", "SCIM Users API");
+  await mustExist("src/lib/auth/sso-service.ts", "SSO provider service");
+  await mustExist(
+    "prisma/migrations/20260608120000_l0_05_sso_scim/migration.sql",
+    "L0-05 SSO/SCIM migration",
+  );
 
   if (errors.length) {
     console.error("Demo smoke check FAILED:\n");

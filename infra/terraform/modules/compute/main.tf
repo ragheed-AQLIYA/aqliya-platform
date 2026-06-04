@@ -174,6 +174,10 @@ resource "aws_ecs_task_definition" "app" {
         { name = "NODE_ENV", value = var.environment },
         { name = "NEXT_PUBLIC_DEPLOY_ENV", value = var.environment },
         { name = "DOMAIN_NAME", value = var.domain_name },
+        { name = "FF_AI_RAG", value = "true" },
+        { name = "FF_AI_REAL_PROVIDERS", value = var.environment == "production" ? "false" : "true" },
+        { name = "FF_QUEUE_ENABLED", value = "true" },
+        { name = "FF_TENANT_LIFECYCLE", value = var.environment == "production" ? "true" : "false" },
       ]
       secrets = [
         { name = "DATABASE_URL", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/database-url" },
@@ -182,6 +186,21 @@ resource "aws_ecs_task_definition" "app" {
         { name = "NEXTAUTH_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/auth-secret" },
         { name = "STORAGE_PROVIDER", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/storage-config" },
         { name = "S3_UPLOAD_BUCKET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/storage-config" },
+        { name = "SCIM_API_KEY", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/scim-api-key" },
+        { name = "SSO_DEFAULT_ORG_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/sso-config" },
+        { name = "AUTH_GOOGLE_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/google-oauth" },
+        { name = "AUTH_GOOGLE_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/google-oauth" },
+        { name = "AUTH_GITHUB_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/github-oauth" },
+        { name = "AUTH_GITHUB_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/github-oauth" },
+        { name = "AUTH_AZURE_AD_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/azure-ad-oauth" },
+        { name = "AUTH_AZURE_AD_TENANT_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/azure-ad-oauth" },
+        { name = "AUTH_AZURE_AD_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/azure-ad-oauth" },
+        { name = "AUTH_OKTA_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/okta-oauth" },
+        { name = "AUTH_OKTA_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/okta-oauth" },
+        { name = "AUTH_OKTA_ISSUER", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/okta-oauth" },
+        { name = "AUTH_OIDC_ISSUER", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/oidc-config" },
+        { name = "AUTH_OIDC_CLIENT_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/oidc-config" },
+        { name = "AUTH_OIDC_CLIENT_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/oidc-config" },
       ]
       logConfiguration = {
         logDriver = "awslogs"

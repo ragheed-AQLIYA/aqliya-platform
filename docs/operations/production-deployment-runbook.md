@@ -47,6 +47,18 @@ cp .env.example .env
 | `REDIS_URL` | Redis connection string |
 | `NEXT_PUBLIC_APP_URL` | Public app URL for client-side use |
 
+### SSO / OAuth (L0-05)
+
+| Variable | Description | Required for |
+|----------|-------------|--------------|
+| `SCIM_API_KEY` | Bearer token for SCIM v2 API | SCIM provisioning |
+| `SSO_DEFAULT_ORG_ID` | Default org ID for SCIM-bound users | SCIM + SSO |
+| `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | Google OAuth credentials | Google sign-in |
+| `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` | GitHub OAuth credentials | GitHub sign-in |
+| `AUTH_AZURE_AD_ID` / `AUTH_AZURE_AD_TENANT_ID` / `AUTH_AZURE_AD_SECRET` | Azure AD OAuth | Azure AD sign-in |
+| `AUTH_OKTA_ID` / `AUTH_OKTA_SECRET` / `AUTH_OKTA_ISSUER` | Okta OAuth | Okta sign-in |
+| `AUTH_OIDC_ISSUER` / `AUTH_OIDC_CLIENT_ID` / `AUTH_OIDC_CLIENT_SECRET` | Custom OIDC | Custom OIDC sign-in |
+
 ### Optional but recommended
 
 | Variable | Description |
