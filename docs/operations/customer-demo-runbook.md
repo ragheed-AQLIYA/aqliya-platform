@@ -15,7 +15,8 @@
 | Min | Route | Message |
 | --- | ----- | ------- |
 | 0–5 | `/` → `/products/audit` | Platform positioning — governed intelligence, not chatbot |
-| 5–20 | `/audit` → engagement → trial balance → evidence → review | AuditOS L5 pilot path; emphasize human review |
+| 5–18 | `/audit` → engagement → trial balance → evidence → review | AuditOS L5 pilot path; emphasize human review |
+| 18–20 | `/audit/engagements/{id}/sampling` (optional) | A1-02 assistive sampling — human decides; see `audit-sampling-browser-smoke.md` |
 | 20–35 | `/local-content` → project → suppliers → finding → export | LocalContentOS L5 with conditions; mention Content Studio at `/local-content/campaigns` as L3 subsystem |
 | 35–40 | `/auditos` | **Guided demo only** — mock data, no real customer data |
 | 40–45 | `/decisions` → decision report export | DecisionOS L4 adjunct — bilingual report, audit on export |

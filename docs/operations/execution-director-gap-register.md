@@ -50,7 +50,7 @@
 | ID | Gap |
 | -- | --- |
 | D3-01 | Outcome-tracking dashboard | ✅ 2026-06-05 — `outcome-dashboard.ts` + DecisionOS portfolio panel |
-| A1-02 | Sampling automation | ✅ 2026-06-05 — `src/lib/audit/sampling/*` + `/audit/.../sampling` |
+| A1-02 | Sampling automation | ✅ 2026-06-07 — engine + UI + action test + `audit-sampling-browser-smoke.md` |
 | LC-01 | LocalContentOS scoring depth | ✅ 2026-06-05 — weighted supplier factors in `scoring.ts` |
 | LC-03 | Multi-reviewer approval routing | ✅ 2026-06-05 — `approval-routing.ts` (2 independent reviewers) |
 | S7-01 | SalesOS intelligence tab completion |

@@ -29,10 +29,13 @@ async function main() {
   const demoRoutes = [
     ["src/app/(marketing)/page.tsx", "marketing home"],
     ["src/app/audit/page.tsx", "AuditOS workspace"],
+    ["src/app/audit/engagements/[engagementId]/sampling/page.tsx", "AuditOS sampling"],
+    ["src/components/audit/sampling/audit-sampling-form.tsx", "AuditOS sampling form"],
     ["src/app/local-content/page.tsx", "LocalContentOS workspace"],
     ["src/app/auditos/page.tsx", "AuditOS public demo"],
     ["src/app/(dashboard)/decisions/page.tsx", "DecisionOS list"],
     ["docs/operations/customer-demo-runbook.md", "demo runbook"],
+    ["docs/operations/audit-sampling-browser-smoke.md", "sampling browser smoke"],
   ];
 
   for (const [path, label] of demoRoutes) {
@@ -147,6 +150,14 @@ async function main() {
   );
 
   await mustExist("src/lib/sales/prisma-repository.ts", "SalesOS Prisma repository");
+  await mustExist(
+    "src/lib/audit/__tests__/audit-sampling-action.test.ts",
+    "audit sampling action tests",
+  );
+  await mustExist(
+    "src/lib/audit/__tests__/sampling-engine.test.ts",
+    "audit sampling engine tests",
+  );
 
   if (errors.length) {
     console.error("Demo smoke check FAILED:\n");
