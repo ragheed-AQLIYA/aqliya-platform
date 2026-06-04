@@ -1,0 +1,6 @@
+# Optional local override — pgvector for IC-01 dev verify (not production).
+# Usage: docker compose -f docker-compose.yml -f docker-compose.pgvector.yml up -d db
+
+services:
+  db:
+    image: pgvector/pgvector:pg16

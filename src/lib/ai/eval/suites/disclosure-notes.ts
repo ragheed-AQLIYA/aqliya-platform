@@ -1,0 +1,65 @@
+import type { EvalSuite } from "../eval-types"
+
+export const disclosureNoteSuite: EvalSuite = {
+  id: "disclosure-notes-v1",
+  name: "Disclosure Note Generation",
+  taskType: "disclosure_note",
+  description:
+    "Validates AI-generated disclosure notes contain required regulatory topics. Test case inputs are passed as actual output until IC-02 (active LLM wiring).",
+  testCases: [
+    {
+      id: "disc-001",
+      taskType: "disclosure_note",
+      input: { topic: "revenue_recognition", standard: "IFRS_15" },
+      expectedOutput: "revenue_recognition",
+      metric: "contains",
+      severity: "critical",
+      tags: ["regulatory", "revenue_recognition"],
+    },
+    {
+      id: "disc-002",
+      taskType: "disclosure_note",
+      input: { topic: "related_parties", standard: "IAS_24" },
+      expectedOutput: "related_parties",
+      metric: "contains",
+      severity: "critical",
+      tags: ["regulatory", "related_parties"],
+    },
+    {
+      id: "disc-003",
+      taskType: "disclosure_note",
+      input: { topic: "going_concern", standard: "IAS_1" },
+      expectedOutput: "going_concern",
+      metric: "contains",
+      severity: "high",
+      tags: ["regulatory", "going_concern"],
+    },
+    {
+      id: "disc-004",
+      taskType: "disclosure_note",
+      input: { topic: "financial_instruments", standard: "IFRS_9" },
+      expectedOutput: "IFRS_9",
+      metric: "contains",
+      severity: "critical",
+      tags: ["regulatory", "financial_instruments"],
+    },
+    {
+      id: "disc-005",
+      taskType: "disclosure_note",
+      input: { topic: "leases", standard: "IFRS_16" },
+      expectedOutput: "leases",
+      metric: "contains",
+      severity: "high",
+      tags: ["regulatory", "leases"],
+    },
+    {
+      id: "disc-006",
+      taskType: "disclosure_note",
+      input: { topic: "impairment", standard: "IAS_36", region: "SA" },
+      expectedOutput: "impairment",
+      metric: "contains",
+      severity: "high",
+      tags: ["regulatory", "impairment"],
+    },
+  ],
+}
