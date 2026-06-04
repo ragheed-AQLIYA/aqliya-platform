@@ -21,6 +21,7 @@ import {
   History,
   Rocket,
   Lock,
+  Calculator,
 } from "lucide-react";
 import type { WorkflowContext } from "@/lib/audit/workflow-gating";
 import { evaluateAllTabGates } from "@/lib/audit/workflow-gating";
@@ -47,6 +48,7 @@ interface EngagementTabsProps {
 const tabDefs = [
   { key: "overview", label: "نظرة عامة", icon: LayoutDashboard },
   { key: "trial-balance", label: "ميزان المراجعة", icon: FileSpreadsheet },
+  { key: "materiality", label: "الأهمية النسبية", icon: Calculator },
   { key: "sampling", label: "العينة", icon: Layers },
   { key: "mapping", label: "تعيين الحسابات", icon: GitCompareArrows },
   { key: "validation", label: "التحقق", icon: ShieldCheck },
