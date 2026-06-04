@@ -1172,15 +1172,15 @@ model AuditEvidenceLink {
 }
 
 model AuditEvidenceVersion {
-  id                String        @id @default(cuid())
-  evidenceId        String
-  evidence          AuditEvidence @relation(fields: [evidenceId], references: [id])
-  versionNumber     Int
-  changes           Json
+  id           String        @id @default(cuid())
+  evidenceId   String
+  evidence     AuditEvidence @relation(fields: [evidenceId], references: [id])
+  versionNumber Int
+  changes      Json          // snapshot of the evidence fields at this version
   changeDescription String?
-  createdById       String?
-  createdByName     String?
-  createdAt         DateTime      @default(now())
+  createdById  String?
+  createdByName String?
+  createdAt    DateTime      @default(now())
 
   @@unique([evidenceId, versionNumber])
   @@index([evidenceId, createdAt])
@@ -2286,6 +2286,11 @@ model SalesAuditEvent {
 }
 
 // ==================== Intelligence Core — RAG (IC-01 pgvector) ====================
+// Embedding storage strategy:
+// - `embedding` (vector(1536)): primary when pgvector extension is available
+// - `embeddingJson` (Json?): fallback when pgvector is not installed
+// Use isPgvectorAvailable() from pgvector-compat to check at runtime.
+// Similarity search requires pgvector; without it, use application-level filtering.
 
 model DocumentChunk {
   id             String                      @id @default(cuid())
@@ -2296,6 +2301,7 @@ model DocumentChunk {
   tokenCount     Int?
   metadata       Json?
   embedding      Unsupported("vector(1536)")?
+  embeddingJson  Json?                       @map("embedding_json")
   createdBy      String?
   createdAt      DateTime                    @default(now())
 
@@ -2369,6 +2375,18 @@ model WorkflowRecord {
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
 
+  // Export approval fields (L5)
+  exportStatus           String           @default("none") // none | requested | approved | rejected
+  exportRequestedAt      DateTime?
+  exportRequestedById    String?
+  exportApprovedAt       DateTime?
+  exportApprovedById     String?
+  exportRejectedReason   String?
+
+  // Escalation fields (L5)
+  escalatedAt            DateTime?
+  escalatedToId          String?
+
   @@index([organizationId, status, createdAt])
   @@index([organizationId, templateId, createdAt])
   @@index([platformOrganizationId, createdAt])
@@ -2389,6 +2407,7 @@ model LocalContact {
   department             String?
   organizationName       String?            // External org this contact belongs to
   sensitivityLevel       String             @default("normal") // normal | sensitive | confidential
+  exportStatus           String             @default("none") // none | requested | approved | rejected | exported
   notes                  String?
   tags                   Json               @default("[]")
   isActive               Boolean            @default(true)
@@ -2402,9 +2421,11 @@ model LocalContact {
   interactions       LocalContactInteraction[]
   evidence           ContactEvidence[]
   reviews            ContactReview[]
+  exportRequests     ContactExportRequest[]
 
   @@index([organizationId, name, createdAt])
   @@index([organizationId, sensitivityLevel])
+  @@index([organizationId, exportStatus])
   @@index([platformOrganizationId, createdAt])
   @@index([email])
   @@index([isActive])
@@ -2529,6 +2550,9 @@ model ContactReview {
   reviewerName           String?
   reason                 String?
   findings               Json?            @default("[]")
+  reviewerNotes          String?
+  reviewDueDate          DateTime?
+  completedAt            DateTime?
   metadata               Json?
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
@@ -2555,4 +2579,126 @@ model ContactApproval {
 
   @@index([organizationId, reviewId])
   @@index([approverId])
+}
+
+// ─── LocalContactOS L5: Export + Compliance ──────────────────────────────
+
+model ContactExportRequest {
+  id                     String        @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  contactId              String
+  contact                LocalContact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  status                 String        @default("pending") // pending | approved | rejected
+  requestedById          String
+  requestedByName        String?
+  reason                 String?
+  reviewedById           String?
+  reviewedByName         String?
+  reviewNote             String?
+  reviewedAt             DateTime?
+  requiresLegalReview    Boolean       @default(false)
+  legalReviewStatus      String?       // not_required | pending | cleared | blocked
+  exportedAt             DateTime?
+  metadata               Json?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  @@index([organizationId, contactId, createdAt])
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, requiresLegalReview])
+}
+
+// ==================== Intelligence Core — Institutional Memory (IC-01/AGENT-5) ====================
+
+model IntelligenceGraphNode {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  type           String   // entity | concept | insight | document | topic
+  metadata       Json?
+  embedding      Unsupported("vector(1536)")?
+  embeddingJson  Json?    @map("embedding_json")
+  createdById    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  outgoingEdges IntelligenceGraphEdge[] @relation("IntelligenceGraphNode_outgoing")
+  incomingEdges IntelligenceGraphEdge[] @relation("IntelligenceGraphNode_incoming")
+
+  @@index([organizationId, type])
+  @@index([organizationId, name])
+}
+
+model IntelligenceGraphEdge {
+  id             String                @id @default(cuid())
+  organizationId String
+  sourceId       String
+  source         IntelligenceGraphNode @relation("IntelligenceGraphNode_outgoing", fields: [sourceId], references: [id], onDelete: Cascade)
+  targetId       String
+  target         IntelligenceGraphNode @relation("IntelligenceGraphNode_incoming", fields: [targetId], references: [id], onDelete: Cascade)
+  relationType   String                // related_to | derives_from | evidence_for | contradicts | supports | references
+  weight         Float                 @default(1.0)
+  metadata       Json?
+  createdById    String?
+  createdAt      DateTime              @default(now())
+
+  @@index([organizationId, sourceId, relationType])
+  @@index([organizationId, targetId, relationType])
+  @@index([organizationId, relationType])
+}
+
+model IntelligenceQuery {
+  id             String   @id @default(cuid())
+  organizationId String
+  query          String
+  results        Json?    // array of {chunkId, documentId, similarity, contentPreview}
+  resultCount    Int?     @default(0)
+  userId         String?
+  metadata       Json?    // includes provider, model, latency
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, userId, createdAt])
+}
+
+model IngestionBatch {
+  id             String   @id @default(cuid())
+  organizationId String
+  status         String   @default("pending") // pending | processing | completed | failed | partial
+  source         String?  // manual_upload | api | webhook | integration
+  totalDocuments Int      @default(0)
+  processedCount Int      @default(0)
+  failedCount    Int      @default(0)
+  metadata       Json?
+  createdById    String?
+  createdAt      DateTime @default(now())
+  completedAt    DateTime?
+  errorMessage   String?
+
+  documents IngestionDocument[]
+
+  @@index([organizationId, status, createdAt])
+}
+
+model IngestionDocument {
+  id             String          @id @default(cuid())
+  organizationId String
+  batchId        String
+  batch          IngestionBatch  @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  documentId     String          // reference to external document/system ID
+  title          String?
+  sourceType     String?         // pdf | csv | text | api | email | etc
+  status         String          @default("pending") // pending | processing | chunked | embedded | completed | failed
+  contentHash    String?         // for deduplication
+  totalChunks    Int             @default(0)
+  tokenCount     Int?            @default(0)
+  metadata       Json?
+  createdById    String?
+  createdAt      DateTime        @default(now())
+  completedAt    DateTime?
+  errorMessage   String?
+
+  @@index([organizationId, batchId])
+  @@index([organizationId, documentId])
 }
