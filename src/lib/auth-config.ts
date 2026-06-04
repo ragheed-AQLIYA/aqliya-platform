@@ -1,9 +1,39 @@
-import "dotenv/config";
+﻿import "dotenv/config";
 import NextAuth from "next-auth";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { isOAuthInviteAllowed } from "@/lib/auth/oauth-invite-only";
+import { getEnvOAuthProviders } from "@/lib/auth/oauth-env-providers";
+
+async function attachUserToToken(
+  token: Record<string, unknown>,
+  email: string,
+): Promise<void> {
+  const dbUser = await prisma.user.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      organizationId: true,
+      organization: {
+        select: { id: true, name: true, platformOrganizationId: true },
+      },
+    },
+  });
+  if (!dbUser) return;
+  token.id = dbUser.id;
+  token.email = dbUser.email;
+  token.name = dbUser.name;
+  token.role = dbUser.role;
+  token.organizationId = dbUser.organizationId;
+  token.organization = dbUser.organization;
+  token.platformOrganizationId =
+    dbUser.organization?.platformOrganizationId ?? undefined;
+}
 
 export const authConfig: NextAuthConfig = {
   session: { strategy: "jwt" },
@@ -11,6 +41,7 @@ export const authConfig: NextAuthConfig = {
   trustHost: true,
   providers: [
     Credentials({
+      id: "credentials",
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -55,19 +86,31 @@ export const authConfig: NextAuthConfig = {
         };
       },
     }),
+    ...getEnvOAuthProviders(),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const u = user as any;
-        token.id = u.id;
-        token.email = user.email;
-        token.name = user.name;
-        token.role = u.role;
-        token.organizationId = u.organizationId;
-        token.organization = u.organization;
-        token.platformOrganizationId = u.platformOrganizationId;
+        const u = user as Record<string, unknown>;
+        if (u.organizationId) {
+          token.id = u.id;
+          token.email = user.email;
+          token.name = user.name;
+          token.role = u.role;
+          token.organizationId = u.organizationId;
+          token.organization = u.organization;
+          token.platformOrganizationId = u.platformOrganizationId;
+        } else if (user.email) {
+          await attachUserToToken(
+            token as Record<string, unknown>,
+            user.email,
+          );
+        }
+      } else if (account && token.email) {
+        await attachUserToToken(
+          token as Record<string, unknown>,
+          token.email as string,
+        );
       }
       return token;
     },
@@ -84,6 +127,15 @@ export const authConfig: NextAuthConfig = {
         });
       }
       return session;
+    },
+    async signIn({ user, account }) {
+      if (!account || account.provider === "credentials") return true;
+      return isOAuthInviteAllowed(user.email, async (email) =>
+        prisma.user.findUnique({
+          where: { email },
+          select: { id: true },
+        }),
+      );
     },
   },
   pages: {

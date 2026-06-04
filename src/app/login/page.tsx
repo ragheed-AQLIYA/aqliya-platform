@@ -12,6 +12,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import type { AvailableProvider } from "@/actions/sso-login-actions";
+
+const PROVIDER_LABELS: Record<string, string> = {
+  google: "Google",
+  github: "GitHub",
+  "azure-ad": "Azure AD",
+  okta: "Okta",
+};
 
 export default function LoginPage() {
   const [justRegistered, setJustRegistered] = useState(false);
@@ -20,12 +29,45 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
+  const [ssoProviders, setSsoProviders] = useState<AvailableProvider[]>([]);
+  const [ssoLoading, setSsoLoading] = useState<string | null>(null);
+  const [ssoError, setSsoError] = useState("");
 
   useEffect(() => {
     setJustRegistered(
       new URL(window.location.href).searchParams.get("registered") === "true",
     );
+    loadSsoProviders();
   }, []);
+
+  async function loadSsoProviders() {
+    try {
+      const { getAvailableSsoProvidersAction } = await import(
+        "@/actions/sso-login-actions"
+      );
+      const providers = await getAvailableSsoProvidersAction();
+      setSsoProviders(providers);
+    } catch {
+      // SSO providers check failed silently
+    }
+  }
+
+  async function handleSsoSignIn(providerId: string) {
+    setSsoLoading(providerId);
+    setSsoError("");
+    try {
+      const url = new URL(window.location.href);
+      const rawCallback = url.searchParams.get("callbackUrl") || "/";
+      const callbackUrl =
+        rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+          ? rawCallback
+          : "/";
+      await signIn(providerId, { callbackUrl });
+    } catch {
+      setSsoError("فشل تسجيل الدخول عبر المزود الخارجي");
+      setSsoLoading(null);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -127,6 +169,43 @@ export default function LoginPage() {
                   : "تسجيل الدخول"}
             </Button>
           </form>
+
+          {ssoProviders.length > 0 && (
+            <>
+              <div className="relative my-4">
+                <Separator />
+                <span className="absolute inset-x-0 -top-2.5 mx-auto w-fit bg-card px-2 text-xs text-muted-foreground">
+                  أو الدخول عبر
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                {ssoProviders.map((provider) => (
+                  <Button
+                    key={provider.id}
+                    variant="outline"
+                    className="w-full gap-2"
+                    onClick={() => handleSsoSignIn(provider.id)}
+                    disabled={ssoLoading !== null}
+                  >
+                    {ssoLoading === provider.id ? (
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    ) : (
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-muted text-[10px] font-bold">
+                        {PROVIDER_LABELS[provider.id]?.charAt(0) || "O"}
+                      </span>
+                    )}
+                    {PROVIDER_LABELS[provider.id] || provider.label}
+                  </Button>
+                ))}
+              </div>
+
+              {ssoError && (
+                <p className="mt-2 text-sm text-destructive">{ssoError}</p>
+              )}
+            </>
+          )}
+
           <p className="mt-4 text-center text-sm text-muted-foreground">
             ليس لديك حساب؟{" "}
             <a
