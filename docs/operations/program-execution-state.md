@@ -89,7 +89,7 @@ Reports: `parallel-execution-cycle-2026-06-07-roadmap-phase3.md`, `ROADMAP_PHASE
 
 **Cycle 6 closure:** Still **BLOCKED** on remote staging — `cycle-6-staging-operator-checklist.md`, `cycle6-operator-preflight.mjs`, `cycle6-smoke-report-stamp.mjs`.
 
-**Phase 4 entry:** `docs/operations/phase-4-entry-checklist.md` (after Cycle 6 remote CLOSED).
+**Phase 4 entry:** `docs/operations/phase-4-entry-checklist.md` (after Cycle 6 remote CLOSED). **Demo static gate:** `npm run demo:smoke` ✅ @ `b198619` (slice 24).
 
 Report: `docs/operations/parallel-execution-cycle-2026-06-05-cycle-5.md`
 
