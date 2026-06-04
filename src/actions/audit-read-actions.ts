@@ -22,6 +22,7 @@ import {
   getValidationRun,
   getEngagementWorkflowStatus,
   getCanonicalAccounts,
+  recordAuditEvent as svcRecordAuditEvent,
 } from "@/lib/audit/services"
 import type {
   Engagement, TrialBalance, AccountMapping, FinancialStatement,
@@ -36,6 +37,14 @@ import {
   getEngagementRollforward,
   type EngagementRollforwardResult,
 } from "@/lib/audit/rollforward-service"
+import {
+  getEvidenceVersions,
+  compareVersions,
+  revertToVersion,
+  type EvidenceVersion,
+  type VersionDiff,
+} from "@/lib/audit/evidence-versioning-service"
+import { prisma } from "@/lib/prisma"
 import { confirmMappingAction as _confirmMapping } from "./audit-actions"
 import { runValidationAction as _runValidation } from "./audit-actions"
 
@@ -64,6 +73,113 @@ export async function getFinancialStatementsAction(engagementId: string): Promis
   requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
   await assertEngagementAccess(engagementId, actor)
   return getFinancialStatements(engagementId)
+}
+
+async function assertEvidenceInEngagement(
+  evidenceId: string,
+  engagementId: string,
+  organizationId: string,
+): Promise<void> {
+  const row = await prisma.auditEvidence.findFirst({
+    where: {
+      id: evidenceId,
+      engagementId,
+      engagement: { organizationId },
+    },
+    select: { id: true },
+  });
+  if (!row) throw new Error("Evidence not found");
+}
+
+export async function getEvidenceVersionsAction(
+  evidenceId: string,
+  engagementId: string,
+): Promise<
+  | { success: true; data: EvidenceVersion[] }
+  | { success: false; error: string }
+> {
+  try {
+    const actor = await getAuditActor();
+    requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"]);
+    await assertEngagementAccess(engagementId, actor);
+    await assertEvidenceInEngagement(
+      evidenceId,
+      engagementId,
+      actor.organizationId,
+    );
+    const data = await getEvidenceVersions(evidenceId);
+    return { success: true, data };
+  } catch {
+    return { success: false, error: "تعذر تحميل سجل إصدارات الدليل" };
+  }
+}
+
+export async function compareEvidenceVersionsAction(
+  evidenceId: string,
+  engagementId: string,
+  versionId1: string,
+  versionId2: string,
+): Promise<
+  | { success: true; data: VersionDiff[] }
+  | { success: false; error: string }
+> {
+  try {
+    const actor = await getAuditActor();
+    requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"]);
+    await assertEngagementAccess(engagementId, actor);
+    await assertEvidenceInEngagement(
+      evidenceId,
+      engagementId,
+      actor.organizationId,
+    );
+    const data = await compareVersions(versionId1, versionId2);
+    return { success: true, data };
+  } catch {
+    return { success: false, error: "تعذر مقارنة الإصدارات" };
+  }
+}
+
+export async function revertEvidenceVersionAction(
+  evidenceId: string,
+  engagementId: string,
+  versionNumber: number,
+): Promise<
+  | { success: true; data: EvidenceVersion }
+  | { success: false; error: string }
+> {
+  try {
+    const actor = await getAuditActor();
+    requireRole(actor, ["admin", "operator", "reviewer"]);
+    await assertEngagementAccess(engagementId, actor);
+    await assertEvidenceInEngagement(
+      evidenceId,
+      engagementId,
+      actor.organizationId,
+    );
+    const data = await revertToVersion(
+      evidenceId,
+      versionNumber,
+      actor.actorId,
+      actor.actorName,
+    );
+    await svcRecordAuditEvent({
+      engagementId,
+      eventType: "evidence.version_reverted",
+      actorId: actor.actorId,
+      actorName: actor.actorName,
+      actorRole: actor.actorRole,
+      targetType: "evidence",
+      targetId: evidenceId,
+      newState: String(
+        (data.changes as Record<string, unknown>).state ?? "reverted",
+      ),
+      description: `استعادة الدليل إلى الإصدار ${versionNumber}`,
+      metadata: { versionNumber, newVersionId: data.id },
+    });
+    return { success: true, data };
+  } catch {
+    return { success: false, error: "تعذر استعادة الإصدار" };
+  }
 }
 
 export async function getEngagementRollforwardAction(

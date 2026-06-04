@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { createEvidenceVersion } from "@/lib/audit/evidence-versioning-service";
 
 import {
   createEngagement as svcCreateEngagement,
@@ -321,6 +322,17 @@ export async function updateEvidenceStateWithEventAction(
     engagementId,
     actor,
   );
+  try {
+    await createEvidenceVersion(
+      id,
+      { state },
+      actor.actorId,
+      actor.actorName,
+      `تغيير الحالة إلى ${state}`,
+    );
+  } catch {
+    /* versioning optional until migration applied */
+  }
   if (escalation.triggers.length > 0) {
     await svcRecordAuditEvent({
       engagementId,
@@ -410,6 +422,23 @@ export async function uploadEvidenceFileAction(params: {
     storageKey,
     fileSize: content.length,
   });
+
+  try {
+    await createEvidenceVersion(
+      evidence.id,
+      {
+        state: "uploaded",
+        fileHash,
+        storageKey,
+        fileSize: content.length,
+      },
+      actor.actorId,
+      actor.actorName,
+      "رفع ملف الدليل",
+    );
+  } catch {
+    /* versioning optional until migration applied */
+  }
 
   await svcRecordAuditEvent({
     engagementId: params.engagementId,

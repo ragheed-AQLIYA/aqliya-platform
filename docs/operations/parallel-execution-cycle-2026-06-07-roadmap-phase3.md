@@ -136,4 +136,17 @@
 | ------- | ------ |
 | `npm test` rollforward + cross-decision-patterns + pdf-arabic | See commit report |
 
-**Status:** DONE (Phase 3 medium backlog slices 1–5 in repo); Cycle 6 remote still BLOCKED; S7-03/L0-01/L0-04 operator/vendor; A1-05/A1-07 remain open
+## Delivered — slice 6 (2026-06-07)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **A1-05** | `AuditEvidenceVersion` migration, versioning service, evidence version history UI |
+| **A1-06** | `arabic-pdf-support.ts`, bilingual locale on `exportEngagementAction` + PDF exporter |
+
+### Validation (slice 6)
+
+| Command | Result |
+| ------- | ------ |
+| `npm test` arabic-pdf-support | See commit report |
+
+**Status:** DONE_WITH_CONCERNS (Phase 3 slices 1–6); migration `20260607100000` needs `migrate deploy` on envs; Cycle 6 remote BLOCKED; A1-07/A1-08 open

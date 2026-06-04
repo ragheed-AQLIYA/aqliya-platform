@@ -7,6 +7,7 @@ import { getEvidence as svcGetEvidence, getFindings as svcGetFindings, getRecomm
 import { getEngagement as svcGetEngagement, getFinancialStatements as svcGetFinancialStatements, getDisclosureNotes as svcGetDisclosureNotes, getApprovalRecords as svcGetApprovalRecords, recordAuditEvent as svcRecordAuditEvent } from "@/lib/audit/services"
 import { generateExport } from "@/lib/audit/export"
 import type { ExportFormat, ExportInput } from "@/lib/audit/export/types"
+import { isArabicText } from "@/lib/audit/arabic-pdf-support"
 
 const APPROVED_STATUSES = ["approved", "published"]
 
@@ -38,10 +39,18 @@ export async function exportEngagementAction(engagementId: string, format: Expor
   const isApproved = APPROVED_STATUSES.includes(engagement.status)
   const lastApproval = approvalRecords.find(a => a.action === 'approved')
 
+  const clientName = engagement.client?.name ?? ''
+  const locale =
+    isArabicText(clientName) ||
+    notes.some((n) => isArabicText(n.title) || isArabicText(n.content))
+      ? ("bilingual" as const)
+      : ("en" as const)
+
   const input: ExportInput = {
     metadata: {
       engagementId,
-      clientName: engagement.client?.name ?? '',
+      clientName,
+      locale,
       fiscalPeriod: engagement.fiscalPeriod,
       reportingFramework: engagement.client?.reportingFramework ?? 'IFRS for SMEs',
       currency: engagement.client?.currencyCode ?? 'SAR',

@@ -1150,6 +1150,7 @@ model AuditEvidence {
   uploadedAt   DateTime?
   state        String   @default("missing")
   links        AuditEvidenceLink[]
+  versions     AuditEvidenceVersion[]
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
 
@@ -1168,6 +1169,21 @@ model AuditEvidenceLink {
   createdAt  DateTime      @default(now())
 
   @@index([evidenceId])
+}
+
+model AuditEvidenceVersion {
+  id                String        @id @default(cuid())
+  evidenceId        String
+  evidence          AuditEvidence @relation(fields: [evidenceId], references: [id])
+  versionNumber     Int
+  changes           Json
+  changeDescription String?
+  createdById       String?
+  createdByName     String?
+  createdAt         DateTime      @default(now())
+
+  @@unique([evidenceId, versionNumber])
+  @@index([evidenceId, createdAt])
 }
 
 model AuditFinding {

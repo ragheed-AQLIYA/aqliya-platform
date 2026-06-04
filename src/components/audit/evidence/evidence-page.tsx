@@ -10,6 +10,7 @@ import {
   Upload,
   User,
   Clock,
+  History,
   CheckCircle,
   XCircle,
   AlertTriangle,
@@ -84,6 +85,7 @@ import {
   getFindingsAction,
 } from "@/actions/audit-read-actions";
 import { EvidenceStorageStatusBadge } from "@/components/audit/evidence/evidence-storage-status";
+import { EvidenceVersionHistory } from "@/components/audit/evidence/evidence-version-history";
 
 const stateColors: Record<string, string> = {
   missing: "bg-red-100 text-red-700 border-red-300",
@@ -152,6 +154,7 @@ export default function EvidencePage() {
   const [rejectError, setRejectError] = useState<string | null>(null);
   const [linkError, setLinkError] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
   const EVIDENCE_PAGE_SIZE = 20;
   const stateLabel: Record<string, string> = {
     missing: t("missingState"),
@@ -1179,9 +1182,33 @@ export default function EvidencePage() {
                     رفض الدليل
                   </Button>
                 )}
+              <Button
+                size="sm"
+                variant="secondary"
+                className="w-full"
+                onClick={() => setVersionHistoryOpen(true)}
+              >
+                <History className="size-4 me-1" />
+                سجل الإصدارات
+              </Button>
             </div>
           </div>
         </div>
+      )}
+
+      {selectedEv && (
+        <EvidenceVersionHistory
+          evidenceId={selectedEv.id}
+          engagementId={engagementId}
+          open={versionHistoryOpen}
+          onClose={() => setVersionHistoryOpen(false)}
+          onRevert={async () => {
+            const list = await getEvidenceAction(engagementId);
+            setEvidence(list);
+            const updated = list.find((e) => e.id === selectedEv.id);
+            if (updated) setSelectedEv(updated);
+          }}
+        />
       )}
     </div>
   );
