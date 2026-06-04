@@ -144,6 +144,7 @@
 | Route                                                | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                                                |
 | ---------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------------------------------------- |
 | `/local-content`                                     | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Dashboard with project metrics, server-action-backed |
+| `/local-content/analytics`                           | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | LC-06 org spend analytics (deterministic aggregates) |
 | `/local-content/projects`                            | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Project list with create form, server-action-backed  |
 | `/local-content/projects/[projectId]`                | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Project detail with scoring, navigation to sub-pages |
 | `/local-content/projects/[projectId]/suppliers`      | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Supplier/vendor records                              |
@@ -199,7 +200,8 @@
 | `/sales/deals/[id]/pilot`              | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Deal pilot handoff                               |
 | `/sales/deals/[id]/pilot/export`       | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Pilot export                                     |
 | `/sales/icp`                           | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | ICP scoring & analysis                           |
-| `/sales/intelligence`                  | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Sales intelligence                               |
+| `/sales/intelligence`                  | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Sales intelligence hub (S7-01)                   |
+| `/sales/forecast`                      | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | S7-02 pipeline forecast (deterministic)          |
 | `/sales/opportunities`                 | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Opportunity list                                 |
 | `/sales/opportunities/new`             | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Create opportunity                               |
 | `/sales/opportunities/[id]`            | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Opportunity detail                               |

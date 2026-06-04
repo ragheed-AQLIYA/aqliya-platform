@@ -31,6 +31,7 @@ import {
   getProjectApprovalRoutingState,
   listAuditEvents,
   calculateProjectScore,
+  getOrganizationSpendAnalytics,
   listReports,
   createReport,
 } from "@/lib/local-content/services";
@@ -171,6 +172,15 @@ export async function listLocalContentProjectsAction(): Promise<
   return safe(async () => {
     const user = await requireUserContext("VIEWER");
     return listProjectsByOrganization(user.organizationId);
+  });
+}
+
+export async function getLocalContentSpendAnalyticsAction(): Promise<
+  ActionResult<Awaited<ReturnType<typeof getOrganizationSpendAnalytics>>>
+> {
+  return safe(async () => {
+    const user = await requireUserContext("VIEWER");
+    return getOrganizationSpendAnalytics(user.organizationId);
   });
 }
 

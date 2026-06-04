@@ -1,8 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { getSignalsAction } from "@/actions/decision-signals-alerts";
-import { acknowledgeSignalAction } from "@/actions/decision-signals-alerts";
+import {
+  getSignalsAction,
+  acknowledgeSignalAction,
+} from "@/actions/decision-signals-alerts";
+import { RunSignalAutomationButton } from "@/components/decisions/run-signal-automation-button";
 import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -82,6 +85,7 @@ export default function SignalsPage() {
       <p className="text-sm text-muted-foreground">
         System-generated signals that require monitoring. Signals are automatically generated and cannot be manually created.
       </p>
+      <RunSignalAutomationButton decisionId={decisionId} />
 
       {signals.length === 0 ? (
         <Card>

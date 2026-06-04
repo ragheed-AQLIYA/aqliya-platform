@@ -11,6 +11,7 @@ import {
   Brain,
   Users,
   TrendingUp,
+  LineChart,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { href: "/sales/intelligence", labelAr: "الذكاء", icon: Brain },
   { href: "/sales/icp", labelAr: "ICP", icon: Users },
   { href: "/sales/revenue", labelAr: "الإيرادات", icon: TrendingUp },
+  { href: "/sales/forecast", labelAr: "التوقعات", icon: LineChart },
 ] as const;
 
 export function SalesSubNav() {

@@ -1,8 +1,9 @@
 # SalesOS
 
-**Status:** Prototype
+**Status:** Prototype / internal preview (L3→L4; L5 conditional per S7-04)
 **Route:** `/sales`
-**Current Maturity:** Dashboard exists but is **not** operational for customers.
+**L5 criteria:** `docs/product/salesos-l5-acceptance-criteria.md` — evaluator: `src/lib/sales/l5-acceptance.ts`
+**Current Maturity:** Governed internal workspace — **not** customer-operational until all L5 criteria pass.
 
 ## What Exists
 - Route `/sales` with dashboard UI

@@ -1,6 +1,13 @@
 "use server";
 
-import { acknowledgeSignal, acknowledgeAlert, resolveAlert, getSignalsByDecision, getAlertsByDecision } from "@/lib/decision/signals-alerts";
+import {
+  acknowledgeSignal,
+  acknowledgeAlert,
+  resolveAlert,
+  getSignalsByDecision,
+  getAlertsByDecision,
+} from "@/lib/decision/signals-alerts";
+import { buildMonitoringSignalsFromRisks } from "@/lib/decision/signal-automation";
 import { validateIntelligenceGate } from "@/lib/decision/intelligence-gate";
 import { revalidatePath } from "next/cache";
 import { requireDecisionAccess } from "@/lib/auth";
@@ -107,6 +114,74 @@ export async function resolveAlertAction(
     return { success: true };
   } catch {
     return { error: "Failed to resolve alert" };
+  }
+}
+
+/** D3-02 — generate system monitoring signals from HIGH/MEDIUM risks (APPROVED only) */
+export async function runMonitoringSignalAutomationAction(decisionId: string) {
+  const { user } = await requireDecisionAccess(decisionId, "OPERATOR");
+
+  const gate = await validateIntelligenceGate(decisionId);
+  if (!gate.allowed) {
+    return { error: `Cannot run signal automation: ${gate.missing.join(", ")}` };
+  }
+
+  try {
+    const decision = await prisma.decision.findFirst({
+      where: { id: decisionId, organizationId: user.organizationId },
+      include: {
+        risks: { select: { id: true, description: true, level: true } },
+        signals: { select: { referenceId: true, source: true } },
+      },
+    });
+    if (!decision) return { error: "Decision not found" };
+
+    const existingReferenceIds = new Set(
+      decision.signals
+        .filter((s) => s.source === "risk")
+        .map((s) => s.referenceId),
+    );
+
+    const drafts = buildMonitoringSignalsFromRisks({
+      decisionId: decision.id,
+      organizationId: decision.organizationId,
+      decisionStatus: decision.status,
+      risks: decision.risks,
+      existingReferenceIds,
+    });
+
+    if (drafts.length === 0) {
+      return { success: true, created: 0 };
+    }
+
+    await prisma.decisionMonitoringSignal.createMany({
+      data: drafts.map((d) => ({
+        decisionId: d.decisionId,
+        organizationId: d.organizationId,
+        source: d.source,
+        referenceId: d.referenceId,
+        signalType: d.signalType,
+        description: d.description,
+        severity: d.severity,
+        generatedBy: "system",
+        status: "NEW",
+      })),
+    });
+
+    await logAudit(
+      user.id,
+      decisionId,
+      "DECISION_UPDATED",
+      "DecisionMonitoringSignal",
+      null,
+      toAuditJson({ created: drafts.length, automation: "D3-02" }),
+      user.organizationId,
+    );
+
+    revalidatePath(`/decisions/${decisionId}/signals`);
+    return { success: true, created: drafts.length };
+  } catch {
+    return { error: "Failed to run monitoring signal automation" };
   }
 }
 

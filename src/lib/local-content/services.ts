@@ -8,6 +8,7 @@ import type { Prisma } from "@prisma/client";
 import { createLocalContentAuditEvent, AuditActions } from "./audit-events";
 import type { ScoringResult } from "./types";
 import { calculateFullScoring } from "./scoring";
+import { buildOrganizationSpendAnalytics } from "./spend-analytics";
 import {
   computeApprovalRoutingState,
   validateApprovalSubmission,
@@ -761,4 +762,32 @@ export async function createReport(input: {
         | undefined,
     },
   });
+}
+
+/** LC-06 — org-wide spend analytics dashboard data */
+export async function getOrganizationSpendAnalytics(organizationId: string) {
+  const projects = await listProjectsByOrganization(organizationId);
+  const enriched = await Promise.all(
+    projects.map(async (p) => {
+      const spendRecords = await listSpendRecords(p.id);
+      return {
+        id: p.id,
+        name: p.name,
+        reportingPeriod: p.reportingPeriod,
+        status: p.status,
+        spendRecords: spendRecords.map((sr) => ({
+          amount: sr.amount,
+          category: sr.category,
+          supplier: {
+            localityClassification:
+              sr.supplier?.localityClassification ?? null,
+            localContentPercentage:
+              sr.supplier?.localContentPercentage ?? null,
+            ownershipType: sr.supplier?.ownershipType ?? null,
+          },
+        })),
+      };
+    }),
+  );
+  return buildOrganizationSpendAnalytics({ projects: enriched });
 }

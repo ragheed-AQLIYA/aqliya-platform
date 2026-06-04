@@ -53,14 +53,45 @@
 
 ---
 
-## Next roadmap items (not this cycle)
+## Delivered — Phase 3 slice 2 (2026-06-07)
+
+| ID | Deliverable | Evidence |
+| -- | ----------- | -------- |
+| **S7-02** | Pipeline forecasting | `src/lib/sales/intelligence/pipeline-forecast.ts`, `/sales/forecast`, `PipelineForecastView`, nav |
+| **LC-06** | Org spend analytics | `src/lib/local-content/spend-analytics.ts`, `/local-content/analytics`, `getOrganizationSpendAnalytics` |
+| **D3-02** | Risk-based monitoring signals | `src/lib/decision/signal-automation.ts`, `runMonitoringSignalAutomationAction`, signals UI button |
+
+### Validation (slice 2)
+
+| Command | Result |
+| ------- | ------ |
+| `npm test` spend-analytics + signal-automation | 4 passed |
+
+---
+
+## Delivered — Phase 3 slice 3 (parallel)
+
+| ID | Deliverable | Evidence |
+| -- | ----------- | -------- |
+| **S7-04** | L5 acceptance criteria | `docs/product/salesos-l5-acceptance-criteria.md`, `l5-acceptance.ts` |
+| **D3-03** | Sector intelligence on decision detail | `sector-intelligence*.ts`, `DecisionSectorIntelligencePanel` |
+
+### Validation (slice 3)
+
+| Command | Result |
+| ------- | ------ |
+| `npm test` l5-acceptance + sector-intelligence | See commit report |
+
+---
+
+## Next roadmap items
 
 | ID | Task | Blocker |
 | -- | ---- | ------- |
 | L0-01 | Terraform apply | Operator approval |
 | L0-04 | Pentest | Vendor |
 | Cycle 6 CLOSED | Remote staging | DNS / `staging.aqliya.ai` |
-| LC-02 | Tender matching | Large — Phase 3 medium |
-| S7-02 | Forecasting | After S7-01 ✅ |
+| LC-02 | Tender matching | Large |
+| S7-05 | Bilingual UX parity | Medium |
 
-**Status:** DONE
+**Status:** DONE (S7-01, slice 2–3); Cycle 6 remote still BLOCKED

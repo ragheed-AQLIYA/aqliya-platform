@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DecisionTabs } from "@/components/decisions/decision-tabs";
 import { DecisionEvidence } from "@/components/decisions/decision-evidence";
+import { DecisionSectorIntelligencePanel } from "@/components/decisions/decision-sector-intelligence-panel";
 import { getDecisionById } from "@/actions/decisions";
 import { evaluateDecisionIntake } from "@/lib/decision/intake";
 import { evaluateDecisionFramework } from "@/lib/decision/framework";
@@ -80,6 +81,12 @@ export default async function DecisionDetailPage({
         </div>
       </div>
       <DecisionTabs decisionId={id} decisionType={decision.type} />
+      <div className="mt-4">
+        <DecisionSectorIntelligencePanel
+          decisionId={id}
+          organizationId={decision.organizationId}
+        />
+      </div>
       <div className="mt-4 mb-6">
         <div className="flex items-center justify-between text-sm mb-2">
           <span className="text-muted-foreground">
