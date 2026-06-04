@@ -27,6 +27,7 @@
     "db:pgvector-health": "node scripts/check-pgvector-health.mjs",
     "ic:smoke:cycle5": "tsx scripts/ic-cycle5-smoke.ts",
     "ic:smoke:cycle5:live": "tsx scripts/ic-cycle5-smoke.ts --live",
+    "cycle6:smoke:audit-ai": "tsx -r ./scripts/mock-server-only.cjs scripts/cycle6-governed-audit-smoke.ts",
     "test:ic01:pgvector": "tsx scripts/run-ic01-pgvector-test.ts",
     "demo:smoke": "node scripts/demo-smoke-check.mjs",
     "db:verify-mfa": "tsx scripts/verify-mfa-db.ts",

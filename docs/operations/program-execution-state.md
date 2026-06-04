@@ -82,7 +82,7 @@ Execution Governance Mature
 
 **Remaining ops for Cycle 6 CLOSED:** Remote staging `DATABASE_URL` → `db:verify-pgvector` → `ic:smoke:cycle5:live` → fill `LIVE_SMOKE_REPORT.md` Required Evidence → Director G6-7. See `parallel-execution-cycle-2026-06-06-cycle-6-close.md`.
 
-**Local proxy (2026-06-06):** Docker `:5434` pgvector + migrate deploy PASS — does **not** substitute for remote staging.
+**Local staging full proxy (2026-06-06):** `:5435/aqliya_staging` — migrate + seed + verify + `cycle6:smoke:audit-ai` PASS. **Remote** `staging.aqliya.ai` still required for Cycle 6 **CLOSED**.
 
 Report: `docs/operations/parallel-execution-cycle-2026-06-05-cycle-5.md`
 

@@ -32,12 +32,15 @@ npm run db:verify-pgvector
 
 If extension missing on Linux DB server, follow `docs/operations/pgvector-staging-validation-runbook.md` §2–3.
 
-**Local dev proxy only** (does not close Cycle 6):
+**Local full staging proxy** (dev/CI — does **not** close Cycle 6 on remote URL):
 
 ```powershell
-$env:DATABASE_URL="postgresql://postgres:postgres@localhost:5434/aqliya"
-npx prisma db execute --file prisma/migrations/20260605000001_ic01_pgvector_document_chunk/migration.sql
+docker compose -f docker-compose.staging.yml -f docker-compose.staging-local.yml up -d db redis
+$env:DATABASE_URL="postgresql://postgres:postgres@localhost:5435/aqliya_staging"
+npx prisma migrate deploy
+npx prisma db seed
 npm run db:verify-pgvector
+npm run cycle6:smoke:audit-ai
 ```
 
 ---

@@ -4,5 +4,5 @@
 
 pgvector_extension=true
 document_chunk_table=true
-ff_ai_rag=disabled
+ff_ai_rag=enabled
 pgvector_health=pass

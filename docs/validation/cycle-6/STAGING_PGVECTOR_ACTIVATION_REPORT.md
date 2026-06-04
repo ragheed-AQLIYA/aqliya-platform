@@ -3,7 +3,7 @@
 **Date:** 2026-06-06  
 **Agent:** AGENT-A  
 **Commit:** `4d24afd`  
-**Environment:** Local pgvector **proxy** for schema validation — `localhost:5434` (Docker `aqliya-db-1`)
+**Environment:** Local staging **full proxy** — `localhost:5435` / `aqliya_staging` (`docker-compose.staging.yml` + `docker-compose.staging-local.yml`)
 
 ---
 
@@ -22,12 +22,14 @@
 
 | Step | Command | Result |
 | ---- | ------- | ------ |
-| 1 | Docker `aqliya-db-1` running | OK |
-| 2 | `npx prisma migrate deploy` | P3005 on non-baselined `:5434`; IC01 applied via `prisma db execute` on `20260605000001_ic01_pgvector_document_chunk` |
-| 3 | `npm run db:pgvector-health` | `pgvector_extension=true`, `document_chunk_table=true` |
-| 4 | `npm run db:verify-pgvector` | PASS JSON: `pgvector=true`, `tableExists=true` |
+| 1 | `docker compose … staging-local.yml up -d db redis` | OK |
+| 2 | `npx prisma migrate deploy` | OK — 27 migrations on fresh `aqliya_staging` |
+| 3 | `npx prisma db seed` | OK — `eng-gulf-2025` |
+| 4 | `npm run db:pgvector-health` | `document_chunk_table=true`, `ff_ai_rag=enabled` |
+| 5 | `npm run db:verify-pgvector` | PASS |
+| 6 | `npm run cycle6:smoke:audit-ai` | PASS — `platform_audit_log_id` recorded |
 
-**Database host (redacted):** `localhost:5434` / database `aqliya`
+**Database host (redacted):** `localhost:5435` / database `aqliya_staging`
 
 ---
 

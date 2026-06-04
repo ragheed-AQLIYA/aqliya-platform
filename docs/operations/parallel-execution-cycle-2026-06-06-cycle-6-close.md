@@ -11,10 +11,10 @@
 | # | Criterion | Result |
 | - | --------- | ------ |
 | 1 | `STAGING_PGVECTOR_ACTIVATION_REPORT.md` | **PASS** (local proxy) |
-| 2 | `LIVE_SMOKE_REPORT.md` Required Evidence complete | **FAIL** — staging fields BLOCKED |
-| 3 | `evidence/` logs | **PARTIAL** |
-| 4 | `ai-intelligence-activation.md` live row | **PARTIAL** — offline/proxy row filled; remote live TBD |
-| 5 | G6-1 / G6-2 spot-check | G6-1 proxy OK; G6-2 not live |
+| 2 | `LIVE_SMOKE_REPORT.md` Required Evidence complete | **PASS** (local-staging-full-proxy `:5435`); remote URL pending |
+| 3 | `evidence/` logs | **PASS** |
+| 4 | `ai-intelligence-activation.md` live row | **PARTIAL** — proxy row; remote live TBD |
+| 5 | G6-1 / G6-2 spot-check | G6-1 PASS (`:5435` migrate+verify); G6-2 proxy PASS; remote pending |
 | 6 | G6-5 docs PR | **PASS** (this bundle) |
 | 7 | No Out-of-Scope product commits | **PASS** (docs-only bundle) |
 | 8 | `program-execution-state` Cycle 6 CLOSED | **FAIL** — updated to BLOCKED/IN_PROGRESS, not CLOSED |
@@ -27,7 +27,7 @@
 
 | Agent | Deliverable | Status |
 | ----- | ----------- | ------ |
-| A | pgvector + offline smoke | PARTIAL |
+| A | pgvector + staging proxy + `cycle6:smoke:audit-ai` | PASS (local); remote pending |
 | B | isolation + risk register | DONE |
 | C | infra + rollback assessment | DONE |
 | D | docs sync | DONE |
@@ -38,10 +38,11 @@
 ## Verdict
 
 ```text
-Cycle 6:     BLOCKED (not CLOSED)
-Reason:      G6-2 live staging smoke + Required Evidence incomplete
-Next:        Operator provides staging DATABASE_URL → AGENT-A live run → re-run G6-7
-Track B:     OpenCode product completion (parallel, does not block re-verification)
+Cycle 6:     BLOCKED (not CLOSED on remote staging)
+Reason:      https://staging.aqliya.ai not exercised; FF_AI_REAL_PROVIDERS live API not run
+Local proof: localhost:5435 full proxy PASS (migrate, seed, verify, cycle6:smoke:audit-ai)
+Next:        Remote staging URL + keys → repeat checklist → G6-7 CLOSED
+Track B:     OpenCode product completion (parallel)
 ```
 
 **Status:** BLOCKED

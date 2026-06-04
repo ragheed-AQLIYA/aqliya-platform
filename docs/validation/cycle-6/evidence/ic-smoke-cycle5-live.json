@@ -1,0 +1,112 @@
+﻿
+> aqliya-app@0.1.0 ic:smoke:cycle5:live
+> tsx scripts/ic-cycle5-smoke.ts --live
+
+{
+  "cycle": 5,
+  "timestamp": "2026-06-04T19:12:02.835Z",
+  "durationMs": 3,
+  "pass": true,
+  "metrics": [
+    {
+      "name": "circuit_closed_initial",
+      "value": true,
+      "pass": true
+    },
+    {
+      "name": "circuit_open_after_5_failures",
+      "value": true,
+      "pass": true
+    },
+    {
+      "name": "circuit_closed_after_reset_success",
+      "value": true,
+      "pass": true
+    },
+    {
+      "name": "selection_flag_off",
+      "value": true,
+      "pass": true
+    },
+    {
+      "name": "selection_flag_on_env",
+      "value": false,
+      "pass": true
+    },
+    {
+      "name": "fallback_chain_length",
+      "value": 4,
+      "pass": true
+    },
+    {
+      "name": "obs_fallback_chain",
+      "value": "openai,anthropic,cloud,deterministic",
+      "pass": true
+    },
+    {
+      "name": "obs_circuits_array",
+      "value": 4,
+      "pass": true
+    },
+    {
+      "name": "obs_budget_alerts_flag",
+      "value": false,
+      "pass": true
+    },
+    {
+      "name": "obs_rag_flag",
+      "value": true,
+      "pass": true
+    },
+    {
+      "name": "obs_real_providers_flag",
+      "value": false,
+      "pass": true
+    },
+    {
+      "name": "rag_ranking_measurable",
+      "value": 0.91,
+      "pass": true
+    },
+    {
+      "name": "rag_evidence_attached",
+      "value": 2,
+      "pass": true
+    },
+    {
+      "name": "rag_governance_parsed",
+      "value": "internal",
+      "pass": true
+    },
+    {
+      "name": "budget_alerts_gated",
+      "value": true,
+      "pass": true
+    },
+    {
+      "name": "budget_alerts_on",
+      "value": true,
+      "pass": true
+    },
+    {
+      "name": "budget_quotas_on",
+      "value": true,
+      "pass": true
+    },
+    {
+      "name": "smoke_mode",
+      "value": "live",
+      "pass": true
+    },
+    {
+      "name": "latency_routing_ms",
+      "value": "requires_running_server",
+      "pass": true
+    },
+    {
+      "name": "fallback_rate",
+      "value": "circuit_open_test_proxy",
+      "pass": true
+    }
+  ]
+}

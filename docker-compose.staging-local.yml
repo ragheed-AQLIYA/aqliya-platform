@@ -1,0 +1,10 @@
+# Local staging overlay — avoids port clash with dev db on 5432/5434.
+# Usage: docker compose -f docker-compose.staging.yml -f docker-compose.staging-local.yml up -d db redis
+
+services:
+  db:
+    ports:
+      - "5435:5432"
+  redis:
+    ports:
+      - "6380:6379"

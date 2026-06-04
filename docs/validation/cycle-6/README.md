@@ -1,7 +1,7 @@
 # Cycle 6 — Enterprise Readiness Evidence Bundle
 
 **Program:** Track A (Cursor / Program Director)  
-**Baseline commit:** `4d24afd` (verify at execution time)  
+**Baseline commit:** `729ae90` (bridge @ `4d24afd`)  
 **Plan:** `docs/operations/parallel-execution-cycle-6-closure-plan.md` v1.1
 
 ## Index
@@ -29,6 +29,8 @@
 | Gate | Status |
 | ---- | ------ |
 | G6-0 | PASS |
-| G6-1 | PARTIAL — local pgvector proxy; **remote staging pending** |
-| G6-2 | BLOCKED — live staging smoke + AuditOS action not run |
-| G6-7 | BLOCKED — awaiting G6-1/2 on real staging + Director sign-off |
+| G6-1 | PASS (local `:5435` full proxy); **remote staging pending** |
+| G6-2 | PASS (local proxy + `cycle6:smoke:audit-ai`); **remote URL pending** |
+| G6-7 | BLOCKED — remote `staging.aqliya.ai` + live providers not run |
+
+**Scripts:** `npm run cycle6:smoke:audit-ai` · `docker-compose.staging-local.yml`

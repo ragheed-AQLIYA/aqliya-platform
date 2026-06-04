@@ -74,8 +74,8 @@ Record results here (date, pass/fail per row, measured values OK, no secrets):
 | Date | Latency | Fallback rate | Circuit transitions | Provider selection | Budget alerts | Observability | Overall |
 | ---- | ------- | ------------- | ------------------- | ------------------ | ------------- | ------------- | ------- |
 | 2026-06-05 | offline skip | circuit proxy pass | closed→open→closed pass | flag gating pass | env gating pass | fallbackChain+circuits pass | **Offline PASS** (`npm run ic:smoke:cycle5`) |
-| 2026-06-06 | offline skip | proxy pass | closed→open→closed pass | flag gating pass | env gating pass | fallbackChain+circuits pass | **Local pgvector PASS** (`localhost:5434`); **remote staging live BLOCKED** |
-| — | live TBD | live TBD | live TBD | live TBD | live TBD | live TBD | Requires staging `DATABASE_URL` + `ic:smoke:cycle5:live` |
+| 2026-06-06 | offline + live CLI | `:5435` full proxy PASS | closed→open→closed pass | flag gating pass | env gating pass | fallbackChain+circuits pass | `migrate deploy` + seed + `cycle6:smoke:audit-ai` PASS |
+| — | remote live | `https://staging.aqliya.ai` | TBD | TBD | TBD | TBD | Operator remote URL + `FF_AI_REAL_PROVIDERS` + API keys |
 
 **Cycle 5 smoke is semi production-like** — measure behaviour per `program-execution-state.md`, not only call success.
 
