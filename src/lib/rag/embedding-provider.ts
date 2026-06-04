@@ -8,7 +8,7 @@ export function getRagEmbeddingProvider(): EmbeddingProvider {
   if (!_embeddingProvider) {
     _embeddingProvider = new OpenAIEmbeddingProvider()
   }
-  return _embeddingProvider
+  return _embeddingProvider as EmbeddingProvider
 }
 
 /** Test hook — reset or inject a mock provider. */
