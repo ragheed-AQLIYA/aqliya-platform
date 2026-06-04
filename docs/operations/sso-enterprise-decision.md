@@ -1,42 +1,47 @@
-# Enterprise SSO — Decision Record (L0-05)
+# Enterprise SSO — Decision Record (L0-05 / L0-06)
 
 **Date:** 2026-06-07 (updated)  
-**Status:** **Partial** — conditional OAuth invite-only in repo; enterprise SAML/LDAP pending
+**Status:** **Partial** — OAuth invite-only + org SSO registry + SCIM v2 API (API-key gated)
 
-## Current implementation (repo @ `main`)
+## Implemented in repository
 
-| Capability | Status |
-| ---------- | ------ |
-| NextAuth v5 JWT sessions | ✅ |
-| Credentials (email/password) | ✅ |
-| MFA TOTP + backup codes | ✅ `/settings/mfa` |
-| Google / GitHub / Azure AD / Okta OAuth | ✅ **When env vars set** — **invite-only** (user must exist in DB) |
-| Login UI OAuth buttons | ✅ When provider env configured |
-| `isOAuthInviteAllowed` guard | ✅ `src/lib/auth/oauth-invite-only.ts` |
+| Capability | Status | Evidence |
+| ---------- | ------ | -------- |
+| Credentials + JWT | ✅ | `auth-config.ts` |
+| MFA TOTP | ✅ | `/settings/mfa` |
+| OAuth (Google/GitHub/Azure/Okta) via env | ✅ | Invite-only — `oauth-invite-only.ts` |
+| Org `SsoProvider` CRUD | ✅ | `sso-service.ts`, `/settings/sso` |
+| SCIM v2 Users/Groups | ✅ | `/api/scim/v2/*`, `scim-service.ts` |
+| SCIM auth | ✅ | `SCIM_API_KEY` + `SCIM_DEFAULT_ORG_ID` |
+| Migration | ✅ | `20260608120000_l0_05_sso_scim` |
 
 ## Not implemented (do not market)
 
-- SAML 2.0
-- LDAP / Active Directory
-- Generic OIDC registry / `SsoProvider` DB config (schema WIP — not deployed)
-- SCIM provisioning production package
-- Auto-provision users on first OAuth login
+- SAML 2.0 end-to-end login flow
+- LDAP / Active Directory bind
+- Auto-provision on OAuth (SCIM may create users; OAuth may not)
+- Full enterprise IdP certification / pentest sign-off
 
-## Commercial rule
+## Commercial rules
 
-- May state: “Optional OAuth sign-in for **pre-provisioned** users when configured.”
-- Do **not** state: “Enterprise SSO”, “SAML”, “LDAP”, or “full IdP integration” until this record shows **Implemented** with vendor test evidence.
+| OK to say | Not OK |
+| --------- | ------ |
+| Optional OAuth for pre-provisioned users | “Full enterprise SSO suite” |
+| SCIM provisioning when API key configured | “SAML/LDAP ready” without evidence |
+| SSO provider registry per organization | Production L6 without Cycle 6 + pentest |
 
-## Operator setup
+## Operator quick start
 
-1. Create user in DB (seed or admin invite).
-2. Set provider env vars in `.env` (see `.env.example`).
-3. Sign in at `/login` via provider button.
+**OAuth:** seed user → set `AUTH_*` env → `/login`
 
-## Recommendation for first paying customer
+**SCIM:**
 
-| Option | When |
-| ------ | ---- |
-| Credentials + MFA | Pilot &lt; 20 users |
-| OAuth invite-only | Customer has Google/Azure — users pre-created |
-| SAML/OIDC enterprise | Contract requires IdP — budget 4–8 weeks after L0-05 schema + pentest |
+```bash
+# .env
+SCIM_API_KEY=<long-random>
+SCIM_DEFAULT_ORG_ID=<organization-cuid>
+npx prisma migrate deploy
+curl -H "Authorization: Bearer $SCIM_API_KEY" https://<host>/api/scim/v2/Users
+```
+
+**SSO registry:** `/settings/sso` (admin) after migration
