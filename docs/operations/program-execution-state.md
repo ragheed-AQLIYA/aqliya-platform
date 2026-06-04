@@ -78,7 +78,7 @@ Execution Governance Mature
 | Track | Owner | Status |
 | ----- | ----- | ------ |
 | **Track A** — Enterprise / Cycle 6 closure | Cursor / Director | **LOCAL_COMPLETE** — `npm run cycle6:full-run`; remote G6-2 pending |
-| **Track B** — Product completion | OpenCode | L5 + slices 14–16 (Agent Memory, materiality UI, Office AI context, shared export metadata) |
+| **Track B** — Product completion | OpenCode | L5 + slices 14–21 (incl. Sales store→repositories @ slice 21, IC migrations @ slice 20) |
 
 **Remaining ops for Cycle 6 CLOSED:** Remote staging `DATABASE_URL` → `db:verify-pgvector` → `ic:smoke:cycle5:live` → fill `LIVE_SMOKE_REPORT.md` Required Evidence → Director G6-7. See `parallel-execution-cycle-2026-06-06-cycle-6-close.md`.
 

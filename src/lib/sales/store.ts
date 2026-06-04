@@ -151,26 +151,35 @@ async function ensureOrgLoaded(organizationId: string): Promise<void> {
   if (!pending) {
     pending = (async () => {
       if (PRISMA_PERSISTENCE_ENABLED) {
-        const { prismaLoadOrgSnapshot } = await import("./prisma-repository");
-        const snapshot = await prismaLoadOrgSnapshot(organizationId);
-        if (snapshot) {
-          const store: OrgStore = {
-            accounts: new Map(snapshot.accounts.map((a) => [a.id, a])),
-            contacts: new Map(snapshot.contacts.map((c) => [c.id, c])),
-            leads: new Map(),
-            opportunities: new Map(
-              snapshot.opportunities.map((o) => [o.id, o]),
-            ),
-            interactions: new Map(snapshot.interactions.map((i) => [i.id, i])),
-            ...emptyIntelligenceMaps(),
-            evidence: new Map(snapshot.evidence.map((e) => [e.id, e])),
-            auditLog: [],
-            seeded: snapshot.seeded,
-          };
-          await hydrateTierAFromPersistence(organizationId, store);
-          orgStores.set(organizationId, store);
-          return;
-        }
+        const {
+          accountRepository,
+          contactRepository,
+          opportunityRepository,
+          interactionRepository,
+          evidenceRepository,
+        } = await import("./repositories");
+        const [accounts, contacts, opportunities, interactions, evidence] =
+          await Promise.all([
+            accountRepository.findByOrganization(organizationId),
+            contactRepository.findByOrganization(organizationId),
+            opportunityRepository.findByOrganization(organizationId),
+            interactionRepository.findByOrganization(organizationId),
+            evidenceRepository.findByOrganization(organizationId),
+          ]);
+        const store: OrgStore = {
+          accounts: new Map(accounts.map((a) => [a.id, a])),
+          contacts: new Map(contacts.map((c) => [c.id, c])),
+          leads: new Map(),
+          opportunities: new Map(opportunities.map((o) => [o.id, o])),
+          interactions: new Map(interactions.map((i) => [i.id, i])),
+          ...emptyIntelligenceMaps(),
+          evidence: new Map(evidence.map((e) => [e.id, e])),
+          auditLog: [],
+          seeded: accounts.length > 0,
+        };
+        await hydrateTierAFromPersistence(organizationId, store);
+        orgStores.set(organizationId, store);
+        return;
       }
 
       if (FILE_PERSISTENCE_ENABLED) {
@@ -283,26 +292,48 @@ export async function ensureSalesSeed(
   await ensureOrgLoaded(organizationId);
 
   if (PRISMA_PERSISTENCE_ENABLED) {
-    const { prismaSeedOrg, prismaLoadOrgSnapshot } =
-      await import("./prisma-repository");
-    await prismaSeedOrg(organizationId, ownerId);
-    const snapshot = await prismaLoadOrgSnapshot(organizationId);
-    if (snapshot) {
-      const store: OrgStore = {
-        accounts: new Map(snapshot.accounts.map((a) => [a.id, a])),
-        contacts: new Map(snapshot.contacts.map((c) => [c.id, c])),
-        leads: new Map(),
-        opportunities: new Map(snapshot.opportunities.map((o) => [o.id, o])),
-        interactions: new Map(snapshot.interactions.map((i) => [i.id, i])),
-        ...emptyIntelligenceMaps(),
-        evidence: new Map(snapshot.evidence.map((e) => [e.id, e])),
-        auditLog: [],
-        seeded: true,
-      };
-      await hydrateTierAFromPersistence(organizationId, store);
-      orgStores.set(organizationId, store);
-      return;
+    const {
+      accountRepository,
+      contactRepository,
+      opportunityRepository,
+      interactionRepository,
+      evidenceRepository,
+    } = await import("./repositories");
+    const seed = buildSalesSeedData(organizationId, ownerId);
+    for (const a of seed.accounts) {
+      await accountRepository.create(a).catch(() => {});
     }
+    for (const c of seed.contacts) {
+      await contactRepository.create(c).catch(() => {});
+    }
+    for (const o of seed.opportunities) {
+      await opportunityRepository.create(o).catch(() => {});
+    }
+    for (const i of seed.interactions) {
+      await interactionRepository.create(i).catch(() => {});
+    }
+    const [accounts, contacts, opportunities, interactions, evidence] =
+      await Promise.all([
+        accountRepository.findByOrganization(organizationId),
+        contactRepository.findByOrganization(organizationId),
+        opportunityRepository.findByOrganization(organizationId),
+        interactionRepository.findByOrganization(organizationId),
+        evidenceRepository.findByOrganization(organizationId),
+      ]);
+    const store: OrgStore = {
+      accounts: new Map(accounts.map((a) => [a.id, a])),
+      contacts: new Map(contacts.map((c) => [c.id, c])),
+      leads: new Map(),
+      opportunities: new Map(opportunities.map((o) => [o.id, o])),
+      interactions: new Map(interactions.map((i) => [i.id, i])),
+      ...emptyIntelligenceMaps(),
+      evidence: new Map(evidence.map((e) => [e.id, e])),
+      auditLog: [],
+      seeded: true,
+    };
+    await hydrateTierAFromPersistence(organizationId, store);
+    orgStores.set(organizationId, store);
+    return;
   }
 
   const store = getOrgStore(organizationId);
@@ -347,8 +378,8 @@ export function createAccount(
   store.accounts.set(account.id, account);
   schedulePersist(input.organizationId);
   persistPrismaWrite(input.organizationId, "createAccount", async () => {
-    const { prismaCreateAccount } = await import("./prisma-repository");
-    await prismaCreateAccount(account);
+    const { accountRepository } = await import("./repositories");
+    await accountRepository.create(account);
   });
   return account;
 }
@@ -395,8 +426,8 @@ export function createOpportunity(
   store.opportunities.set(opportunity.id, opportunity);
   schedulePersist(input.organizationId);
   persistPrismaWrite(input.organizationId, "createOpportunity", async () => {
-    const { prismaCreateOpportunity } = await import("./prisma-repository");
-    await prismaCreateOpportunity(opportunity);
+    const { opportunityRepository } = await import("./repositories");
+    await opportunityRepository.create(opportunity);
   });
   return opportunity;
 }
@@ -413,8 +444,8 @@ export function createInteraction(
   store.interactions.set(interaction.id, interaction);
   schedulePersist(input.organizationId);
   persistPrismaWrite(input.organizationId, "createInteraction", async () => {
-    const { prismaCreateInteraction } = await import("./prisma-repository");
-    await prismaCreateInteraction(interaction);
+    const { interactionRepository } = await import("./repositories");
+    await interactionRepository.create(interaction);
   });
   return interaction;
 }
@@ -431,8 +462,8 @@ export function updateOpportunity(
   store.opportunities.set(opportunityId, updated);
   schedulePersist(organizationId);
   persistPrismaWrite(organizationId, "updateOpportunity", async () => {
-    const { prismaUpdateOpportunity } = await import("./prisma-repository");
-    await prismaUpdateOpportunity(organizationId, opportunityId, patch);
+    const { opportunityRepository } = await import("./repositories");
+    await opportunityRepository.update(organizationId, opportunityId, patch);
   });
   return updated;
 }
@@ -477,8 +508,8 @@ export function linkEvidence(
   store.evidence.set(ref.id, ref);
   schedulePersist(input.organizationId);
   persistPrismaWrite(input.organizationId, "createEvidence", async () => {
-    const { prismaCreateEvidence } = await import("./prisma-repository");
-    await prismaCreateEvidence(ref);
+    const { evidenceRepository } = await import("./repositories");
+    await evidenceRepository.create(ref);
   });
   return ref;
 }
@@ -550,8 +581,8 @@ export function createActivity(
   store.interactions.set(interaction.id, interaction);
   schedulePersist(input.organizationId);
   persistPrismaWrite(input.organizationId, "createInteraction", async () => {
-    const { prismaCreateInteraction } = await import("./prisma-repository");
-    await prismaCreateInteraction(interaction);
+    const { interactionRepository } = await import("./repositories");
+    await interactionRepository.create(interaction);
   });
   return activity;
 }
