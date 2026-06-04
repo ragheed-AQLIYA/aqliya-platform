@@ -1,12 +1,112 @@
 // Deterministic local content scoring logic for LocalContentOS v0.1
 // All calculations are rule-based. No AI calls.
 
-import type { ScoringResult } from "./types";
+import type { ScoringResult, SupplierScoreTier, SupplierWeightedScore } from "./types";
 
 interface SupplierScoreInput {
+  supplierKey?: string;
   localityClassification: string | null;
   localContentPercentage: number | null;
   ownershipType: string | null;
+  workforceLocalPct?: number | null;
+}
+
+/** LC-01 — deterministic multi-factor weights (sum = 100) */
+export const SUPPLIER_SCORE_WEIGHTS = {
+  locality: 40,
+  ownership: 25,
+  workforce: 20,
+  declaredContent: 15,
+} as const;
+
+export function scoreLocalityFactor(supplier: SupplierScoreInput): number {
+  const locality = supplier.localityClassification || "unclassified";
+  const declared = supplier.localContentPercentage ?? 0;
+  switch (locality) {
+    case "local":
+      return SUPPLIER_SCORE_WEIGHTS.locality;
+    case "mixed":
+      return Math.round(
+        (SUPPLIER_SCORE_WEIGHTS.locality * Math.min(100, Math.max(0, declared))) /
+          100,
+      );
+    case "non_local":
+      return 0;
+    default:
+      return Math.round(SUPPLIER_SCORE_WEIGHTS.locality * 0.25);
+  }
+}
+
+export function scoreOwnershipFactor(ownershipType: string | null): number {
+  switch (ownershipType) {
+    case "Saudi":
+      return SUPPLIER_SCORE_WEIGHTS.ownership;
+    case "joint_venture":
+      return Math.round(SUPPLIER_SCORE_WEIGHTS.ownership * 0.6);
+    case "foreign":
+      return Math.round(SUPPLIER_SCORE_WEIGHTS.ownership * 0.15);
+    default:
+      return Math.round(SUPPLIER_SCORE_WEIGHTS.ownership * 0.35);
+  }
+}
+
+export function scoreWorkforceFactor(workforceLocalPct: number | null | undefined): number {
+  if (workforceLocalPct == null || Number.isNaN(workforceLocalPct)) {
+    return Math.round(SUPPLIER_SCORE_WEIGHTS.workforce * 0.4);
+  }
+  const pct = Math.min(100, Math.max(0, workforceLocalPct));
+  return Math.round((SUPPLIER_SCORE_WEIGHTS.workforce * pct) / 100);
+}
+
+export function scoreDeclaredContentFactor(
+  supplier: SupplierScoreInput,
+): number {
+  const declared = supplier.localContentPercentage;
+  if (declared == null || Number.isNaN(declared)) {
+    return Math.round(SUPPLIER_SCORE_WEIGHTS.declaredContent * 0.3);
+  }
+  const pct = Math.min(100, Math.max(0, declared));
+  return Math.round((SUPPLIER_SCORE_WEIGHTS.declaredContent * pct) / 100);
+}
+
+export function supplierScoreTier(compositeScore: number): SupplierScoreTier {
+  if (compositeScore >= 75) return "strong";
+  if (compositeScore >= 50) return "moderate";
+  if (compositeScore >= 25) return "weak";
+  return "critical";
+}
+
+export function calculateSupplierScore(
+  supplier: SupplierScoreInput,
+  index = 0,
+): SupplierWeightedScore {
+  const factors = {
+    locality: scoreLocalityFactor(supplier),
+    ownership: scoreOwnershipFactor(supplier.ownershipType),
+    workforce: scoreWorkforceFactor(supplier.workforceLocalPct),
+    declaredContent: scoreDeclaredContentFactor(supplier),
+  };
+  const compositeScore = Math.min(
+    100,
+    factors.locality +
+      factors.ownership +
+      factors.workforce +
+      factors.declaredContent,
+  );
+  return {
+    supplierKey: supplier.supplierKey ?? `supplier-${index}`,
+    compositeScore,
+    tier: supplierScoreTier(compositeScore),
+    factors,
+    localityClassification: supplier.localityClassification || "unclassified",
+    ownershipType: supplier.ownershipType,
+  };
+}
+
+export function calculateSupplierScores(
+  suppliers: SupplierScoreInput[],
+): SupplierWeightedScore[] {
+  return suppliers.map((s, i) => calculateSupplierScore(s, i));
 }
 
 interface SpendScoreInput {
@@ -269,8 +369,19 @@ export function calculateFullScoring(
     input.classifications,
   );
 
+  const supplierScores = calculateSupplierScores(input.suppliers);
+  const averageSupplierScore =
+    supplierScores.length > 0
+      ? Math.round(
+          supplierScores.reduce((sum, s) => sum + s.compositeScore, 0) /
+            supplierScores.length,
+        )
+      : 0;
+
   return {
     ...spendBreakdown,
+    averageSupplierScore,
+    supplierScores,
     supplierCounts,
     evidenceStats,
     findingStats,

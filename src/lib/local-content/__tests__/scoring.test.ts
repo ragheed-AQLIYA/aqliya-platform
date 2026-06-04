@@ -8,6 +8,9 @@ import {
   calculateFindingCounts,
   calculateClassificationStats,
   calculateFullScoring,
+  calculateSupplierScore,
+  calculateSupplierScores,
+  SUPPLIER_SCORE_WEIGHTS,
 } from "../scoring";
 import type { CalculateScoringInput } from "../scoring";
 
@@ -191,6 +194,35 @@ describe("LocalContentOS scoring", () => {
     });
   });
 
+  describe("calculateSupplierScore (LC-01)", () => {
+    it("scores Saudi local supplier highest", () => {
+      const saudi = calculateSupplierScore({
+        supplierKey: "s1",
+        ...SAUDI_SUPPLIER,
+        workforceLocalPct: 90,
+      });
+      const foreign = calculateSupplierScore({
+        supplierKey: "s2",
+        ...FOREIGN_SUPPLIER,
+        workforceLocalPct: 5,
+      });
+      expect(saudi.compositeScore).toBeGreaterThan(foreign.compositeScore);
+      expect(saudi.tier).toBe("strong");
+      expect(foreign.tier).not.toBe("strong");
+    });
+
+    it("factor weights sum to 100", () => {
+      const w = SUPPLIER_SCORE_WEIGHTS;
+      expect(w.locality + w.ownership + w.workforce + w.declaredContent).toBe(100);
+    });
+
+    it("includes supplier scores in full scoring", () => {
+      const scores = calculateSupplierScores([SAUDI_SUPPLIER, FOREIGN_SUPPLIER]);
+      expect(scores).toHaveLength(2);
+      expect(scores[0].factors.locality).toBeGreaterThan(0);
+    });
+  });
+
   describe("calculateFullScoring", () => {
     it("produces complete scoring result", () => {
       const input: CalculateScoringInput = {
@@ -216,6 +248,8 @@ describe("LocalContentOS scoring", () => {
       };
       const result = calculateFullScoring(input);
       expect(result.localContentPercentage).toBe(80);
+      expect(result.supplierScores).toHaveLength(2);
+      expect(result.averageSupplierScore).toBeGreaterThan(0);
       expect(result.supplierCounts.local).toBe(1);
       expect(result.evidenceStats.coveragePercentage).toBe(50);
       expect(result.findingStats.total).toBe(1);

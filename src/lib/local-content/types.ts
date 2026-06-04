@@ -84,6 +84,22 @@ export const VALID_CONFIDENCE_LEVELS = [
 ] as const;
 export type ConfidenceLevel = (typeof VALID_CONFIDENCE_LEVELS)[number];
 
+export type SupplierScoreTier = "strong" | "moderate" | "weak" | "critical";
+
+export interface SupplierWeightedScore {
+  supplierKey: string;
+  compositeScore: number;
+  tier: SupplierScoreTier;
+  factors: {
+    locality: number;
+    ownership: number;
+    workforce: number;
+    declaredContent: number;
+  };
+  localityClassification: string;
+  ownershipType: string | null;
+}
+
 export interface ScoringResult {
   totalSpend: number;
   localSpend: number;
@@ -91,6 +107,8 @@ export interface ScoringResult {
   mixedSpend: number;
   unclassifiedSpend: number;
   localContentPercentage: number;
+  averageSupplierScore: number;
+  supplierScores: SupplierWeightedScore[];
   supplierCounts: {
     total: number;
     local: number;

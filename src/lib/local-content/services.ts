@@ -624,9 +624,12 @@ export async function calculateProjectScore(
     prisma.localContentSupplier.findMany({
       where: { projectId },
       select: {
+        id: true,
+        name: true,
         localityClassification: true,
         localContentPercentage: true,
         ownershipType: true,
+        workforceLocalPct: true,
       },
     }),
     prisma.localContentSpendRecord.findMany({
@@ -665,9 +668,11 @@ export async function calculateProjectScore(
 
   return calculateFullScoring({
     suppliers: suppliers.map((s) => ({
+      supplierKey: s.id,
       localityClassification: s.localityClassification,
       localContentPercentage: s.localContentPercentage,
       ownershipType: s.ownershipType,
+      workforceLocalPct: s.workforceLocalPct,
     })),
     spendRecords: spendRecords.map((sr) => ({
       amount: sr.amount,
