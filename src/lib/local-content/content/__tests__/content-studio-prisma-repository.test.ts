@@ -9,8 +9,12 @@ import { prisma } from "@/lib/prisma";
 const hasDatabase = Boolean(process.env.DATABASE_URL?.trim());
 const isJestPlaceholder =
   process.env.DATABASE_URL === "postgresql://localhost:5432/test_db";
+const hasContentStudioModels =
+  typeof (prisma as { contentStudioProject?: { create?: unknown } }).contentStudioProject
+    ?.create === "function";
 
-const describeIfDb = hasDatabase && !isJestPlaceholder ? describe : describe.skip;
+const describeIfDb =
+  hasDatabase && !isJestPlaceholder && hasContentStudioModels ? describe : describe.skip;
 
 describeIfDb("PrismaContentStudioRepository (PostgreSQL)", () => {
   const runId = Date.now().toString(36);

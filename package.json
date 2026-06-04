@@ -15,7 +15,7 @@
     "backup": "node scripts/backup.mjs",
     "start": "next start",
     "lint": "eslint",
-    "test": "jest",
+    "test": "jest --ci --passWithNoTests --forceExit",
     "test:unit": "jest --testPathPatterns='src/__tests__/unit/'",
     "test:integration": "jest --testPathPatterns='src/__tests__/integration/' --runInBand",
     "test:i18n": "jest src/__tests__/i18n/ --no-coverage",

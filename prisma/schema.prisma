@@ -2287,6 +2287,28 @@ model DocumentChunk {
   @@index([organizationId, chunkIndex])
 }
 
+// ─── Platform — governed agent memory (tenant-scoped) ───────────────────
+
+model AgentMemory {
+  id             String    @id @default(cuid())
+  organizationId String
+  agentId        String
+  agentType      String    @default("assistant")
+  memoryKey      String
+  memoryValue    Json
+  context        Json      @default("{}")
+  ttl            DateTime?
+  tags           Json      @default("[]")
+  createdById    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([organizationId, agentId, memoryKey])
+  @@index([organizationId, agentId])
+  @@index([organizationId, agentType])
+  @@index([ttl])
+}
+
 // ─── WorkflowOS ─────────────────────────────────────────────────────────
 
 model WorkflowTemplate {
@@ -2362,6 +2384,8 @@ model LocalContact {
   outgoingRelations  LocalContactRelation[] @relation("ContactOutgoing")
   incomingRelations  LocalContactRelation[] @relation("ContactIncoming")
   interactions       LocalContactInteraction[]
+  evidence           ContactEvidence[]
+  reviews            ContactReview[]
 
   @@index([organizationId, name, createdAt])
   @@index([organizationId, sensitivityLevel])
@@ -2411,4 +2435,108 @@ model LocalContactInteraction {
   @@index([organizationId, contactId, occurredAt])
   @@index([organizationId, interactionType, occurredAt])
   @@index([platformOrganizationId, createdAt])
+}
+
+// ─── WorkflowOS L5: Audit + Evidence ────────────────────────────────────
+
+model WorkflowAuditEvent {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  recordId               String
+  actorId                String
+  actorName              String?
+  action                 String   // created | advanced | completed | rejected | cancelled | assigned | updated
+  fromStatus             String?
+  toStatus               String?
+  comment                String?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([organizationId, recordId, createdAt])
+  @@index([organizationId, actorId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+}
+
+model WorkflowEvidence {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  recordId               String
+  stepIndex              Int?
+  filename               String
+  fileType               String
+  storageKey             String?
+  fileHash               String?
+  sizeBytes              Int?
+  uploadedById           String?
+  description            String?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([organizationId, recordId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+}
+
+// ─── LocalContactOS L4.5: Evidence + Review + Approval ──────────────────
+
+model ContactEvidence {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  contactId              String
+  contact                LocalContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  filename               String
+  fileType               String
+  storageKey             String?
+  fileHash               String?
+  sizeBytes              Int?
+  description            String?
+  evidenceType           String       @default("document") // document | note | reference | attachment
+  uploadedById           String?
+  metadata               Json?
+  createdAt              DateTime     @default(now())
+
+  @@index([organizationId, contactId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+}
+
+model ContactReview {
+  id                     String           @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  contactId              String
+  contact                LocalContact     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  reviewType             String           @default("sensitivity") // sensitivity | accuracy | completeness | custom
+  status                 String           @default("pending") // pending | approved | changes_requested | rejected
+  reviewerId             String
+  reviewerName           String?
+  reason                 String?
+  findings               Json?            @default("[]")
+  metadata               Json?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+
+  approvals ContactApproval[]
+
+  @@index([organizationId, contactId, createdAt])
+  @@index([organizationId, status, createdAt])
+  @@index([reviewerId, status])
+}
+
+model ContactApproval {
+  id                     String         @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  reviewId               String
+  review                 ContactReview   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  approverId             String
+  approverName           String?
+  status                 String         @default("approved") // approved | rejected
+  note                   String?
+  metadata               Json?
+  createdAt              DateTime       @default(now())
+
+  @@index([organizationId, reviewId])
+  @@index([approverId])
 }
