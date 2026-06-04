@@ -17,6 +17,7 @@ import {
   type TimelineEvent,
 } from "@/lib/decision/decision-timeline";
 import { logAudit } from "@/lib/platform-audit";
+import { notifyOnEvent } from "@/lib/platform/notification/integration";
 
 function buildSnapshotData(
   recommendation: {
@@ -113,6 +114,21 @@ export async function submitForReview(decisionId: string) {
       user.organizationId,
     );
 
+    try {
+      await notifyOnEvent("on_review", user.organizationId, decisionId, {
+        productKey: "decisionos",
+        templateKey: "decision_for_review",
+        recipientId: user.id,
+        templateVars: {
+          title: decision.title,
+          decisionType: decision.type,
+          requestedAt: new Date().toISOString(),
+        },
+      });
+    } catch {
+      // Notification must not block the primary action
+    }
+
     return { success: true, data: { status: updated.status } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
@@ -188,6 +204,21 @@ export async function approveDecision(
       }),
       user.organizationId,
     );
+
+    try {
+      await notifyOnEvent("on_approval", user.organizationId, decisionId, {
+        productKey: "decisionos",
+        templateKey: "decision_approved",
+        recipientId: user.id,
+        templateVars: {
+          title: decision.title,
+          approvedBy: user.name ?? "System",
+          approvedAt: new Date().toISOString(),
+        },
+      });
+    } catch {
+      // Notification must not block the primary action
+    }
 
     return { success: true, data: { status: updated.status, snapshot } };
   } catch (error) {
@@ -273,6 +304,21 @@ export async function approveWithConditions(
       user.organizationId,
     );
 
+    try {
+      await notifyOnEvent("on_approval", user.organizationId, decisionId, {
+        productKey: "decisionos",
+        templateKey: "decision_approved",
+        recipientId: user.id,
+        templateVars: {
+          title: decision.title,
+          approvedBy: user.name ?? "System",
+          approvedAt: new Date().toISOString(),
+        },
+      });
+    } catch {
+      // Notification must not block the primary action
+    }
+
     return { success: true, data: { status: updated.status, snapshot } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
@@ -332,6 +378,20 @@ export async function rejectDecision(decisionId: string, reason: string) {
       JSON.stringify({ status: "REJECTED", reason }),
       user.organizationId,
     );
+
+    try {
+      await notifyOnEvent("on_rejection", user.organizationId, decisionId, {
+        productKey: "decisionos",
+        templateKey: "decision_rejected",
+        recipientId: user.id,
+        templateVars: {
+          title: decision.title,
+          reason: reason,
+        },
+      });
+    } catch {
+      // Notification must not block the primary action
+    }
 
     return { success: true, data: { status: updated.status } };
   } catch (error) {

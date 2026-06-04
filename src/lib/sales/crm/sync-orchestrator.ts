@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { createConnector } from "./connector-factory";
+import { notifyOnEvent } from "@/lib/platform/notification/integration";
 import {
   applyAccountMapping,
   applyContactMapping,
@@ -310,6 +311,31 @@ export async function runSync(
         requiresReview: false,
         errorDetails,
       });
+
+      try {
+        const connection = await prisma.crmConnection.findUnique({
+          where: { id: connectionId },
+          select: { label: true },
+        });
+        const admins = await prisma.user.findMany({
+          where: { organizationId, role: "ADMIN" },
+          select: { id: true },
+          take: 1,
+        });
+        if (admins.length > 0 && connection) {
+          await notifyOnEvent("on_error", organizationId, connectionId, {
+            productKey: "sales_os",
+            templateKey: "sales_crm_sync_error",
+            recipientId: admins[0].id,
+            templateVars: {
+              systemName: connection.label,
+              errorMessage: errorDetails,
+            },
+          });
+        }
+      } catch {
+        // Notification must not block the primary action
+      }
     }
   }
 

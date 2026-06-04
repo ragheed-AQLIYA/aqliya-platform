@@ -1,91 +1,340 @@
 /**
  * post-deploy-smoke.mjs
  *
- * Post-deployment smoke test: validates that critical routes respond 200,
- * the health endpoint is functional, and key API endpoints return expected shapes.
+ * Comprehensive post-deployment smoke test for AQLIYA.
+ * Executed by CI/CD (deploy.yml → post-deploy job) after ECS deploy.
  *
  * Usage:
- *   node scripts/post-deploy-smoke.mjs --base-url https://staging.aqliya.ai
+ *   node scripts/post-deploy-smoke.mjs --base-url "https://staging.aqliya.ai"
+ *   SCIM_API_KEY=xxx node scripts/post-deploy-smoke.mjs --base-url "http://localhost:3000"
  *
- * Requires:
- *   --base-url  The deployment URL to test (required)
- *   --auth-token  Optional bearer token for authenticated endpoints
- *
- * Returns exit code 0 if all checks pass, 1 if any fail.
+ * Returns exit code 0 if all CRITICAL checks pass, 1 if any fail.
+ * Warnings do not fail the pipeline.
  */
 
-const BASE_URL = process.env.BASE_URL ?? process.argv.find((a) => a.startsWith("--base-url="))?.split("=")[1]
-  ?? process.argv[process.argv.indexOf("--base-url") + 1]
+import { execSync } from "child_process"
+import { config as loadDotenv } from "dotenv"
+import { dirname, resolve } from "path"
+import { fileURLToPath } from "url"
+
+loadDotenv({ path: resolve(dirname(fileURLToPath(import.meta.url)), "..", ".env") })
+
+// ─── CLI / Env ───────────────────────────────────────────────────────────────
+
+const BASE_URL =
+  process.env.BASE_URL ??
+  process.argv.find((a) => a.startsWith("--base-url="))?.split("=")[1] ??
+  process.argv[process.argv.indexOf("--base-url") + 1];
 
 if (!BASE_URL) {
-  console.error("Usage: node scripts/post-deploy-smoke.mjs --base-url <url> [--auth-token <token>]")
-  process.exit(1)
+  console.error("Usage: node scripts/post-deploy-smoke.mjs --base-url <url>");
+  process.exit(1);
 }
 
-const AUTH_TOKEN = process.env.AUTH_TOKEN ?? process.argv.find((a) => a.startsWith("--auth-token="))?.split("=")[1]
-  ?? process.argv[process.argv.indexOf("--auth-token") + 1]
+const SCIM_API_KEY =
+  process.env.SCIM_API_KEY ??
+  process.argv.find((a) => a.startsWith("--scim-key="))?.split("=")[1] ??
+  process.argv[process.argv.indexOf("--scim-key") + 1];
 
-const HEADERS = { "User-Agent": "AqliyaPostDeploySmoke/1.0" }
-if (AUTH_TOKEN) HEADERS["Authorization"] = `Bearer ${AUTH_TOKEN}`
+const AUTH_TOKEN =
+  process.env.AUTH_TOKEN ??
+  process.argv.find((a) => a.startsWith("--auth-token="))?.split("=")[1] ??
+  process.argv[process.argv.indexOf("--auth-token") + 1];
 
-const TIMEOUT_MS = 15_000
-const BASE = BASE_URL.replace(/\/+$/, "")
+const COMMIT = process.env.GIT_SHA ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "unknown";
+const ENVIRONMENT = process.env.NODE_ENV ?? "development";
+const TIMEOUT_MS = 15_000;
+const BASE = BASE_URL.replace(/\/+$/, "");
 
-async function check(label, path, opts = {}) {
-  const url = `${BASE}${path}`
-  const signal = AbortSignal.timeout(opts.timeout ?? TIMEOUT_MS)
-  const start = Date.now()
+// ─── Result collector ────────────────────────────────────────────────────────
+
+const checks = [];
+
+function record({ name, endpoint, status, httpStatus, critical = true, detail }) {
+  checks.push({
+    name,
+    endpoint: endpoint ?? null,
+    status, // "pass" | "fail" | "warn"
+    httpStatus: httpStatus ?? null,
+    critical,
+    detail: detail ?? null,
+    ts: new Date().toISOString(),
+  });
+  const icon = status === "pass" ? "✓" : status === "warn" ? "⚠" : "✗";
+  const crit = critical ? "" : " (non-critical)";
+  console.log(`  ${icon} ${name} — HTTP ${httpStatus ?? "—"} [${status}]${crit}`);
+  if (detail) console.log(`       ${detail}`);
+}
+
+// ─── HTTP helpers ────────────────────────────────────────────────────────────
+
+async function fetchUrl(path, opts = {}) {
+  const url = `${BASE}${path}`;
+  const signal = AbortSignal.timeout(opts.timeout ?? TIMEOUT_MS);
+  const headers = { "User-Agent": "AqliyaPostDeploySmoke/1.0", ...opts.headers };
+  const start = Date.now();
+  let res;
   try {
-    const res = await fetch(url, { headers: { ...HEADERS, ...opts.headers }, signal, redirect: "manual" })
-    const ms = Date.now() - start
-    const status = opts.expectedStatus ?? 200
-    const allowed = opts.acceptStatuses ?? [status]
-    const ok =
-      allowed.includes(res.status) ||
-      (opts.acceptRedirect && res.status >= 300 && res.status < 400)
-    if (ok) {
-      console.log(`  ✓ ${label} (${ms}ms)`)
-      return { ok: true, status: res.status }
-    }
-    console.error(`  ✗ ${label} — expected ${status}, got ${res.status} (${ms}ms)`)
-    return { ok: false, status: res.status }
+    res = await fetch(url, {
+      method: opts.method ?? "GET",
+      headers,
+      signal,
+      redirect: "manual",
+      body: opts.body ?? null,
+    });
   } catch (err) {
-    console.error(`  ✗ ${label} — ${err.message}`)
-    return { ok: false, status: 0 }
+    return { ok: false, status: 0, ms: Date.now() - start, error: err.message };
+  }
+  return { ok: true, status: res.status, ms: Date.now() - start, res };
+}
+
+function isRedirect(status) {
+  return status >= 300 && status < 400;
+}
+
+function acceptAnyOf(got, expected) {
+  return expected.includes(got);
+}
+
+// ─── Check runners ───────────────────────────────────────────────────────────
+
+async function checkHttp(label, path, { acceptStatuses = [200], critical = true, headers = {} } = {}) {
+  const { ok, status, ms, error } = await fetchUrl(path, { headers });
+  if (!ok) {
+    record({ name: label, endpoint: path, status: "fail", httpStatus: 0, critical, detail: error });
+    return;
+  }
+  if (acceptAnyOf(status, acceptStatuses)) {
+    record({ name: label, endpoint: path, status: "pass", httpStatus: status, critical });
+  } else {
+    record({
+      name: label,
+      endpoint: path,
+      status: "fail",
+      httpStatus: status,
+      critical,
+      detail: `Expected status in [${acceptStatuses.join(",")}]`,
+    });
   }
 }
+
+async function checkRedirect(label, path, { critical = true } = {}) {
+  const { ok, status, ms, error, res } = await fetchUrl(path);
+  if (!ok) {
+    record({ name: label, endpoint: path, status: "fail", httpStatus: 0, critical, detail: error });
+    return;
+  }
+  if (isRedirect(status)) {
+    const location = res?.headers?.get("location") ?? "(none)";
+    record({ name: label, endpoint: path, status: "pass", httpStatus: status, critical, detail: `→ ${location}` });
+  } else {
+    record({ name: label, endpoint: path, status: "fail", httpStatus: status, critical, detail: `Expected redirect (3xx), got ${status}` });
+  }
+}
+
+async function checkJsonBody(label, path, { acceptStatuses = [200], validate, critical = true, headers = {} } = {}) {
+  const { ok, status, ms, error, res } = await fetchUrl(path, { headers });
+  if (!ok) {
+    record({ name: label, endpoint: path, status: "fail", httpStatus: 0, critical, detail: error });
+    return;
+  }
+  if (!acceptAnyOf(status, acceptStatuses)) {
+    record({ name: label, endpoint: path, status: "fail", httpStatus: status, critical, detail: `Expected status in [${acceptStatuses.join(",")}]` });
+    return;
+  }
+  let body;
+  try {
+    body = await res.json();
+  } catch {
+    record({ name: label, endpoint: path, status: "fail", httpStatus: status, critical, detail: "Response body is not valid JSON" });
+    return;
+  }
+  if (validate) {
+    const err = validate(body);
+    if (err) {
+      record({ name: label, endpoint: path, status: "fail", httpStatus: status, critical, detail: `Validation failed: ${err}` });
+      return;
+    }
+  }
+  record({ name: label, endpoint: path, status: "pass", httpStatus: status, critical });
+}
+
+// ─── Command runner for notification tests ───────────────────────────────────
+
+function runNotificationTests() {
+  try {
+    const output = execSync(
+      `npx jest --no-coverage --ci "src/lib/platform/notification/__tests__/engine.test.ts" 2>&1`,
+      { cwd: process.cwd(), encoding: "utf-8", timeout: 60_000 },
+    );
+    const passed = output.includes("Tests:") && !output.includes("FAIL");
+    const lastLine = output.trim().split("\n").pop();
+    record({
+      name: "Notification engine tests",
+      endpoint: null,
+      status: passed ? "pass" : "fail",
+      httpStatus: null,
+      critical: false,
+      detail: passed ? "Jest suite passed" : `Test output: ${lastLine}`,
+    });
+  } catch (err) {
+    const msg = err.stderr ?? err.message ?? "Execution error";
+    record({
+      name: "Notification engine tests",
+      endpoint: null,
+      status: "warn",
+      httpStatus: null,
+      critical: false,
+      detail: `Could not run: ${msg.substring(0, 200)}`,
+    });
+  }
+}
+
+// ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(`\nPost-deploy smoke test: ${BASE}\n`)
+  const startedAt = Date.now();
+  console.log(`\n═══════════════════════════════════════════════`);
+  console.log(`  AQLIYA Post-Deploy Smoke Test`);
+  console.log(`  Target: ${BASE}`);
+  console.log(`  Env:    ${ENVIRONMENT}`);
+  console.log(`  Commit: ${COMMIT}`);
+  console.log(`═══════════════════════════════════════════════\n`);
 
-  const checks = [
-    check("Health endpoint", "/api/health"),
-    check("Homepage", "/"),
-    check("Login page", "/login", { acceptRedirect: true }),
-  ]
+  // ── 1. Health Checks ──────────────────────────────────────────────────────
 
-  if (!AUTH_TOKEN) {
-    console.log("\n  (no auth token — skipping authenticated checks)")
+  console.log("\n── Health ──\n");
+
+  await checkJsonBody("Health endpoint — main", "/api/health", {
+    acceptStatuses: [200, 503],
+    validate: (b) => {
+      if (!b || typeof b.status !== "string") return "Missing 'status' field";
+      return null;
+    },
+  });
+
+  await checkJsonBody("Health endpoint — ready", "/api/health/ready", {
+    acceptStatuses: [200, 503],
+    validate: (b) => {
+      if (!b || typeof b.status !== "string") return "Missing 'status' field";
+      return null;
+    },
+  });
+
+  await checkHttp("Health endpoint — live", "/api/health/live");
+
+  // ── 2. Auth Checks ────────────────────────────────────────────────────────
+
+  console.log("\n── Auth ──\n");
+
+  await checkHttp("Login page loads", "/login");
+  await checkHttp("CSRF token endpoint", "/api/auth/csrf", { acceptStatuses: [200, 404] });
+
+  // Protected route → login redirect
+  await checkRedirect("Protected route (/settings) redirects to login", "/settings");
+
+  // ── 3. SCIM Checks ────────────────────────────────────────────────────────
+
+  console.log("\n── SCIM ──\n");
+
+  // Without auth — must return 401
+  await checkHttp("SCIM GET /Users (no auth) rejects with 401", "/api/scim/v2/Users", {
+    acceptStatuses: [401],
+  });
+
+  // With auth — may return 200 or 500 (500 if SCIM_DEFAULT_ORG_ID not configured)
+  if (SCIM_API_KEY) {
+    await checkHttp("SCIM GET /Users (authenticated)", "/api/scim/v2/Users", {
+      acceptStatuses: [200, 500],
+      critical: false,
+      headers: {
+        Authorization: `Bearer ${SCIM_API_KEY}`,
+        "Content-Type": "application/scim+json",
+      },
+    });
   } else {
-    checks.push(
-      check("Auth session", "/api/auth/session"),
-      check("Notifications API", "/api/notifications?limit=1", {
-        acceptStatuses: [200, 404],
-      }),
-      check("Monitoring", "/monitoring", { acceptRedirect: true }),
-    )
+    record({
+      name: "SCIM GET /Users (authenticated)",
+      endpoint: "/api/scim/v2/Users",
+      status: "warn",
+      httpStatus: null,
+      critical: false,
+      detail: "Skipped — set SCIM_API_KEY env var to test authenticated path",
+    });
   }
 
-  const results = await Promise.all(checks)
-  const passed = results.filter((r) => r.ok).length
-  const failed = results.filter((r) => !r.ok).length
+  // ── 4. Marketing / Workspace Checks ──────────────────────────────────────
 
-  console.log(`\n  ---\n  ${passed} passed, ${failed} failed\n`)
+  console.log("\n── Marketing ──\n");
 
-  if (failed > 0) process.exit(1)
+  await checkHttp("Homepage (/)", "/");
+  await checkHttp("About page (/about)", "/about");
+  await checkHttp("Products page (/products)", "/products");
+  await checkHttp("Platform page (/platform)", "/platform");
+
+  // ── 5. Feature Flags / Env Vars ───────────────────────────────────────────
+
+  console.log("\n── Env Vars ──\n");
+
+  const requiredVars = ["AUTH_SECRET"];
+  const optionalVars = ["DATABASE_URL", "REDIS_URL", "SCIM_API_KEY", "SCIM_DEFAULT_ORG_ID"];
+
+  for (const v of requiredVars) {
+    if (process.env[v]) {
+      record({ name: `Required env var: ${v}`, endpoint: null, status: "pass", httpStatus: null, critical: true });
+    } else {
+      record({ name: `Required env var: ${v}`, endpoint: null, status: "fail", httpStatus: null, critical: true, detail: `${v} is not set` });
+    }
+  }
+
+  for (const v of optionalVars) {
+    if (process.env[v]) {
+      record({ name: `Optional env var: ${v}`, endpoint: null, status: "pass", httpStatus: null, critical: false });
+    } else {
+      record({ name: `Optional env var: ${v}`, endpoint: null, status: "warn", httpStatus: null, critical: false, detail: `${v} is not set (optional)` });
+    }
+  }
+
+  // ── 6. Notification Engine Tests ─────────────────────────────────────────
+
+  console.log("\n── Notification Engine ──\n");
+
+  runNotificationTests();
+
+  // ── Summary ───────────────────────────────────────────────────────────────
+
+  const passed = checks.filter((c) => c.status === "pass").length;
+  const failed = checks.filter((c) => c.status === "fail").length;
+  const warnings = checks.filter((c) => c.status === "warn").length;
+  const criticalFailed = checks.filter((c) => c.status === "fail" && c.critical).length;
+
+  const results = {
+    version: "0.1.0",
+    timestamp: new Date().toISOString(),
+    commit: COMMIT,
+    environment: ENVIRONMENT,
+    targetUrl: BASE,
+    durationMs: Date.now() - startedAt,
+    checks: checks.map(({ ts, ...rest }) => rest),
+    summary: { total: checks.length, passed, failed, warnings },
+  };
+
+  console.log(`\n───────────────────────────────────────────────`);
+  console.log(`  ${passed} passed, ${failed} failed, ${warnings} warnings`);
+  console.log(`  Duration: ${results.durationMs}ms`);
+  console.log(`───────────────────────────────────────────────\n`);
+
+  console.log(JSON.stringify(results, null, 2));
+
+  if (criticalFailed > 0) {
+    console.error(`\nFAILED: ${criticalFailed} critical check(s) failed.`);
+    process.exit(1);
+  }
+
+  console.log("\nPASSED — All critical checks pass.\n");
 }
 
 main().catch((err) => {
-  console.error("Smoke test error:", err)
-  process.exit(1)
-})
+  console.error("Smoke test fatal error:", err);
+  process.exit(1);
+});

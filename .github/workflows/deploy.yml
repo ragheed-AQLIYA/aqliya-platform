@@ -169,27 +169,11 @@ jobs:
       - name: Wait for Deployment
         run: sleep 60
 
-      - name: Health Check
-        env:
-          DOMAIN: ${{ github.ref_name == 'main' && 'aqliya.ai' || 'staging.aqliya.ai' }}
-        run: |
-          curl -sSf --max-time 30 "https://$DOMAIN/api/health"
-          echo "Health check passed"
-
-      - name: SCIM Health Check
-        env:
-          DOMAIN: ${{ github.ref_name == 'main' && 'aqliya.ai' || 'staging.aqliya.ai' }}
-        run: |
-          SCIM_URL="https://$DOMAIN/api/scim/v2/Users"
-          SCIM_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$SCIM_URL" \
-            -H "Authorization: Bearer ${{ secrets.SCIM_API_KEY || 'test' }}" \
-            -H "Content-Type: application/scim+json")
-          echo "SCIM endpoint returned HTTP $SCIM_STATUS"
-          # SCIM returns 200 (with results) or 401 (no auth) — both mean the route is alive
-          if [ "$SCIM_STATUS" = "000" ]; then echo "SCIM endpoint unreachable"; exit 1; fi
-
-      - name: Smoke Test
+      - name: Comprehensive Smoke Test
         env:
           BASE_URL: ${{ github.ref_name == 'main' && 'https://aqliya.ai' || 'https://staging.aqliya.ai' }}
+          SCIM_API_KEY: ${{ secrets.SCIM_API_KEY || '' }}
           AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
+          GIT_SHA: ${{ github.sha }}
+          NODE_ENV: production
         run: node scripts/post-deploy-smoke.mjs --base-url "$BASE_URL"

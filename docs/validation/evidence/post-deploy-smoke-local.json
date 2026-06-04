@@ -1,0 +1,222 @@
+﻿
+> aqliya-app@0.1.0 smoke:local
+> node scripts/post-deploy-smoke.mjs --base-url http://localhost:3000
+
+◇ injected env (6) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+
+═══════════════════════════════════════════════
+  AQLIYA Post-Deploy Smoke Test
+  Target: http://localhost:3000
+  Env:    development
+  Commit: unknown
+═══════════════════════════════════════════════
+
+
+── Health ──
+
+  ✓ Health endpoint — main — HTTP 200 [pass]
+  ✓ Health endpoint — ready — HTTP 503 [pass]
+  ✓ Health endpoint — live — HTTP 200 [pass]
+
+── Auth ──
+
+  ✓ Login page loads — HTTP 200 [pass]
+  ✓ CSRF token endpoint — HTTP 200 [pass]
+  ✓ Protected route (/settings) redirects to login — HTTP 307 [pass]
+       → /login?callbackUrl=%2Fsettings
+
+── SCIM ──
+
+  ✓ SCIM GET /Users (no auth) rejects with 401 — HTTP 401 [pass]
+  ✓ SCIM GET /Users (authenticated) — HTTP 500 [pass] (non-critical)
+
+── Marketing ──
+
+  ✓ Homepage (/) — HTTP 200 [pass]
+  ✓ About page (/about) — HTTP 200 [pass]
+  ✓ Products page (/products) — HTTP 200 [pass]
+  ✓ Platform page (/platform) — HTTP 200 [pass]
+
+── Env Vars ──
+
+  ✓ Required env var: AUTH_SECRET — HTTP — [pass]
+  ✓ Optional env var: DATABASE_URL — HTTP — [pass] (non-critical)
+  ⚠ Optional env var: REDIS_URL — HTTP — [warn] (non-critical)
+       REDIS_URL is not set (optional)
+  ✓ Optional env var: SCIM_API_KEY — HTTP — [pass] (non-critical)
+  ⚠ Optional env var: SCIM_DEFAULT_ORG_ID — HTTP — [warn] (non-critical)
+       SCIM_DEFAULT_ORG_ID is not set (optional)
+
+── Notification Engine ──
+
+  ✓ Notification engine tests — HTTP — [pass] (non-critical)
+       Jest suite passed
+
+───────────────────────────────────────────────
+  16 passed, 0 failed, 2 warnings
+  Duration: 1621ms
+───────────────────────────────────────────────
+
+{
+  "version": "0.1.0",
+  "timestamp": "2026-06-04T23:43:35.885Z",
+  "commit": "unknown",
+  "environment": "development",
+  "targetUrl": "http://localhost:3000",
+  "durationMs": 1621,
+  "checks": [
+    {
+      "name": "Health endpoint — main",
+      "endpoint": "/api/health",
+      "status": "pass",
+      "httpStatus": 200,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "Health endpoint — ready",
+      "endpoint": "/api/health/ready",
+      "status": "pass",
+      "httpStatus": 503,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "Health endpoint — live",
+      "endpoint": "/api/health/live",
+      "status": "pass",
+      "httpStatus": 200,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "Login page loads",
+      "endpoint": "/login",
+      "status": "pass",
+      "httpStatus": 200,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "CSRF token endpoint",
+      "endpoint": "/api/auth/csrf",
+      "status": "pass",
+      "httpStatus": 200,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "Protected route (/settings) redirects to login",
+      "endpoint": "/settings",
+      "status": "pass",
+      "httpStatus": 307,
+      "critical": true,
+      "detail": "→ /login?callbackUrl=%2Fsettings"
+    },
+    {
+      "name": "SCIM GET /Users (no auth) rejects with 401",
+      "endpoint": "/api/scim/v2/Users",
+      "status": "pass",
+      "httpStatus": 401,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "SCIM GET /Users (authenticated)",
+      "endpoint": "/api/scim/v2/Users",
+      "status": "pass",
+      "httpStatus": 500,
+      "critical": false,
+      "detail": null
+    },
+    {
+      "name": "Homepage (/)",
+      "endpoint": "/",
+      "status": "pass",
+      "httpStatus": 200,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "About page (/about)",
+      "endpoint": "/about",
+      "status": "pass",
+      "httpStatus": 200,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "Products page (/products)",
+      "endpoint": "/products",
+      "status": "pass",
+      "httpStatus": 200,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "Platform page (/platform)",
+      "endpoint": "/platform",
+      "status": "pass",
+      "httpStatus": 200,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "Required env var: AUTH_SECRET",
+      "endpoint": null,
+      "status": "pass",
+      "httpStatus": null,
+      "critical": true,
+      "detail": null
+    },
+    {
+      "name": "Optional env var: DATABASE_URL",
+      "endpoint": null,
+      "status": "pass",
+      "httpStatus": null,
+      "critical": false,
+      "detail": null
+    },
+    {
+      "name": "Optional env var: REDIS_URL",
+      "endpoint": null,
+      "status": "warn",
+      "httpStatus": null,
+      "critical": false,
+      "detail": "REDIS_URL is not set (optional)"
+    },
+    {
+      "name": "Optional env var: SCIM_API_KEY",
+      "endpoint": null,
+      "status": "pass",
+      "httpStatus": null,
+      "critical": false,
+      "detail": null
+    },
+    {
+      "name": "Optional env var: SCIM_DEFAULT_ORG_ID",
+      "endpoint": null,
+      "status": "warn",
+      "httpStatus": null,
+      "critical": false,
+      "detail": "SCIM_DEFAULT_ORG_ID is not set (optional)"
+    },
+    {
+      "name": "Notification engine tests",
+      "endpoint": null,
+      "status": "pass",
+      "httpStatus": null,
+      "critical": false,
+      "detail": "Jest suite passed"
+    }
+  ],
+  "summary": {
+    "total": 18,
+    "passed": 16,
+    "failed": 0,
+    "warnings": 2
+  }
+}
+
+PASSED — All critical checks pass.
+

@@ -73,6 +73,7 @@ import { getGovernanceContext } from "@/lib/governance/retrieval-router";
 import { getStorageProvider, buildStorageKey } from "@/lib/audit/storage";
 import { createHash } from "crypto";
 import { prisma } from "@/lib/prisma";
+import { notifyOnEvent } from "@/lib/platform/notification/integration";
 
 export async function createEngagementAction(params: {
   organizationId: string;
@@ -83,11 +84,36 @@ export async function createEngagementAction(params: {
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "operator"]);
-  return svcCreateEngagement({
+  const result = await svcCreateEngagement({
     ...params,
     actorId: actor.actorId,
     actorName: actor.actorName,
   });
+
+  const engagementId = typeof result === "object" && result !== null && "id" in result
+    ? (result as { id: string }).id
+    : null;
+
+  if (engagementId && params.teamMemberIds.length > 0) {
+    for (const memberId of params.teamMemberIds) {
+      try {
+        await notifyOnEvent("on_create", params.organizationId, engagementId, {
+          productKey: "audit",
+          templateKey: "audit_review_assigned",
+          recipientId: memberId,
+          templateVars: {
+            title: params.clientName,
+            clientName: params.clientName,
+            assignedAt: new Date().toISOString(),
+          },
+        });
+      } catch {
+        // Notification must not block the primary action
+      }
+    }
+  }
+
+  return result;
 }
 
 export async function uploadTrialBalanceAction(
@@ -687,12 +713,33 @@ export async function createApprovalRecordAction(params: {
   requireRole(actor, ["admin", "partner"]);
   await assertEngagementAccess(params.engagementId, actor);
   await enforceAuditRateLimit(actor, "create_approval", "mutation");
-  return svcCreateApprovalRecord({
+  const result = await svcCreateApprovalRecord({
     ...params,
     actorId: actor.actorId,
     actorName: actor.actorName,
     actorRole: actor.actorRole,
   });
+
+  try {
+    const engagement = await svcGetEngagement(actor.organizationId, params.engagementId);
+    if (engagement) {
+      const clientName = engagement.client?.name ?? engagement.clientId;
+      await notifyOnEvent("on_approval", actor.organizationId, params.engagementId, {
+        productKey: "audit",
+        templateKey: "audit_approval_needed",
+        recipientId: actor.actorId,
+        templateVars: {
+          title: clientName,
+          clientName,
+          requestedAt: new Date().toISOString(),
+        },
+      });
+    }
+  } catch {
+    // Notification must not block the primary action
+  }
+
+  return result;
 }
 
 export async function linkEvidenceToEntityAction(params: {

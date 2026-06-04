@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { getStorageProvider } from "@/lib/platform/storage";
+import { notifyOnEvent } from "@/lib/platform/notification/integration";
 import {
   listProjectsByOrganization,
   getProjectById,
@@ -559,6 +560,26 @@ export async function importLocalContentSpendCsvAction(
       },
     });
 
+    try {
+      const project = await prisma.localContentProject.findUnique({
+        where: { id: projectId },
+        select: { name: true, organizationId: true },
+      });
+      if (project) {
+        await notifyOnEvent("on_sync_complete", project.organizationId, projectId, {
+          productKey: "localcontentos",
+          templateKey: "localcontent_batch_import_complete",
+          recipientId: user.id,
+          templateVars: {
+            batchName: project.name,
+            recordCount: String(created),
+          },
+        });
+      }
+    } catch {
+      // Notification must not block the primary action
+    }
+
     revalidateLocalContentPaths(projectId, [
       "spend",
       "suppliers",
@@ -1034,6 +1055,26 @@ export async function submitLocalContentReviewAction(
       targetId: review.id,
       metadata: { action: review.action },
     });
+
+    try {
+      const project = await prisma.localContentProject.findUnique({
+        where: { id: projectId },
+        select: { name: true, organizationId: true },
+      });
+      if (project) {
+        await notifyOnEvent("on_review", project.organizationId, projectId, {
+          productKey: "localcontentos",
+          templateKey: "localcontent_review_routing",
+          recipientId: user.id,
+          templateVars: {
+            projectName: project.name,
+            score: "0",
+          },
+        });
+      }
+    } catch {
+      // Notification must not block the primary action
+    }
 
     revalidateLocalContentPaths(projectId, [
       "review",
