@@ -238,6 +238,21 @@
 | `/workflowos`                                       | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Real governed workflow |
 | `/workflowos/admin`                                 | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      |                        |
 | `/workflowos/clients/[clientId]/records/[recordId]` | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Record detail          |
+| `/workflowos/templates`                             | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Template list          |
+| `/workflowos/templates/new`                         | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Create template        |
+| `/workflowos/templates/[id]`                        | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Template detail        |
+| `/workflowos/records`                               | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Org workflow records   |
+| `/workflowos/records/[id]`                          | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Record from template   |
+
+### LocalContactOS — Governed Workspace (v0.1 slice)
+
+| Route                              | Product/System | Route Type         | Public/Protected | Implementation Status | Notes              |
+| ---------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------ |
+| `/contacts`                        | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Contact registry   |
+| `/contacts/new`                    | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Create contact     |
+| `/contacts/[id]`                   | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Contact detail     |
+| `/contacts/[id]/relations/new`     | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Add relation       |
+| `/contacts/[id]/interactions/new`  | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Log interaction    |
 
 ### Sunbul — Redirect Alias to WorkflowOS
 
