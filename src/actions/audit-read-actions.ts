@@ -45,6 +45,10 @@ import {
   type VersionDiff,
 } from "@/lib/audit/evidence-versioning-service"
 import { prisma } from "@/lib/prisma"
+import { getOrganizationPortfolioAnalytics } from "@/lib/audit/portfolio-analytics-service"
+import type { AuditPortfolioSnapshot } from "@/lib/audit/portfolio-analytics"
+import { getEngagementReviewerSignoffChain } from "@/lib/audit/reviewer-signoff-chain-service"
+import type { ReviewerSignoffChainSnapshot } from "@/lib/audit/reviewer-signoff-chain"
 import { confirmMappingAction as _confirmMapping } from "./audit-actions"
 import { runValidationAction as _runValidation } from "./audit-actions"
 
@@ -196,6 +200,37 @@ export async function getEngagementRollforwardAction(
     return { success: true, data }
   } catch {
     return { success: false, error: "تعذر تحميل مقارنة الفترات" }
+  }
+}
+
+export async function getAuditPortfolioAnalyticsAction(): Promise<
+  | { success: true; data: AuditPortfolioSnapshot }
+  | { success: false; error: string }
+> {
+  try {
+    const actor = await getAuditActor()
+    requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
+    const data = await getOrganizationPortfolioAnalytics(actor.organizationId)
+    return { success: true, data }
+  } catch {
+    return { success: false, error: "تعذر تحميل محفظة التدقيق" }
+  }
+}
+
+export async function getReviewerSignoffChainAction(
+  engagementId: string,
+): Promise<
+  | { success: true; data: ReviewerSignoffChainSnapshot }
+  | { success: false; error: string }
+> {
+  try {
+    const actor = await getAuditActor()
+    requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
+    await assertEngagementAccess(engagementId, actor)
+    const data = await getEngagementReviewerSignoffChain(engagementId)
+    return { success: true, data }
+  } catch {
+    return { success: false, error: "تعذر تحميل سلسلة الاعتماد" }
   }
 }
 

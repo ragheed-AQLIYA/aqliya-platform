@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
+  BarChart3,
   Briefcase,
   Building2,
   FileSpreadsheet,
@@ -23,6 +24,12 @@ import {
 
 const navItems = [
   { label: "لوحة القيادة", href: "/audit", icon: LayoutDashboard, hash: "" },
+  {
+    label: "محفظة التدقيق",
+    href: "/audit/portfolio",
+    icon: BarChart3,
+    hash: "",
+  },
   {
     label: "الارتباطات",
     href: "/audit#engagements",

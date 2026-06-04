@@ -56,6 +56,7 @@ import {
   getApprovalStatusLabel,
 } from "@/lib/audit/workflow-next-action";
 import Link from "next/link";
+import { ReviewerSignoffChainPanel } from "@/components/audit/approval/reviewer-signoff-chain-panel";
 
 const statusColors: Record<string, string> = {
   not_ready: "bg-gray-100 text-gray-600",
@@ -143,6 +144,8 @@ export default function ApprovalPage() {
 
   return (
     <div className="space-y-6" dir="rtl">
+      <ReviewerSignoffChainPanel engagementId={engagementId} />
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-black tracking-tight">{t("title")}</h1>

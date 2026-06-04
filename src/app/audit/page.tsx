@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { KPICard } from "@/components/enterprise/kpi-card";
 import { SectionHeader } from "@/components/enterprise/section-header";
 import {
@@ -172,6 +173,12 @@ export default async function AuditDashboardPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/audit/portfolio"
+            className="text-sm font-medium text-primary hover:underline"
+          >
+            محفظة التدقيق ←
+          </Link>
           <AIIndicator type="verified" label="ذكاء التدقيق" />
           <EngagementFormWrapper
             users={

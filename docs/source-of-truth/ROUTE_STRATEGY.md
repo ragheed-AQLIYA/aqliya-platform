@@ -88,6 +88,7 @@
 | Route                                               | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                      |
 | --------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | -------------------------- |
 | `/audit`                                            | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Dashboard, engagement list |
+| `/audit/portfolio`                                  | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Org portfolio analytics (A1-07) |
 | `/audit/admin/users`                                | AuditOS        | Settings/admin     | Protected        | Pilot-ready (L5)      | Admin panel                |
 | `/audit/engagements/[engagementId]`                 | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Engagement detail          |
 | `/audit/engagements/[engagementId]/trial-balance`   | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      |                            |

@@ -149,4 +149,17 @@
 | ------- | ------ |
 | `npm test` arabic-pdf-support | See commit report |
 
-**Status:** DONE_WITH_CONCERNS (Phase 3 slices 1–6); migration `20260607100000` needs `migrate deploy` on envs; Cycle 6 remote BLOCKED; A1-07/A1-08 open
+## Delivered — slice 7 (2026-06-07)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **A1-07** | `/audit/portfolio`, `portfolio-analytics.ts` org aggregates |
+| **A1-08** | `reviewer-signoff-chain.ts` + panel on approval page |
+
+### Validation (slice 7)
+
+| Command | Result |
+| ------- | ------ |
+| `npm test` portfolio-analytics + reviewer-signoff-chain | See commit report |
+
+**Status:** DONE_WITH_CONCERNS (Phase 3 slices 1–7); migration deploy still operator; Cycle 6 remote BLOCKED; A1-10/S7-03/L0 open
