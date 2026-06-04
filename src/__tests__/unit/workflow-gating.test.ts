@@ -58,6 +58,22 @@ describe("evaluateTabGate", () => {
     });
   });
 
+  describe("sampling", () => {
+    it("is locked without trial balance", () => {
+      const result = evaluateTabGate("sampling", emptyContext());
+      expect(result.locked).toBe(true);
+      expect(result.reason).toContain("ميزان المراجعة");
+    });
+
+    it("is unlocked with trial balance", () => {
+      const result = evaluateTabGate(
+        "sampling",
+        emptyContext({ hasTrialBalance: true }),
+      );
+      expect(result.locked).toBe(false);
+    });
+  });
+
   describe("mapping", () => {
     it("is locked without trial balance", () => {
       const result = evaluateTabGate("mapping", emptyContext());
@@ -232,14 +248,16 @@ describe("evaluateTabGate", () => {
 });
 
 describe("evaluateAllTabGates", () => {
-  it("returns results for all 15 tabs", () => {
+  it("returns results for all 16 tabs", () => {
     const results = evaluateAllTabGates(emptyContext());
-    expect(Object.keys(results).length).toBe(15);
+    expect(Object.keys(results).length).toBe(16);
+    expect(results).toHaveProperty("sampling");
   });
 
   it("locks intermediate tabs in empty context", () => {
     const results = evaluateAllTabGates(emptyContext());
     expect(results.overview.locked).toBe(false);
+    expect(results.sampling.locked).toBe(true);
     expect(results.mapping.locked).toBe(true);
     expect(results.statements.locked).toBe(true);
     expect(results.exports.locked).toBe(true);
@@ -251,6 +269,7 @@ describe("evaluateAllTabGates", () => {
     const results = evaluateAllTabGates(ctx);
     expect(results.overview.locked).toBe(false);
     expect(results["trial-balance"].locked).toBe(false);
+    expect(results.sampling.locked).toBe(false);
     expect(results.mapping.locked).toBe(false);
     expect(results.statements.locked).toBe(false);
     expect(results.notes.locked).toBe(false);
