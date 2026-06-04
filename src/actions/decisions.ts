@@ -1289,6 +1289,22 @@ export async function getDashboardMetrics() {
       })),
     );
 
+    const { buildCrossDecisionPatterns } = await import(
+      "@/lib/decision/cross-decision-patterns"
+    );
+    const crossDecisionPatterns = buildCrossDecisionPatterns(
+      decisions.map((d) => ({
+        id: d.id,
+        type: d.type,
+        status: d.status,
+        risks: d.risks.map((r) => ({
+          level: r.level,
+          description: r.description,
+        })),
+        outcomeStatus: d.outcome?.outcomeStatus ?? null,
+      })),
+    );
+
     return {
       success: true,
       data: {
@@ -1315,6 +1331,7 @@ export async function getDashboardMetrics() {
         outcomeMetrics,
         outcomeCorrelation,
         portfolioSnapshot,
+        crossDecisionPatterns,
       },
     };
   } catch (error) {

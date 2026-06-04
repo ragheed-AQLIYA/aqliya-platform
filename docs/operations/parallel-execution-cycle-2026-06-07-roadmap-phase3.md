@@ -122,4 +122,18 @@
 | **D3-06** | Outcome correlation on dashboard |
 | **S7-07** | `/sales/pipeline-depth` |
 
-**Status:** DONE (Phase 3 medium/high product backlog in repo); Cycle 6 remote still BLOCKED; S7-03/L0-01/L0-04 operator/vendor
+## Delivered — slice 5 (2026-06-07)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **A1-04** | `rollforward.ts`, `rollforward-service.ts`, `RollforwardPanel` on statements |
+| **LC-05** | `pdf-arabic.ts`, Arabic/RTL labels in `local-content/export.ts` PDF |
+| **D3-04** | `cross-decision-patterns.ts`, recurring themes on `/decisions` dashboard |
+
+### Validation (slice 5)
+
+| Command | Result |
+| ------- | ------ |
+| `npm test` rollforward + cross-decision-patterns + pdf-arabic | See commit report |
+
+**Status:** DONE (Phase 3 medium backlog slices 1–5 in repo); Cycle 6 remote still BLOCKED; S7-03/L0-01/L0-04 operator/vendor; A1-05/A1-07 remain open

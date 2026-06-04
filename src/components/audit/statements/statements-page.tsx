@@ -40,6 +40,7 @@ import {
   getFinancialStatementsAction,
   getEngagementAction,
 } from "@/actions/audit-read-actions";
+import { RollforwardPanel } from "@/components/audit/rollforward-panel";
 
 // Read-only governance indicators — no business logic coupling
 import {
@@ -397,6 +398,8 @@ export default function StatementsPage() {
           </TabsContent>
         ))}
       </Tabs>
+
+      <RollforwardPanel engagementId={engagementId} />
 
       <TraceabilityDrawer
         open={traceabilityOpen}

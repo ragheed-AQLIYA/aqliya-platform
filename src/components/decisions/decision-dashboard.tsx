@@ -6,6 +6,7 @@ import {
 } from "@/lib/decision/outcome-dashboard";
 import type { OutcomeCorrelationSnapshot } from "@/lib/decision/outcome-correlation";
 import type { DecisionPortfolioSnapshot } from "@/lib/decision/decision-portfolio";
+import type { CrossDecisionPatternSnapshot } from "@/lib/decision/cross-decision-patterns";
 
 type DashboardMetrics = {
   totalDecisions: number;
@@ -48,6 +49,7 @@ type DashboardMetrics = {
   outcomeMetrics: OutcomeDashboardMetrics;
   outcomeCorrelation: OutcomeCorrelationSnapshot;
   portfolioSnapshot: DecisionPortfolioSnapshot;
+  crossDecisionPatterns: CrossDecisionPatternSnapshot;
 };
 
 function getPriorityColor(priority: string | null) {
@@ -203,6 +205,30 @@ export function DecisionDashboard({ metrics }: { metrics: DashboardMetrics }) {
           </div>
         </div>
       </div>
+
+      {metrics.crossDecisionPatterns.recurringRiskThemes.length > 0 && (
+        <div className="rounded-lg border p-4 mb-4">
+          <h3 className="text-sm font-semibold mb-3">
+            أنماط عبر القرارات (D3-04)
+          </h3>
+          <ul className="space-y-2 text-sm max-h-48 overflow-y-auto">
+            {metrics.crossDecisionPatterns.recurringRiskThemes.map((row) => (
+              <li
+                key={row.patternKey}
+                className="flex justify-between gap-2 rounded border px-2 py-1"
+              >
+                <span className="truncate">{row.labelAr}</span>
+                <span className="text-muted-foreground shrink-0">
+                  {row.count} قرار
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[10px] text-muted-foreground mt-2">
+            {metrics.crossDecisionPatterns.disclaimerAr}
+          </p>
+        </div>
+      )}
 
       <div className="rounded-lg border p-4 mb-4">
         <h3 className="text-sm font-semibold mb-3">محفظة القرارات (D3-05)</h3>

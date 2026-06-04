@@ -32,6 +32,10 @@ import type { PaginatedResult } from "@/lib/audit/pagination"
 import type { WorkflowContext } from "@/lib/audit/workflow-gating"
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context"
 import { assertEngagementAccess } from "@/lib/audit/tenant-guard"
+import {
+  getEngagementRollforward,
+  type EngagementRollforwardResult,
+} from "@/lib/audit/rollforward-service"
 import { confirmMappingAction as _confirmMapping } from "./audit-actions"
 import { runValidationAction as _runValidation } from "./audit-actions"
 
@@ -60,6 +64,23 @@ export async function getFinancialStatementsAction(engagementId: string): Promis
   requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
   await assertEngagementAccess(engagementId, actor)
   return getFinancialStatements(engagementId)
+}
+
+export async function getEngagementRollforwardAction(
+  engagementId: string,
+): Promise<
+  | { success: true; data: EngagementRollforwardResult }
+  | { success: false; error: string }
+> {
+  try {
+    const actor = await getAuditActor()
+    requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
+    await assertEngagementAccess(engagementId, actor)
+    const data = await getEngagementRollforward(engagementId)
+    return { success: true, data }
+  } catch {
+    return { success: false, error: "تعذر تحميل مقارنة الفترات" }
+  }
 }
 
 export async function getDisclosureNotesAction(engagementId: string): Promise<DisclosureNote[]> {
