@@ -13,6 +13,7 @@ import {
   TrendingUp,
   LineChart,
   Filter,
+  BarChart2,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { href: "/sales/revenue", labelAr: "الإيرادات", icon: TrendingUp },
   { href: "/sales/forecast", labelAr: "التوقعات", icon: LineChart },
   { href: "/sales/funnel", labelAr: "قمع التحويل", icon: Filter },
+  { href: "/sales/pipeline-depth", labelAr: "عمق المسار", icon: BarChart2 },
 ] as const;
 
 export function SalesSubNav() {

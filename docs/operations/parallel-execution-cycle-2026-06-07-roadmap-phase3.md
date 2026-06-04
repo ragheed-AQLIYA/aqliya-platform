@@ -111,4 +111,15 @@
 | **S7-06** | `/sales/funnel`, `conversion-funnel.ts`, command-center snippet |
 | **LC-02** | `tender-matching.ts`, `/local-content/projects/[id]/tender-match`, seed metadata |
 
-**Status:** DONE (Phase 3 product backlog S7-01…S7-06, LC-02/06, D3-02/03); Cycle 6 remote still BLOCKED
+## Delivered — slice 4 (2026-06-07)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **A1-03** | `materiality.ts` + sampling threshold |
+| **LC-04** | `/local-content/classification-rules` |
+| **LC-09** | Content Studio scope doc |
+| **D3-05** | Portfolio panel on decisions dashboard |
+| **D3-06** | Outcome correlation on dashboard |
+| **S7-07** | `/sales/pipeline-depth` |
+
+**Status:** DONE (Phase 3 medium/high product backlog in repo); Cycle 6 remote still BLOCKED; S7-03/L0-01/L0-04 operator/vendor

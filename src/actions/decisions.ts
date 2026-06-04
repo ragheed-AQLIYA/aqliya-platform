@@ -1252,21 +1252,40 @@ export async function getDashboardMetrics() {
     const { buildOutcomeDashboardMetrics } = await import(
       "@/lib/decision/outcome-dashboard"
     );
-    const outcomeMetrics = buildOutcomeDashboardMetrics(
+    const outcomeInput = decisions.map((d) => ({
+      id: d.id,
+      title: d.title,
+      status: d.status,
+      priority: d.priority,
+      type: d.type,
+      outcome: d.outcome
+        ? {
+            outcomeStatus: d.outcome.outcomeStatus,
+            actualOutcome: d.outcome.actualOutcome,
+            variance: d.outcome.variance,
+            reviewedAt: d.outcome.reviewedAt,
+            updatedAt: d.outcome.updatedAt,
+          }
+        : null,
+    }));
+
+    const outcomeMetrics = buildOutcomeDashboardMetrics(outcomeInput);
+
+    const { buildOutcomeCorrelation } = await import(
+      "@/lib/decision/outcome-correlation"
+    );
+    const outcomeCorrelation = buildOutcomeCorrelation(outcomeInput);
+
+    const { buildDecisionPortfolioSnapshot } = await import(
+      "@/lib/decision/decision-portfolio"
+    );
+    const portfolioSnapshot = buildDecisionPortfolioSnapshot(
       decisions.map((d) => ({
         id: d.id,
         title: d.title,
         status: d.status,
+        type: d.type,
         priority: d.priority,
-        outcome: d.outcome
-          ? {
-              outcomeStatus: d.outcome.outcomeStatus,
-              actualOutcome: d.outcome.actualOutcome,
-              variance: d.outcome.variance,
-              reviewedAt: d.outcome.reviewedAt,
-              updatedAt: d.outcome.updatedAt,
-            }
-          : null,
       })),
     );
 
@@ -1294,6 +1313,8 @@ export async function getDashboardMetrics() {
         recentDecisions,
         bottlenecks,
         outcomeMetrics,
+        outcomeCorrelation,
+        portfolioSnapshot,
       },
     };
   } catch (error) {

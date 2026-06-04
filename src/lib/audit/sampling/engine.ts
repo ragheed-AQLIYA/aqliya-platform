@@ -1,6 +1,7 @@
 // A1-02 — deterministic sampling engine v0.1 (no AI, reproducible seed)
 
 import { createHash } from "crypto";
+import { calculateSamplingThreshold, calculatePerformanceMateriality } from "../materiality";
 import type {
   SamplingPopulationItem,
   SamplingRequest,
@@ -81,9 +82,16 @@ export function runSamplingEngine(
 
   switch (request.method) {
     case "high_value": {
-      const threshold =
-        request.materialityThreshold ??
-        Math.max(1, totalAbsoluteBalance * 0.05);
+      let threshold = request.materialityThreshold;
+      if (threshold == null) {
+        const perf = calculatePerformanceMateriality({
+          totalAssets: totalAbsoluteBalance,
+          performancePct: 5,
+        });
+        threshold =
+          calculateSamplingThreshold(perf) ||
+          Math.max(1, totalAbsoluteBalance * 0.05);
+      }
       ranked = [...population]
         .filter((item) => absBalance(item) >= threshold)
         .sort((a, b) => absBalance(b) - absBalance(a));

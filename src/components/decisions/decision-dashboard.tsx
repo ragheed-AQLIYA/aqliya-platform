@@ -4,6 +4,8 @@ import {
   getOutcomeStatusLabel,
   type OutcomeDashboardMetrics,
 } from "@/lib/decision/outcome-dashboard";
+import type { OutcomeCorrelationSnapshot } from "@/lib/decision/outcome-correlation";
+import type { DecisionPortfolioSnapshot } from "@/lib/decision/decision-portfolio";
 
 type DashboardMetrics = {
   totalDecisions: number;
@@ -44,6 +46,8 @@ type DashboardMetrics = {
     priority: string | null;
   }[];
   outcomeMetrics: OutcomeDashboardMetrics;
+  outcomeCorrelation: OutcomeCorrelationSnapshot;
+  portfolioSnapshot: DecisionPortfolioSnapshot;
 };
 
 function getPriorityColor(priority: string | null) {
@@ -200,8 +204,32 @@ export function DecisionDashboard({ metrics }: { metrics: DashboardMetrics }) {
         </div>
       </div>
 
+      <div className="rounded-lg border p-4 mb-4">
+        <h3 className="text-sm font-semibold mb-3">محفظة القرارات (D3-05)</h3>
+        <div className="grid gap-3 sm:grid-cols-4 text-sm">
+          <div className="rounded-md bg-muted/40 p-3">
+            <div className="text-xs text-muted-foreground">نشطة</div>
+            <div className="text-xl font-bold">{metrics.portfolioSnapshot.active}</div>
+          </div>
+          <div className="rounded-md bg-muted/40 p-3">
+            <div className="text-xs text-muted-foreground">معتمدة</div>
+            <div className="text-xl font-bold">{metrics.portfolioSnapshot.approved}</div>
+          </div>
+          <div className="rounded-md bg-muted/40 p-3">
+            <div className="text-xs text-muted-foreground">مسودة</div>
+            <div className="text-xl font-bold">{metrics.portfolioSnapshot.draft}</div>
+          </div>
+          <div className="rounded-md bg-muted/40 p-3">
+            <div className="text-xs text-muted-foreground">عالية · مفتوحة</div>
+            <div className="text-xl font-bold text-amber-600">
+              {metrics.portfolioSnapshot.highPriorityOpen}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="rounded-lg border p-4">
-        <h3 className="text-sm font-semibold mb-3">متابعة النتائج (Portfolio)</h3>
+        <h3 className="text-sm font-semibold mb-3">متابعة النتائج (D3-01)</h3>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
           <div className="rounded-md bg-muted/40 p-3">
             <div className="text-xs text-muted-foreground">نتائج مسجّلة</div>
@@ -246,6 +274,29 @@ export function DecisionDashboard({ metrics }: { metrics: DashboardMetrics }) {
                 </Badge>
               ),
             )}
+          </div>
+        )}
+
+        {metrics.outcomeCorrelation.byPriority.length > 0 && (
+          <div className="mb-4">
+            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+              ارتباط النتائج بالأولوية (D3-06)
+            </h4>
+            <ul className="space-y-1 text-sm">
+              {metrics.outcomeCorrelation.byPriority
+                .filter((r) => r.decisionsWithOutcome > 0)
+                .map((r) => (
+                  <li key={r.key} className="flex justify-between gap-2">
+                    <span>{r.labelAr}</span>
+                    <span className="text-muted-foreground">
+                      نجاح {r.successRatePct ?? "—"}%
+                    </span>
+                  </li>
+                ))}
+            </ul>
+            <p className="text-[10px] text-muted-foreground mt-2">
+              {metrics.outcomeCorrelation.disclaimerAr}
+            </p>
           </div>
         )}
 

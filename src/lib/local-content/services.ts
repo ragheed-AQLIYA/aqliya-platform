@@ -15,6 +15,10 @@ import {
   parseTenderSpecFromMetadata,
 } from "./tender-matching";
 import {
+  parseClassificationRulesFromMetadata,
+  resolveClassificationRules,
+} from "./classification-rules";
+import {
   computeApprovalRoutingState,
   validateApprovalSubmission,
   validateReviewSubmission,
@@ -845,4 +849,20 @@ export async function getProjectTenderMatchReport(projectId: string) {
       supplier: sr.supplier,
     })),
   });
+}
+
+/** LC-04 — org classification rules (project metadata override or defaults) */
+export async function getOrganizationClassificationRules(
+  organizationId: string,
+) {
+  const project = await prisma.localContentProject.findFirst({
+    where: { organizationId },
+    orderBy: { updatedAt: "desc" },
+    select: { metadata: true },
+  });
+  const fromMeta = parseClassificationRulesFromMetadata(project?.metadata);
+  return {
+    rules: resolveClassificationRules(project?.metadata),
+    source: fromMeta ? ("metadata" as const) : ("default" as const),
+  };
 }

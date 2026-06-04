@@ -8,6 +8,7 @@ const links = [
   { href: "/local-content", label: "مركز القيادة" },
   { href: "/local-content/projects", label: "مشاريع الامتثال" },
   { href: "/local-content/analytics", label: "تحليلات الإنفاق" },
+  { href: "/local-content/classification-rules", label: "قواعد التصنيف" },
   { href: "/local-content/campaigns", label: "الحملات" },
   { href: "/local-content/review", label: "المراجعة" },
   { href: "/local-content/outputs", label: "المخرجات" },
