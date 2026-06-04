@@ -69,6 +69,20 @@ async function main() {
       }
     }
 
+    // 4. Check JSON fallback column
+    if (results.tableExists && !results.pgvector) {
+      try {
+        const cols = await client.query(
+          `SELECT column_name FROM information_schema.columns
+           WHERE table_name = $1 AND column_name = $2`,
+          ["DocumentChunk", "embedding_json"],
+        );
+        results.embeddingJsonColumn = cols.rows.length > 0;
+      } catch {
+        results.embeddingJsonColumn = false;
+      }
+    }
+
     client.release();
 
     const ragFlag = process.env.FF_AI_RAG === "true";
@@ -77,6 +91,7 @@ async function main() {
     console.log(`pgvector_extension=${results.pgvector}`);
     console.log(`document_chunk_table=${results.tableExists}`);
     if (results.dimension) console.log(`embedding_dimension=${results.dimension}`);
+    if (results.embeddingJsonColumn !== undefined) console.log(`embedding_json_column=${results.embeddingJsonColumn}`);
     console.log(`ff_ai_rag=${ragStatus}`);
 
     // If FF_AI_RAG is true, pgvector must be present

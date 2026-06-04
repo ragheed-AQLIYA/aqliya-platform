@@ -44,3 +44,22 @@ export async function ensureRedisConnected(): Promise<boolean> {
     return false
   }
 }
+
+export async function isRedisAvailable(): Promise<boolean> {
+  try {
+    return await ensureRedisConnected()
+  } catch {
+    return false
+  }
+}
+
+export async function closeRedis(): Promise<void> {
+  const client = globalForRedis.redisClient
+  if (!client) return
+  try {
+    await client.quit()
+  } catch {
+    client.disconnect()
+  }
+  globalForRedis.redisClient = undefined
+}

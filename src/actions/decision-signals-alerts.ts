@@ -173,7 +173,7 @@ export async function runMonitoringSignalAutomationAction(decisionId: string) {
       decisionId,
       "DECISION_UPDATED",
       "DecisionMonitoringSignal",
-      null,
+      "DecisionMonitoringSignal",
       toAuditJson({ created: drafts.length, automation: "D3-02" }),
       user.organizationId,
     );

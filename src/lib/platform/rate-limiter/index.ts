@@ -25,3 +25,5 @@ export async function createRateLimiter(): Promise<RateLimiter> {
 }
 
 export type { RateLimiter, RateLimitConfig, RateLimitResult, RateLimiterType } from "./types";
+export { RATE_LIMIT_PRESETS, rateLimitHeaders } from "./presets";
+export type { RateLimitHeaders } from "./presets";

@@ -4,7 +4,7 @@ interface EnterpriseCardProps {
   children: React.ReactNode;
   className?: string;
   variant?: "default" | "elevated" | "flat" | "interactive";
-  module?: "audit" | "sales" | "decision" | "platform";
+  module?: "audit" | "sales" | "decision" | "platform" | "local-content";
   hover?: boolean;
   onClick?: () => void;
 }
@@ -21,6 +21,7 @@ const moduleBorderClasses: Record<string, string> = {
   audit: "border-l-2 border-l-module-audit",
   sales: "border-l-2 border-l-module-sales",
   decision: "border-l-2 border-l-module-decision",
+  "local-content": "border-l-2 border-l-module-local-content",
   platform: "",
 };
 

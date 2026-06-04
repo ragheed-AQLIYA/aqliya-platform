@@ -202,7 +202,7 @@ export async function getLocalContentTenderMatchAction(
 > {
   return safe(async () => {
     const user = await requireUserContext("VIEWER");
-    await assertProjectAccess(projectId, user.organizationId);
+    await assertProjectAccess(projectId, "view");
     return getProjectTenderMatchReport(projectId);
   });
 }

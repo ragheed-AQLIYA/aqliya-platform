@@ -72,8 +72,8 @@ export function buildOutcomeCorrelation(
       (k) => (k === "none" ? "بدون أولوية" : k),
     ),
     byDecisionType: groupCorrelation(
-      decisions,
-      (d) => d.type ?? "general",
+      decisions as OutcomeCorrelationDecision[],
+      (d: OutcomeCorrelationDecision) => d.type ?? "general",
       (k) => k,
     ),
     disclaimerAr:

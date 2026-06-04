@@ -78,7 +78,7 @@ function RecommendationList({ items }: { items: ProofEffectivenessRecommendation
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="font-medium">{rec.titleAr}</span>
             <span className="text-[10px] text-muted-foreground">
-              {formatSalesPriority(rec.priority)}
+              {formatSalesPriority(rec.priority ?? "medium")}
             </span>
           </div>
           <p className="text-xs text-muted-foreground">{rec.recommendationAr}</p>

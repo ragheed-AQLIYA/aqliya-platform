@@ -224,6 +224,7 @@ export async function listSpendRecords(projectId: string) {
           name: true,
           localityClassification: true,
           localContentPercentage: true,
+          ownershipType: true,
         },
       },
     },

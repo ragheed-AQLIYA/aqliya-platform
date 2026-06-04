@@ -489,7 +489,22 @@ export async function exportContactProfile(contactId: string) {
     const user = await requireUserContext("VIEWER");
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
-      include: {
+      select: {
+        id: true,
+        organizationId: true,
+        name: true,
+        email: true,
+        phone: true,
+        position: true,
+        department: true,
+        organizationName: true,
+        sensitivityLevel: true,
+        exportStatus: true,
+        notes: true,
+        tags: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
         evidence: { orderBy: { createdAt: "desc" } },
         reviews: { include: { approvals: true }, orderBy: { createdAt: "desc" } },
         interactions: { orderBy: { occurredAt: "desc" }, take: 50 },
