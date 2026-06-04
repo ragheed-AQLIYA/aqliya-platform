@@ -1,8 +1,8 @@
 # L6 Readiness Scorecard — Cycle 6
 
-**Date:** 2026-06-06  
+**Date:** 2026-06-07  
 **Agent:** AGENT-E  
-**Baseline:** `4d24afd`
+**Baseline:** `a6f2c95` (Phase 3 repo complete; Cycle 6 remote pending)
 
 ## Domain matrix
 
@@ -12,7 +12,7 @@
 | Infrastructure | 55 | [INFRASTRUCTURE_READINESS_REPORT.md](./INFRASTRUCTURE_READINESS_REPORT.md) | IaC not applied |
 | Operations | 68 | [STAGING_PGVECTOR_ACTIVATION_REPORT.md](./STAGING_PGVECTOR_ACTIVATION_REPORT.md) | Local proxy only |
 | AI Governance | 72 | [LIVE_SMOKE_REPORT.md](./LIVE_SMOKE_REPORT.md), `audit-ai-bridge` | Live staging BLOCKED |
-| Tenant Isolation | 70 | [CROSS_TENANT_VALIDATION_REPORT.md](./CROSS_TENANT_VALIDATION_REPORT.md) | 92 guard tests |
+| Tenant Isolation | 72 | [CROSS_TENANT_VALIDATION_REPORT.md](./CROSS_TENANT_VALIDATION_REPORT.md) | 92 guard + 20 LocalContactOS action tests |
 | Observability | 75 | `monitoring/ai`, ic-smoke offline | Live metrics TBD |
 | Disaster Recovery | 50 | [BACKUP_RESTORE_DRILL_EVIDENCE.md](./BACKUP_RESTORE_DRILL_EVIDENCE.md), [ROLLBACK_READINESS_ASSESSMENT.md](./ROLLBACK_READINESS_ASSESSMENT.md) | Drills not executed |
 

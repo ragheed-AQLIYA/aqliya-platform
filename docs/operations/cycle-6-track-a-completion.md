@@ -1,7 +1,7 @@
 # Cycle 6 — Track A Completion Record
 
 **Date:** 2026-06-07 (re-validated)  
-**Commit:** `521cd02` (see `main`)  
+**Commit:** `a6f2c95` (see `main`; local full-run @ `3aba98a`)  
 **Director verdict:** **LOCAL_COMPLETE** / **PROGRAM_BLOCKED** (remote)
 
 ---
@@ -13,7 +13,8 @@
 | A1-09 `audit-ai-bridge.ts` | `4d24afd` |
 | AGENT A–E bundle | `docs/validation/cycle-6/` |
 | Local staging full proxy | `:5435/aqliya_staging`, `docker-compose.staging-local.yml` |
-| One-command replay | `npm run cycle6:full-run` |
+| One-command replay | `npm run cycle6:full-run` (fixed PS path 2026-06-07) |
+| Latest local PASS | `2026-06-04T21:23:10Z` — migrations through `20260608000002` |
 | Governed AuditOS smoke | `npm run cycle6:smoke:audit-ai` |
 | pgvector + migrate + seed | `STAGING_PGVECTOR_ACTIVATION_REPORT.md` |
 | Backup + verify | `BACKUP_RESTORE_DRILL_EVIDENCE.md` |
