@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-07  
 **Agent:** AGENT-E  
-**Baseline:** `a6f2c95` (Phase 3 repo complete; Cycle 6 remote pending)
+**Baseline:** `82b06fc` (Jest 141 pass; Cycle 6 local PASS; remote pending)
 
 ## Domain matrix
 
@@ -13,6 +13,7 @@
 | Operations | 68 | [STAGING_PGVECTOR_ACTIVATION_REPORT.md](./STAGING_PGVECTOR_ACTIVATION_REPORT.md) | Local proxy only |
 | AI Governance | 72 | [LIVE_SMOKE_REPORT.md](./LIVE_SMOKE_REPORT.md), `audit-ai-bridge` | Live staging BLOCKED |
 | Tenant Isolation | 72 | [CROSS_TENANT_VALIDATION_REPORT.md](./CROSS_TENANT_VALIDATION_REPORT.md) | 92 guard + 20 LocalContactOS action tests |
+| Testing | 78 | `npm test` @ `bd24a74` | 141 suites / 1015 tests; build not re-run |
 | Observability | 75 | `monitoring/ai`, ic-smoke offline | Live metrics TBD |
 | Disaster Recovery | 50 | [BACKUP_RESTORE_DRILL_EVIDENCE.md](./BACKUP_RESTORE_DRILL_EVIDENCE.md), [ROLLBACK_READINESS_ASSESSMENT.md](./ROLLBACK_READINESS_ASSESSMENT.md) | Drills not executed |
 

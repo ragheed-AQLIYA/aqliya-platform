@@ -2,7 +2,8 @@
 
 **Route:** `/audit/engagements/{engagementId}/sampling`  
 **Prerequisite:** seeded engagement with trial balance (e.g. `eng-gulf-2025` after `npx prisma db seed`)  
-**Auth:** `admin@aqliya.com` / `admin123`
+**Auth:** `admin@aqliya.com` / `admin123`  
+**Server:** `npm run build` then `npm run start:standalone` (repo `output: standalone` — avoid `next start` alone)
 
 ---
 

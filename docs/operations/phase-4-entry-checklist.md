@@ -88,6 +88,12 @@
 
 ## Gate 4 — Full repository validation (Phase 4 sign-off)
 
+| Gate | Command | Evidence @ `82b06fc` |
+| ---- | ------- | -------------------- |
+| Unit/integration Jest | `npm test` | 141 pass, ~8s |
+| Demo static | `npm run demo:smoke` | Pass |
+| TypeScript | `npx tsc --noEmit` | Run before release candidate |
+
 Run before any “production candidate” announcement:
 
 ```bash
