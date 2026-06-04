@@ -38,6 +38,7 @@
 | GOV-01 | Platform audit on `runGovernedAuditAI` | ✅ 2026-06-05 |
 | TEST-01 | `audit-ai-bridge` LLM persist + audit log tests | ✅ 2026-06-05 |
 | TEST-02 | LocalContactOS L5 action tests (`local-contacts.test.ts`) | ✅ 2026-06-07 |
+| DEMO-01 | `npm run demo:smoke` static gate paths | ✅ 2026-06-07 — `demo-smoke-check.mjs` |
 | IC-05 | Model registry | ✅ 2026-06-05 — `src/lib/ai/model-registry.ts` + routing/API snapshot |
 | L0-04 | External penetration test | Vendor |
 

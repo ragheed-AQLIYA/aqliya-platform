@@ -74,6 +74,16 @@
 
 ---
 
+## Gate 0.5 — Customer demo static gate (repo)
+
+| Command | Purpose |
+| ------- | ------- |
+| `npm run demo:smoke` | Routes, download auth, RAG/pgvector files, tenant tests (no server) |
+
+**Evidence:** slice 24 @ `ec7beec`+
+
+---
+
 ## Gate 4 — Full repository validation (Phase 4 sign-off)
 
 Run before any “production candidate” announcement:
