@@ -1,11 +1,17 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { buildSalesCommandCenter } from "@/lib/sales/command-center";
+import { initSalesWorkspace } from "@/lib/sales/service";
+import { listOpportunities } from "@/lib/sales/store";
+import { buildConversionFunnel } from "@/lib/sales/intelligence/conversion-funnel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatSalesStageLabel } from "@/lib/sales/sales-ux-copy";
 
 export default async function SalesCommandCenterPage() {
   const user = await getCurrentUser();
   const snapshot = await buildSalesCommandCenter(user);
+  initSalesWorkspace(user);
+  const funnel = buildConversionFunnel(listOpportunities(user.organizationId));
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -23,6 +29,31 @@ export default async function SalesCommandCenterPage() {
         <Metric label="قيمة المسار" value={snapshot.metrics.pipelineValue} />
         <Metric label="تحتاج مراجعة" value={snapshot.metrics.needsReview} />
       </div>
+
+      <Card className="rounded-[24px]">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-base">قمع التحويل (S7-06)</CardTitle>
+          <Link href="/sales/funnel" className="text-xs text-primary hover:underline">
+            التفاصيل
+          </Link>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-2">
+            فوز: {funnel.winCount} · خسارة: {funnel.lostCount}
+            {funnel.winRatePct != null ? ` · نسبة فوز ${funnel.winRatePct}%` : ""}
+          </p>
+          <ul className="space-y-1 text-sm">
+            {funnel.stages
+              .filter((s) => s.count > 0)
+              .slice(0, 5)
+              .map((row) => (
+                <li key={row.stage}>
+                  {formatSalesStageLabel(String(row.stage))}: {row.count}
+                </li>
+              ))}
+          </ul>
+        </CardContent>
+      </Card>
 
       <Card className="rounded-[24px]">
         <CardHeader>

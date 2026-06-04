@@ -32,6 +32,7 @@ import {
   listAuditEvents,
   calculateProjectScore,
   getOrganizationSpendAnalytics,
+  getProjectTenderMatchReport,
   listReports,
   createReport,
 } from "@/lib/local-content/services";
@@ -181,6 +182,18 @@ export async function getLocalContentSpendAnalyticsAction(): Promise<
   return safe(async () => {
     const user = await requireUserContext("VIEWER");
     return getOrganizationSpendAnalytics(user.organizationId);
+  });
+}
+
+export async function getLocalContentTenderMatchAction(
+  projectId: string,
+): Promise<
+  ActionResult<Awaited<ReturnType<typeof getProjectTenderMatchReport>>>
+> {
+  return safe(async () => {
+    const user = await requireUserContext("VIEWER");
+    await assertProjectAccess(projectId, user.organizationId);
+    return getProjectTenderMatchReport(projectId);
   });
 }
 

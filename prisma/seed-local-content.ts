@@ -395,6 +395,16 @@ async function main() {
       status: "InReview",
       createdById: adminUser.id,
       createdByName: "Ahmed Al-Mansouri",
+      metadata: {
+        tender: {
+          referenceId: "TND-FY2025-001",
+          titleAr: "متطلبات مناقصة المحتوى المحلي — 30% كحد أدنى",
+          minLocalContentPct: 30,
+          requiredSpendCategories: ["services", "equipment", "consulting"],
+          minLocalSupplierCount: 2,
+          maxNonLocalSpendSharePct: 35,
+        },
+      },
     },
   });
   console.log(`  Project: ${project.name}`);

@@ -104,4 +104,11 @@
 | Parity gate | `src/lib/sales/sales-bilingual-parity.ts` |
 | L5 evaluator | `U1_BILINGUAL_RTL` true in `l5-acceptance.ts` baseline |
 
-**Status:** DONE (S7-01 … S7-05); Cycle 6 remote still BLOCKED
+## Delivered — S7-06 + LC-02 (2026-06-07)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **S7-06** | `/sales/funnel`, `conversion-funnel.ts`, command-center snippet |
+| **LC-02** | `tender-matching.ts`, `/local-content/projects/[id]/tender-match`, seed metadata |
+
+**Status:** DONE (Phase 3 product backlog S7-01…S7-06, LC-02/06, D3-02/03); Cycle 6 remote still BLOCKED

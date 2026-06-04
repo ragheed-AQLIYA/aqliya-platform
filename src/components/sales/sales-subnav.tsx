@@ -12,6 +12,7 @@ import {
   Users,
   TrendingUp,
   LineChart,
+  Filter,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -23,6 +24,7 @@ const NAV_ITEMS = [
   { href: "/sales/icp", labelAr: "ICP", icon: Users },
   { href: "/sales/revenue", labelAr: "الإيرادات", icon: TrendingUp },
   { href: "/sales/forecast", labelAr: "التوقعات", icon: LineChart },
+  { href: "/sales/funnel", labelAr: "قمع التحويل", icon: Filter },
 ] as const;
 
 export function SalesSubNav() {

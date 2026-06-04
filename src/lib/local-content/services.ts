@@ -10,6 +10,11 @@ import type { ScoringResult } from "./types";
 import { calculateFullScoring } from "./scoring";
 import { buildOrganizationSpendAnalytics } from "./spend-analytics";
 import {
+  buildTenderMatchReport,
+  DEFAULT_TENDER_SPEC,
+  parseTenderSpecFromMetadata,
+} from "./tender-matching";
+import {
   computeApprovalRoutingState,
   validateApprovalSubmission,
   validateReviewSubmission,
@@ -790,4 +795,54 @@ export async function getOrganizationSpendAnalytics(organizationId: string) {
     }),
   );
   return buildOrganizationSpendAnalytics({ projects: enriched });
+}
+
+/** LC-02 — tender requirement matching for a project */
+export async function getProjectTenderMatchReport(projectId: string) {
+  const project = await prisma.localContentProject.findUnique({
+    where: { id: projectId },
+    select: {
+      id: true,
+      name: true,
+      metadata: true,
+    },
+  });
+  if (!project) {
+    throw new Error("Project not found");
+  }
+
+  const [suppliers, spendRecords] = await Promise.all([
+    prisma.localContentSupplier.findMany({
+      where: { projectId },
+      select: { localityClassification: true },
+    }),
+    prisma.localContentSpendRecord.findMany({
+      where: { projectId },
+      select: {
+        amount: true,
+        category: true,
+        supplier: {
+          select: {
+            localityClassification: true,
+            localContentPercentage: true,
+            ownershipType: true,
+          },
+        },
+      },
+    }),
+  ]);
+
+  const tender =
+    parseTenderSpecFromMetadata(project.metadata) ?? DEFAULT_TENDER_SPEC;
+
+  return buildTenderMatchReport({
+    projectName: project.name,
+    tender,
+    suppliers,
+    spendRecords: spendRecords.map((sr) => ({
+      amount: sr.amount,
+      category: sr.category,
+      supplier: sr.supplier,
+    })),
+  });
 }

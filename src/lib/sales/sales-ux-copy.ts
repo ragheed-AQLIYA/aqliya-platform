@@ -64,4 +64,5 @@ export const SALES_CORE_ROUTES = [
   "/sales/approval",
   "/sales/audit-trail",
   "/sales/reports",
+  "/sales/funnel",
 ] as const;

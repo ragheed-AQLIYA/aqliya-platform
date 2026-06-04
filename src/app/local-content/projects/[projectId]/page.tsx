@@ -23,6 +23,7 @@ import {
   ClipboardCheck,
   FileBarChart,
   History,
+  Scale,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -153,6 +154,11 @@ export default async function ProjectDetailPage({
               label: "سجل التدقيق",
               href: `/local-content/projects/${projectId}/audit-trail`,
               icon: History,
+            },
+            {
+              label: "مطابقة المناقصة",
+              href: `/local-content/projects/${projectId}/tender-match`,
+              icon: Scale,
             },
           ].map(({ label, href, icon: Icon, count }) => (
             <Link key={label} href={href!}>
