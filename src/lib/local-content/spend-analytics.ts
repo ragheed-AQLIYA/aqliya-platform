@@ -1,6 +1,10 @@
 // LC-06 — organization spend analytics (deterministic, reuses scoring breakdown)
 
 import { calculateSpendBreakdown, type CalculateScoringInput } from "./scoring";
+import {
+  buildLocalizationRateTrends,
+  type LocalizationRateTrendSnapshot,
+} from "./localization-rate-trends";
 
 export interface ProjectSpendSummary {
   projectId: string;
@@ -24,6 +28,7 @@ export interface OrganizationSpendAnalytics {
   localContentPercentage: number;
   byCategory: Record<string, number>;
   projects: ProjectSpendSummary[];
+  localizationTrends: LocalizationRateTrendSnapshot;
 }
 
 export function buildOrganizationSpendAnalytics(input: {
@@ -32,7 +37,12 @@ export function buildOrganizationSpendAnalytics(input: {
     name: string;
     reportingPeriod: string;
     status: string;
-    spendRecords: CalculateScoringInput["spendRecords"];
+    spendRecords: Array<
+      CalculateScoringInput["spendRecords"][number] & {
+        period?: string | null;
+        recordCreatedAt?: string | null;
+      }
+    >;
   }>;
 }): OrganizationSpendAnalytics {
   const byCategory: Record<string, number> = {};
@@ -70,6 +80,15 @@ export function buildOrganizationSpendAnalytics(input: {
   const localContentPercentage =
     classified > 0 ? (localSpend / classified) * 100 : 0;
 
+  const flatTrendRecords = input.projects.flatMap((p) =>
+    p.spendRecords.map((sr) => ({
+      amount: sr.amount,
+      period: sr.period,
+      recordCreatedAt: sr.recordCreatedAt,
+      supplier: sr.supplier,
+    })),
+  );
+
   return {
     projectCount: projects.length,
     totalSpend,
@@ -79,5 +98,6 @@ export function buildOrganizationSpendAnalytics(input: {
     localContentPercentage,
     byCategory,
     projects: projects.sort((a, b) => b.totalSpend - a.totalSpend),
+    localizationTrends: buildLocalizationRateTrends(flatTrendRecords),
   };
 }

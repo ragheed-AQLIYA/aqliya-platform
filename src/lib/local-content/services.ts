@@ -787,6 +787,8 @@ export async function getOrganizationSpendAnalytics(organizationId: string) {
         spendRecords: spendRecords.map((sr) => ({
           amount: sr.amount,
           category: sr.category,
+          period: sr.period,
+          recordCreatedAt: sr.createdAt.toISOString(),
           supplier: {
             localityClassification:
               sr.supplier?.localityClassification ?? null,

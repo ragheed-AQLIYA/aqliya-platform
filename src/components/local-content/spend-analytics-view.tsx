@@ -49,6 +49,52 @@ export function SpendAnalyticsView({ data }: { data: OrganizationSpendAnalytics 
 
       <EnterpriseCard module="local-content">
         <EnterpriseCardHeader>
+          <EnterpriseCardTitle>
+            اتجاه نسبة المحتوى المحلي (LC-07)
+          </EnterpriseCardTitle>
+        </EnterpriseCardHeader>
+        <EnterpriseCardContent>
+          {data.localizationTrends.points.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              لا توجد فترات إنفاق كافية لعرض الاتجاه.
+            </p>
+          ) : (
+            <>
+              <p className="text-xs text-muted-foreground mb-3">
+                الاتجاه:{" "}
+                {data.localizationTrends.trendDirection === "up"
+                  ? "صعود"
+                  : data.localizationTrends.trendDirection === "down"
+                    ? "هبوط"
+                    : data.localizationTrends.trendDirection === "flat"
+                      ? "ثابت"
+                      : "بيانات غير كافية"}
+              </p>
+              <ul className="space-y-2 text-sm">
+                {data.localizationTrends.points.map((pt) => (
+                  <li
+                    key={pt.periodKey}
+                    className="flex flex-wrap justify-between gap-2 rounded border px-3 py-2"
+                  >
+                    <span className="font-medium">{pt.labelAr}</span>
+                    <span className="text-muted-foreground">
+                      {pt.localContentPercentage.toFixed(1)}% محلي
+                      {pt.deltaVsPriorPct != null &&
+                        ` (${pt.deltaVsPriorPct >= 0 ? "+" : ""}${pt.deltaVsPriorPct}%)`}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-[10px] text-muted-foreground mt-3">
+                {data.localizationTrends.disclaimerAr}
+              </p>
+            </>
+          )}
+        </EnterpriseCardContent>
+      </EnterpriseCard>
+
+      <EnterpriseCard module="local-content">
+        <EnterpriseCardHeader>
           <EnterpriseCardTitle>المشاريع ({data.projectCount})</EnterpriseCardTitle>
         </EnterpriseCardHeader>
         <EnterpriseCardContent>

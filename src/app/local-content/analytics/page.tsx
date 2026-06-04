@@ -17,7 +17,7 @@ export default async function LocalContentAnalyticsPage() {
     <DashboardLayout>
       <PageHeader
         title="تحليلات الإنفاق"
-        subtitle="LC-06 — ملخص محتوى محلي عبر المشاريع (قواعد حتمية)"
+        subtitle="LC-06/LC-07 — إنفاق واتجاه نسبة المحتوى المحلي (قواعد حتمية)"
       />
       <DevPhaseBadge />
       <ContentStudioNav />

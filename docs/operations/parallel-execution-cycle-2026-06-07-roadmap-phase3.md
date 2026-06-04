@@ -175,4 +175,17 @@
 | ------- | ------ |
 | `npm test` engagement-archival + sales-territory-store | See commit report |
 
-**Status:** DONE_WITH_CONCERNS (Phase 3 slices 1–8); Cycle 6 remote BLOCKED; S7-03/L0/A1-01 open
+## Delivered — slice 9 (2026-06-07)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **LC-07** | Localization rate trends on spend analytics dashboard |
+| **UX** | `loading.tsx` / `error.tsx` for `/audit/portfolio` and `/audit/archived` |
+
+### Validation (slice 9)
+
+| Command | Result |
+| ------- | ------ |
+| `npm test` localization-rate-trends + spend-analytics | See commit report |
+
+**Status:** DONE_WITH_CONCERNS — Phase 3 product backlog complete in repo except XL (S7-03, LC-08); Cycle 6 remote BLOCKED; L0 ops gates open
