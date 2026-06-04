@@ -12,7 +12,8 @@
 | Real LLM | `FF_AI_REAL_PROVIDERS=true` + API keys — env-gated, not default |
 | AuditOS AI (A1-09) | `audit-ai-bridge.ts` → orchestrator (tenant + RAG + budget) |
 | Office AI | `deterministic-generators.ts` — separate from orchestrator unless wired |
-| **Not implemented** | Model registry (IC-05), local GPU runtime (IC-10), institutional memory store |
+| Model registry (IC-05) | `model-registry.ts` — file-based catalog; wired into provider routing + `/api/ai/providers` |
+| **Not implemented** | local GPU runtime (IC-10), institutional memory store |
 
 ---
 
@@ -70,6 +71,7 @@ audit-actions.ts → services/ai.ts → runGovernedAuditAI()  [A1-09]
 | `orchestrator.ts` | Provider selection, governance context injection, prompt assembly, fallback on error |
 | `orchestrator-rag-inject.ts` | Shared governed RAG injection for `generate()` and `generateStream()` |
 | `prompt-registry.ts` | Maps 5 `GovernanceTaskType` values to `prompt-framework.ts` builders |
+| `model-registry.ts` | IC-05 — allowed model IDs, provider binding, active/deprecated/disabled status |
 | `providers/deterministic-provider.ts` | Default provider — routes to registered task handlers |
 | `providers/cloud-provider.ts` | Cloud LLM stub (Phase 4) |
 | `providers/local-provider.ts` | Local AI stub (Phase 4) |
