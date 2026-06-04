@@ -92,7 +92,8 @@
 | ---- | ------- | -------------------- |
 | Unit/integration Jest | `npm test` | 141 pass, ~8s |
 | Demo static | `npm run demo:smoke` | Pass |
-| TypeScript | `npx tsc --noEmit` | Run before release candidate |
+| TypeScript | `npx tsc --noEmit` | Pass @ slice 31 |
+| Production build | `npm run build` | **PASS** @ slice 31 (~155s) |
 
 Run before any “production candidate” announcement:
 
