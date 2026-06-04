@@ -1,0 +1,133 @@
+name: Promote to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: "Commit SHA currently deployed on staging (defaults to latest staging deploy)"
+        required: false
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+  deployments: write
+
+env:
+  AWS_REGION: me-south-1
+  ECR_REPOSITORY: aqliya/production/app
+
+jobs:
+  validate-staging:
+    name: Validate Staging Health
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Check Staging Health
+        run: |
+          echo "Checking staging.aqliya.ai health..."
+          curl -sSf --max-time 30 "https://staging.aqliya.ai/api/health" || {
+            echo "Staging health check failed. Aborting promotion."
+            exit 1
+          }
+          echo "Staging is healthy."
+
+  promote:
+    name: Promote Image to Production
+    needs: [validate-staging]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://aqliya.ai
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Determine Image Tag
+        id: image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          TAG="${{ inputs.commit_sha || github.sha }}"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "registry=${ECR_REGISTRY}" >> $GITHUB_OUTPUT
+          echo "Promoting image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${TAG}"
+
+      - name: Verify Image Exists
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          aws ecr describe-images \
+            --repository-name "$ECR_REPOSITORY" \
+            --image-ids imageTag=${{ steps.image.outputs.tag }} || {
+            echo "Image ${{ steps.image.outputs.tag }} not found in ${ECR_REGISTRY}/${ECR_REPOSITORY}."
+            echo "Has the staging build been pushed to production ECR?"
+            exit 1
+          }
+
+      - name: Update Production ECS Service
+        env:
+          IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.image.outputs.tag }}
+        run: |
+          echo "Deploying ${IMAGE_URI} to production ECS (force new deployment)."
+          aws ecs update-service \
+            --cluster aqliya-production-cluster \
+            --service aqliya-production-service \
+            --force-new-deployment \
+            --region $AWS_REGION
+
+  smoke-test:
+    name: Post-Deploy Smoke Test
+    needs: [promote]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      - name: Wait for Deployment
+        run: sleep 60
+
+      - name: Run Smoke Test
+        run: node scripts/post-deploy-smoke.mjs --base-url https://aqliya.ai
+        env:
+          AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
+
+  rollback:
+    name: Rollback (if smoke test fails)
+    needs: [smoke-test]
+    if: failure()
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Rollback ECS Service
+        run: |
+          echo "Smoke test failed. Rolling back production service..."
+          aws ecs update-service \
+            --cluster aqliya-production-cluster \
+            --service aqliya-production-service \
+            --force-new-deployment \
+            --region $AWS_REGION

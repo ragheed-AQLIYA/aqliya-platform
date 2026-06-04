@@ -1,0 +1,65 @@
+name: Scheduled Database Backup
+
+on:
+  schedule:
+    # Daily backup at 02:00 AST (UTC+3)
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - run: npm ci
+
+      - name: Run database backup
+        run: node scripts/backup.mjs
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-backup-${{ github.run_id }}
+          path: backups/*.sql
+          retention-days: 30
+
+  verify:
+    needs: backup
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Verify latest backup
+        run: npm run backup:verify
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
