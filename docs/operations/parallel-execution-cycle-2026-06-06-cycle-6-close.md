@@ -39,7 +39,7 @@
 
 ```text
 Cycle 6:     BLOCKED (not CLOSED on remote staging)
-Reason:      https://staging.aqliya.ai not exercised; FF_AI_REAL_PROVIDERS live API not run
+Reason:      `staging.aqliya.ai` DNS FAIL (see `REMOTE_STAGING_PROBE.md`); FF_AI_REAL_PROVIDERS not run
 Local proof: localhost:5435 full proxy PASS (migrate, seed, verify, cycle6:smoke:audit-ai)
 Next:        Remote staging URL + keys → repeat checklist → G6-7 CLOSED
 Track B:     OpenCode product completion (parallel)

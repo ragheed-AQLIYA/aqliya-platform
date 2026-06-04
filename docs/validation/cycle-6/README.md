@@ -21,8 +21,13 @@
 | [CERTIFICATION_BLOCKERS.md](./CERTIFICATION_BLOCKERS.md) | E | G6-6 |
 | [PENTEST_PREP_PACKET.md](./PENTEST_PREP_PACKET.md) | E | enterprise |
 | [COMPLIANCE_CHECKLIST.md](./COMPLIANCE_CHECKLIST.md) | E | enterprise |
+| [REMOTE_STAGING_PROBE.md](./REMOTE_STAGING_PROBE.md) | A | DNS / remote |
+| [POST_DEPLOY_SMOKE.md](./POST_DEPLOY_SMOKE.md) | A | local app |
+| [BACKUP_RESTORE_DRILL_EVIDENCE.md](./BACKUP_RESTORE_DRILL_EVIDENCE.md) | C | G6-4 |
 
 **Director close:** `docs/operations/parallel-execution-cycle-2026-06-06-cycle-6-close.md`
+
+**One-command local replay:** `npm run cycle6:full-run`
 
 ## Cycle 6 status
 

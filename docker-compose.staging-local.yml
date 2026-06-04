@@ -5,6 +5,7 @@ services:
   db:
     ports:
       - "5435:5432"
+      - "5434:5432" # legacy dev docs alias (same instance as 5435)
   redis:
     ports:
       - "6380:6379"
