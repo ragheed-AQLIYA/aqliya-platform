@@ -126,6 +126,53 @@ model Invitation {
   @@index([organizationId])
 }
 
+model PlatformSecret {
+  // @map: أسرار_المنصة
+  key                String    @id
+  encryptedValue     String
+  description        String?
+  rotationPeriodDays Int?
+  lastRotatedAt      DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([createdAt])
+}
+
+model PlatformNotification {
+  // @map: إشعارات_المنصة
+  id             String    @id @default(cuid())
+  type           String
+  subject        String
+  body           String
+  channel        String    @default("in_app")
+  severity       String    @default("info")
+  recipientId    String
+  recipientEmail String?
+  organizationId String?
+  metadata       Json?
+  readAt         DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([recipientId, readAt])
+  @@index([organizationId])
+  @@index([createdAt])
+}
+
+model UserNotificationPreference {
+  // @map: تفضيلات_الإشعارات
+  id               String   @id @default(cuid())
+  userId           String
+  notificationType String
+  channel          String   @default("in_app")
+  enabled          Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([userId, notificationType, channel])
+  @@index([userId])
+}
+
 // ==================== ClientWorkspace & Project ====================
 
 model ClientWorkspace {
@@ -2220,4 +2267,22 @@ model SalesAuditEvent {
   @@index([action])
   @@index([targetType, targetId])
   @@index([createdAt])
+}
+
+// ==================== Intelligence Core — RAG (IC-01 pgvector) ====================
+
+model DocumentChunk {
+  id             String                      @id @default(cuid())
+  organizationId String
+  documentId     String
+  chunkIndex     Int
+  content        String
+  tokenCount     Int?
+  metadata       Json?
+  embedding      Unsupported("vector(1536)")?
+  createdBy      String?
+  createdAt      DateTime                    @default(now())
+
+  @@index([organizationId, documentId])
+  @@index([organizationId, chunkIndex])
 }
