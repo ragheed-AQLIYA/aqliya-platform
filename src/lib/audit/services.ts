@@ -31,7 +31,12 @@ import * as mock from "./mock-data";
 
 // Phase 3B: AI abstraction wiring — imports handlers to register them on deterministicProvider
 import "@/lib/ai/handlers/register-handlers";
-import { aiOrchestrator } from "@/lib/ai/orchestrator";
+import { runGovernedAuditAITask } from "@/lib/audit/audit-ai-bridge";
+
+export type AuditAIActorContext = {
+  userId?: string;
+  userRole?: string;
+};
 
 const USE_DATABASE = true;
 const ALLOW_PROTECTED_AUDIT_MOCK_FALLBACK =
@@ -575,26 +580,16 @@ export async function createAIOutput(data: {
 
 export async function generateDraftNotes(
   engagementId: string,
+  actor?: AuditAIActorContext,
 ): Promise<AIAssistanceOutput[]> {
-  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → draftNotesHandler
-  const result = await aiOrchestrator.generate({
-    taskType: "notes_generation",
-    taskInput: { engagementId },
-    engagementId,
-  });
-  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? [];
+  return runGovernedAuditAITask(engagementId, "notes_generation", actor);
 }
 
 export async function generateEvidenceSuggestions(
   engagementId: string,
+  actor?: AuditAIActorContext,
 ): Promise<AIAssistanceOutput[]> {
-  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → evidenceSuggestionsHandler
-  const result = await aiOrchestrator.generate({
-    taskType: "evidence_review",
-    taskInput: { engagementId },
-    engagementId,
-  });
-  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? [];
+  return runGovernedAuditAITask(engagementId, "evidence_review", actor);
 }
 
 export async function acceptEvidenceSuggestion(
@@ -762,14 +757,9 @@ export async function updateAIOutputStatus(
 
 export async function generateFindingDrafts(
   engagementId: string,
+  actor?: AuditAIActorContext,
 ): Promise<AIAssistanceOutput[]> {
-  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → findingDraftsHandler
-  const result = await aiOrchestrator.generate({
-    taskType: "audit_findings",
-    taskInput: { engagementId },
-    engagementId,
-  });
-  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? [];
+  return runGovernedAuditAITask(engagementId, "audit_findings", actor);
 }
 
 export async function acceptFindingDraft(
@@ -806,29 +796,21 @@ export async function acceptFindingDraft(
 
 export async function generateRecommendationDrafts(
   engagementId: string,
+  actor?: AuditAIActorContext,
 ): Promise<AIAssistanceOutput[]> {
-  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → recommendationDraftsHandler
-  const result = await aiOrchestrator.generate({
-    taskType: "approval_review",
-    taskInput: { engagementId },
-    engagementId,
-  });
-  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? [];
+  return runGovernedAuditAITask(engagementId, "approval_review", actor);
 }
 
 export async function generateAnalyticalReview(
   engagementId: string,
+  actor?: AuditAIActorContext,
 ): Promise<AIAssistanceOutput[]> {
-  // Phase 3B: routed through AIOrchestrator → DeterministicAIProvider → analyticalReviewHandler
-  // The handler performs the rule-based TB scan + anomaly flag generation and persists outputs.
-  // Returned AIAssistanceOutput[] is extracted from AIResponse.metadata.outputs.
-  // Public function signature unchanged — callers (audit-actions.ts, UI) are unaffected.
-  const result = await aiOrchestrator.generate({
-    taskType: "trial_balance_upload",
-    taskInput: { engagementId },
+  const result = await runGovernedAuditAITask(
     engagementId,
-  });
-  return (result.response.metadata?.outputs as AIAssistanceOutput[]) ?? [];
+    "trial_balance_upload",
+    actor,
+  );
+  return result;
 }
 
 export async function acceptRecommendationDraft(

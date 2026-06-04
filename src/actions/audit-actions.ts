@@ -745,7 +745,10 @@ export async function generateEvidenceSuggestionsAction(engagementId: string) {
   requireRole(actor, ["admin", "operator"]);
   await assertEngagementAccess(engagementId, actor);
   await enforceAuditRateLimit(actor, "generate_ai", "ai_generate");
-  const aiOutputs = await svcGenerateEvidenceSuggestions(engagementId);
+  const aiOutputs = await svcGenerateEvidenceSuggestions(engagementId, {
+    userId: actor.actorId,
+    userRole: actor.actorRole,
+  });
   await enforceAuditRateLimit(actor, "generate_ai", "ai_generate");
   for (const ai of aiOutputs) {
     await svcRecordAuditEvent({
@@ -796,7 +799,10 @@ export async function generateFindingDraftsAction(engagementId: string) {
   requireRole(actor, ["admin", "operator"]);
   await assertEngagementAccess(engagementId, actor);
   await enforceAuditRateLimit(actor, "generate_ai", "ai_generate");
-  const aiOutputs = await svcGenerateFindingDrafts(engagementId);
+  const aiOutputs = await svcGenerateFindingDrafts(engagementId, {
+    userId: actor.actorId,
+    userRole: actor.actorRole,
+  });
   for (const ai of aiOutputs) {
     await svcRecordAuditEvent({
       engagementId,
@@ -846,7 +852,10 @@ export async function generateRecommendationDraftsAction(engagementId: string) {
   requireRole(actor, ["admin", "operator"]);
   await assertEngagementAccess(engagementId, actor);
   await enforceAuditRateLimit(actor, "generate_ai", "ai_generate");
-  const aiOutputs = await svcGenerateRecommendationDrafts(engagementId);
+  const aiOutputs = await svcGenerateRecommendationDrafts(engagementId, {
+    userId: actor.actorId,
+    userRole: actor.actorRole,
+  });
   for (const ai of aiOutputs) {
     await svcRecordAuditEvent({
       engagementId,
@@ -896,7 +905,10 @@ export async function generateDraftNotesAction(engagementId: string) {
   requireRole(actor, ["admin", "operator"]);
   await assertEngagementAccess(engagementId, actor);
   await enforceAuditRateLimit(actor, "generate_ai", "ai_generate");
-  const aiOutputs = await svcGenerateDraftNotes(engagementId);
+  const aiOutputs = await svcGenerateDraftNotes(engagementId, {
+    userId: actor.actorId,
+    userRole: actor.actorRole,
+  });
   for (const ai of aiOutputs) {
     await svcRecordAuditEvent({
       engagementId,
@@ -999,7 +1011,10 @@ export async function generateAnalyticalReviewAction(engagementId: string) {
   requireRole(actor, ["admin", "operator", "reviewer"]);
   await assertEngagementAccess(engagementId, actor);
   await enforceAuditRateLimit(actor, "generate_ai", "ai_generate");
-  const aiOutputs = await svcGenerateAnalyticalReview(engagementId);
+  const aiOutputs = await svcGenerateAnalyticalReview(engagementId, {
+    userId: actor.actorId,
+    userRole: actor.actorRole,
+  });
   for (const ai of aiOutputs) {
     await svcRecordAuditEvent({
       engagementId,

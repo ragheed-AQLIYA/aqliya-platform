@@ -12,7 +12,7 @@ module.exports = {
     "<rootDir>/.claude/",
     "<rootDir>/docs/",
   ],
-  modulePathIgnorePatterns: ["<rootDir>/.claude/"],
+  modulePathIgnorePatterns: ["<rootDir>/.claude/", "<rootDir>/.next/"],
   setupFiles: [path.join(__dirname, "src/__tests__/setup.ts")],
   moduleNameMapper: {
     "^@/(.*)$": path.join(__dirname, "src", "$1"),
