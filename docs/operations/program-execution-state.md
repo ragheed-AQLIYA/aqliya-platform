@@ -73,7 +73,7 @@ AI Foundation Operational +
 Execution Governance Mature
 ```
 
-**Cycle 6 (A1-09):** Repo **shipped** @ `4d24afd`+. **Track A local:** **COMPLETE** @ `c6f7927` (`cycle-6-track-a-completion.md`, slices 22–23). **Program:** **BLOCKED** — remote `staging.aqliya.ai` + operator G6-7 still required.
+**Cycle 6 (A1-09):** Repo **shipped** @ `4d24afd`+. **Track A local:** **COMPLETE** @ `c6f7927` (`cycle-6-track-a-completion.md`, slices 22–24). **Operator packet:** `cycle-6-remote-operator-packet.md` @ `6b17fb6` (slice 25). **Program:** **BLOCKED** — `staging.aqliya.ai` DNS FAIL 2026-06-07; G6-7 remote still required.
 
 | Track | Owner | Status |
 | ----- | ----- | ------ |
