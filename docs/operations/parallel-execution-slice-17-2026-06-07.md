@@ -16,4 +16,4 @@
 | `npm test -- sampling-engine.test.ts` | 5 passed |
 | `npx tsc --noEmit` | Pass |
 
-**Status:** DONE_WITH_CONCERNS — UI method picker may still list legacy methods only
+**Status:** DONE — engine shipped @ `6f12c77`; UI wired in slice 18 @ follow-up commit

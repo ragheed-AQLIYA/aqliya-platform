@@ -1493,6 +1493,10 @@ export async function generateAuditSamplingAction(params: {
   sampleSize: number;
   seed?: string;
   materialityThreshold?: number;
+  confidenceLevel?: number;
+  marginOfError?: number;
+  interval?: number;
+  randomStart?: number;
 }): Promise<SamplingResult> {
   const actor = await getAuditActor();
   requireRole(actor, [
@@ -1529,6 +1533,10 @@ export async function generateAuditSamplingAction(params: {
     sampleSize: params.sampleSize,
     seed: params.seed,
     materialityThreshold: params.materialityThreshold,
+    confidenceLevel: params.confidenceLevel,
+    marginOfError: params.marginOfError,
+    interval: params.interval,
+    randomStart: params.randomStart,
   });
 
   await svcRecordAuditEvent({
@@ -1547,6 +1555,8 @@ export async function generateAuditSamplingAction(params: {
       populationCount: result.populationCount,
       seed: result.seed,
       selectedIds: result.selectedIds,
+      confidenceLevel: result.parameters.confidenceLevel,
+      recommendedMinSampleSize: result.statistics?.recommendedMinSampleSize,
     },
   });
 
