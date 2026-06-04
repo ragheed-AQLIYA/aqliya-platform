@@ -17,7 +17,11 @@ const MODEL_NAMES = [
   'decisionMonitoringSignal', 'decisionPattern', 'sectorPattern', 'pilotFeedback',
   'pilotSignoff', 'productionBlocker', 'sector', 'sectorBenchmark', 'sectorPlaybook',
   'sectorRule', 'decisionOutcome', 'decisionEvidence', 'sunbulClient', 'sunbulUserMembership', 'sunbulRecord',
-  'sunbulDocument', 'sunbulReview', 'sunbulAuditEvent'
+  'sunbulDocument', 'sunbulReview', 'sunbulAuditEvent',
+  'crmConnection', 'crmSyncLog',
+  'salesAccount', 'salesContact', 'salesDeal', 'salesAuditEvent',
+  'salesPipeline', 'salesPipelineStage', 'salesInteraction',
+  'salesEvidenceLink', 'salesSignal',
 ]
 
 const AuditAction = {
@@ -150,6 +154,18 @@ function matchesWhere(record, where) {
     if (key === 'OR' || key === 'AND') return true
 
     if (value && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
+      if (Object.prototype.hasOwnProperty.call(value, 'path') && Object.prototype.hasOwnProperty.call(value, 'equals')) {
+        const pathArray = value.path;
+        if (Array.isArray(pathArray)) {
+          let current = record[key];
+          for (const segment of pathArray) {
+            if (current == null || typeof current !== 'object') return false;
+            current = current[segment];
+          }
+          return current === value.equals;
+        }
+      }
+
       if (Object.prototype.hasOwnProperty.call(value, 'contains')) {
         const candidate = String(record[key] || '')
         const needle = String(value.contains || '')

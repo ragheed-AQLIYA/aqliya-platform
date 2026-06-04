@@ -1,0 +1,25 @@
+Epic ID,Layer,Name,Status,Priority,Dependencies,Description
+EPIC-0.1,0,Staging Environment,Not Started,Critical,None,"Provision managed Postgres staging instance, configure deployment pipeline, add STAGING_DATABASE_URL to env"
+EPIC-0.2,0,Backup Automation,Not Started,High,EPIC-0.1,"Schedule automated backups (cron/scheduler), document restore drill with timestamp, verify backup-verify.ts works end-to-end"
+EPIC-0.3,0,Redis Rate Limiter,Not Started,High,None,"Wire redis-rate-limiter.ts (currently stubs to memory), set REDIS_URL in prod, test multi-instance rate limiting"
+EPIC-0.4,0,Alerting & Monitoring,Not Started,Medium,EPIC-0.1,"Configure uptime monitor, golden signals dashboard, on-call alerts for errors and backup failure"
+EPIC-0.5,0,IaC Foundation,Not Started,Medium,EPIC-0.1,Infrastructure as Code for prod+staging (Terraform/Pulumi/CDK starting with Vercel + managed PG)
+EPIC-0.6,0,OWASP Security Review,Not Started,High,None,"Formal OWASP Top 10 review, document findings, fix critical/high issues"
+EPIC-05.1,0.5,AI Cost Controls,Not Started,Critical,None,"Per-tenant token budgets, spend alerts, cost tracking per request, provider cost mapping"
+EPIC-05.2,0.5,AI Observability,Not Started,High,EPIC-05.1,"Prompt/response logging, latency tracking, cost dashboard, activate onGenerate callback"
+EPIC-05.3,0.5,AI Eval Framework,Not Started,High,EPIC-05.2,"Golden-set evals per task type, regression gate in CI, human review comparison"
+EPIC-05.4,0.5,Wired LLM Providers,Not Started,High,EPIC-05.1,"Enable real OpenAI/Anthropic providers behind env flag, add retry/timeout/fallback, streaming support"
+EPIC-05.5,0.5,RAG Shared Capability,Deferred,Medium,EPIC-05.4,"pgvector on existing Postgres, governance context embedding, evidence/institutional doc retrieval. Build when L1 demands it"
+EPIC-1.1,1,AuditOS P2 Gap Closure,Not Started,High,None,"Fix loading/error boundaries on 6 tabs (mapping, validation, statements, notes, evidence, findings already have them; add to remaining)"
+EPIC-1.2,1,AuditOS AI Mock Cleanup,Not Started,Medium,EPIC-05.1,Replace mock-backed AI in ai-service.ts with real provider path behind AUDIT_ALLOW_MOCK_FALLBACK flag
+EPIC-1.3,1,AuditOS Integration Tests,Not Started,Medium,None,"Build dedicated integration test suite for audit workflow (currently 1 test), cover governance bridge, export, RBAC"
+EPIC-1.4,1,AuditOS Pilot Execution,Not Started,Critical,EPIC-1.1 + EPIC-0.1 + EPIC-0.2,"Execute commercial-pack pilot: 2-3 design partners, pricing + ROI model, signed LOI/SOW, pilot feedback loop"
+EPIC-2.1,2,LocalContentOS Gap Closure,Deferred,High,EPIC-1.4,"Supplier scoring depth, tender matching automation, multi-reviewer approval routing, Arabic PDF font"
+EPIC-2.2,2,LocalContentOS Pilot,Deferred,High,EPIC-2.1 + EPIC-1.4,Pilot-read LocalContentOS as second product following AuditOS playbook
+EPIC-3.1,3,DecisionOS Outcome Dashboard,Not Started,Medium,None,"Build outcome-tracking dashboard, decision portfolio view, decision->outcome correlation analytics"
+EPIC-8.1,8,External Pentest,Not Started,Critical,None,"Engage pentest vendor, schedule assessment, document remediation plan. Hard gate before enterprise contract"
+EPIC-8.2,8,OIDC/SAML SSO,Deferred,Medium,EPIC-1.4,Single Sign-On integration. Build only if customer contract requires it
+EPIC-8.3,8,DR/HA Architecture,Deferred,Low,EPIC-0.5,"Documented RTO/RPO, multi-AZ database, failover testing. Build when scale demands it"
+EPIC-9.1,9,SOC2 Readiness,Deferred,Low,EPIC-8.1 + EPIC-8.2,SOC2 Type I control mapping and evidence collection. Contract-funded
+EPIC-9.2,9,NCA ECC / PDPL,Deferred,Low,EPIC-9.1,Saudi regulatory compliance self-assessment, data residency proof. Contract-funded
+EPIC-10.1,10,On-Prem Packaging,Deferred,Low,EPIC-9.1 + EPIC-9.2,"On-prem deployment package, local AI runtime, offline licensing. Single funded deployment only"

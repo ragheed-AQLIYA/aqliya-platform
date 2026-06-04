@@ -1,0 +1,43 @@
+﻿
+> aqliya-app@0.1.0 build
+> prisma generate && next build --webpack
+
+node.exe : Loaded Prisma config from prisma.config.ts.
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Loaded Prisma c...isma.config.ts.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Prisma schema loaded from prisma\schema.prisma.
+Error: Prisma schema validation - (get-dmmf wasm)
+Error code: P1012
+[1;91merror[0m: [1mError validating field `contact` in model `ContactEvidence`: The relation field `contact` on 
+model `ContactEvidence` is missing an opposite relation field on the model `LocalContact`. Either run `prisma format` 
+or add it manually.[0m
+  [1;94m-->[0m  [4mprisma\schema.prisma:2486[0m
+[1;94m   | [0m
+[1;94m2485 | [0m  contactId              String
+[1;94m2486 | [0m  [1;91mcontact                LocalContact @relation(fields: [contactId], references: [id], 
+onDelete: Cascade)
+[0m
+[1;94m2487 | [0m  filename               String
+[1;94m   | [0m
+[1;91merror[0m: [1mError validating field `contact` in model `ContactReview`: The relation field `contact` on model 
+`ContactReview` is missing an opposite relation field on the model `LocalContact`. Either run `prisma format` or add 
+it manually.[0m
+  [1;94m-->[0m  [4mprisma\schema.prisma:2507[0m
+[1;94m   | [0m
+[1;94m2506 | [0m  contactId              String
+[1;94m2507 | [0m  [1;91mcontact                LocalContact     @relation(fields: [contactId], references: [id], 
+onDelete: Cascade)
+[0m
+[1;94m2508 | [0m  reviewType             String           @default("sensitivity") // sensitivity | accuracy | 
+completeness | custom
+[1;94m   | [0m
+
+Validation Error Count: 2
+[Context: getDmmf]
+
+Prisma CLI Version : 7.8.0

@@ -1,0 +1,2604 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  OPERATOR
+  VIEWER
+}
+
+enum DecisionStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
+enum DecisionType {
+  TENDER
+  INVESTMENT
+  EXPANSION
+  PROCUREMENT
+  HIRING
+  PARTNERSHIP
+  PRICING
+  STRATEGIC
+  OPERATIONS
+  CUSTOM
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ScenarioType {
+  BEST_CASE
+  EXPECTED_CASE
+  WORST_CASE
+}
+
+enum RecommendationType {
+  GO
+  GO_WITH_CONDITIONS
+  NO_GO
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum OutcomeStatus {
+  SUCCESS
+  PARTIAL_SUCCESS
+  FAILURE
+  UNKNOWN
+}
+
+enum AuditAction {
+  DECISION_CREATED
+  DECISION_UPDATED
+  RECOMMENDATION_UPDATED
+  PATTERN_EXTRACTED
+  ALERT_RESOLVED
+  SECTOR_ASSIGNED
+  BENCHMARK_CREATED
+  OUTPUT_PUBLISHED
+  OUTPUT_UNPUBLISHED
+  SUBMITTED_FOR_REVIEW
+  DECISION_APPROVED
+  DECISION_APPROVED_WITH_CONDITIONS
+  DECISION_REJECTED
+  REVISION_REQUESTED
+  SNAPSHOT_PUBLISHED
+  CURRENT_PUBLISHED_WITHOUT_APPROVAL
+  STALE_PUBLISH_BLOCKED
+  STALE_PUBLISH_OVERRIDE
+  OUTCOME_CREATED
+  OUTCOME_UPDATED
+  OUTCOME_REVIEWED
+}
+
+// ==================== Platform Organization (Bridge) ====================
+
+model PlatformOrganization {
+  // @map: المنظمات_المنصة
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  displayName String?
+  status      String   @default("active")
+  metadata    Json?
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  organizations      Organization[]      @relation("OrgPlatformOrg")
+  auditOrganizations AuditOrganization[] @relation("AuditOrgPlatformOrg")
+  clientWorkspaces   ClientWorkspace[]
+  sunbulClients      SunbulClient[]
+  @@index([createdAt])
+}
+
+model Invitation {
+  // @map: الدعوات
+  id              String    @id @default(cuid())
+  email           String
+  tokenHash       String    @unique
+  role            String    @default("MEMBER")
+  organizationId  String?
+  expiresAt       DateTime
+  acceptedAt      DateTime?
+  invitedByUserId String?
+  metadata        Json?
+  createdAt       DateTime  @default(now())
+
+  @@index([email])
+  @@index([organizationId])
+}
+
+model PlatformSecret {
+  // @map: أسرار_المنصة
+  key                String    @id
+  encryptedValue     String
+  description        String?
+  rotationPeriodDays Int?
+  lastRotatedAt      DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([createdAt])
+}
+
+model PlatformNotification {
+  // @map: إشعارات_المنصة
+  id             String    @id @default(cuid())
+  type           String
+  subject        String
+  body           String
+  channel        String    @default("in_app")
+  severity       String    @default("info")
+  recipientId    String
+  recipientEmail String?
+  organizationId String?
+  metadata       Json?
+  readAt         DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([recipientId, readAt])
+  @@index([organizationId])
+  @@index([createdAt])
+}
+
+model UserNotificationPreference {
+  // @map: تفضيلات_الإشعارات
+  id               String   @id @default(cuid())
+  userId           String
+  notificationType String
+  channel          String   @default("in_app")
+  enabled          Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([userId, notificationType, channel])
+  @@index([userId])
+}
+
+// ==================== ClientWorkspace & Project ====================
+
+model ClientWorkspace {
+  id                     String               @id @default(cuid())
+  platformOrganizationId String
+  platformOrganization   PlatformOrganization @relation(fields: [platformOrganizationId], references: [id])
+  name                   String
+  slug                   String
+  workspaceType          String               @default("client") // client | internal | content | decision
+  status                 String               @default("active") // active | archived | suspended
+  productAccess          Json?
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  deletedAt              DateTime?
+
+  projects     Project[]
+  auditClients AuditClient[]
+
+  @@unique([platformOrganizationId, slug])
+  @@index([platformOrganizationId, status])
+  @@index([workspaceType])
+  @@index([status])
+  @@index([deletedAt])
+}
+
+model Project {
+  id          String          @id @default(cuid())
+  workspaceId String
+  workspace   ClientWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  projectType String
+  status      String          @default("active") // active | archived | completed
+  team        Json?
+  metadata    Json?
+  createdById String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  auditEngagements AuditEngagement[]
+
+  @@index([workspaceId, status])
+  @@index([projectType])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ==================== Platform Audit Log ====================
+
+model PlatformAuditLog {
+  id                     String   @id @default(cuid())
+  platformOrganizationId String?
+  clientWorkspaceId      String?
+  projectId              String?
+  productKey             String
+  environment            String?
+  actorId                String?
+  actorType              String?
+  actorEmail             String?
+  actorName              String?
+  action                 String
+  targetType             String?
+  targetId               String?
+  targetLabel            String?
+  severity               String   @default("info")
+  status                 String   @default("recorded")
+  sourceSystem           String?
+  sourceModel            String?
+  sourceId               String?
+  requestId              String?
+  sessionId              String?
+  ipAddress              String?
+  userAgent              String?
+  aiProvider             String?
+  aiModel                String?
+  aiPromptVersion        String?
+  aiOutputReviewStatus   String?
+  evidenceRefs           Json?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([platformOrganizationId, createdAt])
+  @@index([clientWorkspaceId, createdAt])
+  @@index([projectId, createdAt])
+  @@index([productKey, createdAt])
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+  @@index([targetType, targetId])
+  @@index([sourceSystem, sourceId])
+  @@index([createdAt])
+}
+
+// ==================== Office AI Assistant (Shared Application) ====================
+
+model OfficeAiTask {
+  id                     String    @id @default(cuid())
+  platformOrganizationId String
+  clientWorkspaceId      String?
+  projectId              String?
+  taskType               String // summarize | analyze | draft | outline | exec_summary | meeting_notes
+  status                 String    @default("draft") // draft | finalized | rejected | archived
+  language               String    @default("ar") // ar | en
+  title                  String?
+  instructions           String?
+  createdById            String?
+  createdByName          String?
+  reviewedById           String?
+  reviewedAt             DateTime?
+  approvedById           String?
+  approvedAt             DateTime?
+  metadata               Json?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  outputs     OfficeAiOutput[]
+  sourceFiles OfficeAiFile[]
+
+  @@index([platformOrganizationId, createdAt])
+  @@index([clientWorkspaceId, createdAt])
+  @@index([projectId, createdAt])
+  @@index([taskType, createdAt])
+  @@index([status, createdAt])
+  @@index([createdById, createdAt])
+}
+
+model OfficeAiOutput {
+  id              String       @id @default(cuid())
+  taskId          String
+  task            OfficeAiTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  content         String
+  format          String       @default("markdown") // markdown | text | html
+  status          String       @default("draft") // draft | finalized | rejected
+  aiProvider      String       @default("deterministic") // deterministic | cloud_ai | local_ai
+  aiModel         String?
+  aiPromptVersion String?
+  confidenceScore Float?
+  reviewedById    String?
+  reviewedAt      DateTime?
+  rejectionReason String?
+  metadata        Json?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([taskId, createdAt])
+  @@index([status, createdAt])
+}
+
+model OfficeAiFile {
+  id           String       @id @default(cuid())
+  taskId       String
+  task         OfficeAiTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  filename     String
+  fileType     String // pdf | docx | xlsx | csv | txt | md
+  mimeType     String?
+  storageKey   String?
+  fileHash     String?
+  sizeBytes    Int?
+  uploadedById String?
+  metadata     Json?
+  createdAt    DateTime     @default(now())
+
+  extractedContent String?   @db.Text
+  extractionMeta   Json?
+  extractedAt      DateTime?
+  extractionStatus String?
+
+  @@index([taskId, createdAt])
+  @@index([fileHash])
+}
+
+model Organization {
+  // @map: المنظمات
+  id               String                     @id @default(cuid())
+  name             String
+  users            User[]
+  decisions        Decision[]
+  auditLogs        AuditLog[]
+  signals          DecisionMonitoringSignal[]
+  alerts           DecisionRiskAlert[]
+  decisionPatterns DecisionPattern[]
+  reports          DecisionReport[]
+  createdAt        DateTime                   @default(now())
+  updatedAt        DateTime                   @updatedAt
+
+  platformOrganizationId String?
+  platformOrganization   PlatformOrganization? @relation("OrgPlatformOrg", fields: [platformOrganizationId], references: [id])
+
+  @@index([createdAt])
+  @@index([platformOrganizationId])
+}
+
+model User {
+  id                       String            @id @default(cuid())
+  email                    String            @unique
+  name                     String
+  passwordHash             String?
+  mfaEnabled               Boolean           @default(false)
+  mfaSecret                String?
+  mfaBackupCodes           String?           // JSON array of SHA-256 hashed backup codes
+  role                     UserRole          @default(OPERATOR)
+  organizationId           String
+  organization             Organization      @relation(fields: [organizationId], references: [id])
+  ownedDecisions           Decision[]        @relation("DecisionOwner")
+  reviewedDecisions        Decision[]        @relation("DecisionReviewer")
+  approvedDecisions        Decision[]        @relation("DecisionApprover")
+  approvals                Approval[]        @relation("ApprovalApprover")
+  reviewedOutcomes         DecisionOutcome[] @relation("OutcomeReviewer")
+  auditLogs                AuditLog[]
+  publishedRecommendations Recommendation[]  @relation("RecommendationPublisher")
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+
+  @@index([organizationId])
+  @@index([role])
+}
+
+model Decision {
+  // @map: القرارات
+  id                String                     @id @default(cuid())
+  title             String
+  type              DecisionType               @default(TENDER)
+  ownerId           String
+  owner             User                       @relation("DecisionOwner", fields: [ownerId], references: [id])
+  reviewerId        String?
+  reviewer          User?                      @relation("DecisionReviewer", fields: [reviewerId], references: [id])
+  approverId        String?
+  approver          User?                      @relation("DecisionApprover", fields: [approverId], references: [id])
+  organizationId    String
+  organization      Organization               @relation(fields: [organizationId], references: [id])
+  status            DecisionStatus             @default(DRAFT)
+  description       String?
+  priority          String                     @default("MEDIUM")
+  targetDate        DateTime?
+  tenderProfile     TenderProfile?
+  objectives        Objective[]
+  constraints       Constraint[]
+  assumptions       Assumption[]
+  alternatives      Alternative[]
+  risks             Risk[]
+  framework         DecisionFramework?
+  decisionScenarios DecisionScenario[]
+  riskAnalyses      DecisionRiskAnalysis[]
+  scenarios         Scenario[]
+  simulations       SimulationResult[]
+  recommendation    Recommendation?
+  approvals         Approval[]
+  outcome           DecisionOutcome?
+  auditLogs         AuditLog[]
+  reports           DecisionReport[]
+  signals           DecisionMonitoringSignal[]
+  alerts            DecisionRiskAlert[]
+  // A-3: Sector assignment
+  sectorId          String?
+  sector            Sector?                    @relation(fields: [sectorId], references: [id])
+  decisionPatterns  DecisionPattern?
+  sectorPatterns    SectorPattern[] // Added opposite relation for SectorPattern
+  evidence          DecisionEvidence[]
+  createdAt         DateTime                   @default(now())
+  updatedAt         DateTime                   @updatedAt
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([ownerId])
+  @@index([createdAt])
+  @@index([type])
+}
+
+model DecisionFramework {
+  id              String   @id @default(cuid())
+  decisionId      String   @unique
+  decision        Decision @relation(fields: [decisionId], references: [id])
+  context         String
+  purpose         String
+  options         String
+  criteria        String
+  values          String
+  informationGaps String
+  certainty       String
+  assumptions     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model DecisionScenario {
+  id                   String                @id @default(cuid())
+  decisionId           String
+  decision             Decision              @relation(fields: [decisionId], references: [id])
+  riskAnalysis         DecisionRiskAnalysis?
+  name                 String
+  description          String
+  assumptions          String
+  expectedOutcome      String
+  affectedStakeholders String
+  requiredConditions   String
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+
+  @@index([decisionId])
+}
+
+model DecisionRiskAnalysis {
+  id               String           @id @default(cuid())
+  decisionId       String
+  decision         Decision         @relation(fields: [decisionId], references: [id])
+  scenarioId       String           @unique
+  scenario         DecisionScenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  risks            String
+  tradeoffs        String
+  sacrifices       String
+  opportunityCosts String
+  stakeholderRisks String
+  operationalRisks String
+  strategicRisks   String
+  knowledgeRisks   String
+  uncertaintyLevel String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([decisionId])
+}
+
+model Objective {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([decisionId])
+}
+
+model Constraint {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([decisionId])
+}
+
+model Assumption {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([decisionId])
+}
+
+model Alternative {
+  id          String   @id @default(cuid())
+  decisionId  String
+  decision    Decision @relation(fields: [decisionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([decisionId])
+}
+
+model Risk {
+  id          String    @id @default(cuid())
+  decisionId  String
+  decision    Decision  @relation(fields: [decisionId], references: [id])
+  description String
+  level       RiskLevel
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([decisionId])
+}
+
+model TenderProfile {
+  id                        String    @id @default(cuid())
+  decisionId                String    @unique
+  decision                  Decision  @relation(fields: [decisionId], references: [id])
+  clientName                String
+  estimatedContractValue    Float
+  estimatedCost             Float
+  durationMonths            Int
+  requiredCapacity          Int
+  internalAvailableCapacity Int
+  strategicFitScore         Int
+  riskLevel                 RiskLevel
+  marginEstimate            Float
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+}
+
+model Scenario {
+  id         String            @id @default(cuid())
+  decisionId String
+  decision   Decision          @relation(fields: [decisionId], references: [id])
+  type       ScenarioType
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  simulation SimulationResult?
+
+  @@unique([decisionId, type])
+  @@index([decisionId])
+}
+
+model SimulationResult {
+  id                   String    @id @default(cuid())
+  decisionId           String
+  decision             Decision  @relation(fields: [decisionId], references: [id])
+  scenarioId           String?   @unique
+  scenario             Scenario? @relation(fields: [scenarioId], references: [id])
+  feasibilityScore     Float
+  financialScore       Float
+  capacityScore        Float
+  riskScore            Float
+  strategicFitScore    Float
+  overallDecisionScore Float
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@index([decisionId])
+}
+
+model DecisionMonitoringSignal {
+  id             String              @id @default(cuid())
+  decisionId     String
+  decision       Decision            @relation(fields: [decisionId], references: [id])
+  organizationId String
+  organization   Organization        @relation(fields: [organizationId], references: [id])
+  // Required: source of signal
+  source         String // "assumption" | "risk" | "scenario" | "execution"
+  // Required: link to A-1 entity
+  referenceId    String // ID of the assumption/risk/scenario that triggered this
+  signalType     String // e.g., "risk-increased", "assumption-invalidated"
+  description    String
+  severity       SignalSeverity      @default(INFO)
+  status         SignalStatus        @default(NEW)
+  // No manual creation - system only
+  generatedBy    String              @default("system") //Always "system"
+  acknowledgedBy String?
+  acknowledgedAt DateTime?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  // Opposite relation for alerts triggered by this signal
+  alerts         DecisionRiskAlert[]
+
+  @@index([organizationId])
+}
+
+model DecisionRiskAlert {
+  id                 String                   @id @default(cuid())
+  decisionId         String
+  decision           Decision                 @relation(fields: [decisionId], references: [id])
+  organizationId     String
+  organization       Organization             @relation(fields: [organizationId], references: [id])
+  // Required: what triggered this alert
+  triggeringSignalId String                   @unique
+  triggeringSignal   DecisionMonitoringSignal @relation(fields: [triggeringSignalId], references: [id])
+  alertType          String // e.g., "scenario-risk-emerged", "assumption-invalidated"
+  description        String
+  severity           AlertSeverity            @default(MEDIUM)
+  status             AlertStatus              @default(OPEN)
+  // Must always require human review
+  requiresReview     Boolean                  @default(true)
+  // Never auto-resolve
+  reviewedBy         String?
+  reviewedAt         DateTime?
+  resolution         String? // Only set after human review
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+
+  @@index([organizationId])
+}
+
+enum SignalSeverity {
+  INFO
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum SignalStatus {
+  NEW
+  ACKNOWLEDGED
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  RESOLVED // Only after human review, never auto
+}
+
+model Recommendation {
+  id                    String     @id @default(cuid())
+  decisionId            String     @unique
+  decision              Decision   @relation(fields: [decisionId], references: [id])
+  recommendedAction     String
+  rationale             String
+  expectedNextState     String
+  scopeExclusions       String
+  assumptionsUsed       String
+  risksAccepted         String
+  risksRejected         String
+  humanReviewRequired   Boolean    @default(true)
+  isClientVisible       Boolean    @default(false)
+  publishedAt           DateTime?
+  publishedById         String?
+  publishedBy           User?      @relation("RecommendationPublisher", fields: [publishedById], references: [id])
+  publishedVersion      Int        @default(1)
+  publishedFromSnapshot Boolean    @default(false)
+  publishedApprovalId   String?
+  approvals             Approval[]
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([publishedAt])
+}
+
+model Approval {
+  id                        String          @id @default(cuid())
+  decisionId                String
+  decision                  Decision        @relation(fields: [decisionId], references: [id])
+  approverId                String
+  approver                  User            @relation("ApprovalApprover", fields: [approverId], references: [id])
+  status                    ApprovalStatus  @default(PENDING)
+  comments                  String?
+  recommendationId          String?
+  recommendation            Recommendation? @relation(fields: [recommendationId], references: [id])
+  snapshotAction            String?
+  snapshotRationale         String?
+  snapshotExpectedNextState String?
+  snapshotScopeExclusions   String?
+  snapshotAssumptionsUsed   String?
+  snapshotRisksAccepted     String?
+  snapshotRisksRejected     String?
+  snapshotConditions        String?
+  snapshotRisks             Json?
+  snapshotNextActions       Json?
+  snapshotConfidence        Float?
+  snapshotScore             Float?
+  snapshotOverrideReason    String?
+  snapshotCreatedAt         DateTime?
+  createdAt                 DateTime        @default(now())
+  updatedAt                 DateTime        @updatedAt
+
+  @@index([decisionId])
+  @@index([approverId])
+  @@index([status])
+}
+
+model DecisionOutcome {
+  id              String        @id @default(cuid())
+  decisionId      String        @unique
+  decision        Decision      @relation(fields: [decisionId], references: [id])
+  expectedOutcome String
+  actualOutcome   String?
+  outcomeStatus   OutcomeStatus @default(UNKNOWN)
+  actualValue     Float?
+  expectedValue   Float?
+  variance        Float?
+  lessonsLearned  String?
+  followUpActions Json?
+  reviewedById    String?
+  reviewedBy      User?         @relation("OutcomeReviewer", fields: [reviewedById], references: [id])
+  reviewedAt      DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([outcomeStatus])
+}
+
+model AuditLog {
+  id             String       @id @default(cuid())
+  decisionId     String
+  decision       Decision     @relation(fields: [decisionId], references: [id])
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  action         AuditAction
+  entity         String?
+  before         String?
+  after          String?
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+}
+
+// ==================== A-3 Intelligence Layer ====================
+
+model Sector {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String
+  code        String  @unique
+  isActive    Boolean @default(true)
+
+  // Relations
+  benchmarks SectorBenchmark[]
+  patterns   SectorPattern[]
+  playbooks  SectorPlaybook[]
+  rules      SectorRule[]
+  decisions  Decision[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+}
+
+model SectorBenchmark {
+  id       String @id @default(cuid())
+  sectorId String
+  sector   Sector @relation(fields: [sectorId], references: [id])
+
+  metricName    String
+  value         Float
+  unit          String
+  benchmarkType String
+
+  // Per A-3 design: not static
+  sourceType String @default("manual") // "manual" | "derived" | "assumption"
+  confidence Float  @default(1.0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([sectorId, metricName, benchmarkType])
+  @@index([sectorId])
+}
+
+model SectorPattern {
+  id       String @id @default(cuid())
+  sectorId String
+  sector   Sector @relation(fields: [sectorId], references: [id])
+
+  patternType String
+  patternKey  String
+
+  // Incremental fields
+  occurrenceCount Int      @default(1)
+  lastObservedAt  DateTime @default(now())
+  confidenceScore Float
+
+  sourceDecisionId String?
+  sourceDecision   Decision? @relation(fields: [sourceDecisionId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([sectorId, patternType, patternKey])
+  @@index([sectorId])
+}
+
+model DecisionPattern {
+  id             String       @id @default(cuid())
+  decisionId     String       @unique
+  decision       Decision     @relation(fields: [decisionId], references: [id])
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  patternScope String @default("DECISION") // "DECISION" | "SECTOR" | "CROSS_SECTOR"
+
+  extractedAt DateTime @default(now())
+  confidence  Float
+
+  // No raw analysis stored in DB
+
+  @@index([organizationId])
+}
+
+model SectorPlaybook {
+  id       String @id @default(cuid())
+  sectorId String
+  sector   Sector @relation(fields: [sectorId], references: [id])
+
+  title        String
+  content      String
+  playbookType String
+  isActive     Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sectorId])
+}
+
+model SectorRule {
+  id       String @id @default(cuid())
+  sectorId String
+  sector   Sector @relation(fields: [sectorId], references: [id])
+
+  ruleName            String
+  condition           String
+  action              String
+  isActive            Boolean @default(false)
+  requiresHumanReview Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sectorId])
+}
+
+model DecisionReport {
+  id             String       @id @default(cuid())
+  decisionId     String
+  decision       Decision     @relation(fields: [decisionId], references: [id])
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  title          String
+  content        Json
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+// ==================== Decision Evidence ====================
+
+model DecisionEvidence {
+  id             String    @id @default(cuid())
+  decisionId     String
+  decision       Decision  @relation(fields: [decisionId], references: [id], onDelete: Cascade)
+  organizationId String
+  filename       String
+  fileType       String
+  fileSize       Int       @default(0)
+  fileHash       String?
+  storageKey     String?
+  uploadedById   String?
+  description    String?
+  metadata       Json?
+  createdAt      DateTime  @default(now())
+
+  @@index([decisionId])
+  @@index([organizationId])
+  @@index([createdAt])
+}
+
+// ==================== AuditOS Models ====================
+
+model AuditOrganization {
+  // @map: مؤسسات_المراجعة
+  id                  String        @id @default(cuid())
+  name                String
+  slug                String        @unique
+  jurisdiction        String
+  regulatoryFramework String
+  governanceRules     Json?
+  status              String        @default("active")
+  clients             AuditClient[]
+  users               AuditUser[]
+  createdById         String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  platformOrganizationId String?
+  platformOrganization   PlatformOrganization? @relation("AuditOrgPlatformOrg", fields: [platformOrganizationId], references: [id])
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([platformOrganizationId])
+}
+
+model AuditUser {
+  id             String            @id @default(cuid())
+  organizationId String
+  organization   AuditOrganization @relation(fields: [organizationId], references: [id])
+  email          String
+  name           String
+  role           String            @default("operator")
+  status         String            @default("active")
+  lastLoginAt    DateTime?
+  createdById    String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@unique([organizationId, email])
+  @@index([organizationId, status])
+}
+
+model AuditClient {
+  // @map: عملاء_المراجعة
+  id                 String            @id @default(cuid())
+  organizationId     String
+  organization       AuditOrganization @relation(fields: [organizationId], references: [id])
+  name               String
+  registrationNumber String?
+  industry           String
+  reportingFramework String            @default("ifrs_for_smes")
+  fiscalPeriodEnd    String            @default("12-31")
+  currencyCode       String            @default("SAR")
+  status             String            @default("active")
+  contactEmail       String?
+  contactPhone       String?
+  engagements        AuditEngagement[]
+  createdById        String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  deletedAt          DateTime?
+
+  clientWorkspaceId String?
+  clientWorkspace   ClientWorkspace? @relation(fields: [clientWorkspaceId], references: [id])
+
+  @@index([organizationId, status])
+  @@index([clientWorkspaceId])
+}
+
+model AuditEngagement {
+  // @map: مهام_المراجعة
+  id                     String                       @id @default(cuid())
+  organizationId         String
+  clientId               String
+  client                 AuditClient                  @relation(fields: [clientId], references: [id])
+  fiscalPeriod           String
+  engagementType         String                       @default("full_audit")
+  status                 String         @default("draft")
+  team                   Json?
+  alerts                 Json?
+  governanceRules        Json?
+  createdById            String?
+  accountMappings        AuditAccountMapping[]
+  trialBalances          AuditTrialBalance[]
+  evidences              AuditEvidence[]
+  findings               AuditFinding[]
+  recommendations        AuditRecommendation[]
+  reviewComments         AuditReviewComment[]
+  approvalRecords        AuditApprovalRecord[]
+  publications           AuditPublicationPackage[]
+  events                 AuditEvent[]
+  aiOutputs              AuditAiOutput[]
+  pilotFeedback          PilotFeedback[]
+  pilotBlockers          ProductionBlocker[]
+  pilotSignoffs          PilotSignoff[]
+  validationRuns         AuditValidationRun[]
+  validationIssues       AuditValidationIssue[]
+  validationDispositions AuditValidationDisposition[]
+  createdAt              DateTime                     @default(now())
+  updatedAt              DateTime                     @updatedAt
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([clientId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([projectId])
+}
+
+model AuditTrialBalance {
+  id              String                  @id @default(cuid())
+  engagementId    String
+  engagement      AuditEngagement         @relation(fields: [engagementId], references: [id])
+  importTimestamp DateTime                @default(now())
+  sourceFile      String
+  fileHash        String?
+  trustState      String @default("pending")
+  totalDebits     Float                   @default(0)
+  totalCredits    Float                   @default(0)
+  variance        Float                   @default(0)
+  lines           AuditTrialBalanceLine[]
+  createdAt       DateTime                @default(now())
+
+  @@index([engagementId])
+}
+
+model AuditTrialBalanceLine {
+  id             String            @id @default(cuid())
+  trialBalanceId String
+  trialBalance   AuditTrialBalance @relation(fields: [trialBalanceId], references: [id])
+  accountCode    String
+  accountName    String
+  debitAmount    Float             @default(0)
+  creditAmount   Float             @default(0)
+  balance        Float             @default(0)
+  accountType    String?
+  currency       String            @default("SAR")
+
+  @@index([trialBalanceId])
+}
+
+model AuditCanonicalAccount {
+  id                 String                @id @default(cuid())
+  code               String                @unique
+  name               String
+  category           String
+  subcategory        String?
+  statementType      String
+  reportingFramework String                @default("ifrs_for_smes")
+  version            String                @default("1.0")
+  displayOrder       Int                   @default(0)
+  mappings           AuditAccountMapping[]
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+
+  @@index([reportingFramework])
+}
+
+model AuditAccountMapping {
+  id                      String                 @id @default(cuid())
+  engagementId            String
+  engagement              AuditEngagement        @relation(fields: [engagementId], references: [id])
+  sourceAccountId         String
+  sourceAccountCode       String
+  sourceAccountName       String
+  debitAmount             Float                  @default(0)
+  creditAmount            Float                  @default(0)
+  canonicalAccountId      String?
+  canonicalAccount        AuditCanonicalAccount? @relation(fields: [canonicalAccountId], references: [id])
+  confidence              Float?
+  mappingType             String                 @default("ai_suggested")
+  status                  String @default("pending")
+  statementClassification String?
+  mappedBy                String?
+  mappedAt                DateTime?
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+
+  @@index([engagementId])
+  @@index([status])
+}
+
+model AuditFinancialStatement {
+  id            String   @id @default(cuid())
+  engagementId  String
+  statementType String
+  title         String
+  status        String @default("draft")
+  lines         Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([engagementId])
+}
+
+model AuditDisclosureNote {
+  id                  String   @id @default(cuid())
+  engagementId        String
+  noteNumber          String
+  title               String
+  noteType            String
+  content             String
+  linkedStatementLine String?
+  missingInformation  Json?
+  aiDrafted           Boolean  @default(false)
+  status              String @default("draft")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([engagementId])
+}
+
+model AuditEvidence {
+  id           String              @id @default(cuid())
+  engagementId String
+  engagement   AuditEngagement     @relation(fields: [engagementId], references: [id])
+  filename     String
+  fileType     String
+  fileSize     Int                 @default(0)
+  fileHash     String?
+  storageKey   String?
+  uploadedBy   String?
+  uploadedAt   DateTime?
+  state        String   @default("missing")
+  links        AuditEvidenceLink[]
+  versions     AuditEvidenceVersion[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@index([engagementId])
+}
+
+model AuditEvidenceLink {
+  id         String        @id @default(cuid())
+  evidenceId String
+  evidence   AuditEvidence @relation(fields: [evidenceId], references: [id])
+  targetType String
+  targetId   String
+  linkType   String        @default("supports")
+  context    String?
+  createdBy  String?
+  createdAt  DateTime      @default(now())
+
+  @@index([evidenceId])
+}
+
+model AuditEvidenceVersion {
+  id           String        @id @default(cuid())
+  evidenceId   String
+  evidence     AuditEvidence @relation(fields: [evidenceId], references: [id])
+  versionNumber Int
+  changes      Json          // snapshot of the evidence fields at this version
+  changeDescription String?
+  createdById  String?
+  createdByName String?
+  createdAt    DateTime      @default(now())
+
+  @@unique([evidenceId, versionNumber])
+  @@index([evidenceId, createdAt])
+}
+
+model AuditFinding {
+  id                 String                @id @default(cuid())
+  engagementId       String
+  engagement         AuditEngagement       @relation(fields: [engagementId], references: [id])
+  title              String
+  findingType        String                @default("observation")
+  severity           String                @default("medium")
+  materiality        String                @default("immaterial")
+  description        String
+  rootCause          String?
+  impact             String?
+  status             String     @default("draft")
+  relatedAccountIds  Json?
+  relatedEvidenceIds Json?
+  aiSuggested        Boolean               @default(false)
+  assignedTo         String?
+  createdById        String?
+  recommendations    AuditRecommendation[]
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+
+  @@index([engagementId])
+  @@index([severity])
+  @@index([status])
+}
+
+model AuditRecommendation {
+  id                String          @id @default(cuid())
+  engagementId      String
+  engagement        AuditEngagement @relation(fields: [engagementId], references: [id])
+  findingId         String
+  finding           AuditFinding    @relation(fields: [findingId], references: [id])
+  title             String
+  description       String
+  recommendedAction String
+  impactAssessment  String?
+  riskLevel         String          @default("medium")
+  status            String @default("suggested")
+  aiContributed     Boolean         @default(false)
+  aiSuggestionId    String?
+  reviewerDecision  String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([engagementId])
+  @@index([status])
+}
+
+model AuditReviewComment {
+  id             String          @id @default(cuid())
+  engagementId   String
+  engagement     AuditEngagement @relation(fields: [engagementId], references: [id])
+  targetType     String
+  targetId       String
+  reviewerId     String
+  reviewerName   String
+  comment        String
+  requiredAction String          @default("none")
+  resolution     String?
+  status         String @default("open")
+  createdAt      DateTime        @default(now())
+  resolvedAt     DateTime?
+
+  @@index([engagementId])
+}
+
+model AuditApprovalRecord {
+  id           String          @id @default(cuid())
+  engagementId String
+  engagement   AuditEngagement @relation(fields: [engagementId], references: [id])
+  approverId   String
+  approverName String
+  approverRole String
+  action       String
+  rationale    String?
+  targetType   String
+  targetId     String
+  createdAt    DateTime        @default(now())
+
+  @@index([engagementId])
+}
+
+model AuditPublicationPackage {
+  id           String          @id @default(cuid())
+  engagementId String
+  engagement   AuditEngagement @relation(fields: [engagementId], references: [id])
+  status       String @default("draft")
+  publishedAt  DateTime?
+  publishedBy  String?
+  lockedAt     DateTime?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([engagementId])
+}
+
+model AuditEvent {
+  id            String          @id @default(cuid())
+  engagementId  String
+  engagement    AuditEngagement @relation(fields: [engagementId], references: [id])
+  eventType     String
+  actorId       String
+  actorName     String
+  actorRole     String
+  targetType    String
+  targetId      String
+  previousState String          @default("")
+  newState      String          @default("")
+  description   String
+  aiRelated     Boolean         @default(false)
+  metadata      Json?
+  timestamp     DateTime        @default(now())
+  createdAt     DateTime        @default(now())
+
+  @@index([engagementId, eventType, timestamp])
+}
+
+model AuditAiOutput {
+  id               String          @id @default(cuid())
+  engagementId     String
+  engagement       AuditEngagement @relation(fields: [engagementId], references: [id])
+  suggestionType   String
+  inputContext     String?
+  outputContent    String
+  confidence       Float?
+  modelVersion     String?
+  status           String @default("suggested")
+  acceptedBy       String?
+  acceptedAt       DateTime?
+  rejectedBy       String?
+  rejectedAt       DateTime?
+  sourceEntityType String?
+  sourceEntityId   String?
+  metadata         Json?
+  createdAt        DateTime        @default(now())
+
+  @@index([engagementId, sourceEntityType, sourceEntityId])
+}
+
+model PilotFeedback {
+  id           String          @id @default(cuid())
+  engagementId String
+  engagement   AuditEngagement @relation(fields: [engagementId], references: [id])
+  title        String
+  description  String
+  source       String
+  category     String
+  severity     String          @default("medium")
+  status       String @default("open")
+  decision     String?
+  owner        String?
+  nextAction   String?
+  createdBy    String
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([engagementId])
+}
+
+model ProductionBlocker {
+  id             String           @id @default(cuid())
+  engagementId   String?
+  engagement     AuditEngagement? @relation(fields: [engagementId], references: [id])
+  title          String
+  description    String
+  category       String
+  severity       String           @default("critical")
+  status         String           @default("open")
+  requiredBefore String           @default("production")
+  owner          String?
+  resolutionPlan String?
+  createdBy      String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([engagementId])
+}
+
+model PilotSignoff {
+  id            String          @id @default(cuid())
+  engagementId  String
+  engagement    AuditEngagement @relation(fields: [engagementId], references: [id])
+  checklistItem String
+  status        String @default("pending")
+  signedBy      String?
+  signedAt      DateTime?
+  notes         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@unique([engagementId, checklistItem])
+  @@index([engagementId])
+}
+
+model AuditValidationRun {
+  id             String                 @id @default(cuid())
+  engagementId   String
+  engagement     AuditEngagement        @relation(fields: [engagementId], references: [id])
+  validationType String
+  status     String                 @default("completed") // completed | failed | running
+  trustState     String                 @default("conditional")
+  summary        String?
+  issueCount     Int                    @default(0)
+  criticalCount  Int                    @default(0)
+  highCount      Int                    @default(0)
+  mediumCount    Int                    @default(0)
+  lowCount       Int                    @default(0)
+  createdBy      String
+  createdAt      DateTime               @default(now())
+  completedAt    DateTime?
+  issues         AuditValidationIssue[]
+
+  @@index([engagementId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AuditValidationIssue {
+  id              String                       @id @default(cuid())
+  validationRunId String
+  validationRun   AuditValidationRun           @relation(fields: [validationRunId], references: [id])
+  engagementId    String
+  engagement      AuditEngagement              @relation(fields: [engagementId], references: [id])
+  checkType       String
+  severity        String
+  status          String    @default("open")
+  title           String
+  description     String
+  message         String
+  accountCode     String?
+  accountName     String?
+  expectedValue   Float?
+  actualValue     Float?
+  difference      Float?
+  createdAt       DateTime                     @default(now())
+  dispositions    AuditValidationDisposition[]
+
+  @@index([validationRunId])
+  @@index([engagementId])
+  @@index([severity])
+  @@index([status])
+}
+
+model AuditValidationDisposition {
+  id           String               @id @default(cuid())
+  issueId      String
+  issue        AuditValidationIssue @relation(fields: [issueId], references: [id])
+  engagementId String
+  engagement   AuditEngagement      @relation(fields: [engagementId], references: [id])
+  action       String
+  rationale    String?
+  disposedBy   String
+  disposedAt   DateTime             @default(now())
+
+  @@index([issueId])
+  @@index([engagementId])
+}
+
+// ==================== Sunbul Models ====================
+
+enum SunbulUserRole {
+  PlatformAdmin
+  Operator
+  Reviewer
+}
+
+enum SunbulMembershipStatus {
+  Active
+  Suspended
+}
+
+enum SunbulRecordStatus {
+  Draft
+  UnderReview
+  Approved
+  Archived
+}
+
+enum SunbulReviewStatus {
+  Pending
+  Approved
+  Returned
+}
+
+enum SunbulAuditAction {
+  CLIENT_CREATED
+  CLIENT_UPDATED
+  MEMBERSHIP_CREATED
+  MEMBERSHIP_ROLE_CHANGED
+  MEMBERSHIP_STATUS_CHANGED
+  RECORD_CREATED
+  RECORD_UPDATED
+  RECORD_SUBMITTED
+  RECORD_APPROVED
+  RECORD_RETURNED
+  RECORD_ARCHIVED
+  RECORD_EXPORTED
+  REVIEW_CREATED
+  DOCUMENT_CREATED
+  DOCUMENT_DELETED
+}
+
+model SunbulClient {
+  id                     String   @id @default(cuid())
+  name                   String
+  slug                   String   @unique
+  status                 String   @default("active")
+  config                 Json?
+  platformOrganizationId String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  platformOrganization PlatformOrganization? @relation(fields: [platformOrganizationId], references: [id])
+  memberships          SunbulUserMembership[]
+  records              SunbulRecord[]
+  documents            SunbulDocument[]
+  reviews              SunbulReview[]
+  auditEvents          SunbulAuditEvent[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([platformOrganizationId])
+}
+
+model SunbulUserMembership {
+  id        String                 @id @default(cuid())
+  clientId  String
+  client    SunbulClient           @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  userId    String
+  role      SunbulUserRole         @default(Operator)
+  status    SunbulMembershipStatus @default(Active)
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
+
+  @@unique([clientId, userId])
+  @@index([clientId])
+  @@index([userId])
+  @@index([role])
+}
+
+model SunbulRecord {
+  id          String             @id @default(cuid())
+  clientId    String
+  client      SunbulClient       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  type        String             @default("CASE")
+  status      SunbulRecordStatus @default(Draft)
+  priority    String             @default("medium")
+  createdById String
+  submittedAt DateTime?
+  approvedAt  DateTime?
+  archivedAt  DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  documents SunbulDocument[]
+  reviews   SunbulReview[]
+
+  @@index([clientId])
+  @@index([status])
+  @@index([createdById])
+  @@index([createdAt])
+}
+
+model SunbulDocument {
+  id           String       @id @default(cuid())
+  clientId     String
+  client       SunbulClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  recordId     String
+  record       SunbulRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  fileName     String
+  fileType     String
+  fileSize     Int          @default(0)
+  storageKey   String
+  uploadedById String
+  createdAt    DateTime     @default(now())
+
+  @@index([clientId])
+  @@index([recordId])
+  @@index([uploadedById])
+}
+
+model SunbulReview {
+  id         String             @id @default(cuid())
+  clientId   String
+  client     SunbulClient       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  recordId   String
+  record     SunbulRecord       @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  reviewerId String
+  status     SunbulReviewStatus @default(Pending)
+  notes      String?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@index([clientId])
+  @@index([recordId])
+  @@index([reviewerId])
+}
+
+model SunbulAuditEvent {
+  id         String            @id @default(cuid())
+  clientId   String
+  client     SunbulClient      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  recordId   String?
+  actorId    String
+  action     SunbulAuditAction
+  entityType String
+  entityId   String
+  metadata   Json?
+  createdAt  DateTime          @default(now())
+
+  @@index([clientId])
+  @@index([recordId])
+  @@index([actorId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ==================== LocalContentOS (Strategic Second Product) ====================
+
+model LocalContentProject {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  clientWorkspaceId      String?
+  projectId              String?
+  name                   String
+  reportingPeriod        String
+  scopeDescription       String?
+  status                 String   @default("Draft") // Draft, DataCollection, ClassificationInProgress, EvidenceReview, FindingsDrafted, InReview, Returned, Approved, Rejected, ReportReady, Exported, Archived
+  localContentScore      Float?
+  createdById            String?
+  createdByName          String?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  suppliers       LocalContentSupplier[]
+  spendRecords    LocalContentSpendRecord[]
+  classifications LocalContentClassification[]
+  evidence        LocalContentEvidence[]
+  findings        LocalContentFinding[]
+  reviews         LocalContentReview[]
+  approvals       LocalContentApproval[]
+  reports         LocalContentReport[]
+  auditEvents     LocalContentAuditEvent[]
+
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([clientWorkspaceId, createdAt])
+  @@index([projectId, createdAt])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model LocalContentSupplier {
+  id                     String              @id @default(cuid())
+  projectId              String
+  project                LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name                   String
+  crNumber               String?
+  localityClassification String? // local, non_local, mixed, unclassified
+  localContentPercentage Float?
+  ownershipType          String? // Saudi, foreign, joint_venture
+  workforceLocalPct      Float?
+  status                 String              @default("active") // active, inactive, under_review
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  spendRecords    LocalContentSpendRecord[]
+  classifications LocalContentClassification[]
+  evidenceItems   LocalContentEvidence[]
+
+  @@index([projectId, status])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model LocalContentSpendRecord {
+  id                String               @id @default(cuid())
+  projectId         String
+  project           LocalContentProject  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  supplierId        String
+  supplier          LocalContentSupplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  amount            Float
+  currency          String               @default("SAR")
+  category          String // goods, services, construction, technology, logistics, other
+  contractReference String?
+  period            String
+  description       String?
+  metadata          Json?
+  createdById       String?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  classifications       LocalContentClassification[]
+  localContentEvidences LocalContentEvidence[]
+
+  @@index([projectId, createdAt])
+  @@index([supplierId, createdAt])
+  @@index([category])
+  @@index([createdAt])
+}
+
+model LocalContentClassification {
+  id                  String                   @id @default(cuid())
+  projectId           String
+  project             LocalContentProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  supplierId          String?
+  supplier            LocalContentSupplier?    @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  spendRecordId       String?
+  spendRecord         LocalContentSpendRecord? @relation(fields: [spendRecordId], references: [id], onDelete: SetNull)
+  classifiedBy        String?
+  localPercentage     Float
+  classificationBasis String // certificate, self_declaration, contract_term, analyst_estimate
+  confidence          String                   @default("unverified") // high, medium, low, unverified
+  notes               String?
+  reviewStatus        String                   @default("draft") // draft, reviewed, confirmed, disputed
+  metadata            Json?
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+
+  @@index([projectId, createdAt])
+  @@index([supplierId, createdAt])
+  @@index([spendRecordId, createdAt])
+  @@index([reviewStatus])
+  @@index([createdAt])
+}
+
+model LocalContentEvidence {
+  id            String                   @id @default(cuid())
+  projectId     String
+  project       LocalContentProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  supplierId    String?
+  supplier      LocalContentSupplier?    @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  spendRecordId String?
+  spendRecord   LocalContentSpendRecord? @relation(fields: [spendRecordId], references: [id], onDelete: SetNull)
+  findingId     String?
+  finding       LocalContentFinding?     @relation(fields: [findingId], references: [id], onDelete: SetNull)
+  filename      String
+  fileType      String // pdf, xlsx, docx, jpg, png, csv, txt
+  mimeType      String?
+  storageKey    String?
+  fileHash      String?
+  sizeBytes     Int?
+  evidenceType  String // certificate, contract, attestation, invoice, registration, other
+  status        String                   @default("uploaded") // uploaded, linked, reviewed, verified, rejected, missing
+  reviewedById  String?
+  reviewedAt    DateTime?
+  metadata      Json?
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+
+  @@index([projectId, status, createdAt])
+  @@index([supplierId, createdAt])
+  @@index([spendRecordId, createdAt])
+  @@index([findingId, createdAt])
+  @@index([fileHash])
+  @@index([createdAt])
+}
+
+model LocalContentFinding {
+  id                  String              @id @default(cuid())
+  projectId           String
+  project             LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type                String // evidence_gap, low_content, unclassified_supplier, data_quality, compliance_risk
+  severity            String              @default("medium") // low, medium, high, critical
+  title               String
+  description         String
+  linkedSupplierId    String?
+  linkedSpendRecordId String?
+  status              String              @default("draft") // draft, submitted, reviewed, resolved, dismissed
+  createdById         String?
+  createdByName       String?
+  metadata            Json?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  evidenceItems LocalContentEvidence[]
+
+  @@index([projectId, severity, status])
+  @@index([type, createdAt])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model LocalContentReview {
+  id           String              @id @default(cuid())
+  projectId    String
+  project      LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reviewerId   String
+  reviewerName String
+  action       String // submitted, returned, commented
+  comments     String?
+  status       String              @default("pending") // pending, in_review, returned, completed
+  metadata     Json?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@index([projectId, createdAt])
+  @@index([reviewerId, createdAt])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model LocalContentApproval {
+  id               String              @id @default(cuid())
+  projectId        String
+  project          LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  approverId       String
+  approverName     String
+  decision         String // approved, rejected
+  comments         String?
+  approvalSnapshot Json?
+  createdAt        DateTime            @default(now())
+
+  @@index([projectId, createdAt])
+  @@index([approverId, createdAt])
+  @@index([decision])
+  @@index([createdAt])
+}
+
+model LocalContentReport {
+  id              String              @id @default(cuid())
+  projectId       String
+  project         LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reportType      String // assessment_summary, supplier_register, spend_classification, gap_risk, evidence_index, final_package
+  format          String // pdf, xlsx
+  status          String              @default("generated") // generated, downloaded, archived
+  generatedById   String?
+  generatedByName String?
+  storageKey      String?
+  disclaimer      String?
+  metadata        Json?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([projectId, createdAt])
+  @@index([reportType, createdAt])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model LocalContentAuditEvent {
+  id         String              @id @default(cuid())
+  projectId  String
+  project    LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  actorId    String
+  actorName  String?
+  action     String
+  entityType String
+  entityId   String
+  before     String?
+  after      String?
+  metadata   Json?
+  createdAt  DateTime            @default(now())
+
+  @@index([projectId, createdAt])
+  @@index([actorId, createdAt])
+  @@index([action])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+// ─── LocalContentOS Content Studio (governed workflow — separate from compliance LocalContent*) ───
+
+model ContentStudioProject {
+  id                     String                  @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  title                  String
+  objective              String?
+  audience               String?
+  language               String                  @default("ar")
+  status                 String                  @default("draft")
+  createdById            String?
+  createdByName          String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  campaigns              ContentStudioCampaign[]
+
+  @@index([organizationId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioCampaign {
+  id               String                @id @default(cuid())
+  contentProjectId String
+  organizationId   String
+  name             String
+  objective        String?
+  audience         String?
+  channels         Json                  @default("[]")
+  startDate        String?
+  endDate          String?
+  status           String                @default("draft")
+  createdById      String?
+  createdByName    String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  project          ContentStudioProject  @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+  sources          ContentStudioSource[]
+  contentItems     ContentStudioItem[]
+  outputs          ContentStudioOutput[]
+
+  @@index([organizationId])
+  @@index([contentProjectId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioSource {
+  id               String                 @id @default(cuid())
+  organizationId   String
+  campaignId       String?
+  contentItemId    String?
+  title            String
+  type             String
+  url              String?
+  note             String?
+  fileRef          String?
+  credibility      String                 @default("unverified")
+  status           String                 @default("proposed")
+  evidenceMetadata Json?
+  createdById      String?
+  createdByName    String?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  campaign         ContentStudioCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  contentItem      ContentStudioItem?     @relation(fields: [contentItemId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([campaignId])
+  @@index([contentItemId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioItem {
+  id                  String                  @id @default(cuid())
+  campaignId          String
+  organizationId      String
+  title               String
+  format              String
+  body                String?
+  sourceRefIds        Json                    @default("[]")
+  status              String                  @default("idea")
+  aiGenerated         Boolean                 @default(false)
+  reviewRequired      Boolean                 @default(false)
+  draftAssistMetadata Json?
+  createdById         String?
+  createdByName       String?
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+  campaign            ContentStudioCampaign   @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  sources             ContentStudioSource[]
+  reviews             ContentStudioReview[]
+  approvals           ContentStudioApproval[]
+
+  @@index([organizationId])
+  @@index([campaignId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioReview {
+  id             String            @id @default(cuid())
+  contentItemId  String
+  organizationId String
+  status         String            @default("pending")
+  dimensions     Json              @default("{}")
+  notes          String?
+  reviewerId     String?
+  reviewerName   String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  contentItem    ContentStudioItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([contentItemId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+model ContentStudioApproval {
+  id             String            @id @default(cuid())
+  contentItemId  String
+  organizationId String
+  approved       Boolean
+  notes          String?
+  approverId     String?
+  approverName   String?
+  createdAt      DateTime          @default(now())
+  contentItem    ContentStudioItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([contentItemId])
+}
+
+model ContentStudioOutput {
+  id             String                @id @default(cuid())
+  campaignId     String
+  organizationId String
+  title          String
+  status         String                @default("draft")
+  includes       Json
+  exportMetadata Json?
+  exportedAt     DateTime?
+  createdById    String?
+  createdByName  String?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  campaign       ContentStudioCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([campaignId])
+  @@index([organizationId, status])
+  @@index([status])
+}
+
+// ==================== SalesOS (P0 Core) ====================
+
+model SalesPipeline {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  slug                   String
+  isDefault              Boolean  @default(false)
+  status                 String   @default("active")
+  metadata               Json?
+  createdById            String?
+  updatedById            String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  stages SalesPipelineStage[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([status])
+}
+
+model SalesPipelineStage {
+  id                     String        @id @default(cuid())
+  pipelineId             String
+  pipeline               SalesPipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  slug                   String
+  sortOrder              Int           @default(0)
+  isClosed               Boolean       @default(false)
+  status                 String        @default("active")
+  metadata               Json?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  deals SalesDeal[]
+
+  @@unique([pipelineId, slug])
+  @@index([pipelineId, sortOrder])
+  @@index([organizationId])
+  @@index([platformOrganizationId])
+}
+
+model SalesAccount {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  status                 String   @default("active")
+  industry               String?
+  isDemo                 Boolean  @default(false)
+  metadata               Json?
+  createdById            String?
+  updatedById            String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  deals          SalesDeal[]
+  evidenceLinks  SalesEvidenceLink[]
+  interactions   SalesInteraction[]
+  contacts       SalesContact[]
+
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([organizationId, isDemo])
+  @@index([status])
+}
+
+model SalesDeal {
+  id                     String              @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  accountId              String
+  account                SalesAccount          @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  stageId                String?
+  stage                  SalesPipelineStage? @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  title                  String
+  status                 String              @default("open")
+  amount                 Float?
+  currency               String              @default("SAR")
+  probability            Float?
+  expectedCloseDate      DateTime?
+  isDemo                 Boolean             @default(false)
+  metadata               Json?
+  createdById            String?
+  updatedById            String?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  evidenceLinks SalesEvidenceLink[]
+  interactions  SalesInteraction[]
+  proposals     SalesProposal[]
+  reviews       SalesReview[]
+  approvals     SalesApproval[]
+
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, updatedAt])
+  @@index([accountId])
+  @@index([stageId])
+  @@index([platformOrganizationId, updatedAt])
+  @@index([isDemo])
+}
+
+model SalesEvidenceLink {
+  id                     String        @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  targetType             String
+  targetId               String
+  dealId                 String?
+  deal                   SalesDeal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  accountId              String?
+  account                SalesAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  evidenceId             String
+  evidenceSource         String        @default("platform")
+  label                  String?
+  evidenceType           String?
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime      @default(now())
+
+  @@unique([targetType, targetId, evidenceId])
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([dealId])
+  @@index([accountId])
+  @@index([evidenceId])
+  @@index([targetType, targetId])
+}
+
+model SalesInteraction {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  accountId              String
+  account                SalesAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  dealId                 String?
+  deal                   SalesDeal?   @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  type                   String
+  subject                String?
+  summary                String?
+  occurredAt             DateTime
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([organizationId, occurredAt])
+  @@index([platformOrganizationId, occurredAt])
+  @@index([accountId, occurredAt])
+  @@index([dealId, occurredAt])
+  @@index([organizationId, accountId])
+}
+
+model SalesContact {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  accountId              String
+  account                SalesAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name                   String
+  email                  String?
+  role                   String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([organizationId, accountId])
+  @@index([platformOrganizationId, accountId])
+  @@index([accountId])
+}
+
+model SalesProposal {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  dealId                 String
+  deal                   SalesDeal @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  version                Int      @default(1)
+  status                 String   @default("draft")
+  title                  String?
+  draft                  String   @default("")
+  pilotCriteria          String   @default("")
+  evidenceRefs           Json?
+  exportReady            Boolean  @default(false)
+  metadata               Json?
+  createdById            String?
+  updatedById            String?
+  submittedAt            DateTime?
+  decidedAt              DateTime?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  reviews                SalesReview[]
+  approvals              SalesApproval[]
+
+  @@index([organizationId, dealId])
+  @@index([organizationId, status])
+  @@index([platformOrganizationId, updatedAt])
+}
+
+model SalesReview {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  reviewType             String
+  targetType             String
+  targetId               String
+  dealId                 String?
+  deal                   SalesDeal? @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  proposalId             String?
+  proposal               SalesProposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+  status                 String   @default("pending")
+  reason                 String
+  stageSlug              String?
+  reviewerId             String
+  reviewerName           String?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  approvals              SalesApproval[]
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, status])
+  @@index([targetType, targetId])
+  @@index([dealId])
+  @@index([proposalId])
+}
+
+model SalesApproval {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  reviewId               String
+  review                 SalesReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  proposalId             String?
+  proposal               SalesProposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+  dealId                 String?
+  deal                   SalesDeal? @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  kind                   String
+  status                 String   @default("approved")
+  approverId             String
+  approverName           String?
+  note                   String?
+  expiresAt              DateTime?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([reviewId])
+  @@index([dealId])
+  @@index([proposalId])
+}
+
+model SalesAuditEvent {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  actorId                String
+  actorName              String?
+  action                 String
+  targetType             String
+  targetId               String
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([actorId, createdAt])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
+
+// ==================== Intelligence Core — RAG (IC-01 pgvector) ====================
+
+model DocumentChunk {
+  id             String                      @id @default(cuid())
+  organizationId String
+  documentId     String
+  chunkIndex     Int
+  content        String
+  tokenCount     Int?
+  metadata       Json?
+  embedding      Unsupported("vector(1536)")?
+  createdBy      String?
+  createdAt      DateTime                    @default(now())
+
+  @@index([organizationId, documentId])
+  @@index([organizationId, chunkIndex])
+}
+
+// ─── Platform — governed agent memory (tenant-scoped) ───────────────────
+
+model AgentMemory {
+  id             String    @id @default(cuid())
+  organizationId String
+  agentId        String
+  agentType      String    @default("assistant")
+  memoryKey      String
+  memoryValue    Json
+  context        Json      @default("{}")
+  ttl            DateTime?
+  tags           Json      @default("[]")
+  createdById    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([organizationId, agentId, memoryKey])
+  @@index([organizationId, agentId])
+  @@index([organizationId, agentType])
+  @@index([ttl])
+}
+
+// ─── WorkflowOS ─────────────────────────────────────────────────────────
+
+model WorkflowTemplate {
+  id                     String        @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  description            String?
+  category               String        @default("general") // general | approval | review | inspection | custom
+  status                 String        @default("active")
+  steps                  Json          @default("[]") // Array of workflow step definitions
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  records WorkflowRecord[]
+
+  @@index([organizationId, category, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([status])
+}
+
+model WorkflowRecord {
+  id                     String           @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  templateId             String
+  template               WorkflowTemplate @relation(fields: [templateId], references: [id])
+  title                  String
+  description            String?
+  status                 String           @default("pending") // pending | in_progress | completed | rejected | cancelled
+  currentStep            Int              @default(0)
+  steps                  Json             @default("[]") // Snapshot of steps at creation time
+  stepResults            Json             @default("{}") // Results per step
+  assignedToId           String?
+  priority               String           @default("medium") // low | medium | high | urgent
+  dueDate                DateTime?
+  completedAt            DateTime?
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+
+  // Export approval fields (L5)
+  exportStatus           String           @default("none") // none | requested | approved | rejected
+  exportRequestedAt      DateTime?
+  exportRequestedById    String?
+  exportApprovedAt       DateTime?
+  exportApprovedById     String?
+  exportRejectedReason   String?
+
+  // Escalation fields (L5)
+  escalatedAt            DateTime?
+  escalatedToId          String?
+
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, templateId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([assignedToId, status])
+  @@index([dueDate])
+}
+
+// ─── LocalContactOS ─────────────────────────────────────────────────────
+
+model LocalContact {
+  id                     String             @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  email                  String?
+  phone                  String?
+  position               String?
+  department             String?
+  organizationName       String?            // External org this contact belongs to
+  sensitivityLevel       String             @default("normal") // normal | sensitive | confidential
+  exportStatus           String             @default("none") // none | requested | approved | rejected | exported
+  notes                  String?
+  tags                   Json               @default("[]")
+  isActive               Boolean            @default(true)
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+
+  outgoingRelations  LocalContactRelation[] @relation("ContactOutgoing")
+  incomingRelations  LocalContactRelation[] @relation("ContactIncoming")
+  interactions       LocalContactInteraction[]
+  evidence           ContactEvidence[]
+  reviews            ContactReview[]
+  exportRequests     ContactExportRequest[]
+
+  @@index([organizationId, name, createdAt])
+  @@index([organizationId, sensitivityLevel])
+  @@index([organizationId, exportStatus])
+  @@index([platformOrganizationId, createdAt])
+  @@index([email])
+  @@index([isActive])
+}
+
+model LocalContactRelation {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  sourceContactId        String
+  sourceContact          LocalContact @relation("ContactOutgoing", fields: [sourceContactId], references: [id], onDelete: Cascade)
+  targetContactId        String
+  targetContact          LocalContact @relation("ContactIncoming", fields: [targetContactId], references: [id], onDelete: Cascade)
+  relationType           String       // colleague | manager | subordinate | partner | client | vendor | board_member | investor | other
+  description            String?
+  strength               Int          @default(5) // 1-10
+  isActive               Boolean      @default(true)
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([organizationId, relationType])
+  @@index([sourceContactId, targetContactId])
+  @@index([platformOrganizationId, createdAt])
+}
+
+model LocalContactInteraction {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  contactId              String
+  contact                LocalContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  interactionType        String       // meeting | call | email | message | note | other
+  subject                String?
+  summary                String?
+  occurredAt             DateTime
+  duration               Int?         // minutes
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([organizationId, contactId, occurredAt])
+  @@index([organizationId, interactionType, occurredAt])
+  @@index([platformOrganizationId, createdAt])
+}
+
+// ─── WorkflowOS L5: Audit + Evidence ────────────────────────────────────
+
+model WorkflowAuditEvent {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  recordId               String
+  actorId                String
+  actorName              String?
+  action                 String   // created | advanced | completed | rejected | cancelled | assigned | updated
+  fromStatus             String?
+  toStatus               String?
+  comment                String?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([organizationId, recordId, createdAt])
+  @@index([organizationId, actorId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+}
+
+model WorkflowEvidence {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  recordId               String
+  stepIndex              Int?
+  filename               String
+  fileType               String
+  storageKey             String?
+  fileHash               String?
+  sizeBytes              Int?
+  uploadedById           String?
+  description            String?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([organizationId, recordId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+}
+
+// ─── LocalContactOS L4.5: Evidence + Review + Approval ──────────────────
+
+model ContactEvidence {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  contactId              String
+  contact                LocalContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  filename               String
+  fileType               String
+  storageKey             String?
+  fileHash               String?
+  sizeBytes              Int?
+  description            String?
+  evidenceType           String       @default("document") // document | note | reference | attachment
+  uploadedById           String?
+  metadata               Json?
+  createdAt              DateTime     @default(now())
+
+  @@index([organizationId, contactId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+}
+
+model ContactReview {
+  id                     String           @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  contactId              String
+  contact                LocalContact     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  reviewType             String           @default("sensitivity") // sensitivity | accuracy | completeness | custom
+  status                 String           @default("pending") // pending | approved | changes_requested | rejected
+  reviewerId             String
+  reviewerName           String?
+  reason                 String?
+  findings               Json?            @default("[]")
+  reviewerNotes          String?
+  reviewDueDate          DateTime?
+  completedAt            DateTime?
+  metadata               Json?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+
+  approvals ContactApproval[]
+
+  @@index([organizationId, contactId, createdAt])
+  @@index([organizationId, status, createdAt])
+  @@index([reviewerId, status])
+}
+
+model ContactApproval {
+  id                     String         @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  reviewId               String
+  review                 ContactReview   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  approverId             String
+  approverName           String?
+  status                 String         @default("approved") // approved | rejected
+  note                   String?
+  metadata               Json?
+  createdAt              DateTime       @default(now())
+
+  @@index([organizationId, reviewId])
+  @@index([approverId])
+}
+
+// ─── LocalContactOS L5: Export + Compliance ──────────────────────────────
+
+model ContactExportRequest {
+  id                     String        @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  contactId              String
+  contact                LocalContact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  status                 String        @default("pending") // pending | approved | rejected
+  requestedById          String
+  requestedByName        String?
+  reason                 String?
+  reviewedById           String?
+  reviewedByName         String?
+  reviewNote             String?
+  reviewedAt             DateTime?
+  requiresLegalReview    Boolean       @default(false)
+  legalReviewStatus      String?       // not_required | pending | cleared | blocked
+  exportedAt             DateTime?
+  metadata               Json?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  @@index([organizationId, contactId, createdAt])
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, requiresLegalReview])
+}

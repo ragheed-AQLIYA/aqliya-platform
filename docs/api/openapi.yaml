@@ -1,0 +1,1378 @@
+openapi: "3.0.3"
+info:
+  title: AQLIYA Platform API
+  version: "0.1.0"
+  description: |
+    AQLIYA is a Private Governed Institutional Intelligence Platform.
+    This API provides access to platform health, monitoring, AI services,
+    product exports, and workflow operations.
+  contact:
+    name: AQLIYA Platform
+    url: https://aqliya.com
+
+servers:
+  - url: http://localhost:3000
+    description: Local development
+  - url: https://{tenant}.aqliya.com
+    variables:
+      tenant:
+        default: app
+        description: Organization tenant subdomain
+
+paths:
+  # ─── Health ───
+  /api/health:
+    get:
+      summary: Health check
+      description: Lightweight health endpoint for load balancers and monitoring probes
+      operationId: healthCheck
+      tags: [Health]
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+        "503":
+          description: Service is unhealthy
+
+  # ─── Auth ───
+  /api/auth/session:
+    get:
+      summary: Get current session
+      description: Returns the current authenticated session details
+      operationId: getSession
+      tags: [Authentication]
+      responses:
+        "200":
+          description: Session details
+
+  # ─── Metrics ───
+  /api/metrics:
+    get:
+      summary: Platform metrics
+      description: Aggregated platform metrics including engagement, user, decision, and project counts
+      operationId: getMetrics
+      tags: [Platform]
+      security:
+        - adminAuth: []
+      responses:
+        "200":
+          description: Platform metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetricsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  # ─── Monitoring ───
+  /api/monitoring/health:
+    get:
+      summary: System health monitoring
+      description: Full system health check including database, Redis, queue, and AI provider status
+      operationId: getMonitoringHealth
+      tags: [Monitoring]
+      security:
+        - adminAuth: []
+      parameters:
+        - name: scope
+          in: query
+          schema:
+            type: string
+            enum: [health, system, queue, all]
+            default: all
+          description: Scope of health check to perform
+      responses:
+        "200":
+          description: Health check results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthCheckResult"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /api/monitoring/queue/jobs:
+    get:
+      summary: List queue jobs
+      description: List jobs in the Bull queue by status with pagination
+      operationId: listQueueJobs
+      tags: [Monitoring]
+      security:
+        - adminAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [failed, waiting, active, completed]
+            default: failed
+          description: Job status filter
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Maximum number of jobs to return
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Number of jobs to skip
+      responses:
+        "200":
+          description: List of queue jobs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /api/monitoring/queue/retry:
+    post:
+      summary: Retry a failed job
+      description: Retry a failed Bull queue job by its ID
+      operationId: retryQueueJob
+      tags: [Monitoring]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [jobId]
+              properties:
+                jobId:
+                  type: string
+                  description: The ID of the failed job to retry
+      responses:
+        "200":
+          description: Job retry initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: retried
+                      jobId:
+                        type: string
+        "400":
+          description: Invalid request or job not failed
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: Job not found
+
+  # ─── AI ───
+  /api/ai/stream:
+    post:
+      summary: Stream AI response
+      description: |
+        Initiates a streaming AI generation using SSE (Server-Sent Events).
+        Requires `ai.streaming` feature flag to be ON.
+        Returns a `text/event-stream` response with raw provider stream chunks.
+      operationId: streamAiResponse
+      tags: [AI]
+      security:
+        - viewerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [taskType, taskInput]
+              properties:
+                taskType:
+                  type: string
+                  description: Governance task type key
+                taskInput:
+                  type: object
+                  description: Task-specific input parameters
+                engagementId:
+                  type: string
+                organizationId:
+                  type: string
+                preferProvider:
+                  type: string
+                  description: Preferred AI provider hint
+      responses:
+        "200":
+          description: SSE stream of AI response chunks
+          headers:
+            X-AI-Provider:
+              schema:
+                type: string
+              description: The AI provider that handled the request
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: Raw stream chunks (SSE format from provider)
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          description: Streaming disabled or feature flag off
+        "400":
+          description: Invalid request body
+
+  /api/ai/providers:
+    get:
+      summary: List AI providers
+      description: List all configured AI providers with health status
+      operationId: listAiProviders
+      tags: [AI]
+      security:
+        - adminAuth: []
+      responses:
+        "200":
+          description: List of AI providers
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Select AI provider
+      description: Select the optimal AI provider or invalidate health cache
+      operationId: selectAiProvider
+      tags: [AI]
+      security:
+        - operatorAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskType:
+                  type: string
+                preferredProvider:
+                  type: string
+                modelId:
+                  type: string
+      responses:
+        "200":
+          description: Provider selection result
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /api/ai/eval-gate:
+    post:
+      summary: Evaluate AI output
+      description: Evaluate AI output against configured eval suites
+      operationId: evaluateAiOutput
+      tags: [AI]
+      security:
+        - operatorAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [suiteId, taskType, actualOutput]
+              properties:
+                suiteId:
+                  type: string
+                taskType:
+                  type: string
+                actualOutput:
+                  type: string
+      responses:
+        "200":
+          description: Evaluation result
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /api/ai/governance:
+    get:
+      summary: AI governance metrics
+      description: Get AI governance and compliance metrics
+      operationId: getAiGovernance
+      tags: [AI]
+      security:
+        - adminAuth: []
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 30
+          description: Number of days of data to include
+      responses:
+        "200":
+          description: AI governance metrics
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /api/ai/observability:
+    get:
+      summary: AI observability dashboard data
+      description: |
+        Combined AI observability data including spend summary, governance metrics,
+        per-product breakdown, per-provider metrics (latency, error rate, fallback count),
+        latency distribution (P50/P95/P99), spend/requests/governance/error trends,
+        and top organizations by spend.
+      operationId: getAiObservability
+      tags: [AI]
+      security:
+        - adminAuth: []
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 30
+          description: Number of days of data to include
+      responses:
+        "200":
+          description: Combined AI observability data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      summary:
+                        type: object
+                        properties:
+                          totalRequests: { type: integer }
+                          totalCost: { type: number }
+                          reviewRate: { type: number }
+                          averageConfidence: { type: number }
+                          currency: { type: string }
+                          period:
+                            type: object
+                            properties:
+                              from: { type: string, format: date-time }
+                              to: { type: string, format: date-time }
+                      byProduct:
+                        type: object
+                        additionalProperties:
+                          type: object
+                          properties:
+                            requests: { type: integer }
+                            cost: { type: number }
+                            reviewed: { type: integer }
+                            reviewedPercent: { type: number }
+                            errors: { type: integer }
+                      byProvider:
+                        type: object
+                        additionalProperties:
+                          type: object
+                          properties:
+                            requests: { type: integer }
+                            cost: { type: number }
+                            latency: { type: number }
+                            errorRate: { type: number }
+                            fallbackCount: { type: integer }
+                      latencyDistribution:
+                        type: object
+                        properties:
+                          p50: { type: integer }
+                          p95: { type: integer }
+                          p99: { type: integer }
+                      spendTrend:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            date: { type: string }
+                            requests: { type: integer }
+                            cost: { type: number }
+                      governanceTrend:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            date: { type: string }
+                            requests: { type: integer }
+                            reviewed: { type: integer }
+                            autoAccepted: { type: integer }
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            date: { type: string }
+                            count: { type: integer }
+                      topOrgs:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            organizationId: { type: string }
+                            requests: { type: integer }
+                            cost: { type: number }
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /api/ai/spend:
+    get:
+      summary: AI spend summary
+      description: Get AI provider spend summary
+      operationId: getAiSpend
+      tags: [AI]
+      security:
+        - adminAuth: []
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 30
+          description: Number of days of spend data to include
+      responses:
+        "200":
+          description: AI spend summary
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /api/auth/sessions:
+    get:
+      summary: List active sessions
+      description: List all active sessions for the current user with device info
+      operationId: listSessions
+      tags: [Auth]
+      security:
+        - viewerAuth: []
+      responses:
+        "200":
+          description: List of active sessions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        jti: { type: string }
+                        deviceInfo:
+                          type: object
+                          nullable: true
+                          properties:
+                            userAgent: { type: string }
+                            acceptLanguage: { type: string }
+                        ipAddress: { type: string, nullable: true }
+                        lastActiveAt: { type: string, format: date-time }
+                        createdAt: { type: string, format: date-time }
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+    delete:
+      summary: Revoke all other sessions
+      description: Revoke all active sessions except the current one
+      operationId: revokeAllSessions
+      tags: [Auth]
+      security:
+        - viewerAuth: []
+      responses:
+        "200":
+          description: Sessions revoked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      revokedSessions:
+                        type: integer
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+  /api/auth/sessions/{jti}:
+    delete:
+      summary: Revoke a specific session
+      description: Revoke a specific session by JWT ID
+      operationId: revokeSession
+      tags: [Auth]
+      security:
+        - viewerAuth: []
+      parameters:
+        - name: jti
+          in: path
+          required: true
+          schema:
+            type: string
+          description: JWT ID of the session to revoke
+      responses:
+        "200":
+          description: Session revoked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        "400":
+          description: Missing session ID
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+
+  /api/platform/reviews:
+    get:
+      summary: List pending reviews
+      description: List pending reviews across all products, optionally filtered by product
+      operationId: listPendingReviews
+      tags: [Platform]
+      security:
+        - viewerAuth: []
+      parameters:
+        - name: product
+          in: query
+          schema:
+            type: string
+            enum: [audit, sales, workflowos, localcontent, contentstudio]
+          description: Filter by product
+        - name: counts
+          in: query
+          schema:
+            type: string
+            enum: ["true"]
+          description: Return counts by product only
+      responses:
+        "200":
+          description: List of pending review items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        product: { type: string }
+                        title: { type: string }
+                        description: { type: string }
+                        targetId: { type: string }
+                        targetType: { type: string }
+                        status: { type: string }
+                        reviewerId: { type: string }
+                        reviewerName: { type: string, nullable: true }
+                        createdAt: { type: string, format: date-time }
+                        productUrl: { type: string }
+                        metadata: { type: object }
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+    post:
+      summary: Execute a review action
+      description: Approve, reject, return, or request changes on a pending review
+      operationId: executeReviewAction
+      tags: [Platform]
+      security:
+        - viewerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reviewId, product, action]
+              properties:
+                reviewId: { type: string }
+                product:
+                  type: string
+                  enum: [audit, sales, workflowos, localcontent, contentstudio]
+                action:
+                  type: string
+                  enum: [approve, reject, return, request_changes]
+                note: { type: string }
+      responses:
+        "200":
+          description: Action result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      success: { type: boolean }
+                      reviewId: { type: string }
+                      newStatus: { type: string }
+        "400":
+          description: Missing fields or invalid action
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+
+  # ─── AuditOS ───
+  /api/audit/evidence/{evidenceId}/download:
+    get:
+      summary: Download audit evidence
+      description: Download an audit evidence file. Requires a valid download token or audit actor session.
+      operationId: downloadAuditEvidence
+      tags: [AuditOS]
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: evidenceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Evidence file ID
+        - name: token
+          in: query
+          schema:
+            type: string
+          description: Download token (alternative to session auth)
+      responses:
+        "200":
+          description: File download
+        "401":
+          description: Unauthenticated or invalid token
+        "404":
+          description: Evidence not found (returns 404 for security)
+
+  /api/audit/engagements/{engagementId}/exports/{format}:
+    get:
+      summary: Export engagement
+      description: Export an audit engagement as PDF or XLSX
+      operationId: exportEngagement
+      tags: [AuditOS]
+      security:
+        - auditAuth: []
+      parameters:
+        - name: engagementId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [pdf, xlsx]
+      responses:
+        "200":
+          description: Exported file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: Engagement not found
+
+  # ─── LocalContentOS ───
+  /api/local-content/projects/{projectId}/evidence/{evidenceId}/download:
+    get:
+      summary: Download LocalContentOS evidence
+      description: Download a LocalContentOS evidence file
+      operationId: downloadLocalContentEvidence
+      tags: [LocalContentOS]
+      security:
+        - viewerAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: evidenceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: File download
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: Evidence not found
+
+  /api/local-content/projects/{projectId}/reports/{reportId}/download:
+    get:
+      summary: Download LocalContentOS report
+      description: Download a LocalContentOS report (PDF/XLSX)
+      operationId: downloadLocalContentReport
+      tags: [LocalContentOS]
+      security:
+        - viewerAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Report file download
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: Report not found
+
+  # ─── DecisionOS ───
+  /api/decisions/{decisionId}/evidence/{evidenceId}/download:
+    get:
+      summary: Download DecisionOS evidence
+      description: Download a DecisionOS evidence file
+      operationId: downloadDecisionEvidence
+      tags: [DecisionOS]
+      security:
+        - viewerAuth: []
+      parameters:
+        - name: decisionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: evidenceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: File download
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: Evidence not found
+
+  # ─── Office AI Assistant ───
+  /api/office-ai/download:
+    get:
+      summary: Download Office AI file
+      description: Download a file from Office AI Assistant
+      operationId: downloadOfficeAiFile
+      tags: [Office AI]
+      security:
+        - viewerAuth: []
+      parameters:
+        - name: fileId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: File download
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: File not found
+
+  # ─── WorkflowOS (Sunbul) ───
+  /api/workflowos/documents/{documentId}/download:
+    get:
+      summary: Download WorkflowOS document
+      description: Download a WorkflowOS (Sunbul) document
+      operationId: downloadWorkflowDocument
+      tags: [WorkflowOS]
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Document download
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          description: Document not found
+
+  /api/workflowos/clients/{clientId}/records/{recordId}/export/pdf:
+    get:
+      summary: Export WorkflowOS record
+      description: Export a WorkflowOS client record as PDF
+      operationId: exportWorkflowRecord
+      tags: [WorkflowOS]
+      security:
+        - workflowAuth: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: PDF export
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          description: Insufficient client access permissions
+
+  # ─── Public Forms ───
+  /api/pilot-review:
+    post:
+      summary: Submit pilot review request
+      description: Public endpoint for submitting pilot review requests
+      operationId: submitPilotReview
+      tags: [Public]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                organization:
+                  type: string
+                product:
+                  type: string
+                notes:
+                  type: string
+      responses:
+        "200":
+          description: Review request submitted
+        "400":
+          description: Invalid input
+
+  /api/custom-product-submit:
+    post:
+      summary: Submit custom product request
+      description: Public endpoint for custom product inquiries
+      operationId: submitCustomProductRequest
+      tags: [Public]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                organization:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Request submitted
+        "400":
+          description: Invalid input
+
+  # ─── OpenAPI spec itself ───
+  /api/openapi.json:
+    get:
+      summary: OpenAPI specification
+      description: Returns the full OpenAPI 3.0 specification for this API
+      operationId: getOpenApiSpec
+      tags: [Developer]
+      responses:
+        "200":
+          description: OpenAPI specification in JSON format
+          content:
+            application/json:
+              schema:
+                type: object
+
+components:
+  securitySchemes:
+    adminAuth:
+      type: http
+      scheme: bearer
+      description: ADMIN role required via NextAuth session
+    operatorAuth:
+      type: http
+      scheme: bearer
+      description: OPERATOR role required via NextAuth session
+    viewerAuth:
+      type: http
+      scheme: bearer
+      description: VIEWER (authenticated) role required via NextAuth session
+    auditAuth:
+      type: http
+      scheme: bearer
+      description: Audit actor session (admin/operator/reviewer/partner)
+    tokenAuth:
+      type: apiKey
+      in: query
+      name: token
+      description: Download token for expiring access
+    workflowAuth:
+      type: http
+      scheme: bearer
+      description: WorkflowOS client membership authentication
+
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+
+    MetricsResponse:
+      type: object
+      properties:
+        engagements:
+          type: integer
+        users:
+          type: integer
+        decisions:
+          type: integer
+        projects:
+          type: integer
+
+    HealthCheckResult:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        checks:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: [ok, warn, error]
+              message:
+                type: string
+              latencyMs:
+                type: integer
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: string
+
+    QueueMetrics:
+      type: object
+      properties:
+        waiting:
+          type: integer
+        active:
+          type: integer
+        completed:
+          type: integer
+        failed:
+          type: integer
+        delayed:
+          type: integer
+
+    JobDetail:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+          enum: [failed, waiting, active, completed]
+        payload:
+          type: object
+        failedReason:
+          type: string
+          nullable: true
+        stacktrace:
+          type: string
+          nullable: true
+        attempts:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+          nullable: true
+        finishedOn:
+          type: string
+          format: date-time
+          nullable: true
+        duration:
+          type: integer
+          nullable: true
+
+    JobListResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            jobs:
+              type: array
+              items:
+                $ref: "#/components/schemas/JobDetail"
+            status:
+              type: string
+            limit:
+              type: integer
+            offset:
+              type: integer
+
+    NotificationObject:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        severity:
+          type: string
+          enum: [info, warning, error, critical]
+        readAt:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    NotificationListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            notifications:
+              type: array
+              items:
+                $ref: "#/components/schemas/NotificationObject"
+            unreadCount:
+              type: integer
+
+    UnreadCountResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            count:
+              type: integer
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+
+    PreferenceObject:
+      type: object
+      properties:
+        id:
+          type: string
+        notificationType:
+          type: string
+        channel:
+          type: string
+          enum: [in_app, email]
+        enabled:
+          type: boolean
+
+    PreferencesResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            preferences:
+              type: array
+              items:
+                $ref: "#/components/schemas/PreferenceObject"
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+
+  responses:
+    Unauthenticated:
+      description: Authentication is required
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    Forbidden:
+      description: Insufficient role permissions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Notifications ───
+  /api/notifications:
+    get:
+      summary: List recent notifications
+      description: Returns the most recent notifications for the authenticated user
+      operationId: listNotifications
+      tags: [Notifications]
+      security:
+        - viewerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+          description: Maximum number of notifications to return
+      responses:
+        "200":
+          description: Notification list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+
+  /api/notifications/unread-count:
+    get:
+      summary: Get unread notification count
+      description: Returns the number of unread notifications for the authenticated user
+      operationId: getUnreadNotificationCount
+      tags: [Notifications]
+      security:
+        - viewerAuth: []
+      responses:
+        "200":
+          description: Unread count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnreadCountResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+
+  /api/notifications/mark-read:
+    post:
+      summary: Mark notification as read
+      description: Marks a single notification as read. Silently succeeds if notification doesn't belong to user.
+      operationId: markNotificationRead
+      tags: [Notifications]
+      security:
+        - viewerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+                  description: Notification ID
+      responses:
+        "200":
+          description: Notification marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Invalid request body
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+
+  /api/notifications/preferences:
+    get:
+      summary: Get notification preferences
+      description: Returns all notification preference rows for the authenticated user
+      operationId: getNotificationPreferences
+      tags: [Notifications]
+      security:
+        - viewerAuth: []
+      responses:
+        "200":
+          description: Notification preferences
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreferencesResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+    put:
+      summary: Update notification preference
+      description: Enables or disables a specific notification type on a specific channel
+      operationId: upsertNotificationPreference
+      tags: [Notifications]
+      security:
+        - viewerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [notificationType, channel, enabled]
+              properties:
+                notificationType:
+                  type: string
+                  description: Notification type key
+                channel:
+                  type: string
+                  enum: [in_app, email]
+                  description: Notification channel
+                enabled:
+                  type: boolean
+                  description: Whether the preference is enabled
+      responses:
+        "200":
+          description: Preference updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Invalid request body
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+
+tags:
+  - name: Notifications
+    description: In-app notifications and user preferences
+  - name: Health
+    description: Health check endpoints
+  - name: Authentication
+    description: Authentication and session
+  - name: Platform
+    description: Platform-level metrics and operations
+  - name: Monitoring
+    description: System monitoring and queue management
+  - name: AI
+    description: AI provider management and governance
+  - name: AuditOS
+    description: AuditOS product APIs
+  - name: LocalContentOS
+    description: LocalContentOS product APIs
+  - name: DecisionOS
+    description: DecisionOS product APIs
+  - name: Office AI
+    description: Office AI Assistant APIs
+  - name: WorkflowOS
+    description: WorkflowOS (Sunbul) APIs
+  - name: Public
+    description: Public unauthenticated endpoints
+  - name: Developer
+    description: Developer tools and API metadata

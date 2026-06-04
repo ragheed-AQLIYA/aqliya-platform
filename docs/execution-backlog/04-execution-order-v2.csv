@@ -1,0 +1,31 @@
+Phase,Order,Layer,Task ID,Task Name,Justification,Dependencies,Parallelizable,Estimated Effort
+Foundation Immediate,1,0,T-0.2,Backup automation + restore drill,"R1 data-safety critical. Scripts exist (production-grade with CONFIRM_RESTORE safety gate). Just needs scheduling automation + documented drill. Zero dependencies — can start today.",None,Yes,S
+Foundation Immediate,2,0.5,T-05.1.1,AI token cost calculation,"Foundation for all AI cost controls. Pure library code — no infra dependencies. Can start today, unblocks budgets + eval + provider wiring.",None,Yes,M
+Foundation Immediate,3,0.5,T-05.3,AI eval framework design,"Define golden test sets per task type. Foundation for AI quality gate. Can start today — no infra needed.",None,Yes,M
+Foundation Immediate,4,0,N3,Feature Flags system,"Enables safe rollouts of AI features, gradual LLM provider enablement, A/B testing. Zero existing code — build lightweight LaunchDarkly-compatible or Flagsmith. Must be in place before any AI feature reaches real users.",None,Yes,M
+Foundation Immediate,5,1,T-1.4.1,T-1.4.2 Pricing + ROI model,"Commercial enabler. No code dependencies — pure business docs. Draft now so it's ready when pilot approaches.",None,Yes,S
+Infrastructure Sprint,6,0,T-0.1.1,Redis provisioning (Docker),"Prerequisite for both rate limiter and queue runtime. Single Redis instance serves both. Add to docker-compose.yml.",None,Yes,XS
+Infrastructure Sprint,7,0,T-0.1,Staging environment,"Prerequisite for safe deployment of all subsequent work. Managed Postgres staging + CI deploy target.",EPIC-0.1,No,M
+Infrastructure Sprint,8,0,T-0.3,Wire Redis rate limiter,"Multi-instance correctness. Use provisioned Redis from step 6. The redis-rate-limiter.ts currently stubs to memory — wire it properly.",T-0.1.1,No,S
+Infrastructure Sprint,9,0,N1,Queue Runtime (Bull on Redis),"Unlocks async AI processing, background exports, notification dispatch, scheduled backup. Architectural dependency for L0.5 and L1 production. Bull on Redis — same Redis instance from step 6.",T-0.1.1,No,M
+Infrastructure Sprint,10,0,N5,Tenant Lifecycle CRUD,"Foundation for multi-tenant. Guards exist (production-grade) but no org creation/provisioning. Build org CRUD Server Actions + provisioning flow.",T-0.1 (staging),Yes,L
+Infrastructure Sprint,11,0,N2,Object Storage S3 production-grade,"Local filesystem works for single-instance but blocks HA. Upgrade S3 provider (currently hand-rolled SigV4 — no aws-sdk) with retry, streaming, multipart.",None,Yes,M
+Infrastructure Sprint,12,0,N6,Notifications engine,"Reviews, approvals, escalations all need notification triggers. Start with email (Resend/SendGrid), then in-app. Currently all send() operations intentionally throw.",None,Yes,M
+Infrastructure Sprint,13,0,N7,Secrets/KMS,"Vault or cloud KMS for secrets management. Currently .env + validate-env.mjs only. Acceptable for pilot but needed before enterprise.",None,Yes,M
+Intelligence Core,14,0.5,T-05.1.2,T-05.1.4 AI budgets + spend dashboard,"Per-tenant token budgets, spend alerts, cost dashboard. Builds on token cost tracking from step 2.",T-05.1.1,No,M
+Intelligence Core,15,0.5,T-05.2,AI audit logging + observability,"Activate onGenerate callback, add prompt/response logging, latency tracking. Builds on queue runtime for async logging.",N1 (queue),No,M
+Intelligence Core,16,0.5,T-05.4,Wire real LLM providers,"Enable real Anthropic/OpenAI providers behind env flag. Add retry/timeout/fallback. With cost controls (step 14) and eval (step 3) in place first.",T-05.1.2 + T-05.3,No,M
+Intelligence Core,17,0.5,T-05.3.3,AI eval CI gate,"Add eval runner as CI regression gate. Prevents AI quality regression when changing prompts or providers.",T-05.3,No,S
+Product Hardening,18,1,T-1.1,Audit P2 gap closure,"Fix loading/error boundaries on remaining 6 audit tabs. Direct UX quality improvement for pilot users.",T-0.1 (staging),Yes,M
+Product Hardening,19,1,T-1.2,Audit mock AI cleanup,"Replace mock-backed AI paths in ai-service.ts. Gate behind AUDIT_ALLOW_MOCK_FALLBACK (currently on — turn off).",T-05.4,Yes,M
+Product Hardening,20,1,T-1.3,Audit integration test suite,"Build dedicated integration tests: governance bridge, export, RBAC, end-to-end workflow. Regression prevention for pilot.",T-0.1 (staging),Yes,L
+Operational Readiness,21,0,T-0.6,OWASP Top 10 review,"Security review. Should come AFTER foundation is built (not before) — reviewing queue, storage, tenant lifecycle, notifications all at once is more efficient.",N1+N2+N5+N6,Yes,M
+Operational Readiness,22,0,T-0.4,Alerting + monitoring dashboards,"Configure Sentry alerts, golden signals (latency/traffic/errors/saturation), uptime monitoring.",None,Yes,M
+Operational Readiness,23,0,T-0.5,IaC for prod+staging,"Terraform/Pulumi/CDK for reproducible deployment. Builds on staging environment knowledge.",T-0.1,No,M
+Go To Market,24,8,T-8.1,External pentest schedule + execute,"Hard gate for enterprise contracts. Schedule vendor, scope engagement, execute. Should happen after OWASP review.",T-0.6,No,L
+Go To Market,25,8,T-8.1.4,Pentest remediation,"Close critical/high findings before first enterprise contract.",T-8.1,No,L
+Go To Market,26,1,T-1.4.3-T-1.4.6,Execute AuditOS pilot,"Approach design partners, execute onboarding, sign LOI/SOW, iterate on feedback. With pricing (step 5) and product hardened (steps 18-20).",T-1.4.1 + T-1.1 + T-1.2,No,L
+Product Expansion,27,0.5,T-05.5,RAG research + pgvector setup,"Shared Intelligence Core capability — not a product feature. Research approach, add pgvector extension. Build when L1 AI demands it.",None,Yes,M
+Product Expansion,28,3,T-3.1,DecisionOS outcome dashboard,"DecisionOS L5 completion. Outcome tracking, portfolio view, decision->outcome correlation. Low dependency — can proceed in parallel with pilot.",None,Yes,M
+Product Expansion,29,2,T-2.1,LocalContentOS gap closure prep,"Prepare for second product once L1 earns revenue. Supplier scoring, tender matching, multi-reviewer approval routing.",None,Yes,L
+Optimization,30,0.5,T-05.4.4,AI response streaming,UX polish — not blocking. Implement when bandwidth allows.,T-05.4,Yes,S

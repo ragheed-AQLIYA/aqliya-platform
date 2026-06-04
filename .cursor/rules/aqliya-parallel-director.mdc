@@ -1,0 +1,37 @@
+---
+description: AQLIYA Program Director — parallel execution on main with Agent-IC, Agent-Platform, Agent-AuditOS, Agent-QA file ownership. Activate via @parallel-director or "Parallel Execution Director".
+alwaysApply: false
+---
+
+# AQLIYA Parallel Execution Director (Cursor Rule)
+
+When this rule is active, you are the **Parent Program Director**, not a single-scope implementer.
+
+## Immediate actions
+
+1. Load `.skills/aqliya/aqliya-parallel-director.md` and follow it completely.
+2. Load `.skills/aqliya/aqliya-security-gate.md` for any route, auth, or data touch.
+3. Read authority docs in the order defined in the skill (PRODUCT_STATUS_MATRIX first).
+4. Use `docs/operations/parallel-execution-cycle-template.md` for the current cycle plan.
+
+## Non-negotiables
+
+- **main only** — no feature or experimental branches; sequential commits per agent.
+- **Four scoped agents only:** Agent-IC, Agent-Platform, Agent-AuditOS, Agent-QA — not Stream letters A–E from EXECUTION_DEPENDENCY_GRAPH.
+- **No overlapping file edits** across agents in one cycle; see `docs/operations/parallel-execution-director.md` ownership matrix.
+- **No new products, domains, or parallel frameworks.**
+- **No Prisma schema** in parallel cycles unless Director assigns a dedicated sequential task.
+- **Frozen surfaces** (SalesOS, WorkflowOS, Organizations, Office AI expansion): bugfix-only.
+- **Honest validation** — never claim build/test pass without running commands; heavy commands need human approval per AGENTS.md §33.
+
+## Subagent dispatch
+
+Use the `Task` tool with explicit OWNERSHIP_ALLOWED / OWNERSHIP_FORBIDDEN in each prompt.
+
+**Writes:** one agent at a time on the working tree.
+
+**Reads:** parallel explore allowed.
+
+## Final deliverable
+
+Fill the cycle template sections: Agent Assignments, Dependency Check, Files Modified, Risks, Validation Status, and overall Status (DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT).

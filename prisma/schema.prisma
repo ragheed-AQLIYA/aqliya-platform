@@ -360,6 +360,9 @@ model Organization {
 
   platformOrganizationId String?
   platformOrganization   PlatformOrganization? @relation("OrgPlatformOrg", fields: [platformOrganizationId], references: [id])
+  ssoProviders           SsoProvider[]
+  crmConnections         CrmConnection[]
+  erpConnections         ErpConnection[]
 
   @@index([createdAt])
   @@index([platformOrganizationId])
@@ -369,7 +372,9 @@ model User {
   id                       String            @id @default(cuid())
   email                    String            @unique
   name                     String
+  emailVerified            DateTime?
   passwordHash             String?
+  image                    String?
   mfaEnabled               Boolean           @default(false)
   mfaSecret                String?
   mfaBackupCodes           String?           // JSON array of SHA-256 hashed backup codes
@@ -383,6 +388,11 @@ model User {
   reviewedOutcomes         DecisionOutcome[] @relation("OutcomeReviewer")
   auditLogs                AuditLog[]
   publishedRecommendations Recommendation[]  @relation("RecommendationPublisher")
+  accounts                 Account[]
+  sessions                 Session[]
+  scimEvents               ScimProvisioningEvent[]  @relation("ScimEventPerformer")
+  reviewedImportBatches    ErpImportBatch[]       @relation("BatchReviewer")
+  approvedImportBatches    ErpImportBatch[]       @relation("BatchApprover")
   createdAt                DateTime          @default(now())
   updatedAt                DateTime          @updatedAt
 
@@ -2701,4 +2711,233 @@ model IngestionDocument {
 
   @@index([organizationId, batchId])
   @@index([organizationId, documentId])
+}
+
+// ==================== SSO / NextAuth Adapter Models (L0-05) ====================
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String  // oauth | saml | oidc
+  provider          String  // google | github | azure-ad | okta | saml | custom-oidc
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ==================== SSO Provider Config (L0-05) ====================
+
+model SsoProvider {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  providerType          String   // oidc | saml | google | github | azure-ad | okta
+  label                 String   // display name e.g. "Company Okta"
+  issuerUrl             String?  // OIDC issuer URL
+  authorizationUrl      String?  // OIDC auth endpoint
+  tokenUrl              String?  // OIDC token endpoint
+  userInfoUrl           String?  // OIDC userinfo endpoint
+  jwksUri               String?  // OIDC JWKS URI
+  clientId              String?  // encrypted at rest via PlatformSecret
+  clientSecret          String?  // encrypted at rest via PlatformSecret
+  samlEntryPoint        String?  // SAML IdP SSO URL
+  samlIssuer            String?  // SAML entity ID
+  samlCert              String?  // SAML x509 cert
+  attributeMapping      Json?    // {email, name, role} field mapping
+  domains               Json?    // allowed email domains ["@company.com"]
+  enabled               Boolean  @default(true)
+  metadata              Json?
+  createdById           String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([organizationId, providerType, issuerUrl])
+  @@index([organizationId, enabled])
+}
+
+// ==================== SCIM Provisioning (L0-06) ====================
+
+model ScimProvisioningEvent {
+  id              String   @id @default(cuid())
+  organizationId  String
+  direction       String   // inbound | outbound
+  resourceType    String   // User | Group
+  operation       String   // POST | PUT | PATCH | DELETE
+  externalId      String?  // SCIM external ID
+  localId         String?  // local User/Group ID
+  requestBody     Json?
+  responseStatus  Int?
+  responseBody    Json?
+  success         Boolean  @default(true)
+  errorMessage    String?
+  performedById   String?
+  createdBy       User?    @relation("ScimEventPerformer", fields: [performedById], references: [id])
+  createdAt       DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, resourceType, operation])
+}
+
+// ==================== CRM Integration (S7-03) ====================
+
+model CrmConnection {
+  id              String   @id @default(cuid())
+  organizationId  String
+  provider        String   // hubspot | salesforce | apollo | custom
+  label           String   // display name
+  apiEndpoint     String?  // base API URL
+  accessToken     String?  // encrypted via PlatformSecret
+  refreshToken    String?  // encrypted via PlatformSecret
+  tokenExpiresAt  DateTime?
+  apiKey          String?  // encrypted via PlatformSecret
+  apiVersion      String?  @default("v1")
+  syncEnabled     Boolean  @default(false)
+  syncIntervalMin Int?     @default(60)
+  lastSyncAt      DateTime?
+  lastSyncStatus  String?  // success | partial | failed
+  lastSyncError   String?
+  fieldMapping    Json?    // {salesField: crmField} mapping
+  conflictPolicy  String?  @default("crm_wins") // crm_wins | local_wins | manual
+  metadata        Json?
+  createdById     String?
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  syncLogs     CrmSyncLog[]
+
+  @@index([organizationId, provider])
+  @@index([organizationId, syncEnabled])
+}
+
+model CrmSyncLog {
+  id             String   @id @default(cuid())
+  connectionId   String
+  connection     CrmConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  organizationId String
+  resourceType   String   // account | contact | opportunity | interaction
+  direction      String   // import | export
+  status         String   // running | success | partial | failed
+  totalRecords   Int      @default(0)
+  createdRecords Int      @default(0)
+  updatedRecords Int      @default(0)
+  failedRecords  Int      @default(0)
+  skippedRecords Int      @default(0)
+  errorDetails   Json?
+  createdAt      DateTime @default(now())
+  completedAt    DateTime?
+
+  @@index([connectionId, createdAt])
+  @@index([organizationId, status, createdAt])
+}
+
+// ==================== ERP Integration (LC-08) ====================
+
+model ErpConnection {
+  id                String   @id @default(cuid())
+  organizationId    String
+  provider          String   // sap | oracle | microsoft-dynamics | csv-upload | custom
+  label             String
+  connectionType    String   @default("api") // api | file_drop | sftp | custom
+  apiEndpoint       String?
+  apiKey            String?  // encrypted via PlatformSecret
+  apiSecret         String?  // encrypted via PlatformSecret
+  sftpHost          String?
+  sftpPort          Int?
+  sftpUsername      String?
+  sftpKey           String?  // encrypted via PlatformSecret
+  syncEnabled       Boolean  @default(false)
+  syncIntervalMin   Int?     @default(1440) // daily default
+  lastSyncAt        DateTime?
+  lastSyncStatus    String?
+  fieldMapping      Json?    // {localField: erpField}
+  sourceSystem      String?  // SAP ERP | Oracle EBS | IFusion
+  defaultCurrency   String?  @default("SAR")
+  metadata          Json?
+  createdById       String?
+  updatedAt         DateTime @updatedAt
+  createdAt         DateTime @default(now())
+
+  organization Organization    @relation(fields: [organizationId], references: [id])
+  syncLogs     ErpSyncLog[]
+  importBatches ErpImportBatch[]
+
+  @@index([organizationId, provider])
+}
+
+model ErpSyncLog {
+  id             String   @id @default(cuid())
+  connectionId   String
+  connection     ErpConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  organizationId String
+  direction      String   @default("import") // import | export
+  status         String   // running | success | partial | failed
+  totalRecords   Int      @default(0)
+  importedRecords Int     @default(0)
+  failedRecords  Int      @default(0)
+  skippedRecords Int      @default(0)
+  sourceFile     String?  // if file-based import
+  fileHash       String?  // SHA-256 for evidence
+  errorDetails   Json?
+  createdAt      DateTime @default(now())
+  completedAt    DateTime?
+
+  @@index([connectionId, createdAt])
+  @@index([organizationId, status, createdAt])
+}
+
+model ErpImportBatch {
+  id             String   @id @default(cuid())
+  connectionId   String
+  connection     ErpConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  organizationId String
+  status         String   // pending | validated | needs_review | approved | rejected | imported
+  sourceType     String   // api | csv | excel | sftp | manual
+  totalLines     Int      @default(0)
+  validLines     Int      @default(0)
+  errorLines     Int      @default(0)
+  fileHash       String?  // SHA-256 evidence
+  originalFile   String?  // stored file path
+  reviewNotes    String?
+  reviewedById   String?
+  reviewedBy     User?    @relation("BatchReviewer", fields: [reviewedById], references: [id])
+  reviewedAt     DateTime?
+  approvedById   String?
+  approvedBy     User?    @relation("BatchApprover", fields: [approvedById], references: [id])
+  approvedAt     DateTime?
+  metadata       Json?
+  createdById    String?
+  createdAt      DateTime @default(now())
+
+  @@index([connectionId, status, createdAt])
+  @@index([organizationId, status])
 }

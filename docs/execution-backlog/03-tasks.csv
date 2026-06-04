@@ -1,0 +1,61 @@
+Task ID,Epic ID,Layer,Name,Status,Priority,Effort,Dependencies,Blocking,Parallel,Optional
+T-0.1.1,EPIC-0.1,0,Provision managed Postgres staging instance,Not Started,Critical,S,None,Yes,Yes,No
+T-0.1.2,EPIC-0.1,0,Configure staging deployment in CI/CD pipeline,Not Started,Critical,M,T-0.1.1,Yes,No,No
+T-0.1.3,EPIC-0.1,0,Add STAGING_DATABASE_URL to env and validate,Not Started,Critical,XS,T-0.1.1,Yes,No,No
+T-0.1.4,EPIC-0.1,0,Add staging docker-compose or terraform module,Not Started,High,M,T-0.1.1,No,Yes,No
+T-0.2.1,EPIC-0.2,0,Review existing db-backup.ts for compatibility,Not Started,High,XS,None,No,Yes,No
+T-0.2.2,EPIC-0.2,0,Schedule automated backup via cron/Windows Task Scheduler/GitHub Actions,Not Started,High,S,T-0.2.1,Yes,No,No
+T-0.2.3,EPIC-0.2,0,Execute and document restore drill with timestamp,Not Started,High,M,T-0.2.2,Yes,No,No
+T-0.2.4,EPIC-0.2,0,Add backup failure alerting,Not Started,Medium,S,T-0.2.3,No,Yes,No
+T-0.3.1,EPIC-0.3,0,Provision Redis instance (managed or Docker),Not Started,High,XS,None,Yes,Yes,No
+T-0.3.2,EPIC-0.3,0,Wire redis-rate-limiter.ts to actually connect to Redis,Not Started,High,M,T-0.3.1,Yes,No,No
+T-0.3.3,EPIC-0.3,0,Test multi-instance rate limiting behavior,Not Started,High,S,T-0.3.2,No,No,No
+T-0.3.4,EPIC-0.3,0,Set RATE_LIMITER=redis in prod env,Not Started,High,XS,T-0.3.2,No,Yes,No
+T-0.4.1,EPIC-0.4,0,Configure Sentry alerts for error thresholds,Not Started,Medium,S,None,No,Yes,No
+T-0.4.2,EPIC-0.4,0,Set up uptime monitor for /api/health,Not Started,Medium,XS,None,No,Yes,No
+T-0.4.3,EPIC-0.4,0,Create golden signals dashboard (latency, traffic, errors, saturation),Not Started,Medium,M,T-0.4.1,No,Yes,No
+T-0.4.4,EPIC-0.4,0,Configure on-call alert routing,Not Started,Medium,M,T-0.4.1,No,Yes,Optional
+T-0.5.1,EPIC-0.5,0,Draft IaC for prod environment (Vercel + managed PG),Not Started,Medium,L,EPIC-0.1,No,Yes,No
+T-0.5.2,EPIC-0.5,0,Draft IaC for staging environment (mirror of prod),Not Started,Medium,S,T-0.5.1,No,Yes,No
+T-0.6.1,EPIC-0.6,0,Run OWASP Top 10 review checklist,Not Started,High,M,None,No,Yes,No
+T-0.6.2,EPIC-0.6,0,Fix critical/high findings from review,Not Started,High,M,T-0.6.1,No,No,No
+T-05.1.1,EPIC-05.1,0.5,Implement per-request token cost calculation,Not Started,Critical,M,None,No,Yes,No
+T-05.1.2,EPIC-05.1,0.5,Implement per-tenant token budget with alerts,Not Started,Critical,M,T-05.1.1,No,No,No
+T-05.1.3,EPIC-05.1,0.5,Add provider cost mapping table (API/model/price per token),Not Started,High,S,T-05.1.1,No,Yes,No
+T-05.1.4,EPIC-05.1,0.5,Build basic AI spend dashboard,Not Started,High,M,T-05.1.3,No,No,No
+T-05.2.1,EPIC-05.2,0.5,Activate onGenerate callback for centralized AI audit logging,Not Started,High,M,None,No,Yes,No
+T-05.2.2,EPIC-05.2,0.5,Add prompt/response logging to governed-ai-executor.ts,Not Started,High,M,T-05.2.1,No,No,No
+T-05.2.3,EPIC-05.2,0.5,Build AI latency and cost observability dashboard,Not Started,High,M,T-05.1.4,No,No,No
+T-05.3.1,EPIC-05.3,0.5,Define golden test sets per task type,Not Started,High,M,None,No,Yes,No
+T-05.3.2,EPIC-05.3,0.5,Build eval runner and scoring,Not Started,High,M,T-05.3.1,No,No,No
+T-05.3.3,EPIC-05.3,0.5,Add eval regression gate to CI pipeline,Not Started,High,S,T-05.3.2,No,No,No
+T-05.4.1,EPIC-05.4,0.5,Wire real Anthropic provider (currently stubs),Not Started,High,M,EPIC-05.1,No,Yes,No
+T-05.4.2,EPIC-05.4,0.5,Wire real OpenAI provider (currently stubs),Not Started,High,M,EPIC-05.1,No,Yes,No
+T-05.4.3,EPIC-05.4,0.5,Add retry/timeout/fallback wrapper around provider calls,Not Started,High,M,T-05.4.1,No,No,No
+T-05.4.4,EPIC-05.4,0.5,Add streaming support for AI responses,Not Started,Medium,L,T-05.4.3,No,Yes,Optional
+T-05.5.1,EPIC-05.5,0.5,Research and document RAG approach (pgvector vs external),Not Started,Medium,S,None,No,Yes,No
+T-05.5.2,EPIC-05.5,0.5,Add pgvector extension to Postgres,Not Started,Medium,S,T-05.5.1,No,Yes,Deferred
+T-05.5.3,EPIC-05.5,0.5,Build governance context embedding pipeline,Not Started,Medium,L,T-05.5.2,No,No,Deferred
+T-05.5.4,EPIC-05.5,0.5,Build retrieval endpoint for evidence/institutional docs,Not Started,Medium,M,T-05.5.3,No,No,Deferred
+T-1.1.1,EPIC-1.1,1,Audit tabs lacking loading/error boundaries (6 tabs),Not Started,High,M,None,No,Yes,No
+T-1.1.2,EPIC-1.1,1,Add loading skeletons and error fallbacks to each tab,Not Started,High,M,T-1.1.1,No,No,No
+T-1.2.1,EPIC-1.2,1,Audit ai-service.ts for mock paths,Not Started,Medium,S,EPIC-05.1,No,Yes,No
+T-1.2.2,EPIC-1.2,1,Replace mock paths with real provider calls or hard error,Not Started,Medium,M,T-1.2.1,No,No,No
+T-1.2.3,EPIC-1.2,1,Remove or gate AUDIT_ALLOW_MOCK_FALLBACK env flag,Not Started,Medium,XS,T-1.2.2,No,Yes,Optional
+T-1.3.1,EPIC-1.3,1,Build integration test for audit governance bridge,Not Started,Medium,M,None,No,Yes,No
+T-1.3.2,EPIC-1.3,1,Build integration test for audit export (PDF/XLSX),Not Started,Medium,M,None,No,Yes,No
+T-1.3.3,EPIC-1.3,1,Build integration test for audit RBAC + tenant isolation,Not Started,Medium,M,None,No,Yes,No
+T-1.3.4,EPIC-1.3,1,Build integration test for end-to-end engagement workflow,Not Started,Medium,L,None,No,No,No
+T-1.4.1,EPIC-1.4,1,Finalize pricing document with tiers,Not Started,Critical,M,None,Yes,Yes,No
+T-1.4.2,EPIC-1.4,1,Build one-page ROI calculator (audit-hours-saved model),Not Started,Critical,M,None,No,Yes,No
+T-1.4.3,EPIC-1.4,1,Identify and approach 2-3 design partner prospects,Not Started,Critical,S,T-1.4.1,Yes,No,No
+T-1.4.4,EPIC-1.4,1,Execute pilot onboarding per commercial-pack checklist,Not Started,Critical,M,T-1.4.3,No,No,No
+T-1.4.5,EPIC-1.4,1,Sign LOI/SOW with first pilot customer,Not Started,Critical,M,T-1.4.4,Yes,No,No
+T-1.4.6,EPIC-1.4,1,Collect pilot feedback and iterate,Not Started,High,L,T-1.4.5,No,No,No
+T-3.1.1,EPIC-3.1,3,Design outcome-tracking dashboard schema and queries,Not Started,Medium,S,None,No,Yes,No
+T-3.1.2,EPIC-3.1,3,Build decision portfolio view page,Not Started,Medium,M,T-3.1.1,No,No,No
+T-3.1.3,EPIC-3.1,3,Add decision->outcome correlation analytics,Not Started,Medium,M,T-3.1.2,No,No,Optional
+T-8.1.1,EPIC-8.1,8,Research and select pentest vendor,Not Started,Critical,S,None,Yes,Yes,No
+T-8.1.2,EPIC-8.1,8,Schedule and scope pentest engagement,Not Started,Critical,S,T-8.1.1,Yes,No,No
+T-8.1.3,EPIC-8.1,8,Receive and document pentest findings,Not Started,Critical,M,T-8.1.2,No,No,No
+T-8.1.4,EPIC-8.1,8,Remediate critical/high findings,Not Started,Critical,L,T-8.1.3,Yes,No,No
