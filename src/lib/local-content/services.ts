@@ -8,6 +8,12 @@ import type { Prisma } from "@prisma/client";
 import { createLocalContentAuditEvent, AuditActions } from "./audit-events";
 import type { ScoringResult } from "./types";
 import { calculateFullScoring } from "./scoring";
+import {
+  computeApprovalRoutingState,
+  validateApprovalSubmission,
+  validateReviewSubmission,
+  type ApprovalRoutingState,
+} from "./approval-routing";
 import type {
   CreateProjectInput,
   CreateSupplierInput,
@@ -16,7 +22,7 @@ import type {
   CreateFindingInput,
 } from "./types";
 
-// ─── Project CRUD ───
+// ????????? Project CRUD ?????????
 
 export async function listProjectsByOrganization(
   organizationId: string,
@@ -123,7 +129,7 @@ export async function updateProjectStatus(
   return project;
 }
 
-// ─── Supplier CRUD ───
+// ????????? Supplier CRUD ?????????
 
 export async function listSuppliers(projectId: string) {
   return prisma.localContentSupplier.findMany({
@@ -196,7 +202,7 @@ export async function deleteSupplier(
   }
 }
 
-// ─── Spend Record CRUD ───
+// ????????? Spend Record CRUD ?????????
 
 export async function listSpendRecords(projectId: string) {
   return prisma.localContentSpendRecord.findMany({
@@ -285,7 +291,7 @@ export async function deleteSpendRecord(
   }
 }
 
-// ─── Classification CRUD ───
+// ????????? Classification CRUD ?????????
 
 export async function listClassifications(projectId: string) {
   return prisma.localContentClassification.findMany({
@@ -333,7 +339,7 @@ export async function createClassification(
   return classification;
 }
 
-// ─── Evidence CRUD ───
+// ????????? Evidence CRUD ?????????
 
 export async function listEvidence(projectId: string) {
   return prisma.localContentEvidence.findMany({
@@ -434,7 +440,7 @@ export async function deleteEvidence(
   return ev;
 }
 
-// ─── Finding CRUD ───
+// ????????? Finding CRUD ?????????
 
 export async function listFindings(projectId: string) {
   return prisma.localContentFinding.findMany({
@@ -513,13 +519,23 @@ export async function createFinding(
   return finding;
 }
 
-// ─── Review CRUD ───
+// ????????? Review CRUD ?????????
 
 export async function listReviews(projectId: string) {
   return prisma.localContentReview.findMany({
     where: { projectId },
     orderBy: { createdAt: "desc" },
   });
+}
+
+export async function getProjectApprovalRoutingState(
+  projectId: string,
+): Promise<ApprovalRoutingState> {
+  const [reviews, approvals] = await Promise.all([
+    listReviews(projectId),
+    listApprovals(projectId),
+  ]);
+  return computeApprovalRoutingState(reviews, approvals);
 }
 
 export async function createReview(input: {
@@ -529,6 +545,20 @@ export async function createReview(input: {
   action: string;
   comments?: string;
 }) {
+  const existing = await listReviews(input.projectId);
+  validateReviewSubmission({
+    reviewerId: input.reviewerId,
+    action: input.action,
+    reviews: existing,
+  });
+
+  const reviewStatus =
+    input.action === "returned"
+      ? "returned"
+      : input.action === "submitted"
+        ? "completed"
+        : "in_review";
+
   const review = await prisma.localContentReview.create({
     data: {
       projectId: input.projectId,
@@ -536,6 +566,7 @@ export async function createReview(input: {
       reviewerName: input.reviewerName,
       action: input.action,
       comments: input.comments ?? null,
+      status: reviewStatus,
     },
   });
 
@@ -552,7 +583,7 @@ export async function createReview(input: {
   return review;
 }
 
-// ─── Approval CRUD ───
+// ????????? Approval CRUD ?????????
 
 export async function listApprovals(projectId: string) {
   return prisma.localContentApproval.findMany({
@@ -569,6 +600,12 @@ export async function createApproval(input: {
   comments?: string;
   snapshot?: Record<string, unknown>;
 }) {
+  const [reviews, approvals] = await Promise.all([
+    listReviews(input.projectId),
+    listApprovals(input.projectId),
+  ]);
+  validateApprovalSubmission({ reviews, approvals });
+
   const approval = await prisma.localContentApproval.create({
     data: {
       projectId: input.projectId,
@@ -595,7 +632,7 @@ export async function createApproval(input: {
   return approval;
 }
 
-// ─── Audit Trail ───
+// ????????? Audit Trail ?????????
 
 export async function listAuditEvents(projectId: string) {
   return prisma.localContentAuditEvent.findMany({
@@ -604,7 +641,7 @@ export async function listAuditEvents(projectId: string) {
   });
 }
 
-// ─── Scoring ───
+// ????????? Scoring ?????????
 
 export async function calculateProjectScore(
   projectId: string,
@@ -693,7 +730,7 @@ export async function calculateProjectScore(
   });
 }
 
-// ─── Report CRUD ───
+// ????????? Report CRUD ?????????
 
 export async function listReports(projectId: string) {
   return prisma.localContentReport.findMany({

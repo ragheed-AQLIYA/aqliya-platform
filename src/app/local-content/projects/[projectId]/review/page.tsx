@@ -3,6 +3,7 @@ import {
   getLocalContentProjectAction,
   getLocalContentScoreAction,
   listLocalContentReviewsAction,
+  getLocalContentApprovalRoutingAction,
   submitLocalContentReviewAction,
 } from "@/actions/localcontent-actions";
 import {
@@ -32,16 +33,18 @@ export default async function ReviewPage({
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = await params;
-  const [projectRes, scoreRes, reviewsRes] = await Promise.all([
+  const [projectRes, scoreRes, reviewsRes, routingRes] = await Promise.all([
     getLocalContentProjectAction(projectId),
     getLocalContentScoreAction(projectId),
     listLocalContentReviewsAction(projectId),
+    getLocalContentApprovalRoutingAction(projectId),
   ]);
   if (!projectRes.ok || !projectRes.data) notFound();
 
   const project = projectRes.data;
   const score = scoreRes.ok ? scoreRes.data : null;
   const reviews = reviewsRes.ok ? reviewsRes.data : [];
+  const routing = routingRes.ok ? routingRes.data : null;
 
   return (
     <DashboardLayout>
@@ -56,6 +59,22 @@ export default async function ReviewPage({
         subtitle="مراجعة تقييم المحتوى المحلي قبل الاعتماد"
       />
       <DevPhaseBadge />
+
+      {routing && (
+        <Card className="mb-6">
+          <CardContent className="p-4 text-sm">
+            <p>
+              مسار المراجعة:{" "}
+              <Badge variant="outline">
+                {routing.distinctSubmitters}/{routing.requiredReviewers} مراجعين
+              </Badge>
+            </p>
+            {routing.blockReason && !routing.canSubmitApproval && (
+              <p className="mt-2 text-muted-foreground">{routing.blockReason}</p>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {score && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">

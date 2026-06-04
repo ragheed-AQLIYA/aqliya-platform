@@ -4,6 +4,7 @@ import {
   getLocalContentScoreAction,
   listLocalContentApprovalsAction,
   listLocalContentReviewsAction,
+  getLocalContentApprovalRoutingAction,
   submitLocalContentApprovalAction,
 } from "@/actions/localcontent-actions";
 import {
@@ -31,19 +32,22 @@ export default async function ApprovalPage({
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = await params;
-  const [projectRes, scoreRes, approvalsRes, reviewsRes] = await Promise.all([
-    getLocalContentProjectAction(projectId),
-    getLocalContentScoreAction(projectId),
-    listLocalContentApprovalsAction(projectId),
-    listLocalContentReviewsAction(projectId),
-  ]);
+  const [projectRes, scoreRes, approvalsRes, reviewsRes, routingRes] =
+    await Promise.all([
+      getLocalContentProjectAction(projectId),
+      getLocalContentScoreAction(projectId),
+      listLocalContentApprovalsAction(projectId),
+      listLocalContentReviewsAction(projectId),
+      getLocalContentApprovalRoutingAction(projectId),
+    ]);
   if (!projectRes.ok || !projectRes.data) notFound();
 
   const project = projectRes.data;
   const score = scoreRes.ok ? scoreRes.data : null;
   const approvals = approvalsRes.ok ? approvalsRes.data : [];
   const reviews = reviewsRes.ok ? reviewsRes.data : [];
-  const hasReview = reviews.length > 0;
+  const routing = routingRes.ok ? routingRes.data : null;
+  const canApprove = routing?.canSubmitApproval ?? false;
   const lastApproval = approvals[0];
 
   return (
@@ -60,11 +64,22 @@ export default async function ApprovalPage({
       />
       <DevPhaseBadge />
 
-      {!hasReview && (
-        <Card className="mb-6 border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950">
-          <CardContent className="p-4 text-sm text-yellow-900 dark:text-yellow-200">
-            <AlertTriangle className="h-4 w-4 inline mr-1" />
-            لا يمكن الاعتماد قبل إكمال المراجعة. يرجى تقديم المراجعة أولاً.
+      {routing && (
+        <Card className="mb-6">
+          <CardContent className="p-4 text-sm">
+            <p className="flex items-center gap-2 flex-wrap">
+              مسار الاعتماد:
+              <Badge variant="outline">{routing.phase}</Badge>
+              <Badge variant="outline">
+                {routing.distinctSubmitters}/{routing.requiredReviewers} مراجعين
+              </Badge>
+            </p>
+            {routing.blockReason && !canApprove && (
+              <p className="mt-2 text-amber-800 dark:text-amber-200">
+                <AlertTriangle className="h-4 w-4 inline mr-1" />
+                {routing.blockReason}
+              </p>
+            )}
           </CardContent>
         </Card>
       )}
@@ -100,7 +115,7 @@ export default async function ApprovalPage({
         </div>
       )}
 
-      {hasReview && !lastApproval && (
+      {canApprove && !lastApproval && (
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-base">قرار الاعتماد</CardTitle>
@@ -189,7 +204,7 @@ export default async function ApprovalPage({
             </Card>
           ))}
         </div>
-      ) : !hasReview ? null : null}
+      ) : null}
 
       <Card className="border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950">
         <CardContent className="p-4 text-sm text-red-900 dark:text-red-200">

@@ -28,6 +28,7 @@ import {
   createReview,
   listApprovals,
   createApproval,
+  getProjectApprovalRoutingState,
   listAuditEvents,
   calculateProjectScore,
   listReports,
@@ -1082,6 +1083,17 @@ export async function listLocalContentReviewsAction(
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
     return listReviews(projectId);
+  });
+}
+
+export async function getLocalContentApprovalRoutingAction(
+  projectId: string,
+): Promise<
+  ActionResult<Awaited<ReturnType<typeof getProjectApprovalRoutingState>>>
+> {
+  return safe(async () => {
+    await assertProjectAccess(projectId, "view");
+    return getProjectApprovalRoutingState(projectId);
   });
 }
 
