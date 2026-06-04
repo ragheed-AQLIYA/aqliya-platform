@@ -29,6 +29,7 @@ const publicExact = new Set([
   "/how-we-work",
   "/insights",
   "/login",
+  "/signup",
   "/access-denied",
   "/pilot-proof",
   "/platform",
@@ -46,6 +47,7 @@ const publicExact = new Set([
 
 const publicPrefixes = [
   "/_next",
+  "/invite/",
   "/api/auth",
   "/api/auth/mfa/verify",
   "/api/health",

@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,11 +14,18 @@ import {
 import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
+  const [justRegistered, setJustRegistered] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
+
+  useEffect(() => {
+    setJustRegistered(
+      new URL(window.location.href).searchParams.get("registered") === "true",
+    );
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -76,6 +83,11 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {justRegistered && (
+            <p className="mb-4 rounded-md border border-green-500/30 bg-green-500/10 px-3 py-2 text-sm text-green-800 dark:text-green-200">
+              تم إنشاء المنشأة بنجاح. سجّل الدخول ببريدك وكلمة المرور.
+            </p>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">البريد الإلكتروني</Label>
@@ -115,6 +127,15 @@ export default function LoginPage() {
                   : "تسجيل الدخول"}
             </Button>
           </form>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            ليس لديك حساب؟{" "}
+            <a
+              href="/signup"
+              className="font-medium text-foreground underline hover:text-foreground/80"
+            >
+              إنشاء منشأة جديدة
+            </a>
+          </p>
           <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
             بعد تحديث التطبيق أو إعادة نشر Docker: نفّذ تحديثاً قسرياً للصفحة
             (Ctrl+Shift+R) إذا ظهرت شاشة تحميل بدون نهاية.

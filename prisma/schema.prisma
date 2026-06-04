@@ -109,6 +109,23 @@ model PlatformOrganization {
   @@index([createdAt])
 }
 
+model Invitation {
+  // @map: الدعوات
+  id              String    @id @default(cuid())
+  email           String
+  tokenHash       String    @unique
+  role            String    @default("MEMBER")
+  organizationId  String?
+  expiresAt       DateTime
+  acceptedAt      DateTime?
+  invitedByUserId String?
+  metadata        Json?
+  createdAt       DateTime  @default(now())
+
+  @@index([email])
+  @@index([organizationId])
+}
+
 // ==================== ClientWorkspace & Project ====================
 
 model ClientWorkspace {
