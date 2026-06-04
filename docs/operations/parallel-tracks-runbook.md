@@ -31,7 +31,8 @@
 | 2 | `npm run demo:smoke` | Pass |
 | 3 | `npm test` | All pass (~12s) |
 | 4 | `npm run build` | Standalone output |
-| 5 | `npm run start:standalone` | `/api/health` OK |
+| 5 | `npm run start:standalone` | `/api/health`, `/api/health/live`, `/api/health/ready` |
+| 5b | `npm run smoke:local` | Post-deploy smoke vs localhost |
 | 6 | Browser | `audit-sampling-browser-smoke.md` |
 
 **Product slices (parallel with 1–6):** AuditOS polish, SalesOS L5 proof, WorkflowOS/LocalContactOS depth, IC consumption via `retrieveGovernedContext`.
