@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkEdgeRateLimit } from "@/lib/rate-limit-edge";
 
-export function rateLimitMiddleware(request: NextRequest): NextResponse | null {
+export async function rateLimitMiddleware(request: NextRequest): Promise<NextResponse | null> {
   if (!request.nextUrl.pathname.startsWith("/api/")) return null;
 
   const ip =
@@ -11,7 +11,7 @@ export function rateLimitMiddleware(request: NextRequest): NextResponse | null {
     "anonymous";
 
   const key = `${ip}:${request.nextUrl.pathname}`;
-  const result = checkRateLimit(key);
+  const result = await checkEdgeRateLimit(key);
 
   if (!result.allowed) {
     return new NextResponse(

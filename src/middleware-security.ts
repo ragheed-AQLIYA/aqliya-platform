@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const securityHeaders = {
+  "Strict-Transport-Security":
+    "max-age=31536000; includeSubDomains; preload",
   "X-DNS-Prefetch-Control": "on",
   "X-XSS-Protection": "1; mode=block",
   "X-Frame-Options": "SAMEORIGIN",

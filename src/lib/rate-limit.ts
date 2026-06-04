@@ -1,42 +1,32 @@
-const rateMap = new Map<string, { count: number; resetAt: number }>();
+import "server-only";
 
-interface RateLimitConfig {
-  maxRequests: number;
-  windowMs: number;
-}
+import { createRateLimiter } from "@/lib/platform/rate-limiter";
+import type { RateLimitConfig, RateLimiter } from "@/lib/platform/rate-limiter/types";
 
 const DEFAULT_CONFIG: RateLimitConfig = {
   maxRequests: 60,
   windowMs: 60_000,
 };
 
-export function checkRateLimit(
+let _instance: RateLimiter | null = null;
+
+/**
+ * Server-only rate limiter entrypoint.
+ *
+ * This module may use Redis when RATE_LIMITER=redis, so it must stay out of
+ * Edge middleware dependency graphs.
+ */
+export async function checkRateLimit(
   key: string,
   config: RateLimitConfig = DEFAULT_CONFIG,
-): { allowed: boolean; remaining: number; resetAt: number } {
-  const now = Date.now();
-  const entry = rateMap.get(key);
-
-  if (!entry || entry.resetAt < now) {
-    rateMap.set(key, { count: 1, resetAt: now + config.windowMs });
-    return {
-      allowed: true,
-      remaining: config.maxRequests - 1,
-      resetAt: now + config.windowMs,
-    };
+): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
+  if (!_instance) {
+    try {
+      _instance = await createRateLimiter();
+    } catch {
+      const { MemoryRateLimiter } = await import("@/lib/platform/rate-limiter/memory-rate-limiter");
+      _instance = new MemoryRateLimiter({ suppressWarning: true });
+    }
   }
-
-  entry.count++;
-  if (entry.count > config.maxRequests) {
-    return { allowed: false, remaining: 0, resetAt: entry.resetAt };
-  }
-
-  return {
-    allowed: true,
-    remaining: config.maxRequests - entry.count,
-    resetAt: entry.resetAt,
-  };
+  return _instance.check(key, config);
 }
-
-// No periodic cleanup — entries are checked lazily in checkRateLimit.
-// This avoids setInterval which is unavailable in Edge runtime.

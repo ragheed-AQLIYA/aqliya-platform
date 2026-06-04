@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { setSecurityHeaders } from "@/middleware-security";
 import { rateLimitMiddleware } from "@/middleware-rate-limit";
+import { isMFARequiredForRoleName } from "@/lib/auth/mfa-roles";
 
 const secret = process.env.AUTH_SECRET;
 
@@ -46,11 +47,18 @@ const publicExact = new Set([
 const publicPrefixes = [
   "/_next",
   "/api/auth",
+  "/api/auth/mfa/verify",
   "/api/health",
   "/auditos/",
   "/products/",
   "/buyers/",
   "/insights/",
+];
+
+const mfaExemptPrefixes = [
+  "/login",
+  "/settings/mfa",
+  "/api/auth",
 ];
 
 function isPublicPath(pathname: string): boolean {
@@ -69,25 +77,35 @@ function isPublicPath(pathname: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
+  const start = Date.now();
+
+  const withTiming = (response: NextResponse): NextResponse => {
+    response.headers.set("X-Response-Time", `${Date.now() - start}ms`);
+    return response;
+  };
+
   const { pathname } = request.nextUrl;
 
-  const rateLimitResponse = rateLimitMiddleware(request);
+  const rateLimitResponse = await rateLimitMiddleware(request);
   if (rateLimitResponse) {
-    return setSecurityHeaders(rateLimitResponse);
+    return withTiming(setSecurityHeaders(rateLimitResponse));
   }
 
   if (isPublicPath(pathname)) {
-    return setSecurityHeaders(NextResponse.next());
+    return withTiming(setSecurityHeaders(NextResponse.next()));
   }
 
+  let token: unknown = null;
   try {
-    const token = await getToken({ req: request, secret });
+    token = await getToken({ req: request, secret });
     if (!token) {
       if (isApiPath(pathname) || pathname.startsWith("/api/")) {
-        return setSecurityHeaders(
-          NextResponse.json(
-            { error: "Authentication required", code: "UNAUTHENTICATED" },
-            { status: 401 },
+        return withTiming(
+          setSecurityHeaders(
+            NextResponse.json(
+              { error: "Authentication required", code: "UNAUTHENTICATED" },
+              { status: 401 },
+            ),
           ),
         );
       }
@@ -95,24 +113,57 @@ export async function middleware(request: NextRequest) {
       url.pathname = "/login";
       const returnUrl = request.nextUrl.pathname + request.nextUrl.search;
       url.searchParams.set("callbackUrl", returnUrl);
-      return setSecurityHeaders(NextResponse.redirect(url));
+      return withTiming(setSecurityHeaders(NextResponse.redirect(url)));
     }
   } catch {
     if (isApiPath(pathname) || pathname.startsWith("/api/")) {
-      return setSecurityHeaders(
-        NextResponse.json(
-          { error: "Authentication required", code: "UNAUTHENTICATED" },
-          { status: 401 },
+      return withTiming(
+        setSecurityHeaders(
+          NextResponse.json(
+            { error: "Authentication required", code: "UNAUTHENTICATED" },
+            { status: 401 },
+          ),
         ),
       );
     }
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("callbackUrl", request.nextUrl.pathname);
-    return setSecurityHeaders(NextResponse.redirect(url));
+    return withTiming(setSecurityHeaders(NextResponse.redirect(url)));
   }
 
-  return setSecurityHeaders(NextResponse.next());
+  const tok = token as Record<string, unknown> | null;
+  if (tok) {
+    const role = tok.role as string | undefined;
+    const mfaEnabled = tok.mfaEnabled as boolean | undefined;
+    const mfaVerified = tok.mfaVerified as boolean | undefined;
+    if (role && isMFARequiredForRoleName(role)) {
+      const isMfaExempt = mfaExemptPrefixes.some((p) => pathname.startsWith(p));
+      if (!isMfaExempt && (!mfaEnabled || !mfaVerified)) {
+        if (isApiPath(pathname) || pathname.startsWith("/api/")) {
+          return withTiming(
+            setSecurityHeaders(
+              NextResponse.json(
+                { error: "MFA_REQUIRED", code: "MFA_REQUIRED" },
+                { status: 403 },
+              ),
+            ),
+          );
+        }
+        const url = request.nextUrl.clone();
+        if (!mfaEnabled) {
+          url.pathname = "/settings/mfa";
+        } else {
+          url.pathname = "/login";
+          url.searchParams.set("mfa", "true");
+        }
+        url.searchParams.set("callbackUrl", request.nextUrl.pathname + request.nextUrl.search);
+        return withTiming(setSecurityHeaders(NextResponse.redirect(url)));
+      }
+    }
+  }
+
+  return withTiming(setSecurityHeaders(NextResponse.next()));
 }
 
 export const config = {
@@ -147,7 +198,10 @@ export const config = {
     "/api/sunbul/:path*",
     "/api/workflowos/:path*",
     "/api/metrics",
+    "/api/monitoring/:path*",
+    "/api/ai/:path*",
     "/api/custom-product-submit",
     "/api/pilot-review",
+    "/api/platform/:path*",
   ],
 };
