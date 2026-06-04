@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { archiveEngagementAction } from "@/actions/audit-actions";
 import { evaluateEngagementArchival } from "@/lib/audit/engagement-archival";
 import { Archive, Loader2 } from "lucide-react";
@@ -26,9 +27,12 @@ export function ArchiveEngagementButton({
 
   if (engagementStatus === "archived") {
     return (
-      <Button variant="outline" size="sm" asChild>
-        <Link href="/audit/archived">عرض الأرشيف</Link>
-      </Button>
+      <Link
+        href="/audit/archived"
+        className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+      >
+        عرض الأرشيف
+      </Link>
     );
   }
 
