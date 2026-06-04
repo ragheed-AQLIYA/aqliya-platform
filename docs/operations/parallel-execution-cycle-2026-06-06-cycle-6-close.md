@@ -1,10 +1,13 @@
 # Cycle 6 Close — Director Report
 
 **Date:** 2026-06-07 (updated)  
-**Baseline:** `4d24afd` (A1-09 bridge); **Roadmap Phase 3:** `3beabfc`  
+**Baseline:** `e791cc1` (Track A local complete; remote pending)  
 **Plan:** `parallel-execution-cycle-6-closure-plan.md` v1.1
 
-**Post–Phase 3 operator note:** Before remote G6-2, run `npx prisma migrate deploy` on staging (includes `20260607100000_audit_evidence_version`). Stamp commit with `node scripts/cycle6-smoke-report-stamp.mjs`.
+**Operator packet:** `docs/operations/cycle-6-remote-operator-packet.md`  
+**Blockers:** `docs/validation/cycle-6/CERTIFICATION_BLOCKERS.md`
+
+**Post–Phase 3 operator note:** Before remote G6-2, run `npx prisma migrate deploy` on staging (through `20260608000002`). Stamp commit with `node scripts/cycle6-smoke-report-stamp.mjs`.
 
 ---
 
@@ -19,7 +22,8 @@
 | 5 | G6-1 / G6-2 spot-check | G6-1 PASS (`:5435` migrate+verify); G6-2 proxy PASS; remote pending |
 | 6 | G6-5 docs PR | **PASS** (this bundle) |
 | 7 | No Out-of-Scope product commits | **PASS** (docs-only bundle) |
-| 8 | `program-execution-state` Cycle 6 CLOSED | **FAIL** — updated to BLOCKED/IN_PROGRESS, not CLOSED |
+| 8 | `program-execution-state` Cycle 6 CLOSED | **FAIL** — BLOCKED until remote; local @ `3aba98a`+ |
+| 9 | `npm run demo:smoke` static gate | **PASS** @ `b198619` (slice 24) |
 
 **G6-7 overall:** **CONDITIONAL** — Track A **LOCAL_COMPLETE**; program **BLOCKED** on remote DNS
 

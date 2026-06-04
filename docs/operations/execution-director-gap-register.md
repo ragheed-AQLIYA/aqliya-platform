@@ -25,6 +25,7 @@
 | OPS-01 | Staging pgvector: `migrate deploy` + `db:verify-pgvector` | OpenCode |
 | OPS-02 | Live smoke: `ic:smoke:cycle5:live` + activation log | OpenCode |
 | OPS-03 | `IC01_PGVECTOR_INTEGRATION` test on staging DB | OpenCode |
+| OPS-04 | Remote Cycle 6 close (`cycle-6-remote-operator-packet.md`) | **Ops** — packet ✅ 2026-06-07; execution OPEN |
 
 ---
 

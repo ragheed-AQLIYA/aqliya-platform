@@ -38,7 +38,8 @@ Exits 0 when required env vars are present (preflight does not hit the network).
 | Staging app URL | e.g. `https://staging.aqliya.ai` |
 | `AUTH_SECRET` / session | Smoke user can sign in |
 | Provider keys | Per `AI_PROVIDER` when `FF_AI_REAL_PROVIDERS=true` |
-| Repo checkout | `main` ≥ `3bf3734` (Roadmap Phase 3 slices 1–9) + `4d24afd` (A1-09 bridge) |
+| Repo checkout | `main` ≥ `e791cc1` (Phase 3 complete + slices 22–24 + demo:smoke) |
+| Migrations | Through `20260608000002` (see `cycle-6-remote-operator-packet.md` §2) |
 
 ---
 
@@ -128,3 +129,5 @@ Save stdout/JSON to `docs/validation/cycle-6/evidence/ic-smoke-cycle5-live.json`
 | Live smoke provider fail | Check flags + keys; fall back to deterministic only for diagnosis |
 
 **Director rule:** Cycle 6 stays **BLOCKED** until §3–§5 complete on **remote staging**.
+
+**One-page packet:** `docs/operations/cycle-6-remote-operator-packet.md`
