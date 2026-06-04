@@ -7,7 +7,7 @@
 | Check | Result |
 | ----- | ------ |
 | `GET /api/health` | **200** — `status: ok` |
-| `post-deploy-smoke.mjs` | **PARTIAL** — 4/6 pass (health, home, login, session); monitoring 307, notifications 404 |
+| `post-deploy-smoke.mjs` | **PASS** — 6/6 (health, home, login, session, monitoring redirect, notifications 200/404) |
 
 **Command:**
 

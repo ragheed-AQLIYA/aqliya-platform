@@ -73,11 +73,11 @@ AI Foundation Operational +
 Execution Governance Mature
 ```
 
-**Cycle 6 (A1-09):** Repo **shipped** @ `4d24afd` (`audit-ai-bridge.ts`). Program status: **BLOCKED** — not CLOSED until G6-2 live staging + G6-7 Director PASS.
+**Cycle 6 (A1-09):** Repo **shipped** @ `4d24afd`. **Track A local:** **COMPLETE** (`cycle-6-track-a-completion.md`). **Program:** **BLOCKED** — remote staging DNS/URL not reachable from dev VM.
 
 | Track | Owner | Status |
 | ----- | ----- | ------ |
-| **Track A** — Enterprise / Cycle 6 closure | Cursor / Director | **IN_PROGRESS** — evidence bundle `docs/validation/cycle-6/` |
+| **Track A** — Enterprise / Cycle 6 closure | Cursor / Director | **LOCAL_COMPLETE** — `npm run cycle6:full-run`; remote G6-2 pending |
 | **Track B** — Product completion | OpenCode | Parallel — not blocking Cycle 6 re-verification |
 
 **Remaining ops for Cycle 6 CLOSED:** Remote staging `DATABASE_URL` → `db:verify-pgvector` → `ic:smoke:cycle5:live` → fill `LIVE_SMOKE_REPORT.md` Required Evidence → Director G6-7. See `parallel-execution-cycle-2026-06-06-cycle-6-close.md`.

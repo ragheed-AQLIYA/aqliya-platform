@@ -19,7 +19,7 @@
 | 7 | No Out-of-Scope product commits | **PASS** (docs-only bundle) |
 | 8 | `program-execution-state` Cycle 6 CLOSED | **FAIL** — updated to BLOCKED/IN_PROGRESS, not CLOSED |
 
-**G6-7 overall:** **BLOCKED**
+**G6-7 overall:** **CONDITIONAL** — Track A **LOCAL_COMPLETE**; program **BLOCKED** on remote DNS
 
 ---
 
@@ -45,4 +45,6 @@ Next:        Remote staging URL + keys → repeat checklist → G6-7 CLOSED
 Track B:     OpenCode product completion (parallel)
 ```
 
-**Status:** BLOCKED
+**Status:** CONDITIONAL (local complete / remote blocked)
+
+**Record:** `docs/operations/cycle-6-track-a-completion.md`

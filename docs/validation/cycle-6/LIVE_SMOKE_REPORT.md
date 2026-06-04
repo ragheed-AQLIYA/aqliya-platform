@@ -23,8 +23,8 @@
 | `generated_audit_event_id` | N/A — platform log used | OK |
 | `platform_audit_log_id` | `cmpzvgc8f0004xgpqbnkdebnr` (`auditos_ai_generation`) | OK |
 | `audit_ai_bridge_record_ref` | `audit-ai-bridge.ts/runGovernedAuditAI` | OK |
-| `embedding_count` | `0` (no chunks seeded) | OK — documented |
-| `vector_search_result` | pgvector table present; RAG path gated | Partial |
+| `embedding_count` | `1` (`cycle6-smoke-chunk-001`) | OK |
+| `vector_search_result` | pgvector table + seeded chunk; RAG path `FF_AI_RAG=true` | OK (proxy) |
 | `ic_smoke_metrics_json` | `evidence/ic-smoke-cycle5-live.json` | PASS |
 | `pgvector_verify_json` | `evidence/pgvector-verify-output.txt` | PASS |
 | `flags_snapshot` | `FF_AI_RAG=true`, `FF_AI_REAL_PROVIDERS=false` | OK (proxy) |

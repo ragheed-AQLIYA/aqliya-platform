@@ -54,6 +54,22 @@ async function main() {
     select: { id: true },
   })
 
+  const orgId = auditOrg.platformOrganizationId
+  await prisma.documentChunk.upsert({
+    where: { id: "cycle6-smoke-chunk-001" },
+    create: {
+      id: "cycle6-smoke-chunk-001",
+      organizationId: orgId,
+      documentId: "cycle6-smoke-doc",
+      chunkIndex: 0,
+      content: "Cycle 6 governed RAG smoke — AuditOS engagement context",
+      tokenCount: 12,
+      metadata: { smoke: "cycle6", productKey: "auditos" },
+      createdBy: user?.id,
+    },
+    update: { content: "Cycle 6 governed RAG smoke — AuditOS engagement context" },
+  })
+
   await import("../src/lib/ai/handlers/register-handlers")
   const { runGovernedAuditAI } = await import("../src/lib/audit/audit-ai-bridge")
 
