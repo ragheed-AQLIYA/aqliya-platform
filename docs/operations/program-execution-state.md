@@ -73,7 +73,7 @@ AI Foundation Operational +
 Execution Governance Mature
 ```
 
-**Cycle 6 (A1-09):** Repo **shipped** @ `4d24afd`. **Track A local:** **COMPLETE** (`cycle-6-track-a-completion.md`). **Program:** **BLOCKED** — remote staging DNS/URL not reachable from dev VM.
+**Cycle 6 (A1-09):** Repo **shipped** @ `4d24afd`+. **Track A local:** **COMPLETE** — re-validated `npm run cycle6:full-run` @ `3aba98a` / `521cd02` (`cycle-6-track-a-completion.md`, slice 22). **Program:** **BLOCKED** — remote `staging.aqliya.ai` + operator G6-7 still required.
 
 | Track | Owner | Status |
 | ----- | ----- | ------ |
