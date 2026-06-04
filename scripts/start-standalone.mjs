@@ -6,8 +6,10 @@
 import { access, cp, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
+import { config as loadDotenv } from "dotenv";
 
 const root = process.cwd();
+loadDotenv({ path: join(root, ".env") });
 const standaloneDir = join(root, ".next", "standalone");
 const serverJs = join(standaloneDir, "server.js");
 

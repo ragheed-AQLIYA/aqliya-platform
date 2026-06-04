@@ -52,7 +52,8 @@ describe("rateLimitMiddleware", () => {
   it("returns 429 when rate limited", async () => {
     const { rateLimitMiddleware } = await import("@/middleware-rate-limit")
     const req = makeNextRequest("/api/test")
-    for (let i = 0; i < 60; i++) {
+    // STANDARD_API preset = 100 req/min — exceed it
+    for (let i = 0; i < 101; i++) {
       await rateLimitMiddleware(req.clone())
     }
     const result = await rateLimitMiddleware(req.clone())
@@ -67,7 +68,7 @@ describe("rateLimitMiddleware", () => {
     const reqA = makeNextRequest("/api/test", "1.1.1.1")
     const reqB = makeNextRequest("/api/test", "2.2.2.2")
 
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 101; i++) {
       await rateLimitMiddleware(reqA.clone())
     }
     expect(await rateLimitMiddleware(reqA.clone())).not.toBeNull()
