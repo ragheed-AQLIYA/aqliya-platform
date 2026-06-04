@@ -1,0 +1,7 @@
+pgvector_extension=true
+document_chunk_table=true
+ff_ai_rag=disabled
+pgvector_health=pass
+
+Recorded: 2026-06-06
+Host: localhost:5434 (local proxy)

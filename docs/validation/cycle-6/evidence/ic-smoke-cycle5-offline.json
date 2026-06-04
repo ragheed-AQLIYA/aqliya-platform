@@ -1,0 +1,5 @@
+{
+  "note": "Offline npm run ic:smoke:cycle5 — circuit transitions PASS, provider flags gating PASS. Not a substitute for ic:smoke:cycle5:live on staging.",
+  "recorded": "2026-06-06",
+  "commit": "4d24afd"
+}
