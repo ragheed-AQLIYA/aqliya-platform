@@ -3,29 +3,29 @@ import {
   getSalesIntelligenceMemory,
   initSalesWorkspace,
 } from "@/lib/sales/service";
+import { salesGetMarketIntelligenceForOrg } from "@/lib/sales/services/market-intelligence-service";
+import { salesBuildProofEffectivenessAnalysis } from "@/lib/sales/services/proof-effectiveness-service";
+import { salesGetCommercialKnowledgeGraphSnapshot } from "@/lib/sales/services/commercial-knowledge-graph-service";
 import { IntelligenceHub } from "@/components/sales/intelligence-hub";
 import { IntelligenceMemoryView } from "@/components/sales/intelligence-memory-view";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MarketIntelligenceView } from "@/components/sales/market-intelligence-view";
+import { ProofEffectivenessView } from "@/components/sales/proof-effectiveness-view";
+import { CommercialKnowledgeGraphPanel } from "@/components/sales/commercial-knowledge-graph-panel";
 
 export const dynamic = "force-dynamic";
-
-function PlaceholderPanel({ title }: { title: string }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="text-sm text-muted-foreground">
-        مسودة — غير مُتحقق بعد (pilot DB aligned; service stubs pending)
-      </CardContent>
-    </Card>
-  );
-}
 
 export default async function SalesIntelligencePage() {
   const user = await getCurrentUser();
   initSalesWorkspace(user);
-  const memory = await getSalesIntelligenceMemory(user);
+  const orgId = user.organizationId;
+
+  const [memory, marketView, proofAnalysis, graphSnapshot] = await Promise.all([
+    getSalesIntelligenceMemory(user),
+    Promise.resolve(salesGetMarketIntelligenceForOrg(orgId)),
+    Promise.resolve(salesBuildProofEffectivenessAnalysis(orgId)),
+    Promise.resolve(salesGetCommercialKnowledgeGraphSnapshot(orgId, 12)),
+  ]);
+
   const competitorsView = memory.competitors.map((c) => ({
     id: c.id,
     name: c.competitorName,
@@ -35,8 +35,8 @@ export default async function SalesIntelligencePage() {
 
   return (
     <IntelligenceHub
-      marketPanel={<PlaceholderPanel title="ذكاء السوق" />}
-      proofPanel={<PlaceholderPanel title="فعالية الإثبات" />}
+      marketPanel={<MarketIntelligenceView data={marketView} />}
+      proofPanel={<ProofEffectivenessView analysis={proofAnalysis} />}
       memoryPanel={
         <IntelligenceMemoryView
           objections={memory.objections}
@@ -47,7 +47,7 @@ export default async function SalesIntelligencePage() {
           opportunityInsights={memory.opportunityInsights}
         />
       }
-      graphPanel={<PlaceholderPanel title="Knowledge graph / proof network" />}
+      graphPanel={<CommercialKnowledgeGraphPanel snapshot={graphSnapshot} />}
     />
   );
 }
