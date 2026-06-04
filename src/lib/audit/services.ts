@@ -1656,3 +1656,14 @@ export async function archiveEngagement(
   });
   await db.archiveEngagement(engagementId, actorId, actorName);
 }
+
+export async function restoreEngagement(
+  engagementId: string,
+  actorId: string,
+  actorName: string,
+): Promise<string> {
+  const db = await getDb().catch(() => {
+    throw new Error("Database not available");
+  });
+  return db.restoreEngagement(engagementId, actorId, actorName);
+}

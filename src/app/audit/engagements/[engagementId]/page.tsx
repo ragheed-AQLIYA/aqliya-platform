@@ -20,6 +20,7 @@ import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
 import { ArrowLeft, Circle } from "lucide-react";
 import { AIOutputsPanel } from "@/components/audit/ai/ai-outputs-panel";
 import { ArchiveEngagementButton } from "@/components/audit/engagement/archive-engagement-button";
+import { evaluateEngagementArchival } from "@/lib/audit/engagement-archival";
 
 export default async function EngagementDetailPage({
   params,
@@ -60,7 +61,9 @@ export default async function EngagementDetailPage({
 
   const recentEvents = auditEvents.slice(-5).reverse();
 
-  const canArchive = ["admin", "partner"].includes(actor.actorRole);
+  const canArchive =
+    ["admin", "partner"].includes(actor.actorRole) &&
+    evaluateEngagementArchival(engagement.status).canArchive;
 
   return (
     <div className="space-y-6" dir="rtl">

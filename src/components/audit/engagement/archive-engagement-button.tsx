@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { archiveEngagementAction } from "@/actions/audit-actions";
+import { evaluateEngagementArchival } from "@/lib/audit/engagement-archival";
 import { Archive, Loader2 } from "lucide-react";
 
 interface ArchiveEngagementButtonProps {
@@ -20,7 +22,17 @@ export function ArchiveEngagementButton({
   const router = useRouter();
   const [archiving, setArchiving] = useState(false);
 
-  if (engagementStatus === "archived" || !canArchive) return null;
+  const archival = evaluateEngagementArchival(engagementStatus);
+
+  if (engagementStatus === "archived") {
+    return (
+      <Button variant="outline" size="sm" asChild>
+        <Link href="/audit/archived">عرض الأرشيف</Link>
+      </Button>
+    );
+  }
+
+  if (!canArchive || !archival.canArchive) return null;
 
   async function handleArchive() {
     if (

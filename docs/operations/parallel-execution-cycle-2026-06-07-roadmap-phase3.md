@@ -162,4 +162,17 @@
 | ------- | ------ |
 | `npm test` portfolio-analytics + reviewer-signoff-chain | See commit report |
 
-**Status:** DONE_WITH_CONCERNS (Phase 3 slices 1–7); migration deploy still operator; Cycle 6 remote BLOCKED; A1-10/S7-03/L0 open
+## Delivered — slice 8 (2026-06-07)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **A1-10** | Archival rules, `/audit/archived`, restore engagement |
+| **S7-08** | ICP + territory admin on `/sales/icp` |
+
+### Validation (slice 8)
+
+| Command | Result |
+| ------- | ------ |
+| `npm test` engagement-archival + sales-territory-store | See commit report |
+
+**Status:** DONE_WITH_CONCERNS (Phase 3 slices 1–8); Cycle 6 remote BLOCKED; S7-03/L0/A1-01 open

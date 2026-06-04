@@ -3697,3 +3697,49 @@ export async function archiveEngagement(
     },
   });
 }
+
+export async function restoreEngagement(
+  engagementId: string,
+  actorId: string,
+  actorName: string,
+): Promise<string> {
+  const engagement = await prisma.auditEngagement.findUnique({
+    where: { id: engagementId },
+    select: { status: true },
+  });
+  if (!engagement) throw new Error("Engagement not found");
+  if (engagement.status !== "archived")
+    throw new Error("Engagement is not archived");
+
+  const lastArchive = await prisma.auditEvent.findFirst({
+    where: { engagementId, eventType: "engagement.archived" },
+    orderBy: { timestamp: "desc" },
+    select: { previousState: true },
+  });
+  const restoreStatus =
+    lastArchive?.previousState &&
+    lastArchive.previousState !== "archived"
+      ? lastArchive.previousState
+      : "published";
+
+  await prisma.auditEngagement.update({
+    where: { id: engagementId },
+    data: { status: restoreStatus },
+  });
+  await prisma.auditEvent.create({
+    data: {
+      engagementId,
+      eventType: "engagement.restored",
+      actorId,
+      actorName,
+      actorRole: "admin",
+      targetType: "engagement",
+      targetId: engagementId,
+      previousState: "archived",
+      newState: restoreStatus,
+      description: `Engagement restored by ${actorName}`,
+      timestamp: new Date(),
+    },
+  });
+  return restoreStatus;
+}

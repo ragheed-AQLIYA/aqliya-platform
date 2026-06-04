@@ -89,6 +89,7 @@
 | --------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | -------------------------- |
 | `/audit`                                            | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Dashboard, engagement list |
 | `/audit/portfolio`                                  | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Org portfolio analytics (A1-07) |
+| `/audit/archived`                                   | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Archived engagements + restore (A1-10) |
 | `/audit/admin/users`                                | AuditOS        | Settings/admin     | Protected        | Pilot-ready (L5)      | Admin panel                |
 | `/audit/engagements/[engagementId]`                 | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Engagement detail          |
 | `/audit/engagements/[engagementId]/trial-balance`   | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      |                            |

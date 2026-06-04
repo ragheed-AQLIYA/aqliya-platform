@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   FileOutput,
   History,
+  Archive,
   Settings,
 } from "lucide-react";
 
@@ -28,6 +29,12 @@ const navItems = [
     label: "محفظة التدقيق",
     href: "/audit/portfolio",
     icon: BarChart3,
+    hash: "",
+  },
+  {
+    label: "الأرشيف",
+    href: "/audit/archived",
+    icon: Archive,
     hash: "",
   },
   {

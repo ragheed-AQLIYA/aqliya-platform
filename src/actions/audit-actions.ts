@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createEvidenceVersion } from "@/lib/audit/evidence-versioning-service";
+import { evaluateEngagementArchival } from "@/lib/audit/engagement-archival";
 
 import {
   createEngagement as svcCreateEngagement,
@@ -43,6 +44,7 @@ import {
   disposeValidationIssue as svcDisposeValidationIssue,
   publishEngagement as svcPublishEngagement,
   archiveEngagement as svcArchiveEngagement,
+  restoreEngagement as svcRestoreEngagement,
   getEngagement as svcGetEngagement,
   getEvidence as svcGetEvidence,
   getTrialBalanceLines as svcGetTrialBalanceLines,
@@ -1423,6 +1425,11 @@ export async function archiveEngagementAction(engagementId: string) {
     throw new Error("Engagement is already archived");
   }
 
+  const archival = evaluateEngagementArchival(engagement.status);
+  if (!archival.canArchive) {
+    throw new Error(archival.reasonAr);
+  }
+
   await svcArchiveEngagement(engagementId, actor.actorId, actor.actorName);
 
   await svcRecordAuditEvent({
@@ -1444,8 +1451,39 @@ export async function archiveEngagementAction(engagementId: string) {
 
   revalidatePath(`/audit/engagements/${engagementId}`);
   revalidatePath("/audit");
+  revalidatePath("/audit/archived");
 
   return { success: true };
+}
+
+export async function restoreEngagementAction(engagementId: string) {
+  const actor = await getAuditActor();
+  requireRole(actor, ["admin", "partner"]);
+  await assertEngagementAccess(engagementId, actor);
+  await enforceAuditRateLimit(actor, "restore_engagement", "mutation");
+
+  const engagement = await svcGetEngagement(actor.organizationId, engagementId);
+  if (!engagement) {
+    throw new Error("Engagement not found");
+  }
+
+  const archival = evaluateEngagementArchival(engagement.status);
+  if (!archival.canRestore) {
+    throw new Error(archival.reasonAr);
+  }
+
+  const restoredStatus = await svcRestoreEngagement(
+    engagementId,
+    actor.actorId,
+    actor.actorName,
+  );
+
+  revalidatePath(`/audit/engagements/${engagementId}`);
+  revalidatePath("/audit");
+  revalidatePath("/audit/archived");
+  revalidatePath("/audit/portfolio");
+
+  return { success: true, restoredStatus };
 }
 
 /** A1-02 — deterministic trial balance sampling (assistive; human decides). */

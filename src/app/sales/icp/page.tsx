@@ -10,6 +10,8 @@ import {
 } from "@/lib/sales/store";
 import { buildICPLearningSnapshot } from "@/lib/sales/vnext/icp-learning";
 import { ICPLearningView } from "@/components/sales/icp-learning-view";
+import { IcpTerritoryAdminPanel } from "@/components/sales/icp-territory-admin-panel";
+import { listTerritories } from "@/lib/sales/sales-territory-store";
 
 export const dynamic = "force-dynamic";
 
@@ -37,5 +39,12 @@ export default async function SalesICPPage() {
     interactions,
   });
 
-  return <ICPLearningView snapshot={snapshot} />;
+  const territories = listTerritories(orgId);
+
+  return (
+    <div className="space-y-8">
+      <ICPLearningView snapshot={snapshot} />
+      <IcpTerritoryAdminPanel insights={icpInsights} territories={territories} />
+    </div>
+  );
 }
