@@ -48,6 +48,7 @@
     "db:migrate": "prisma migrate dev",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
+    "cy:local": "cypress run --config baseUrl=http://localhost:3000",
     "test:e2e": "npm run build && npx next start & npx wait-on http://localhost:3000 && cypress run",
     "platform:backfill-orgs:dry": "tsx scripts/backfill-platform-organizations.ts",
     "platform:backfill-orgs:apply": "tsx scripts/backfill-platform-organizations.ts --apply",

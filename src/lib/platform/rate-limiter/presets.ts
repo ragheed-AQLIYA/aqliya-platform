@@ -5,6 +5,12 @@ export const RATE_LIMIT_PRESETS = {
   AUTH_ENDPOINTS: { maxRequests: 10, windowMs: 60_000 } as RateLimitConfig,
   EXPORT_ENDPOINTS: { maxRequests: 20, windowMs: 60_000 } as RateLimitConfig,
   AI_ENDPOINTS: { maxRequests: 30, windowMs: 60_000 } as RateLimitConfig,
+  /** SCIM provisioning — strict: provisioning is not high-frequency */
+  SCIM_ENDPOINTS: { maxRequests: 15, windowMs: 60_000 } as RateLimitConfig,
+  /** Health check — lenient: monitoring systems poll frequently */
+  HEALTH_ENDPOINTS: { maxRequests: 300, windowMs: 60_000 } as RateLimitConfig,
+  /** SSO OAuth callback — moderate: human-driven but burstable */
+  SSO_CALLBACK: { maxRequests: 20, windowMs: 60_000 } as RateLimitConfig,
 } as const
 
 export interface RateLimitHeaders {
