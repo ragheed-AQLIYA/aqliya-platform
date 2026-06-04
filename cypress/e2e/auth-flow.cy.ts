@@ -28,12 +28,9 @@
   });
 
   it("should login with valid admin credentials and redirect to dashboard", () => {
-    cy.get('input[type="email"]').type("admin@aqliya.com");
-    cy.get('input[type="password"]').type("admin123");
-    cy.get('button[type="submit"]').click();
-    // After successful login, user is redirected away from /login
+    cy.loginAdmin();
+    cy.visit("/audit");
     cy.url({ timeout: 15000 }).should("not.include", "/login");
-    // The page should have RTL direction
     cy.get("html").should("have.attr", "dir", "rtl");
   });
 

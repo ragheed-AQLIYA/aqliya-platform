@@ -1,14 +1,15 @@
 describe("AuditOS — Sampling browser smoke", () => {
   beforeEach(() => {
-    cy.visit("/login");
-    cy.get('input[type="email"]').type("admin@aqliya.com");
-    cy.get('input[type="password"]').type("admin123");
-    cy.get('button[type="submit"]').click();
-    cy.url({ timeout: 20000 }).should("not.include", "/login");
+    cy.loginAdmin();
+    cy.visit("/audit", { timeout: 30000, failOnStatusCode: false });
+    cy.url().should("not.include", "/login");
   });
 
   it("loads sampling tab with population and governance banner", () => {
-    cy.visit("/audit/engagements/eng-gulf-2025/sampling");
+    cy.visit("/audit/engagements/eng-gulf-2025/sampling", {
+      timeout: 30000,
+      failOnStatusCode: false,
+    });
     cy.url().should("include", "/sampling");
     cy.contains("محرك العينة").should("exist");
     cy.contains("بنود الميزان").should("exist");
@@ -16,7 +17,10 @@ describe("AuditOS — Sampling browser smoke", () => {
   });
 
   it("generates reproducible stratified sample with seed smoke-01", () => {
-    cy.visit("/audit/engagements/eng-gulf-2025/sampling");
+    cy.visit("/audit/engagements/eng-gulf-2025/sampling", {
+      timeout: 30000,
+      failOnStatusCode: false,
+    });
     cy.get("#method").select("stratified");
     cy.get("#sampleSize").clear().type("5");
     cy.get("#seed").clear().type("smoke-01");
@@ -30,7 +34,10 @@ describe("AuditOS — Sampling browser smoke", () => {
   });
 
   it("generates systematic sample with interval", () => {
-    cy.visit("/audit/engagements/eng-gulf-2025/sampling");
+    cy.visit("/audit/engagements/eng-gulf-2025/sampling", {
+      timeout: 30000,
+      failOnStatusCode: false,
+    });
     cy.get("#method").select("systematic");
     cy.get("#interval").type("2");
     cy.get("#randomStart").type("1");

@@ -1,11 +1,6 @@
 ﻿describe("AuditOS — Engagement Workspace", () => {
   beforeEach(() => {
-    // Login as admin
-    cy.visit("/login");
-    cy.get('input[type="email"]').type("admin@aqliya.com");
-    cy.get('input[type="password"]').type("admin123");
-    cy.get('button[type="submit"]').click();
-    cy.url({ timeout: 15000 }).should("not.include", "/login");
+    cy.loginAdmin();
   });
 
   it("should load AuditOS dashboard with title and KPIs", () => {

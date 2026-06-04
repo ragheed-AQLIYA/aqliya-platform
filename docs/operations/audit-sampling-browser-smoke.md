@@ -29,6 +29,15 @@ npm test -- src/lib/audit/__tests__/audit-sampling-action.test.ts
 npm run demo:smoke
 ```
 
+## Cypress (conditional)
+
+```bash
+npm run build && npm run start:standalone
+npm run cy:local -- --spec cypress/e2e/audit-sampling.cy.ts
+```
+
+See `cypress-local-runbook.md` — session/cookie stability on standalone may require `next dev --webpack`.
+
 ---
 
 ## Fail escalation
