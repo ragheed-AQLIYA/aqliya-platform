@@ -1,5 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import {
+  getOutcomeStatusLabel,
+  type OutcomeDashboardMetrics,
+} from "@/lib/decision/outcome-dashboard";
 
 type DashboardMetrics = {
   totalDecisions: number;
@@ -39,6 +43,7 @@ type DashboardMetrics = {
     stage: string;
     priority: string | null;
   }[];
+  outcomeMetrics: OutcomeDashboardMetrics;
 };
 
 function getPriorityColor(priority: string | null) {
@@ -193,6 +198,89 @@ export function DecisionDashboard({ metrics }: { metrics: DashboardMetrics }) {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="rounded-lg border p-4">
+        <h3 className="text-sm font-semibold mb-3">متابعة النتائج (Portfolio)</h3>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
+          <div className="rounded-md bg-muted/40 p-3">
+            <div className="text-xs text-muted-foreground">نتائج مسجّلة</div>
+            <div className="text-xl font-bold mt-1">
+              {metrics.outcomeMetrics.totalOutcomes}
+            </div>
+            <div className="text-xs text-muted-foreground mt-1">
+              تغطية {metrics.outcomeMetrics.coveragePct}% من القرارات
+            </div>
+          </div>
+          <div className="rounded-md bg-muted/40 p-3">
+            <div className="text-xs text-muted-foreground">مراجعات النتيجة</div>
+            <div className="text-xl font-bold mt-1 text-green-600">
+              {metrics.outcomeMetrics.reviewedCount}
+            </div>
+            <div className="text-xs text-amber-600 mt-1">
+              {metrics.outcomeMetrics.missingReview} بانتظار مراجعة
+            </div>
+          </div>
+          <div className="rounded-md bg-muted/40 p-3">
+            <div className="text-xs text-muted-foreground">معتمدة بدون نتيجة</div>
+            <div className="text-xl font-bold mt-1 text-amber-600">
+              {metrics.outcomeMetrics.approvedMissingOutcome}
+            </div>
+          </div>
+          <div className="rounded-md bg-muted/40 p-3">
+            <div className="text-xs text-muted-foreground">متوسط الانحراف</div>
+            <div className="text-xl font-bold mt-1">
+              {metrics.outcomeMetrics.avgVariance != null
+                ? metrics.outcomeMetrics.avgVariance
+                : "—"}
+            </div>
+          </div>
+        </div>
+
+        {Object.keys(metrics.outcomeMetrics.byStatus).length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {Object.entries(metrics.outcomeMetrics.byStatus).map(
+              ([status, count]) => (
+                <Badge key={status} variant="outline">
+                  {getOutcomeStatusLabel(status)}: {count}
+                </Badge>
+              ),
+            )}
+          </div>
+        )}
+
+        {metrics.outcomeMetrics.recentOutcomes.length > 0 ? (
+          <div className="space-y-2">
+            {metrics.outcomeMetrics.recentOutcomes.map((item) => (
+              <Link
+                key={item.decisionId}
+                href={`/decisions/${item.decisionId}/outcome`}
+                className="flex items-center justify-between text-sm p-2 rounded hover:bg-muted transition-colors"
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="font-medium truncate max-w-[220px]">
+                    {item.title}
+                  </span>
+                  <Badge variant="secondary">
+                    {getOutcomeStatusLabel(item.outcomeStatus)}
+                  </Badge>
+                  {!item.hasReview && (
+                    <Badge variant="outline" className="text-[10px]">
+                      بانتظار مراجعة
+                    </Badge>
+                  )}
+                </div>
+                <span className="text-xs text-muted-foreground shrink-0">
+                  {item.variance != null ? `انحراف ${item.variance}` : "—"}
+                </span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            لا توجد نتائج مسجّلة بعد. سجّل النتيجة من صفحة القرار بعد الاعتماد.
+          </p>
+        )}
       </div>
 
       {metrics.bottlenecks.length > 0 && (

@@ -1249,24 +1249,26 @@ export async function getDashboardMetrics() {
         return { id: d.id, title: d.title, stage, priority: d.priority };
       });
 
-    const outcomeMetrics = {
-      totalOutcomes: decisions.filter((d) => d.outcome).length,
-      byStatus: decisions
-        .filter((d) => d.outcome)
-        .reduce(
-          (acc, d) => {
-            if (d.outcome) {
-              acc[d.outcome.outcomeStatus] =
-                (acc[d.outcome.outcomeStatus] || 0) + 1;
+    const { buildOutcomeDashboardMetrics } = await import(
+      "@/lib/decision/outcome-dashboard"
+    );
+    const outcomeMetrics = buildOutcomeDashboardMetrics(
+      decisions.map((d) => ({
+        id: d.id,
+        title: d.title,
+        status: d.status,
+        priority: d.priority,
+        outcome: d.outcome
+          ? {
+              outcomeStatus: d.outcome.outcomeStatus,
+              actualOutcome: d.outcome.actualOutcome,
+              variance: d.outcome.variance,
+              reviewedAt: d.outcome.reviewedAt,
+              updatedAt: d.outcome.updatedAt,
             }
-            return acc;
-          },
-          {} as Record<string, number>,
-        ),
-      missingReview: decisions.filter((d) => d.outcome && !d.outcome.reviewedAt)
-        .length,
-      reviewedCount: decisions.filter((d) => d.outcome?.reviewedAt).length,
-    };
+          : null,
+      })),
+    );
 
     return {
       success: true,
