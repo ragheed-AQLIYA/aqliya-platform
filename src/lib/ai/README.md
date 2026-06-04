@@ -1,24 +1,40 @@
-# Phase 3: AI Abstraction Layer
+# Intelligence Core — AI Abstraction Layer
 
-**Status:** Phase 3B complete — deterministic wiring finished. Phase 3C stabilized.
+**Status:** L5 operational in repository (2026-06-05). Staging live smoke = OpenCode ops gate.
+
+## Truth labels
+
+| Capability | Status |
+| ---------- | ------ |
+| Static governance context | `retrieval-router.ts` — doctrine, evidence requirements, approval flags |
+| Governed RAG (IC-01) | `src/lib/rag/intelligence-core-rag.ts` when `FF_AI_RAG=true` + pgvector |
+| Provider routing (IC-09) | `provider-router.ts` — fallback chain, circuit breaker, cost sort |
+| Real LLM | `FF_AI_REAL_PROVIDERS=true` + API keys — env-gated, not default |
+| AuditOS AI (A1-09) | `audit-ai-bridge.ts` → orchestrator (tenant + RAG + budget) |
+| Office AI | `deterministic-generators.ts` — separate from orchestrator unless wired |
+| **Not implemented** | Model registry (IC-05), local GPU runtime (IC-10), institutional memory store |
 
 ---
 
 ## Architecture
 
 ```
-audit-actions.ts → services.ts → aiOrchestrator.generate()
-                                    │
-                                    ├── governance context (retrieval-router.ts)
-                                    ├── prompt assembly (prompt-registry.ts)
-                                    └── provider selection
-                                        └── DeterministicAIProvider (default)
-                                            ├── analyticalReviewHandler   → trial_balance_upload
-                                            ├── evidenceSuggestionsHandler → evidence_review
-                                            ├── findingDraftsHandler       → audit_findings
-                                            ├── recommendationDraftsHandler→ approval_review
-                                            └── draftNotesHandler          → notes_generation
+audit-actions.ts → services/ai.ts → runGovernedAuditAI()  [A1-09]
+                                        │
+                                        └── aiOrchestrator.generate()
+                                              ├── governance context (retrieval-router.ts)
+                                              ├── RAG (intelligence-core-rag.ts) if FF_AI_RAG
+                                              ├── budget quotas/alerts (IC-06) if flagged
+                                              ├── prompt assembly (prompt-registry.ts)
+                                              └── provider selection (IC-09)
+                                                    ├── OpenAI / Anthropic / Cloud (if configured)
+                                                    └── DeterministicAIProvider (fallback)
+                                                          └── 5 audit handlers (register-handlers.ts)
 ```
+
+**Public RAG API:** `src/lib/rag/index.ts`
+
+**Knowledge HTTP API (IC-01):** `/api/ai/knowledge/*` — see `docs/operations/ai-platform/KNOWLEDGE_API_STATUS.md`
 
 ---
 
@@ -26,9 +42,11 @@ audit-actions.ts → services.ts → aiOrchestrator.generate()
 
 | Provider | Status | Notes |
 |---|---|---|
-| **DeterministicAIProvider** | **Active (default)** | 5 handlers registered. Rule-based generation preserved exactly. Always available. |
-| **CloudAIProvider** | Stub — throws on call | Configured via `AI_CLOUD_API_KEY` + `AI_CLOUD_MODEL` env vars. `execute()` throws "not yet wired." Phase 4 will wire external API call. |
-| **LocalAIProvider** | Stub — throws on call | `execute()` throws "not implemented." Phase 4 will integrate Ollama/vLLM. |
+| **DeterministicAIProvider** | **Default** | 5 AuditOS handlers; always available fallback |
+| **OpenAIProvider** | Env-gated | `FF_AI_REAL_PROVIDERS` + `OPENAI_API_KEY` |
+| **AnthropicProvider** | Env-gated | `FF_AI_REAL_PROVIDERS` + `ANTHROPIC_API_KEY` |
+| **CloudAIProvider** | Partial | Legacy cloud config path |
+| **LocalAIProvider** | Not implemented | IC-10 future |
 
 ---
 
@@ -50,6 +68,7 @@ audit-actions.ts → services.ts → aiOrchestrator.generate()
 |---|---|
 | `types.ts` | `AIProvider`, `AIRequest`, `AIResponse`, `AIProviderStatus`, `AIProviderId`, `DeterministicTaskHandler` |
 | `orchestrator.ts` | Provider selection, governance context injection, prompt assembly, fallback on error |
+| `orchestrator-rag-inject.ts` | Shared governed RAG injection for `generate()` and `generateStream()` |
 | `prompt-registry.ts` | Maps 5 `GovernanceTaskType` values to `prompt-framework.ts` builders |
 | `providers/deterministic-provider.ts` | Default provider — routes to registered task handlers |
 | `providers/cloud-provider.ts` | Cloud LLM stub (Phase 4) |
@@ -65,11 +84,12 @@ audit-actions.ts → services.ts → aiOrchestrator.generate()
 
 ## Audit Event Logging
 
-Audit events for AI calls are logged by `src/actions/audit-actions.ts` using the existing `db.recordAuditEvent()` with `aiRelated: true`. Each AI output generation records an `ai.output_generated` event with metadata containing `suggestionType`, `sourceEntityType`, and `sourceEntityId`.
-
-The orchestrator supports an optional `onGenerate` callback that can be wired for centralized logging at the orchestrator level. This is not yet activated — the existing per-action logging is sufficient.
-
-All logging uses the existing `AuditEvent` Prisma model (no schema changes).
+| Layer | Mechanism |
+| ----- | --------- |
+| AuditOS engagement | `audit-actions.ts` → `recordAuditEvent` with `aiRelated: true` |
+| Platform | `audit-ai-bridge.ts` → `writePlatformAuditLog` action `auditos_ai_generation` |
+| RAG search | `rag-retriever.ts` → `rag_search` with ranking + chunk IDs; lexical fallback when pgvector empty |
+| Orchestrator | Optional `onGenerate` callback (not required when bridge logging active) |
 
 ---
 
@@ -84,20 +104,16 @@ All logging uses the existing `AuditEvent` Prisma model (no schema changes).
 
 ## Constraints
 
-- All AI outputs remain human-reviewed (accept/reject workflow)
-- Evidence-aware (governance context from `retrieval-router.ts`)
-- Permissioned (tenant guard + role checks in actions)
-- Auditable (`AuditEvent` with `aiRelated: true`)
-- No Cloud API calls (Phase 4)
-- No Local AI runtime (Phase 4)
-- No claims that Private/On-Prem/Air-Gapped or Model Governance are implemented
+- AI assists; humans decide; evidence governs
+- All AuditOS outputs remain `suggested` until accept/reject
+- Real providers and RAG require explicit env flags + staging validation
+- Do not claim production AI until `ai-intelligence-activation.md` live smoke passes
 
 ---
 
-## Phase 4 Next Steps
+## Ops references
 
-1. Wire `CloudAIProvider.execute()` to external API (OpenAI/Claude)
-2. Implement `LocalAIProvider` with Ollama/vLLM
-3. Activate orchestrator `onGenerate` callback for centralized AI audit logging
-4. Add provider status endpoint (`/api/health` AI section)
-5. Remove or deprecate `src/lib/audit/ai-service.ts` (0 callers)
+- `docs/operations/ai-intelligence-activation.md`
+- `docs/operations/pgvector-staging-runbook.md`
+- `docs/operations/auditos-ai-governed-generation.md`
+- `docs/operations/execution-director-gap-register.md`

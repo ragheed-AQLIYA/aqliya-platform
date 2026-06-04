@@ -5,6 +5,10 @@ import { validateIntelligenceGate } from "@/lib/decision/intelligence-gate"
 import { generateStrategicInsight } from "@/lib/decision/insight"
 import { generateWhatToDoNow } from "@/lib/decision/what-to-do"
 import { generateExecutiveOverview } from "@/lib/decision/overview"
+import {
+  mergeDecisionInsightWithAI,
+  runGovernedDecisionAI,
+} from "@/lib/decision/decision-ai-bridge"
 import { isExpectedAccessDeniedError, requireDecisionAccess } from "@/lib/auth"
 
 export async function getDecisionForIntelligence(decisionId: string) {
@@ -49,7 +53,7 @@ export async function getDecisionForIntelligence(decisionId: string) {
 
 export async function generateStrategicInsightAction(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "OPERATOR")
+    const access = await requireDecisionAccess(decisionId, "OPERATOR")
     const gate = await validateIntelligenceGate(decisionId)
     if (!gate.allowed) {
       return { success: false, error: "Intelligence access blocked", missing: gate.missing }
@@ -78,7 +82,14 @@ export async function generateStrategicInsightAction(decisionId: string) {
       return { success: false, error: "Decision not found" }
     }
 
-    const insight = generateStrategicInsight(decision)
+    const base = generateStrategicInsight(decision)
+    const ai = await runGovernedDecisionAI({
+      decisionId,
+      userId: access.user.id,
+      userRole: access.user.role,
+      focus: "insight",
+    }).catch(() => null)
+    const insight = mergeDecisionInsightWithAI(base, ai)
     return { success: true, data: insight }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {

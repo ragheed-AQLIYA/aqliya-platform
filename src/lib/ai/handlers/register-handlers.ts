@@ -8,6 +8,8 @@ import { evidenceSuggestionsHandler } from "./evidence-suggestions-handler"
 import { findingDraftsHandler } from "./finding-drafts-handler"
 import { recommendationDraftsHandler } from "./recommendation-drafts-handler"
 import { draftNotesHandler } from "./draft-notes-handler"
+import { commercialClaimAssistHandler } from "./commercial-claim-assist-handler"
+import { pilotDecisionAssistHandler } from "./pilot-decision-assist-handler"
 
 // analytical review — rule-based TB scan + anomaly flag generation
 deterministicProvider.registerHandler('trial_balance_upload', analyticalReviewHandler)
@@ -23,3 +25,7 @@ deterministicProvider.registerHandler('approval_review', recommendationDraftsHan
 
 // draft notes — notes engine rule-based note generation with skipExistingTitles
 deterministicProvider.registerHandler('notes_generation', draftNotesHandler)
+
+// cross-product governed assist (Office AI, LocalContentOS, DecisionOS)
+deterministicProvider.registerHandler('commercial_claim_review', commercialClaimAssistHandler)
+deterministicProvider.registerHandler('pilot_decision', pilotDecisionAssistHandler)

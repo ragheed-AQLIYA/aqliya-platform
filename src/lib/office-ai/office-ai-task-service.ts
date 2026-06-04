@@ -571,24 +571,55 @@ export async function generateOfficeAiTaskOutput(
     extractionStatus: f.extractionStatus ?? undefined,
   }));
 
-  const { content, format } = generateDeterministicOfficeAiOutput(
-    {
-      id: task.id,
-      title: task.title,
-      taskType: task.taskType,
-      instructions: task.instructions,
-      language: task.language,
-      createdByName: task.createdByName,
-    },
-    files,
-  );
+  const fileContext = files
+    .map((f) => f.extractedContent)
+    .filter(Boolean)
+    .join("\n\n")
+    .slice(0, 8000);
 
-  // Create the output via existing service
+  const { runGovernedOfficeAI } = await import("./office-ai-orchestrator-bridge");
+  const governed = await runGovernedOfficeAI({
+    taskId: task.id,
+    title: task.title ?? "Office AI task",
+    taskType: task.taskType as OfficeAiTaskType,
+    instructions: task.instructions,
+    language: task.language,
+    organizationId: task.platformOrganizationId,
+    userId: actor?.id,
+    fileContext,
+  }).catch(() => null);
+
+  let content: string;
+  let format = "markdown";
+  let aiProvider = "deterministic";
+  let aiPromptVersion = "office-ai-deterministic-v1";
+
+  if (governed?.content) {
+    content = governed.content;
+    format = governed.format;
+    aiProvider = governed.aiProvider;
+    aiPromptVersion = governed.aiPromptVersion;
+  } else {
+    const deterministic = generateDeterministicOfficeAiOutput(
+      {
+        id: task.id,
+        title: task.title,
+        taskType: task.taskType,
+        instructions: task.instructions,
+        language: task.language,
+        createdByName: task.createdByName,
+      },
+      files,
+    );
+    content = deterministic.content;
+    format = deterministic.format;
+  }
+
   const outputResult = await addOfficeAiOutput(taskId, {
     content,
     format,
-    aiProvider: "deterministic",
-    aiPromptVersion: "office-ai-deterministic-v1",
+    aiProvider,
+    aiPromptVersion,
   });
 
   if (!outputResult.success) {

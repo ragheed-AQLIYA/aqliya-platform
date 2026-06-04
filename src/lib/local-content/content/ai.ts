@@ -4,6 +4,7 @@ import "server-only";
 
 import { createHash } from "crypto";
 import { buildCommercialClaimReviewPrompt } from "@/lib/governance/prompt-framework";
+import { runGovernedProductAI } from "@/lib/platform/product-ai-bridge";
 import { getContentRepository } from "./repository-instance";
 import { assertContentItemTransition } from "./workflow";
 import {
@@ -101,29 +102,69 @@ export async function executeGovernedAI(
       ? linkedSources.map((s) => `- ${s.title} (${s.status})`).join("\n")
       : "لا توجد مصادر مرتبطة — يلزم إرفاق مصادر قبل النشر.";
 
-  const draftBody = [
-    `# ${item.title}`,
-    "",
-    `**الصيغة:** ${item.format}`,
-    "",
-    "## مسودة (AI-assisted — DRAFT)",
-    "",
-    options?.instructions
-      ? `تعليمات: ${options.instructions}`
-      : "مسودة أولية بناءً على العنوان والمصادر المرتبطة.",
-    "",
-    "## المصادر",
+  const ragQuery = [
+    "LocalContentOS content draft",
+    item.title,
+    item.format,
+    options?.instructions ?? "",
     sourceSummary,
-    "",
-    "---",
-    "_هذه مسودة محكومة. لا تُعتمد تلقائياً. المراجعة البشرية مطلوبة._",
-    "",
-    promptResult.governanceContext.humanApprovalRequired
-      ? "⚠️ Human approval required before publish."
-      : "",
   ]
     .filter(Boolean)
-    .join("\n");
+    .join(" ");
+
+  const governed = await runGovernedProductAI({
+    productKey: "localcontentos",
+    useCase: "commercial_claim_review",
+    organizationId,
+    userId: options.actorId,
+    resourceId: contentItemId,
+    query: ragQuery,
+    evidenceComplete: linkedSources.some((s) => s.status === "verified"),
+    taskInput: {
+      claimType: item.format,
+      targetAudience: "local content audience",
+      isPilotResult: true,
+      hasEvidenceSupport: linkedSources.some((s) => s.status === "verified"),
+      instructions: options?.instructions,
+      contextSummary: sourceSummary,
+    },
+  }).catch(() => null);
+
+  const draftBody = governed?.output
+    ? [
+        `# ${item.title}`,
+        "",
+        governed.output,
+        "",
+        "## المصادر",
+        sourceSummary,
+        "",
+        "---",
+        "_مسودة محكومة عبر Intelligence Core — مراجعة بشرية مطلوبة._",
+      ].join("\n")
+    : [
+        `# ${item.title}`,
+        "",
+        `**الصيغة:** ${item.format}`,
+        "",
+        "## مسودة (AI-assisted — DRAFT)",
+        "",
+        options?.instructions
+          ? `تعليمات: ${options.instructions}`
+          : "مسودة أولية بناءً على العنوان والمصادر المرتبطة.",
+        "",
+        "## المصادر",
+        sourceSummary,
+        "",
+        "---",
+        "_هذه مسودة محكومة. لا تُعتمد تلقائياً. المراجعة البشرية مطلوبة._",
+        "",
+        promptResult.governanceContext.humanApprovalRequired
+          ? "⚠️ Human approval required before publish."
+          : "",
+      ]
+        .filter(Boolean)
+        .join("\n");
 
   const promptHash = createHash("sha256")
     .update(promptResult.fullPrompt)
