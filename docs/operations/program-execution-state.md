@@ -84,6 +84,8 @@ Execution Governance Mature
 
 **Local staging full proxy (2026-06-06):** `:5435/aqliya_staging` — migrate + seed + verify + `cycle6:smoke:audit-ai` PASS. **Remote** `staging.aqliya.ai` still required for Cycle 6 **CLOSED**.
 
+**Roadmap Phase 3 (2026-06-07):** S7-01 shipped — `/sales/intelligence` hub wired to market/proof/knowledge graph engines. Report: `parallel-execution-cycle-2026-06-07-roadmap-phase3.md`.
+
 Report: `docs/operations/parallel-execution-cycle-2026-06-05-cycle-5.md`
 
 ---
