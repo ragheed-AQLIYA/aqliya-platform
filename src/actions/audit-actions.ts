@@ -44,7 +44,13 @@ import {
   archiveEngagement as svcArchiveEngagement,
   getEngagement as svcGetEngagement,
   getEvidence as svcGetEvidence,
+  getTrialBalanceLines as svcGetTrialBalanceLines,
 } from "@/lib/audit/services";
+import {
+  runSamplingEngine,
+  type SamplingMethod,
+  type SamplingResult,
+} from "@/lib/audit/sampling";
 import { linkEvidenceToEntity as svcLinkEvidenceToEntity } from "@/lib/audit/services";
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
 import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
@@ -1396,4 +1402,72 @@ export async function archiveEngagementAction(engagementId: string) {
   revalidatePath("/audit");
 
   return { success: true };
+}
+
+/** A1-02 — deterministic trial balance sampling (assistive; human decides). */
+export async function generateAuditSamplingAction(params: {
+  engagementId: string;
+  method: SamplingMethod;
+  sampleSize: number;
+  seed?: string;
+  materialityThreshold?: number;
+}): Promise<SamplingResult> {
+  const actor = await getAuditActor();
+  requireRole(actor, [
+    "admin",
+    "partner",
+    "manager",
+    "senior",
+    "staff",
+    "operator",
+    "reviewer",
+    "viewer",
+  ]);
+  await assertEngagementAccess(params.engagementId, actor);
+  await enforceAuditRateLimit(actor, "generate_sampling", "read");
+
+  const lines = await svcGetTrialBalanceLines(params.engagementId);
+  if (lines.length === 0) {
+    throw new Error(
+      "لا توجد بنود ميزان مراجعة — ارفع الميزان قبل توليد العينة.",
+    );
+  }
+
+  const population = lines.map((line) => ({
+    id: line.id,
+    accountCode: line.accountCode,
+    accountName: line.accountName,
+    debitAmount: line.debitAmount,
+    creditAmount: line.creditAmount,
+    balance: line.balance,
+  }));
+
+  const result = runSamplingEngine(params.engagementId, population, {
+    method: params.method,
+    sampleSize: params.sampleSize,
+    seed: params.seed,
+    materialityThreshold: params.materialityThreshold,
+  });
+
+  await svcRecordAuditEvent({
+    engagementId: params.engagementId,
+    eventType: "sampling.generated",
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: "trial_balance_sample",
+    targetId: params.engagementId,
+    description: `Sampling generated (${result.method}, n=${result.sampleSize})`,
+    aiRelated: false,
+    metadata: {
+      method: result.method,
+      sampleSize: result.sampleSize,
+      populationCount: result.populationCount,
+      seed: result.seed,
+      selectedIds: result.selectedIds,
+    },
+  });
+
+  revalidatePath(`/audit/engagements/${params.engagementId}/sampling`);
+  return result;
 }

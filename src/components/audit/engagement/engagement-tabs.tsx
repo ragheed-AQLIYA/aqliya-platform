@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   FileSpreadsheet,
+  Layers,
   GitCompareArrows,
   ShieldCheck,
   FileText,
@@ -46,6 +47,7 @@ interface EngagementTabsProps {
 const tabDefs = [
   { key: "overview", label: "نظرة عامة", icon: LayoutDashboard },
   { key: "trial-balance", label: "ميزان المراجعة", icon: FileSpreadsheet },
+  { key: "sampling", label: "العينة", icon: Layers },
   { key: "mapping", label: "تعيين الحسابات", icon: GitCompareArrows },
   { key: "validation", label: "التحقق", icon: ShieldCheck },
   { key: "statements", label: "القوائم المالية", icon: FileText },

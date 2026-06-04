@@ -26,6 +26,16 @@ const tabGates: Record<string, TabGate> = {
 
   "trial-balance": () => ({ locked: false }),
 
+  sampling: (ctx) => {
+    if (!ctx.hasTrialBalance) {
+      return {
+        locked: true,
+        reason: "ارفع ميزان المراجعة قبل توليد العينة.",
+      };
+    }
+    return { locked: false };
+  },
+
   mapping: (ctx) => {
     if (!ctx.hasTrialBalance) {
       return {
