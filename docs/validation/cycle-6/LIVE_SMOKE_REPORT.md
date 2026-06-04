@@ -1,8 +1,8 @@
 # Live Smoke Report — Cycle 6
 
-**Date:** 2026-06-06  
+**Date:** 2026-06-07 (local re-run)  
 **Agent:** AGENT-A  
-**Commit:** `729ae90` (bridge @ `4d24afd`) — **re-stamp on remote run:** `node scripts/cycle6-smoke-report-stamp.mjs` (expect ≥ `3beabfc`)
+**Commit:** `521cd02` (local proxy re-validation) — **remote:** `node scripts/cycle6-smoke-report-stamp.mjs` on real staging URL
 
 **Environment label:** `local-staging-full-proxy` — Docker `aqliya_staging` on `localhost:5435` with `migrate deploy` + `prisma db seed` + `cycle6:smoke:audit-ai`. **Not** `https://staging.aqliya.ai`.
 
@@ -12,8 +12,9 @@
 
 | Field | Value | Status |
 | ----- | ----- | ------ |
-| `smoke_execution_timestamp` | `2026-06-04T19:11:54.933Z` | OK (proxy) |
-| `commit_sha` | `729ae90` | OK |
+| `smoke_execution_timestamp` | `2026-06-04T21:23:10.565Z` | OK (proxy, `cycle6:full-run`) |
+| `commit_sha` | `521cd02` | OK |
+| `platform_audit_log_id` | `cmq005552000430pq071ewbnt` (`auditos_ai_generation`) | OK (2026-06-07 run) |
 | `staging_base_url` | `http://localhost:5435-local-staging-proxy` | Proxy — remote TBD |
 | `database_url_host` | `localhost:5435` / `aqliya_staging` | OK (local staging DB) |
 | `provider_used` | `deterministic` | OK (no live API key) |
@@ -21,7 +22,6 @@
 | `audit_organization_id` | `org-aqliya` | OK |
 | `engagement_id` | `eng-gulf-2025` | OK |
 | `generated_audit_event_id` | N/A — platform log used | OK |
-| `platform_audit_log_id` | `cmpzvgc8f0004xgpqbnkdebnr` (`auditos_ai_generation`) | OK |
 | `audit_ai_bridge_record_ref` | `audit-ai-bridge.ts/runGovernedAuditAI` | OK |
 | `embedding_count` | `1` (`cycle6-smoke-chunk-001`) | OK |
 | `vector_search_result` | pgvector table + seeded chunk; RAG path `FF_AI_RAG=true` | OK (proxy) |
@@ -38,7 +38,7 @@
 | Command | Environment | Exit |
 | ------- | ------------- | ---- |
 | `docker compose -f docker-compose.staging.yml -f docker-compose.staging-local.yml up -d db redis` | local | 0 |
-| `npx prisma migrate deploy` | `:5435/aqliya_staging` | 0 |
+| `npx prisma migrate deploy` | `:5435` — incl. `20260607100000`, `20260608000001`, `20260608000002` | 0 |
 | `npx prisma db seed` | `:5435` | 0 |
 | `npm run db:verify-pgvector` | `:5435` | 0 |
 | `npm run ic:smoke:cycle5` | CLI | 0 |

@@ -1,7 +1,7 @@
 # Cycle 6 — full local staging proxy (one command)
 # Does NOT contact https://staging.aqliya.ai (DNS may be unavailable).
 $ErrorActionPreference = "Stop"
-Set-Location $PSScriptRoot ..
+Set-Location (Join-Path $PSScriptRoot "..")
 
 Write-Host "== Cycle 6 local staging full run ==" -ForegroundColor Cyan
 
