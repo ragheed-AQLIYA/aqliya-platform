@@ -2286,3 +2286,129 @@ model DocumentChunk {
   @@index([organizationId, documentId])
   @@index([organizationId, chunkIndex])
 }
+
+// ─── WorkflowOS ─────────────────────────────────────────────────────────
+
+model WorkflowTemplate {
+  id                     String        @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  description            String?
+  category               String        @default("general") // general | approval | review | inspection | custom
+  status                 String        @default("active")
+  steps                  Json          @default("[]") // Array of workflow step definitions
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  records WorkflowRecord[]
+
+  @@index([organizationId, category, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([status])
+}
+
+model WorkflowRecord {
+  id                     String           @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  templateId             String
+  template               WorkflowTemplate @relation(fields: [templateId], references: [id])
+  title                  String
+  description            String?
+  status                 String           @default("pending") // pending | in_progress | completed | rejected | cancelled
+  currentStep            Int              @default(0)
+  steps                  Json             @default("[]") // Snapshot of steps at creation time
+  stepResults            Json             @default("{}") // Results per step
+  assignedToId           String?
+  priority               String           @default("medium") // low | medium | high | urgent
+  dueDate                DateTime?
+  completedAt            DateTime?
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, templateId, createdAt])
+  @@index([platformOrganizationId, createdAt])
+  @@index([assignedToId, status])
+  @@index([dueDate])
+}
+
+// ─── LocalContactOS ─────────────────────────────────────────────────────
+
+model LocalContact {
+  id                     String             @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  name                   String
+  email                  String?
+  phone                  String?
+  position               String?
+  department             String?
+  organizationName       String?            // External org this contact belongs to
+  sensitivityLevel       String             @default("normal") // normal | sensitive | confidential
+  notes                  String?
+  tags                   Json               @default("[]")
+  isActive               Boolean            @default(true)
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+
+  outgoingRelations  LocalContactRelation[] @relation("ContactOutgoing")
+  incomingRelations  LocalContactRelation[] @relation("ContactIncoming")
+  interactions       LocalContactInteraction[]
+
+  @@index([organizationId, name, createdAt])
+  @@index([organizationId, sensitivityLevel])
+  @@index([platformOrganizationId, createdAt])
+  @@index([email])
+  @@index([isActive])
+}
+
+model LocalContactRelation {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  sourceContactId        String
+  sourceContact          LocalContact @relation("ContactOutgoing", fields: [sourceContactId], references: [id], onDelete: Cascade)
+  targetContactId        String
+  targetContact          LocalContact @relation("ContactIncoming", fields: [targetContactId], references: [id], onDelete: Cascade)
+  relationType           String       // colleague | manager | subordinate | partner | client | vendor | board_member | investor | other
+  description            String?
+  strength               Int          @default(5) // 1-10
+  isActive               Boolean      @default(true)
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([organizationId, relationType])
+  @@index([sourceContactId, targetContactId])
+  @@index([platformOrganizationId, createdAt])
+}
+
+model LocalContactInteraction {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  contactId              String
+  contact                LocalContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  interactionType        String       // meeting | call | email | message | note | other
+  subject                String?
+  summary                String?
+  occurredAt             DateTime
+  duration               Int?         // minutes
+  metadata               Json?
+  createdById            String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([organizationId, contactId, occurredAt])
+  @@index([organizationId, interactionType, occurredAt])
+  @@index([platformOrganizationId, createdAt])
+}

@@ -29,7 +29,10 @@ import {
 } from "@/lib/workflowos/storage";
 import { listWorkflowAuditEvents } from "@/lib/workflowos/audit";
 import { getUserWorkflowRole } from "@/lib/workflowos/tenant-guard";
-import { isExpectedAccessDeniedError } from "@/lib/auth";
+import { isExpectedAccessDeniedError, requireUserContext } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 function mapAuthError(error: unknown): string {
   const msg = error instanceof Error ? error.message : "";
@@ -460,5 +463,208 @@ export async function workflow_listAuditEvents(
     if (!isExpectedAccessDeniedError(error))
       console.error("Error listing Workflow audit events:", error);
     return { success: false, error: "Failed to list audit events" };
+  }
+}
+
+// ─── Templates ──────────────────────────────────────────
+
+export async function createWorkflowTemplate(data: {
+  name: string;
+  description?: string;
+  category?: string;
+  steps: unknown[];
+}) {
+  try {
+    const user = await requireUserContext();
+    const template = await prisma.workflowTemplate.create({
+      data: {
+        organizationId: user.organizationId,
+        platformOrganizationId: user.platformOrganizationId ?? null,
+        name: data.name,
+        description: data.description ?? null,
+        category: data.category ?? "general",
+        steps: data.steps as Prisma.InputJsonValue,
+        createdById: user.id,
+      },
+    });
+    revalidatePath("/workflowos/templates");
+    return { success: true, data: template };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error creating Workflow template:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+export async function listWorkflowTemplates(organizationId: string) {
+  try {
+    const user = await requireUserContext();
+    if (user.organizationId !== organizationId) {
+      return { success: false, error: "لا تملك صلاحية الوصول لهذه المنظمة" };
+    }
+    const templates = await prisma.workflowTemplate.findMany({
+      where: { organizationId, status: "active" },
+      include: { _count: { select: { records: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+    return { success: true, data: templates };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error listing Workflow templates:", error);
+    return { success: false, error: "Failed to list templates" };
+  }
+}
+
+export async function getWorkflowTemplate(id: string) {
+  try {
+    const user = await requireUserContext();
+    const template = await prisma.workflowTemplate.findUnique({
+      where: { id },
+      include: { _count: { select: { records: true } } },
+    });
+    if (!template) {
+      return { success: false, error: "النموذج غير موجود" };
+    }
+    if (template.organizationId !== user.organizationId) {
+      return { success: false, error: "لا تملك صلاحية الوصول لهذا النموذج" };
+    }
+    return { success: true, data: template };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error getting Workflow template:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+export async function startWorkflowFromTemplate(
+  templateId: string,
+  title: string,
+  assignedToId?: string,
+) {
+  try {
+    const user = await requireUserContext();
+    const template = await prisma.workflowTemplate.findUnique({
+      where: { id: templateId },
+    });
+    if (!template) {
+      return { success: false, error: "النموذج غير موجود" };
+    }
+    if (template.organizationId !== user.organizationId) {
+      return { success: false, error: "لا تملك صلاحية الوصول لهذا النموذج" };
+    }
+    const record = await prisma.workflowRecord.create({
+      data: {
+        organizationId: user.organizationId,
+        platformOrganizationId: user.platformOrganizationId ?? null,
+        templateId: template.id,
+        title,
+        status: "pending",
+        currentStep: 0,
+        steps: template.steps as Prisma.InputJsonValue,
+        stepResults: {} as Prisma.InputJsonValue,
+        assignedToId: assignedToId ?? null,
+        createdById: user.id,
+      },
+    });
+    revalidatePath("/workflowos/records");
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error starting Workflow record:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+export async function workflow_listOrgRecords(
+  organizationId: string,
+  status?: string,
+) {
+  try {
+    const user = await requireUserContext();
+    if (user.organizationId !== organizationId) {
+      return { success: false, error: "لا تملك صلاحية الوصول لهذه المنظمة" };
+    }
+    const where: Record<string, unknown> = { organizationId };
+    if (status) where.status = status;
+    const records = await prisma.workflowRecord.findMany({
+      where,
+      include: { template: { select: { name: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+    return { success: true, data: records };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error listing Workflow records:", error);
+    return { success: false, error: "Failed to list records" };
+  }
+}
+
+export async function updateWorkflowRecordStatus(
+  id: string,
+  status: string,
+  stepResult?: Record<string, unknown>,
+) {
+  try {
+    const user = await requireUserContext();
+    const record = await prisma.workflowRecord.findUnique({
+      where: { id },
+    });
+    if (!record) {
+      return { success: false, error: "السجل غير موجود" };
+    }
+    if (record.organizationId !== user.organizationId) {
+      return { success: false, error: "لا تملك صلاحية الوصول لهذا السجل" };
+    }
+    const existingResults =
+      typeof record.stepResults === "object" && record.stepResults !== null
+        ? (record.stepResults as Record<string, unknown>)
+        : {};
+    const stepResults = stepResult
+      ? ({
+          ...existingResults,
+          [`step_${record.currentStep}`]: {
+            ...stepResult,
+            updatedAt: new Date().toISOString(),
+          },
+        } as Prisma.InputJsonValue)
+      : undefined;
+    const updated = await prisma.workflowRecord.update({
+      where: { id },
+      data: {
+        status,
+        ...(status === "completed" ? { completedAt: new Date() } : {}),
+        ...(status === "in_progress" && record.currentStep === 0
+          ? { currentStep: 1 }
+          : {}),
+        ...(stepResult ? { stepResults } : {}),
+      },
+    });
+    revalidatePath("/workflowos/records");
+    return { success: true, data: updated };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error updating Workflow record status:", error);
+    return { success: false, error: mapAuthError(error) };
+  }
+}
+
+export async function workflow_getRecordById(id: string) {
+  try {
+    const user = await requireUserContext();
+    const record = await prisma.workflowRecord.findUnique({
+      where: { id },
+      include: { template: { select: { name: true, steps: true } } },
+    });
+    if (!record) {
+      return { success: false, error: "السجل غير موجود" };
+    }
+    if (record.organizationId !== user.organizationId) {
+      return { success: false, error: "لا تملك صلاحية الوصول لهذا السجل" };
+    }
+    return { success: true, data: record };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error))
+      console.error("Error getting Workflow record:", error);
+    return { success: false, error: mapAuthError(error) };
   }
 }

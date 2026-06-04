@@ -28,6 +28,8 @@ const GUARD_PATTERNS = [
   "getAuditActor",
   "assertEngagementAccess",
   "requireWorkflow",
+  "requireWorkflowAdmin",
+  "requireClientAccess",
   "writePlatformAuditLog",
 ];
 
