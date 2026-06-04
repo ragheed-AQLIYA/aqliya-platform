@@ -87,7 +87,7 @@ npx prisma migrate deploy
 
 1. `docs/operations/cycle-6-staging-operator-checklist.md` — close G6-2 → G6-7.
 2. Deploy Prisma migration `20260607100000` on staging/production.
-3. Phase 4 entry: `L0-04` pentest scheduling + `L0-01` Terraform apply decision.
+3. Phase 4 entry: `docs/operations/phase-4-entry-checklist.md` (after Cycle 6 remote CLOSED).
 
 ---
 

@@ -87,7 +87,9 @@ Execution Governance Mature
 **Roadmap Phase 3 (2026-06-07):** **Repo COMPLETE** — slices 1–9 on `main` through `3bf3734` (AuditOS portfolio/archival/rollforward/evidence versions; DecisionOS patterns; LocalContentOS LC-02–LC-07; SalesOS S7-01–S7-08 except S7-03 XL).  
 Reports: `parallel-execution-cycle-2026-06-07-roadmap-phase3.md`, `ROADMAP_PHASE3_COMPLETION_REPORT.md`.
 
-**Cycle 6 closure:** Still **BLOCKED** on remote staging — operator checklist + `node scripts/cycle6-operator-preflight.mjs`.
+**Cycle 6 closure:** Still **BLOCKED** on remote staging — `cycle-6-staging-operator-checklist.md`, `cycle6-operator-preflight.mjs`, `cycle6-smoke-report-stamp.mjs`.
+
+**Phase 4 entry:** `docs/operations/phase-4-entry-checklist.md` (after Cycle 6 remote CLOSED).
 
 Report: `docs/operations/parallel-execution-cycle-2026-06-05-cycle-5.md`
 

@@ -203,4 +203,18 @@
 | ------- | ------ |
 | `node scripts/cycle6-operator-preflight.mjs` (no env) | Expected FAIL (DATABASE_URL) — script only |
 
-**Status:** DONE_WITH_CONCERNS — Phase 3 product backlog complete in repo except XL (S7-03, LC-08); Cycle 6 remote BLOCKED; L0 ops gates open
+## Delivered — slice 11 (2026-06-07, Phase 4 entry + Cycle 6 ops)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **DOC** | `phase-4-entry-checklist.md` |
+| **OPS** | `scripts/cycle6-smoke-report-stamp.mjs` |
+| **DOC** | Backlog Phase 3 closure banner; cycle-6 close + LIVE_SMOKE remote checklist |
+
+### Validation (slice 11)
+
+| Command | Result |
+| ------- | ------ |
+| `node scripts/cycle6-smoke-report-stamp.mjs` | Pass (stdout stamp) |
+
+**Status:** DONE_WITH_CONCERNS — Phase 3 product backlog complete in repo except XL (S7-03, LC-08); Cycle 6 remote BLOCKED; Phase 4 entry doc ready

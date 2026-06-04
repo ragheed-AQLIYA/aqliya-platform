@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-06  
 **Agent:** AGENT-A  
-**Commit:** `729ae90` (bridge @ `4d24afd`)
+**Commit:** `729ae90` (bridge @ `4d24afd`) — **re-stamp on remote run:** `node scripts/cycle6-smoke-report-stamp.mjs` (expect ≥ `3beabfc`)
 
 **Environment label:** `local-staging-full-proxy` — Docker `aqliya_staging` on `localhost:5435` with `migrate deploy` + `prisma db seed` + `cycle6:smoke:audit-ai`. **Not** `https://staging.aqliya.ai`.
 
@@ -56,3 +56,18 @@
 | **Cycle 6 program CLOSED** | **BLOCKED** until remote G6-2 + G6-7 |
 
 **Operator runbook:** `docs/operations/cycle-6-staging-operator-checklist.md`
+
+---
+
+## Remote re-run checklist (post Phase 3)
+
+| Step | Command / action |
+| ---- | ---------------- |
+| 1 | Checkout `main` ≥ `3beabfc` |
+| 2 | `npx prisma migrate deploy` (staging) — include `20260607100000_audit_evidence_version` |
+| 3 | `node scripts/cycle6-smoke-report-stamp.mjs` → update Required Evidence table |
+| 4 | `npm run db:verify-pgvector` |
+| 5 | `npm run ic:smoke:cycle5:live` |
+| 6 | `npm run cycle6:smoke:audit-ai` |
+| 7 | Set `staging_base_url` to resolvable production-like URL (not `:5435` proxy) |
+| 8 | Director G6-7 in `parallel-execution-cycle-2026-06-06-cycle-6-close.md` |

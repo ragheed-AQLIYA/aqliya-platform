@@ -1,8 +1,10 @@
 # Cycle 6 Close — Director Report
 
-**Date:** 2026-06-06  
-**Baseline:** `4d24afd`  
+**Date:** 2026-06-07 (updated)  
+**Baseline:** `4d24afd` (A1-09 bridge); **Roadmap Phase 3:** `3beabfc`  
 **Plan:** `parallel-execution-cycle-6-closure-plan.md` v1.1
+
+**Post–Phase 3 operator note:** Before remote G6-2, run `npx prisma migrate deploy` on staging (includes `20260607100000_audit_evidence_version`). Stamp commit with `node scripts/cycle6-smoke-report-stamp.mjs`.
 
 ---
 
