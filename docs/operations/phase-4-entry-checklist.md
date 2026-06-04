@@ -31,7 +31,8 @@
 
 **Runbook:** `cycle-6-staging-operator-checklist.md`  
 **Preflight:** `node scripts/cycle6-operator-preflight.mjs`  
-**Stamp helper:** `node scripts/cycle6-smoke-report-stamp.mjs`
+**Stamp helper:** `node scripts/cycle6-smoke-report-stamp.mjs`  
+**Remote smoke:** `npm run cycle6:remote-smoke`
 
 ---
 

@@ -217,4 +217,18 @@
 | ------- | ------ |
 | `node scripts/cycle6-smoke-report-stamp.mjs` | Pass (stdout stamp) |
 
-**Status:** DONE_WITH_CONCERNS — Phase 3 product backlog complete in repo except XL (S7-03, LC-08); Cycle 6 remote BLOCKED; Phase 4 entry doc ready
+## Delivered — slice 12 (2026-06-07, Cycle 6 ops + AuditOS RSC fix)
+
+| ID | Deliverable |
+| -- | ----------- |
+| **FIX** | `/audit/portfolio`, `/audit/archived` — Link + `buttonVariants` (RSC-safe) |
+| **OPS** | `cycle6-remote-smoke.ps1`, `npm run cycle6:remote-smoke` |
+| **OPS** | `cycle6-full-run.ps1` ends with smoke stamp |
+
+### Validation (slice 12)
+
+| Command | Result |
+| ------- | ------ |
+| `npx tsc --noEmit` | Not run (2-file UI fix only) |
+
+**Status:** DONE_WITH_CONCERNS — Phase 3 product backlog complete in repo except XL (S7-03, LC-08); Cycle 6 remote BLOCKED; operator scripts ready

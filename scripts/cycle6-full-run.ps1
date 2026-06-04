@@ -36,4 +36,7 @@ Write-Host "Governed AuditOS AI smoke..."
 npm run cycle6:smoke:audit-ai | Out-Host
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-Write-Host "DONE — update LIVE_SMOKE_REPORT if needed; remote staging still operator-owned." -ForegroundColor Green
+Write-Host ""
+node scripts/cycle6-smoke-report-stamp.mjs
+Write-Host ""
+Write-Host "DONE — paste stamp into LIVE_SMOKE_REPORT if needed; remote staging still operator-owned." -ForegroundColor Green

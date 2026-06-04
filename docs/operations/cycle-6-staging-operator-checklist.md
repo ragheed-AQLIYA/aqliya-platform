@@ -5,6 +5,18 @@
 
 ---
 
+## Remote smoke (one command)
+
+After `DATABASE_URL` and `STAGING_BASE_URL` point at **remote** staging (not `:5435` proxy):
+
+```powershell
+npm run cycle6:remote-smoke
+```
+
+Then paste `cycle6-smoke-report-stamp` output into `docs/validation/cycle-6/LIVE_SMOKE_REPORT.md`.
+
+---
+
 ## 0. Preflight (optional, local)
 
 ```powershell

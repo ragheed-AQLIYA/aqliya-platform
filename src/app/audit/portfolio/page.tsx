@@ -4,7 +4,8 @@ import Link from "next/link";
 import { getAuditActor } from "@/lib/audit/actor-context";
 import { getOrganizationPortfolioAnalytics } from "@/lib/audit/portfolio-analytics-service";
 import { PortfolioAnalyticsPanel } from "@/components/audit/portfolio/portfolio-analytics-panel";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 
 export default async function AuditPortfolioPage() {
@@ -20,12 +21,13 @@ export default async function AuditPortfolioPage() {
             نظرة تشغيلية عبر كل التكليفات في المنظمة
           </p>
         </div>
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/audit">
-            <ArrowRight className="size-4 ms-1" />
-            لوحة AuditOS
-          </Link>
-        </Button>
+        <Link
+          href="/audit"
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+        >
+          <ArrowRight className="size-4 ms-1" />
+          لوحة AuditOS
+        </Link>
       </div>
       <PortfolioAnalyticsPanel snapshot={snapshot} />
     </div>

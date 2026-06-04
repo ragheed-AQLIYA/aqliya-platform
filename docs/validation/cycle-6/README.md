@@ -1,7 +1,7 @@
 # Cycle 6 — Enterprise Readiness Evidence Bundle
 
 **Program:** Track A (Cursor / Program Director)  
-**Baseline commit:** `729ae90` (bridge @ `4d24afd`)  
+**Baseline commit:** `022b1d7` (Phase 3 complete; bridge @ `4d24afd`)  
 **Plan:** `docs/operations/parallel-execution-cycle-6-closure-plan.md` v1.1
 
 ## Index
@@ -27,7 +27,8 @@
 
 **Director close:** `docs/operations/parallel-execution-cycle-2026-06-06-cycle-6-close.md`
 
-**One-command local replay:** `npm run cycle6:full-run`
+**One-command local replay:** `npm run cycle6:full-run`  
+**Remote staging (operator):** `npm run cycle6:remote-smoke`
 
 ## Cycle 6 status
 

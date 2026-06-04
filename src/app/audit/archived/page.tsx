@@ -4,7 +4,8 @@ import Link from "next/link";
 import { getAuditActor } from "@/lib/audit/actor-context";
 import { listArchivedEngagements } from "@/lib/audit/engagement-archival-service";
 import { ArchivedEngagementsPanel } from "@/components/audit/archived/archived-engagements-panel";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default async function AuditArchivedPage() {
   const actor = await getAuditActor();
@@ -20,9 +21,12 @@ export default async function AuditArchivedPage() {
             تكليفات منشورة/معتمدة تم أرشفتها — الاستعادة للمشرف/الشريك فقط (A1-10)
           </p>
         </div>
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/audit/portfolio">محفظة التدقيق</Link>
-        </Button>
+        <Link
+          href="/audit/portfolio"
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+        >
+          محفظة التدقيق
+        </Link>
       </div>
       <ArchivedEngagementsPanel rows={rows} canRestore={canRestore} />
     </div>
