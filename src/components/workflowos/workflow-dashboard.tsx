@@ -11,6 +11,7 @@ import {
   workflow_listRecords,
   workflow_getUserRole,
 } from "@/actions/workflowos-actions";
+import { getCurrentUserPendingExportCount, getWorkflowExportStatus } from "@/actions/workflowos-export-actions";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -21,6 +22,8 @@ import {
   FolderKanban,
   ShieldCheck,
   Download,
+  AlertTriangle,
+  Bell,
 } from "lucide-react";
 
 export function WorkflowDashboard() {
@@ -32,6 +35,8 @@ export function WorkflowDashboard() {
     draft: 0,
     underReview: 0,
     approved: 0,
+    pendingExports: 0,
+    escalated: 0,
   });
   const [userRole, setUserRole] = useState<string | null>(null);
 
@@ -59,6 +64,8 @@ export function WorkflowDashboard() {
           draft: records.filter((r) => r.status === "Draft").length,
           underReview: records.filter((r) => r.status === "UnderReview").length,
           approved: records.filter((r) => r.status === "Approved").length,
+          pendingExports: 0,
+          escalated: 0,
         });
       }
       if (!result.success) {
@@ -67,6 +74,15 @@ export function WorkflowDashboard() {
         } else if (result.error?.includes("Unauthenticated")) {
           setNoAccess(true);
         }
+      }
+    });
+    getCurrentUserPendingExportCount().then((result) => {
+      if (result.success && result.data) {
+        setStats((prev) => ({
+          ...prev,
+          pendingExports: result.data.pending,
+          escalated: result.data.escalated,
+        }));
       }
     });
   }, [clientId, refreshKey]);
@@ -110,6 +126,20 @@ export function WorkflowDashboard() {
       color: "text-status-success",
       bg: "bg-status-success/10",
     },
+    {
+      label: "طلبات تصدير معلقة",
+      value: stats.pendingExports,
+      icon: Download,
+      color: "text-blue-600",
+      bg: "bg-blue-100",
+    },
+    {
+      label: "طلبات مُصعدة",
+      value: stats.escalated,
+      icon: AlertTriangle,
+      color: "text-orange-600",
+      bg: "bg-orange-100",
+    },
   ];
 
   return (
@@ -143,7 +173,7 @@ export function WorkflowDashboard() {
         />
       ) : (
         <>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
             {statCards.map((card) => (
               <div
                 key={card.label}
@@ -203,13 +233,42 @@ export function WorkflowDashboard() {
                 </p>
               </Link>
 
+              {(userRole === "Reviewer" || userRole === "PlatformAdmin") && (
+                <Link
+                  href="/workflowos/records"
+                  className="block rounded-lg border bg-card p-4 text-center hover:bg-muted/30 transition-colors"
+                >
+                  <Download className="mx-auto h-8 w-8 text-blue-600/50" />
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    طلبات التصدير
+                    {stats.pendingExports > 0 && (
+                      <span className="mr-1 inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
+                        {stats.pendingExports}
+                      </span>
+                    )}
+                  </p>
+                </Link>
+              )}
+
+              {stats.escalated > 0 && (
+                <Link
+                  href="/workflowos/records"
+                  className="block rounded-lg border border-orange-200 bg-orange-50 p-4 text-center hover:bg-orange-100 transition-colors"
+                >
+                  <AlertTriangle className="mx-auto h-8 w-8 text-orange-600/70" />
+                  <p className="mt-2 text-xs font-medium text-orange-800">
+                    طلبات مُصعدة — {stats.escalated}
+                  </p>
+                </Link>
+              )}
+
               <Link
                 href="/workflowos/records"
                 className="block rounded-lg border bg-card p-4 text-center hover:bg-muted/30 transition-colors"
               >
                 <Download className="mx-auto h-8 w-8 text-muted-foreground/50" />
                 <p className="mt-2 text-xs text-muted-foreground">
-                  تصدير PDF — متاح بعد اعتماد القضية
+                  تصدير — متاح بعد اعتماد القضية
                 </p>
               </Link>
 

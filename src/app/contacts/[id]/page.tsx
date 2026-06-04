@@ -28,7 +28,13 @@ import {
   Shield,
   Download,
   Eye,
+  AlertTriangle,
+  Scale,
 } from "lucide-react";
+import { CompliancePanel } from "@/components/contacts/compliance-panel";
+import { ExportApprovalBadge } from "@/components/contacts/export-approval-badge";
+import { ExportApprovalDialog } from "@/components/contacts/export-approval-dialog";
+import { ReviewAssignmentPanel } from "@/components/contacts/review-assignment-panel";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -267,6 +273,8 @@ export default async function ContactDetailPage({ params }: PageProps) {
                 </form>
               </>
             ) : null}
+            <ComplianceSidebarSection contactId={contact.id} orgId={user.organizationId} userId={user.id} />
+            <ExportApprovalSidebarSection contactId={contact.id} orgId={user.organizationId} userId={user.id} userRole={user.role} />
           </div>
         </div>
       </div>
@@ -371,7 +379,7 @@ async function EvidenceSection({
   );
 }
 
-// ─── Reviews Section ───────────────────────────────────
+// ─── Reviews Section (Enhanced L5) ─────────────────────
 
 async function ReviewsSection({
   contactId,
@@ -384,165 +392,108 @@ async function ReviewsSection({
   userId: string;
   userRole: string;
 }) {
-  const reviews = await prisma.contactReview.findMany({
+  const [reviews, availableReviewers] = await Promise.all([
+    prisma.contactReview.findMany({
+      where: { organizationId: orgId, contactId },
+      include: { approvals: true },
+      orderBy: { createdAt: "desc" },
+    }),
+    userRole === "ADMIN" || userRole === "OPERATOR"
+      ? prisma.user.findMany({
+          where: { organizationId: orgId, role: { in: ["ADMIN", "OPERATOR"] } },
+          select: { id: true, name: true, email: true, role: true },
+          orderBy: { name: "asc" },
+        })
+      : [],
+  ]);
+
+  const serializedReviews = reviews.map((r) => ({
+    ...r,
+    reviewDueDate: r.reviewDueDate?.toISOString() ?? null,
+    completedAt: r.completedAt?.toISOString() ?? null,
+    createdAt: r.createdAt.toISOString(),
+    updatedAt: r.updatedAt.toISOString(),
+    approvals: r.approvals.map((a) => ({
+      ...a,
+      createdAt: a.createdAt.toISOString(),
+    })),
+  }));
+
+  return (
+    <ReviewAssignmentPanel
+      contactId={contactId}
+      organizationId={orgId}
+      reviews={serializedReviews}
+      availableReviewers={availableReviewers}
+      userRole={userRole}
+    />
+  );
+}
+
+// ─── Compliance Sidebar Section ─────────────────────────
+
+async function ComplianceSidebarSection({
+  contactId,
+  orgId,
+  userId,
+}: {
+  contactId: string;
+  orgId: string;
+  userId: string;
+}) {
+  const { getExportComplianceSummary } = await import("@/lib/localcontactos/compliance-service");
+  const user = await requireUserContext("VIEWER");
+  const summary = await getExportComplianceSummary(contactId, user);
+
+  return <CompliancePanel summary={summary} />;
+}
+
+// ─── Export Approval Sidebar Section ────────────────────
+
+async function ExportApprovalSidebarSection({
+  contactId,
+  orgId,
+  userId,
+  userRole,
+}: {
+  contactId: string;
+  orgId: string;
+  userId: string;
+  userRole: string;
+}) {
+  const contact = await prisma.localContact.findUnique({
+    where: { id: contactId },
+    select: { sensitivityLevel: true, exportStatus: true },
+  });
+  if (!contact) return null;
+
+  const exportRequests = await prisma.contactExportRequest.findMany({
     where: { organizationId: orgId, contactId },
-    include: { approvals: true },
     orderBy: { createdAt: "desc" },
   });
 
-  const REVIEW_STATUS_LABELS: Record<string, string> = {
-    pending: "قيد المراجعة",
-    approved: "معتمد",
-    changes_requested: "تعديلات مطلوبة",
-    rejected: "مرفوض",
-  };
+  const serializedRequests = exportRequests.map((r) => ({
+    ...r,
+    reviewedAt: r.reviewedAt?.toISOString() ?? null,
+    exportedAt: r.exportedAt?.toISOString() ?? null,
+    createdAt: r.createdAt.toISOString(),
+    updatedAt: r.updatedAt.toISOString(),
+  }));
 
-  const REVIEW_STATUS_COLORS: Record<string, string> = {
-    pending: "bg-yellow-100 text-yellow-800",
-    approved: "bg-green-100 text-green-800",
-    changes_requested: "bg-blue-100 text-blue-800",
-    rejected: "bg-red-100 text-red-800",
-  };
+  const requiresApproval = contact.sensitivityLevel === "confidential" || contact.sensitivityLevel === "sensitive";
+  const requiresLegal = contact.sensitivityLevel === "confidential";
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Shield className="h-5 w-5" />
-          المراجعات والموافقات
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {(userRole === "ADMIN" || userRole === "OPERATOR") && (
-          <details className="border rounded-lg p-3">
-            <summary className="cursor-pointer font-medium text-sm text-muted-foreground hover:text-foreground">
-              إنشاء مراجعة جديدة
-            </summary>
-            <form action={createReviewAction} className="mt-3 space-y-3">
-              <input type="hidden" name="contactId" value={contactId} />
-              <div>
-                <label className="text-sm font-medium">نوع المراجعة</label>
-                <select
-                  name="reviewType"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  defaultValue="sensitivity"
-                >
-                  <option value="sensitivity">مراجعة حساسية</option>
-                  <option value="accuracy">مراجعة دقة</option>
-                  <option value="completeness">مراجعة اكتمال</option>
-                  <option value="custom">مخصص</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium">السبب</label>
-                <Textarea name="reason" placeholder="سبب المراجعة" />
-              </div>
-              <Button type="submit" size="sm">
-                <Shield className="ml-1 h-4 w-4" />
-                إنشاء مراجعة
-              </Button>
-            </form>
-          </details>
-        )}
-
-        {reviews.length === 0 ? (
-          <p className="text-muted-foreground text-sm">لا توجد مراجعات</p>
-        ) : (
-          <div className="space-y-3">
-            {reviews.map((review) => (
-              <div key={review.id} className="border rounded-lg p-3 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Badge className={REVIEW_STATUS_COLORS[review.status] ?? ""}>
-                      {REVIEW_STATUS_LABELS[review.status] ?? review.status}
-                    </Badge>
-                    <Badge variant="outline" className="text-xs">
-                      {review.reviewType}
-                    </Badge>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(review.createdAt).toLocaleDateString("ar-SA")}
-                  </span>
-                </div>
-                {review.reviewerName && (
-                  <p className="text-sm">
-                    المراجع: {review.reviewerName}
-                  </p>
-                )}
-                {review.reason && (
-                  <p className="text-sm text-muted-foreground">{review.reason}</p>
-                )}
-
-                {review.approvals.length > 0 && (
-                  <div className="space-y-1 mt-2 border-t pt-2">
-                    <p className="text-xs font-medium text-muted-foreground">
-                      الموافقات:
-                    </p>
-                    {review.approvals.map((a) => (
-                      <div
-                        key={a.id}
-                        className="flex items-center justify-between text-xs"
-                      >
-                        <span>
-                          {a.approverName ?? "مستخدم"}:{" "}
-                          {a.status === "approved" ? (
-                            <span className="text-green-600">✓ معتمد</span>
-                          ) : (
-                            <span className="text-red-600">✗ مرفوض</span>
-                          )}
-                        </span>
-                        <span className="text-muted-foreground">
-                          {new Date(a.createdAt).toLocaleDateString("ar-SA")}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {review.status === "pending" &&
-                  (userRole === "ADMIN" || userRole === "OPERATOR") && (
-                    <div className="flex gap-2 mt-2">
-                      <form action={approveReviewAction}>
-                        <input type="hidden" name="reviewId" value={review.id} />
-                        <input
-                          type="hidden"
-                          name="contactId"
-                          value={contactId}
-                        />
-                        <Button
-                          type="submit"
-                          size="sm"
-                          variant="default"
-                          className="bg-green-600 hover:bg-green-700"
-                        >
-                          <CheckCircle className="ml-1 h-4 w-4" />
-                          اعتماد
-                        </Button>
-                      </form>
-                      <form action={rejectReviewAction}>
-                        <input type="hidden" name="reviewId" value={review.id} />
-                        <input
-                          type="hidden"
-                          name="contactId"
-                          value={contactId}
-                        />
-                        <Button
-                          type="submit"
-                          size="sm"
-                          variant="destructive"
-                        >
-                          <XCircle className="ml-1 h-4 w-4" />
-                          رفض
-                        </Button>
-                      </form>
-                    </div>
-                  )}
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <ExportApprovalDialog
+      contactId={contactId}
+      exportStatus={contact.exportStatus}
+      sensitivityLevel={contact.sensitivityLevel}
+      canExport={contact.exportStatus === "approved" || (!requiresApproval && contact.exportStatus === "none")}
+      hasPendingRequest={exportRequests.some((r) => r.status === "pending")}
+      requiresExportApproval={requiresApproval}
+      requiresLegalReview={requiresLegal}
+      exportRequests={serializedRequests}
+    />
   );
 }
 

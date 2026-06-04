@@ -501,6 +501,13 @@ export async function exportContactProfile(contactId: string) {
       throw new Error("Contact not found or access denied");
     }
 
+    // L5: Export approval gate — only approved exports can proceed
+    if (contact.sensitivityLevel !== "normal" && contact.exportStatus !== "approved") {
+      throw new Error(
+        "Export requires approval. Request export approval first.",
+      );
+    }
+
     return {
       exportedAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX"),
       exportedBy: user.name ?? user.email,
