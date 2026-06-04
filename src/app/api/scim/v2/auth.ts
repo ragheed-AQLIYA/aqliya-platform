@@ -4,6 +4,7 @@
 
 import { NextResponse } from "next/server";
 import { buildScimError } from "@/lib/auth/scim-types";
+import crypto from "crypto";
 
 export interface ScimAuthResult {
   authenticated: boolean;
@@ -28,7 +29,7 @@ export function authenticateScimRequest(request: Request): ScimAuthResult {
 
   const token = authHeader.slice(7);
 
-  if (!scimApiKey || token !== scimApiKey) {
+  if (!scimApiKey || token.length !== scimApiKey.length || !crypto.timingSafeEqual(Buffer.from(token), Buffer.from(scimApiKey))) {
     return {
       authenticated: false,
       organizationId: null,
