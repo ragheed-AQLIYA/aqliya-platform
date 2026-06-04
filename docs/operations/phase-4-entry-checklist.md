@@ -94,6 +94,7 @@
 | Demo static | `npm run demo:smoke` | Pass |
 | TypeScript | `npx tsc --noEmit` | Pass @ slice 31 |
 | Production build | `npm run build` | **PASS** @ slice 31 (~155s) |
+| Post-deploy smoke (local) | `npm run smoke:local` | **PASS** @ slice 33 (standalone `:3000`) |
 
 Run before any “production candidate” announcement:
 
