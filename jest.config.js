@@ -6,13 +6,22 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   maxWorkers: 1,
+  forceExit: true,
+  /** Only discover tests under src/ — excludes docs/archive and .claude worktrees */
+  roots: ["<rootDir>/src"],
   testMatch: ["**/__tests__/**/*.test.ts", "**/__tests__/**/*.test.tsx"],
   testPathIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/.claude/",
     "<rootDir>/docs/",
+    "\\\\.claude\\\\worktrees",
   ],
-  modulePathIgnorePatterns: ["<rootDir>/.claude/", "<rootDir>/.next/"],
+  modulePathIgnorePatterns: [
+    "<rootDir>/.claude/",
+    "<rootDir>/.next/",
+    "<rootDir>/docs/",
+  ],
+  watchPathIgnorePatterns: ["<rootDir>/.claude/", "<rootDir>/docs/"],
   setupFiles: [path.join(__dirname, "src/__tests__/setup.ts")],
   moduleNameMapper: {
     "^@/(.*)$": path.join(__dirname, "src", "$1"),
@@ -27,6 +36,10 @@ module.exports = {
     "^server-only$": path.join(__dirname, "src/__mocks__/server-only.js"),
     "^@prisma/client$": path.join(__dirname, "src/__mocks__/prisma-client-mock.js"),
     "^@prisma/adapter-pg$": path.join(__dirname, "src/__mocks__/prisma-adapter-mock.js"),
+    "^@/lib/ai/providers/openai-embedding-provider$": path.join(
+      __dirname,
+      "src/__mocks__/openai-embedding-provider.js",
+    ),
   },
   transform: {
     "^.+\\.tsx?$": ["ts-jest", {

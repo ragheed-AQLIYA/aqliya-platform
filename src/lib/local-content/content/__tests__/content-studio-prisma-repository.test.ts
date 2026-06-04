@@ -13,8 +13,14 @@ const hasContentStudioModels =
   typeof (prisma as { contentStudioProject?: { create?: unknown } }).contentStudioProject
     ?.create === "function";
 
+/** Real PostgreSQL only — set CONTENT_STUDIO_PRISMA_INTEGRATION=1 (not default `npm test`). */
 const describeIfDb =
-  hasDatabase && !isJestPlaceholder && hasContentStudioModels ? describe : describe.skip;
+  process.env.CONTENT_STUDIO_PRISMA_INTEGRATION === "1" &&
+  hasDatabase &&
+  !isJestPlaceholder &&
+  hasContentStudioModels
+    ? describe
+    : describe.skip;
 
 describeIfDb("PrismaContentStudioRepository (PostgreSQL)", () => {
   const runId = Date.now().toString(36);
@@ -32,7 +38,7 @@ describeIfDb("PrismaContentStudioRepository (PostgreSQL)", () => {
   let outputId: string;
 
   afterAll(async () => {
-    if (!hasDatabase || isJestPlaceholder) return;
+    if (!hasDatabase || isJestPlaceholder || !hasContentStudioModels) return;
     await prisma.contentStudioOutput.deleteMany({ where: { organizationId: ORG } });
     await prisma.contentStudioApproval.deleteMany({
       where: { organizationId: ORG },

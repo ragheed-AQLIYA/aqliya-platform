@@ -298,6 +298,15 @@ function isEnglishUIString(candidate: string): boolean {
   // for operator clarity during the current transition phase.
   if (trimmed.includes("/") && /[\u0600-\u06FF]/.test(trimmed)) return false;
 
+  // Arabic-primary labels with internal roadmap refs e.g. (A1-08)
+  if (
+    /[\u0600-\u06FF]/.test(trimmed) &&
+    /\(A\d+-\d+\)/.test(trimmed) &&
+    !/\b(the|and|for|with|from|your|click|submit|error|loading)\b/i.test(trimmed)
+  ) {
+    return false;
+  }
+
   // Must contain at least some English letters
   if (!/[A-Za-z]/.test(trimmed)) return false;
 
