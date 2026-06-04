@@ -5,6 +5,18 @@
 
 ---
 
+## 0. Preflight (optional, local)
+
+```powershell
+$env:DATABASE_URL="<staging-connection-string>"
+$env:STAGING_BASE_URL="https://staging.aqliya.ai"
+node scripts/cycle6-operator-preflight.mjs
+```
+
+Exits 0 when required env vars are present (does not hit the network).
+
+---
+
 ## 0. Prerequisites (operator)
 
 | Item | Required |
@@ -13,7 +25,7 @@
 | Staging app URL | e.g. `https://staging.aqliya.ai` |
 | `AUTH_SECRET` / session | Smoke user can sign in |
 | Provider keys | Per `AI_PROVIDER` when `FF_AI_REAL_PROVIDERS=true` |
-| Repo checkout | `main` ≥ `4d24afd` (bridge) + `1d5ea8b` (evidence bundle) |
+| Repo checkout | `main` ≥ `3bf3734` (Roadmap Phase 3 slices 1–9) + `4d24afd` (A1-09 bridge) |
 
 ---
 
