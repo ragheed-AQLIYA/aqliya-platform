@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-07 (local re-run)  
 **Agent:** AGENT-A  
-**Commit:** `521cd02` (local proxy re-validation) — **remote:** `node scripts/cycle6-smoke-report-stamp.mjs` on real staging URL
+**Commit:** `bd24a74` (local proxy re-validation) — **remote:** `node scripts/cycle6-smoke-report-stamp.mjs` on real staging URL
 
 **Environment label:** `local-staging-full-proxy` — Docker `aqliya_staging` on `localhost:5435` with `migrate deploy` + `prisma db seed` + `cycle6:smoke:audit-ai`. **Not** `https://staging.aqliya.ai`.
 
@@ -12,8 +12,8 @@
 
 | Field | Value | Status |
 | ----- | ----- | ------ |
-| `smoke_execution_timestamp` | `2026-06-04T21:23:10.565Z` | OK (proxy, `cycle6:full-run`) |
-| `commit_sha` | `521cd02` | OK |
+| `smoke_execution_timestamp` | `2026-06-04T23:06:55.451Z` | OK (proxy, `cycle6:full-run`) |
+| `commit_sha` | `bd24a74` | OK |
 | `platform_audit_log_id` | `cmq005552000430pq071ewbnt` (`auditos_ai_generation`) | OK (2026-06-07 run) |
 | `staging_base_url` | `http://localhost:5435-local-staging-proxy` | Proxy — remote TBD |
 | `database_url_host` | `localhost:5435` / `aqliya_staging` | OK (local staging DB) |

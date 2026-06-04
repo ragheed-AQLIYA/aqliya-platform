@@ -72,7 +72,7 @@ npx prisma migrate deploy
 | ----- | ------- | ------ |
 | Per-slice unit tests | `npm test -- <module>` | Pass per slice report |
 | Full `npm run build` | Not re-run at slice 9 close | Not claimed |
-| Full `npm test` | Not re-run at slice 9 close | Not claimed |
+| Full `npm test` | **PASS** @ `bd24a74` — 141 suites, 1015 tests, ~8s | Light validated |
 | Cycle 6 local | `npm run cycle6:full-run` | LOCAL_COMPLETE (prior cycle) |
 
 ---
