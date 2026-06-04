@@ -4,6 +4,7 @@ import {
   EnterpriseCardHeader,
   EnterpriseCardTitle,
 } from "@/components/enterprise/enterprise-card";
+import { formatSalesPriority } from "@/lib/sales/sales-ux-copy";
 import {
   PROOF_EFFECTIVENESS_RECOMMENDATION_LABEL,
   type ProofEffectivenessAnalysis,
@@ -76,7 +77,9 @@ function RecommendationList({ items }: { items: ProofEffectivenessRecommendation
         <li key={rec.id} className="rounded-lg border border-border/60 p-2 space-y-1">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="font-medium">{rec.titleAr}</span>
-            <span className="text-[10px] text-muted-foreground">{rec.priority}</span>
+            <span className="text-[10px] text-muted-foreground">
+              {formatSalesPriority(rec.priority)}
+            </span>
           </div>
           <p className="text-xs text-muted-foreground">{rec.recommendationAr}</p>
         </li>

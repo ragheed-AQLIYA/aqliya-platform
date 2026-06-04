@@ -94,4 +94,14 @@
 | LC-02 | Tender matching | Large |
 | S7-05 | Bilingual UX parity | Medium |
 
-**Status:** DONE (S7-01, slice 2–3); Cycle 6 remote still BLOCKED
+## Delivered — S7-05 (2026-06-07)
+
+| Item | Evidence |
+| ---- | -------- |
+| RTL layout | `src/app/sales/layout.tsx` (existing) + hub/views `dir="rtl"` |
+| Arabic loading | `src/app/sales/loading.tsx` |
+| Copy helpers | `src/lib/sales/sales-ux-copy.ts` |
+| Parity gate | `src/lib/sales/sales-bilingual-parity.ts` |
+| L5 evaluator | `U1_BILINGUAL_RTL` true in `l5-acceptance.ts` baseline |
+
+**Status:** DONE (S7-01 … S7-05); Cycle 6 remote still BLOCKED

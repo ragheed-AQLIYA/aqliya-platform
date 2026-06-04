@@ -38,7 +38,7 @@ export function SalesWorkspace({
       <div>
         <h1 className="text-h2 font-black text-foreground">SalesOS</h1>
         <p className="mt-1 text-body-sm text-muted-foreground">
-          ذكاء الإيرادات المحكوم — L4 usable (in-memory)
+          ذكاء الإيرادات المحكوم — نسخة تشغيلية داخلية (ذاكرة مؤقتة)
         </p>
       </div>
 

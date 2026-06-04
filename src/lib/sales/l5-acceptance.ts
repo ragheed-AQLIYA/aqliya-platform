@@ -132,7 +132,7 @@ export const SALES_L5_REPO_BASELINE: SalesL5EvaluationInput = {
   I1_INTELLIGENCE_HUB: true,
   I2_PIPELINE_FORECAST: true,
   I3_NO_FALSE_AI_CLAIMS: true,
-  U1_BILINGUAL_RTL: false,
+  U1_BILINGUAL_RTL: true, // S7-05 — layout RTL + Arabic loading/errors + core route manifest
   C1_NO_CRM_SYNC_CLAIM: true,
   C2_OPERATOR_DISCLAIMER: true,
 };

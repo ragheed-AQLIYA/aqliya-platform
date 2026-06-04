@@ -32,7 +32,7 @@ export function SalesSubNav() {
     <nav
       className="mb-6 flex flex-wrap gap-1 rounded-xl border bg-muted/40 p-1"
       dir="rtl"
-      aria-label="SalesOS navigation"
+      aria-label="تنقل SalesOS"
     >
       {NAV_ITEMS.map((item) => {
         const { href, labelAr, icon: Icon } = item;

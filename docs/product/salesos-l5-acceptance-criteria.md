@@ -22,7 +22,7 @@ Trust principle: **AI assists. Humans decide. Evidence governs.**
 | `L5_CONDITIONAL` | Most governance + intelligence met; known gaps (e.g. bilingual parity) |
 | `L5_PILOT_READY` | All required criteria met; operator may run internal pilot with disclaimer |
 
-**Current repository baseline (2026-06-07):** `L5_CONDITIONAL` / `NOT_L5` — **U1_BILINGUAL_RTL** (S7-05) open.
+**Current repository baseline (2026-06-07):** `L5_PILOT_READY` per `evaluateSalesL5Acceptance()` after **S7-05** — still **internal/pilot only** until operator sign-off; not L6.
 
 ---
 
@@ -38,7 +38,7 @@ Trust principle: **AI assists. Humans decide. Evidence governs.**
 | I1 | S7-01 intelligence hub wired | `/sales/intelligence` panels |
 | I2 | S7-02 deterministic forecast | `/sales/forecast`, `pipeline-forecast.ts` |
 | I3 | AI assistive only | No autonomous approval exports |
-| U1 | Arabic/RTL parity on core routes | **Open** — S7-05 |
+| U1 | Arabic/RTL parity on core routes | **Met** — S7-05 (`sales-bilingual-parity.ts`, `sales/loading.tsx`) |
 | C1 | No live CRM sync claim | S7-03 not implemented; docs honest |
 | C2 | Prototype/internal commercial labels | `PRODUCT_STATUS_MATRIX`, this doc |
 

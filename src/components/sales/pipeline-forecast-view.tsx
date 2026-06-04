@@ -5,21 +5,10 @@ import {
   EnterpriseCardTitle,
 } from "@/components/enterprise/enterprise-card";
 import type { PipelineForecast } from "@/lib/sales/intelligence/pipeline-forecast";
-
-const STAGE_LABELS: Record<string, string> = {
-  Draft: "مسودة",
-  Qualification: "تأهيل",
-  InReview: "قيد المراجعة",
-  Approved: "معتمد",
-  Negotiation: "تفاوض",
-  ClosedWon: "فوز",
-};
-
-const CONFIDENCE_AR: Record<PipelineForecast["forecastConfidence"], string> = {
-  low: "منخفضة",
-  medium: "متوسطة",
-  high: "عالية",
-};
+import {
+  formatSalesConfidence,
+  formatSalesStageLabel,
+} from "@/lib/sales/sales-ux-copy";
 
 export function PipelineForecastView({ forecast }: { forecast: PipelineForecast }) {
   return (
@@ -52,7 +41,7 @@ export function PipelineForecastView({ forecast }: { forecast: PipelineForecast 
           <EnterpriseCardContent className="pt-6">
             <p className="text-xs text-muted-foreground">ثقة التوقع</p>
             <p className="text-xl font-bold">
-              {CONFIDENCE_AR[forecast.forecastConfidence]}
+              {formatSalesConfidence(forecast.forecastConfidence)}
             </p>
           </EnterpriseCardContent>
         </EnterpriseCard>
@@ -69,7 +58,7 @@ export function PipelineForecastView({ forecast }: { forecast: PipelineForecast 
                 key={stage}
                 className="flex flex-wrap items-center justify-between gap-2 rounded border px-3 py-2"
               >
-                <span>{STAGE_LABELS[stage] ?? stage}</span>
+                <span>{formatSalesStageLabel(stage)}</span>
                 <span className="text-muted-foreground">
                   {bucket.count} صفقة · مرجّح{" "}
                   {Math.round(bucket.weighted).toLocaleString("ar-SA")} ر.س

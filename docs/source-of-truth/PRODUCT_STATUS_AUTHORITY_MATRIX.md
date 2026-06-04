@@ -73,7 +73,7 @@
 - Contacts list, CRUD, RBAC, audit trail
 
 ### What prevents Active
-- Bilingual UX parity incomplete (S7-05)
+- Bilingual UX parity gate passed in repo (S7-05); deep copy sweep on secondary panels still incremental
 - No CRM sync (S7-03 — must not claim live)
 - L5 criteria **defined** (S7-04) — repository baseline **L5_CONDITIONAL**, not L5_PILOT_READY until all criteria pass (`evaluateSalesL5Acceptance`)
 - Not commercial release

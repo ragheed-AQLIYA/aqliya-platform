@@ -7,18 +7,10 @@ import {
 } from "@/components/enterprise/enterprise-card";
 import { StatusBadge } from "@/components/enterprise/status-badge";
 import type { RevenueIntelligenceSnapshot } from "@/lib/sales/vnext/revenue-intelligence";
-
-const STAGE_LABELS: Record<string, string> = {
-  Draft: "مسودة",
-  Qualification: "تأهيل",
-  InReview: "قيد المراجعة",
-  Approved: "معتمد",
-  Negotiation: "تفاوض",
-  ClosedWon: "فوز",
-  ClosedLost: "خسارة",
-  Rejected: "مرفوض",
-  Archived: "مؤرشف",
-};
+import {
+  formatSalesConfidence,
+  formatSalesStageLabel,
+} from "@/lib/sales/sales-ux-copy";
 
 function Metric({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
@@ -83,7 +75,7 @@ export function RevenueIntelligenceView({ snapshot }: RevenueIntelligenceViewPro
         <Metric
           label="التوقع المرجّح"
           value={`${Math.round(weightedForecast).toLocaleString("ar-SA")} ر.س`}
-          hint={`ثقة: ${forecastConfidence}`}
+          hint={`ثقة: ${formatSalesConfidence(forecastConfidence)}`}
         />
         <Metric
           label="تغطية المسار"
@@ -123,7 +115,7 @@ export function RevenueIntelligenceView({ snapshot }: RevenueIntelligenceViewPro
                 {stageDistribution.map((bucket) => (
                   <div key={bucket.stage} className="space-y-1">
                     <div className="flex justify-between text-sm">
-                      <span>{STAGE_LABELS[bucket.stage] ?? bucket.stage}</span>
+                      <span>{formatSalesStageLabel(bucket.stage)}</span>
                       <span className="text-muted-foreground">
                         {bucket.count} · {bucket.rawValue.toLocaleString("ar-SA")} ر.س
                       </span>
@@ -198,7 +190,7 @@ export function RevenueIntelligenceView({ snapshot }: RevenueIntelligenceViewPro
                       {item.name}
                     </Link>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {STAGE_LABELS[item.stage] ?? item.stage} ·{" "}
+                      {formatSalesStageLabel(item.stage)} ·{" "}
                       {item.valueEstimate.toLocaleString("ar-SA")} ر.س
                       {item.daysSinceActivity != null
                         ? ` · ${item.daysSinceActivity} يوم بدون نشاط`

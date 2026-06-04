@@ -12,11 +12,10 @@ describe("SalesOS L5 acceptance (S7-04)", () => {
     expect(required.some((c) => c.id === "I2_PIPELINE_FORECAST")).toBe(true);
   });
 
-  it("repo baseline is honest partial (not full L5)", () => {
+  it("repo baseline meets L5 criteria after S7-05 (pilot-ready with operator disclaimer)", () => {
     const result = evaluateSalesL5Acceptance(SALES_L5_REPO_BASELINE);
-    expect(result.allRequiredMet).toBe(false);
-    expect(result.gaps).toContain("U1_BILINGUAL_RTL");
-    expect(result.readinessLabel).not.toBe("L5_PILOT_READY");
+    expect(result.allRequiredMet).toBe(true);
+    expect(result.readinessLabel).toBe("L5_PILOT_READY");
   });
 
   it("reports L5 pilot ready when all required met", () => {
