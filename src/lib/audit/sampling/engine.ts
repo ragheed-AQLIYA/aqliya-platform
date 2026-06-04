@@ -1,11 +1,13 @@
-// A1-02 — deterministic sampling engine v0.1 (no AI, reproducible seed)
+// A1-02 — deterministic sampling engine v0.2 (statistical formulas, stratified, systematic)
+// BONUS: confidence intervals, standard error, z-scores, recommended sample size, stratified sampling with proportional allocation, systematic interval sampling
 
 import { createHash } from "crypto";
-import { calculateSamplingThreshold, calculatePerformanceMateriality } from "../materiality";
 import type {
   SamplingPopulationItem,
   SamplingRequest,
   SamplingResult,
+  SamplingStatistics,
+  StratifiedSamplingStratum,
 } from "./types";
 
 const DISCLAIMER_AR =
@@ -59,6 +61,78 @@ function takeSample(
   return ranked.slice(0, size);
 }
 
+function zScore(confidenceLevel: number): number {
+  if (confidenceLevel >= 0.99) return 2.576;
+  if (confidenceLevel >= 0.95) return 1.96;
+  if (confidenceLevel >= 0.90) return 1.645;
+  return 1.96;
+}
+
+function calculateStandardDeviation(values: number[]): number {
+  if (values.length < 2) return 0;
+  const mean = values.reduce((s, v) => s + v, 0) / values.length;
+  const sqDiffs = values.map((v) => (v - mean) ** 2);
+  const variance = sqDiffs.reduce((s, d) => s + d, 0) / (values.length - 1);
+  return Math.sqrt(variance);
+}
+
+function calculateStandardError(stdDev: number, populationSize: number, sampleSize: number): number {
+  const fpc = Math.sqrt((populationSize - sampleSize) / (populationSize - 1));
+  return (stdDev / Math.sqrt(sampleSize)) * fpc;
+}
+
+function calculateConfidenceInterval(
+  sampleMean: number,
+  standardError: number,
+  z: number,
+): [number, number] {
+  const moe = z * standardError;
+  return [sampleMean - moe, sampleMean + moe];
+}
+
+function calculateRecommendedSampleSize(
+  populationSize: number,
+  confidenceLevel: number,
+  marginOfError: number,
+  estimatedStdDev?: number,
+): number {
+  const z = zScore(confidenceLevel);
+  const p = 0.5;
+  const n0 = (z ** 2 * p * (1 - p)) / (marginOfError ** 2);
+  const n = n0 / (1 + (n0 - 1) / populationSize);
+  return Math.max(1, Math.ceil(n));
+}
+
+function computeStatistics(
+  selectedItems: SamplingPopulationItem[],
+  populationSize: number,
+  confidenceLevel: number,
+  marginOfError: number,
+): SamplingStatistics {
+  const balances = selectedItems.map((i) => absBalance(i));
+  const standardDeviation = calculateStandardDeviation(balances);
+  const sampleSize = selectedItems.length;
+  const standardError = calculateStandardError(standardDeviation, populationSize, sampleSize);
+  const z = zScore(confidenceLevel);
+  const [ciLower, ciUpper] = calculateConfidenceInterval(
+    balances.reduce((s, v) => s + v, 0) / sampleSize,
+    standardError,
+    z,
+  );
+  const recommendedMinSampleSize = calculateRecommendedSampleSize(populationSize, confidenceLevel, marginOfError);
+
+  return {
+    confidenceLevel,
+    confidenceInterval: ciUpper - ciLower,
+    marginOfError: z * standardError,
+    standardDeviation,
+    standardError,
+    sampleSize,
+    populationSize,
+    recommendedMinSampleSize,
+  };
+}
+
 export function runSamplingEngine(
   engagementId: string,
   population: SamplingPopulationItem[],
@@ -77,41 +151,89 @@ export function runSamplingEngine(
     (sum, item) => sum + absBalance(item),
     0,
   );
+  const confidenceLevel = request.confidenceLevel ?? 0.95;
+  const marginOfError = request.marginOfError ?? 0.05;
 
-  let ranked: SamplingPopulationItem[];
+  let selectedItems: SamplingPopulationItem[];
+  let strata: StratifiedSamplingStratum[] | undefined;
+  let interval: number | undefined;
+  let randomStart: number | undefined;
 
   switch (request.method) {
     case "high_value": {
-      let threshold = request.materialityThreshold;
-      if (threshold == null) {
-        const perf = calculatePerformanceMateriality({
-          totalAssets: totalAbsoluteBalance,
-          performancePct: 5,
-        });
-        threshold =
-          calculateSamplingThreshold(perf) ||
-          Math.max(1, totalAbsoluteBalance * 0.05);
-      }
-      ranked = [...population]
+      const threshold =
+        request.materialityThreshold ??
+        Math.max(1, totalAbsoluteBalance * 0.05);
+      const ranked = [...population]
         .filter((item) => absBalance(item) >= threshold)
         .sort((a, b) => absBalance(b) - absBalance(a));
-      if (ranked.length === 0) {
-        ranked = [...population].sort((a, b) => absBalance(b) - absBalance(a));
-      }
+      selectedItems = ranked.length > 0
+        ? takeSample(ranked, sampleSize)
+        : takeSample(
+            [...population].sort((a, b) => absBalance(b) - absBalance(a)),
+            sampleSize,
+          );
       break;
     }
     case "monetary_unit": {
-      ranked = [...population].sort((a, b) => absBalance(b) - absBalance(a));
+      const ranked = [...population].sort((a, b) => absBalance(b) - absBalance(a));
+      selectedItems = takeSample(ranked, sampleSize);
+      break;
+    }
+    case "stratified": {
+      const strataLabels = request.strataLabels ?? ["low", "medium", "high"];
+      const numStrata = strataLabels.length;
+      const itemsPerStratum = Math.max(1, Math.floor(population.length / numStrata));
+      strata = [];
+      selectedItems = [];
+
+      for (let s = 0; s < numStrata; s++) {
+        const start = s * itemsPerStratum;
+        const end = s === numStrata - 1 ? population.length : (s + 1) * itemsPerStratum;
+        const stratumItems = population.slice(start, end);
+        const stratumBalance = stratumItems.reduce((sum, item) => sum + absBalance(item), 0);
+        const proportion = stratumItems.length / population.length;
+        const stratumSampleSize = Math.max(1, Math.round(sampleSize * proportion));
+        const shuffled = shuffleDeterministic(stratumItems, `${seed}-stratum-${s}`);
+
+        strata.push({
+          label: strataLabels[s] ?? `Stratum ${s + 1}`,
+          populationItems: stratumItems.length,
+          sampleItems: Math.min(stratumSampleSize, stratumItems.length),
+          totalBalance: stratumBalance,
+          proportion,
+        });
+
+        selectedItems.push(...takeSample(shuffled, stratumSampleSize));
+      }
+      break;
+    }
+    case "systematic": {
+      interval = request.interval ?? Math.max(1, Math.floor(population.length / sampleSize));
+      randomStart = request.randomStart ?? (seedToInt(seed) % interval);
+      const sorted = [...population].sort((a, b) => a.accountCode.localeCompare(b.accountCode));
+      selectedItems = [];
+      for (let i = randomStart; i < sorted.length && selectedItems.length < sampleSize; i += interval) {
+        selectedItems.push(sorted[i]);
+      }
+      if (selectedItems.length < sampleSize) {
+        const remaining = takeSample(
+          sorted.filter((item) => !selectedItems.includes(item)),
+          sampleSize - selectedItems.length,
+        );
+        selectedItems.push(...remaining);
+      }
       break;
     }
     case "random":
     default: {
-      ranked = shuffleDeterministic(population, seed);
+      const ranked = shuffleDeterministic(population, seed);
+      selectedItems = takeSample(ranked, sampleSize);
       break;
     }
   }
 
-  const selectedItems = takeSample(ranked, sampleSize);
+  const statistics = computeStatistics(selectedItems, population.length, confidenceLevel, marginOfError);
 
   return {
     method: request.method,
@@ -123,7 +245,13 @@ export function runSamplingEngine(
     parameters: {
       materialityThreshold: request.materialityThreshold,
       totalAbsoluteBalance,
+      confidenceLevel,
+      marginOfError,
     },
+    statistics,
+    strata,
+    interval,
+    randomStart,
     generatedAt: new Date().toISOString(),
     disclaimer: DISCLAIMER_AR,
   };

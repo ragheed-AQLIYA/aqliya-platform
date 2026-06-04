@@ -61,4 +61,29 @@ describe("A1-02 sampling engine", () => {
     });
     expect(result.selectedIds[0]).toBe("l3");
   });
+
+  it("stratified sampling returns strata breakdown", () => {
+    const result = runSamplingEngine("eng-1", population, {
+      method: "stratified",
+      sampleSize: 3,
+      seed: "strat-seed",
+      strataLabels: ["a", "b", "c"],
+    });
+    expect(result.strata?.length).toBe(3);
+    expect(result.selectedItems.length).toBeGreaterThan(0);
+    expect(result.statistics?.confidenceLevel).toBe(0.95);
+  });
+
+  it("systematic sampling uses interval and records randomStart", () => {
+    const result = runSamplingEngine("eng-1", population, {
+      method: "systematic",
+      sampleSize: 2,
+      seed: "sys-seed",
+      interval: 2,
+      randomStart: 0,
+    });
+    expect(result.interval).toBe(2);
+    expect(result.randomStart).toBe(0);
+    expect(result.selectedItems.length).toBe(2);
+  });
 });
