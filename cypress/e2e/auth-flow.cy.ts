@@ -28,16 +28,16 @@
   });
 
   it("should login with valid admin credentials and redirect to dashboard", () => {
-    cy.loginAdmin();
-    cy.visit("/audit");
-    cy.url({ timeout: 15000 }).should("not.include", "/login");
+    cy.get('input[type="email"]').type("admin@aqliya.com");
+    cy.get('input[type="password"]').type("admin123");
+    cy.get('button[type="submit"]').click();
+    cy.url({ timeout: 20000 }).should("not.include", "/login");
     cy.get("html").should("have.attr", "dir", "rtl");
   });
 
   it("should login with operator credentials", () => {
-    cy.get('input[type="email"]').type("sara@aqliya.com");
-    cy.get('input[type="password"]').type("operator123");
-    cy.get('button[type="submit"]').click();
+    cy.loginOperator();
+    cy.visit("/audit", { failOnStatusCode: false });
     cy.url({ timeout: 15000 }).should("not.include", "/login");
   });
 

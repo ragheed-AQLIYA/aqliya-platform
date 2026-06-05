@@ -10,6 +10,13 @@ import { config as loadDotenv } from "dotenv";
 
 const root = process.cwd();
 loadDotenv({ path: join(root, ".env") });
+const e2eMode =
+  process.env.E2E_STANDALONE === "1" ||
+  process.argv.includes("--e2e");
+if (e2eMode) {
+  // Local Cypress / E2E: allow workspace routes without MFA enrollment redirect
+  process.env.MFA_REQUIRED_ROLES = "";
+}
 const standaloneDir = join(root, ".next", "standalone");
 const serverJs = join(standaloneDir, "server.js");
 

@@ -95,6 +95,7 @@
 | TypeScript | `npx tsc --noEmit` | Pass @ slice 31 |
 | Production build | `npm run build` | **PASS** @ slice 31 (~155s) |
 | Post-deploy smoke (local) | `npm run smoke:local` | **PASS** @ slice 33 (standalone `:3000`) |
+| AuditOS sampling E2E | `cy:local` + `audit-sampling.cy.ts` | **3/3 PASS** @ slice 35 (`start:standalone:e2e`) |
 
 Run before any “production candidate” announcement:
 

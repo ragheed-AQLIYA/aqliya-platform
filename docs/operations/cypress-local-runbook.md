@@ -6,8 +6,14 @@
 
 ```powershell
 npm run build
-npm run start:standalone   # loads repo .env into standalone process
-npx prisma db seed         # eng-gulf-2025 + admin user
+npm run start:standalone:e2e   # MFA_REQUIRED_ROLES cleared for E2E
+npx prisma db seed             # eng-gulf-2025 + admin user
+```
+
+Terminal 2:
+
+```powershell
+npm run cy:local -- --spec cypress/e2e/audit-sampling.cy.ts
 ```
 
 ## Commands
@@ -23,7 +29,8 @@ npx prisma db seed         # eng-gulf-2025 + admin user
 | Issue | Workaround |
 | ----- | ---------- |
 | `MissingCSRF` on rapid `signIn` | Use `cy.loginAdmin()` session helper |
-| Standalone + Cypress cookie restore | Verify `cy.visit('/audit')` after login; may need `next dev --webpack` for full E2E |
+| MFA redirect to `/settings/mfa` | Use **`npm run start:standalone:e2e`** (not plain `start:standalone`) |
+| Standalone + Cypress cookie restore | Use **`cy.loginAdmin()`** (CSRF API login) in `cypress/support/commands.ts` |
 | Marketing pages 500 on some routes | Track in QA; `smoke:local` covers critical paths |
 | `staging.aqliya.ai` | `npm run staging:probe` — DNS still operator-owned |
 

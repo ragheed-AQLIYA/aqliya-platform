@@ -36,7 +36,7 @@ npm run build && npm run start:standalone
 npm run cy:local -- --spec cypress/e2e/audit-sampling.cy.ts
 ```
 
-See `cypress-local-runbook.md` — session/cookie stability on standalone may require `next dev --webpack`.
+See `cypress-local-runbook.md`. Use **`npm run start:standalone:e2e`** then **`npm run cy:local -- --spec cypress/e2e/audit-sampling.cy.ts`** (3/3 PASS @ slice 35).
 
 ---
 
@@ -48,4 +48,4 @@ See `cypress-local-runbook.md` — session/cookie stability on standalone may re
 | Empty population | `getTrialBalanceLines` / upload path |
 | Action error | Server logs; `generateAuditSamplingAction` RBAC |
 
-**Status label:** browser smoke = **manual**; engine/action tests = **automated**.
+**Status label:** Cypress sampling = **automated PASS** (with `start:standalone:e2e`); engine/action tests = **automated**.

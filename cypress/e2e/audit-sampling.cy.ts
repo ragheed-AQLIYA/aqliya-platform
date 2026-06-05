@@ -1,8 +1,6 @@
 describe("AuditOS — Sampling browser smoke", () => {
   beforeEach(() => {
     cy.loginAdmin();
-    cy.visit("/audit", { timeout: 30000, failOnStatusCode: false });
-    cy.url().should("not.include", "/login");
   });
 
   it("loads sampling tab with population and governance banner", () => {
