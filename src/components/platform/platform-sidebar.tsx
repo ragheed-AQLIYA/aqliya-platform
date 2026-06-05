@@ -19,6 +19,8 @@ import {
   ScrollText,
   Bot,
   Globe,
+  FileText,
+  FolderKanban,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -236,10 +238,22 @@ const workflowosNav = [
     icon: LayoutDashboard,
   },
   {
-    name: "Review Queue",
-    nameAr: "قائمة المراجعة",
-    href: "/workflowos",
-    icon: ShieldCheck,
+    name: "Records",
+    nameAr: "السجلات",
+    href: "/workflowos/records",
+    icon: FileText,
+  },
+  {
+    name: "Templates",
+    nameAr: "القوالب",
+    href: "/workflowos/templates",
+    icon: FolderKanban,
+  },
+  {
+    name: "Admin Dashboard",
+    nameAr: "لوحة الإدارة",
+    href: "/workflowos/admin",
+    icon: TrendingUp,
   },
   {
     name: "WorkflowOS Admin",

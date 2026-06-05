@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { WorkflowAdminPage } from "@/components/workflowos/workflow-admin-page";
+import { WorkflowAdminDashboard } from "@/components/workflowos/workflow-admin-dashboard";
 
 export default async function WorkflowosAdminPage() {
   let user;
@@ -14,5 +14,5 @@ export default async function WorkflowosAdminPage() {
     redirect("/access-denied");
   }
 
-  return <WorkflowAdminPage />;
+  return <WorkflowAdminDashboard />;
 }
