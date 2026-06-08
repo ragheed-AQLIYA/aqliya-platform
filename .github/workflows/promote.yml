@@ -25,8 +25,8 @@ jobs:
     steps:
       - name: Check Staging Health
         run: |
-          echo "Checking staging.aqliya.ai health..."
-          curl -sSf --max-time 30 "https://staging.aqliya.ai/api/health" || {
+          echo "Checking staging.aqliya.com health..."
+          curl -sSf --max-time 30 "https://staging.aqliya.com/api/health" || {
             echo "Staging health check failed. Aborting promotion."
             exit 1
           }
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://aqliya.ai
+      url: https://aqliya.com
     steps:
       - uses: actions/checkout@v4
 
@@ -105,7 +105,7 @@ jobs:
         run: sleep 60
 
       - name: Run Smoke Test
-        run: node scripts/post-deploy-smoke.mjs --base-url https://aqliya.ai
+        run: node scripts/post-deploy-smoke.mjs --base-url https://aqliya.com
         env:
           AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
 

@@ -171,7 +171,7 @@ jobs:
 
       - name: Comprehensive Smoke Test
         env:
-          BASE_URL: ${{ github.ref_name == 'main' && 'https://aqliya.ai' || 'https://staging.aqliya.ai' }}
+          BASE_URL: ${{ github.ref_name == 'main' && 'https://aqliya.com' || 'https://staging.aqliya.com' }}
           SCIM_API_KEY: ${{ secrets.SCIM_API_KEY || '' }}
           AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
           GIT_SHA: ${{ github.sha }}

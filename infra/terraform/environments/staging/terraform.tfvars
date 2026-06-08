@@ -1,5 +1,5 @@
 environment   = "staging"
-domain_name   = "staging.aqliya.ai"
+domain_name   = "staging.aqliya.com"
 
 container_image = "123456789012.dkr.ecr.me-south-1.amazonaws.com/aqliya/staging/app:latest"
 

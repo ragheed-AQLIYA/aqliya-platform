@@ -1,5 +1,5 @@
 environment   = "dev"
-domain_name   = "dev.aqliya.ai"
+domain_name   = "dev.aqliya.com"
 
 container_image = "123456789012.dkr.ecr.me-south-1.amazonaws.com/aqliya/dev/app:latest"
 
