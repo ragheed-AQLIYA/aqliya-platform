@@ -1,33 +1,111 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { getCookie, setCookie } from "cookies-next";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
-// Navigation redesign decisions:
-// 1. Platform + Systems + Governance = three pillars enterprise buyers need
-// 2. Removed "How We Work" from primary nav (moved to footer)
-// 3. Removed Turkish (AR/EN for target market only)
-// 4. CTA changed: "طلب جلسة تنفيذية" — executive qualification signal
-// 5. Added institutional top bar with operational status signal
-
-const navItems = [
-  { label: "المنصة", href: "/platform", description: "AQLIYA Intelligence Core" },
-  { label: "الأنظمة", href: "/products", description: "خطوط الأنظمة المؤسسية" },
-  { label: "الحوكمة", href: "/governance", description: "بنية الثقة والأدلة" },
-  { label: "الإثبات", href: "/case-studies", description: "دراسات الحالة والدليل" },
-  { label: "من نحن", href: "/about", description: "" },
-  { label: "تواصل", href: "/contact", description: "" },
+const productItems = [
+  { label: "DecisionOS", href: "/products/decision", description: "نظام تشغيل القرارات المؤسسية" },
+  { label: "SalesOS", href: "/products/sales", description: "نظام تشغيل تطوير الأعمال والمبيعات" },
+  { label: "AuditOS", href: "/products/audit", description: "نظام تشغيل المراجعة والالتزام" },
+  { label: "LocalContentOS", href: "/products/local-content", description: "نظام تشغيل المحتوى المحلي وسلاسل التوريد" },
 ];
+
+const resourceItems = [
+  { label: "رؤى ومقالات", href: "/insights", description: "تحليلات بدون تسويق" },
+  { label: "دراسات الحالة", href: "/case-studies", description: "قصص نجاح وإثبات" },
+  { label: "دليل المشتري", href: "/buyers/cfo", description: "للمدير المالي وشركاء التدقيق" },
+  { label: "الملخص التنفيذي", href: "/executive-brief", description: "قراءة سريعة للمنصة" },
+];
+
+function DropdownMenu({
+  label,
+  items,
+  isOpen,
+  onToggle,
+  onClose,
+}: {
+  label: string;
+  items: { label: string; href: string; description: string }[];
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        onClose();
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClick);
+    }
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [isOpen, onClose]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={onToggle}
+        className="flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted/70 hover:text-foreground"
+      >
+        {label}
+        <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", isOpen && "rotate-180")} />
+      </button>
+      {isOpen && (
+        <div className="absolute right-0 top-full mt-1 w-72 rounded-xl border border-border/60 bg-background p-2 shadow-xl backdrop-blur-xl">
+          {items.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onClose}
+              className="flex flex-col gap-0.5 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/70"
+            >
+              <span className="text-sm font-semibold text-foreground">{item.label}</span>
+              <span className="text-[11px] text-muted-foreground">{item.description}</span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
   const currentLocale = getCookie("NEXT_LOCALE") ?? "ar";
+
+  const navItems = [
+    { label: "الحلول", href: "/solutions", isNew: true },
+    {
+      label: "المنتجات",
+      dropdown: true,
+      items: productItems,
+      open: productsOpen,
+      setOpen: setProductsOpen,
+    },
+    { label: "المنصة", href: "/platform" },
+    {
+      label: "الموارد",
+      dropdown: true,
+      items: resourceItems,
+      open: resourcesOpen,
+      setOpen: setResourcesOpen,
+    },
+    { label: "من نحن", href: "/about" },
+  ];
+
+  const isActive = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
@@ -42,12 +120,6 @@ export function SiteHeader() {
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-status-success" />
               السحابة متاحة الآن
             </span>
-            <a
-              href="mailto:ragheed@aqliya.com"
-              className="text-[10px] text-muted-foreground/60 transition-colors hover:text-muted-foreground"
-            >
-              ragheed@aqliya.com
-            </a>
           </div>
         </div>
       </div>
@@ -74,32 +146,43 @@ export function SiteHeader() {
           aria-label="التنقل الرئيسي"
         >
           {navItems.map((item) => {
-            const active =
-              pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href));
+            if ("dropdown" in item && item.dropdown) {
+              return (
+                <DropdownMenu
+                  key={item.label}
+                  label={item.label}
+                  items={item.items!}
+                  isOpen={item.open}
+                  onToggle={() => {
+                    item.setOpen(!item.open);
+                    // Close other dropdown
+                    if (item.label === "المنتجات") setResourcesOpen(false);
+                    if (item.label === "الموارد") setProductsOpen(false);
+                  }}
+                  onClose={() => item.setOpen(false)}
+                />
+              );
+            }
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={item.href!}
                 className={cn(
                   "relative rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200",
-                  active
+                  isActive(item.href!)
                     ? "bg-primary/8 text-primary"
                     : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
                 )}
-                aria-current={active ? "page" : undefined}
+                aria-current={isActive(item.href!) ? "page" : undefined}
               >
                 {item.label}
-                {active && (
-                  <span className="absolute inset-x-3 -bottom-px h-px rounded-full bg-primary/50" />
-                )}
               </Link>
             );
           })}
 
           <span className="mx-3 h-4 w-px bg-border" />
 
-          {/* Language switcher — AR/EN only */}
+          {/* Language switcher */}
           {[
             { label: "ع", value: "ar" },
             { label: "EN", value: "en" },
@@ -137,7 +220,7 @@ export function SiteHeader() {
             href="/contact"
             className="mr-1 inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/15 transition-all duration-200 hover:bg-primary/90 hover:shadow-md hover:shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            طلب جلسة تنفيذية
+            طلب تجربة
           </Link>
         </nav>
 
@@ -161,32 +244,78 @@ export function SiteHeader() {
             className="flex flex-col gap-0.5 px-4 py-3"
             aria-label="التنقل الرئيسي للجوال"
           >
-            {navItems.map((item) => {
-              const active =
-                pathname === item.href ||
-                (item.href !== "/" && pathname.startsWith(item.href));
-              return (
+            {/* Solutions */}
+            <Link
+              href="/products"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-medium text-foreground hover:bg-muted"
+            >
+              <span>الحلول</span>
+              <span className="text-[11px] text-muted-foreground/50">حسب تحدياتك التشغيلية</span>
+            </Link>
+
+            {/* Products Group */}
+            <div className="border-t border-border/20 pt-2 mt-2">
+              <p className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
+                المنتجات
+              </p>
+              {productItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={cn(
-                    "flex items-center justify-between rounded-xl px-3 py-3 text-sm font-medium transition-colors",
-                    active
-                      ? "bg-primary/8 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                  )}
-                  aria-current={active ? "page" : undefined}
+                  className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   <span>{item.label}</span>
-                  {item.description && (
-                    <span className="text-[11px] text-muted-foreground/50">
-                      {item.description}
-                    </span>
-                  )}
+                  <span className="text-[11px] text-muted-foreground/50">{item.description}</span>
                 </Link>
-              );
-            })}
+              ))}
+            </div>
+
+            {/* Platform */}
+            <Link
+              href="/platform"
+              onClick={() => setOpen(false)}
+              className={cn(
+                "rounded-xl px-3 py-3 text-sm font-medium",
+                isActive("/platform")
+                  ? "bg-primary/8 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              المنصة
+            </Link>
+
+            {/* Resources Group */}
+            <div className="border-t border-border/20 pt-2">
+              <p className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
+                الموارد
+              </p>
+              {resourceItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                >
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+            </div>
+
+            {/* About */}
+            <Link
+              href="/about"
+              onClick={() => setOpen(false)}
+              className={cn(
+                "rounded-xl px-3 py-3 text-sm font-medium",
+                isActive("/about")
+                  ? "bg-primary/8 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              من نحن
+            </Link>
 
             <div className="mt-2 flex items-center gap-1.5 border-t border-border/40 pt-3">
               {[
@@ -225,7 +354,7 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               className="btn-primary mt-1 h-11 text-sm"
             >
-              طلب جلسة تنفيذية
+              طلب تجربة
             </Link>
           </nav>
         </div>

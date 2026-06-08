@@ -9,9 +9,9 @@ import {
 } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "DecisionOS — حوكمة القرارات التنفيذية | AQLIYA",
+  title: "DecisionOS — نظام تشغيل القرارات المؤسسية | AQLIYA",
   description:
-    "DecisionOS خط نظام لحوكمة القرارات التنفيذية ضمن AQLIYA Intelligence Core، يربط البدائل والمعايير والمخاطر والأدلة ضمن مسار قابل للمراجعة والاعتماد.",
+    "DecisionOS هو نظام تشغيل القرارات المؤسسية — مسار متكامل لتحليل البدائل والمخاطر والتوصيات والاعتمادات داخل إطار حوكمة واضح.",
 };
 
 const outputs = [
@@ -33,31 +33,30 @@ export default function DecisionProductPage() {
             href="/products"
             className="relative text-sm text-white/45 hover:text-white/70 transition-colors"
           >
-            ← العودة إلى خطوط عقلية
+            ← العودة إلى المنتجات
           </Link>
           <div className="relative max-w-4xl">
             <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-              DecisionOS / Governed Decisions
+              DecisionOS / Decision Operating System
             </span>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              نظام مجاور — نشط
+              L4 — نشط
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              حوكمة القرار بدل تركه لمذكرات متفرقة ونقاشات غير قابلة للتتبع
+              مؤسستك تحتاج نظام تشغيل للقرارات، لا مجرد مذكرات ونقاشات متفرقة
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              DecisionOS يحول القرارات المعقدة من نقاشات وملفات متفرقة إلى مسار
-              مؤسسي واضح: مشكلة، بدائل، معايير، مخاطر، أدلة، توصية، واعتماد داخل
-              منطق واحد مبني على AQLIYA Intelligence Core.
+              حل تحديات تشغيلية محددة داخل المؤسسة — تحليل البدائل والمخاطر والتوصيات
+              والاعتمادات داخل إطار حوكمة واضح.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
                 ناقش تفعيل النظام
               </Link>
               <Link href="/products" className="btn-secondary px-6">
-                استكشف خطوط عقلية
+استكشف المنتجات
               </Link>
             </div>
           </div>
@@ -68,8 +67,8 @@ export default function DecisionProductPage() {
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="المشكلة والحل"
-          title="لماذا تحتاج المؤسسات نظام قرار واضح؟"
-          description="DecisionOS يربط البدائل والمعايير والمخاطر والأدلة داخل منطق حوكمة واحد، بحيث يصبح القرار المؤسسي قابلاً للمراجعة لا مجرد توصية سريعة."
+          title="لماذا تحتاج المؤسسات نظام تشغيل قرارات واضح؟"
+          description="DecisionOS يربط البدائل والمعايير والمخاطر والأدلة داخل مسار تشغيل متكامل، بحيث يصبح القرار المؤسسي قابلاً للتشغيل والتتبع بدلاً من التوصيات المتناثرة."
         />
         <div className="mt-10">
           <BeforeAfterBlock
@@ -95,7 +94,7 @@ export default function DecisionProductPage() {
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="الحوكمة والثقة"
-          title="كيف يعمل مبدأ الثقة في نظام القرار؟"
+          title="كيف يعمل مبدأ الثقة في نظام تشغيل القرارات؟"
           description="الذكاء يساعد بإعداد البيانات والبدائل. الإنسان يقرر بناءً على المعايير والأدلة. الدليل يحكم من خلال توثيق كامل للمسار والقرار."
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
@@ -158,7 +157,7 @@ export default function DecisionProductPage() {
         <SectionEyebrow
           label="التخصيص"
           title="كيف يتكيف النظام مع مؤسستك؟"
-          description="يُفعّل DecisionOS حسب نطاق المؤسسة من خلال مواءمة البيانات، الصلاحيات، إجراءات الاعتماد، معايير التقييم، والتقارير، مع بقاء النواة الحاكمة نفسها فوق AQLIYA Intelligence Core."
+          description="يُفعّل DecisionOS حسب نطاق المؤسسة من خلال مواءمة البيانات، الصلاحيات، إجراءات الاعتماد، معايير التقييم، والتقارير، مع بقاء النواة الحاكمة نفسها فوق منصة AQLIYA."
         />
       </section>
 
@@ -188,7 +187,7 @@ export default function DecisionProductPage() {
           title="هل تحتاج نظام قرار واضح لمؤسستك؟"
           primaryLabel="ناقش تفعيل النظام"
           primaryHref="/custom-product"
-          secondaryLabel="استكشف خطوط عقلية"
+          secondaryLabel="استكشف المنتجات"
           secondaryHref="/contact"
         />
       </section>
