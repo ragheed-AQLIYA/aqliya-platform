@@ -18,6 +18,10 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/aqliya_ci
+      AUTH_SECRET: ci-auth-secret-minimum-32-characters
+      NODE_ENV: development
     steps:
       - uses: actions/checkout@v4
 
@@ -26,7 +30,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts
+
+      - run: npx prisma generate
 
       - run: npx tsc --noEmit
 

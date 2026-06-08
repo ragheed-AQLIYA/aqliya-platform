@@ -12,13 +12,14 @@ jobs:
     env:
       DATABASE_URL: postgresql://ci:ci@localhost:5432/aqliya_ci
       AUTH_SECRET: ci-auth-secret-minimum-32-characters
+      NODE_ENV: development
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - run: npm ci --ignore-scripts
       - run: npx prisma generate
       - run: npx tsc --noEmit
       - run: npm run lint
