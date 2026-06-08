@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { cn } from "@/lib/utils";
+import { WorkflowChain } from "@/components/enterprise";
 
 export const metadata: Metadata = {
   title: "من نحن | AQLIYA",
@@ -48,6 +50,73 @@ const operatingBeliefs = [
   "لا نبدأ من الشاشة، بل من واقع المؤسسة: من يقرر، من يراجع، وما الذي يجب أن يبقى قابلًا للتفسير.",
   "لا نبيع ذكاءً معزولًا عن المسؤولية. كل مخرج في عقلية يجب أن يجد طريقه إلى المراجعة والاعتماد.",
   "لا نبني لكل نطاق نظامًا منفصلًا تمامًا؛ نبني قدرة تشغيلية يمكن تكرارها فوق نواة واحدة.",
+];
+
+const phases = [
+  {
+    num: "01",
+    title: "فهم الواقع التشغيلي",
+    desc: "نبدأ من طريقة عمل المؤسسة كما هي: القرارات، الملفات، الأدوار، الصلاحيات، والاختناقات التي تمنع وضوح التشغيل.",
+    output: "خريطة الواقع التشغيلي",
+    participants: "فريق عقلية + أصحاب العلاقة",
+    next: "هيكلة البيانات",
+  },
+  {
+    num: "02",
+    title: "هيكلة البيانات",
+    desc: "نحدد البيانات الحرجة، مصادرها، علاقتها بالمخرجات، وما الذي يجب أن يبقى قابلًا للتتبع والمراجعة داخل النظام.",
+    output: "نموذج البيانات التشغيلي",
+    participants: "فريق عقلية",
+    next: "تصميم سير العمل",
+  },
+  {
+    num: "03",
+    title: "تصميم سير العمل",
+    desc: "نحوّل الإجراءات الحالية إلى مسار واضح يربط الإدخال، المعالجة، المراجعة، والاعتماد بدل الاعتماد على الذاكرة والتتبع اليدوي.",
+    output: "خريطة سير العمل المحكوم",
+    participants: "فريق عقلية + أصحاب العلاقة",
+    next: "ربط الأدلة والصلاحيات",
+  },
+  {
+    num: "04",
+    title: "ربط الأدلة والصلاحيات",
+    desc: "نعرّف من يراجع، من يعتمد، ما الأدلة المطلوبة، وكيف تُحكم الصلاحيات حتى لا تنفصل المخرجات عن المسؤولية المؤسسية.",
+    output: "نموذج الحوكمة والأدلة",
+    participants: "فريق عقلية",
+    next: "إضافة طبقة الذكاء",
+  },
+  {
+    num: "05",
+    title: "إضافة طبقة الذكاء",
+    desc: "نفعّل الذكاء الاصطناعي كمساعد داخل المسار، لا كصاحب قرار: اقتراحات، تصنيفات، تلخيصات، وتنبيهات تخضع للمراجعة البشرية.",
+    output: "طبقة مساعدة محكومة",
+    participants: "فريق عقلية",
+    next: "المراجعة والاعتماد",
+  },
+  {
+    num: "06",
+    title: "المراجعة والاعتماد",
+    desc: "نربط كل مخرج بالمراجعة البشرية والاعتماد الرسمي حتى تصبح القرارات والمخرجات قابلة للفحص قبل اعتمادها أو نشرها.",
+    output: "بوابات مراجعة واعتماد",
+    participants: "فريق عقلية + المستخدمون",
+    next: "التفعيل التشغيلي",
+  },
+  {
+    num: "07",
+    title: "التفعيل التشغيلي",
+    desc: "نفعّل خط النظام أو المسار المؤسسي داخل بيئة العمل الفعلية مع تدريب الفرق على التشغيل ضمن منطق حوكمة واضح.",
+    output: "نظام مؤسسي مفعل",
+    participants: "فريق عقلية + فريق المؤسسة",
+    next: "التحسين المستمر",
+  },
+  {
+    num: "08",
+    title: "التحسين المستمر",
+    desc: "نقيس ما تغير في التشغيل ونطوّر المسار بناءً على الاستخدام الحقيقي، والأثر، والملاحظات، ومتطلبات المراجعة المستمرة.",
+    output: "تحسينات وتوسعات دورية",
+    participants: "فريق عقلية + فريق المؤسسة",
+    next: "—",
+  },
 ];
 
 export default function AboutPage() {
@@ -227,6 +296,63 @@ export default function AboutPage() {
                 <p className="text-sm leading-7 text-white/75">{item}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-gradient-dark border-t border-white/5">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
+              منهجية العمل
+            </p>
+            <h2 className="mt-4 text-3xl font-black text-white">
+              كيف يتحول الواقع التشغيلي إلى نظام محكوم؟
+            </h2>
+            <p className="mt-4 text-base leading-8 text-white/58">
+              عقلية لا تبدأ من واجهة. تبدأ من فهم الواقع التشغيلي، ثم تعيد
+              بناءه كمسار مؤسسي واضح داخل منطق واحد مبني على AQLIYA
+              Intelligence Core.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-12 max-w-5xl">
+            <div className="mb-10 rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
+              <WorkflowChain
+                steps={phases.map((p) => p.title)}
+                className="justify-center"
+              />
+            </div>
+
+            <div className="space-y-4">
+              {phases.map((phase, i) => (
+                <div
+                  key={phase.num}
+                  className={cn(
+                    "flex items-start gap-5 rounded-2xl border p-6",
+                    i % 2 === 0
+                      ? "border-white/10 bg-white/[0.03]"
+                      : "border-aqliya-cyan/10 bg-aqliya-cyan/[0.02]",
+                  )}
+                >
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-aqliya-cyan/20 text-lg font-black text-aqliya-cyan shadow-sm">
+                    {phase.num}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-black text-white">
+                      {phase.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-7 text-white/58">
+                      {phase.desc}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">
+                      <span>المخرج: {phase.output}</span>
+                      <span>المشاركون: {phase.participants}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

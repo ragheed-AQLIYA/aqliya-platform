@@ -3,53 +3,42 @@ import Image from "next/image";
 
 const footerColumns = [
   {
-    title: "المنصة والحوكمة",
+    title: "المنتجات",
+    links: [
+      { label: "DecisionOS — القرارات المؤسسية", href: "/products/decision" },
+      { label: "SalesOS — تطوير الأعمال والمبيعات", href: "/products/sales" },
+      { label: "AuditOS — المراجعة والالتزام", href: "/products/audit" },
+      { label: "LocalContentOS — المحتوى المحلي وسلاسل التوريد", href: "/products/local-content" },
+    ],
+  },
+  {
+    title: "المنصة",
     links: [
       { label: "AQLIYA Intelligence Core", href: "/platform" },
-      { label: "بنية الحوكمة والثقة", href: "/governance" },
-      { label: "عائلة الأنظمة", href: "/products" },
-      { label: "بيئات النشر", href: "/deployment" },
+      { label: "Workflow Engine", href: "/platform#workflow" },
+      { label: "Governance", href: "/governance" },
+      { label: "Integration Layer", href: "/platform#integration" },
+      { label: "Evidence Graph", href: "/platform#evidence" },
+      { label: "Audit Trail", href: "/platform#audit" },
     ],
   },
   {
-    title: "الأنظمة النشطة",
+    title: "الموارد",
     links: [
-      { label: "AuditOS — التدقيق والذكاء المالي", href: "/products/audit" },
-      { label: "DecisionOS — حوكمة القرارات", href: "/products/decision" },
-      { label: "LocalContentOS — المحتوى المحلي", href: "/products/local-content" },
-      { label: "أنظمة مؤسسية مخصصة", href: "/custom-product" },
-    ],
-  },
-  {
-    title: "للمشترين",
-    links: [
-      { label: "المدير المالي — CFO", href: "/buyers/cfo" },
-      { label: "مدير التقنية — CIO", href: "/buyers/cio" },
-      { label: "شريك التدقيق", href: "/buyers/audit-partner" },
-      { label: "الجهات الحكومية", href: "/buyers/government" },
-      { label: "المشتريات والعقود", href: "/buyers/procurement" },
-    ],
-  },
-  {
-    title: "الدليل والتعاون",
-    links: [
+      { label: "رؤى ومقالات", href: "/insights" },
       { label: "دراسات الحالة", href: "/case-studies" },
-      { label: "مكتبة الإثبات", href: "/proof-library" },
-      { label: "دليل البايلوت", href: "/pilot-proof" },
-      { label: "نماذج التعاون", href: "/engagement-models" },
-      { label: "الديمو التفاعلي", href: "/demo" },
+      { label: "دليل المشتري", href: "/buyers/cfo" },
       { label: "الملخص التنفيذي", href: "/executive-brief" },
+      { label: "الديمو التفاعلي", href: "/demo" },
     ],
   },
   {
-    title: "الشركة والمعرفة",
+    title: "الشركة",
     links: [
       { label: "من نحن", href: "/about" },
-      { label: "كيف نعمل", href: "/how-we-work" },
-      { label: "حالات الاستخدام", href: "/use-cases" },
-      { label: "رؤى ومقالات", href: "/insights" },
+      { label: "بيئات النشر", href: "/deployment" },
+      { label: "نماذج التعاون", href: "/engagement-models" },
       { label: "تواصل معنا", href: "/contact" },
-      { label: "ragheed@aqliya.com", href: "mailto:ragheed@aqliya.com" },
     ],
   },
 ];
@@ -58,7 +47,6 @@ const legalLinks = [
   { label: "سياسة الخصوصية", href: "/privacy" },
   { label: "شروط الخدمة", href: "/terms" },
   { label: "الأمن المؤسسي", href: "/security" },
-  { label: "بيئات النشر", href: "/deployment" },
 ];
 
 export function SiteFooter() {
@@ -80,11 +68,10 @@ export function SiteFooter() {
             </Link>
 
             <p className="text-sm leading-7 text-muted-foreground">
-              منصة ذكاء مؤسسي خاص ومحكوم. تبني أنظمة تشغيلية متخصصة فوق AQLIYA
-              Intelligence Core — كل نظام داخل بنية حوكمة، أدلة، وسجل تدقيق واحد.
+              منصة تشغيل مؤسسية للقرارات والعمليات والامتثال. أربعة منتجات تعمل فوق بنية واحدة: الحوكمة، سير العمل، الأدلة، وسجل التدقيق.
             </p>
 
-            {/* Trust Principle card */}
+            {/* Platform Message */}
             <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-4">
               <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-primary/70">
                 المبدأ المؤسسي

@@ -9,9 +9,9 @@ import {
 } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "SalesOS — الذاكرة التجارية والمبيعات | AQLIYA",
+  title: "SalesOS — نظام تشغيل تطوير الأعمال والمبيعات | AQLIYA",
   description:
-    "SalesOS نظام الذاكرة التجارية والمبيعات ضمن عقلية، قيد التطوير — ينظم التأهيل والترتيب والمتابعة والتعلم داخل مسار تجاري محكوم.",
+    "SalesOS نظام تشغيل تطوير الأعمال والمبيعات ضمن عقلية — يحل تحديات تشغيلية محددة داخل المؤسسة مثل إدارة الحسابات والفرص والاجتماعات والعروض والعقود والذاكرة البيعية مع حوكمة وأدلة وسجل تدقيقي كامل.",
 };
 
 const outputs = [
@@ -33,38 +33,34 @@ export default function SalesProductPage() {
             href="/products"
             className="relative text-sm text-white/45 hover:text-white/70 transition-colors"
           >
-            ← العودة إلى خطوط عقلية
+            ← العودة إلى المنتجات
           </Link>
           <div className="relative max-w-4xl">
             <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-              SalesOS / Commercial Memory
+              SalesOS / Business Development & Sales
             </span>
-            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-              قيد التطوير
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              L4 — نشط
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              المبيعات ليست فقط Pipeline بل ذاكرة تشغيلية يجب أن تتعلم وتتحسن
+              عمليات البيع لا تُدار بالاجتهاد — بل بنظام تشغيل محكوم ومتصل
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              SalesOS ضمن عقلية هو نظام الذاكرة التجارية والمبيعات، قيد التطوير.
-              يستكشف كيفية تنظيم رحلة المبيعات من تعريف العميل المثالي إلى
-              التأهيل والترتيب والمتابعة والتعلم المؤسسي. الخلفية التشغيلية
-              الكاملة لم تكتمل بعد — التفعيل يتم بتنسيق مسبق.
+              SalesOS هو نظام تشغيل تطوير الأعمال والمبيعات، نشط
+              وجاهز للاستخدام. يدير الحسابات والفرص والاجتماعات والعروض
+              والعقود والذاكرة البيعية في بيئة محكومة مع حوكمة كاملة وسجل
+              تدقيقي وأدلة لكل قرار.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/custom-product" className="btn-primary px-6">
-                ناقش إمكانية التطوير
+                اطلع على النظام
               </Link>
               <Link href="/products" className="btn-secondary px-6">
-                استكشف خطوط عقلية
+استكشف المنتجات
               </Link>
             </div>
-            <p className="mt-4 text-xs leading-6 text-white/35">
-              SalesOS قيد التطوير. التفعيل الكامل يتطلب تنسيقًا مسبقًا مع
-              الفريق الهندسي.
-            </p>
           </div>
         </div>
       </section>
@@ -73,24 +69,24 @@ export default function SalesProductPage() {
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="المشكلة والحل"
-          title="لماذا تحتاج فرق المبيعات نظامًا واضحًا؟"
-          description="SalesOS لا يقدم CRM عامًا، بل يفعّل ذاكرة تجارية مؤسسية تربط التأهيل والأولوية والمتابعة والتعلم داخل منطق واحد قابل للتتبع."
+          title="لماذا تحتاج فرق المبيعات نظام تشغيل بدلاً من أدوات متفرقة؟"
+          description="SalesOS لا يقدم CRM تقليديًا، بل نظام تشغيل تطوير أعمال ومبيعات يربط الحسابات والفرص والعقود والذاكرة البيعية داخل بيئة واحدة محكومة وقابلة للتتبع."
         />
         <div className="mt-10">
           <BeforeAfterBlock
             before={[
-              "عملاء غير مؤهلين",
-              "رسائل عامة وغير مخصصة",
-              "متابعة ضعيفة أو عشوائية",
-              "غياب منطق الأولوية",
-              "تقارير أداء غير دقيقة",
+              "حسابات مبعثرة بين جداول ورسائل",
+              "فرص بدون تصنيف أو أولوية",
+              "اجتماعات دون أهداف أو متابعة",
+              "عروض وعقود خارج النظام",
+              "غياب الذاكرة البيعية عند تغير الفريق",
             ]}
             after={[
-              "ملف عميل مثالي واضح (ICP)",
-              "تأهيل وترتيب منهجي",
-              "حملات ومتابعة منظمة",
-              "أولويات مبنية على البيانات",
-              "تقارير تعلم وتحسين مستمر",
+              "حسابات منظّمة بسجل كامل",
+              "فرص مصنّفة حسب الأولوية والمرحلة",
+              "اجتماعات مرتبطة بالحساب والفرصة",
+              "عروض وعقود داخل سير عمل موحّد",
+              "ذاكرة بيعية مؤسسية قابلة للتعلم",
             ]}
           />
         </div>
@@ -171,18 +167,20 @@ export default function SalesProductPage() {
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
           label="سيناريو تطبيقي"
-          title="فريق مبيعات B2B في شركة خدمات"
+          title="قسم مبيعات B2B يعاني من تشتت الحسابات والفرص"
         />
         <div className="mt-10 rounded-[24px] border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm sm:p-8">
           <p className="text-base leading-8 text-muted-foreground">
-            <strong className="text-foreground">قبل:</strong> الفريق يتواصل مع
-            أي عميل محتمل، بدون تأهيل واضح، والمتابعة تعتمد على الذاكرة
-            والاجتهاد الشخصي.
+            <strong className="text-foreground">قبل:</strong> الحسابات موزعة
+            بين إيميلات وجداول إكسل وملاحظات شخصية. الفرص بدون تصنيف،
+            والاجتماعات لا ترتبط بصفقة محددة. عند مغادرة أي عضو فريق، تضيع
+            معرفة كاملة بحسابات كاملة.
           </p>
           <p className="mt-4 text-base leading-8 text-muted-foreground">
-            <strong className="text-foreground">بعد:</strong> كل عميل يمر بمسار
-            تأهيل واضح، يتم ترتيبه بناءً على معايير محددة، والمتابعة تتم
-            تلقائيًا وفقًا لمنطق محدد.
+            <strong className="text-foreground">بعد:</strong> كل حساب له سجل
+            كامل بالفرص والاجتماعات والعروض والعقود. الفرص مصنّفة حسب
+            المرحلة والأولوية. الذاكرة البيعية مؤسسية — لا تضيع المعرفة
+            بتغير الفريق. وكل قرار موثق مع دليل وسجل تدقيقي.
           </p>
         </div>
       </section>
@@ -190,11 +188,11 @@ export default function SalesProductPage() {
       {/* 8. CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
-          title="هل تحتاج نظام مبيعات واضح لفريقك؟"
-          description="SalesOS في مرحلة النموذج الأولي. إذا كنت مهتمًا بهذا المفهوم، ناقش حالة الاستخدام مع فريق عقلية."
+          title="هل تحتاج نظام تشغيل لتطوير الأعمال والمبيعات؟"
+          description="SalesOS نشط وجاهز للاستخدام. إذا كنت مهتمًا بهذا النظام، ناقش حالة الاستخدام مع فريق عقلية."
           primaryLabel="ناقش حالة الاستخدام"
           primaryHref="/custom-product"
-          secondaryLabel="استكشف خطوط عقلية"
+          secondaryLabel="استكشف المنتجات"
           secondaryHref="/products"
         />
       </section>

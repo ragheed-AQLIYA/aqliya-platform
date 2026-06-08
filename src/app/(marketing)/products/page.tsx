@@ -9,7 +9,7 @@ import {
 } from "@/components/visuals";
 
 export const metadata: Metadata = {
-  title: "الأنظمة | AQLIYA",
+  title: "المنتجات | AQLIYA",
   description:
     "أنظمة مؤسسية مبنية على AQLIYA Intelligence Core. ثلاثة أنظمة نشطة، خطوط استراتيجية مخططة، وقدرة مخصصة — كل شيء داخل منطق حوكمة واحد.",
 };
@@ -119,10 +119,10 @@ export default function ProductsPage() {
           <div className="relative mx-auto max-w-4xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-              عائلة الأنظمة
+              عائلة المنتجات
             </span>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              أنظمة مؤسسية مبنية على نواة واحدة
+              منتجات مؤسسية مبنية على نواة واحدة
             </h1>
             <p className="mt-5 text-base leading-8 text-white/62 sm:text-lg">
               كل نظام من أنظمة عقلية يعالج مساراً مؤسسياً محدداً، لكن جميعها
