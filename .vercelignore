@@ -1,0 +1,11 @@
+docs
+scripts
+runbooks
+backups
+infra
+node_modules
+.next
+*.bak
+*.pptx
+*/.git
+cypress
