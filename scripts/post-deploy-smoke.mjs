@@ -5,7 +5,7 @@
  * Executed by CI/CD (deploy.yml → post-deploy job) after ECS deploy.
  *
  * Usage:
- *   node scripts/post-deploy-smoke.mjs --base-url "https://staging.aqliya.ai"
+ *   node scripts/post-deploy-smoke.mjs --base-url "https://staging.aqliya.com"
  *   SCIM_API_KEY=xxx node scripts/post-deploy-smoke.mjs --base-url "http://localhost:3000"
  *
  * Returns exit code 0 if all CRITICAL checks pass, 1 if any fail.
@@ -271,6 +271,20 @@ async function main() {
   await checkHttp("About page (/about)", "/about");
   await checkHttp("Products page (/products)", "/products");
   await checkHttp("Platform page (/platform)", "/platform");
+
+  // Launch program — platform-first marketing (2026-06)
+  await checkHttp("Industries (/industries)", "/industries");
+  await checkHttp("Proof Center (/proof)", "/proof");
+  await checkHttp("Procurement pack (/procurement-pack)", "/procurement-pack");
+  await checkHttp("SOC2 roadmap (/soc2-roadmap)", "/soc2-roadmap");
+  await checkHttp("Pilot outcomes (/pilot-outcomes)", "/pilot-outcomes");
+  await checkHttp("Executive brief PDF (/print/executive-brief)", "/print/executive-brief");
+  await checkHttp("Security summary PDF (/print/security-summary)", "/print/security-summary");
+  await checkHttp("English home (/en)", "/en");
+  await checkHttp("English proof (/en/proof)", "/en/proof");
+  await checkHttp("English platform (/en/platform)", "/en/platform");
+  await checkHttp("English SOC2 (/en/soc2-roadmap)", "/en/soc2-roadmap");
+  await checkRedirect("Buyers procurement → pack", "/buyers/procurement");
 
   // ── 5. Feature Flags / Env Vars ───────────────────────────────────────────
 

@@ -3,15 +3,13 @@ import { NextResponse } from "next/server";
 const MAX_FIELD_LENGTH = 2000;
 const MAX_BODY_BYTES = 50_000;
 
-const REQUIRED_FIELDS = [
-  "name",
-  "email",
-  "organization",
-  "productInterest",
-  "useCase",
-  "dataType",
-  "goal",
-] as const;
+const REQUIRED_FIELDS = ["name", "email", "organization", "useCase"] as const;
+
+const DEFAULTS = {
+  productInterest: "غير متأكد — أحتاج توجيهًا",
+  dataType: "غير محدد — سأناقشه مع الفريق",
+  goal: "يُناقش في جلسة التشخيص",
+} as const;
 
 function isNonEmptyString(v: unknown): v is string {
   return typeof v === "string" && v.trim().length > 0;
@@ -128,7 +126,36 @@ export async function POST(request: Request) {
       );
     }
 
-    const payload = body as unknown as PilotReviewPayload;
+    const payload: PilotReviewPayload = {
+      name: (body.name as string).trim(),
+      email: (body.email as string).trim(),
+      organization: (body.organization as string).trim(),
+      useCase: (body.useCase as string).trim(),
+      role:
+        typeof body.role === "string" && body.role.trim()
+          ? body.role.trim()
+          : undefined,
+      productInterest:
+        typeof body.productInterest === "string" && body.productInterest.trim()
+          ? body.productInterest.trim()
+          : DEFAULTS.productInterest,
+      interest:
+        typeof body.interest === "string" && body.interest.trim()
+          ? body.interest.trim()
+          : undefined,
+      dataType:
+        typeof body.dataType === "string" && body.dataType.trim()
+          ? body.dataType.trim()
+          : DEFAULTS.dataType,
+      currentWorkflow:
+        typeof body.currentWorkflow === "string" && body.currentWorkflow.trim()
+          ? body.currentWorkflow.trim()
+          : undefined,
+      goal:
+        typeof body.goal === "string" && body.goal.trim()
+          ? body.goal.trim()
+          : DEFAULTS.goal,
+    };
     safeDevLog(payload);
 
     const webhookUrl = process.env.PILOT_REVIEW_WEBHOOK_URL;

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
+import { BOOKING_EMAIL } from "@/lib/marketing/booking";
 import { WorkflowChain } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "من نحن | AQLIYA",
+  title: "عن عقلية | AQLIYA",
   description:
-    "عقلية منصة ذكاء مؤسسي خاص ومحكوم تبني خطوط أنظمة مؤسسية فوق AQLIYA Intelligence Core، بحيث تبقى البيانات والمخرجات والمراجعات تحت حوكمة المؤسسة.",
+    "وُجدت عقلية لأن المؤسسة تحتاج ذكاءً يمكن الوثوق به ومساءلته — لا فقط ذكاءً أسرع. منصة تشغيل مؤسسية للقرارات والعمليات والأدلة.",
 };
 
 const whyAqliyaExists = [
@@ -26,9 +27,9 @@ const coreItems = [
 ];
 
 const activeSystems = [
-  { name: "AuditOS", desc: "نظام التدقيق والذكاء المالي — L5 جاهز للتجريب" },
-  { name: "DecisionOS", desc: "نظام حوكمة القرارات — L4 نشط v0.1" },
-  { name: "LocalContentOS", desc: "نظام المحتوى المحلي — L4 نشط (12 مسار)" },
+  { name: "AuditOS", desc: "نظام التدقيق والذكاء المالي — جاهز للبايلوت" },
+  { name: "DecisionOS", desc: "نظام حوكمة القرارات — نشط" },
+  { name: "LocalContentOS", desc: "نظام المحتوى المحلي — بايلوت منسّق (12 مسار)" },
 ];
 
 const strategicSystems = [
@@ -357,6 +358,58 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* § — الفريق */}
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+            الفريق
+          </p>
+          <h2 className="mt-4 text-3xl font-black text-foreground">
+            الأشخاص وراء عقلية
+          </h2>
+          <p className="mt-4 text-base leading-8 text-muted-foreground">
+            عقلية لا تُبنى بكود فقط — تُبنى بأشخاص يؤمنون أن القرار المؤسسي
+            يستحق أن يُوثَّق ويُحفَظ.
+          </p>
+        </div>
+
+        <div className="mx-auto mt-10 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="group rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6 transition-all hover:border-primary/25">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-xl font-black text-primary">
+              ر
+            </div>
+            <h3 className="mt-4 text-base font-black text-foreground">
+              رغيد الحكيم
+            </h3>
+            <p className="mt-1 text-xs font-medium text-muted-foreground">
+              Ragheed Al-Hakeem
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              المؤسس — يعمل على بناء عقلية كمنصة تشغيل مؤسسية تجمع الذكاء
+              والحوكمة والأدلة في مسار واحد.
+            </p>
+            <a
+              href={`mailto:${BOOKING_EMAIL}`}
+              className="mt-3 inline-block text-xs font-medium text-primary underline"
+            >
+              {BOOKING_EMAIL}
+            </a>
+          </div>
+
+          <div className="group rounded-2xl border border-dashed border-border/40 bg-muted/10 p-6 transition-all hover:border-border/60">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-lg font-black text-muted-foreground/50">
+              +
+            </div>
+            <h3 className="mt-4 text-base font-black text-muted-foreground/60">
+              انضم إلى الفريق
+            </h3>
+            <p className="mt-1 text-xs text-muted-foreground/50">
+              عقلية تبحث عن شركاء مؤسسين في التقنية والحوكمة وتطوير الأعمال.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-4xl rounded-[28px] border border-border/70 bg-gradient-to-br from-muted/40 via-background to-primary/[0.03] p-8 text-center shadow-sm sm:p-12">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-primary">
@@ -373,8 +426,8 @@ export default function AboutPage() {
             <Link href="/contact" className="btn-primary h-12 px-8 text-base">
               طلب جلسة تنفيذية
             </Link>
-            <Link href="/products" className="btn-outline h-12 px-8 text-base">
-              استكشف الأنظمة
+            <Link href="/platform#capabilities" className="btn-outline h-12 px-8 text-base">
+              أنظمة التشغيل
             </Link>
           </div>
         </div>

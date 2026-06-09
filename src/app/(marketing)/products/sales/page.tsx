@@ -7,6 +7,7 @@ import {
   OutputCard,
   EnterpriseCTA,
 } from "@/components/enterprise";
+import { publicOsStatus } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "SalesOS — نظام تشغيل تطوير الأعمال والمبيعات | AQLIYA",
@@ -40,25 +41,24 @@ export default function SalesProductPage() {
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
               SalesOS / Business Development & Sales
             </span>
-            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              L4 — نشط
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-muted-foreground/30 bg-muted/20 px-3 py-1 text-xs font-medium text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
+              {publicOsStatus.salesOS.label}
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              عمليات البيع لا تُدار بالاجتهاد — بل بنظام تشغيل محكوم ومتصل
+              نظام ذاكرة تجارية محكوم — قيد التطوير
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              SalesOS هو نظام تشغيل تطوير الأعمال والمبيعات، نشط
-              وجاهز للاستخدام. يدير الحسابات والفرص والاجتماعات والعروض
-              والعقود والذاكرة البيعية في بيئة محكومة مع حوكمة كاملة وسجل
-              تدقيقي وأدلة لكل قرار.
+              SalesOS خط استراتيجي على AQLIYA Intelligence Core — ليس متاحًا
+              للشراء أو البايلوت حاليًا. هذه الصفحة تصف الاتجاه فقط، لا منتجًا
+              جاهزًا للتفعيل.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/custom-product" className="btn-primary px-6">
-                اطلع على النظام
+              <Link href="/contact" className="btn-primary px-6">
+                ناقش الاتجاه مع الفريق
               </Link>
-              <Link href="/products" className="btn-secondary px-6">
-استكشف المنتجات
+              <Link href="/products#strategic" className="btn-secondary px-6">
+                الخطوط الاستراتيجية
               </Link>
             </div>
           </div>
@@ -188,12 +188,12 @@ export default function SalesProductPage() {
       {/* 8. CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
-          title="هل تحتاج نظام تشغيل لتطوير الأعمال والمبيعات؟"
-          description="SalesOS نشط وجاهز للاستخدام. إذا كنت مهتمًا بهذا النظام، ناقش حالة الاستخدام مع فريق عقلية."
-          primaryLabel="ناقش حالة الاستخدام"
-          primaryHref="/custom-product"
-          secondaryLabel="استكشف المنتجات"
-          secondaryHref="/products"
+          title="مهتم بمسار الذاكرة التجارية المحكومة؟"
+          description="SalesOS قيد التطوير — لا بايلوت ولا شراء حاليًا. يمكننا مناقشة الاتجاه أو مسار AuditOS/DecisionOS إذا كان لديك حاجة تشغيلية فورية."
+          primaryLabel="احجز جلسة تشخيص"
+          primaryHref="/contact"
+          secondaryLabel="مركز الإثبات"
+          secondaryHref="/proof"
         />
       </section>
     </div>

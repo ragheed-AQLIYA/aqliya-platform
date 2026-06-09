@@ -1,11 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ContactForm } from "./contact-form";
+import { publicOsStatus } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
-  title: "طلب مراجعة Pilot محكومة | AQLIYA",
+  title: "احجز جلسة تشخيص | AQLIYA",
   description:
-    "ابدأ بسير عمل واحد، مجموعة بيانات محدودة، ومعايير نجاح واضحة — قبل أي التزام واسع. اختر المنتج المناسب: AuditOS، LocalContentOS، DecisionOS، أو Office AI Assistant.",
+    "ابدأ بجلسة تشخيص أو بايلوت محكوم — سير عمل واحد، بيانات محدودة، ومعايير نجاح واضحة قبل أي التزام واسع.",
 };
 
 const products = [
@@ -13,29 +14,29 @@ const products = [
     name: "AuditOS",
     description: "للتدقيق، القوائم المالية، الأدلة، المراجعة، والاعتماد.",
     href: "/products/audit",
-    status: "Pilot-ready L5",
+    status: publicOsStatus.auditOS.label,
     statusColor: "text-emerald-400",
   },
   {
     name: "LocalContentOS",
     description: "للمحتوى المحلي، الموردين، الأدلة، والتقارير.",
     href: "/products/local-content",
-    status: "Pilot-ready بشروط",
+    status: publicOsStatus.localContentOS.label,
     statusColor: "text-amber-400",
   },
   {
     name: "DecisionOS",
     description: "للقرارات، السيناريوهات، المخاطر، والمراجعة.",
     href: "/products/decision",
-    status: "Usable v0.1 L4",
-    statusColor: "text-amber-400",
+    status: publicOsStatus.decisionOS.label,
+    statusColor: "text-primary",
   },
   {
     name: "Office AI Assistant",
     description: "للمعرفة الداخلية، الإنتاجية، والمساعد المؤسسي المحكوم.",
     href: "/products/office-ai",
-    status: "Usable v0.1 L4",
-    statusColor: "text-amber-400",
+    status: publicOsStatus.officeAI.label,
+    statusColor: "text-primary",
   },
 ];
 
@@ -86,7 +87,7 @@ export default function ContactPage() {
               طلب مراجعة Pilot محكومة
             </span>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              ابدأ بتجربة بايلوت خاضعة للحوكمة
+              احجز جلسة تشخيص أو بايلوت محكوم
             </h1>
             <p className="mt-5 text-base leading-8 text-white/62 sm:text-lg">
               سير عمل واحد، مجموعة بيانات محدودة، ومعايير نجاح واضحة — قبل أي

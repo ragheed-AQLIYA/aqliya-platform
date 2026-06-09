@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { DemoVideoSection } from "@/components/marketing/demo-video-section";
 
 export const metadata: Metadata = {
   title: "ديمو AuditOS | AQLIYA",
@@ -165,8 +167,17 @@ export default function DemoPage() {
               ))}
             </div>
           </div>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <Link href="/auditos" className="btn-primary px-8 py-3">
+              ابدأ الديمو الآن
+            </Link>
+            <ScheduleDiagnosticCta variant="outline" />
+          </div>
         </div>
       </section>
+
+      <DemoVideoSection locale="ar" />
 
       {/* Demo Paths */}
       <section className="py-16 border-b border-white/5">
@@ -347,12 +358,7 @@ export default function DemoPage() {
             <div className="glass-card rounded-xl p-6 text-center">
               <h3 className="text-white font-semibold mb-2">جلسة تنفيذية</h3>
               <p className="text-slate-400 text-sm mb-5">للقيادة والمدراء</p>
-              <Link
-                href="/contact"
-                className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center"
-              >
-                طلب الجلسة
-              </Link>
+              <ScheduleDiagnosticCta className="w-full rounded-xl py-2.5 text-sm font-medium" />
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
+import { publicOsStatus } from "@/lib/marketing/public-status";
 import {
   AuditTraceVisual,
   DecisionMatrixVisual,
@@ -20,8 +21,7 @@ const tier1Systems = [
     id: "auditos",
     title: "AuditOS",
     subtitle: "نظام التدقيق والذكاء المالي",
-    maturity: "L5 — Pilot-Ready",
-    statusLabel: "نشط — جاهز للتجريب",
+    statusLabel: publicOsStatus.auditOS.label,
     problem:
       "بيانات مالية متفرقة، تصنيفات يدوية، أدلة غير مرتبطة، ومراجعة يصعب تتبعها.",
     system:
@@ -41,8 +41,7 @@ const tier1Systems = [
     id: "decisionos",
     title: "DecisionOS",
     subtitle: "نظام حوكمة القرارات",
-    maturity: "L4 — Usable v0.1",
-    statusLabel: "نشط — v0.1",
+    statusLabel: publicOsStatus.decisionOS.label,
     problem:
       "قرارات مهمة تُبنى على نقاشات متفرقة، ملفات متعددة، ومعايير غير موحدة.",
     system:
@@ -62,8 +61,7 @@ const tier1Systems = [
     id: "localcontentos",
     title: "LocalContentOS",
     subtitle: "نظام المحتوى المحلي",
-    maturity: "L5 — Pilot-ready بشروط",
-    statusLabel: "نشط — Pilot-ready (12 مسار)",
+    statusLabel: publicOsStatus.localContentOS.label,
     problem:
       "بيانات موردين، إنفاق، التزام، وتصنيفات موزعة بين فرق ومصادر متعددة.",
     system:
@@ -77,7 +75,7 @@ const tier1Systems = [
     ],
     href: "/products/local-content",
     visual: LocalContentMapVisual,
-    proofNote: "v0.1 جاهز — النشر بالتنسيق مع الجهة",
+    proofNote: "النشر بالتنسيق مع الجهة",
   },
 ];
 
@@ -87,8 +85,7 @@ const tier2Systems = [
     id: "salesos",
     title: "SalesOS",
     subtitle: "نظام الذاكرة التجارية",
-    maturity: "L4 — قيد التطوير",
-    statusLabel: "قيد التطوير",
+    statusLabel: publicOsStatus.salesOS.label,
     problem:
       "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
     outline:
@@ -99,8 +96,7 @@ const tier2Systems = [
     id: "simulatios",
     title: "SimulationOS",
     subtitle: "نظام محاكاة السيناريوهات",
-    maturity: "L1 — Concept",
-    statusLabel: "قيد التخطيط",
+    statusLabel: publicOsStatus.simulationOS.label,
     problem:
       "قرارات تُنفذ قبل اختبار أثرها على التكلفة، المخاطر، الأداء، أو النتائج.",
     outline:
@@ -206,9 +202,6 @@ export default function ProductsPage() {
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-400">
                         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
                         {system.statusLabel}
-                      </span>
-                      <span className="px-1 font-mono text-[9px] text-muted-foreground/50">
-                        {system.maturity}
                       </span>
                     </div>
                   </div>
@@ -441,7 +434,10 @@ export default function ProductsPage() {
       </section>
 
       {/* Tier 2 Systems — compact, visually demoted */}
-      <section className="section-gradient-dark border-b border-white/5">
+      <section
+        id="strategic"
+        className="section-gradient-dark scroll-mt-20 border-b border-white/5"
+      >
         <div className="mx-auto max-w-7xl px-6 py-14">
           <div className="grid gap-6 md:grid-cols-2">
             {tier2Systems.map((system) => (
@@ -494,7 +490,7 @@ export default function ProductsPage() {
                 </div>
                 <div className="mt-5 border-t border-white/8 pt-4">
                   <p className="text-[10px] text-white/25">
-                    {system.maturity} — لا يُعرض كنظام قائم
+                    {system.statusLabel} — لا يُعرض للشراء أو البايلوت حاليًا
                   </p>
                 </div>
               </div>

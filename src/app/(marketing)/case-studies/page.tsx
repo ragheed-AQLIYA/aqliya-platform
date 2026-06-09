@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 
 export const metadata: Metadata = {
   title: "دراسات الحالة | AQLIYA",
@@ -167,6 +168,36 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
+      {/* Reference #1 slot — honest placeholder */}
+      <section className="py-12 border-b border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="rounded-2xl border border-dashed border-cyan-500/30 bg-cyan-500/5 p-8">
+            <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
+              Reference #1 — Day 90 target
+            </p>
+            <h2 className="mt-3 text-xl font-bold text-white">
+              مرجع بايلوت anonymized — قيد الإعداد
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-slate-400">
+              لا ننشر مرجعاً قبل Proceed + إذن كتابي + مقاييس مقاسة. الهيكل
+              جاهز — المحتوى يأتي من بايلوت حقيقي.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Link
+                href="/print/reference-case-template"
+                target="_blank"
+                className="btn-outline px-5 py-2.5 text-sm"
+              >
+                قالب المرجع (PDF)
+              </Link>
+              <Link href="/pilot-outcomes" className="btn-outline px-5 py-2.5 text-sm">
+                نتائج البايلوت
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Trust Points */}
       <section className="py-10 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -312,12 +343,7 @@ export default function CaseStudiesPage() {
             >
               مشاهدة الديمو الكامل
             </Link>
-            <Link
-              href="/contact"
-              className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
-            >
-              طلب جلسة تنفيذية
-            </Link>
+            <ScheduleDiagnosticCta className="rounded-xl px-8 py-3 text-sm font-medium" />
           </div>
         </div>
       </section>

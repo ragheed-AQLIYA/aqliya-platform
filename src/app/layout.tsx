@@ -73,7 +73,7 @@ export default async function RootLayout({
             }),
           }}
         />
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages ?? {}}>
           <A11yProvider>
             <WebVitals />
             <Analytics />

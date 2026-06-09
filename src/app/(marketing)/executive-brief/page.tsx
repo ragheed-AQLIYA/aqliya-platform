@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { publicOsStatus, publicReadinessGate } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "الإحاطة التنفيذية | AQLIYA",
@@ -17,13 +19,13 @@ const platformLayers = [
   {
     name: "AuditOS",
     description:
-      "نظام سير عمل التدقيق المالي — من ميزان المراجعة إلى حزمة الارتباط. L5: Pilot-ready.",
+      "نظام سير عمل التدقيق المالي — من ميزان المراجعة إلى حزمة الارتباط. جاهز للبايلوت.",
     role: "المنتج الرئيسي",
   },
   {
     name: "DecisionOS",
     description:
-      "توثيق القرارات المؤسسية — سياق + بدائل + أدلة + اعتماد + Audit Trail. L4: Usable v0.1.",
+      "توثيق القرارات المؤسسية — سياق + بدائل + أدلة + اعتماد + Audit Trail. نشط.",
     role: "المنتج الثاني",
   },
   {
@@ -121,10 +123,10 @@ const whyNow = [
 ];
 
 const currentStatus = {
-  readinessGate: "Pilot-ready (L5) — مرشح لبيئة بايلوت تقييمي",
+  readinessGate: publicReadinessGate,
   availableNow: [
-    "AuditOS — Pilot-ready",
-    "DecisionOS — Usable v0.1",
+    `AuditOS — ${publicOsStatus.auditOS.label}`,
+    `DecisionOS — ${publicOsStatus.decisionOS.label}`,
     "سير عمل كامل على بيانات فعلية",
   ],
   notYet: [
@@ -151,6 +153,29 @@ export default function ExecutiveBriefPage() {
             ملخص تنفيذي للرؤساء التنفيذيين، مدراء التقنية، وصناع القرار: ما هي
             AQLIYA، لماذا تهم مؤسستك اليوم، وما الجاهز للتجربة.
           </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/print/executive-brief"
+              target="_blank"
+              className="btn-primary px-6 py-3"
+            >
+              تحميل PDF (طباعة)
+            </Link>
+            <Link
+              href="/print/executive-brief-en"
+              target="_blank"
+              className="btn-outline px-6 py-3 text-white/80"
+            >
+              PDF (English)
+            </Link>
+            <ScheduleDiagnosticCta />
+            <Link
+              href="/procurement-pack"
+              className="btn-outline px-6 py-3 text-white/80"
+            >
+              حزمة المشتريات
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -585,13 +610,7 @@ export default function ExecutiveBriefPage() {
               <p className="text-slate-400 text-sm mb-5">
                 ٤٥ دقيقة — نناقش سياقك واحتياجاتك المحددة
               </p>
-              <Link
-                href="/contact"
-                className="btn-primary block w-full py-2.5 rounded-xl text-sm font-medium text-center"
-                data-event="click_request_pilot_review"
-              >
-                طلب الجلسة
-              </Link>
+              <ScheduleDiagnosticCta className="block w-full py-2.5 rounded-xl text-sm font-medium text-center" />
             </div>
             <div className="glass-card rounded-xl p-6 text-center">
               <div className="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mx-auto mb-4">

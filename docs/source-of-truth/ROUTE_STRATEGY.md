@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-06-02 — Phase 10: SalesOS test suite fix (0 failures), DecisionOS L4 report i18n + PDF, AI Governance real engines
+> **Last updated:** 2026-06-09 — Website repositioning: new navigation (المنصة\|القطاعات\|الإثبات\|الحوكمة\|عن عقلية), added /industries, /proof, /demo, platform-first positioning
 
 ---
 
@@ -38,43 +38,57 @@
 
 ## Complete Route Table
 
-### Company & Marketing Routes
+### Company & Marketing Routes (Platform-First Navigation)
+
+The primary navigation presents AQLIYA as a platform, not a product company:
+**المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية** with CTA **احجز جلسة تشخيص**.
 
 | Route                 | Product/System | Route Type             | Public/Protected | Implementation Status | Notes                                 |
 | --------------------- | -------------- | ---------------------- | ---------------- | --------------------- | ------------------------------------- |
-| `/`                   | AQLIYA Company | Platform landing       | Public           | Active                | Marketing homepage                    |
-| `/about`              | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/contact`            | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/deployment`         | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/engagement-models`  | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/executive-brief`    | AQLIYA Company | Product marketing page | Public           | Active                | Canonical executive brief route       |
-| `/executive-briefing` | AQLIYA Company | Product marketing page | Public           | Active                | Redirect alias to `/executive-brief`  |
-| `/governance`         | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/how-we-work`        | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/insights`           | AQLIYA Company | Product marketing page | Public           | Active                | Blog/insights index                   |
-| `/insights/*`         | AQLIYA Company | Product marketing page | Public           | Active                | Individual insight articles           |
-| `/platform`           | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/pilot-proof`        | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/proof-library`      | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/security`           | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/terms`              | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/privacy`            | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/use-cases`          | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/case-studies`       | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/demo`               | AQLIYA Company | Product marketing page | Public           | Active                |                                       |
-| `/buyers/*`           | AQLIYA Company | Product marketing page | Public           | Active                | Buyer personas                        |
-| `/custom-product`     | AQLIYA Company | Product marketing page | Public           | Active                | Leads to `/api/custom-product-submit` |
+| `/`                   | AQLIYA Platform| Platform landing       | Public           | Active                | 9-section platform positioning, no product names |
+| `/platform`           | AQLIYA Platform| Platform page          | Public           | Active                | Intelligence Core + operating systems list |
+| `/industries`         | AQLIYA Platform| Sectors page           | Public           | Active                | 4 sectors: audit, government, enterprise, professional services |
+| `/proof`              | AQLIYA Platform| Proof Center           | Public           | Active                | Central hub: demo, brief, pilot, library, security |
+| `/governance`         | AQLIYA Platform| Governance page        | Public           | Active                | Trust architecture with AI governance section |
+| `/about`              | AQLIYA Platform| Company page           | Public           | Active                | Story + team + methodology |
+| `/security`           | AQLIYA Platform| Enterprise security    | Public           | Active                | RBAC, audit trail, encryption, deployment controls |
+| `/deployment`         | AQLIYA Platform| Deployment models      | Public           | Active                | Cloud / Private / Air-Gapped |
+| `/demo`               | AQLIYA Platform| Interactive demo landing| Public           | Active                | Demo walkthrough landing |
+| `/executive-brief`    | AQLIYA Platform| Executive summary      | Public           | Active                | Canonical 4-page brief for leadership |
+| `/executive-briefing` | AQLIYA Platform| Redirect alias         | Public           | Active                | Redirect → `/executive-brief` |
+| `/pilot-proof`        | AQLIYA Platform| Pilot framework        | Public           | Active                | 28 evaluation criteria + scenarios |
+| `/pilot-outcomes`     | AQLIYA Platform| Pilot outcomes hub     | Public           | Active                | Honest placeholder until ≥2 completed pilots |
+| `/soc2-roadmap`       | AQLIYA Platform| SOC2 target roadmap    | Public           | Active                | Not a certification claim; Q-targets |
+| `/proof-library`      | AQLIYA Platform| Evidence library       | Public           | Active                | Sample outputs on mock data |
+| `/contact`            | AQLIYA Platform| Pilot request form     | Public           | Active                | Integrated pilot/demo/contact form |
+| `/procurement-pack`   | AQLIYA Platform| Procurement hub        | Public           | Active                | PDF pack: brief, security, DPA, residency, SOW |
+| `/print/*`            | AQLIYA Platform| Printable trust assets | Public           | Active                | noindex; executive brief AR/EN, security, DPA, etc. |
+| `/en`                 | AQLIYA Platform| English marketing MVP  | Public           | Active                | Home, proof, security, audit, demo, contact, brief |
+| `/en/*`               | AQLIYA Platform| English marketing MVP  | Public           | Active                | Subpaths of `/en` only (not full site localization) |
+| `/case-studies`       | AQLIYA Platform| Case study index       | Public           | Active                | Simulated scenarios + reference #1 placeholder |
+| `/engagement-models`  | AQLIYA Platform| Partnership page       | Public           | Active                | Diagnostic → Pilot → Deploy → Scale + pricing band |
+| `/custom-product`     | AQLIYA Platform| Custom system inquiry  | Public           | Active                | Leads to `/api/custom-product-submit` |
+| `/terms`              | AQLIYA Platform| Terms of service       | Public           | Active                | Enterprise-grade terms |
+| `/privacy`            | AQLIYA Platform| Privacy policy         | Public           | Active                | Honest about no SOC2 yet |
+| `/insights`           | AQLIYA Platform| Articles index         | Public           | Active                | Thought leadership |
+| `/insights/*`         | AQLIYA Platform| Individual articles    | Public           | Active                |                                        |
+| `/buyers/*`           | AQLIYA Platform| Buyer persona guides   | Public           | Active                | Audit partner, CFO, CIO, government |
+| `/use-cases`          | AQLIYA Platform| Use case listing       | Public           | Active                |                                        |
+| `/how-we-work`        | AQLIYA Platform| Methodology page       | Public           | Loading                | Requires content fix |
 
-### Product Marketing Routes
+### Operating System Reference Pages (deep-links from /platform#capabilities)
 
-| Route                     | Product/System  | Route Type             | Public/Protected | Implementation Status | Notes                                                               |
-| ------------------------- | --------------- | ---------------------- | ---------------- | --------------------- | ------------------------------------------------------------------- |
-| `/products`               | Product catalog | Product marketing page | Public           | Active                | Product index                                                       |
-| `/products/audit`         | AuditOS         | Product marketing page | Public           | Active                | Marketing page                                                      |
-| `/products/decision`      | DecisionOS      | Product marketing page | Public           | Active                | Marketing page                                                      |
-| `/products/simulation`    | SimulationOS    | Product marketing page | Public           | Marketing-only (L1)   | Not a standalone system                                             |
-| `/products/sales`         | SalesOS         | Product marketing page | Public           | Active                | Marketing page. Workspace routes at `/sales/*` (27 routes).         |
-| `/products/local-content` | LocalContentOS  | Product marketing page | Public           | Active                | Marketing page. Workspace routes at `/local-content/*` (12 routes). |
+These pages serve as detail references for specialized operating systems. They are NOT primary navigation items — linked from `/platform#capabilities` and footer only.
+
+| Route                     | Operating System | Route Type             | Public/Protected | Implementation Status | Notes                                                               |
+| ------------------------- | ---------------- | ---------------------- | ---------------- | --------------------- | ------------------------------------------------------------------- |
+| `/products`               | OS catalog       | Reference page         | Public           | Active                | Listing of all operating systems                                    |
+| `/products/audit`         | AuditOS          | Reference page         | Public           | Active                | 12-station audit lifecycle detail                                   |
+| `/products/decision`      | DecisionOS       | Reference page         | Public           | Active                | Decision governance workflow detail                                 |
+| `/products/local-content` | LocalContentOS   | Reference page         | Public           | Active                | Local content compliance detail                                     |
+| `/products/sales`         | SalesOS          | Reference page         | Public           | Active                | Business development workflow detail                                |
+| `/products/office-ai`     | Office AI        | Reference page         | Public           | Active                | Shared application detail                                           |
+| `/products/simulation`    | SimulationOS     | Reference page         | Public           | Redirect only         | marketing-only label — redirects to /products                       |
 
 ### Auth & Internal Routes
 

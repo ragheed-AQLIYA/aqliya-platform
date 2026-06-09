@@ -4,9 +4,9 @@ import { SectionEyebrow } from "@/components/enterprise";
 import { OperatingSystemMapVisual } from "@/components/visuals";
 
 export const metadata: Metadata = {
-  title: "المنصة — البنية الأساسية المشتركة | AQLIYA",
+  title: "المنصة | AQLIYA Intelligence Core",
   description:
-    "AQLIYA Intelligence Core هي البنية الأساسية المشتركة التي تعتمد عليها جميع منتجات وتطبيقات عقلية — نواة واحدة تجمع الذكاء، الحوكمة، سير العمل، الأدلة، والتكاملات في بيئة مؤسسية واحدة.",
+    "البنية الأساسية المشتركة التي تعتمد عليها جميع أنظمة عقلية — حوكمة، سير عمل، أدلة، وسجل تدقيق في نواة واحدة.",
 };
 
 const deploymentModels = [
@@ -57,33 +57,29 @@ const deploymentModels = [
   },
 ];
 
-const systemsOnCore = [
+const operatingSystems = [
   {
-    name: "AuditOS",
-    tagline: "نظام التدقيق والذكاء المالي",
-    maturity: "L5 — Pilot-ready",
-    status: "live",
+    useCase: "إدارة ارتباطات المراجعة",
+    system: "AuditOS",
+    description: "من قبول العميل إلى التقرير — دورة مراجعة كاملة محكومة.",
+    status: "pilot-ready",
+    statusLabel: "جاهز للبايلوت",
     href: "/products/audit",
   },
   {
-    name: "DecisionOS",
-    tagline: "حوكمة القرار التنفيذي",
-    maturity: "L4 — Usable v0.1",
-    status: "live",
+    useCase: "توثيق القرارات المؤسسية",
+    system: "DecisionOS",
+    description: "بدائل، مخاطر، أدلة، توصية، واعتماد — في مسار واحد.",
+    status: "active",
+    statusLabel: "نشط",
     href: "/products/decision",
   },
   {
-    name: "SalesOS",
-    tagline: "ذاكرة تجارية محكومة",
-    maturity: "L4 — قيد التطوير",
-    status: "live",
-    href: "/products/sales",
-  },
-  {
-    name: "LocalContentOS",
-    tagline: "قياس المحتوى المحلي",
-    maturity: "L4 — Usable v0.1",
-    status: "live",
+    useCase: "برامج المحتوى المحلي",
+    system: "LocalContentOS",
+    description: "موردون، إنفاق، عقود، امتثال، وتقارير — للسوق السعودي.",
+    status: "pilot-ready",
+    statusLabel: "بايلوت منسّق",
     href: "/products/local-content",
   },
 ];
@@ -260,45 +256,70 @@ export default function PlatformPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+      <section
+        id="capabilities"
+        className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20 scroll-mt-20"
+      >
         <SectionEyebrow
-          label="المنتجات المبنية على المنصة"
-          title="كل منتج تحت عقلية يرث مكونات المنصة تلقائياً"
-          description="من AuditOS إلى LocalContentOS — كل منتج يُعيد استخدام نفس مكونات الذكاء، الحوكمة، سير العمل، والأدلة دون إعادة بناء."
+          label="أنظمة التشغيل المتخصصة"
+          title="المنصة تُطبَّق عبر مسارات تشغيلية — لا منتجات منفصلة"
+          description="كل نظام تشغيل يرث تلقائياً الحوكمة، الأدلة، سير العمل، والصلاحيات من نفس المنصة — دون إعادة بناء."
         />
 
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {systemsOnCore.map((sys) => (
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          {operatingSystems.map((sys) => (
             <Link
-              key={sys.name}
+              key={sys.system}
               href={sys.href}
-              className={`group rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-sm ${
-                sys.status === "live"
-                  ? "border-border/70 bg-background hover:border-primary/20"
-                  : "border-border/50 bg-muted/10"
-              }`}
+              className="group rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
             >
-              <div className="flex items-start justify-between mb-3">
-                <h3 className="text-sm font-black text-foreground">
-                  {sys.name}
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <h3 className="text-base font-black text-foreground group-hover:text-primary">
+                  {sys.useCase}
                 </h3>
                 <span
-                  className={`rounded-full px-2 py-0.5 text-[9px] font-bold ${
-                    sys.status === "live"
+                  className={`shrink-0 rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
+                    sys.status === "pilot-ready"
                       ? "bg-status-success/15 text-status-success"
-                      : "bg-amber-500/15 text-amber-600"
+                      : sys.status === "active"
+                        ? "bg-primary/10 text-primary"
+                        : "bg-amber-500/15 text-amber-600"
                   }`}
                 >
-                  {sys.status === "live" ? "نشط" : "قيد التطوير"}
+                  {sys.statusLabel}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground mb-2">{sys.tagline}</p>
-              <p className="text-[11px] font-mono text-muted-foreground/60">
-                {sys.maturity}
+              <p className="text-xs text-muted-foreground">{sys.description}</p>
+              <p className="mt-3 text-[10px] font-medium text-muted-foreground/60">
+                نظام التشغيل: {sys.system}
               </p>
             </Link>
           ))}
         </div>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          Office AI Assistant قدرة مشتركة عبر المنصة — مساعد مؤسسي محكوم ضمن
+          الصلاحيات والأدلة.{" "}
+          <Link
+            href="/products/office-ai"
+            className="text-primary underline underline-offset-4"
+          >
+            التفاصيل
+          </Link>
+        </p>
+        <p className="mt-4 text-center text-xs text-muted-foreground/70">
+          SalesOS و SimulationOS في خارطة التطوير —{" "}
+          <span className="text-muted-foreground">
+            غير متاحين للشراء أو البايلوت حاليًا
+          </span>
+          .{" "}
+          <Link
+            href="/products#strategic"
+            className="text-primary underline underline-offset-4"
+          >
+            الخطوط الاستراتيجية
+          </Link>
+        </p>
       </section>
 
       <section className="section-gradient-light border-t">
@@ -379,10 +400,10 @@ export default function PlatformPage() {
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-4">
               <Link href="/contact" className="btn-primary h-11 px-8">
-                طلب جلسة تنفيذية
+                احجز جلسة تشخيص
               </Link>
-              <Link href="/products" className="btn-secondary h-11 px-8">
-                استكشف المنتجات
+              <Link href="/proof" className="btn-secondary h-11 px-8">
+                مركز الإثبات
               </Link>
             </div>
           </div>

@@ -3,42 +3,42 @@ import Image from "next/image";
 
 const footerColumns = [
   {
-    title: "المنتجات",
-    links: [
-      { label: "DecisionOS — القرارات المؤسسية", href: "/products/decision" },
-      { label: "SalesOS — تطوير الأعمال والمبيعات", href: "/products/sales" },
-      { label: "AuditOS — المراجعة والالتزام", href: "/products/audit" },
-      { label: "LocalContentOS — المحتوى المحلي وسلاسل التوريد", href: "/products/local-content" },
-    ],
-  },
-  {
     title: "المنصة",
     links: [
-      { label: "AQLIYA Intelligence Core", href: "/platform" },
-      { label: "Workflow Engine", href: "/platform#workflow" },
-      { label: "Governance", href: "/governance" },
-      { label: "Integration Layer", href: "/platform#integration" },
-      { label: "Evidence Graph", href: "/platform#evidence" },
-      { label: "Audit Trail", href: "/platform#audit" },
+      { label: "كيف تعمل عقلية", href: "/platform" },
+      { label: "أنظمة التشغيل", href: "/platform#capabilities" },
+      { label: "الحوكمة", href: "/governance" },
+      { label: "بيئات النشر", href: "/deployment" },
+      { label: "الأمن المؤسسي", href: "/security" },
     ],
   },
   {
-    title: "الموارد",
+    title: "القطاعات",
     links: [
-      { label: "رؤى ومقالات", href: "/insights" },
-      { label: "دراسات الحالة", href: "/case-studies" },
-      { label: "دليل المشتري", href: "/buyers" },
-      { label: "الملخص التنفيذي", href: "/executive-brief" },
+      { label: "مكاتب المراجعة", href: "/industries#audit-firms" },
+      { label: "الجهات الحكومية", href: "/industries#government" },
+      { label: "الشركات الكبرى", href: "/industries#enterprise" },
+      { label: "الخدمات المهنية", href: "/industries#professional-services" },
+    ],
+  },
+  {
+    title: "الإثبات",
+    links: [
+      { label: "مركز الإثبات", href: "/proof" },
       { label: "الديمو التفاعلي", href: "/demo" },
+      { label: "الملخص التنفيذي", href: "/executive-brief" },
+      { label: "إطار البايلوت", href: "/pilot-proof" },
+      { label: "مكتبة الأدلة", href: "/proof-library" },
     ],
   },
   {
     title: "الشركة",
     links: [
-      { label: "من نحن", href: "/about" },
-      { label: "بيئات النشر", href: "/deployment" },
+      { label: "عن عقلية", href: "/about" },
       { label: "نماذج التعاون", href: "/engagement-models" },
-      { label: "تواصل معنا", href: "/contact" },
+      { label: "دليل المشتري", href: "/buyers" },
+      { label: "رؤى ومقالات", href: "/insights" },
+      { label: "تواصل", href: "/contact" },
     ],
   },
 ];
@@ -46,18 +46,23 @@ const footerColumns = [
 const legalLinks = [
   { label: "سياسة الخصوصية", href: "/privacy" },
   { label: "شروط الخدمة", href: "/terms" },
-  { label: "الأمن المؤسسي", href: "/security" },
 ];
 
-export function SiteFooter() {
+/** Product pages remain reachable but not promoted in primary nav. */
+const productLinks = [
+  { label: "AuditOS", href: "/products/audit" },
+  { label: "DecisionOS", href: "/products/decision" },
+  { label: "LocalContentOS", href: "/products/local-content" },
+];
+
+export function SiteFooter({ locale = "ar" }: { locale?: "ar" | "en" } = {}) {
+  const homeHref = locale === "en" ? "/en" : "/";
   return (
     <footer className="border-t bg-gradient-to-b from-muted/30 to-background">
       <div className="mx-auto max-w-7xl px-6 py-14">
-        {/* Main grid */}
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
-          {/* Brand column */}
           <div className="space-y-5">
-            <Link href="/" className="inline-flex items-center gap-3">
+            <Link href={homeHref} className="inline-flex items-center gap-3">
               <Image
                 src="/brand/aqliya-logo-approved.png"
                 alt="AQLIYA"
@@ -68,10 +73,10 @@ export function SiteFooter() {
             </Link>
 
             <p className="text-sm leading-7 text-muted-foreground">
-              منصة تشغيل مؤسسية للقرارات والعمليات والامتثال. أربعة منتجات تعمل فوق بنية واحدة: الحوكمة، سير العمل، الأدلة، وسجل التدقيق.
+              منصة تشغيل مؤسسية للقرارات والعمليات والأدلة. تربط البيانات
+              والإجراءات والاعتمادات في مسار واحد قابل للمراجعة.
             </p>
 
-            {/* Platform Message */}
             <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-4">
               <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-primary/70">
                 المبدأ المؤسسي
@@ -79,29 +84,9 @@ export function SiteFooter() {
               <p className="mt-2 text-sm font-medium leading-7 text-foreground">
                 الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
               </p>
-              <p className="mt-1 text-[10px] text-muted-foreground/60">
-                AI assists. Humans decide. Evidence governs.
-              </p>
-            </div>
-
-            {/* Deployment status */}
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground/70">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-status-success" />
-                السحابة متاحة الآن
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground/45">
-                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
-                الخوادم الخاصة — قيد التخطيط
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground/35">
-                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/20" />
-                البيئة المعزولة — استراتيجي
-              </div>
             </div>
           </div>
 
-          {/* Nav columns */}
           {footerColumns.map((group) => (
             <div key={group.title} className="space-y-4">
               <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">
@@ -123,13 +108,29 @@ export function SiteFooter() {
           ))}
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-12 border-t pt-6">
+        <div className="mt-10 border-t border-border/40 pt-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/50 mb-3">
+            أنظمة التشغيل المتخصصة
+          </p>
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            {productLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-xs text-muted-foreground/45 transition-colors hover:text-muted-foreground/70"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 border-t pt-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-xs text-muted-foreground/55">
-              &copy; {new Date().getFullYear()} AQLIYA. جميع الحقوق محفوظة.
+              &copy; {new Date().getFullYear()} AQLIYA.{" "}
+              {locale === "en" ? "All rights reserved." : "جميع الحقوق محفوظة."}
             </p>
-            {/* Legal links */}
             <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
               {legalLinks.map((link) => (
                 <Link

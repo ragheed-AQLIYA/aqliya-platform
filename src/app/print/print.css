@@ -1,0 +1,58 @@
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  @page {
+    margin: 18mm 16mm;
+  }
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.print-doc {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.print-doc h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.print-doc h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.print-doc p,
+.print-doc li {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: #334155;
+}
+
+.print-doc ul {
+  margin: 0.5rem 0;
+  padding-right: 1.25rem;
+}
+
+.print-meta {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.print-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}

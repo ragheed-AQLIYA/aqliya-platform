@@ -434,9 +434,49 @@ export default function SecurityPage() {
                 <p className="mt-2 text-sm leading-6 text-white/55">
                   لا ندّعي شهادات SOC2 أو ISO لم نحصل عليها بعد. نحن شركة
                   ناشئة تبني بنيتها الأمنية بمسؤولية — وجاهزون لجلسة تقنية
-                  مفتوحة مع فريقك الأمني.
+                  مفتوحة مع فريقك الأمني.{" "}
+                  <Link href="/soc2-roadmap" className="text-aqliya-cyan underline">
+                    خارطة SOC2 المستهدفة →
+                  </Link>
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Procurement pack */}
+      <section className="border-t border-white/5 py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mx-auto max-w-3xl rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
+              حزمة التقييم للمشتريات
+            </p>
+            <h2 className="mt-4 text-2xl font-black text-white">
+              وثائق جاهزة لفريق المشتريات والأمن
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-white/60">
+              نطاق البايلوت، معايير النجاح، ملخص الأمن، نماذج التعاون، وإطار
+              Go/No-Go — متاحة عبر{" "}
+              <Link href="/proof" className="text-aqliya-cyan underline">
+                مركز الإثبات
+              </Link>{" "}
+              و{" "}
+              <Link href="/buyers/procurement" className="text-aqliya-cyan underline">
+                دليل المشتريات
+              </Link>
+              .
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
+              <Link href="/procurement-pack" className="btn-primary px-6 py-2.5 text-sm">
+                حزمة المشتريات
+              </Link>
+              <Link href="/proof" className="btn-secondary px-6 py-2.5 text-sm">
+                مركز الإثبات
+              </Link>
+              <Link href="/engagement-models" className="btn-outline px-6 py-2.5 text-sm">
+                نماذج التعاون
+              </Link>
             </div>
           </div>
         </div>

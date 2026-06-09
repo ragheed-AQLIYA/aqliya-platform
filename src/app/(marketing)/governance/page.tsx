@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { SectionEyebrow, WorkflowChain } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "الحوكمة والأمان | AQLIYA",
+  title: "الحوكمة | AQLIYA",
   description:
-    "بنية الثقة المؤسسية في عقلية: سلسلة الأدلة، RBAC، سجل التدقيق غير القابل للتعديل، بوابات المراجعة البشرية، عزل المؤسسات، وحدود الذكاء الاصطناعي — مُنفَّذة على مستوى المنصة.",
+    "سلسلة أدلة كاملة، RBAC متعدد المستويات، Audit Trail غير قابل للتعديل، وحوكمة AI صارمة — مدمجة في البنية.",
 };
 
 // ─── Evidence Chain Levels ──────────────────────────────────────────────────
@@ -193,8 +193,34 @@ export default function GovernancePage() {
         </div>
       </section>
 
-      {/* ─── RBAC ─────────────────────────────────────────── */}
+      {/* ─── AI Governance ───────────────────────────────── */}
       <section className="section-gradient-light border-t">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <SectionEyebrow
+            label="حوكمة الذكاء الاصطناعي"
+            title="الذكاء الاصطناعي يساعد — لا يستبدل مسار الحوكمة أو يتجاوزه"
+            description="في عقلية، الذكاء الاصطناعي ليس صندوقاً أسود. كل استخدام محكوم بقواعد معلنة تمنع التصرف المستقل وتضمن أن الإنسان يبقى في مركز القرار. هذا ليس إعداداً اختيارياً — إنه قيد هندسي في المنصة."
+          />
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {aiRules.map((rule) => (
+              <div
+                key={rule.rule}
+                className="rounded-2xl border border-border/60 bg-background p-5"
+              >
+                <div className="flex items-start gap-2 mb-3">
+                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-aqliya-cyan" />
+                  <p className="text-sm font-bold text-foreground">{rule.rule}</p>
+                </div>
+                <p className="text-sm leading-6 text-muted-foreground">{rule.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── RBAC ─────────────────────────────────────────── */}
+      <section className="border-t">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <SectionEyebrow
             label="الصلاحيات والأدوار"
@@ -266,32 +292,6 @@ export default function GovernancePage() {
         </div>
       </section>
 
-      {/* ─── AI Governance ───────────────────────────────── */}
-      <section className="section-gradient-light border-t">
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-          <SectionEyebrow
-            label="حوكمة الذكاء الاصطناعي"
-            title="الذكاء محدود بقواعد صريحة في كل سياق"
-            description="في عقلية، الذكاء الاصطناعي ليس صندوقاً أسود. كل استخدام محكوم بقواعد معلنة تمنع التصرف المستقل وتضمن أن الإنسان يبقى في مركز القرار."
-          />
-
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {aiRules.map((rule) => (
-              <div
-                key={rule.rule}
-                className="rounded-2xl border border-border/60 bg-background p-5"
-              >
-                <div className="flex items-start gap-2 mb-3">
-                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-aqliya-cyan" />
-                  <p className="text-sm font-bold text-foreground">{rule.rule}</p>
-                </div>
-                <p className="text-sm leading-6 text-muted-foreground">{rule.detail}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ─── Tenant Isolation ────────────────────────────── */}
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <SectionEyebrow
@@ -315,6 +315,46 @@ export default function GovernancePage() {
               <p className="text-xs leading-6 text-muted-foreground">{item.body}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ─── Security Brief Download ────────────────────── */}
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="text-2xl font-black text-foreground sm:text-3xl">
+            لمسؤول الأمن أو التقني في مؤسستك
+          </h2>
+          <p className="mt-4 text-base leading-7 text-muted-foreground">
+            ملخص أمني PDF يلخص بنية RBAC، Audit Trail، عزل البيانات، التشفير،
+            ونماذج النشر — جاهز للمراجعة المبدئية من فريقك التقني.
+          </p>
+          <div className="mx-auto mt-8 max-w-md rounded-2xl border border-border/60 bg-gradient-to-br from-muted/20 to-background p-6 text-right">
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="security-email"
+                  className="mb-1.5 block text-xs font-semibold text-foreground"
+                >
+                  البريد الإلكتروني المؤسسي
+                </label>
+                <input
+                  id="security-email"
+                  type="email"
+                  placeholder="you@organisation.com"
+                  className="w-full rounded-xl border border-border/70 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/15"
+                />
+              </div>
+              <Link
+                href="/contact"
+                className="btn-primary flex h-11 w-full items-center justify-center text-sm"
+              >
+                أرسل الملخص الأمني
+              </Link>
+              <p className="text-[11px] text-muted-foreground/50 text-center">
+                سنرسل لك الملخص الأمني مباشرة. لا بريد عشوائي، لا مشاركة.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

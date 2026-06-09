@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { publicOsStatus } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "نماذج التعاون | AQLIYA",
@@ -214,7 +216,7 @@ const recommendedProducts = [
     description:
       "سير عمل المراجعة المالية: ميزان المراجعة، القوائم، الأدلة، المراجعة، والاعتماد.",
     href: "/products/audit",
-    status: "Pilot-ready L5",
+    status: publicOsStatus.auditOS.label,
     statusColor: "text-emerald-400",
   },
   {
@@ -222,24 +224,24 @@ const recommendedProducts = [
     match: "المحتوى المحلي والموردين",
     description: "إدارة المحتوى المحلي: الموردين، العقود، الأدلة، والتقارير.",
     href: "/products/local-content",
-    status: "Pilot-ready L5",
-    statusColor: "text-emerald-400",
+    status: publicOsStatus.localContentOS.label,
+    statusColor: "text-amber-400",
   },
   {
     name: "DecisionOS",
     match: "حوكمة القرارات",
     description: "توثيق القرارات: سيناريوهات، مخاطر، أدلة، مراجعة، واعتماد.",
     href: "/products/decision",
-    status: "Usable v0.1 L4",
-    statusColor: "text-amber-400",
+    status: publicOsStatus.decisionOS.label,
+    statusColor: "text-primary",
   },
   {
     name: "Office AI Assistant",
     match: "المساعد المؤسسي المحكوم",
     description: "المعرفة الداخلية والإنتاجية ضمن بيئة حوكمة وأدلة ومراجعة.",
     href: "/products/office-ai",
-    status: "Usable v0.1 L4",
-    statusColor: "text-amber-400",
+    status: publicOsStatus.officeAI.label,
+    statusColor: "text-primary",
   },
 ];
 
@@ -572,6 +574,41 @@ export default function EngagementModelsPage() {
         </div>
       </section>
 
+      {/* Investment framing */}
+      <section className="border-b border-white/5 py-16">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
+            الاستثمار
+          </p>
+          <h2 className="mt-4 text-2xl font-bold text-white">
+            التشخيص والبايلوت — مجاني. النشر — بعد Go/No-Go
+          </h2>
+          <p className="mt-4 text-sm leading-7 text-slate-400">
+            لا نحدد تسعيرة الإنتاج قبل تقييم النطاق. بعد بايلوت ناجح، نقدم
+            عرضًا مبنيًا على عدد المستخدمين، أنظمة التشغيل المفعّلة، ومتطلبات
+            النشر. البايلوت التقييمي مجاني دائمًا للمسار الأول.
+          </p>
+          <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-6 text-right">
+            <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
+              نطاق تقديري (بعد Go/No-Go — ليس عرضاً ملزماً)
+            </p>
+            <ul className="mt-4 space-y-2 text-sm text-slate-300">
+              <li>• جلسة تشخيص — مجانية</li>
+              <li>• بايلوت تقييمي (مسار واحد) — مجاني</li>
+              <li>
+                • نشر إنتاج: يبدأ تقريباً من{" "}
+                <strong className="text-white">15,000 ريال/شهر</strong> لمكتب
+                مراجعة صغير — يُحدد في عرض مكتوب بعد البايلوت
+              </li>
+              <li>• مؤسسات أكبر / أنظمة متعددة — تسعير حسب النطاق والنشر</li>
+            </ul>
+            <p className="mt-4 text-xs text-slate-500">
+              الأرقام إرشادية للتأهيل فقط. لا التزام تعاقدي قبل SOW وGo/No-Go.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="section-gradient-dark py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -584,12 +621,12 @@ export default function EngagementModelsPage() {
               المنتجات أولاً.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
+              <ScheduleDiagnosticCta className="px-8 py-3 rounded-xl text-sm font-medium" />
               <Link
-                href="/contact"
-                className="btn-primary px-8 py-3 rounded-xl text-sm font-medium"
-                data-event="click_request_pilot_review"
+                href="/procurement-pack"
+                className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
               >
-                طلب جلسة تشخيص
+                حزمة المشتريات
               </Link>
               <Link
                 href="/pilot-proof"
