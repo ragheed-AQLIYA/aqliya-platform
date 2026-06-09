@@ -45,9 +45,14 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/products/office-ai",
+        source: "/products/simulation",
         destination: "/products",
         permanent: true,
+      },
+      {
+        source: "/solutions",
+        destination: "/products",
+        permanent: false,
       },
     ]
   },

@@ -18,7 +18,7 @@ const productItems = [
 const resourceItems = [
   { label: "رؤى ومقالات", href: "/insights", description: "تحليلات بدون تسويق" },
   { label: "دراسات الحالة", href: "/case-studies", description: "قصص نجاح وإثبات" },
-  { label: "دليل المشتري", href: "/buyers/cfo", description: "للمدير المالي وشركاء التدقيق" },
+  { label: "دليل المشتري", href: "/buyers", description: "للمدير المالي وشركاء التدقيق" },
   { label: "الملخص التنفيذي", href: "/executive-brief", description: "قراءة سريعة للمنصة" },
 ];
 

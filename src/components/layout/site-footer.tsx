@@ -27,7 +27,7 @@ const footerColumns = [
     links: [
       { label: "رؤى ومقالات", href: "/insights" },
       { label: "دراسات الحالة", href: "/case-studies" },
-      { label: "دليل المشتري", href: "/buyers/cfo" },
+      { label: "دليل المشتري", href: "/buyers" },
       { label: "الملخص التنفيذي", href: "/executive-brief" },
       { label: "الديمو التفاعلي", href: "/demo" },
     ],
