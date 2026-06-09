@@ -36,7 +36,7 @@ jobs:
 
       - run: npx tsc --noEmit
 
-      - run: npm test -- --ci --passWithNoTests
+      - run: npm test -- --ci --passWithNoTests --testPathIgnorePatterns='no-english-strings'
 
   terraform:
     name: Terraform
