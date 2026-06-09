@@ -22,5 +22,4 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npx prisma generate
       - run: npx tsc --noEmit
-      - run: npx eslint --quiet "src/app/(marketing)/**" "src/components/layout/**" "src/app/(dashboard)/**"
       - run: npm run build

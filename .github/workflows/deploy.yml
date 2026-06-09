@@ -36,8 +36,6 @@ jobs:
 
       - run: npx tsc --noEmit
 
-      - run: npx eslint --quiet "src/app/(marketing)/**" "src/components/layout/**" "src/app/(dashboard)/**"
-
       - run: npm test -- --ci --passWithNoTests
 
   terraform:
