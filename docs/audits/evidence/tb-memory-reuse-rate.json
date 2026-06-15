@@ -1,0 +1,9 @@
+{
+  "kpi": "memory_reuse_rate",
+  "engagementId": "eng-shalfa-2025",
+  "measuredAt": "2026-06-15T00:38:31.778Z",
+  "totalClassifiedAccounts": 578,
+  "firmMemoryHits": 0,
+  "reuseRate": 0,
+  "note": "Uses latest TBClassificationHistory source per account. Client 2+ baseline TBD."
+}
