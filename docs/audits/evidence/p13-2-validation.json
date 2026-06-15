@@ -1,0 +1,456 @@
+{
+  "phase": "13.2",
+  "objective": "Engagement Presentation Policy Engine",
+  "resolverChecks": {
+    "genericProfileResolvesToGenericPolicy": true,
+    "pilotProfileResolvesToShalfaPolicy": true,
+    "seededGenericPolicyLoadable": true,
+    "seededShalfaPolicyLoadable": true
+  },
+  "hardcodedConstantsRemoved": true,
+  "policyResolutionChain": [
+    "statement-builder",
+    "presentation profile",
+    "presentation policy",
+    "rendered statements"
+  ],
+  "genericClient": {
+    "name": "Generic — Gulf Trading seed demo",
+    "policySlug": "generic-v1",
+    "mappedCount": 23,
+    "auditos": {
+      "revenue": 5250000,
+      "costOfRevenue": 2800000,
+      "grossProfit": 2450000,
+      "operatingExpenses": 1595000,
+      "operatingProfit": 855000,
+      "financeCosts": 35000,
+      "otherIncome": 45000,
+      "netProfit": 865000,
+      "totalAssets": 5200000,
+      "totalEquity": 3570000,
+      "cash": 500000,
+      "signedIsNet": 865000
+    },
+    "reference": {
+      "client": "Gulf Trading Co. (seed demo)",
+      "revenue": 5250000,
+      "otherIncome": 45000,
+      "costOfRevenue": 2800000,
+      "grossProfit": 2495000,
+      "operatingExpenses": 1595000,
+      "financeCosts": 35000,
+      "operatingProfit": 900000,
+      "netProfit": 865000,
+      "totalAssets": 5200000,
+      "totalEquity": 3570000,
+      "cash": 500000
+    },
+    "variances": {
+      "netProfitPct": 0,
+      "revenuePct": 0,
+      "costOfRevenuePct": 0,
+      "otherIncomePct": 0,
+      "financeCostsPct": 0,
+      "operatingProfitPct": -5
+    },
+    "scores": {
+      "structural": 98,
+      "economic": 100,
+      "presentation": 100,
+      "lineItem": 100,
+      "factoryAccuracy": 100
+    },
+    "lineChecks": [
+      {
+        "label": "Revenue",
+        "auditos": 5250000,
+        "reference": 5250000,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Cost of revenue",
+        "auditos": 2800000,
+        "reference": 2800000,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Gross profit",
+        "auditos": 2450000,
+        "reference": 2495000,
+        "variancePct": -1.8036072144288577,
+        "match": true
+      },
+      {
+        "label": "Operating expenses",
+        "auditos": 1595000,
+        "reference": 1595000,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Operating profit",
+        "auditos": 855000,
+        "reference": 900000,
+        "variancePct": -5,
+        "match": true
+      },
+      {
+        "label": "Finance costs",
+        "auditos": 35000,
+        "reference": 35000,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Other income",
+        "auditos": 45000,
+        "reference": 45000,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Net profit",
+        "auditos": 865000,
+        "reference": 865000,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Total assets",
+        "auditos": 5200000,
+        "reference": 5200000,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Total equity",
+        "auditos": 3570000,
+        "reference": 3570000,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Cash",
+        "auditos": 500000,
+        "reference": 500000,
+        "variancePct": 0,
+        "match": true
+      }
+    ],
+    "presentationTotals": {
+      "revenueTotal": 5250000,
+      "revenueIntercompany": 0,
+      "revenueReclassified": 0,
+      "revenueAffiliate": 0,
+      "revenueContract": 0,
+      "revenueOther": 5250000,
+      "costOfRevenueTotal": 2800000,
+      "operatingExpensesTotal": 1595000,
+      "financeCostsTotal": 35000,
+      "otherIncomeTotal": 45000,
+      "zakatTotal": 0,
+      "grossProfit": 2450000,
+      "operatingProfit": 855000,
+      "profitBeforeZakat": 865000
+    },
+    "netProfitUnchanged": true
+  },
+  "shalfaGenericPolicy": {
+    "name": "Shalfa — generic policy (regression control)",
+    "policySlug": "generic-v1",
+    "mappedCount": 578,
+    "auditos": {
+      "revenue": 531162927.16,
+      "costOfRevenue": 476134062.1099998,
+      "grossProfit": 55028865.05000025,
+      "operatingExpenses": 26637563.180000007,
+      "operatingProfit": 28391301.870000243,
+      "financeCosts": 13235282.17,
+      "otherIncome": 11171844.76,
+      "netProfit": 25084855.92000027,
+      "totalAssets": 376111038.65999997,
+      "totalEquity": 112586726.38000028,
+      "cash": 62819988.839999944,
+      "signedIsNet": 25084855.92000027
+    },
+    "reference": {
+      "client": "Shalfa Facilities (pilot)",
+      "revenue": 451412506,
+      "costOfRevenue": 384959315,
+      "grossProfit": 66453191,
+      "operatingExpenses": 26627726,
+      "operatingProfit": 39825465,
+      "financeCosts": 12901271,
+      "otherIncome": 735915,
+      "netProfit": 25084852,
+      "totalAssets": 376138426,
+      "totalEquity": 112586721,
+      "cash": 62819989
+    },
+    "variances": {
+      "netProfitPct": 0.000015626961921118933,
+      "revenuePct": 17.666861263254418,
+      "costOfRevenuePct": 23.68425533747632,
+      "otherIncomePct": 1418.089012997425,
+      "financeCostsPct": 2.5889787913144366,
+      "operatingProfitPct": -28.71068330275555
+    },
+    "scores": {
+      "structural": 98,
+      "economic": 75,
+      "presentation": 55,
+      "lineItem": 55,
+      "factoryAccuracy": 71
+    },
+    "lineChecks": [
+      {
+        "label": "Revenue",
+        "auditos": 531162927.16,
+        "reference": 451412506,
+        "variancePct": 17.666861263254418,
+        "match": false
+      },
+      {
+        "label": "Cost of revenue",
+        "auditos": 476134062.1099998,
+        "reference": 384959315,
+        "variancePct": 23.68425533747632,
+        "match": false
+      },
+      {
+        "label": "Gross profit",
+        "auditos": 55028865.05000025,
+        "reference": 66453191,
+        "variancePct": -17.1915385523018,
+        "match": false
+      },
+      {
+        "label": "Operating expenses",
+        "auditos": 26637563.180000007,
+        "reference": 26627726,
+        "variancePct": 0.03694337248327984,
+        "match": true
+      },
+      {
+        "label": "Operating profit",
+        "auditos": 28391301.870000243,
+        "reference": 39825465,
+        "variancePct": -28.71068330275555,
+        "match": false
+      },
+      {
+        "label": "Finance costs",
+        "auditos": 13235282.17,
+        "reference": 12901271,
+        "variancePct": 2.5889787913144366,
+        "match": true
+      },
+      {
+        "label": "Other income",
+        "auditos": 11171844.76,
+        "reference": 735915,
+        "variancePct": 1418.089012997425,
+        "match": false
+      },
+      {
+        "label": "Net profit",
+        "auditos": 25084855.92000027,
+        "reference": 25084852,
+        "variancePct": 0.000015626961921118933,
+        "match": true
+      },
+      {
+        "label": "Total assets",
+        "auditos": 376111038.65999997,
+        "reference": 376138426,
+        "variancePct": -0.007281186421520618,
+        "match": true
+      },
+      {
+        "label": "Total equity",
+        "auditos": 112586726.38000028,
+        "reference": 112586721,
+        "variancePct": 0.000004778538916995097,
+        "match": true
+      },
+      {
+        "label": "Cash",
+        "auditos": 62819988.839999944,
+        "reference": 62819989,
+        "variancePct": -2.5469609048859606e-7,
+        "match": true
+      }
+    ],
+    "presentationTotals": {
+      "revenueTotal": 531162927.16,
+      "revenueIntercompany": 68774043.86999999,
+      "revenueReclassified": 0,
+      "revenueAffiliate": 68774043.86999999,
+      "revenueContract": 3744151.5399999917,
+      "revenueOther": 458644731.75000006,
+      "costOfRevenueTotal": 476134062.1099998,
+      "operatingExpensesTotal": 26637563.180000007,
+      "financeCostsTotal": 13235282.17,
+      "otherIncomeTotal": 11171844.76,
+      "zakatTotal": 2575256.63,
+      "grossProfit": 55028865.05000025,
+      "operatingProfit": 28391301.870000243,
+      "profitBeforeZakat": 26327864.460000243
+    },
+    "netProfitUnchanged": true
+  },
+  "shalfaPilotPolicy": {
+    "name": "Shalfa — shalfa-pilot-audited-v1 policy (Factory Accuracy v4)",
+    "policySlug": "shalfa-pilot-audited-v1",
+    "mappedCount": 578,
+    "auditos": {
+      "revenue": 450305191.84000003,
+      "costOfRevenue": 383760688.2699998,
+      "grossProfit": 66544503.57000023,
+      "operatingExpenses": 26637563.180000007,
+      "operatingProfit": 39906940.390000224,
+      "financeCosts": 12901271.17,
+      "otherIncome": 735915,
+      "netProfit": 25084855.92000027,
+      "totalAssets": 376111038.65999997,
+      "totalEquity": 112586726.38000028,
+      "cash": 62819988.839999944,
+      "signedIsNet": 25084855.92000027
+    },
+    "reference": {
+      "client": "Shalfa Facilities (pilot)",
+      "revenue": 451412506,
+      "costOfRevenue": 384959315,
+      "grossProfit": 66453191,
+      "operatingExpenses": 26627726,
+      "operatingProfit": 39825465,
+      "financeCosts": 12901271,
+      "otherIncome": 735915,
+      "netProfit": 25084852,
+      "totalAssets": 376138426,
+      "totalEquity": 112586721,
+      "cash": 62819989
+    },
+    "variances": {
+      "netProfitPct": 0.000015626961921118933,
+      "revenuePct": -0.2452998411169332,
+      "costOfRevenuePct": -0.3113645217287957,
+      "otherIncomePct": 0,
+      "financeCostsPct": 0.0000013176996276219156,
+      "operatingProfitPct": 0.2045811392289434
+    },
+    "scores": {
+      "structural": 98,
+      "economic": 100,
+      "presentation": 100,
+      "lineItem": 100,
+      "factoryAccuracy": 100
+    },
+    "lineChecks": [
+      {
+        "label": "Revenue",
+        "auditos": 450305191.84000003,
+        "reference": 451412506,
+        "variancePct": -0.2452998411169332,
+        "match": true
+      },
+      {
+        "label": "Cost of revenue",
+        "auditos": 383760688.2699998,
+        "reference": 384959315,
+        "variancePct": -0.3113645217287957,
+        "match": true
+      },
+      {
+        "label": "Gross profit",
+        "auditos": 66544503.57000023,
+        "reference": 66453191,
+        "variancePct": 0.13740885670972708,
+        "match": true
+      },
+      {
+        "label": "Operating expenses",
+        "auditos": 26637563.180000007,
+        "reference": 26627726,
+        "variancePct": 0.03694337248327984,
+        "match": true
+      },
+      {
+        "label": "Operating profit",
+        "auditos": 39906940.390000224,
+        "reference": 39825465,
+        "variancePct": 0.2045811392289434,
+        "match": true
+      },
+      {
+        "label": "Finance costs",
+        "auditos": 12901271.17,
+        "reference": 12901271,
+        "variancePct": 0.0000013176996276219156,
+        "match": true
+      },
+      {
+        "label": "Other income",
+        "auditos": 735915,
+        "reference": 735915,
+        "variancePct": 0,
+        "match": true
+      },
+      {
+        "label": "Net profit",
+        "auditos": 25084855.92000027,
+        "reference": 25084852,
+        "variancePct": 0.000015626961921118933,
+        "match": true
+      },
+      {
+        "label": "Total assets",
+        "auditos": 376111038.65999997,
+        "reference": 376138426,
+        "variancePct": -0.007281186421520618,
+        "match": true
+      },
+      {
+        "label": "Total equity",
+        "auditos": 112586726.38000028,
+        "reference": 112586721,
+        "variancePct": 0.000004778538916995097,
+        "match": true
+      },
+      {
+        "label": "Cash",
+        "auditos": 62819988.839999944,
+        "reference": 62819989,
+        "variancePct": -2.5469609048859606e-7,
+        "match": true
+      }
+    ],
+    "presentationTotals": {
+      "revenueTotal": 450305191.84000003,
+      "revenueIntercompany": 68774043.86999999,
+      "revenueReclassified": 12083691.449999992,
+      "revenueAffiliate": 68774043.86999999,
+      "revenueContract": 3744151.5399999917,
+      "revenueOther": 458644731.75000006,
+      "costOfRevenueTotal": 383760688.2699998,
+      "operatingExpensesTotal": 26637563.180000007,
+      "financeCostsTotal": 12901271.17,
+      "otherIncomeTotal": 735915,
+      "zakatTotal": 2575256.63,
+      "grossProfit": 66544503.57000023,
+      "operatingProfit": 39906940.390000224,
+      "profitBeforeZakat": 27741584.220000222
+    },
+    "netProfitUnchanged": true
+  },
+  "successCriteria": {
+    "shalfaFactoryAccuracyTarget": 85,
+    "genericUnchanged": true,
+    "shalfaPass": true,
+    "netProfitUnchanged": true,
+    "resolverPass": true
+  }
+}
