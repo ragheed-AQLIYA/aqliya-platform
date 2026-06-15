@@ -2,6 +2,10 @@ import "server-only"
 import { prisma } from "@/lib/prisma"
 import { getAISpendSummary } from "@/lib/ai/spend-tracker"
 import { getAIGovernanceMetrics } from "@/lib/ai/governance-metrics"
+import { getCircuitBreakerSnapshot } from "@/lib/ai/providers/provider-circuit-breaker"
+import { aiOrchestrator } from "@/lib/ai/orchestrator"
+import { getAllCounters, type MetricCounter } from "@/lib/integration/metrics"
+import type { AIProviderStatus } from "./types"
 
 export interface AIObservabilityData {
   summary: {
@@ -191,5 +195,58 @@ export async function getAIObservability(days = 30): Promise<AIObservabilityData
     governanceTrend,
     errors,
     topOrgs,
+  }
+}
+
+// ─── Realtime Observability (synchronous, data-source-agnostic) ───
+
+export interface AIRealtimeObservability {
+  circuitBreakers: Array<{
+    providerId: string
+    state: string
+    consecutiveFailures: number
+  }>
+  providerStatus: Record<string, AIProviderStatus>
+  metricCounters: MetricCounter[]
+  defaultProvider: string
+  overallHealth: {
+    providersConfigured: number
+    providersAvailable: number
+    circuitsClosed: number
+    circuitsOpen: number
+    circuitsHalfOpen: number
+  }
+}
+
+/**
+ * Returns a realtime snapshot of AI system observability.
+ * Synchronous — does not access the database. Uses in-memory circuit breaker,
+ * orchestrator status, and metrics counters.
+ */
+export function getAIRealtimeObservability(): AIRealtimeObservability {
+  const circuitBreakers = getCircuitBreakerSnapshot()
+  const providerStatus = aiOrchestrator.getAllStatus()
+  const metricCounters = getAllCounters()
+  const defaultProvider = aiOrchestrator.getDefaultProviderId()
+
+  const statusValues = Object.values(providerStatus)
+  const providersConfigured = statusValues.filter((s) => s.configured).length
+  const providersAvailable = statusValues.filter((s) => s.available).length
+  const circuitsClosed = circuitBreakers.filter((c) => c.state === "closed").length
+  const circuitsOpen = circuitBreakers.filter((c) => c.state === "open").length
+  const circuitsHalfOpen = circuitBreakers.filter((c) => c.state === "half-open").length
+
+  return {
+    circuitBreakers,
+    providerStatus,
+    metricCounters,
+    defaultProvider,
+    overallHealth: {
+      providersConfigured,
+      providersAvailable,
+      circuitsClosed,
+      circuitsOpen,
+      circuitsHalfOpen,
+    },
   }
 }

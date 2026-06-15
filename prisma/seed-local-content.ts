@@ -396,6 +396,8 @@ async function main() {
       createdById: adminUser.id,
       createdByName: "Ahmed Al-Mansouri",
       metadata: {
+        auditEngagementId: "eng-gulf-2025",
+        platformProjectId: "proj-gulf-2025-audit",
         tender: {
           referenceId: "TND-FY2025-001",
           titleAr: "متطلبات مناقصة المحتوى المحلي — 30% كحد أدنى",

@@ -12,8 +12,17 @@
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ PRESENTATION LAYER                                          │
-│ src/app/          routes, layouts, route handlers           │
-│ src/components/   UI composition and product components     │
+│ src/app/(marketing)/  public marketing pages                │
+│   ├── page.tsx         homepage (platform-first, no products)│
+│   ├── platform/        AQLIYA Intelligence Core + systems   │
+│   ├── industries/      sectors page (4 target segments)     │
+│   ├── proof/           Proof Center (demo, brief, pilot...) │
+│   ├── governance/      trust architecture                   │
+│   ├── about/           company + team + methodology         │
+│   ├── products/*       operating system reference pages     │
+│   └── ...              contact, security, deployment, etc.  │
+│ src/app/(dashboard)/   authenticated workspaces             │
+│ src/components/        UI composition and shared components │
 ├─────────────────────────────────────────────────────────────┤
 │ ACTIONS LAYER                                               │
 │ src/actions/      server actions and product mutations      │

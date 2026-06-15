@@ -1,6 +1,6 @@
 // ERP Integration types and DTOs
 
-export type ErpProvider = "sap" | "oracle" | "microsoft-dynamics" | "csv-upload" | "custom";
+export type ErpProvider = "sap" | "oracle" | "microsoft-dynamics" | "odoo" | "csv-upload" | "custom";
 
 export type ErpConnectionType = "api" | "file_drop" | "sftp" | "custom";
 

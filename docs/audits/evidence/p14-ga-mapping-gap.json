@@ -1,0 +1,75 @@
+{
+  "auditedGa": 26627726,
+  "map1GaAccountCount": 69,
+  "map1GaTotal": 26648923.930000007,
+  "engineOperatingExpenses": 26637563.180000007,
+  "engineGaFromMap1Included": 26637563.180000007,
+  "gapVsAudited": 9837.180000007153,
+  "gapMap1VsEngine": 11360.75,
+  "misclassifiedFromMap1Ga": [],
+  "misclassifiedTotal": 0,
+  "unmappedGaAccounts": [],
+  "unmappedGaTotal": 0,
+  "topIncludedGa": [
+    {
+      "code": "3101010001",
+      "name": "رواتب وأجور/ادارية",
+      "amount": 11306769.11,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3101020002",
+      "name": "تجديد واستخراج اقامات",
+      "amount": 2616354.31,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3101060017",
+      "name": "ديون معدومة",
+      "amount": 1763144,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3101070025",
+      "name": "مصاريف دراسة ائتمانية-الرياض",
+      "amount": 847795.46,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3101050006",
+      "name": "اتعاب مهنية/متنوعة",
+      "amount": 821650,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3101020011",
+      "name": "رسوم حكومية وغرفه تجارية",
+      "amount": 731094.46,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3202010026-1",
+      "name": "مصروفات متنوعة",
+      "amount": 707119,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3101010005",
+      "name": "بدل اجازة",
+      "amount": 684971.32,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3101070014",
+      "name": "عمولة ضمان دفعة مقدمه/الرياض",
+      "amount": 681952.8,
+      "kind": "operating_expense"
+    },
+    {
+      "code": "3101070027",
+      "name": "مصاريف دراسة ائتمانية-العربي",
+      "amount": 589285.87,
+      "kind": "operating_expense"
+    }
+  ]
+}

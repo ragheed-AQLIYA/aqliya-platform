@@ -1,8 +1,14 @@
 import { config } from "dotenv";
 import { resolve } from "path";
-import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { PrismaClient, UserRole } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { generateNotes } from "../src/lib/audit/notes";
+import { CANONICAL_COA_ACCOUNTS } from "../src/lib/audit/coa/canonical-coa";
+import {
+  GENERIC_PRESENTATION_POLICY_V1,
+  SHALFA_PILOT_PRESENTATION_POLICY_V1,
+} from "../src/lib/audit/presentation/presentation-policy-types";
 
 config({ path: resolve(__dirname, "../.env") });
 
@@ -10,6 +16,94 @@ const adapter = new PrismaPg(process.env.DATABASE_URL!);
 const prisma = new PrismaClient({ adapter });
 
 const SAR = (v: number) => v;
+
+async function ensurePresentationPolicies() {
+  const policies = [
+    {
+      id: "pol-generic-v1",
+      rules: GENERIC_PRESENTATION_POLICY_V1,
+    },
+    {
+      id: "pol-shalfa-pilot-audited-v1",
+      rules: SHALFA_PILOT_PRESENTATION_POLICY_V1,
+    },
+  ];
+
+  for (const { id, rules } of policies) {
+    await prisma.auditPresentationPolicy.upsert({
+      where: { id },
+      create: {
+        id,
+        slug: rules.slug,
+        name: rules.name,
+        version: rules.version,
+        rules,
+        isSystem: true,
+      },
+      update: {
+        slug: rules.slug,
+        name: rules.name,
+        version: rules.version,
+        rules,
+        isSystem: true,
+      },
+    });
+  }
+}
+
+/** Platform User records required for /login and Cypress (seed-audit does not wipe these). */
+async function ensurePlatformLoginUsers(platformOrganizationId: string) {
+  let org = await prisma.organization.findFirst({
+    where: { platformOrganizationId },
+  });
+  if (!org) {
+    org = await prisma.organization.create({
+      data: {
+        name: "AQLIYA Demo Organization",
+        platformOrganizationId,
+      },
+    });
+  }
+
+  const adminHash = await bcrypt.hash("admin123", 10);
+  const operatorHash = await bcrypt.hash("operator123", 10);
+
+  await prisma.user.upsert({
+    where: { email: "admin@aqliya.com" },
+    update: {
+      passwordHash: adminHash,
+      organizationId: org.id,
+      role: UserRole.ADMIN,
+      name: "Ahmed Al-Mansouri",
+    },
+    create: {
+      email: "admin@aqliya.com",
+      name: "Ahmed Al-Mansouri",
+      role: UserRole.ADMIN,
+      organizationId: org.id,
+      passwordHash: adminHash,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "sara@aqliya.com" },
+    update: {
+      passwordHash: operatorHash,
+      organizationId: org.id,
+      role: UserRole.OPERATOR,
+      name: "Sara Al-Otaibi",
+    },
+    create: {
+      email: "sara@aqliya.com",
+      name: "Sara Al-Otaibi",
+      role: UserRole.OPERATOR,
+      organizationId: org.id,
+      passwordHash: operatorHash,
+    },
+  });
+
+  console.log("  Platform login users ensured (admin@aqliya.com, sara@aqliya.com)");
+}
 
 async function main() {
   console.log("Cleaning existing AuditOS data...");
@@ -30,6 +124,16 @@ async function main() {
   await prisma.auditTrialBalance.deleteMany();
   await prisma.pilotFeedback.deleteMany();
   await prisma.pilotSignoff.deleteMany();
+  await prisma.auditValidationDisposition.deleteMany();
+  await prisma.auditValidationIssue.deleteMany();
+  await prisma.auditValidationRun.deleteMany();
+  await prisma.leadScheduleLine.deleteMany();
+  await prisma.leadSchedule.deleteMany();
+  await prisma.workingPaperIndex.deleteMany();
+  await prisma.reportingGraphSnapshot.deleteMany();
+  await prisma.reportingGraphEdge.deleteMany();
+  await prisma.reportingGraphNode.deleteMany();
+  await prisma.reportingGraph.deleteMany();
   await prisma.auditEngagement.deleteMany();
   await prisma.auditClient.deleteMany();
   await prisma.auditUser.deleteMany();
@@ -49,6 +153,8 @@ async function main() {
       displayName: "AQLIYA Demo Organization",
     },
   });
+
+  await ensurePlatformLoginUsers(platformAuditOrg.id);
 
   // ─── Organization ───
   const org = await prisma.auditOrganization.create({
@@ -157,15 +263,69 @@ async function main() {
   });
   console.log(`  Client: ${client.name}`);
 
+  // ─── Platform Context (ClientWorkspace + Project) ───
+  const workspace = await prisma.clientWorkspace.upsert({
+    where: {
+      platformOrganizationId_slug: {
+        platformOrganizationId: platformAuditOrg.id,
+        slug: "gulf-trading",
+      },
+    },
+    update: {},
+    create: {
+      id: "cws-gulf-trading",
+      platformOrganizationId: platformAuditOrg.id,
+      name: "Gulf Trading Co.",
+      slug: "gulf-trading",
+      workspaceType: "client",
+      status: "active",
+      productAccess: { audit: true },
+      metadata: {
+        source: "seed-audit",
+        auditClientId: client.id,
+      },
+    },
+  });
+
+  await prisma.auditClient.update({
+    where: { id: client.id },
+    data: { clientWorkspaceId: workspace.id },
+  });
+
+  const project = await prisma.project.upsert({
+    where: { id: "proj-gulf-2025-audit" },
+    update: {},
+    create: {
+      id: "proj-gulf-2025-audit",
+      workspaceId: workspace.id,
+      name: "Gulf Trading Co. — FY2025",
+      projectType: "audit_engagement",
+      status: "active",
+      metadata: {
+        source: "seed-audit",
+        auditEngagementId: "eng-gulf-2025",
+        fiscalPeriod: "FY2025",
+      },
+    },
+  });
+  console.log(`  Platform context: ${workspace.name} / ${project.name}`);
+
+  await ensurePresentationPolicies();
+  console.log("  Presentation policies: generic-v1, shalfa-pilot-audited-v1");
+
   // ─── Engagement ───
   const engagement = await prisma.auditEngagement.create({
     data: {
       id: "eng-gulf-2025",
       organizationId: org.id,
       clientId: client.id,
+      projectId: project.id,
       fiscalPeriod: "FY2025",
       engagementType: "full_audit",
       status: "in_progress",
+      presentationProfile: "generic",
+      presentationProfileVersion: "generic-v1",
+      presentationPolicyId: "pol-generic-v1",
       team: [
         {
           userId: "usr-khalid",
@@ -495,193 +655,8 @@ async function main() {
     `  Trial Balance: ${tb.lines.length} lines (Debits: SAR ${totalDebits.toLocaleString()}, Credits: SAR ${totalCredits.toLocaleString()}, Variance: SAR ${(totalDebits - totalCredits).toLocaleString()})`,
   );
 
-  // ─── Canonical Accounts ───
-  const canonicalAccountsData = [
-    {
-      id: "ca-1",
-      code: "CA-1010",
-      name: "Cash and Cash Equivalents",
-      category: "Current Assets",
-      statementType: "balance_sheet",
-      displayOrder: 100,
-    },
-    {
-      id: "ca-2",
-      code: "CA-1020",
-      name: "Trade Receivables",
-      category: "Current Assets",
-      statementType: "balance_sheet",
-      displayOrder: 110,
-    },
-    {
-      id: "ca-3",
-      code: "CA-1030",
-      name: "Inventories",
-      category: "Current Assets",
-      statementType: "balance_sheet",
-      displayOrder: 120,
-    },
-    {
-      id: "ca-4",
-      code: "CA-1040",
-      name: "Prepayments",
-      category: "Current Assets",
-      statementType: "balance_sheet",
-      displayOrder: 130,
-    },
-    {
-      id: "ca-5",
-      code: "CA-1050",
-      name: "Property, Plant and Equipment",
-      category: "Non-Current Assets",
-      statementType: "balance_sheet",
-      displayOrder: 200,
-    },
-    {
-      id: "ca-6",
-      code: "CA-1060",
-      name: "Accumulated Depreciation",
-      category: "Non-Current Assets",
-      statementType: "balance_sheet",
-      displayOrder: 210,
-    },
-    {
-      id: "ca-7",
-      code: "CA-2010",
-      name: "Trade Payables",
-      category: "Current Liabilities",
-      statementType: "balance_sheet",
-      displayOrder: 300,
-    },
-    {
-      id: "ca-8",
-      code: "CA-2020",
-      name: "Accrued Expenses",
-      category: "Current Liabilities",
-      statementType: "balance_sheet",
-      displayOrder: 310,
-    },
-    {
-      id: "ca-9",
-      code: "CA-2030",
-      name: "Tax and Zakat Payable",
-      category: "Current Liabilities",
-      statementType: "balance_sheet",
-      displayOrder: 320,
-    },
-    {
-      id: "ca-10",
-      code: "CA-2040",
-      name: "Short-term Borrowings",
-      category: "Current Liabilities",
-      statementType: "balance_sheet",
-      displayOrder: 330,
-    },
-    {
-      id: "ca-11",
-      code: "CA-3010",
-      name: "Share Capital",
-      category: "Equity",
-      statementType: "balance_sheet",
-      displayOrder: 400,
-    },
-    {
-      id: "ca-12",
-      code: "CA-3020",
-      name: "Retained Earnings",
-      category: "Equity",
-      statementType: "balance_sheet",
-      displayOrder: 410,
-    },
-    {
-      id: "ca-13",
-      code: "CA-4010",
-      name: "Revenue - Sale of Goods",
-      category: "Revenue",
-      statementType: "income_statement",
-      displayOrder: 500,
-    },
-    {
-      id: "ca-14",
-      code: "CA-4020",
-      name: "Revenue - Services",
-      category: "Revenue",
-      statementType: "income_statement",
-      displayOrder: 510,
-    },
-    {
-      id: "ca-15",
-      code: "CA-5010",
-      name: "Cost of Sales",
-      category: "Expenses",
-      statementType: "income_statement",
-      displayOrder: 600,
-    },
-    {
-      id: "ca-16",
-      code: "CA-5020",
-      name: "Employee Benefits",
-      category: "Expenses",
-      statementType: "income_statement",
-      displayOrder: 610,
-    },
-    {
-      id: "ca-17",
-      code: "CA-5030",
-      name: "Occupancy Expenses",
-      category: "Expenses",
-      statementType: "income_statement",
-      displayOrder: 620,
-    },
-    {
-      id: "ca-18",
-      code: "CA-5040",
-      name: "Utilities",
-      category: "Expenses",
-      statementType: "income_statement",
-      displayOrder: 630,
-    },
-    {
-      id: "ca-19",
-      code: "CA-5050",
-      name: "Depreciation and Amortisation",
-      category: "Expenses",
-      statementType: "income_statement",
-      displayOrder: 640,
-    },
-    {
-      id: "ca-20",
-      code: "CA-5060",
-      name: "Professional and Consulting Fees",
-      category: "Expenses",
-      statementType: "income_statement",
-      displayOrder: 650,
-    },
-    {
-      id: "ca-21",
-      code: "CA-5070",
-      name: "General and Administrative Expenses",
-      category: "Expenses",
-      statementType: "income_statement",
-      displayOrder: 660,
-    },
-    {
-      id: "ca-22",
-      code: "CA-5100",
-      name: "Other Income",
-      category: "Revenue",
-      statementType: "income_statement",
-      displayOrder: 670,
-    },
-    {
-      id: "ca-23",
-      code: "CA-2050",
-      name: "Finance Cost",
-      category: "Expenses",
-      statementType: "income_statement",
-      displayOrder: 680,
-    },
-  ];
+  // ─── Canonical Accounts (Phase 8.1 — see src/lib/audit/coa/canonical-coa.ts) ───
+  const canonicalAccountsData = CANONICAL_COA_ACCOUNTS;
   const canonicalAccounts = await Promise.all(
     canonicalAccountsData.map((ca) =>
       prisma.auditCanonicalAccount.create({ data: ca }),

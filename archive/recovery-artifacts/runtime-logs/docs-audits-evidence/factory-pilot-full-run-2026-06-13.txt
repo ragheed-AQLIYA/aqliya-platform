@@ -1,0 +1,42 @@
+Factory Pilot Full Run — 2026-06-13
+
+Infrastructure
+- Docker Desktop: started (com.docker.service)
+- Database: pgvector/pgvector:pg16 on localhost:5434
+- Extension: vector (CREATE EXTENSION IF NOT EXISTS vector)
+- Schema: npx prisma db push --accept-data-loss (synced)
+
+Seed
+- npm run seed:audit: PASS
+- Engagement: eng-gulf-2025 (Gulf Trading Co., SAR, 23 TB lines, 23 mappings)
+
+Factory Live Smoke (npm run factory:smoke)
+- FS v2 rebuild: PASS (cash_flow present)
+- Reporting graph: 152 nodes
+- IFRS rules: PASS (21 rules)
+- SOCPA rules: PASS (13 rules, jurisdiction applicable)
+- Disclosure auto: 1 note created from 1 trigger
+- Validation: completed (trust: conditional)
+- Reconciliation: 4/6 checks failed (RC tie-out — known aggregate limitation)
+- Overall: PASS (script assertions met)
+
+Unit Tests
+- Factory modules: 25/25 PASS
+- Static smoke: 33/33 PASS
+
+Server
+- npm run start: running http://localhost:3000
+- /api/health: 200
+- post-deploy smoke:local: 28/30 pass
+  - FAIL (pre-existing): /buyers/procurement expected redirect, got 200
+  - WARN: SCIM_DEFAULT_ORG_ID unset (optional)
+
+Factory flags used in smoke (env):
+FF_AUDIT_FS_V2, FF_AUDIT_IFRS_RULES, FF_AUDIT_SOCPA_RULES,
+FF_AUDIT_DISCLOSURE_AUTO, FF_AUDIT_RECONCILIATION, FF_AUDIT_REPORTING_GRAPH,
+FF_AUDIT_LEAD_SCHEDULE_AUTO, FF_AUDIT_APPROVAL_GATES, FF_AUDIT_MIND_MAP
+
+Login (seed): admin@aqliya.com / admin123
+
+Evidence files:
+- docs/audits/evidence/factory-pilot-smoke-2026-06-13T20-49-51-364Z.txt

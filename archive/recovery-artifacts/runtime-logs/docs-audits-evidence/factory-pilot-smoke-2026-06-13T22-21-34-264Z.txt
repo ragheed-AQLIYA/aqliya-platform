@@ -1,0 +1,18 @@
+Factory Pilot Smoke — 2026-06-13T22:21:34.264Z
+Engagement: eng-gulf-2025
+Currency: SAR
+
+PASS FS v2 rebuild: {"rebuilt":true}
+PASS Reporting graph sync: ok
+PASS Lead schedules: ok
+PASS Reconciliation: {"engagementId":"eng-gulf-2025","passed":false,"checkCount":6,"failedCount":3,"checks":[{"code":"RC-001","checkType":"tb_ls_tie","passed":true,"severity":"warning","messageAr":"تعيينات مؤكدة تطابق بنو
+PASS IFRS rules: {"engagementId":"eng-gulf-2025","passed":true,"ruleCount":21,"failedCount":0,"warningCount":0,"evaluations":[{"ruleId":"ias1-r001","standardCode":"IAS 1","paragraphReference":"IAS 1.10","topic":"compl
+PASS SOCPA rules: {"engagementId":"eng-gulf-2025","jurisdictionApplicable":true,"passed":true,"ruleCount":13,"failedCount":0,"warningCount":1,"evaluations":[{"ruleId":"socpa-accounting-framework-r001","standardCode":"S
+PASS Disclosure auto: {"engagementId":"eng-gulf-2025","triggersCollected":1,"triggersDeduped":1,"notesCreated":0,"notesUpdated":1,"notesSkipped":0,"runAt":"2026-06-13T22:21:34.140Z"}
+FAIL Validation run: AuditOS mutation unavailable: runValidation(eng-gulf-2025). Mock fallback disabled.
+PASS FS statements >= 3: income_statement, balance_sheet, cash_flow, equity
+PASS Cash flow statement (FS v2): present
+PASS Disclosure notes persisted: 15 notes
+PASS Reporting graph nodes: 153 nodes
+
+Summary: 11/12 passed

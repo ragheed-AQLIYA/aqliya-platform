@@ -12,24 +12,15 @@ function loginViaCredentials(email: string, password: string, sessionId: string)
   cy.session(
     sessionId,
     () => {
-      cy.request("/api/auth/csrf").then((csrfRes) => {
-        const csrfToken = csrfRes.body.csrfToken as string;
-        cy.request({
-          method: "POST",
-          url: "/api/auth/callback/credentials",
-          body: {
-            csrfToken,
-            email,
-            password,
-            redirect: "false",
-            json: "true",
-          },
-          form: true,
-        });
+      cy.request({
+        method: "POST",
+        url: "/api/auth/custom-login",
+        body: { email, password },
+      }).then((res) => {
+        expect(res.status).to.eq(200);
+        expect(res.body.ok).to.eq(true);
+        expect(res.body.user.email).to.eq(email);
       });
-      cy.request("/api/auth/session")
-        .its("body.user.email")
-        .should("eq", email);
     },
     {
       validate() {

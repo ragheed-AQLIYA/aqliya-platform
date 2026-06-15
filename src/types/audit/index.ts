@@ -34,7 +34,7 @@ export type Materiality = 'immaterial' | 'material' | 'pervasive'
 export type TrustState = 'trusted' | 'conditional' | 'blocked'
 export type EngagementType = 'full_audit' | 'review' | 'agreed_upon_procedures'
 export type UserRole = 'admin' | 'partner' | 'manager' | 'reviewer' | 'operator' | 'viewer'
-export type ValidationCheckType = 'balance_equality' | 'missing_mappings' | 'unusual_balance' | 'negative_balance' | 'classification_conflict' | 'prior_period_variance' | 'completeness'
+export type ValidationCheckType = 'balance_equality' | 'missing_mappings' | 'unusual_balance' | 'negative_balance' | 'classification_conflict' | 'prior_period_variance' | 'completeness' | 'tb_ls_tie' | 'ls_fs_tie' | 'balance_sheet_equation' | 'is_equity_flow' | 'reconciliation_coverage' | 'cash_flow_tie' | 'ifrs_rule' | 'socpa_rule'
 export type ValidationSeverity = 'error' | 'warning' | 'info'
 export type ValidationStatus = 'passed' | 'failed' | 'warning'
 
@@ -91,6 +91,9 @@ export interface Engagement {
   team: EngagementTeamMember[]
   governanceRules?: Record<string, unknown>
   alerts?: EngagementAlert[]
+  presentationProfile?: string | null
+  presentationProfileVersion?: string | null
+  presentationPolicyId?: string | null
   createdAt: string
   updatedAt: string
 }
@@ -170,6 +173,9 @@ export interface AccountMapping {
   canonicalAccountName?: string
   statementClassification?: string
   confidence?: number
+  classificationSource?: 'firm_memory' | 'rule' | 'pattern' | 'local' | 'cloud' | 'none'
+  /** Explainable classification — Trust + Evidence (Phase 4). */
+  classificationExplanation?: import('@/lib/tb-intelligence/classification-explanation').MappingClassificationExplanation
   mappingType: 'ai_suggested' | 'human_mapped' | 'confirmed_ai'
   status: 'pending' | 'confirmed' | 'rejected'
   aiSuggestionId?: string
@@ -228,6 +234,8 @@ export interface FinancialStatementLine {
   indentLevel: number
   displayOrder: number
   linkedAccountMappings: string[] // mapping IDs
+  ifrsCitations?: string[]
+  socpaCitations?: string[]
 }
 
 export interface DisclosureNote {

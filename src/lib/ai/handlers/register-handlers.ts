@@ -8,6 +8,7 @@ import { evidenceSuggestionsHandler } from "./evidence-suggestions-handler"
 import { findingDraftsHandler } from "./finding-drafts-handler"
 import { recommendationDraftsHandler } from "./recommendation-drafts-handler"
 import { draftNotesHandler } from "./draft-notes-handler"
+import { disclosureEnrichmentHandler } from "./disclosure-enrichment-handler"
 import { commercialClaimAssistHandler } from "./commercial-claim-assist-handler"
 import { pilotDecisionAssistHandler } from "./pilot-decision-assist-handler"
 
@@ -25,6 +26,7 @@ deterministicProvider.registerHandler('approval_review', recommendationDraftsHan
 
 // draft notes — notes engine rule-based note generation with skipExistingTitles
 deterministicProvider.registerHandler('notes_generation', draftNotesHandler)
+deterministicProvider.registerHandler('disclosure_enrichment', disclosureEnrichmentHandler)
 
 // cross-product governed assist (Office AI, LocalContentOS, DecisionOS)
 deterministicProvider.registerHandler('commercial_claim_review', commercialClaimAssistHandler)

@@ -3,7 +3,8 @@
 **Version:** 1.1  
 **Status:** Official doctrine — identity, governance, and strategic positioning  
 **Source files:** `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`  
-**Note:** Implementation-status claims in this file reflect v0.1 operational baseline as of 2026-05-22. For current implementation status, see `AQLIYA_MASTER_REFERENCE.md` or inspect code.
+**Note:** Implementation-status claims in this file reflect v0.1 operational baseline as of 2026-05-22. For current implementation status, see `AQLIYA_MASTER_REFERENCE.md` or inspect code.  
+**Website positioning (2026-06-09):** AQLIYA is presented as a **platform first** — the homepage sells the institutional operating platform, not individual products. Specialized operating systems (formerly called "products") are surfaced inside the platform page as capabilities. See `docs/source-of-truth/AQLIYA_ARCHITECTURE.md` for the updated architecture.
 
 ---
 
@@ -50,6 +51,23 @@ AQLIYA is a **Private Governed Institutional Intelligence Platform**.
 | **AQLIYA Air-Gapped**        | Strategic no-internet deployment with local-only processing       | **Strategic / future** — not implemented                         |
 
 ---
+
+## Website Positioning (2026-06-09)
+
+AQLIYA.com is positioned as an **institutional operating platform**, not a product company.
+
+**Navigation:** المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية
+
+**Key principles:**
+- The homepage presents the platform (9 sections) — no product names appear on the homepage
+- Specialized operating systems (AuditOS, DecisionOS, etc.) are surfaced inside `/platform#capabilities` as capabilities of the platform, not as standalone products
+- Sectors (مكاتب المراجعة, الجهات الحكومية, المؤسسات الكبرى, الخدمات المهنية) are the primary entry point for buyers, at `/industries`
+- Proof Center at `/proof` consolidates demo, executive brief, pilot framework, evidence library, and security summary in one place
+- The trust principle "AI assists. Humans decide. Evidence governs." anchors every page
+
+**Language shift applied:**
+- "منتج" (product) → "نظام تشغيل" / "مسار تشغيلي" (operating system / operational path)
+- "شركة لديها 4 منتجات" → "منصة تشغيل مؤسسية تُطبّق عبر أنظمة متخصصة"
 
 ## Current v0.1 Reality Snapshot
 

@@ -1,0 +1,125 @@
+{
+  "phase": "0",
+  "startedAt": "2026-06-14T12:16:06.409Z",
+  "finishedAt": "2026-06-14T12:16:20.473Z",
+  "pass": true,
+  "env": {
+    "FF_AI_REAL_PROVIDERS": "true",
+    "AI_MODE": "hybrid",
+    "AI_LOCAL_BASE_URL": "http://localhost:11434",
+    "AI_LOCAL_MODEL": "qwen3:8b"
+  },
+  "routingPath": "runInference → aiOrchestrator.generate → resolveProvider → LocalAIProvider.execute → Ollama POST /api/chat",
+  "providerSelected": "local",
+  "modelUsed": "ollama/qwen3:8b",
+  "latencyMs": {
+    "directLocalProvider": 2458,
+    "runInference": 11562
+  },
+  "checks": [
+    {
+      "name": "env.FF_AI_REAL_PROVIDERS",
+      "pass": true,
+      "detail": "true"
+    },
+    {
+      "name": "env.AI_MODE",
+      "pass": true,
+      "detail": "hybrid"
+    },
+    {
+      "name": "env.AI_LOCAL_MODEL",
+      "pass": true,
+      "detail": "qwen3:8b"
+    },
+    {
+      "name": "flag.ai.real-providers",
+      "pass": true,
+      "detail": true
+    },
+    {
+      "name": "localProvider.configured",
+      "pass": true,
+      "detail": "ollama/qwen3:8b"
+    },
+    {
+      "name": "localProvider.health(/api/tags)",
+      "pass": true,
+      "detail": true
+    },
+    {
+      "name": "providerRouter.fallbackChainIncludesLocal",
+      "pass": true,
+      "detail": "openai → anthropic → local → cloud → deterministic"
+    },
+    {
+      "name": "providerRouter.localInHealthSnapshot",
+      "pass": true,
+      "detail": {
+        "providerId": "local",
+        "healthy": true,
+        "circuitOpen": false,
+        "lastCheck": "2026-06-14T12:16:06.441Z"
+      }
+    },
+    {
+      "name": "providerRouter.selectOptimalProvider(prefer=local)",
+      "pass": true,
+      "detail": {
+        "selected": "local",
+        "reason": "preferred_provider",
+        "costEstimate": 0.01
+      }
+    },
+    {
+      "name": "providerRouter.realProvidersEnabled",
+      "pass": true,
+      "detail": {
+        "realProvidersEnabled": true,
+        "chain": [
+          "openai",
+          "anthropic",
+          "local",
+          "cloud",
+          "deterministic"
+        ]
+      }
+    },
+    {
+      "name": "hybridRouter.executionMode",
+      "pass": true,
+      "detail": "hybrid"
+    },
+    {
+      "name": "hybridRouter.selectProviderForTask(account_mapping)",
+      "pass": true,
+      "detail": "local"
+    },
+    {
+      "name": "hybridRouter.selectProviderForTask(notes_generation)",
+      "pass": true,
+      "detail": "openai"
+    },
+    {
+      "name": "localProvider.execute(direct)",
+      "pass": true,
+      "detail": {
+        "model": "ollama/qwen3:8b",
+        "provider": "local",
+        "latencyMs": 2458,
+        "preview": "AQLIYA_LOCAL_OK"
+      }
+    },
+    {
+      "name": "runInference(preferProvider=local, account_mapping)",
+      "pass": true,
+      "detail": {
+        "providerId": "local",
+        "modelVersion": "ollama/qwen3:8b",
+        "runtimeMode": "hybrid",
+        "latencyMs": 11562,
+        "preview": "**Draft Output: Account Mapping Task**  \n**Status:** `draft`  \n**Escalation Triggers:** None triggered (no low-confidenc"
+      }
+    }
+  ]
+}

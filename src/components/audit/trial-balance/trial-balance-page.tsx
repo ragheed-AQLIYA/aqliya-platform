@@ -81,16 +81,33 @@ export default function TrialBalancePage() {
   const [search, setSearch] = useState("");
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [showUpload, setShowUpload] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
     Promise.all([
       getTrialBalanceAction(engagementId),
       getEngagementAction(engagementId),
-    ]).then(([t, e]) => {
-      setTb(t);
-      setEngagement(e);
-      setLoading(false);
-    });
+    ])
+      .then(([trialBalance, engagementData]) => {
+        if (cancelled) return;
+        setTb(trialBalance);
+        setEngagement(engagementData);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("[TrialBalancePage] load failed:", err);
+        setLoadError(
+          err instanceof Error ? err.message : "تعذر تحميل ميزان المراجعة",
+        );
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [engagementId]);
 
   const handleUploadComplete = () => {
@@ -103,6 +120,45 @@ export default function TrialBalancePage() {
         <div className="size-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
       </div>
     );
+
+  if (loadError)
+    return (
+      <div className="space-y-4">
+        <Card className="rounded-[24px] border-red-200 shadow-sm">
+          <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
+            <AlertTriangle className="size-8 text-red-600" />
+            <p className="text-sm text-muted-foreground">{loadError}</p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setLoadError(null);
+                setLoading(true);
+                Promise.all([
+                  getTrialBalanceAction(engagementId),
+                  getEngagementAction(engagementId),
+                ])
+                  .then(([trialBalance, engagementData]) => {
+                    setTb(trialBalance);
+                    setEngagement(engagementData);
+                    setLoadError(null);
+                  })
+                  .catch((err) => {
+                    setLoadError(
+                      err instanceof Error
+                        ? err.message
+                        : "تعذر تحميل ميزان المراجعة",
+                    );
+                  })
+                  .finally(() => setLoading(false));
+              }}
+            >
+              إعادة المحاولة
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+
   if (!tb)
     return (
       <div className="space-y-4">
@@ -134,7 +190,7 @@ export default function TrialBalancePage() {
     }
   };
 
-  const filtered = tb.lines.filter(
+  const filtered = (tb.lines ?? []).filter(
     (l) =>
       l.accountName.toLowerCase().includes(search.toLowerCase()) ||
       l.accountCode.includes(search),

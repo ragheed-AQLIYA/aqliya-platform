@@ -1,0 +1,161 @@
+{
+  "_sanitized": true,
+  "_sanitizedAt": "2026-06-15T01:00:10.885Z",
+  "_note": "Account-level identifiers and GL names removed for PR hygiene. Metrics preserved.",
+  "phase": "3A",
+  "accountCount": 578,
+  "startedAt": "2026-06-14T13:14:02.304Z",
+  "finishedAt": "2026-06-14T15:26:04.299Z",
+  "successCriterionMet": true,
+  "rulesOnly": false,
+  "env": {
+    "AI_MODE": "hybrid",
+    "AI_LOCAL_MODEL": "qwen3:8b",
+    "FF_AI_REAL_PROVIDERS": "true"
+  },
+  "rules": {
+    "total": 578,
+    "exact": 66,
+    "accuracy": 0.11418685121107267,
+    "avgConfidence": 0.8800000000000009,
+    "latencyMs": {
+      "avg": 0.14359861591695502,
+      "p50": 0,
+      "p95": 1,
+      "total": 83
+    },
+    "byCategory": {
+      "Cash": {
+        "total": 16,
+        "exact": 1
+      },
+      "Assets": {
+        "total": 160,
+        "exact": 9
+      },
+      "Expenses": {
+        "total": 94,
+        "exact": 27
+      },
+      "Liabilities": {
+        "total": 170,
+        "exact": 11
+      },
+      "Zakat": {
+        "total": 6,
+        "exact": 6
+      },
+      "Lease": {
+        "total": 5,
+        "exact": 5
+      },
+      "Equity": {
+        "total": 6,
+        "exact": 4
+      },
+      "Revenue": {
+        "total": 121,
+        "exact": 3
+      }
+    }
+  },
+  "localAi": {
+    "total": 578,
+    "exact": 118,
+    "accuracy": 0.2041522491349481,
+    "avgConfidence": 0.8500692041522578,
+    "latencyMs": {
+      "avg": 10622.56401384083,
+      "p50": 9568,
+      "p95": 18325,
+      "total": 6139842
+    },
+    "byCategory": {
+      "Cash": {
+        "total": 16,
+        "exact": 13
+      },
+      "Assets": {
+        "total": 160,
+        "exact": 40
+      },
+      "Expenses": {
+        "total": 94,
+        "exact": 25
+      },
+      "Liabilities": {
+        "total": 170,
+        "exact": 24
+      },
+      "Zakat": {
+        "total": 6,
+        "exact": 5
+      },
+      "Lease": {
+        "total": 5,
+        "exact": 2
+      },
+      "Equity": {
+        "total": 6,
+        "exact": 3
+      },
+      "Revenue": {
+        "total": 121,
+        "exact": 6
+      }
+    }
+  },
+  "hybrid": {
+    "total": 578,
+    "exact": 276,
+    "accuracy": 0.47750865051903113,
+    "avgConfidence": 0.8743922667106124,
+    "latencyMs": {
+      "avg": 3083.1487889273358,
+      "p50": 41,
+      "p95": 14108,
+      "total": 1782060
+    },
+    "byCategory": {
+      "Cash": {
+        "total": 16,
+        "exact": 7
+      },
+      "Assets": {
+        "total": 160,
+        "exact": 32
+      },
+      "Expenses": {
+        "total": 94,
+        "exact": 83
+      },
+      "Liabilities": {
+        "total": 170,
+        "exact": 17
+      },
+      "Zakat": {
+        "total": 6,
+        "exact": 6
+      },
+      "Lease": {
+        "total": 5,
+        "exact": 5
+      },
+      "Equity": {
+        "total": 6,
+        "exact": 5
+      },
+      "Revenue": {
+        "total": 121,
+        "exact": 121
+      }
+    }
+  },
+  "topFailuresSummary": {
+    "count": 25,
+    "byCategory": {
+      "Cash": 8,
+      "Assets": 17
+    }
+  }
+}

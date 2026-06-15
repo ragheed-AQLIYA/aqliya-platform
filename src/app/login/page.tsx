@@ -34,9 +34,14 @@ export default function LoginPage() {
   const [ssoError, setSsoError] = useState("");
 
   useEffect(() => {
-    setJustRegistered(
-      new URL(window.location.href).searchParams.get("registered") === "true",
-    );
+    const params = new URL(window.location.href).searchParams;
+    setJustRegistered(params.get("registered") === "true");
+    const authError = params.get("error");
+    if (authError === "CredentialsSignin") {
+      setError("بريد إلكتروني أو كلمة مرور غير صحيحة");
+    } else if (authError) {
+      setError("فشل تسجيل الدخول. حاول مرة أخرى.");
+    }
     loadSsoProviders();
   }, []);
 
@@ -69,41 +74,64 @@ export default function LoginPage() {
     }
   }
 
+  function fillDemoAccount(demoEmail: string, demoPassword: string) {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setError("");
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     try {
-      const res = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
+      // Use custom login endpoint to bypass NextAuth v5 beta CSRF issue
+      const res = await fetch("/api/auth/custom-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: normalizedEmail, password }),
+        credentials: "include",
       });
 
-      if (res?.error) {
-        setError("بريد إلكتروني أو كلمة مرور غير صحيحة");
-        setLoading(false);
-      } else if (res?.ok) {
-        const verifyRes = await fetch("/api/auth/session");
-        const session = await verifyRes.json();
+      const data = await res.json().catch(() => null);
 
-        if (session?.user) {
-          setRedirecting(true);
-          const url = new URL(window.location.href);
-          const rawCallback = url.searchParams.get("callbackUrl") || "/";
-          // Prevent open redirects: accept only relative, same-origin paths.
-          const callbackUrl =
-            rawCallback.startsWith("/") && !rawCallback.startsWith("//")
-              ? rawCallback
-              : "/";
-          window.location.href = callbackUrl;
-        } else {
-          setError("تم تسجيل الدخول ولكن الجلسة لم تُنشأ. حاول مرة أخرى.");
-          setLoading(false);
-        }
+      if (res.status === 429) {
+        setError("محاولات كثيرة. انتظر دقيقة ثم حاول مرة أخرى.");
+        setLoading(false);
+        return;
+      }
+
+      if (res.status >= 500) {
+        setError("خطأ في الخادم. تحقق من قاعدة البيانات و AUTH_SECRET.");
+        setLoading(false);
+        return;
+      }
+
+      if (!res.ok || data?.error) {
+        setError(
+          normalizedEmail === "admin@aqliya.com"
+            ? "بيانات الدخول غير صحيحة. للحساب التجريبي استخدم admin123 (انقر «مدير» بالأسفل للتعبئة التلقائية)."
+            : "بريد إلكتروني أو كلمة مرور غير صحيحة",
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (data?.ok && data?.user) {
+        setRedirecting(true);
+        const url = new URL(window.location.href);
+        const rawCallback = url.searchParams.get("callbackUrl") || "/audit";
+        // Prevent open redirects: accept only relative, same-origin paths.
+        const callbackUrl =
+          rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+            ? rawCallback
+            : "/audit";
+        window.location.href = callbackUrl;
       } else {
-        setError("حدث خطأ غير متوقع. حاول مرة أخرى.");
+        setError("تم تسجيل الدخول ولكن الجلسة لم تُنشأ. حاول مرة أخرى.");
         setLoading(false);
       }
     } catch {
@@ -229,18 +257,37 @@ export default function LoginPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="text-xs text-muted-foreground space-y-1.5">
-          <div className="flex justify-between gap-4">
+          <button
+            type="button"
+            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted"
+            onClick={() => fillDemoAccount("admin@aqliya.com", "admin123")}
+          >
             <span className="font-medium">مدير</span>
             <span dir="ltr">admin@aqliya.com / admin123</span>
-          </div>
-          <div className="flex justify-between gap-4">
+          </button>
+          <button
+            type="button"
+            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted"
+            onClick={() =>
+              fillDemoAccount("sara@aqliya.com", "operator123")
+            }
+          >
             <span className="font-medium">مشغّل</span>
             <span dir="ltr">sara@aqliya.com / operator123</span>
-          </div>
-          <div className="flex justify-between gap-4">
+          </button>
+          <button
+            type="button"
+            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted"
+            onClick={() =>
+              fillDemoAccount("mohammad@aqliya.com", "viewer123")
+            }
+          >
             <span className="font-medium">مشاهد</span>
             <span dir="ltr">mohammad@aqliya.com / viewer123</span>
-          </div>
+          </button>
+          <p className="pt-1 text-center text-[10px]">
+            انقر أي صف لتعبئة البريد وكلمة المرور تلقائياً
+          </p>
         </CardContent>
       </Card>
     </main>

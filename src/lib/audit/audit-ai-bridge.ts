@@ -1,7 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import { aiOrchestrator } from "@/lib/ai/orchestrator";
+import { runInference } from "@/lib/ai/runtime";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import type { GovernanceTaskType } from "@/lib/governance/runtime-types";
@@ -105,7 +105,7 @@ export async function runGovernedAuditAI(
     ...params.taskInput,
   };
 
-  const result = await aiOrchestrator.generate({
+  const result = await runInference({
     taskType: params.taskType,
     taskInput,
     engagementId: params.engagementId,

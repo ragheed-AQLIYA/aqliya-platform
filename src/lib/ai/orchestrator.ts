@@ -14,6 +14,7 @@ import { getPromptBuilder, assemblePrompt } from "./prompt-registry"
 import { getGovernanceContext } from "@/lib/governance/retrieval-router"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import { selectOptimalProvider } from "./provider-router"
+import { selectProviderForTask } from "./hybrid-router"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
 import { checkBudgetQuota } from "./budget-manager"
 import { injectGovernedRagIntoRequest } from "./orchestrator-rag-inject"
@@ -98,17 +99,56 @@ export class AIOrchestrator {
     this.providers.set('anthropic', new AnthropicProvider(config.anthropicConfig))
   }
 
+  private async getProviderForExecution(
+    providerId: AIProviderId,
+    organizationId?: string,
+  ): Promise<AIProvider | null> {
+    if (
+      organizationId &&
+      (providerId === "openai" ||
+        providerId === "anthropic" ||
+        providerId === "cloud")
+    ) {
+      try {
+        const { createAnyAIProviderFromResolver } = await import(
+          "./providers/ai-provider-factory"
+        );
+        return await createAnyAIProviderFromResolver(
+          organizationId,
+          providerId,
+        );
+      } catch {
+        /* fall through to env-backed instance */
+      }
+    }
+    return this.providers.get(providerId) ?? null;
+  }
+
   private async resolveProvider(
     taskType: GovernanceTaskType,
+    organizationId?: string,
     preferProvider?: AIProviderId
   ): Promise<{ provider: AIProvider; providerId: AIProviderId }> {
-    const realProviderOrder: AIProviderId[] = preferProvider
-      ? [preferProvider, "openai", "anthropic", "cloud"]
-      : ["openai", "anthropic", "cloud"]
+    let routedPrefer = preferProvider
+    if (!routedPrefer && organizationId && isEnabled("ai.real-providers")) {
+      try {
+        routedPrefer = await selectProviderForTask(
+          taskType,
+          organizationId,
+          preferProvider,
+        )
+      } catch {
+        /* env-only fallback */
+      }
+    }
+
+    const realProviderOrder: AIProviderId[] = routedPrefer
+      ? [routedPrefer, "local", "openai", "anthropic", "cloud"]
+      : ["openai", "anthropic", "local", "cloud"]
 
     if (isEnabled("ai.real-providers")) {
       for (const id of realProviderOrder) {
-        const candidate = this.providers.get(id)
+        const candidate = await this.getProviderForExecution(id, organizationId)
         if (!candidate) continue
         const status = candidate.getStatus()
         if (status.configured && (await candidate.isAvailable())) {
@@ -117,7 +157,10 @@ export class AIOrchestrator {
       }
       try {
         const decision = await selectOptimalProvider(taskType, preferProvider)
-        const selectedProvider = this.providers.get(decision.selected)
+        const selectedProvider = await this.getProviderForExecution(
+          decision.selected,
+          organizationId,
+        )
         if (selectedProvider) {
           const status = selectedProvider.getStatus()
           if (status.configured && status.available) {
@@ -129,11 +172,13 @@ export class AIOrchestrator {
       }
     }
 
-    const preferred = preferProvider ? this.providers.get(preferProvider) : null
+    const preferred = routedPrefer
+      ? await this.getProviderForExecution(routedPrefer, organizationId)
+      : null
     const providerStatus = preferred ? preferred.getStatus() : null
 
     if (preferred && providerStatus?.configured && providerStatus?.available) {
-      return { provider: preferred, providerId: preferProvider! }
+      return { provider: preferred, providerId: routedPrefer! }
     }
 
     return {
@@ -187,7 +232,11 @@ export class AIOrchestrator {
       }
     }
 
-    const { provider, providerId } = await this.resolveProvider(request.taskType, request.preferProvider)
+    const { provider, providerId } = await this.resolveProvider(
+      request.taskType,
+      request.organizationId,
+      request.preferProvider,
+    )
 
     let response: AIResponse
     try {
@@ -285,7 +334,11 @@ export class AIOrchestrator {
       }
     }
 
-    const { provider, providerId } = await this.resolveProvider(request.taskType, request.preferProvider)
+    const { provider, providerId } = await this.resolveProvider(
+      request.taskType,
+      request.organizationId,
+      request.preferProvider,
+    )
 
     if (!provider.stream) {
       throw new Error(`Provider "${providerId}" does not support streaming`)

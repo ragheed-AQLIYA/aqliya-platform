@@ -14,6 +14,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { getValidationRunAction, getEngagementAction } from "@/actions/audit-read-actions"
+import { ReconciliationPanel } from "@/components/audit/reconciliation/reconciliation-panel"
+import { IfrsRulesPanel } from "@/components/audit/rules/ifrs-rules-panel"
+import { SocpaRulesPanel } from "@/components/audit/rules/socpa-rules-panel"
 
 const severityIcons: Record<string, React.ReactNode> = { error: <XCircle className="size-4 text-red-500" />, warning: <AlertTriangle className="size-4 text-amber-500" />, info: <Info className="size-4 text-blue-500" /> }
 const checkIcons: Record<string, React.ReactNode> = {
@@ -96,6 +99,12 @@ export default function ValidationPage() {
           </Button>
         </div>
       </div>
+
+      <ReconciliationPanel engagementId={engagementId} />
+
+      <IfrsRulesPanel engagementId={engagementId} />
+
+      <SocpaRulesPanel engagementId={engagementId} />
 
       {analyticalFlags.length > 0 && (
         <Card className="border-violet-200">

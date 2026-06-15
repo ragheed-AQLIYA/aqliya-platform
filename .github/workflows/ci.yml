@@ -20,9 +20,12 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npx prisma generate
+
       - run: npx tsc --noEmit
         env:
           NODE_ENV: development
+      - run: npm test
+      - run: npm run lint
       - run: npm run build
         env:
           NODE_ENV: production

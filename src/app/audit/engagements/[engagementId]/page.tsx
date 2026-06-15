@@ -20,6 +20,10 @@ import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
 import { ArrowLeft, Circle } from "lucide-react";
 import { AIOutputsPanel } from "@/components/audit/ai/ai-outputs-panel";
 import { ArchiveEngagementButton } from "@/components/audit/engagement/archive-engagement-button";
+import { PresentationProfileSettings } from "@/components/audit/engagement/presentation-profile-settings";
+import { PresentationPolicySettings } from "@/components/audit/engagement/presentation-policy-settings";
+import { loadEngagementPresentationContext } from "@/lib/audit/presentation/engagement-presentation-config";
+import { listPresentationPoliciesForOrganization } from "@/lib/audit/presentation/presentation-policy-service";
 import { evaluateEngagementArchival } from "@/lib/audit/engagement-archival";
 
 export default async function EngagementDetailPage({
@@ -65,6 +69,14 @@ export default async function EngagementDetailPage({
     ["admin", "partner"].includes(actor.actorRole) &&
     evaluateEngagementArchival(engagement.status).canArchive;
 
+  const isAdmin = actor.actorRole === "admin";
+  const [presentationContext, presentationPolicies] = isAdmin
+    ? await Promise.all([
+        loadEngagementPresentationContext(engagementId),
+        listPresentationPoliciesForOrganization(actor.organizationId),
+      ])
+    : [null, []];
+
   return (
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
@@ -98,6 +110,22 @@ export default async function EngagementDetailPage({
       )}
 
       <OverviewTab engagementId={engagementId} engagement={engagement} />
+
+      {isAdmin && presentationContext ? (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <PresentationProfileSettings
+            engagementId={engagementId}
+            presentationProfile={engagement.presentationProfile}
+            presentationProfileVersion={engagement.presentationProfileVersion}
+          />
+          <PresentationPolicySettings
+            engagementId={engagementId}
+            policies={presentationPolicies}
+            currentPolicyId={presentationContext.presentationPolicyId}
+            currentPolicy={presentationContext.policy}
+          />
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card className="rounded-[24px] border-border/70 shadow-sm">

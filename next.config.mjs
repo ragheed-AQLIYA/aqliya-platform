@@ -54,6 +54,11 @@ const nextConfig = {
         destination: "/products",
         permanent: false,
       },
+      {
+        source: "/buyers/procurement",
+        destination: "/procurement-pack",
+        permanent: true,
+      },
     ]
   },
 

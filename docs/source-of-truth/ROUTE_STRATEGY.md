@@ -135,6 +135,8 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                            | Product/System | Route Type         | Public/Protected | Implementation Status | Notes           |
 | -------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | --------------- |
+| `/decision`                      | DecisionOS     | Dashboard          | Protected        | Active (L4)           | Workspace dashboard, links to full decision routes |
+| `/decision/gov`                  | DecisionOS     | Dashboard          | Protected        | Active (L4)           | Governance dashboard: escalation rules, audit events |
 | `/decisions`                     | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Decision list   |
 | `/decisions/new`                 | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Create decision |
 | `/decisions/[id]`                | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Decision detail |

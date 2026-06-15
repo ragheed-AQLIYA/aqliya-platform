@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/table";
 
 import type { AccountMapping, Engagement } from "@/types/audit";
+import { getMockCanonicalAccounts } from "@/lib/audit/coa/canonical-coa";
 import {
   getMappingsAction,
   getEngagementAction,
@@ -47,7 +48,9 @@ import {
 import {
   confirmMappingAction,
   updateManualMappingAction,
+  bulkConfirmSuggestedMappingsAction,
 } from "@/actions/audit-actions";
+import { MappingClassificationBadges } from "@/components/audit/mapping/mapping-classification-badges";
 
 const sar = (v: number) =>
   new Intl.NumberFormat("en-SA", {
@@ -69,6 +72,7 @@ export default function MappingPage() {
   const [canonicalAccounts, setCanonicalAccounts] = useState<
     Array<{ id: string; code: string; name: string }>
   >([]);
+  const [bulkConfirming, setBulkConfirming] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -121,6 +125,26 @@ export default function MappingPage() {
     }
   };
 
+  const handleBulkConfirm = async () => {
+    setBulkConfirming(true);
+    try {
+      const result = await bulkConfirmSuggestedMappingsAction(engagementId);
+      const refreshed = await getMappingsAction(engagementId);
+      setMappings(refreshed);
+      if (result.confirmedCount > 0) {
+        showToast(
+          t("bulkConfirmSuccess", { count: result.confirmedCount }),
+        );
+      } else {
+        showToast(t("bulkConfirmNone"), "error");
+      }
+    } catch {
+      showToast(t("bulkConfirmFailed"), "error");
+    } finally {
+      setBulkConfirming(false);
+    }
+  };
+
   if (loading)
     return (
       <div className="flex items-center justify-center h-64">
@@ -131,6 +155,9 @@ export default function MappingPage() {
   const total = mappings.length;
   const confirmed = mappings.filter((m) => m.status === "confirmed").length;
   const pending = mappings.filter((m) => m.status === "pending").length;
+  const pendingWithSuggestion = mappings.filter(
+    (m) => m.status === "pending" && m.canonicalAccountId,
+  ).length;
 
   let filtered = mappings;
   if (filter === "mapped")
@@ -141,46 +168,7 @@ export default function MappingPage() {
   const canonicals =
     canonicalAccounts.length > 0
       ? canonicalAccounts
-      : [
-          { id: "ca-1", code: "CA-1010", name: "Cash and Cash Equivalents" },
-          { id: "ca-2", code: "CA-1020", name: "Trade Receivables" },
-          { id: "ca-3", code: "CA-1030", name: "Inventories" },
-          { id: "ca-4", code: "CA-1040", name: "Prepayments" },
-          {
-            id: "ca-5",
-            code: "CA-1050",
-            name: "Property, Plant and Equipment",
-          },
-          { id: "ca-6", code: "CA-1060", name: "Accumulated Depreciation" },
-          { id: "ca-7", code: "CA-2010", name: "Trade Payables" },
-          { id: "ca-8", code: "CA-2020", name: "Accrued Expenses" },
-          { id: "ca-9", code: "CA-2030", name: "Tax and Zakat Payable" },
-          { id: "ca-10", code: "CA-2040", name: "Short-term Borrowings" },
-          { id: "ca-11", code: "CA-3010", name: "Share Capital" },
-          { id: "ca-12", code: "CA-3020", name: "Retained Earnings" },
-          { id: "ca-13", code: "CA-4010", name: "Revenue - Sale of Goods" },
-          { id: "ca-14", code: "CA-4020", name: "Revenue - Services" },
-          { id: "ca-15", code: "CA-5010", name: "Cost of Sales" },
-          { id: "ca-16", code: "CA-5020", name: "Employee Benefits" },
-          { id: "ca-17", code: "CA-5030", name: "Occupancy Expenses" },
-          { id: "ca-18", code: "CA-5040", name: "Utilities" },
-          {
-            id: "ca-19",
-            code: "CA-5050",
-            name: "Depreciation and Amortisation",
-          },
-          {
-            id: "ca-20",
-            code: "CA-5060",
-            name: "Professional and Consulting Fees",
-          },
-          {
-            id: "ca-21",
-            code: "CA-5070",
-            name: "General and Administrative Expenses",
-          },
-          { id: "ca-22", code: "CA-5100", name: "Other Income" },
-        ];
+      : getMockCanonicalAccounts();
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -214,6 +202,18 @@ export default function MappingPage() {
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
+              {pendingWithSuggestion > 0 && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  disabled={bulkConfirming}
+                  onClick={handleBulkConfirm}
+                >
+                  {bulkConfirming
+                    ? t("bulkConfirming")
+                    : t("bulkConfirm", { count: pendingWithSuggestion })}
+                </Button>
+              )}
               <Badge
                 variant={pending === 0 ? "secondary" : "outline"}
                 className={pending > 0 ? "bg-amber-100 text-amber-800" : ""}
@@ -256,7 +256,7 @@ export default function MappingPage() {
                   <TableHead>{t("credit")}</TableHead>
                   <TableHead>{t("suggestedMapping")}</TableHead>
                   <TableHead>{t("classification")}</TableHead>
-                  <TableHead>{t("confidence")}</TableHead>
+                  <TableHead>{t("trustAndEvidence")}</TableHead>
                   <TableHead>{t("status")}</TableHead>
                   <TableHead>{t("actions")}</TableHead>
                 </TableRow>
@@ -296,9 +296,9 @@ export default function MappingPage() {
                     </TableCell>
                     <TableCell>{m.statementClassification || "-"}</TableCell>
                     <TableCell>
-                      {m.confidence
-                        ? `${(m.confidence * 100).toFixed(0)}%`
-                        : "-"}
+                      <MappingClassificationBadges
+                        explanation={m.classificationExplanation}
+                      />
                     </TableCell>
                     <TableCell>
                       {m.status === "confirmed" ? (

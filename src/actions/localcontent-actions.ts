@@ -35,6 +35,8 @@ import {
   getOrganizationSpendAnalytics,
   getProjectTenderMatchReport,
   getOrganizationClassificationRules,
+  getProjectVerificationChecklistReport,
+  updateVerificationChecklistItem,
   listReports,
   createReport,
 } from "@/lib/local-content/services";
@@ -43,6 +45,12 @@ import {
   resolveProjectContext,
   ProjectAccessError,
 } from "@/lib/local-content/guards";
+import {
+  extractLocalContentSignalsFromEngagement,
+  summarizeLocalContentSignals,
+  estimateLocalContentPercent,
+} from "@/lib/local-content-intelligence";
+import { resolveAuditEngagementIdForLcProject } from "@/lib/local-content-intelligence/audit-engagement-bridge";
 import { parseLocalContentCSV } from "@/lib/local-content/import";
 import {
   validateRequired,
@@ -205,6 +213,78 @@ export async function getLocalContentTenderMatchAction(
     const user = await requireUserContext("VIEWER");
     await assertProjectAccess(projectId, "view");
     return getProjectTenderMatchReport(projectId);
+  });
+}
+
+export async function getLocalContentVerificationChecklistAction(
+  projectId: string,
+): Promise<
+  ActionResult<Awaited<ReturnType<typeof getProjectVerificationChecklistReport>>>
+> {
+  return safe(async () => {
+    await assertProjectAccess(projectId, "view");
+    return getProjectVerificationChecklistReport(projectId);
+  });
+}
+
+export async function getLocalContentTbSignalsAction(projectId: string): Promise<
+  ActionResult<{
+    engagementId: string;
+    signalCount: number;
+    totalAmount: number;
+    estimatedLocalContentPct: number;
+    byCategory: Record<string, { count: number; amount: number }>;
+    mappingUrl: string;
+  } | null>
+> {
+  return safe(async () => {
+    await assertProjectAccess(projectId, "view");
+    const engagementId = await resolveAuditEngagementIdForLcProject(projectId);
+    if (!engagementId) return null;
+
+    const signals = await extractLocalContentSignalsFromEngagement(engagementId);
+    const summary = summarizeLocalContentSignals(signals);
+
+    return {
+      engagementId,
+      signalCount: signals.length,
+      totalAmount: summary.totalAmount,
+      estimatedLocalContentPct: estimateLocalContentPercent(signals),
+      byCategory: summary.byCategory,
+      mappingUrl: `/audit/engagements/${engagementId}/mapping`,
+    };
+  });
+}
+
+export async function updateLocalContentVerificationItemAction(
+  projectId: string,
+  itemId: string,
+  formData: FormData,
+): Promise<ActionResult<{ itemId: string; scale: string }>> {
+  return safe(async () => {
+    const { user } = await assertProjectAccess(projectId, "admin");
+    const scale = (formData.get("scale") as string)?.trim();
+    validateRequired(scale, "scale");
+    const workingPaperRef = (formData.get("workingPaperRef") as string)?.trim();
+
+    await updateVerificationChecklistItem(
+      projectId,
+      itemId,
+      { scale, workingPaperRef },
+      { id: user.id, name: user.name ?? user.email ?? "User" },
+    );
+
+    await logToPlatform({
+      projectId,
+      user,
+      action: "localcontent.verification.updated",
+      targetType: "LocalContentProject",
+      targetId: projectId,
+      metadata: { itemId, scale },
+    });
+
+    revalidateLocalContentPaths(projectId, ["verification"]);
+    return { itemId, scale };
   });
 }
 
@@ -1252,7 +1332,9 @@ type LocalContentPathSegment =
   | "review"
   | "approval"
   | "reports"
-  | "audit-trail";
+  | "audit-trail"
+  | "verification"
+  | "tender-match";
 
 function revalidateLocalContentPaths(
   projectId: string,

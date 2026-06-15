@@ -1,0 +1,114 @@
+{
+  "_sanitized": true,
+  "_sanitizedAt": "2026-06-15T01:00:10.892Z",
+  "_note": "Account-level identifiers and GL names removed for PR hygiene. Metrics preserved.",
+  "phase": "3B",
+  "accountCount": 578,
+  "startedAt": "2026-06-14T18:20:04.772Z",
+  "finishedAt": "2026-06-14T18:20:04.932Z",
+  "successCriterionMet": false,
+  "rulesOnly": true,
+  "erpHintsLoaded": 577,
+  "deterministicHybridWhenRulesOnly": true,
+  "env": {
+    "AI_MODE": "hybrid",
+    "AI_LOCAL_MODEL": "qwen3:8b",
+    "FF_AI_REAL_PROVIDERS": "true"
+  },
+  "rules": {
+    "total": 578,
+    "exact": 578,
+    "accuracy": 1,
+    "avgConfidence": 0.8799999999999962,
+    "latencyMs": {
+      "avg": 0.1453287197231834,
+      "p50": 0,
+      "p95": 1,
+      "total": 84
+    },
+    "byCategory": {
+      "Cash": {
+        "total": 16,
+        "exact": 16
+      },
+      "Assets": {
+        "total": 160,
+        "exact": 160
+      },
+      "Expenses": {
+        "total": 94,
+        "exact": 94
+      },
+      "Liabilities": {
+        "total": 170,
+        "exact": 170
+      },
+      "Zakat": {
+        "total": 6,
+        "exact": 6
+      },
+      "Lease": {
+        "total": 5,
+        "exact": 5
+      },
+      "Equity": {
+        "total": 6,
+        "exact": 6
+      },
+      "Revenue": {
+        "total": 121,
+        "exact": 121
+      }
+    }
+  },
+  "hybrid": {
+    "total": 578,
+    "exact": 578,
+    "accuracy": 1,
+    "avgConfidence": 0.8799999999999962,
+    "latencyMs": {
+      "avg": 0.11764705882352941,
+      "p50": 0,
+      "p95": 1,
+      "total": 68
+    },
+    "byCategory": {
+      "Cash": {
+        "total": 16,
+        "exact": 16
+      },
+      "Assets": {
+        "total": 160,
+        "exact": 160
+      },
+      "Expenses": {
+        "total": 94,
+        "exact": 94
+      },
+      "Liabilities": {
+        "total": 170,
+        "exact": 170
+      },
+      "Zakat": {
+        "total": 6,
+        "exact": 6
+      },
+      "Lease": {
+        "total": 5,
+        "exact": 5
+      },
+      "Equity": {
+        "total": 6,
+        "exact": 6
+      },
+      "Revenue": {
+        "total": 121,
+        "exact": 121
+      }
+    }
+  },
+  "topFailuresSummary": {
+    "count": 0,
+    "byCategory": {}
+  }
+}
