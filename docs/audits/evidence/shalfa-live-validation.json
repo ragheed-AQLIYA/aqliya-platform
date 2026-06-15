@@ -10,18 +10,18 @@
     "operatingProfit": 39906940.390000105,
     "financeCosts": 12901271.17,
     "otherIncome": 735915,
-    "netProfit": 25084855.92000003,
+    "netProfit": 25084855.92000009,
     "totalAssets": 385461575.0899999,
-    "totalEquity": 112586726.38000004,
+    "totalEquity": 112586726.3800001,
     "cash": 62819988.839999944,
-    "signedIsNet": 25084855.92000003,
+    "signedIsNet": 25084855.92000009,
     "renderedLines": {
       "revenue": 450305191.84000003,
       "costOfRevenue": 197666442
     }
   },
   "variances": {
-    "netProfitPct": 0.000015626960970670513,
+    "netProfitPct": 0.000015626961208282618,
     "revenuePct": -0.2452998411169332,
     "costOfRevenuePct": -0.3113645217287647,
     "operatingProfitPct": 0.20458113922864404
@@ -84,9 +84,9 @@
     },
     {
       "label": "Net profit",
-      "auditos": 25084855.92000003,
+      "auditos": 25084855.92000009,
       "reference": 25084852,
-      "variancePct": 0.000015626960970670513,
+      "variancePct": 0.000015626961208282618,
       "match": true
     },
     {
@@ -98,9 +98,9 @@
     },
     {
       "label": "Total equity",
-      "auditos": 112586726.38000004,
+      "auditos": 112586726.3800001,
       "reference": 112586721,
-      "variancePct": 0.00000477853870523071,
+      "variancePct": 0.000004778538758171807,
       "match": true
     },
     {

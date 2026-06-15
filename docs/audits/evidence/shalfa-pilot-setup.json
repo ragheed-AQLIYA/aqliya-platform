@@ -16,8 +16,10 @@
       "count": 33
     },
     "tb": {
-      "skipped": true,
-      "reason": "--skip-tb"
+      "skipped": false,
+      "tbLines": 578,
+      "confirmedMappings": 578,
+      "tbFile": "C:\\Users\\PC\\Downloads\\TB 31-12-2025 Final.xlsx"
     },
     "validation": {
       "engagement": {
@@ -28,7 +30,7 @@
         }
       },
       "mappingCount": 578,
-      "map1HistoryCount": 918,
+      "map1HistoryCount": 1707,
       "fsCount": 4,
       "fsRebuild": {
         "status": "rebuilt",
