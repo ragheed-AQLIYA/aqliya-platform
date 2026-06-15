@@ -55,9 +55,9 @@ export const GENERIC_PRESENTATION_POLICY_V1: PresentationPolicyRules = {
   version: "generic-v1",
   revenue: {
     operatingExclusionGlCodes: [],
-    affiliateGlCodes: ["4401010005"],
-    contractRevenueGlCodes: ["4401010004"],
-    unbilledDuplicateGlCodes: ["4401010003"],
+    affiliateGlCodes: [],
+    contractRevenueGlCodes: [],
+    unbilledDuplicateGlCodes: [],
     excludeAffiliateFromOperatingHeadline: false,
   },
   costOfRevenue: {

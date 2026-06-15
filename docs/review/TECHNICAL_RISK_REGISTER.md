@@ -189,3 +189,120 @@ Low:       R-010, R-011, R-012
 \*Safe with drift playbook if partial apply detected.
 
 **Overall migration posture:** **Safe for staging with operator playbook**; **production** requires successful staging replay first.
+
+---
+
+## R-013 — Cash flow builder: operating logic real, investing/financing zero from architecture
+
+| Field | Value |
+|-------|-------|
+| **Source** | CRITICAL_REMEDIATION_REPORT.md pre-existing R-003 |
+| **Severity** | **Medium** (was **High** in CRITICAL_REMEDIATION_REPORT) |
+| **Category** | Architecture / Data |
+| **Evidence** | `src/lib/audit/fs-engine/cash-flow-builder.ts` — `deriveCashFlowContext()` extracts `netProfit` from income‑statement lines, computes `depreciationAddBack` from mapping canonical names (`Accumulated Depreciation`) and source account names (`.includes("depreciation")`). `buildCashFlowLinesFromContext()` generates an operating section with Net Profit line, depreciation add‑back, and Net Cash from Operating Activities subtotal. |
+| **Reclassification** | **Not a UI shell.** The **operating cash flow** derivation is real — net profit extraction, depreciation identification, FS‑line building. The investing/financing/beginning‑cash gaps are **architectural**: no prior‑period balance‑sheet data exists to compute working‑capital changes required by the indirect method. `netCashFromInvesting = 0`, `netCashFromFinancing = 0`, `cashAtBeginning = 0` by construction. |
+| **Impact** | Cash‑flow statement shows operating activity only; investing/financing sections are zero‑value headers. Not misleading for first‑period engagements, but incomplete for any period‑over‑period disclosure. |
+| **Mitigation** | (1) Document as architectural limitation in pilot context. (2) When period‑over‑period data is introduced, implement working‑capital delta computation. (3) Until then, cash‑flow is usable for operating‑cash tie‑outs only. |
+| **Owner** | Architecture / Product |
+| **Status** | **ACKNOWLEDGED — NOT FIXED** |
+
+> **R-013 reclassified, not resolved.** Cash flow completeness remains limited by absence of prior-period balances. Do not read this risk as closed or IFRS cash-flow disclosure complete.
+
+---
+
+## R-014 — Shalfa-specific GL codes in Generic Presentation Policy (partially overlaps R-008)
+
+| Field | Value |
+|-------|-------|
+| **Source** | CRITICAL_REMEDIATION_REPORT.md pre-existing R-004 |
+| **Severity** | **Low** (was **Medium** before R-004 fix) |
+| **Category** | Product / Commercial truthfulness |
+| **Evidence** | R-004 investigation found `GENERIC_PRESENTATION_POLICY_V1` in `presentation-policy-types.ts` contained `affiliateGlCodes: ["4401010005"]`, `contractRevenueGlCodes: ["4401010004"]`, `unbilledDuplicateGlCodes: ["4401010003"]` — all Shalfa‑pilot‑specific. The migration seed (`20260614130000`) matched. |
+| **Fix applied (2026-06-15)** | (1) Source: cleared the three arrays in `GENERIC_PRESENTATION_POLICY_V1` (now `[]`). (2) Migration: updated the seeded JSONB to match. (3) `SHALFA_PILOT_PRESENTATION_POLICY_V1` retains all codes. (4) Verification: `temp_verify_policy.mjs` confirmed migration seed JSON exactly matches TypeScript source — **zero drift**. |
+| **Impact** | Generic policy is now truly generic. Second client will get clean empty arrays. Shalfa pilot policy remains intact. No data migration needed — JSONB fix is presentational. |
+| **Owner** | Engineering |
+| **Status** | **FIXED** |
+
+---
+
+## R-015 — Test coverage gap for critical audit functions (PHASE 1 COMPLETE)
+
+| Field | Value |
+|-------|-------|
+| **Source** | CRITICAL_REMEDIATION_REPORT.md pre-existing R-H01 |
+| **Severity** | **Medium** |
+| **Category** | QA / Test coverage |
+| **Evidence** | CRITICAL_REMEDIATION_REPORT.md listed 13 critical functions without direct unit tests. Phase 1 (2026-06-15) added 15 new tests covering **6 functions**. |
+| **New coverage** | See test coverage delta below. |
+| **Remaining gap** | 7 critical functions still lack direct unit tests (require Prisma‑integration mocks beyond current mock scope). |
+| **Mitigation** | Phase 2 test expansion required for remaining functions (see `CRITICAL_REMEDIATION_REPORT.md` R-H01). |
+| **Owner** | Engineering (QA) |
+| **Status** | **PARTIALLY ADDRESSED**
+
+---
+
+## Test Coverage Delta (R-H01 Phase 1)
+
+### Before (baseline)
+
+| Test file | Tests |
+|-----------|-------|
+| `presentation-policy-service.test.ts` | 3 |
+| `fs-engine.test.ts` | 4 (1 overlaps with status-lifecycle) |
+| `income-statement-presentation.test.ts` | 7 |
+| `status-lifecycle.test.ts` | — (did not exist) |
+| **Total** | **14** |
+
+### After (this remediation)
+
+| Test file | Tests | New | Note |
+|-----------|-------|-----|------|
+| `presentation-policy-service.test.ts` | 9 | +6 | 1 for R-004 verification, 2 for `createOrgPresentationPolicyFromTemplate`, 3 for `updateOrgPresentationPolicy` |
+| `status-lifecycle.test.ts` | 9 | +9 | **New file** — 1 for `canTransitionFsStatus`, 3 for `transitionFinancialStatementStatus`, 2 for `markAllFinancialStatementsReviewed`, 3 for `approveAllFinancialStatementsForEngagement` |
+| `fs-engine.test.ts` | 4 | 0 | Unchanged |
+| `income-statement-presentation.test.ts` | 7 | 0 | Modified for R-004 (policy parameter added), not new |
+| **Total** | **29** | **+15** | |
+
+### Newly covered functions
+
+| Function | Tests | File |
+|----------|-------|------|
+| `GENERIC_PRESENTATION_POLICY_V1` — empty codes verification | 1 | `presentation-policy-service.test.ts` |
+| `createOrgPresentationPolicyFromTemplate(slug)` — slug found in memory | 1 | `presentation-policy-service.test.ts` |
+| `createOrgPresentationPolicyFromTemplate(slug)` — fallback to builtin | 1 | `presentation-policy-service.test.ts` |
+| `updateOrgPresentationPolicy(...)` — not found / not editable error | 1 | `presentation-policy-service.test.ts` |
+| `updateOrgPresentationPolicy(...)` — invalid rules in database | 1 | `presentation-policy-service.test.ts` |
+| `updateOrgPresentationPolicy(...)` — success update | 1 | `presentation-policy-service.test.ts` |
+| `canTransitionFsStatus(draft → reviewed)` | 1 | `status-lifecycle.test.ts` |
+| `transitionFinancialStatementStatus(...)` — statement not found | 1 | `status-lifecycle.test.ts` |
+| `transitionFinancialStatementStatus(...)` — invalid transition | 1 | `status-lifecycle.test.ts` |
+| `transitionFinancialStatementStatus(...)` — success + audit event | 1 | `status-lifecycle.test.ts` |
+| `markAllFinancialStatementsReviewed(...)` — no drafts | 1 | `status-lifecycle.test.ts` |
+| `markAllFinancialStatementsReviewed(...)` — marks drafts | 1 | `status-lifecycle.test.ts` |
+| `approveAllFinancialStatementsForEngagement(...)` — no pending | 1 | `status-lifecycle.test.ts` |
+| `approveAllFinancialStatementsForEngagement(...)` — approves reviewed | 1 | `status-lifecycle.test.ts` |
+| `approveAllFinancialStatementsForEngagement(...)` — promotes drafts pipeline | 1 | `status-lifecycle.test.ts` |
+
+### Remaining critical functions without direct unit tests
+
+| Function | Module | Dependencies blocking mock |
+|----------|--------|---------------------------|
+| `rebuildFinancialStatementsV2` | `fs-engine/fs-engine.ts` | Prisma DB access, prior FS state |
+| `syncReportingGraphForEngagement` | `reporting-graph/graph-builder.ts` | Prisma graph node query, cache |
+| `promoteFinancialStatementsOnApproval` | `governance/governance-engine.ts` | Prisma updateMany (refactored, but function itself not unit-tested) |
+| `enrichMappingsWithErpMap1` | `presentation/enrich-mapping-map1.ts` | External mapping data, Prisma |
+| `buildPresentationIncomeStatementTotals` | `db/income-statement-presentation.ts` | Complex aggregation with policy resolution |
+| `reconcileTrialBalanceToFs` | `reconciliation/reconciliation.ts` | Prisma batch read, multiple FS types |
+| `classifyRevenuePresentationSegment` | `db/income-statement-presentation.ts` | Covered indirectly via income-statement-presentation tests but not as isolated unit |
+
+---
+
+## Risk heat map (updated)
+
+```text
+Critical:  R-003 (auth token — untracked, not merged)
+High:      R-001, R-002
+Medium:    R-004 (LeadSchedule migration gap), R-005, R-006, R-007, R-013 (cash flow — architectural), R-015 (test gap)
+Low:       R-008 (partially fixed by R-014), R-009 (resolved), R-010, R-011, R-012
+Resolved:  R-014 (Shalfa codes in generic policy — FIXED)
+```

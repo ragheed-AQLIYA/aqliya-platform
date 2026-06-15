@@ -49,7 +49,7 @@ VALUES
     'generic-v1',
     'Generic Presentation Policy',
     'generic-v1',
-    '{"slug":"generic-v1","name":"Generic Presentation Policy","version":"generic-v1","revenue":{"operatingExclusionGlCodes":[],"affiliateGlCodes":["4401010005"],"contractRevenueGlCodes":["4401010004"],"unbilledDuplicateGlCodes":["4401010003"],"excludeAffiliateFromOperatingHeadline":false},"costOfRevenue":{"exclusionGlCodes":[],"exclusionPrefixPatterns":[]},"otherIncome":{"miscNettingGlCode":null,"targetNet":null},"finance":{"netOffset":null},"headline":{"useOperatingRevenueLabel":false,"useAuditedHeadlineRules":false}}'::jsonb,
+    '{"slug":"generic-v1","name":"Generic Presentation Policy","version":"generic-v1","revenue":{"operatingExclusionGlCodes":[],"affiliateGlCodes":[],"contractRevenueGlCodes":[],"unbilledDuplicateGlCodes":[],"excludeAffiliateFromOperatingHeadline":false},"costOfRevenue":{"exclusionGlCodes":[],"exclusionPrefixPatterns":[]},"otherIncome":{"miscNettingGlCode":null,"targetNet":null},"finance":{"netOffset":null},"headline":{"useOperatingRevenueLabel":false,"useAuditedHeadlineRules":false}}'::jsonb,
     true,
     CURRENT_TIMESTAMP
   ),

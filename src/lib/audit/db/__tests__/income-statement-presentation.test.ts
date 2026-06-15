@@ -39,6 +39,7 @@ function mapping(
 }
 
 describe("income-statement-presentation", () => {
+  const shalfaPolicy = SHALFA_PILOT_PRESENTATION_POLICY_V1;
   it("treats only Map1 zakat expense as zakat — not all 310102 government GL", () => {
     expect(isPresentationZakatMapping(mapping())).toBe(true);
     expect(
@@ -96,7 +97,7 @@ describe("income-statement-presentation", () => {
     ).toBe(433_201.08);
   });
 
-  it("moves unbilled duplicate GL to other revenue segment", () => {
+  it("moves unbilled duplicate GL to other revenue segment (Shalfa policy)", () => {
     expect(
       classifyRevenuePresentationSegment(
         mapping({
@@ -109,6 +110,7 @@ describe("income-statement-presentation", () => {
           canonicalCode: "CA-4010",
           category: "Revenue",
         }),
+        shalfaPolicy,
       ),
     ).toBe("revenue_other");
   });
