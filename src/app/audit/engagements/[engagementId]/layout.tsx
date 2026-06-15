@@ -1,5 +1,6 @@
 import { EngagementTabs } from "@/components/audit/engagement/engagement-tabs";
 import { PlatformContextCard } from "@/components/audit/engagement/platform-context-card";
+import { LcTbSignalsCard } from "@/components/audit/engagement/lc-tb-signals-card";
 import { EngagementWorkflowShell } from "@/components/audit/layout/engagement-workflow-shell";
 import { getWorkflowReadinessAction } from "@/actions/audit-read-actions";
 
@@ -23,6 +24,7 @@ export default async function EngagementLayout({
   return (
     <div className="space-y-6">
       <PlatformContextCard engagementId={engagementId} />
+      <LcTbSignalsCard engagementId={engagementId} />
       <EngagementTabs
         engagementId={engagementId}
         workflowContext={workflowContext}

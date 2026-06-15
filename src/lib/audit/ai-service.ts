@@ -24,7 +24,44 @@ export class AIService {
     accountCode: string,
     accountName: string,
     balance: number,
+    context?: { organizationId?: string; engagementId?: string },
   ): Promise<AiSuggestionResult> {
+    if (context?.organizationId) {
+      const { classifyTrialBalanceAccount } = await import(
+        "@/lib/tb-intelligence"
+      );
+      const result = await classifyTrialBalanceAccount({
+        organizationId: context.organizationId,
+        engagementId: context.engagementId ?? "",
+        accountCode,
+        accountName,
+        enableCloudAi: true,
+      });
+
+      if (result) {
+        return {
+          suggestion: {
+            id: `ai-mapping-${Date.now()}`,
+            engagementId: context.engagementId ?? "",
+            suggestionType: "mapping",
+            inputContext: `Account: ${accountCode} - ${accountName}, balance SAR ${balance}`,
+            outputContent: `Suggested: ${result.canonicalCode} ${result.canonicalName} (${result.source}, confidence ${Math.round(result.confidence * 100)}%)`,
+            confidence: result.confidence,
+            modelVersion: result.providerId ?? `tb-intelligence/${result.source}`,
+            status: "suggested",
+            createdAt: new Date().toISOString(),
+          },
+          humanActionRequired: true,
+          governanceMetadata: {
+            aiContributions: result.source === "cloud" || result.source === "local",
+            modelVersion: result.providerId ?? result.source,
+            requiresConfirmation: true,
+            evidenceTraceAvailable: true,
+          },
+        };
+      }
+    }
+
     await delay(400);
     const suggestion = mockAiOutputs.find(
       (a) => a.suggestionType === "mapping",

@@ -28,10 +28,202 @@ interface ColumnMapping {
   required: boolean
 }
 
+/** Parse monetary amounts: strips thousands separators, handles (negative) parentheses. */
+function parseAmount(raw: string | undefined | null): number {
+  if (raw == null) return 0
+  let s = String(raw).trim()
+  if (!s || s === "-" || s === "—") return 0
+
+  let negative = false
+  if (/^\(.*\)$/.test(s)) {
+    negative = true
+    s = s.slice(1, -1)
+  }
+
+  // Arabic-Indic digits → Western
+  s = s.replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+  // Remove currency symbols and spaces; keep digits, dot, minus
+  s = s.replace(/[^\d.,\-]/g, "")
+  // 1,234.56 or 1.234,56 — if both separators, last one is decimal
+  if (s.includes(",") && s.includes(".")) {
+    if (s.lastIndexOf(",") > s.lastIndexOf(".")) {
+      s = s.replace(/\./g, "").replace(",", ".")
+    } else {
+      s = s.replace(/,/g, "")
+    }
+  } else if (s.includes(",")) {
+    const parts = s.split(",")
+    s = parts.length === 2 && parts[1].length <= 2
+      ? `${parts[0].replace(/\./g, "")}.${parts[1]}`
+      : s.replace(/,/g, "")
+  }
+
+  const n = parseFloat(s)
+  if (!Number.isFinite(n)) return 0
+  return negative ? -Math.abs(n) : n
+}
+
+type AmountColumnMap = {
+  debitCol: string | null
+  creditCol: string | null
+  netBalanceCol: string | null
+  closingDebitCol: string | null
+  closingCreditCol: string | null
+}
+
+function getAmountColumns(colMap: ColumnMapping[]): AmountColumnMap {
+  const getCol = (target: string): string | null =>
+    colMap.find((m) => m.target === target)?.source ?? null
+  return {
+    debitCol: getCol("debit"),
+    creditCol: getCol("credit"),
+    netBalanceCol: getCol("netBalance"),
+    closingDebitCol: getCol("closingDebit"),
+    closingCreditCol: getCol("closingCredit"),
+  }
+}
+
+/** Movement first; if row has no movement, use closing balance columns. */
+function resolveRowDebitCredit(
+  row: ParsedRow,
+  cols: AmountColumnMap,
+): { debit: number; credit: number } {
+  const movD = cols.debitCol ? parseAmount(row[cols.debitCol]) : 0
+  const movC = cols.creditCol ? parseAmount(row[cols.creditCol]) : 0
+  const closeD = cols.closingDebitCol ? parseAmount(row[cols.closingDebitCol]) : 0
+  const closeC = cols.closingCreditCol ? parseAmount(row[cols.closingCreditCol]) : 0
+
+  if (movD !== 0 || movC !== 0) {
+    return { debit: movD, credit: movC }
+  }
+  if (closeD !== 0 || closeC !== 0) {
+    return { debit: closeD, credit: closeC }
+  }
+  if (cols.netBalanceCol) {
+    const balance = parseAmount(row[cols.netBalanceCol])
+    return balance >= 0
+      ? { debit: balance, credit: 0 }
+      : { debit: 0, credit: Math.abs(balance) }
+  }
+  return { debit: 0, credit: 0 }
+}
+
+function sumDebitCredit(
+  rows: ParsedRow[],
+  cols: AmountColumnMap,
+  mode: "movement" | "resolved",
+): { debits: number; credits: number } {
+  let debits = 0
+  let credits = 0
+  rows.forEach((row) => {
+    if (mode === "movement" && cols.debitCol && cols.creditCol) {
+      debits += parseAmount(row[cols.debitCol])
+      credits += parseAmount(row[cols.creditCol])
+      return
+    }
+    const { debit, credit } = resolveRowDebitCredit(row, cols)
+    debits += debit
+    credits += credit
+  })
+  return { debits, credits }
+}
+
+function hasImportableAmountColumns(cols: AmountColumnMap): boolean {
+  return Boolean(
+    (cols.debitCol && cols.creditCol) ||
+      cols.netBalanceCol ||
+      cols.closingDebitCol ||
+      cols.closingCreditCol,
+  )
+}
+
+function normalizeHeader(col: string): string {
+  return col.toLowerCase().replace(/[\s_\-/\\()]/g, "")
+}
+
+/** Exact / high-confidence Arabic & bilingual column labels (Saudi TB exports). */
+const COLUMN_ALIASES: Record<string, string[]> = {
+  accountCode: ["رقم الحساب", "رمز الحساب", "كود الحساب", "Account Code", "AccountCode"],
+  accountName: ["اسم الحساب", "اسم الحسابات", "Account Name", "AccountName"],
+  debit: [
+    "حركة الفترة مدين",
+    "حركة مدين",
+    "مدين الفترة",
+    "CurrentYearDebit",
+    "Period Debit",
+    "Debit",
+  ],
+  credit: [
+    "حركة الفترة دائن",
+    "حركة دائن",
+    "دائن الفترة",
+    "CurrentYearCredit",
+    "Period Credit",
+    "Credit",
+  ],
+  openingBalance: ["صافي الرصيد الافتتاحي", "الرصيد الافتتاحي", "Opening Balance"],
+  priorYearBalance: ["رصيد العام السابق", "الرصيد السابق مدين", "Prior Year Balance"],
+  closingDebit: ["الرصيد الحالي مدين", "الرصيد الختامي مدين", "Closing Debit"],
+  closingCredit: ["الرصيد الحالي دائن", "الرصيد الختامي دائن", "Closing Credit"],
+}
+
+/** Columns that look like balances but must NOT be used as debit/credit movement or netBalance. */
+function isClosingBalanceColumn(col: string): boolean {
+  const raw = col.trim()
+  const compact = raw.replace(/\s/g, "")
+  return (
+    /الرصيد\s*الحالي\s*مدين|الرصيد\s*الحالي\s*دائن|الرصيد\s*الختامي|الرصيد\s*السابق\s*مدين|الرصيد\s*السابق\s*دائن/i.test(raw) ||
+    /الرصيدالحاليمدين|الرصيدالحاليدائن|الرصيدالختامي|الرصيدالسابقمدين/.test(compact)
+  )
+}
+
+function isNetBalanceColumn(col: string): boolean {
+  if (isClosingBalanceColumn(col)) return false
+  const raw = col.trim()
+  const cl = normalizeHeader(col)
+  return (
+    /صافي\s*الرصيد\s*الحالي|closingbalance|currentbalance|netcurrentbalance/i.test(raw) ||
+    /صافيالرصيدالحالي/.test(cl.replace(/\s/g, ""))
+  )
+}
+
+function matchColumnAlias(target: string, columns: string[]): string | undefined {
+  const aliases = COLUMN_ALIASES[target] ?? []
+  for (const alias of aliases) {
+    const found = columns.find(
+      (c) => c.trim() === alias || normalizeHeader(c) === normalizeHeader(alias),
+    )
+    if (found) return found
+  }
+  return undefined
+}
+
 interface ValidationCheck {
   label: string
   status: "valid" | "issue" | "error"
   detail: string
+}
+
+const FIELD_KEYS = [
+  "accountCode",
+  "accountName",
+  "debit",
+  "credit",
+  "closingDebit",
+  "closingCredit",
+  "netBalance",
+  "openingBalance",
+  "priorYearBalance",
+] as const
+
+const UNMAP_VALUE = "__unmap__"
+
+function defaultMappings(): ColumnMapping[] {
+  return FIELD_KEYS.map((key) => ({
+    target: key,
+    source: null,
+    required: key === "accountCode" || key === "accountName",
+  }))
 }
 
 const statusIcon = {
@@ -110,14 +302,21 @@ function parseXLSX(file: File): Promise<ParsedRow[]> {
 }
 
 function computeValidation(rows: ParsedRow[], colMap: ColumnMapping[], t: (key: string, values?: Record<string, string | number | Date>) => string): ValidationCheck[] {
-  const getCol = (target: string): string | null => colMap.find(m => m.target === target)?.source ?? null
-  const codeCol = getCol("accountCode")
-  const nameCol = getCol("accountName")
-  const debitCol = getCol("debit")
-  const creditCol = getCol("credit")
+  const cols = getAmountColumns(colMap)
+  const codeCol = colMap.find(m => m.target === "accountCode")?.source ?? null
+  const nameCol = colMap.find(m => m.target === "accountName")?.source ?? null
 
-  const totalDebits = rows.reduce((s, r) => s + (debitCol ? (parseFloat(r[debitCol] || "0") || 0) : 0), 0)
-  const totalCredits = rows.reduce((s, r) => s + (creditCol ? (parseFloat(r[creditCol] || "0") || 0) : 0), 0)
+  const dataRows = rows.filter((row) => {
+    const code = codeCol ? (row[codeCol] ?? "").trim() : ""
+    const name = nameCol ? (row[nameCol] ?? "").trim() : ""
+    return code || name
+  })
+
+  const movementTotals =
+    cols.debitCol && cols.creditCol
+      ? sumDebitCredit(dataRows, cols, "movement")
+      : null
+  const resolvedTotals = sumDebitCredit(dataRows, cols, "resolved")
 
   const codeSet = new Set<string>()
   const duplicateCodes: string[] = []
@@ -125,28 +324,68 @@ function computeValidation(rows: ParsedRow[], colMap: ColumnMapping[], t: (key: 
   let emptyCodes = 0
   let emptyBoth = 0
 
-  rows.forEach((row, i) => {
+  rows.forEach((row) => {
     const code = codeCol ? (row[codeCol] ?? "").trim() : ""
     const name = nameCol ? (row[nameCol] ?? "").trim() : ""
-    if (!code && !name) { emptyBoth++ }
-    if (!code) { emptyCodes++ }
-    if (!name) { emptyNames++ }
+    if (!code && !name) {
+      emptyBoth++
+      return
+    }
+    if (!code) emptyCodes++
+    if (!name) emptyNames++
     if (code) {
       if (codeSet.has(code)) duplicateCodes.push(code)
       codeSet.add(code)
     }
   })
 
-  const isBalanced = debitCol && creditCol ? Math.abs(totalDebits - totalCredits) < 0.01 : true
-
-  return [
+  const checks: ValidationCheck[] = [
     { label: t("rowCount"), status: rows.length > 0 ? "valid" : "error", detail: t("rowsParsed", { count: rows.length }) },
     { label: t("accountCodes"), status: emptyCodes > 0 ? "error" : "valid", detail: emptyCodes > 0 ? t("missingCode", { count: emptyCodes }) : t("allHaveCodes") },
     { label: t("accountNames"), status: emptyNames > 0 ? "error" : "valid", detail: emptyNames > 0 ? t("missingName", { count: emptyNames }) : t("allHaveNames") },
     { label: t("emptyRows"), status: emptyBoth > 0 ? "issue" : "valid", detail: emptyBoth > 0 ? t("emptyRowsDetail", { count: emptyBoth }) : t("noEmptyRows") },
     { label: t("duplicateCodes"), status: duplicateCodes.length > 0 ? "issue" : "valid", detail: duplicateCodes.length > 0 ? t("duplicateDetail", { codes: duplicateCodes.join("، ") }) : t("noDuplicates") },
-    ...(debitCol && creditCol ? [{ label: t("balance"), status: (isBalanced ? "valid" : "error") as "valid" | "error", detail: isBalanced ? t("balancedDetail", { debits: totalDebits.toLocaleString(), credits: totalCredits.toLocaleString() }) : t("unbalancedDetail", { debits: totalDebits.toLocaleString(), credits: totalCredits.toLocaleString() }) }] : []),
   ]
+
+  if (!hasImportableAmountColumns(cols)) {
+    checks.push({ label: t("balance"), status: "error", detail: t("balanceColumnsMissing") })
+    return checks
+  }
+
+  const resolvedVariance = resolvedTotals.debits - resolvedTotals.credits
+  const resolvedBalanced = Math.abs(resolvedVariance) < 0.01
+
+  if (movementTotals) {
+    const movVar = movementTotals.debits - movementTotals.credits
+    if (Math.abs(movVar) >= 0.01) {
+      checks.push({
+        label: t("balanceMovement"),
+        status: "issue",
+        detail: t("unbalancedDetail", {
+          debits: movementTotals.debits.toLocaleString(),
+          credits: movementTotals.credits.toLocaleString(),
+          variance: Math.abs(movVar).toLocaleString(),
+        }),
+      })
+    }
+  }
+
+  checks.push({
+    label: t("balance"),
+    status: resolvedBalanced ? "valid" : "issue",
+    detail: resolvedBalanced
+      ? t("balancedDetail", {
+          debits: resolvedTotals.debits.toLocaleString(),
+          credits: resolvedTotals.credits.toLocaleString(),
+        })
+      : `${t("unbalancedDetail", {
+          debits: resolvedTotals.debits.toLocaleString(),
+          credits: resolvedTotals.credits.toLocaleString(),
+          variance: Math.abs(resolvedVariance).toLocaleString(),
+        })} — ${t("balanceProceedHint")}`,
+  })
+
+  return checks
 }
 
 export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: TrialBalanceUploadProps) {
@@ -156,6 +395,9 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
     { key: "accountName", label: t("accountName"), required: true },
     { key: "debit", label: t("debit"), required: false },
     { key: "credit", label: t("credit"), required: false },
+    { key: "closingDebit", label: t("closingDebit"), required: false },
+    { key: "closingCredit", label: t("closingCredit"), required: false },
+    { key: "netBalance", label: t("netBalance"), required: false },
     { key: "openingBalance", label: t("openingBalance"), required: false },
     { key: "priorYearBalance", label: t("priorYearBalance"), required: false },
   ]
@@ -163,9 +405,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
   const [fileName, setFileName] = useState<string | null>(null)
   const [parsedRows, setParsedRows] = useState<ParsedRow[]>([])
   const [sourceColumns, setSourceColumns] = useState<string[]>([])
-  const [mappings, setMappings] = useState<ColumnMapping[]>(
-    (["accountCode", "accountName", "debit", "credit", "openingBalance", "priorYearBalance"] as const).map(key => ({ target: key, source: null, required: key === "accountCode" || key === "accountName" }))
-  )
+  const [mappings, setMappings] = useState<ColumnMapping[]>(defaultMappings)
   const [importing, setImporting] = useState(false)
   const [importError, setImportError] = useState<string | null>(null)
   const [importSuccess, setImportSuccess] = useState(false)
@@ -175,7 +415,7 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
     setFileName(null)
     setParsedRows([])
     setSourceColumns([])
-    setMappings((["accountCode", "accountName", "debit", "credit", "openingBalance", "priorYearBalance"] as const).map(key => ({ target: key, source: null, required: key === "accountCode" || key === "accountName" })))
+    setMappings(defaultMappings())
     setImporting(false)
     setImportError(null)
     setImportSuccess(false)
@@ -204,12 +444,23 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
       setParsedRows(rows)
       const cols = Object.keys(rows[0] ?? {})
       setSourceColumns(cols)
-      const fieldDefs = [{ key: "accountCode" as const, required: true }, { key: "accountName" as const, required: true }, { key: "debit" as const, required: false }, { key: "credit" as const, required: false }, { key: "openingBalance" as const, required: false }, { key: "priorYearBalance" as const, required: false }]
+      const fieldDefs = FIELD_KEYS.map((key) => ({
+        key,
+        required: key === "accountCode" || key === "accountName",
+      }))
       const autoMappings = fieldDefs.map(f => ({
         target: f.key,
         source: autoDetectColumn(f.key, cols) ?? null,
         required: f.required,
       }))
+      const hasMovementColumns =
+        autoMappings.find((m) => m.target === "debit")?.source &&
+        autoMappings.find((m) => m.target === "credit")?.source
+      if (hasMovementColumns) {
+        for (const m of autoMappings) {
+          if (m.target === "netBalance") m.source = null
+        }
+      }
       setMappings(autoMappings)
     } catch (err) {
       setImportError(err instanceof Error ? err.message : t("parseFailed"))
@@ -217,14 +468,55 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
   }
 
   const autoDetectColumn = (target: string, columns: string[]): string | undefined => {
+    const aliasMatch = matchColumnAlias(target, columns)
+    if (aliasMatch) return aliasMatch
+
     for (const col of columns) {
-      const cl = col.toLowerCase().replace(/[\s_-]/g, "")
-      if (target === "accountCode" && (cl.includes("accountcode") || cl.includes("code") || cl.includes("acctcode"))) return col
-      if (target === "accountName" && (cl.includes("accountname") || cl.includes("name") || cl.includes("account"))) return col
-      if (target === "debit" && (cl === "debit" || cl === "dr" || cl.includes("debitamount"))) return col
-      if (target === "credit" && (cl === "credit" || cl === "cr" || cl.includes("creditamount"))) return col
-      if (target === "openingBalance" && (cl.includes("opening") || cl.includes("openbal"))) return col
-      if (target === "priorYearBalance" && (cl.includes("prioryear") || cl.includes("prior") || cl.includes("previous"))) return col
+      const cl = normalizeHeader(col)
+      const raw = col.trim()
+
+      if (target === "accountCode") {
+        if (/accountcode|acctcode|glcode|ledgercode/.test(cl)) return col
+        if (/^(code|codigo|kod)$/.test(cl)) return col
+        if (/^رقمالحساب$/.test(cl.replace(/\s/g, ""))) return col
+      }
+      if (target === "accountName") {
+        if (/accountname|acctname|glname|ledgername/.test(cl)) return col
+        if (/^(name|description|desc)$/.test(cl)) return col
+        if (/^اسمالحساب/.test(cl.replace(/\s/g, ""))) return col
+      }
+      if (target === "debit") {
+        if (isClosingBalanceColumn(col) || isNetBalanceColumn(col)) continue
+        if (/حركة.*مدين|مدين.*الفترة|period.*debit|debit.*period/.test(raw.replace(/\s/g, ""))) return col
+        if (/^dr$/.test(cl) || cl.endsWith("debit") || cl.includes("debitamount")) return col
+        if (/currentyeardebit|perioddebit/.test(cl)) return col
+        if (/مدين/.test(raw) && !/دائن/.test(raw)) return col
+      }
+      if (target === "credit") {
+        if (isClosingBalanceColumn(col) || isNetBalanceColumn(col)) continue
+        if (/حركة.*دائن|دائن.*الفترة|period.*credit|credit.*period/.test(raw.replace(/\s/g, ""))) return col
+        if (/^cr$/.test(cl) || cl.endsWith("credit") || cl.includes("creditamount")) return col
+        if (/currentyearcredit|periodcredit/.test(cl)) return col
+        if (/دائن/.test(raw) && !/مدين/.test(raw)) return col
+      }
+      if (target === "netBalance") {
+        if (isNetBalanceColumn(col)) return col
+        if (/^(balance|netbalance|amount|saldo)$/.test(cl)) return col
+      }
+      if (target === "closingDebit") {
+        if (/الرصيد\s*الحالي\s*مدين|الرصيد\s*الختامي\s*مدين|closingdebit|currentdebit/i.test(raw)) return col
+      }
+      if (target === "closingCredit") {
+        if (/الرصيد\s*الحالي\s*دائن|الرصيد\s*الختامي\s*دائن|closingcredit|currentcredit/i.test(raw)) return col
+      }
+      if (target === "openingBalance") {
+        if (/opening|openbal|beginning/.test(cl)) return col
+        if (/افتتاح/.test(raw) && !/حالي|ختام/i.test(raw)) return col
+      }
+      if (target === "priorYearBalance") {
+        if (/prioryear|previousyear|lastyear|comparative/.test(cl)) return col
+        if (/سابق|مقارن|العامالسابق/.test(raw.replace(/\s/g, ""))) return col
+      }
     }
     return undefined
   }
@@ -234,8 +526,27 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
   }
 
   const requiredMapped = mappings.filter(m => m.required).every(m => m.source)
+  const movementMapped =
+    Boolean(mappings.find(m => m.target === "debit")?.source) &&
+    Boolean(mappings.find(m => m.target === "credit")?.source)
+  const netBalanceMapped = Boolean(mappings.find(m => m.target === "netBalance")?.source)
+  const showNetBalanceWarning = movementMapped && netBalanceMapped
   const validationChecks = parsedRows.length > 0 ? computeValidation(parsedRows, mappings, t) : []
   const hasErrors = validationChecks.some(c => c.status === "error")
+  const hasBalanceWarning = validationChecks.some(
+    (c) => c.label === t("balance") && c.status === "issue",
+  )
+
+function extractClassificationHints(row: ParsedRow): string[] {
+  const hints: string[] = [];
+  for (const [key, value] of Object.entries(row)) {
+    const label = key.trim();
+    if (!/^mapping\s*\d/i.test(label)) continue;
+    const text = String(value ?? "").trim();
+    if (text) hints.push(text);
+  }
+  return hints;
+}
 
   const handleConfirm = async () => {
     if (!fileName) return
@@ -244,16 +555,35 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
     try {
       const codeCol = mappings.find(m => m.target === "accountCode")?.source
       const nameCol = mappings.find(m => m.target === "accountName")?.source
-      const debitCol = mappings.find(m => m.target === "debit")?.source
-      const creditCol = mappings.find(m => m.target === "credit")?.source
+      const amountCols = getAmountColumns(mappings)
       if (!codeCol || !nameCol) throw new Error(t("requiredFieldMapping"))
+      if (!hasImportableAmountColumns(amountCols)) {
+        throw new Error(t("balanceColumnsMissing"))
+      }
 
-      const rows = parsedRows.map(r => ({
-        accountCode: (r[codeCol] ?? "").trim(),
-        accountName: (r[nameCol] ?? "").trim(),
-        debit: debitCol ? (parseFloat(r[debitCol] || "0") || 0) : 0,
-        credit: creditCol ? (parseFloat(r[creditCol] || "0") || 0) : 0,
-      })).filter(r => r.accountCode && r.accountName)
+      const rows = parsedRows
+        .map((r) => {
+          const accountCode = (r[codeCol] ?? "").trim()
+          const accountName = (r[nameCol] ?? "").trim()
+          if (!accountCode && !accountName) return null
+          const { debit, credit } = resolveRowDebitCredit(r, amountCols)
+          return {
+            accountCode,
+            accountName,
+            debit,
+            credit,
+            classificationHints: extractClassificationHints(r),
+          }
+        })
+        .filter((r): r is {
+          accountCode: string;
+          accountName: string;
+          debit: number;
+          credit: number;
+          classificationHints: string[];
+        } =>
+          r !== null && Boolean(r.accountCode && r.accountName),
+        )
 
       if (rows.length === 0) throw new Error(t("noValidRows"))
 
@@ -329,19 +659,36 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                           {field.required && <span className="text-destructive ml-1">*</span>}
                         </TableCell>
                         <TableCell>
-                          <Select
-                            value={mapping.source || ""}
-                            onValueChange={(val) => updateMapping(field.key, val || null)}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder={t("selectColumn")} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {sourceColumns.map(col => (
-                                <SelectItem key={col} value={col}>{col}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <div className="flex items-center gap-1">
+                            <Select
+                              value={
+                                mapping.source ??
+                                (field.required ? undefined : UNMAP_VALUE)
+                              }
+                              onValueChange={(val) =>
+                                updateMapping(
+                                  field.key,
+                                  val === UNMAP_VALUE ? null : val,
+                                )
+                              }
+                            >
+                              <SelectTrigger className="flex-1">
+                                <SelectValue placeholder={t("selectColumn")} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {!field.required && (
+                                  <SelectItem value={UNMAP_VALUE}>
+                                    {t("clearMapping")}
+                                  </SelectItem>
+                                )}
+                                {sourceColumns.map((col) => (
+                                  <SelectItem key={col} value={col}>
+                                    {col}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </TableCell>
                         <TableCell>
                           {field.required
@@ -355,6 +702,13 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
                 </TableBody>
               </Table>
             </div>
+
+            {showNetBalanceWarning && (
+              <div className="flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                <AlertTriangle className="size-4 shrink-0 mt-0.5" />
+                <span>{t("netBalanceConflictHint")}</span>
+              </div>
+            )}
 
             {previewColumns.length > 0 && (
               <div className="rounded-md border overflow-x-auto">
@@ -386,6 +740,12 @@ export function TrialBalanceUpload({ open, onClose, engagementId, onComplete }: 
 
         {step === 3 && validationChecks.length > 0 && (
           <div className="space-y-4 py-4 px-4">
+            {hasBalanceWarning && (
+              <div className="flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                <AlertTriangle className="size-4 shrink-0 mt-0.5" />
+                <span>{t("balanceProceedHint")}</span>
+              </div>
+            )}
             <div className="grid gap-2">
               {validationChecks.map((check, i) => (
                 <div key={i} className="flex items-start gap-3 rounded-md border px-4 py-3">
