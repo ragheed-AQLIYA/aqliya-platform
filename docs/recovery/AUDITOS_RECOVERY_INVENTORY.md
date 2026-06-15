@@ -131,6 +131,8 @@ Existing stashes from 2026-06-05 may overlap with current work. **Do not `stash 
 | Item | Status |
 |------|--------|
 | Recovery branch created | ✅ `auditos/factory-memory-2026-06` |
-| Work preserved on branch | ⏳ Pending commit slices |
-| Binaries excluded | ⏳ Enforced at commit time |
-| Remote push | ❌ Not yet |
+| Commit slices | ✅ **10 commits** (`3e80fab` → `HEAD`) |
+| Binaries excluded | ✅ `.pptx`, `.docx`, `.pdf`, `.xlsx`, `temp_*` not committed |
+| Remote push | ❌ **Not yet** — run `git push -u origin auditos/factory-memory-2026-06` |
+
+**Note:** Commit `6a2f026` message says "memory" but contains TB intelligence code (`src/lib/tb-intelligence/`). Cosmetic only; no content loss.
