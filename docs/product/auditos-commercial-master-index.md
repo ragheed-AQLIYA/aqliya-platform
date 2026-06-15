@@ -1,4 +1,6 @@
-# AuditOS Commercial Master Index
+﻿# AuditOS Commercial Master Index
+
+> **Positioning note (2026-06-09):** AQLIYA is now positioned as an **institutional operating platform** first. AuditOS is a **Specialized Operating System** (capability) running on the AQLIYA platform — not a standalone product. For the authoritative platform/product hierarchy, see `docs/official/AQLIYA_MASTER_REFERENCE.md` §5b.
 
 ## Status
 

@@ -19,6 +19,8 @@ const MODEL_NAMES = [
   'sectorRule', 'decisionOutcome', 'decisionEvidence', 'sunbulClient', 'sunbulUserMembership', 'sunbulRecord',
   'sunbulDocument', 'sunbulReview', 'sunbulAuditEvent',
   'crmConnection', 'crmSyncLog',
+  'tenantIntegration',
+  'tBMappingPattern', 'tBMappingFeedback', 'tBClassificationHistory',
   'salesAccount', 'salesContact', 'salesDeal', 'salesAuditEvent',
   'salesPipeline', 'salesPipelineStage', 'salesInteraction',
   'salesEvidenceLink', 'salesSignal',
@@ -178,6 +180,14 @@ function matchesWhere(record, where) {
         return record[key] === value.increment
       }
 
+      if (Object.prototype.hasOwnProperty.call(value, 'lt')) {
+        return record[key] < value.lt
+      }
+
+      if (Object.prototype.hasOwnProperty.call(value, 'gte')) {
+        return record[key] >= value.gte
+      }
+
       if (key.includes('_')) {
         return Object.entries(value).every(([nestedKey, nestedValue]) => record[nestedKey] === nestedValue)
       }
@@ -304,6 +314,11 @@ function resolveRelation(model, record, key) {
     case 'auditEvidence':
       if (key === 'engagement') return getOne('auditEngagement', { id: record.engagementId })
       break
+    case 'auditAccountMapping':
+      if (key === 'canonicalAccount') {
+        return getOne('auditCanonicalAccount', { id: record.canonicalAccountId })
+      }
+      break
   }
 
   return record[key] ?? null
@@ -390,6 +405,7 @@ function inferModelName(key) {
     outputs: 'officeAiOutput',
     sourceFiles: 'officeAiFile',
     engagement: 'auditEngagement',
+    canonicalAccount: 'auditCanonicalAccount',
   }
   return mapping[key] || key
 }

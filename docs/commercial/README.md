@@ -1,4 +1,6 @@
-# AQLIYA Commercial Documentation
+﻿# AQLIYA Commercial Documentation
+
+> **Positioning note (2026-06-09):** AQLIYA is now positioned as an **institutional operating platform** first. AuditOS is a **Specialized Operating System** (capability) within the platform. Commercial materials should reflect this hierarchy: AQLIYA platform → Specialized Operating Systems → capabilities. See `docs/official/AQLIYA_MASTER_REFERENCE.md` §5b.
 
 ## Current Role
 

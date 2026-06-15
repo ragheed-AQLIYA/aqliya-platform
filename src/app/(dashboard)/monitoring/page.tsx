@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
+import { AiObservabilityCards } from "@/components/monitoring/ai-observability-cards";
 
 export const dynamic = "force-dynamic";
 
@@ -61,6 +62,15 @@ export default function MonitoringPage() {
         }
       >
         <MetricsCards />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="text-center text-muted-foreground py-8">
+            جار تحميل بيانات AI…
+          </div>
+        }
+      >
+        <AiObservabilityCards />
       </Suspense>
     </div>
   );

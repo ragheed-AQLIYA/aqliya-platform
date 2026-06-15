@@ -17,9 +17,9 @@ describe("ProviderRouter", () => {
   describe("getAllProviderHealth", () => {
     it("returns health for all providers", async () => {
       const health = await getAllProviderHealth()
-      expect(health.length).toBe(4)
+      expect(health.length).toBe(5)
       health.forEach(h => {
-        expect(["openai", "anthropic", "cloud", "deterministic"]).toContain(h.providerId)
+        expect(["openai", "anthropic", "local", "cloud", "deterministic"]).toContain(h.providerId)
         expect(h.lastCheck).toBeDefined()
       })
       const det = health.find(h => h.providerId === "deterministic")

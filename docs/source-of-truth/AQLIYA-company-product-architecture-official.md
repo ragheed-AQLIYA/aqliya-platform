@@ -1,5 +1,7 @@
 # AQLIYA Company Product Architecture
 
+> **Language note (2026-06-09):** Public-facing materials now refer to "Specialized Operating Systems" instead of "Products." The platform is positioned as an "institutional operating platform" first, with capabilities surfaced inside it. See `docs/official/AQLIYA_MASTER_REFERENCE.md §5b` for details.
+
 ## Official Definition
 
 عقلية تبني أنظمة ذكاء اصطناعي تشغيلية للشركات في القرار، المبيعات، المالية، الامتثال، والتقارير المهنية.

@@ -4,6 +4,7 @@ import {
   PromptLayerContent,
   StatementDraftingPromptInput,
   MappingRecommendationPromptInput,
+  AccountClassificationPromptInput,
   EvidenceReviewPromptInput,
   AuditFindingPromptInput,
   CommercialClaimPromptInput,
@@ -179,6 +180,63 @@ export function buildMappingRecommendationPrompt(input: MappingRecommendationPro
   return {
     layers,
     fullPrompt: combineLayers(layers),
+    governanceContext: context,
+    warnings,
+  };
+}
+
+export function buildAccountClassificationPrompt(
+  input: AccountClassificationPromptInput,
+): PromptAssemblyResult {
+  const context = getGovernanceContext('account_mapping');
+  const warnings: string[] = [
+    ...collectEvidenceWarnings(context),
+    ...collectHumanApprovalWarning(context),
+  ];
+
+  const payload = {
+    accountName: input.accountName,
+    accountCode: input.accountCode,
+    accountBalance: input.accountBalance,
+    candidateAccounts: input.candidateAccounts,
+    chartOfAccountsContext: input.chartOfAccountsContext,
+  };
+
+  const taskBody = assembleSection('ACCOUNT CLASSIFICATION TASK', [
+    'Map ONE trial balance GL account to exactly ONE canonical AuditOS code from candidateAccounts.',
+    'This is a draft suggestion — human review is required before committing the mapping.',
+    '',
+    'Input:',
+    JSON.stringify(payload, null, 2),
+    '',
+    'Respond with ONLY a single JSON object (no markdown fences, no prose before or after):',
+    JSON.stringify(
+      {
+        accountCode: 'CA-XXXX',
+        confidence: 0.85,
+        reasoning: 'Brief rationale citing the account name and chosen canonical line',
+      },
+      null,
+      2,
+    ),
+    '',
+    'Rules:',
+    '- accountCode MUST be one of the CA-XXXX codes listed in candidateAccounts',
+    '- confidence MUST be a number between 0 and 1',
+    '- reasoning MUST be one or two sentences',
+  ]);
+
+  const layers: PromptLayerContent[] = [
+    buildLayerContent('system_doctrine', buildSystemDoctrineLayer(context)),
+    buildLayerContent('product_doctrine', buildProductDoctrineLayer(context)),
+    buildLayerContent('governance', buildGovernanceLayer(context)),
+    buildLayerContent('human_approval', buildHumanApprovalLayer(context)),
+    buildLayerContent('task_specific', taskBody),
+  ];
+
+  return {
+    layers,
+    fullPrompt: taskBody,
     governanceContext: context,
     warnings,
   };

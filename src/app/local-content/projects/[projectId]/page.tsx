@@ -160,6 +160,12 @@ export default async function ProjectDetailPage({
               href: `/local-content/projects/${projectId}/tender-match`,
               icon: Scale,
             },
+            {
+              label: "قائمة التحقق",
+              href: `/local-content/projects/${projectId}/verification`,
+              icon: ClipboardCheck,
+              count: 36,
+            },
           ].map(({ label, href, icon: Icon, count }) => (
             <Link key={label} href={href!}>
               <Card className="p-4 text-center hover:border-primary transition-colors">

@@ -10,10 +10,8 @@
 ## Taxonomy Layers
 
 ```
-AQLIYA Company
-├── AQLIYA Intelligence Core
-│   ├── Shared Applications
-│   │   └── Office AI Assistant
+AQLIYA Platform Company
+├── AQLIYA Intelligence Core (shared platform layer)
 │   ├── AI Orchestration Engine
 │   ├── Governance Engine
 │   ├── Workflow Engine
@@ -23,22 +21,28 @@ AQLIYA Company
 │   ├── Document Intelligence
 │   ├── Reporting Engine
 │   └── Deployment Layer
-├── Products / Systems
-│   ├── AuditOS
-│   ├── DecisionOS
-│   ├── LocalContentOS
-│   ├── SalesOS
+├── Shared Applications (built on Core)
+│   └── Office AI Assistant
+├── Specialized Operating Systems (capabilities — built on Core)
+│   ├── AuditOS                 (audit workflow)
+│   ├── DecisionOS              (decision governance)
+│   ├── LocalContentOS          (local content & supply chain)
+│   ├── SalesOS                 (business development)
+│   └── SimulationOS            (capability label only)
+├── Custom / Client-Specific Workspaces
+│   ├── WorkflowOS (canonical governed workspace)
+│   └── Sunbul (legacy redirect alias to WorkflowOS)
+├── Future Systems (not yet implemented)
 │   ├── LocalContactOS
 │   ├── RiskOS
 │   ├── ComplianceOS
 │   ├── LegalOS
 │   └── GovOS
-├── Custom / Client-Specific Workspaces
-│   ├── WorkflowOS (canonical governed workspace)
-│   └── Sunbul (legacy redirect alias to WorkflowOS)
 └── Strategic Platform Layer
     └── AQLIYA Studio
 ```
+
+> **Language note (2026-06-09):** What were previously called "Products / Systems" are now referred to as "Specialized Operating Systems" in public-facing materials. This reflects the repositioning of AQLIYA as a platform first, with capabilities surfaced inside the platform rather than as standalone products. The internal codebase may still use "product" terminology in places; the public-facing language shift is the priority.
 
 ---
 

@@ -19,6 +19,11 @@ import {
   resolveClassificationRules,
 } from "./classification-rules";
 import {
+  buildVerificationChecklistReport,
+  mergeVerificationChecklistUpdate,
+  type VerificationChecklistReport,
+} from "./verification-checklist";
+import {
   computeApprovalRoutingState,
   validateApprovalSubmission,
   validateReviewSubmission,
@@ -868,4 +873,66 @@ export async function getOrganizationClassificationRules(
     rules: resolveClassificationRules(project?.metadata),
     source: fromMeta ? ("metadata" as const) : ("default" as const),
   };
+}
+
+/** LC verification matrix checklist (knowledge JSON + project metadata progress) */
+export async function getProjectVerificationChecklistReport(
+  projectId: string,
+): Promise<VerificationChecklistReport> {
+  const project = await prisma.localContentProject.findUnique({
+    where: { id: projectId },
+    select: { metadata: true },
+  });
+  if (!project) {
+    throw new Error("Project not found");
+  }
+  return buildVerificationChecklistReport(project.metadata);
+}
+
+export async function updateVerificationChecklistItem(
+  projectId: string,
+  itemId: string,
+  input: { scale: string; workingPaperRef?: string },
+  actor: { id: string; name: string },
+) {
+  const project = await prisma.localContentProject.findUnique({
+    where: { id: projectId },
+    select: { metadata: true, name: true },
+  });
+  if (!project) {
+    throw new Error("Project not found");
+  }
+
+  const nextMetadata = mergeVerificationChecklistUpdate(
+    project.metadata,
+    itemId,
+    {
+      scale: input.scale.trim(),
+      workingPaperRef: input.workingPaperRef?.trim() || undefined,
+      updatedAt: new Date().toISOString(),
+      updatedBy: actor.name,
+    },
+  );
+
+  const updated = await prisma.localContentProject.update({
+    where: { id: projectId },
+    data: { metadata: nextMetadata as Prisma.InputJsonValue },
+  });
+
+  await createLocalContentAuditEvent({
+    projectId,
+    actorId: actor.id,
+    actorName: actor.name,
+    action: AuditActions.PROJECT_UPDATED,
+    entityType: "LocalContentProject",
+    entityId: projectId,
+    after: JSON.stringify({
+      verificationItemId: itemId,
+      scale: input.scale,
+      workingPaperRef: input.workingPaperRef ?? "",
+    }),
+    metadata: { verificationChecklistItem: itemId },
+  });
+
+  return updated;
 }

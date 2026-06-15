@@ -42,6 +42,7 @@ export const MODEL_REGISTRY: readonly ModelRegistryEntry[] = [
       "audit_findings",
       "approval_review",
       "notes_generation",
+      "disclosure_enrichment",
     ],
     notes: "Handler-emitted modelVersion label",
   },

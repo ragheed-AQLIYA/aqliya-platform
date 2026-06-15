@@ -10,6 +10,8 @@
 >
 > Retained in-source for historical reference. Do not use as authority for planning or status decisions.
 
+> **Language note (2026-06-09):** Public-facing materials now refer to "Specialized Operating Systems" instead of "Products." The platform is positioned as an "institutional operating platform" first, with capabilities surfaced inside it. See `docs/official/AQLIYA_MASTER_REFERENCE.md §5b` for details.
+
 **Type:** Company + Product delivery roadmap (now superseded)
 **Method:** Code reality first, documentation second. No capability is graded above what the repository proves.
 **Author basis:** Direct audit of `prisma/schema.prisma` (95 models, 18 enums), `src/app/*` routes, `src/lib/{ai,auth,governance,audit,platform}`, `.github/workflows/ci.yml`, `Dockerfile`, and the source-of-truth matrices.

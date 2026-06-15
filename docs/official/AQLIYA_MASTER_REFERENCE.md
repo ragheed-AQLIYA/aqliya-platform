@@ -4,7 +4,7 @@
 **Version:** 0.1  
 **File location:** `docs/official/AQLIYA_MASTER_REFERENCE.md`  
 **Authority:** Level 1 — secondary only to `docs/DOCUMENTATION_AUTHORITY.md`  
-**Last updated:** 2026-05-28
+**Last updated:** 2026-06-09 — Website repositioning to platform-first positioning
 
 ---
 
@@ -61,13 +61,13 @@ Every AI-assisted feature obeys this principle.
 
 ---
 
-## 5. Product Taxonomy
+## 5. Product Taxonomy (Platform-First Language)
+
+> **Note (2026-06-09):** Public-facing materials now refer to "Specialized Operating Systems" instead of "Products." The internal codebase still uses "product" in places. See website repositioning section below.
 
 ```
-AQLIYA Company
-├── AQLIYA Intelligence Core
-│   ├── Shared Applications
-│   │   └── Office AI Assistant
+AQLIYA Platform Company
+├── AQLIYA Intelligence Core (shared platform layer)
 │   ├── AI Orchestration Engine
 │   ├── Governance Engine
 │   ├── Workflow Engine
@@ -77,24 +77,42 @@ AQLIYA Company
 │   ├── Document Intelligence
 │   ├── Reporting Engine
 │   └── Deployment Layer
-├── Products / Systems
+├── Shared Applications (built on Core)
+│   └── Office AI Assistant
+├── Specialized Operating Systems (capabilities — built on Core)
 │   ├── AuditOS
 │   ├── DecisionOS
 │   ├── LocalContentOS
 │   ├── SalesOS
+│   └── SimulationOS (capability label only)
+├── Custom / Client-Specific Workspaces
+│   ├── WorkflowOS
+│   └── Sunbul (legacy redirect alias to WorkflowOS)
+├── Future Systems (not yet implemented)
 │   ├── LocalContactOS
 │   ├── RiskOS
 │   ├── ComplianceOS
 │   ├── LegalOS
 │   └── GovOS
-├── Custom / Client-Specific Workspaces
-│   ├── WorkflowOS (canonical governed workspace)
-│   └── Sunbul (legacy redirect alias to WorkflowOS)
 └── Strategic Platform Layer
     └── AQLIYA Studio
 ```
 
 ---
+
+## 5b. Website Positioning (2026-06-09)
+
+AQLIYA.com presents the company as an **institutional operating platform**, not a product company.
+
+**Navigation:** المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية
+
+**What changed:**
+- Homepage: 9-section platform-first architecture — no product names appear
+- Products relocated to `/platform#capabilities` as "Specialized Operating Systems"
+- New `/industries` page — sector-based entry for audit firms, government, enterprise, professional services
+- New `/proof` page — Proof Center consolidating demo, executive brief, pilot framework, evidence library, security
+- Language shift: "منتج" → "نظام تشغيل" / "مسار تشغيلي" in public-facing content
+- CTA: "احجز جلسة تشخيص" — diagnostic-first sales model
 
 ## 6. Product Implementation Status
 

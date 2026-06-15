@@ -1,3 +1,5 @@
+﻿> **Language note (2026-06-09):** AQLIYA is now positioned as a **platform** first. SalesOS is a **Specialized Operating System** within the platform. See `docs/official/AQLIYA_MASTER_REFERENCE.md` §5b.
+
 # SalesOS
 
 **Status:** Prototype / internal preview (L3→L4; L5 conditional per S7-04)

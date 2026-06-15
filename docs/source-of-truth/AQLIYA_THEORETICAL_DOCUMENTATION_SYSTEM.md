@@ -5,6 +5,8 @@
 > **This file is NOT the highest documentation authority.**  
 > For conflict resolution, identity, product status, and implementation reality, follow `docs/DOCUMENTATION_AUTHORITY.md`.
 
+> **Language note (2026-06-09):** Public-facing materials now refer to "Specialized Operating Systems" instead of "Products." The platform is positioned as an "institutional operating platform" first, with capabilities surfaced inside it. See `docs/official/AQLIYA_MASTER_REFERENCE.md §5b` for details.
+
 ---
 
 ## 1. Purpose

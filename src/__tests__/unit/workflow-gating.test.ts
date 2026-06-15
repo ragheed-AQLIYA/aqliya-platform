@@ -113,6 +113,54 @@ describe("evaluateTabGate", () => {
     });
   });
 
+  describe("lead-schedules", () => {
+    it("is locked without confirmed mappings", () => {
+      expect(
+        evaluateTabGate(
+          "lead-schedules",
+          emptyContext({ hasTrialBalance: true, hasMappings: true }),
+        ).locked,
+      ).toBe(true);
+    });
+
+    it("is unlocked with confirmed mappings", () => {
+      expect(
+        evaluateTabGate(
+          "lead-schedules",
+          emptyContext({
+            hasTrialBalance: true,
+            hasMappings: true,
+            hasConfirmedMappings: true,
+          }),
+        ).locked,
+      ).toBe(false);
+    });
+  });
+
+  describe("factory-map", () => {
+    it("is locked without financial statements", () => {
+      expect(
+        evaluateTabGate(
+          "factory-map",
+          emptyContext({ hasTrialBalance: true, hasMappings: true }),
+        ).locked,
+      ).toBe(true);
+    });
+
+    it("is unlocked with TB, mappings, and FS", () => {
+      expect(
+        evaluateTabGate(
+          "factory-map",
+          emptyContext({
+            hasTrialBalance: true,
+            hasMappings: true,
+            hasFinancialStatements: true,
+          }),
+        ).locked,
+      ).toBe(false);
+    });
+  });
+
   describe("notes", () => {
     it("is locked without financial statements", () => {
       expect(evaluateTabGate("notes", emptyContext()).locked).toBe(true);
@@ -250,7 +298,7 @@ describe("evaluateTabGate", () => {
 describe("evaluateAllTabGates", () => {
   it("returns results for all 16 tabs", () => {
     const results = evaluateAllTabGates(emptyContext());
-    expect(Object.keys(results).length).toBe(16);
+    expect(Object.keys(results).length).toBe(18);
     expect(results).toHaveProperty("sampling");
   });
 

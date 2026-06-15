@@ -74,6 +74,127 @@ const FLAG_REGISTRY: Record<string, FeatureFlag> = {
     createdAt: "2026-06-03",
     updatedAt: "2026-06-03",
   },
+  "audit.intelligence": {
+    key: "audit.intelligence",
+    name: "AuditOS Intelligence Layer",
+    description:
+      "When on, enriches rule-citation disclosure drafts via governed inference after FS rebuild.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.reporting-graph": {
+    key: "audit.reporting-graph",
+    name: "AuditOS Reporting Graph",
+    description:
+      "When on, dual-writes TB/mapping/FS/notes into ReportingGraphNode/Edge tables.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.lead-schedule-auto": {
+    key: "audit.lead-schedule-auto",
+    name: "AuditOS Lead Schedule Auto-Generation",
+    description:
+      "When on, auto-generates lead schedules from confirmed mappings after mapping confirm.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.reconciliation": {
+    key: "audit.reconciliation",
+    name: "AuditOS Factory Reconciliation",
+    description:
+      "When on, runs TB↔LS↔FS tie-out checks on validation and after FS rebuild.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.reconciliation-gates": {
+    key: "audit.reconciliation-gates",
+    name: "AuditOS Reconciliation Approval Gates",
+    description:
+      "When on, failed reconciliation checks block engagement approval.",
+    variant: "off",
+    owner: "eng",
+    dependencies: ["audit.reconciliation"],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.fs-v2": {
+    key: "audit.fs-v2",
+    name: "AuditOS FS Engine v2",
+    description:
+      "When on, rebuilds 4 statements including cash flow and enables FS status lifecycle.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.ifrs-rules": {
+    key: "audit.ifrs-rules",
+    name: "AuditOS IFRS Rules Engine",
+    description:
+      "When on, evaluates admitted IFRS knowledge rules after FS rebuild and on validation.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.socpa-rules": {
+    key: "audit.socpa-rules",
+    name: "AuditOS SOCPA Rules Engine",
+    description:
+      "When on, evaluates SOCPA jurisdiction overlay rules for SAR/Saudi engagements.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.disclosure-auto": {
+    key: "audit.disclosure-auto",
+    name: "AuditOS Disclosure Auto Engine",
+    description:
+      "When on, materializes IFRS/SOCPA rule triggers into draft disclosure notes after FS rebuild.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.approval-gates": {
+    key: "audit.approval-gates",
+    name: "AuditOS Factory Approval Gates",
+    description:
+      "When on, blocks approval and export until factory disclosure, validation, and FS gates pass.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
+  "audit.mind-map": {
+    key: "audit.mind-map",
+    name: "AuditOS Factory Mind Map",
+    description:
+      "When on, shows TB→mapping→FS→disclosure graph UI and captures GraphSnapshot on approval.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-13",
+    updatedAt: "2026-06-13",
+  },
   "queue.enabled": {
     key: "queue.enabled",
     name: "Async Queue Runtime",
@@ -133,6 +254,28 @@ function getEnvOverride(key: string): FlagVariant | undefined {
       return process.env.FF_AI_BUDGET_ALERTS === "true" ? "on" : undefined
     case "audit.mock-ai":
       return process.env.FF_AUDIT_MOCK_AI === "false" ? "off" : undefined
+    case "audit.intelligence":
+      return process.env.FF_AUDIT_INTELLIGENCE === "true" ? "on" : undefined
+    case "audit.reporting-graph":
+      return process.env.FF_AUDIT_REPORTING_GRAPH === "true" ? "on" : undefined
+    case "audit.lead-schedule-auto":
+      return process.env.FF_AUDIT_LEAD_SCHEDULE_AUTO === "true" ? "on" : undefined
+    case "audit.reconciliation":
+      return process.env.FF_AUDIT_RECONCILIATION === "true" ? "on" : undefined
+    case "audit.reconciliation-gates":
+      return process.env.FF_AUDIT_RECONCILIATION_GATES === "true" ? "on" : undefined
+    case "audit.fs-v2":
+      return process.env.FF_AUDIT_FS_V2 === "true" ? "on" : undefined
+    case "audit.ifrs-rules":
+      return process.env.FF_AUDIT_IFRS_RULES === "true" ? "on" : undefined
+    case "audit.socpa-rules":
+      return process.env.FF_AUDIT_SOCPA_RULES === "true" ? "on" : undefined
+    case "audit.disclosure-auto":
+      return process.env.FF_AUDIT_DISCLOSURE_AUTO === "true" ? "on" : undefined
+    case "audit.approval-gates":
+      return process.env.FF_AUDIT_APPROVAL_GATES === "true" ? "on" : undefined
+    case "audit.mind-map":
+      return process.env.FF_AUDIT_MIND_MAP === "true" ? "on" : undefined
     case "queue.enabled":
       return process.env.FF_QUEUE_ENABLED === "true" ? "on" : undefined
     case "tenant.self-service":

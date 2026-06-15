@@ -1,0 +1,30 @@
+export {
+  createNode,
+  getNode,
+  updateNode,
+  deleteNode,
+  createEdge,
+  getEdge,
+  deleteEdge,
+  getNodeNeighbors,
+  findPath,
+  getSubgraph,
+  searchMemory,
+  logQuery,
+  createCollection,
+  addNodeToCollection,
+  removeNodeFromCollection,
+  getCollectionNodes,
+  ingestDocument,
+  getIngestionStatus,
+  getMemoryStats,
+} from "./institutional-memory-service"
+
+export type {
+  CreateNodeInput,
+  CreateEdgeInput,
+  SearchMemoryInput,
+  CollectionInput,
+  IngestDocumentInput,
+  MemoryStats,
+} from "./institutional-memory-service"

@@ -8,7 +8,8 @@ export type GovernanceTaskType =
   | 'audit_findings'
   | 'commercial_claim_review'
   | 'pilot_decision'
-  | 'approval_review';
+  | 'approval_review'
+  | 'disclosure_enrichment';
 
 // ===== Core Governance Types =====
 
@@ -153,6 +154,14 @@ export interface MappingRecommendationPromptInput {
   mappedCount: number;
   lowConfidenceCount: number;
   unmappedCount: number;
+}
+
+export interface AccountClassificationPromptInput {
+  accountCode: string;
+  accountName: string;
+  accountBalance: number;
+  candidateAccounts: string[];
+  chartOfAccountsContext: string;
 }
 
 export interface EvidenceReviewPromptInput {

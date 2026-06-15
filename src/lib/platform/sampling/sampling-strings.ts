@@ -1,0 +1,47 @@
+export const SAMPLING_STRINGS = {
+  error: {
+    PLAN_NOT_FOUND: 'Sampling plan not found',
+    RESULT_NOT_FOUND: 'Sampling result not found',
+    ORG_ID_REQUIRED: 'Organization ID is required',
+    TITLE_REQUIRED: 'Sampling plan title is required',
+    POPULATION_SIZE_REQUIRED: 'Population size must be greater than 0',
+    CONFIDENCE_LEVEL_INVALID: 'Confidence level must be 0.90, 0.95, or 0.99',
+    MATERIALITY_INVALID: 'Materiality percentage must be greater than 0',
+    PLAN_NOT_DRAFT: 'Only DRAFT plans can be executed',
+    POPULATION_EMPTY: 'Population cannot be empty',
+    SAMPLE_SIZE_ZERO: 'Sample size must be greater than 0',
+    STRATA_FIELD_MISSING: 'Strata field is required for stratified sampling',
+    JUDGMENTAL_IDS_MISSING: 'Item IDs are required for judgmental sampling',
+    STRATUM_SIZE_INVALID: 'Size per stratum must be greater than 0',
+    POPULATION_TOO_SMALL: 'Population too small for systematic sampling',
+    CREATE_FAILED: 'Failed to create sampling plan',
+    FETCH_FAILED: 'Failed to fetch sampling data',
+    EXECUTE_FAILED: 'Failed to execute sampling plan',
+  },
+  event: {
+    PLAN_CREATED: 'Sampling plan created',
+    PLAN_EXECUTED: 'Sampling plan executed',
+    PLAN_REVIEWED: 'Sampling plan reviewed',
+  },
+  method: {
+    RANDOM: 'Simple random sampling without replacement',
+    STRATIFIED: 'Stratified random sampling with proportional allocation',
+    SYSTEMATIC: 'Systematic sampling with interval selection',
+    JUDGMENTAL: 'Judgmental sampling of specified items',
+  },
+  ar: {
+    error: {
+      PLAN_NOT_FOUND: 'خطة العينة غير موجودة',
+      RESULT_NOT_FOUND: 'نتيجة العينة غير موجودة',
+      ORG_ID_REQUIRED: 'معرف المنظمة مطلوب',
+      POPULATION_SIZE_REQUIRED: 'حجم المجتمع يجب أن يكون أكبر من 0',
+      POPULATION_EMPTY: 'المجتمع لا يمكن أن يكون فارغاً',
+    },
+    method: {
+      RANDOM: 'عينة عشوائية بسيطة بدون استبدال',
+      STRATIFIED: 'عينة طبقية مع توزيع نسبي',
+      SYSTEMATIC: 'عينة منتظمة مع اختيار بفاصل زمني',
+      JUDGMENTAL: 'عينة حكمية للعناصر المحددة',
+    },
+  },
+} as const

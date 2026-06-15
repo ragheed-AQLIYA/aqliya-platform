@@ -4,6 +4,7 @@ import type { AIProviderId } from "@/lib/ai/types"
 export const PROVIDER_FALLBACK_CHAIN: AIProviderId[] = [
   "openai",
   "anthropic",
+  "local",
   "cloud",
   "deterministic",
 ]

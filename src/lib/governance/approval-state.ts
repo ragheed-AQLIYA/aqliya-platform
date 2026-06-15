@@ -14,6 +14,7 @@ const AI_FORBIDDEN_TRANSITIONS: Record<ApprovalState, ApprovalState[]> = {
 const PROFESSIONAL_TASK_TYPES: GovernanceTaskType[] = [
   'statement_drafting',
   'notes_generation',
+  'disclosure_enrichment',
   'audit_findings',
   'commercial_claim_review',
 ];

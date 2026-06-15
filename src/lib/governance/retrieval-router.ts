@@ -222,6 +222,58 @@ const GOVERNANCE_TASK_MAP: Record<GovernanceTaskType, GovernanceContext> = {
       "task_specific",
     ],
   },
+  disclosure_enrichment: {
+    taskType: "disclosure_enrichment",
+    doctrineReferences: [
+      {
+        documentId: "05.03",
+        title: "AI-Assisted Audit Philosophy",
+        principle: "AI assists. Humans decide. Evidence governs.",
+        relevance: "Disclosure enrichment is assistive only",
+      },
+      {
+        documentId: "05.01",
+        title: "AuditOS Thesis",
+        principle: "AuditOS is a governed workflow and evidence infrastructure",
+        relevance: "Enrichment must cite rule evidence anchors",
+      },
+    ],
+    governanceReferences: [
+      {
+        source: "05.03 AI-Assisted Audit Philosophy",
+        rule: "AI outputs are suggestions — never final audit conclusions",
+        enforcement: "Notes remain draft until human approval",
+      },
+      {
+        source: "05.11 Audit Report Intelligence",
+        rule: "Notes must be traceable to evidence and standards",
+        enforcement: "Rule citations required as enrichment anchors",
+      },
+    ],
+    evidenceRequirements: [
+      {
+        description: "Rule citations linked to disclosure note",
+        status: "partial",
+        requiredForApproval: true,
+      },
+      {
+        description: "Human reviewer approval before export",
+        status: "missing",
+        requiredForApproval: true,
+      },
+    ],
+    humanApprovalRequired: true,
+    escalationTriggers: ["missing_evidence", "governance_ambiguity"],
+    outputBoundary: "draft_only",
+    recommendedPromptLayers: [
+      "system_doctrine",
+      "product_doctrine",
+      "governance",
+      "evidence",
+      "human_approval",
+      "task_specific",
+    ],
+  },
   evidence_review: {
     taskType: "evidence_review",
     doctrineReferences: [
