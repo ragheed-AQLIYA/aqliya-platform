@@ -1,0 +1,6 @@
+{
+  "framework": "arabic_labels",
+  "version": "1.0",
+  "locale": "ar",
+  "extends": "ifrs-mapping.json"
+}
