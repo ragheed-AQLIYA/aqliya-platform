@@ -175,6 +175,20 @@ npm run smoke:local                                    # pass
 
 ---
 
+## Staging Deploy Attempt (2026-06-15)
+
+| Step | Result |
+|------|--------|
+| Merge factory RC → `staging` @ `608579c` | ✅ |
+| CI Test (`tsc`) | ✅ PASS |
+| Terraform / Docker / ECS | ❌ AWS credentials missing in GitHub Actions |
+
+**Fix applied:** `knowledge/chart-of-accounts/*.json` was untracked (blocked CI) — committed in `608579c`.
+
+**Operator:** Configure `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` repo secrets → re-run [Deploy to AWS](https://github.com/ragheed-AQLIYA/aqliya-platform/actions/workflows/deploy.yml) on `staging` → RDS migrate → Shalfa validate.
+
+---
+
 ## Related Docs
 
 - `docs/review/MIGRATION_WALKTHROUGH.md` — Risk B, drift resolution
