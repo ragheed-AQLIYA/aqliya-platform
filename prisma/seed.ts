@@ -60,6 +60,36 @@ async function main() {
   });
   console.log(`Created organization: ${org.name}`);
 
+  await prisma.tenantIntegration.upsert({
+    where: { id: `ai-${org.id}` },
+    update: {},
+    create: {
+      id: `ai-${org.id}`,
+      organizationId: org.id,
+      type: "AI",
+      provider: "aqliya-ai-runtime",
+      displayName: "AQLIYA AI Runtime",
+      status: "ACTIVE",
+      configMetadata: {
+        executionMode: "hybrid",
+        cloudProvider: "openai",
+        cloudModel: "",
+        localBaseUrl: "http://localhost:11434",
+        localModel: "llama3.2",
+        hybridPolicy: {
+          tb_classification: "local",
+          account_mapping: "local",
+          trial_balance_upload: "local",
+          notes_generation: "cloud",
+          report_writing: "cloud",
+          audit_findings: "cloud",
+          analytical_review: "local",
+        },
+      },
+    },
+  });
+  console.log("Created default AI runtime integration (hybrid)");
+
   // Create Users
   const admin = await prisma.user.create({
     data: {
@@ -715,13 +745,59 @@ async function main() {
     },
   });
 
+  const auditWorkspace = await prisma.clientWorkspace.upsert({
+    where: {
+      platformOrganizationId_slug: {
+        platformOrganizationId: platformOrg.id,
+        slug: "gulf-trading",
+      },
+    },
+    update: {},
+    create: {
+      id: "cws-gulf-trading",
+      platformOrganizationId: platformOrg.id,
+      name: "Gulf Trading Co.",
+      slug: "gulf-trading",
+      workspaceType: "client",
+      status: "active",
+      productAccess: { audit: true },
+      metadata: {
+        source: "seed",
+        auditClientId: auditClient.id,
+      },
+    },
+  });
+
+  await prisma.auditClient.update({
+    where: { id: auditClient.id },
+    data: { clientWorkspaceId: auditWorkspace.id },
+  });
+
+  const auditProject = await prisma.project.upsert({
+    where: { id: "proj-gulf-2025-audit" },
+    update: {},
+    create: {
+      id: "proj-gulf-2025-audit",
+      workspaceId: auditWorkspace.id,
+      name: "Gulf Trading Co. — FY2025",
+      projectType: "audit_engagement",
+      status: "active",
+      metadata: {
+        source: "seed",
+        auditEngagementId: "eng-gulf-2025",
+        fiscalPeriod: "FY2025",
+      },
+    },
+  });
+
   await prisma.auditEngagement.upsert({
     where: { id: "eng-gulf-2025" },
-    update: {},
+    update: { projectId: auditProject.id },
     create: {
       id: "eng-gulf-2025",
       organizationId: auditOrg.id,
       clientId: auditClient.id,
+      projectId: auditProject.id,
       fiscalPeriod: "FY2025",
       engagementType: "full_audit",
       status: "in_progress",
