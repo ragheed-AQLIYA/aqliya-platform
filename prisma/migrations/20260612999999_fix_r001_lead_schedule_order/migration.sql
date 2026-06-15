@@ -1,6 +1,6 @@
--- AuditOS 2.0 Phase 2: Add LeadSchedule and WorkingPaperIndex tables
--- IDEMPOTENT version — safe for fresh and existing databases.
--- Tables may already exist from bridge migration 20260612999999_fix_r001_lead_schedule_order.
+-- Fix R-001: Create LeadSchedule and WorkingPaperIndex before
+-- 20260613100000 tries to FK LeadScheduleLine to LeadSchedule.
+-- Uses IF NOT EXISTS for safety on existing databases.
 
 CREATE TABLE IF NOT EXISTS "WorkingPaperIndex" (
     "id" TEXT NOT NULL,
