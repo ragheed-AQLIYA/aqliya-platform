@@ -31,8 +31,8 @@ Options:
 # Engagement shell only (no TB upload)
 npm run shalfa:setup -- --skip-tb
 
-# Custom TB path (required — use full Shalfa file, not repo TB.xlsx)
-TB_FILE="C:/Users/PC/Downloads/TB 31-12-2025 Final.xlsx" npm run shalfa:setup
+# Custom TB path (required — use full pilot TB file, not repo TB.xlsx)
+TB_FILE="/path/to/pilot-tb.xlsx" npm run shalfa:setup
 ```
 
 **Evidence output:** [`evidence/shalfa-pilot-setup.json`](./evidence/shalfa-pilot-setup.json)
@@ -67,7 +67,7 @@ TB_FILE="C:/Users/PC/Downloads/TB 31-12-2025 Final.xlsx" npm run shalfa:setup
 **Offline (TB file + policy engine):**
 
 ```bash
-TB_FILE="C:/Users/PC/Downloads/TB 31-12-2025 Final.xlsx" node -r ./scripts/mock-server-only.cjs --import tsx scripts/p13-2-validation.mjs
+TB_FILE="/path/to/pilot-tb.xlsx" node -r ./scripts/mock-server-only.cjs --import tsx scripts/p13-2-validation.mjs
 ```
 
 **Live (DB engagement + Map1 enrichment):**

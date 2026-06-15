@@ -56,7 +56,7 @@
 
 ```powershell
 $env:DATABASE_URL="postgresql://postgres:postgres@localhost:5432/aqliya?schema=public"
-$env:TB_FILE="C:/Users/PC/Downloads/TB 31-12-2025 Final.xlsx"
+$env:TB_FILE="/path/to/pilot-tb.xlsx"
 
 npm run shalfa:setup
 npm run shalfa:validate

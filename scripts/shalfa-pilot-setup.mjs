@@ -10,7 +10,7 @@
  *   node -r ./scripts/mock-server-only.cjs --import tsx scripts/shalfa-pilot-setup.mjs --skip-tb
  *
  * Env:
- *   TB_FILE — path to TB 31-12-2025 Final.xlsx (default: Downloads path)
+ *   TB_FILE — path to pilot TB XLSX (required unless --skip-tb)
  *   DATABASE_URL
  */
 process.env.DATABASE_URL =
@@ -29,9 +29,13 @@ const PROJECT_ID = "proj-shalfa-2025-audit";
 const WORKSPACE_ID = "cws-shalfa-facilities";
 const ORG_ID = "org-aqliya";
 const skipTb = process.argv.includes("--skip-tb");
-const tbFile =
-  process.env.TB_FILE ??
-  "c:/Users/PC/Downloads/TB 31-12-2025 Final.xlsx";
+const tbFile = process.env.TB_FILE ?? process.argv[2];
+if (!skipTb && !tbFile) {
+  console.error(
+    "TB file required: set TB_FILE env or pass path as first CLI argument (or use --skip-tb).",
+  );
+  process.exit(1);
+}
 
 const {
   GENERIC_PRESENTATION_POLICY_V1,

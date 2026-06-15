@@ -8,7 +8,11 @@ process.env.DATABASE_URL =
 import XLSX from "xlsx";
 
 const engagementId = process.argv[2] ?? "eng-gulf-2025";
-const tbFile = process.argv[3] ?? "c:\\Users\\PC\\Downloads\\TB 31-12-2025 Final.xlsx";
+const tbFile = process.env.TB_FILE ?? process.argv[3];
+if (!tbFile) {
+  console.error("TB file required: set TB_FILE env or pass as third CLI argument.");
+  process.exit(1);
+}
 
 const { prisma } = await import("../src/lib/prisma.ts");
 

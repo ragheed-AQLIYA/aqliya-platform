@@ -163,7 +163,7 @@ npx prisma db seed
 ### Evidence files to collect:
 - `docs/audits/evidence/tsc-output.txt` ✅ (exists)
 - `docs/audits/evidence/build-output.txt` ✅ (exists)
-- `docs/audits/evidence/test-output.txt` (run locally)
+- `archive/recovery-artifacts/runtime-logs/docs-audits-evidence/test-output.txt` (moved from `docs/audits/evidence/` in Phase R1)
 - `docs/audits/evidence/smoke-output.txt` (run locally)
 - `docs/audits/evidence/cypress-output.txt` (run locally)
 - Screenshots: login.png, audit.png, local-content.png, workflowos.png, sales.png, decisions.png

@@ -468,7 +468,7 @@ curl route probes (unauthenticated + authenticated)
 
 - `docs/audits/reality-audit-tsc.txt`
 - `docs/audits/reality-audit-jest.txt`
-- `docs/audits/reality-audit-lint.txt`
+- `archive/recovery-artifacts/runtime-logs/docs-audits/reality-audit-lint.txt` (moved from `docs/audits/` in Phase R1)
 - `docs/audits/reality-audit-build.txt`
 - `docs/audits/reality-audit-demo-smoke.txt`
 - `docs/audits/reality-audit-smoke-local.txt`

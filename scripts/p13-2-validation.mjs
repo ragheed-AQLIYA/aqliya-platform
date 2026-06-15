@@ -421,11 +421,9 @@ const genericClient = runScenario(
 
 let shalfaGenericPolicy = null;
 let shalfaPilotPolicy = null;
-const pilotTb =
-  process.env.TB_FILE ??
-  "c:/Users/PC/Downloads/TB 31-12-2025 Final.xlsx";
+const pilotTb = process.env.TB_FILE ?? process.argv[2];
 
-if (fs.existsSync(pilotTb)) {
+if (pilotTb && fs.existsSync(pilotTb)) {
   const pilotMappings = buildMappingsFromTb(parseTb(pilotTb));
   shalfaGenericPolicy = runScenario(
     "Shalfa — generic policy (regression control)",

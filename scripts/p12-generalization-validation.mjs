@@ -429,10 +429,8 @@ const seedResult = runScenario(
 
 let shalfaControl = null;
 let shalfaPilotAudited = null;
-const pilotTb =
-  process.env.TB_FILE ??
-  "c:/Users/PC/Downloads/TB 31-12-2025 Final.xlsx";
-if (fs.existsSync(pilotTb)) {
+const pilotTb = process.env.TB_FILE ?? process.argv[2];
+if (pilotTb && fs.existsSync(pilotTb)) {
   const pilotMappings = buildMappingsFromTb(parseTb(pilotTb));
   shalfaControl = runScenario(
     "Control — Shalfa pilot TB (generic profile)",

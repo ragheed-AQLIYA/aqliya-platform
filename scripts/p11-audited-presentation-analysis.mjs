@@ -5,9 +5,11 @@ import fs from "node:fs";
 import path from "node:path";
 import XLSX from "xlsx";
 
-const tbFile =
-  process.env.TB_FILE ??
-  "c:/Users/PC/Downloads/TB 31-12-2025 Final.xlsx";
+const tbFile = process.env.TB_FILE ?? process.argv[2];
+if (!tbFile) {
+  console.error("TB file required: set TB_FILE env or pass path as first CLI argument.");
+  process.exit(1);
+}
 
 function parseAmount(value) {
   return Number(String(value ?? "").replace(/,/g, "")) || 0;
