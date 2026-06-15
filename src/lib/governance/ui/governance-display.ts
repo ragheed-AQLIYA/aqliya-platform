@@ -6,6 +6,7 @@ export function getTaskTypeLabel(taskType: GovernanceTaskType): string {
     account_mapping: 'Account Mapping',
     statement_drafting: 'Statement Drafting',
     notes_generation: 'Notes Generation',
+    disclosure_enrichment: 'Disclosure Enrichment',
     evidence_review: 'Evidence Review',
     audit_findings: 'Audit Findings',
     commercial_claim_review: 'Commercial Claim Review',

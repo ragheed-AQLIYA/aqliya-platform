@@ -1,0 +1,108 @@
+{
+  "framework": "ifrs_for_smes",
+  "version": "1.1",
+  "accounts": [
+    {
+      "code": "CA-1010",
+      "name": "Cash and Cash Equivalents",
+      "category": "asset",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-1020",
+      "name": "Trade Receivables",
+      "category": "asset",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-1030",
+      "name": "Inventories",
+      "category": "asset",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-1080",
+      "name": "Contract Assets",
+      "category": "asset",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-1050",
+      "name": "Property, Plant and Equipment",
+      "category": "asset",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-1070",
+      "name": "Right-of-Use Assets",
+      "category": "asset",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-2010",
+      "name": "Trade Payables",
+      "category": "liability",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-2035",
+      "name": "Zakat Provision",
+      "category": "liability",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-2110",
+      "name": "Lease Liabilities - Current",
+      "category": "liability",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-2120",
+      "name": "Lease Liabilities - Non-Current",
+      "category": "liability",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-2130",
+      "name": "Long-Term Debt",
+      "category": "liability",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-2140",
+      "name": "Deferred Tax",
+      "category": "liability",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "CA-3010",
+      "name": "Share Capital",
+      "category": "equity",
+      "statementType": "equity"
+    },
+    {
+      "code": "CA-3030",
+      "name": "Actuarial Reserve",
+      "category": "equity",
+      "statementType": "equity"
+    },
+    {
+      "code": "CA-3040",
+      "name": "OCI Reserve",
+      "category": "equity",
+      "statementType": "equity"
+    },
+    {
+      "code": "CA-4010",
+      "name": "Revenue",
+      "category": "revenue",
+      "statementType": "income_statement"
+    },
+    {
+      "code": "CA-5010",
+      "name": "Cost of Sales",
+      "category": "expense",
+      "statementType": "income_statement"
+    }
+  ]
+}

@@ -72,6 +72,59 @@ const mfaExemptPrefixes = [
   "/api/auth",
 ];
 
+// ── RBAC: Route-to-minimum-role mapping ──
+// This is the Edge-compatible first gate. Detailed permission checks
+// happen server-side in server-action-guard / CoreAccessControl.
+const routeMinRoles: Record<string, string> = {
+  "/audit": "viewer",
+  "/decisions": "viewer",
+  "/decision": "viewer",
+  "/local-content": "viewer",
+  "/assistant": "viewer",
+  "/contacts": "viewer",
+  "/content-studio": "viewer",
+  "/risk": "viewer",
+  "/office-ai": "viewer",
+  "/sampling": "viewer",
+  "/sales": "viewer",
+  "/workflowos": "viewer",
+  "/sunbul": "viewer",
+  "/settings": "viewer",
+  "/organizations": "admin",
+  "/intelligence": "viewer",
+  "/monitoring": "admin",
+  "/api/scim": "admin",
+  "/api/platform": "admin",
+  "/api/audit": "viewer",
+  "/api/local-content": "viewer",
+  "/api/workflowos": "viewer",
+  "/api/office-ai": "viewer",
+  "/api/metrics": "viewer",
+  "/api/ai": "viewer",
+  "/api/monitoring": "admin",
+};
+
+const roleHierarchy: Record<string, number> = {
+  viewer: 0,
+  operator: 1,
+  manager: 2,
+  admin: 3,
+};
+
+function hasSufficientRole(userRole: string, requiredRole: string): boolean {
+  const userLevel = roleHierarchy[userRole.toLowerCase()];
+  const requiredLevel = roleHierarchy[requiredRole.toLowerCase()];
+  if (userLevel === undefined || requiredLevel === undefined) return false;
+  return userLevel >= requiredLevel;
+}
+
+function getRequiredRole(pathname: string): string | null {
+  for (const [prefix, role] of Object.entries(routeMinRoles)) {
+    if (pathname.startsWith(prefix)) return role;
+  }
+  return null;
+}
+
 function isPublicPath(pathname: string): boolean {
   if (publicExact.has(pathname)) return true;
   if (publicPrefixes.some((p) => pathname.startsWith(p))) return true;
@@ -108,7 +161,7 @@ export async function middleware(request: NextRequest) {
 
   let token: unknown = null;
   try {
-    token = await getToken({ req: request, secret });
+    token = await getToken({ req: request, secret, salt: "authjs.session-token" });
     if (!token) {
       if (isApiPath(pathname) || pathname.startsWith("/api/")) {
         return withTiming(
@@ -174,6 +227,29 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // ── RBAC: Role-based route access check ──
+  if (tok) {
+    const role = tok.role as string | undefined;
+    const requiredRole = getRequiredRole(pathname);
+    if (requiredRole && role && !hasSufficientRole(role, requiredRole)) {
+      if (isApiPath(pathname) || pathname.startsWith("/api/")) {
+        return withTiming(
+          setSecurityHeaders(
+            NextResponse.json(
+              { error: "Insufficient permissions", code: "FORBIDDEN" },
+              { status: 403 },
+            ),
+          ),
+        );
+      }
+      return withTiming(
+        setSecurityHeaders(
+          NextResponse.redirect(new URL("/access-denied", request.url)),
+        ),
+      );
+    }
+  }
+
   return withTiming(setSecurityHeaders(NextResponse.next()));
 }
 
@@ -191,6 +267,22 @@ export const config = {
     "/sales/:path*",
     "/sunbul",
     "/sunbul/:path*",
+    "/contacts",
+    "/contacts/:path*",
+    "/decision",
+    "/decision/:path*",
+    "/content-studio",
+    "/content-studio/:path*",
+    "/risk",
+    "/risk/:path*",
+    "/office-ai",
+    "/office-ai/:path*",
+    "/sampling",
+    "/sampling/:path*",
+    "/settings/audit-bridge",
+    "/settings/audit-bridge/:path*",
+    "/settings/organization",
+    "/settings/organization/:path*",
     "/workflowos",
     "/workflowos/:path*",
     "/organizations",
@@ -212,6 +304,7 @@ export const config = {
     "/api/monitoring/:path*",
     "/api/ai/:path*",
     "/api/scim/:path*",
+    "/api/integration/:path*",
     "/api/custom-product-submit",
     "/api/pilot-review",
     "/api/platform/:path*",

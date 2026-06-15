@@ -9,6 +9,7 @@ import {
   FileSpreadsheet,
   Shield,
   Loader2,
+  AlertTriangle,
 } from "lucide-react";
 import {
   Card,
@@ -40,6 +41,12 @@ import {
   getFinancialStatementsAction,
   getEngagementAction,
 } from "@/actions/audit-read-actions";
+import {
+  isFsV2EnabledAction,
+  markAllStatementsReviewedAction,
+  rebuildFinancialStatementsV2Action,
+  transitionStatementStatusAction,
+} from "@/actions/audit-fs-actions";
 import { RollforwardPanel } from "@/components/audit/rollforward-panel";
 
 // Read-only governance indicators — no business logic coupling
@@ -50,12 +57,12 @@ import {
 } from "@/components/audit/governance";
 import { getGovernanceContext } from "@/lib/governance/retrieval-router";
 
-const sar = (v: number) =>
+const sar = (v: number | null | undefined) =>
   new Intl.NumberFormat("en-SA", {
     style: "currency",
     currency: "SAR",
     minimumFractionDigits: 0,
-  }).format(v);
+  }).format(Number.isFinite(v) ? (v as number) : 0);
 
 function formatExportError(status: number, message: string): string {
   if (status === 401) return "يلزم تسجيل الدخول لتصدير الملف.";
@@ -116,7 +123,30 @@ export default function StatementsPage() {
   const [exporting, setExporting] = useState<"pdf" | "xlsx" | null>(null);
   const [exportError, setExportError] = useState<string | null>(null);
   const [exportSuccess, setExportSuccess] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [fsV2Enabled, setFsV2Enabled] = useState(false);
+  const [fsActionLoading, setFsActionLoading] = useState(false);
   const governanceCtx = getGovernanceContext("statement_drafting");
+
+  const loadStatements = () => {
+    setLoading(true);
+    setLoadError(null);
+    return Promise.all([
+      getFinancialStatementsAction(engagementId),
+      getEngagementAction(engagementId),
+    ])
+      .then(([s, e]) => {
+        setStatements(Array.isArray(s) ? s : []);
+        setEngagement(e);
+      })
+      .catch((err) => {
+        console.error("[StatementsPage] load failed:", err);
+        setLoadError(
+          err instanceof Error ? err.message : "تعذر تحميل القوائم المالية",
+        );
+      })
+      .finally(() => setLoading(false));
+  };
 
   const statementLabels: Record<string, string> = {
     balance_sheet: t("balanceSheet"),
@@ -132,14 +162,34 @@ export default function StatementsPage() {
   };
 
   useEffect(() => {
+    isFsV2EnabledAction().then(setFsV2Enabled).catch(() => setFsV2Enabled(false));
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
     Promise.all([
       getFinancialStatementsAction(engagementId),
       getEngagementAction(engagementId),
-    ]).then(([s, e]) => {
-      setStatements(s);
-      setEngagement(e);
-      setLoading(false);
-    });
+    ])
+      .then(([s, e]) => {
+        if (cancelled) return;
+        setStatements(Array.isArray(s) ? s : []);
+        setEngagement(e);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("[StatementsPage] load failed:", err);
+        setLoadError(
+          err instanceof Error ? err.message : "تعذر تحميل القوائم المالية",
+        );
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [engagementId]);
 
   if (loading)
@@ -148,6 +198,22 @@ export default function StatementsPage() {
         <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
+
+  if (loadError)
+    return (
+      <div className="space-y-4">
+        <Card className="rounded-[24px] border-red-200 shadow-sm">
+          <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
+            <AlertTriangle className="size-8 text-red-600" />
+            <p className="text-sm text-muted-foreground">{loadError}</p>
+            <Button variant="outline" onClick={() => loadStatements()}>
+              إعادة المحاولة
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+
   if (statements.length === 0)
     return (
       <Card>
@@ -173,6 +239,45 @@ export default function StatementsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {fsV2Enabled && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={fsActionLoading}
+                onClick={async () => {
+                  setFsActionLoading(true);
+                  try {
+                    await rebuildFinancialStatementsV2Action(engagementId);
+                    await loadStatements();
+                  } finally {
+                    setFsActionLoading(false);
+                  }
+                }}
+              >
+                {fsActionLoading ? (
+                  <Loader2 className="size-4 me-1 animate-spin" />
+                ) : null}
+                إعادة بناء القوائم (v2)
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={fsActionLoading}
+                onClick={async () => {
+                  setFsActionLoading(true);
+                  try {
+                    await markAllStatementsReviewedAction(engagementId);
+                    await loadStatements();
+                  } finally {
+                    setFsActionLoading(false);
+                  }
+                }}
+              >
+                اعتماد مراجعة الكل
+              </Button>
+            </>
+          )}
           {exportSuccess && (
             <span className="text-xs text-green-700">{exportSuccess}</span>
           )}
@@ -301,12 +406,12 @@ export default function StatementsPage() {
             >
               {statementIcons[s.statementType]}
               {statementLabels[s.statementType] || s.title}
-              {s.reviewComments.length > 0 && (
+              {(s.reviewComments?.length ?? 0) > 0 && (
                 <Badge
                   variant="outline"
                   className="me-1 bg-amber-100 text-amber-700 text-[10px] px-1"
                 >
-                  {s.reviewComments.length}
+                  {s.reviewComments?.length ?? 0}
                 </Badge>
               )}
             </TabsTrigger>
@@ -325,13 +430,13 @@ export default function StatementsPage() {
                     </CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
-                    {s.reviewComments.length > 0 && (
+                    {(s.reviewComments?.length ?? 0) > 0 && (
                       <Badge
                         variant="outline"
                         className="bg-amber-100 text-amber-700 flex items-center gap-1"
                       >
                         <MessageSquare className="size-3" />
-                        {s.reviewComments.length} {t("comments")}
+                        {s.reviewComments?.length ?? 0} {t("comments")}
                       </Badge>
                     )}
                     <Badge
@@ -348,14 +453,38 @@ export default function StatementsPage() {
                         ? "مسودة"
                         : s.status === "reviewed"
                           ? "تمت المراجعة"
-                          : s.status}
+                          : s.status === "approved"
+                            ? "معتمد"
+                            : s.status}
                     </Badge>
+                    {fsV2Enabled && s.status === "draft" && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        disabled={fsActionLoading}
+                        onClick={async () => {
+                          setFsActionLoading(true);
+                          try {
+                            await transitionStatementStatusAction({
+                              engagementId,
+                              statementId: s.id,
+                              toStatus: "reviewed",
+                            });
+                            await loadStatements();
+                          } finally {
+                            setFsActionLoading(false);
+                          }
+                        }}
+                      >
+                        وضع «تمت المراجعة»
+                      </Button>
+                    )}
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="font-mono text-sm space-y-0.5">
-                  {s.lines.map((line) => (
+                  {(s.lines ?? []).map((line) => (
                     <div
                       key={line.id}
                       className={`flex items-center justify-between py-1 px-2 rounded cursor-pointer hover:bg-muted/50 ${line.isTotal ? "font-bold border-t border-dashed mt-1 pt-2" : ""}`}
@@ -376,7 +505,9 @@ export default function StatementsPage() {
                         }
                         setTraceabilityOpen(true);
                       }}
-                      style={{ paddingLeft: `${12 + line.indentLevel * 20}px` }}
+                      style={{
+                        paddingLeft: `${12 + (line.indentLevel ?? 0) * 20}px`,
+                      }}
                     >
                       <span
                         className={

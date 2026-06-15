@@ -1,3 +1,5 @@
+﻿> **Language note (2026-06-09):** AQLIYA is now positioned as a **platform** first. Each system in this map is a **Specialized Operating System** within the platform. See `docs/official/AQLIYA_MASTER_REFERENCE.md` §5b.
+
 # AQLIYA Systems Documentation
 
 ## Systems Maturity Map

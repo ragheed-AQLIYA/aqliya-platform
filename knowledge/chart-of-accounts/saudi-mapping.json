@@ -1,0 +1,7 @@
+{
+  "framework": "saudi_accounting",
+  "version": "1.0",
+  "locale": "ar",
+  "notes": "Saudi market aliases extend IFRS mapping via synonyms.ts",
+  "extends": "ifrs-mapping.json"
+}

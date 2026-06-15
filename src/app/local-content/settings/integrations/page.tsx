@@ -96,6 +96,7 @@ const PROVIDER_LABELS: Record<string, string> = {
   sap: "SAP ERP",
   oracle: "Oracle EBS",
   "microsoft-dynamics": "Microsoft Dynamics",
+  odoo: "Odoo ERP",
   "csv-upload": "رفع ملف CSV",
   custom: "مخصص",
 };
@@ -104,6 +105,7 @@ const PROVIDER_ICONS: Record<string, typeof Database> = {
   sap: Server,
   oracle: Globe,
   "microsoft-dynamics": Database,
+  odoo: Cable,
   "csv-upload": FileSpreadsheet,
   custom: HardDrive,
 };
@@ -268,6 +270,7 @@ function ConnectionFormDialog({
                   <SelectItem value="microsoft-dynamics">
                     Microsoft Dynamics
                   </SelectItem>
+                  <SelectItem value="odoo">Odoo ERP</SelectItem>
                   <SelectItem value="csv-upload">رفع ملف CSV</SelectItem>
                   <SelectItem value="custom">مخصص</SelectItem>
                 </SelectContent>

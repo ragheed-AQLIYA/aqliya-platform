@@ -1,0 +1,23 @@
+Factory Pilot Smoke — Live Run Blocked
+Timestamp: 2026-06-13T20:33:08Z
+Engagement: eng-gulf-2025 (SAR / Gulf Trading Co.)
+
+Result: BLOCKED — database unreachable
+
+Environment:
+- Docker Desktop: not running (npipe dockerDesktopLinuxEngine missing)
+- audit:health: database connectivity failed
+
+Static smoke: PASS (npm run factory:smoke:static — 33 checks after panel path fix)
+
+Next steps (local):
+1. docker compose up -d db
+2. npx prisma db push
+3. npm run seed:audit
+4. npm run factory:smoke
+
+Factory flags enabled by live smoke script:
+FF_AUDIT_FS_V2, FF_AUDIT_IFRS_RULES, FF_AUDIT_SOCPA_RULES,
+FF_AUDIT_DISCLOSURE_AUTO, FF_AUDIT_RECONCILIATION, FF_AUDIT_REPORTING_GRAPH,
+FF_AUDIT_LEAD_SCHEDULE_AUTO, FF_AUDIT_APPROVAL_GATES, FF_AUDIT_MIND_MAP
+(FF_AUDIT_INTELLIGENCE=false to avoid external AI dependency in smoke)

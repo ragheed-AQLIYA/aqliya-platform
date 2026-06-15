@@ -36,6 +36,7 @@ const USECASE_TASK_MAP: Record<string, GovernanceTaskType> = {
   evidence_review: "evidence_review",
   audit_findings: "audit_findings",
   notes_generation: "notes_generation",
+  disclosure_enrichment: "disclosure_enrichment",
   approval_review: "approval_review",
   pilot_decision: "pilot_decision",
   trial_balance_upload: "trial_balance_upload",

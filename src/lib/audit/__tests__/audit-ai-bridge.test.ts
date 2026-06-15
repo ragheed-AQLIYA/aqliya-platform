@@ -6,6 +6,10 @@ jest.mock("@/lib/prisma", () => ({
   },
 }));
 
+jest.mock("@/lib/ai/runtime", () => ({
+  runInference: jest.fn(),
+}));
+
 jest.mock("@/lib/ai/orchestrator", () => ({
   aiOrchestrator: { generate: jest.fn() },
 }));
@@ -21,6 +25,7 @@ jest.mock("@/lib/platform/audit-log", () => ({
 import { describe, expect, it, beforeEach, jest } from "@jest/globals";
 import { prisma } from "@/lib/prisma";
 import { aiOrchestrator } from "@/lib/ai/orchestrator";
+import { runInference } from "@/lib/ai/runtime";
 import {
   resolveAuditAIContext,
   runGovernedAuditAI,
@@ -56,7 +61,7 @@ describe("audit-ai-bridge (A1-09)", () => {
     expect(ctx.ragQuery).toContain("AuditOS");
   });
 
-  it("runGovernedAuditAI passes tenant + engagement to orchestrator", async () => {
+  it("runGovernedAuditAI passes tenant + engagement to runInference", async () => {
     (prisma.auditEngagement.findUnique as jest.Mock).mockResolvedValue({
       id: "eng-1",
       organizationId: "audit-org-1",
@@ -71,11 +76,12 @@ describe("audit-ai-bridge (A1-09)", () => {
     });
 
     const mockOutput = { id: "ai-1", suggestionType: "finding" };
-    (aiOrchestrator.generate as jest.Mock).mockResolvedValue({
+    (runInference as jest.Mock).mockResolvedValue({
       response: { metadata: { outputs: [mockOutput] }, output: "" },
       providerId: "deterministic",
       warnings: [],
       governanceContext: {},
+      runtimeMode: "cloud",
     });
 
     const result = await runGovernedAuditAI({
@@ -85,7 +91,7 @@ describe("audit-ai-bridge (A1-09)", () => {
       userRole: "OPERATOR",
     });
 
-    expect(aiOrchestrator.generate).toHaveBeenCalledWith(
+    expect(runInference).toHaveBeenCalledWith(
       expect.objectContaining({
         engagementId: "eng-1",
         organizationId: "plat-org-1",

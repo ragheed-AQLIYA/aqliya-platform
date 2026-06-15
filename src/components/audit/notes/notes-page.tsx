@@ -16,6 +16,9 @@ import { TraceabilityDrawer } from "@/components/audit/shared/traceability-drawe
 import type { TraceabilityNode } from "@/components/audit/shared/traceability-drawer"
 import { getDisclosureNotesAction, getEngagementAction } from "@/actions/audit-read-actions"
 import { getEvidenceForNoteType, type NoteCategory } from "@/lib/audit/notes"
+import { extractRuleCitations, RULE_CITATION_PREFIX } from "@/lib/audit/notes/disclosure-types"
+import { AuditIntelligencePanel } from "@/components/audit/notes/audit-intelligence-panel"
+import { DisclosureAutoPanel } from "@/components/audit/notes/disclosure-auto-panel"
 
 const statusColors: Record<string, string> = { draft: "bg-gray-100 text-gray-700 border-gray-300", needs_info: "bg-amber-100 text-amber-700 border-amber-300", reviewed: "bg-blue-100 text-blue-700 border-blue-300", approved: "bg-green-100 text-green-700 border-green-300", rejected: "bg-red-100 text-red-700 border-red-300" }
 
@@ -98,7 +101,8 @@ export default function NotesPage() {
   }
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
-  if (notes.length === 0 && aiDrafts.length === 0) return <Card><CardContent className="p-6 text-muted-foreground">{t("noNotes")}</CardContent></Card>
+
+  const isEmpty = notes.length === 0 && aiDrafts.length === 0
 
   let filtered = notes
   if (statusFilter !== "all") filtered = filtered.filter(n => n.status === statusFilter)
@@ -146,6 +150,14 @@ export default function NotesPage() {
           </div>
         </CardContent>
       </Card>
+
+      <DisclosureAutoPanel engagementId={engagementId} onNotesChanged={loadNotes} />
+
+      <AuditIntelligencePanel engagementId={engagementId} onNotesChanged={loadNotes} />
+
+      {isEmpty && (
+        <Card><CardContent className="p-6 text-muted-foreground">{t("noNotes")}</CardContent></Card>
+      )}
 
       {aiDrafts.length > 0 && (
         <Card className="border-violet-200">
@@ -270,6 +282,8 @@ function NoteCard({ note, expanded, onToggle, onTrace, onStatusChange }: { note:
   const t = useTranslations("audit.notes")
   const statusColors: Record<string, string> = { draft: "bg-gray-100 text-gray-700 border-gray-300", needs_info: "bg-amber-100 text-amber-700 border-amber-300", reviewed: "bg-blue-100 text-blue-700 border-blue-300", approved: "bg-green-100 text-green-700 border-green-300", rejected: "bg-red-100 text-red-700 border-red-300" }
   const evidenceReq = getEvidenceForNoteType(note.noteType as NoteCategory)
+  const ruleCitations = extractRuleCitations(note.missingInformation)
+  const displayMissing = note.missingInformation.filter((m) => !m.startsWith(RULE_CITATION_PREFIX))
   const linkedLabel = note.linkedStatementLine ? (accountTypeLabels[note.linkedStatementLine] ?? note.linkedStatementLine) : null
   const [reviewComment, setReviewComment] = useState("")
   const [submittingStatus, setSubmittingStatus] = useState<string | null>(null)
@@ -310,16 +324,25 @@ function NoteCard({ note, expanded, onToggle, onTrace, onStatusChange }: { note:
             {!expanded && (
               <p className="text-xs text-muted-foreground mt-2 line-clamp-1">{note.content}</p>
             )}
-            {note.missingInformation.length > 0 && !expanded && (
+            {displayMissing.length > 0 && !expanded && (
               <div className="flex items-center gap-1 mt-2 flex-wrap">
-                {note.missingInformation.slice(0, 2).map((mi, i) => (
+                {displayMissing.slice(0, 2).map((mi, i) => (
                   <Badge key={i} variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-[10px]">
                     <AlertTriangle className="size-2.5 me-0.5" />{mi}
                   </Badge>
                 ))}
-                {note.missingInformation.length > 2 && (
-                  <Badge variant="outline" className="text-[10px]">+{note.missingInformation.length - 2} {t("more")}</Badge>
+                {displayMissing.length > 2 && (
+                  <Badge variant="outline" className="text-[10px]">+{displayMissing.length - 2} {t("more")}</Badge>
                 )}
+              </div>
+            )}
+            {ruleCitations.length > 0 && !expanded && (
+              <div className="flex items-center gap-1 mt-1 flex-wrap">
+                {ruleCitations.map((c) => (
+                  <Badge key={`${c.source}-${c.ruleId}`} variant="outline" className="text-[10px] bg-violet-50">
+                    {c.source.toUpperCase()} {c.standardCode}
+                  </Badge>
+                ))}
               </div>
             )}
           </div>
@@ -345,13 +368,13 @@ function NoteCard({ note, expanded, onToggle, onTrace, onStatusChange }: { note:
               </div>
             )}
             <div className="text-sm leading-relaxed whitespace-pre-wrap">{note.content}</div>
-            {note.missingInformation.length > 0 && (
+            {displayMissing.length > 0 && (
               <div>
                 <div className="text-xs font-medium text-amber-700 mb-1 flex items-center gap-1">
                   <AlertTriangle className="size-3" />{t("missingInfo")}
                 </div>
                 <div className="flex items-center gap-1 flex-wrap">
-                  {note.missingInformation.map((mi, i) => (
+                  {displayMissing.map((mi, i) => (
                     <Badge key={i} variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
                       {mi}
                     </Badge>

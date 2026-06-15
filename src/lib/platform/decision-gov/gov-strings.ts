@@ -1,0 +1,31 @@
+export const GOV_STRINGS = {
+  error: {
+    DECISION_NOT_FOUND: 'Decision not found',
+    INVALID_TRANSITION: 'Decision status does not allow this action',
+    AUTHOR_CANNOT_APPROVE: 'Decision author cannot approve their own decision',
+    REASON_REQUIRED: 'Reason is required for rejection',
+    ORG_ID_REQUIRED: 'Organization ID is required',
+    ESCALATION_RULE_NOT_FOUND: 'Escalation rule not found',
+    NOT_APPROVED: 'Decision must be approved before export',
+    ALREADY_IN_STATUS: 'Decision is already in this status',
+    FETCH_FAILED: 'Failed to fetch decision',
+    CREATE_FAILED: 'Failed to create escalation rule',
+    PROCESS_FAILED: 'Failed to process escalations',
+    EVENT_LOG_FAILED: 'Failed to fetch decision event log',
+  },
+  event: {
+    SUBMITTED: 'Decision submitted for review',
+    APPROVED: 'Decision approved',
+    REJECTED: 'Decision rejected',
+    EXPORTED: 'Decision exported',
+    ARCHIVED: 'Decision archived',
+    ESCALATED: 'Decision escalated to higher reviewer',
+  },
+  gate: {
+    SUBMIT_DENIED: 'Only draft decisions can be submitted',
+    APPROVE_DENIED: 'Only decisions in review can be approved',
+    REJECT_DENIED: 'Only decisions in review can be rejected',
+    EXPORT_DENIED: 'Only approved decisions can be exported',
+    ARCHIVE_DENIED: 'Only approved or rejected decisions can be archived',
+  },
+} as const;

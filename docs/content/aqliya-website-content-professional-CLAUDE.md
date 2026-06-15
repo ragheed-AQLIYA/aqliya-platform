@@ -1,16 +1,21 @@
-# AQLIYA — منصة ذكاء مؤسسي محكوم | Professional Website Content Rewrite
+﻿# AQLIYA — منصة ذكاء مؤسسي محكوم | Professional Website Content Rewrite
 
-**Version**: 3.0 Professional  
+**Version**: 4.0 Platform-First  
 **Language**: Bilingual (Arabic-First)  
 **Tone**: Executive B2B | Direct | High-Impact  
-**Status**: Ready for Implementation
+**Status**: Updated to Current Site Architecture
 
+> **⚠️ Site Repositioning Notice (2026-06-09):** This document has been updated to describe the current live site. The AQLIYA website now uses a **platform-first architecture** with navigation: **المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية**. Specialized systems (أنظمة تشغيل متخصصة) appear inside /platform#capabilities. New pages include /industries (القطاعات), /proof (مركز الإثبات), and /demo (ديمو AuditOS المباشر). The primary CTA is "احجز جلسة تشخيص" → /contact.
+
+> **Navigation change note:** The old navigation in this document (§6.1 Navigation Copy) listed المنتجات: /products, منهجية العمل: /how-we-work, and تواصل معنا: /contact. The current live site uses platform-first navigation (المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية). Products are no longer a top-level nav item.
+
+---
 ---
 
 ## 📋 Table of Contents
 1. Homepage
-2. Products Overview Page
-3. Individual Product Pages
+2. Platform / Capabilities Page
+3. Specialized Systems
 4. About Page
 5. Contact & CTAs
 6. Supporting Pages
@@ -117,16 +122,16 @@ that supports it, presented clearly for leaders, auditors, and regulators to und
 
 **Primary (Bold)**
 ```
-AR: استكشف الأنظمة المحكومة
-EN: Explore Governed Systems
-Href: /products
+AR: احجز جلسة تشخيص
+EN: Book a Diagnostic Session
+Href: /contact
 ```
 
 **Secondary (Lighter)**
 ```
-AR: شاهد عرض توضيحي مباشر
-EN: Watch Live Demo
-Href: /auditos
+AR: شاهد الإثبات
+EN: See the Proof
+Href: /proof
 ```
 
 **Tertiary (Subtle)**
@@ -155,11 +160,11 @@ EN: The Platform Enterprise Leaders Trust
 Icon: Core/Network
 AR Headline: نواة حوكمة موحدة
 AR Body: منطق واحد للقرارات المحكومة، متكرّر عبر كل خطوط الأنظمة. 
-         لا حاجة لإعادة بناء الحوكمة لكل منتج. التسق والمعايير والسيطرة المركزية.
+         لا حاجة لإعادة بناء الحوكمة لكل نظام. التسق والمعايير والسيطرة المركزية.
 
 EN Headline: One Governance Core
 EN Body: Single decision logic replicated across every system line. 
-         No need to rebuild governance for each product. Consistency, standards, central control.
+         No need to rebuild governance for each system. Consistency, standards, central control.
 
 Stat: 1 Core / 6 Systems Built
 ```
@@ -246,154 +251,92 @@ EN: AQLIYA Delivers:
 
 ---
 
-## 1.5 Products Overview Section
+## 1.5 Platform Architecture — 9-Section Layout
 
 ### Headline
 ```
-AR: خطوط أنظمة محكومة لكل حالة استخدام مؤسسية
-EN: Governed System Lines for Every Enterprise Use Case
+AR: بنية منصة متكاملة لذكاء مؤسسي محكوم
+EN: Integrated Platform Architecture for Governed Institutional Intelligence
 ```
 
-### Intro Paragraph
+### Description
 ```
-AR: عقلية ليست منتج واحد. هي منصة تشغيل مؤسسية توفر خطوط أنظمة متعددة، 
-كل مبني على النواة نفسها من الحوكمة والشفافية والمساءلة. 
-اختر النظام الذي يناسب احتياجاتك الفورية، مع معرفة أنك تبني على 
-أساس يمكن توسيعه وتطويره.
+AR: الصفحة الرئيسية لعقلية مبنية على 9 أقسام منظمة تعرض المنصة كبنية مؤسسية 
+متكاملة، وليست كمجموعة منتجات. كل قسم يبني على سابقه ليقدّم صورة كاملة 
+عن فلسفة وقدرات منصة عقلية.
 
-EN: AQLIYA isn't a single product. It's an institutional operating platform 
-that delivers multiple system lines, each built on the same core of governance, 
-transparency, and accountability. Choose the system that fits your immediate needs, 
-knowing you're building on a foundation that scales.
+EN: The AQLIYA homepage is structured as 9 integrated sections that present 
+the platform as a complete institutional architecture, not a product catalog. 
+Each section builds on the previous to deliver a complete picture of the 
+AQLIYA platform philosophy and capabilities.
 ```
 
 ---
 
-### Product Cards (Mini)
-
-**Product 1: AuditOS** ⭐ (Featured)
+### Section 1 — Hero
 ```
-Status Badge: أول تطبيق مُثبت — جاهز للتفعيل الآن
-Status Badge EN: First Proven Product — Ready Now
+AR: القسم الترويجي الرئيسي — شعار عقلية وجملة القيمة المقترحة
+   "الذكاء الاصطناعي لا يقرر. يُساعد. الإنسان يقرر."
+   مع أزرار الدعوة للإجراء: احجز جلسة تشخيص | شاهد الإثبات | تحدث إلى متخصص
 
-Headline AR: نظام التدقيق المحكوم الذكي
-Headline EN: Intelligent Governed Audit System
-
-Problem AR: التدقيق المستمر يحتاج فريق ضخم وساعات عمل لا تُحصى. 
-           أنت تريد رؤية شاملة للامتثال بدون الحاجة لكل هذا الجهد.
-
-Problem EN: Continuous auditing requires massive teams and countless hours. 
-           You want complete compliance visibility without all that overhead.
-
-Solution AR: عقلية توفر ذكاء يكتشف الانحرافات تلقائيًا، 
-            يشرح الأسباب، يقترح الإجراءات — كل شيء موثق وقابل للمراجعة.
-
-Solution EN: AQLIYA provides intelligence that automatically detects deviations, 
-            explains the causes, suggests actions — all documented and auditable.
-
-CTA: شاهد عرضًا مباشرًا → /auditos
+EN: Main hero section — AQLIYA tagline and value proposition
+   "AI Doesn't Decide. It Informs. Humans Decide."
+   With CTAs: Book a Diagnostic Session | See the Proof | Talk to a Specialist
 ```
 
-**Product 2: LocalContentOS**
+### Section 2 — Impact Metrics
 ```
-Status Badge: استراتيجي — الثاني — قيد التطوير
-Status Badge EN: Strategic — Second — In Development
+AR: إحصائيات المنصة — بطاقات الأداء المؤسسي
+   نواة حوكمة موحدة | كل قرار يمر على إنسان | سجل تدقيق كامل
 
-Headline AR: نظام الامتثال المحلي المُحكم
-Headline EN: Governed Local Compliance System
-
-Problem AR: الشركات السعودية تتعامل مع متطلبات محتوى محلي معقدة. 
-           الامتثال اليدوي بطيء وعرضة للأخطاء.
-
-Problem EN: Saudi companies face complex local content requirements. 
-           Manual compliance is slow and error-prone.
-
-Solution AR: عقلية تُدير متطلبات المحتوى المحلي تلقائيًا مع سجل شامل 
-            للامتثال موثق للجهات التنظيمية.
-
-Solution EN: AQLIYA automatically manages local content requirements with 
-            comprehensive compliance documentation for regulators.
-
-CTA: تعرف على المزيد → /localcontent
+EN: Platform metrics — institutional performance cards
+   One Governance Core | Every Decision Reviewed | Complete Audit Trail
 ```
 
-**Product 3: DecisionOS**
+### Section 3 — Why Choose AQLIYA
 ```
-Status Badge: نظام مجاور — نشط
-Status Badge EN: Adjacent System — Active
+AR: مقارنة بنّاءة مع منصات الذكاء الاصطناعي التقليدية — 
+   لماذا عقلية مختلفة
 
-Headline AR: منصة إدارة القرارات المؤسسية
-Headline EN: Enterprise Decision Management Platform
-
-Problem AR: القرارات المؤسسية الحرجة غالبًا ما تُتخذ في صوامع منعزلة. 
-           لا يوجد تتبع، لا يوجد تعلم من القرارات السابقة.
-
-Problem EN: Critical enterprise decisions are often made in isolated silos. 
-           No tracking, no learning from past decisions.
-
-Solution AR: منصة قرارات تجمع كل القرارات في مكان واحد، موثقة ومراجعة، 
-            مع رؤى حول الأنماط والنتائج.
-
-Solution EN: A decision platform that centralizes all decisions, documented and 
-            reviewed, with insights into patterns and outcomes.
-
-CTA: استكشف → /decision
+EN: Constructive comparison with traditional AI platforms —
+   what makes AQLIYA different
 ```
 
-**Product 4: SalesOS** (Prototype)
+### Section 4 — Governance & Trust
 ```
-Status Badge: نموذج أولي — مستقبلي
-Status Badge EN: Prototype — Future Roadmap
+AR: مبدأ الثقة: الذكاء الاصطناعي يساعد. الإنسان يقرر. الدليل يحكم.
+   هذا المبدأ معماري وليس تسويقيًا.
 
-Headline AR: نظام المبيعات الذكية المحكومة
-Headline EN: Intelligent Governed Sales System
-
-Vision AR: فريق مبيعات مسلح بذكاء يعرّف العملاء المحتملين الحقيقيين، 
-          يكتشف الفرص المخفية، ويتنبأ بالأداء — كل شيء محكوم وشفاف.
-
-Vision EN: Sales teams armed with intelligence that identifies true prospects, 
-          uncovers hidden opportunities, predicts performance — all governed and transparent.
-
-Status AR: *قيد التطوير — سيكون متاحًا قريبًا*
-
-CTA: راقب التطورات → /sales
+EN: Trust Principle: AI assists. Humans decide. Evidence governs.
+   This is an architectural commitment, not marketing copy.
 ```
 
-**Product 5: SimulationOS** (Concept)
+### Section 5 — Deployment Options
 ```
-Status Badge: مفهوم تسويقي — مستقبلي
-Status Badge EN: Marketing Concept — Future
+AR: خيارات النشر: سحابة | خوادم خاصة | بيئة معزولة
 
-Headline AR: محاكاة السيناريوهات المؤسسية
-Headline EN: Enterprise Scenario Simulation
-
-Vision AR: اختبر القرارات والسيناريوهات في بيئة آمنة قبل تطبيقها فعليًا. 
-         افهم المخاطر والفرص قبل الالتزام.
-
-Vision EN: Test decisions and scenarios in a safe environment before real execution. 
-         Understand risks and opportunities before committing.
-
-Status AR: *تحت التطوير النشط*
-
+EN: Deployment options: Cloud | Private/On-Premises | Air-Gapped
 ```
 
-**Product 6: Custom Enterprise Systems**
+### Sections 6-8 — Platform Pillars (Institutional Depth)
 ```
-Status Badge: يُفعّل حسب النطاق المؤسسي
-Status Badge EN: Activated Per Institutional Scope
+AR: أقسام متخصصة تغطي: الحوكمة المؤسسية، الأمان والامتثال،
+   وقابلية التوسع عبر النظام الأساسي الموحد.
 
-Headline AR: أنظمة مخصصة مبنية على نواة عقلية
-Headline EN: Custom Systems Built on AQLIYA Core
-
-Headline AR: كل مؤسسة فريدة
-Problem AR: لا توجد حلول جاهزة توقيّة جميع احتياجاتك. 
-           نحن نبني أنظمة مخصصة مبنية على النواة نفسها.
-
-Problem EN: No off-the-shelf solution covers all your needs. 
-           We build custom systems architected on our core governance platform.
-
-CTA: ناقش احتياجاتك → /contact
+EN: Specialized sections covering: institutional governance, 
+   security & compliance, and scalability across the unified platform.
 ```
+
+### Section 9 — Final CTA
+```
+AR: قسم الدعوة الأخير للعمل — جاهز لجعل قراراتك محكومة وشفافة؟
+   مع خيارين: احجز جلسة تشخيص | تحدث إلى متخصص
+
+EN: Final call-to-action section — Ready to make your decisions governed and transparent?
+   Options: Book a Diagnostic Session | Talk to a Specialist
+```
+
+> **Note:** No product names appear in sections 1-8. Products/specialized systems are referenced only inside /platform#capabilities.
 
 ---
 
@@ -543,17 +486,19 @@ Status: نموذج استراتيجي | Strategic Model
 
 ---
 
-# 2️⃣ PRODUCTS OVERVIEW PAGE
+# 2️⃣ PLATFORM / CAPABILITIES PAGE
+
+## URL: /platform
 
 ## 2.1 Page Header
 
 ### Metadata
 ```yaml
-Title AR: خطوط عقلية المحكومة | منصات ذكاء مؤسسي
-Title EN: AQLIYA System Lines | Governed Enterprise Intelligence
+Title AR: المنصة | عقلية — بنية مؤسسية لذكاء محكوم
+Title EN: Platform | AQLIYA — Institutional Architecture for Governed Intelligence
 
-Description AR: ستة خطوط أنظمة مبنية على نواة حوكمة واحدة. 
-               من التدقيق إلى إدارة القرارات، كل نظام محكوم وشفاف وقابل للتدقيق.
+Description AR: تعرّف على بنية منصة عقلية: نواة حوكمة موحدة، أنظمة تشغيل متخصصة، 
+               وخيارات نشر مرنة. كل شيء مبني على الشفافية والمساءلة والأدلة.
 ```
 
 ---
@@ -562,24 +507,26 @@ Description AR: ستة خطوط أنظمة مبنية على نواة حوكمة
 
 **Headline**
 ```
-AR: ستة خطوط أنظمة. نواة واحدة. لا سجلات مُنعزلة.
-EN: Six System Lines. One Core. No Isolated Records.
+AR: بنية مؤسسية تجعل الذكاء مفيدًا، مفهومًا، ومحكومًا
+EN: An Institutional Architecture That Makes Intelligence Useful, Understandable, and Governed
 ```
 
 **Subheadline**
 ```
-AR: كل نظام مبني على الحوكمة والشفافية والمساءلة نفسها.
-   تفعيل سريع. توسع منطقي. لا إعادة هندسة.
+AR: منصة عقلية ليست مجرد مجموعة أدوات — إنها نظام تشغيل مؤسسي متكامل.
+   نواة حوكمة واحدة تمتد عبر جميع الأنظمة، مع خيارات نشر تناسب 
+   أي بيئة تنظيمية.
 
-EN: Every system built on the same governance, transparency, and accountability.
-   Fast activation. Logical scaling. No re-engineering.
+EN: AQLIYA is not a toolkit — it'''s an integrated institutional operating system.
+   One governance core that extends across all systems, with deployment 
+   options that fit any regulatory environment.
 ```
 
 ---
 
-## 2.2 Products Grid
+## 2.2 Capabilities Grid — أنظمة تشغيل متخصصة
 
-### Product 1: AuditOS (Featured / Highlighted)
+### Capability 1: AuditOS — Audit Intelligence (Featured / Highlighted)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -645,15 +592,15 @@ EN: Every system built on the same governance, transparency, and accountability.
 │                                                         │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
-│ [شاهد عرضًا مباشرًا] [اطلب نسخة تجريبية]            │
-│ [Watch Live Demo]    [Request Trial]                  │
+│ [شاهد الإثبات] [اطلب نسخة تجريبية]            │
+│ [See the Proof]    [Request Trial]                  │
 │                                                         │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### Product 2: LocalContentOS
+### Capability 2: LocalContentOS — Local Content Intelligence
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -715,7 +662,7 @@ EN: Every system built on the same governance, transparency, and accountability.
 
 ---
 
-### Product 3: DecisionOS
+### Capability 3: DecisionOS — Decision Intelligence
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -786,7 +733,7 @@ EN: Every system built on the same governance, transparency, and accountability.
 
 ---
 
-### Product 4: SalesOS (Prototype)
+### Capability 4: SalesOS — Sales Intelligence (Prototype)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -831,7 +778,7 @@ EN: Every system built on the same governance, transparency, and accountability.
 
 ---
 
-### Product 5: SimulationOS (Concept)
+### Capability 5: SimulationOS — Scenario Simulation (Concept)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -878,7 +825,7 @@ EN: Every system built on the same governance, transparency, and accountability.
 
 ---
 
-### Product 6: Custom Enterprise Systems
+### Capability 6: Custom Enterprise Systems
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -931,7 +878,7 @@ EN: Every system built on the same governance, transparency, and accountability.
 
 ---
 
-## 2.3 Products Page Footer Section
+## 2.3 Platform Page Footer Section
 
 ### Headline
 ```
@@ -949,13 +896,41 @@ EN: [Talk to a Specialist]
 
 ---
 
-# 3️⃣ INDIVIDUAL PRODUCT PAGES
+# 3️⃣ SPECIALIZED SYSTEMS (أنظمة تشغيل متخصصة)
 
-*Each product gets a dedicated page with deeper content*
+> **Note:** These specialized systems do NOT exist as standalone public routes. They are described inside /platform#capabilities and filtered by sector on the /industries page. The detailed descriptions below are maintained for reference and may be adapted into capability cards on /platform#capabilities or used in sales materials.
+
+### AuditOS
+- Route: Referenced in /platform#capabilities, /industries, /proof
+- Status: First proven capability — Ready now
+
+### LocalContentOS
+- Route: Referenced in /platform#capabilities, /industries  
+- Status: Strategic — second capability — In development
+
+### DecisionOS
+- Route: Referenced in /platform#capabilities, /industries
+- Status: Adjacent system — Active
+
+### SalesOS
+- Route: Referenced in /platform#capabilities
+- Status: Prototype — Future roadmap
+
+### SimulationOS
+- Route: Referenced in /platform#capabilities
+- Status: Concept — Future
+
+### Custom Enterprise Systems
+- Route: Referenced in /platform#capabilities, /contact
+- Status: Activated per institutional scope
 
 ---
 
-## 3.1 AuditOS Dedicated Page
+## 3.1 AuditOS Detailed Reference
+
+---
+
+## 3.1 AuditOS Capability Reference
 
 ### URL: /auditos
 
@@ -1250,11 +1225,11 @@ EN: Three Plans by Organization Size
 
 ---
 
-## 3.2 DecisionOS Dedicated Page
+## 3.2 DecisionOS Capability Reference
 
 *(Similar comprehensive structure)*
 
-### URL: /decision
+### URL: /platform#capabilities (Reference)
 
 ### Key Sections
 - Hero with status badge
@@ -1267,11 +1242,11 @@ EN: Three Plans by Organization Size
 
 ---
 
-## 3.3 LocalContentOS Dedicated Page
+## 3.3 LocalContentOS Capability Reference
 
 *(Similar comprehensive structure)*
 
-### URL: /localcontent
+### URL: /platform#capabilities (Reference)
 
 ### Key Sections
 - Hero highlighting Saudi market focus
@@ -1283,11 +1258,11 @@ EN: Three Plans by Organization Size
 
 ---
 
-## 3.4 Custom Systems Page
+## 3.4 Custom Systems Capability Reference
 
 *(Different structure — focus on possibilities)*
 
-### URL: /custom-product
+### URL: /platform#capabilities (Reference)
 
 ### Key Sections
 - Hero: "What's Your Unique Challenge?"
@@ -1595,11 +1570,11 @@ EN: Email
 اسم الشركة / Company: [________]
 الدور الوظيفي / Job Title: [________]
 رقم الهاتف / Phone: [________]
-المنتج المهتم به / Product of Interest:
-  ☐ AuditOS
-  ☐ DecisionOS
-  ☐ LocalContentOS
-  ☐ Custom System
+المهتم بـ / Interested In:
+  ☐ جلسة تشخيص / Diagnostic Session
+  ☐ المنصة والقدرات / Platform & Capabilities
+  ☐ قطاع محدد / Specific Sector
+  ☐ نظام مخصص / Custom System
   ☐ أخرى / Other
 
 الرسالة / Message: [________________]
@@ -1617,16 +1592,121 @@ EN: Email
 
 ### Header Navigation
 ```yaml
-الرئيسية: /
-المنتجات: /products
-منهجية العمل: /how-we-work
-من نحن: /about
-تواصل معنا: /contact
+المنصة: /platform
+القطاعات: /industries
+الإثبات: /proof
+الحوكمة: /governance
+عن عقلية: /about
+```
+
+
+---
+
+## 6.2 Industries Page — /industries (القطاعات)
+
+### Metadata
+```yaml
+Title AR: القطاعات | عقلية — ذكاء مؤسسي محكوم لكل قطاع
+Title EN: Industries | AQLIYA — Governed Institutional Intelligence by Sector
+```
+
+### Description
+```
+AR: صفحة القطاعات تقدّم أربعة قطاعات مستهدفة مع فلترة ديناميكية. 
+كل قطاع يعرض قدرات المنصة ذات الصلة به دون قوائم منتجات منفصلة.
+
+EN: The Industries page presents four target sectors with dynamic filtering.
+Each sector shows relevant platform capabilities without separate product listings.
+```
+
+### Four Target Sectors
+```
+1. المالية والمصرفية / Financial & Banking
+2. الحكومي والتنظيمي / Government & Regulatory  
+3. الصناعي والطاقة / Industrial & Energy
+4. الصحي / Healthcare
+```
+
+### Behavior
+- Sector filter at top: pictures/select the sector
+- Content updates to show relevant capabilities from /platform#capabilities
+- Each sector card shows: icon, sector name, relevant capabilities, CTA to /demo
+
+---
+
+## 6.3 Proof Page — /proof (مركز الإثبات)
+
+### Metadata
+```yaml
+Title AR: مركز الإثبات | عقلية — رأَ الأدلة بنفسك
+Title EN: Proof Center | AQLIYA — See the Evidence Yourself
+```
+
+### Sections
+- **Case Studies** — Real institutional use examples
+- **Live Demo** — Interactive demonstration of AuditOS
+- **Testimonials** — Partner and client feedback
+- **Evaluations** — Third-party assessments and certifications
+
+### Hero Headline
+```
+AR: الإثبات ليس في الوعود — بل فيما تراه بعينك
+EN: The Proof Isn'''t in Promises — It'''s in What You See
+```
+
+### Primary CTA
+```
+AR: ابدأ جلسة تشخيص
+EN: Start a Diagnostic Session
+CTA: → /demo
 ```
 
 ---
 
-## 6.2 Footer Copy
+## 6.4 Demo Page — /demo (ديمو AuditOS المباشر)
+
+### Metadata
+```yaml
+Title AR: ديمو AuditOS | AQLIYA
+Title EN: AuditOS Live Demo | AQLIYA
+```
+
+### Description
+```
+AR: رحلة الديمو الكاملة لـ AuditOS — من رفع ميزان المراجعة 
+إلى نشر الحزمة. يمر المستخدم بسبع خطوات تفاعلية تظهر 
+مسار العمل المحكوم.
+
+EN: Complete AuditOS demo walkthrough — from trial balance upload 
+to package publication. The user proceeds through seven interactive 
+steps showing the governed workflow path.
+```
+
+**Note:** This is different from "جلسة تشخيص" (diagnostic session). 
+The diagnostic session is at /contact. /demo is a self-guided product demonstration.
+
+### Form Fields
+- الاسم الكامل / Full Name
+- البريد الإلكتروني / Email
+- اسم الشركة / Company
+- القطاع / Sector (dropdown: مالي, حكومي, صناعي, صحي, أخرى)
+- نوع التحدي / Challenge Type (text area)
+- التاريخ المفضل / Preferred Date
+- الوقت المفضل / Preferred Time
+
+---
+
+## 6.5 Governance Page — /governance (الحوكمة)
+
+### Metadata
+```yaml
+Title AR: الحوكمة | عقلية — مبادئ الحوكمة المؤسسية للذكاء
+Title EN: Governance | AQLIYA — Institutional AI Governance Principles
+```
+
+---
+
+## 6.6 Footer Copy
 
 ### Footer Structure
 
@@ -1639,15 +1719,14 @@ EN: AQLIYA — Governed Institutional Intelligence Platform
     AI assists. Humans decide. Evidence governs.
 ```
 
-**Product Links**
+**Capabilities**
 ```
-خطوط الأنظمة
-  • AuditOS
-  • DecisionOS
-  • LocalContentOS
-  • SalesOS
-  • SimulationOS
-  • أنظمة مخصصة
+القدرات
+  • المنصة /platform
+  • القطاعات /industries
+  • الإثبات /proof
+  • الحوكمة /governance
+  • عن عقلية /about
 ```
 
 **Company Links**
@@ -1681,34 +1760,32 @@ EN: AQLIYA — Governed Institutional Intelligence Platform
 
 ---
 
-## 6.3 CTA Master List
+## 6.7 CTA Master List
 
 ### Primary CTAs (Bold, High-Conversion)
 ```
-استكشف الأنظمة / Explore Systems → /products
-اطلب عرضًا توضيحيًا / Request Demo → /auditos
+احجز جلسة تشخيص / Book a Diagnostic Session → /contact
+شاهد الإثبات / See the Proof → /proof
 تحدث مع متخصص / Talk to Specialist → /contact
-ابدأ الآن / Start Now → /contact
 ```
 
 ### Secondary CTAs (Medium Priority)
 ```
-تعرف على AuditOS / Learn About AuditOS → /auditos
-اكتشف DecisionOS / Explore DecisionOS → /decision
+استكشف القدرات / Explore Capabilities → /platform#capabilities
+تصفّح القطاعات / Browse Industries → /industries
 ناقش احتياجاتك / Discuss Your Needs → /contact
-شاهد الحالات / See Use Cases → /auditos
 ```
 
 ### Tertiary CTAs (Awareness)
 ```
-راقب التطورات / Stay Updated → newsletter signup
 تابعنا / Follow Us → social media
 اقرأ المدونة / Read Blog → /blog (future)
+اطلب نشرة دورية / Subscribe to Newsletter → newsletter signup
 ```
 
 ---
 
-## 6.4 Trust Badges & Callouts
+## 6.8 Trust Badges & Callouts
 
 ### Trust Principle (Appears on Every Key Page)
 
@@ -1747,14 +1824,12 @@ EN: Enterprise-Grade Security
 
 ## Content Hierarchy
 
-- [ ] Homepage finalized and approved
-- [ ] Products page finalized and approved
-- [ ] AuditOS page finalized and approved
-- [ ] DecisionOS page finalized and approved
-- [ ] LocalContentOS page finalized and approved
-- [ ] SalesOS page finalized and approved
-- [ ] SimulationOS page finalized and approved
-- [ ] Custom Systems page finalized and approved
+- [ ] Homepage finalized and approved (9-section platform layout)
+- [ ] Platform / Capabilities page finalized and approved
+- [ ] Industries page finalized and approved
+- [ ] Proof page finalized and approved
+- [ ] Demo / Diagnostic Session page finalized and approved
+- [ ] Governance page finalized and approved
 - [ ] About page finalized and approved
 - [ ] Contact page finalized and approved
 - [ ] Navigation copy finalized
@@ -1883,13 +1958,13 @@ The copy emphasizes:
 
 ---
 
-**This document is ready for implementation.**
+**This document has been updated to reflect the current live website.**
 
 ---
 
 **Document Stats**
-- Total Sections: 6 major pages
+- Total Sections: 9+ pages (including /platform, /industries, /proof, /demo, /governance)
 - Total Copy: ~15,000+ words
 - Bilingual: Full Arabic and English equivalents
 - Tone: Professional B2B Executive
-- Status: Ready for CMS import
+- Status: Updated to current site architecture

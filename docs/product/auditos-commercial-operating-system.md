@@ -1,4 +1,4 @@
-# AuditOS Commercial Operating System
+﻿# AuditOS Commercial Operating System
 
 Source of truth:
 
@@ -10,6 +10,10 @@ Source of truth:
 - `docs/product/auditos-first-customer-loop/`
 - `docs/product/auditos-customer-conversion-reference/`
 - `docs/product/auditos-market-proof-system/`
+
+---
+
+> **Positioning note (2026-06-09):** AQLIYA is now positioned as an **institutional operating platform** first. AuditOS is a **Specialized Operating System** within the platform. All references to "product" in this document should be understood in the context of "Specialized Operating System" running on the AQLIYA Intelligence Core. For the authoritative hierarchy, see `docs/official/AQLIYA_MASTER_REFERENCE.md` §5b.
 
 ---
 

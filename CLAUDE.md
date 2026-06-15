@@ -22,7 +22,11 @@ Read these files in this order before analysis, editing, or review:
 8. `docs/official/aqliya-agent-context-v1.1.md`
 9. `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`
 10. `docs/source-of-truth/ROUTE_STRATEGY.md`
-11. `docs/source-of-truth/READINESS_GATES.md`
+11. `docs/source-of-truth/ROUTE_REGISTRY.md`
+12. `docs/source-of-truth/READINESS_GATES.md`
+13. `docs/operations/production-deployment-runbook.md`
+14. `docs/operations/ha-dr-plan.md`
+15. `infra/terraform/README.md`
 
 If documentation conflicts:
 
@@ -35,7 +39,9 @@ If documentation conflicts:
 - AQLIYA is a **Private Governed Institutional Intelligence Platform**.
 - Trust principle: **AI assists. Humans decide. Evidence governs.**
 - AQLIYA is not AuditOS only, not SaaS only, not a generic chatbot, not a CRM, and not a collection of disconnected demos.
-- Cloud deployment is real. Private / On-Prem and Air-Gapped are strategic directions, not implemented production packages.
+- **Production domain: `aqliya.com`** (migrated from `aqliya.ai` 2026-06-09).
+- **Staging domain: `staging.aqliya.com`**.
+- Cloud deployment is real (AWS ECS Fargate). Private / On-Prem and Air-Gapped are strategic directions, not implemented production packages.
 
 ## Product Taxonomy And Current Status
 
@@ -45,31 +51,53 @@ If documentation conflicts:
 | **AuditOS**             | Product                 | L5 pilot-ready                 | Governed audit workspace at `/audit/*`                        |
 | **auditos demo**        | Demo                    | L1 public demo                 | Sanitized guided demo at `/auditos/*`                         |
 | **DecisionOS**          | Adjacent product/system | L4 usable v0.1                 | Governed workspace at `/decisions/*`                          |
-| **LocalContentOS**      | Product                 | L5 pilot-ready with conditions | Governed workspace at `/local-content/*`                      |
+| **LocalContentOS**      | Product                 | L5 pilot-ready with conditions | Governed workspace at `/local-content/*`, ERP integration     |
 | **Office AI Assistant** | Shared application      | L4 usable v0.1                 | Shared governed app at `/assistant/*`, not standalone product |
-| **WorkflowOS**          | Custom/client workspace | L4 usable v0.1                 | Governed workspace at `/workflowos/*`                         |
+| **WorkflowOS**          | Custom/client workspace | L4→L5 partial                 | Governed workspace at `/workflowos/*`                         |
 | **Sunbul**              | Legacy alias            | Redirect only                  | Redirect alias to WorkflowOS, not a separate product          |
-| **SalesOS**             | Product concept in repo | L3 prototype                   | `/sales` is prototype only, not a real backend product        |
-| **SimulationOS**        | Marketing label         | L1 marketing only              | `/products/simulation` only, not a standalone system          |
-| **LocalContactOS**      | Future product          | L0 not implemented             | No live workspace                                             |
+| **SalesOS**             | Product concept in repo | L4 (builds + tests pass)       | `/sales` workspace (27 routes), CRM sync v0.3                 |
+| **SimulationOS**        | Marketing label         | L1 marketing only              | Redirects to `/products`, not a standalone system             |
+| **LocalContactOS**      | Governed workspace      | L4→L5 partial                 | `/contacts/*` with evidence, review, export                   |
+| **SSO (SAML/OIDC)**     | Enterprise auth         | L4 usable v0.1                 | `/settings/sso`, provider CRUD, login buttons                 |
+| **SCIM Provisioning**   | Identity management     | L4 usable v0.1                 | `/api/scim/v2/*`, API key auth, audit trail                   |
 | **AQLIYA Studio**       | Strategic layer         | L0 future                      | Do not claim implemented                                      |
 
-Keep these distinctions explicit. Do not collapse AQLIYA into AuditOS. Do not present SalesOS, SimulationOS, or AQLIYA Studio as implemented products.
+Keep these distinctions explicit. Do not collapse AQLIYA into AuditOS. Do not present SimulationOS, or AQLIYA Studio as implemented products.
 
 ## Route Boundaries
 
 - `/audit/*` = protected, governed, database-backed AuditOS workspace.
 - `/auditos/*` = public, sanitized, mock-backed, read-only guided demo.
 - `/decisions/*` = protected DecisionOS workspace.
-- `/local-content/*` = protected LocalContentOS workspace.
+- `/local-content/*` = protected LocalContentOS workspace (+ `/local-content/settings/integrations` for ERP).
 - `/assistant/*` = protected Office AI Assistant workspace.
 - `/workflowos/*` = protected WorkflowOS governed workspace.
 - `/sunbul/*` = redirect alias to `/workflowos/*`.
-- `/sales` = protected prototype surface only.
+- `/contacts/*` = protected LocalContactOS workspace.
+- `/sales/*` = protected SalesOS workspace (intelligence, forecast, pipeline, ICP, CRM settings).
+- `/settings/sso` = SSO provider configuration UI.
+- `/settings/audit-logs` = platform audit log viewer.
+- `/settings/platform-organization` = platform organization admin.
+- `/settings/workspaces` = workspace admin.
 - `/products/*` = public marketing pages.
+- `/insights/*` = public blog/insights.
+- `/buyers/*` = public buyer persona pages.
+- `/custom-product` = public commercial funnel.
+- `/api/scim/v2/*` = SCIM provisioning API (API key auth).
+- `/api/integration/*` = integration APIs.
+- `/api/custom-product-submit` = custom product inquiry API.
+- `/monitoring` = platform monitoring dashboard.
 - Sensitive `/api/*` routes must remain permissioned.
 
-If route scope changes, update `docs/source-of-truth/ROUTE_STRATEGY.md` and preserve truthful status labels.
+### Redirects (defined in `next.config.mjs`)
+- `/sunbul` → `/workflowos` (permanent)
+- `/sunbul/admin` → `/workflowos/admin` (permanent)
+- `/sunbul/clients/*/records/*` → `/workflowos/clients/*/records/*` (permanent)
+- `/products/simulation` → `/products` (permanent)
+- `/solutions` → `/products` (temporary)
+- `/executive-briefing` → `/executive-brief` (permanent)
+
+If route scope changes, update `docs/source-of-truth/ROUTE_STRATEGY.md` and `docs/source-of-truth/ROUTE_REGISTRY.md`. Preserve truthful status labels.
 
 ## Demo Vs Workspace Rules
 
@@ -78,6 +106,42 @@ If route scope changes, update `docs/source-of-truth/ROUTE_STRATEGY.md` and pres
 - Do not use real customer data, uploads, mutations, exports, tenant state, or operational audit workflows on `/auditos/*`.
 - Governed workspaces must be authenticated, permissioned, auditable, and scoped to the correct tenant or organization.
 - Marketing pages must not imply that demos, prototypes, or future systems are live operational products.
+
+## Deployment & Infrastructure
+
+### Production Architecture
+- **Cloud**: AWS (me-south-1 primary, eu-central-1 DR).
+- **Compute**: ECS Fargate (3 tasks min, 10 max; 1 vCPU / 2 GB per task).
+- **Database**: RDS PostgreSQL (Multi-AZ, deletion protection, 30-day backup retention, cross-region DR).
+- **Cache**: ElastiCache Redis (caching, rate limiting, queues).
+- **Storage**: S3 (uploads + static assets), CloudFront CDN.
+- **Monitoring**: CloudWatch (logs, alarms), Sentry (error tracking).
+- **Orchestration**: Terraform IaC at `infra/terraform/`.
+
+### Deployment Pipeline (GitHub Actions — `.github/workflows/deploy.yml`)
+1. **Test**: `npx tsc --noEmit` on push to `main` or `staging`.
+2. **Terraform**: Init → Validate → Plan (artifact uploaded).
+3. **Build & Push**: Docker multi-stage build → push to ECR.
+4. **Deploy**: Terraform apply → ECS service update.
+5. **Post-Deploy**: Comprehensive smoke test (`scripts/post-deploy-smoke.mjs`).
+
+### Vercel (Alternative)
+- Configured via `vercel.json` (standalone Next.js output).
+- Build: `npx prisma generate && npm run build`.
+- Excluded from build: `docs/`, `scripts/`, `runbooks/`, `backups/`, `infra/`, `cypress/`.
+
+### Docker
+- Multi-stage production build (`Dockerfile`).
+- Output: Next.js standalone mode (`next.config.mjs` → `output: "standalone"`).
+- Runs as unprivileged `nextjs` user.
+
+### Security Headers
+Configured in `next.config.mjs`:
+- `Content-Security-Policy` (restrictive)
+- `X-Frame-Options: SAMEORIGIN`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `poweredByHeader: false`
 
 ## Mandatory Development Rules
 
@@ -90,6 +154,8 @@ If route scope changes, update `docs/source-of-truth/ROUTE_STRATEGY.md` and pres
 - Preserve Arabic-first, RTL-aware product behavior where relevant.
 - Before changing Next.js code, check the relevant docs in `node_modules/next/dist/docs/` and verify server/client boundaries.
 - Do not claim unimplemented capabilities as live.
+- When changing infrastructure (`infra/terraform/`, `Dockerfile`, `vercel.json`, `.github/workflows/`), run `npx tsc --noEmit` and verify Terraform plan.
+- When changing deployment configuration, update `docs/operations/production-deployment-runbook.md`.
 
 ## Low-Load Execution Protocol
 
@@ -113,6 +179,7 @@ Do not run heavy commands unless the user explicitly asks or clearly approves:
 - `npm install <package>`
 - `npx prisma generate`
 - `npx prisma migrate dev`
+- `terraform plan` / `terraform apply`
 
 Never inspect or print secrets. Never use destructive git commands.
 
@@ -120,6 +187,7 @@ Never inspect or print secrets. Never use destructive git commands.
 
 - For docs-only tasks, verify scope with file diff and status. Heavy validation is not required by default.
 - For code tasks, run the minimum relevant validation and report exactly what was and was not run.
+- For infrastructure tasks (`infra/terraform/`, `Dockerfile`, `deploy.yml`), validate with `npx tsc --noEmit` and `terraform validate` in the relevant directory.
 - Never say validation passed unless the command actually ran.
 - Never claim readiness levels above what the repo proves.
 
@@ -170,4 +238,4 @@ Risks / Limitations
 - ...
 ```
 
-When relevant, also state whether the work affected route status, product status, governance, or docs authority.
+When relevant, also state whether the work affected route status, product status, governance, docs authority, or infrastructure/deployment configuration.

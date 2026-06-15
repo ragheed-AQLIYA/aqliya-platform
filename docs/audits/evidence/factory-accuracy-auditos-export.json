@@ -1,0 +1,3234 @@
+{
+  "engagementId": "eng-gulf-2025",
+  "exportedAt": "2026-06-14T00:08:04.012Z",
+  "statements": {
+    "cash_flow": {
+      "title": "Statement of Cash Flows",
+      "status": "draft",
+      "lines": [
+        {
+          "label": "OPERATING ACTIVITIES",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Net Profit",
+          "amount": 926038529.0799997,
+          "isTotal": false
+        },
+        {
+          "label": "Add: Depreciation",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Net Cash from Operating Activities",
+          "amount": 62819988.839999944,
+          "isTotal": true
+        },
+        {
+          "label": "INVESTING ACTIVITIES",
+          "amount": 0,
+          "isTotal": true
+        },
+        {
+          "label": "FINANCING ACTIVITIES",
+          "amount": 0,
+          "isTotal": true
+        },
+        {
+          "label": "Net Increase in Cash",
+          "amount": 62819988.839999944,
+          "isTotal": true
+        },
+        {
+          "label": "Cash at Beginning of Period",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Cash at End of Period",
+          "amount": 62819988.839999944,
+          "isTotal": true
+        }
+      ]
+    },
+    "equity": {
+      "title": "Statement of Changes in Equity",
+      "status": "draft",
+      "lines": [
+        {
+          "label": "Share Capital",
+          "amount": 14000000,
+          "isTotal": false
+        },
+        {
+          "label": "Share Capital",
+          "amount": 14000000,
+          "isTotal": false
+        },
+        {
+          "label": "Share Capital",
+          "amount": 14000000,
+          "isTotal": false
+        },
+        {
+          "label": "Retained Earnings",
+          "amount": 150000,
+          "isTotal": false
+        },
+        {
+          "label": "Retained Earnings",
+          "amount": 44798901.46,
+          "isTotal": false
+        },
+        {
+          "label": "Actuarial Reserve",
+          "amount": 552969,
+          "isTotal": false
+        },
+        {
+          "label": "Current Year Profit",
+          "amount": 926038529.0799997,
+          "isTotal": false
+        },
+        {
+          "label": "Total Equity",
+          "amount": 1013540399.5399997,
+          "isTotal": true
+        }
+      ]
+    },
+    "balance_sheet": {
+      "title": "Statement of Financial Position",
+      "status": "draft",
+      "lines": [
+        {
+          "label": "ASSETS",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Current Assets",
+          "amount": 320483880.61,
+          "isTotal": true
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 144633.26000000024,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 14828292.639999986,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 12254442.039999992,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 221961.97999999998,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 1993436.9200000018,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 349600,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 30878877.21999997,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 8150,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 6680.13,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 959712.0999999999,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 9031.799999999988,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 1140170.75,
+          "isTotal": false
+        },
+        {
+          "label": "Cash and Cash Equivalents",
+          "amount": 25000,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 47691569.49000001,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 43614908.36,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 55597761.25,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 4787.32,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 82108193.81,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 651894.2799999998,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 296204.4700000002,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": -106618255.57,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 142613.85,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": -0.1,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 0.2800000000279397,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": -27351,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": -121458.07999999984,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 33988964.099999994,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": -2775918.64,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Receivables",
+          "amount": 0.29,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 197040.82000000004,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 278192.86000000004,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 477528.78,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 267538.83,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 72051.96,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 8010.19,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 633214.79,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 979298.07,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 466069.95,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 1736.1,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": -0.33,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": 1267242,
+          "isTotal": false
+        },
+        {
+          "label": "Inventories",
+          "amount": -466069.95,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 1000,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": -0.09,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 759570.31,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 131118.78,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 942282.4299999999,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 300,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 1200,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 754609.0899999999,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 450,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 500,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 125,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0.33999999999999997,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 8062.65,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 8949.279999999995,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 61033.33,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 2760,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 8000,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0.46,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": -0.4,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 1186.52,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": -0.34,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 4629.53,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 26360.86,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 134300,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 272.24,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 3633.85,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 18105,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 91,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 6148.43,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 4170.83,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 5659.049999999988,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 11541.87,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 2348821.0900000036,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 21239.56,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 1400,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 10.090000000000146,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 80.21,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 9326.89,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 12028.03,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 838.0400000000009,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 29213.23000000001,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 9865.059999999998,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 241563.25000000006,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 7739170.65,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 1737879.9,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 750,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 576241.2,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 93025.42,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 13629407.3,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 419216.50000000023,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0.2,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0.01,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": -0.45,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 67631.98000000045,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 201500,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 4399867.640000001,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 156030.6,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 166000,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 1235913.32,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 1932226.1199999996,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 94889.55,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 28412.65,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 30440.49,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 19219.46000000043,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 25619.22,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 35634.000000000015,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 300,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 6250,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 7313,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 21850,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 28750,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 35190,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": 0.01,
+          "isTotal": false
+        },
+        {
+          "label": "Prepayments",
+          "amount": -1091419,
+          "isTotal": false
+        },
+        {
+          "label": "Contract Assets",
+          "amount": 1364778.07,
+          "isTotal": false
+        },
+        {
+          "label": "Contract Assets",
+          "amount": 60395590.28000003,
+          "isTotal": false
+        },
+        {
+          "label": "Contract Assets",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Non-Current Assets",
+          "amount": 55627158.049999975,
+          "isTotal": true
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 0.33,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 38276635.87,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 1492713.63,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 348549.39,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 15877485.92,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 323794.43,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 384705.6099999994,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 434522,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": -0.34999999997671694,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": 1613500,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": -20859098.68,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": -619077.4299999999,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": -160458.06,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": -5187554.5,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": -176726.41999999998,
+          "isTotal": false
+        },
+        {
+          "label": "Property, Plant and Equipment",
+          "amount": -78817,
+          "isTotal": false
+        },
+        {
+          "label": "Right-of-Use Assets",
+          "amount": 34016514.769999996,
+          "isTotal": false
+        },
+        {
+          "label": "Less: ROU Accumulated Depreciation",
+          "amount": -10059531.46,
+          "isTotal": false
+        },
+        {
+          "label": "TOTAL ASSETS",
+          "amount": 376111038.65999997,
+          "isTotal": true
+        },
+        {
+          "label": "LIABILITIES AND EQUITY",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Current Liabilities",
+          "amount": 248804705.3,
+          "isTotal": true
+        },
+        {
+          "label": "Trade Payables",
+          "amount": -0.01,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 300.05,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 32119,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0.07,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 453881.12,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 12981.2,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 1325965.9000000004,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": -0.01,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 747892.2600000002,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 11700,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 87400,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 45000,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 35000,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 140000,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 2950,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 3000,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 22500,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 98042.12,
+          "isTotal": false
+        },
+        {
+          "label": "Trade Payables",
+          "amount": 31451240.709999993,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 1989.71,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 0.5,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 0.20000000001164153,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 4613253.460000008,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 18210052.36,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 2180499.1500000004,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 2084328.6700000018,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 0.33,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 5179711.21,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 12152281.520000001,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 34684.08,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": -0.28999999980442226,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 0.3300000000745058,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 359025.58999999997,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": -0.010000000009313226,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 3440026.1300000004,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 452382.80000000005,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 20532170.45,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 4856045.7,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 6539444.02,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 6346315.47,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 8311116.649999999,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 26500,
+          "isTotal": false
+        },
+        {
+          "label": "Accrued Expenses",
+          "amount": 15954949.250000004,
+          "isTotal": false
+        },
+        {
+          "label": "Tax and Zakat Payable",
+          "amount": -42,
+          "isTotal": false
+        },
+        {
+          "label": "Tax and Zakat Payable",
+          "amount": 0.029999997466802597,
+          "isTotal": false
+        },
+        {
+          "label": "Tax and Zakat Payable",
+          "amount": 9416.69,
+          "isTotal": false
+        },
+        {
+          "label": "Tax and Zakat Payable",
+          "amount": 0.5400000065565109,
+          "isTotal": false
+        },
+        {
+          "label": "Tax and Zakat Payable",
+          "amount": 7690641.539999992,
+          "isTotal": false
+        },
+        {
+          "label": "Zakat Provision",
+          "amount": 2575257,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 2483700.969999999,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 5486734.19,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 7525120.229999999,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 15579978.04,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 4868235.49,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 2281430.68,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 10218149.35,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 10988465.05,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 10381450,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 9671843,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 13299574.61,
+          "isTotal": false
+        },
+        {
+          "label": "Short-term Borrowings",
+          "amount": 0.2,
+          "isTotal": false
+        },
+        {
+          "label": "Non-Current Liabilities",
+          "amount": 14719606.979999999,
+          "isTotal": true
+        },
+        {
+          "label": "Long-Term Debt",
+          "amount": 3932164.2600000007,
+          "isTotal": false
+        },
+        {
+          "label": "Long-Term Debt",
+          "amount": 10222653.939999998,
+          "isTotal": false
+        },
+        {
+          "label": "Long-Term Debt",
+          "amount": 564788.78,
+          "isTotal": false
+        },
+        {
+          "label": "Equity",
+          "amount": 112586726.37999997,
+          "isTotal": true
+        },
+        {
+          "label": "Share Capital",
+          "amount": 14000000,
+          "isTotal": false
+        },
+        {
+          "label": "Share Capital",
+          "amount": 14000000,
+          "isTotal": false
+        },
+        {
+          "label": "Share Capital",
+          "amount": 14000000,
+          "isTotal": false
+        },
+        {
+          "label": "Retained Earnings",
+          "amount": 150000,
+          "isTotal": false
+        },
+        {
+          "label": "Retained Earnings",
+          "amount": 44798901.46,
+          "isTotal": false
+        },
+        {
+          "label": "Actuarial Reserve",
+          "amount": 552969,
+          "isTotal": false
+        },
+        {
+          "label": "TB Closing Classification Adjustments",
+          "amount": 25084855.919999957,
+          "isTotal": false
+        },
+        {
+          "label": "TOTAL LIABILITIES AND EQUITY",
+          "amount": 376111038.65999997,
+          "isTotal": true
+        }
+      ]
+    },
+    "income_statement": {
+      "title": "Statement of Profit or Loss",
+      "status": "draft",
+      "lines": [
+        {
+          "label": "Revenue",
+          "amount": 982972011.8299997,
+          "isTotal": true
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 125561.09,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 24000,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 100450.53,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 28981,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 183758.58,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 378864.1,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 599095.23,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1.15,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2802.9,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 4910,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 32.2,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 94477.65,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 44549.75,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 6543.33,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 6438356.4,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 200,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 179655889.87,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 6859372.63,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1737061.09,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 263087.74,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 6448376.63,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 529405.06,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 226284.79,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 79699.75,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 504353.23000000004,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 272721.21,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 8353162.5,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2167386.27,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2160526.78,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2324394.66,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 140807.94,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1988880.02,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 8591.6,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 15997523.2,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2604035.59,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 29997.41,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2192211.6,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 946.57,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 49143510.36,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 5084271.73,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 22336175.97,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2304169.09,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 5266067.390000001,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1490698.5499999998,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1689192.16,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 368354.37000000005,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 52680.87,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 6453.34,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 6901.21,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1902502.47,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1286.39,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 227597.53,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 5829380.2,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1766.12,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2485284.6999999997,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 15300.15,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 32807727.819999997,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1884.54,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 13423000.83,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 3855006.33,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 582127.05,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 251953.87,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 46000,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 301110.85,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 126086.96,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1343377.49,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 3643885.45,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 258674.69,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 51479.31,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 7620,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2366747.1999999997,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 552299.19,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 44853.73999999999,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2893.53,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2053168.91,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 15371.45,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 12300,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 3717851.86,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 4571437.88,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 201693.92,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 112826.15999999999,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2018037.52,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 3585361,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 82200,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 22875597.09,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 578723.18,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 31811.01,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 5065.7,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 8395.98,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 261691.82,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 42729.149999999994,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 19300.8,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 252.65,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 487.67,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 38109.07,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 364266.26,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 12370.37,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 96830.73,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 3381.93,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 1500,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 23828.95,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 17718.49,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 8551,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 70831.01,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 99635.95,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 108851.01,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 292473.68,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 17985.45,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 114563.01999999999,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 57091,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 9831171.5,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 19822495.85,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 356517711.19,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 60395590.28000003,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 3744151.5399999917,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 68774043.86999999,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 13569394.52,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 6244629.12,
+          "isTotal": false
+        },
+        {
+          "label": "Revenue - Sale of Goods",
+          "amount": 2094910.79,
+          "isTotal": false
+        },
+        {
+          "label": "Cost of Sales",
+          "amount": 1267242,
+          "isTotal": true
+        },
+        {
+          "label": "Cost of Sales",
+          "amount": 1267242,
+          "isTotal": false
+        },
+        {
+          "label": "Gross Profit",
+          "amount": 981704769.8299997,
+          "isTotal": true
+        },
+        {
+          "label": "Operating Expenses",
+          "amount": 66838085.51,
+          "isTotal": true
+        },
+        {
+          "label": "Employee Benefits",
+          "amount": 11306769.11,
+          "isTotal": false
+        },
+        {
+          "label": "Employee Benefits",
+          "amount": 86121.11,
+          "isTotal": false
+        },
+        {
+          "label": "Employee Benefits",
+          "amount": 684971.32,
+          "isTotal": false
+        },
+        {
+          "label": "Employee Benefits",
+          "amount": 495240.71,
+          "isTotal": false
+        },
+        {
+          "label": "Employee Benefits",
+          "amount": 5899358.17,
+          "isTotal": false
+        },
+        {
+          "label": "Employee Benefits",
+          "amount": 5200827.18,
+          "isTotal": false
+        },
+        {
+          "label": "Employee Benefits",
+          "amount": 567190.65,
+          "isTotal": false
+        },
+        {
+          "label": "Utilities",
+          "amount": 73821.35,
+          "isTotal": false
+        },
+        {
+          "label": "Utilities",
+          "amount": 139.13,
+          "isTotal": false
+        },
+        {
+          "label": "Utilities",
+          "amount": 155824.19,
+          "isTotal": false
+        },
+        {
+          "label": "Utilities",
+          "amount": 3175.3,
+          "isTotal": false
+        },
+        {
+          "label": "Utilities",
+          "amount": 1533796.04,
+          "isTotal": false
+        },
+        {
+          "label": "Utilities",
+          "amount": 1667702.41,
+          "isTotal": false
+        },
+        {
+          "label": "Utilities",
+          "amount": 1359950.55,
+          "isTotal": false
+        },
+        {
+          "label": "Utilities",
+          "amount": 7990798.29,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 310781.16,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 92618.11,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 125,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 190841.5,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 104203.4,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 7762.54,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 2616354.31,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 100000,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 2575256.63,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 11360,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 1400,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 731094.46,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 97376.6,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 438,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 9562.39,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 290283.23,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 4187.33,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 10000,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 113150,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 492235.95,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 821650,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 4270.23,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 140533.97,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 56592.17,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 6021.52,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 21535.52,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 48577.74,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 542272.4299999999,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 3808.69,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 31324,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 8265,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 1763144,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 59912,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 0.75,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 287.91,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 41398.68,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 652.58,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 3283.25,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 36155.8,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 22776.78,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 24931.94,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 544632.01,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 330774.67,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 15209.47,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 23941.85,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 681952.8,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 316000,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 847795.46,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 589285.87,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 219444.46,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 14457.43,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 11353.239999999998,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 72329.25,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 36050.16,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 402.5,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 1452.1200000000001,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 77924.6,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 707119,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 14701.250000000018,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 433201.08,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 16805.04,
+          "isTotal": false
+        },
+        {
+          "label": "General and Administrative Expenses",
+          "amount": 225860,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 192413.01,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 2515681.6,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 2407910.46,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 239659.59,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 513539.1699999999,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 303373.51000000007,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 1925525,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 112449.19,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 370593.47,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 446553.75,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 822603.39,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 1042694.7100000001,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 697215.6,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 412669.17,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 419848.28,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 6843.179999999999,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 388089.09,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 417620,
+          "isTotal": false
+        },
+        {
+          "label": "Finance Cost",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Profit Before Tax",
+          "amount": 914866684.3199997,
+          "isTotal": true
+        },
+        {
+          "label": "Other Income",
+          "amount": 11171844.76,
+          "isTotal": true
+        },
+        {
+          "label": "Other Income",
+          "amount": 8408.519999999997,
+          "isTotal": false
+        },
+        {
+          "label": "Other Income",
+          "amount": 11163436.24,
+          "isTotal": false
+        },
+        {
+          "label": "Other Income",
+          "amount": 0,
+          "isTotal": false
+        },
+        {
+          "label": "Net Profit",
+          "amount": 926038529.0799997,
+          "isTotal": true
+        }
+      ]
+    }
+  },
+  "cashFlowContext": {
+    "netProfit": 926038529.0799997,
+    "depreciationAddBack": 0,
+    "netCashFromOperating": 62819988.839999944,
+    "netCashFromInvesting": 0,
+    "netCashFromFinancing": 0,
+    "netIncreaseInCash": 62819988.839999944,
+    "cashAtBeginning": 0,
+    "cashAtEnd": 62819988.839999944,
+    "tbCashTotal": 62819988.839999944
+  },
+  "canonicalSums": {
+    "CA-1010": 62819988.839999944,
+    "CA-1040": 37167755.24,
+    "CA-2020": 111274777.28000002,
+    "CA-1020": 154553914.11000004,
+    "CA-5070": 16577117.829999996,
+    "CA-4010": 982972011.8299997,
+    "CA-5020": 24240478.25,
+    "CA-1050": 31670174.739999995,
+    "CA-1030": 4181854.0699999994,
+    "CA-2010": 34469972.41,
+    "CA-1080": 61760368.35000003,
+    "CA-2030": 7700016.799999996,
+    "CA-1070": 34016514.769999996,
+    "CA-2040": 92784681.81,
+    "CA-2130": 14719606.979999999,
+    "CA-3020": 44948901.46,
+    "CA-3010": 42000000,
+    "CA-2035": 2575257,
+    "CA-3030": 552969,
+    "CA-5040": 12785207.26,
+    "CA-2050": 13235282.17,
+    "CA-5010": 1267242,
+    "CA-5100": 11171844.76,
+    "CA-1071": -10059531.46
+  },
+  "disclosureNotes": [
+    {
+      "noteNumber": "11",
+      "title": "Zakat and Tax",
+      "noteType": "tax",
+      "status": "needs_info",
+      "excerpt": "The Company is subject to Zakat and income tax regulations in the Kingdom of Saudi Arabia. Zakat/Tax payable as at the reporting date: SAR 1,630,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "12",
+      "title": "Share Capital",
+      "noteType": "equity",
+      "status": "draft",
+      "excerpt": "Share capital as at the reporting date is SAR 2,705,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "13",
+      "title": "Related Party Transactions",
+      "noteType": "related_party",
+      "status": "needs_info",
+      "excerpt": "Related party transactions are disclosed based on management representations.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "14",
+      "title": "Commitments and Contingencies",
+      "noteType": "contingencies",
+      "status": "needs_info",
+      "excerpt": "The Company has no material capital commitments or contingent liabilities as at the reporting date, other than those arising in the ordinary course of business.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "15",
+      "title": "IFRS Adoption in Saudi Arabia",
+      "noteType": "accounting_policies",
+      "status": "draft",
+      "excerpt": "# IFRS Adoption in Saudi Arabia\n\n**Assistive draft — human review required**\n\nIFRS for SMEs framework — verify SOCPA full IFRS eligibility.\n\nإطار IFRS for SMEs — تحقق من أهلية SOCPA للشركات المدرجة.\n\nRule reference: SOCPA-IFRS-ADOPTION · socpa-ifrs-adoption-r001 (SOCPA)\n\n_AI assists. Humans decide. Evidence governs._"
+    },
+    {
+      "noteNumber": "1",
+      "title": "General Information and Basis of Preparation",
+      "noteType": "accounting_policy",
+      "status": "reviewed",
+      "excerpt": "The Company is incorporated in the Kingdom of Saudi Arabia. These financial statements have been prepared in accordance with IFRS for SMEs on a historical cost basis.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "2",
+      "title": "Cash and Cash Equivalents",
+      "noteType": "financial_instruments",
+      "status": "reviewed",
+      "excerpt": "Cash and cash equivalents include cash on hand and balances with banks. The balance as at the reporting date is SAR 2,575,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "3",
+      "title": "Trade Receivables",
+      "noteType": "financial_instruments",
+      "status": "needs_info",
+      "excerpt": "Trade receivables are carried at original invoice amount less allowance for expected credit losses. The balance as at the reporting date is SAR 2,575,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "4",
+      "title": "Inventories",
+      "noteType": "inventory",
+      "status": "needs_info",
+      "excerpt": "Inventories are stated at the lower of cost and net realisable value. The balance as at the reporting date is SAR 2,575,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "5",
+      "title": "Property, Plant and Equipment",
+      "noteType": "fixed_assets",
+      "status": "needs_info",
+      "excerpt": "Property, plant and equipment are stated at cost less accumulated depreciation. Depreciation is computed on a straight-line basis over the estimated useful lives. Gross book value: SAR 3,500,000, Accumulated depreciation: SAR 875,000, Net book value: SAR 2,625,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "6",
+      "title": "Trade Payables",
+      "noteType": "financial_instruments",
+      "status": "approved",
+      "excerpt": "Trade payables are obligations to suppliers for goods and services acquired in the ordinary course of business. The balance as at the reporting date is SAR 1,630,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "7",
+      "title": "Short-term Borrowings",
+      "noteType": "borrowings",
+      "status": "needs_info",
+      "excerpt": "Short-term borrowings consist of financing facilities from banks. The balance as at the reporting date is SAR 1,630,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "8",
+      "title": "Revenue",
+      "noteType": "revenue",
+      "status": "needs_info",
+      "excerpt": "Revenue is recognised when control of goods or services is transferred to the customer. Total revenue for the period: SAR 5,295,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "9",
+      "title": "Expenses by Nature",
+      "noteType": "expenses",
+      "status": "needs_info",
+      "excerpt": "Operating expenses include cost of goods sold, salaries and wages, depreciation, and other administrative expenses. Total operating expenses: SAR 4,430,000.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    },
+    {
+      "noteNumber": "10",
+      "title": "Finance Cost",
+      "noteType": "borrowings",
+      "status": "needs_info",
+      "excerpt": "Finance cost of SAR 4,430,000 represents charges on financing arrangements during the period.\n\n⚠ DRAFT — This note is auto-generated and requires human review, verification of amounts, and tailoring to the Company's specific circumstances. All figures are preliminary and subject to audit adjustments."
+    }
+  ]
+}

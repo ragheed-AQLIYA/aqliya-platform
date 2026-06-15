@@ -46,6 +46,22 @@ const tabGates: Record<string, TabGate> = {
     return { locked: false };
   },
 
+  "lead-schedules": (ctx) => {
+    if (!ctx.hasTrialBalance) {
+      return {
+        locked: true,
+        reason: "ارفع ميزان المراجعة قبل قوائم الربط.",
+      };
+    }
+    if (!ctx.hasConfirmedMappings) {
+      return {
+        locked: true,
+        reason: "أكّد تعيين الحسابات قبل توليد قوائم الربط.",
+      };
+    }
+    return { locked: false };
+  },
+
   validation: (ctx) => {
     if (!ctx.hasTrialBalance) {
       return { locked: true, reason: "ارفع ميزان المراجعة قبل تشغيل التحقق." };
@@ -64,6 +80,28 @@ const tabGates: Record<string, TabGate> = {
       return {
         locked: true,
         reason: "أكمل تعيين الحسابات قبل توليد القوائم المالية.",
+      };
+    }
+    return { locked: false };
+  },
+
+  "factory-map": (ctx) => {
+    if (!ctx.hasTrialBalance) {
+      return {
+        locked: true,
+        reason: "ارفع ميزان المراجعة قبل عرض خريطة المصنع.",
+      };
+    }
+    if (!ctx.hasMappings) {
+      return {
+        locked: true,
+        reason: "أكمل تعيين الحسابات قبل عرض خريطة المصنع.",
+      };
+    }
+    if (!ctx.hasFinancialStatements) {
+      return {
+        locked: true,
+        reason: "ولّد القوائم المالية قبل عرض خريطة المصنع.",
       };
     }
     return { locked: false };

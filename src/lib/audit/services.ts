@@ -1,4 +1,4 @@
-// ─── AuditOS MVP Data Services ───
+import { getMockCanonicalAccounts } from "@/lib/audit/coa/canonical-coa";
 // Protected AuditOS workspace reads are database-first.
 // Mock fallback is disabled by default and must be explicitly enabled.
 
@@ -25,6 +25,7 @@ import type {
   ProductionBlocker,
   PilotSignoff,
 } from "@/types/audit";
+import { classifyTrialBalanceRows } from "@/lib/tb-intelligence";
 import type { PaginatedResult } from "@/lib/audit/pagination";
 import { type FinancialStatementLine } from "@/types/audit";
 import * as mock from "./mock-data";
@@ -182,6 +183,16 @@ export async function confirmMapping(
     throw new Error("Database not available for confirmMapping");
   });
   return db.confirmMapping(engagementId, mappingId);
+}
+
+export async function confirmAllSuggestedMappings(engagementId: string): Promise<{
+  confirmedCount: number;
+  mappings: AccountMapping[];
+}> {
+  const db = await getDb().catch(() => {
+    throw new Error("Database not available for confirmAllSuggestedMappings");
+  });
+  return db.confirmAllSuggestedMappings(engagementId);
 }
 
 export async function updateManualMapping(data: {
@@ -1119,6 +1130,90 @@ export async function createEngagement(params: {
   return { engagement };
 }
 
+export async function updateEngagementPresentationProfile(params: {
+  organizationId: string;
+  engagementId: string;
+  presentationProfile: string;
+  actorId: string;
+  actorName: string;
+  actorRole: string;
+}): Promise<{
+  engagement: Engagement;
+  fsRebuild: import("@/lib/audit/presentation/presentation-profile-rebuild").PresentationProfileRebuildResult;
+}> {
+  const db = await getDb().catch(() => {
+    throw new Error("Database not available for write operations");
+  });
+
+  const existing = await db.getEngagement(params.organizationId, params.engagementId);
+  if (!existing) {
+    throw new Error("Engagement not found");
+  }
+
+  const { resolvePresentationProfile, presentationProfileVersionFor } =
+    await import("@/lib/audit/presentation/presentation-profile");
+  const { policyIdForProfile } = await import(
+    "@/lib/audit/presentation/presentation-policy-resolver"
+  );
+  const profile = resolvePresentationProfile(params.presentationProfile);
+  const version = presentationProfileVersionFor(profile);
+  const policyId = policyIdForProfile(profile);
+
+  const engagement = await db.updateEngagementPresentationProfile(
+    params.engagementId,
+    {
+      presentationProfile: profile,
+      presentationProfileVersion: version,
+      presentationPolicyId: policyId,
+    },
+  );
+
+  await db.recordAuditEvent({
+    engagementId: params.engagementId,
+    eventType: "engagement.presentation_profile_updated",
+    actorId: params.actorId,
+    actorName: params.actorName,
+    actorRole: params.actorRole,
+    targetType: "engagement",
+    targetId: params.engagementId,
+    previousState: existing.presentationProfile ?? "generic",
+    newState: profile,
+    description: `Presentation profile updated to ${profile} (${version})`,
+    metadata: {
+      presentationProfile: profile,
+      presentationProfileVersion: version,
+      presentationPolicyId: policyId,
+    },
+  });
+
+  const { rebuildFinancialStatementsAfterProfileChange } = await import(
+    "@/lib/audit/presentation/presentation-profile-rebuild"
+  );
+  const fsRebuild = await rebuildFinancialStatementsAfterProfileChange(
+    params.engagementId,
+  );
+
+  if (fsRebuild.status === "rebuilt") {
+    await db.recordAuditEvent({
+      engagementId: params.engagementId,
+      eventType: "engagement.presentation_profile_fs_rebuilt",
+      actorId: params.actorId,
+      actorName: params.actorName,
+      actorRole: params.actorRole,
+      targetType: "engagement",
+      targetId: params.engagementId,
+      description: `Financial statements rebuilt after presentation profile change (${fsRebuild.method})`,
+      metadata: {
+        presentationProfile: profile,
+        rebuildMethod: fsRebuild.method,
+        statementCount: fsRebuild.statementCount,
+      },
+    });
+  }
+
+  return { engagement, fsRebuild };
+}
+
 export async function uploadTrialBalance(
   engagementId: string,
   sourceFile: string,
@@ -1127,6 +1222,7 @@ export async function uploadTrialBalance(
     accountName: string;
     debit: number;
     credit: number;
+    classificationHints?: string[];
   }>,
   actorId?: string,
   actorName?: string,
@@ -1145,6 +1241,57 @@ export async function uploadTrialBalance(
     sourceFile,
     normalised,
   );
+
+  const organizationId = await db.getEngagementOrganizationId(engagementId);
+  if (organizationId) {
+    const classified = await classifyTrialBalanceRows(
+      organizationId,
+      engagementId,
+      normalised.map((r, i) => ({
+        accountCode: r.accountCode,
+        accountName: r.accountName,
+        debitAmount: r.debitAmount,
+        creditAmount: r.creditAmount,
+        classificationHints: rows[i]?.classificationHints,
+      })),
+      { enableCloudAi: true },
+    );
+
+    const mappingRows = classified
+      .filter((c) => c.classification?.canonicalAccountId)
+      .map((c) => ({
+        accountCode: c.row.accountCode,
+        accountName: c.row.accountName,
+        debitAmount: c.row.debitAmount,
+        creditAmount: c.row.creditAmount,
+        canonicalAccountId: c.classification!.canonicalAccountId,
+        confidence: c.classification!.confidence,
+        source: c.classification!.source,
+      }));
+
+    const mappingCount = await db.createSuggestedMappingsForTrialBalance(
+      engagementId,
+      organizationId,
+      mappingRows,
+    );
+
+    if (mappingCount > 0) {
+      await db.recordAuditEvent({
+        engagementId,
+        eventType: "mapping.ai_suggested",
+        actorId: actorId ?? "system",
+        actorName: actorName ?? "System",
+        actorRole: "operator",
+        targetType: "account_mapping",
+        targetId: trialBalance.id,
+        newState: "pending",
+        description: `AI suggested ${mappingCount} account mappings from trial balance upload`,
+        aiRelated: true,
+        metadata: { mappingCount, source: "tb-intelligence" },
+      });
+    }
+  }
+
   await db.recordAuditEvent({
     engagementId,
     eventType: "trial_balance.uploaded",
@@ -1156,6 +1303,19 @@ export async function uploadTrialBalance(
     newState: "uploaded",
     description: `Trial balance uploaded: ${sourceFile} (${rows.length} accounts)`,
   });
+
+  try {
+    const { maybeSyncReportingGraphAfterTbUpload } = await import(
+      "@/lib/audit/reporting-graph/graph-sync-service"
+    );
+    await maybeSyncReportingGraphAfterTbUpload(engagementId);
+  } catch (graphErr) {
+    console.error(
+      `[AuditOS] reporting graph sync after TB upload failed for ${engagementId}`,
+      graphErr,
+    );
+  }
+
   return { trialBalance };
 }
 
@@ -1518,6 +1678,12 @@ export async function createApprovalRecord(params: {
   const db = await getDb().catch(() => {
     throw new Error("Database not available");
   });
+  if (params.action === "approved") {
+    const { assertFactoryApprovalGatesPass } = await import(
+      "@/lib/audit/governance"
+    );
+    await assertFactoryApprovalGatesPass(params.engagementId);
+  }
   const ar = await db.createApprovalRecord({
     engagementId: params.engagementId,
     approverId: params.actorId ?? "system",
@@ -1528,6 +1694,40 @@ export async function createApprovalRecord(params: {
     targetType: params.targetType,
     targetId: params.targetId,
   });
+  if (params.action === "approved") {
+    try {
+      const { promoteFinancialStatementsOnApproval } = await import(
+        "@/lib/audit/governance"
+      );
+      await promoteFinancialStatementsOnApproval(
+        params.engagementId,
+        params.actorId ?? "system",
+        params.actorName ?? "System",
+      );
+    } catch (promoteErr) {
+      console.error(
+        `[AuditOS] FS promotion on approval failed for ${params.engagementId}`,
+        promoteErr,
+      );
+    }
+    try {
+      const { captureReportingGraphSnapshot } = await import(
+        "@/lib/audit/reporting-graph"
+      );
+      await captureReportingGraphSnapshot({
+        engagementId: params.engagementId,
+        milestone: "approval",
+        actorId: params.actorId ?? "system",
+        actorName: params.actorName ?? "System",
+        actorRole: params.actorRole ?? "reviewer",
+      });
+    } catch (snapErr) {
+      console.error(
+        `[AuditOS] Graph snapshot on approval failed for ${params.engagementId}`,
+        snapErr,
+      );
+    }
+  }
   await db.recordAuditEvent({
     engagementId: params.engagementId,
     eventType:
@@ -1592,39 +1792,7 @@ export async function getCanonicalAccounts(
   limit?: number,
 ): Promise<Array<{ id: string; code: string; name: string }>> {
   return tryDb(
-    () =>
-      Promise.resolve([
-        { id: "ca-1", code: "CA-1010", name: "Cash and Cash Equivalents" },
-        { id: "ca-2", code: "CA-1020", name: "Trade Receivables" },
-        { id: "ca-3", code: "CA-1030", name: "Inventories" },
-        { id: "ca-4", code: "CA-1040", name: "Prepayments" },
-        { id: "ca-5", code: "CA-1050", name: "Property, Plant and Equipment" },
-        { id: "ca-6", code: "CA-1060", name: "Accumulated Depreciation" },
-        { id: "ca-7", code: "CA-2010", name: "Trade Payables" },
-        { id: "ca-8", code: "CA-2020", name: "Accrued Expenses" },
-        { id: "ca-9", code: "CA-2030", name: "Tax and Zakat Payable" },
-        { id: "ca-10", code: "CA-2040", name: "Short-term Borrowings" },
-        { id: "ca-11", code: "CA-3010", name: "Share Capital" },
-        { id: "ca-12", code: "CA-3020", name: "Retained Earnings" },
-        { id: "ca-13", code: "CA-4010", name: "Revenue - Sale of Goods" },
-        { id: "ca-14", code: "CA-4020", name: "Revenue - Services" },
-        { id: "ca-15", code: "CA-5010", name: "Cost of Sales" },
-        { id: "ca-16", code: "CA-5020", name: "Employee Benefits" },
-        { id: "ca-17", code: "CA-5030", name: "Occupancy Expenses" },
-        { id: "ca-18", code: "CA-5040", name: "Utilities" },
-        { id: "ca-19", code: "CA-5050", name: "Depreciation and Amortisation" },
-        {
-          id: "ca-20",
-          code: "CA-5060",
-          name: "Professional and Consulting Fees",
-        },
-        {
-          id: "ca-21",
-          code: "CA-5070",
-          name: "General and Administrative Expenses",
-        },
-        { id: "ca-22", code: "CA-5100", name: "Other Income" },
-      ]),
+    () => Promise.resolve(getMockCanonicalAccounts().slice(0, limit ?? 100)),
     (db) => db.getCanonicalAccounts(limit),
   );
 }

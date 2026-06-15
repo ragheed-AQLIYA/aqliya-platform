@@ -36,6 +36,10 @@ import type {
   ProductionBlocker,
   PilotSignoff,
 } from "@/types/audit";
+import {
+  buildStatementLinesFromMappings,
+  type MappingWithCanonical,
+} from "./statement-builder";
 
 function toEngagementTeamMember(data: unknown): EngagementTeamMember[] {
   if (Array.isArray(data)) return data as EngagementTeamMember[];
@@ -102,6 +106,9 @@ function toEngagement(e: {
   status: string;
   team: unknown;
   alerts: unknown;
+  presentationProfile?: string | null;
+  presentationProfileVersion?: string | null;
+  presentationPolicyId?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }): Engagement {
@@ -115,6 +122,9 @@ function toEngagement(e: {
     status: e.status as Engagement["status"],
     team: toEngagementTeamMember(e.team),
     alerts: toEngagementAlerts(e.alerts),
+    presentationProfile: e.presentationProfile ?? null,
+    presentationProfileVersion: e.presentationProfileVersion ?? null,
+    presentationPolicyId: e.presentationPolicyId ?? null,
     createdAt: e.createdAt.toISOString(),
     updatedAt: e.updatedAt.toISOString(),
   };
@@ -813,500 +823,66 @@ export async function getMappings(
       orderBy: { createdAt: "asc" },
     });
     if (mappings.length === 0) return [];
-    return mappings.map(toAccountMapping);
+
+    const { getLatestClassificationSources } = await import(
+      "@/lib/tb-intelligence/firm-memory"
+    );
+    const { getMappingClassificationExplanations } = await import(
+      "@/lib/tb-intelligence/classification-explanation"
+    );
+    const mapped = mappings.map(toAccountMapping);
+    const [sources, explanations] = await Promise.all([
+      getLatestClassificationSources(engagementId),
+      getMappingClassificationExplanations(engagementId, mapped),
+    ]);
+
+    return mapped.map((m) => ({
+      ...m,
+      classificationSource: sources[m.sourceAccountCode],
+      classificationExplanation: explanations[m.sourceAccountCode],
+    }));
   } catch (error) {
     protectedAuditReadUnavailable(`getMappings(${engagementId})`, error);
   }
 }
 
-type MappingWithCanonical = {
-  id: string;
-  engagementId: string;
-  sourceAccountId: string;
-  sourceAccountCode: string;
-  sourceAccountName: string;
-  debitAmount: number;
-  creditAmount: number;
-  canonicalAccountId: string | null;
-  canonicalAccount: {
-    id: string;
-    code: string;
-    name: string;
-    category: string;
-    statementType: string;
-    displayOrder: number;
-  } | null;
-  confidence: number | null;
-  mappingType: string;
-  status: string;
-  statementClassification: string | null;
-  mappedBy: string | null;
-  mappedAt: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-function getMappingDisplayAmount(mapping: MappingWithCanonical): number {
-  const category =
-    mapping.statementClassification ?? mapping.canonicalAccount?.category ?? "";
-  const statementType = mapping.canonicalAccount?.statementType ?? "";
-  if (statementType === "income_statement") {
-    return mapping.creditAmount !== 0
-      ? mapping.creditAmount
-      : mapping.debitAmount;
-  }
-  const isAssetCategory =
-    category === "Current Assets" || category === "Non-Current Assets";
-  if (isAssetCategory) {
-    return mapping.debitAmount !== 0
-      ? mapping.debitAmount
-      : -mapping.creditAmount;
-  }
-  return mapping.creditAmount !== 0
-    ? mapping.creditAmount
-    : -mapping.debitAmount;
-}
-
-function buildStatementLinesFromMappings(
-  statementId: string,
-  statementType: "income_statement" | "balance_sheet" | "equity",
-  mappings: MappingWithCanonical[],
-): FinancialStatementLine[] {
-  const confirmed = mappings.filter(
-    (mapping) =>
-      mapping.status === "confirmed" &&
-      mapping.canonicalAccount &&
-      mapping.statementClassification,
-  );
-  const incomeMappings = confirmed.filter(
-    (mapping) => mapping.canonicalAccount?.statementType === "income_statement",
-  );
-  const balanceMappings = confirmed.filter(
-    (mapping) => mapping.canonicalAccount?.statementType === "balance_sheet",
-  );
-  const revenueMappings = incomeMappings.filter(
-    (mapping) =>
-      mapping.canonicalAccount?.category === "Revenue" &&
-      mapping.canonicalAccount?.name !== "Other Income",
-  );
-  const otherIncomeMappings = incomeMappings.filter(
-    (mapping) => mapping.canonicalAccount?.name === "Other Income",
-  );
-  const costOfSalesMappings = incomeMappings.filter(
-    (mapping) => mapping.canonicalAccount?.name === "Cost of Sales",
-  );
-  const operatingExpenseMappings = incomeMappings.filter(
-    (mapping) =>
-      mapping.canonicalAccount?.category === "Expenses" &&
-      mapping.canonicalAccount?.name !== "Cost of Sales",
-  );
-  const currentAssets = balanceMappings.filter(
-    (mapping) => mapping.statementClassification === "Current Assets",
-  );
-  const nonCurrentAssets = balanceMappings.filter(
-    (mapping) => mapping.statementClassification === "Non-Current Assets",
-  );
-  const currentLiabilities = balanceMappings.filter(
-    (mapping) => mapping.statementClassification === "Current Liabilities",
-  );
-  const nonCurrentLiabilities = balanceMappings.filter(
-    (mapping) => mapping.statementClassification === "Non-Current Liabilities",
-  );
-  const equityMappings = balanceMappings.filter(
-    (mapping) => mapping.statementClassification === "Equity",
-  );
-
-  const sorted = (items: MappingWithCanonical[]) =>
-    [...items].sort(
-      (a, b) =>
-        (a.canonicalAccount?.displayOrder ?? 0) -
-        (b.canonicalAccount?.displayOrder ?? 0),
-    );
-  const sum = (items: MappingWithCanonical[]) =>
-    items.reduce((total, item) => total + getMappingDisplayAmount(item), 0);
-  const ids = (items: MappingWithCanonical[]) => items.map((item) => item.id);
-
-  if (statementType === "income_statement") {
-    const lines: FinancialStatementLine[] = [];
-    let displayOrder = 10;
-    const revenueTotal = sum(revenueMappings);
-    const costOfSalesTotal = sum(costOfSalesMappings);
-    const operatingExpensesTotal = sum(operatingExpenseMappings);
-    const otherIncomeTotal = sum(otherIncomeMappings);
-    const grossProfit = revenueTotal - costOfSalesTotal;
-    const profitBeforeTax = grossProfit - operatingExpensesTotal;
-    const netProfit = profitBeforeTax + otherIncomeTotal;
-
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Revenue",
-      amount: revenueTotal,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: ids(revenueMappings),
-    });
-    displayOrder += 1;
-    for (const mapping of sorted(revenueMappings)) {
-      lines.push({
-        id: `${statementId}-line-${displayOrder}`,
-        statementId,
-        label: `  ${mapping.canonicalAccount?.name ?? mapping.sourceAccountName}`,
-        amount: getMappingDisplayAmount(mapping),
-        isTotal: false,
-        indentLevel: 1,
-        displayOrder,
-        linkedAccountMappings: [mapping.id],
-      });
-      displayOrder += 1;
-    }
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Cost of Sales",
-      amount: costOfSalesTotal,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: ids(costOfSalesMappings),
-    });
-    displayOrder += 1;
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Gross Profit",
-      amount: grossProfit,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: [],
-    });
-    displayOrder += 10;
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Operating Expenses",
-      amount: operatingExpensesTotal,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: ids(operatingExpenseMappings),
-    });
-    displayOrder += 1;
-    for (const mapping of sorted(operatingExpenseMappings)) {
-      lines.push({
-        id: `${statementId}-line-${displayOrder}`,
-        statementId,
-        label: `  ${mapping.canonicalAccount?.name ?? mapping.sourceAccountName}`,
-        amount: getMappingDisplayAmount(mapping),
-        isTotal: false,
-        indentLevel: 1,
-        displayOrder,
-        linkedAccountMappings: [mapping.id],
-      });
-      displayOrder += 1;
-    }
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Profit Before Tax",
-      amount: profitBeforeTax,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: [],
-    });
-    displayOrder += 5;
-    if (otherIncomeMappings.length > 0) {
-      lines.push({
-        id: `${statementId}-line-${displayOrder}`,
-        statementId,
-        label: "Other Income",
-        amount: otherIncomeTotal,
-        isTotal: false,
-        indentLevel: 0,
-        displayOrder,
-        linkedAccountMappings: ids(otherIncomeMappings),
-      });
-      displayOrder += 5;
-    }
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Net Profit",
-      amount: netProfit,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: [],
-    });
-    return lines;
-  }
-
-  if (statementType === "balance_sheet") {
-    const lines: FinancialStatementLine[] = [];
-    let displayOrder = 5;
-    const currentAssetsTotal = sum(currentAssets);
-    const nonCurrentAssetsTotal = sum(nonCurrentAssets);
-    const currentLiabilitiesTotal = sum(currentLiabilities);
-    const nonCurrentLiabilitiesTotal = sum(nonCurrentLiabilities);
-    const equityCoreTotal = sum(equityMappings);
-    const revenueTotal = sum(revenueMappings);
-    const costOfSalesTotal = sum(costOfSalesMappings);
-    const operatingExpensesTotal = sum(operatingExpenseMappings);
-    const otherIncomeTotal = sum(otherIncomeMappings);
-    const currentYearProfit =
-      revenueTotal -
-      costOfSalesTotal -
-      operatingExpensesTotal +
-      otherIncomeTotal;
-    const totalAssets = currentAssetsTotal + nonCurrentAssetsTotal;
-    const totalLiabilitiesAndEquity =
-      currentLiabilitiesTotal +
-      nonCurrentLiabilitiesTotal +
-      equityCoreTotal +
-      currentYearProfit;
-
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "ASSETS",
-      amount: 0,
-      isTotal: false,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: [],
-    });
-    displayOrder += 5;
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Current Assets",
-      amount: currentAssetsTotal,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: ids(currentAssets),
-    });
-    displayOrder += 1;
-    for (const mapping of sorted(currentAssets)) {
-      lines.push({
-        id: `${statementId}-line-${displayOrder}`,
-        statementId,
-        label: `  ${mapping.canonicalAccount?.name ?? mapping.sourceAccountName}`,
-        amount: getMappingDisplayAmount(mapping),
-        isTotal: false,
-        indentLevel: 1,
-        displayOrder,
-        linkedAccountMappings: [mapping.id],
-      });
-      displayOrder += 1;
-    }
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Non-Current Assets",
-      amount: nonCurrentAssetsTotal,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: ids(nonCurrentAssets),
-    });
-    displayOrder += 1;
-    for (const mapping of sorted(nonCurrentAssets)) {
-      const label =
-        mapping.canonicalAccount?.name === "Accumulated Depreciation"
-          ? "  Less: Accumulated Depreciation"
-          : `  ${mapping.canonicalAccount?.name ?? mapping.sourceAccountName}`;
-      lines.push({
-        id: `${statementId}-line-${displayOrder}`,
-        statementId,
-        label,
-        amount: getMappingDisplayAmount(mapping),
-        isTotal: false,
-        indentLevel: 1,
-        displayOrder,
-        linkedAccountMappings: [mapping.id],
-      });
-      displayOrder += 1;
-    }
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "TOTAL ASSETS",
-      amount: totalAssets,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: [],
-    });
-    displayOrder += 5;
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "LIABILITIES AND EQUITY",
-      amount: 0,
-      isTotal: false,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: [],
-    });
-    displayOrder += 5;
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Current Liabilities",
-      amount: currentLiabilitiesTotal,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: ids(currentLiabilities),
-    });
-    displayOrder += 1;
-    for (const mapping of sorted(currentLiabilities)) {
-      lines.push({
-        id: `${statementId}-line-${displayOrder}`,
-        statementId,
-        label: `  ${mapping.canonicalAccount?.name ?? mapping.sourceAccountName}`,
-        amount: getMappingDisplayAmount(mapping),
-        isTotal: false,
-        indentLevel: 1,
-        displayOrder,
-        linkedAccountMappings: [mapping.id],
-      });
-      displayOrder += 1;
-    }
-    if (nonCurrentLiabilities.length > 0) {
-      lines.push({
-        id: `${statementId}-line-${displayOrder}`,
-        statementId,
-        label: "Non-Current Liabilities",
-        amount: nonCurrentLiabilitiesTotal,
-        isTotal: true,
-        indentLevel: 0,
-        displayOrder,
-        linkedAccountMappings: ids(nonCurrentLiabilities),
-      });
-      displayOrder += 1;
-      for (const mapping of sorted(nonCurrentLiabilities)) {
-        lines.push({
-          id: `${statementId}-line-${displayOrder}`,
-          statementId,
-          label: `  ${mapping.canonicalAccount?.name ?? mapping.sourceAccountName}`,
-          amount: getMappingDisplayAmount(mapping),
-          isTotal: false,
-          indentLevel: 1,
-          displayOrder,
-          linkedAccountMappings: [mapping.id],
-        });
-        displayOrder += 1;
-      }
-    }
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "Equity",
-      amount: equityCoreTotal + currentYearProfit,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: ids(equityMappings),
-    });
-    displayOrder += 1;
-    for (const mapping of sorted(equityMappings)) {
-      lines.push({
-        id: `${statementId}-line-${displayOrder}`,
-        statementId,
-        label: `  ${mapping.canonicalAccount?.name ?? mapping.sourceAccountName}`,
-        amount: getMappingDisplayAmount(mapping),
-        isTotal: false,
-        indentLevel: 1,
-        displayOrder,
-        linkedAccountMappings: [mapping.id],
-      });
-      displayOrder += 1;
-    }
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "  Current Year Profit",
-      amount: currentYearProfit,
-      isTotal: false,
-      indentLevel: 1,
-      displayOrder,
-      linkedAccountMappings: [],
-    });
-    displayOrder += 1;
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: "TOTAL LIABILITIES AND EQUITY",
-      amount: totalLiabilitiesAndEquity,
-      isTotal: true,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: [],
-    });
-    return lines;
-  }
-
-  const revenueTotal = sum(revenueMappings);
-  const costOfSalesTotal = sum(costOfSalesMappings);
-  const operatingExpensesTotal = sum(operatingExpenseMappings);
-  const otherIncomeTotal = sum(otherIncomeMappings);
-  const currentYearProfit =
-    revenueTotal - costOfSalesTotal - operatingExpensesTotal + otherIncomeTotal;
-  const lines: FinancialStatementLine[] = [];
-  let displayOrder = 10;
-  for (const mapping of sorted(equityMappings)) {
-    lines.push({
-      id: `${statementId}-line-${displayOrder}`,
-      statementId,
-      label: mapping.canonicalAccount?.name ?? mapping.sourceAccountName,
-      amount: getMappingDisplayAmount(mapping),
-      isTotal: false,
-      indentLevel: 0,
-      displayOrder,
-      linkedAccountMappings: [mapping.id],
-    });
-    displayOrder += 10;
-  }
-  lines.push({
-    id: `${statementId}-line-${displayOrder}`,
-    statementId,
-    label: "Current Year Profit",
-    amount: currentYearProfit,
-    isTotal: false,
-    indentLevel: 0,
-    displayOrder,
-    linkedAccountMappings: [],
-  });
-  displayOrder += 10;
-  lines.push({
-    id: `${statementId}-line-${displayOrder}`,
-    statementId,
-    label: "Total Equity",
-    amount: sum(equityMappings) + currentYearProfit,
-    isTotal: true,
-    indentLevel: 0,
-    displayOrder,
-    linkedAccountMappings: [],
-  });
-  return lines;
-}
-
-async function rebuildFinancialStatementsForEngagement(
+export async function rebuildFinancialStatementsForEngagement(
   engagementId: string,
 ): Promise<void> {
-  const [mappings, existingStatements] = await Promise.all([
+  let rebuiltViaV2 = false;
+  try {
+    const { maybeRebuildFinancialStatements } = await import(
+      "@/lib/audit/fs-engine"
+    );
+    rebuiltViaV2 = await maybeRebuildFinancialStatements(engagementId);
+  } catch (fsErr) {
+    console.error(
+      `[AuditDB] FS v2 rebuild failed for ${engagementId}`,
+      fsErr,
+    );
+  }
+
+  if (!rebuiltViaV2) {
+  const { loadEngagementPresentationContext } = await import(
+    "@/lib/audit/presentation/engagement-presentation-config"
+  );
+  const { enrichMappingsWithErpMap1 } = await import(
+    "@/lib/audit/presentation/enrich-mapping-map1"
+  );
+  const [mappings, existingStatements, presentationContext] = await Promise.all([
     prisma.auditAccountMapping.findMany({
       where: { engagementId },
       include: { canonicalAccount: true },
       orderBy: { createdAt: "asc" },
     }),
     prisma.auditFinancialStatement.findMany({ where: { engagementId } }),
+    loadEngagementPresentationContext(engagementId),
   ]);
+
+  const enrichedMappings = await enrichMappingsWithErpMap1(
+    engagementId,
+    mappings as MappingWithCanonical[],
+  );
 
   const titles: Record<string, string> = {
     income_statement: "Statement of Profit or Loss",
@@ -1326,7 +902,11 @@ async function rebuildFinancialStatementsForEngagement(
     const lines = buildStatementLinesFromMappings(
       statementId,
       statementType,
-      mappings as MappingWithCanonical[],
+      enrichedMappings,
+      {
+        presentationProfile: presentationContext.presentationProfile,
+        presentationPolicy: presentationContext.policy,
+      },
     );
     if (existing) {
       await prisma.auditFinancialStatement.update({
@@ -1345,6 +925,92 @@ async function rebuildFinancialStatementsForEngagement(
         },
       });
     }
+  }
+  }
+
+  try {
+    const engagement = await prisma.auditEngagement.findUnique({
+      where: { id: engagementId },
+      select: { organizationId: true },
+    });
+    const { maybeRunAuditIntelligenceAfterDisclosure } = await import(
+      "@/lib/audit/intelligence"
+    );
+    await maybeRunAuditIntelligenceAfterDisclosure(
+      engagementId,
+      engagement?.organizationId,
+    );
+  } catch (intelErr) {
+    console.error(
+      `[AuditDB] audit intelligence hook failed for ${engagementId}`,
+      intelErr,
+    );
+  }
+
+  try {
+    const { maybeGenerateLeadSchedules, isLeadScheduleAutoEnabled } =
+      await import("@/lib/audit/lead-schedule");
+    if (isLeadScheduleAutoEnabled()) {
+      await maybeGenerateLeadSchedules(engagementId, "mapping_confirm");
+    } else {
+      const { maybeSyncReportingGraphAfterFsRebuild } = await import(
+        "@/lib/audit/reporting-graph/graph-sync-service"
+      );
+      await maybeSyncReportingGraphAfterFsRebuild(engagementId);
+    }
+  } catch (hookErr) {
+    console.error(
+      `[AuditDB] lead schedule / graph hook failed for ${engagementId}`,
+      hookErr,
+    );
+  }
+
+  try {
+    const { maybeRunReconciliationAfterPipeline } = await import(
+      "@/lib/audit/reconciliation"
+    );
+    await maybeRunReconciliationAfterPipeline(engagementId);
+  } catch (reconErr) {
+    console.error(
+      `[AuditDB] reconciliation hook failed for ${engagementId}`,
+      reconErr,
+    );
+  }
+
+  try {
+    const { maybeRunIfrsRulesAfterFsRebuild } = await import(
+      "@/lib/audit/rules"
+    );
+    await maybeRunIfrsRulesAfterFsRebuild(engagementId);
+  } catch (ifrsErr) {
+    console.error(
+      `[AuditDB] IFRS rules hook failed for ${engagementId}`,
+      ifrsErr,
+    );
+  }
+
+  try {
+    const { maybeRunSocpaRulesAfterFsRebuild } = await import(
+      "@/lib/audit/rules"
+    );
+    await maybeRunSocpaRulesAfterFsRebuild(engagementId);
+  } catch (socpaErr) {
+    console.error(
+      `[AuditDB] SOCPA rules hook failed for ${engagementId}`,
+      socpaErr,
+    );
+  }
+
+  try {
+    const { maybeAutoGenerateDisclosureNotes } = await import(
+      "@/lib/audit/notes/disclosure-auto"
+    );
+    await maybeAutoGenerateDisclosureNotes(engagementId);
+  } catch (disclosureErr) {
+    console.error(
+      `[AuditDB] disclosure auto hook failed for ${engagementId}`,
+      disclosureErr,
+    );
   }
 }
 
@@ -1371,6 +1037,57 @@ export async function confirmMapping(
     );
     throw new Error(
       `AuditOS mutation unavailable: confirmMapping(${mappingId}). Mock fallback disabled.`,
+    );
+  }
+}
+
+export async function confirmAllSuggestedMappings(engagementId: string): Promise<{
+  confirmedCount: number;
+  mappings: AccountMapping[];
+}> {
+  try {
+    const pending = await prisma.auditAccountMapping.findMany({
+      where: {
+        engagementId,
+        status: "pending",
+        canonicalAccountId: { not: null },
+      },
+      select: { id: true },
+    });
+
+    if (pending.length === 0) {
+      return { confirmedCount: 0, mappings: [] };
+    }
+
+    const ids = pending.map((p) => p.id);
+    await prisma.auditAccountMapping.updateMany({
+      where: { id: { in: ids } },
+      data: {
+        status: "confirmed",
+        mappingType: "confirmed_ai",
+        mappedAt: new Date(),
+      },
+    });
+
+    await rebuildFinancialStatementsForEngagement(engagementId);
+
+    const updated = await prisma.auditAccountMapping.findMany({
+      where: { id: { in: ids } },
+      include: { canonicalAccount: true },
+      orderBy: { sourceAccountCode: "asc" },
+    });
+
+    return {
+      confirmedCount: updated.length,
+      mappings: updated.map((m) => toAccountMapping(m)),
+    };
+  } catch (error) {
+    console.error(
+      `[AuditDB] confirmAllSuggestedMappings(${engagementId}) failed.`,
+      error,
+    );
+    throw new Error(
+      `AuditOS mutation unavailable: confirmAllSuggestedMappings(${engagementId}).`,
     );
   }
 }
@@ -1526,6 +1243,7 @@ export async function runValidation(
     }> = [];
 
     let idx = 0;
+    const issueId = (n: number) => `${runId}-i-${n}`;
 
     const tb = await prisma.auditTrialBalance.findFirst({
       where: { engagementId },
@@ -1560,7 +1278,7 @@ export async function runValidation(
       const sev =
         Math.abs(variance) < 1 ? "low" : variance > 10000 ? "high" : "medium";
       issues.push({
-        id: `vi-${++idx}`,
+        id: issueId(++idx),
         validationRunId: runId,
         engagementId,
         checkType: "balance_equality",
@@ -1585,7 +1303,7 @@ export async function runValidation(
     const pendingMappings = mappings.filter((m) => m.status === "pending");
     if (pendingMappings.length > 0) {
       issues.push({
-        id: `vi-${++idx}`,
+        id: issueId(++idx),
         validationRunId: runId,
         engagementId,
         checkType: "missing_mappings",
@@ -1615,7 +1333,7 @@ export async function runValidation(
           Math.abs(m.creditAmount - line.creditAmount) > 1)
       ) {
         issues.push({
-          id: `vi-${++idx}`,
+          id: issueId(++idx),
           validationRunId: runId,
           engagementId,
           checkType: "classification_conflict",
@@ -1639,7 +1357,7 @@ export async function runValidation(
     const missingEvidence = evidence.filter((e) => e.state === "missing");
     if (missingEvidence.length > 0) {
       issues.push({
-        id: `vi-${++idx}`,
+        id: issueId(++idx),
         validationRunId: runId,
         engagementId,
         checkType: "completeness",
@@ -1660,7 +1378,7 @@ export async function runValidation(
     // Check 5: Statement existence
     if (statements.length === 0) {
       issues.push({
-        id: `vi-${++idx}`,
+        id: issueId(++idx),
         validationRunId: runId,
         engagementId,
         checkType: "completeness",
@@ -1676,6 +1394,60 @@ export async function runValidation(
         difference: null,
         createdAt: now,
       });
+    }
+
+    try {
+      const { appendReconciliationValidationIssues } = await import(
+        "@/lib/audit/reconciliation/reconciliation-engine"
+      );
+      idx = await appendReconciliationValidationIssues(
+        engagementId,
+        runId,
+        issues,
+        idx,
+        now,
+      );
+    } catch (reconErr) {
+      console.error(
+        `[AuditDB] reconciliation validation append failed for ${engagementId}`,
+        reconErr,
+      );
+    }
+
+    try {
+      const { appendIfrsValidationIssues } = await import(
+        "@/lib/audit/rules/ifrs-rules-engine"
+      );
+      idx = await appendIfrsValidationIssues(
+        engagementId,
+        runId,
+        issues,
+        idx,
+        now,
+      );
+    } catch (ifrsErr) {
+      console.error(
+        `[AuditDB] IFRS validation append failed for ${engagementId}`,
+        ifrsErr,
+      );
+    }
+
+    try {
+      const { appendSocpaValidationIssues } = await import(
+        "@/lib/audit/rules/socpa-rules-engine"
+      );
+      idx = await appendSocpaValidationIssues(
+        engagementId,
+        runId,
+        issues,
+        idx,
+        now,
+      );
+    } catch (socpaErr) {
+      console.error(
+        `[AuditDB] SOCPA validation append failed for ${engagementId}`,
+        socpaErr,
+      );
     }
 
     // Persist issues
@@ -1816,12 +1588,18 @@ export async function getFinancialStatements(
     const mappedMappings = mappings.map(toAccountMapping);
     const mappedComments = reviewComments.map(toReviewComment);
     return statements.map((fs) => {
-      const lines: FinancialStatementLine[] =
-        typeof fs.lines === "string"
-          ? JSON.parse(fs.lines)
-          : Array.isArray(fs.lines)
-            ? fs.lines
-            : [];
+      let lines: FinancialStatementLine[] = [];
+      try {
+        lines =
+          typeof fs.lines === "string"
+            ? JSON.parse(fs.lines)
+            : Array.isArray(fs.lines)
+              ? fs.lines
+              : [];
+      } catch {
+        lines = [];
+      }
+      if (!Array.isArray(lines)) lines = [];
       return {
         id: fs.id,
         engagementId: fs.engagementId,
@@ -2215,6 +1993,34 @@ export async function getApprovalStatus(engagementId: string): Promise<{
       blockingIssues.push(
         `Engagement status (${engagement?.status ?? "unknown"}) not ready for approval`,
       );
+
+    try {
+      const { appendFactoryApprovalGates } = await import(
+        "@/lib/audit/governance"
+      );
+      await appendFactoryApprovalGates(engagementId, blockingIssues, checklist);
+    } catch (gateErr) {
+      console.error(
+        `[AuditDB] factory approval gates failed for ${engagementId}`,
+        gateErr,
+      );
+    }
+
+    try {
+      const { appendReconciliationApprovalGates } = await import(
+        "@/lib/audit/reconciliation/reconciliation-engine"
+      );
+      await appendReconciliationApprovalGates(
+        engagementId,
+        blockingIssues,
+        checklist,
+      );
+    } catch (reconGateErr) {
+      console.error(
+        `[AuditDB] reconciliation approval gates failed for ${engagementId}`,
+        reconGateErr,
+      );
+    }
 
     const isReady = blockingIssues.length === 0;
     return {
@@ -2900,7 +2706,14 @@ export async function createEngagement(data: {
   engagementType: string;
   team?: Array<Record<string, unknown>>;
   status?: string;
+  presentationProfile?: string;
+  presentationProfileVersion?: string;
+  presentationPolicyId?: string;
 }): Promise<Engagement> {
+  const { policyIdForProfile } = await import(
+    "@/lib/audit/presentation/presentation-policy-resolver"
+  );
+  const profile = data.presentationProfile ?? "generic";
   const engagement = await prisma.auditEngagement.create({
     data: {
       organizationId: data.organizationId,
@@ -2909,9 +2722,35 @@ export async function createEngagement(data: {
       engagementType: data.engagementType,
       status: data.status ?? "setup",
       team: (data.team ?? []) as any,
+      presentationProfile: profile,
+      presentationProfileVersion:
+        data.presentationProfileVersion ?? "generic-v1",
+      presentationPolicyId:
+        data.presentationPolicyId ?? policyIdForProfile(profile as any),
     },
     include: { client: true },
   });
+  return toEngagement(engagement as any);
+}
+
+export async function updateEngagementPresentationProfile(
+  engagementId: string,
+  params: {
+    presentationProfile: string;
+    presentationProfileVersion: string;
+    presentationPolicyId: string;
+  },
+): Promise<Engagement> {
+  const engagement = await prisma.auditEngagement.update({
+    where: { id: engagementId },
+    data: {
+      presentationProfile: params.presentationProfile,
+      presentationProfileVersion: params.presentationProfileVersion,
+      presentationPolicyId: params.presentationPolicyId,
+    },
+    include: { client: true, presentationPolicy: true },
+  });
+
   return toEngagement(engagement as any);
 }
 
@@ -2927,6 +2766,12 @@ export async function saveTrialBalance(
     accountType?: string;
   }>,
 ): Promise<TrialBalance> {
+  const engagement = await prisma.auditEngagement.findUnique({
+    where: { id: engagementId },
+    select: { client: { select: { currencyCode: true } } },
+  });
+  const currency = engagement?.client?.currencyCode ?? "SAR";
+
   const totalDebits = rows.reduce((s, r) => s + r.debitAmount, 0);
   const totalCredits = rows.reduce((s, r) => s + r.creditAmount, 0);
   const variance = totalDebits - totalCredits;
@@ -2946,13 +2791,68 @@ export async function saveTrialBalance(
           creditAmount: r.creditAmount,
           balance: r.balance,
           accountType: r.accountType ?? null,
-          currency: "SAR",
+          currency,
         })),
       },
     },
     include: { lines: true },
   });
   return toTrialBalance(tb);
+}
+
+export async function createSuggestedMappingsForTrialBalance(
+  engagementId: string,
+  organizationId: string,
+  rows: Array<{
+    accountCode: string;
+    accountName: string;
+    debitAmount: number;
+    creditAmount: number;
+    canonicalAccountId: string;
+    confidence: number;
+    source: string;
+  }>,
+): Promise<number> {
+  let created = 0;
+  for (const row of rows) {
+    const sourceAccountId = `src-${engagementId}-${row.accountCode}`;
+    const existing = await prisma.auditAccountMapping.findFirst({
+      where: { engagementId, sourceAccountCode: row.accountCode },
+    });
+    if (existing) continue;
+
+    const canonical = await prisma.auditCanonicalAccount.findUnique({
+      where: { id: row.canonicalAccountId },
+    });
+
+    await prisma.auditAccountMapping.create({
+      data: {
+        engagementId,
+        sourceAccountId,
+        sourceAccountCode: row.accountCode,
+        sourceAccountName: row.accountName,
+        debitAmount: row.debitAmount,
+        creditAmount: row.creditAmount,
+        canonicalAccountId: row.canonicalAccountId,
+        confidence: row.confidence,
+        mappingType: "ai_suggested",
+        status: "pending",
+        statementClassification: canonical?.category ?? null,
+      },
+    });
+    created++;
+  }
+  return created;
+}
+
+export async function getEngagementOrganizationId(
+  engagementId: string,
+): Promise<string | null> {
+  const engagement = await prisma.auditEngagement.findUnique({
+    where: { id: engagementId },
+    select: { organizationId: true },
+  });
+  return engagement?.organizationId ?? null;
 }
 
 export async function recordAuditEvent(params: {

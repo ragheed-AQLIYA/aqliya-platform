@@ -1,11 +1,12 @@
-# AQLIYA Product Comparison & Decisive Recommendation
+﻿# AQLIYA Product Comparison & Decisive Recommendation
 
 > **v1.1 Alignment Notice:** This is an internal strategic analysis document written before the AQLIYA v1.1 official taxonomy. It contains comparative analysis useful for internal planning. For authoritative product boundaries and status, see `docs/official/aqliya-product-taxonomy-v1.1.md`. References to GovernanceOS as a product reflect a conceptual direction; v1.1 positions governance as a shared engine within AQLIYA Intelligence Core.
+
+> **Platform-first positioning update (2026-06-09):** This comparison document uses legacy "product" terminology. Under the current platform-first positioning, AQLIYA is an **institutional operating platform**, and the systems discussed (AuditOS, DecisionOS, SalesOS, etc.) are **Specialized Operating Systems** running on the platform. The comparative analysis remains valid for internal planning. For the authoritative platform/product hierarchy, see `docs/official/AQLIYA_MASTER_REFERENCE.md` §5b.
 
 **Date:** 2026-05-13
 **Scope:** Strategic comparison of GovernanceOS, DecisionOS, SalesOS, SimulationOS against AuditOS
 **Source of truth:** Product Focus Doctrine (`docs/theoretical-reference/13-product-philosophy/13-12-product-focus-doctrine.md`)
-
 ---
 
 ## Part 1: Comparative Matrix

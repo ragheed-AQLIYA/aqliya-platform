@@ -1,0 +1,48 @@
+{
+  "phase": "Shalfa Pilot Rollout",
+  "engagementId": "eng-shalfa-2025",
+  "steps": {
+    "policies": {
+      "ok": true
+    },
+    "engagement": {
+      "ok": true,
+      "id": "eng-shalfa-2025",
+      "profile": "pilot-audited",
+      "policyId": "pol-shalfa-pilot-audited-v1"
+    },
+    "canonicalCoa": {
+      "ok": true,
+      "count": 33
+    },
+    "tb": {
+      "skipped": false,
+      "tbLines": 578,
+      "confirmedMappings": 578,
+      "tbFile": "C:\\Users\\PC\\Downloads\\TB 31-12-2025 Final.xlsx"
+    },
+    "validation": {
+      "engagement": {
+        "presentationProfile": "pilot-audited",
+        "presentationPolicyId": "pol-shalfa-pilot-audited-v1",
+        "presentationPolicy": {
+          "slug": "shalfa-pilot-audited-v1"
+        }
+      },
+      "mappingCount": 578,
+      "map1HistoryCount": 1707,
+      "fsCount": 4,
+      "fsRebuild": {
+        "status": "rebuilt",
+        "method": "v2",
+        "statementCount": 4
+      },
+      "urls": {
+        "engagement": "/audit/engagements/eng-shalfa-2025",
+        "statements": "/audit/engagements/eng-shalfa-2025/statements",
+        "mapping": "/audit/engagements/eng-shalfa-2025/mapping"
+      }
+    }
+  },
+  "success": true
+}

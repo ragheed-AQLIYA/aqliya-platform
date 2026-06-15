@@ -1,9 +1,10 @@
-# AQLIYA Architecture (aligned with v1.1)
+# AQLIYA Architecture (aligned with v1.1 — repositioned)
 
 ## Official Hierarchy
 
 ```
-AQLIYA Company
+AQLIYA Platform Company
+│
 ├── AQLIYA Intelligence Core (shared platform layer)
 │   ├── AI Orchestration Engine
 │   ├── Governance Engine
@@ -16,100 +17,142 @@ AQLIYA Company
 │   ├── Document Intelligence
 │   ├── Reporting Engine
 │   └── Deployment Layer
+│
 ├── Shared Applications (built on Core)
-│   └── Office AI Assistant      (/assistant) — real governed shared application, not standalone product
+│   └── Office AI Assistant      (/assistant) — governed shared application
+│
 ├── AQLIYA Studio (custom systems layer)
-├── Systems (products — built on Core)
-│   ├── AuditOS                 (active, workspace + demo, first proof product)
-│   ├── DecisionOS              (active, workspace, adjacent system)
-│   ├── SalesOS                 (prototype only)
-│   ├── SimulationOS            (marketing-only label)
-│   └── LocalContentOS          (workspace at /local-content/*, L5 pilot-ready with conditions, strategic second product)
+│
+├── Specialized Operating Systems (capabilities — built on Core)
+│   ├── AuditOS                 (audit workflow — L5 pilot-ready)
+│   ├── DecisionOS              (decision governance — L4 usable)
+│   ├── LocalContentOS          (local content & supply chain — L5 conditional)
+│   ├── SalesOS                 (business development — early access)
+│   └── SimulationOS            (capability label — not standalone)
+│
 ├── Custom / Client-Specific Workspaces
-│   └── WorkflowOS              (/workflowos) — real governed custom workflow workspace (canonical)
+│   └── WorkflowOS              (/workflowos) — governed custom workflow
+│
 ├── Workspaces (execution environments)
-│   ├── AuditOS Workspace       (/audit)  — governed operational environment
+│   ├── AuditOS Workspace       (/audit)
 │   ├── DecisionOS Workspace    (/decisions, /intelligence/sectors)
-│   ├── Office AI Workspace     (/assistant) — shared application workspace
-│   ├── WorkflowOS Workspace    (/workflowos) — canonical custom client-specific execution environment
-│   ├── Sunbul Workspace        (/sunbul) — legacy redirect alias to /workflowos
-│   ├── Organizations Surface   (/organizations) — protected prototype only
-│   ├── Generic Settings        (/settings) — protected prototype only
-│   └── SalesOS Workspace       (/sales)  — prototype/dashboard only
+│   ├── Office AI Workspace     (/assistant)
+│   ├── WorkflowOS Workspace    (/workflowos)
+│   ├── Sunbul Workspace        (/sunbul) — legacy redirect → /workflowos
+│   ├── Organizations Surface   (/organizations) — prototype only
+│   ├── Generic Settings        (/settings) — prototype only
+│   └── SalesOS Workspace       (/sales) — prototype/dashboard
+│
 ├── Governance (cross-cutting)
-│   ├── Validation
-│   ├── Traceability
-│   ├── Publication
-│   ├── Audit Trail
-│   └── Admin
-├── Demos
-│   └── AuditOS Guided Demo     (/auditos)  — public, mock-backed, unauthenticated
+│   ├── RBAC                     (multi-level permissions)
+│   ├── Audit Trail              (immutable event log)
+│   ├── Evidence Chain           (source-to-output traceability)
+│   ├── AI Governance            (human-in-the-loop enforcement)
+│   ├── Tenant Isolation         (per-organization data boundaries)
+│   └── Deployment Controls      (Cloud / Private / Air-Gapped)
+│
+├── Proof Center (public evaluation)
+│   ├── Interactive Demo         (/demo) — no-login walkthrough
+│   ├── Executive Brief          (/executive-brief) — 4-page summary
+│   ├── Pilot Framework          (/pilot-proof) — 28 evaluation criteria
+│   ├── Evidence Library         (/proof-library) — sample outputs
+│   └── Security Summary         (/security) — RBAC, audit, encryption
+│
 └── Marketing Pages
-    ├── Homepage                (/)
-    ├── Products Catalog        (/products)
-    ├── Product Detail Pages    (/products/*)
-    └── Custom Product Inquiry  (/custom-product)
+    ├── Homepage                 (/) — platform positioning, no product names
+    ├── Platform                 (/platform) — Core + operating systems
+    ├── Sectors                  (/industries) — audit, government, enterprise, professional services
+    ├── Proof Center             (/proof) — all evaluation assets in one place
+    ├── Governance               (/governance) — trust architecture
+    ├── About                    (/about) — company + team
+    ├── Operating System Detail  (/products/*) — deep-dive references
+    ├── Custom Systems           (/custom-product)
+    ├── Engagement Models        (/engagement-models)
+    ├── Buyer Guides             (/buyers/*)
+    ├── Insights                 (/insights/*)
+    └── Case Studies             (/case-studies)
 
 Future products (not yet implemented): LocalContactOS, RiskOS, ComplianceOS, LegalOS, GovOS.
-Deployment models: Cloud (active), Private/On-Prem (strategic — not yet implemented), Air-Gapped (strategic — not yet implemented).
+Deployment models: Cloud (active), Private/On-Prem (strategic), Air-Gapped (strategic).
 ```
 
 ## Layer Definitions
 
-- **Company**: The legal and brand entity. Must not be confused with any one product.
-- **System**: A named product or product line with its own route, data model, and purpose.
-- **Shared Application**: A governed application built on AQLIYA Core that is real in code but not a standalone product category.
-- **Custom Workspace**: A real governed implementation for a client-specific or custom workflow that should not be overpromoted into a platform-wide product claim.
-- **Custom Workspace Alias**: A legacy redirect alias to a custom workspace. No independent components, data, or UI.
+- **Platform Company**: The brand and product entity. Must be presented as a platform first, not a collection of products.
+- **AQLIYA Intelligence Core**: The shared platform layer. All operating systems built on it inherit governance, evidence graph, RBAC, and audit trail automatically.
+- **Specialized Operating System**: A capability or workflow path built on the Core. Referred to as "نظام تشغيل" / "مسار تشغيلي" in Arabic. Not marketed as standalone products.
+- **Shared Application**: A governed application built on Core that is real in code but not a standalone product category.
+- **Custom Workspace**: A governed implementation for a client-specific or custom workflow.
 - **Workspace**: A governed operational execution environment with auth, access control, and durable data.
-- **Demo**: A guided, read-only, mock-backed walkthrough. Must be explicitly labeled as a demo.
+- **Proof Center**: A consolidated public-facing section that centralizes demo, executive brief, pilot framework, evidence library, and security summary in one place.
 - **Marketing Page**: Public-facing content describing a capability. OK to exist without a workspace.
 
 ## Route Model
 
 | Route                                    | Purpose                                     | Layer                  |
 | ---------------------------------------- | ------------------------------------------- | ---------------------- |
-| `/`                                      | AQLIYA Company homepage                     | Company/Marketing      |
+| `/`                                      | AQLIYA homepage (platform positioning)      | Company/Marketing      |
+| `/platform`                              | AQLIYA Intelligence Core + operating systems| Company/Marketing      |
+| `/industries`                            | Sectors page (audit, government, enterprise)| Company/Marketing      |
+| `/proof`                                 | Proof Center (all evaluation assets)        | Company/Marketing      |
+| `/governance`                            | Trust architecture (RBAC, audit, AI)        | Company/Marketing      |
+| `/about`                                 | Company + team                              | Company/Marketing      |
+| `/security`                              | Enterprise security overview                | Company/Marketing      |
+| `/deployment`                            | Deployment models (Cloud, Private, Gapped)  | Company/Marketing      |
+| `/demo`                                  | Interactive demo landing page               | Company/Marketing      |
+| `/pilot-proof`                           | Pilot evaluation framework                  | Company/Marketing      |
+| `/proof-library`                         | Sample evidence outputs                     | Company/Marketing      |
+| `/executive-brief`                       | Executive summary                           | Company/Marketing      |
+| `/engagement-models`                     | Partnership/engagement models               | Company/Marketing      |
+| `/contact`                               | Pilot request + contact form                | Company/Marketing      |
+| `/custom-product`                        | Custom system design inquiry                | Company/Marketing      |
+| `/products`                              | Operating system catalog (references)       | Company/Marketing      |
+| `/products/audit`                        | AuditOS detail page                         | Marketing/Reference    |
+| `/products/decision`                     | DecisionOS detail page                      | Marketing/Reference    |
+| `/products/local-content`                | LocalContentOS detail page                  | Marketing/Reference    |
+| `/products/sales`                        | SalesOS detail page                         | Marketing/Reference    |
+| `/products/simulation`                   | Redirects to /products                      | Marketing/Reference    |
+| `/buyers/*`                              | Buyer persona guides                        | Company/Marketing      |
+| `/insights/*`                            | Thought leadership articles                 | Company/Marketing      |
+| `/case-studies`                          | Case study index                            | Company/Marketing      |
+| `/privacy`                               | Privacy policy                              | Company/Legal          |
+| `/terms`                                 | Terms of service                            | Company/Legal          |
 | `/audit`                                 | AuditOS governed workspace                  | Workspace              |
 | `/auditos`                               | AuditOS guided demo                         | Demo                   |
+| `/auditos/*`                             | Demo sub-pages (trial-balance, mapping...)  | Demo                   |
 | `/decisions`                             | DecisionOS workspace                        | Workspace              |
-| `/assistant`                             | Office AI Assistant shared workspace        | Shared Application     |
+| `/assistant`                             | Office AI Assistant workspace               | Shared Application     |
 | `/workflowos`                            | WorkflowOS governed workspace               | Custom Workspace       |
-| `/sunbul`                                | Sunbul legacy redirect alias to /workflowos | Custom Workspace Alias |
+| `/sunbul`                                | Legacy redirect → /workflowos               | Custom Workspace Alias |
+| `/local-content`                         | LocalContentOS governed workspace           | Workspace              |
+| `/sales`                                 | SalesOS prototype dashboard                 | Workspace/Prototype    |
+| `/contacts`                              | LocalContactOS governed workspace           | Workspace              |
 | `/organizations`                         | Protected mock organizations surface        | Workspace/Prototype    |
 | `/settings`                              | Protected generic settings preview          | Workspace/Prototype    |
-| `/sales`                                 | SalesOS prototype dashboard                 | Workspace/Prototype    |
-| `/products/simulation`                   | SimulationOS marketing page                 | Marketing              |
-| `/local-content`                         | LocalContentOS governed workspace           | Workspace              |
-| `/products/local-content`                | Local Content OS marketing page             | Marketing              |
-| `/products/*`                            | Product detail pages                        | Marketing              |
-| `/custom-product`                        | Custom product inquiry                      | Company                |
-| `/login`, `/access-denied`               | Auth                                        | Internal               |
-| `/published/recommendation/[decisionId]` | Legacy published decision view              | Legacy                 |
+| `/login`                                 | Authentication                              | Internal               |
+| `/access-denied`                         | Access control                              | Internal               |
 
 ## Download Security Standard
 
 Every file download API route must implement these three layers in order:
 
-1. **Authentication** — Require valid session at entry (`requireUserContext`, `getCurrentUser`, or `getAuditActor`).
-2. **Tenant-safe access** — Return **404 on any failure** (not found, wrong org, no storage key). Never return 403 for "exists but not yours" — this leaks record existence.
-3. **Audit trail** — Log successful downloads via `writePlatformAuditLog` with fields: `productKey`, `action`, `platformOrganizationId`, `actorId`, `actorType`, `actorName`, `targetType`, `targetId`, `targetLabel`, `sourceSystem`, `status: "success"`.
+1. **Authentication** — Require valid session at entry.
+2. **Tenant-safe access** — Return **404 on any failure**. Never return 403 for "exists but not yours".
+3. **Audit trail** — Log successful downloads via `writePlatformAuditLog`.
 
-Response headers must include `Cache-Control: private, no-store` and `X-Content-Type-Options: nosniff`.
+Response headers: `Cache-Control: private, no-store`, `X-Content-Type-Options: nosniff`.
 
 **Enforced on**: Sunbul documents, Office AI outputs, AuditOS evidence, DecisionOS evidence, LocalContentOS evidence.
 
 ## Reality Alignment Notes
 
-- `Office AI Assistant` is implemented in code today as a governed shared application, even though some official v1.1 documents still describe it as planned.
-- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L4 Usable v0.1). It is a real workspace but best classified as a custom/client-specific surface rather than a core AQLIYA product-family product.
-- `Sunbul` is a legacy redirect alias only: `/sunbul/*` routes are `permanentRedirect(302)` to matching `/workflowos/*` routes. Prisma models retain `Sunbul*` prefixes for schema compatibility.
-- `/organizations`, `/settings`, and `/sales` are protected surfaces but do not yet meet v0.1 workspace completeness requirements.
-- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 12 routes, server actions, seed data, bilingual UI, evidence upload, protected evidence/report downloads, review/approval, binary PDF/XLSX exports (pdfkit + xlsx), and audit trail. Status: L5 pilot-ready with conditions — not L6 production-hardened. Arabic PDF font rendering is P2 quality gap. See `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for current maturity details.
-- `DecisionOS` now includes stored evidence files plus protected evidence download routes under `/api/decisions/[decisionId]/evidence/[evidenceId]/download`, in addition to governed export preparation inside the workspace.
-- **Schema v0.2 (2026-05-28)**:
-  - `createdById: String?` added to 10 models: PlatformOrganization, ClientWorkspace, Project, AuditOrganization, AuditUser, AuditClient, AuditEngagement, AuditFinding, LocalContentSupplier, LocalContentSpendRecord
-  - `DecisionEvidence` model added with document fields linked to Decision (rbac check + DecisionEvidence.organizationId for tenant isolation)
-  - `platformOrganizationId: String?` added to SunbulClient for tenant isolation from platform organizations
-  - Migration applied: `add_governance_fields_v0_2`
-  - 14 AuditOS Prisma enums attempted but reverted to `String @default(...)` due to value mismatch with existing codebase; application-level types in `src/types/audit/index.ts` continue to provide type safety
+- AQLIYA is positioned as an **institutional operating platform**, not a product company. The homepage presents the platform first; operating systems are surfaced inside `/platform#capabilities`.
+- `Office AI Assistant` is implemented in code today as a governed shared application.
+- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L4).
+- `Sunbul` is a legacy redirect alias: `/sunbul/*` routes → `permanentRedirect(302)` to `/workflowos/*`.
+- `/organizations`, `/settings`, and `/sales` are protected surfaces — not yet v0.1 workspace complete.
+- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 12 routes, bilingual UI, evidence upload, binary PDF/XLSX exports, and audit trail. L5 pilot-ready with conditions.
+- `DecisionOS` includes stored evidence files plus protected download routes.
+- `AuditOS` is the most mature operating system with 12-station audit lifecycle, ISQM1 quality management, and interactive demo at `/auditos`.
+- **Schema v0.2 (2026-05-28)**: `createdById` added to 10 models, `DecisionEvidence` model added, `platformOrganizationId` added to SunbulClient.
+- **Website repositioning (2026-06-09)**: Navigation changed to `المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية`. Homepage redesigned with 9-section platform-first architecture. Products moved inside `/platform#capabilities`. Proof Center established at `/proof`. Sectors page at `/industries`.

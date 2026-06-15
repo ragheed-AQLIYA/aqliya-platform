@@ -7,6 +7,7 @@ import type { GovernanceTaskType, PromptAssemblyResult } from "@/lib/governance/
 import {
   buildStatementDraftingPrompt,
   buildMappingRecommendationPrompt,
+  buildAccountClassificationPrompt,
   buildEvidenceReviewPrompt,
   buildAuditFindingPrompt,
   buildCommercialClaimReviewPrompt,
@@ -42,12 +43,27 @@ export const PROMPT_REGISTRY: Partial<Record<GovernanceTaskType, PromptRegistryE
   },
 
   account_mapping: {
-    builder: (input) => buildMappingRecommendationPrompt({
-      accountCount: (input.accountCount as number) ?? 0,
-      mappedCount: (input.mappedCount as number) ?? 0,
-      lowConfidenceCount: (input.lowConfidenceCount as number) ?? 0,
-      unmappedCount: (input.unmappedCount as number) ?? 0,
-    }),
+    builder: (input) => {
+      if (input.mode === "classification") {
+        return buildAccountClassificationPrompt({
+          accountCode: String(input.accountCode ?? ""),
+          accountName: String(input.accountName ?? ""),
+          accountBalance: Number(input.accountBalance ?? 0),
+          candidateAccounts: Array.isArray(input.candidateAccounts)
+            ? (input.candidateAccounts as string[])
+            : Array.isArray(input.canonicalCandidates)
+              ? (input.canonicalCandidates as string[])
+              : [],
+          chartOfAccountsContext: String(input.chartOfAccountsContext ?? ""),
+        });
+      }
+      return buildMappingRecommendationPrompt({
+        accountCount: (input.accountCount as number) ?? 0,
+        mappedCount: (input.mappedCount as number) ?? 0,
+        lowConfidenceCount: (input.lowConfidenceCount as number) ?? 0,
+        unmappedCount: (input.unmappedCount as number) ?? 0,
+      });
+    },
     requiresEvidence: false,
     requiresHumanApproval: true,
     outputBoundary: 'draft_only',

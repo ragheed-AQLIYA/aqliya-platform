@@ -71,18 +71,45 @@ export class OpenAIEmbeddingProvider implements EmbeddingProvider {
 }
 
 export class LocalEmbeddingProvider implements EmbeddingProvider {
-  readonly providerId = "local"
+  readonly providerId = "local";
+  private baseUrl: string;
+  private model: string;
 
-  async embed(_text: string): Promise<number[]> {
-    throw new Error("LocalEmbeddingProvider not yet implemented")
+  constructor() {
+    this.baseUrl =
+      process.env.AI_LOCAL_BASE_URL ?? "http://localhost:11434";
+    this.model = process.env.AI_LOCAL_EMBED_MODEL ?? "nomic-embed-text";
   }
 
-  async embedBatch(_texts: string[]): Promise<number[][]> {
-    throw new Error("LocalEmbeddingProvider not yet implemented")
+  async embed(text: string): Promise<number[]> {
+    const batch = await this.embedBatch([text]);
+    const vec = batch[0];
+    if (!vec) throw new Error("Ollama embedding returned empty result");
+    return vec;
+  }
+
+  async embedBatch(texts: string[]): Promise<number[][]> {
+    const res = await fetch(`${this.baseUrl.replace(/\/$/, "")}/api/embeddings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: this.model, input: texts }),
+    });
+    if (!res.ok) {
+      throw new Error(`Ollama embeddings error ${res.status}`);
+    }
+    const data = (await res.json()) as { embeddings?: number[][] };
+    return data.embeddings ?? [];
   }
 
   async isAvailable(): Promise<boolean> {
-    return false
+    try {
+      const res = await fetch(`${this.baseUrl.replace(/\/$/, "")}/api/tags`, {
+        signal: AbortSignal.timeout(3000),
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
   }
 }
 

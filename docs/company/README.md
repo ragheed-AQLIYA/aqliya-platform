@@ -8,7 +8,9 @@ Company positioning, identity, and commercial reference documents.
 - `docs/theoretical-reference/01-foundational-doctrine/` — Foundational thesis, vision, mission, what AQLIYA is/is not
 - `docs/theoretical-reference/19-strategic-narratives/` — Enterprise, audit, financial, governance, AI-native, decision-infrastructure, enterprise-trust, self-hosted, sovereign-intelligence, and long-term category narratives
 
-## Products
+## Products / Operating Systems
+
+> **Language note (2026-06-09):** Public-facing materials refer to "Specialized Operating Systems" rather than "Products." Documentation and codebase may still use "product" for internal classification.
 
 - `docs/product/` — PRDs, architecture specs, phase plans, commercial assets, sales ops, pilot management, market proof, outbound kits
 - `docs/theoretical-reference/13-product-philosophy/` — Product philosophy thesis and principles

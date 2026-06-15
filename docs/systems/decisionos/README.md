@@ -1,3 +1,5 @@
+﻿> **Language note (2026-06-09):** AQLIYA is now positioned as a **platform** first. DecisionOS is a **Specialized Operating System** within the platform. See `docs/official/AQLIYA_MASTER_REFERENCE.md` §5b.
+
 # DecisionOS System Documentation
 
 ## Status

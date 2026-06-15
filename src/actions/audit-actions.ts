@@ -48,6 +48,7 @@ import {
   getEngagement as svcGetEngagement,
   getEvidence as svcGetEvidence,
   getTrialBalanceLines as svcGetTrialBalanceLines,
+  updateEngagementPresentationProfile as svcUpdateEngagementPresentationProfile,
 } from "@/lib/audit/services";
 import {
   runSamplingEngine,
@@ -124,6 +125,7 @@ export async function uploadTrialBalanceAction(
     accountName: string;
     debit: number;
     credit: number;
+    classificationHints?: string[];
   }>,
 ) {
   const actor = await getAuditActor();
@@ -206,6 +208,31 @@ export async function confirmMappingAction(
   const { confirmMapping } = await import("@/lib/audit/services");
   const result = await confirmMapping(engagementId, mappingId);
   if (result) {
+    const { resolveFirmMemoryOrganizationIdFromEngagement } = await import(
+      "@/lib/tb-intelligence/org-resolver"
+    );
+    const orgId = await resolveFirmMemoryOrganizationIdFromEngagement(
+      engagementId,
+    );
+    if (orgId && result.canonicalAccountId) {
+      const { recordFirmMemoryFeedback, getClassificationHintsForAccount } =
+        await import("@/lib/tb-intelligence/firm-memory");
+      const classificationHints = await getClassificationHintsForAccount(
+        engagementId,
+        result.sourceAccountCode,
+      );
+      await recordFirmMemoryFeedback({
+        organizationId: orgId,
+        engagementId,
+        clientAccountCode: result.sourceAccountCode,
+        clientAccountName: result.sourceAccountName,
+        suggestedCanonicalId: result.canonicalAccountId,
+        acceptedCanonicalId: result.canonicalAccountId,
+        wasAccepted: true,
+        reviewerId: actor.actorId,
+        classificationHints,
+      });
+    }
     await svcRecordAuditEvent({
       engagementId,
       eventType: "mapping.confirmed",
@@ -236,6 +263,83 @@ export async function confirmMappingAction(
     });
   }
   return result;
+}
+
+export async function bulkConfirmSuggestedMappingsAction(
+  engagementId: string,
+): Promise<{ confirmedCount: number }> {
+  const actor = await getAuditActor();
+  requireRole(actor, ["admin", "operator"]);
+  await assertEngagementAccess(engagementId, actor);
+
+  const { confirmAllSuggestedMappings } = await import("@/lib/audit/services");
+  const { confirmedCount, mappings } =
+    await confirmAllSuggestedMappings(engagementId);
+
+  if (confirmedCount === 0) {
+    return { confirmedCount: 0 };
+  }
+
+  const { resolveFirmMemoryOrganizationIdFromEngagement } = await import(
+    "@/lib/tb-intelligence/org-resolver"
+  );
+  const orgId = await resolveFirmMemoryOrganizationIdFromEngagement(engagementId);
+
+  if (orgId) {
+    const { recordFirmMemoryFeedback, getClassificationHintsForAccount } =
+      await import("@/lib/tb-intelligence/firm-memory");
+    for (const result of mappings) {
+      if (!result.canonicalAccountId) continue;
+      const classificationHints = await getClassificationHintsForAccount(
+        engagementId,
+        result.sourceAccountCode,
+      );
+      await recordFirmMemoryFeedback({
+        organizationId: orgId,
+        engagementId,
+        clientAccountCode: result.sourceAccountCode,
+        clientAccountName: result.sourceAccountName,
+        suggestedCanonicalId: result.canonicalAccountId,
+        acceptedCanonicalId: result.canonicalAccountId,
+        wasAccepted: true,
+        reviewerId: actor.actorId,
+        classificationHints,
+      });
+    }
+  }
+
+  await svcRecordAuditEvent({
+    engagementId,
+    eventType: "mapping.confirmed",
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: "account_mapping",
+    targetId: engagementId,
+    newState: "bulk_confirmed",
+    description: `Bulk confirmed ${confirmedCount} suggested mappings`,
+    metadata: { confirmedCount },
+  });
+  await svcRecordAuditEvent({
+    engagementId,
+    eventType: "financial_statements.generated",
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: "engagement",
+    targetId: engagementId,
+    newState: "statements_rebuilt",
+    description: "Financial statements regenerated after bulk mapping confirmation",
+    metadata: {
+      trigger: "bulk_mapping_confirm",
+      confirmedCount,
+      statementTypes: ["income_statement", "balance_sheet", "equity"],
+      source: "trial_balance_mapping",
+      generatedAt: new Date().toISOString(),
+    },
+  });
+
+  return { confirmedCount };
 }
 
 const ALLOWED_FILE_TYPES = [
@@ -1609,4 +1713,31 @@ export async function generateAuditSamplingAction(params: {
 
   revalidatePath(`/audit/engagements/${params.engagementId}/sampling`);
   return result;
+}
+
+export async function updateEngagementPresentationProfileAction(params: {
+  engagementId: string;
+  presentationProfile: string;
+}) {
+  const actor = await getAuditActor();
+  requireRole(actor, ["admin"]);
+  await assertEngagementAccess(params.engagementId, actor);
+
+  const result = await svcUpdateEngagementPresentationProfile({
+    organizationId: actor.organizationId,
+    engagementId: params.engagementId,
+    presentationProfile: params.presentationProfile,
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+  });
+
+  revalidatePath(`/audit/engagements/${params.engagementId}`);
+  revalidatePath(`/audit/engagements/${params.engagementId}/statements`);
+
+  return {
+    presentationProfile: result.engagement.presentationProfile,
+    presentationProfileVersion: result.engagement.presentationProfileVersion,
+    fsRebuild: result.fsRebuild,
+  };
 }

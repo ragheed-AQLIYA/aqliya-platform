@@ -36,6 +36,9 @@ export async function exportEngagementAction(engagementId: string, format: Expor
   if (!engagement) throw new Error('Engagement not found')
   if (statements.length === 0) throw new Error('No financial statements to export. Complete account mapping first.')
 
+  const { assertFactoryApprovalGatesPass } = await import("@/lib/audit/governance")
+  await assertFactoryApprovalGatesPass(engagementId)
+
   const isApproved = APPROVED_STATUSES.includes(engagement.status)
   const lastApproval = approvalRecords.find(a => a.action === 'approved')
 
