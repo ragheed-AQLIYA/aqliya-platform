@@ -136,6 +136,30 @@ npx prisma db seed
 - [ ] No `RENAME` without alias period
 - [ ] Migration tested against staging first
 
+### Post-creation migration seed edits (AuditOS Factory V1)
+
+**Context:** `release-hardening-pr5` (`291adda`, 2026-06-15) adjusted the **seed JSONB** inside an already-created migration:
+
+| Migration | Change | Reason |
+|-----------|--------|--------|
+| `20260614130000_presentation_policy_engine` | Cleared Shalfa-specific GL codes from `generic-v1` seed row | `GENERIC_PRESENTATION_POLICY_V1` must stay client-agnostic; Shalfa codes remain in `SHALFA_PILOT_PRESENTATION_POLICY_V1` only |
+
+**Rules for operators:**
+
+- This is **not a new migration** — the file was edited after initial creation during release hardening.
+- **Fresh path:** `prisma migrate deploy` on a clean database applies the corrected seed automatically.
+- **Already-applied DBs:** If `20260614130000` ran before `291adda`, the generic policy row may still contain pilot GL codes. Verify with:
+
+```sql
+SELECT slug, rules->'revenue'->'affiliateGlCodes' AS affiliate
+FROM "PresentationPolicyTemplate"
+WHERE slug = 'generic-v1';
+```
+
+Expected after hardening: `[]` (empty array). If stale, update the row to match `GENERIC_PRESENTATION_POLICY_V1` in `src/lib/audit/presentation/presentation-policy-types.ts` or re-seed from that source — do **not** re-run the whole migration.
+
+- **Validation:** TypeScript source and migration seed JSON must match (zero drift). See R-014 in `docs/review/TECHNICAL_RISK_REGISTER.md`.
+
 ---
 
 ## 5. Health Check Endpoints
