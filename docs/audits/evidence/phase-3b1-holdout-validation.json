@@ -1,0 +1,3219 @@
+{
+  "phase": "3B.1",
+  "engagementId": "eng-shalfa-2025",
+  "finishedAt": "2026-06-14T18:22:58.762Z",
+  "splitMethod": "Sorted by GL account code ascending; first 450 = train, next 128 = hold-out",
+  "trainSize": 450,
+  "holdoutSize": 128,
+  "evalPolicy": {
+    "allowExactName": false,
+    "allowSynonyms": false,
+    "allowFirmMemory": false,
+    "layers": [
+      "prefix",
+      "map1",
+      "map2",
+      "name_pattern"
+    ]
+  },
+  "minedFromTrain": {
+    "prefixRules": 15,
+    "map1Entries": 14,
+    "map2Entries": 25,
+    "namePatterns": 63,
+    "exactNamesExcluded": true
+  },
+  "holdout": {
+    "total": 128,
+    "exact": 59,
+    "accuracy": 0.4609375,
+    "byCategory": {
+      "Expenses": {
+        "total": 13,
+        "exact": 7
+      },
+      "Revenue": {
+        "total": 110,
+        "exact": 52
+      },
+      "Liabilities": {
+        "total": 2,
+        "exact": 0
+      },
+      "Assets": {
+        "total": 1,
+        "exact": 0
+      },
+      "Lease": {
+        "total": 2,
+        "exact": 0
+      }
+    },
+    "byLayer": {
+      "map1": 6,
+      "map2": 72,
+      "name_pattern": 11
+    },
+    "layerPrecision": {
+      "map1": {
+        "hits": 6,
+        "correct": 5,
+        "precision": 0.8333333333333334
+      },
+      "map2": {
+        "hits": 72,
+        "correct": 54,
+        "precision": 0.75
+      },
+      "name_pattern": {
+        "hits": 11,
+        "correct": 0,
+        "precision": 0
+      }
+    }
+  },
+  "holdoutPrefixSample": "3202010023",
+  "successTarget": 0.7,
+  "successMet": false,
+  "trainAccountCodes": [
+    "1101010002",
+    "1101020001",
+    "1101020002",
+    "1101020007",
+    "1101020008",
+    "1101020011",
+    "1101020012",
+    "1101020015",
+    "1101020016",
+    "1101020017",
+    "1101020018",
+    "1101020020",
+    "1101020021",
+    "1101020022",
+    "1101020112",
+    "1101020213",
+    "1102010001",
+    "1103010001",
+    "1103370198",
+    "1103370199",
+    "1103370200",
+    "1103370201",
+    "1103370202",
+    "1103370203",
+    "1103370204",
+    "1103370205",
+    "1103720001",
+    "1103720079",
+    "1104020109",
+    "1104040124",
+    "1104050367",
+    "1104050368",
+    "1104050369",
+    "1104050370",
+    "1104050371",
+    "110500003",
+    "1105010003",
+    "1105010015",
+    "1105010020",
+    "1105010034",
+    "1105010050",
+    "1105010053",
+    "1105010055",
+    "1105010063",
+    "1105010064",
+    "1105010073",
+    "1105010075",
+    "1105010076",
+    "1105010088",
+    "1105010106",
+    "1105010115",
+    "1105010120",
+    "1105010123",
+    "1105010130",
+    "1105010132",
+    "1105010138",
+    "1105010139",
+    "1105010141",
+    "1105010142",
+    "1105010146",
+    "1105010148",
+    "1105010149",
+    "1105010153",
+    "1105010161",
+    "1105010173",
+    "1105010175",
+    "1105010177",
+    "1105010178",
+    "1105010179",
+    "1105010180",
+    "1105010181",
+    "1105020001",
+    "1105020176",
+    "1105020178",
+    "1105020179",
+    "1105020180",
+    "1105020182",
+    "1105020183",
+    "1105020184",
+    "1105020186",
+    "1105020187",
+    "1105020188",
+    "1105020189",
+    "1105020190",
+    "1105020193",
+    "1105020194",
+    "1105020195",
+    "1105020196",
+    "1105020197",
+    "1106010001",
+    "1106010003",
+    "1106010005",
+    "1106010006",
+    "1106010007",
+    "1106010008",
+    "1106010009",
+    "1106010010",
+    "1106010011",
+    "1106010013",
+    "1106010015",
+    "1106010016",
+    "1106010017",
+    "1106010017-1",
+    "1106010018",
+    "1106010019",
+    "1106010020",
+    "1106010021",
+    "1106020015",
+    "1106020058",
+    "1106020062",
+    "1106030001",
+    "1107020003",
+    "1107020005",
+    "1107020006",
+    "1107020009",
+    "1107020012",
+    "1107030116",
+    "1107030117",
+    "1107030118",
+    "1107040002",
+    "1107040005",
+    "1107040007",
+    "1107060057",
+    "1107080001",
+    "1107080002",
+    "1107080004",
+    "1108010001",
+    "1108010002",
+    "1108010003",
+    "1108010005",
+    "1108010007",
+    "1108010008",
+    "1108010039",
+    "1110010001",
+    "1110010002",
+    "1301010002",
+    "1301010004",
+    "1301010005",
+    "1301010006",
+    "1301010007",
+    "1301010008",
+    "1301010010",
+    "1301010011",
+    "1301010012",
+    "1301010013",
+    "1401010003",
+    "2101020009",
+    "2101030007",
+    "2101030014",
+    "2101030016",
+    "2101030017",
+    "2101030018",
+    "2101030021",
+    "2101030023",
+    "2101030027",
+    "2101030036",
+    "2101030037",
+    "2103010009",
+    "2103010034",
+    "2103010057",
+    "2103010059",
+    "2103010060",
+    "2103010068",
+    "2103010069",
+    "2103010070",
+    "2103010071",
+    "2103010073",
+    "2103010074",
+    "2103010075",
+    "2103010076",
+    "2103010077",
+    "2103010078",
+    "2103010079",
+    "2103010081",
+    "2103010083",
+    "2103010086",
+    "2103010092",
+    "2103010094",
+    "2103010095",
+    "2103010096",
+    "2103010097",
+    "2103010098",
+    "2103010100",
+    "2103010103",
+    "2103010104",
+    "2103010105",
+    "2103010109",
+    "2103010113",
+    "2103010114",
+    "2103010116",
+    "2103010118",
+    "2103010119",
+    "2103010122",
+    "2103010123",
+    "2103010125",
+    "2103010126",
+    "2103010127",
+    "2103010128",
+    "2103010131",
+    "2103010132",
+    "2103010133",
+    "2103010134",
+    "2103010136",
+    "2103010138",
+    "2103010139",
+    "2103010140",
+    "2103010141",
+    "2103010143",
+    "2103010144",
+    "2103010145",
+    "2103010146",
+    "2103010147",
+    "2103010148",
+    "2103010149",
+    "2103010150",
+    "2103010151",
+    "2103010152",
+    "2103010153",
+    "2103010154",
+    "2103010156",
+    "2103010157",
+    "2103010158",
+    "2103010159",
+    "2103010160",
+    "2103010161",
+    "2103010162",
+    "2103020013",
+    "2103020014",
+    "2103020015",
+    "2103020016",
+    "2103020100",
+    "2103020101",
+    "2103020103",
+    "2103020104",
+    "2103020105",
+    "2103020106",
+    "2103020107",
+    "2103020108",
+    "2103020109",
+    "2103020120",
+    "2103020121",
+    "2103020122",
+    "2103020123",
+    "2103020124",
+    "2103020125",
+    "2103020126",
+    "2103020127",
+    "2103020128",
+    "2103020129",
+    "2103020130",
+    "2103020131",
+    "2103020132",
+    "2103020133",
+    "2103020134",
+    "2103020135",
+    "2103020136",
+    "2103020137",
+    "2103020138",
+    "2103020139",
+    "2103020140",
+    "2103020141",
+    "2103020142",
+    "2103020143",
+    "2103020144",
+    "2103020145",
+    "2103020146",
+    "2103020147",
+    "2103020148",
+    "2103020149",
+    "2103020150",
+    "2103020151",
+    "2103020152",
+    "2103020153",
+    "2103020154",
+    "2103020155",
+    "2103020156",
+    "2103020157",
+    "2103020158",
+    "2103020159",
+    "2103020160",
+    "2103020161",
+    "2103020162",
+    "2103020163",
+    "2103020164",
+    "2103020165",
+    "2103020166",
+    "2103020167",
+    "2103020168",
+    "2104010001",
+    "2104010003",
+    "2104010006",
+    "2104010007",
+    "2104010009",
+    "2104010010",
+    "2104010011",
+    "2104010012",
+    "2104010013",
+    "2104010014",
+    "2104010015",
+    "2104010016",
+    "2104010017",
+    "2104010018",
+    "2104010020",
+    "2104010021",
+    "2104010022",
+    "2104010023",
+    "2104010024",
+    "2104010026",
+    "2104010027",
+    "2106010001",
+    "2106010002",
+    "2106010003",
+    "2106010004",
+    "2106010006",
+    "2106020002",
+    "2106020003",
+    "2106020004",
+    "2106020125",
+    "2106030109",
+    "2108010001",
+    "2108010002",
+    "2108010004",
+    "2108010010",
+    "2108010012",
+    "2108020001",
+    "2108020004",
+    "2108020005",
+    "2108020008",
+    "2108020009",
+    "2108020011",
+    "2108020013",
+    "2108020014",
+    "2108020015",
+    "2108020017",
+    "2108020018",
+    "2109010005",
+    "2302010002",
+    "2302010004",
+    "2302010005",
+    "2302010006",
+    "2302010007",
+    "2302010008",
+    "2302010009",
+    "2303010002",
+    "2303010003",
+    "2303020001",
+    "2303020001-1",
+    "2303020002",
+    "2303020009",
+    "2303020010",
+    "2303020011",
+    "2401010001",
+    "2401010002",
+    "2401010003",
+    "2403010001",
+    "2404010001",
+    "3101010001",
+    "3101010002",
+    "3101010005",
+    "3101010006",
+    "3101010006-1",
+    "3101010007",
+    "3101010009",
+    "3101010010",
+    "3101010011",
+    "3101010012",
+    "3101020001",
+    "3101020002",
+    "3101020003",
+    "3101020005",
+    "3101020007",
+    "3101020009",
+    "3101020011",
+    "3101020012",
+    "3101020012-1",
+    "3101020014",
+    "3101030001",
+    "3101030004",
+    "3101030006",
+    "3101050001",
+    "3101050004",
+    "3101050005",
+    "3101050006",
+    "3101060001",
+    "3101060002",
+    "3101060003",
+    "3101060004",
+    "3101060005",
+    "3101060007",
+    "3101060008",
+    "3101060009",
+    "3101060010",
+    "3101060011",
+    "3101060012",
+    "3101060013",
+    "3101060017",
+    "3101060018",
+    "3101060019",
+    "3101060022",
+    "3101060027",
+    "3101060028",
+    "3101060030",
+    "3101070002",
+    "3101070003",
+    "3101070004",
+    "3101070007",
+    "3101070008",
+    "3101070009",
+    "3101070013",
+    "3101070014",
+    "3101070016",
+    "3101070017",
+    "3101070018",
+    "3101070020",
+    "3101070021",
+    "3101070024",
+    "3101070025",
+    "3101070027",
+    "3101070028",
+    "3101070031",
+    "3101070032",
+    "3101070033",
+    "3101070034",
+    "3101070035",
+    "3101070036",
+    "3101070037",
+    "3101070038",
+    "3101070040",
+    "3101070041",
+    "3101070043",
+    "3101070044",
+    "3101070045",
+    "3101070047",
+    "3101070048",
+    "3101070049",
+    "3101070050",
+    "3201010003",
+    "3201010009",
+    "3201010010",
+    "3201010016",
+    "3201010017",
+    "3201010018",
+    "3201010020",
+    "3201010021",
+    "3201010022",
+    "3201010026",
+    "3201020001",
+    "3201020002",
+    "3201020008",
+    "3202010018"
+  ],
+  "holdoutAccountCodes": [
+    "3202010023",
+    "3202010026",
+    "3202010026-1",
+    "3202010031",
+    "3202010034",
+    "3202010038",
+    "3202010039",
+    "3203010001",
+    "3203010004",
+    "3204010001",
+    "3204010002",
+    "3204010004",
+    "3204010005",
+    "3204010006",
+    "3204010007",
+    "3204010008",
+    "3204010009",
+    "3204010010",
+    "3204010011",
+    "3204010012",
+    "3204010013",
+    "3204010014",
+    "3204010015",
+    "3204010016",
+    "3204010017",
+    "3204010018",
+    "3204010019",
+    "3204010020",
+    "3204010021",
+    "3204010022",
+    "3204010023",
+    "3204010024",
+    "3204010025",
+    "3204010026",
+    "3204010026-1",
+    "3204010027",
+    "3204010028",
+    "3204010029",
+    "3204010030",
+    "3204010031",
+    "3204010032",
+    "3204010034",
+    "3204010035",
+    "3204010036",
+    "3204010037",
+    "3204010038",
+    "3204010040",
+    "3204010042",
+    "3204010043",
+    "3204010045",
+    "3204010047",
+    "3204010048",
+    "3204010050",
+    "3204010051",
+    "3204010053",
+    "3204010054",
+    "3204010055",
+    "3204010056",
+    "3204010057",
+    "3204010058",
+    "3204010060",
+    "3204010061",
+    "3204010062",
+    "3204010063",
+    "3204010064",
+    "3204010067",
+    "3204010070",
+    "3204010071",
+    "3204010072",
+    "3204010073",
+    "3204010074",
+    "3204010075",
+    "3204010076",
+    "3204010077",
+    "3204010078",
+    "3204010079",
+    "3204010081",
+    "3204010082",
+    "3204010083",
+    "3204010084",
+    "3204010085",
+    "3204010086",
+    "3204010087",
+    "3204010088",
+    "3204010089",
+    "3204010090",
+    "3204010091",
+    "3205010001",
+    "3205010002",
+    "3205010003",
+    "3205010005",
+    "3205010006",
+    "3205010007",
+    "3205010008",
+    "3205010009",
+    "3205010010",
+    "3205010011",
+    "3205010012",
+    "3205010013",
+    "3205010014",
+    "3205010015",
+    "3205010016",
+    "3205010017",
+    "3205010019",
+    "3205010020",
+    "3205010021",
+    "3205010022",
+    "3205010023",
+    "3301010002",
+    "3301010003",
+    "3301010004",
+    "3301010006",
+    "3301010007",
+    "3301010010",
+    "3301010011",
+    "3301010011-1",
+    "4301010002",
+    "4401010001",
+    "4401010003",
+    "4401010004",
+    "4401010005",
+    "4501010001",
+    "4501010003",
+    "4501010003-1",
+    "4501010003-2",
+    "4601010002",
+    "4601010003",
+    "4701010001"
+  ],
+  "holdoutResults": [
+    {
+      "accountCode": "3202010023",
+      "accountName": "رسوم حكومية",
+      "expectedCode": "CA-5070",
+      "hints": [
+        "General and administrative expenses",
+        "Government Exp."
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-5070",
+      "layer": "map1",
+      "correct": true
+    },
+    {
+      "accountCode": "3202010026",
+      "accountName": "مصروفات متنوعة",
+      "expectedCode": "CA-5070",
+      "hints": [
+        "General and administrative expenses",
+        "Other Exp."
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-5070",
+      "layer": "map1",
+      "correct": true
+    },
+    {
+      "accountCode": "3202010026-1",
+      "accountName": "مصروفات متنوعة",
+      "expectedCode": "CA-5070",
+      "hints": [
+        "General and administrative expenses",
+        "Impairement expense - Prepayments"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-5070",
+      "layer": "map1",
+      "correct": true
+    },
+    {
+      "accountCode": "3202010031",
+      "accountName": "عمولات بنكية.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3202010034",
+      "accountName": "اعمال تنسيق الموقع العام والري والزراعه",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3202010038",
+      "accountName": "مصروفات شحن وترحيل",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3202010039",
+      "accountName": "ايجار",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3203010001",
+      "accountName": "رواتب",
+      "expectedCode": "CA-2020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Liabilities",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3203010004",
+      "accountName": "حسومات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010001",
+      "accountName": "رواتب",
+      "expectedCode": "CA-2020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Liabilities",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010002",
+      "accountName": "اضافى",
+      "expectedCode": "CA-5020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010004",
+      "accountName": "نهاية خدمة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010005",
+      "accountName": "بدل اجازة",
+      "expectedCode": "CA-5020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010006",
+      "accountName": "صيانة سيارات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010007",
+      "accountName": "زيوت وشحومات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010008",
+      "accountName": "محروقات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010009",
+      "accountName": "صيانة الات ومعدات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010010",
+      "accountName": "ادوات مكتبية قرطاسية",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010011",
+      "accountName": "هاتف",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010012",
+      "accountName": "مياه",
+      "expectedCode": "CA-5040",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010013",
+      "accountName": "كهرباء",
+      "expectedCode": "CA-5040",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010014",
+      "accountName": "جوال",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010015",
+      "accountName": "صيانة مزروعات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010016",
+      "accountName": "مواد نظافة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010017",
+      "accountName": "اعمال صيانة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010018",
+      "accountName": "مصروفات سكن",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Labor Housing"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010019",
+      "accountName": "ايجارات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Labor Housing"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-2010",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010020",
+      "accountName": "تجهيزات المشروع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010021",
+      "accountName": "مصروفات متنوعة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010022",
+      "accountName": "حسومات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010023",
+      "accountName": "قطع غيار ومستهلكات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010024",
+      "accountName": "قطع غيار مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010025",
+      "accountName": "مواد اخرى متنوعه",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010026",
+      "accountName": "تذاكر سفر.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010026-1",
+      "accountName": "تذاكر سفر.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010027",
+      "accountName": "انتقالات.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010028",
+      "accountName": "مصروفات حكومية - اقامات ورخص عمل",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Government expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010029",
+      "accountName": "مصروفات تأمين طبى.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010030",
+      "accountName": "تأمينات اجتماعية.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010031",
+      "accountName": "مصروفات تأشيرات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Government expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010032",
+      "accountName": "حسومات مستخلصات المشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010034",
+      "accountName": "ادوات ومعدات نظافة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010035",
+      "accountName": "ملابس للعاملين",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010036",
+      "accountName": "تأمين على السيارات.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010037",
+      "accountName": "قطع واجزاء كهربائية",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010038",
+      "accountName": "منح ومكافأت",
+      "expectedCode": "CA-5070",
+      "hints": [
+        "General and administrative expenses",
+        "Salaries and wages"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-5070",
+      "layer": "map1",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010040",
+      "accountName": "عمولات بنكيه للمشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010042",
+      "accountName": "مواد نظافة مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010043",
+      "accountName": "ايجار معدات وادوات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010045",
+      "accountName": "مصروفات المستودع-مشاريع الصيانة والتشغيل",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Maintenance"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-1030",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010047",
+      "accountName": "تأمين علي مباني",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010048",
+      "accountName": "اهلاك سيارات المشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010050",
+      "accountName": "اهلاك حاسب آلى المشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010051",
+      "accountName": "اهلاك الات ومعدات المشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010053",
+      "accountName": "بدل مأمورية-المشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010054",
+      "accountName": "مصروفات مشتركة مشاريع التضامن",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Expenses for Joint venture"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010055",
+      "accountName": "دعايا واعلان مشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010056",
+      "accountName": "اعمال خدمات من الغير (تاجير عمالة)",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "External labor"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010057",
+      "accountName": "ايجار سيارات -مشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010058",
+      "accountName": "مصروفات نقل صرف صحي",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010060",
+      "accountName": "اعمال نظافه متنوعه",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010061",
+      "accountName": "غرامات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010062",
+      "accountName": "اشتراك نت",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010063",
+      "accountName": "سعي ايجار",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010064",
+      "accountName": "رسوم وتراخيص حكوميه",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Government expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010067",
+      "accountName": "مصروفات ضيافة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010070",
+      "accountName": "مصاريف ورسوم استقدام",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Government expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010071",
+      "accountName": "مصروفات معدات وادوات صيانه",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010072",
+      "accountName": "مصروفات تشغيلية-فحص سموم",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3204010073",
+      "accountName": "مستهلكات كهربائيه ومكانيكية-مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010074",
+      "accountName": "مستهلكات الزراعة والري والمبيدات الحشرية -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010075",
+      "accountName": "مواد ومطهرات النظافة والغسيل ومواد العناية الشخصية -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010076",
+      "accountName": "الوقود والزيوت والمحروقات -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010077",
+      "accountName": "توريد المياة -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010078",
+      "accountName": "مستهلكات آلات التصوير والنسخ والطابعات -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010079",
+      "accountName": "مواد كيميائية و مرشحات -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010081",
+      "accountName": "مستهلكات الاعمال المدنية  -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010082",
+      "accountName": "قطع غيار -مستعاضة 2",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010083",
+      "accountName": "اعمال اضافية-مستعاضة (المياه الوطنية)",
+      "expectedCode": "CA-5040",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-2130",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010084",
+      "accountName": "قطع غيار وخدمات-مستعاضة (المياه الوطنية)",
+      "expectedCode": "CA-5040",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-2130",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010085",
+      "accountName": "مصروفات معالجة  نفايات - مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Maintenance"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010086",
+      "accountName": "مصروفات نقل جماعي",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010087",
+      "accountName": "مقرات ادارية مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010088",
+      "accountName": "مشتريات مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010089",
+      "accountName": "مصروفات معدات خاضة -مستعاضة ( المياة الوطنية)",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010090",
+      "accountName": "مقاولين باطن - مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Maintenance"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010091",
+      "accountName": "تكلفة مردم تبوك ( مخزون)",
+      "expectedCode": "CA-1030",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Assets",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3205010001",
+      "accountName": "رواتب قطاع الحاويات",
+      "expectedCode": "CA-5020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3205010002",
+      "accountName": "محروقات قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Vehicles and fuel expense"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010003",
+      "accountName": "مصروفات متنوعه قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010005",
+      "accountName": "مصروفات سكن قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010006",
+      "accountName": "جوال وهاتف-قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010007",
+      "accountName": "صيانة سيارات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Maintenance"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3205010008",
+      "accountName": "صيانة سيارات-الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010009",
+      "accountName": "قرطاسية ومطبوعات وادوات مكتبية",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010010",
+      "accountName": "عمولات بنكية-قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010011",
+      "accountName": "تامين سيارات قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010012",
+      "accountName": "زيوت وشحوم -  قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010013",
+      "accountName": "رسوم حكومية.- قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010014",
+      "accountName": "مصروف تامينات اجتماعية - قطاع الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010015",
+      "accountName": "تحميلات اهلاك سيارات  الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010016",
+      "accountName": "تحميلات أستهلاك الات و معدات- حاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010017",
+      "accountName": "تجهيزات مشاريع - قطاع االحاويات.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010019",
+      "accountName": "بدل اجازه-الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010020",
+      "accountName": "نهايه خدمه-حاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010021",
+      "accountName": "تذاكر سفر-الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010022",
+      "accountName": "اضافي-الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3205010023",
+      "accountName": "ايجارات الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": true
+    },
+    {
+      "accountCode": "3301010002",
+      "accountName": "أستهلاك السيارات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010003",
+      "accountName": "أستهلاك اثاث و ديكور",
+      "expectedCode": "CA-5070",
+      "hints": [
+        "General and administrative expenses",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-5070",
+      "layer": "map1",
+      "correct": true
+    },
+    {
+      "accountCode": "3301010004",
+      "accountName": "أستهلاك اجهزة حاسب آلي",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010006",
+      "accountName": "أستهلاك الات و معدات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010007",
+      "accountName": "استهلاك عدد وادوات صغيرة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010010",
+      "accountName": "اهلاك مباني",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010011",
+      "accountName": "اهلاك اصول حق الاستخدام",
+      "expectedCode": "CA-1071",
+      "hints": [
+        "Cost of revenue",
+        "Amortization ROU"
+      ],
+      "metricCategory": "Lease",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3301010011-1",
+      "accountName": "اهلاك اصول حق الاستخدام",
+      "expectedCode": "CA-1071",
+      "hints": [
+        "General and administrative expenses",
+        "Amortization ROU"
+      ],
+      "metricCategory": "Lease",
+      "predicted": "CA-5070",
+      "layer": "map1",
+      "correct": false
+    },
+    {
+      "accountCode": "4301010002",
+      "accountName": "ايرادات قطاع الامن والسلامة.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "ايرادات قطاع االخدمات البيئيه."
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4401010001",
+      "accountName": "ايرادات مشاريع التشغيل والصيانة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "خدمات اداره مرافق"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "4401010003",
+      "accountName": "ايرادات الصيانه والتشغيل (غير مفوترة)",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "خدمات اداره مرافق"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4401010004",
+      "accountName": "ايرادات الصيانه والتشغيل (مطالبات)",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "خدمات اداره مرافق"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4401010005",
+      "accountName": "ايرادات الشركات الشقيقة",
+      "expectedCode": "CA-4010",
+      "hints": [],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4501010001",
+      "accountName": "أ.خ بيع أصول ثابتة",
+      "expectedCode": "CA-5100",
+      "hints": [
+        "Other income",
+        "أرباح بيع أصول ثابتة"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4501010003",
+      "accountName": "ايرادات اخرى متنوعه.",
+      "expectedCode": "CA-5100",
+      "hints": [
+        "Other income",
+        "ايرادات اخرى متنوعه."
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "4501010003-1",
+      "accountName": "الأرباح من ودائع المرابحة لأجل",
+      "expectedCode": "CA-2050",
+      "hints": [
+        "Finance Costs",
+        "الأرباح من ودائع المرابحة لأجل"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4501010003-2",
+      "accountName": "أرباح استبعاد عقود الايجار",
+      "expectedCode": "CA-5100",
+      "hints": [
+        "Other income",
+        "أرباح استبعاد عقود الايجار"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-2010",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "4601010002",
+      "accountName": "ايرادات قطاع االخدمات البيئيه.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "ايرادات قطاع االخدمات البيئيه."
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4601010003",
+      "accountName": "ايرادات مشروع تدوير النفايات بمردم تبوك",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "ايرادات قطاع االخدمات البيئيه."
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4701010001",
+      "accountName": "ايرادات الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "خدمات اداره مرافق"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    }
+  ],
+  "failures": [
+    {
+      "accountCode": "3203010001",
+      "accountName": "رواتب",
+      "expectedCode": "CA-2020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Liabilities",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010001",
+      "accountName": "رواتب",
+      "expectedCode": "CA-2020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Liabilities",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010002",
+      "accountName": "اضافى",
+      "expectedCode": "CA-5020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010005",
+      "accountName": "بدل اجازة",
+      "expectedCode": "CA-5020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010011",
+      "accountName": "هاتف",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010014",
+      "accountName": "جوال",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010016",
+      "accountName": "مواد نظافة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010017",
+      "accountName": "اعمال صيانة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010018",
+      "accountName": "مصروفات سكن",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Labor Housing"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010019",
+      "accountName": "ايجارات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Labor Housing"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-2010",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010023",
+      "accountName": "قطع غيار ومستهلكات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010024",
+      "accountName": "قطع غيار مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010025",
+      "accountName": "مواد اخرى متنوعه",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010028",
+      "accountName": "مصروفات حكومية - اقامات ورخص عمل",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Government expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010031",
+      "accountName": "مصروفات تأشيرات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Government expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010034",
+      "accountName": "ادوات ومعدات نظافة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010035",
+      "accountName": "ملابس للعاملين",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010037",
+      "accountName": "قطع واجزاء كهربائية",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010042",
+      "accountName": "مواد نظافة مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010045",
+      "accountName": "مصروفات المستودع-مشاريع الصيانة والتشغيل",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Maintenance"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-1030",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010048",
+      "accountName": "اهلاك سيارات المشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010050",
+      "accountName": "اهلاك حاسب آلى المشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010051",
+      "accountName": "اهلاك الات ومعدات المشاريع",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010054",
+      "accountName": "مصروفات مشتركة مشاريع التضامن",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Expenses for Joint venture"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010056",
+      "accountName": "اعمال خدمات من الغير (تاجير عمالة)",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "External labor"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010062",
+      "accountName": "اشتراك نت",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010064",
+      "accountName": "رسوم وتراخيص حكوميه",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Government expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010067",
+      "accountName": "مصروفات ضيافة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010070",
+      "accountName": "مصاريف ورسوم استقدام",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Government expenses"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010071",
+      "accountName": "مصروفات معدات وادوات صيانه",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010073",
+      "accountName": "مستهلكات كهربائيه ومكانيكية-مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010074",
+      "accountName": "مستهلكات الزراعة والري والمبيدات الحشرية -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010075",
+      "accountName": "مواد ومطهرات النظافة والغسيل ومواد العناية الشخصية -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010076",
+      "accountName": "الوقود والزيوت والمحروقات -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010077",
+      "accountName": "توريد المياة -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010078",
+      "accountName": "مستهلكات آلات التصوير والنسخ والطابعات -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010079",
+      "accountName": "مواد كيميائية و مرشحات -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010081",
+      "accountName": "مستهلكات الاعمال المدنية  -مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010082",
+      "accountName": "قطع غيار -مستعاضة 2",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010083",
+      "accountName": "اعمال اضافية-مستعاضة (المياه الوطنية)",
+      "expectedCode": "CA-5040",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-2130",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010084",
+      "accountName": "قطع غيار وخدمات-مستعاضة (المياه الوطنية)",
+      "expectedCode": "CA-5040",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-2130",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010085",
+      "accountName": "مصروفات معالجة  نفايات - مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Maintenance"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010086",
+      "accountName": "مصروفات نقل جماعي",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Utilities"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5040",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3204010087",
+      "accountName": "مقرات ادارية مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010088",
+      "accountName": "مشتريات مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010089",
+      "accountName": "مصروفات معدات خاضة -مستعاضة ( المياة الوطنية)",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Spare Parts & Consumables"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010090",
+      "accountName": "مقاولين باطن - مستعاضة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Maintenance"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3204010091",
+      "accountName": "تكلفة مردم تبوك ( مخزون)",
+      "expectedCode": "CA-1030",
+      "hints": [
+        "Cost of revenue",
+        "Other expenses"
+      ],
+      "metricCategory": "Assets",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3205010001",
+      "accountName": "رواتب قطاع الحاويات",
+      "expectedCode": "CA-5020",
+      "hints": [
+        "Cost of revenue",
+        "Wages, salaries"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": "CA-4010",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3205010007",
+      "accountName": "صيانة سيارات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Maintenance"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010002",
+      "accountName": "أستهلاك السيارات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010004",
+      "accountName": "أستهلاك اجهزة حاسب آلي",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010006",
+      "accountName": "أستهلاك الات و معدات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010007",
+      "accountName": "استهلاك عدد وادوات صغيرة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010010",
+      "accountName": "اهلاك مباني",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Cost of revenue",
+        "Depreciation PP&E"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "map2",
+      "correct": false
+    },
+    {
+      "accountCode": "3301010011",
+      "accountName": "اهلاك اصول حق الاستخدام",
+      "expectedCode": "CA-1071",
+      "hints": [
+        "Cost of revenue",
+        "Amortization ROU"
+      ],
+      "metricCategory": "Lease",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "3301010011-1",
+      "accountName": "اهلاك اصول حق الاستخدام",
+      "expectedCode": "CA-1071",
+      "hints": [
+        "General and administrative expenses",
+        "Amortization ROU"
+      ],
+      "metricCategory": "Lease",
+      "predicted": "CA-5070",
+      "layer": "map1",
+      "correct": false
+    },
+    {
+      "accountCode": "4301010002",
+      "accountName": "ايرادات قطاع الامن والسلامة.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "ايرادات قطاع االخدمات البيئيه."
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4401010001",
+      "accountName": "ايرادات مشاريع التشغيل والصيانة",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "خدمات اداره مرافق"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "4401010003",
+      "accountName": "ايرادات الصيانه والتشغيل (غير مفوترة)",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "خدمات اداره مرافق"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4401010004",
+      "accountName": "ايرادات الصيانه والتشغيل (مطالبات)",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "خدمات اداره مرافق"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4401010005",
+      "accountName": "ايرادات الشركات الشقيقة",
+      "expectedCode": "CA-4010",
+      "hints": [],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4501010001",
+      "accountName": "أ.خ بيع أصول ثابتة",
+      "expectedCode": "CA-5100",
+      "hints": [
+        "Other income",
+        "أرباح بيع أصول ثابتة"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4501010003",
+      "accountName": "ايرادات اخرى متنوعه.",
+      "expectedCode": "CA-5100",
+      "hints": [
+        "Other income",
+        "ايرادات اخرى متنوعه."
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-5070",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "4501010003-1",
+      "accountName": "الأرباح من ودائع المرابحة لأجل",
+      "expectedCode": "CA-2050",
+      "hints": [
+        "Finance Costs",
+        "الأرباح من ودائع المرابحة لأجل"
+      ],
+      "metricCategory": "Expenses",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4501010003-2",
+      "accountName": "أرباح استبعاد عقود الايجار",
+      "expectedCode": "CA-5100",
+      "hints": [
+        "Other income",
+        "أرباح استبعاد عقود الايجار"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": "CA-2010",
+      "layer": "name_pattern",
+      "correct": false
+    },
+    {
+      "accountCode": "4601010002",
+      "accountName": "ايرادات قطاع االخدمات البيئيه.",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "ايرادات قطاع االخدمات البيئيه."
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4601010003",
+      "accountName": "ايرادات مشروع تدوير النفايات بمردم تبوك",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "ايرادات قطاع االخدمات البيئيه."
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    },
+    {
+      "accountCode": "4701010001",
+      "accountName": "ايرادات الحاويات",
+      "expectedCode": "CA-4010",
+      "hints": [
+        "Revenues",
+        "خدمات اداره مرافق"
+      ],
+      "metricCategory": "Revenue",
+      "predicted": null,
+      "layer": null,
+      "correct": false
+    }
+  ]
+}

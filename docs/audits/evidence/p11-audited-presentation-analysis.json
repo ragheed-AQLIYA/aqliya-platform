@@ -1,0 +1,1522 @@
+{
+  "audited": {
+    "revenue": 451412506,
+    "costOfRevenue": 384959315,
+    "grossProfit": 66453191,
+    "operatingExpenses": 26627726,
+    "operatingProfit": 39825465,
+    "financeCosts": 12901271,
+    "otherIncome": 735915,
+    "profitBeforeZakat": 27660109,
+    "zakat": 2575257,
+    "netProfit": 25084852
+  },
+  "map1Summary": [
+    {
+      "map1": "Cost of revenue",
+      "count": 122,
+      "closingRevenueStyle": 477454949.4499998,
+      "closingExpenseStyle": 477454949.4499998,
+      "movementRevenueStyle": 476134062.1099998,
+      "movementExpenseStyle": 1320887.34
+    },
+    {
+      "map1": "Revenues",
+      "count": 7,
+      "closingRevenueStyle": 462388883.29,
+      "closingExpenseStyle": 462388883.29,
+      "movementRevenueStyle": 0,
+      "movementExpenseStyle": 462388883.29
+    },
+    {
+      "map1": "General and administrative expenses",
+      "count": 69,
+      "closingRevenueStyle": 26648923.930000007,
+      "closingExpenseStyle": 26648923.930000007,
+      "movementRevenueStyle": 26637563.180000007,
+      "movementExpenseStyle": 11360.75
+    },
+    {
+      "map1": "Finance Costs",
+      "count": 19,
+      "closingRevenueStyle": 13235282.17,
+      "closingExpenseStyle": 13235282.17,
+      "movementRevenueStyle": 13235282.17,
+      "movementExpenseStyle": 0
+    },
+    {
+      "map1": "Other income",
+      "count": 3,
+      "closingRevenueStyle": 11171844.76,
+      "closingExpenseStyle": 11171844.76,
+      "movementRevenueStyle": 0,
+      "movementExpenseStyle": 11171844.76
+    },
+    {
+      "map1": "zakat expense",
+      "count": 1,
+      "closingRevenueStyle": 2575256.63,
+      "closingExpenseStyle": 2575256.63,
+      "movementRevenueStyle": 2575256.63,
+      "movementExpenseStyle": 0
+    }
+  ],
+  "revenueBridge": {
+    "auditosV3Total": 542334771.92,
+    "map1RevenuesOnly": 462388883.29,
+    "affiliateTotal": 68774043.86999999,
+    "contractTotal": 3744151.5399999917,
+    "unbilledDuplicate4401010003": 60395590.28000003,
+    "otherOperatingTotal": 409420986.23,
+    "blankMap1Revenue": 68774043.86999999,
+    "audited": 451412506,
+    "gapAuditosVsAudited": 90922265.91999996,
+    "gapMap1RevenuesVsAudited": 10976377.290000021,
+    "gapAfterExcludeAffiliate": 22148222.049999952
+  },
+  "revenueGlDetail": [
+    {
+      "code": "4301010002",
+      "name": "ايرادات قطاع الامن والسلامة.",
+      "map1": "Revenues",
+      "map2": "ايرادات قطاع االخدمات البيئيه.",
+      "closing": 19822495.85,
+      "movement": -19822495.85
+    },
+    {
+      "code": "4401010001",
+      "name": "ايرادات مشاريع التشغيل والصيانة",
+      "map1": "Revenues",
+      "map2": "خدمات اداره مرافق",
+      "closing": 356517711.19,
+      "movement": -356517711.19
+    },
+    {
+      "code": "4401010003",
+      "name": "ايرادات الصيانه والتشغيل (غير مفوترة)",
+      "map1": "Revenues",
+      "map2": "خدمات اداره مرافق",
+      "closing": 60395590.28000003,
+      "movement": -60395590.28000003
+    },
+    {
+      "code": "4401010004",
+      "name": "ايرادات الصيانه والتشغيل (مطالبات)",
+      "map1": "Revenues",
+      "map2": "خدمات اداره مرافق",
+      "closing": 3744151.5399999917,
+      "movement": -3744151.5399999917
+    },
+    {
+      "code": "4401010005",
+      "name": "ايرادات الشركات الشقيقة",
+      "map1": "",
+      "map2": "",
+      "closing": 68774043.86999999,
+      "movement": -68774043.86999999
+    },
+    {
+      "code": "4501010001",
+      "name": "أ.خ بيع أصول ثابتة",
+      "map1": "Other income",
+      "map2": "أرباح بيع أصول ثابتة",
+      "closing": 8408.519999999997,
+      "movement": -8408.519999999997
+    },
+    {
+      "code": "4501010003",
+      "name": "ايرادات اخرى متنوعه.",
+      "map1": "Other income",
+      "map2": "ايرادات اخرى متنوعه.",
+      "closing": 11163436.24,
+      "movement": -11163436.24
+    },
+    {
+      "code": "4601010002",
+      "name": "ايرادات قطاع االخدمات البيئيه.",
+      "map1": "Revenues",
+      "map2": "ايرادات قطاع االخدمات البيئيه.",
+      "closing": 13569394.52,
+      "movement": -13569394.52
+    },
+    {
+      "code": "4601010003",
+      "name": "ايرادات مشروع تدوير النفايات بمردم تبوك",
+      "map1": "Revenues",
+      "map2": "ايرادات قطاع االخدمات البيئيه.",
+      "closing": 6244629.12,
+      "movement": -6244629.12
+    },
+    {
+      "code": "4701010001",
+      "name": "ايرادات الحاويات",
+      "map1": "Revenues",
+      "map2": "خدمات اداره مرافق",
+      "closing": 2094910.79,
+      "movement": -2094910.79
+    }
+  ],
+  "corBridge": {
+    "auditosV3Cor": 478932415.03999984,
+    "map1CorOnly": 477454949.4499998,
+    "prefix32": 468267614.33999985,
+    "prefix33": 10664800.7,
+    "audited": 384959315,
+    "gap": 93973100.03999984,
+    "topCorAccounts": [
+      {
+        "code": "3204010001",
+        "name": "رواتب",
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "closing": 179655889.87
+      },
+      {
+        "code": "3204010028",
+        "name": "مصروفات حكومية - اقامات ورخص عمل",
+        "map1": "Cost of revenue",
+        "map2": "Government expenses",
+        "closing": 49143510.36
+      },
+      {
+        "code": "3204010054",
+        "name": "مصروفات مشتركة مشاريع التضامن",
+        "map1": "Cost of revenue",
+        "map2": "Expenses for Joint venture",
+        "closing": 32807727.819999997
+      },
+      {
+        "code": "3204010090",
+        "name": "مقاولين باطن - مستعاضة",
+        "map1": "Cost of revenue",
+        "map2": "Maintenance",
+        "closing": 22875597.09
+      },
+      {
+        "code": "3204010030",
+        "name": "تأمينات اجتماعية.",
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "closing": 22336175.97
+      },
+      {
+        "code": "3204010023",
+        "name": "قطع غيار ومستهلكات",
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "closing": 15997523.2
+      },
+      {
+        "code": "3204010056",
+        "name": "اعمال خدمات من الغير (تاجير عمالة)",
+        "map1": "Cost of revenue",
+        "map2": "External labor",
+        "closing": 13423000.83
+      },
+      {
+        "code": "3301010011",
+        "name": "اهلاك اصول حق الاستخدام",
+        "map1": "Cost of revenue",
+        "map2": "Amortization ROU",
+        "closing": 9831171.5
+      },
+      {
+        "code": "3204010016",
+        "name": "مواد نظافة",
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "closing": 8353162.5
+      },
+      {
+        "code": "3204010084",
+        "name": "قطع غيار وخدمات-مستعاضة (المياه الوطنية)",
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "closing": 7990798.29
+      },
+      {
+        "code": "3204010004",
+        "name": "نهاية خدمة",
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "closing": 6859372.63
+      },
+      {
+        "code": "3204010008",
+        "name": "محروقات",
+        "map1": "Cost of revenue",
+        "map2": "Vehicles and fuel expense",
+        "closing": 6448376.63
+      },
+      {
+        "code": "3203010001",
+        "name": "رواتب",
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "closing": 6438356.4
+      },
+      {
+        "code": "3204010002",
+        "name": "اضافى",
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "closing": 5899358.17
+      },
+      {
+        "code": "3204010048",
+        "name": "اهلاك سيارات المشاريع",
+        "map1": "Cost of revenue",
+        "map2": "Depreciation PP&E",
+        "closing": 5829380.2
+      },
+      {
+        "code": "3204010032",
+        "name": "حسومات مستخلصات المشاريع",
+        "map1": "Cost of revenue",
+        "map2": "Other expenses",
+        "closing": 5266067.390000001
+      },
+      {
+        "code": "3204010005",
+        "name": "بدل اجازة",
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "closing": 5200827.18
+      },
+      {
+        "code": "3204010029",
+        "name": "مصروفات تأمين طبى.",
+        "map1": "Cost of revenue",
+        "map2": "Other expenses",
+        "closing": 5084271.73
+      },
+      {
+        "code": "3204010082",
+        "name": "قطع غيار -مستعاضة 2",
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "closing": 4571437.88
+      },
+      {
+        "code": "3204010057",
+        "name": "ايجار سيارات -مشاريع",
+        "map1": "Cost of revenue",
+        "map2": "Vehicles and fuel expense",
+        "closing": 3855006.33
+      },
+      {
+        "code": "3204010081",
+        "name": "مستهلكات الاعمال المدنية  -مستعاضة",
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "closing": 3717851.86
+      },
+      {
+        "code": "3204010067",
+        "name": "مصروفات ضيافة",
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "closing": 3643885.45
+      },
+      {
+        "code": "3204010088",
+        "name": "مشتريات مستعاضة",
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "closing": 3585361
+      },
+      {
+        "code": "3204010024",
+        "name": "قطع غيار مستعاضة",
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "closing": 2604035.59
+      },
+      {
+        "code": "3204010051",
+        "name": "اهلاك الات ومعدات المشاريع",
+        "map1": "Cost of revenue",
+        "map2": "Depreciation PP&E",
+        "closing": 2485284.6999999997
+      }
+    ]
+  },
+  "corByPrefix": {
+    "3201": {
+      "count": 13,
+      "closing": 1604368.69,
+      "accounts": [
+        {
+          "code": "3201010003",
+          "name": "مكافأة نهاية خدمة",
+          "map1": "General and administrative expenses",
+          "closing": 402.5
+        },
+        {
+          "code": "3201010009",
+          "name": "محروقات",
+          "map1": "Cost of revenue",
+          "closing": 125561.09
+        },
+        {
+          "code": "3201010010",
+          "name": "ايجار معدات ووسائل نقل",
+          "map1": "Cost of revenue",
+          "closing": 24000
+        },
+        {
+          "code": "3201010016",
+          "name": "مياه",
+          "map1": "Cost of revenue",
+          "closing": 155824.19
+        },
+        {
+          "code": "3201010017",
+          "name": "كهرباء",
+          "map1": "Cost of revenue",
+          "closing": 3175.3
+        },
+        {
+          "code": "3201010018",
+          "name": "قرطاسية",
+          "map1": "Cost of revenue",
+          "closing": 100450.53
+        },
+        {
+          "code": "3201010020",
+          "name": "تذاكر سفر",
+          "map1": "Cost of revenue",
+          "closing": 28981
+        },
+        {
+          "code": "3201010021",
+          "name": "تأمين طبى",
+          "map1": "Cost of revenue",
+          "closing": 183758.58
+        },
+        {
+          "code": "3201010022",
+          "name": "اشتركات سوفت وير",
+          "map1": "Cost of revenue",
+          "closing": 378864.1
+        },
+        {
+          "code": "3201010026",
+          "name": "تأمينات اجتماعية",
+          "map1": "Cost of revenue",
+          "closing": 599095.23
+        },
+        {
+          "code": "3201020001",
+          "name": "عمولات مبيعات",
+          "map1": "Cost of revenue",
+          "closing": 1.15
+        },
+        {
+          "code": "3201020002",
+          "name": "عمولات بنكية",
+          "map1": "General and administrative expenses",
+          "closing": 1452.1200000000001
+        },
+        {
+          "code": "3201020008",
+          "name": "تأمين على السيارات.",
+          "map1": "Cost of revenue",
+          "closing": 2802.9
+        }
+      ]
+    },
+    "3202": {
+      "count": 8,
+      "closing": 950257.7799999999,
+      "accounts": [
+        {
+          "code": "3202010018",
+          "name": "اعمال دهانات",
+          "map1": "Cost of revenue",
+          "closing": 4910
+        },
+        {
+          "code": "3202010023",
+          "name": "رسوم حكومية",
+          "map1": "General and administrative expenses",
+          "closing": 77924.6
+        },
+        {
+          "code": "3202010026-1",
+          "name": "مصروفات متنوعة",
+          "map1": "General and administrative expenses",
+          "closing": 707119
+        },
+        {
+          "code": "3202010026",
+          "name": "مصروفات متنوعة",
+          "map1": "General and administrative expenses",
+          "closing": 14701.250000000018
+        },
+        {
+          "code": "3202010031",
+          "name": "عمولات بنكية.",
+          "map1": "Cost of revenue",
+          "closing": 32.2
+        },
+        {
+          "code": "3202010034",
+          "name": "اعمال تنسيق الموقع العام والري والزراعه",
+          "map1": "Cost of revenue",
+          "closing": 94477.65
+        },
+        {
+          "code": "3202010038",
+          "name": "مصروفات شحن وترحيل",
+          "map1": "Cost of revenue",
+          "closing": 44549.75
+        },
+        {
+          "code": "3202010039",
+          "name": "ايجار",
+          "map1": "Cost of revenue",
+          "closing": 6543.33
+        }
+      ]
+    },
+    "3203": {
+      "count": 2,
+      "closing": 6438556.4,
+      "accounts": [
+        {
+          "code": "3203010001",
+          "name": "رواتب",
+          "map1": "Cost of revenue",
+          "closing": 6438356.4
+        },
+        {
+          "code": "3203010004",
+          "name": "حسومات",
+          "map1": "Cost of revenue",
+          "closing": 200
+        }
+      ]
+    },
+    "3204": {
+      "count": 78,
+      "closing": 457021759.0999999,
+      "accounts": [
+        {
+          "code": "3204010001",
+          "name": "رواتب",
+          "map1": "Cost of revenue",
+          "closing": 179655889.87
+        },
+        {
+          "code": "3204010002",
+          "name": "اضافى",
+          "map1": "Cost of revenue",
+          "closing": 5899358.17
+        },
+        {
+          "code": "3204010004",
+          "name": "نهاية خدمة",
+          "map1": "Cost of revenue",
+          "closing": 6859372.63
+        },
+        {
+          "code": "3204010005",
+          "name": "بدل اجازة",
+          "map1": "Cost of revenue",
+          "closing": 5200827.18
+        },
+        {
+          "code": "3204010006",
+          "name": "صيانة سيارات",
+          "map1": "Cost of revenue",
+          "closing": 1737061.09
+        },
+        {
+          "code": "3204010007",
+          "name": "زيوت وشحومات",
+          "map1": "Cost of revenue",
+          "closing": 263087.74
+        },
+        {
+          "code": "3204010008",
+          "name": "محروقات",
+          "map1": "Cost of revenue",
+          "closing": 6448376.63
+        },
+        {
+          "code": "3204010009",
+          "name": "صيانة الات ومعدات",
+          "map1": "Cost of revenue",
+          "closing": 529405.06
+        },
+        {
+          "code": "3204010010",
+          "name": "ادوات مكتبية قرطاسية",
+          "map1": "Cost of revenue",
+          "closing": 226284.79
+        },
+        {
+          "code": "3204010011",
+          "name": "هاتف",
+          "map1": "Cost of revenue",
+          "closing": 79699.75
+        },
+        {
+          "code": "3204010012",
+          "name": "مياه",
+          "map1": "Cost of revenue",
+          "closing": 1533796.04
+        },
+        {
+          "code": "3204010013",
+          "name": "كهرباء",
+          "map1": "Cost of revenue",
+          "closing": 1667702.41
+        },
+        {
+          "code": "3204010014",
+          "name": "جوال",
+          "map1": "Cost of revenue",
+          "closing": 504353.23000000004
+        },
+        {
+          "code": "3204010015",
+          "name": "صيانة مزروعات",
+          "map1": "Cost of revenue",
+          "closing": 272721.21
+        },
+        {
+          "code": "3204010016",
+          "name": "مواد نظافة",
+          "map1": "Cost of revenue",
+          "closing": 8353162.5
+        },
+        {
+          "code": "3204010017",
+          "name": "اعمال صيانة",
+          "map1": "Cost of revenue",
+          "closing": 2167386.27
+        },
+        {
+          "code": "3204010018",
+          "name": "مصروفات سكن",
+          "map1": "Cost of revenue",
+          "closing": 2160526.78
+        },
+        {
+          "code": "3204010019",
+          "name": "ايجارات",
+          "map1": "Cost of revenue",
+          "closing": 2324394.66
+        },
+        {
+          "code": "3204010020",
+          "name": "تجهيزات المشروع",
+          "map1": "Cost of revenue",
+          "closing": 140807.94
+        },
+        {
+          "code": "3204010021",
+          "name": "مصروفات متنوعة",
+          "map1": "Cost of revenue",
+          "closing": 1988880.02
+        },
+        {
+          "code": "3204010022",
+          "name": "حسومات",
+          "map1": "Cost of revenue",
+          "closing": 8591.6
+        },
+        {
+          "code": "3204010023",
+          "name": "قطع غيار ومستهلكات",
+          "map1": "Cost of revenue",
+          "closing": 15997523.2
+        },
+        {
+          "code": "3204010024",
+          "name": "قطع غيار مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 2604035.59
+        },
+        {
+          "code": "3204010025",
+          "name": "مواد اخرى متنوعه",
+          "map1": "Cost of revenue",
+          "closing": 29997.41
+        },
+        {
+          "code": "3204010026",
+          "name": "تذاكر سفر.",
+          "map1": "Cost of revenue",
+          "closing": 2192211.6
+        },
+        {
+          "code": "3204010026-1",
+          "name": "تذاكر سفر.",
+          "map1": "Cost of revenue",
+          "closing": 0
+        },
+        {
+          "code": "3204010027",
+          "name": "انتقالات.",
+          "map1": "Cost of revenue",
+          "closing": 946.57
+        },
+        {
+          "code": "3204010028",
+          "name": "مصروفات حكومية - اقامات ورخص عمل",
+          "map1": "Cost of revenue",
+          "closing": 49143510.36
+        },
+        {
+          "code": "3204010029",
+          "name": "مصروفات تأمين طبى.",
+          "map1": "Cost of revenue",
+          "closing": 5084271.73
+        },
+        {
+          "code": "3204010030",
+          "name": "تأمينات اجتماعية.",
+          "map1": "Cost of revenue",
+          "closing": 22336175.97
+        },
+        {
+          "code": "3204010031",
+          "name": "مصروفات تأشيرات",
+          "map1": "Cost of revenue",
+          "closing": 2304169.09
+        },
+        {
+          "code": "3204010032",
+          "name": "حسومات مستخلصات المشاريع",
+          "map1": "Cost of revenue",
+          "closing": 5266067.390000001
+        },
+        {
+          "code": "3204010034",
+          "name": "ادوات ومعدات نظافة",
+          "map1": "Cost of revenue",
+          "closing": 1490698.5499999998
+        },
+        {
+          "code": "3204010035",
+          "name": "ملابس للعاملين",
+          "map1": "Cost of revenue",
+          "closing": 1689192.16
+        },
+        {
+          "code": "3204010036",
+          "name": "تأمين على السيارات.",
+          "map1": "Cost of revenue",
+          "closing": 368354.37000000005
+        },
+        {
+          "code": "3204010037",
+          "name": "قطع واجزاء كهربائية",
+          "map1": "Cost of revenue",
+          "closing": 52680.87
+        },
+        {
+          "code": "3204010038",
+          "name": "منح ومكافأت",
+          "map1": "General and administrative expenses",
+          "closing": 433201.08
+        },
+        {
+          "code": "3204010040",
+          "name": "عمولات بنكيه للمشاريع",
+          "map1": "Cost of revenue",
+          "closing": 6453.34
+        },
+        {
+          "code": "3204010042",
+          "name": "مواد نظافة مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 6901.21
+        },
+        {
+          "code": "3204010043",
+          "name": "ايجار معدات وادوات",
+          "map1": "Cost of revenue",
+          "closing": 1902502.47
+        },
+        {
+          "code": "3204010045",
+          "name": "مصروفات المستودع-مشاريع الصيانة والتشغيل",
+          "map1": "Cost of revenue",
+          "closing": 1286.39
+        },
+        {
+          "code": "3204010047",
+          "name": "تأمين علي مباني",
+          "map1": "Cost of revenue",
+          "closing": 227597.53
+        },
+        {
+          "code": "3204010048",
+          "name": "اهلاك سيارات المشاريع",
+          "map1": "Cost of revenue",
+          "closing": 5829380.2
+        },
+        {
+          "code": "3204010050",
+          "name": "اهلاك حاسب آلى المشاريع",
+          "map1": "Cost of revenue",
+          "closing": 1766.12
+        },
+        {
+          "code": "3204010051",
+          "name": "اهلاك الات ومعدات المشاريع",
+          "map1": "Cost of revenue",
+          "closing": 2485284.6999999997
+        },
+        {
+          "code": "3204010053",
+          "name": "بدل مأمورية-المشاريع",
+          "map1": "Cost of revenue",
+          "closing": 15300.15
+        },
+        {
+          "code": "3204010054",
+          "name": "مصروفات مشتركة مشاريع التضامن",
+          "map1": "Cost of revenue",
+          "closing": 32807727.819999997
+        },
+        {
+          "code": "3204010055",
+          "name": "دعايا واعلان مشاريع",
+          "map1": "Cost of revenue",
+          "closing": 1884.54
+        },
+        {
+          "code": "3204010056",
+          "name": "اعمال خدمات من الغير (تاجير عمالة)",
+          "map1": "Cost of revenue",
+          "closing": 13423000.83
+        },
+        {
+          "code": "3204010057",
+          "name": "ايجار سيارات -مشاريع",
+          "map1": "Cost of revenue",
+          "closing": 3855006.33
+        },
+        {
+          "code": "3204010058",
+          "name": "مصروفات نقل صرف صحي",
+          "map1": "Cost of revenue",
+          "closing": 582127.05
+        },
+        {
+          "code": "3204010060",
+          "name": "اعمال نظافه متنوعه",
+          "map1": "Cost of revenue",
+          "closing": 251953.87
+        },
+        {
+          "code": "3204010061",
+          "name": "غرامات",
+          "map1": "Cost of revenue",
+          "closing": 46000
+        },
+        {
+          "code": "3204010062",
+          "name": "اشتراك نت",
+          "map1": "Cost of revenue",
+          "closing": 301110.85
+        },
+        {
+          "code": "3204010063",
+          "name": "سعي ايجار",
+          "map1": "Cost of revenue",
+          "closing": 126086.96
+        },
+        {
+          "code": "3204010064",
+          "name": "رسوم وتراخيص حكوميه",
+          "map1": "Cost of revenue",
+          "closing": 1343377.49
+        },
+        {
+          "code": "3204010067",
+          "name": "مصروفات ضيافة",
+          "map1": "Cost of revenue",
+          "closing": 3643885.45
+        },
+        {
+          "code": "3204010070",
+          "name": "مصاريف ورسوم استقدام",
+          "map1": "Cost of revenue",
+          "closing": 258674.69
+        },
+        {
+          "code": "3204010071",
+          "name": "مصروفات معدات وادوات صيانه",
+          "map1": "Cost of revenue",
+          "closing": 51479.31
+        },
+        {
+          "code": "3204010072",
+          "name": "مصروفات تشغيلية-فحص سموم",
+          "map1": "Cost of revenue",
+          "closing": 7620
+        },
+        {
+          "code": "3204010073",
+          "name": "مستهلكات كهربائيه ومكانيكية-مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 2366747.1999999997
+        },
+        {
+          "code": "3204010074",
+          "name": "مستهلكات الزراعة والري والمبيدات الحشرية -مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 552299.19
+        },
+        {
+          "code": "3204010075",
+          "name": "مواد ومطهرات النظافة والغسيل ومواد العناية الشخصية -مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 44853.73999999999
+        },
+        {
+          "code": "3204010076",
+          "name": "الوقود والزيوت والمحروقات -مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 2893.53
+        },
+        {
+          "code": "3204010077",
+          "name": "توريد المياة -مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 2053168.91
+        },
+        {
+          "code": "3204010078",
+          "name": "مستهلكات آلات التصوير والنسخ والطابعات -مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 15371.45
+        },
+        {
+          "code": "3204010079",
+          "name": "مواد كيميائية و مرشحات -مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 12300
+        },
+        {
+          "code": "3204010081",
+          "name": "مستهلكات الاعمال المدنية  -مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 3717851.86
+        },
+        {
+          "code": "3204010082",
+          "name": "قطع غيار -مستعاضة 2",
+          "map1": "Cost of revenue",
+          "closing": 4571437.88
+        },
+        {
+          "code": "3204010083",
+          "name": "اعمال اضافية-مستعاضة (المياه الوطنية)",
+          "map1": "Cost of revenue",
+          "closing": 1359950.55
+        },
+        {
+          "code": "3204010084",
+          "name": "قطع غيار وخدمات-مستعاضة (المياه الوطنية)",
+          "map1": "Cost of revenue",
+          "closing": 7990798.29
+        },
+        {
+          "code": "3204010085",
+          "name": "مصروفات معالجة  نفايات - مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 201693.92
+        },
+        {
+          "code": "3204010086",
+          "name": "مصروفات نقل جماعي",
+          "map1": "Cost of revenue",
+          "closing": 112826.15999999999
+        },
+        {
+          "code": "3204010087",
+          "name": "مقرات ادارية مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 2018037.52
+        },
+        {
+          "code": "3204010088",
+          "name": "مشتريات مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 3585361
+        },
+        {
+          "code": "3204010089",
+          "name": "مصروفات معدات خاضة -مستعاضة ( المياة الوطنية)",
+          "map1": "Cost of revenue",
+          "closing": 82200
+        },
+        {
+          "code": "3204010090",
+          "name": "مقاولين باطن - مستعاضة",
+          "map1": "Cost of revenue",
+          "closing": 22875597.09
+        },
+        {
+          "code": "3204010091",
+          "name": "تكلفة مردم تبوك ( مخزون)",
+          "map1": "Cost of revenue",
+          "closing": 1267242
+        }
+      ]
+    },
+    "3205": {
+      "count": 21,
+      "closing": 2252672.37,
+      "accounts": [
+        {
+          "code": "3205010001",
+          "name": "رواتب قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 567190.65
+        },
+        {
+          "code": "3205010002",
+          "name": "محروقات قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 578723.18
+        },
+        {
+          "code": "3205010003",
+          "name": "مصروفات متنوعه قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 31811.01
+        },
+        {
+          "code": "3205010005",
+          "name": "مصروفات سكن قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 5065.7
+        },
+        {
+          "code": "3205010006",
+          "name": "جوال وهاتف-قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 8395.98
+        },
+        {
+          "code": "3205010007",
+          "name": "صيانة سيارات",
+          "map1": "Cost of revenue",
+          "closing": 261691.82
+        },
+        {
+          "code": "3205010008",
+          "name": "صيانة سيارات-الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 42729.149999999994
+        },
+        {
+          "code": "3205010009",
+          "name": "قرطاسية ومطبوعات وادوات مكتبية",
+          "map1": "Cost of revenue",
+          "closing": 19300.8
+        },
+        {
+          "code": "3205010010",
+          "name": "عمولات بنكية-قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 252.65
+        },
+        {
+          "code": "3205010011",
+          "name": "تامين سيارات قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 487.67
+        },
+        {
+          "code": "3205010012",
+          "name": "زيوت وشحوم -  قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 38109.07
+        },
+        {
+          "code": "3205010013",
+          "name": "رسوم حكومية.- قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 364266.26
+        },
+        {
+          "code": "3205010014",
+          "name": "مصروف تامينات اجتماعية - قطاع الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 12370.37
+        },
+        {
+          "code": "3205010015",
+          "name": "تحميلات اهلاك سيارات  الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 96830.73
+        },
+        {
+          "code": "3205010016",
+          "name": "تحميلات أستهلاك الات و معدات- حاويات",
+          "map1": "Cost of revenue",
+          "closing": 3381.93
+        },
+        {
+          "code": "3205010017",
+          "name": "تجهيزات مشاريع - قطاع االحاويات.",
+          "map1": "Cost of revenue",
+          "closing": 1500
+        },
+        {
+          "code": "3205010019",
+          "name": "بدل اجازه-الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 23828.95
+        },
+        {
+          "code": "3205010020",
+          "name": "نهايه خدمه-حاويات",
+          "map1": "Cost of revenue",
+          "closing": 17718.49
+        },
+        {
+          "code": "3205010021",
+          "name": "تذاكر سفر-الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 8551
+        },
+        {
+          "code": "3205010022",
+          "name": "اضافي-الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 70831.01
+        },
+        {
+          "code": "3205010023",
+          "name": "ايجارات الحاويات",
+          "map1": "Cost of revenue",
+          "closing": 99635.95
+        }
+      ]
+    },
+    "3301": {
+      "count": 8,
+      "closing": 10664800.7,
+      "accounts": [
+        {
+          "code": "3301010002",
+          "name": "أستهلاك السيارات",
+          "map1": "Cost of revenue",
+          "closing": 108851.01
+        },
+        {
+          "code": "3301010003",
+          "name": "أستهلاك اثاث و ديكور",
+          "map1": "General and administrative expenses",
+          "closing": 16805.04
+        },
+        {
+          "code": "3301010004",
+          "name": "أستهلاك اجهزة حاسب آلي",
+          "map1": "Cost of revenue",
+          "closing": 292473.68
+        },
+        {
+          "code": "3301010006",
+          "name": "أستهلاك الات و معدات",
+          "map1": "Cost of revenue",
+          "closing": 17985.45
+        },
+        {
+          "code": "3301010007",
+          "name": "استهلاك عدد وادوات صغيرة",
+          "map1": "Cost of revenue",
+          "closing": 114563.01999999999
+        },
+        {
+          "code": "3301010010",
+          "name": "اهلاك مباني",
+          "map1": "Cost of revenue",
+          "closing": 57091
+        },
+        {
+          "code": "3301010011",
+          "name": "اهلاك اصول حق الاستخدام",
+          "map1": "Cost of revenue",
+          "closing": 9831171.5
+        },
+        {
+          "code": "3301010011-1",
+          "name": "اهلاك اصول حق الاستخدام",
+          "map1": "General and administrative expenses",
+          "closing": 225860
+        }
+      ]
+    }
+  },
+  "otherIncomeBridge": {
+    "grossOtherIncomeClosing": 11171844.76,
+    "account4501010003": {
+      "code": "4501010003",
+      "name": "ايرادات اخرى متنوعه.",
+      "closing": 11163436.24,
+      "movement": -11163436.24
+    },
+    "smallOtherAccounts": [
+      {
+        "code": "4501010001",
+        "name": "أ.خ بيع أصول ثابتة",
+        "closing": 8408.519999999997
+      },
+      {
+        "code": "4501010003-1",
+        "name": "الأرباح من ودائع المرابحة لأجل",
+        "closing": 0
+      },
+      {
+        "code": "4501010003-2",
+        "name": "أرباح استبعاد عقود الايجار",
+        "closing": 0
+      }
+    ],
+    "auditedNet": 735915,
+    "grossMinusAudited": 10435929.76,
+    "impliedNettingOffset": 10435929.76,
+    "financeGross": 17022373.36,
+    "financeCredits": 17022373.36,
+    "financeNetGrossMinusCredits": 0,
+    "auditedFinance": 12901271
+  },
+  "financeGlDetail": [
+    {
+      "code": "3101070002",
+      "name": "عمولة ضمان ابتدائي-الرياض",
+      "map1": "General and administrative expenses",
+      "closingDebit": 36155.8,
+      "closingCredit": 0,
+      "closeNet": -36155.8,
+      "movement": -36155.8
+    },
+    {
+      "code": "3101070003",
+      "name": "عمولة ضمان ابتدائي-الجزيرة",
+      "map1": "General and administrative expenses",
+      "closingDebit": 22776.78,
+      "closingCredit": 0,
+      "closeNet": -22776.78,
+      "movement": -22776.78
+    },
+    {
+      "code": "3101070004",
+      "name": "عمولة ضمان ابتدائي-العربي",
+      "map1": "General and administrative expenses",
+      "closingDebit": 24931.94,
+      "closingCredit": 0,
+      "closeNet": -24931.94,
+      "movement": -24931.94
+    },
+    {
+      "code": "3101070007",
+      "name": "عمولة ضمان نهائي-الرياض",
+      "map1": "General and administrative expenses",
+      "closingDebit": 544632.01,
+      "closingCredit": 0,
+      "closeNet": -544632.01,
+      "movement": -544632.01
+    },
+    {
+      "code": "3101070008",
+      "name": "عمولة ضمان نهائي-الجزيرة",
+      "map1": "General and administrative expenses",
+      "closingDebit": 330774.67,
+      "closingCredit": 0,
+      "closeNet": -330774.67,
+      "movement": -330774.67
+    },
+    {
+      "code": "3101070009",
+      "name": "عمولة ضمان نهائي-العربي",
+      "map1": "General and administrative expenses",
+      "closingDebit": 15209.47,
+      "closingCredit": 0,
+      "closeNet": -15209.47,
+      "movement": -15209.47
+    },
+    {
+      "code": "3101070013",
+      "name": "عمولة ضمان مالي/الرياض",
+      "map1": "General and administrative expenses",
+      "closingDebit": 23941.85,
+      "closingCredit": 0,
+      "closeNet": -23941.85,
+      "movement": -23941.85
+    },
+    {
+      "code": "3101070014",
+      "name": "عمولة ضمان دفعة مقدمه/الرياض",
+      "map1": "General and administrative expenses",
+      "closingDebit": 681952.8,
+      "closingCredit": 0,
+      "closeNet": -681952.8,
+      "movement": -681952.8
+    },
+    {
+      "code": "3101070016",
+      "name": "عمولة قرض طويل الاجل- تجهيز موقع1(شراء اصول)/الجزيرة",
+      "map1": "Finance Costs",
+      "closingDebit": 192413.01,
+      "closingCredit": 0,
+      "closeNet": -192413.01,
+      "movement": -192413.01
+    },
+    {
+      "code": "3101070017",
+      "name": "عمولة قرض طويل الاجل بنك الرياض شركة المياه الوطنية - ادارة المرافق المتكاملة",
+      "map1": "Finance Costs",
+      "closingDebit": 2515681.6,
+      "closingCredit": 0,
+      "closeNet": -2515681.6,
+      "movement": -2515681.6
+    },
+    {
+      "code": "3101070018",
+      "name": "عمولة تمويل مستخلص/الرياض",
+      "map1": "Finance Costs",
+      "closingDebit": 2407910.46,
+      "closingCredit": 0,
+      "closeNet": -2407910.46,
+      "movement": -2407910.46
+    },
+    {
+      "code": "3101070020",
+      "name": "عمولة تمويل مستخلص/الجزيرة",
+      "map1": "Finance Costs",
+      "closingDebit": 239659.59,
+      "closingCredit": 0,
+      "closeNet": -239659.59,
+      "movement": -239659.59
+    },
+    {
+      "code": "3101070021",
+      "name": "عمولة قرض بنك الرياض - مشروع هئية الزكاة حراسات المنافذ",
+      "map1": "Finance Costs",
+      "closingDebit": 513539.1699999999,
+      "closingCredit": 0,
+      "closeNet": -513539.1699999999,
+      "movement": -513539.1699999999
+    },
+    {
+      "code": "3101070024",
+      "name": "مصاريف دراسة ائتمانية البنك السعودى للاستثمار",
+      "map1": "General and administrative expenses",
+      "closingDebit": 316000,
+      "closingCredit": 0,
+      "closeNet": -316000,
+      "movement": -316000
+    },
+    {
+      "code": "3101070025",
+      "name": "مصاريف دراسة ائتمانية-الرياض",
+      "map1": "General and administrative expenses",
+      "closingDebit": 847795.46,
+      "closingCredit": 0,
+      "closeNet": -847795.46,
+      "movement": -847795.46
+    },
+    {
+      "code": "3101070027",
+      "name": "مصاريف دراسة ائتمانية-العربي",
+      "map1": "General and administrative expenses",
+      "closingDebit": 589285.87,
+      "closingCredit": 0,
+      "closeNet": -589285.87,
+      "movement": -589285.87
+    },
+    {
+      "code": "3101070028",
+      "name": "مصاريف دراسة ائتمانية-الجزيرة",
+      "map1": "General and administrative expenses",
+      "closingDebit": 219444.46,
+      "closingCredit": 0,
+      "closeNet": -219444.46,
+      "movement": -219444.46
+    },
+    {
+      "code": "3101070031",
+      "name": "عمولة قرض البنك العربي - مشروع مستشفى قوى الامن الدمام",
+      "map1": "Finance Costs",
+      "closingDebit": 303373.51000000007,
+      "closingCredit": 0,
+      "closeNet": -303373.51000000007,
+      "movement": -303373.51000000007
+    },
+    {
+      "code": "3101070032",
+      "name": "فوائد اصول حق الاستخدام",
+      "map1": "Finance Costs",
+      "closingDebit": 1925525,
+      "closingCredit": 0,
+      "closeNet": -1925525,
+      "movement": -1925525
+    },
+    {
+      "code": "3101070033",
+      "name": "عمولة تمويل مستخلص/العربي",
+      "map1": "Finance Costs",
+      "closingDebit": 112449.19,
+      "closingCredit": 0,
+      "closeNet": -112449.19,
+      "movement": -112449.19
+    },
+    {
+      "code": "3101070034",
+      "name": "عمولة قرض البنك العربي - مشروع رئاسة امن الدولة المباحث العامة",
+      "map1": "Finance Costs",
+      "closingDebit": 370593.47,
+      "closingCredit": 0,
+      "closeNet": -370593.47,
+      "movement": -370593.47
+    },
+    {
+      "code": "3101070035",
+      "name": "عمولة قرض بنك الجزيرة - المياة الوطنية اتفاقية تثبيت اسعار",
+      "map1": "Finance Costs",
+      "closingDebit": 446553.75,
+      "closingCredit": 0,
+      "closeNet": -446553.75,
+      "movement": -446553.75
+    },
+    {
+      "code": "3101070036",
+      "name": "عمولة قرض بنك الرياض - مشروع مراكز التاهيل المجموعة الرابعة",
+      "map1": "Finance Costs",
+      "closingDebit": 822603.39,
+      "closingCredit": 0,
+      "closeNet": -822603.39,
+      "movement": -822603.39
+    },
+    {
+      "code": "3101070037",
+      "name": "عمولة ضمان ابتدائي - البنك السعودي للاسثمار",
+      "map1": "General and administrative expenses",
+      "closingDebit": 14457.43,
+      "closingCredit": 0,
+      "closeNet": -14457.43,
+      "movement": -14457.43
+    },
+    {
+      "code": "3101070038",
+      "name": "عمولة ضمان نهائي البنك السعودي للاستثمار",
+      "map1": "General and administrative expenses",
+      "closingDebit": 11353.239999999998,
+      "closingCredit": 0,
+      "closeNet": -11353.239999999998,
+      "movement": -11353.239999999998
+    },
+    {
+      "code": "3101070040",
+      "name": "عمولة قرض بنك الرياض - المديرية العامة للمباحث",
+      "map1": "Finance Costs",
+      "closingDebit": 1042694.7100000001,
+      "closingCredit": 0,
+      "closeNet": -1042694.7100000001,
+      "movement": -1042694.7100000001
+    },
+    {
+      "code": "3101070041",
+      "name": "عمولة قرض بنك الرياض -مراكز التاهيل المجموعة الاولي",
+      "map1": "Finance Costs",
+      "closingDebit": 697215.6,
+      "closingCredit": 0,
+      "closeNet": -697215.6,
+      "movement": -697215.6
+    },
+    {
+      "code": "3101070043",
+      "name": "عمولة قرض بنك الرياض -مراكز التاهيل المجموعة السادسة",
+      "map1": "Finance Costs",
+      "closingDebit": 412669.17,
+      "closingCredit": 0,
+      "closeNet": -412669.17,
+      "movement": -412669.17
+    },
+    {
+      "code": "3101070044",
+      "name": "عمولة قرض بنك الجزيرة - شركة تطوير للمباني - TBC",
+      "map1": "Finance Costs",
+      "closingDebit": 419848.28,
+      "closingCredit": 0,
+      "closeNet": -419848.28,
+      "movement": -419848.28
+    },
+    {
+      "code": "3101070045",
+      "name": "عمولة قروض طويلة الاجل البنك السعودي للاستثمار",
+      "map1": "Finance Costs",
+      "closingDebit": 6843.179999999999,
+      "closingCredit": 0,
+      "closeNet": -6843.179999999999,
+      "movement": -6843.179999999999
+    },
+    {
+      "code": "3101070047",
+      "name": "عمولة ضمان نهائي البنك  الاهلي السعودي",
+      "map1": "General and administrative expenses",
+      "closingDebit": 72329.25,
+      "closingCredit": 0,
+      "closeNet": -72329.25,
+      "movement": -72329.25
+    },
+    {
+      "code": "3101070048",
+      "name": "مصاريف دراسة ائتمانية البنك الاهلي  السعودى",
+      "map1": "General and administrative expenses",
+      "closingDebit": 36050.16,
+      "closingCredit": 0,
+      "closeNet": -36050.16,
+      "movement": -36050.16
+    },
+    {
+      "code": "3101070049",
+      "name": "عمولة قرض بنك الجزيرة -مراكز التاهيل المجموعة الثالثة",
+      "map1": "Finance Costs",
+      "closingDebit": 388089.09,
+      "closingCredit": 0,
+      "closeNet": -388089.09,
+      "movement": -388089.09
+    },
+    {
+      "code": "3101070050",
+      "name": "الفوائد الاكتوارية",
+      "map1": "Finance Costs",
+      "closingDebit": 417620,
+      "closingCredit": 0,
+      "closeNet": -417620,
+      "movement": -417620
+    },
+    {
+      "code": "4501010003-1",
+      "name": "الأرباح من ودائع المرابحة لأجل",
+      "map1": "Finance Costs",
+      "closingDebit": 0,
+      "closingCredit": 0,
+      "closeNet": 0,
+      "movement": 0
+    }
+  ],
+  "simulatedPresentation": {
+    "operatingRevenue": 462388883.29,
+    "excludeAffiliateFromHeadline": 473560728.04999995,
+    "excludeAffiliateAndUnbilledDup": 413165137.7699999,
+    "map1RevenuesExclUnbilled": 401993293.01,
+    "corExcl33xx": 468267614.33999985,
+    "corMap1Only": 477454949.4499998,
+    "otherIncomeNetRule_smallAccountsOnly": 8408.519999999997,
+    "otherIncomeUsingAuditedTarget": 735915
+  }
+}
