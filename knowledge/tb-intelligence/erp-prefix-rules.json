@@ -1,0 +1,141 @@
+{
+  "version": "1.0.0",
+  "source": "eng-shalfa-2025",
+  "generatedAt": "2026-06-14T18:19:25.451Z",
+  "minSupportRatio": 0.95,
+  "rules": [
+    {
+      "prefix": "110501",
+      "canonicalCode": "CA-1040",
+      "confidence": 0.9471428571428571,
+      "support": 0.9714285714285714,
+      "count": 35
+    },
+    {
+      "prefix": "320501",
+      "canonicalCode": "CA-4010",
+      "confidence": 0.9452380952380952,
+      "support": 0.9523809523809523,
+      "count": 21
+    },
+    {
+      "prefix": "110502",
+      "canonicalCode": "CA-1040",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 18
+    },
+    {
+      "prefix": "110801",
+      "canonicalCode": "CA-1030",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 7
+    },
+    {
+      "prefix": "110405",
+      "canonicalCode": "CA-1040",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 5
+    },
+    {
+      "prefix": "110702",
+      "canonicalCode": "CA-1020",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 5
+    },
+    {
+      "prefix": "310105",
+      "canonicalCode": "CA-5070",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 4
+    },
+    {
+      "prefix": "440101",
+      "canonicalCode": "CA-4010",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 4
+    },
+    {
+      "prefix": "110602",
+      "canonicalCode": "CA-1040",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 3
+    },
+    {
+      "prefix": "110703",
+      "canonicalCode": "CA-1040",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 3
+    },
+    {
+      "prefix": "110708",
+      "canonicalCode": "CA-1040",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 3
+    },
+    {
+      "prefix": "240101",
+      "canonicalCode": "CA-3010",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 3
+    },
+    {
+      "prefix": "310103",
+      "canonicalCode": "CA-5070",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 3
+    },
+    {
+      "prefix": "1105",
+      "canonicalCode": "CA-1040",
+      "confidence": 0.9481481481481482,
+      "support": 0.9814814814814815,
+      "count": 54
+    },
+    {
+      "prefix": "3205",
+      "canonicalCode": "CA-4010",
+      "confidence": 0.9452380952380952,
+      "support": 0.9523809523809523,
+      "count": 21
+    },
+    {
+      "prefix": "1104",
+      "canonicalCode": "CA-1040",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 7
+    },
+    {
+      "prefix": "1108",
+      "canonicalCode": "CA-1030",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 7
+    },
+    {
+      "prefix": "4401",
+      "canonicalCode": "CA-4010",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 4
+    },
+    {
+      "prefix": "2401",
+      "canonicalCode": "CA-3010",
+      "confidence": 0.95,
+      "support": 1,
+      "count": 3
+    }
+  ]
+}

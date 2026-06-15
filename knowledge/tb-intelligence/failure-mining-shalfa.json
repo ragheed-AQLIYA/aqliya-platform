@@ -1,0 +1,210 @@
+{
+  "version": "1.0.0",
+  "source": "eng-shalfa-2025",
+  "generatedAt": "2026-06-14T18:19:25.442Z",
+  "failureCount": 302,
+  "categories": [
+    {
+      "category": "Liabilities",
+      "count": 153,
+      "top_patterns": [
+        "Prefix:2103*",
+        "ايجار",
+        "محمد",
+        "عبدالله",
+        "Prefix:2104*",
+        "Prefix:2108*",
+        "عبدالعزيز",
+        "صالح"
+      ],
+      "sample_accounts": [
+        {
+          "accountCode": "1107040005",
+          "accountName": "وسيط سداد استحقاقات",
+          "expected": "CA-2010",
+          "hybrid": "CA-2050"
+        },
+        {
+          "accountCode": "2101020009",
+          "accountName": "مؤسسه راشد هادي السهلي",
+          "expected": "CA-2010",
+          "hybrid": "CA-2035"
+        },
+        {
+          "accountCode": "2101030007",
+          "accountName": "شركة امانه للتامين التعاوني",
+          "expected": "CA-2020",
+          "hybrid": "CA-2035"
+        },
+        {
+          "accountCode": "2101030016",
+          "accountName": "مؤسسة كيان تبوك للمقاولات",
+          "expected": "CA-2010",
+          "hybrid": "CA-2050"
+        },
+        {
+          "accountCode": "2101030017",
+          "accountName": "مؤسسة فهد حسين الدخيل للمقاولات",
+          "expected": "CA-2010",
+          "hybrid": "CA-1080"
+        }
+      ]
+    },
+    {
+      "category": "Assets",
+      "count": 128,
+      "top_patterns": [
+        "Prefix:1105*",
+        "محمد",
+        "عهدة",
+        "عهده",
+        "Prefix:2103*",
+        "ايجار",
+        "Prefix:1106*",
+        "Prefix:1107*"
+      ],
+      "sample_accounts": [
+        {
+          "accountCode": "1101020012",
+          "accountName": "محفظة اسهم العربى 4800298517",
+          "expected": "CA-1040",
+          "hybrid": "CA-1080"
+        },
+        {
+          "accountCode": "1103370198",
+          "accountName": "مبالغ محتجزة-مستشفي قوي الامن-الدمام",
+          "expected": "CA-1040",
+          "hybrid": "CA-1080"
+        },
+        {
+          "accountCode": "1103370199",
+          "accountName": "مبالغ محتجزة-الهيئة الملكية(الدحو)",
+          "expected": "CA-1040",
+          "hybrid": "CA-2035"
+        },
+        {
+          "accountCode": "1103370202",
+          "accountName": "مبالغ محتجزة قوي الامن الدمام 2",
+          "expected": "CA-1040",
+          "hybrid": "CA-1020"
+        },
+        {
+          "accountCode": "1103370203",
+          "accountName": "مبالغ محتجزة-هيئة الزكاة والجمارك",
+          "expected": "CA-1040",
+          "hybrid": "CA-2035"
+        }
+      ]
+    },
+    {
+      "category": "Expenses",
+      "count": 11,
+      "top_patterns": [
+        "Prefix:3101*",
+        "تذاكر",
+        "السفر",
+        "رسوم",
+        "سيارات",
+        "تامين",
+        "انتقالات",
+        "مأمورية"
+      ],
+      "sample_accounts": [
+        {
+          "accountCode": "3101010006",
+          "accountName": "تذاكر السفر",
+          "expected": "CA-5070",
+          "hybrid": "CA-4010"
+        },
+        {
+          "accountCode": "3101010006-1",
+          "accountName": "تذاكر السفر",
+          "expected": "CA-5070",
+          "hybrid": "CA-4010"
+        },
+        {
+          "accountCode": "3101010009",
+          "accountName": "تامين طبي",
+          "expected": "CA-5070",
+          "hybrid": "CA-5020"
+        },
+        {
+          "accountCode": "3101010010",
+          "accountName": "انتقالات",
+          "expected": "CA-5070",
+          "hybrid": "CA-4010"
+        },
+        {
+          "accountCode": "3101010012",
+          "accountName": "بدل مأمورية-الادارة",
+          "expected": "CA-5070",
+          "hybrid": "CA-4010"
+        }
+      ]
+    },
+    {
+      "category": "Cash",
+      "count": 9,
+      "top_patterns": [
+        "Prefix:1101*",
+        "بنك الرياض",
+        "الرياض",
+        "البنك",
+        "السعودي",
+        "بنك العربي",
+        "العربي",
+        "وديعه"
+      ],
+      "sample_accounts": [
+        {
+          "accountCode": "1101020001",
+          "accountName": "بنك الرياض",
+          "expected": "CA-1010",
+          "hybrid": "CA-2050"
+        },
+        {
+          "accountCode": "1101020002",
+          "accountName": "البنك العربي",
+          "expected": "CA-1010",
+          "hybrid": "CA-2050"
+        },
+        {
+          "accountCode": "1101020008",
+          "accountName": "وديعه بنك الرياض",
+          "expected": "CA-1010",
+          "hybrid": "CA-2040"
+        },
+        {
+          "accountCode": "1101020016",
+          "accountName": "بنك الرياض- الخدمات البيئية والمنزلية",
+          "expected": "CA-1010",
+          "hybrid": "CA-4020"
+        },
+        {
+          "accountCode": "1101020017",
+          "accountName": "بنك الجزيرة",
+          "expected": "CA-1010",
+          "hybrid": "CA-2050"
+        }
+      ]
+    },
+    {
+      "category": "Equity",
+      "count": 1,
+      "top_patterns": [
+        "أرباح",
+        "وخسائر",
+        "مستبقاة",
+        "Prefix:2404*"
+      ],
+      "sample_accounts": [
+        {
+          "accountCode": "2404010001",
+          "accountName": "أرباح وخسائر مستبقاة",
+          "expected": "CA-3020",
+          "hybrid": "CA-2030"
+        }
+      ]
+    }
+  ]
+}
