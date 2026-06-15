@@ -1699,7 +1699,11 @@ export async function createApprovalRecord(params: {
       const { promoteFinancialStatementsOnApproval } = await import(
         "@/lib/audit/governance"
       );
-      await promoteFinancialStatementsOnApproval(params.engagementId);
+      await promoteFinancialStatementsOnApproval(
+        params.engagementId,
+        params.actorId ?? "system",
+        params.actorName ?? "System",
+      );
     } catch (promoteErr) {
       console.error(
         `[AuditOS] FS promotion on approval failed for ${params.engagementId}`,

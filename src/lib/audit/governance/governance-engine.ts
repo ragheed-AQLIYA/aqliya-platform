@@ -106,10 +106,15 @@ export async function assertFactoryApprovalGatesPass(
 
 export async function promoteFinancialStatementsOnApproval(
   engagementId: string,
+  actorId: string,
+  actorName: string,
 ): Promise<number> {
-  const result = await prisma.auditFinancialStatement.updateMany({
-    where: { engagementId, status: { not: "approved" } },
-    data: { status: "approved" },
-  });
-  return result.count;
+  const { approveAllFinancialStatementsForEngagement } = await import(
+    "@/lib/audit/fs-engine"
+  );
+  return approveAllFinancialStatementsForEngagement(
+    engagementId,
+    actorId,
+    actorName,
+  );
 }
