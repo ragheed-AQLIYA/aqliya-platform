@@ -1,0 +1,174 @@
+# ============================================================
+# Skill: ROI Analysis (L3 Business)
+# ============================================================
+# Purpose: Analyze return on investment for product features,
+# engineering initiatives, and platform decisions. Evaluates
+# development cost, maintenance cost, expected benefit, risk
+# factors, and time-to-value.
+# ============================================================
+
+id: "skill:business:roi-analysis"
+name: "ROI Analysis"
+nameAr: "تحليل العائد على الاستثمار"
+version: "0.1.0"
+description: >
+  Analyze return on investment for product features, engineering
+  initiatives, and strategic decisions. Evaluates development
+  cost, ongoing maintenance cost, expected business benefit,
+  risk factors, time-to-value, and break-even horizon.
+descriptionAr: >
+  تحليل العائد على الاستثمار لميزات المنتجات والمبادرات الهندسية
+  والقرارات الاستراتيجية. يقيم تكلفة التطوير والصيانة والفائدة
+  المتوقعة وعوامل المخاطرة ووقت تحقيق القيمة
+category: "business"
+level: 3
+tags:
+  - "roi"
+  - "investment"
+  - "cost-analysis"
+  - "business-case"
+  - "prioritization"
+products:
+  - "*"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "product-management"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Requires nuanced cost-benefit reasoning and business context"
+  existingInfrastructure:
+    - "Project tracking data"
+    - "Effort estimation practices"
+
+inputs:
+  required:
+    - name: "initiativeDescription"
+      type: "string"
+      description: "Description of the initiative to analyze"
+  optional:
+    - name: "estimatedDevCost"
+      type: "number"
+      description: "Estimated development cost in person-days"
+    - name: "timeHorizon"
+      type: "number"
+      description: "Analysis time horizon in months"
+      default: 12
+    - name: "includeRisk"
+      type: "boolean"
+      description: "Include risk-adjusted ROI"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "ROI analysis with cost, benefit, break-even, and risk-adjusted returns"
+  artifacts:
+    - name: "roi-report"
+      type: "report"
+      description: "Full ROI analysis report"
+    - name: "sensitivity-matrix"
+      type: "data"
+      description: "Sensitivity analysis across key variables"
+    - name: "recommendation"
+      type: "data"
+      description: "Go/No-Go recommendation with rationale"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "analyze-cost"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze costs for initiative: {{inputs.initiativeDescription}}
+            Estimated development: {{inputs.estimatedDevCost}} person-days
+            Time horizon: {{inputs.timeHorizon}} months
+            
+            1. Estimate development cost (direct)
+            2. Estimate ongoing maintenance cost
+            3. Estimate operational/infrastructure cost
+            4. Estimate opportunity cost
+          model: "high"
+          temperature: 0.2
+      - id: "analyze-benefit"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze expected benefits for: {{inputs.initiativeDescription}}
+            
+            1. Direct revenue impact
+            2. Cost savings/efficiency gains
+            3. Strategic value (competitive advantage, market position)
+            4. Risk reduction value
+            Timeframe: {{inputs.timeHorizon}} months
+          model: "high"
+          temperature: 0.2
+      - id: "calculate-roi"
+        type: "prompt"
+        config:
+          prompt: |
+            Calculate ROI:
+            Costs: {{steps.analyze-cost.output}}
+            Benefits: {{steps.analyze-benefit.output}}
+            
+            Include: net ROI, payback period, risk-adjusted ROI,
+            sensitivity analysis, and final recommendation.
+          model: "high"
+          temperature: 0.1
+  timeout: 300
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "cost-accuracy"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.70
+      metric: "cost-estimate-reasonableness"
+    - name: "benefit-completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "benefit-category-coverage"
+    - name: "methodology"
+      type: "quality"
+      weight: 0.40
+      threshold: 0.75
+      metric: "roi-methodology-soundness"
+  datasets:
+    - name: "roi-samples-v1"
+      path: ".skills/evaluations/skill:business:roi-analysis/datasets/v1.yaml"
+  frequency: "per-execution"
+
+governance:
+  access:
+    roles: ["admin", "product-manager", "executive"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "moderate"

@@ -1,0 +1,66 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:meta:skill-auditor (v1)
+# 3 samples: full registry audit, single skill audit, governance
+# ============================================================
+version: 1
+skillId: "skill:meta:skill-auditor"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for skill registry auditing"
+samples:
+  - id: "sample-001"
+    description: "Full skill registry audit — validate all manifests against schema"
+    input:
+      target: "all"
+      auditScope: ["schema", "datasets", "governance", "dependencies"]
+    expected:
+      outputType: "skill_audit_report"
+      totalSkills: "number"
+      validManifests: "number"
+      invalidManifests: "number"
+      withDatasets: "number"
+      withCriteria: "number"
+      schemaViolations: "array of {skillId, field, issue}"
+      governanceIssues: "array of {skillId, policy, violation}"
+      dependencyIssues: "array of {skillId, issue}"
+      overallHealth: "string — score percentage"
+    tags:
+      - "baseline"
+      - "full-audit"
+  - id: "sample-002"
+    description: "Single skill audit — deep validation of one manifest"
+    input:
+      targetSkill: "skill:foundation:repo-analysis"
+      auditScope: ["schema", "datasets", "governance"]
+    expected:
+      outputType: "skill_audit_report"
+      skillId: "string"
+      skillName: "string"
+      schemaCompliant: "boolean"
+      structureIssues: "array of string"
+      datasetFreshness: "string — dataset last updated"
+      datasetCoverage: "string — samples count"
+      criteriaCompleteness: "string — criteria assessment"
+      governanceCheck: "string — policy compliance"
+      recommendations: "array of string"
+      overallGrade: "string — A/B/C/D/F"
+    tags:
+      - "baseline"
+      - "single-skill"
+  - id: "sample-003"
+    description: "Dependency graph audit — detect circular/broken references"
+    input:
+      target: "all"
+      auditScope: ["dependencies"]
+    expected:
+      outputType: "skill_audit_report"
+      totalSkills: "number"
+      dependencyEdges: "number"
+      circularDependencies: "array of {cycle}"
+      brokenReferences: "array of {source, target, issue}"
+      orphanSkills: "array of string — no dependents"
+      highlyDependedUpon: "array of {skillId, dependentCount}"
+      dependencyHealth: "string — score"
+      recommendations: "array of string"
+    tags:
+      - "baseline"
+      - "dependencies"

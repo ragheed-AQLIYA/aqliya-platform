@@ -1,0 +1,69 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:meta:skill-builder (v1)
+# 3 samples: generate from pattern, from requirements, validate
+# ============================================================
+version: 1
+skillId: "skill:meta:skill-builder"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for skill manifest generation"
+samples:
+  - id: "sample-001"
+    description: "Generate a new skill manifest by analyzing a codebase pattern"
+    input:
+      pattern: "governance-rules-service"
+      description: "Skill to analyze governance rule configurations across products"
+      category: "engineering"
+    expected:
+      outputType: "skill_manifest_output"
+      generated: "boolean"
+      skillId: "string — skill:engineering:governance-rules"
+      name: "string"
+      hasSchemaCompliantFields: "boolean"
+      hasWorkflow: "boolean"
+      hasEvaluationCriteria: "boolean"
+      complete: "boolean — all required fields present"
+      warnings: "array of string"
+    tags:
+      - "baseline"
+      - "code-pattern"
+  - id: "sample-002"
+    description: "Generate a skill manifest from user requirements"
+    input:
+      requirements: "A skill that reviews Arabic content for local content compliance"
+      category: "product"
+      level: 2
+    expected:
+      outputType: "skill_manifest_output"
+      generated: "boolean"
+      skillId: "string"
+      name: "string"
+      hasArabicSupport: "boolean"
+      hasWorkflow: "boolean"
+      hasEvaluationCriteria: "boolean"
+      complete: "boolean"
+      warnings: "array of string"
+      suggestedCategory: "string"
+      suggestedLevel: "number"
+    tags:
+      - "baseline"
+      - "requirements"
+  - id: "sample-003"
+    description: "Generate skill manifest and validate against schema"
+    input:
+      pattern: "data-export"
+      description: "Skill that exports evaluation data to multiple formats"
+      category: "engineering"
+      validateResult: true
+    expected:
+      outputType: "skill_manifest_output"
+      generated: "boolean"
+      skillId: "string"
+      name: "string"
+      complete: "boolean"
+      validationPassed: "boolean"
+      validationErrors: "array of string"
+      warnings: "array of string"
+      totalFields: "number"
+    tags:
+      - "baseline"
+      - "validation"

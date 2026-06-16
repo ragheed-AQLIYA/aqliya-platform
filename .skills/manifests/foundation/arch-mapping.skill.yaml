@@ -1,0 +1,153 @@
+# ============================================================
+# Skill: Architecture Mapping (L0 Foundation)
+# ============================================================
+# Purpose: Map architecture layers, component relationships,
+# data flow, and service boundaries.
+# Reuses: AI Orchestrator, Governance Framework, RAG
+# ============================================================
+
+id: "skill:foundation:arch-mapping"
+name: "Architecture Mapping"
+nameAr: "رسم الخرائط المعمارية"
+version: "0.1.0"
+description: >
+  Map architecture layers, component relationships, data flow patterns,
+  and service boundaries. Produces an architecture model with identified
+  layers, component dependencies, and boundary analysis.
+descriptionAr: >
+  رسم طبقات العمارة، علاقات المكونات، أنماط تدفق البيانات،
+  وحدود الخدمات. ينتج نموذجاً معمارياً مع الطبقات المحددة
+category: "foundation"
+level: 0
+tags:
+  - "architecture"
+  - "mapping"
+  - "components"
+  - "data-flow"
+  - "boundaries"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:doc-analysis"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+  dataSources:
+    - "filesystem"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Repository path or module path"
+  optional:
+    - name: "depth"
+      type: "string"
+      description: "Mapping depth: 'layers' | 'components' | 'data-flow' | 'full'"
+      default: "full"
+
+outputs:
+  primary:
+    type: "object"
+    description: "Architecture model with layer map, component diagram, and data flow"
+  artifacts:
+    - name: "architecture-model"
+      type: "data"
+      description: "Structured architecture model"
+    - name: "component-graph"
+      type: "graph"
+      description: "Component dependency graph"
+    - name: "boundary-report"
+      type: "report"
+      description: "Service boundary analysis"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-structure"
+        type: "prompt"
+        config:
+          prompt: >
+            Scan the project at {{inputs.targetPath}} and identify architectural
+            layers: app, components, lib, actions, api routes. Map component
+            relationships and data flow directions.
+          model: "fast"
+          temperature: 0.1
+      - id: "identify-patterns"
+        type: "prompt"
+        config:
+          prompt: >
+            From the structural scan above, identify architectural patterns in use:
+            - Server/Client boundaries
+            - Data access patterns
+            - State management approach
+            - Module dependency direction
+            - Governance layer usage
+          model: "medium"
+          temperature: 0.2
+      - id: "generate-map"
+        type: "transform"
+        config:
+          strategy: "aggregate"
+          inputs:
+            - from: "scan-structure"
+              key: "structure"
+            - from: "identify-patterns"
+              key: "patterns"
+  timeout: 180
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "accuracy"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.70
+      metric: "layer-identification-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "component-coverage"
+    - name: "consistency"
+      type: "consistency"
+      weight: 0.30
+      threshold: 0.65
+      metric: "output-consistency"
+  datasets:
+    - name: "arch-samples-v1"
+      path: ".skills/evaluations/skill:foundation:arch-mapping/datasets/v1.yaml"
+      description: "Sample architectures for validation"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer", "auditor", "reviewer", "system"]
+    requireAuth: false
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: false
+  review:
+    required: true
+    interval: "180d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "moderate"

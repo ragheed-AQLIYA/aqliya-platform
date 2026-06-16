@@ -1,0 +1,169 @@
+# ============================================================
+# Skill: Tech Debt Analysis (L1 Engineering)
+# ============================================================
+# Purpose: Analyze and quantify technical debt across the codebase.
+# Identifies TODO/FIXME/XXX markers, deprecated API usage,
+# outdated dependencies, code complexity hotspots, missing tests,
+# and structural debt. Produces a prioritized remediation plan.
+# ============================================================
+
+id: "skill:engineering:tech-debt"
+name: "Tech Debt Analysis"
+nameAr: "تحليل الديون التقنية"
+version: "0.1.0"
+description: >
+  Quantify technical debt across the repository. Scans for TODO/FIXME/XXX
+  markers, deprecated API usage, outdated dependencies in package.json,
+  high-complexity functions, modules missing tests, hardcoded config,
+  and architectural drift. Produces a prioritized remediation plan
+  with estimated effort and risk.
+descriptionAr: >
+  قياس الديون التقنية عبر المستودع. يفحص علامات TODO وFIXME واستخدام
+  الواجهات القديمة والتبعيات القديمة والدوال عالية التعقيد والوحدات
+  غير المختبرة. ينتج خطة معالجة ذات أولوية
+category: "engineering"
+level: 1
+tags:
+  - "tech-debt"
+  - "code-quality"
+  - "maintainability"
+  - "refactoring"
+  - "remediation"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:dependency-map"
+    - "skill:foundation:doc-analysis"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+    reason: "Classification and pattern detection — deployable on local models"
+  existingInfrastructure:
+    - "dependency scanning (npm audit)"
+    - "complexity analysis (radon, plato)"
+    - "code search (ripgrep, grep)"
+
+inputs:
+  required:
+    - name: "scanScope"
+      type: "string"
+      description: "Scope: full | module:<path> | pattern:<glob>"
+  optional:
+    - name: "includeDependencies"
+      type: "boolean"
+      description: "Scan npm dependencies for outdated/packages"
+      default: true
+    - name: "minSeverity"
+      type: "string"
+      description: "Minimum severity to report: low|medium|high|critical"
+      default: "low"
+    - name: "maxResults"
+      type: "number"
+      description: "Maximum debt items to report"
+      default: 50
+
+outputs:
+  primary:
+    type: "object"
+    description: "Tech debt report with categorized findings and remediation"
+  artifacts:
+    - name: "debt-inventory"
+      type: "report"
+      description: "All identified debt items with severity"
+    - name: "remediation-plan"
+      type: "report"
+      description: "Prioritized remediation recommendations with effort estimates"
+    - name: "debt-trend"
+      type: "data"
+      description: "Debt metrics for trend tracking over time"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-markers"
+        type: "prompt"
+        config:
+          prompt: |
+            Scan the codebase for technical debt markers in {{inputs.scanScope}}:
+            1. Count TODO/FIXME/XXX/HACK comments
+            2. Identify deprecated API usage
+            3. Identify hardcoded configuration values
+            4. Detect console.log statements in production code
+          model: "medium"
+          temperature: 0.1
+      - id: "analyze-complexity"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze code complexity in {{inputs.scanScope}}:
+            1. Identify functions with high cyclomatic complexity
+            2. Detect deeply nested conditionals
+            3. Identify long functions (>100 lines)
+            4. Detect duplicated code blocks
+          model: "medium"
+          temperature: 0.1
+      - id: "produce-remediation"
+        type: "prompt"
+        config:
+          prompt: |
+            Based on findings, produce a prioritized remediation plan:
+            - Markers: {{steps.scan-markers.output}}
+            - Complexity: {{steps.analyze-complexity.output}}
+            
+            For each item: severity, effort (estimate), risk, and recommendation.
+          model: "medium"
+          temperature: 0.2
+  timeout: 180
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "detection-accuracy"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.75
+      metric: "debt-detection-hit-rate"
+    - name: "severity-calibration"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.70
+      metric: "severity-rating-agreement"
+    - name: "actionability"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.70
+      metric: "actionable-recommendation-rate"
+  datasets:
+    - name: "debt-samples-v1"
+      path: ".skills/evaluations/skill:engineering:tech-debt/datasets/v1.yaml"
+  frequency: "weekly"
+
+governance:
+  access:
+    roles: ["admin", "developer"]
+    requireAuth: true
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"

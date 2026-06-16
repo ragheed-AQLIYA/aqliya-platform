@@ -1,0 +1,66 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:product:salesos-review (v1)
+# 3 samples: account review, pipeline review, governance flags
+# ============================================================
+version: 1
+skillId: "skill:product:salesos-review"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for SalesOS review"
+samples:
+  - id: "sample-001"
+    description: "Account data completeness and stakeholder coverage review"
+    input:
+      accountId: "sales-acct-001"
+      reviewScope: "account"
+      governanceCheck: true
+    expected:
+      outputType: "sales_review_report"
+      accountId: "string"
+      dataCompleteness: "number"
+      stakeholderCoverage: "number"
+      memoryPopulated: "boolean"
+      interactionFreshness: "string"
+      completenessIssues: "array of {field, status, recommendation}"
+      governanceFlags: "array of {claim, risk, recommendation}"
+      qualityScore: "number"
+    tags:
+      - "baseline"
+      - "account"
+  - id: "sample-002"
+    description: "Pipeline opportunity review — stage accuracy, stale deals, next actions"
+    input:
+      accountId: "sales-acct-001"
+      reviewScope: "pipeline"
+    expected:
+      outputType: "sales_review_report"
+      accountId: "string"
+      totalOpportunities: "number"
+      accurateStage: "number"
+      stageIssues: "number"
+      staleCount: "number"
+      opportunities: "array of {name, stage, stageAccuracy, nextAction, stale}"
+      pipelineHealth: "string"
+      qualityScore: "number"
+    tags:
+      - "baseline"
+      - "pipeline"
+  - id: "sample-003"
+    description: "Full account review with governance-sensitive claims detection"
+    input:
+      accountId: "sales-acct-002"
+      reviewScope: "full"
+      governanceCheck: true
+    expected:
+      outputType: "sales_review_report"
+      accountId: "string"
+      overallQualityScore: "number"
+      accountQuality: "number"
+      pipelineQuality: "number"
+      interactionQuality: "number"
+      governanceFlags: "array of {claim, type, risk, recommendation}"
+      governanceRisks: "array of {statement, policy, severity}"
+      recommendations: "array of string"
+      reviewSummary: "string"
+    tags:
+      - "baseline"
+      - "full-account"

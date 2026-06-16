@@ -1,0 +1,66 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:meta:skill-optimizer (v1)
+# 3 samples: optimize single skill, batch optimize, cost analysis
+# ============================================================
+version: 1
+skillId: "skill:meta:skill-optimizer"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for skill optimization"
+samples:
+  - id: "sample-001"
+    description: "Optimize a single skill for latency and token cost"
+    input:
+      targetSkill: "skill:foundation:repo-analysis"
+      optimizationGoal: "latency_reduction"
+      constraints: ["accuracy >= 0.8", "cost < current"]
+    expected:
+      outputType: "optimization_result"
+      skillId: "string"
+      optimized: "boolean"
+      currentLatency: "string"
+      estimatedLatencyAfter: "string"
+      currentTokenCost: "string"
+      estimatedTokenCostAfter: "string"
+      suggestedChanges: "array of {component, before, after, impact}"
+      tradeoffs: "array of {change, benefit, risk}"
+      confidenceScore: "number"
+    tags:
+      - "baseline"
+      - "latency"
+  - id: "sample-002"
+    description: "Batch optimize all meta skills for governance compliance"
+    input:
+      targetLevel: 4
+      optimizationGoal: "governance_strengthening"
+      constraints: ["pass existing criteria", "no new dependencies"]
+    expected:
+      outputType: "optimization_result"
+      totalSkills: "number"
+      optimized: "number"
+      skipped: "array of {skillId, reason}"
+      governanceImprovements: "array of {skillId, changes, impact}"
+      costProjection: "string"
+      recommendations: "array of string"
+    tags:
+      - "baseline"
+      - "governance"
+  - id: "sample-003"
+    description: "Cost analysis and model downgrade recommendations"
+    input:
+      targetSkill: "skill:engineering:security-audit"
+      optimizationGoal: "cost_reduction"
+      constraints: ["accuracy >= 0.75", "same capability"]
+    expected:
+      outputType: "optimization_result"
+      skillId: "string"
+      currentModel: "string"
+      recommendedModel: "string"
+      currentCostPerRun: "string"
+      estimatedCostPerRun: "string"
+      accuracyImpact: "string — estimated accuracy change"
+      annualSavings: "string"
+      safetyAssessment: "string — governance risk of downgrade"
+      recommendation: "string"
+    tags:
+      - "baseline"
+      - "cost"

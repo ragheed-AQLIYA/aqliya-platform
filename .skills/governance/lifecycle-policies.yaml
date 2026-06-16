@@ -1,0 +1,111 @@
+# ============================================================
+# AQLIYA Skill Lifecycle Policies v1.0
+# ============================================================
+# Defines lifecycle transitions, gates, and review cadence.
+# ============================================================
+
+version: 1
+updatedAt: "2026-06-15T22:00:00Z"
+
+transitions:
+  concept_to_draft:
+    from: "concept"
+    to: "draft"
+    criteria:
+      - "Manifest has valid schema"
+      - "All required fields are populated"
+      - "Dependency references are valid"
+    approver: "skill-owner"
+
+  draft_to_validated:
+    from: "draft"
+    to: "validated"
+    criteria:
+      - "Evaluation passes minimum threshold"
+      - "At least one test case passes"
+      - "Workflow is syntactically valid"
+      - "Governance policies are defined"
+    approver: "skill-auditor"
+
+  validated_to_published:
+    from: "validated"
+    to: "published"
+    criteria:
+      - "Evaluation meets target threshold"
+      - "Documentation is complete"
+      - "Governance board approved"
+      - "Dependency skills are published"
+      - "Security review passed (if L1+)"
+    approver: "governance-board"
+    auditLevel: "all"
+
+  published_to_deprecated:
+    from: "published"
+    to: "deprecated"
+    criteria:
+      - "Replacement skill exists OR"
+      - "Quality below minimum for 2 consecutive evaluations OR"
+      - "Owner explicitly requests deprecation"
+    approver: "governance-board"
+    notifyUsers: true
+
+  deprecated_to_retired:
+    from: "deprecated"
+    to: "retired"
+    criteria:
+      - "30 days in deprecated status OR"
+      - "Emergency retirement required"
+    approver: "governance-board"
+    archivePath: ".skills/archive/"
+
+reviewCadence:
+  foundation:
+    interval: "180d"
+    triggerThreshold: 0.70
+    description: "L0 skills reviewed every 180 days or on quality drop below 0.70"
+  
+  engineering:
+    interval: "90d"
+    triggerThreshold: 0.75
+    description: "L1 skills reviewed every 90 days or on quality drop below 0.75"
+  
+  product:
+    interval: "60d"
+    triggerThreshold: 0.80
+    description: "L2 skills reviewed every 60 days or on quality drop below 0.80"
+  
+  business:
+    interval: "30d"
+    triggerThreshold: 0.80
+    description: "L3 skills reviewed every 30 days or on quality drop below 0.80"
+  
+  meta:
+    interval: "30d"
+    triggerThreshold: 0.85
+    description: "L4 skills reviewed every 30 days or on quality drop below 0.85"
+
+qualityThresholds:
+  critical:
+    range: [0.00, 0.49]
+    label: "Critical"
+    action: "Auto-flagged. Cannot be used in production. Notify owner."
+
+  belowMinimum:
+    range: [0.50, 0.69]
+    label: "Below Minimum"
+    action: "Skill is degraded. Can be used with warnings. Scheduled review required."
+
+  meetsMinimum:
+    range: [0.70, 0.84]
+    label: "Meets Minimum"
+    action: "Usable. Standard monitoring."
+
+  meetsTarget:
+    range: [0.85, 0.94]
+    label: "Meets Target"
+    action: "Good quality. Target for most skills."
+
+  excellent:
+    range: [0.95, 1.00]
+    label: "Excellent"
+    action: "Exceptional quality. May be used as reference."

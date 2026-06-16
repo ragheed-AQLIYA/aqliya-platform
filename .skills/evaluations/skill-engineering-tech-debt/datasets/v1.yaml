@@ -1,0 +1,107 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:engineering:tech-debt (v1)
+# 3 real samples: full repo, AI module, skill-runtime module
+# ============================================================
+version: 1
+skillId: "skill:engineering:tech-debt"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples — full repo scan, AI module, skill-runtime module"
+samples:
+  - id: "sample-001"
+    description: "Full repository tech debt scan — all source files"
+    input:
+      scanScope: "full"
+      includeDependencies: true
+      minSeverity: "low"
+      maxResults: 50
+    expected:
+      outputType: "tech_debt_report"
+      hasFindings: true
+      findingCount: "number (20-50)"
+      items: "array of objects with path, category, severity, description, effort, impact"
+      dependencyAnalysis:
+        totalDependencies: "number (from package.json)"
+        outdatedThreshold: "6+ months"
+        vulnerablePackages: "array of name, currentVersion, recommendedVersion, severity"
+      categories:
+        - "unused exports"
+        - "duplicate code"
+        - "overly complex functions (cyclomatic complexity > 10)"
+        - "missing error handling"
+        - "hardcoded values"
+        - "TODO/FIXME comments"
+        - "large files (> 300 lines)"
+        - "inconsistent naming conventions"
+      largeFiles:
+        - "prisma/schema.prisma"
+        - "prisma/seed.ts"
+        - "src/middleware.ts (312 lines)"
+        - "src/lib/skill-runtime/runtime.ts (846 lines)"
+        - "src/lib/ai/orchestrator.ts (383 lines)"
+    tags:
+      - "baseline"
+      - "full-scan"
+      - "tech-debt"
+
+  - id: "sample-002"
+    description: "AI module tech debt scan — src/lib/ai/"
+    input:
+      scanScope: "module:src/lib/ai"
+      includeDependencies: false
+      minSeverity: "low"
+      maxResults: 50
+    expected:
+      outputType: "tech_debt_report"
+      hasFindings: true
+      findingCount: "number (10-20)"
+      items: "array of objects with path, category, severity, description, effort, impact"
+      submodulesScanned:
+        - "orchestrator.ts — governance logic mixed with provider routing"
+        - "hybrid-router.ts — conditional provider branching"
+        - "provider-router.ts — provider selection logic"
+        - "governed-ai-executor.ts — execution with governance hooks"
+        - "eval-gate.ts — evaluation gating logic"
+        - "budget-manager.ts — budget enforcement"
+        - "spend-tracker.ts — cost tracking"
+        - "prompt-registry.ts — prompt assembly"
+      findings:
+        - "orchestrator.ts has high cyclomatic complexity (provider selection + governance + budget)"
+        - "governed-ai-executor.ts may duplicate governance checks from orchestrator"
+        - "README.md exists but is documentation, not code debt"
+    tags:
+      - "baseline"
+      - "ai"
+      - "module-scan"
+
+  - id: "sample-003"
+    description: "Skill runtime tech debt scan — src/lib/skill-runtime/ (limited to 20 results)"
+    input:
+      scanScope: "module:src/lib/skill-runtime"
+      includeDependencies: false
+      minSeverity: "low"
+      maxResults: 20
+    expected:
+      outputType: "tech_debt_report"
+      hasFindings: true
+      findingCount: "number (5-15)"
+      maxResultsApplied: 20
+      items: "array of objects with path, category, severity, description, effort, impact"
+      filesScanned:
+        - "runtime.ts (846 lines — largest file in module)"
+        - "evaluator.ts"
+        - "evaluator-types.ts"
+        - "types.ts"
+        - "index.ts"
+      findings:
+        - "runtime.ts is very large (846 lines) — consider splitting into submodules"
+        - "sync file I/O (readFileSync) at runtime — consider async or caching"
+        - "YAML loading on every execution — consider manifest cache"
+        - "step execution loop is sequential — consider parallel step dispatch"
+      limitedBy:
+        parameter: "maxResults"
+        value: 20
+    tags:
+      - "baseline"
+      - "skill-runtime"
+      - "module-scan"
+      - "limited-results"

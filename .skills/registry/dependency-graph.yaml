@@ -1,0 +1,179 @@
+# ============================================================
+# AQLIYA Skill Dependency Graph v1.0
+# ============================================================
+# Directed acyclic graph (DAG) of skill dependencies.
+# A skill can only depend on skills at the same or lower level.
+# ============================================================
+
+version: 1
+updatedAt: "2026-06-15T22:00:00Z"
+
+edges:
+  # ─── L0 → L0 (self-level deps) ───
+  - from: "skill:foundation:doc-analysis"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:foundation:arch-mapping"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:foundation:arch-mapping"
+    to: "skill:foundation:doc-analysis"
+    type: "requires"
+
+  - from: "skill:foundation:dependency-map"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:foundation:knowledge-extract"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:foundation:knowledge-extract"
+    to: "skill:foundation:doc-analysis"
+    type: "requires"
+
+  - from: "skill:foundation:knowledge-extract"
+    to: "skill:foundation:arch-mapping"
+    type: "requires"
+
+  # ─── L1 → L0 ───
+  - from: "skill:engineering:security-audit"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:engineering:security-audit"
+    to: "skill:foundation:arch-mapping"
+    type: "recommends"
+
+  - from: "skill:engineering:migration-audit"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:engineering:migration-audit"
+    to: "skill:foundation:dependency-map"
+    type: "requires"
+
+  - from: "skill:engineering:performance-review"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:engineering:performance-review"
+    to: "skill:foundation:dependency-map"
+    type: "requires"
+
+  - from: "skill:engineering:test-coverage"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:engineering:test-coverage"
+    to: "skill:foundation:arch-mapping"
+    type: "recommends"
+
+  - from: "skill:engineering:release-audit"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:engineering:release-audit"
+    to: "skill:foundation:doc-analysis"
+    type: "requires"
+
+  - from: "skill:engineering:tech-debt"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:engineering:tech-debt"
+    to: "skill:foundation:arch-mapping"
+    type: "requires"
+
+  - from: "skill:engineering:tech-debt"
+    to: "skill:foundation:dependency-map"
+    type: "requires"
+
+  # ─── L2 → L0 + L1 ───
+  - from: "skill:product:auditos-review"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"
+
+  - from: "skill:product:auditos-review"
+    to: "skill:engineering:security-audit"
+    type: "recommends"
+
+  - from: "skill:product:localcontent-review"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"
+
+  - from: "skill:product:salesos-review"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"
+
+  - from: "skill:product:complianceos-review"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"
+
+  # ─── L3 → L0 + L2 ───
+  - from: "skill:business:commercial-validation"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:business:commercial-validation"
+    to: "skill:foundation:doc-analysis"
+    type: "requires"
+
+  - from: "skill:business:roi-analysis"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"
+
+  - from: "skill:business:pricing-analysis"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"
+
+  - from: "skill:business:market-assessment"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"
+
+  - from: "skill:business:product-positioning"
+    to: "skill:foundation:doc-analysis"
+    type: "requires"
+
+  - from: "skill:business:product-positioning"
+    to: "skill:business:commercial-validation"
+    type: "recommends"
+
+  # ─── L4 → ALL ───
+  - from: "skill:meta:skill-builder"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:meta:skill-builder"
+    to: "skill:foundation:doc-analysis"
+    type: "requires"
+
+  - from: "skill:meta:skill-builder"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"
+
+  - from: "skill:meta:skill-auditor"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:meta:skill-auditor"
+    to: "skill:foundation:doc-analysis"
+    type: "requires"
+
+  - from: "skill:meta:skill-optimizer"
+    to: "skill:meta:skill-evaluator"
+    type: "requires"
+
+  - from: "skill:meta:skill-composer"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:meta:skill-evaluator"
+    to: "skill:foundation:repo-analysis"
+    type: "requires"
+
+  - from: "skill:meta:skill-evaluator"
+    to: "skill:foundation:knowledge-extract"
+    type: "requires"

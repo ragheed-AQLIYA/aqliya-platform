@@ -1,0 +1,156 @@
+# ============================================================
+# Skill: Performance Review (L1 Engineering)
+# ============================================================
+# Purpose: Review code performance, identify bottlenecks,
+# and recommend optimizations. Analyzes runtime complexity,
+# resource usage, and performance anti-patterns.
+# ============================================================
+
+id: "skill:engineering:performance-review"
+name: "Performance Review"
+nameAr: "مراجعة الأداء"
+version: "0.1.0"
+description: >
+  Review code performance across modules. Identifies bottlenecks,
+  analyzes complexity (time/space), detects performance anti-patterns
+  (N+1 queries, memory leaks, O(N^2) loops), and recommends
+  targeted optimizations with estimated impact.
+descriptionAr: >
+  مراجعة أداء الكود عبر الوحدات. يحدد الاختناقات ويحلل التعقيد
+  ويكتشف أنماط الأداء السيئة ويوصي بتحسينات مستهدفة مع تقدير الأثر
+category: "engineering"
+level: 1
+tags:
+  - "performance"
+  - "optimization"
+  - "profiling"
+  - "complexity"
+  - "bottlenecks"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:dependency-map"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+  existingInfrastructure:
+    - "TypeScript/JavaScript analyzer"
+    - "Profiling tools (console.time, perf_hooks)"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Path to module or function to analyze"
+  optional:
+    - name: "focus"
+      type: "string"
+      description: "Performance focus area: runtime|memory|network|all"
+      default: "all"
+    - name: "includeNPlusOne"
+      type: "boolean"
+      description: "Detect N+1 query patterns in data access"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Performance review report with findings and recommendations"
+  artifacts:
+    - name: "bottleneck-report"
+      type: "report"
+      description: "Identified performance bottlenecks with severity"
+    - name: "optimization-plan"
+      type: "report"
+      description: "Prioritized optimization recommendations"
+    - name: "complexity-matrix"
+      type: "data"
+      description: "Time/space complexity analysis by function"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-source"
+        type: "prompt"
+        config:
+          prompt: >
+            Scan {{inputs.targetPath}} for performance analysis.
+            Analyze: time complexity of functions, memory allocation patterns,
+            N+1 query patterns (if {{inputs.includeNPlusOne}}), and resource usage.
+            Focus: {{inputs.focus}}
+          model: "medium"
+          temperature: 0.1
+      - id: "identify-bottlenecks"
+        type: "prompt"
+        config:
+          prompt: >
+            From the scan results, identify the top performance bottlenecks.
+            For each: severity (critical/major/minor), estimated impact,
+            root cause, and recommended fix approach.
+          model: "medium"
+          temperature: 0.2
+      - id: "generate-plan"
+        type: "transform"
+        config:
+          strategy: "aggregate"
+          inputs:
+            - from: "scan-source"
+              key: "scanResults"
+            - from: "identify-bottlenecks"
+              key: "bottlenecks"
+  timeout: 120
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "bottleneck-detection"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.70
+      metric: "bottleneck-hit-rate"
+    - name: "recommendation-quality"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.65
+      metric: "optimization-relevance"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "module-coverage"
+  datasets:
+    - name: "perf-samples-v1"
+      path: ".skills/evaluations/skill:engineering:performance-review/datasets/v1.yaml"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer"]
+    requireAuth: true
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: false
+  review:
+    required: true
+    interval: "90d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"

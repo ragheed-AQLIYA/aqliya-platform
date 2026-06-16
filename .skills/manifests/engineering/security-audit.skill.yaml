@@ -1,0 +1,168 @@
+# ============================================================
+# Skill: Security Audit (L1 Engineering)
+# ============================================================
+# Purpose: Audit code for security vulnerabilities, auth gaps,
+# and data exposure risks.
+# Reuses: Governance Framework, RBAC, tenant isolation patterns
+# ============================================================
+
+id: "skill:engineering:security-audit"
+name: "Security Audit"
+nameAr: "تدقيق أمني"
+version: "0.1.0"
+description: >
+  Audit code for security vulnerabilities, authentication gaps,
+  authorization bypasses, data exposure risks, and insecure patterns.
+  Produces a ranked security findings report with severity levels.
+descriptionAr: >
+  تدقيق الكود بحثاً عن الثغرات الأمنية وثغرات المصادقة وتجاوز
+  الصلاحيات ومخاطر تسرب البيانات. ينتج تقريراً مرتباً بمستويات الخطورة
+category: "engineering"
+level: 1
+tags:
+  - "security"
+  - "audit"
+  - "vulnerability"
+  - "auth"
+  - "rbac"
+  - "middleware"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:arch-mapping"
+  models:
+    minCapability: "medium"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Security analysis requires strong reasoning for vulnerability detection"
+  existingInfrastructure:
+    - "Governance Framework (src/lib/governance/)"
+    - "RBAC system"
+    - "Tenant isolation patterns"
+    - "Security middleware patterns"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Path to audit for security issues"
+  optional:
+    - name: "severityFilter"
+      type: "string"
+      description: "Minimum severity to report: 'critical' | 'high' | 'medium' | 'low'"
+      default: "medium"
+    - name: "scanType"
+      type: "string"
+      description: "Scan type: 'auth' | 'data' | 'injection' | 'full'"
+      default: "full"
+
+outputs:
+  primary:
+    type: "object"
+    description: "Security audit report with findings, severity, and remediation"
+  artifacts:
+    - name: "findings"
+      type: "report"
+      description: "Ranked security findings"
+    - name: "remediation"
+      type: "report"
+      description: "Remediation recommendations"
+    - name: "auth-gaps"
+      type: "report"
+      description: "Authentication and authorization gaps"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-files"
+        type: "tool"
+        config:
+          tool: "filesystem:scan"
+          params:
+            path: "{{inputs.targetPath}}"
+            include: ["**/*.ts", "**/*.tsx"]
+      - id: "detect-auth-gaps"
+        type: "prompt"
+        config:
+          prompt: |
+            Review the following files for security issues. Focus on:
+            
+            1. Authentication gaps — routes without auth checks
+            2. Authorization bypasses — missing role/tenant validation
+            3. Data exposure — sensitive data in client bundles
+            4. Injection risks — unvalidated user input in queries
+            5. Insecure patterns — hardcoded secrets, unsafe eval
+            6. Middleware bypasses — routes that bypass security middleware
+            
+            Files:
+            {{steps.scan-files.output}}
+            
+            For each finding, provide:
+            - File and line
+            - Finding description
+            - Severity (critical/high/medium/low)
+            - CWE category where applicable
+            - Remediation suggestion
+          model: "primary"
+          temperature: 0.0
+  timeout: 180
+  maxRetries: 1
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "detection-rate"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.70
+      metric: "vulnerability-detection-rate"
+    - name: "false-positive-rate"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.80
+      metric: "low-false-positive-rate"
+    - name: "severity-accuracy"
+      type: "accuracy"
+      weight: 0.20
+      threshold: 0.70
+      metric: "severity-classification-accuracy"
+  datasets:
+    - name: "security-samples-v1"
+      path: ".skills/evaluations/skill:engineering:security-audit/datasets/v1.yaml"
+      description: "Code samples with known vulnerabilities"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer", "auditor"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "90d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "90d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+    - provider: "local"
+      model: "llama3-70b"
+  fallbackEnabled: true
+  localEquivalent: "deepseek-coder"
+  degradationProfile: "controlled"

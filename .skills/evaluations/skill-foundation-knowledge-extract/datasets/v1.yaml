@@ -1,0 +1,63 @@
+﻿version: 1
+skillId: "skill:foundation:knowledge-extract"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples"
+samples:
+  - id: "sample-001"
+    description: "Full knowledge extraction from the AI infrastructure module into named collection"
+    input:
+      sourcePath: "src/lib/ai/"
+      collectionName: "ai-infrastructure"
+      extractionType: "full"
+      storeInMemory: true
+    expected:
+      outputType: "knowledge_collection"
+      collectionName: "ai-infrastructure"
+      extractionType: "full"
+      entityCount: "number"
+      entities: "array of {name, type, file, description}"
+      relationships: "array of {source, target, relation}"
+      stored: true
+      memoryKey: "string — collection identifier"
+    tags:
+      - "baseline"
+      - "primary-path"
+
+  - id: "sample-002"
+    description: "Knowledge extraction from official platform documentation for reference"
+    input:
+      sourcePath: "docs/official/"
+      collectionName: "platform-docs"
+      extractionType: "full"
+      storeInMemory: true
+    expected:
+      outputType: "knowledge_collection"
+      collectionName: "platform-docs"
+      extractionType: "full"
+      documentCount: "number"
+      extractedConcepts: "array of {concept, document, references}"
+      crossDocLinks: "array of {sourceDoc, targetDoc, commonConcepts}"
+      stored: true
+    tags:
+      - "baseline"
+      - "docs"
+
+  - id: "sample-003"
+    description: "Entity-level knowledge extraction from the skill-runtime module targeting types and interfaces"
+    input:
+      sourcePath: "src/lib/skill-runtime/"
+      collectionName: "skill-runtime"
+      extractionType: "entities"
+      storeInMemory: true
+    expected:
+      outputType: "knowledge_collection"
+      collectionName: "skill-runtime"
+      extractionType: "entities"
+      entityCount: "number"
+      exportedEntities: "array of {name, kind, file, exported}"
+      interfaceDefinitions: "array of {name, properties}"
+      typeAliases: "array of {name, definition}"
+      stored: true
+    tags:
+      - "baseline"
+      - "entities"

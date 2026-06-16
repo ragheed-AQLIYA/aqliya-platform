@@ -1,0 +1,152 @@
+# ============================================================
+# Skill: Documentation Analysis (L0 Foundation)
+# ============================================================
+# Purpose: Read, classify, and cross-reference documentation.
+# Reuses: deterministic handlers, existing doc authority hierarchy
+# ============================================================
+
+id: "skill:foundation:doc-analysis"
+name: "Documentation Analysis"
+nameAr: "تحليل الوثائق"
+version: "0.1.0"
+description: >
+  Read, classify, and cross-reference documentation across the repository.
+  Detects stale documentation, terminology inconsistencies, and
+  broken cross-references. Respects doc authority hierarchy.
+descriptionAr: >
+  قراءة وتصنيف وربط الوثائق عبر المستودع. يكشف الوثائق القديمة،
+  التناقضات في المصطلحات، والمراجع المعطلة. يحترم تسلسل سلطة الوثائق
+category: "foundation"
+level: 0
+tags:
+  - "documentation"
+  - "analysis"
+  - "classification"
+  - "cross-reference"
+  - "consistency"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+  models:
+    minCapability: "low"
+    preferredProvider: "any"
+    localCapable: true
+  dataSources:
+    - "filesystem"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Documentation directory path"
+  optional:
+    - name: "checkConsistency"
+      type: "boolean"
+      description: "Check terminology consistency across docs"
+      default: true
+    - name: "checkReferences"
+      type: "boolean"
+      description: "Check cross-references for broken links"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Documentation analysis with classification, stale detection, and consistency report"
+  artifacts:
+    - name: "doc-index"
+      type: "data"
+      description: "Complete index of all documentation files"
+    - name: "stale-report"
+      type: "report"
+      description: "List of stale or outdated documentation"
+    - name: "consistency-report"
+      type: "report"
+      description: "Terminology consistency analysis"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-docs"
+        type: "prompt"
+        config:
+          prompt: >
+            Scan documentation at {{inputs.targetPath}} and produce a complete
+            index. Classify each document by type (spec, reference, guide, readme).
+            Detect stale files older than 90 days.
+          model: "fast"
+          temperature: 0.1
+      - id: "analyze-consistency"
+        type: "prompt"
+        config:
+          prompt: >
+            Check terminology consistency across docs at {{inputs.targetPath}}.
+            Cross-reference with AQLIYA glossary terms. Flag inconsistencies.
+            Check: {{inputs.checkConsistency}}
+          model: "fast"
+          temperature: 0.2
+      - id: "generate-report"
+        type: "transform"
+        config:
+          strategy: "aggregate"
+          inputs:
+            - from: "scan-docs"
+              key: "docIndex"
+            - from: "analyze-consistency"
+              key: "consistencyReport"
+  timeout: 120
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "accuracy"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.75
+      metric: "classification-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "doc-coverage-ratio"
+    - name: "consistency"
+      type: "consistency"
+      weight: 0.30
+      threshold: 0.70
+      metric: "output-consistency"
+  datasets:
+    - name: "doc-samples-v1"
+      path: ".skills/evaluations/skill:foundation:doc-analysis/datasets/v1.yaml"
+      description: "Sample documentation sets"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer", "auditor", "reviewer", "system"]
+    requireAuth: false
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: false
+  review:
+    required: true
+    interval: "180d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"

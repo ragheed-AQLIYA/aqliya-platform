@@ -1,0 +1,160 @@
+# ============================================================
+# Skill: Knowledge Extraction (L0 Foundation)
+# ============================================================
+# Purpose: Extract structured knowledge from code and documents,
+# building institutional memory and knowledge graph entries.
+# Reuses: InstitutionalMemoryService, Platform Knowledge Graph
+# ============================================================
+
+id: "skill:foundation:knowledge-extract"
+name: "Knowledge Extraction"
+nameAr: "استخراج المعرفة"
+version: "0.1.0"
+description: >
+  Extract structured knowledge from code, documentation, and
+  conversations. Populates institutional memory with entities,
+  relationships, and collections. Enables knowledge graph queries.
+descriptionAr: >
+  استخراج المعرفة المنظمة من الكود والوثائق والمحادثات.
+  يغذي الذاكرة المؤسسية بالكيانات والعلاقات والمجموعات
+category: "foundation"
+level: 0
+tags:
+  - "knowledge"
+  - "extraction"
+  - "institutional-memory"
+  - "knowledge-graph"
+  - "entities"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:doc-analysis"
+    - "skill:foundation:arch-mapping"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+  existingInfrastructure:
+    - "InstitutionalMemoryService (src/lib/platform/institutional-memory/)"
+    - "Platform Knowledge Graph (prisma models: KnowledgeEntity, KnowledgeRelationship, KnowledgeCollection)"
+    - "intelligenceQuery (src/lib/ai/)"
+
+inputs:
+  required:
+    - name: "sourcePath"
+      type: "string"
+      description: "Path to source code or documentation"
+    - name: "collectionName"
+      type: "string"
+      description: "Name for the knowledge collection"
+  optional:
+    - name: "extractionType"
+      type: "string"
+      description: "Type of extraction: 'entities' | 'relationships' | 'full'"
+      default: "full"
+    - name: "storeInMemory"
+      type: "boolean"
+      description: "Persist extracted knowledge to institutional memory"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Extracted knowledge graph with entities, relationships, and provenance"
+  artifacts:
+    - name: "entities"
+      type: "data"
+      description: "Extracted entities with types and metadata"
+    - name: "relationships"
+      type: "graph"
+      description: "Entity relationship graph"
+    - name: "collections"
+      type: "data"
+      description: "Knowledge collections created"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-source"
+        type: "prompt"
+        config:
+          prompt: >
+            Scan {{inputs.targetPath}} and extract all knowledge entities:
+            functions, types, interfaces, classes, components, routes, actions.
+            For each entity, identify its type and relationships to other entities.
+          model: "fast"
+          temperature: 0.1
+      - id: "build-graph"
+        type: "prompt"
+        config:
+          prompt: >
+            From the extracted entities, build a relationship graph.
+            Identify: imports, extends, implements, renders, calls, provides.
+            Output as a structured entity-relationship list.
+          model: "medium"
+          temperature: 0.2
+      - id: "generate-collections"
+        type: "transform"
+        config:
+          strategy: "aggregate"
+          inputs:
+            - from: "scan-source"
+              key: "entities"
+            - from: "build-graph"
+              key: "relationships"
+  timeout: 180
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "entity-accuracy"
+      type: "accuracy"
+      weight: 0.35
+      threshold: 0.70
+      metric: "entity-extraction-precision"
+    - name: "relationship-accuracy"
+      type: "accuracy"
+      weight: 0.35
+      threshold: 0.65
+      metric: "relationship-extraction-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "knowledge-coverage"
+  datasets:
+    - name: "knowledge-samples-v1"
+      path: ".skills/evaluations/skill:foundation:knowledge-extract/datasets/v1.yaml"
+      description: "Sample knowledge extraction scenarios"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer", "auditor", "reviewer", "system"]
+    requireAuth: false
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: false
+  review:
+    required: true
+    interval: "180d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "moderate"

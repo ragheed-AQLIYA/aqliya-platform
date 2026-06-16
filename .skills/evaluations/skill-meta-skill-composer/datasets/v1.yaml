@@ -1,0 +1,62 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:meta:skill-composer (v1)
+# 3 samples: compose two skills, detect conflicts, optimize
+# ============================================================
+version: 1
+skillId: "skill:meta:skill-composer"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for skill composition"
+samples:
+  - id: "sample-001"
+    description: "Compose repo-analysis and arch-mapping into a comprehensive analysis workflow"
+    input:
+      skillIds: ["skill:foundation:repo-analysis", "skill:foundation:arch-mapping"]
+      targetWorkflow: "full-codebase-analysis"
+    expected:
+      outputType: "composition_result"
+      composed: "boolean"
+      compositeSkillId: "string"
+      stepCount: "number"
+      includedSkills: "array of string"
+      dependencyOrder: "array of string"
+      conflictDetected: "boolean"
+      parallelizable: "boolean"
+      parallelSteps: "array of string"
+      warnings: "array of string"
+    tags:
+      - "baseline"
+      - "composition"
+  - id: "sample-002"
+    description: "Detect conflicts between overlapping security and governance skills"
+    input:
+      skillIds: ["skill:engineering:security-audit", "skill:engineering:release-audit"]
+      targetWorkflow: "security-governance-review"
+    expected:
+      outputType: "composition_result"
+      composed: "boolean"
+      compositeSkillId: "string"
+      stepCount: "number"
+      conflictDetected: "boolean"
+      conflicts: "array of {skillA, skillB, overlap, resolution}"
+      mergedGovernance: "string — governance policy merge"
+      recommendations: "array of string"
+    tags:
+      - "baseline"
+      - "conflict-detection"
+  - id: "sample-003"
+    description: "Optimize parallel execution of independent skills"
+    input:
+      skillIds: ["skill:foundation:doc-analysis", "skill:foundation:dependency-map", "skill:foundation:knowledge-extract"]
+      targetWorkflow: "parallel-codebase-intelligence"
+    expected:
+      outputType: "composition_result"
+      composed: "boolean"
+      compositeSkillId: "string"
+      stepCount: "number"
+      parallelizableGroups: "array of {group, skills, reason}"
+      estimatedSpeedup: "string — factor estimate"
+      dependencyOrder: "array of string"
+      recommendations: "array of string"
+    tags:
+      - "baseline"
+      - "parallelization"

@@ -1,0 +1,211 @@
+# ============================================================
+# Skill: Skill Builder (L4 Meta)
+# ============================================================
+# Purpose: Meta-skill that generates new skill manifests from
+# analysis of codebase patterns, existing skills, and requirements.
+# Closes the loop — AQLIYA builds its own skills.
+# Reuses: AIOrchestrator, InstitutionalMemory, Eval Framework
+# ============================================================
+
+id: "skill:meta:skill-builder"
+name: "Skill Builder"
+nameAr: "بناء المهارات"
+version: "0.1.0"
+description: >
+  Meta-skill that generates new skill manifests by analyzing codebase
+  patterns, existing skills, user requirements, and infrastructure
+  capabilities. Creates complete manifests with execution workflows,
+  evaluation criteria, governance policies, and documentation stubs.
+  AQLIYA builds its own skills through this skill.
+descriptionAr: >
+  مهارة فوقية تولد بيانات مهارات جديدة من خلال تحليل أنماط قاعدة الكود
+  والمهارات الموجودة ومتطلبات المستخدم. تنشئ بيانات كاملة مع سير عمل
+  التنفيذ ومعايير التقييم وسياسات الحوكمة
+category: "meta"
+level: 4
+tags:
+  - "meta"
+  - "skill-generation"
+  - "builder"
+  - "manifest"
+  - "self-improving"
+  - "loop-closing"
+products:
+  - "intelligence-core"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:doc-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: true
+    reason: "High reasoning needed for generating valid manifests and workflows"
+  existingInfrastructure:
+    - "AIOrchestrator generate()"
+    - "InstitutionalMemoryService (knowledge graph)"
+    - "Eval Framework (eval-types.ts)"
+    - "Prompt Registry"
+    - "Governance Framework"
+
+inputs:
+  required:
+    - name: "requirement"
+      type: "string"
+      description: "Natural language description of the skill to build"
+    - name: "targetLevel"
+      type: "integer"
+      description: "Target skill level (0-4)"
+      validation: "range: 0-4"
+  optional:
+    - name: "category"
+      type: "string"
+      description: "Skill category"
+      default: "auto-detect"
+    - name: "referenceSkills"
+      type: "array"
+      description: "IDs of existing skills to use as patterns"
+    - name: "storeInMemory"
+      type: "boolean"
+      description: "Store generated manifest artifacts in institutional memory"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Complete skill manifest with all required fields"
+  artifacts:
+    - name: "skill-manifest"
+      type: "data"
+      description: "Complete YAML manifest file content"
+    - name: "eval-dataset-stub"
+      type: "data"
+      description: "Evaluation dataset template"
+    - name: "documentation-stub"
+      type: "data"
+      description: "Quickstart documentation template"
+    - name: "registry-entry"
+      type: "data"
+      description: "Proposed registry index entry"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "analyze-requirement"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze the following skill requirement and determine:
+            1. What is the primary purpose of this skill?
+            2. What level should it be (0-4)?
+            3. What existing skills would it depend on?
+            4. What category does it belong to?
+            5. What infrastructure does it need?
+            6. What inputs and outputs would it have?
+            7. What governance policies are appropriate?
+            
+            Requirement: {{inputs.requirement}}
+            Target Level: {{inputs.targetLevel}}
+            Available categories: foundation, engineering, product, business, meta
+          model: "high"
+          temperature: 0.2
+      - id: "inspect-patterns"
+        type: "prompt"
+        config:
+          prompt: >
+            Based on the analysis, inspect existing skill manifests
+            in .skills/manifests/ and identify patterns to reuse.
+            
+            Reference skills: {{inputs.referenceSkills}}
+            
+            Extract:
+            1. Common workflow step patterns
+            2. Evaluation criteria patterns
+            3. Governance policy patterns
+            4. Input/output patterns
+          model: "high"
+          temperature: 0.1
+      - id: "generate-manifest"
+        type: "prompt"
+        config:
+          prompt: |
+            Generate a complete skill manifest for:
+            
+            Requirement: {{inputs.requirement}}
+            Level: {{inputs.targetLevel}}
+            Category: {{steps.analyze-requirement.category}}
+            
+            Follow the schema in .skills/schemas/skill-manifest-schema.yaml.
+            Include:
+            1. Complete metadata (id, name, version, description)
+            2. Dependencies (skills, models, infrastructure)
+            3. Input/output definitions
+            4. Execution workflow with prompt step configuration
+            5. Evaluation criteria with weights and thresholds
+            6. Governance policies
+            7. Model resilience configuration
+            
+            Return the complete YAML content.
+          model: "high"
+          temperature: 0.2
+          outputFormat: "yaml"
+  timeout: 300
+  maxRetries: 1
+  retryDelay: 15
+
+evaluation:
+  criteria:
+    - name: "schema-validity"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.70
+      metric: "yaml-schema-compliance"
+      description: "Generated manifest must pass schema validation"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.25
+      threshold: 0.78
+      metric: "field-completeness"
+    - name: "quality"
+      type: "quality"
+      weight: 0.25
+      threshold: 0.72
+      metric: "expert-rating"
+      description: "Expert review of generated workflow quality"
+  datasets:
+    - name: "builder-samples-v1"
+      path: ".skills/evaluations/skill:meta:skill-builder/datasets/v1.yaml"
+  frequency: "per-run"
+
+governance:
+  access:
+    roles: ["admin", "ai-engineer"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: true
+    roles: ["governance-board"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "critical"
+  fallbackBehavior: "block-and-notify"

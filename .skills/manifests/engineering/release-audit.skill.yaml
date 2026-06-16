@@ -1,0 +1,176 @@
+# ============================================================
+# Skill: Release Audit (L1 Engineering)
+# ============================================================
+# Purpose: Verify a release is ready by checking build outputs,
+# test results, security coverage, migration status, docs freshness,
+# and governance compliance before Go/No-Go decision.
+# ============================================================
+
+id: "skill:engineering:release-audit"
+name: "Release Audit"
+nameAr: "تدقيق الإصدار"
+version: "0.1.0"
+description: >
+  Pre-release verification skill. Checks build integrity, test
+  coverage and pass rates, security scan results, migration state,
+  documentation freshness, and governance compliance. Produces
+  a Go/No-Go recommendation with evidence for each gate.
+descriptionAr: >
+  التحقق من جاهزية الإصدار. يتحقق من سلامة البناء وتغطية الاختبارات
+  ونتائج فحص الأمان وحالة الترحيل وحداثة التوثيق والامتثال للحوكمة
+category: "engineering"
+level: 1
+tags:
+  - "release"
+  - "audit"
+  - "deployment"
+  - "quality-gate"
+  - "go-no-go"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:doc-analysis"
+    - "skill:engineering:security-audit"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+    reason: "Classification and recommendation aggregation — deployable on local models"
+  existingInfrastructure:
+    - "Build pipeline (package.json scripts)"
+    - "Test runner (Jest)"
+    - "Lint/formatting tools"
+    - "Migration scripts"
+
+inputs:
+  required:
+    - name: "releaseVersion"
+      type: "string"
+      description: "Semantic version of the release (e.g., 0.2.0)"
+    - name: "sourceBranch"
+      type: "string"
+      description: "Branch being released"
+  optional:
+    - name: "requireApproval"
+      type: "boolean"
+      description: "Whether the release requires governance approval gate"
+      default: false
+    - name: "checkMigrations"
+      type: "boolean"
+      description: "Whether migration scripts should be audited"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Release audit result with Go/No-Go verdict and gate evidence"
+  artifacts:
+    - name: "release-report"
+      type: "report"
+      description: "Full release audit report with per-gate status"
+    - name: "go-no-go-decision"
+      type: "data"
+      description: "Go/No-Go with evidence summary"
+    - name: "blocker-list"
+      type: "report"
+      description: "Items blocking the release"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "check-build"
+        type: "prompt"
+        config:
+          prompt: |
+            Check build integrity for release {{inputs.releaseVersion}}:
+            1. Does `npm run build` complete without errors?
+            2. Are there any new build warnings?
+            3. Is the output directory populated correctly?
+            4. Are sourcemaps generated?
+          model: "medium"
+          temperature: 0.1
+      - id: "check-tests"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze test results for the release {{inputs.releaseVersion}}:
+            1. Are all test suites passing?
+            2. What is the code coverage percentage?
+            3. Are there flaky tests?
+            4. Are integration tests green?
+          model: "medium"
+          temperature: 0.1
+      - id: "check-security"
+        type: "skill"
+        config:
+          skillId: "skill:engineering:security-audit"
+          inputs:
+            targetPath: "{{inputs.sourceBranch}}"
+            severity: "medium"
+      - id: "final-verdict"
+        type: "prompt"
+        config:
+          prompt: |
+            Based on the findings, produce a Go/No-Go verdict:
+            - Build: {{steps.check-build.output}}
+            - Tests: {{steps.check-tests.output}}
+            - Security: {{steps.check-security.output}}
+            
+            If all critical gates pass, recommend "Go". Otherwise list blockers.
+          model: "medium"
+          temperature: 0.1
+  timeout: 180
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "gate-accuracy"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.85
+      metric: "correct-go-no-go-classification"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.25
+      threshold: 0.80
+      metric: "gate-coverage"
+    - name: "blocker-quality"
+      type: "quality"
+      weight: 0.25
+      threshold: 0.75
+      metric: "actionable-blocker-ratio"
+  datasets:
+    - name: "release-samples-v1"
+      path: ".skills/evaluations/skill:engineering:release-audit/datasets/v1.yaml"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "release-manager"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: true
+    roles: ["release-manager"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "minimal"

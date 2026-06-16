@@ -1,0 +1,95 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:engineering:release-audit (v1)
+# 3 real samples: standard, RC with approval, hotfix
+# ============================================================
+version: 1
+skillId: "skill:engineering:release-audit"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples — standard release, RC with approval gate, hotfix"
+samples:
+  - id: "sample-001"
+    description: "Standard release audit — v0.2.0 from main (post-reality-hardening)"
+    input:
+      releaseVersion: "0.2.0"
+      sourceBranch: "main"
+      requireApproval: false
+      checkMigrations: true
+    expected:
+      outputType: "release_audit_report"
+      hasFindings: true
+      findingCount: "number (4-8)"
+      items: "array of objects with category, severity, description, pass/fail"
+      preFlightChecks:
+        - "46 migrations present, all applied"
+        - "seed script runs without error"
+        - "build completes (18 TS errors fixed in v0.1 hardening)"
+        - "lint passes (135 warnings resolved in v0.1 hardening)"
+        - "tests pass (governance validation suite)"
+      migrationChecks:
+        - "all migrations are timestamp-ordered"
+        - "no pending migrations after prisma migrate deploy"
+        - "no destructive operations without data migration"
+      concerns:
+        - "migration timestamp outlier: 20260612999999_fix_r001"
+        - "seed data references specific workspace slugs"
+    tags:
+      - "baseline"
+      - "release"
+      - "standard"
+
+  - id: "sample-002"
+    description: "Release candidate audit — v0.3.0-rc1 from release/0.3.0 with approval gate"
+    input:
+      releaseVersion: "0.3.0-rc1"
+      sourceBranch: "release/0.3.0"
+      requireApproval: true
+      checkMigrations: true
+    expected:
+      outputType: "release_audit_report"
+      hasFindings: true
+      findingCount: "number (5-9)"
+      items: "array of objects with category, severity, description, pass/fail"
+      rcChecks:
+        - "release branch exists and is up to date with main"
+        - "CHANGELOG or release notes document new features"
+        - "approval gate requires designated reviewer sign-off"
+        - "migration audit confirms backward compatibility"
+        - "rollback plan documented for each migration"
+      approvalRequirement:
+        approvalRequired: true
+        approvalRole: "release-manager or admin"
+        approvalStatus: "pending"
+      concerns:
+        - "RC cut may include unreviewed changes from feature branches"
+        - "migration count delta from last release must be documented"
+      tags:
+        - "baseline"
+        - "release-candidate"
+        - "approval-gate"
+
+  - id: "sample-003"
+    description: "Hotfix release audit — v0.1.1 from hotfix/login (no migrations)"
+    input:
+      releaseVersion: "0.1.1"
+      sourceBranch: "hotfix/login"
+      requireApproval: false
+      checkMigrations: false
+    expected:
+      outputType: "release_audit_report"
+      hasFindings: true
+      findingCount: "number (3-5)"
+      items: "array of objects with category, severity, description, pass/fail"
+      hotfixChecks:
+        - "hotfix branch targets specific critical bug"
+        - "diff is minimal (single file or module, e.g. src/middleware.ts or src/lib/auth/)"
+        - "no schema or migration changes (checkMigrations=false)"
+        - "build passes without schema regeneration"
+        - "deploy to production bypasses standard RC pipeline"
+      risks:
+        - "bypasses full regression testing"
+        - "must be cherry-picked back to main"
+        - "no migration rollback needed (safe for hotfix)"
+      tags:
+        - "baseline"
+        - "hotfix"
+        - "no-migrations"

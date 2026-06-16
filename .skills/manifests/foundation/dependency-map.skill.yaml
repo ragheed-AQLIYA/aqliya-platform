@@ -1,0 +1,156 @@
+# ============================================================
+# Skill: Dependency Map (L0 Foundation)
+# ============================================================
+# Purpose: Analyze and visualize dependency relationships
+# between modules, packages, and external libraries.
+# ============================================================
+
+id: "skill:foundation:dependency-map"
+name: "Dependency Map"
+nameAr: "خريطة التبعيات"
+version: "0.1.0"
+description: >
+  Analyze and visualize dependency relationships between modules,
+  packages, and external libraries. Identifies circular dependencies,
+  orphaned modules, dependency depth, and coupling patterns.
+descriptionAr: >
+  تحليل وتصور علاقات التبعية بين الوحدات والحزم والمكتبات الخارجية.
+  يحدد التبعيات الدائرية والوحدات المعزولة وعمق التبعية
+category: "foundation"
+level: 0
+tags:
+  - "dependencies"
+  - "analysis"
+  - "graph"
+  - "coupling"
+  - "circular"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+  models:
+    minCapability: "low"
+    preferredProvider: "any"
+    localCapable: true
+  dataSources:
+    - "filesystem"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Module or package path to analyze"
+  optional:
+    - name: "includeExternal"
+      type: "boolean"
+      description: "Include external package dependencies"
+      default: false
+
+outputs:
+  primary:
+    type: "object"
+    description: "Dependency graph with metrics, cycles, and coupling analysis"
+  artifacts:
+    - name: "dependency-graph"
+      type: "graph"
+      description: "Full dependency graph"
+    - name: "cycle-report"
+      type: "report"
+      description: "Circular dependency analysis"
+    - name: "coupling-metrics"
+      type: "data"
+      description: "Coupling and cohesion metrics"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "parse-imports"
+        type: "tool"
+        config:
+          tool: "filesystem:scan"
+          params:
+            path: "{{inputs.targetPath}}"
+            include: ["**/*.ts", "**/*.tsx"]
+      - id: "extract-deps"
+        type: "prompt"
+        config:
+          prompt: |
+            Extract all import/require/from statements from the following files.
+            For each file, list:
+            1. Its own path
+            2. Every module it imports (relative and absolute)
+            3. External packages it imports
+            
+            Files:
+            {{steps.parse-imports.output}}
+          model: "primary"
+          temperature: 0.0
+      - id: "analyze-graph"
+        type: "prompt"
+        config:
+          prompt: >
+            Build a dependency graph from the extracted imports.
+            Identify:
+            1. All unique modules
+            2. All edges (X depends on Y)
+            3. Detect circular dependencies (A->B->C->A)
+            4. Calculate fan-in and fan-out per module
+            5. Identify orphan modules (no dependents, no dependencies)
+            6. Calculate module depth from entry points
+          model: "primary"
+          temperature: 0.0
+  timeout: 120
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "accuracy"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.80
+      metric: "dependency-extraction-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.75
+      metric: "edge-coverage"
+    - name: "cycle-detection"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.85
+      metric: "cycle-detection-accuracy"
+  datasets:
+    - name: "dep-samples-v1"
+      path: ".skills/evaluations/skill:foundation:dependency-map/datasets/v1.yaml"
+      description: "Sample dependency graphs with known cycles"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer", "auditor", "reviewer", "system"]
+    requireAuth: false
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: false
+  review:
+    required: true
+    interval: "180d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"

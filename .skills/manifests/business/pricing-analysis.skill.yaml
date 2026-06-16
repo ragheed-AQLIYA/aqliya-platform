@@ -1,0 +1,178 @@
+# ============================================================
+# Skill: Pricing Analysis (L3 Business)
+# ============================================================
+# Purpose: Analyze pricing models and strategies for AQLIYA
+# products. Evaluates cost-plus, value-based, competitive,
+# and tiered pricing approaches against market benchmarks,
+# feature parity, and regional factors (Saudi market).
+# ============================================================
+
+id: "skill:business:pricing-analysis"
+name: "Pricing Analysis"
+nameAr: "تحليل التسعير"
+version: "0.1.0"
+description: >
+  Analyze pricing models for AQLIYA products. Evaluates cost-plus,
+  value-based, competitive, and tiered pricing against feature
+  implementation, market benchmarks, and Saudi market factors.
+  Recommends pricing strategy with revenue projections.
+descriptionAr: >
+  تحليل نماذج التسعير لمنتجات عقلية. يقيم التسعير على أساس
+  التكلفة والقيمة والمنافسة والتصنيف مقابل الميزات المنفذة
+  ومعايير السوق والعوامل السعودية
+category: "business"
+level: 3
+tags:
+  - "pricing"
+  - "revenue"
+  - "monetization"
+  - "market"
+  - "strategy"
+products:
+  - "*"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "product-management"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Strategic pricing analysis requires market context and nuanced reasoning"
+  existingInfrastructure:
+    - "Product Status Matrix"
+    - "Implementation analysis tools"
+
+inputs:
+  required:
+    - name: "productName"
+      type: "string"
+      description: "Product to analyze pricing for"
+  optional:
+    - name: "market"
+      type: "string"
+      description: "Target market: global|saudi|both"
+      default: "both"
+    - name: "includeCompetitive"
+      type: "boolean"
+      description: "Include competitive pricing analysis"
+      default: true
+    - name: "tierCount"
+      type: "number"
+      description: "Number of pricing tiers to recommend"
+      default: 3
+
+outputs:
+  primary:
+    type: "object"
+    description: "Pricing analysis with recommendations and revenue projections"
+  artifacts:
+    - name: "pricing-report"
+      type: "report"
+      description: "Full pricing analysis report"
+    - name: "tier-matrix"
+      type: "data"
+      description: "Proposed pricing tiers with feature mapping"
+    - name: "revenue-forecast"
+      type: "data"
+      description: "Revenue projections per pricing scenario"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "analyze-product"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze product {{inputs.productName}} for pricing:
+            1. What features are implemented (refer to Product Status Matrix)?
+            2. What is the implementation level (L0-L6)?
+            3. What is the target market and buyer persona?
+            4. What is the competitive landscape?
+            Market: {{inputs.market}}
+          model: "high"
+          temperature: 0.2
+      - id: "price-modeling"
+        type: "prompt"
+        config:
+          prompt: |
+            Model pricing strategies for {{inputs.productName}}:
+            
+            Evaluate:
+            1. Cost-plus: development + operations + margin
+            2. Value-based: aligned with customer value perception
+            3. Competitive: benchmarked against alternatives
+            4. Tiered: {{inputs.tierCount}} tiers with feature differentiation
+            
+            Include Saudi market considerations.
+            Competitive analysis: {{inputs.includeCompetitive}}
+          model: "high"
+          temperature: 0.3
+      - id: "recommend"
+        type: "prompt"
+        config:
+          prompt: |
+            Based on analysis, produce pricing recommendation:
+            Product: {{steps.analyze-product.output}}
+            Models: {{steps.price-modeling.output}}
+            
+            Include: recommended model, tier prices, revenue estimates,
+            and risk factors.
+          model: "high"
+          temperature: 0.1
+  timeout: 300
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "market-alignment"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.70
+      metric: "market-benchmark-agreement"
+    - name: "methodology"
+      type: "quality"
+      weight: 0.35
+      threshold: 0.75
+      metric: "pricing-methodology-soundness"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.35
+      threshold: 0.70
+      metric: "factor-coverage"
+  datasets:
+    - name: "pricing-samples-v1"
+      path: ".skills/evaluations/skill:business:pricing-analysis/datasets/v1.yaml"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "product-manager", "executive"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: true
+    roles: ["executive"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "moderate"

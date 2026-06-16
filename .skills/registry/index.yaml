@@ -1,0 +1,189 @@
+# ============================================================
+# AQLIYA Skill Registry Index v1.0
+# ============================================================
+# This is the master index of all registered skills.
+# Auto-generated. Manual updates allowed for draft skills.
+# ============================================================
+
+version: 1
+updatedAt: "2026-06-15T22:00:00Z"
+skills:
+  # ─── L0 Foundation ───
+  - id: "skill:foundation:repo-analysis"
+    path: "manifests/foundation/repo-analysis.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "foundation"
+    level: 0
+
+  - id: "skill:foundation:doc-analysis"
+    path: "manifests/foundation/doc-analysis.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "foundation"
+    level: 0
+
+  - id: "skill:foundation:arch-mapping"
+    path: "manifests/foundation/arch-mapping.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "foundation"
+    level: 0
+
+  - id: "skill:foundation:dependency-map"
+    path: "manifests/foundation/dependency-map.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "foundation"
+    level: 0
+
+  - id: "skill:foundation:knowledge-extract"
+    path: "manifests/foundation/knowledge-extract.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "foundation"
+    level: 0
+
+  # ─── L1 Engineering ───
+  - id: "skill:engineering:security-audit"
+    path: "manifests/engineering/security-audit.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "engineering"
+    level: 1
+
+  - id: "skill:engineering:migration-audit"
+    path: "manifests/engineering/migration-audit.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "engineering"
+    level: 1
+
+  - id: "skill:engineering:performance-review"
+    path: "manifests/engineering/performance-review.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "engineering"
+    level: 1
+
+  - id: "skill:engineering:test-coverage"
+    path: "manifests/engineering/test-coverage.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "engineering"
+    level: 1
+
+  - id: "skill:engineering:release-audit"
+    path: "manifests/engineering/release-audit.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "engineering"
+    level: 1
+
+  - id: "skill:engineering:tech-debt"
+    path: "manifests/engineering/tech-debt.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "engineering"
+    level: 1
+
+  # ─── L2 Product ───
+  - id: "skill:product:auditos-review"
+    path: "manifests/product/auditos-review.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "product"
+    level: 2
+
+  - id: "skill:product:localcontent-review"
+    path: "manifests/product/localcontent-review.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "product"
+    level: 2
+
+  - id: "skill:product:salesos-review"
+    path: "manifests/product/salesos-review.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "product"
+    level: 2
+
+  - id: "skill:product:complianceos-review"
+    path: "manifests/product/complianceos-review.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "product"
+    level: 2
+
+  # ─── L3 Business ───
+  - id: "skill:business:commercial-validation"
+    path: "manifests/business/commercial-validation.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "business"
+    level: 3
+
+  - id: "skill:business:roi-analysis"
+    path: "manifests/business/roi-analysis.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "business"
+    level: 3
+
+  - id: "skill:business:pricing-analysis"
+    path: "manifests/business/pricing-analysis.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "business"
+    level: 3
+
+  - id: "skill:business:market-assessment"
+    path: "manifests/business/market-assessment.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "business"
+    level: 3
+
+  - id: "skill:business:product-positioning"
+    path: "manifests/business/product-positioning.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "business"
+    level: 3
+
+  # ─── L4 Meta ───
+  - id: "skill:meta:skill-builder"
+    path: "manifests/meta/skill-builder.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "meta"
+    level: 4
+
+  - id: "skill:meta:skill-auditor"
+    path: "manifests/meta/skill-auditor.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "meta"
+    level: 4
+
+  - id: "skill:meta:skill-optimizer"
+    path: "manifests/meta/skill-optimizer.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "meta"
+    level: 4
+
+  - id: "skill:meta:skill-composer"
+    path: "manifests/meta/skill-composer.skill.yaml"
+    status: "concept"
+    version: "0.1.0"
+    category: "meta"
+    level: 4
+
+  - id: "skill:meta:skill-evaluator"
+    path: "manifests/meta/skill-evaluator.skill.yaml"
+    status: "draft"
+    version: "0.1.0"
+    category: "meta"
+    level: 4

@@ -1,0 +1,62 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:business:product-positioning (v1)
+# 3 samples: AuditOS positioning, platform identity, messaging
+# ============================================================
+version: 1
+skillId: "skill:business:product-positioning"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for product positioning"
+samples:
+  - id: "sample-001"
+    description: "AuditOS positioning against compliance/audit buyer personas"
+    input:
+      product: "AuditOS"
+      buyerPersonas: ["CFO", "internal audit director", "compliance officer"]
+      existingPositioning: "review docs/official/"
+    expected:
+      outputType: "positioning_analysis"
+      valueProposition: "string — core value prop statement"
+      targetPersonas: "array of {persona, relevance, message}"
+      differentiators: "array of string"
+      competitiveComparison: "array of {competitor, positioning, gap}"
+      messagingRecommendations: "array of string"
+      positioningStatement: "string — recommended statement"
+    tags:
+      - "baseline"
+      - "audit"
+  - id: "sample-002"
+    description: "Platform positioning for AQLIYA as institutional intelligence platform"
+    input:
+      product: "AQLIYA Platform"
+      buyerPersonas: ["CTO", "CEO", "institutional decision maker"]
+      competitiveSet: ["traditional audit software", "AI copilots"]
+    expected:
+      outputType: "positioning_analysis"
+      valueProposition: "string"
+      platformIdentity: "string — alignment with docs/official/"
+      targetMarkets: "array of {market, segment, positioning}"
+      differentiators: "array of string"
+      narrative: "string — platform story"
+      messagingRecommendations: "array of string"
+      positioningStatement: "string"
+    tags:
+      - "baseline"
+      - "platform"
+  - id: "sample-003"
+    description: "SalesOS positioning against CRM buyer perceptions"
+    input:
+      product: "SalesOS"
+      buyerPersonas: ["sales director", "revenue operations"]
+      positioningDanger: "avoid CRM clone framing"
+    expected:
+      outputType: "positioning_analysis"
+      valueProposition: "string"
+      positioningRisk: "string — CRM clone risk assessment"
+      recommendedFraming: "string — governed revenue intelligence"
+      differentiators: "array of string"
+      competitorAvoidance: "array of {competitor, howToDifferentiate}"
+      messagingRecommendations: "array of string"
+      positioningStatement: "string"
+    tags:
+      - "baseline"
+      - "sales"

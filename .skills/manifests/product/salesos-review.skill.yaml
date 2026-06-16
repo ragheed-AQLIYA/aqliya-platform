@@ -1,0 +1,169 @@
+# ============================================================
+# Skill: SalesOS Review (L2 Product)
+# ============================================================
+# Purpose: Review SalesOS pipeline data — account records,
+# stakeholder contacts, opportunity stages, interaction logs,
+# sales memory consistency, and governance compliance for
+# sensitive sales claims.
+# ============================================================
+
+id: "skill:product:salesos-review"
+name: "SalesOS Review"
+nameAr: "مراجعة سيلز أو إس"
+version: "0.1.0"
+description: >
+  AI-assisted quality review for SalesOS pipeline data. Validates
+  account completeness, stakeholder coverage, opportunity stage
+  accuracy, interaction log consistency, and sales memory integrity.
+  Flags governance-sensitive claims for human review.
+descriptionAr: >
+  مراجعة الجودة لبيانات مسار المبيعات. تتحقق من اكتمال الحسابات
+  وتغطية أصحاب المصلحة ودقة مرحلة الفرصة واتساق سجل التفاعلات
+  وسلامة ذاكرة المبيعات
+category: "product"
+level: 2
+tags:
+  - "sales"
+  - "pipeline"
+  - "crm"
+  - "opportunity"
+  - "stakeholder"
+products:
+  - "salesos"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "salesos-team"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+    reason: "Standard data validation — no high reasoning required"
+  existingInfrastructure:
+    - "SalesOS data models"
+    - "Governance Framework"
+
+inputs:
+  required:
+    - name: "accountId"
+      type: "string"
+      description: "SalesOS account ID to review"
+  optional:
+    - name: "reviewScope"
+      type: "string"
+      description: "Scope: full|account|pipeline|interactions|claims"
+      default: "full"
+    - name: "governanceCheck"
+      type: "boolean"
+      description: "Flag governance-sensitive claims for human review"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "SalesOS review report with quality scores and flags"
+  artifacts:
+    - name: "quality-scorecard"
+      type: "report"
+      description: "Data quality scores per category"
+    - name: "governance-flags"
+      type: "report"
+      description: "Governance-sensitive claims requiring review"
+    - name: "interaction-gaps"
+      type: "report"
+      description: "Missing or stale interaction records"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "fetch-account"
+        type: "tool"
+        config:
+          tool: "data:fetch"
+          params:
+            source: "salesos"
+            accountId: "{{inputs.accountId}}"
+      - id: "review-account"
+        type: "prompt"
+        config:
+          prompt: |
+            Review SalesOS account {{inputs.accountId}}:
+            1. Is account data complete (name, industry, size, territory)?
+            2. Are all key stakeholders identified?
+            3. Is the sales memory populated with relevant history?
+            4. Are interaction logs up to date?
+            Governance check: {{inputs.governanceCheck}}
+          model: "medium"
+          temperature: 0.1
+      - id: "review-pipeline"
+        type: "prompt"
+        config:
+          prompt: |
+            Review opportunity pipeline:
+            1. Are opportunity stages accurate?
+            2. Are next actions defined and current?
+            3. Is the deal value reasonable?
+            4. Are there stale opportunities?
+          model: "medium"
+          temperature: 0.1
+      - id: "produce-review"
+        type: "prompt"
+        config:
+          prompt: |
+            Produce review report:
+            Account: {{steps.review-account.output}}
+            Pipeline: {{steps.review-pipeline.output}}
+            Include quality score, flags, and recommendations.
+          model: "medium"
+          temperature: 0.1
+  timeout: 180
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "data-quality"
+      type: "accuracy"
+      weight: 0.35
+      threshold: 0.55
+      metric: "field-accuracy"
+    - name: "governance-detection"
+      type: "accuracy"
+      weight: 0.35
+      threshold: 0.55
+      metric: "governance-flag-precision"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.60
+      metric: "coverage-rate"
+  datasets:
+    - name: "salesos-review-v1"
+      path: ".skills/evaluations/skill:product:salesos-review/datasets/v1.yaml"
+  frequency: "per-execution"
+
+governance:
+  access:
+    roles: ["admin", "sales-manager"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"

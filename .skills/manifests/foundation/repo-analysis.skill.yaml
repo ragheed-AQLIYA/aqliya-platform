@@ -1,0 +1,172 @@
+# ============================================================
+# Skill: Repository Analysis (L0 Foundation)
+# ============================================================
+# Purpose: Analyze repository structure, file organization,
+# module boundaries, and code patterns.
+# Reuses: deterministic handlers, file system, existing AI types
+# ============================================================
+
+id: "skill:foundation:repo-analysis"
+name: "Repository Analysis"
+nameAr: "تحليل المستودع"
+version: "0.1.0"
+description: >
+  Analyze repository structure, file organization, module boundaries,
+  import relationships, and code patterns. Produces a structured repository
+  map with module classification and pattern inventory.
+descriptionAr: >
+  تحليل بنية المستودع، تنظيم الملفات، حدود الوحدات، علاقات الاستيراد،
+  وأنماط الكود. ينتج خريطة منظمة للمستودع مع تصنيف الوحدات
+category: "foundation"
+level: 0
+tags:
+  - "analysis"
+  - "repository"
+  - "structure"
+  - "mapping"
+  - "patterns"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills: []
+  models:
+    minCapability: "low"
+    preferredProvider: "any"
+    localCapable: true
+  dataSources:
+    - "filesystem"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Repository path or module path to analyze"
+    - name: "depth"
+      type: "string"
+      description: "Analysis depth: 'structure' | 'modules' | 'imports' | 'patterns'"
+      validation: "enum: structure, modules, imports, patterns"
+  optional:
+    - name: "includePatterns"
+      type: "array"
+      description: "Glob patterns to include"
+      default: ["**/*.ts", "**/*.tsx", "**/*.js"]
+    - name: "excludePatterns"
+      type: "array"
+      description: "Glob patterns to exclude"
+      default: ["node_modules/**", ".next/**", "dist/**"]
+
+outputs:
+  primary:
+    type: "object"
+    description: "Repository analysis with structure map, module inventory, and pattern list"
+  artifacts:
+    - name: "structure-map"
+      type: "graph"
+      description: "Directory and file tree as structured data"
+    - name: "module-inventory"
+      type: "data"
+      description: "List of modules with boundaries and responsibilities"
+    - name: "pattern-report"
+      type: "report"
+      description: "Detected code patterns and conventions"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-files"
+        type: "tool"
+        config:
+          tool: "filesystem:scan"
+          params:
+            path: "{{inputs.targetPath}}"
+            include: "{{inputs.includePatterns}}"
+            exclude: "{{inputs.excludePatterns}}"
+      - id: "classify-modules"
+        type: "prompt"
+        config:
+          prompt: |
+            Classify the following files into logical modules based on their paths and naming conventions.
+            
+            Files:
+            {{steps.scan-files.output}}
+            
+            For each module, identify:
+            1. Module name
+            2. File count
+            3. Primary responsibility
+            4. Entry points
+            
+            Target depth: {{inputs.depth}}
+          model: "primary"
+          temperature: 0.1
+      - id: "detect-patterns"
+        type: "prompt"
+        config:
+          prompt: >
+            Analyze the repository structure and identify:
+            1. Architecture patterns used (e.g., modular monolith, layered)
+            2. Naming conventions
+            3. Import patterns
+            4. Any anti-patterns present
+            
+            Provide a structured pattern inventory.
+          model: "primary"
+          temperature: 0.1
+  timeout: 120
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "accuracy"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.75
+      metric: "module-classification-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "file-coverage-ratio"
+    - name: "consistency"
+      type: "consistency"
+      weight: 0.30
+      threshold: 0.70
+      metric: "output-consistency"
+  datasets:
+    - name: "repo-samples-v1"
+      path: ".skills/evaluations/skill:foundation:repo-analysis/datasets/v1.yaml"
+      description: "Sample repositories with known structure"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer", "auditor", "reviewer", "system"]
+    requireAuth: false
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: false
+  review:
+    required: true
+    interval: "180d"
+
+documentation:
+  quickstart: ".skills/skills/foundation/repo-analysis/docs/quickstart.md"
+
+modelResilience:
+  alternativeModels: []
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"

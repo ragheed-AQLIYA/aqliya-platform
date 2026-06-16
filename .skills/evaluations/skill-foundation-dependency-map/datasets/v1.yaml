@@ -1,0 +1,52 @@
+﻿version: 1
+skillId: "skill:foundation:dependency-map"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples"
+samples:
+  - id: "sample-001"
+    description: "Internal dependency map of the shared lib directory"
+    input:
+      targetPath: "src/lib/"
+      includeExternal: false
+    expected:
+      outputType: "dependency_map"
+      includeExternal: false
+      totalModules: "number"
+      dependencyEdges: "array of {source, target, type}"
+      internalCycles: "array of {cycle, modules}"
+      mostDependedUpon: "array of {module, dependedOnByCount}"
+    tags:
+      - "baseline"
+      - "primary-path"
+
+  - id: "sample-002"
+    description: "Internal dependency map of the AI infrastructure module"
+    input:
+      targetPath: "src/lib/ai/"
+      includeExternal: false
+    expected:
+      outputType: "dependency_map"
+      includeExternal: false
+      subModules: "array of strings — e.g. ['embedding', 'providers', 'retrieval', 'review', 'runtime']"
+      internalDeps: "array of {from, to}"
+      entryExports: "array of {file, exports}"
+      unusedModules: "array of string — modules with no internal consumers"
+    tags:
+      - "baseline"
+      - "module"
+
+  - id: "sample-003"
+    description: "Full dependency map of the skill-runtime including external npm dependencies"
+    input:
+      targetPath: "src/lib/skill-runtime/"
+      includeExternal: true
+    expected:
+      outputType: "dependency_map"
+      includeExternal: true
+      internalFiles: "array of strings — e.g. ['evaluator.ts', 'runtime.ts', 'types.ts', 'index.ts']"
+      internalEdges: "array of {source, target}"
+      externalDependencies: "array of {package, version, usedBy}"
+      totalExternalCount: "number"
+    tags:
+      - "baseline"
+      - "advanced"

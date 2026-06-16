@@ -1,0 +1,161 @@
+# ============================================================
+# Skill: Migration Audit (L1 Engineering)
+# ============================================================
+# Purpose: Audit database migrations for safety, data integrity,
+# backward compatibility, and rollback readiness.
+# Reuses: Prisma schema, migration history, seed conventions
+# ============================================================
+
+id: "skill:engineering:migration-audit"
+name: "Migration Audit"
+nameAr: "تدقيق الترحيل"
+version: "0.1.0"
+description: >
+  Audit database migrations for safety concerns, data integrity risks,
+  backward compatibility issues, and rollback readiness. Reviews
+  schema changes against existing models and data patterns.
+descriptionAr: >
+  تدقيق ترحيلات قاعدة البيانات بحثاً عن مخاطر السلامة وسلامة البيانات
+  ومشاكل التوافق العكسي وجاهزية التراجع
+category: "engineering"
+level: 1
+tags:
+  - "migration"
+  - "database"
+  - "schema"
+  - "safety"
+  - "rollback"
+  - "prisma"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:dependency-map"
+  models:
+    minCapability: "medium"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Strong reasoning needed for cascade analysis"
+  existingInfrastructure:
+    - "Prisma schema (prisma/schema.prisma)"
+    - "Migration history (prisma/migrations/)"
+    - "Seed scripts (prisma/seed*.ts)"
+
+inputs:
+  required:
+    - name: "migrationPath"
+      type: "string"
+      description: "Path to migration SQL file or directory"
+  optional:
+    - name: "schemaPath"
+      type: "string"
+      description: "Path to Prisma schema"
+      default: "prisma/schema.prisma"
+    - name: "checkRollback"
+      type: "boolean"
+      description: "Also analyze rollback readiness"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Migration audit report with risk categories and recommendations"
+  artifacts:
+    - name: "risk-analysis"
+      type: "report"
+      description: "Migration risk assessment"
+    - name: "rollback-plan"
+      type: "report"
+      description: "Rollback readiness analysis"
+    - name: "data-impact"
+      type: "report"
+      description: "Data integrity impact analysis"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "check-migrations"
+        type: "prompt"
+        config:
+          prompt: >
+            Audit migration state for {{inputs.targetPath}} or the full project.
+            Check: migration history, applied vs pending migrations, naming conventions,
+            rollback scripts, and data transformation correctness.
+            Severity threshold: {{inputs.severityThreshold}}
+          model: "medium"
+          temperature: 0.1
+      - id: "assess-data-impact"
+        type: "prompt"
+        config:
+          prompt: >
+            Based on migration findings, assess data integrity impact.
+            Check for: column drops that may lose data, type changes that may
+            truncate, nullable transitions, and default value changes.
+          model: "medium"
+          temperature: 0.2
+      - id: "produce-report"
+        type: "transform"
+        config:
+          strategy: "aggregate"
+          inputs:
+            - from: "check-migrations"
+              key: "migrationAudit"
+            - from: "assess-data-impact"
+              key: "dataImpact"
+  timeout: 180
+  maxRetries: 1
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "detection-rate"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.75
+      metric: "migration-risk-detection"
+    - name: "recommendation-quality"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.70
+      metric: "recommendation-relevance"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.20
+      threshold: 0.70
+      metric: "impact-coverage"
+  datasets:
+    - name: "migration-samples-v1"
+      path: ".skills/evaluations/skill:engineering:migration-audit/datasets/v1.yaml"
+  frequency: "per-migration"
+
+governance:
+  access:
+    roles: ["admin", "developer"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "90d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "90d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "controlled"

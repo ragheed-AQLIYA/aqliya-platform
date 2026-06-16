@@ -1,0 +1,59 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:business:commercial-validation (v1)
+# 3 real samples validating commercial claims against reality
+# ============================================================
+version: 1
+skillId: "skill:business:commercial-validation"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for commercial claim validation"
+samples:
+  - id: "sample-001"
+    description: "Validate AQLIYA platform commercial claims against codebase reality"
+    input:
+      targetClaims: ["SaaS-only", "on-prem available", "air-gapped", "kubernetes"]
+      sourceContext: "docs/official/aqliya-vision-v1.1.md"
+    expected:
+      outputType: "commercial_validation"
+      hasClaims: true
+      totalClaims: "number — count of claims checked"
+      validatedCount: "number — claims confirmed as implemented"
+      flaggedCount: "number — claims not supported by code evidence"
+      findings: "array of {claim, status, evidence, recommendation}"
+      overallStatus: "string — pass/fail/pending"
+    tags:
+      - "baseline"
+      - "platform"
+  - id: "sample-002"
+    description: "Validate product pricing and positioning claims against feature implementation"
+    input:
+      targetClaims: ["audit-ai-review", "local-ai-inference", "studio-builder"]
+      sourceContext: "docs/official/aqliya-product-taxonomy-v1.1.md"
+    expected:
+      outputType: "commercial_validation"
+      hasClaims: true
+      totalClaims: "number"
+      validatedCount: "number"
+      flaggedCount: "number"
+      implementableCount: "number — planned but not yet implemented"
+      recommendations: "array of {claim, action, priority}"
+      overallStatus: "string"
+    tags:
+      - "baseline"
+      - "pricing"
+  - id: "sample-003"
+    description: "Validate marketing copy claims against actual route/feature availability"
+    input:
+      targetClaims: ["decision-os", "sales-os", "local-content-os"]
+      sourceContext: "src/app/ page copy and route structure"
+    expected:
+      outputType: "commercial_validation"
+      hasClaims: true
+      totalClaims: "number"
+      validatedCount: "number"
+      flaggedCount: "number"
+      missingRoutes: "array of string — routes claimed but not existing"
+      severity: "string — high/medium/low"
+      overallStatus: "string"
+    tags:
+      - "baseline"
+      - "marketing"

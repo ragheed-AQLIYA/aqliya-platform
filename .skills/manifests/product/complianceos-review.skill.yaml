@@ -1,0 +1,176 @@
+# ============================================================
+# Skill: ComplianceOS Review (L2 Product)
+# ============================================================
+# Purpose: Review compliance data across products — policy adherence,
+# regulatory reporting accuracy, risk flag consistency, evidence
+# completeness, and audit trail integrity for institutional compliance.
+# ============================================================
+
+id: "skill:product:complianceos-review"
+name: "ComplianceOS Review"
+nameAr: "مراجعة الامتثال"
+version: "0.1.0"
+description: >
+  AI-assisted review for ComplianceOS. Analyzes policy adherence,
+  regulatory reporting accuracy, risk flag consistency, evidence
+  completeness, and audit trail integrity. Flags gaps requiring
+  human compliance officer review.
+descriptionAr: >
+  مراجعة مدعومة بالذكاء الاصطناعي للامتثال. تحلل الالتزام بالسياسات
+  ودقة التقارير التنظيمية واتساق علامات المخاطر واكتمال الأدلة
+  وسلامة سجل التدقيق
+category: "product"
+level: 2
+tags:
+  - "compliance"
+  - "regulatory"
+  - "policy"
+  - "risk"
+  - "audit-trail"
+products:
+  - "complianceos"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "compliance-team"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:doc-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Regulatory compliance requires high reasoning and accuracy"
+  existingInfrastructure:
+    - "Governance Framework"
+    - "Audit trail service"
+    - "Policy registry"
+
+inputs:
+  required:
+    - name: "reviewTarget"
+      type: "string"
+      description: "Entity to review: policy:<id>|report:<id>|audit:<id>|full"
+  optional:
+    - name: "regulatoryFramework"
+      type: "string"
+      description: "Regulatory framework to validate against"
+      default: "built-in"
+    - name: "severityThreshold"
+      type: "string"
+      description: "Minimum severity to flag: low|medium|high|critical"
+      default: "medium"
+
+outputs:
+  primary:
+    type: "object"
+    description: "Compliance review report with adherence scores and flags"
+  artifacts:
+    - name: "compliance-scorecard"
+      type: "report"
+      description: "Adherence scores per policy/regulation category"
+    - name: "violation-report"
+      type: "report"
+      description: "Identified gaps and violations requiring remediation"
+    - name: "evidence-map"
+      type: "data"
+      description: "Evidence-to-requirement mapping"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "fetch-target"
+        type: "tool"
+        config:
+          tool: "data:fetch"
+          params:
+            source: "complianceos"
+            target: "{{inputs.reviewTarget}}"
+      - id: "check-policies"
+        type: "prompt"
+        config:
+          prompt: |
+            Review compliance data for {{inputs.reviewTarget}}:
+            1. Does the data adhere to applicable policies?
+            2. Are regulatory reporting requirements met?
+            3. Are risk flags consistently applied?
+            4. Is the audit trail complete and tamper-evident?
+            Regulatory framework: {{inputs.regulatoryFramework}}
+            Severity threshold: {{inputs.severityThreshold}}
+          model: "high"
+          temperature: 0.2
+      - id: "assess-evidence"
+        type: "prompt"
+        config:
+          prompt: |
+            Assess evidence completeness:
+            1. Is each compliance claim supported by evidence?
+            2. Are evidence files valid and accessible?
+            3. Are retention periods met?
+          model: "high"
+          temperature: 0.1
+      - id: "final-assessment"
+        type: "prompt"
+        config:
+          prompt: >
+            Produce final compliance assessment:
+            Policies: {{steps.check-policies.output}}
+            Evidence: {{steps.assess-evidence.output}}
+            Format with severity ratings and concrete recommendations.
+          model: "high"
+          temperature: 0.1
+  timeout: 300
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "violation-detection"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.55
+      metric: "violation-precision-recall"
+    - name: "evidence-assessment"
+      type: "accuracy"
+      weight: 0.25
+      threshold: 0.55
+      metric: "evidence-gap-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.25
+      threshold: 0.70
+      metric: "policy-coverage"
+  datasets:
+    - name: "complianceos-review-v1"
+      path: ".skills/evaluations/skill:product:complianceos-review/datasets/v1.yaml"
+  frequency: "per-execution"
+
+governance:
+  access:
+    roles: ["admin", "compliance-officer"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: true
+    roles: ["compliance-officer"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "critical"
+  fallbackBehavior: "block-and-notify"

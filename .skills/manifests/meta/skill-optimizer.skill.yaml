@@ -1,0 +1,200 @@
+# ============================================================
+# Skill: Skill Optimizer (L4 Meta)
+# ============================================================
+# Purpose: Optimize existing skills for performance, accuracy,
+# cost efficiency, and governance compliance. Analyzes execution
+# traces, evaluation results, and usage patterns to recommend
+# manifest improvements — prompt refinement, model downgrade,
+# governance tuning, and workflow restructuring.
+# ============================================================
+
+id: "skill:meta:skill-optimizer"
+name: "Skill Optimizer"
+nameAr: "محسّن المهارات"
+version: "0.1.0"
+description: >
+  Meta-skill that optimizes existing skills for better performance,
+  lower cost, higher accuracy, and stronger governance. Analyzes
+  execution traces (latency, tokens, errors), evaluation history,
+  usage frequency, and user feedback. Recommends targeted manifest
+  improvements: prompt refinement, model downgrade where safe,
+  governance tuning, retry/backoff adjustments, and workflow steps
+  consolidation or parallelization.
+descriptionAr: >
+  مهارة فوقية تحسّن المهارات الموجودة للأداء والتكلفة والدقة والحوكمة.
+  تحلل سجلات التنفيذ وتاريخ التقييم وتكرار الاستخدام. توصي بتحسينات
+  مستهدفة: تحسين المطالبات، تخفيض النموذج عند الإمكان، ضبط الحوكمة
+category: "meta"
+level: 4
+tags:
+  - "meta"
+  - "optimization"
+  - "performance"
+  - "cost"
+  - "tuning"
+  - "efficiency"
+products:
+  - "intelligence-core"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+    - "skill:meta:skill-evaluator"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: true
+    reason: "Cost-performance tradeoff analysis requires reasoning; rule-based checks are local-capable"
+  existingInfrastructure:
+    - "Skill Runtime audit logs"
+    - "Evaluation results store"
+    - "Registry index"
+
+inputs:
+  required:
+    - name: "targetSkillId"
+      type: "string"
+      description: "ID of the skill to optimize"
+  optional:
+    - name: "optimizationGoal"
+      type: "string"
+      description: "Primary goal: cost|speed|accuracy|governance|balanced"
+      default: "balanced"
+    - name: "includePromptOptimization"
+      type: "boolean"
+      description: "Optimize prompt templates"
+      default: true
+    - name: "includeModelOptimization"
+      type: "boolean"
+      description: "Recommend model downgrade/upgrade"
+      default: true
+    - name: "includeWorkflowOptimization"
+      type: "boolean"
+      description: "Optimize workflow step structure"
+      default: true
+    - name: "maxChanges"
+      type: "number"
+      description: "Maximum changes to recommend"
+      default: 10
+
+outputs:
+  primary:
+    type: "object"
+    description: "Optimization recommendations with expected impact"
+  artifacts:
+    - name: "optimization-report"
+      type: "report"
+      description: "Full optimization analysis and recommendations"
+    - name: "manifest-patches"
+      type: "data"
+      description: "Suggested manifest changes (diff format)"
+    - name: "impact-estimates"
+      type: "data"
+      description: "Estimated impact on cost, speed, and accuracy"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "analyze-execution"
+        type: "prompt"
+        config:
+          prompt: >
+            Analyze execution traces for skill {{inputs.targetSkillId}}:
+            1. Average latency per step
+            2. Token consumption per step
+            3. Error rates and retry patterns
+            4. Timeout occurrences
+            5. User feedback and ratings
+            
+            Goal: {{inputs.optimizationGoal}}
+          model: "high"
+          temperature: 0.1
+      - id: "identify-improvements"
+        type: "prompt"
+        config:
+          prompt: >
+            Identify optimization opportunities:
+            Execution data: {{steps.analyze-execution.output}}
+            
+            Areas to evaluate:
+            1. Can model be downgraded (lower cost) without accuracy loss?
+            2. Can prompts be shortened or made more specific?
+            3. Can steps be parallelized instead of sequential?
+            4. Are retry settings appropriate?
+            5. Are timeout values optimal?
+            6. Can governance be relaxed for low-risk skills?
+            
+            Max changes: {{inputs.maxChanges}}
+          model: "high"
+          temperature: 0.2
+      - id: "generate-patches"
+        type: "prompt"
+        config:
+          prompt: >
+            Generate manifest patches for:
+            {{steps.identify-improvements.output}}
+            
+            For each change, provide:
+            1. The current value
+            2. The proposed value
+            3. Expected impact (cost/speed/accuracy)
+            4. Risk level of change
+            5. Implementation note
+          model: "high"
+          temperature: 0.1
+  timeout: 300
+  maxRetries: 1
+  retryDelay: 15
+
+evaluation:
+  criteria:
+    - name: "improvement-impact"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.70
+      metric: "actual-vs-estimated-improvement"
+    - name: "safety"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.85
+      metric: "no-regression-rate"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "opportunity-coverage"
+  datasets:
+    - name: "optimizer-samples-v1"
+      path: ".skills/evaluations/skill:meta:skill-optimizer/datasets/v1.yaml"
+  frequency: "weekly"
+
+governance:
+  access:
+    roles: ["admin", "ai-engineer"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: true
+    roles: ["ai-engineer"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "moderate"

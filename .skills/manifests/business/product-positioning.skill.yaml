@@ -1,0 +1,187 @@
+# ============================================================
+# Skill: Product Positioning (L3 Business)
+# ============================================================
+# Purpose: Develop and validate product positioning strategy.
+# Analyzes current positioning against buyer personas, competitive
+# differentiation, value proposition clarity, and AQLIYA platform
+# identity. Recommends positioning improvements.
+# ============================================================
+
+id: "skill:business:product-positioning"
+name: "Product Positioning"
+nameAr: "تحديد موقع المنتج"
+version: "0.1.0"
+description: >
+  Develop and validate product positioning for AQLIYA products.
+  Analyzes current positioning against target buyer personas,
+  competitive differentiation, value proposition clarity, and
+  AQLIYA platform identity doctrine. Produces positioning
+  statements and messaging recommendations.
+descriptionAr: >
+  تطوير والتحقق من تحديد موقع منتجات عقلية. يحلل الموقع الحالي
+  مقابل شخصيات المشتري والتميز التنافسي ووضوح عرض القيمة
+  وهوية منصة عقلية
+category: "business"
+level: 3
+tags:
+  - "positioning"
+  - "messaging"
+  - "value-proposition"
+  - "brand"
+  - "strategy"
+products:
+  - "*"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "product-management"
+
+dependencies:
+  skills:
+    - "skill:foundation:doc-analysis"
+    - "skill:foundation:knowledge-extract"
+    - "skill:business:market-assessment"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Positioning requires deep understanding of brand, audience, and competition"
+  existingInfrastructure:
+    - "Product Status Matrix"
+    - "AQLIYA vision/identity docs"
+    - "Marketing documentation"
+
+inputs:
+  required:
+    - name: "productName"
+      type: "string"
+      description: "Product to position"
+  optional:
+    - name: "targetAudience"
+      type: "string"
+      description: "Primary target audience description"
+    - name: "includeCompetitive"
+      type: "boolean"
+      description: "Include competitive positioning analysis"
+      default: true
+    - name: "outputFormat"
+      type: "string"
+      description: "Output format: brief|standard|detailed"
+      default: "standard"
+
+outputs:
+  primary:
+    type: "object"
+    description: "Positioning strategy with statements, messaging, and differentiation"
+  artifacts:
+    - name: "positioning-report"
+      type: "report"
+      description: "Full positioning analysis and strategy"
+    - name: "positioning-statement"
+      type: "data"
+      description: "Core positioning statement"
+    - name: "messaging-framework"
+      type: "report"
+      description: "Messaging hierarchy and key messages"
+    - name: "differentiator-matrix"
+      type: "data"
+      description: "Competitive differentiators mapped to buyer needs"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "analyze-current"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze current positioning for {{inputs.productName}}:
+            1. How is it currently described?
+            2. What is the value proposition?
+            3. Who is the target buyer?
+            4. Is positioning aligned with AQLIYA platform identity?
+            5. Is it commercially truthful (claims match implementation)?
+            Audience: {{inputs.targetAudience}}
+          model: "high"
+          temperature: 0.2
+      - id: "competitive-positioning"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze competitive positioning:
+            Product: {{inputs.productName}}
+            
+            1. How do competitors position similar offerings?
+            2. What are their key messages?
+            3. What differentiators are claimed?
+            4. What positioning gaps exist?
+          model: "high"
+          temperature: 0.2
+      - id: "develop-positioning"
+        type: "prompt"
+        config:
+          prompt: |
+            Develop positioning strategy:
+            Current: {{steps.analyze-current.output}}
+            Competitive: {{steps.competitive-positioning.output}}
+            
+            Produce:
+            1. Core positioning statement
+            2. Value proposition
+            3. Key differentiators
+            4. Target audience personas
+            5. Messaging framework
+            6. Proof points (from implemented features)
+            Format: {{inputs.outputFormat}}
+          model: "high"
+          temperature: 0.3
+  timeout: 300
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "positioning-quality"
+      type: "quality"
+      weight: 0.40
+      threshold: 0.75
+      metric: "expert-positioning-rating"
+    - name: "truthfulness"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.85
+      metric: "claim-implementation-agreement"
+    - name: "differentiation"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.70
+      metric: "competitive-differentiation-clarity"
+  datasets:
+    - name: "positioning-samples-v1"
+      path: ".skills/evaluations/skill:business:product-positioning/datasets/v1.yaml"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "product-manager", "marketing"]
+    requireAuth: true
+  audit:
+    level: "summary"
+    retainFor: "365d"
+  approval:
+    required: true
+    roles: ["governance-board"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "moderate"

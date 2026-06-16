@@ -1,0 +1,64 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:product:complianceos-review (v1)
+# 3 samples: policy review, evidence map, full compliance audit
+# ============================================================
+version: 1
+skillId: "skill:product:complianceos-review"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for ComplianceOS review"
+samples:
+  - id: "sample-001"
+    description: "Policy adherence review for a specific policy target"
+    input:
+      reviewTarget: "policy:data-retention-2026"
+      regulatoryFramework: "Saudi NCA"
+      severityThreshold: "medium"
+    expected:
+      outputType: "compliance_review_report"
+      targetId: "string"
+      regulatoryFramework: "string"
+      adherenceScore: "number"
+      totalRequirements: "number"
+      metCount: "number"
+      violationCount: "number"
+      violations: "array of {requirement, gap, severity, remediation}"
+      overallStatus: "string"
+    tags:
+      - "baseline"
+      - "policy"
+  - id: "sample-002"
+    description: "Evidence completeness mapping — requirement-to-evidence linkage"
+    input:
+      reviewTarget: "report:compliance-2026-q1"
+      regulatoryFramework: "built-in"
+    expected:
+      outputType: "compliance_review_report"
+      targetId: "string"
+      requirementsMapped: "number"
+      fullyMapped: "number"
+      partiallyMapped: "number"
+      unmapped: "number"
+      evidenceMap: "array of {requirement, status, evidenceId, gaps}"
+      overallCompleteness: "string"
+    tags:
+      - "baseline"
+      - "evidence"
+  - id: "sample-003"
+    description: "Full compliance audit — policies, evidence, audit trail"
+    input:
+      reviewTarget: "full"
+    expected:
+      outputType: "compliance_review_report"
+      overallScore: "number"
+      policyScore: "number"
+      evidenceScore: "number"
+      auditTrailScore: "number"
+      totalViolations: "number"
+      criticalViolations: "number"
+      violations: "array of {domain, requirement, gap, severity, remediation}"
+      evidenceGaps: "array of {requirement, gapType, severity}"
+      recommendations: "array of string"
+      complianceStatus: "string"
+    tags:
+      - "baseline"
+      - "full-audit"

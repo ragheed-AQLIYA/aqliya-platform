@@ -1,0 +1,68 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:business:roi-analysis (v1)
+# 3 samples: feature ROI, platform initiative ROI, cost-benefit
+# ============================================================
+version: 1
+skillId: "skill:business:roi-analysis"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for ROI analysis"
+samples:
+  - id: "sample-001"
+    description: "ROI analysis for AI-assisted audit review feature"
+    input:
+      feature: "AI audit review"
+      devCost: "engineering-weeks: 12"
+      expectedBenefit: "reduced review time by 40%"
+      timeHorizon: "12 months"
+    expected:
+      outputType: "roi_analysis"
+      totalInvestment: "string — SAR development + infra cost"
+      annualBenefit: "string — SAR expected annual benefit"
+      paybackPeriod: "string — months to break-even"
+      netPresentValue: "string — NPV estimate"
+      internalRateOfReturn: "string — IRR percentage"
+      riskFactors: "array of {risk, impact, probability}"
+      recommendation: "string"
+    tags:
+      - "baseline"
+      - "feature"
+  - id: "sample-002"
+    description: "ROI for LocalContentOS product development initiative"
+    input:
+      initiative: "LocalContentOS v0.1 completion"
+      devCost: "engineering-weeks: 20"
+      marketOpportunity: "Saudi content compliance market"
+      timeHorizon: "24 months"
+    expected:
+      outputType: "roi_analysis"
+      totalInvestment: "string"
+      annualBenefit: "string"
+      paybackPeriod: "string"
+      netPresentValue: "string"
+      internalRateOfReturn: "string"
+      marketValidation: "string — TAM/SAM captured"
+      riskFactors: "array of {risk, impact, probability}"
+      recommendation: "string"
+    tags:
+      - "baseline"
+      - "product"
+  - id: "sample-003"
+    description: "Cost-benefit analysis for on-prem vs cloud deployment"
+    input:
+      initiative: "On-prem deployment package"
+      devCost: "engineering-weeks: 30"
+      ongoingOpsCost: "SAR/month estimate"
+      revenuePerCustomer: "SAR/year"
+    expected:
+      outputType: "roi_analysis"
+      totalInvestment: "string"
+      annualBenefit: "string"
+      paybackPeriod: "string"
+      breakEvenCustomers: "number — customers needed to break even"
+      ongoingCostPerCustomer: "string — monthly ops cost"
+      marginPerCustomer: "string — gross margin"
+      riskFactors: "array of {risk, impact, probability}"
+      recommendation: "string"
+    tags:
+      - "baseline"
+      - "infrastructure"

@@ -1,0 +1,73 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:engineering:security-audit (v1)
+# 3 real samples targeting auth, middleware, and AI infra
+# ============================================================
+version: 1
+skillId: "skill:engineering:security-audit"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples across auth code, middleware, and AI infrastructure"
+samples:
+  - id: "sample-001"
+    description: "Auth module security audit — src/lib/auth/ (SCIM, SSO, MFA, OAuth)"
+    input:
+      targetPath: "src/lib/auth/"
+      severityFilter: "medium"
+      scanType: "full"
+    expected:
+      outputType: "audit_report"
+      hasFindings: true
+      findingCount: "number (6-10)"
+      severity: "string (critical/high/medium/low)"
+      items: "array of objects each with path, lineRange, severity, category, description, recommendation"
+      topModules: "SSO service, SCIM service, MFA roles, OAuth providers"
+      authZConcerns: "SCIM token exposure risk, SSO redirect validation, MFA bypass paths"
+    tags:
+      - "baseline"
+      - "auth"
+      - "critical"
+
+  - id: "sample-002"
+    description: "Middleware security audit — src/middleware.ts (RBAC, rate limit, MFA enforcement)"
+    input:
+      targetPath: "src/middleware.ts"
+      severityFilter: "high"
+      scanType: "full"
+    expected:
+      outputType: "audit_report"
+      hasFindings: true
+      findingCount: "number (3-6)"
+      severity: "high"
+      items: "array of objects with path, lineRange, severity, category, description, recommendation"
+      keyAreas: "route-to-minimum-role mapping (lines 78-105), roleHierarchy (lines 107-112), public path detection (lines 128-141), MFA gating (lines 204-227)"
+      concerns:
+        - "publicExact Set may miss nested routes under public prefixes"
+        - "catch clause on line 182 silently falls back to login"
+        - "token parsing catches all errors as unauthenticated"
+    tags:
+      - "baseline"
+      - "middleware"
+      - "rbac"
+      - "mfa"
+
+  - id: "sample-003"
+    description: "AI infrastructure security audit — src/lib/ai/ (orchestrator, provider routing, governance)"
+    input:
+      targetPath: "src/lib/ai/"
+      severityFilter: "medium"
+      scanType: "full"
+    expected:
+      outputType: "audit_report"
+      hasFindings: true
+      findingCount: "number (5-8)"
+      severity: "string (high/medium)"
+      items: "array of objects with path, lineRange, severity, category, description, recommendation"
+      keyModules: "orchestrator.ts, provider-router.ts, governed-ai-executor.ts, eval-gate.ts, hybrid-router.ts"
+      concernCategories:
+        - "provider API key exposure paths"
+        - "governance context injection validation"
+        - "budget enforcement bypass risks"
+        - "AI output review bypass paths"
+    tags:
+      - "baseline"
+      - "ai"
+      - "infrastructure"

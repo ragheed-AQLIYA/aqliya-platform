@@ -1,0 +1,64 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:business:market-assessment (v1)
+# 3 samples: Saudi market, competitive landscape, GTM readiness
+# ============================================================
+version: 1
+skillId: "skill:business:market-assessment"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for market assessment"
+samples:
+  - id: "sample-001"
+    description: "Assess Saudi institutional intelligence platform market"
+    input:
+      market: "Saudi Arabia"
+      segment: "private institutions"
+      products: ["AuditOS", "DecisionOS", "LocalContentOS"]
+    expected:
+      outputType: "market_assessment"
+      totalAddressableMarket: "number — TAM in SAR"
+      serviceableAddressableMarket: "number — SAM in SAR"
+      growthRate: "string — CAGR estimate"
+      segments: "array of {name, size, priority}"
+      competitors: "array of {name, strengths, weaknesses}"
+      recommendations: "array of string"
+      overallRating: "string — opportunity rating"
+    tags:
+      - "baseline"
+      - "saudi"
+  - id: "sample-002"
+    description: "Competitive analysis for AuditOS vs regional audit platforms"
+    input:
+      market: "MENA"
+      segment: "audit intelligence"
+      competitors: ["CaseWare", "AuditBoard", "Wafeq"]
+    expected:
+      outputType: "market_assessment"
+      productAuditOS: "string — positioning assessment"
+      competitiveAdvantages: "array of string"
+      competitiveGaps: "array of string"
+      marketShare: "string — estimated"
+      barriersToEntry: "array of string"
+      recommendations: "array of string"
+      overallRating: "string"
+    tags:
+      - "baseline"
+      - "competitive"
+  - id: "sample-003"
+    description: "Go-to-market readiness for LocalContentOS in Saudi market"
+    input:
+      market: "Saudi Arabia"
+      segment: "local content compliance"
+      product: "LocalContentOS"
+    expected:
+      outputType: "market_assessment"
+      regulatoryEnvironment: "string — assessment of Saudi content laws"
+      channelReadiness: "string — partner/channel assessment"
+      targetBuyers: "array of {persona, need, urgency}"
+      pricingStrategy: "string — recommended approach"
+      timelineToRevenue: "string — months estimate"
+      risks: "array of {risk, mitigation}"
+      recommendations: "array of string"
+      overallRating: "string"
+    tags:
+      - "baseline"
+      - "go-to-market"

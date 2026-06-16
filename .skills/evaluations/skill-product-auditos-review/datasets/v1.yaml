@@ -1,0 +1,63 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:product:auditos-review (v1)
+# 3 samples: TB review, evidence gaps, full engagement review
+# ============================================================
+version: 1
+skillId: "skill:product:auditos-review"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for AuditOS review"
+samples:
+  - id: "sample-001"
+    description: "Trial balance review — completeness, balancing, unusual balances"
+    input:
+      engagementId: "eng-audit-2026-001"
+      reviewScope: "tb"
+    expected:
+      outputType: "audit_review_report"
+      tbBalanced: "boolean"
+      unusualAccounts: "number"
+      missingAccounts: "array of string"
+      completenessScore: "number"
+      flags: "array of {account, issue, severity}"
+      confidence: "number"
+      tbAnalysis: "string"
+    tags:
+      - "baseline"
+      - "trial-balance"
+  - id: "sample-002"
+    description: "Evidence sufficiency review — gap detection and completeness"
+    input:
+      engagementId: "eng-audit-2026-001"
+      reviewScope: "evidence"
+      minConfidence: 0.7
+    expected:
+      outputType: "audit_review_report"
+      evidenceChecked: "number"
+      sufficientCount: "number"
+      gapCount: "number"
+      evidenceGaps: "array of {balance, missingEvidence, severity}"
+      overallSufficiency: "string"
+      confidence: "number"
+    tags:
+      - "baseline"
+      - "evidence"
+  - id: "sample-003"
+    description: "Full engagement review — TB, mappings, statements, findings"
+    input:
+      engagementId: "eng-audit-2026-002"
+      reviewScope: "full"
+    expected:
+      outputType: "audit_review_report"
+      engagementId: "string"
+      overallScore: "number"
+      tbAnalysis: "string"
+      mappingConsistency: "number"
+      statementCoherence: "number"
+      findingQuality: "number"
+      totalFlags: "number"
+      criticalFlags: "number"
+      flags: "array of {item, issue, severity, recommendation, confidence}"
+      reviewSummary: "string"
+    tags:
+      - "baseline"
+      - "full-engagement"

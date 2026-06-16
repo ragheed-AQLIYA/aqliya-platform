@@ -1,0 +1,51 @@
+﻿version: 1
+skillId: "skill:foundation:arch-mapping"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples"
+samples:
+  - id: "sample-001"
+    description: "Full architecture map of the entire src/ directory"
+    input:
+      targetPath: "src/"
+      depth: "full"
+    expected:
+      outputType: "architecture_map"
+      depth: "full"
+      topLevelLayers: "array of strings — e.g. ['app', 'components', 'lib', 'actions']"
+      layerRelations: "array of {from, to, relationship}"
+      entryPoints: "array of {path, role}"
+      dataFlow: "string — description of primary data flow"
+    tags:
+      - "baseline"
+      - "primary-path"
+
+  - id: "sample-002"
+    description: "Architecture map focused on the shared lib/ domain services"
+    input:
+      targetPath: "src/lib/"
+      depth: "full"
+    expected:
+      outputType: "architecture_map"
+      depth: "full"
+      domainServices: "array of strings — e.g. ['ai', 'audit', 'governance', 'auth', 'platform', 'decision']"
+      crossDomainRelations: "array of {sourceDomain, targetDomain, sharedTypes}"
+      coreUtils: "array of strings — shared utility modules"
+    tags:
+      - "baseline"
+      - "domain"
+
+  - id: "sample-003"
+    description: "Architecture map of the App Router route groups"
+    input:
+      targetPath: "src/app/"
+      depth: "full"
+    expected:
+      outputType: "architecture_map"
+      depth: "full"
+      routeGroups: "array of strings — e.g. ['(dashboard)', '(marketing)', 'api', 'audit', 'local-content', 'decision']"
+      layoutHierarchy: "array of {path, layoutFile, nestedRoutes}"
+      apiRoutes: "array of string — API route paths"
+      authBoundaries: "array of {route, requiresAuth, middleware}"
+    tags:
+      - "baseline"
+      - "routes"

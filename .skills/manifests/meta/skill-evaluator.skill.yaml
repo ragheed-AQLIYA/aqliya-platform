@@ -1,0 +1,174 @@
+# ============================================================
+# Skill: Skill Evaluator (L4 Meta)
+# ============================================================
+# Purpose: Evaluate skill quality, run test cases, compute scores,
+# and generate improvement recommendations.
+# Reuses: Eval Framework, test case datasets, InstitutionalMemory
+# ============================================================
+
+id: "skill:meta:skill-evaluator"
+name: "Skill Evaluator"
+nameAr: "تقييم المهارات"
+version: "0.1.0"
+description: >
+  Evaluate the quality of any skill by running test cases from its
+  evaluation datasets, computing scores against defined criteria,
+  and generating improvement recommendations. The gatekeeper for
+  skill promotion through lifecycle stages.
+descriptionAr: >
+  تقييم جودة أي مهارة من خلال تشغيل حالات الاختبار من بيانات التقييم
+  وحساب الدرجات وفق المعايير المحددة وتوليد توصيات التحسين
+category: "meta"
+level: 4
+tags:
+  - "meta"
+  - "evaluation"
+  - "quality"
+  - "testing"
+  - "gates"
+  - "improvement"
+products:
+  - "intelligence-core"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+    reason: "Evaluation benchmarks run against known datasets"
+  existingInfrastructure:
+    - "Eval Framework (eval-runner.ts, eval-types.ts)"
+    - "EvalMetric, EvalTestCase, EvalSuite, EvalRunReport"
+
+inputs:
+  required:
+    - name: "skillId"
+      type: "string"
+      description: "ID of the skill to evaluate"
+  optional:
+    - name: "datasets"
+      type: "array"
+      description: "Specific datasets to evaluate against"
+    - name: "rerunAll"
+      type: "boolean"
+      description: "Re-run all test cases instead of using cached results"
+      default: false
+    - name: "generateReport"
+      type: "boolean"
+      description: "Generate a full evaluation report"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Evaluation results with scores, pass/fail per criterion, and recommendations"
+  artifacts:
+    - name: "eval-run-report"
+      type: "report"
+      description: "Detailed evaluation run report"
+    - name: "scorecard"
+      type: "data"
+      description: "Criterion-by-criterion scorecard"
+    - name: "improvement-plan"
+      type: "report"
+      description: "Recommendations for skill improvement"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "load-manifest"
+        type: "tool"
+        config:
+          tool: "filesystem:read"
+          params:
+            path: ".skills/manifests/{{inputs.skillId.split(':').slice(1).join('/')}}.skill.yaml"
+      - id: "load-datasets"
+        type: "tool"
+        config:
+          tool: "filesystem:read"
+          params:
+            path: "{{steps.load-manifest.evaluation.datasets}}"
+      - id: "run-evaluations"
+        type: "eval"
+        config:
+          dataset: "{{steps.load-datasets.output}}"
+          criteria: "{{steps.load-manifest.evaluation.criteria}}"
+          model: "{{inputs.skillId.skill.preferredModel}}"
+      - id: "compute-scores"
+        type: "prompt"
+        config:
+          prompt: |
+            Compute final scores for each criterion based on evaluation results:
+            
+            Evaluation results: {{steps.run-evaluations.output}}
+            Criteria definitions: {{steps.load-manifest.evaluation.criteria}}
+            
+            For each criterion:
+            1. Calculate actual score
+            2. Compare against threshold
+            3. Determine pass/fail status
+            4. Generate overall quality score (weighted average)
+            5. Recommend lifecycle action (promote/pass/demote/block)
+          model: "primary"
+          temperature: 0.0
+  timeout: 300
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "score-accuracy"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.78
+      metric: "score-computation-accuracy"
+      description: "Scores must match manual computation"
+    - name: "recommendation-quality"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.72
+      metric: "recommendation-relevance"
+    - name: "consistency"
+      type: "consistency"
+      weight: 0.20
+      threshold: 0.80
+      metric: "run-to-run-consistency"
+  datasets:
+    - name: "eval-samples-v1"
+      path: ".skills/evaluations/skill:meta:skill-evaluator/datasets/v1.yaml"
+      description: "Sample evaluation runs with known expected scores"
+  frequency: "per-run"
+
+governance:
+  access:
+    roles: ["admin", "ai-engineer", "auditor"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "controlled"
+  fallbackBehavior: "use-deterministic-scoring"

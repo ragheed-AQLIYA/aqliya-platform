@@ -1,0 +1,174 @@
+# ============================================================
+# Skill: AuditOS Review (L2 Product)
+# ============================================================
+# Purpose: Review AuditOS engagement data — trial balances,
+# account mappings, financial statements, findings, and evidence.
+# Provides AI-assisted review with human oversight for audit
+# quality assurance.
+# ============================================================
+
+id: "skill:product:auditos-review"
+name: "AuditOS Review"
+nameAr: "مراجعة أوديت أو إس"
+version: "0.1.0"
+description: >
+  AI-assisted review for AuditOS engagements. Analyzes trial balance
+  completeness, account mapping consistency, financial statement
+  coherence, finding quality, and evidence sufficiency. Produces
+  review notes with confidence levels for human auditor sign-off.
+descriptionAr: >
+  مراجعة مدعومة بالذكاء الاصطناعي لمهام أوديت أو إس. تحلل اكتمال
+  ميزان المراجعة واتساق ترحيل الحسابات وتماسك القوائم المالية
+  وجودة النتائج وكفاية الأدلة
+category: "product"
+level: 2
+tags:
+  - "audit"
+  - "review"
+  - "financial"
+  - "trial-balance"
+  - "evidence"
+products:
+  - "auditos"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "auditos-team"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Financial domain requires high reasoning for accurate review"
+  existingInfrastructure:
+    - "AIReviewEngine"
+    - "AuditOS data models"
+    - "Evidence vault"
+    - "Governance Framework"
+
+inputs:
+  required:
+    - name: "engagementId"
+      type: "string"
+      description: "AuditOS engagement ID to review"
+  optional:
+    - name: "reviewScope"
+      type: "string"
+      description: "Scope: full|tb|mappings|statements|findings|evidence"
+      default: "full"
+    - name: "minConfidence"
+      type: "number"
+      description: "Minimum confidence threshold for flags (0.0-1.0)"
+      default: 0.7
+
+outputs:
+  primary:
+    type: "object"
+    description: "Review report with findings, flags, and confidence levels"
+  artifacts:
+    - name: "review-summary"
+      type: "report"
+      description: "Executive summary of review findings"
+    - name: "flag-list"
+      type: "report"
+      description: "Flagged items requiring human attention"
+    - name: "evidence-gaps"
+      type: "report"
+      description: "Missing or insufficient evidence items"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "fetch-engagement"
+        type: "tool"
+        config:
+          tool: "data:fetch"
+          params:
+            source: "auditos"
+            engagementId: "{{inputs.engagementId}}"
+      - id: "analyze-tb"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze the trial balance for engagement {{inputs.engagementId}}:
+            1. Does the TB balance (debits = credits)?
+            2. Are there unusual account balances?
+            3. Are any required accounts missing?
+            4. Is the TB complete for the reporting period?
+          model: "high"
+          temperature: 0.1
+      - id: "check-evidence"
+        type: "prompt"
+        config:
+          prompt: |
+            Review evidence sufficiency for flagged items:
+            1. Is each significant balance supported by evidence?
+            2. Are evidence files complete and valid?
+            3. Are there gaps requiring follow-up?
+          model: "high"
+          temperature: 0.2
+      - id: "produce-review"
+        type: "prompt"
+        config:
+          prompt: |
+            Produce a final review summary:
+            - TB Analysis: {{steps.analyze-tb.output}}
+            - Evidence: {{steps.check-evidence.output}}
+            
+            For each flag: severity, description, recommendation, confidence.
+          model: "high"
+          temperature: 0.1
+  timeout: 300
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "flag-accuracy"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.55
+      metric: "correct-flag-rate"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.25
+      threshold: 0.70
+      metric: "coverage-by-scope"
+    - name: "confidence-calibration"
+      type: "accuracy"
+      weight: 0.25
+      threshold: 0.55
+      metric: "confidence-vs-outcome"
+  datasets:
+    - name: "auditos-review-v1"
+      path: ".skills/evaluations/skill:product:auditos-review/datasets/v1.yaml"
+  frequency: "per-execution"
+
+governance:
+  access:
+    roles: ["admin", "auditor", "reviewer"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "severe"
+  fallbackBehavior: "block-and-notify"

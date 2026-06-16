@@ -1,0 +1,88 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:engineering:performance-review (v1)
+# 3 real samples targeting orchestrator, AI module, and runtime
+# ============================================================
+version: 1
+skillId: "skill:engineering:performance-review"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples across orchestrator, AI module, and skill runtime"
+samples:
+  - id: "sample-001"
+    description: "AI orchestrator performance review — src/lib/ai/orchestrator.ts (383 lines)"
+    input:
+      targetPath: "src/lib/ai/orchestrator.ts"
+      focus: "all"
+      includeNPlusOne: true
+    expected:
+      outputType: "performance_report"
+      hasFindings: true
+      findingCount: "number (3-6)"
+      items: "array of objects with lineRange, type, severity, description, recommendation"
+      analysis:
+        - "Provider selection hot path (selectOptimalProvider) — called per-execution"
+        - "Governance context fetch (getGovernanceContext) — may be synchronous"
+        - "Audit log writes (writePlatformAuditLog) — potential I/O bottleneck"
+        - "RAG context injection (orchestrator-rag-inject) — vector DB query timing"
+        - "Budget enforcement (budget-manager) — per-tenant quota check overhead"
+      nPlusOneConcerns:
+        - "multiple sequential provider checks before routing"
+        - "governance context retrieval may query multiple tables"
+    tags:
+      - "baseline"
+      - "orchestrator"
+      - "performance"
+
+  - id: "sample-002"
+    description: "AI module memory performance review — src/lib/ai/ with memory focus"
+    input:
+      targetPath: "src/lib/ai/"
+      focus: "memory"
+      includeNPlusOne: true
+    expected:
+      outputType: "performance_report"
+      hasFindings: true
+      findingCount: "number (4-7)"
+      items: "array of objects with path, type, severity, description, recommendation"
+      submodulesInspected:
+        - "orchestrator.ts — governance context object size per request"
+        - "memory/ — institutional memory cache and retrieval patterns"
+        - "embedding/ — vector embedding generation overhead"
+        - "retrieval/ — RAG context assembly memory usage"
+        - "hybrid-router.ts — request/response object allocation patterns"
+      concerns:
+        - "large prompt assembly can spike heap usage"
+        - "institutional memory may retain unbounded context"
+        - "embedding responses cached vs recomputed"
+        - "AI response objects may duplicate input context"
+    tags:
+      - "baseline"
+      - "memory"
+      - "ai"
+
+  - id: "sample-003"
+    description: "Skill runtime performance review — src/lib/skill-runtime/runtime.ts (846 lines)"
+    input:
+      targetPath: "src/lib/skill-runtime/runtime.ts"
+      focus: "all"
+      includeNPlusOne: true
+    expected:
+      outputType: "performance_report"
+      hasFindings: true
+      findingCount: "number (3-5)"
+      items: "array of objects with lineRange, type, severity, description, recommendation"
+      analysis:
+        - "YAML manifest parsing (readFileSync + yaml.load) — synchronous file I/O per execution"
+        - "Step resolution loop — sequential step execution may not parallelize independent steps"
+        - "AI orchestration per step — each step calls aiOrchestrator with full governance context"
+        - "Audit log writes — writePlatformAuditLog called per step"
+      nPlusOneConcerns:
+        - "each step resolves skill definition from disk independently"
+        - "each step writes audit log entry sequentially"
+      recommendations:
+        - "cache parsed manifests in memory"
+        - "batch audit log writes"
+        - "parallelize independent steps"
+    tags:
+      - "baseline"
+      - "runtime"
+      - "performance"

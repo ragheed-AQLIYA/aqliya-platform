@@ -1,0 +1,87 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:engineering:migration-audit (v1)
+# 3 real samples targeting migrations, schema, and seed
+# ============================================================
+version: 1
+skillId: "skill:engineering:migration-audit"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples across migrations directory, schema file, and seed script"
+samples:
+  - id: "sample-001"
+    description: "Full migration history audit — prisma/migrations/ (46 migration directories)"
+    input:
+      migrationPath: "prisma/"
+      schemaPath: "prisma/schema.prisma"
+      checkRollback: true
+    expected:
+      outputType: "migration_audit_report"
+      hasFindings: true
+      findingCount: "number (4-8)"
+      totalMigrations: 46
+      dateRange: "2026-05-06 to 2026-06-15"
+      items: "array of objects with migrationName, date, tablesAdded, columnsChanged, riskLevel, rollbackAvailable"
+      keyChecks:
+        - "all migrations have reversible operations documented"
+        - "no destructive column drops without data migration"
+        - "migration_lock.toml consistency"
+        - "sequential ordering check (20260612999999_fix_r001_lead_schedule_order is an outlier)"
+      risks:
+        - "some migrations lack rollback SQL"
+        - "timestamp ordering has gaps"
+    tags:
+      - "baseline"
+      - "migrations"
+      - "prisma"
+
+  - id: "sample-002"
+    description: "Schema integrity audit — prisma/schema.prisma (40+ models)"
+    input:
+      migrationPath: "prisma/schema.prisma"
+      schemaPath: "prisma/schema.prisma"
+      checkRollback: false
+    expected:
+      outputType: "schema_audit_report"
+      hasFindings: true
+      findingCount: "number (5-10)"
+      totalModels: "40+"
+      items: "array of objects with modelName, fieldCount, missingIndexes, relationIssues, recommendation"
+      keyChecks:
+        - "all models have id field with @default(cuid())"
+        - "all business models have createdAt/updatedAt"
+        - "relation integrity and onDelete cascade rules"
+        - "index coverage on foreign keys"
+        - "enum Usage analysis"
+      concernAreas:
+        - "User model has many relation fields (16+) — potential N+1"
+        - "AuditEngagement has 20+ relation fields"
+        - "Organization model has 20+ relation fields with platformOrganizationId nullable"
+    tags:
+      - "baseline"
+      - "schema"
+      - "prisma"
+
+  - id: "sample-003"
+    description: "Seed script audit — prisma/seed.ts (877 lines)"
+    input:
+      migrationPath: "prisma/seed.ts"
+      schemaPath: "prisma/schema.prisma"
+      checkRollback: false
+    expected:
+      outputType: "seed_audit_report"
+      hasFindings: true
+      findingCount: "number (3-5)"
+      seedLines: 877
+      items: "array of objects with section, issueType, description, recommendation"
+      keyChecks:
+        - "seed data matches current schema (no stale model references)"
+        - "password hashing uses bcrypt with correct salt rounds"
+        - "organization/platformOrganization bridge is seeded"
+        - "AuditOS seed data aligns with AuditEngagement schema"
+        - "environment variable handling (dotenv + PrismaPg adapter)"
+      concerns:
+        - "seed must be idempotent (deleteMany ordering)"
+        - "hardcoded IDs may conflict across environments"
+    tags:
+      - "baseline"
+      - "seed"
+      - "data"

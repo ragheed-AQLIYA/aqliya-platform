@@ -1,0 +1,151 @@
+# ============================================================
+# AQLIYA Skill Access Policies v1.0
+# ============================================================
+# Defines who can invoke which skills and under what conditions.
+# Uses role-based access control aligned with AQLIYA's existing RBAC.
+# ============================================================
+
+version: 1
+updatedAt: "2026-06-15T22:00:00Z"
+
+policies:
+  # ─── L0 Foundation — low sensitivity ───
+  - skill: "skill:foundation:*"
+    description: "All foundation skills are read-only analysis"
+    roles: ["admin", "developer", "auditor", "reviewer", "system"]
+    authRequired: false
+    auditLevel: "summary"
+    approvalRequired: false
+    evidenceRequired: false
+
+  # ─── L1 Engineering — medium sensitivity ───
+  - skill: "skill:engineering:security-audit"
+    description: "Security audit findings are sensitive"
+    roles: ["admin", "developer", "auditor"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: false
+    evidenceRequired: true
+
+  - skill: "skill:engineering:migration-audit"
+    description: "Migration audit impacts data integrity"
+    roles: ["admin", "developer"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: false
+    evidenceRequired: true
+
+  - skill: "skill:engineering:performance-review"
+    description: "Performance review is advisory"
+    roles: ["admin", "developer", "reviewer"]
+    authRequired: true
+    auditLevel: "summary"
+    approvalRequired: false
+    evidenceRequired: false
+
+  - skill: "skill:engineering:test-coverage"
+    description: "Test coverage review is advisory"
+    roles: ["admin", "developer"]
+    authRequired: true
+    auditLevel: "summary"
+    approvalRequired: false
+    evidenceRequired: false
+
+  - skill: "skill:engineering:release-audit"
+    description: "Release audit may block releases"
+    roles: ["admin", "developer"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: true
+    evidenceRequired: true
+
+  - skill: "skill:engineering:tech-debt"
+    description: "Tech debt review is advisory"
+    roles: ["admin", "developer", "reviewer"]
+    authRequired: true
+    auditLevel: "summary"
+    approvalRequired: false
+    evidenceRequired: false
+
+  # ─── L2 Product — high sensitivity ───
+  - skill: "skill:product:auditos-review"
+    description: "AuditOS product review — audit-sensitive"
+    roles: ["admin", "auditor"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: true
+    evidenceRequired: true
+
+  - skill: "skill:product:localcontent-review"
+    description: "LocalContent review — compliance-sensitive"
+    roles: ["admin", "auditor"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: true
+    evidenceRequired: true
+
+  - skill: "skill:product:salesos-review"
+    description: "Sales pipeline review — commercially sensitive"
+    roles: ["admin", "sales-manager"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: true
+    evidenceRequired: true
+
+  - skill: "skill:product:complianceos-review"
+    description: "Compliance review — regulatory sensitivity"
+    roles: ["admin", "compliance-officer"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: true
+    evidenceRequired: true
+
+  # ─── L3 Business — executive sensitivity ───
+  - skill: "skill:business:*"
+    description: "All business skills are executive-level"
+    roles: ["admin", "executive"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: true
+    evidenceRequired: true
+
+  # ─── L4 Meta — infrastructure sensitivity ───
+  - skill: "skill:meta:skill-builder"
+    description: "Skill Builder can generate new capabilities"
+    roles: ["admin", "ai-engineer"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: true
+    evidenceRequired: true
+
+  - skill: "skill:meta:skill-auditor"
+    description: "Skill Auditor reviews quality of all skills"
+    roles: ["admin", "ai-engineer"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: false
+    evidenceRequired: true
+
+  - skill: "skill:meta:skill-optimizer"
+    description: "Skill Optimizer modifies skill parameters"
+    roles: ["admin", "ai-engineer"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: true
+    evidenceRequired: true
+
+  - skill: "skill:meta:skill-composer"
+    description: "Skill Composer creates multi-skill workflows"
+    roles: ["admin", "ai-engineer", "developer"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: false
+    evidenceRequired: true
+
+  - skill: "skill:meta:skill-evaluator"
+    description: "Skill Evaluator measures skill quality"
+    roles: ["admin", "ai-engineer", "auditor"]
+    authRequired: true
+    auditLevel: "all"
+    approvalRequired: false
+    evidenceRequired: true

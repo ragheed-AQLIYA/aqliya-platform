@@ -1,0 +1,182 @@
+# ============================================================
+# AQLIYA Composition Workflow: Full Repository Audit
+# ============================================================
+# Chains analysis, architecture, security, and documentation skills
+# into a comprehensive repository health assessment.
+# ============================================================
+
+id: "workflow:full-repository-audit"
+name: "Full Repository Audit"
+nameAr: "تدقيق شامل للمستودع"
+version: "0.1.0"
+description: >
+  Comprehensive repository health assessment that chains repository
+  analysis, architecture mapping, dependency analysis, security audit,
+  test coverage review, and documentation analysis into a single
+  orchestrated workflow.
+descriptionAr: >
+  تقييم شامل لسلامة المستودع يربط تحليل المستودع والرسم المعماري
+  وتحليل التبعيات والتدقيق الأمني ومراجعة تغطية الاختبارات
+  وتحليل الوثائق في سير عمل واحد منسق
+tags:
+  - "audit"
+  - "full"
+  - "health"
+  - "comprehensive"
+products:
+  - "*"
+
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Repository or module path to audit"
+  optional:
+    - name: "depth"
+      type: "string"
+      description: "Audit depth: 'quick' | 'standard' | 'deep'"
+      default: "standard"
+
+outputs:
+  primary:
+    type: "object"
+    description: "Aggregated audit report with all section results and executive summary"
+
+stages:
+  # ─── Phase 1: Foundation (parallel) ───
+  - id: "phase-1-foundation"
+    name: "Foundation Analysis"
+    description: "Parallel analysis of repository structure and documentation"
+    parallel: true
+    steps:
+      - id: "repo-analysis"
+        skill: "skill:foundation:repo-analysis"
+        params:
+          targetPath: "{{inputs.targetPath}}"
+          depth: "modules"
+      - id: "doc-analysis"
+        skill: "skill:foundation:doc-analysis"
+        params:
+          targetPath: "{{inputs.targetPath}}/docs"
+          checkConsistency: true
+          checkReferences: true
+      - id: "dep-analysis"
+        skill: "skill:foundation:dependency-map"
+        params:
+          targetPath: "{{inputs.targetPath}}"
+          includeExternal: true
+
+  # ─── Phase 2: Architecture (depends on Phase 1) ───
+  - id: "phase-2-architecture"
+    name: "Architecture & Knowledge"
+    description: "Build architecture model from analysis results"
+    dependsOn: ["phase-1-foundation"]
+    parallel: false
+    steps:
+      - id: "arch-mapping"
+        skill: "skill:foundation:arch-mapping"
+        params:
+          targetPath: "{{inputs.targetPath}}"
+          depth: "full"
+      - id: "knowledge-extract"
+        skill: "skill:foundation:knowledge-extract"
+        params:
+          sourcePath: "{{inputs.targetPath}}"
+          collectionName: "repository-audit-{{inputs.targetPath | slugify}}"
+          extractionType: "full"
+          storeInMemory: true
+
+  # ─── Phase 3: Engineering Audit (parallel, depends on Phase 1+2) ───
+  - id: "phase-3-engineering"
+    name: "Engineering Audit"
+    description: "Parallel security, testing, and engineering analysis"
+    dependsOn: ["phase-2-architecture"]
+    parallel: true
+    steps:
+      - id: "security-audit"
+        skill: "skill:engineering:security-audit"
+        params:
+          targetPath: "{{inputs.targetPath}}"
+          severityFilter: "medium"
+          scanType: "full"
+      - id: "test-coverage"
+        skill: "skill:engineering:test-coverage"
+        params:
+          targetPath: "{{inputs.targetPath}}"
+          includeQualityAnalysis: true
+      - id: "migration-audit"
+        skill: "skill:engineering:migration-audit"
+        params:
+          migrationPath: "{{inputs.targetPath}}/prisma/migrations"
+
+  # ─── Phase 4: Synthesis (depends on Phase 3) ───
+  - id: "phase-4-synthesis"
+    name: "Audit Synthesis"
+    description: "Aggregate results into comprehensive report"
+    dependsOn: ["phase-3-engineering"]
+    parallel: false
+    steps:
+      - id: "generate-report"
+        type: "aggregate"
+        config:
+          strategy: "sequential"
+          inputs:
+            - from: "repo-analysis"
+              key: "structure"
+            - from: "doc-analysis"
+              key: "documentation"
+            - from: "dep-analysis"
+              key: "dependencies"
+            - from: "arch-mapping"
+              key: "architecture"
+            - from: "knowledge-extract"
+              key: "knowledge"
+            - from: "security-audit"
+              key: "security"
+            - from: "test-coverage"
+              key: "testing"
+          outputFormat: "markdown"
+          template: |
+            # Full Repository Audit Report
+
+            ## Executive Summary
+            {{executive_summary}}
+
+            ## Repository Structure
+            {{repo-analysis.structure}}
+
+            ## Documentation Health
+            {{doc-analysis.documentation}}
+
+            ## Dependency Analysis
+            {{dep-analysis.dependencies}}
+
+            ## Architecture Model
+            {{arch-mapping.architecture}}
+
+            ## Security Findings
+            {{security-audit.security}}
+
+            ## Test Coverage
+            {{test-coverage.testing}}
+
+            ## Recommendations
+            1. {{recommendation_1}}
+            2. {{recommendation_2}}
+            3. {{recommendation_3}}
+
+            ## Knowledge Graph Entries
+            {{knowledge-extract.knowledge}}
+
+            _Generated by AQLIYA Skill OS — Workflow: full-repository-audit v0.1.0_
+
+errorHandling:
+  strategy: "continue-on-error"
+  timeoutPerStep: 180
+  maxRetriesPerStep: 2
+  failureAggregation: "include-warnings"

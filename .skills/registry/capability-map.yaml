@@ -1,0 +1,140 @@
+# ============================================================
+# AQLIYA Skill Capability Map v1.0
+# ============================================================
+# Maps business capabilities → skill IDs.
+# Enables discovery: "I need to audit security" → find skill
+# ============================================================
+
+version: 1
+updatedAt: "2026-06-15T22:00:00Z"
+
+capabilities:
+  # ─── Analysis (L0) ───
+  repository-analysis:
+    description: "Understand repository structure and patterns"
+    skills:
+      - skill:foundation:repo-analysis
+
+  documentation-analysis:
+    description: "Read, classify, and cross-reference docs"
+    skills:
+      - skill:foundation:doc-analysis
+
+  architecture-mapping:
+    description: "Map architecture layers and component relationships"
+    skills:
+      - skill:foundation:arch-mapping
+
+  dependency-mapping:
+    description: "Map dependencies between modules and services"
+    skills:
+      - skill:foundation:dependency-map
+
+  knowledge-extraction:
+    description: "Extract entities, workflows, business rules"
+    skills:
+      - skill:foundation:knowledge-extract
+
+  # ─── Audit & Review (L1) ───
+  security-audit:
+    description: "Audit code for security vulnerabilities"
+    skills:
+      - skill:engineering:security-audit
+
+  migration-audit:
+    description: "Analyze migration readiness and breaking changes"
+    skills:
+      - skill:engineering:migration-audit
+
+  performance-review:
+    description: "Identify performance bottlenecks"
+    skills:
+      - skill:engineering:performance-review
+
+  test-coverage-review:
+    description: "Analyze test coverage and quality"
+    skills:
+      - skill:engineering:test-coverage
+
+  release-audit:
+    description: "Verify release readiness"
+    skills:
+      - skill:engineering:release-audit
+
+  technical-debt-review:
+    description: "Identify dead code, duplication, architectural drift"
+    skills:
+      - skill:engineering:tech-debt
+
+  # ─── Product Review (L2) ───
+  audit-product-review:
+    description: "Review audit engagements and findings"
+    skills:
+      - skill:product:auditos-review
+
+  local-content-review:
+    description: "Review local content compliance"
+    skills:
+      - skill:product:localcontent-review
+
+  sales-review:
+    description: "Review pipeline, opportunities, stakeholders"
+    skills:
+      - skill:product:salesos-review
+
+  compliance-review:
+    description: "Review compliance records and obligations"
+    skills:
+      - skill:product:complianceos-review
+
+  # ─── Business (L3) ───
+  commercial-validation:
+    description: "Validate commercial claims against reality"
+    skills:
+      - skill:business:commercial-validation
+
+  roi-analysis:
+    description: "Analyze return on investment"
+    skills:
+      - skill:business:roi-analysis
+
+  pricing-analysis:
+    description: "Analyze pricing models and strategy"
+    skills:
+      - skill:business:pricing-analysis
+
+  market-assessment:
+    description: "Assess market segments and competitive landscape"
+    skills:
+      - skill:business:market-assessment
+
+  product-positioning:
+    description: "Analyze and recommend product positioning"
+    skills:
+      - skill:business:product-positioning
+
+  # ─── Meta (L4) ───
+  skill-building:
+    description: "Generate new skills from descriptions"
+    skills:
+      - skill:meta:skill-builder
+
+  skill-auditing:
+    description: "Audit existing skills for quality and compliance"
+    skills:
+      - skill:meta:skill-auditor
+
+  skill-optimization:
+    description: "Optimize skill performance and cost"
+    skills:
+      - skill:meta:skill-optimizer
+
+  skill-composition:
+    description: "Compose multiple skills into workflows"
+    skills:
+      - skill:meta:skill-composer
+
+  skill-evaluation:
+    description: "Evaluate any skill against criteria"
+    skills:
+      - skill:meta:skill-evaluator

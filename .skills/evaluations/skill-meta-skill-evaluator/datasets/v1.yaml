@@ -1,0 +1,59 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:meta:skill-evaluator (v1)
+# 3 samples: evaluate single skill, batch, compare runs
+# ============================================================
+version: 1
+skillId: "skill:meta:skill-evaluator"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for skill evaluation"
+samples:
+  - id: "sample-001"
+    description: "Evaluate a single foundation skill against its dataset"
+    input:
+      targetSkill: "skill:foundation:repo-analysis"
+      datasetPath: ".skills/evaluations/skill-foundation-repo-analysis/datasets/v1.yaml"
+    expected:
+      outputType: "evaluation_result"
+      skillId: "string"
+      evaluated: "boolean"
+      overallScore: "number — 0 to 1"
+      passed: "boolean"
+      sampleCount: "number"
+      criterionBreakdown: "array of {name, score, threshold, passed}"
+      errors: "array of string"
+    tags:
+      - "baseline"
+      - "single"
+  - id: "sample-002"
+    description: "Batch evaluate all foundation-level skills"
+    input:
+      level: 0
+    expected:
+      outputType: "batch_evaluation_result"
+      totalSkills: "number"
+      evaluated: "array of string"
+      passed: "number"
+      failed: "number"
+      overallPassRate: "number"
+      breakdown: "array of {skillId, overallScore, passed}"
+      errors: "array of string"
+    tags:
+      - "baseline"
+      - "batch"
+  - id: "sample-003"
+    description: "Compare evaluation results between two runs and identify regressions"
+    input:
+      runA: "path/to/previous/results.json"
+      runB: "current-run-results"
+      comparisonMetric: "overallScore"
+    expected:
+      outputType: "comparison_result"
+      compared: "boolean"
+      improved: "array of {skillId, delta}"
+      regressed: "array of {skillId, delta}"
+      unchanged: "array of string"
+      overallDelta: "number"
+      summary: "string"
+    tags:
+      - "baseline"
+      - "comparison"

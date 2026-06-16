@@ -1,0 +1,176 @@
+# ============================================================
+# Skill: Commercial Validation (L3 Business)
+# ============================================================
+# Purpose: Validate commercial claims, pricing models, and
+# revenue projections across products. Cross-references claims
+# against implemented features, market data, and governance policies
+# to ensure commercial truthfulness.
+# ============================================================
+
+id: "skill:business:commercial-validation"
+name: "Commercial Validation"
+nameAr: "التحقق التجاري"
+version: "0.1.0"
+description: >
+  Validate commercial claims made in documentation, marketing
+  materials, sales proposals, and product descriptions. Cross-references
+  claims against implemented features in the codebase, pricing
+  models, market benchmarks, and AQLIYA governance policies.
+  Ensures commercial truthfulness before external communication.
+descriptionAr: >
+  التحقق من الادعاءات التجارية في التوثيق والمواد التسويقية
+  وعروض المبيعات. يقارن الادعاءات بالميزات المنفذة ونماذج
+  التسعير ومعايير السوق لضمان الصدق التجاري
+category: "business"
+level: 3
+tags:
+  - "commercial"
+  - "validation"
+  - "truthfulness"
+  - "marketing"
+  - "claims"
+products:
+  - "*"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "product-management"
+
+dependencies:
+  skills:
+    - "skill:foundation:doc-analysis"
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Requires nuanced understanding of commercial claims vs implementation reality"
+  existingInfrastructure:
+    - "Product Status Matrix (PRODUCT_STATUS_MATRIX.md)"
+    - "Route Strategy docs"
+    - "Governance Framework"
+
+inputs:
+  required:
+    - name: "claimSource"
+      type: "string"
+      description: "Path to document or URL containing claims to validate"
+  optional:
+    - name: "strictness"
+      type: "string"
+      description: "Validation strictness: strict|moderate|lenient"
+      default: "strict"
+    - name: "generateReport"
+      type: "boolean"
+      description: "Generate a formal validation report"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Validation results: verified, overclaimed, underclaimed, unsupported"
+  artifacts:
+    - name: "validation-report"
+      type: "report"
+      description: "Detailed claim-by-claim validation report"
+    - name: "claim-inventory"
+      type: "data"
+      description: "All extracted claims with validation status"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "extract-claims"
+        type: "prompt"
+        config:
+          prompt: |
+            Extract all commercial claims from {{inputs.claimSource}}:
+            1. Product capabilities claims
+            2. Implementation status claims
+            3. Deployment claims (cloud/private/on-prem)
+            4. Performance/scale claims
+            5. Compliance/certification claims
+            6. Pricing claims
+            Strictness: {{inputs.strictness}}
+          model: "high"
+          temperature: 0.1
+      - id: "verify-claims"
+        type: "prompt"
+        config:
+          prompt: |
+            Verify each claim against codebase reality:
+            Claims: {{steps.extract-claims.output}}
+            
+            For each claim determine:
+            - Verified: implemented and documented
+            - Overclaimed: partially implemented or exaggerated
+            - Unsupported: claim cannot be verified
+            - Underclaimed: implementation exceeds claim
+            
+            Reference the product status matrix and route strategy.
+          model: "high"
+          temperature: 0.2
+      - id: "produce-report"
+        type: "prompt"
+        config:
+          prompt: >
+            Produce validation report:
+            {{steps.verify-claims.output}}
+            
+            Include: verified count, overclaimed count, risk level,
+            and remediation recommendations for unsupported claims.
+          model: "high"
+          temperature: 0.1
+  timeout: 300
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "claim-detection"
+      type: "accuracy"
+      weight: 0.35
+      threshold: 0.80
+      metric: "claim-extraction-recall"
+    - name: "verification-accuracy"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.85
+      metric: "correct-verification-rate"
+    - name: "report-quality"
+      type: "quality"
+      weight: 0.25
+      threshold: 0.75
+      metric: "actionable-recommendations"
+  datasets:
+    - name: "commercial-validation-v1"
+      path: ".skills/evaluations/skill:business:commercial-validation/datasets/v1.yaml"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "product-manager"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: true
+    roles: ["governance-board"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "critical"
+  fallbackBehavior: "block-and-notify"

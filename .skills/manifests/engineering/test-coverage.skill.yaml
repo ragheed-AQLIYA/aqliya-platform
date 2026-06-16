@@ -1,0 +1,153 @@
+# ============================================================
+# Skill: Test Coverage Review (L1 Engineering)
+# ============================================================
+# Purpose: Review test coverage, identify gaps, and recommend
+# test additions. Analyzes test patterns and quality.
+# ============================================================
+
+id: "skill:engineering:test-coverage"
+name: "Test Coverage Review"
+nameAr: "مراجعة تغطية الاختبارات"
+version: "0.1.0"
+description: >
+  Review test coverage across the codebase. Identifies untested
+  modules, recommends test cases, analyzes test quality patterns,
+  and provides coverage metrics.
+descriptionAr: >
+  مراجعة تغطية الاختبارات عبر قاعدة الكود. يحدد الوحدات غير المختبرة
+  ويوصي بحالات اختبار ويحلل أنماط جودة الاختبارات
+category: "engineering"
+level: 1
+tags:
+  - "testing"
+  - "coverage"
+  - "quality"
+  - "jest"
+  - "tests"
+products:
+  - "*"
+
+status: "draft"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:arch-mapping"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+  existingInfrastructure:
+    - "Jest test configuration"
+    - "Test directory conventions (tests/, __tests__)"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Path to source module to analyze"
+  optional:
+    - name: "testPattern"
+      type: "string"
+      description: "Pattern for test files"
+      default: "**/*.test.ts,**/*.spec.ts,**/__tests__/**"
+    - name: "includeQualityAnalysis"
+      type: "boolean"
+      description: "Analyze test quality (assertions, mocks, edge cases)"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Coverage report with gap analysis and recommendations"
+  artifacts:
+    - name: "coverage-report"
+      type: "report"
+      description: "Module-by-module coverage status"
+    - name: "gap-analysis"
+      type: "report"
+      description: "Identified testing gaps"
+    - name: "quality-report"
+      type: "report"
+      description: "Test quality metrics"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-tests"
+        type: "prompt"
+        config:
+          prompt: >
+            Scan {{inputs.targetPath}} and analyze test coverage.
+            Identify: modules with tests, modules without tests, test-to-source
+            ratios, test file patterns, and test framework usage.
+          model: "fast"
+          temperature: 0.1
+      - id: "assess-quality"
+        type: "prompt"
+        config:
+          prompt: >
+            Assess test quality for {{inputs.targetPath}}.
+            Evaluate: assertion density, edge case coverage, mock usage,
+            integration vs unit ratio, and test maintainability.
+          model: "medium"
+          temperature: 0.2
+      - id: "generate-report"
+        type: "transform"
+        config:
+          strategy: "aggregate"
+          inputs:
+            - from: "scan-tests"
+              key: "coverageData"
+            - from: "assess-quality"
+              key: "qualityData"
+  timeout: 120
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "gap-detection"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.70
+      metric: "gap-detection-rate"
+    - name: "recommendation-quality"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.65
+      metric: "recommendation-relevance"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "module-coverage"
+  datasets:
+    - name: "test-samples-v1"
+      path: ".skills/evaluations/skill:engineering:test-coverage/datasets/v1.yaml"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer"]
+    requireAuth: true
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+    roles: []
+    evidenceRequired: false
+  review:
+    required: true
+    interval: "90d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"

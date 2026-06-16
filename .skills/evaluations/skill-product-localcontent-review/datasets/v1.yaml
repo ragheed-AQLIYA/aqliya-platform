@@ -1,0 +1,67 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:product:localcontent-review (v1)
+# 3 samples: supplier classification, scoring, full project review
+# ============================================================
+version: 1
+skillId: "skill:product:localcontent-review"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for LocalContent review"
+samples:
+  - id: "sample-001"
+    description: "Supplier and spend classification review — correctness and completeness"
+    input:
+      projectId: "lc-project-sa-001"
+      reviewScope: "suppliers"
+      language: "both"
+    expected:
+      outputType: "local_content_review"
+      projectId: "string"
+      supplierCount: "number"
+      correctClassification: "number"
+      misclassifiedCount: "number"
+      classificationIssues: "array of {supplier, expectedClass, actualClass, issue}"
+      completenessScore: "number"
+      classificationAccuracy: "number"
+      reviewNotes: "string"
+    tags:
+      - "baseline"
+      - "suppliers"
+  - id: "sample-002"
+    description: "Local content scoring methodology and score verification"
+    input:
+      projectId: "lc-project-sa-001"
+      reviewScope: "scoring"
+      language: "both"
+    expected:
+      outputType: "local_content_review"
+      projectId: "string"
+      scoringMethodology: "string"
+      totalScoreItems: "number"
+      verifiedScoreItems: "number"
+      scoreDiscrepancies: "number"
+      discrepancies: "array of {item, reportedScore, verifiedScore, evidenceIssue}"
+      scoringAccuracy: "number"
+      bilingualNotes: "string"
+    tags:
+      - "baseline"
+      - "scoring"
+  - id: "sample-003"
+    description: "Full project review — suppliers, scoring, findings, recommendations"
+    input:
+      projectId: "lc-project-sa-002"
+      reviewScope: "full"
+      language: "both"
+    expected:
+      outputType: "local_content_review"
+      projectId: "string"
+      overallScore: "number"
+      supplierQuality: "number"
+      scoringQuality: "number"
+      evidenceQuality: "number"
+      findings: "array of {domain, issue, severity, recommendation}"
+      gaps: "array of {category, description, impact}"
+      recommendations: "array of string"
+      bilingualSummary: "string"
+    tags:
+      - "baseline"
+      - "full-project"

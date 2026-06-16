@@ -1,0 +1,128 @@
+# ============================================================
+# AQLIYA Skill Template: Extraction Skill (L0)
+# ============================================================
+# Base template for extraction-type skills (entities, relationships,
+# metadata, patterns). Designed for institutional memory population.
+# ============================================================
+
+id: "skill:TEMPLATE:extraction"
+name: "{{NAME}}"
+nameAr: "{{NAME_AR}}"
+version: "0.1.0"
+description: "{{DESCRIPTION}}"
+descriptionAr: "{{DESCRIPTION_AR}}"
+category: "foundation"
+level: 0
+tags:
+  - "extraction"
+  - "{{TAG_1}}"
+  - "{{TAG_2}}"
+products:
+  - "*"
+
+status: "concept"
+createdAt: "{{CREATED_AT}}"
+updatedAt: "{{CREATED_AT}}"
+createdBy: "skill-builder"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+  models:
+    minCapability: "medium"
+    preferredProvider: "any"
+    localCapable: true
+  existingInfrastructure:
+    - "InstitutionalMemoryService"
+
+inputs:
+  required:
+    - name: "sourcePath"
+      type: "string"
+      description: "Source to extract from"
+    - name: "collectionName"
+      type: "string"
+      description: "Knowledge collection name"
+  optional:
+    - name: "extractionType"
+      type: "string"
+      description: "Type: 'entities' | 'relationships' | 'full'"
+      default: "full"
+    - name: "storeInMemory"
+      type: "boolean"
+      description: "Persist to institutional memory"
+      default: true
+
+outputs:
+  primary:
+    type: "object"
+    description: "Extracted data"
+  artifacts:
+    - name: "extracted-entities"
+      type: "data"
+      description: "Extracted entities"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "scan-source"
+        type: "tool"
+        config:
+          tool: "filesystem:scan"
+          params:
+            path: "{{inputs.sourcePath}}"
+      - id: "extract"
+        type: "prompt"
+        config:
+          prompt: "Extract {{inputs.extractionType}} from the following source. {{PROMPT_TEMPLATE}}"
+          model: "primary"
+          temperature: 0.1
+      - id: "format-output"
+        type: "prompt"
+        config:
+          prompt: "Format the extracted data into structured output"
+          model: "primary"
+          temperature: 0.0
+  timeout: 180
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "extraction-accuracy"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.70
+      metric: "extraction-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "coverage"
+    - name: "structure-validity"
+      type: "quality"
+      weight: 0.20
+      threshold: 0.80
+      metric: "output-structure-validity"
+  datasets: []
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer", "auditor", "reviewer", "system"]
+    requireAuth: false
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "180d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "moderate"

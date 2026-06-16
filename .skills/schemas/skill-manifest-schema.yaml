@@ -1,0 +1,363 @@
+# ============================================================
+# AQLIYA Skill Manifest Schema v1.0
+# ============================================================
+# Schema: https://json-schema.org/draft/2020-12/schema
+# This is the canonical schema for all skill manifests.
+# Every manifest in .skills/manifests/**/*.skill.yaml validates against this.
+# ============================================================
+
+version: "1.0"
+title: "AQLIYA Skill Manifest Schema"
+description: "Canonical schema for all Skill OS skill manifests"
+
+# --- Identity ---
+id:
+  type: string
+  pattern: "^skill:[a-z]+:[a-z0-9-]+$"
+  description: "Unique skill ID: skill:{category}:{name}"
+
+name:
+  type: string
+  description: "Human-readable skill name (English)"
+
+nameAr:
+  type: string
+  description: "Human-readable skill name (Arabic)"
+
+version:
+  type: string
+  pattern: "^\\d+\\.\\d+\\.\\d+$"
+  description: "Semantic version (semver)"
+
+description:
+  type: string
+  description: "One-paragraph description of what this skill does"
+
+descriptionAr:
+  type: string
+  description: "Arabic description"
+
+# --- Classification ---
+category:
+  type: string
+  enum: ["foundation", "engineering", "product", "business", "meta"]
+  description: "Skill taxonomy level category"
+
+level:
+  type: integer
+  minimum: 0
+  maximum: 4
+  description: "0=Foundation, 1=Engineering, 2=Product, 3=Business, 4=Meta"
+
+tags:
+  type: array
+  items:
+    type: string
+  description: "Searchable tags for discovery"
+
+products:
+  type: array
+  items:
+    type: string
+  description: "Applicable products: 'auditos', 'localcontent', 'platform', '*' for all"
+
+# --- Lifecycle ---
+status:
+  type: string
+  enum: ["concept", "draft", "validated", "published", "deprecated", "retired"]
+  description: "Current lifecycle stage"
+
+createdAt:
+  type: string
+  format: date-time
+  description: "ISO 8601 creation timestamp"
+
+updatedAt:
+  type: string
+  format: date-time
+  description: "ISO 8601 last update timestamp"
+
+createdBy:
+  type: string
+  description: "Entity that created this skill (user ID or 'skill-builder:v1')"
+
+owner:
+  type: string
+  description: "Responsible team or user for this skill"
+
+# --- Dependencies ---
+dependencies:
+  type: object
+  properties:
+    skills:
+      type: array
+      items:
+        type: string
+        pattern: "^skill:[a-z]+:[a-z0-9-]+$"
+      description: "Required skill IDs that must be available"
+    models:
+      type: object
+      properties:
+        minCapability:
+          type: string
+          enum: ["low", "medium", "high", "highest"]
+          description: "Minimum model capability required"
+        preferredProvider:
+          type: string
+          enum: ["any", "local", "anthropic", "openai", "hybrid"]
+          description: "Preferred AI provider"
+        localCapable:
+          type: boolean
+          description: "Can this skill run with a local model?"
+      required: ["minCapability"]
+    dataSources:
+      type: array
+      items:
+        type: string
+      description: "Required data sources: repository, database, filesystem, rag"
+  required: ["skills", "models"]
+
+# --- Inputs ---
+inputs:
+  type: object
+  properties:
+    required:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          type:
+            type: string
+            enum: ["string", "number", "boolean", "object", "array", "file"]
+          description:
+            type: string
+          validation:
+            type: string
+        required: ["name", "type", "description"]
+    optional:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          type:
+            type: string
+            enum: ["string", "number", "boolean", "object", "array", "file"]
+          description:
+            type: string
+          default:
+            type: ["string", "number", "boolean", "object", "array", "null"]
+        required: ["name", "type", "description"]
+  required: ["required"]
+
+# --- Outputs ---
+outputs:
+  type: object
+  properties:
+    primary:
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+      required: ["type", "description"]
+    artifacts:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          type:
+            type: string
+            enum: ["report", "data", "graph", "file", "action"]
+          description:
+            type: string
+        required: ["name", "type", "description"]
+  required: ["primary"]
+
+# --- Execution ---
+execution:
+  type: object
+  properties:
+    type:
+      type: string
+      enum: ["workflow", "function", "prompt-chain", "composite"]
+      description: "Execution type"
+    workflow:
+      type: object
+      properties:
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+                enum: ["prompt", "tool", "skill", "decision", "transform"]
+              config:
+                type: object
+              inputs:
+                type: object
+              outputs:
+                type: object
+              retry:
+                type: object
+                properties:
+                  maxAttempts:
+                    type: integer
+                  delay:
+                    type: integer
+              timeout:
+                type: integer
+            required: ["id", "type"]
+    timeout:
+      type: integer
+      description: "Total execution timeout in seconds"
+    maxRetries:
+      type: integer
+      description: "Maximum retry attempts"
+    retryDelay:
+      type: integer
+      description: "Delay between retries in seconds"
+  required: ["type"]
+
+# --- Evaluation ---
+evaluation:
+  type: object
+  properties:
+    criteria:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          type:
+            type: string
+            enum: ["accuracy", "completeness", "consistency", "speed", "cost", "custom"]
+          weight:
+            type: number
+            minimum: 0
+            maximum: 1
+          threshold:
+            type: number
+            minimum: 0
+            maximum: 1
+          metric:
+            type: string
+        required: ["name", "type", "weight", "threshold"]
+    datasets:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          path:
+            type: string
+          description:
+            type: string
+        required: ["name", "path"]
+    frequency:
+      type: string
+      enum: ["always", "per-execution", "daily", "weekly", "per-release"]
+  required: ["criteria"]
+
+# --- Governance ---
+governance:
+  type: object
+  properties:
+    access:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            type: string
+          description: "Roles allowed to invoke"
+        requireAuth:
+          type: boolean
+      required: ["roles"]
+    audit:
+      type: object
+      properties:
+        level:
+          type: string
+          enum: ["all", "errors-only", "summary"]
+        retainFor:
+          type: string
+      required: ["level"]
+    approval:
+      type: object
+      properties:
+        required:
+          type: boolean
+        roles:
+          type: array
+          items:
+            type: string
+        evidenceRequired:
+          type: boolean
+      required: ["required"]
+    review:
+      type: object
+      properties:
+        required:
+          type: boolean
+        interval:
+          type: string
+      required: ["required"]
+  required: ["access", "audit", "approval"]
+
+# --- Documentation ---
+documentation:
+  type: object
+  properties:
+    quickstart:
+      type: string
+    reference:
+      type: string
+    examples:
+      type: array
+      items:
+        type: string
+
+# --- Model Resilience ---
+modelResilience:
+  type: object
+  properties:
+    alternativeModels:
+      type: array
+      items:
+        type: string
+    fallbackEnabled:
+      type: boolean
+    localEquivalent:
+      type: string
+    degradationProfile:
+      type: string
+      enum: ["none", "minimal", "moderate", "severe"]
+
+# --- Required top-level fields ---
+required:
+  - id
+  - name
+  - version
+  - description
+  - category
+  - level
+  - status
+  - createdAt
+  - updatedAt
+  - inputs
+  - outputs
+  - execution
+  - evaluation
+  - governance

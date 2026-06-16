@@ -1,0 +1,55 @@
+﻿version: 1
+skillId: "skill:foundation:repo-analysis"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples"
+samples:
+  - id: "sample-001"
+    description: "Structure-level analysis of the main src/ directory at top level"
+    input:
+      targetPath: "src/"
+      depth: "structure"
+    expected:
+      outputType: "analysis_report"
+      hasStructure: true
+      depth: "structure"
+      topLevelDirs: "array of strings — e.g. ['app', 'components', 'lib', 'actions']"
+      fileCount: "number — total files in src/"
+      largestDirectories: "array of {path, fileCount}"
+    tags:
+      - "baseline"
+      - "primary-path"
+
+  - id: "sample-002"
+    description: "Module-level analysis of the AI infrastructure at src/lib/ai/ identifying sub-modules"
+    input:
+      targetPath: "src/lib/ai/"
+      depth: "modules"
+    expected:
+      outputType: "analysis_report"
+      hasModules: true
+      depth: "modules"
+      moduleCount: "number"
+      moduleNames: "array of strings — e.g. ['embedding', 'handlers', 'providers', 'retrieval', 'review', 'runtime']"
+      entryPoints: "array of {module, files, exports}"
+    tags:
+      - "baseline"
+      - "primary-path"
+
+  - id: "sample-003"
+    description: "Import-graph analysis across all src/ TypeScript files to detect module coupling"
+    input:
+      targetPath: "."
+      depth: "imports"
+      includePatterns:
+        - "src/**/*.ts"
+    expected:
+      outputType: "analysis_report"
+      hasImports: true
+      depth: "imports"
+      importCount: "number"
+      importGraph: "object with nodes and edges"
+      circularDependencies: "array of string cycles if found"
+      mostImported: "array of {module, importedByCount}"
+    tags:
+      - "baseline"
+      - "advanced"

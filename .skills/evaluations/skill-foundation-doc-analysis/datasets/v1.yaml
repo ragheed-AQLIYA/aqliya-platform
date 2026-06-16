@@ -1,0 +1,54 @@
+﻿version: 1
+skillId: "skill:foundation:doc-analysis"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples"
+samples:
+  - id: "sample-001"
+    description: "Full consistency and reference check across the docs/ directory"
+    input:
+      targetPath: "docs/"
+      checkConsistency: true
+      checkReferences: true
+    expected:
+      outputType: "doc_analysis_report"
+      docCount: "number — total document files"
+      brokenReferences: "array of {sourceFile, brokenLink}"
+      consistencyIssues: "array of {file, issue, severity}"
+      summary: "string — overall health assessment"
+    tags:
+      - "baseline"
+      - "primary-path"
+
+  - id: "sample-002"
+    description: "Focused analysis of official doctrine documents for cross-reference integrity"
+    input:
+      targetPath: "docs/official/"
+      checkConsistency: true
+      checkReferences: true
+    expected:
+      outputType: "doc_analysis_report"
+      docCount: "number — files in docs/official/"
+      fileNames: "array of strings — e.g. ['aqliya-vision-v1.1.md', 'aqliya-core-architecture-v1.1.md']"
+      crossReferences: "array of {fromFile, toFile, status}"
+      consistencyScore: "string — e.g. 'high' / 'medium' / 'low'"
+    tags:
+      - "baseline"
+      - "doctrine"
+
+  - id: "sample-003"
+    description: "Single-file analysis of the master reference document for structural correctness"
+    input:
+      targetPath: "README.md"
+      checkConsistency: true
+      checkReferences: false
+    expected:
+      outputType: "doc_analysis_report"
+      fileAnalyzed: "README.md"
+      sectionCount: "number"
+      hasFrontmatter: "boolean"
+      hasBadges: "boolean"
+      hasBrokenInternalLinks: "boolean"
+      structureIssues: "array of {line, issue}"
+    tags:
+      - "baseline"
+      - "single-file"

@@ -1,0 +1,62 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:business:pricing-analysis (v1)
+# 3 samples: AuditOS, LocalContentOS, platform pricing
+# ============================================================
+version: 1
+skillId: "skill:business:pricing-analysis"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples for pricing analysis"
+samples:
+  - id: "sample-001"
+    description: "AuditOS pricing model analysis against market benchmarks"
+    input:
+      product: "AuditOS"
+      markets: ["Saudi Arabia", "MENA"]
+      benchmarks: ["CaseWare pricing", "AuditBoard pricing"]
+    expected:
+      outputType: "pricing_analysis"
+      currentModel: "string — subscription/tiered/per-engagement"
+      recommendedModel: "string"
+      pricePoints: "array of {tier, features, priceSAR, priceUSD}"
+      competitorComparison: "array of {competitor, model, priceRange, parity}"
+      optimalRange: "string — SAR range"
+      revenueProjection: "string — annual estimate"
+      recommendations: "array of string"
+    tags:
+      - "baseline"
+      - "audit"
+  - id: "sample-002"
+    description: "LocalContentOS pricing aligned with Saudi content compliance budgets"
+    input:
+      product: "LocalContentOS"
+      market: "Saudi Arabia"
+      buyerType: "government contractors"
+    expected:
+      outputType: "pricing_analysis"
+      currentModel: "string"
+      recommendedModel: "string"
+      pricePoints: "array of {tier, features, priceSAR}"
+      valueMetric: "string — per project / per supplier / annual"
+      costPlusAnalysis: "string — estimated delivery cost"
+      competitiveComparison: "array of {competitor, offering, priceRange}"
+      recommendations: "array of string"
+    tags:
+      - "baseline"
+      - "local-content"
+  - id: "sample-003"
+    description: "Platform-wide pricing strategy for AQLIYA product suite"
+    input:
+      products: ["AuditOS", "DecisionOS", "LocalContentOS", "Office AI Assistant"]
+      model: "suite bundling vs individual"
+    expected:
+      outputType: "pricing_analysis"
+      currentModel: "string"
+      suiteBundlePrice: "string — SAR/month"
+      individualPrices: "array of {product, price, adoptionEstimate}"
+      bundlingDiscount: "string — percentage"
+      elasticity: "string — demand sensitivity estimate"
+      strategicRecommendation: "string"
+      recommendations: "array of string"
+    tags:
+      - "baseline"
+      - "platform"

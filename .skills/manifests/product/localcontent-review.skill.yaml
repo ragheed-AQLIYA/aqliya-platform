@@ -1,0 +1,172 @@
+# ============================================================
+# Skill: LocalContent Review (L2 Product)
+# ============================================================
+# Purpose: Review LocalContentOS project data — supplier records,
+# spend classification, local content scores, gap analysis, and
+# compliance evidence. Supports Saudi-market content review
+# with bilingual output.
+# ============================================================
+
+id: "skill:product:localcontent-review"
+name: "LocalContent Review"
+nameAr: "مراجعة المحتوى المحلي"
+version: "0.1.0"
+description: >
+  AI-assisted review for LocalContentOS projects. Analyzes supplier
+  classification, spend allocation, local content scoring methodology,
+  gap/risk findings, and evidence completeness. Provides review
+  notes in Arabic and English with confidence levels.
+descriptionAr: >
+  مراجعة مدعومة بالذكاء الاصطناعي لمشاريع المحتوى المحلي. تحلل
+  تصنيف الموردين وتوزيع الإنفاق ومنهجية تسجيل المحتوى المحلي
+  ونتائج الفجوات والامتثال. توفر ملاحظات مراجعة بالعربية والإنجليزية
+category: "product"
+level: 2
+tags:
+  - "local-content"
+  - "saudi"
+  - "supplier"
+  - "spend"
+  - "classification"
+products:
+  - "localcontentos"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "localcontent-team"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Bilingual Saudi-market domain review requires high reasoning"
+  existingInfrastructure:
+    - "LocalContentOS data models"
+    - "Scoring engine"
+    - "Evidence vault"
+
+inputs:
+  required:
+    - name: "projectId"
+      type: "string"
+      description: "LocalContentOS project ID to review"
+  optional:
+    - name: "reviewScope"
+      type: "string"
+      description: "Scope: full|suppliers|spend|scoring|findings"
+      default: "full"
+    - name: "language"
+      type: "string"
+      description: "Output language: ar|en|both"
+      default: "both"
+
+outputs:
+  primary:
+    type: "object"
+    description: "Local content review report with findings and recommendations"
+  artifacts:
+    - name: "review-summary"
+      type: "report"
+      description: "Bilingual review summary"
+    - name: "classification-issues"
+      type: "report"
+      description: "Supplier/spend classification flags"
+    - name: "score-verification"
+      type: "report"
+      description: "Local content score verification notes"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "fetch-project"
+        type: "tool"
+        config:
+          tool: "data:fetch"
+          params:
+            source: "localcontentos"
+            projectId: "{{inputs.projectId}}"
+      - id: "review-classification"
+        type: "prompt"
+        config:
+          prompt: |
+            Review supplier and spend classification for project {{inputs.projectId}}:
+            1. Are suppliers correctly classified (local/foreign)?
+            2. Is spend allocation accurate?
+            3. Are there classification inconsistencies?
+            4. Are all required fields populated?
+            Language: {{inputs.language}}
+          model: "high"
+          temperature: 0.2
+      - id: "verify-scoring"
+        type: "prompt"
+        config:
+          prompt: |
+            Verify local content scoring methodology:
+            1. Are scoring rules applied consistently?
+            2. Are evidence files linked to scores?
+            3. Are there gaps in score calculation?
+          model: "high"
+          temperature: 0.1
+      - id: "final-review"
+        type: "prompt"
+        config:
+          prompt: >
+            Produce final review:
+            Classification: {{steps.review-classification.output}}
+            Scoring: {{steps.verify-scoring.output}}
+            Format findings by severity with bilingual labels.
+          model: "high"
+          temperature: 0.1
+  timeout: 300
+  maxRetries: 2
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "classification-accuracy"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.80
+      metric: "correct-classification-flag-rate"
+    - name: "bilingual-quality"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.75
+      metric: "arabic-term-correctness"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.75
+      metric: "field-coverage"
+  datasets:
+    - name: "localcontent-review-v1"
+      path: ".skills/evaluations/skill:product:localcontent-review/datasets/v1.yaml"
+  frequency: "per-execution"
+
+governance:
+  access:
+    roles: ["admin", "localcontent-reviewer"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "moderate"

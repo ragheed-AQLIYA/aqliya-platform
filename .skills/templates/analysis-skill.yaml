@@ -1,0 +1,101 @@
+# ============================================================
+# AQLIYA Skill Template: Analysis Skill (L0-L1)
+# ============================================================
+# Base template for analysis-type skills (read-only, audit, review).
+# Fill in: name, description, tags, inputs, evaluation criteria.
+# ============================================================
+
+id: "skill:TEMPLATE:analysis"
+name: "{{NAME}}"
+nameAr: "{{NAME_AR}}"
+version: "0.1.0"
+description: "{{DESCRIPTION}}"
+descriptionAr: "{{DESCRIPTION_AR}}"
+category: "{{CATEGORY}}"
+level: {{LEVEL}}
+tags:
+  - "{{TAG_1}}"
+  - "{{TAG_2}}"
+  - "analysis"
+products:
+  - "*"
+
+status: "concept"
+createdAt: "{{CREATED_AT}}"
+updatedAt: "{{CREATED_AT}}"
+createdBy: "skill-builder"
+owner: "intelligence-core"
+
+dependencies:
+  skills: []
+  models:
+    minCapability: "low"
+    preferredProvider: "any"
+    localCapable: true
+  dataSources:
+    - "filesystem"
+
+inputs:
+  required:
+    - name: "targetPath"
+      type: "string"
+      description: "Path to analyze"
+  optional: []
+
+outputs:
+  primary:
+    type: "object"
+    description: "Analysis results"
+  artifacts: []
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "analyze"
+        type: "prompt"
+        config:
+          prompt: "{{PROMPT_TEMPLATE}}"
+          model: "primary"
+          temperature: 0.1
+  timeout: 120
+  maxRetries: 2
+  retryDelay: 5
+
+evaluation:
+  criteria:
+    - name: "accuracy"
+      type: "accuracy"
+      weight: 0.50
+      threshold: 0.70
+      metric: "accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.70
+      metric: "completeness"
+    - name: "consistency"
+      type: "consistency"
+      weight: 0.20
+      threshold: 0.70
+      metric: "consistency"
+  datasets: []
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "developer", "auditor", "reviewer", "system"]
+    requireAuth: false
+  audit:
+    level: "summary"
+    retainFor: "30d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "180d"
+
+modelResilience:
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"

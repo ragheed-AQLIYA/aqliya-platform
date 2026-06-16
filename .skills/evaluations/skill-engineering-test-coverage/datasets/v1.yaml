@@ -1,0 +1,111 @@
+﻿# ============================================================
+# Evaluation Dataset: skill:engineering:test-coverage (v1)
+# 3 real samples targeting AI, skill-runtime, and governance
+# ============================================================
+version: 1
+skillId: "skill:engineering:test-coverage"
+createdAt: "2026-06-15T22:00:00Z"
+description: "Baseline evaluation dataset with 3 samples across AI, skill-runtime, and governance test suites"
+samples:
+  - id: "sample-001"
+    description: "AI module test coverage — src/lib/ai/ (9 test files, 30 source files)"
+    input:
+      targetPath: "src/lib/ai/"
+      testPattern: "**/*.test.ts,**/*.spec.ts,**/__tests__/**"
+      includeQualityAnalysis: true
+    expected:
+      outputType: "coverage_report"
+      hasFindings: true
+      overallCoverage: "percent (estimated 40-60%)"
+      testFiles:
+        - "embedding-provider.test.ts"
+        - "generate-facade.test.ts"
+        - "hybrid-router.test.ts"
+        - "ingestion-pipeline.test.ts"
+        - "institutional-memory.test.ts"
+        - "observability.test.ts"
+        - "orchestrator-hybrid.test.ts"
+        - "provider-router.test.ts"
+        - "similarity-search.test.ts"
+      untestedModules:
+        - "orchestrator.ts (383 lines — governance + provider selection + budget)"
+        - "governed-ai-executor.ts"
+        - "eval-gate.ts"
+        - "budget-manager.ts"
+        - "spend-tracker.ts"
+        - "prompt-registry.ts"
+        - "cost-mapping.ts"
+      qualityMetrics:
+        totalAssertions: "number"
+        mockCoverage: "percent"
+        edgeCaseCoverage: "percent"
+      items: "array of objects with module, testFile, assertionCount, coverageEstimate, gap"
+    tags:
+      - "baseline"
+      - "ai"
+      - "coverage"
+
+  - id: "sample-002"
+    description: "Skill runtime test coverage — src/lib/skill-runtime/ (2 test files, 6 source files)"
+    input:
+      targetPath: "src/lib/skill-runtime/"
+      testPattern: "**/*.test.ts,**/*.spec.ts,**/__tests__/**"
+      includeQualityAnalysis: true
+    expected:
+      outputType: "coverage_report"
+      hasFindings: true
+      overallCoverage: "percent (estimated 30-50%)"
+      testFiles:
+        - "skill-registry.integration.test.ts"
+        - "skill-runtime.test.ts"
+      sourceFiles:
+        - "runtime.ts (846 lines — YAML parsing, step execution, audit)"
+        - "evaluator.ts"
+        - "evaluator-types.ts"
+        - "types.ts"
+        - "index.ts"
+      qualityMetrics:
+        totalAssertions: "number"
+        integrationTests: "count"
+        unitTests: "count"
+      items: "array of objects with sourceFile, testFile, assertionCount, coverageGap"
+      gaps:
+        - "runtime.ts has limited error-path coverage"
+        - "evaluator.ts may have untested evaluation paths"
+    tags:
+      - "baseline"
+      - "skill-runtime"
+      - "coverage"
+
+  - id: "sample-003"
+    description: "Governance module test coverage — src/lib/governance/ (5 test files, 10 source files)"
+    input:
+      targetPath: "src/lib/governance/"
+      testPattern: "**/*.test.ts,**/*.spec.ts,**/__tests__/**"
+      includeQualityAnalysis: true
+    expected:
+      outputType: "coverage_report"
+      hasFindings: true
+      overallCoverage: "percent (estimated 60-80%)"
+      testFiles:
+        - "approval-state-validation.test.ts"
+        - "escalation-validation.test.ts"
+        - "prompt-validation.test.ts"
+        - "provenance-validation.test.ts"
+        - "retrieval-validation.test.ts"
+      sourceFiles:
+        - "approval-state.ts"
+        - "escalation.ts"
+        - "prompt-framework.ts"
+        - "provenance.ts"
+        - "retrieval-router.ts"
+        - "actor-lineage.ts"
+        - "runtime-types.ts"
+      qualityMetrics:
+        totalAssertions: "number"
+        validationRuleCoverage: "percent"
+      items: "array of objects with sourceFile, testFile, assertionCount, coverageEstimate"
+    tags:
+      - "baseline"
+      - "governance"
+      - "coverage"

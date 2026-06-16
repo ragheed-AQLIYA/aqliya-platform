@@ -1,0 +1,122 @@
+# ============================================================
+# AQLIYA Skill Template: Review Skill (L2-L3)
+# ============================================================
+# Base template for review-type skills (product review, compliance,
+# governance assessment). Includes governance and approval gates.
+# ============================================================
+
+id: "skill:TEMPLATE:review"
+name: "{{NAME}}"
+nameAr: "{{NAME_AR}}"
+version: "0.1.0"
+description: "{{DESCRIPTION}}"
+descriptionAr: "{{DESCRIPTION_AR}}"
+category: "{{CATEGORY}}"
+level: {{LEVEL}}
+tags:
+  - "{{TAG_1}}"
+  - "{{TAG_2}}"
+  - "review"
+  - "assessment"
+products:
+  - "{{PRODUCT}}"
+
+status: "concept"
+createdAt: "{{CREATED_AT}}"
+updatedAt: "{{CREATED_AT}}"
+createdBy: "skill-builder"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "medium"
+    preferredProvider: "anthropic"
+    localCapable: true
+  existingInfrastructure: []
+
+inputs:
+  required:
+    - name: "targetId"
+      type: "string"
+      description: "ID of entity to review"
+    - name: "reviewType"
+      type: "string"
+      description: "Type of review"
+  optional: []
+
+outputs:
+  primary:
+    type: "object"
+    description: "Review results with findings and recommendations"
+  artifacts:
+    - name: "findings"
+      type: "report"
+      description: "Findings report"
+    - name: "recommendations"
+      type: "report"
+      description: "Recommendations"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "gather-context"
+        type: "prompt"
+        config:
+          prompt: "Review {{inputs.targetId}} for {{inputs.reviewType}}. {{PROMPT_TEMPLATE}}"
+          model: "primary"
+          temperature: 0.2
+      - id: "generate-findings"
+        type: "prompt"
+        config:
+          prompt: "Based on context, generate structured findings with severity"
+          model: "primary"
+          temperature: 0.1
+  timeout: 180
+  maxRetries: 1
+  retryDelay: 10
+
+evaluation:
+  criteria:
+    - name: "finding-accuracy"
+      type: "accuracy"
+      weight: 0.40
+      threshold: 0.75
+      metric: "finding-accuracy"
+    - name: "severity-accuracy"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.70
+      metric: "severity-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.75
+      metric: "finding-coverage"
+  datasets: []
+  frequency: "per-review"
+
+governance:
+  access:
+    roles: ["admin", "reviewer", "auditor"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "90d"
+  approval:
+    required: true
+    roles: ["governance-board"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "60d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "controlled"

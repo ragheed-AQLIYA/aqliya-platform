@@ -1,0 +1,224 @@
+# ============================================================
+# Skill: Skill Composer (L4 Meta)
+# ============================================================
+# Purpose: Compose multiple skills into higher-order composite
+# workflows. Analyzes dependency graphs to find optimal composition
+# paths, generates composite manifests, detects conflicts in
+# overlapping skills, and recommends composition patterns
+# for complex multi-skill tasks.
+# ============================================================
+
+id: "skill:meta:skill-composer"
+name: "Skill Composer"
+nameAr: "مؤلف المهارات"
+version: "0.1.0"
+description: >
+  Meta-skill that composes multiple individual skills into higher-order
+  composite workflows. Analyzes the dependency graph to find optimal
+  execution order, detects conflicts and overlaps between skills,
+  generates composite manifests with merged governance, optimizes
+  for parallel execution where possible, and validates composition
+  coherence before publishing.
+descriptionAr: >
+  مهارة فوقية تؤلف مهارات متعددة في سير عمل مركبة عالية المستوى.
+  تحلل رسم بياني للتبعيات لإيجاد ترتيب تنفيذ أمثل، تكتشف التعارضات
+  والتداخلات، تنشئ بيانات مركبة مع حوكمة مدمجة
+category: "meta"
+level: 4
+tags:
+  - "meta"
+  - "composition"
+  - "workflow"
+  - "orchestration"
+  - "composite"
+  - "integration"
+products:
+  - "intelligence-core"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:knowledge-extract"
+    - "skill:meta:skill-evaluator"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Complex composition reasoning and conflict resolution require high capability"
+  existingInfrastructure:
+    - "Dependency graph (.skills/registry/dependency-graph.yaml)"
+    - "Capability map (.skills/registry/capability-map.yaml)"
+    - "Workflow compositions (.skills/workflows/)"
+    - "Skill Runtime DAG scheduler"
+
+inputs:
+  required:
+    - name: "goal"
+      type: "string"
+      description: "Natural language description of the goal to accomplish"
+  optional:
+    - name: "requiredSkills"
+      type: "array"
+      description: "Specific skill IDs to include in composition"
+    - name: "maxSkills"
+      type: "number"
+      description: "Maximum number of skills to compose"
+      default: 8
+    - name: "optimizationGoal"
+      type: "string"
+      description: "Optimization: speed|accuracy|cost|balanced"
+      default: "balanced"
+    - name: "publishComposite"
+      type: "boolean"
+      description: "Publish composite manifest to registry"
+      default: false
+
+outputs:
+  primary:
+    type: "object"
+    description: "Composite workflow definition with execution plan"
+  artifacts:
+    - name: "composition-report"
+      type: "report"
+      description: "Composition analysis and design decisions"
+    - name: "composite-manifest"
+      type: "data"
+      description: "Generated composite skill manifest"
+    - name: "execution-plan"
+      type: "graph"
+      description: "Execution DAG with parallelization opportunities"
+    - name: "conflict-report"
+      type: "report"
+      description: "Identified conflicts and resolution decisions"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "analyze-goal"
+        type: "prompt"
+        config:
+          prompt: >
+            Analyze composition goal: {{inputs.goal}}
+            
+            1. What are the sub-tasks required?
+            2. What skill categories are needed?
+            3. What data flows between sub-tasks?
+            4. What is the expected output?
+            
+            Max skills: {{inputs.maxSkills}}
+            Optimization: {{inputs.optimizationGoal}}
+          model: "high"
+          temperature: 0.2
+      - id: "select-skills"
+        type: "prompt"
+        config:
+          prompt: >
+            Select skills from registry for each sub-task:
+            Goal analysis: {{steps.analyze-goal.output}}
+            
+            1. Map sub-tasks to existing skills
+            2. Check dependency compatibility
+            3. Identify skill gaps requiring new skills
+            4. Consider skill levels and trust
+            5. Evaluate composition alternatives
+            
+            Required skills: {{inputs.requiredSkills}}
+          model: "high"
+          temperature: 0.2
+      - id: "design-workflow"
+        type: "prompt"
+        config:
+          prompt: >
+            Design the composite execution workflow:
+            Skill selection: {{steps.select-skills.output}}
+            
+            1. Define execution order (DAG)
+            2. Identify parallel execution opportunities
+            3. Define data flow between steps
+            4. Merge governance policies
+            5. Set timeout and retry strategy
+            6. Design evaluation for the composite
+            
+            Output as: step-by-step execution plan.
+          model: "high"
+          temperature: 0.2
+      - id: "generate-manifest"
+        type: "prompt"
+        config:
+          prompt: >
+            Generate composite manifest:
+            Workflow design: {{steps.design-workflow.output}}
+            
+            Include:
+            1. Composite metadata (id, name, version)
+            2. All steps with skill references
+            3. Mapped inputs and outputs
+            4. Merged governance with conflict resolution
+            5. Composite evaluation criteria
+            6. Execution configuration
+            
+            Publish: {{inputs.publishComposite}}
+          model: "high"
+          temperature: 0.1
+          outputFormat: "yaml"
+  timeout: 300
+  maxRetries: 1
+  retryDelay: 15
+
+evaluation:
+  criteria:
+    - name: "composition-quality"
+      type: "quality"
+      weight: 0.30
+      threshold: 0.75
+      metric: "workflow-coherence"
+    - name: "skill-selection"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.75
+      metric: "correct-skill-mapping"
+    - name: "conflict-resolution"
+      type: "accuracy"
+      weight: 0.20
+      threshold: 0.80
+      metric: "governance-conflict-resolution"
+    - name: "execution-optimization"
+      type: "quality"
+      weight: 0.20
+      threshold: 0.70
+      metric: "parallelization-efficiency"
+  datasets:
+    - name: "composer-samples-v1"
+      path: ".skills/evaluations/skill:meta:skill-composer/datasets/v1.yaml"
+  frequency: "per-execution"
+
+governance:
+  access:
+    roles: ["admin", "ai-engineer"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: true
+    roles: ["governance-board"]
+    evidenceRequired: true
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "critical"
+  fallbackBehavior: "block-and-notify"

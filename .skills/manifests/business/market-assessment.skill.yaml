@@ -1,0 +1,199 @@
+# ============================================================
+# Skill: Market Assessment (L3 Business)
+# ============================================================
+# Purpose: Assess market opportunity for AQLIYA products and
+# features. Analyzes market size, competitive landscape, target
+# segments, regulatory environment, and go-to-market readiness.
+# Supports Saudi market focus with regional insights.
+# ============================================================
+
+id: "skill:business:market-assessment"
+name: "Market Assessment"
+nameAr: "تقييم السوق"
+version: "0.1.0"
+description: >
+  Assess market opportunity for AQLIYA products. Analyzes total
+  addressable market, competitive positioning, target segments,
+  regulatory considerations (especially Saudi Arabia), channel
+  readiness, and go-to-market strategy recommendations.
+descriptionAr: >
+  تقييم الفرصة السوقية لمنتجات عقلية. يحلل إجمالي السوق القابلة
+  للخدمة والموقع التنافسي والقطاعات المستهدفة والاعتبارات التنظيمية
+  وجاهزية قنوات الوصول للسوق
+category: "business"
+level: 3
+tags:
+  - "market"
+  - "strategy"
+  - "competition"
+  - "segments"
+  - "go-to-market"
+products:
+  - "*"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "product-management"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:doc-analysis"
+    - "skill:foundation:knowledge-extract"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: false
+    reason: "Strategic market assessment requires broad context and nuanced reasoning"
+  existingInfrastructure:
+    - "Product Status Matrix"
+    - "Documentation repository"
+
+inputs:
+  required:
+    - name: "productName"
+      type: "string"
+      description: "Product to assess market for"
+  optional:
+    - name: "focusMarket"
+      type: "string"
+      description: "Market to focus on: saudi|gcc|mena|global"
+      default: "saudi"
+    - name: "includeRegulatory"
+      type: "boolean"
+      description: "Include regulatory environment analysis"
+      default: true
+    - name: "depth"
+      type: "string"
+      description: "Analysis depth: quick|standard|comprehensive"
+      default: "standard"
+
+outputs:
+  primary:
+    type: "object"
+    description: "Market assessment with opportunity sizing and recommendations"
+  artifacts:
+    - name: "market-report"
+      type: "report"
+      description: "Full market assessment report"
+    - name: "competitor-matrix"
+      type: "data"
+      description: "Competitive landscape comparison"
+    - name: "segment-profiles"
+      type: "report"
+      description: "Target segment profiles and personas"
+    - name: "gtm-roadmap"
+      type: "report"
+      description: "Go-to-market strategy recommendations"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "analyze-domain"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze the product domain for {{inputs.productName}}:
+            1. What problem does it solve?
+            2. What is the institutional/government need?
+            3. What current alternatives exist?
+            4. What is the regulatory landscape?
+            Market: {{inputs.focusMarket}}
+            Depth: {{inputs.depth}}
+          model: "high"
+          temperature: 0.2
+      - id: "size-opportunity"
+        type: "prompt"
+        config:
+          prompt: |
+            Size the market opportunity:
+            Product: {{steps.analyze-domain.output}}
+            
+            1. Estimate total addressable market
+            2. Estimate serviceable addressable market
+            3. Estimate serviceable obtainable market
+            4. Identify growth trends and drivers
+            5. Consider Saudi Vision 2030 alignment
+          model: "high"
+          temperature: 0.3
+      - id: "competitive-analysis"
+        type: "prompt"
+        config:
+          prompt: |
+            Analyze competitive landscape:
+            Product: {{inputs.productName}}
+            Market: {{inputs.focusMarket}}
+            
+            1. Identify direct competitors
+            2. Identify indirect alternatives
+            3. Compare features and positioning
+            4. Identify AQLIYA differentiators
+            5. Assess barriers to entry
+          model: "high"
+          temperature: 0.3
+      - id: "strategy-recommendation"
+        type: "prompt"
+        config:
+          prompt: >
+            Produce go-to-market strategy:
+            Opportunity: {{steps.size-opportunity.output}}
+            Competition: {{steps.competitive-analysis.output}}
+            
+            Include: positioning, channel strategy, pricing approach,
+            and risk factors. Depth: {{inputs.depth}}
+          model: "high"
+          temperature: 0.2
+  timeout: 360
+  maxRetries: 2
+  retryDelay: 15
+
+evaluation:
+  criteria:
+    - name: "market-sizing"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.65
+      metric: "market-estimate-reasonableness"
+    - name: "competitive-accuracy"
+      type: "accuracy"
+      weight: 0.30
+      threshold: 0.70
+      metric: "competitor-identification-accuracy"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.20
+      threshold: 0.75
+      metric: "factor-coverage"
+    - name: "actionability"
+      type: "quality"
+      weight: 0.20
+      threshold: 0.70
+      metric: "actionable-recommendations"
+  datasets:
+    - name: "market-samples-v1"
+      path: ".skills/evaluations/skill:business:market-assessment/datasets/v1.yaml"
+  frequency: "per-release"
+
+governance:
+  access:
+    roles: ["admin", "product-manager", "executive"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: null
+  degradationProfile: "moderate"

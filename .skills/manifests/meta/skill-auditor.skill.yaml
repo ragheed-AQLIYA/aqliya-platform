@@ -1,0 +1,194 @@
+# ============================================================
+# Skill: Skill Auditor (L4 Meta)
+# ============================================================
+# Purpose: Audit existing skills for quality, completeness,
+# schema compliance, and currency. Validates manifests against
+# schema, checks evaluation datasets, reviews governance policies,
+# and reports skill health across the registry.
+# ============================================================
+
+id: "skill:meta:skill-auditor"
+name: "Skill Auditor"
+nameAr: "مدقق المهارات"
+version: "0.1.0"
+description: >
+  Meta-skill that audits the entire skill registry. Validates each
+  manifest against the canonical schema (YAML structure, required
+  fields, field types), checks evaluation dataset freshness and
+  coverage, reviews governance policy consistency, verifies
+  dependency graph integrity, detects broken or circular references,
+  and produces a skill health scorecard.
+descriptionAr: >
+  مهارة فوقية تدقق سجل المهارات بأكمله. تتحقق من صحة كل بيان مهارة
+  مقابل المخطط الأساسي، وتفحص حداثة مجموعات بيانات التقييم،
+  وتراجع اتساق سياسات الحوكمة، وتتحقق من سلامة رسم بياني للتبعيات
+category: "meta"
+level: 4
+tags:
+  - "meta"
+  - "audit"
+  - "quality"
+  - "validation"
+  - "registry"
+  - "health"
+  - "schema"
+products:
+  - "intelligence-core"
+
+status: "concept"
+createdAt: "2026-06-15T22:00:00Z"
+updatedAt: "2026-06-15T22:00:00Z"
+createdBy: "aqliya-architect"
+owner: "intelligence-core"
+
+dependencies:
+  skills:
+    - "skill:foundation:repo-analysis"
+    - "skill:foundation:doc-analysis"
+    - "skill:foundation:knowledge-extract"
+    - "skill:meta:skill-evaluator"
+  models:
+    minCapability: "high"
+    preferredProvider: "anthropic"
+    localCapable: true
+    reason: "Schema compliance checking can be deterministic; quality assessment needs reasoning"
+  existingInfrastructure:
+    - "Skill Manifest Schema (.skills/schemas/)"
+    - "Registry index (.skills/registry/index.yaml)"
+    - "Dependency graph (.skills/registry/dependency-graph.yaml)"
+    - "Skill Runtime types"
+
+inputs:
+  required:
+    - name: "auditScope"
+      type: "string"
+      description: "Scope: all | category:<cat> | skill:<id> | changed-since:<date>"
+  optional:
+    - name: "checkEvalDatasets"
+      type: "boolean"
+      description: "Check evaluation dataset freshness and paths"
+      default: true
+    - name: "fixMinorIssues"
+      type: "boolean"
+      description: "Auto-fix minor schema/formatting issues"
+      default: false
+    - name: "severityThreshold"
+      type: "string"
+      description: "Minimum severity: info|warning|error|critical"
+      default: "warning"
+
+outputs:
+  primary:
+    type: "object"
+    description: "Audit results with health scores, issues, and recommendations"
+  artifacts:
+    - name: "audit-report"
+      type: "report"
+      description: "Full audit report with per-skill health"
+    - name: "health-scorecard"
+      type: "data"
+      description: "Aggregate health scores by category and overall"
+    - name: "issues-database"
+      type: "data"
+      description: "All identified issues with severity and recommendations"
+    - name: "registry-fixes"
+      type: "action"
+      description: "Auto-fixes applied (if fixMinorIssues enabled)"
+
+execution:
+  type: "workflow"
+  workflow:
+    steps:
+      - id: "load-registry"
+        type: "tool"
+        config:
+          tool: "filesystem:read"
+          params:
+            path: ".skills/registry/index.yaml"
+      - id: "validate-manifests"
+        type: "prompt"
+        config:
+          prompt: >
+            Audit all skill manifests in scope {{inputs.auditScope}}.
+            For each manifest check:
+            1. Schema compliance (required fields, types, enums)
+            2. ID format (skill:{category}:{name})
+            3. Dependency references point to existing skills
+            4. Evaluation datasets exist at specified paths
+            5. Governance policies are complete
+            6. Version is semver
+            7. Timestamps are valid
+            
+            Severity threshold: {{inputs.severityThreshold}}
+          model: "high"
+          temperature: 0.1
+      - id: "check-graph"
+        type: "prompt"
+        config:
+          prompt: >
+            Analyze the dependency graph integrity:
+            1. Are all dependency references valid?
+            2. Are there circular dependencies?
+            3. Are there orphaned skills (no reverse deps)?
+            4. Are level constraints respected (no L3 deps on L4)?
+          model: "high"
+          temperature: 0.1
+      - id: "produce-audit"
+        type: "prompt"
+        config:
+          prompt: >
+            Produce final audit:
+            Manifests: {{steps.validate-manifests.output}}
+            Graph: {{steps.check-graph.output}}
+            
+            Include: overall health score, per-category scores,
+            critical issues, recommendations.
+            Auto-fix: {{inputs.fixMinorIssues}}
+          model: "high"
+          temperature: 0.1
+  timeout: 300
+  maxRetries: 1
+  retryDelay: 15
+
+evaluation:
+  criteria:
+    - name: "issue-detection"
+      type: "accuracy"
+      weight: 0.45
+      threshold: 0.78
+      metric: "issue-detection-precision-recall"
+    - name: "severity-calibration"
+      type: "accuracy"
+      weight: 0.25
+      threshold: 0.75
+      metric: "severity-rating-agreement"
+    - name: "completeness"
+      type: "completeness"
+      weight: 0.30
+      threshold: 0.82
+      metric: "registry-coverage"
+  datasets:
+    - name: "auditor-samples-v1"
+      path: ".skills/evaluations/skill:meta:skill-auditor/datasets/v1.yaml"
+  frequency: "weekly"
+
+governance:
+  access:
+    roles: ["admin", "ai-engineer"]
+    requireAuth: true
+  audit:
+    level: "all"
+    retainFor: "365d"
+  approval:
+    required: false
+  review:
+    required: true
+    interval: "30d"
+
+modelResilience:
+  alternativeModels:
+    - provider: "openai"
+      model: "gpt-4o"
+  fallbackEnabled: true
+  localEquivalent: "deterministic"
+  degradationProfile: "minimal"
