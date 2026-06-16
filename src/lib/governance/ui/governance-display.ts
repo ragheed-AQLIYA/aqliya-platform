@@ -12,6 +12,7 @@ export function getTaskTypeLabel(taskType: GovernanceTaskType): string {
     commercial_claim_review: 'Commercial Claim Review',
     pilot_decision: 'Pilot Decision',
     approval_review: 'Approval Review',
+    skill_execution: 'Skill Execution',
   };
   return labels[taskType] || taskType;
 }

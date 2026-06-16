@@ -16,6 +16,7 @@ const ALL_TASK_TYPES: GovernanceTaskType[] = [
   "pilot_decision",
   "approval_review",
   "disclosure_enrichment",
+  "skill_execution",
 ];
 
 describe("governance retrieval router", () => {

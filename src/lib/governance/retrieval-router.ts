@@ -488,6 +488,44 @@ const GOVERNANCE_TASK_MAP: Record<GovernanceTaskType, GovernanceContext> = {
       "task_specific",
     ],
   },
+
+  // ─── Skill Execution ───
+  skill_execution: {
+    taskType: "skill_execution",
+    doctrineReferences: [
+      {
+        documentId: "aqliya-skill-os-v1.0",
+        title: "AQLIYA Skill Operating System",
+        principle: "AI-assisted skill execution with human oversight",
+        relevance: "Skill execution is an AI-assisted operation",
+      },
+    ],
+    governanceReferences: [
+      {
+        source: "AGENTS.md §12",
+        rule: "AI features must be governed",
+        enforcement: "Every skill execution is audited",
+      },
+    ],
+    evidenceRequirements: [
+      {
+        description: "Skill execution result must be reviewed before use as operational input",
+        status: "missing",
+        requiredForApproval: true,
+      },
+    ],
+    humanApprovalRequired: false,
+    escalationTriggers: [],
+    outputBoundary: "review_required",
+    recommendedPromptLayers: [
+      "system_doctrine",
+      "product_doctrine",
+      "governance",
+      "evidence",
+      "human_approval",
+      "task_specific",
+    ],
+  },
 };
 
 export function getGovernanceContext(

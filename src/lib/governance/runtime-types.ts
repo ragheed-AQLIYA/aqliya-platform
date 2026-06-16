@@ -9,7 +9,8 @@ export type GovernanceTaskType =
   | 'commercial_claim_review'
   | 'pilot_decision'
   | 'approval_review'
-  | 'disclosure_enrichment';
+  | 'disclosure_enrichment'
+  | 'skill_execution';
 
 // ===== Core Governance Types =====
 

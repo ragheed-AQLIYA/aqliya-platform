@@ -21,6 +21,7 @@ import {
   Globe,
   FileText,
   FolderKanban,
+  BarChart3,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -106,6 +107,12 @@ const platformNav = [
     href: "/assistant",
     icon: Bot,
   },
+  {
+    name: "Skills Evaluation",
+    nameAr: "تقييم المهارات",
+    href: "/settings/skills/evaluate",
+    icon: BarChart3,
+  },
 ];
 
 const auditNav = [
@@ -160,6 +167,12 @@ const auditNav = [
     nameAr: "مساعد العمل الذكي",
     href: "/assistant",
     icon: Bot,
+  },
+  {
+    name: "Skills Evaluation",
+    nameAr: "تقييم المهارات",
+    href: "/settings/skills/evaluate",
+    icon: BarChart3,
   },
 ];
 

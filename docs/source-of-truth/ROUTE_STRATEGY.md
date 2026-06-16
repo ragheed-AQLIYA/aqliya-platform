@@ -253,6 +253,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/settings/workspaces`            | Platform       | Settings/admin | Protected        | Active (L4)           | Real workspace diagnostics        |
 | `/settings/platform-organization` | Platform       | Settings/admin | Protected        | Active (L4)           | Real platform org diagnostics     |
 | `/settings/audit-logs`            | Platform       | Settings/admin | Protected        | Active (L4)           | Real audit log viewer             |
+| `/settings/skills/evaluate`       | Platform       | Settings/admin | Protected        | Active (L4)           | Skills evaluation dashboard       |
 | `/monitoring`                     | Platform       | Settings/admin | Protected        | Active (L4)           | Real aggregate counts             |
 
 ### WorkflowOS — Governed Workspace
@@ -302,6 +303,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/api/health`                                                            | AQLIYA Platform     | API — health   | Public           | Active                | Safe health check                                               |
 | `/api/custom-product-submit`                                             | AQLIYA Platform     | API — form     | Public           | Active                | Custom product inquiry                                          |
 | `/api/metrics`                                                           | AQLIYA Platform     | API — metrics  | Protected        | Active                | Admin-only                                                      |
+| `/api/skills/evaluate`                                                   | AQLIYA Platform     | API — eval     | Protected        | Active                | GET lists skills; POST runs evaluation (auth required)          |
 | `/api/audit/evidence/[evidenceId]/download`                              | AuditOS             | API — download | Protected        | Active                | Authenticated + engagement access + audit log                   |
 | `/api/audit/engagements/[engagementId]/exports/[format]`                 | AuditOS             | API — export   | Protected        | Active                | Authenticated + engagement access                               |
 | `/api/decisions/[decisionId]/evidence/[evidenceId]/download`             | DecisionOS          | API — download | Protected        | Active                | Authenticated + tenant-safe decision access + audit log         |
