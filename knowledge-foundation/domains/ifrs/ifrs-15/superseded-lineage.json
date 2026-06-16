@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "assetId": "kf-accounting-a-ifrs-15-lineage",
+    "parentAssetId": "kf-accounting-a-ifrs-15",
+    "standardCode": "IFRS 15",
+    "remediationId": "wave1-remediation-ifrs15-lineage",
+    "remediationDate": "2026-06-09",
+    "validationStatus": "validated",
+    "policyStatement": "Version history must never be destroyed — superseded standards retained for lineage",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "currentStandard": {
+    "standardCode": "IFRS 15",
+    "versionLabel": "IFRS 15:2024",
+    "effectiveDate": "2018-01-01",
+    "status": "current"
+  },
+  "supersededLineage": [
+    {
+      "supersededCode": "IAS 11",
+      "supersededName": "Construction Contracts",
+      "relationship": "supersedes",
+      "supersededDate": "2018-01-01",
+      "topic": "Revenue from construction contracts",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-15"
+    },
+    {
+      "supersededCode": "IAS 18",
+      "supersededName": "Revenue",
+      "relationship": "supersedes",
+      "supersededDate": "2018-01-01",
+      "topic": "Revenue recognition (goods, services, interest, royalties, dividends)",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-15"
+    },
+    {
+      "supersededCode": "IFRIC 13",
+      "supersededName": "Customer Loyalty Programmes",
+      "relationship": "supersedes",
+      "supersededDate": "2018-01-01",
+      "topic": "Customer loyalty programme revenue allocation",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-15"
+    },
+    {
+      "supersededCode": "IFRIC 15",
+      "supersededName": "Agreements for the Construction of Real Estate",
+      "relationship": "supersedes",
+      "supersededDate": "2018-01-01",
+      "topic": "Real estate construction revenue",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-15"
+    },
+    {
+      "supersededCode": "IFRIC 18",
+      "supersededName": "Transfers of Assets from Customers",
+      "relationship": "supersedes",
+      "supersededDate": "2018-01-01",
+      "topic": "Non-cash consideration and customer contributions",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-15"
+    },
+    {
+      "supersededCode": "SIC 31",
+      "supersededName": "Revenue — Barter Transactions Involving Advertising Services",
+      "relationship": "supersedes",
+      "supersededDate": "2018-01-01",
+      "topic": "Barter advertising revenue",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-15"
+    }
+  ],
+  "lineageChain": {
+    "minimumChain": [
+      "decision",
+      "rule",
+      "authority",
+      "sourceDocument",
+      "reviewer"
+    ],
+    "supersededReferencePolicy": "Historical decisions citing IAS 11/18 or IFRIC/SIC must map forward to IFRS 15 for current-period routing while preserving original source in lineage"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "domain": "accounting",
+    "subdomain": "socpa-accounting",
+    "assetId": "kf-socpa-a-socpa-jurisdiction-overlay-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-socpa-a-socpa-jurisdiction-overlay",
+    "standardCode": "SOCPA-JURISDICTION-OVERLAY",
+    "ruleCount": 4,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "socpa-jurisdiction-overlay-r001",
+      "paragraphReference": "SOCPA-JO-1",
+      "ruleText": "SOCPA jurisdiction overlays supplement but do not replace IFRS Foundation or IAASB base standards.",
+      "topic": "overlay-principle",
+      "assetType": "B",
+      "lineageParentId": "kf-socpa-a-socpa-jurisdiction-overlay",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-jurisdiction-overlay-r002",
+      "paragraphReference": "SOCPA-JO-2",
+      "ruleText": "Every overlay asset shall maintain lineageParentId linking to the base IFRS or ISA asset.",
+      "topic": "lineage-required",
+      "assetType": "B",
+      "lineageParentId": "kf-socpa-a-socpa-jurisdiction-overlay",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-jurisdiction-overlay-r003",
+      "paragraphReference": "SOCPA-JO-3",
+      "ruleText": "Base standard version history must never be destroyed when admitting SOCPA overlays.",
+      "topic": "version-preservation",
+      "assetType": "B",
+      "lineageParentId": "kf-socpa-a-socpa-jurisdiction-overlay",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-jurisdiction-overlay-r004",
+      "paragraphReference": "SOCPA-JO-4",
+      "ruleText": "TB Intelligence and Mapping Engine shall apply SOCPA overlay only when engagement jurisdiction is saudi-arabia.",
+      "topic": "routing-gate",
+      "assetType": "B",
+      "lineageParentId": "kf-socpa-a-socpa-jurisdiction-overlay",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "subdomain": "isa-standards",
+    "assetId": "kf-audit-a-isa-500-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-audit-a-isa-500",
+    "standardCode": "ISA 500",
+    "versionLabel": "ISA 500:2024",
+    "session": "2",
+    "ruleCount": 4,
+    "executableRules": true,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "isa-500-r001",
+      "paragraphReference": "ISA 500.6",
+      "ruleText": "The auditor shall obtain sufficient appropriate audit evidence to reduce audit risk to an acceptably low level and draw reasonable conclusions.",
+      "topic": "sufficient-appropriate",
+      "usage": "evidence-catalog",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-500",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "evidence-catalog"
+      }
+    },
+    {
+      "ruleId": "isa-500-r002",
+      "paragraphReference": "ISA 500.8",
+      "ruleText": "Audit evidence is more reliable when it is obtained from independent sources outside the entity and when it consists of documentary evidence.",
+      "topic": "reliability-factors",
+      "usage": "evidence-catalog",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-500",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "evidence-catalog"
+      }
+    },
+    {
+      "ruleId": "isa-500-r003",
+      "paragraphReference": "ISA 500.11",
+      "ruleText": "In assessing the sufficiency and appropriateness of audit evidence, the auditor shall consider the relevance and reliability of information to be used as audit evidence.",
+      "topic": "assess-evidence",
+      "usage": "evidence-catalog",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-500",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "evidence-catalog"
+      }
+    },
+    {
+      "ruleId": "isa-500-r004",
+      "paragraphReference": "ISA 500.17",
+      "ruleText": "The auditor shall design and perform substantive procedures for each material class of transactions, account balance and disclosure.",
+      "topic": "substantive-procedures",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-500",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    }
+  ]
+}

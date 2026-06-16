@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-16-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-16",
+    "standardCode": "IFRS 16",
+    "versionLabel": "IFRS 16:2024",
+    "ruleCount": 6,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ifrs16-r001",
+      "paragraphReference": "IFRS 16.9",
+      "ruleText": "At the commencement date, a lessee shall recognise a right-of-use asset and a lease liability, except for leases accounted for under the short-term lease or low-value asset exemptions.",
+      "topic": "initial-recognition",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-16",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs16-r002",
+      "paragraphReference": "IFRS 16.22",
+      "ruleText": "A lessee shall measure the lease liability at the present value of lease payments that are not paid at the commencement date, discounted using the interest rate implicit in the lease or the lessee's incremental borrowing rate.",
+      "topic": "lease-liability-measurement",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-16",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs16-r003",
+      "paragraphReference": "IFRS 16.24",
+      "ruleText": "The right-of-use asset shall be measured at cost, comprising the initial lease liability amount, lease payments made at or before commencement, initial direct costs, and an estimate of dismantling costs.",
+      "topic": "rou-asset-measurement",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-16",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs16-r004",
+      "paragraphReference": "IFRS 16.29",
+      "ruleText": "After commencement, a lessee shall measure the lease liability by increasing the carrying amount to reflect interest and reducing it for lease payments made.",
+      "topic": "subsequent-lease-liability",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-16",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs16-r005",
+      "paragraphReference": "IFRS 16.31",
+      "ruleText": "A lessee shall depreciate the right-of-use asset and account for interest on the lease liability separately, unless applying the recognition exemption for short-term or low-value leases.",
+      "topic": "depreciation-interest",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-16",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs16-r006",
+      "paragraphReference": "IFRS 16.B37",
+      "ruleText": "A contract is (or contains) a lease if it conveys the right to control the use of an identified asset for a period of time in exchange for consideration.",
+      "topic": "lease-definition",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-16",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    }
+  ]
+}

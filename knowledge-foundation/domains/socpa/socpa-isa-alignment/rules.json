@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "domain": "audit",
+    "subdomain": "socpa-audit",
+    "assetId": "kf-socpa-a-socpa-isa-alignment-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-socpa-a-socpa-isa-alignment",
+    "standardCode": "SOCPA-ISA-ALIGNMENT",
+    "ruleCount": 4,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "socpa-isa-alignment-r001",
+      "paragraphReference": "SOCPA-ISA-1",
+      "ruleText": "SOCPA auditing standards are aligned with ISA — ISA base assets govern audit methodology in KSA.",
+      "topic": "isa-alignment",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-isa-alignment",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-isa-alignment-r002",
+      "paragraphReference": "SOCPA-ISA-2",
+      "ruleText": "Where SOCPA issues KSA-specific audit guidance, it applies as jurisdiction overlay to the relevant ISA standard.",
+      "topic": "ksa-guidance",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-isa-alignment",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-isa-alignment-r003",
+      "paragraphReference": "SOCPA-ISA-3",
+      "ruleText": "Risk assessment and evidence requirements follow ISA 315 and ISA 500 unless SOCPA overlay specifies additional procedures.",
+      "topic": "risk-evidence",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-isa-alignment",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-isa-alignment-r004",
+      "paragraphReference": "SOCPA-ISA-4",
+      "ruleText": "Lineage from audit conclusions shall reference both ISA base rule and SOCPA overlay when applicable.",
+      "topic": "dual-lineage",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-isa-alignment",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    }
+  ]
+}

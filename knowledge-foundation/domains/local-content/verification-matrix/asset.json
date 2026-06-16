@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "lcgpa",
+    "authorityLevel": "A",
+    "licenseId": "lcgpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-4-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "pending-review",
+    "reviewStatus": "pending",
+    "admissionWorkflowStage": "ingestion",
+    "storageTier": "ingestion-staging",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-lc-d-verification-matrix",
+    "assetType": "D",
+    "domain": "local-content",
+    "subdomain": "verification-procedures",
+    "standardCode": "LC-VERIFICATION-MATRIX",
+    "standardName": "Facility-Level Core Baseline Compliance Verification Matrix",
+    "versionLabel": "LC-VERIFICATION-MATRIX:v1",
+    "issueDate": "2021-01-01",
+    "effectiveDate": "2021-06-01",
+    "status": "current",
+    "sourceUrl": "https://lcgpa.gov.sa/",
+    "sourceOwner": "LCGPA",
+    "catalogId": "kf-lc-verification-matrix",
+    "session": "4",
+    "attribution": [
+      "© LCGPA"
+    ],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval. Local content conclusions require human review.",
+    "regulationReference": "ISRS 4400 / LCGPA Rules No. 1-4661-21"
+  },
+  "ontology": {
+    "domain": "local-content",
+    "subdomain": "verification-procedures",
+    "entity": "verification-procedure",
+    "relationship": "requires-evidence",
+    "authority": "lcgpa",
+    "usage": "local-content-intelligence"
+  },
+  "engines": [
+    "local-content-intelligence",
+    "evidence-catalog",
+    "audit-intelligence"
+  ],
+  "lineage": {
+    "upstreamAssetIds": [
+      "kf-lc-a-lcgpa-rules"
+    ],
+    "crossReferences": [
+      {
+        "standard": "ISRS 4400",
+        "role": "aup-framework"
+      },
+      {
+        "catalogId": "kf-audit-isa-500",
+        "role": "evidence-baseline"
+      }
+    ],
+    "note": "LCGPA rules govern local content measurement — overlay on audited financial inputs"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "pending-review",
+    "confidenceScore": 69
+  },
+  "licensing": {
+    "licenseId": "lcgpa-standard",
+    "embedding": "restricted-review-required",
+    "redistribution": "prohibited"
+  }
+}

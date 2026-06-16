@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "subdomain": "isa-standards",
+    "assetId": "kf-audit-a-isa-250-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-audit-a-isa-250",
+    "standardCode": "ISA 250",
+    "versionLabel": "ISA 250:2024",
+    "session": "2",
+    "ruleCount": 4,
+    "executableRules": true,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "isa-250-r001",
+      "paragraphReference": "ISA 250.13",
+      "ruleText": "The auditor shall obtain a general understanding of the legal and regulatory framework applicable to the entity and how the entity complies.",
+      "topic": "understand-laws",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-250",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "ruleId": "isa-250-r002",
+      "paragraphReference": "ISA 250.17",
+      "ruleText": "The auditor shall perform procedures to identify instances of non-compliance with laws and regulations that may have a material effect on the financial statements.",
+      "topic": "identify-noncompliance",
+      "usage": "findings-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-250",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "findings-library"
+      }
+    },
+    {
+      "ruleId": "isa-250-r003",
+      "paragraphReference": "ISA 250.20",
+      "ruleText": "If the auditor becomes aware of information concerning an instance of non-compliance, the auditor shall obtain further information and consult within the firm.",
+      "topic": "respond-noncompliance",
+      "usage": "findings-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-250",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "findings-library"
+      }
+    },
+    {
+      "ruleId": "isa-250-r004",
+      "paragraphReference": "ISA 250.23",
+      "ruleText": "The auditor shall request management to disclose identified or suspected non-compliance to those charged with governance unless prohibited by law.",
+      "topic": "communicate-tcg",
+      "usage": "findings-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-250",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "findings-library"
+      }
+    }
+  ]
+}

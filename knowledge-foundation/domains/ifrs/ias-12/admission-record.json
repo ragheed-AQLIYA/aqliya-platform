@@ -1,0 +1,72 @@
+{
+  "catalogId": "kf-acct-ifrs-ias-12",
+  "standardCode": "IAS 12",
+  "workflowSequence": [
+    "source",
+    "ingestion",
+    "validation",
+    "authorityCheck",
+    "licensingCheck",
+    "confidenceAssignment",
+    "lineageAssignment",
+    "reviewerApproval",
+    "productionAdmission"
+  ],
+  "currentStage": "productionAdmission",
+  "stageResults": {
+    "source": {
+      "status": "pass",
+      "timestamp": "2026-06-09"
+    },
+    "ingestion": {
+      "status": "complete",
+      "timestamp": "2026-06-09"
+    },
+    "validation": {
+      "status": "pass",
+      "timestamp": "2026-06-09",
+      "reportId": "val-kf-acct-ifrs-ias-12"
+    },
+    "authorityCheck": {
+      "status": "pass",
+      "authorityLevel": "A",
+      "executableRulePermitted": true,
+      "timestamp": "2026-06-09"
+    },
+    "licensingCheck": {
+      "status": "pass",
+      "embeddingPermitted": false,
+      "note": "Linking/referencing permitted; embedding requires separate legal gate",
+      "timestamp": "2026-06-09"
+    },
+    "confidenceAssignment": {
+      "status": "pass",
+      "confidenceScore": 95,
+      "productionEligible": true,
+      "timestamp": "2026-06-09"
+    },
+    "lineageAssignment": {
+      "status": "pass",
+      "chainComplete": true,
+      "timestamp": "2026-06-09"
+    },
+    "reviewerApproval": {
+      "status": "approved",
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "reviewTimestamp": "2026-06-09",
+      "reviewNotes": "Batch approval — Sessions 1–3 Priority 1 standards"
+    },
+    "productionAdmission": {
+      "status": "admitted",
+      "admissionTimestamp": "2026-06-09",
+      "catalogStatus": "production-admitted"
+    }
+  },
+  "blockedTechnologies": [
+    "RAG",
+    "Ollama",
+    "Fine-tuning",
+    "Vector DB"
+  ]
+}

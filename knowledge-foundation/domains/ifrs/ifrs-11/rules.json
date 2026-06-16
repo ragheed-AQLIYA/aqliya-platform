@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-11-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-11",
+    "standardCode": "IFRS 11",
+    "versionLabel": "IFRS 11:2024",
+    "wave": 2,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ifrs-11-r001",
+      "paragraphReference": "IFRS 11.4",
+      "ruleText": "A joint arrangement is an arrangement of which two or more parties have joint control.",
+      "topic": "joint-arrangement",
+      "usage": "tb-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-11",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "ruleId": "ifrs-11-r002",
+      "paragraphReference": "IFRS 11.14",
+      "ruleText": "A joint operation is a joint arrangement whereby the parties have rights to the assets and obligations for the liabilities relating to the arrangement.",
+      "topic": "joint-operation",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-11",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs-11-r003",
+      "paragraphReference": "IFRS 11.15",
+      "ruleText": "A joint venture is a joint arrangement whereby the parties have rights to the net assets of the arrangement.",
+      "topic": "joint-venture",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-11",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs-11-r004",
+      "paragraphReference": "IFRS 11.24",
+      "ruleText": "A joint venturer shall recognise its interest in a joint venture using the equity method.",
+      "topic": "equity-method",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-11",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-audit-a-isa-240",
+    "assetType": "A",
+    "subdomain": "isa-standards",
+    "standardCode": "ISA 240",
+    "standardName": "The Auditor's Responsibilities Relating to Fraud",
+    "versionLabel": "ISA 240:2024",
+    "issueDate": "2009-01-01",
+    "effectiveDate": "2009-12-15",
+    "supersededDate": null,
+    "status": "current",
+    "sourceUrl": "https://www.iaasb.org/publications/isa-240",
+    "sourceOwner": "IAASB",
+    "catalogId": "kf-audit-isa-240",
+    "session": "2",
+    "attribution": [
+      "© IAASB / IFAC"
+    ],
+    "crossDomainLinks": [],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval before production use.",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "ontology": {
+    "domain": "audit",
+    "subdomain": "isa-standards",
+    "entity": "standard",
+    "relationship": "implements",
+    "authority": "iaasb",
+    "usage": "audit-intelligence"
+  },
+  "engines": [
+    "audit-intelligence",
+    "risk-library",
+    "findings-library",
+    "evidence-catalog"
+  ],
+  "lineage": {
+    "lineageId": null,
+    "lineageParentId": null,
+    "upstreamAssetIds": [],
+    "note": "Lineage assigned at reviewer approval"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "validated",
+    "versionStatus": "current",
+    "reviewStatus": "pending",
+    "confidenceScore": 95
+  },
+  "licensing": {
+    "licenseId": "iaasb-standard",
+    "linking": "permitted",
+    "cataloging": "permitted-with-attribution",
+    "referencing": "permitted-with-attribution",
+    "embedding": "restricted-review-required",
+    "redistribution": "prohibited",
+    "commercialUse": "restricted-review-required"
+  }
+}

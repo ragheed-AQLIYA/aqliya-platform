@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-socpa-a-socpa-auditing-standards",
+    "assetType": "A",
+    "domain": "audit",
+    "subdomain": "socpa-audit",
+    "standardCode": "SOCPA-AUDITING-STANDARDS",
+    "standardName": "SOCPA Auditing Standards",
+    "versionLabel": "SOCPA-AUDITING-STANDARDS:2024",
+    "issueDate": "2010-01-01",
+    "effectiveDate": "2017-01-01",
+    "status": "current",
+    "sourceUrl": "https://www.socpa.org.sa/",
+    "sourceOwner": "SOCPA",
+    "catalogId": "kf-socpa-socpa-auditing-standards",
+    "session": "3",
+    "attribution": [
+      "© SOCPA"
+    ],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval. Jurisdiction overlay — does not replace IFRS/ISA base assets.",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "ontology": {
+    "domain": "audit",
+    "subdomain": "socpa-audit",
+    "entity": "standard",
+    "relationship": "implements",
+    "authority": "socpa",
+    "usage": "tb-intelligence"
+  },
+  "engines": [
+    "audit-intelligence",
+    "evidence-catalog"
+  ],
+  "lineage": {
+    "upstreamAssetIds": [],
+    "jurisdictionOverlay": true,
+    "note": "Preserve IFRS/ISA base version history — overlay only"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "validated",
+    "confidenceScore": 95
+  },
+  "licensing": {
+    "licenseId": "socpa-standard",
+    "embedding": "restricted-review-required",
+    "redistribution": "prohibited"
+  }
+}

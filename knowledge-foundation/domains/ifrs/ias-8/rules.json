@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-8-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-8",
+    "standardCode": "IAS 8",
+    "versionLabel": "IAS 8:2024",
+    "wave": 2,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-8-r001",
+      "paragraphReference": "IAS 8.5",
+      "ruleText": "An entity shall select and apply accounting policies in accordance with IFRS Standards and consider IFRIC and SIC guidance.",
+      "topic": "policy-selection",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-8",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-8-r002",
+      "paragraphReference": "IAS 8.14",
+      "ruleText": "An entity shall change an accounting policy only if required by a Standard or if the change results in more reliable and relevant information.",
+      "topic": "policy-change",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-8",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-8-r003",
+      "paragraphReference": "IAS 8.32",
+      "ruleText": "An entity shall account for a change in accounting estimate prospectively by including it in profit or loss in the period of change and future periods if applicable.",
+      "topic": "estimate-change",
+      "usage": "tb-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-8",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "ruleId": "ias-8-r004",
+      "paragraphReference": "IAS 8.41",
+      "ruleText": "Prior period errors shall be corrected by retrospective restatement unless impracticable.",
+      "topic": "error-correction",
+      "usage": "tb-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-8",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "tb-intelligence"
+      }
+    }
+  ]
+}

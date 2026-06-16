@@ -1,0 +1,251 @@
+{
+  "$schema": "knowledge-foundation/governance/schema/governance-model-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-governance-model",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "session": "0.5",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active"
+  },
+  "operatingPhilosophy": {
+    "sequence": ["Knowledge First", "Human Governed", "AI Assisted"],
+    "knowledgePipeline": [
+      "Authority",
+      "Governance",
+      "Classification",
+      "Knowledge",
+      "Lineage",
+      "Memory",
+      "AI"
+    ],
+    "noBypass": true
+  },
+  "roles": [
+    {
+      "roleId": "KNOWLEDGE_OPERATOR",
+      "description": "Ingests and structures candidate knowledge assets into staging",
+      "permissions": ["ingest-staging", "edit-draft-metadata", "submit-for-review"],
+      "forbidden": ["approve-executable-rules", "production-admission", "override-licensing"]
+    },
+    {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "description": "Validates authority, licensing, confidence, lineage; approves admission",
+      "permissions": ["validate", "approve-admission", "reject-admission", "request-licensing-review"],
+      "forbidden": ["bypass-lineage", "approve-llm-executable-rules-without-attestation"]
+    },
+    {
+      "roleId": "ADMIN",
+      "description": "Platform administration; version rollback requires ADR",
+      "permissions": ["all-knowledge-operations", "version-rollback-with-adr"],
+      "forbidden": ["destroy-version-history", "modify-frozen-charter"]
+    },
+    {
+      "roleId": "VIEWER",
+      "description": "Read admitted canonical and permitted operational knowledge",
+      "permissions": ["read-admitted", "search-governed-metadata"],
+      "forbidden": ["ingest", "approve", "mutate"]
+    },
+    {
+      "roleId": "OPERATOR",
+      "description": "Product operator using admitted knowledge in AuditOS / intelligence engines",
+      "permissions": ["use-admitted-knowledge", "create-firm-memory-type-e", "submit-for-review"],
+      "forbidden": ["admit-authority-rules", "autonomous-professional-decisions"]
+    },
+    {
+      "roleId": "REVIEWER",
+      "description": "Engagement reviewer — approves outputs (mappings, FS drafts, findings)",
+      "permissions": ["approve-outputs", "reject-outputs", "annotate-lineage"],
+      "forbidden": ["admit-canonical-rules", "bypass-confidence-gates"]
+    }
+  ],
+  "admissionPipeline": {
+    "workflowRef": "knowledge-foundation/governance/knowledge-admission-workflow.json",
+    "stages": [
+      "source",
+      "ingestion",
+      "validation",
+      "authorityCheck",
+      "licensingCheck",
+      "confidenceAssignment",
+      "lineageAssignment",
+      "reviewerApproval",
+      "productionAdmission"
+    ],
+    "defaultStagingTier": "ingestion-staging",
+    "defaultRejectTier": "external-reference"
+  },
+  "rejectionCriteria": {
+    "charterSection": "§9 Non-Negotiable Constraints",
+    "criteria": [
+      {
+        "id": "no-autonomous-professional-decisions",
+        "description": "AI may recommend. Humans approve.",
+        "enforcement": "block-production-admission-without-reviewerApproval"
+      },
+      {
+        "id": "no-unattributed-knowledge",
+        "description": "Every governed asset must have source attribution",
+        "enforcement": "reject-missing-sourceUrl-or-sourceOwner"
+      },
+      {
+        "id": "no-versionless-knowledge",
+        "description": "Every governed asset must belong to a version policy",
+        "enforcement": "reject-missing-versionLabel-or-effectiveDate"
+      },
+      {
+        "id": "no-untraceable-conclusions",
+        "description": "Every conclusion must maintain lineage",
+        "enforcement": "reject-incomplete-lineage-chain"
+      },
+      {
+        "id": "no-direct-llm-rule-creation",
+        "description": "LLMs may suggest candidate rules. Humans approve executable rules.",
+        "enforcement": "downgrade-llm-type-a-to-candidate-type-b; cap-confidence-at-69"
+      },
+      {
+        "id": "no-orphan-knowledge",
+        "description": "Missing authority, version, confidence, or lineage",
+        "enforcement": "reject-at-validation-stage"
+      },
+      {
+        "id": "priority-gate-violation",
+        "description": "Non-Priority-1 ingestion during Sessions 1–3",
+        "enforcement": "reject-at-validation-stage",
+        "artifactRef": "knowledge-foundation/governance/priority-ingestion-backlog.json"
+      }
+    ]
+  },
+  "llmAssistBoundaries": {
+    "permitted": [
+      "suggest-candidate-rules",
+      "draft-implementation-guidance",
+      "normalize-perplexity-output",
+      "propose-ontology-mapping",
+      "assist-catalog-indexing"
+    ],
+    "forbidden": [
+      "create-executable-rules-without-human-approval",
+      "final-professional-decisions",
+      "autonomous-financial-statement-issuance",
+      "bypass-licensing-check",
+      "embed-without-legal-sign-off"
+    ],
+    "candidateRuleFlow": {
+      "maxAssetType": "B",
+      "maxConfidence": 69,
+      "requiredNextStep": "KNOWLEDGE_REVIEWER approval before Type A promotion"
+    }
+  },
+  "perplexityOutputNormalization": {
+    "requiredFrontmatter": [
+      "catalogId",
+      "assetId",
+      "assetType",
+      "authorityLevel",
+      "authorityId",
+      "domain",
+      "subdomain",
+      "versionLabel",
+      "effectiveDate",
+      "sourceUrl",
+      "sourceOwner",
+      "confidenceScore",
+      "validationStatus",
+      "reviewStatus",
+      "session",
+      "charterVersion"
+    ],
+    "defaultValidationStatus": "pending-review",
+    "defaultReviewStatus": "pending",
+    "outputPathPattern": "knowledge-foundation/domains/{domain}/{standard-slug}/"
+  },
+  "validationRules": {
+    "authorityMatrix": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-authority-matrix.json",
+      "rules": ["executable-rules-level-a-only", "llmRuleCreation-false"]
+    },
+    "storageMatrix": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-storage-matrix.json",
+      "rules": ["tier-by-asset-type", "audit-on-write", "minimum-metadata-at-gate"]
+    },
+    "confidenceModel": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+      "gates": {
+        "executableRuleMinimum": 95,
+        "productionRecommendationMinimum": 70,
+        "humanReviewRequiredBelow": 85,
+        "llmGeneratedContentCap": 69
+      }
+    },
+    "versionPolicy": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+      "rules": ["no-versionless-admission", "never-destroy-history", "one-current-per-assetId"]
+    },
+    "lineageModel": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+      "rules": ["minimum-5-node-chain", "human-review-before-production", "no-llm-only-reasoning"]
+    },
+    "licensingMatrix": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+      "rules": ["default-deny-embedding", "default-deny-redistribution", "resolve-licenseId"]
+    }
+  },
+  "sessionGates": {
+    "session0": { "status": "complete", "deliverable": "master-knowledge-catalog.json" },
+    "session0_5": {
+      "status": "complete",
+      "deliverables": [
+        "knowledge-governance-model.json",
+        "knowledge-admission-workflow.json",
+        "priority-ingestion-backlog.json"
+      ]
+    },
+    "session1": {
+      "status": "blocked-until-0_5-review",
+      "scope": "IFRS / IAS / IFRIC",
+      "priorityGate": "priority1-only"
+    },
+    "session2": {
+      "status": "blocked",
+      "scope": "ISA / ISQM",
+      "priorityGate": "priority1-only"
+    },
+    "session3": {
+      "status": "blocked",
+      "scope": "SOCPA",
+      "priorityGate": "priority1-only"
+    },
+    "sessions4to12": { "status": "blocked" },
+    "blockedTechnologies": ["RAG", "Ollama", "Fine-tuning", "Vector DB"]
+  },
+  "auditOsGovernance": {
+    "flow": [
+      "TB Upload",
+      "TB Intelligence",
+      "Firm Memory",
+      "Mapping Suggestions",
+      "Reviewer Approval",
+      "Financial Statements"
+    ],
+    "autonomousFsGeneration": false,
+    "humanApprovalRequired": true,
+    "lineageRequired": true,
+    "firmMemoryAssetType": "E",
+    "charterCompliant": true
+  },
+  "artifactCrossReferences": {
+    "masterCatalog": "knowledge-foundation/governance/master-knowledge-catalog.json",
+    "admissionWorkflow": "knowledge-foundation/governance/knowledge-admission-workflow.json",
+    "priorityBacklog": "knowledge-foundation/governance/priority-ingestion-backlog.json",
+    "authorityMatrix": "knowledge-foundation/artifacts/knowledge-authority-matrix.json",
+    "storageMatrix": "knowledge-foundation/artifacts/knowledge-storage-matrix.json",
+    "confidenceModel": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+    "lineageModel": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+    "versionPolicy": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+    "ontology": "knowledge-foundation/artifacts/knowledge-ontology.json",
+    "licensingMatrix": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+  }
+}

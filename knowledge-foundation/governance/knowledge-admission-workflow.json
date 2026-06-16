@@ -1,0 +1,311 @@
+{
+  "$schema": "knowledge-foundation/governance/schema/admission-workflow-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-admission-workflow",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "session": "0.5",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active",
+    "purpose": "Canonical asset lifecycle — future admission gate for IFRS, ISA, and SOCPA ingestion"
+  },
+  "workflowSequence": [
+    "source",
+    "ingestion",
+    "validation",
+    "authorityCheck",
+    "licensingCheck",
+    "confidenceAssignment",
+    "lineageAssignment",
+    "reviewerApproval",
+    "productionAdmission"
+  ],
+  "stages": [
+    {
+      "stageId": "source",
+      "order": 1,
+      "name": "Source",
+      "description": "Authoritative source identified and registered in master knowledge catalog",
+      "inputs": ["catalogId", "sourceUrl", "sourceOwner", "standardCode"],
+      "outputs": ["sourceRecordId", "authorityId"],
+      "storageTier": "external-reference",
+      "blockingConditions": ["missing sourceUrl", "unregistered catalogId"],
+      "artifactRefs": [
+        "knowledge-foundation/governance/master-knowledge-catalog.json",
+        "knowledge-foundation/artifacts/knowledge-authority-matrix.json"
+      ]
+    },
+    {
+      "stageId": "ingestion",
+      "order": 2,
+      "name": "Ingestion",
+      "description": "Raw content received into ingestion-staging — no production use",
+      "inputs": ["sourceRecordId", "contentPayload", "ingestionMethod"],
+      "outputs": ["stagingAssetId", "ingestionTimestamp", "ingestedBy"],
+      "storageTier": "ingestion-staging",
+      "allowedMethods": ["manual-upload", "structured-json", "perplexity-normalized", "agent-output"],
+      "forbiddenMethods": ["autonomous-llm-rule-extraction", "ungoverned-scrape"],
+      "retention": "90-days-or-until-admitted",
+      "artifactRefs": ["knowledge-foundation/artifacts/knowledge-storage-matrix.json"],
+      "runtimeNote": "FF_AI_RAG / Vector DB ingest explicitly blocked until Foundation v1 fully adopted"
+    },
+    {
+      "stageId": "validation",
+      "order": 3,
+      "name": "Validation",
+      "description": "Metadata and structural validation against Foundation schemas",
+      "inputs": ["stagingAssetId"],
+      "outputs": ["validationReportId", "validationStatus"],
+      "checks": [
+        {
+          "checkId": "no-orphan-knowledge",
+          "charterRef": "§2.2",
+          "required": ["authoritySource", "versionInformation", "confidenceInformation", "knowledgeLineage"]
+        },
+        {
+          "checkId": "no-versionless",
+          "charterRef": "§9.3",
+          "requiredFields": ["assetId", "versionLabel", "issueDate", "effectiveDate", "jurisdiction", "status", "sourceUrl", "sourceOwner"]
+        },
+        {
+          "checkId": "ontology-complete",
+          "requiredFields": ["domain", "subdomain", "entity", "relationship", "authority", "usage"]
+        },
+        {
+          "checkId": "priority-gate",
+          "rule": "Only Priority 1 families admitted during Sessions 1–3",
+          "artifactRef": "knowledge-foundation/governance/priority-ingestion-backlog.json"
+        }
+      ],
+      "outcomes": {
+        "pass": "proceed-to-authorityCheck",
+        "fail": "reject-to-external-reference",
+        "pending": "hold-in-staging"
+      },
+      "artifactRefs": [
+        "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "knowledge-foundation/artifacts/knowledge-ontology.json"
+      ]
+    },
+    {
+      "stageId": "authorityCheck",
+      "order": 4,
+      "name": "Authority Check",
+      "description": "Verify authority level permits requested asset type and rule creation",
+      "inputs": ["stagingAssetId", "assetType", "authorityId"],
+      "outputs": ["authorityCheckId", "authorityLevel", "executableRulePermitted"],
+      "rules": [
+        {
+          "ruleId": "executable-rules-level-a-only",
+          "condition": "assetType === A",
+          "requires": "authorityLevel === A",
+          "authorities": ["ifrs-foundation", "iaasb", "socpa", "lcgpa", "government-regulators"]
+        },
+        {
+          "ruleId": "no-llm-executable-rules",
+          "charterRef": "§9.5",
+          "condition": "producedBy === llm",
+          "executableRulePermitted": false,
+          "maxAssetType": "B"
+        },
+        {
+          "ruleId": "level-e-external-only",
+          "condition": "authorityLevel === E",
+          "admissionPolicy": "external-reference-only"
+        }
+      ],
+      "outcomes": {
+        "pass": "proceed-to-licensingCheck",
+        "fail": "reject-or-downgrade-to-type-b"
+      },
+      "artifactRefs": ["knowledge-foundation/artifacts/knowledge-authority-matrix.json"]
+    },
+    {
+      "stageId": "licensingCheck",
+      "order": 5,
+      "name": "Licensing Check",
+      "description": "Resolve license permissions for intended use (catalog, reference, embedding)",
+      "inputs": ["stagingAssetId", "licenseId", "intendedUse"],
+      "outputs": ["licensingCheckId", "permissionsResolved", "embeddingPermitted"],
+      "intendedUseTypes": ["linking", "cataloging", "referencing", "embedding", "redistribution", "commercialUse"],
+      "rules": [
+        {
+          "ruleId": "embedding-default-deny",
+          "default": "prohibited",
+          "overrideRequires": ["legal-sign-off", "KNOWLEDGE_REVIEWER"]
+        },
+        {
+          "ruleId": "redistribution-default-deny",
+          "default": "prohibited"
+        },
+        {
+          "ruleId": "big-four-no-embedding",
+          "licenseId": "big-four-publication",
+          "embedding": "prohibited"
+        }
+      ],
+      "outcomes": {
+        "pass": "proceed-to-confidenceAssignment",
+        "fail": "link-only-external-reference",
+        "restricted": "metadata-only-admission"
+      },
+      "artifactRefs": ["knowledge-foundation/artifacts/knowledge-licensing-matrix.json"]
+    },
+    {
+      "stageId": "confidenceAssignment",
+      "order": 6,
+      "name": "Confidence Assignment",
+      "description": "Compute confidence score from authority, validation, version, and review status",
+      "inputs": ["stagingAssetId", "authorityLevel", "validationStatus", "versionStatus", "reviewStatus", "producedBy"],
+      "outputs": ["confidenceScore", "confidenceBand", "productionEligible"],
+      "scoring": {
+        "baseScores": { "A": 95, "B": 80, "C": 75, "D": 65, "E": 40 },
+        "llmGeneratedContentCap": 69,
+        "executableRuleMinimum": 95,
+        "productionRecommendationMinimum": 70,
+        "humanReviewRequiredBelow": 85
+      },
+      "rules": [
+        {
+          "ruleId": "llm-cap",
+          "condition": "producedBy === llm && !humanReviewed",
+          "maxConfidence": 69
+        },
+        {
+          "ruleId": "authority-a-validated-current",
+          "indicativeRange": { "min": 95, "max": 100 }
+        },
+        {
+          "ruleId": "block-autonomous-decision",
+          "charterRef": "§9.1",
+          "autonomousDecision": false
+        }
+      ],
+      "artifactRefs": ["knowledge-foundation/artifacts/knowledge-confidence-model.json"]
+    },
+    {
+      "stageId": "lineageAssignment",
+      "order": 7,
+      "name": "Lineage Assignment",
+      "description": "Establish minimum lineage chain and upstream asset links",
+      "inputs": ["stagingAssetId", "upstreamAssetIds", "ruleReferences"],
+      "outputs": ["lineageId", "chainComplete", "lineageRecord"],
+      "minimumChain": ["decision", "rule", "authority", "sourceDocument", "reviewer"],
+      "rules": [
+        {
+          "ruleId": "no-untraceable-conclusions",
+          "charterRef": "§9.4",
+          "minimumUpstreamLinks": 1
+        },
+        {
+          "ruleId": "llm-provenance",
+          "requires": ["modelProvider", "promptPackVersion", "retrievedAssetIds", "humanReviewStatus"]
+        },
+        {
+          "ruleId": "immutable-lineage",
+          "deletionPolicy": "never-destroy"
+        }
+      ],
+      "artifactRefs": ["knowledge-foundation/artifacts/knowledge-lineage-model.json"]
+    },
+    {
+      "stageId": "reviewerApproval",
+      "order": 8,
+      "name": "Reviewer Approval",
+      "description": "Human KNOWLEDGE_REVIEWER approves or rejects admission",
+      "inputs": ["stagingAssetId", "lineageId", "confidenceScore", "validationReportId"],
+      "outputs": ["reviewDecision", "reviewerId", "reviewTimestamp", "reviewNotes"],
+      "requiredRole": "KNOWLEDGE_REVIEWER",
+      "decisions": [
+        {
+          "decision": "approved",
+          "effect": "proceed-to-productionAdmission",
+          "confidenceModifier": 5
+        },
+        {
+          "decision": "rejected",
+          "effect": "reject-to-external-reference",
+          "confidenceModifier": -50,
+          "retainForAudit": true
+        },
+        {
+          "decision": "pending",
+          "effect": "hold-in-staging",
+          "blockProductionOutput": true
+        }
+      ],
+      "charterRules": [
+        "AI may recommend. Humans approve.",
+        "No Direct Rule Creation by LLMs without human approval of executable rules"
+      ],
+      "artifactRefs": ["knowledge-foundation/governance/knowledge-governance-model.json"]
+    },
+    {
+      "stageId": "productionAdmission",
+      "order": 9,
+      "name": "Production Admission",
+      "description": "Asset promoted to canonical or operational store — available to intelligence engines",
+      "inputs": ["stagingAssetId", "reviewDecision", "storageTier", "repositoryPath"],
+      "outputs": ["admittedAssetId", "admissionTimestamp", "catalogStatus"],
+      "preconditions": [
+        "validationStatus === validated",
+        "reviewDecision === approved",
+        "chainComplete === true",
+        "confidenceScore >= productionRecommendationMinimum",
+        "executable rules require confidenceScore >= 95"
+      ],
+      "storageAssignment": {
+        "A": "canonical",
+        "B": "canonical",
+        "C": "canonical",
+        "D": "operational",
+        "E": "operational"
+      },
+      "postAdmission": [
+        "Update master-knowledge-catalog.json status to admitted",
+        "Emit platform audit event knowledge_admit",
+        "Preserve staging record immutably",
+        "Do not enable RAG/vector ingest without separate Foundation v1 adoption gate"
+      ],
+      "artifactRefs": [
+        "knowledge-foundation/artifacts/knowledge-storage-matrix.json",
+        "knowledge-foundation/governance/master-knowledge-catalog.json"
+      ]
+    }
+  ],
+  "rejectionPaths": {
+    "externalReference": {
+      "tier": "external-reference",
+      "embedding": false,
+      "productionUse": false
+    },
+    "auditRetention": {
+      "retainRejected": true,
+      "reasonRequired": true
+    }
+  },
+  "auditRequirements": {
+    "events": [
+      "knowledge_ingest_staging",
+      "knowledge_validate",
+      "knowledge_authority_check",
+      "knowledge_license_check",
+      "knowledge_confidence_assign",
+      "knowledge_lineage_assign",
+      "knowledge_review",
+      "knowledge_admit",
+      "knowledge_reject"
+    ],
+    "tenantScoped": true,
+    "immutableTrail": true
+  },
+  "blockedUntilFoundationV1": [
+    "RAG",
+    "Ollama",
+    "Fine-tuning",
+    "Vector DB",
+    "FF_AI_RAG production ingest"
+  ]
+}

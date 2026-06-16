@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-10-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-10",
+    "standardCode": "IFRS 10",
+    "versionLabel": "IFRS 10:2024",
+    "wave": 2,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ifrs-10-r001",
+      "paragraphReference": "IFRS 10.4",
+      "ruleText": "An entity that controls one or more other entities shall present consolidated financial statements.",
+      "topic": "consolidation-requirement",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-10",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs-10-r002",
+      "paragraphReference": "IFRS 10.7",
+      "ruleText": "An investor controls an investee when it is exposed to variable returns and has the ability to affect those returns through its power over the investee.",
+      "topic": "control-definition",
+      "usage": "tb-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-10",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "ruleId": "ifrs-10-r003",
+      "paragraphReference": "IFRS 10.B86",
+      "ruleText": "On acquisition, the acquirer shall combine the assets, liabilities and equity of the subsidiary line by line with those of the parent.",
+      "topic": "consolidation-procedure",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-10",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs-10-r004",
+      "paragraphReference": "IFRS 10.B94",
+      "ruleText": "The parent and subsidiaries shall use uniform accounting policies for like transactions and events in similar circumstances.",
+      "topic": "uniform-policies",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-10",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    }
+  ]
+}

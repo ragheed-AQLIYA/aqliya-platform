@@ -1,0 +1,105 @@
+{
+  "$schema": "knowledge-foundation/confidence/schema/confidence-model-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-confidence-model",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active"
+  },
+  "requiredFields": [
+    "authorityLevel",
+    "validationStatus",
+    "versionStatus",
+    "reviewStatus",
+    "confidenceScore"
+  ],
+  "validationStatuses": [
+    { "id": "validated", "label": "Validated", "description": "Reviewed and admitted by KNOWLEDGE_REVIEWER" },
+    { "id": "pending-review", "label": "Pending Review", "description": "In staging; not for production use" },
+    { "id": "rejected", "label": "Rejected", "description": "Failed admission; retained for audit only" },
+    { "id": "unvalidated", "label": "Unvalidated", "description": "Not admitted; external reference only" }
+  ],
+  "versionStatuses": [
+    { "id": "current", "label": "Current", "modifier": 0 },
+    { "id": "superseded", "label": "Superseded", "modifier": -15, "retainHistory": true },
+    { "id": "draft", "label": "Draft", "modifier": -20, "productionUse": false },
+    { "id": "withdrawn", "label": "Withdrawn", "modifier": -30, "productionUse": false }
+  ],
+  "reviewStatuses": [
+    { "id": "approved", "label": "Human Approved", "modifier": 5 },
+    { "id": "pending", "label": "Pending Human Review", "modifier": -10, "blockProductionOutput": true },
+    { "id": "rejected", "label": "Human Rejected", "modifier": -50, "blockProductionOutput": true },
+    { "id": "not-required", "label": "Not Required", "modifier": 0, "appliesTo": ["A-validated-current"] }
+  ],
+  "indicativeRanges": [
+    {
+      "id": "authority-a-validated-current",
+      "label": "Authority A + Validated + Current Version",
+      "min": 95,
+      "max": 100,
+      "conditions": {
+        "authorityLevel": "A",
+        "validationStatus": "validated",
+        "versionStatus": "current"
+      }
+    },
+    {
+      "id": "authority-bc-interpretation",
+      "label": "Authority B/C Interpretation",
+      "min": 70,
+      "max": 90,
+      "conditions": {
+        "authorityLevel": ["B", "C"],
+        "validationStatus": "validated"
+      }
+    },
+    {
+      "id": "firm-memory-repeated-approval",
+      "label": "Firm Memory + Repeated Approval",
+      "min": 85,
+      "max": 99,
+      "conditions": {
+        "assetType": "E",
+        "approvalCountMin": 2,
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "id": "unvalidated",
+      "label": "Unvalidated Assets",
+      "min": 0,
+      "max": 69,
+      "conditions": {
+        "validationStatus": ["unvalidated", "pending-review"]
+      },
+      "admissionPolicy": "external-reference-only"
+    }
+  ],
+  "scoringFormula": {
+    "description": "Base score from authority level, adjusted by version and review modifiers",
+    "baseScores": {
+      "A": 95,
+      "B": 80,
+      "C": 75,
+      "D": 65,
+      "E": 40
+    },
+    "modifiers": {
+      "versionStatus": "from versionStatuses.modifier",
+      "reviewStatus": "from reviewStatuses.modifier",
+      "repeatedApprovalBonus": { "perApproval": 2, "maxBonus": 10, "assetType": "E" }
+    },
+    "clamp": { "min": 0, "max": 100 },
+    "llmGeneratedContentCap": 69,
+    "note": "LLM-generated reasoning alone cannot exceed unvalidated ceiling"
+  },
+  "outputGates": {
+    "executableRuleMinimum": 95,
+    "productionRecommendationMinimum": 70,
+    "humanReviewRequiredBelow": 85,
+    "blockAutonomousDecision": true
+  }
+}

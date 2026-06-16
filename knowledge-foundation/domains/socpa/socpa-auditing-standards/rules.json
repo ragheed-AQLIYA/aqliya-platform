@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "domain": "audit",
+    "subdomain": "socpa-audit",
+    "assetId": "kf-socpa-a-socpa-auditing-standards-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-socpa-a-socpa-auditing-standards",
+    "standardCode": "SOCPA-AUDITING-STANDARDS",
+    "ruleCount": 4,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "socpa-auditing-standards-r001",
+      "paragraphReference": "SOCPA-AUD-1",
+      "ruleText": "Audit engagements in Saudi Arabia shall be conducted in accordance with SOCPA-adopted ISA standards.",
+      "topic": "isa-adoption",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-auditing-standards",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-auditing-standards-r002",
+      "paragraphReference": "SOCPA-AUD-2",
+      "ruleText": "The auditor shall comply with SOCPA regulatory registration and quality requirements applicable in KSA.",
+      "topic": "regulatory-compliance",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-auditing-standards",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-auditing-standards-r003",
+      "paragraphReference": "SOCPA-AUD-3",
+      "ruleText": "Audit documentation shall support the auditor's report and comply with SOCPA retention requirements.",
+      "topic": "documentation",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-auditing-standards",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-auditing-standards-r004",
+      "paragraphReference": "SOCPA-AUD-4",
+      "ruleText": "Auditor reporting in KSA shall follow SOCPA formats while maintaining ISA opinion requirements.",
+      "topic": "reporting-format",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-auditing-standards",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    }
+  ]
+}

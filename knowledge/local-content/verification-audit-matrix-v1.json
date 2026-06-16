@@ -1,0 +1,332 @@
+{
+  "version": "1.0",
+  "source": "Local_Content_Verification_Audit_Matrix_v1.xlsx",
+  "importedAt": "2026-06-09T20:54:48.414Z",
+  "itemCount": 36,
+  "items": [
+    {
+      "id": "LAB-01",
+      "section": "workforce",
+      "criteria": "Demographic Mapping",
+      "action": "Acquire a structured database of total payroll elements, segregated strictly by Gender (Male/Female) and Nationality (Saudi/Expatriate).",
+      "document": "Categorized Payroll & Headcount Summary",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-02",
+      "section": "workforce",
+      "criteria": "Scope of Compensation",
+      "action": "Verify that gross metrics encompass basic wages, structural bonuses, overtime pools, housing/transport stipends, and GOSI facility contributions.",
+      "document": "Audited Trial Balance & General Ledger",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-03",
+      "section": "workforce",
+      "criteria": "End of Service Benefits",
+      "action": "Reconcile the accrued employee end-of-service provision vector formed within the current reporting cycle.",
+      "document": "Actuarial Valuation / Provision Ledger",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-04",
+      "section": "workforce",
+      "criteria": "Statutory Legality",
+      "action": "Acquire a formal signed statement verifying that all registered personnel are documented in full accordance with KSA labor laws.",
+      "document": "Signed Management Statement",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-05",
+      "section": "workforce",
+      "criteria": "Sampling Execution",
+      "action": "Determine and apply sample filters: select at random the lesser of 40 individual files or 20% of the total localized human resource cost base.",
+      "document": "Statistical Selection Register",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-06",
+      "section": "workforce",
+      "criteria": "Identity Verification",
+      "action": "For all selected personnel files, confirm authentic government credentials.",
+      "document": "National ID (Saudi) / Valid Iqama (Expat)",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-07",
+      "section": "workforce",
+      "criteria": "Banking Trail Trace",
+      "action": "Trace payroll distributions for the selected sample directly to institutional bank output files to confirm absolute execution.",
+      "document": "Wages Protection System (WPS) Logs",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-08",
+      "section": "workforce",
+      "criteria": "Contract Validity",
+      "action": "Examine current physical or electronic employment documentation to verify direct active status during the reporting cycle.",
+      "document": "Valid Unexpired Employment Contracts",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-09",
+      "section": "workforce",
+      "criteria": "Contractor Segregation",
+      "action": "Audit human resource logs to confirm zero intermingling of external sub-contractors or third-party manpower within Section 3.",
+      "document": "Vendor Invoice Exclusion Test Log",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "LAB-10",
+      "section": "workforce",
+      "criteria": "Cross-Section Exclusions",
+      "action": "Verify that health insurance premiums (Sec 4) or educational/training overheads (Sec 6) are systematically purged from workforce entries.",
+      "document": "Expense Reclassification Matrix",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "Workforce Sampling Parameters Calculator",
+      "section": "workforce",
+      "criteria": "",
+      "action": "",
+      "document": "",
+      "scale": "",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-01",
+      "section": "supply_chain",
+      "criteria": "Descending Sorting",
+      "action": "Acquire a comprehensive vendor ledger of all expenditures incurred across supply chains, structured in descending order of cost.",
+      "document": "100% General Ledger alignment check",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-02",
+      "section": "supply_chain",
+      "criteria": "Unclassified Spend Cap",
+      "action": "Isolate any cost element lacking explicit granular transaction backing and classify directly as a non-permissible unclassified cost.",
+      "document": "Auto-transferred to non-compliant tier",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-03",
+      "section": "supply_chain",
+      "criteria": "Exclusion Verification",
+      "action": "Verify that explicit exclusions (Capex, Depreciation, Zakat, Taxes, Customs, Provisions, Foreign hub cost) are fully extracted from the operational baseline.",
+      "document": "Zero presence of disallowed items",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-04",
+      "section": "supply_chain",
+      "criteria": "The 70% Scope Threshold",
+      "action": "Confirm that the declared list covers at least 70% of total supply chain outlays, or captures the top 40 unique suppliers systematically.",
+      "document": "Minimum 10 unique vendors floor limit",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-05",
+      "section": "supply_chain",
+      "criteria": "The 500M SAR Risk Vector",
+      "action": "If unmapped residual spend remains equal to or above 500 Million SAR, expand the tracking matrix down to 80 suppliers or until residual drops below 500M.",
+      "document": "Mandatory expanded tracking test loop",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-06",
+      "section": "supply_chain",
+      "criteria": "Dual-Transaction Sample",
+      "action": "For every declared domestic vendor entity, pull the single largest historical invoice along with one purely randomized voucher line.",
+      "document": "2 Transactions per vendor audited",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-07",
+      "section": "supply_chain",
+      "criteria": "Ancillary Document Match",
+      "action": "Cross-examine sampled lines against underlying foundational commercial evidence blocks.",
+      "document": "Contracts, Purchase Orders, Delivery Notes",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-08",
+      "section": "supply_chain",
+      "criteria": "Registry Score Match",
+      "action": "Validate every specific claimed vendor local content score directly against the live digital authentication portal maintained by LCGPA.",
+      "document": "Verify score validity on portal",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-09",
+      "section": "supply_chain",
+      "criteria": "Non-Manufacturing Agents",
+      "action": "Where regional distribution agents or intermediate brokers are utilized, track compliance with LCGPA intermediary guidelines.",
+      "document": "Trace score to the root factory source",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "SC-10",
+      "section": "supply_chain",
+      "criteria": "Extra Disclosure (4.1)",
+      "action": "If outlays on pure physical goods represent less than 50% of the cost base, confirm the inclusion of up to 300 suppliers in Section 4.1.",
+      "document": "Triggered when goods component < 50%",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CPX-01",
+      "section": "capex_capacity",
+      "criteria": "Capex Threshold Loop",
+      "action": "Verify if gross annual capital additions exceed the 100M SAR benchmark to activate full compliance mapping protocols.",
+      "document": "Section 5 trigger threshold = 100M SAR",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CPX-02",
+      "section": "capex_capacity",
+      "criteria": "Asset Filtering",
+      "action": "Exclude real estate purchases, bare land acquisitions, inventory stores, and asset transfers between associated global corporate units.",
+      "document": "Purged from localized asset index",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CPX-03",
+      "section": "capex_capacity",
+      "criteria": "Capex Sampling Grid",
+      "action": "Map out the top 80 unique capital assets in descending cost order or until unmapped capex equals zero.",
+      "document": "Verify largest asset transactions",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CAP-01",
+      "section": "capex_capacity",
+      "criteria": "Saudi Training Bounds",
+      "action": "Confirm that all educational outlays and training entries are tied exclusively to the development of Saudi citizens.",
+      "document": "0% Expatriate training inclusion allowed",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CAP-02",
+      "section": "capex_capacity",
+      "criteria": "Internal Training Cost",
+      "action": "Audit internal on-the-job instructional logs. Ensure calculations match verifiable recorded training hours.",
+      "document": "Hourly cost rates trace to actuals",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CAP-03",
+      "section": "capex_capacity",
+      "criteria": "Supplier Enhancement",
+      "action": "Examine direct tech-transfers or investments made to enhance KSA SMEs. Exclude contractually mandated maintenance setup.",
+      "document": "Direct non-contractual economic uplift",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CAP-04",
+      "section": "capex_capacity",
+      "criteria": "R&D Regulatory Review",
+      "action": "Verify that declared Research & Development outlays conform directly with IFRS capitalization constraints.",
+      "document": "Expense mapping match to income statement",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "DEP-01",
+      "section": "capex_capacity",
+      "criteria": "Depreciation Tracking",
+      "action": "Acquire the complete master corporate Fixed Asset Register. Match baseline amounts to the audited financial ledger.",
+      "document": "100% Reconciliation to balance sheet",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "DEP-02",
+      "section": "capex_capacity",
+      "criteria": "Land & Building Defaults",
+      "action": "Verify that all assets classified as buildings or structural land improvements are assigned a domestic manufacturing index.",
+      "document": "100% Local component mapping default",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "DEP-03",
+      "section": "capex_capacity",
+      "criteria": "Equipment Sourcing",
+      "action": "For all non-building asset pools, test origin paperwork to separate domestic manufacturing from foreign cross-border imports.",
+      "document": "Verify manufacturing origin flags",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CLO-01",
+      "section": "closeout",
+      "criteria": "Top 10 Client Grid",
+      "action": "For industrial entities, verify mandatory listing of sales for the top 10 unique commercial buyers in KSA.",
+      "document": "Net of government levies & VAT",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CLO-02",
+      "section": "closeout",
+      "criteria": "Export Ledger Match",
+      "action": "Verify total export transactions against the general ledger. Check that end-users reside completely outside KSA borders.",
+      "document": "Requires 30% to 100% coverage grid",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CLO-03",
+      "section": "closeout",
+      "criteria": "Dividend Disclosures",
+      "action": "Verify that declared dividend distributions match financial statements and are split by Saudi and foreign shareholding blocks.",
+      "document": "100% equity ledger reconciliation",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CLO-04",
+      "section": "closeout",
+      "criteria": "Representation Letter",
+      "action": "Acquire a copy of the official Management Representation Letter, printed on corporate letterhead, signed by the CEO, and stamped.",
+      "document": "Mandatory bilingual execution",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    },
+    {
+      "id": "CLO-05",
+      "section": "closeout",
+      "criteria": "Auditor Declaration",
+      "action": "Confirm completion and signature of the compliance declaration by the lead registered partner.",
+      "document": "Signed by qualified SOCPA partner",
+      "scale": "Pending",
+      "workingPaperRef": ""
+    }
+  ]
+}

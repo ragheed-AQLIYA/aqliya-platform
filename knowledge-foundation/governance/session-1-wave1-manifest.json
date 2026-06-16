@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "session": "1",
+    "wave": 1,
+    "date": "2026-06-09",
+    "status": "ingested-staging",
+    "ragUsed": false,
+    "vectorDbUsed": false,
+    "productionAdmission": false,
+    "reviewerApprovalRequired": true
+  },
+  "standards": [
+    {
+      "slug": "ifrs-15",
+      "catalogId": "kf-acct-ifrs-ifrs-15",
+      "standardCode": "IFRS 15",
+      "ruleCount": 6,
+      "guidanceCount": 2
+    },
+    {
+      "slug": "ifrs-16",
+      "catalogId": "kf-acct-ifrs-ifrs-16",
+      "standardCode": "IFRS 16",
+      "ruleCount": 6,
+      "guidanceCount": 1
+    },
+    {
+      "slug": "ifrs-9",
+      "catalogId": "kf-acct-ifrs-ifrs-9",
+      "standardCode": "IFRS 9",
+      "ruleCount": 6,
+      "guidanceCount": 1
+    },
+    {
+      "slug": "ias-1",
+      "catalogId": "kf-acct-ifrs-ias-1",
+      "standardCode": "IAS 1",
+      "ruleCount": 6,
+      "guidanceCount": 1
+    },
+    {
+      "slug": "ias-12",
+      "catalogId": "kf-acct-ifrs-ias-12",
+      "standardCode": "IAS 12",
+      "ruleCount": 6,
+      "guidanceCount": 1
+    },
+    {
+      "slug": "ifrs-for-smes",
+      "catalogId": "kf-acct-ifrs-ifrs-for-smes",
+      "standardCode": "IFRS for SMEs",
+      "ruleCount": 6,
+      "guidanceCount": 2
+    }
+  ],
+  "nextWave": "Remaining Priority 1 IFRS/IAS/IFRIC catalog entries",
+  "admissionWorkflowRef": "knowledge-foundation/governance/knowledge-admission-workflow.json"
+}

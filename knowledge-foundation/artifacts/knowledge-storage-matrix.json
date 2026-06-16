@@ -1,0 +1,127 @@
+{
+  "$schema": "knowledge-foundation/governance/schema/storage-matrix-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-storage-matrix",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active"
+  },
+  "storageTiers": [
+    {
+      "tier": "canonical",
+      "description": "Versioned, governed authority rules and structured objects",
+      "retention": "permanent-with-version-history",
+      "tenantScope": "platform",
+      "encryption": "required-at-rest"
+    },
+    {
+      "tier": "operational",
+      "description": "Operational intelligence libraries and firm memory",
+      "retention": "policy-driven-with-holds",
+      "tenantScope": "organization",
+      "encryption": "required-at-rest"
+    },
+    {
+      "tier": "ingestion-staging",
+      "description": "Pre-admission staging for review and validation",
+      "retention": "90-days-or-until-admitted",
+      "tenantScope": "organization",
+      "encryption": "required-at-rest"
+    },
+    {
+      "tier": "external-reference",
+      "description": "Non-admitted sources (Level E, unvalidated)",
+      "retention": "link-only-no-embedding",
+      "tenantScope": "none",
+      "encryption": "not-applicable"
+    }
+  ],
+  "assetTypeMapping": [
+    {
+      "assetType": "A",
+      "name": "Authority Rules",
+      "storageTier": "canonical",
+      "repositoryPath": "knowledge-foundation/domains/{domain}/rules/",
+      "runtimeStore": "governed-knowledge-store",
+      "vectorIndex": "permitted-after-validation",
+      "accessRoles": ["KNOWLEDGE_OPERATOR", "KNOWLEDGE_REVIEWER", "ADMIN"],
+      "auditOnWrite": true,
+      "versionPolicy": "mandatory",
+      "lineageRequired": true
+    },
+    {
+      "assetType": "B",
+      "name": "Implementation Guidance",
+      "storageTier": "canonical",
+      "repositoryPath": "knowledge-foundation/domains/{domain}/guidance/",
+      "runtimeStore": "governed-knowledge-store",
+      "vectorIndex": "permitted-after-validation",
+      "accessRoles": ["KNOWLEDGE_OPERATOR", "KNOWLEDGE_REVIEWER", "VIEWER"],
+      "auditOnWrite": true,
+      "versionPolicy": "mandatory",
+      "lineageRequired": true
+    },
+    {
+      "assetType": "C",
+      "name": "Structured Objects",
+      "storageTier": "canonical",
+      "repositoryPath": "knowledge-foundation/domains/{domain}/structures/",
+      "runtimeStore": "structured-object-store",
+      "vectorIndex": "optional",
+      "accessRoles": ["KNOWLEDGE_OPERATOR", "OPERATOR", "ADMIN"],
+      "auditOnWrite": true,
+      "versionPolicy": "mandatory",
+      "lineageRequired": true
+    },
+    {
+      "assetType": "D",
+      "name": "Operational Intelligence",
+      "storageTier": "operational",
+      "repositoryPath": "knowledge-foundation/domains/{domain}/operational/",
+      "runtimeStore": "organization-knowledge-store",
+      "vectorIndex": "permitted",
+      "accessRoles": ["OPERATOR", "REVIEWER", "ADMIN"],
+      "auditOnWrite": true,
+      "versionPolicy": "mandatory",
+      "lineageRequired": true
+    },
+    {
+      "assetType": "E",
+      "name": "Institutional Memory",
+      "storageTier": "operational",
+      "repositoryPath": "knowledge-foundation/domains/{domain}/memory/",
+      "runtimeStore": "organization-memory-store",
+      "vectorIndex": "permitted-with-approval-history",
+      "accessRoles": ["OPERATOR", "REVIEWER", "ADMIN"],
+      "auditOnWrite": true,
+      "versionPolicy": "mandatory",
+      "lineageRequired": true,
+      "confidenceBoostOnRepeatedApproval": true
+    }
+  ],
+  "runtimeIntegration": {
+    "knowledgeApi": "/api/ai/knowledge",
+    "featureFlag": "FF_AI_RAG",
+    "ingestEndpoint": "POST /api/ai/knowledge/ingest",
+    "searchEndpoint": "GET /api/ai/knowledge/search",
+    "governanceNote": "Runtime store requires charter-compliant metadata before ingest"
+  },
+  "admissionGate": {
+    "stagingTier": "ingestion-staging",
+    "requiredReview": "KNOWLEDGE_REVIEWER",
+    "rejectTo": "external-reference",
+    "minimumMetadata": [
+      "assetId",
+      "assetType",
+      "authorityLevel",
+      "versionLabel",
+      "sourceUrl",
+      "sourceOwner",
+      "confidenceScore",
+      "lineageParentId"
+    ]
+  }
+}

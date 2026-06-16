@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "lcgpa",
+    "authorityLevel": "A",
+    "licenseId": "lcgpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-4-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "pending-review",
+    "reviewStatus": "pending",
+    "admissionWorkflowStage": "ingestion",
+    "storageTier": "ingestion-staging",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-lc-a-lcgpa-rules",
+    "assetType": "A",
+    "domain": "local-content",
+    "subdomain": "lcgpa-rules",
+    "standardCode": "LCGPA-RULES",
+    "standardName": "LCGPA Local Content Rules",
+    "versionLabel": "LCGPA-RULES:1-4661-21",
+    "issueDate": "2021-01-01",
+    "effectiveDate": "2021-06-01",
+    "status": "current",
+    "sourceUrl": "https://lcgpa.gov.sa/",
+    "sourceOwner": "LCGPA",
+    "catalogId": "kf-lc-lcgpa-rules",
+    "session": "4",
+    "attribution": [
+      "© LCGPA"
+    ],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval. Local content conclusions require human review.",
+    "regulationReference": "LCGPA Rules No. 1-4661-21"
+  },
+  "ontology": {
+    "domain": "local-content",
+    "subdomain": "lcgpa-rules",
+    "entity": "regulation",
+    "relationship": "governs",
+    "authority": "lcgpa",
+    "usage": "local-content-intelligence"
+  },
+  "engines": [
+    "local-content-intelligence",
+    "supplier-classification",
+    "spend-analysis"
+  ],
+  "lineage": {
+    "upstreamAssetIds": [
+      "kf-socpa-socpa-ifrs-adoption",
+      "kf-acct-ifrs-ias-1"
+    ],
+    "crossReferences": [
+      {
+        "standard": "ISRS 4400",
+        "role": "agreed-upon-procedures-baseline"
+      }
+    ],
+    "note": "LCGPA rules govern local content measurement — overlay on audited financial inputs"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "pending-review",
+    "confidenceScore": 69
+  },
+  "licensing": {
+    "licenseId": "lcgpa-standard",
+    "embedding": "restricted-review-required",
+    "redistribution": "prohibited"
+  }
+}

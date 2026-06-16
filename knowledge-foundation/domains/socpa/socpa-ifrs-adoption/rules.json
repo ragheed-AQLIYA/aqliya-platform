@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "domain": "accounting",
+    "subdomain": "socpa-accounting",
+    "assetId": "kf-socpa-a-socpa-ifrs-adoption-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-socpa-a-socpa-ifrs-adoption",
+    "standardCode": "SOCPA-IFRS-ADOPTION",
+    "ruleCount": 4,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "socpa-ifrs-adoption-r001",
+      "paragraphReference": "SOCPA-IFRS-1",
+      "ruleText": "Listed companies and certain regulated entities shall apply full IFRS as adopted in Saudi Arabia.",
+      "topic": "full-ifrs",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-ifrs-adoption",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-ifrs-adoption-r002",
+      "paragraphReference": "SOCPA-IFRS-2",
+      "ruleText": "Qualifying non-public entities may apply IFRS for SMEs subject to SOCPA eligibility criteria.",
+      "topic": "ifrs-smes-eligibility",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-ifrs-adoption",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-ifrs-adoption-r003",
+      "paragraphReference": "SOCPA-IFRS-3",
+      "ruleText": "IFRS adoption does not eliminate SOCPA supplementary disclosure requirements for zakat and tax.",
+      "topic": "supplementary-disclosure",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-ifrs-adoption",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-ifrs-adoption-r004",
+      "paragraphReference": "SOCPA-IFRS-4",
+      "ruleText": "Jurisdiction overlay shall link to base IFRS assets without replacing IFRS version history.",
+      "topic": "overlay-lineage",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-ifrs-adoption",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "meta": {
+    "assetId": "kf-accounting-a-ifrs-9-scope",
+    "parentAssetId": "kf-accounting-a-ifrs-9",
+    "standardCode": "IFRS 9",
+    "assetType": "A",
+    "remediationId": "wave1-remediation-ifrs9",
+    "remediationDate": "2026-06-09",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "current_scope": {
+    "description": "Classification and measurement of financial assets and financial liabilities; impairment (expected credit losses); hedge accounting.",
+    "effectiveFrom": "2018-01-01",
+    "appliesTo": [
+      "Financial asset classification (business model + SPPI)",
+      "Financial liability measurement",
+      "Expected credit loss model",
+      "Hedge accounting relationships"
+    ],
+    "paragraphAnchor": "IFRS 9.1.1"
+  },
+  "legacy_scope": {
+    "description": "Pre-IFRS 9 engagements and jurisdictions with delayed adoption may reference IAS 39 for historical measurement categories and incurred loss impairment.",
+    "status": "legacy-reference-only",
+    "routingPolicy": "Do not apply IAS 39 as default for current-period classification under IFRS 9 adoption",
+    "historicalUse": "Comparative periods, first-time adoption overlays, and explicit legacy engagement configuration only"
+  },
+  "replaced_standard": {
+    "standardCode": "IAS 39",
+    "standardName": "Financial Instruments: Recognition and Measurement",
+    "replacementScope": "Partial — IFRS 9 replaced classification, measurement, and impairment portions; IFRS 7 disclosure requirements continue alongside IFRS 9",
+    "effectiveDate": "2018-01-01",
+    "relationship": "supersedes-partial"
+  },
+  "superseded_references": [
+    {
+      "supersededCode": "IAS 39",
+      "topic": "Classification and measurement of financial instruments",
+      "supersededBy": "IFRS 9",
+      "relationship": "supersedes",
+      "retainForLineage": true,
+      "productionRouting": false
+    },
+    {
+      "supersededCode": "IAS 39",
+      "topic": "Incurred loss impairment model",
+      "supersededBy": "IFRS 9.5.5 (ECL model)",
+      "relationship": "supersedes",
+      "retainForLineage": true,
+      "productionRouting": false
+    },
+    {
+      "supersededCode": "IAS 39",
+      "topic": "Hedge accounting (2008 version)",
+      "supersededBy": "IFRS 9 Chapter 6",
+      "relationship": "supersedes",
+      "retainForLineage": true,
+      "productionRouting": false
+    }
+  ],
+  "legacyDistinction": {
+    "ifrs9": {
+      "label": "IFRS 9 — Current Authority",
+      "useFor": [
+        "current-period classification",
+        "ECL impairment",
+        "hedge accounting",
+        "mapping-engine default"
+      ],
+      "authorityLevel": "A",
+      "executableRules": true
+    },
+    "ias39": {
+      "label": "IAS 39 — Legacy Reference",
+      "useFor": [
+        "historical lineage",
+        "comparative disclosure context",
+        "explicit legacy engagement flag only"
+      ],
+      "authorityLevel": "A",
+      "executableRules": false,
+      "productionRouting": false,
+      "note": "IAS 39 references must not auto-route in TB Intelligence or Mapping Engine for current IFRS 9 engagements"
+    }
+  },
+  "classificationTaxonomy": [
+    {
+      "categoryId": "amortized-cost",
+      "label": "Amortized Cost",
+      "abbreviation": "AC",
+      "measurementBasis": "amortised cost using effective interest method",
+      "paragraphReference": "IFRS 9.4.1.2",
+      "eligibilityCriteria": [
+        "Hold-to-collect business model",
+        "Contractual cash flows are solely payments of principal and interest (SPPI)"
+      ],
+      "impairmentModel": "expected-credit-loss",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine"
+      ]
+    },
+    {
+      "categoryId": "fvoci",
+      "label": "Fair Value Through Other Comprehensive Income",
+      "abbreviation": "FVOCI",
+      "measurementBasis": "fair value with changes in OCI (debt instruments) or fair value (equity election)",
+      "paragraphReference": "IFRS 9.4.1.2A",
+      "eligibilityCriteria": [
+        "Hold-to-collect-and-sell business model with SPPI, or",
+        "Equity instrument irrevocable FVOCI election on initial recognition"
+      ],
+      "impairmentModel": "expected-credit-loss-for-debt",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ]
+    },
+    {
+      "categoryId": "fvtpl",
+      "label": "Fair Value Through Profit or Loss",
+      "abbreviation": "FVTPL",
+      "measurementBasis": "fair value with changes in profit or loss",
+      "paragraphReference": "IFRS 9.4.1.4",
+      "eligibilityCriteria": [
+        "Default category when AC or FVOCI criteria not met",
+        "May include assets held for trading or designated at FVTPL"
+      ],
+      "impairmentModel": "not-applicable-fair-value",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine"
+      ]
+    }
+  ],
+  "routingGate": {
+    "defaultStandard": "IFRS 9",
+    "blockLegacyAutoRoute": true,
+    "legacyStandard": "IAS 39",
+    "requiresExplicitEngagementFlag": true
+  }
+}

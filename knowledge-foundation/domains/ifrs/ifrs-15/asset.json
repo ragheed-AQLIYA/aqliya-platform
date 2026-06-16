@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "remediationId": "wave1-remediation-ifrs15-lineage",
+    "remediationDate": "2026-06-09",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-15",
+    "assetType": "A",
+    "standardCode": "IFRS 15",
+    "standardName": "Revenue from Contracts with Customers",
+    "versionLabel": "IFRS 15:2024",
+    "issueDate": "2014-05-28",
+    "effectiveDate": "2018-01-01",
+    "supersededDate": null,
+    "status": "current",
+    "sourceUrl": "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-15-revenue-from-contracts-with-customers/",
+    "sourceOwner": "IFRS Foundation",
+    "catalogId": "kf-acct-ifrs-ifrs-15",
+    "session": "1",
+    "attribution": [
+      "© IFRS Foundation"
+    ],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval before production use. Not a substitute for the authoritative standard text.",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "ontology": {
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "entity": "standard",
+    "relationship": "implements",
+    "authority": "ifrs-foundation",
+    "usage": "tb-intelligence"
+  },
+  "engines": [
+    "tb-intelligence",
+    "mapping-engine",
+    "disclosure-engine",
+    "accounting-intelligence"
+  ],
+  "lineage": {
+    "lineageId": null,
+    "lineageParentId": null,
+    "upstreamAssetIds": [],
+    "artifactRef": "superseded-lineage.json",
+    "supersededStandards": [
+      "IAS 11",
+      "IAS 18",
+      "IFRIC 13",
+      "IFRIC 15",
+      "IFRIC 18",
+      "SIC 31"
+    ],
+    "relationship": "supersedes",
+    "retainForLineage": true,
+    "productionRouting": false,
+    "note": "Superseded standards preserved for lineage — current routing is IFRS 15 only"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "validated",
+    "versionStatus": "current",
+    "reviewStatus": "pending",
+    "confidenceScore": 95,
+    "note": "Capped at 69 until KNOWLEDGE_REVIEWER validates paragraph citations"
+  },
+  "licensing": {
+    "licenseId": "ifrs-foundation-standard",
+    "linking": "permitted",
+    "cataloging": "permitted-with-attribution",
+    "referencing": "permitted-with-attribution",
+    "embedding": "restricted-review-required",
+    "redistribution": "prohibited",
+    "commercialUse": "restricted-review-required"
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "$schema": "knowledge-foundation/authority/schema/authority-matrix-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-authority-matrix",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active"
+  },
+  "levels": [
+    {
+      "level": "A",
+      "name": "Primary Authorities",
+      "description": "Regulators and standard-setters whose publications may create executable rules.",
+      "ruleCreation": "executable",
+      "confidenceFloor": 95,
+      "confidenceCeiling": 100,
+      "authorities": [
+        {
+          "id": "ifrs-foundation",
+          "name": "IFRS Foundation",
+          "jurisdictions": ["global", "saudi-adoption"],
+          "domains": ["accounting", "disclosure", "financial-reporting"],
+          "sourceUrl": "https://www.ifrs.org/",
+          "assetTypesPermitted": ["A", "B"],
+          "executableRules": true
+        },
+        {
+          "id": "iaasb",
+          "name": "International Auditing and Assurance Standards Board (IAASB)",
+          "jurisdictions": ["global"],
+          "domains": ["audit", "assurance", "quality-management"],
+          "sourceUrl": "https://www.iaasb.org/",
+          "assetTypesPermitted": ["A", "B"],
+          "executableRules": true
+        },
+        {
+          "id": "socpa",
+          "name": "Saudi Organization for Chartered and Professional Accountants (SOCPA)",
+          "jurisdictions": ["saudi-arabia"],
+          "domains": ["accounting", "audit", "zakat", "professional-standards"],
+          "sourceUrl": "https://www.socpa.org.sa/",
+          "assetTypesPermitted": ["A", "B"],
+          "executableRules": true
+        },
+        {
+          "id": "lcgpa",
+          "name": "Local Content and Government Procurement Authority (LCGPA)",
+          "jurisdictions": ["saudi-arabia"],
+          "domains": ["local-content", "procurement", "supplier-classification"],
+          "sourceUrl": "https://lcgpa.gov.sa/",
+          "assetTypesPermitted": ["A", "B"],
+          "executableRules": true
+        },
+        {
+          "id": "government-regulators",
+          "name": "Official Government Regulators",
+          "jurisdictions": ["saudi-arabia", "gcc", "jurisdiction-specific"],
+          "domains": ["regulatory-compliance", "licensing", "reporting"],
+          "sourceUrl": null,
+          "assetTypesPermitted": ["A", "B"],
+          "executableRules": true,
+          "note": "Each regulator entry must be registered individually with source URL before admission."
+        }
+      ]
+    },
+    {
+      "level": "B",
+      "name": "Professional Authorities",
+      "description": "Global and national professional bodies whose guidance supports implementation.",
+      "ruleCreation": "implementation-guidance",
+      "confidenceFloor": 70,
+      "confidenceCeiling": 90,
+      "authorities": [
+        {
+          "id": "ifac",
+          "name": "International Federation of Accountants (IFAC)",
+          "jurisdictions": ["global"],
+          "domains": ["accounting", "audit", "ethics", "quality-management"],
+          "sourceUrl": "https://www.ifac.org/",
+          "assetTypesPermitted": ["B"],
+          "executableRules": false
+        },
+        {
+          "id": "acca",
+          "name": "Association of Chartered Certified Accountants (ACCA)",
+          "jurisdictions": ["global"],
+          "domains": ["accounting", "audit", "implementation-guidance"],
+          "sourceUrl": "https://www.accaglobal.com/",
+          "assetTypesPermitted": ["B"],
+          "executableRules": false
+        },
+        {
+          "id": "icaew",
+          "name": "Institute of Chartered Accountants in England and Wales (ICAEW)",
+          "jurisdictions": ["uk", "global"],
+          "domains": ["accounting", "audit", "implementation-guidance"],
+          "sourceUrl": "https://www.icaew.com/",
+          "assetTypesPermitted": ["B"],
+          "executableRules": false
+        },
+        {
+          "id": "aicpa",
+          "name": "American Institute of Certified Public Accountants (AICPA)",
+          "jurisdictions": ["us", "global"],
+          "domains": ["accounting", "audit", "assurance"],
+          "sourceUrl": "https://www.aicpa-cima.com/",
+          "assetTypesPermitted": ["B"],
+          "executableRules": false
+        },
+        {
+          "id": "cpa-canada",
+          "name": "Chartered Professional Accountants of Canada (CPA Canada)",
+          "jurisdictions": ["canada", "global"],
+          "domains": ["accounting", "audit", "implementation-guidance"],
+          "sourceUrl": "https://www.cpacanada.ca/",
+          "assetTypesPermitted": ["B"],
+          "executableRules": false
+        }
+      ]
+    },
+    {
+      "level": "C",
+      "name": "Professional Publications",
+      "description": "Major firm and body publications that support interpretation — not executable rules.",
+      "ruleCreation": "interpretation-support",
+      "confidenceFloor": 70,
+      "confidenceCeiling": 90,
+      "authorities": [
+        {
+          "id": "big-four-publications",
+          "name": "Big Four Professional Publications",
+          "jurisdictions": ["global"],
+          "domains": ["accounting", "audit", "implementation"],
+          "sourceUrl": null,
+          "assetTypesPermitted": ["B", "C"],
+          "executableRules": false,
+          "note": "Each publication series must be registered with publisher, title, and version."
+        },
+        {
+          "id": "major-professional-bodies",
+          "name": "Major Professional Bodies (non-executable publications)",
+          "jurisdictions": ["global", "regional"],
+          "domains": ["accounting", "audit", "local-content"],
+          "sourceUrl": null,
+          "assetTypesPermitted": ["B"],
+          "executableRules": false
+        }
+      ]
+    },
+    {
+      "level": "D",
+      "name": "Academic Sources",
+      "description": "Universities and peer-reviewed research for validation and research support.",
+      "ruleCreation": "research-validation",
+      "confidenceFloor": 50,
+      "confidenceCeiling": 85,
+      "authorities": [
+        {
+          "id": "universities",
+          "name": "Universities",
+          "jurisdictions": ["global"],
+          "domains": ["research", "methodology", "validation"],
+          "sourceUrl": null,
+          "assetTypesPermitted": ["B"],
+          "executableRules": false
+        },
+        {
+          "id": "peer-reviewed-research",
+          "name": "Peer Reviewed Research",
+          "jurisdictions": ["global"],
+          "domains": ["research", "validation"],
+          "sourceUrl": null,
+          "assetTypesPermitted": ["B"],
+          "executableRules": false,
+          "admissionRequirement": "DOI or citation with peer-review confirmation"
+        }
+      ]
+    },
+    {
+      "level": "E",
+      "name": "Industry Commentary",
+      "description": "Analysis, commentary, and opinion — external reference only; never executable.",
+      "ruleCreation": "none",
+      "confidenceFloor": 0,
+      "confidenceCeiling": 69,
+      "authorities": [
+        {
+          "id": "industry-analysis",
+          "name": "Industry Analysis",
+          "jurisdictions": ["global"],
+          "domains": ["market", "commentary"],
+          "sourceUrl": null,
+          "assetTypesPermitted": [],
+          "executableRules": false,
+          "admissionPolicy": "external-reference-only"
+        },
+        {
+          "id": "opinion-content",
+          "name": "Opinion Content",
+          "jurisdictions": ["global"],
+          "domains": ["commentary"],
+          "sourceUrl": null,
+          "assetTypesPermitted": [],
+          "executableRules": false,
+          "admissionPolicy": "external-reference-only"
+        }
+      ]
+    }
+  ],
+  "admissionRules": {
+    "minimumFields": ["authoritySource", "versionInformation", "confidenceInformation", "knowledgeLineage"],
+    "rejectIfMissing": true,
+    "llmRuleCreation": false,
+    "humanApprovalRequiredForExecutableRules": true
+  }
+}

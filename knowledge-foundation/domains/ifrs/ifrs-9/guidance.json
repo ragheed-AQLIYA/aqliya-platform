@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-9-guidance",
+    "assetType": "B",
+    "parentAssetId": "kf-accounting-a-ifrs-9",
+    "standardCode": "IFRS 9",
+    "versionLabel": "IFRS 9:2024",
+    "guidanceCount": 1,
+    "executableRules": false,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "guidance": [
+    {
+      "guidanceId": "ifrs9-g001",
+      "paragraphReference": "IFRS 9.B5.5",
+      "title": "Simplified approach for trade receivables",
+      "text": "Entities may apply the simplified approach and recognise lifetime expected credit losses for trade receivables, contract assets, and lease receivables without tracking credit risk changes.",
+      "topic": "simplified-ecl",
+      "assetType": "B",
+      "lineageParentId": "kf-accounting-a-ifrs-9",
+      "confidenceScore": 69,
+      "validationStatus": "pending-review",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "interpretation",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

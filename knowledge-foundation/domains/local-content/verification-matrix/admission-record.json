@@ -1,0 +1,26 @@
+{
+  "catalogId": "kf-lc-verification-matrix",
+  "standardCode": "LC-VERIFICATION-MATRIX",
+  "session": "4",
+  "currentStage": "ingestion",
+  "stageResults": {
+    "source": {
+      "status": "pass",
+      "timestamp": "2026-06-09"
+    },
+    "ingestion": {
+      "status": "complete",
+      "stagingPath": "knowledge-foundation/domains/local-content/verification-matrix/"
+    },
+    "productionAdmission": {
+      "status": "blocked",
+      "reason": "pending-review"
+    }
+  },
+  "blockedTechnologies": [
+    "RAG",
+    "Ollama",
+    "Fine-tuning",
+    "Vector DB"
+  ]
+}

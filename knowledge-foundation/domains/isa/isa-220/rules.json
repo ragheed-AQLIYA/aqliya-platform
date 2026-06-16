@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "subdomain": "isa-standards",
+    "assetId": "kf-audit-a-isa-220-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-audit-a-isa-220",
+    "standardCode": "ISA 220",
+    "versionLabel": "ISA 220:2024",
+    "session": "2",
+    "ruleCount": 4,
+    "executableRules": true,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "isa-220-r001",
+      "paragraphReference": "ISA 220.9",
+      "ruleText": "The engagement partner shall take responsibility for the overall quality of the audit engagement performed.",
+      "topic": "engagement-partner",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-220",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "ruleId": "isa-220-r002",
+      "paragraphReference": "ISA 220.12",
+      "ruleText": "The engagement partner shall be satisfied that the engagement team and any auditor's experts collectively have appropriate competence and capabilities.",
+      "topic": "competence",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-220",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "ruleId": "isa-220-r003",
+      "paragraphReference": "ISA 220.17",
+      "ruleText": "The engagement partner shall take responsibility for direction, supervision and performance of the audit engagement.",
+      "topic": "direction-supervision",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-220",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "ruleId": "isa-220-r004",
+      "paragraphReference": "ISA 220.21",
+      "ruleText": "The engagement partner shall take responsibility for the auditor's report being appropriate in the circumstances.",
+      "topic": "report-responsibility",
+      "usage": "findings-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-220",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "findings-library"
+      }
+    }
+  ]
+}

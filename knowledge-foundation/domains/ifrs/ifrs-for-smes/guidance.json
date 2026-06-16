@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-smes-guidance",
+    "assetType": "B",
+    "parentAssetId": "kf-accounting-a-ifrs-smes",
+    "standardCode": "IFRS for SMEs",
+    "versionLabel": "IFRS for SMEs:2024",
+    "guidanceCount": 2,
+    "executableRules": false,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "guidance": [
+    {
+      "guidanceId": "smes-g001",
+      "paragraphReference": "Preface",
+      "title": "Differences from full IFRS",
+      "text": "IFRS for SMEs simplifies recognition and measurement relative to full IFRS; map AuditOS engagements configured for SMEs to Section-based requirements before applying full IFRS 15/16/9 rules.",
+      "topic": "ifrs-mapping",
+      "assetType": "B",
+      "lineageParentId": "kf-accounting-a-ifrs-smes",
+      "confidenceScore": 69,
+      "validationStatus": "pending-review",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "interpretation",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "guidanceId": "smes-g002",
+      "paragraphReference": "Section 33",
+      "title": "Related party disclosures",
+      "text": "SMEs require related party disclosures when control, joint control, or significant influence exists — align with AuditOS engagement related party workflows.",
+      "topic": "related-parties",
+      "assetType": "B",
+      "lineageParentId": "kf-accounting-a-ifrs-smes",
+      "confidenceScore": 69,
+      "validationStatus": "pending-review",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "interpretation",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

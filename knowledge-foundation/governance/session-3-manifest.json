@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "session": "3",
+    "date": "2026-06-09",
+    "status": "ingested-staging",
+    "jurisdiction": "saudi-arabia",
+    "ragUsed": false,
+    "programPause": "Sessions 1–3 complete — Priority 2 blocked"
+  },
+  "standards": [
+    {
+      "slug": "socpa-accounting-framework",
+      "catalogId": "kf-socpa-socpa-accounting-framework",
+      "standardCode": "SOCPA-ACCOUNTING-FRAMEWORK",
+      "ruleCount": 4,
+      "hasOverlay": true
+    },
+    {
+      "slug": "socpa-ifrs-adoption",
+      "catalogId": "kf-socpa-socpa-ifrs-adoption",
+      "standardCode": "SOCPA-IFRS-ADOPTION",
+      "ruleCount": 4,
+      "hasOverlay": true
+    },
+    {
+      "slug": "socpa-zakat-tax",
+      "catalogId": "kf-socpa-socpa-zakat-tax",
+      "standardCode": "SOCPA-ZAKAT-TAX",
+      "ruleCount": 4,
+      "hasOverlay": true
+    },
+    {
+      "slug": "socpa-auditing-standards",
+      "catalogId": "kf-socpa-socpa-auditing-standards",
+      "standardCode": "SOCPA-AUDITING-STANDARDS",
+      "ruleCount": 4,
+      "hasOverlay": true
+    },
+    {
+      "slug": "socpa-isa-alignment",
+      "catalogId": "kf-socpa-socpa-isa-alignment",
+      "standardCode": "SOCPA-ISA-ALIGNMENT",
+      "ruleCount": 4,
+      "hasOverlay": true
+    },
+    {
+      "slug": "socpa-circulars",
+      "catalogId": "kf-socpa-socpa-circulars",
+      "standardCode": "SOCPA-CIRCULARS",
+      "ruleCount": 4,
+      "hasOverlay": false
+    },
+    {
+      "slug": "socpa-professional-conduct",
+      "catalogId": "kf-socpa-socpa-professional-conduct",
+      "standardCode": "SOCPA-PROFESSIONAL-CONDUCT",
+      "ruleCount": 4,
+      "hasOverlay": true
+    },
+    {
+      "slug": "socpa-jurisdiction-overlay",
+      "catalogId": "kf-socpa-socpa-jurisdiction-overlay",
+      "standardCode": "SOCPA-JURISDICTION-OVERLAY",
+      "ruleCount": 4,
+      "hasOverlay": true
+    }
+  ],
+  "totals": {
+    "standards": 8,
+    "rules": 32,
+    "overlays": 7
+  },
+  "sessions1to3Summary": {
+    "session1": 32,
+    "session2": 16,
+    "session3": 8,
+    "total": 56
+  }
+}

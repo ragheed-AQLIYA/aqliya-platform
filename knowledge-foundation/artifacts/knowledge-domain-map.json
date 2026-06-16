@@ -1,0 +1,158 @@
+{
+  "$schema": "knowledge-foundation/ontology/schema/domain-map-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-domain-map",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active"
+  },
+  "executionScope": {
+    "activeSessions": ["0", "0.5", "1", "2", "3"],
+    "pausedAfterSession": "3",
+    "sessionsNotStarted": ["4", "5", "6", "7", "8", "9", "10", "11", "12"]
+  },
+  "domains": [
+    {
+      "id": "accounting",
+      "name": "Accounting Intelligence",
+      "description": "Financial reporting standards, recognition, measurement, and disclosure",
+      "repositoryPath": "knowledge-foundation/domains/ifrs/",
+      "primaryAuthorities": ["ifrs-foundation", "socpa"],
+      "engines": ["accounting-intelligence", "tb-intelligence", "mapping-engine", "disclosure-engine"],
+      "subdomains": [
+        {
+          "id": "ifrs-standards",
+          "name": "IFRS Standards",
+          "session": "1",
+          "standards": ["IFRS", "IAS", "IFRIC", "SIC"],
+          "status": "in-scope"
+        },
+        {
+          "id": "socpa-accounting",
+          "name": "SOCPA Accounting Standards",
+          "session": "3",
+          "status": "in-scope"
+        },
+        {
+          "id": "chart-of-accounts",
+          "name": "Chart of Accounts and Mapping",
+          "assetType": "C",
+          "status": "planned"
+        },
+        {
+          "id": "disclosure",
+          "name": "Financial Statement Disclosure",
+          "assetType": "A",
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "audit",
+      "name": "Audit Intelligence",
+      "description": "Auditing standards, quality management, and assurance methodology",
+      "repositoryPath": "knowledge-foundation/domains/isa/",
+      "primaryAuthorities": ["iaasb", "socpa"],
+      "engines": ["audit-intelligence", "risk-library", "findings-library", "evidence-catalog"],
+      "subdomains": [
+        {
+          "id": "isa-standards",
+          "name": "International Standards on Auditing (ISA)",
+          "session": "2",
+          "status": "in-scope"
+        },
+        {
+          "id": "isqm",
+          "name": "International Standard on Quality Management (ISQM)",
+          "session": "2",
+          "repositoryPath": "knowledge-foundation/domains/isqm/",
+          "status": "in-scope"
+        },
+        {
+          "id": "socpa-audit",
+          "name": "SOCPA Auditing Standards",
+          "session": "3",
+          "status": "in-scope"
+        },
+        {
+          "id": "audit-procedures",
+          "name": "Audit Procedures and Evidence",
+          "assetType": "D",
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "local-content",
+      "name": "Local Content Intelligence",
+      "description": "Saudi local content classification, supplier rules, and procurement compliance",
+      "repositoryPath": "knowledge-foundation/domains/local-content/",
+      "primaryAuthorities": ["lcgpa", "government-regulators"],
+      "engines": ["local-content-intelligence", "supplier-classification", "spend-analysis"],
+      "subdomains": [
+        {
+          "id": "lcgpa-rules",
+          "name": "LCGPA Rules and Classifications",
+          "status": "paused-post-session-3"
+        },
+        {
+          "id": "supplier-classification",
+          "name": "Supplier and Vendor Classification",
+          "assetType": "C",
+          "status": "paused-post-session-3"
+        }
+      ]
+    },
+    {
+      "id": "governance",
+      "name": "Knowledge Governance",
+      "description": "Cross-domain governance, catalog, and admission control",
+      "repositoryPath": "knowledge-foundation/governance/",
+      "primaryAuthorities": ["ifrs-foundation"],
+      "engines": ["knowledge-catalog", "admission-gate", "lineage-engine"],
+      "subdomains": [
+        {
+          "id": "master-catalog",
+          "name": "Master Knowledge Catalog",
+          "session": "0",
+          "status": "in-scope"
+        },
+        {
+          "id": "governance-model",
+          "name": "Knowledge Governance Model",
+          "session": "0.5",
+          "status": "in-scope"
+        }
+      ]
+    }
+  ],
+  "crossDomainRelationships": [
+    {
+      "from": "accounting.ifrs-standards",
+      "to": "audit.isa-standards",
+      "relationship": "informs-audit-of-financial-statements",
+      "lineageRequired": true
+    },
+    {
+      "from": "audit.isqm",
+      "to": "audit.isa-standards",
+      "relationship": "quality-framework-for",
+      "lineageRequired": true
+    },
+    {
+      "from": "accounting.socpa-accounting",
+      "to": "accounting.ifrs-standards",
+      "relationship": "jurisdiction-overlay",
+      "lineageRequired": true
+    },
+    {
+      "from": "local-content.lcgpa-rules",
+      "to": "accounting.chart-of-accounts",
+      "relationship": "spend-classification-input",
+      "lineageRequired": true
+    }
+  ]
+}

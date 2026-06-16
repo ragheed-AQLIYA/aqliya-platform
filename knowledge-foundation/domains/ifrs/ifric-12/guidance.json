@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifric-12-guidance",
+    "assetType": "B",
+    "parentAssetId": "kf-accounting-a-ifric-12",
+    "standardCode": "IFRIC 12",
+    "versionLabel": "IFRIC 12:2024",
+    "wave": 2,
+    "guidanceCount": 1,
+    "executableRules": false,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "guidance": [
+    {
+      "guidanceId": "ifric12-g001",
+      "paragraphReference": "IFRIC 12.IE",
+      "title": "IFRS 15 linkage",
+      "text": "Operation phase revenue follows IFRS 15 — maintain lineage to IFRS 15 asset.",
+      "topic": "ifrs15-link",
+      "assetType": "B",
+      "lineageParentId": "kf-accounting-a-ifric-12",
+      "confidenceScore": 69,
+      "validationStatus": "pending-review",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "interpretation",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

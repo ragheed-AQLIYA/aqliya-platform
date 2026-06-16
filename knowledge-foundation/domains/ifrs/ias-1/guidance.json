@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-1-guidance",
+    "assetType": "B",
+    "parentAssetId": "kf-accounting-a-ias-1",
+    "standardCode": "IAS 1",
+    "versionLabel": "IAS 1:2024",
+    "guidanceCount": 1,
+    "executableRules": false,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "guidance": [
+    {
+      "guidanceId": "ias1-g001",
+      "paragraphReference": "IAS 1.IG",
+      "title": "Line item presentation by function or nature",
+      "text": "Choose presentation of expenses by function or by nature consistently; additional disclosure by nature is required if function format is used.",
+      "topic": "expense-classification",
+      "assetType": "B",
+      "lineageParentId": "kf-accounting-a-ias-1",
+      "confidenceScore": 69,
+      "validationStatus": "pending-review",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "interpretation",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

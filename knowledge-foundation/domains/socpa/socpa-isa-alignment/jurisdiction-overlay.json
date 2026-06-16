@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-socpa-a-socpa-isa-alignment-overlay",
+    "assetType": "B",
+    "parentAssetId": "kf-socpa-a-socpa-isa-alignment",
+    "standardCode": "SOCPA-ISA-ALIGNMENT",
+    "overlayType": "jurisdiction-overlay",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "overlay": {
+    "jurisdiction": "saudi-arabia",
+    "baseStandards": [
+      {
+        "catalogId": "kf-audit-isa-315",
+        "standardCode": "ISA 315"
+      },
+      {
+        "catalogId": "kf-audit-isa-500",
+        "standardCode": "ISA 500"
+      }
+    ],
+    "relationship": "jurisdiction-overlay",
+    "retainBaseVersionHistory": true,
+    "supersessionPolicy": "Do not replace IFRS/ISA assets — overlay applies in KSA context only",
+    "rules": []
+  }
+}

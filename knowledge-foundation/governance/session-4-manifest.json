@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "session": "4",
+    "date": "2026-06-09",
+    "status": "ingested-staging",
+    "jurisdiction": "saudi-arabia",
+    "ragUsed": false,
+    "programNote": "Priority 2 LCGPA wave — verification matrix sourced from Local_Content_Verification_Audit_Matrix_v1.xlsx"
+  },
+  "assets": [
+    {
+      "slug": "lcgpa",
+      "catalogId": "kf-lc-lcgpa-rules",
+      "standardCode": "LCGPA-RULES",
+      "ruleCount": 12,
+      "procedureCount": 0,
+      "assetType": "A"
+    },
+    {
+      "slug": "verification-matrix",
+      "catalogId": "kf-lc-verification-matrix",
+      "standardCode": "LC-VERIFICATION-MATRIX",
+      "ruleCount": 0,
+      "procedureCount": 8,
+      "assetType": "D"
+    }
+  ],
+  "totals": {
+    "assets": 2,
+    "rules": 12,
+    "procedures": 8
+  },
+  "crossReferences": {
+    "isrs4400": "agreed-upon-procedures-baseline",
+    "lcgpaRules": "1-4661-21",
+    "upstreamSocpa": "kf-socpa-socpa-ifrs-adoption"
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "meta": {
+    "session": "2",
+    "date": "2026-06-09",
+    "status": "ingested-staging",
+    "ragUsed": false,
+    "vectorDbUsed": false,
+    "productionAdmission": false,
+    "reviewerApprovalRequired": true
+  },
+  "standards": [
+    {
+      "slug": "isa-315",
+      "catalogId": "kf-audit-isa-315",
+      "standardCode": "ISA 315",
+      "ruleCount": 4,
+      "procedureCount": 2,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-315"
+    },
+    {
+      "slug": "isa-330",
+      "catalogId": "kf-audit-isa-330",
+      "standardCode": "ISA 330",
+      "ruleCount": 4,
+      "procedureCount": 1,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-330"
+    },
+    {
+      "slug": "isa-500",
+      "catalogId": "kf-audit-isa-500",
+      "standardCode": "ISA 500",
+      "ruleCount": 4,
+      "procedureCount": 2,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-500"
+    },
+    {
+      "slug": "isa-540",
+      "catalogId": "kf-audit-isa-540",
+      "standardCode": "ISA 540",
+      "ruleCount": 4,
+      "procedureCount": 1,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-540"
+    },
+    {
+      "slug": "isa-700",
+      "catalogId": "kf-audit-isa-700",
+      "standardCode": "ISA 700",
+      "ruleCount": 4,
+      "procedureCount": 1,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-700"
+    },
+    {
+      "slug": "isqm-1",
+      "catalogId": "kf-audit-isqm-1",
+      "standardCode": "ISQM 1",
+      "ruleCount": 4,
+      "procedureCount": 1,
+      "domainPath": "knowledge-foundation/domains/isqm/isqm-1/"
+    },
+    {
+      "slug": "isa-200",
+      "catalogId": "kf-audit-isa-200",
+      "standardCode": "ISA 200",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-200"
+    },
+    {
+      "slug": "isa-210",
+      "catalogId": "kf-audit-isa-210",
+      "standardCode": "ISA 210",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-210"
+    },
+    {
+      "slug": "isa-220",
+      "catalogId": "kf-audit-isa-220",
+      "standardCode": "ISA 220",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-220"
+    },
+    {
+      "slug": "isa-240",
+      "catalogId": "kf-audit-isa-240",
+      "standardCode": "ISA 240",
+      "ruleCount": 4,
+      "procedureCount": 1,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-240"
+    },
+    {
+      "slug": "isa-250",
+      "catalogId": "kf-audit-isa-250",
+      "standardCode": "ISA 250",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-250"
+    },
+    {
+      "slug": "isa-260",
+      "catalogId": "kf-audit-isa-260",
+      "standardCode": "ISA 260",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-260"
+    },
+    {
+      "slug": "isa-570",
+      "catalogId": "kf-audit-isa-570",
+      "standardCode": "ISA 570",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-570"
+    },
+    {
+      "slug": "isa-580",
+      "catalogId": "kf-audit-isa-580",
+      "standardCode": "ISA 580",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-580"
+    },
+    {
+      "slug": "isa-705",
+      "catalogId": "kf-audit-isa-705",
+      "standardCode": "ISA 705",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-705"
+    },
+    {
+      "slug": "isa-706",
+      "catalogId": "kf-audit-isa-706",
+      "standardCode": "ISA 706",
+      "ruleCount": 4,
+      "procedureCount": 0,
+      "domainPath": "C:\\Users\\PC\\Documents\\Aqliya\\knowledge-foundation\\domains\\isa/isa-706"
+    }
+  ],
+  "totals": {
+    "standards": 16,
+    "rules": 64,
+    "procedures": 9
+  },
+  "crossDomainLinks": [
+    {
+      "from": "ISA 540",
+      "to": [
+        "IAS 36",
+        "IFRS 9"
+      ]
+    },
+    {
+      "from": "ISA 570",
+      "to": [
+        "IAS 1"
+      ]
+    }
+  ],
+  "admissionWorkflowRef": "knowledge-foundation/governance/knowledge-admission-workflow.json"
+}

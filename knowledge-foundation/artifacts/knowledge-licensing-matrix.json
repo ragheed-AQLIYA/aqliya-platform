@@ -1,0 +1,201 @@
+{
+  "$schema": "knowledge-foundation/governance/schema/licensing-matrix-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-licensing-matrix",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active",
+    "note": "Supplementary artifact v1.0 — governs admission and runtime use permissions per source. Legal review required before commercial deployment."
+  },
+  "permissionLevels": {
+    "permitted": "Allowed without additional approval",
+    "permitted-with-attribution": "Allowed when source, owner, and version are attributed",
+    "restricted-review-required": "Requires KNOWLEDGE_REVIEWER + legal/compliance sign-off before use",
+    "prohibited": "Not allowed — external reference (link) only"
+  },
+  "useTypes": {
+    "linking": "Hyperlink to authoritative source URL",
+    "cataloging": "Index metadata in master knowledge catalog",
+    "referencing": "Cite paragraph/section in lineage chain and outputs",
+    "embedding": "Store text chunks in vector index or governed knowledge store",
+    "redistribution": "Copy or republish full or substantial content outside AQLIYA",
+    "commercialUse": "Use within paid/commercial AQLIYA product offerings"
+  },
+  "licenses": [
+    {
+      "licenseId": "ifrs-foundation-standard",
+      "authorityId": "ifrs-foundation",
+      "authorityLevel": "A",
+      "sourceOwner": "IFRS Foundation",
+      "jurisdictions": ["global", "saudi-adoption"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted-with-attribution",
+        "referencing": "permitted-with-attribution",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited",
+        "commercialUse": "restricted-review-required"
+      },
+      "embeddingPolicy": "Store paragraph references and metadata; full-text embedding requires IFRS Foundation licence review",
+      "attributionRequired": ["sourceUrl", "standardCode", "versionLabel", "paragraphReference", "© IFRS Foundation"],
+      "runtimeGate": "FF_AI_RAG ingest blocked until legal sign-off for full-text embedding"
+    },
+    {
+      "licenseId": "iaasb-standard",
+      "authorityId": "iaasb",
+      "authorityLevel": "A",
+      "sourceOwner": "IAASB / IFAC",
+      "jurisdictions": ["global"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted-with-attribution",
+        "referencing": "permitted-with-attribution",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited",
+        "commercialUse": "restricted-review-required"
+      },
+      "embeddingPolicy": "Paragraph-cited rules permitted in canonical store; vector embedding requires licence review",
+      "attributionRequired": ["sourceUrl", "standardCode", "versionLabel", "paragraphReference"],
+      "runtimeGate": "FF_AI_RAG ingest blocked until legal sign-off for full-text embedding"
+    },
+    {
+      "licenseId": "socpa-standard",
+      "authorityId": "socpa",
+      "authorityLevel": "A",
+      "sourceOwner": "SOCPA",
+      "jurisdictions": ["saudi-arabia"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted-with-attribution",
+        "referencing": "permitted-with-attribution",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited",
+        "commercialUse": "restricted-review-required"
+      },
+      "embeddingPolicy": "Arabic/English SOCPA standards — verify SOCPA terms before embedding",
+      "attributionRequired": ["sourceUrl", "standardCode", "versionLabel", "sourceOwner"],
+      "runtimeGate": "FF_AI_RAG ingest blocked until SOCPA licence review"
+    },
+    {
+      "licenseId": "lcgpa-standard",
+      "authorityId": "lcgpa",
+      "authorityLevel": "A",
+      "sourceOwner": "LCGPA",
+      "jurisdictions": ["saudi-arabia"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted-with-attribution",
+        "referencing": "permitted-with-attribution",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited",
+        "commercialUse": "restricted-review-required"
+      },
+      "embeddingPolicy": "Paused until Session 4+ program restart",
+      "attributionRequired": ["sourceUrl", "regulationCode", "versionLabel"],
+      "runtimeGate": "paused-post-session-3"
+    },
+    {
+      "licenseId": "big-four-publication",
+      "authorityId": "big-four-publications",
+      "authorityLevel": "C",
+      "sourceOwner": "Publisher-specific (Deloitte, EY, KPMG, PwC)",
+      "jurisdictions": ["global"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted-with-attribution",
+        "referencing": "restricted-review-required",
+        "embedding": "prohibited",
+        "redistribution": "prohibited",
+        "commercialUse": "prohibited"
+      },
+      "embeddingPolicy": "External reference and catalog metadata only — no content embedding without publisher licence",
+      "attributionRequired": ["publisher", "publicationTitle", "edition", "sourceUrl"],
+      "runtimeGate": "embedding and commercial use prohibited by default"
+    },
+    {
+      "licenseId": "professional-body-guidance",
+      "authorityId": "ifac",
+      "authorityLevel": "B",
+      "sourceOwner": "Respective professional body",
+      "jurisdictions": ["global"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted-with-attribution",
+        "referencing": "permitted-with-attribution",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited",
+        "commercialUse": "restricted-review-required"
+      },
+      "embeddingPolicy": "Implementation guidance only — not executable rules",
+      "attributionRequired": ["sourceUrl", "guidanceTitle", "publisher"],
+      "runtimeGate": "Type B assets only; executable rules forbidden"
+    },
+    {
+      "licenseId": "firm-institutional-memory",
+      "authorityId": "firm-internal",
+      "authorityLevel": "E",
+      "sourceOwner": "Organization / Audit Firm",
+      "jurisdictions": ["organization-scoped"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted",
+        "referencing": "permitted",
+        "embedding": "permitted-with-attribution",
+        "redistribution": "restricted-review-required",
+        "commercialUse": "permitted"
+      },
+      "embeddingPolicy": "Tenant-scoped firm memory — Type E assets with approval history",
+      "attributionRequired": ["organizationId", "approvedBy", "approvalTimestamp"],
+      "runtimeGate": "Requires RBAC tenant isolation and audit trail"
+    },
+    {
+      "licenseId": "academic-research",
+      "authorityId": "peer-reviewed-research",
+      "authorityLevel": "D",
+      "sourceOwner": "Publisher / Institution",
+      "jurisdictions": ["global"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted-with-attribution",
+        "referencing": "permitted-with-attribution",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited",
+        "commercialUse": "restricted-review-required"
+      },
+      "embeddingPolicy": "Research validation support only — not executable rules",
+      "attributionRequired": ["DOI", "citation", "peerReviewConfirmation"],
+      "runtimeGate": "Type B admission only"
+    },
+    {
+      "licenseId": "external-commentary",
+      "authorityId": "industry-analysis",
+      "authorityLevel": "E",
+      "sourceOwner": "Third party",
+      "jurisdictions": ["global"],
+      "permissions": {
+        "linking": "permitted",
+        "cataloging": "permitted",
+        "referencing": "permitted-with-attribution",
+        "embedding": "prohibited",
+        "redistribution": "prohibited",
+        "commercialUse": "prohibited"
+      },
+      "embeddingPolicy": "External reference tier only — not admitted to Foundation",
+      "attributionRequired": ["sourceUrl"],
+      "runtimeGate": "external-reference tier only"
+    }
+  ],
+  "defaultDeny": {
+    "embeddingWithoutLicenseId": true,
+    "commercialUseWithoutReview": true,
+    "redistribution": true
+  },
+  "catalogIntegration": {
+    "field": "licensingStatus",
+    "resolveFrom": "licenseId",
+    "requiredInCatalog": true
+  }
+}

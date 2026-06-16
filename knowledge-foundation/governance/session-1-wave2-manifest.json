@@ -1,0 +1,207 @@
+{
+  "meta": {
+    "session": "1",
+    "wave": 2,
+    "date": "2026-06-09",
+    "status": "ingested-staging",
+    "ragUsed": false,
+    "vectorDbUsed": false,
+    "productionAdmission": false,
+    "reviewerApprovalRequired": true,
+    "remediationRequired": false
+  },
+  "standards": [
+    {
+      "slug": "ifrs-1",
+      "catalogId": "kf-acct-ifrs-ifrs-1",
+      "standardCode": "IFRS 1",
+      "ruleCount": 4,
+      "guidanceCount": 1
+    },
+    {
+      "slug": "ifrs-2",
+      "catalogId": "kf-acct-ifrs-ifrs-2",
+      "standardCode": "IFRS 2",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-3",
+      "catalogId": "kf-acct-ifrs-ifrs-3",
+      "standardCode": "IFRS 3",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-5",
+      "catalogId": "kf-acct-ifrs-ifrs-5",
+      "standardCode": "IFRS 5",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-7",
+      "catalogId": "kf-acct-ifrs-ifrs-7",
+      "standardCode": "IFRS 7",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-8",
+      "catalogId": "kf-acct-ifrs-ifrs-8",
+      "standardCode": "IFRS 8",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-10",
+      "catalogId": "kf-acct-ifrs-ifrs-10",
+      "standardCode": "IFRS 10",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-11",
+      "catalogId": "kf-acct-ifrs-ifrs-11",
+      "standardCode": "IFRS 11",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-12",
+      "catalogId": "kf-acct-ifrs-ifrs-12",
+      "standardCode": "IFRS 12",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-13",
+      "catalogId": "kf-acct-ifrs-ifrs-13",
+      "standardCode": "IFRS 13",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifrs-17",
+      "catalogId": "kf-acct-ifrs-ifrs-17",
+      "standardCode": "IFRS 17",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-2",
+      "catalogId": "kf-acct-ifrs-ias-2",
+      "standardCode": "IAS 2",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-7",
+      "catalogId": "kf-acct-ifrs-ias-7",
+      "standardCode": "IAS 7",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-8",
+      "catalogId": "kf-acct-ifrs-ias-8",
+      "standardCode": "IAS 8",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-10",
+      "catalogId": "kf-acct-ifrs-ias-10",
+      "standardCode": "IAS 10",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-16",
+      "catalogId": "kf-acct-ifrs-ias-16",
+      "standardCode": "IAS 16",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-19",
+      "catalogId": "kf-acct-ifrs-ias-19",
+      "standardCode": "IAS 19",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-23",
+      "catalogId": "kf-acct-ifrs-ias-23",
+      "standardCode": "IAS 23",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-32",
+      "catalogId": "kf-acct-ifrs-ias-32",
+      "standardCode": "IAS 32",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-36",
+      "catalogId": "kf-acct-ifrs-ias-36",
+      "standardCode": "IAS 36",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-37",
+      "catalogId": "kf-acct-ifrs-ias-37",
+      "standardCode": "IAS 37",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ias-38",
+      "catalogId": "kf-acct-ifrs-ias-38",
+      "standardCode": "IAS 38",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifric-10",
+      "catalogId": "kf-acct-ifrs-ifric-10",
+      "standardCode": "IFRIC 10",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifric-12",
+      "catalogId": "kf-acct-ifrs-ifric-12",
+      "standardCode": "IFRIC 12",
+      "ruleCount": 4,
+      "guidanceCount": 1
+    },
+    {
+      "slug": "ifric-19",
+      "catalogId": "kf-acct-ifrs-ifric-19",
+      "standardCode": "IFRIC 19",
+      "ruleCount": 4,
+      "guidanceCount": 0
+    },
+    {
+      "slug": "ifric-23",
+      "catalogId": "kf-acct-ifrs-ifric-23",
+      "standardCode": "IFRIC 23",
+      "ruleCount": 4,
+      "guidanceCount": 1
+    }
+  ],
+  "totals": {
+    "standards": 26,
+    "rules": 104,
+    "guidance": 3
+  },
+  "session1Complete": {
+    "accountingPriority1": true,
+    "note": "All Session 1 Priority 1 IFRS/IAS/IFRIC ingested to staging. Sessions 2–3 (ISA/ISQM/SOCPA) remain."
+  },
+  "admissionWorkflowRef": "knowledge-foundation/governance/knowledge-admission-workflow.json"
+}

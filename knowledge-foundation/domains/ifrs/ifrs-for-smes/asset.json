@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "jurisdiction-specific",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "remediationId": "wave1-remediation-smes",
+    "remediationDate": "2026-06-09",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-smes",
+    "assetType": "A",
+    "standardCode": "IFRS for SMEs",
+    "standardName": "IFRS for SMEs Accounting Standard",
+    "versionLabel": "IFRS for SMEs:2024",
+    "issueDate": "2009-07-09",
+    "effectiveDate": "2010-01-01",
+    "supersededDate": null,
+    "status": "current",
+    "sourceUrl": "https://www.ifrs.org/issued-standards/ifrs-for-smes/",
+    "sourceOwner": "IFRS Foundation",
+    "catalogId": "kf-acct-ifrs-ifrs-for-smes",
+    "session": "1",
+    "attribution": [
+      "© IFRS Foundation"
+    ],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval before production use. Not a substitute for the authoritative standard text.",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "ontology": {
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "entity": "standard",
+    "relationship": "implements",
+    "authority": "ifrs-foundation",
+    "usage": "tb-intelligence"
+  },
+  "engines": [
+    "tb-intelligence",
+    "mapping-engine",
+    "disclosure-engine",
+    "accounting-intelligence"
+  ],
+  "jurisdictionAdoption": {
+    "artifactRef": "jurisdiction-adoption.json",
+    "adoption_status": "jurisdiction-specific",
+    "effective_date_by_jurisdiction": true,
+    "local_adoption_reference": "SOCPA (saudi-arabia)",
+    "activationGate": {
+      "jurisdiction_review_required": true,
+      "automaticGlobalRouting": false
+    }
+  },
+  "lineage": {
+    "lineageId": null,
+    "lineageParentId": null,
+    "upstreamAssetIds": [],
+    "note": "Lineage assigned at reviewer approval — source document is this asset"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "validated",
+    "versionStatus": "current",
+    "reviewStatus": "pending",
+    "confidenceScore": 95,
+    "note": "Capped at 69 until KNOWLEDGE_REVIEWER validates paragraph citations"
+  },
+  "licensing": {
+    "licenseId": "ifrs-foundation-standard",
+    "linking": "permitted",
+    "cataloging": "permitted-with-attribution",
+    "referencing": "permitted-with-attribution",
+    "embedding": "restricted-review-required",
+    "redistribution": "prohibited",
+    "commercialUse": "restricted-review-required"
+  }
+}

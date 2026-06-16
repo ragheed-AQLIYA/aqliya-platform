@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "remediationId": "wave1-remediation-ifrs16-lineage",
+    "remediationDate": "2026-06-09",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-16",
+    "assetType": "A",
+    "standardCode": "IFRS 16",
+    "standardName": "Leases",
+    "versionLabel": "IFRS 16:2024",
+    "issueDate": "2016-01-13",
+    "effectiveDate": "2019-01-01",
+    "supersededDate": null,
+    "status": "current",
+    "sourceUrl": "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-16-leases/",
+    "sourceOwner": "IFRS Foundation",
+    "catalogId": "kf-acct-ifrs-ifrs-16",
+    "session": "1",
+    "attribution": [
+      "© IFRS Foundation"
+    ],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval before production use. Not a substitute for the authoritative standard text.",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "ontology": {
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "entity": "standard",
+    "relationship": "implements",
+    "authority": "ifrs-foundation",
+    "usage": "tb-intelligence"
+  },
+  "engines": [
+    "tb-intelligence",
+    "mapping-engine",
+    "disclosure-engine",
+    "accounting-intelligence"
+  ],
+  "lineage": {
+    "lineageId": null,
+    "lineageParentId": null,
+    "upstreamAssetIds": [],
+    "artifactRef": "superseded-lineage.json",
+    "supersededStandards": [
+      "IAS 17",
+      "IFRIC 4",
+      "SIC 15",
+      "SIC 27"
+    ],
+    "relationship": "supersedes",
+    "retainForLineage": true,
+    "productionRouting": false,
+    "note": "Superseded standards preserved for lineage — current routing is IFRS 16 only"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "validated",
+    "versionStatus": "current",
+    "reviewStatus": "pending",
+    "confidenceScore": 95,
+    "note": "Capped at 69 until KNOWLEDGE_REVIEWER validates paragraph citations"
+  },
+  "licensing": {
+    "licenseId": "ifrs-foundation-standard",
+    "linking": "permitted",
+    "cataloging": "permitted-with-attribution",
+    "referencing": "permitted-with-attribution",
+    "embedding": "restricted-review-required",
+    "redistribution": "prohibited",
+    "commercialUse": "restricted-review-required"
+  }
+}

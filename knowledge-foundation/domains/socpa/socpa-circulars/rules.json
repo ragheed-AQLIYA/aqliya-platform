@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "domain": "accounting",
+    "subdomain": "socpa-accounting",
+    "assetId": "kf-socpa-a-socpa-circulars-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-socpa-a-socpa-circulars",
+    "standardCode": "SOCPA-CIRCULARS",
+    "ruleCount": 4,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "socpa-circulars-r001",
+      "paragraphReference": "SOCPA-CIR-1",
+      "ruleText": "SOCPA circulars with effective regulatory force shall be admitted as Authority A rules with version and effective date.",
+      "topic": "circular-admission",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-circulars",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-circulars-r002",
+      "paragraphReference": "SOCPA-CIR-2",
+      "ruleText": "Each circular must reference its issue date, effective date, and superseded circulars without destroying version history.",
+      "topic": "circular-versioning",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-circulars",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-circulars-r003",
+      "paragraphReference": "SOCPA-CIR-3",
+      "ruleText": "Circulars affecting IFRS application shall be linked as jurisdiction overlay to the affected IFRS/IAS asset.",
+      "topic": "circular-overlay",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-circulars",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-circulars-r004",
+      "paragraphReference": "SOCPA-CIR-4",
+      "ruleText": "Entities shall monitor SOCPA circular updates and assess impact on financial reporting and audit procedures.",
+      "topic": "monitoring",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-circulars",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    }
+  ]
+}

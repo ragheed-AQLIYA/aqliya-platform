@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "operational",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "subdomain": "isa-standards",
+    "assetId": "kf-audit-a-isa-700-procedures",
+    "assetType": "D",
+    "parentAssetId": "kf-audit-a-isa-700",
+    "standardCode": "ISA 700",
+    "versionLabel": "ISA 700:2024",
+    "session": "2",
+    "procedureCount": 1,
+    "executableRules": false,
+    "humanApprovalRequired": true,
+    "note": "Type D operational templates — reviewer approval required before use",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "procedures": [
+    {
+      "procedureId": "isa-700-p001",
+      "title": "Final analytical review",
+      "description": "Perform analytical procedures near the end of the audit to identify unusual or unexpected relationships.",
+      "evidenceType": "analytical-review",
+      "paragraphReference": "ISA 700.A1",
+      "assetType": "D",
+      "lineageParentId": "kf-audit-a-isa-700",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "audit-procedure",
+        "relationship": "requires-evidence",
+        "authority": "iaasb",
+        "usage": "evidence-catalog"
+      }
+    }
+  ]
+}

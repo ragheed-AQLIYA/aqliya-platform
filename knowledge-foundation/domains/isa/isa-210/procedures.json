@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "operational",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "subdomain": "isa-standards",
+    "assetId": "kf-audit-a-isa-210-procedures",
+    "assetType": "D",
+    "parentAssetId": "kf-audit-a-isa-210",
+    "standardCode": "ISA 210",
+    "versionLabel": "ISA 210:2024",
+    "session": "2",
+    "procedureCount": 0,
+    "executableRules": false,
+    "humanApprovalRequired": true,
+    "note": "Type D operational templates — reviewer approval required before use",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "procedures": []
+}

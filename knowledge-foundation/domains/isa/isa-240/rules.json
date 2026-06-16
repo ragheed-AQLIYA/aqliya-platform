@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "subdomain": "isa-standards",
+    "assetId": "kf-audit-a-isa-240-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-audit-a-isa-240",
+    "standardCode": "ISA 240",
+    "versionLabel": "ISA 240:2024",
+    "session": "2",
+    "ruleCount": 4,
+    "executableRules": true,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "isa-240-r001",
+      "paragraphReference": "ISA 240.11",
+      "ruleText": "The auditor shall maintain professional scepticism throughout the audit, recognizing that fraud may exist notwithstanding past integrity.",
+      "topic": "scepticism-fraud",
+      "usage": "risk-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-240",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "risk-library"
+      }
+    },
+    {
+      "ruleId": "isa-240-r002",
+      "paragraphReference": "ISA 240.25",
+      "ruleText": "The auditor shall discuss the susceptibility of the entity's financial statements to material misstatement due to fraud among the engagement team.",
+      "topic": "fraud-discussion",
+      "usage": "risk-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-240",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "risk-library"
+      }
+    },
+    {
+      "ruleId": "isa-240-r003",
+      "paragraphReference": "ISA 240.28",
+      "ruleText": "The auditor shall inquire of management and others within the entity about risks of fraud and how fraud is addressed.",
+      "topic": "fraud-inquiry",
+      "usage": "evidence-catalog",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-240",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "evidence-catalog"
+      }
+    },
+    {
+      "ruleId": "isa-240-r004",
+      "paragraphReference": "ISA 240.32",
+      "ruleText": "When the auditor identifies a fraud risk factor, the auditor shall assess whether a risk of material misstatement due to fraud exists.",
+      "topic": "fraud-risk-factors",
+      "usage": "risk-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-240",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "risk-library"
+      }
+    }
+  ]
+}

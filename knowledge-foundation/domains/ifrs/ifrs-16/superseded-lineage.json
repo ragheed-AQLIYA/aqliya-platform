@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "assetId": "kf-accounting-a-ifrs-16-lineage",
+    "parentAssetId": "kf-accounting-a-ifrs-16",
+    "standardCode": "IFRS 16",
+    "remediationId": "wave1-remediation-ifrs16-lineage",
+    "remediationDate": "2026-06-09",
+    "validationStatus": "validated",
+    "policyStatement": "Version history must never be destroyed — superseded standards retained for lineage",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "currentStandard": {
+    "standardCode": "IFRS 16",
+    "versionLabel": "IFRS 16:2024",
+    "effectiveDate": "2019-01-01",
+    "status": "current"
+  },
+  "supersededLineage": [
+    {
+      "supersededCode": "IAS 17",
+      "supersededName": "Leases",
+      "relationship": "supersedes",
+      "supersededDate": "2019-01-01",
+      "topic": "Operating and finance lease classification (lessee/lessor)",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-16"
+    },
+    {
+      "supersededCode": "IFRIC 4",
+      "supersededName": "Determining whether an Arrangement contains a Lease",
+      "relationship": "supersedes",
+      "supersededDate": "2019-01-01",
+      "topic": "Lease identification in service arrangements",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-16"
+    },
+    {
+      "supersededCode": "SIC 15",
+      "supersededName": "Operating Leases — Incentives",
+      "relationship": "supersedes",
+      "supersededDate": "2019-01-01",
+      "topic": "Lease incentives recognition",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-16"
+    },
+    {
+      "supersededCode": "SIC 27",
+      "supersededName": "Evaluating the Substance of Transactions in the Legal Form of a Lease",
+      "relationship": "supersedes",
+      "supersededDate": "2019-01-01",
+      "topic": "Substance over form in lease transactions",
+      "retainForLineage": true,
+      "productionRouting": false,
+      "lineageParentId": "kf-accounting-a-ifrs-16"
+    }
+  ],
+  "lineageChain": {
+    "minimumChain": [
+      "decision",
+      "rule",
+      "authority",
+      "sourceDocument",
+      "reviewer"
+    ],
+    "supersededReferencePolicy": "Comparative periods under IAS 17 retained in lineage; current-period lease accounting routes to IFRS 16 only"
+  }
+}

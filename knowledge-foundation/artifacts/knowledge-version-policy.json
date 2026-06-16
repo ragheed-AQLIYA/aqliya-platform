@@ -1,0 +1,108 @@
+{
+  "$schema": "knowledge-foundation/governance/schema/version-policy-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-version-policy",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active"
+  },
+  "policyStatement": "Version history must never be destroyed.",
+  "requiredFields": [
+    {
+      "field": "assetId",
+      "type": "string",
+      "format": "kf-{domain}-{type}-{sequence}",
+      "description": "Stable identifier across versions",
+      "immutable": true
+    },
+    {
+      "field": "versionLabel",
+      "type": "string",
+      "description": "Human-readable version (e.g. IFRS 15:2024, ISA 315:2022)",
+      "required": true
+    },
+    {
+      "field": "issueDate",
+      "type": "date",
+      "description": "Date the source authority issued this version",
+      "required": true
+    },
+    {
+      "field": "effectiveDate",
+      "type": "date",
+      "description": "Date this version becomes effective for use",
+      "required": true
+    },
+    {
+      "field": "supersededDate",
+      "type": "date",
+      "description": "Date this version was superseded; null if current",
+      "required": false
+    },
+    {
+      "field": "jurisdiction",
+      "type": "string",
+      "description": "Applicable jurisdiction (global, saudi-arabia, etc.)",
+      "required": true
+    },
+    {
+      "field": "status",
+      "type": "enum",
+      "values": ["current", "superseded", "draft", "withdrawn"],
+      "required": true
+    },
+    {
+      "field": "sourceUrl",
+      "type": "url",
+      "description": "Canonical URL to authority source",
+      "required": true
+    },
+    {
+      "field": "sourceOwner",
+      "type": "string",
+      "description": "Authority body that owns the source",
+      "required": true
+    }
+  ],
+  "lifecycle": {
+    "states": ["draft", "current", "superseded", "withdrawn"],
+    "transitions": [
+      { "from": "draft", "to": "current", "requires": ["KNOWLEDGE_REVIEWER approval", "complete metadata"] },
+      { "from": "current", "to": "superseded", "requires": ["new version admitted", "supersededDate set"] },
+      { "from": "current", "to": "withdrawn", "requires": ["authority withdrawal notice", "ADMIN approval"] },
+      { "from": "superseded", "to": "current", "requires": ["ADR or explicit rollback decision"] }
+    ],
+    "onlyOneCurrentPerAssetId": true
+  },
+  "versionHistory": {
+    "retention": "permanent",
+    "destructionAllowed": false,
+    "archivePolicy": "retain-all-versions-with-metadata",
+    "auditOnTransition": true
+  },
+  "supersessionRules": {
+    "onNewVersionAdmitted": [
+      "Set previous current version status to superseded",
+      "Set supersededDate on previous version",
+      "Maintain lineage links from decisions to version used at time of decision",
+      "Do not retroactively alter historical lineage"
+    ],
+    "downstreamImpact": {
+      "notifyEngines": true,
+      "requireRevalidation": "for-executable-rules",
+      "humanReviewRequired": true
+    }
+  },
+  "jurisdictionOverlay": {
+    "description": "SOCPA and LCGPA may overlay global standards without destroying base version history",
+    "baseStandardRetention": "mandatory",
+    "overlayAssetIdSuffix": "-{jurisdiction}"
+  },
+  "noVersionlessKnowledge": {
+    "constraint": "Charter §9.3",
+    "enforcement": "reject-admission-without-versionLabel-and-effectiveDate"
+  }
+}

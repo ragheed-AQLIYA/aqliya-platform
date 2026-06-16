@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "remediationId": "wave1-remediation-ifrs9",
+    "remediationDate": "2026-06-09",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-9",
+    "assetType": "A",
+    "standardCode": "IFRS 9",
+    "standardName": "Financial Instruments",
+    "versionLabel": "IFRS 9:2024",
+    "issueDate": "2014-07-24",
+    "effectiveDate": "2018-01-01",
+    "supersededDate": null,
+    "status": "current",
+    "sourceUrl": "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-9-financial-instruments/",
+    "sourceOwner": "IFRS Foundation",
+    "catalogId": "kf-acct-ifrs-ifrs-9",
+    "session": "1",
+    "attribution": [
+      "© IFRS Foundation"
+    ],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval before production use. Not a substitute for the authoritative standard text.",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "ontology": {
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "entity": "standard",
+    "relationship": "implements",
+    "authority": "ifrs-foundation",
+    "usage": "tb-intelligence"
+  },
+  "engines": [
+    "tb-intelligence",
+    "mapping-engine",
+    "disclosure-engine",
+    "accounting-intelligence"
+  ],
+  "scope": {
+    "artifactRef": "scope-and-classification.json",
+    "current_scope": "Classification, measurement, ECL impairment, hedge accounting (IFRS 9.1.1)",
+    "legacy_scope": "IAS 39 legacy reference only — historical/comparative; not default routing",
+    "replaced_standard": "IAS 39 (partial)",
+    "superseded_references": [
+      "IAS 39 classification",
+      "IAS 39 incurred loss",
+      "IAS 39 hedge accounting"
+    ]
+  },
+  "classificationTaxonomy": {
+    "artifactRef": "scope-and-classification.json",
+    "categories": [
+      "Amortized Cost",
+      "FVOCI",
+      "FVTPL"
+    ]
+  },
+  "lineage": {
+    "lineageId": null,
+    "lineageParentId": null,
+    "upstreamAssetIds": [],
+    "supersededReferences": [
+      {
+        "code": "IAS 39",
+        "relationship": "supersedes-partial",
+        "productionRouting": false
+      }
+    ],
+    "legacyDistinction": {
+      "ifrs9": "current-authority",
+      "ias39": "legacy-reference-only"
+    },
+    "note": "See scope-and-classification.json for full IAS 39 vs IFRS 9 routing gates"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "validated",
+    "versionStatus": "current",
+    "reviewStatus": "pending",
+    "confidenceScore": 95,
+    "note": "Capped at 69 until KNOWLEDGE_REVIEWER validates paragraph citations"
+  },
+  "licensing": {
+    "licenseId": "ifrs-foundation-standard",
+    "linking": "permitted",
+    "cataloging": "permitted-with-attribution",
+    "referencing": "permitted-with-attribution",
+    "embedding": "restricted-review-required",
+    "redistribution": "prohibited",
+    "commercialUse": "restricted-review-required"
+  }
+}

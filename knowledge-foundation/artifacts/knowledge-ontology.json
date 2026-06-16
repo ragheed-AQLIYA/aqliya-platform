@@ -1,0 +1,139 @@
+{
+  "$schema": "knowledge-foundation/ontology/schema/ontology-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-ontology",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active"
+  },
+  "minimumFields": [
+    {
+      "field": "domain",
+      "type": "string",
+      "required": true,
+      "description": "Top-level knowledge domain (accounting, audit, local-content, governance)"
+    },
+    {
+      "field": "subdomain",
+      "type": "string",
+      "required": true,
+      "description": "Specialized area within domain (e.g. ifrs-standards, isa-standards)"
+    },
+    {
+      "field": "entity",
+      "type": "string",
+      "required": true,
+      "description": "The knowledge entity (standard, rule, procedure, mapping, finding)"
+    },
+    {
+      "field": "relationship",
+      "type": "string",
+      "required": true,
+      "description": "Relationship type connecting entities"
+    },
+    {
+      "field": "authority",
+      "type": "string",
+      "required": true,
+      "description": "Authority ID from knowledge-authority-matrix"
+    },
+    {
+      "field": "usage",
+      "type": "string",
+      "required": true,
+      "description": "Engine or workflow that consumes this entity"
+    }
+  ],
+  "relationshipTypes": [
+    {
+      "id": "implements",
+      "label": "Implements",
+      "direction": "guidance-to-rule",
+      "example": "IFAC guide implements IFRS 15 requirement"
+    },
+    {
+      "id": "supersedes",
+      "label": "Supersedes",
+      "direction": "version-to-version",
+      "example": "IFRS 15:2024 supersedes IFRS 15:2018"
+    },
+    {
+      "id": "jurisdiction-overlay",
+      "label": "Jurisdiction Overlay",
+      "direction": "local-to-global",
+      "example": "SOCPA standard overlays IFRS adoption"
+    },
+    {
+      "id": "informs-audit-of",
+      "label": "Informs Audit Of",
+      "direction": "accounting-to-audit",
+      "example": "IFRS 15 informs ISA 540 revenue testing"
+    },
+    {
+      "id": "requires-evidence",
+      "label": "Requires Evidence",
+      "direction": "rule-to-evidence-type",
+      "example": "ISA 500 requires specific evidence types"
+    },
+    {
+      "id": "maps-to-account",
+      "label": "Maps To Account",
+      "direction": "rule-to-coa",
+      "example": "IFRS 16 maps to right-of-use asset accounts"
+    },
+    {
+      "id": "classifies-spend",
+      "label": "Classifies Spend",
+      "direction": "lcgpa-to-procurement",
+      "example": "LCGPA rule classifies supplier spend"
+    },
+    {
+      "id": "approved-by",
+      "label": "Approved By",
+      "direction": "memory-to-reviewer",
+      "example": "Firm mapping approved by engagement partner"
+    }
+  ],
+  "entityTypes": [
+    { "id": "standard", "assetTypes": ["A"], "domains": ["accounting", "audit"] },
+    { "id": "interpretation", "assetTypes": ["B"], "domains": ["accounting", "audit"] },
+    { "id": "chart-of-accounts", "assetTypes": ["C"], "domains": ["accounting"] },
+    { "id": "mapping-rule", "assetTypes": ["C", "D"], "domains": ["accounting"] },
+    { "id": "audit-procedure", "assetTypes": ["D"], "domains": ["audit"] },
+    { "id": "risk-factor", "assetTypes": ["D"], "domains": ["audit"] },
+    { "id": "finding-template", "assetTypes": ["D"], "domains": ["audit"] },
+    { "id": "lcgpa-classification", "assetTypes": ["A", "C"], "domains": ["local-content"] },
+    { "id": "firm-decision", "assetTypes": ["E"], "domains": ["accounting", "audit", "local-content"] }
+  ],
+  "engineBindings": [
+    {
+      "engine": "tb-intelligence",
+      "requiredOntologyFields": ["domain", "subdomain", "entity", "relationship", "authority", "usage"],
+      "primaryRelationships": ["maps-to-account", "implements"]
+    },
+    {
+      "engine": "mapping-engine",
+      "requiredOntologyFields": ["domain", "subdomain", "entity", "relationship", "authority", "usage"],
+      "primaryRelationships": ["maps-to-account", "jurisdiction-overlay"]
+    },
+    {
+      "engine": "disclosure-engine",
+      "requiredOntologyFields": ["domain", "subdomain", "entity", "relationship", "authority", "usage"],
+      "primaryRelationships": ["implements", "requires-evidence"]
+    },
+    {
+      "engine": "audit-intelligence",
+      "requiredOntologyFields": ["domain", "subdomain", "entity", "relationship", "authority", "usage"],
+      "primaryRelationships": ["informs-audit-of", "requires-evidence"]
+    },
+    {
+      "engine": "local-content-intelligence",
+      "requiredOntologyFields": ["domain", "subdomain", "entity", "relationship", "authority", "usage"],
+      "primaryRelationships": ["classifies-spend", "jurisdiction-overlay"]
+    }
+  ],
+  "participationRule": "All admitted assets must include all minimum ontology fields before production use"
+}

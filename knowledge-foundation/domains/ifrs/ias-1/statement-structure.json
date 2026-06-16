@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "assetId": "kf-accounting-a-ias-1-statement-structure",
+    "parentAssetId": "kf-accounting-a-ias-1",
+    "standardCode": "IAS 1",
+    "assetType": "A",
+    "remediationId": "wave1-remediation-ias1",
+    "remediationDate": "2026-06-09",
+    "validationStatus": "validated",
+    "engine": "disclosure-engine",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "statement_structure": {
+    "description": "Mandatory components of a complete set of financial statements per IAS 1",
+    "paragraphAnchor": "IAS 1.10",
+    "mandatoryComponents": [
+      {
+        "componentId": "statement-of-financial-position",
+        "label": "Statement of Financial Position",
+        "aliases": [
+          "Balance Sheet",
+          "قائمة المركز المالي"
+        ],
+        "required": true,
+        "order": 1,
+        "paragraphReference": "IAS 1.10(a)"
+      },
+      {
+        "componentId": "statement-of-profit-or-loss",
+        "label": "Statement of Profit or Loss",
+        "aliases": [
+          "Income Statement",
+          "قائمة الربح أو الخسارة"
+        ],
+        "required": true,
+        "order": 2,
+        "paragraphReference": "IAS 1.10(b)"
+      },
+      {
+        "componentId": "other-comprehensive-income",
+        "label": "Other Comprehensive Income (OCI)",
+        "aliases": [
+          "OCI",
+          "الدخل الشامل الآخر"
+        ],
+        "required": true,
+        "order": 3,
+        "presentationOptions": [
+          "separate-statement",
+          "single-statement-with-profit-or-loss-section"
+        ],
+        "paragraphReference": "IAS 1.10A, IAS 1.82A"
+      },
+      {
+        "componentId": "statement-of-cash-flows",
+        "label": "Cash Flow Statement",
+        "aliases": [
+          "Statement of Cash Flows",
+          "قائمة التدفقات النقدية"
+        ],
+        "required": true,
+        "order": 4,
+        "paragraphReference": "IAS 1.10(c)",
+        "crossStandard": "IAS 7"
+      },
+      {
+        "componentId": "statement-of-changes-in-equity",
+        "label": "Statement of Changes in Equity",
+        "aliases": [
+          "Changes in Equity",
+          "قائمة التغيرات في حقوق الملكية"
+        ],
+        "required": true,
+        "order": 5,
+        "paragraphReference": "IAS 1.10(d)"
+      },
+      {
+        "componentId": "notes",
+        "label": "Notes",
+        "aliases": [
+          "Notes to Financial Statements",
+          "الإيضاحات"
+        ],
+        "required": true,
+        "order": 6,
+        "paragraphReference": "IAS 1.10(e), IAS 1.112"
+      }
+    ]
+  },
+  "classificationGates": {
+    "description": "Gates for Financial Statement Generator — AI Assisted FS Preparation with human approval",
+    "engine": "disclosure-engine",
+    "autonomousGeneration": false,
+    "humanApprovalRequired": true,
+    "gates": [
+      {
+        "gateId": "complete-set-gate",
+        "label": "Complete Set Validation",
+        "rule": "All six mandatory components must be present or explicitly justified as not applicable with disclosure",
+        "blocksOutput": true,
+        "paragraphReference": "IAS 1.10"
+      },
+      {
+        "gateId": "going-concern-gate",
+        "label": "Going Concern Assessment",
+        "rule": "FS generation blocked if going concern basis not supported unless required disclosures prepared",
+        "blocksOutput": true,
+        "paragraphReference": "IAS 1.25"
+      },
+      {
+        "gateId": "materiality-gate",
+        "label": "Materiality Classification",
+        "rule": "Dissimilar material items shall not be aggregated; immaterial items may be combined",
+        "blocksOutput": false,
+        "requiresReviewerFlag": true,
+        "paragraphReference": "IAS 1.29"
+      },
+      {
+        "gateId": "oci-presentation-gate",
+        "label": "OCI Presentation Method",
+        "rule": "Entity must select single-statement or two-statement approach consistently",
+        "blocksOutput": true,
+        "paragraphReference": "IAS 1.81A"
+      },
+      {
+        "gateId": "comparative-information-gate",
+        "label": "Comparative Information",
+        "rule": "Comparative amounts required for prior period unless first-time adoption exception applies",
+        "blocksOutput": false,
+        "requiresReviewerFlag": true,
+        "paragraphReference": "IAS 1.38"
+      },
+      {
+        "gateId": "lineage-gate",
+        "label": "Lineage to Authority Rules",
+        "rule": "Every FS line item suggestion must link to admitted IFRS/IAS rule with paragraph reference",
+        "blocksOutput": true,
+        "charterRef": "Human-Defensible Intelligence"
+      },
+      {
+        "gateId": "reviewer-approval-gate",
+        "label": "Reviewer Approval",
+        "rule": "Financial Statement output requires REVIEWER approval before publication",
+        "blocksOutput": true,
+        "charterRef": "No Autonomous Professional Decisions"
+      }
+    ]
+  },
+  "auditOsFlow": {
+    "sequence": [
+      "TB Upload",
+      "TB Intelligence",
+      "Mapping Suggestions",
+      "Statement Structure Validation (this artifact)",
+      "FS Draft Suggestions",
+      "Reviewer Approval",
+      "Financial Statements"
+    ],
+    "charterCompliant": true
+  }
+}

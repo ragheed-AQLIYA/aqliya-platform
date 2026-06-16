@@ -1,0 +1,105 @@
+{
+  "$schema": "knowledge-foundation/lineage/schema/lineage-model-v1.schema.json",
+  "meta": {
+    "artifactId": "knowledge-lineage-model",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "lastUpdated": "2026-06-09",
+    "status": "active"
+  },
+  "minimumChain": [
+    {
+      "order": 1,
+      "node": "decision",
+      "description": "The output, conclusion, or recommendation produced",
+      "requiredFields": ["decisionId", "decisionType", "timestamp", "producedBy"]
+    },
+    {
+      "order": 2,
+      "node": "rule",
+      "description": "The executable or interpretive rule applied",
+      "requiredFields": ["ruleId", "ruleText", "assetType", "paragraphReference"]
+    },
+    {
+      "order": 3,
+      "node": "authority",
+      "description": "The authority level and source body",
+      "requiredFields": ["authorityId", "authorityLevel", "authorityName"]
+    },
+    {
+      "order": 4,
+      "node": "sourceDocument",
+      "description": "The versioned source document",
+      "requiredFields": ["assetId", "versionLabel", "sourceUrl", "effectiveDate"]
+    },
+    {
+      "order": 5,
+      "node": "reviewer",
+      "description": "The human reviewer who approved or validated",
+      "requiredFields": ["reviewerId", "reviewStatus", "reviewTimestamp"]
+    }
+  ],
+  "explanationChain": {
+    "description": "Human-defensible intelligence chain (Charter §2.3)",
+    "sequence": ["decision", "rule", "standard", "source", "reviewer"],
+    "standardNode": {
+      "mapsTo": "sourceDocument",
+      "additionalFields": ["standardCode", "standardName", "jurisdiction"]
+    }
+  },
+  "lineageRecord": {
+    "requiredFields": [
+      "lineageId",
+      "decisionId",
+      "upstreamAssetIds",
+      "downstreamOutputIds",
+      "chainComplete",
+      "createdAt",
+      "organizationId"
+    ],
+    "immutable": true,
+    "deletionPolicy": "never-destroy-version-history"
+  },
+  "downstreamLinkage": {
+    "description": "Every downstream output must maintain linkage to upstream knowledge assets",
+    "outputTypes": [
+      "recommendation",
+      "classification",
+      "mapping",
+      "disclosure-suggestion",
+      "audit-finding",
+      "local-content-conclusion",
+      "generated-report"
+    ],
+    "minimumUpstreamLinks": 1,
+    "allowLlmOnlyReasoning": false
+  },
+  "aiAssistLineage": {
+    "description": "AI-assisted outputs require additional provenance",
+    "requiredFields": [
+      "modelProvider",
+      "promptPackVersion",
+      "retrievedAssetIds",
+      "confidenceScore",
+      "humanReviewStatus"
+    ],
+    "blockFinalDecision": true,
+    "note": "AI may recommend; lineage must show human reviewer node before production use"
+  },
+  "templates": {
+    "auditFinding": {
+      "chain": ["finding", "isa-rule", "iaasb", "isa-document", "engagement-reviewer"],
+      "repositoryPath": "knowledge-foundation/lineage/templates/audit-finding.json"
+    },
+    "accountingMapping": {
+      "chain": ["mapping", "ifrs-rule", "ifrs-foundation", "ifrs-document", "mapping-reviewer"],
+      "repositoryPath": "knowledge-foundation/lineage/templates/accounting-mapping.json"
+    },
+    "localContentClassification": {
+      "chain": ["classification", "lcgpa-rule", "lcgpa", "lcgpa-document", "lc-reviewer"],
+      "repositoryPath": "knowledge-foundation/lineage/templates/local-content-classification.json"
+    }
+  }
+}

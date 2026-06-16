@@ -1,0 +1,4708 @@
+{
+  "meta": {
+    "artifactId": "master-knowledge-catalog",
+    "schemaVersion": "1.0",
+    "charterVersion": "1.0",
+    "charterReference": "knowledge-foundation/charter/AQLIYA_KNOWLEDGE_FOUNDATION_CHARTER_v1.0.md",
+    "governingStatement": "This Foundation shall always privilege authoritative professional judgment over automated inference.",
+    "session": "0",
+    "lastUpdated": "2026-06-09",
+    "status": "active",
+    "entryCount": 64,
+    "artifactCrossReferences": {
+      "authorityMatrix": "knowledge-foundation/artifacts/knowledge-authority-matrix.json",
+      "storageMatrix": "knowledge-foundation/artifacts/knowledge-storage-matrix.json",
+      "domainMap": "knowledge-foundation/artifacts/knowledge-domain-map.json",
+      "confidenceModel": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+      "lineageModel": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+      "versionPolicy": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+      "ontology": "knowledge-foundation/artifacts/knowledge-ontology.json",
+      "licensingMatrix": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+    },
+    "session1Wave1": {
+      "status": "in-progress",
+      "ingestedStandards": 6,
+      "date": "2026-06-09"
+    },
+    "session1": {
+      "status": "wave2-complete-staging",
+      "wave1Standards": 6,
+      "wave2Standards": 26,
+      "totalIngested": 32,
+      "date": "2026-06-09"
+    },
+    "session2": {
+      "status": "complete-staging",
+      "ingestedStandards": 16,
+      "date": "2026-06-09"
+    },
+    "session3": {
+      "status": "complete-staging",
+      "ingestedStandards": 8,
+      "date": "2026-06-09"
+    },
+    "sessions1to3": {
+      "status": "production-admitted",
+      "totalStandards": 56,
+      "date": "2026-06-09"
+    },
+    "productionAdmissionBatch": {
+      "date": "2026-06-09",
+      "admittedCount": 56,
+      "reviewer": {
+        "roleId": "KNOWLEDGE_REVIEWER",
+        "reviewerId": "kf-reviewer-batch-001"
+      },
+      "sessions": [
+        "1",
+        "2",
+        "3"
+      ],
+      "ragBlocked": true
+    },
+    "session4": {
+      "status": "ingested-staging",
+      "ingestedAssets": 2,
+      "date": "2026-06-09"
+    }
+  },
+  "policyTemplates": {
+    "lineageA": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+      "minimumChain": [
+        "decision",
+        "rule",
+        "authority",
+        "sourceDocument",
+        "reviewer"
+      ],
+      "humanReviewBeforeProduction": true,
+      "llmOnlyReasoningAllowed": false,
+      "blockAutonomousDecision": true
+    },
+    "lineageB": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+      "minimumChain": [
+        "decision",
+        "rule",
+        "authority",
+        "sourceDocument",
+        "reviewer"
+      ],
+      "humanReviewBeforeProduction": true,
+      "llmOnlyReasoningAllowed": false,
+      "note": "Type B — guidance only, not executable rules"
+    },
+    "lineageD": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+      "minimumChain": [
+        "decision",
+        "rule",
+        "authority",
+        "sourceDocument",
+        "reviewer"
+      ],
+      "humanReviewBeforeProduction": true,
+      "templateRequired": true
+    },
+    "lineageE": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+      "minimumChain": [
+        "decision",
+        "rule",
+        "authority",
+        "sourceDocument",
+        "reviewer"
+      ],
+      "humanReviewBeforeProduction": true,
+      "repeatedApprovalBoost": true
+    },
+    "versionMandatory": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+      "policyStatement": "Version history must never be destroyed",
+      "requiredFields": [
+        "assetId",
+        "versionLabel",
+        "issueDate",
+        "effectiveDate",
+        "jurisdiction",
+        "status",
+        "sourceUrl",
+        "sourceOwner"
+      ],
+      "noVersionlessAdmission": true
+    },
+    "confidenceA": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+      "authorityLevel": "A",
+      "indicativeRange": {
+        "min": 95,
+        "max": 100
+      },
+      "conditions": "validated + current version",
+      "executableRuleMinimum": 95,
+      "llmGeneratedContentCap": 69,
+      "blockAutonomousDecision": true
+    },
+    "confidenceB": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+      "authorityLevel": "B",
+      "indicativeRange": {
+        "min": 70,
+        "max": 90
+      },
+      "llmGeneratedContentCap": 69,
+      "executableRules": false
+    },
+    "confidenceE": {
+      "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+      "assetType": "E",
+      "indicativeRange": {
+        "min": 85,
+        "max": 99
+      },
+      "conditions": "repeated approval",
+      "approvalCountMin": 2
+    }
+  },
+  "auditOsFlow": {
+    "description": "AI Assisted Financial Statement Preparation — human approval required",
+    "sequence": [
+      "TB Upload",
+      "TB Intelligence",
+      "Firm Memory",
+      "Mapping Suggestions",
+      "Reviewer Approval",
+      "Financial Statements"
+    ],
+    "charterCompliant": true,
+    "autonomousFsGeneration": false
+  },
+  "entries": [
+    {
+      "catalogId": "kf-gov-master-catalog",
+      "domain": "governance",
+      "subdomain": "master-catalog",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "C",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/governance/",
+      "engines": [
+        "knowledge-catalog",
+        "admission-gate"
+      ],
+      "priority": 0,
+      "session": "0",
+      "standardCode": "MASTER-CATALOG",
+      "jurisdiction": "global",
+      "status": "in-progress",
+      "ontology": {
+        "entity": "catalog",
+        "relationship": "governs",
+        "usage": "knowledge-catalog"
+      }
+    },
+    {
+      "catalogId": "kf-gov-governance-model",
+      "domain": "governance",
+      "subdomain": "governance-model",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "C",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/governance/",
+      "engines": [
+        "admission-gate",
+        "lineage-engine"
+      ],
+      "priority": 0,
+      "session": "0.5",
+      "standardCode": "GOVERNANCE-MODEL",
+      "jurisdiction": "global",
+      "status": "planned",
+      "ontology": {
+        "entity": "governance-model",
+        "relationship": "governs",
+        "usage": "admission-gate"
+      }
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-15",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-15/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine",
+        "accounting-intelligence"
+      ],
+      "priority": 1,
+      "session": "1",
+      "standardCode": "IFRS 15",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-16",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-16/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine",
+        "accounting-intelligence"
+      ],
+      "priority": 1,
+      "session": "1",
+      "standardCode": "IFRS 16",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-9",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-9/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine",
+        "accounting-intelligence"
+      ],
+      "priority": 1,
+      "session": "1",
+      "standardCode": "IFRS 9",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-1",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-1/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine",
+        "accounting-intelligence"
+      ],
+      "priority": 1,
+      "session": "1",
+      "standardCode": "IAS 1",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-12",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-12/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine",
+        "accounting-intelligence"
+      ],
+      "priority": 1,
+      "session": "1",
+      "standardCode": "IAS 12",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-for-smes",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-for-smes/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine",
+        "accounting-intelligence"
+      ],
+      "priority": 1,
+      "session": "1",
+      "standardCode": "IFRS for SMEs",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-1",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-1/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 1",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-2",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-2/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 2",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-3",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-3/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 3",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-5",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-5/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 5",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-7",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-7/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 7",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-8",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-8/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 8",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-10",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-10/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 10",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-11",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-11/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 11",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-12",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-12/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 12",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-13",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-13/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 13",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifrs-17",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifrs-17/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRS 17",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-2",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-2/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 2",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-7",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-7/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 7",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-8",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-8/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 8",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-10",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-10/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 10",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-16",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-16/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 16",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-19",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-19/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 19",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-23",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-23/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 23",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-32",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-32/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 32",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-36",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-36/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 36",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-37",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-37/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 37",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ias-38",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ias-38/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IAS 38",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifric-10",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifric-10/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRIC 10",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifric-12",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifric-12/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRIC 12",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifric-19",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifric-19/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRIC 19",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-ifrs-ifric-23",
+      "domain": "accounting",
+      "subdomain": "ifrs-standards",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/ifric-23/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "IFRIC 23",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "wave": 2,
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-acct-coa-canonical",
+      "domain": "accounting",
+      "subdomain": "chart-of-accounts",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "C",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/structures/chart-of-accounts/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine"
+      ],
+      "priority": 1,
+      "session": "1",
+      "standardCode": "COA-IFRS-SME",
+      "jurisdiction": "global",
+      "status": "planned",
+      "ontology": {
+        "entity": "chart-of-accounts",
+        "relationship": "maps-to-account",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "catalogId": "kf-acct-disclosure-rules",
+      "domain": "accounting",
+      "subdomain": "disclosure",
+      "authority": "ifrs-foundation",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "ifrs-foundation-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/disclosure/",
+      "engines": [
+        "disclosure-engine",
+        "accounting-intelligence"
+      ],
+      "priority": 2,
+      "session": "1",
+      "standardCode": "DISCLOSURE-IFRS",
+      "jurisdiction": "global",
+      "status": "planned",
+      "ontology": {
+        "entity": "disclosure-rule",
+        "relationship": "requires-evidence",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "catalogId": "kf-acct-firm-memory-mapping",
+      "domain": "accounting",
+      "subdomain": "chart-of-accounts",
+      "authority": "firm-internal",
+      "authorityLevel": "E",
+      "assetType": "E",
+      "storageTier": "operational",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "repeatedApprovalBoost": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "assetType": "E",
+        "indicativeRange": {
+          "min": 85,
+          "max": 99
+        },
+        "conditions": "repeated approval",
+        "approvalCountMin": 2
+      },
+      "licensingStatus": {
+        "licenseId": "firm-institutional-memory",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/ifrs/memory/tb-mapping/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine"
+      ],
+      "priority": 1,
+      "session": "1",
+      "standardCode": "FIRM-MEMORY-TB-MAPPING",
+      "jurisdiction": "organization-scoped",
+      "status": "planned",
+      "ontology": {
+        "entity": "firm-decision",
+        "relationship": "approved-by",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "catalogId": "kf-audit-isa-315",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-315/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog",
+        "findings-library"
+      ],
+      "priority": 1,
+      "session": "2",
+      "standardCode": "ISA 315",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-330",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-330/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog",
+        "findings-library"
+      ],
+      "priority": 1,
+      "session": "2",
+      "standardCode": "ISA 330",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-500",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-500/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog",
+        "findings-library"
+      ],
+      "priority": 1,
+      "session": "2",
+      "standardCode": "ISA 500",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-540",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-540/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog",
+        "findings-library"
+      ],
+      "priority": 1,
+      "session": "2",
+      "standardCode": "ISA 540",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-700",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-700/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog",
+        "findings-library"
+      ],
+      "priority": 1,
+      "session": "2",
+      "standardCode": "ISA 700",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isqm-1",
+      "domain": "audit",
+      "subdomain": "isqm",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json",
+        "embedding": "restricted-review-required"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isqm/isqm-1/",
+      "engines": [
+        "audit-intelligence",
+        "risk-library"
+      ],
+      "priority": 1,
+      "session": "2",
+      "standardCode": "ISQM 1",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-200",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-200/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 200",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-210",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-210/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 210",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-220",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-220/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 220",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-240",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-240/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 240",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-250",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-250/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 250",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-260",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-260/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 260",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-570",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-570/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 570",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-580",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-580/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 580",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-705",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-705/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 705",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-isa-706",
+      "domain": "audit",
+      "subdomain": "isa-standards",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/isa-706/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "ISA 706",
+      "jurisdiction": "global",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "sessionIngested": "2",
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-audit-procedures-library",
+      "domain": "audit",
+      "subdomain": "audit-procedures",
+      "authority": "iaasb",
+      "authorityLevel": "A",
+      "assetType": "D",
+      "storageTier": "operational",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "templateRequired": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "iaasb-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/isa/operational/procedures/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "2",
+      "standardCode": "AUDIT-PROCEDURES",
+      "jurisdiction": "global",
+      "status": "planned",
+      "ontology": {
+        "entity": "audit-procedure",
+        "relationship": "requires-evidence",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "catalogId": "kf-socpa-socpa-accounting-framework",
+      "domain": "accounting",
+      "subdomain": "socpa-accounting",
+      "authority": "socpa",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "socpa-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/socpa/socpa-accounting-framework/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 1,
+      "session": "3",
+      "standardCode": "SOCPA-ACCOUNTING-FRAMEWORK",
+      "jurisdiction": "saudi-arabia",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-socpa-socpa-ifrs-adoption",
+      "domain": "accounting",
+      "subdomain": "socpa-accounting",
+      "authority": "socpa",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "socpa-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/socpa/socpa-ifrs-adoption/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 1,
+      "session": "3",
+      "standardCode": "SOCPA-IFRS-ADOPTION",
+      "jurisdiction": "saudi-arabia",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-socpa-socpa-zakat-tax",
+      "domain": "accounting",
+      "subdomain": "socpa-accounting",
+      "authority": "socpa",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "socpa-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/socpa/socpa-zakat-tax/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 1,
+      "session": "3",
+      "standardCode": "SOCPA-ZAKAT-TAX",
+      "jurisdiction": "saudi-arabia",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-socpa-socpa-auditing-standards",
+      "domain": "audit",
+      "subdomain": "socpa-audit",
+      "authority": "socpa",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "socpa-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/socpa/socpa-auditing-standards/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 1,
+      "session": "3",
+      "standardCode": "SOCPA-AUDITING-STANDARDS",
+      "jurisdiction": "saudi-arabia",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-socpa-socpa-isa-alignment",
+      "domain": "audit",
+      "subdomain": "socpa-audit",
+      "authority": "socpa",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "socpa-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/socpa/socpa-isa-alignment/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "3",
+      "standardCode": "SOCPA-ISA-ALIGNMENT",
+      "jurisdiction": "saudi-arabia",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-socpa-socpa-circulars",
+      "domain": "accounting",
+      "subdomain": "socpa-accounting",
+      "authority": "socpa",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "socpa-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/socpa/socpa-circulars/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 2,
+      "session": "3",
+      "standardCode": "SOCPA-CIRCULARS",
+      "jurisdiction": "saudi-arabia",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-socpa-socpa-professional-conduct",
+      "domain": "audit",
+      "subdomain": "socpa-audit",
+      "authority": "socpa",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "socpa-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/socpa/socpa-professional-conduct/",
+      "engines": [
+        "audit-intelligence",
+        "evidence-catalog"
+      ],
+      "priority": 2,
+      "session": "3",
+      "standardCode": "SOCPA-PROFESSIONAL-CONDUCT",
+      "jurisdiction": "saudi-arabia",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "implements",
+        "usage": "audit-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-socpa-socpa-jurisdiction-overlay",
+      "domain": "accounting",
+      "subdomain": "socpa-accounting",
+      "authority": "socpa",
+      "authorityLevel": "A",
+      "assetType": "B",
+      "storageTier": "canonical",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "note": "Type B — guidance only, not executable rules"
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "B",
+        "indicativeRange": {
+          "min": 70,
+          "max": 90
+        },
+        "llmGeneratedContentCap": 69,
+        "executableRules": false
+      },
+      "licensingStatus": {
+        "licenseId": "socpa-standard",
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-licensing-matrix.json"
+      },
+      "repositoryPath": "knowledge-foundation/domains/socpa/socpa-jurisdiction-overlay/",
+      "engines": [
+        "tb-intelligence",
+        "mapping-engine",
+        "disclosure-engine"
+      ],
+      "priority": 1,
+      "session": "3",
+      "standardCode": "SOCPA-JURISDICTION-OVERLAY",
+      "jurisdiction": "saudi-arabia",
+      "status": "production-admitted",
+      "ontology": {
+        "entity": "standard",
+        "relationship": "jurisdiction-overlay",
+        "usage": "tb-intelligence"
+      },
+      "productionAdmittedAt": "2026-06-09"
+    },
+    {
+      "catalogId": "kf-lc-lcgpa-rules",
+      "domain": "local-content",
+      "subdomain": "lcgpa-rules",
+      "authority": "lcgpa",
+      "authorityLevel": "A",
+      "assetType": "A",
+      "storageTier": "ingestion-staging",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "llmOnlyReasoningAllowed": false,
+        "blockAutonomousDecision": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69
+      },
+      "licensingStatus": {
+        "licenseId": "lcgpa-standard",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited"
+      },
+      "repositoryPath": "knowledge-foundation/domains/local-content/lcgpa/",
+      "engines": [
+        "local-content-intelligence",
+        "supplier-classification",
+        "spend-analysis"
+      ],
+      "priority": 2,
+      "session": "4",
+      "standardCode": "LCGPA-RULES",
+      "jurisdiction": "saudi-arabia",
+      "status": "ingested-staging",
+      "ontology": {
+        "entity": "regulation",
+        "relationship": "governs",
+        "usage": "local-content-intelligence"
+      }
+    },
+    {
+      "catalogId": "kf-lc-verification-matrix",
+      "domain": "local-content",
+      "subdomain": "verification-procedures",
+      "authority": "lcgpa",
+      "authorityLevel": "A",
+      "assetType": "D",
+      "storageTier": "ingestion-staging",
+      "lineageRequirements": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-lineage-model.json",
+        "minimumChain": [
+          "decision",
+          "rule",
+          "authority",
+          "sourceDocument",
+          "reviewer"
+        ],
+        "humanReviewBeforeProduction": true,
+        "templateRequired": true
+      },
+      "versionPolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-version-policy.json",
+        "policyStatement": "Version history must never be destroyed",
+        "requiredFields": [
+          "assetId",
+          "versionLabel",
+          "issueDate",
+          "effectiveDate",
+          "jurisdiction",
+          "status",
+          "sourceUrl",
+          "sourceOwner"
+        ],
+        "noVersionlessAdmission": true
+      },
+      "confidencePolicy": {
+        "artifactRef": "knowledge-foundation/artifacts/knowledge-confidence-model.json",
+        "authorityLevel": "A",
+        "indicativeRange": {
+          "min": 95,
+          "max": 100
+        },
+        "conditions": "validated + current version",
+        "executableRuleMinimum": 95,
+        "llmGeneratedContentCap": 69,
+        "blockAutonomousDecision": true
+      },
+      "licensingStatus": {
+        "licenseId": "lcgpa-standard",
+        "embedding": "restricted-review-required",
+        "redistribution": "prohibited"
+      },
+      "repositoryPath": "knowledge-foundation/domains/local-content/verification-matrix/",
+      "engines": [
+        "local-content-intelligence",
+        "evidence-catalog",
+        "audit-intelligence"
+      ],
+      "priority": 2,
+      "session": "4",
+      "standardCode": "LC-VERIFICATION-MATRIX",
+      "jurisdiction": "saudi-arabia",
+      "status": "ingested-staging",
+      "ontology": {
+        "entity": "verification-procedure",
+        "relationship": "requires-evidence",
+        "usage": "evidence-catalog"
+      }
+    }
+  ],
+  "validationSummary": {
+    "session0Complete": true,
+    "crossArtifactReview": "knowledge-foundation/governance/SESSION_0_CROSS_ARTIFACT_REVIEW.md",
+    "sessionsAuthorized": [
+      "0",
+      "0.5",
+      "1",
+      "2",
+      "3"
+    ],
+    "session1BlockedUntilReview": true,
+    "minimumEntryCount": 50,
+    "actualEntryCount": 62
+  }
+}

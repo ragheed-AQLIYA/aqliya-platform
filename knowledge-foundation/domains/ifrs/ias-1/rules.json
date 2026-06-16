@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-1-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-1",
+    "standardCode": "IAS 1",
+    "versionLabel": "IAS 1:2024",
+    "ruleCount": 6,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias1-r001",
+      "paragraphReference": "IAS 1.10",
+      "ruleText": "A complete set of financial statements comprises a statement of financial position, a statement of profit or loss and other comprehensive income, a statement of changes in equity, a statement of cash flows, and notes.",
+      "topic": "complete-set",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-1",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias1-r002",
+      "paragraphReference": "IAS 1.15",
+      "ruleText": "An entity shall prepare its financial statements on a going concern basis unless management intends to liquidate or cease trading or has no realistic alternative.",
+      "topic": "going-concern",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-1",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias1-r003",
+      "paragraphReference": "IAS 1.25",
+      "ruleText": "An entity shall not offset assets and liabilities or income and expenses unless offsetting is required or permitted by an IFRS Accounting Standard.",
+      "topic": "no-offsetting",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-1",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias1-r004",
+      "paragraphReference": "IAS 1.29",
+      "ruleText": "An entity shall present separately each material class of similar items and dissimilar items separately unless they are immaterial.",
+      "topic": "materiality-presentation",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-1",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias1-r005",
+      "paragraphReference": "IAS 1.54",
+      "ruleText": "An entity shall disclose in the notes information required by IFRS Standards and additional information necessary to achieve a fair presentation.",
+      "topic": "note-disclosure",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-1",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias1-r006",
+      "paragraphReference": "IAS 1.82A",
+      "ruleText": "An entity with material other comprehensive income items shall present a statement of profit or loss and a separate statement of comprehensive income, or a single statement with profit or loss section and OCI section.",
+      "topic": "oci-presentation",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-1",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    }
+  ]
+}

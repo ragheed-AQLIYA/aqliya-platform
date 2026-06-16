@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "batchId": "kf-batch-p1-production-admission-2026-06-09",
+    "date": "2026-06-09",
+    "charterVersion": "1.0",
+    "reviewer": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001"
+    },
+    "scope": "Priority 1 — Sessions 1–3 (IFRS/IAS/IFRIC, ISA/ISQM, SOCPA)",
+    "admittedStandards": 56,
+    "confidenceScore": 95,
+    "ragIngest": false,
+    "vectorIndex": false
+  },
+  "stats": {
+    "filesUpdated": 172,
+    "rulesUpdated": 245,
+    "admissionRecords": 56,
+    "catalogIds": {}
+  },
+  "preconditions": [
+    "validationStatus === validated",
+    "reviewDecision === approved",
+    "confidenceScore >= 95",
+    "lineage chain complete"
+  ],
+  "postAdmission": {
+    "catalogUpdated": 56,
+    "backlogUpdated": true,
+    "embeddingStillBlocked": true,
+    "note": "RAG/Vector DB ingest remains blocked until separate Foundation v1 adoption + legal sign-off"
+  }
+}

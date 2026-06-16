@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "assetId": "kf-accounting-a-ifrs-smes-jurisdiction",
+    "parentAssetId": "kf-accounting-a-ifrs-smes",
+    "standardCode": "IFRS for SMEs",
+    "assetType": "A",
+    "remediationId": "wave1-remediation-smes",
+    "remediationDate": "2026-06-09",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "jurisdiction": {
+    "defaultScope": "jurisdiction-specific",
+    "globalRouting": false,
+    "note": "IFRS for SMEs is not automatically equivalent to full IFRS — jurisdiction adoption determines applicability"
+  },
+  "adoption_status": {
+    "global": {
+      "status": "available",
+      "description": "IFRS Foundation publishes IFRS for SMEs as a separate standard for non-publicly accountable entities"
+    },
+    "saudi-arabia": {
+      "status": "adopted-with-overlay",
+      "adoptionAuthority": "SOCPA",
+      "description": "SOCPA permits IFRS for SMEs for qualifying entities; full IFRS required for certain entity types",
+      "localAdoptionReference": "SOCPA accounting framework — IFRS for SMEs eligibility criteria",
+      "requiresSocpaOverlay": true
+    }
+  },
+  "effective_date_by_jurisdiction": [
+    {
+      "jurisdiction": "global",
+      "effectiveDate": "2010-01-01",
+      "versionLabel": "IFRS for SMEs:2009",
+      "status": "superseded-by-later-revisions"
+    },
+    {
+      "jurisdiction": "global",
+      "effectiveDate": "2017-01-01",
+      "versionLabel": "IFRS for SMEs:2015",
+      "status": "current-global-publication"
+    },
+    {
+      "jurisdiction": "saudi-arabia",
+      "effectiveDate": null,
+      "versionLabel": "SOCPA-adopted IFRS for SMEs",
+      "status": "jurisdiction-review-required",
+      "note": "Confirm effective date and eligibility with SOCPA circulars at engagement setup"
+    }
+  ],
+  "local_adoption_reference": [
+    {
+      "jurisdiction": "saudi-arabia",
+      "authority": "socpa",
+      "referenceType": "jurisdiction-overlay",
+      "catalogCrossRef": "kf-socpa-socpa-ifrs-adoption",
+      "session": "3",
+      "status": "planned"
+    },
+    {
+      "jurisdiction": "global",
+      "authority": "ifrs-foundation",
+      "referenceType": "primary-standard",
+      "sourceUrl": "https://www.ifrs.org/issued-standards/ifrs-for-smes/"
+    }
+  ],
+  "activationGate": {
+    "jurisdiction_review_required": true,
+    "automaticGlobalRouting": false,
+    "engagementSetupRequired": [
+      "Confirm entity public accountability status",
+      "Confirm jurisdiction adoption (SOCPA / other regulator)",
+      "Select IFRS for SMEs vs full IFRS before TB Intelligence routing",
+      "Apply SOCPA overlay when jurisdiction is saudi-arabia"
+    ],
+    "blockTbIntelligenceUntil": "jurisdiction-confirmed",
+    "blockMappingEngineUntil": "framework-selection-confirmed",
+    "routingPolicy": "Route to IFRS for SMEs sections only when engagement explicitly configured — never default to full IFRS 15/16/9 rules"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "domain": "accounting",
+    "subdomain": "socpa-accounting",
+    "assetId": "kf-socpa-a-socpa-accounting-framework-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-socpa-a-socpa-accounting-framework",
+    "standardCode": "SOCPA-ACCOUNTING-FRAMEWORK",
+    "ruleCount": 4,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "socpa-accounting-framework-r001",
+      "paragraphReference": "SOCPA-AF-1",
+      "ruleText": "Entities in Saudi Arabia shall apply SOCPA-approved accounting standards including IFRS adoption requirements as mandated for their entity category.",
+      "topic": "framework-scope",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-accounting-framework",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-accounting-framework-r002",
+      "paragraphReference": "SOCPA-AF-2",
+      "ruleText": "Financial statements shall present fairly the financial position and performance in accordance with the adopted reporting framework.",
+      "topic": "fair-presentation",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-accounting-framework",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-accounting-framework-r003",
+      "paragraphReference": "SOCPA-AF-3",
+      "ruleText": "Entities shall disclose the applicable financial reporting framework in the notes to the financial statements.",
+      "topic": "framework-disclosure",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-accounting-framework",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-accounting-framework-r004",
+      "paragraphReference": "SOCPA-AF-4",
+      "ruleText": "First-time adoption of IFRS in KSA shall follow SOCPA transition requirements without destroying prior framework version history.",
+      "topic": "transition",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-accounting-framework",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    }
+  ]
+}

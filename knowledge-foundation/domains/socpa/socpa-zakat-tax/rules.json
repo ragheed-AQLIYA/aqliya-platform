@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "domain": "accounting",
+    "subdomain": "socpa-accounting",
+    "assetId": "kf-socpa-a-socpa-zakat-tax-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-socpa-a-socpa-zakat-tax",
+    "standardCode": "SOCPA-ZAKAT-TAX",
+    "ruleCount": 4,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "socpa-zakat-tax-r001",
+      "paragraphReference": "SOCPA-ZT-1",
+      "ruleText": "Entities subject to zakat shall present zakat obligations in accordance with SOCPA guidance alongside IFRS financial statements.",
+      "topic": "zakat-presentation",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-zakat-tax",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-zakat-tax-r002",
+      "paragraphReference": "SOCPA-ZT-2",
+      "ruleText": "Income tax and zakat charges shall be disclosed separately where material to users of the financial statements.",
+      "topic": "separate-disclosure",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-zakat-tax",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-zakat-tax-r003",
+      "paragraphReference": "SOCPA-ZT-3",
+      "ruleText": "Deferred tax and zakat bases may differ — reconciliation disclosures required where applicable.",
+      "topic": "reconciliation",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-zakat-tax",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-zakat-tax-r004",
+      "paragraphReference": "SOCPA-ZT-4",
+      "ruleText": "Zakat and tax accounting shall maintain lineage to IAS 12 base rules with SOCPA jurisdiction overlay.",
+      "topic": "ias12-overlay",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-zakat-tax",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    }
+  ]
+}

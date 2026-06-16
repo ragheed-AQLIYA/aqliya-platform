@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "subdomain": "isa-standards",
+    "assetId": "kf-audit-a-isa-200-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-audit-a-isa-200",
+    "standardCode": "ISA 200",
+    "versionLabel": "ISA 200:2024",
+    "session": "2",
+    "ruleCount": 4,
+    "executableRules": true,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "isa-200-r001",
+      "paragraphReference": "ISA 200.11",
+      "ruleText": "The auditor shall obtain reasonable assurance about whether the financial statements as a whole are free from material misstatement, whether due to fraud or error.",
+      "topic": "overall-objective",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-200",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "ruleId": "isa-200-r002",
+      "paragraphReference": "ISA 200.13",
+      "ruleText": "Professional scepticism includes being alert to conditions that may indicate possible misstatement due to fraud or error.",
+      "topic": "professional-scepticism",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-200",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "ruleId": "isa-200-r003",
+      "paragraphReference": "ISA 200.15",
+      "ruleText": "The auditor shall comply with all ISAs relevant to the audit and plan and perform the audit with professional scepticism.",
+      "topic": "comply-isas",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-200",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "ruleId": "isa-200-r004",
+      "paragraphReference": "ISA 200.18",
+      "ruleText": "The auditor shall exercise professional judgment in planning and performing an audit of financial statements.",
+      "topic": "professional-judgment",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-200",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-1-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-smes-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-smes",
+    "standardCode": "IFRS for SMEs",
+    "versionLabel": "IFRS for SMEs:2024",
+    "ruleCount": 6,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "smes-r001",
+      "paragraphReference": "Section 1.2",
+      "ruleText": "This Standard is intended for general purpose financial statements of entities that do not have public accountability and publish general purpose financial statements for external users.",
+      "topic": "scope",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-smes",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "smes-r002",
+      "paragraphReference": "Section 3.4",
+      "ruleText": "Financial statements shall present fairly the financial position, performance and cash flows of the entity through application of the principles in this Standard.",
+      "topic": "fair-presentation",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-smes",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "smes-r003",
+      "paragraphReference": "Section 23.2",
+      "ruleText": "An entity shall recognise revenue from the sale of goods when the significant risks and rewards of ownership transfer, the entity retains no effective control, amount can be measured reliably, and economic benefits are probable.",
+      "topic": "revenue-goods",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-smes",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "smes-r004",
+      "paragraphReference": "Section 17.9",
+      "ruleText": "Property, plant and equipment shall be measured at cost less accumulated depreciation and impairment unless the revaluation model is applied to an entire class of assets.",
+      "topic": "ppe-measurement",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-smes",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "smes-r005",
+      "paragraphReference": "Section 29.1",
+      "ruleText": "Income tax expense comprises current tax and deferred tax based on temporary differences between carrying amounts and tax bases using enacted tax rates.",
+      "topic": "income-tax-smes",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-smes",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "smes-r006",
+      "paragraphReference": "Section 5.2",
+      "ruleText": "An entity shall use a presentation format consistent with prior periods unless a change results in more reliable and relevant information.",
+      "topic": "consistency",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-smes",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    }
+  ]
+}

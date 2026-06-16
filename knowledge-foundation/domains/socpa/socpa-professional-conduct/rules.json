@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "socpa",
+    "authorityLevel": "A",
+    "licenseId": "socpa-standard",
+    "jurisdiction": "saudi-arabia",
+    "producedBy": "session-3-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "domain": "audit",
+    "subdomain": "socpa-audit",
+    "assetId": "kf-socpa-a-socpa-professional-conduct-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-socpa-a-socpa-professional-conduct",
+    "standardCode": "SOCPA-PROFESSIONAL-CONDUCT",
+    "ruleCount": 4,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "socpa-professional-conduct-r001",
+      "paragraphReference": "SOCPA-PC-1",
+      "ruleText": "Licensed accounting professionals shall comply with SOCPA code of professional conduct and ethics.",
+      "topic": "code-compliance",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-professional-conduct",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-professional-conduct-r002",
+      "paragraphReference": "SOCPA-PC-2",
+      "ruleText": "Independence requirements for audit engagements shall follow SOCPA and ISA 220 requirements in KSA.",
+      "topic": "independence",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-professional-conduct",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-professional-conduct-r003",
+      "paragraphReference": "SOCPA-PC-3",
+      "ruleText": "Conflicts of interest shall be identified, evaluated and addressed before acceptance or continuance of engagements.",
+      "topic": "conflicts",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-professional-conduct",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    },
+    {
+      "ruleId": "socpa-professional-conduct-r004",
+      "paragraphReference": "SOCPA-PC-4",
+      "ruleText": "Breaches of professional conduct shall be documented and reported per SOCPA disciplinary framework.",
+      "topic": "breach-reporting",
+      "assetType": "A",
+      "lineageParentId": "kf-socpa-a-socpa-professional-conduct",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "jurisdiction": "saudi-arabia"
+    }
+  ]
+}

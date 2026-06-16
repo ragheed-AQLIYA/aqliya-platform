@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "iaasb",
+    "authorityLevel": "A",
+    "licenseId": "iaasb-standard",
+    "domain": "audit",
+    "jurisdiction": "global",
+    "producedBy": "session-2-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "subdomain": "isa-standards",
+    "assetId": "kf-audit-a-isa-700-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-audit-a-isa-700",
+    "standardCode": "ISA 700",
+    "versionLabel": "ISA 700:2024",
+    "session": "2",
+    "ruleCount": 4,
+    "executableRules": true,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-06-09",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-001",
+      "decision": "approved",
+      "timestamp": "2026-06-09"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "isa-700-r001",
+      "paragraphReference": "ISA 700.11",
+      "ruleText": "The auditor shall form an opinion on whether the financial statements are prepared, in all material respects, in accordance with the applicable financial reporting framework.",
+      "topic": "form-opinion",
+      "usage": "audit-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-700",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "audit-intelligence"
+      }
+    },
+    {
+      "ruleId": "isa-700-r002",
+      "paragraphReference": "ISA 700.14",
+      "ruleText": "The auditor shall evaluate whether the financial statements achieve fair presentation, including considering the overall presentation, structure and content.",
+      "topic": "fair-presentation",
+      "usage": "findings-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-700",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "findings-library"
+      }
+    },
+    {
+      "ruleId": "isa-700-r003",
+      "paragraphReference": "ISA 700.36",
+      "ruleText": "The auditor's report shall include an opinion section with a clear written expression of opinion on the financial statements.",
+      "topic": "opinion-section",
+      "usage": "findings-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-700",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "findings-library"
+      }
+    },
+    {
+      "ruleId": "isa-700-r004",
+      "paragraphReference": "ISA 700.41",
+      "ruleText": "When the auditor expresses an unmodified opinion, the opinion section shall use the heading 'Opinion' and state that the financial statements present fairly.",
+      "topic": "unmodified-opinion",
+      "usage": "findings-library",
+      "assetType": "A",
+      "lineageParentId": "kf-audit-a-isa-700",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "audit",
+        "subdomain": "isa-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "iaasb",
+        "usage": "findings-library"
+      }
+    }
+  ]
+}
