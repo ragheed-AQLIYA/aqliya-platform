@@ -1,0 +1,322 @@
+{
+  "type": "single",
+  "mode": "live",
+  "skillId": "skill:meta:skill-auditor",
+  "provider": "ollama",
+  "model": "qwen3:8b",
+  "result": {
+    "skillId": "skill:meta:skill-auditor",
+    "skillName": "Skill Auditor",
+    "skillVersion": "0.1.0",
+    "provider": "ollama",
+    "model": "qwen3:8b",
+    "datasetName": "Baseline evaluation dataset with 3 samples for skill registry auditing",
+    "datasetDescription": "Baseline evaluation dataset with 3 samples for skill registry auditing",
+    "sampleCount": 3,
+    "timestamp": "2026-06-16T01:04:37.785Z",
+    "overallScore": 0.820562678062678,
+    "passThreshold": 0.7845,
+    "passed": true,
+    "criterionBreakdown": [
+      {
+        "name": "issue-detection",
+        "score": 0.7436609686609686,
+        "weight": 0.45,
+        "threshold": 0.78,
+        "weighted": 0.3346474358974359,
+        "passed": false
+      },
+      {
+        "name": "severity-calibration",
+        "score": 0.7436609686609686,
+        "weight": 0.25,
+        "threshold": 0.75,
+        "weighted": 0.18591524216524216,
+        "passed": false
+      },
+      {
+        "name": "completeness",
+        "score": 1,
+        "weight": 0.3,
+        "threshold": 0.82,
+        "weighted": 0.3,
+        "passed": true
+      }
+    ],
+    "samples": [
+      {
+        "sampleId": "sample-001",
+        "description": "Full skill registry audit — validate all manifests against schema",
+        "status": "completed",
+        "output": {
+          "outputType": "skill_audit_report",
+          "totalSkills": 150,
+          "validManifests": 120,
+          "invalidManifests": 30,
+          "withDatasets": 80,
+          "withCriteria": 60,
+          "schemaViolations": [
+            {
+              "skillId": "skill_001",
+              "field": "version",
+              "issue": "missing required field"
+            },
+            {
+              "skillId": "skill_045",
+              "field": "dependencies",
+              "issue": "invalid type (string instead of object)"
+            },
+            {
+              "skillId": "skill_078",
+              "field": "license",
+              "issue": "invalid enum value"
+            },
+            {
+              "skillId": "skill_115",
+              "field": "parameters",
+              "issue": "missing required sub-field 'type'"
+            },
+            {
+              "skillId": "skill_132",
+              "field": "metrics",
+              "issue": "unexpected additional property"
+            }
+          ],
+          "governanceIssues": [
+            {
+              "skillId": "skill_023",
+              "policy": "data_privacy",
+              "violation": "exposes user identifiers without consent"
+            },
+            {
+              "skillId": "skill_056",
+              "policy": "security",
+              "violation": "missing encryption configuration for sensitive data"
+            },
+            {
+              "skillId": "skill_098",
+              "policy": "compliance",
+              "violation": "non-compliant with GDPR article 13"
+            }
+          ],
+          "dependencyIssues": [
+            {
+              "skillId": "skill_012",
+              "issue": "circular dependency detected between skill_012 and skill_045"
+            },
+            {
+              "skillId": "skill_077",
+              "issue": "broken dependency reference to non-existent skill_999"
+            }
+          ],
+          "overallHealth": "75%"
+        },
+        "expandedOutput": {
+          "outputType": "skill_audit_report",
+          "totalSkills": 150,
+          "validManifests": 120,
+          "invalidManifests": 30,
+          "withDatasets": 80,
+          "withCriteria": 60,
+          "schemaViolations": [
+            {
+              "skillId": "skill_001",
+              "field": "version",
+              "issue": "missing required field"
+            },
+            {
+              "skillId": "skill_045",
+              "field": "dependencies",
+              "issue": "invalid type (string instead of object)"
+            },
+            {
+              "skillId": "skill_078",
+              "field": "license",
+              "issue": "invalid enum value"
+            },
+            {
+              "skillId": "skill_115",
+              "field": "parameters",
+              "issue": "missing required sub-field 'type'"
+            },
+            {
+              "skillId": "skill_132",
+              "field": "metrics",
+              "issue": "unexpected additional property"
+            }
+          ],
+          "governanceIssues": [
+            {
+              "skillId": "skill_023",
+              "policy": "data_privacy",
+              "violation": "exposes user identifiers without consent"
+            },
+            {
+              "skillId": "skill_056",
+              "policy": "security",
+              "violation": "missing encryption configuration for sensitive data"
+            },
+            {
+              "skillId": "skill_098",
+              "policy": "compliance",
+              "violation": "non-compliant with GDPR article 13"
+            }
+          ],
+          "dependencyIssues": [
+            {
+              "skillId": "skill_012",
+              "issue": "circular dependency detected between skill_012 and skill_045"
+            },
+            {
+              "skillId": "skill_077",
+              "issue": "broken dependency reference to non-existent skill_999"
+            }
+          ],
+          "overallHealth": "75%"
+        },
+        "rawLength": 1269,
+        "criterionScores": {
+          "issue-detection": 0.675,
+          "severity-calibration": 0.675,
+          "completeness": 1
+        },
+        "overallScore": 0.7725,
+        "durationMs": 10112
+      },
+      {
+        "sampleId": "sample-002",
+        "description": "Single skill audit — deep validation of one manifest",
+        "status": "completed",
+        "output": {
+          "outputType": "skill_audit_report",
+          "skillId": "skill:foundation:repo-analysis",
+          "skillName": "repo-analysis",
+          "schemaCompliant": false,
+          "structureIssues": [
+            "Missing required field 'license'",
+            "Field 'version' must be a number"
+          ],
+          "datasetFreshness": "30 days",
+          "datasetCoverage": "75%",
+          "criteriaCompleteness": "60%",
+          "governanceCheck": "Inconsistent policy enforcement across modules",
+          "recommendations": [
+            "Add missing 'license' field to manifest",
+            "Correct 'version' field to numeric type",
+            "Update dataset last_modified timestamp",
+            "Align governance policies across all modules"
+          ],
+          "overallGrade": "C-"
+        },
+        "expandedOutput": {
+          "outputType": "skill_audit_report",
+          "skillId": "skill:foundation:repo-analysis",
+          "skillName": "repo-analysis",
+          "schemaCompliant": false,
+          "structureIssues": [
+            "Missing required field 'license'",
+            "Field 'version' must be a number"
+          ],
+          "datasetFreshness": "30 days",
+          "datasetCoverage": "75%",
+          "criteriaCompleteness": "60%",
+          "governanceCheck": "Inconsistent policy enforcement across modules",
+          "recommendations": [
+            "Add missing 'license' field to manifest",
+            "Correct 'version' field to numeric type",
+            "Update dataset last_modified timestamp",
+            "Align governance policies across all modules"
+          ],
+          "overallGrade": "C-"
+        },
+        "rawLength": 630,
+        "criterionScores": {
+          "issue-detection": 0.7282051282051282,
+          "severity-calibration": 0.7282051282051282,
+          "completeness": 1
+        },
+        "overallScore": 0.8097435897435896,
+        "durationMs": 10999
+      },
+      {
+        "sampleId": "sample-003",
+        "description": "Dependency graph audit — detect circular/broken references",
+        "status": "completed",
+        "output": {
+          "outputType": "skill_audit_report",
+          "totalSkills": 150,
+          "dependencyEdges": 200,
+          "circularDependencies": [
+            {
+              "cycle": "skill_123 -> skill_456 -> skill_789 -> skill_123"
+            }
+          ],
+          "brokenReferences": [
+            {
+              "source": "skill_999",
+              "target": "skill_1000",
+              "issue": "target skill not found in registry"
+            }
+          ],
+          "orphanSkills": [
+            "skill_111",
+            "skill_222"
+          ],
+          "highlyDependedUpon": [
+            {
+              "skillId": "core_utils",
+              "dependentCount": 15
+            }
+          ],
+          "dependencyHealth": "moderate",
+          "recommendations": [
+            "Break circular dependencies in skill_123, skill_456, and skill_789",
+            "Verify existence of target skill in registry for broken reference"
+          ]
+        },
+        "expandedOutput": {
+          "outputType": "skill_audit_report",
+          "totalSkills": 150,
+          "dependencyEdges": 200,
+          "circularDependencies": [
+            {
+              "cycle": "skill_123 -> skill_456 -> skill_789 -> skill_123"
+            }
+          ],
+          "brokenReferences": [
+            {
+              "source": "skill_999",
+              "target": "skill_1000",
+              "issue": "target skill not found in registry"
+            }
+          ],
+          "orphanSkills": [
+            "skill_111",
+            "skill_222"
+          ],
+          "highlyDependedUpon": [
+            {
+              "skillId": "core_utils",
+              "dependentCount": 15
+            }
+          ],
+          "dependencyHealth": "moderate",
+          "recommendations": [
+            "Break circular dependencies in skill_123, skill_456, and skill_789",
+            "Verify existence of target skill in registry for broken reference"
+          ]
+        },
+        "rawLength": 616,
+        "criterionScores": {
+          "issue-detection": 0.8277777777777778,
+          "severity-calibration": 0.8277777777777778,
+          "completeness": 1
+        },
+        "overallScore": 0.8794444444444445,
+        "durationMs": 10524
+      }
+    ],
+    "errors": [],
+    "durationMs": 31673
+  }
+}

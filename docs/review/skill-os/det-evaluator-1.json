@@ -1,0 +1,350 @@
+{
+  "type": "single",
+  "mode": "live",
+  "skillId": "skill:meta:skill-evaluator",
+  "provider": "ollama",
+  "model": "qwen3:8b",
+  "result": {
+    "skillId": "skill:meta:skill-evaluator",
+    "skillName": "Skill Evaluator",
+    "skillVersion": "0.1.0",
+    "provider": "ollama",
+    "model": "qwen3:8b",
+    "datasetName": "Baseline evaluation dataset with 3 samples for skill evaluation",
+    "datasetDescription": "Baseline evaluation dataset with 3 samples for skill evaluation",
+    "sampleCount": 3,
+    "timestamp": "2026-06-16T01:06:40.807Z",
+    "overallScore": 0.833277260179434,
+    "passThreshold": 0.766,
+    "passed": true,
+    "criterionBreakdown": [
+      {
+        "name": "score-accuracy",
+        "score": 0.6665545203588682,
+        "weight": 0.5,
+        "threshold": 0.78,
+        "weighted": 0.3332772601794341,
+        "passed": false
+      },
+      {
+        "name": "recommendation-quality",
+        "score": 1,
+        "weight": 0.3,
+        "threshold": 0.72,
+        "weighted": 0.3,
+        "passed": true
+      },
+      {
+        "name": "consistency",
+        "score": 1,
+        "weight": 0.2,
+        "threshold": 0.8,
+        "weighted": 0.2,
+        "passed": true
+      }
+    ],
+    "samples": [
+      {
+        "sampleId": "sample-001",
+        "description": "Evaluate a single foundation skill against its dataset",
+        "status": "completed",
+        "output": {
+          "outputType": "evaluation_result",
+          "skillId": "skill:foundation:repo-analysis",
+          "evaluated": true,
+          "overallScore": 65.5,
+          "passed": false,
+          "sampleCount": 50,
+          "criterionBreakdown": [
+            {
+              "name": "Accuracy",
+              "score": 60.2,
+              "threshold": 70,
+              "passed": false
+            },
+            {
+              "name": "Completeness",
+              "score": 72.8,
+              "threshold": 80,
+              "passed": false
+            },
+            {
+              "name": "Timeliness",
+              "score": 63.4,
+              "threshold": 70,
+              "passed": false
+            }
+          ],
+          "errors": [
+            "Missing dependency: repo-parser",
+            "Timeout exceeded in test case 12",
+            "Invalid data format in sample 45"
+          ]
+        },
+        "expandedOutput": {
+          "outputType": "evaluation_result",
+          "skillId": "skill:foundation:repo-analysis",
+          "evaluated": true,
+          "overallScore": 65.5,
+          "passed": false,
+          "sampleCount": 50,
+          "criterionBreakdown": [
+            {
+              "name": "Accuracy",
+              "score": 60.2,
+              "threshold": 70,
+              "passed": false
+            },
+            {
+              "name": "Completeness",
+              "score": 72.8,
+              "threshold": 80,
+              "passed": false
+            },
+            {
+              "name": "Timeliness",
+              "score": 63.4,
+              "threshold": 70,
+              "passed": false
+            }
+          ],
+          "errors": [
+            "Missing dependency: repo-parser",
+            "Timeout exceeded in test case 12",
+            "Invalid data format in sample 45"
+          ]
+        },
+        "rawLength": 569,
+        "criterionScores": {
+          "score-accuracy": 0.6479166666666666,
+          "recommendation-quality": 1,
+          "consistency": 1
+        },
+        "overallScore": 0.8239583333333333,
+        "durationMs": 8436
+      },
+      {
+        "sampleId": "sample-002",
+        "description": "Batch evaluate all foundation-level skills",
+        "status": "completed",
+        "output": {
+          "outputType": "batch_evaluation_result",
+          "totalSkills": 50,
+          "evaluated": [
+            "skill_001",
+            "skill_002",
+            "skill_003",
+            "skill_004",
+            "skill_005",
+            "skill_006",
+            "skill_007",
+            "skill_008",
+            "skill_009",
+            "skill_010"
+          ],
+          "passed": 8,
+          "failed": 2,
+          "overallPassRate": 80,
+          "breakdown": [
+            {
+              "skillId": "skill_001",
+              "overallScore": 95.5,
+              "passed": true
+            },
+            {
+              "skillId": "skill_002",
+              "overallScore": 88,
+              "passed": true
+            },
+            {
+              "skillId": "skill_003",
+              "overallScore": 72.3,
+              "passed": false
+            },
+            {
+              "skillId": "skill_004",
+              "overallScore": 91.7,
+              "passed": true
+            },
+            {
+              "skillId": "skill_005",
+              "overallScore": 85,
+              "passed": true
+            },
+            {
+              "skillId": "skill_006",
+              "overallScore": 68.9,
+              "passed": false
+            },
+            {
+              "skillId": "skill_007",
+              "overallScore": 93.2,
+              "passed": true
+            },
+            {
+              "skillId": "skill_008",
+              "overallScore": 89.8,
+              "passed": true
+            },
+            {
+              "skillId": "skill_009",
+              "overallScore": 76.4,
+              "passed": false
+            },
+            {
+              "skillId": "skill_010",
+              "overallScore": 94.1,
+              "passed": true
+            }
+          ],
+          "errors": [
+            "Test case missing for skill_009",
+            "Timeout during evaluation for skill_010"
+          ]
+        },
+        "expandedOutput": {
+          "outputType": "batch_evaluation_result",
+          "totalSkills": 50,
+          "evaluated": [
+            "skill_001",
+            "skill_002",
+            "skill_003",
+            "skill_004",
+            "skill_005",
+            "skill_006",
+            "skill_007",
+            "skill_008",
+            "skill_009",
+            "skill_010"
+          ],
+          "passed": 8,
+          "failed": 2,
+          "overallPassRate": 80,
+          "breakdown": [
+            {
+              "skillId": "skill_001",
+              "overallScore": 95.5,
+              "passed": true
+            },
+            {
+              "skillId": "skill_002",
+              "overallScore": 88,
+              "passed": true
+            },
+            {
+              "skillId": "skill_003",
+              "overallScore": 72.3,
+              "passed": false
+            },
+            {
+              "skillId": "skill_004",
+              "overallScore": 91.7,
+              "passed": true
+            },
+            {
+              "skillId": "skill_005",
+              "overallScore": 85,
+              "passed": true
+            },
+            {
+              "skillId": "skill_006",
+              "overallScore": 68.9,
+              "passed": false
+            },
+            {
+              "skillId": "skill_007",
+              "overallScore": 93.2,
+              "passed": true
+            },
+            {
+              "skillId": "skill_008",
+              "overallScore": 89.8,
+              "passed": true
+            },
+            {
+              "skillId": "skill_009",
+              "overallScore": 76.4,
+              "passed": false
+            },
+            {
+              "skillId": "skill_010",
+              "overallScore": 94.1,
+              "passed": true
+            }
+          ],
+          "errors": [
+            "Test case missing for skill_009",
+            "Timeout during evaluation for skill_010"
+          ]
+        },
+        "rawLength": 1066,
+        "criterionScores": {
+          "score-accuracy": 0.6812499999999999,
+          "recommendation-quality": 1,
+          "consistency": 1
+        },
+        "overallScore": 0.840625,
+        "durationMs": 15422
+      },
+      {
+        "sampleId": "sample-003",
+        "description": "Compare evaluation results between two runs and identify regressions",
+        "status": "completed",
+        "output": {
+          "outputType": "comparison_result",
+          "compared": true,
+          "improved": [
+            {
+              "skillId": "skill_123",
+              "delta": 5.2
+            }
+          ],
+          "regressed": [
+            {
+              "skillId": "skill_456",
+              "delta": -2.8
+            }
+          ],
+          "unchanged": [
+            "skill_789",
+            "skill_012"
+          ],
+          "overallDelta": 3.5,
+          "summary": "The current run shows improvements in some skills but regressions in others. Overall score increased by 3.5 points."
+        },
+        "expandedOutput": {
+          "outputType": "comparison_result",
+          "compared": true,
+          "improved": [
+            {
+              "skillId": "skill_123",
+              "delta": 5.2
+            }
+          ],
+          "regressed": [
+            {
+              "skillId": "skill_456",
+              "delta": -2.8
+            }
+          ],
+          "unchanged": [
+            "skill_789",
+            "skill_012"
+          ],
+          "overallDelta": 3.5,
+          "summary": "The current run shows improvements in some skills but regressions in others. Overall score increased by 3.5 points."
+        },
+        "rawLength": 372,
+        "criterionScores": {
+          "score-accuracy": 0.6704968944099379,
+          "recommendation-quality": 1,
+          "consistency": 1
+        },
+        "overallScore": 0.8352484472049688,
+        "durationMs": 8005
+      }
+    ],
+    "errors": [],
+    "durationMs": 31901
+  }
+}

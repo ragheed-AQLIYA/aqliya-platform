@@ -1,0 +1,205 @@
+{
+  "projectName": "شركة الخليج للتجارة والمقاولات",
+  "period": "2025-Q4",
+  "generatedAt": "2026-06-16T13:24:58.942Z",
+  "currentBaseline": {
+    "score": 11,
+    "tier": "critical",
+    "subScores": {
+      "supplier": 30,
+      "workforce": 0,
+      "capex": 0,
+      "capacityBuilding": 0
+    }
+  },
+  "scenarios": [
+    {
+      "id": "scenario-1",
+      "name": "إعادة تصنيف الموردين الأجانب",
+      "description": "إعادة تصنيف 3 موردين أجانب كبار (GlobalTech, EuroParts, AsiaTrade) بنسبة محتوى محلي 60%",
+      "modifications": [
+        {
+          "field": "GlobalTech Solutions localityClassification",
+          "before": "non_local",
+          "after": "local"
+        },
+        {
+          "field": "GlobalTech Solutions localContentPercentage",
+          "before": "0%",
+          "after": "60%"
+        },
+        {
+          "field": "EuroParts Middle East localityClassification",
+          "before": "non_local",
+          "after": "local"
+        },
+        {
+          "field": "AsiaTrade Import Co localityClassification",
+          "before": "non_local",
+          "after": "local"
+        }
+      ],
+      "baselineScore": 11,
+      "scenarioScore": 13,
+      "delta": 2,
+      "deltaPct": 18,
+      "subScoreChanges": {
+        "supplier": {
+          "before": 30,
+          "after": 37,
+          "delta": 7
+        },
+        "workforce": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "capex": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "capacityBuilding": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        }
+      },
+      "confidence": "medium"
+    },
+    {
+      "id": "scenario-2",
+      "name": "زيادة التوطين إلى 30%",
+      "description": "رفع نسبة الموظفين السعوديين من 0% إلى 30%",
+      "modifications": [
+        {
+          "field": "Workforce Saudi Ratio",
+          "before": "0%",
+          "after": "30%"
+        }
+      ],
+      "baselineScore": 11,
+      "scenarioScore": 20,
+      "delta": 9,
+      "deltaPct": 82,
+      "subScoreChanges": {
+        "supplier": {
+          "before": 30,
+          "after": 30,
+          "delta": 0
+        },
+        "workforce": {
+          "before": 0,
+          "after": 30,
+          "delta": 30
+        },
+        "capex": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "capacityBuilding": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        }
+      },
+      "confidence": "medium"
+    },
+    {
+      "id": "scenario-3",
+      "name": "توجيه النفقات الرأسمالية محلياً",
+      "description": "رفع نسبة المحتوى المحلي في النفقات الرأسمالية إلى 50%",
+      "modifications": [
+        {
+          "field": "CAPEX Local Percentage",
+          "before": "0%",
+          "after": "50%"
+        }
+      ],
+      "baselineScore": 11,
+      "scenarioScore": 21,
+      "delta": 10,
+      "deltaPct": 91,
+      "subScoreChanges": {
+        "supplier": {
+          "before": 30,
+          "after": 30,
+          "delta": 0
+        },
+        "workforce": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "capex": {
+          "before": 0,
+          "after": 50,
+          "delta": 50
+        },
+        "capacityBuilding": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        }
+      },
+      "confidence": "medium"
+    },
+    {
+      "id": "scenario-4",
+      "name": "السيناريو المتكامل (أفضل حالة)",
+      "description": "تطبيق جميع التحسينات معاً: إعادة تصنيف الموردين + توطين 30% + توجيه النفقات الرأسمالية محلياً 50%",
+      "modifications": [
+        {
+          "field": "Supplier Classification",
+          "before": "Local: partial",
+          "after": "Local: 3 major importers at 60%"
+        },
+        {
+          "field": "Workforce Saudi Ratio",
+          "before": "0%",
+          "after": "30%"
+        },
+        {
+          "field": "CAPEX Local Percentage",
+          "before": "0%",
+          "after": "50%"
+        }
+      ],
+      "baselineScore": 11,
+      "scenarioScore": 32,
+      "delta": 21,
+      "deltaPct": 191,
+      "subScoreChanges": {
+        "supplier": {
+          "before": 30,
+          "after": 37,
+          "delta": 7
+        },
+        "workforce": {
+          "before": 0,
+          "after": 30,
+          "delta": 30
+        },
+        "capex": {
+          "before": 0,
+          "after": 50,
+          "delta": 50
+        },
+        "capacityBuilding": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        }
+      },
+      "confidence": "low"
+    }
+  ],
+  "notes": [
+    "All simulations use the workbook formula: 35% supplier + 30% workforce + 20% CAPEX + 15% capacity building",
+    "Conservative defaults (0%) are used for unclassified data, so improvements show maximum possible delta",
+    "Capacity building score remains 0 in all scenarios because no financial data source exists for it",
+    "Simulation confidence decreases with the number of simultaneous modifications (more variables = less certainty)",
+    "The 'best case' scenario (Scenario 4) shows that significant LC% improvement is achievable through procurement and HR policy changes"
+  ]
+}

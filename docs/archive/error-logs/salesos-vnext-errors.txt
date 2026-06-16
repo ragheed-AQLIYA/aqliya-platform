@@ -1,0 +1,55 @@
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(4,3): error TS2305: Module '"../commercial-knowledge-graph"' has no exported member 'KNOWLEDGE_GRAPH_EDGE_KINDS'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(5,3): error TS2724: '"../commercial-knowledge-graph"' has no exported member named 'buildCommercialKnowledgeGraphViewForOrg'. Did you mean 'buildCommercialKnowledgeGraphView'?
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(7,3): error TS2305: Module '"../commercial-knowledge-graph"' has no exported member 'rankTopCommercialRelationships'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(16,3): error TS2305: Module '"../../services/commercial-knowledge-graph-service"' has no exported member 'salesGetTopCommercialRelationships'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(58,32): error TS2339: Property 'supports' does not exist on type 'Record<"uses" | "mentions" | "wins_with" | "loses_with" | "related_to", number>'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(59,32): error TS2339: Property 'blocks' does not exist on type 'Record<"uses" | "mentions" | "wins_with" | "loses_with" | "related_to", number>'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(87,49): error TS2339: Property 'kind' does not exist on type 'KnowledgeGraphNode'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(88,47): error TS2339: Property 'kind' does not exist on type 'KnowledgeGraphEdge'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(89,50): error TS2339: Property 'kind' does not exist on type 'KnowledgeGraphNode'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(97,60): error TS2345: Argument of type '{ accountRefIds: string[]; proofRefIds: string[]; industryRefIds: string[]; maxTopRelationships: number; }' is not assignable to parameter of type 'number'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(105,17): error TS2339: Property 'topRelationships' does not exist on type '{ graph: KnowledgeGraph; snapshot: CommercialKnowledgeGraphSnapshot; }'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(106,17): error TS2339: Property 'accountSubgraphs' does not exist on type '{ graph: KnowledgeGraph; snapshot: CommercialKnowledgeGraphSnapshot; }'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(107,17): error TS2339: Property 'proofSubgraphs' does not exist on type '{ graph: KnowledgeGraph; snapshot: CommercialKnowledgeGraphSnapshot; }'.
+src/lib/sales/vnext/__tests__/commercial-knowledge-graph.test.ts(109,12): error TS2339: Property 'industrySubgraphs' does not exist on type '{ graph: KnowledgeGraph; snapshot: CommercialKnowledgeGraphSnapshot; }'.
+src/lib/sales/vnext/__tests__/commercial-proof-network-overview.test.ts(34,11): error TS2353: Object literal may only specify known properties, and 'value' does not exist in type 'SalesOpportunity'.
+src/lib/sales/vnext/__tests__/commercial-proof-network.test.ts(48,20): error TS2339: Property 'disclaimerEn' does not exist on type 'ProofNetworkBundle'.
+src/lib/sales/vnext/__tests__/commercial-proof-network.test.ts(49,20): error TS2339: Property 'categories' does not exist on type 'ProofNetworkBundle'.
+src/lib/sales/vnext/__tests__/commercial-proof-network.test.ts(50,20): error TS2339: Property 'crossProductCandidateCount' does not exist on type 'ProofNetworkBundle'.
+src/lib/sales/vnext/__tests__/commercial-proof-network.test.ts(65,7): error TS2353: Object literal may only specify known properties, and 'includeDraft' does not exist in type 'Omit<ProofSearchQuery, "organizationId">'.
+src/lib/sales/vnext/__tests__/commercial-proof-network.test.ts(69,20): error TS2339: Property 'relevance' does not exist on type 'ProofSearchHit'.
+src/lib/sales/vnext/__tests__/commercial-proof-network.test.ts(81,19): error TS2339: Property 'scopeLabel' does not exist on type 'ProofNetworkBundle'.
+src/lib/sales/vnext/__tests__/commercial-proof-network.test.ts(87,7): error TS2353: Object literal may only specify known properties, and 'includeDraft' does not exist in type 'ProofSearchQuery'.
+src/lib/sales/vnext/__tests__/commercial-recommendations.test.ts(98,11): error TS2741: Property 'createdById' is missing in type '{ id: string; organizationId: string; accountId: string; opportunityId: string; source: "manual"; status: "active"; createdAt: string; updatedAt: string; category: string; description: string; frequency: number; resolved: false; }' but required in type 'SalesObjection'.
+src/lib/sales/vnext/__tests__/cross-product-signals.test.ts(13,1): error TS2304: Cannot find name 'jest'.
+src/lib/sales/vnext/__tests__/cross-product-signals.test.ts(14,33): error TS2304: Cannot find name 'jest'.
+src/lib/sales/vnext/__tests__/cross-product-signals.test.ts(15,31): error TS2304: Cannot find name 'jest'.
+src/lib/sales/vnext/__tests__/cross-product-signals.test.ts(23,23): error TS2304: Cannot find name 'jest'.
+src/lib/sales/vnext/__tests__/cross-product-signals.test.ts(37,3): error TS2322: Type '{ id: string; organizationId: string; sourceProduct: CrossProductSourceProduct; targetEntityType?: CrossProductTargetEntityType | undefined; ... 9 more ...; sourceSignalIds: string[]; }' is not assignable to type 'CrossProductCommercialSignal'.
+src/lib/sales/vnext/__tests__/meeting-intelligence.test.ts(2,10): error TS2305: Module '"../meeting-intelligence"' has no exported member 'extractMeetingMetadataFromInteraction'.
+src/lib/sales/vnext/__tests__/pipeline-analytics.test.ts(3,39): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/lib/sales/vnext/__tests__/proof-effectiveness.test.ts(169,11): error TS2353: Object literal may only specify known properties, and 'evidenceRef' does not exist in type 'Partial<SalesProofAsset> & Pick<SalesProofAsset, "id" | "title">'.
+src/lib/sales/vnext/__tests__/proof-effectiveness.test.ts(187,9): error TS2741: Property 'createdById' is missing in type '{ id: string; organizationId: string; opportunityId: string; category: string; description: string; resolved: true; status: "active"; source: "manual"; createdAt: string; updatedAt: string; }' but required in type 'SalesObjection'.
+src/lib/sales/vnext/commercial-evidence.ts(3,45): error TS2307: Cannot find module '@/lib/platform/registry/runtime' or its corresponding type declarations.
+src/lib/sales/vnext/commercial-recommendations.ts(104,3): error TS2353: Object literal may only specify known properties, and 'messaging_themes' does not exist in type 'Record<"opp_at_risk" | "industry_priority" | "proof_to_use" | "account_revisit" | "icp_drift", "proof" | "icp_drift" | "industries" | "accounts_revisit" | "opps_at_risk" | "messaging_themes">'.
+src/lib/sales/vnext/commercial-review-runtime.ts(4,42): error TS2307: Cannot find module '@/lib/ai/intelligence-runtime' or its corresponding type declarations.
+src/lib/sales/vnext/commercial-review-runtime.ts(5,38): error TS2307: Cannot find module '@/lib/platform/contracts/audit-trail-runtime' or its corresponding type declarations.
+src/lib/sales/vnext/commercial-review-runtime.ts(6,39): error TS2307: Cannot find module '@/lib/platform/integration/core-adoption-enforcer' or its corresponding type declarations.
+src/lib/sales/vnext/deal-review.ts(8,8): error TS2307: Cannot find module '@/lib/platform/contracts/review-approval-runtime' or its corresponding type declarations.
+src/lib/sales/vnext/deal-review.ts(12,8): error TS2307: Cannot find module '@/lib/platform/contracts/review-approval-contract' or its corresponding type declarations.
+src/lib/sales/vnext/icp-learning.ts(177,15): error TS2339: Property 'evidenceRef' does not exist on type 'SalesICPInsight'.
+src/lib/sales/vnext/icp-learning.ts(179,38): error TS2339: Property 'evidenceRef' does not exist on type 'SalesICPInsight'.
+src/lib/sales/vnext/icp-learning.ts(180,37): error TS2339: Property 'evidenceRef' does not exist on type 'SalesICPInsight'.
+src/lib/sales/vnext/proof-effectiveness-wave-b.ts(110,13): error TS2339: Property 'accountId' does not exist on type 'SalesProofAsset'.
+src/lib/sales/vnext/proof-effectiveness-wave-b.ts(110,38): error TS2339: Property 'accountId' does not exist on type 'SalesProofAsset'.
+src/lib/sales/vnext/proof-network-overview.ts(208,9): error TS2554: Expected 1 arguments, but got 2.
+src/lib/sales/vnext/proof-network-overview.ts(209,9): error TS2339: Property 'length' does not exist on type 'Promise<CrossProductProofCandidate[]>'.
+src/lib/sales/vnext/proposal-workflow.ts(3,47): error TS2307: Cannot find module '@/lib/platform/workflow/product-templates' or its corresponding type declarations.
+src/lib/sales/vnext/proposal-workflow.ts(7,8): error TS2307: Cannot find module '@/lib/platform/contracts/review-approval-runtime' or its corresponding type declarations.
+src/lib/sales/vnext/proposal-workflow.ts(8,42): error TS2307: Cannot find module '@/lib/platform/contracts/review-approval-contract' or its corresponding type declarations.
+src/lib/sales/vnext/proposal-workflow.ts(37,41): error TS7006: Parameter 'g' implicitly has an 'any' type.
+src/lib/sales/vnext/revenue-intelligence.ts(156,31): error TS2339: Property 'riskIndicators' does not exist on type '{ score: number; factors: string[]; }'.
+src/lib/sales/vnext/revenue-intelligence.ts(220,42): error TS2339: Property 'blockers' does not exist on type '{ score: number; factors: string[]; }'.
+src/lib/sales/vnext/revenue-intelligence.ts(231,38): error TS2339: Property 'riskIndicators' does not exist on type '{ score: number; factors: string[]; }'.
+src/lib/sales/vnext/revenue-intelligence.ts(233,18): error TS2339: Property 'blockers' does not exist on type '{ score: number; factors: string[]; }'.
+src/lib/sales/vnext/workspace-metadata.ts(3,47): error TS2307: Cannot find module '@/lib/platform/workflow/product-templates' or its corresponding type declarations.

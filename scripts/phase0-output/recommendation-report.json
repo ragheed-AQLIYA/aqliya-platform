@@ -1,0 +1,81 @@
+{
+  "projectName": "شركة الخليج للتجارة والمقاولات",
+  "period": "2025-Q4",
+  "generatedAt": "2026-06-16T13:24:58.941Z",
+  "currentScore": 11,
+  "targetScore": 70,
+  "totalPotentialIncrease": 21.2,
+  "recommendations": [
+    {
+      "id": "rec-supplier-1",
+      "category": "supplier_replacement",
+      "titleAr": "استبدال \"GlobalTech Solutions\" بمورد محلي",
+      "titleEn": "Replace \"GlobalTech Solutions\" with a local supplier",
+      "descriptionAr": "إجمالي الإنفاق: 4,200,000 SAR. استبدال هذا المورد الأجنبي بخيار محلي قد يزيد نسبة المحتوى المحلي بنحو 6.3% من إجمالي نقاط التقييم.",
+      "descriptionEn": "Total spend: 4,200,000 SAR. Replacing this foreign supplier with a local alternative could increase LC% by approximately 6.3 percentage points.",
+      "impact": "high",
+      "estimatedScoreIncreasePct": 6.3,
+      "effort": "medium",
+      "priority": 1,
+      "dataSource": "Trial Balance account 5023: مشتريات - موردين أجانب - GlobalTech",
+      "formula": "opportunityScore = amount × (1 - currentLC%) × impactFactor"
+    },
+    {
+      "id": "rec-sourcing-1",
+      "category": "local_sourcing",
+      "titleAr": "زيادة المشتريات المحلية بدلاً من المستوردة",
+      "titleEn": "Increase local sourcing over imported goods",
+      "descriptionAr": "إجمالي المشتريات المستوردة: 4,200,000 SAR. تحويل 30% من المشتريات المستوردة إلى مصادر محلية قد يحسن درجة المحتوى المحلي بشكل كبير.",
+      "descriptionEn": "Total imported purchases: 4,200,000 SAR. Shifting 30% of imported spend to local sources could significantly improve LC% score.",
+      "impact": "high",
+      "estimatedScoreIncreasePct": 3.4,
+      "effort": "high",
+      "priority": 6,
+      "dataSource": "Income Statement — Imported Goods (SAR 9,800,000)",
+      "formula": "localSourcingIncrease = (localTargetPct - currentLocalPct) × categorySpend / totalSpend × weight"
+    },
+    {
+      "id": "rec-workforce-1",
+      "category": "workforce_localization",
+      "titleAr": "زيادة نسبة التوطين (السعودة)",
+      "titleEn": "Increase Saudi workforce ratio",
+      "descriptionAr": "إجمالي مزايا الموظفين: 900,000 SAR. لا توجد بيانات حالية عن توزيع الجنسيات. زيادة نسبة السعوديين إلى 30% على الأقل ستحسن درجة القوى العاملة (وزنها 30% من النتيجة الإجمالية).",
+      "descriptionEn": "Total employee benefits: 900,000 SAR. No nationality distribution data available. Increasing Saudi ratio to at least 30% would improve the workforce sub-score (30% weight).",
+      "impact": "medium",
+      "estimatedScoreIncreasePct": 6,
+      "effort": "high",
+      "priority": 7,
+      "dataSource": "FS Employee Benefits: SAR 1,020,000 + Notes headcount estimate: 85",
+      "formula": "workforceScore = (saudiCount / totalCount) × 100 × workforceWeight(30)"
+    },
+    {
+      "id": "rec-capex-1",
+      "category": "capex_localization",
+      "titleAr": "توجيه النفقات الرأسمالية للمنتجين المحليين",
+      "titleEn": "Source capital expenditure locally",
+      "descriptionAr": "إجمالي النفقات الرأسمالية: 5,800,000 SAR (معدات: SAR 800,000, تطوير مباني: SAR 450,000). توجيه هذه النفقات لمقاولين وموردين محليين قد يحسن درجة الأصول.",
+      "descriptionEn": "Total CAPEX: 5,800,000 SAR (Equipment: SAR 800,000, Building improvements: SAR 450,000). Sourcing these from local providers could improve asset sub-score.",
+      "impact": "medium",
+      "estimatedScoreIncreasePct": 4,
+      "effort": "medium",
+      "priority": 8,
+      "dataSource": "TB asset accounts 6010, 6011 + Notes (PP&E schedule)",
+      "formula": "capexScore = (localCapex / totalCapex) × 100 × capexWeight(20)"
+    },
+    {
+      "id": "rec-capacity-1",
+      "category": "capacity_building",
+      "titleAr": "تفعيل برامج تطوير القدرات",
+      "titleEn": "Implement capacity building programs",
+      "descriptionAr": "إضافة برامج تدريب وتأهيل للكوادر الوطنية وتوثيقها (بما في ذلك التدريب على رأس العمل، الابتعاث، الشهادات المهنية) قد يساهم في تحسين درجة تطوير القدرات.",
+      "descriptionEn": "Implement documented training and qualification programs for Saudi talent, including on-the-job training, scholarships, and professional certifications to improve capacity building score.",
+      "impact": "low",
+      "estimatedScoreIncreasePct": 1.5,
+      "effort": "medium",
+      "priority": 9,
+      "dataSource": "No financial data available — operational data required from client",
+      "formula": "capacityScore = (programCount × avgSpend × qualityFactor) / benchmark × capacityWeight(15)"
+    }
+  ],
+  "dataCompletenessNote": "Current score is based on conservative defaults (0% for unclassified data). Actual LC% may be higher once client provides supplier classifications. Current score represents the minimum possible LC%."
+}
