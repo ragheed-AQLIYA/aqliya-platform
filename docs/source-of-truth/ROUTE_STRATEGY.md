@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-06-09 — Website repositioning: new navigation (المنصة\|القطاعات\|الإثبات\|الحوكمة\|عن عقلية), added /industries, /proof, /demo, platform-first positioning
+> **Last updated:** 2026-06-17 — LocalContentOS V3.5: added /local-content/pilot-readiness route (Pilot Readiness Dashboard)
 
 ---
 
@@ -135,8 +135,10 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                            | Product/System | Route Type         | Public/Protected | Implementation Status | Notes           |
 | -------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | --------------- |
-| `/decision`                      | DecisionOS     | Dashboard          | Protected        | Active (L4)           | Workspace dashboard, links to full decision routes |
-| `/decision/gov`                  | DecisionOS     | Dashboard          | Protected        | Active (L4)           | Governance dashboard: escalation rules, audit events |
+| `/decisions/gov`                 | DecisionOS     | Dashboard          | Protected        | Active (L4)           | Platform governance console: escalation rules, audit events |
+| `/decisions/gov/escalation-rules`| DecisionOS     | Dashboard          | Protected        | Active (L4)           | Escalation rule management |
+| `/decision`                      | DecisionOS     | Redirect           | Protected        | Redirect → `/decisions` | Legacy path (2026-06-17 cleanup) |
+| `/decision/gov`                  | DecisionOS     | Redirect           | Protected        | Redirect → `/decisions/gov` | Legacy path (2026-06-17 cleanup) |
 | `/decisions`                     | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Decision list   |
 | `/decisions/new`                 | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Create decision |
 | `/decisions/[id]`                | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Decision detail |
@@ -157,35 +159,38 @@ These pages serve as detail references for specialized operating systems. They a
 | `/decisions/[id]/tender`         | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
 | `/decisions/[id]/what-to-do`     | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
 
-### LocalContentOS — Pilot-Ready Product Workspace (12 routes)
+### LocalContentOS — Usable v0.1 Product Workspace (20 routes)
 
 | Route                                                | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                                                |
 | ---------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------------------------------------- |
-| `/local-content`                                     | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Dashboard with project metrics, server-action-backed |
-| `/local-content/analytics`                           | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | LC-06 org spend analytics (deterministic aggregates) |
-| `/local-content/classification-rules`                | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | LC-04 classification rule admin (read)               |
-| `/local-content/projects/[projectId]/tender-match`   | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | LC-02 tender requirement matching (metadata.tender)  |
-| `/local-content/projects`                            | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Project list with create form, server-action-backed  |
-| `/local-content/projects/[projectId]`                | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Project detail with scoring, navigation to sub-pages |
-| `/local-content/projects/[projectId]/suppliers`      | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Supplier/vendor records                              |
-| `/local-content/projects/[projectId]/spend`          | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Spend/procurement records                            |
-| `/local-content/projects/[projectId]/classification` | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Local content classification workflow                |
-| `/local-content/projects/[projectId]/evidence`       | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Evidence upload + protected file download            |
-| `/local-content/projects/[projectId]/findings`       | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Gap/risk findings                                    |
-| `/local-content/projects/[projectId]/review`         | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Review workflow                                      |
-| `/local-content/projects/[projectId]/approval`       | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Approval workflow                                    |
-| `/local-content/projects/[projectId]/reports`        | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Export/reports generation                            |
-| `/local-content/projects/[projectId]/audit-trail`    | LocalContentOS | Governed workspace | Protected        | L5 with conditions    | Audit log viewer                                     |
+| `/local-content`                                     | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Dashboard with project metrics, server-action-backed |
+| `/local-content/analytics`                           | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | LC-06 org spend analytics (deterministic aggregates) |
+| `/local-content/classification-rules`                | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | LC-04 classification rule admin (read)               |
+| `/local-content/projects/[projectId]/tender-match`   | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | LC-02 tender requirement matching (metadata.tender)  |
+| `/local-content/projects`                            | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Project list with create form, server-action-backed  |
+| `/local-content/projects/[projectId]`                | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Project detail, navigation to sub-pages, workbook link |
+| `/local-content/workbook`                            | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Workbook dashboard: status, completion metrics, score summary |
+| `/local-content/workbook/[workbookId]`               | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Workbook detail with 3 tabs (lines/missing/requests) + gating. Scoring UI card showing contributions analysis + section breakdown |
+| `/local-content/pilot-readiness`                     | LocalContentOS | Dashboard          | Protected        | L4 Usable v0.1    | V3.5: 11-dimension operational readiness assessment with GREEN/AMBER/RED status per metric and overall pilot score |
+| `/local-content/projects/[projectId]/suppliers`      | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Supplier/vendor records                              |
+| `/local-content/projects/[projectId]/spend`          | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Spend/procurement records                            |
+| `/local-content/projects/[projectId]/classification` | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Local content classification workflow                |
+| `/local-content/projects/[projectId]/evidence`       | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Evidence upload + protected file download            |
+| `/local-content/projects/[projectId]/findings`       | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Gap/risk findings                                    |
+| `/local-content/projects/[projectId]/review`         | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Review workflow                                      |
+| `/local-content/projects/[projectId]/approval`       | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Approval workflow                                    |
+| `/local-content/projects/[projectId]/reports`        | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Export/reports generation                            |
+| `/local-content/projects/[projectId]/audit-trail`    | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Audit log viewer                                     |
 
 **LocalContentOS route limitations:**
 
-- L5 with conditions / usable v0.1 — not L6 production-hardened
-- Mutation feedback loop verified (2026-05-23); finding create PASS on `/local-content/projects/lc-project-demo-001/findings`
-- Review/approval/report inline server forms may still need clean manual pass
-- PDF/XLSX binary generation implemented using pdfkit + xlsx libraries
-- Delete UI now exists for suppliers, spend records, evidence, and findings
+- L4 Usable v0.1 - not L6 production-hardened
+- Scoring engine (LcScore): 4 metrics - revenue 35%, supplier_spend 35%, workforce 20%, assets 10%
+- Formula engine active: GP-01 (REV-03 - COS-03), WRK-03 (WRK-01 / WRK-02 x 100), SPN-03 (SPN-01 + SPN-02)
+- Tab-level gating enforced: population, recalculation, edits, exports are gated per tab
+- Score persistence: lcScore + lcScoreComputedAt saved to DB; export includes score data
+- 265 passing LocalContent tests
 - See `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`
-
 ### Office AI Assistant — Shared Application
 
 | Route                 | Product/System      | Route Type         | Public/Protected | Implementation Status   | Notes                          |
@@ -360,7 +365,7 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 2. `/auditos/*` = guided demo (public, mock-backed, read-only). Always label as `Demo` in UI and docs.
    `/auditos/*` is intentionally public because it is a sanitized, mock-only, read-only guided demo. It must not use customer data, uploads, mutations, exports/downloads, tenant state, or operational audit workflows. If any of these are introduced, the route must move behind authentication/gating before release.
 3. `/assistant/*` = governed shared application on AQLIYA Core. Do not market it as a standalone product unless explicitly reclassified.
-4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). Pilot-ready with conditions (L5). See limitations in route table above.
+4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). Usable v0.1 (L4). See limitations in route table above.
 5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). WorkflowOS is the canonical product name.
 6. `/sunbul/*` = redirect alias family over WorkflowOS implementation. Every route is a `permanentRedirect(302)` wrapper.
 7. `/organizations/*` and `/settings` must be labeled prototype/internal preview until they have real persistence and workflow backing. SalesOS is no longer prototype-only — 27 routes with real Prisma schema, server actions, RBAC, audit trail, and evidence links now compile and build. Remaining gaps: seed data verification and browser smoke test.

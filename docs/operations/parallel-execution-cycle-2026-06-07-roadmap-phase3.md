@@ -73,7 +73,7 @@
 
 | ID | Deliverable | Evidence |
 | -- | ----------- | -------- |
-| **S7-04** | L5 acceptance criteria | `docs/product/salesos-l5-acceptance-criteria.md`, `l5-acceptance.ts` |
+| **S7-04** | L5 acceptance criteria | `docs/products/salesos-l5-acceptance-criteria.md`, `l5-acceptance.ts` |
 | **D3-03** | Sector intelligence on decision detail | `sector-intelligence*.ts`, `DecisionSectorIntelligencePanel` |
 
 ### Validation (slice 3)
@@ -194,28 +194,28 @@
 | -- | ----------- |
 | **DOC** | `ROADMAP_PHASE3_COMPLETION_REPORT.md` |
 | **DOC** | `program-execution-state.md` sync |
-| **OPS** | `scripts/cycle6-operator-preflight.mjs` + checklist preflight section |
+| **OPS** | `scripts/ic/cycle6-operator-preflight.mjs` + checklist preflight section |
 | **DOC** | `PRODUCT_STATUS_MATRIX.md` — AuditOS/SalesOS/LocalContentOS Phase 3 honesty |
 
 ### Validation (slice 10)
 
 | Command | Result |
 | ------- | ------ |
-| `node scripts/cycle6-operator-preflight.mjs` (no env) | Expected FAIL (DATABASE_URL) — script only |
+| `node scripts/ic/cycle6-operator-preflight.mjs` (no env) | Expected FAIL (DATABASE_URL) — script only |
 
 ## Delivered — slice 11 (2026-06-07, Phase 4 entry + Cycle 6 ops)
 
 | ID | Deliverable |
 | -- | ----------- |
 | **DOC** | `phase-4-entry-checklist.md` |
-| **OPS** | `scripts/cycle6-smoke-report-stamp.mjs` |
+| **OPS** | `scripts/ic/cycle6-smoke-report-stamp.mjs` |
 | **DOC** | Backlog Phase 3 closure banner; cycle-6 close + LIVE_SMOKE remote checklist |
 
 ### Validation (slice 11)
 
 | Command | Result |
 | ------- | ------ |
-| `node scripts/cycle6-smoke-report-stamp.mjs` | Pass (stdout stamp) |
+| `node scripts/ic/cycle6-smoke-report-stamp.mjs` | Pass (stdout stamp) |
 
 ## Delivered — slice 12 (2026-06-07, Cycle 6 ops + AuditOS RSC fix)
 

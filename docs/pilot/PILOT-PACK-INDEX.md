@@ -13,7 +13,7 @@
 | [`docs/pilot/execution-pack/`](./execution-pack/) | **Primary operational execution pack** | After customer agrees — TB intake, demo walkthrough, QA checklists, feedback, post-pilot review |
 | [`docs/pilot/`](../pilot/) (root files) | **Governance and readiness** | Scope, go/no-go, risk disclosure, controlled execution, session reports |
 | [`docs/archive/commercial-legacy/pilot-pack/`](../archive/commercial-legacy/pilot-pack/) | **Archived legacy commercial pack** | Historical reference only — do not use for live pilots |
-| [`docs/product/auditos-commercial-master-index.md`](../product/auditos-commercial-master-index.md) | **AuditOS commercial navigation hub** | Start here for full AuditOS commercial doc map |
+| [`docs/products/auditos-commercial-master-index.md`](../products/auditos-commercial-master-index.md) | **AuditOS commercial navigation hub** | Start here for full AuditOS commercial doc map |
 
 ### Overlap guidance (AuditOS)
 
@@ -27,9 +27,9 @@
 
 | Tree | Role |
 |------|------|
-| [`docs/product/localcontentos-v0.1/pilot-onboarding-pack/`](../product/localcontentos-v0.1/pilot-onboarding-pack/) | **Primary LocalContentOS pilot pack** — scope, demo script, safe claims, closeout |
-| [`docs/product/localcontentos-pilot-runbook/`](../product/localcontentos-pilot-runbook/) | Operating runbook (analyst-led procedures) |
-| [`docs/product/localcontentos-sales-pack/`](../product/localcontentos-sales-pack/) | **Superseded** pre-software sales framing — use pilot-onboarding-pack for live demos |
+| [`docs/products/localcontentos-v0.1/pilot-onboarding-pack/`](../products/localcontentos-v0.1/pilot-onboarding-pack/) | **Primary LocalContentOS pilot pack** — scope, demo script, safe claims, closeout |
+| [`docs/products/localcontentos-pilot-runbook/`](../products/localcontentos-pilot-runbook/) | Operating runbook (analyst-led procedures) |
+| [`docs/products/localcontentos-sales-pack/`](../products/localcontentos-sales-pack/) | **Superseded** pre-software sales framing — use pilot-onboarding-pack for live demos |
 
 LocalContentOS packs are **not** duplicates of AuditOS commercial-pack; they cover a different product workspace at `/local-content/*`.
 

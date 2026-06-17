@@ -12,7 +12,7 @@ Company positioning, identity, and commercial reference documents.
 
 > **Language note (2026-06-09):** Public-facing materials refer to "Specialized Operating Systems" rather than "Products." Documentation and codebase may still use "product" for internal classification.
 
-- `docs/product/` — PRDs, architecture specs, phase plans, commercial assets, sales ops, pilot management, market proof, outbound kits
+- `docs/products/` — PRDs, architecture specs, phase plans, commercial assets, sales ops, pilot management, market proof, outbound kits
 - `docs/theoretical-reference/13-product-philosophy/` — Product philosophy thesis and principles
 - `docs/theoretical-reference/14-commercialization-theory/` — Value theory, pricing, ROI, pilot-to-contract, expansion
 

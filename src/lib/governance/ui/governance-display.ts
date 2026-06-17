@@ -13,6 +13,7 @@ export function getTaskTypeLabel(taskType: GovernanceTaskType): string {
     pilot_decision: 'Pilot Decision',
     approval_review: 'Approval Review',
     skill_execution: 'Skill Execution',
+    pattern_improvement: 'Pattern Improvement',
   };
   return labels[taskType] || taskType;
 }

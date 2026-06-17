@@ -16,7 +16,7 @@
 | 4     | Office AI Assistant       | Active foundation    | Real governed shared application, not future-only anymore                                                                                                                                                                            |
 | 5     | Reality Hardening         | Completed            | Sensitive APIs protected, prototypes labeled, test stack repaired                                                                                                                                                                    |
 | 6     | v0.1 Scope Lock           | Current              | Official docs alignment and release-scope definition                                                                                                                                                                                 |
-| 7     | LocalContentOS            | Complete / hardening | L5 pilot-ready with conditions / usable v0.1. Mutation feedback loop verified (2026-05-23). Binary PDF/XLSX exports implemented (pdfkit + xlsx). Remaining: clean manual pass for review/approval/report inline forms; L6 hardening. |
+| 7     | LocalContentOS            | Complete / hardening | L4 Usable v0.1. Workbook scoring engine (LcScore) with 4 metrics: revenue 35%, supplier_spend 35%, workforce 20%, assets 10%. Formula engine active: GP-01 (REV-03 - COS-03), WRK-03 (WRK-01 / WRK-02 x 100), SPN-03 (SPN-01 + SPN-02). Tab-level gating enforced. Score persistence to DB. 265 passing LocalContent tests. Remaining: L6 hardening. |
 | 8     | Private / On-Prem Package | Strategic            | Not implemented                                                                                                                                                                                                                      |
 | 9     | AQLIYA Studio             | Strategic            | Not implemented                                                                                                                                                                                                                      |
 | 10    | SalesOS + LocalContactOS  | Future               | Not implemented                                                                                                                                                                                                                      |
@@ -77,6 +77,6 @@
 ## What to Avoid
 
 - Treating SalesOS or SimulationOS marketing pages as released products
-- Overclaiming LocalContentOS as production-hardened (L6) when it is L5 with conditions
+- Overclaiming LocalContentOS as production-hardened (L6) when it is L4 Usable v0.1
 - Presenting workflowos as a distinct product without separate domain evidence
 - Claiming On-Prem, Air-Gapped, Local AI, Studio, Model Governance, or Institutional Memory as live

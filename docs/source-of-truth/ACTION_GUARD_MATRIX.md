@@ -10,7 +10,7 @@ Every **write** server action must call either:
 1. `requireServerActionAccess(resource, action, { organizationId })` from `@/core/access`, or  
 2. A product guard documented below that enforces **session + org scope + role** equivalently.
 
-Audit inventory: `node scripts/audit-action-guards.mjs`
+Audit inventory: `node scripts/platform/audit-action-guards.mjs`
 
 ## Wired in remediation (explicit `requireServerActionAccess`)
 
@@ -55,5 +55,5 @@ Audit inventory: `node scripts/audit-action-guards.mjs`
 ## Backlog
 
 - Extend unified guard to `local-content-workspace-actions.ts` remaining writes (beyond Content Studio create).
-- Target: periodic `node scripts/audit-action-guards.mjs` in CI.
+- Target: periodic `node scripts/platform/audit-action-guards.mjs` in CI.
 - Sales `_v02` intelligence: still re-exported via `vnext/`; physical archive blocked until vnext absorbs types (see [`docs/operations/salesos-migration-runbook.md`](../operations/salesos-migration-runbook.md)).

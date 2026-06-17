@@ -70,7 +70,7 @@ cp .env.example .env
 ### Validation
 
 ```bash
-node scripts/validate-env.mjs
+node scripts/platform/validate-env.mjs
 ```
 
 ---

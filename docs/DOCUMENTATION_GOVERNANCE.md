@@ -13,7 +13,7 @@
 | 3           | **Website Content Source** | `docs/content/website-content-rewrite-v3-hybrid.md` | Current public website messaging source of truth                                   |
 | 4           | **Website Implementation** | `src/` (source code)                                | The live website copy following v3 hybrid                                          |
 | 5           | **Release Notes**          | `docs/releases/`                                    | Records of completed implementation milestones                                     |
-| 6           | **Product / System Docs**  | `docs/systems/`, `docs/product/`                    | Per-product PRDs, operator manuals, definition packs                               |
+| 6           | **Product / System Docs**  | `docs/systems/`, `docs/products/`                    | Per-product PRDs, operator manuals, definition packs                               |
 | 7           | **Commercial Assets**      | `docs/commercial/`, `docs/commercial-pack/`         | Demo scripts, pilot packs, sales materials                                         |
 | 8           | **Implementation Reports** | `docs/pilot/`, `docs/runtime-prototypes/`           | Session reports, observations, validation                                          |
 | 9           | **Historical / Archive**   | `docs/archive/`, `docs/theoretical-reference/`      | Pre-v1.1 docs, legacy brand, theoretical foundation                                |

@@ -10,8 +10,8 @@
 
 - Workspace at `/local-content/*` with project, supplier, spend, classification, evidence, findings, scoring, review, approval, reports, audit trail
 - Prisma models, server actions, seed dataset (`lc-project-demo-001`)
-- Product pack at `docs/product/localcontentos-v0.1/`
-- Pilot onboarding pack at `docs/product/localcontentos-v0.1/pilot-onboarding-pack/`
+- Product pack at `docs/products/localcontentos-v0.1/`
+- Pilot onboarding pack at `docs/products/localcontentos-v0.1/pilot-onboarding-pack/`
 
 ## What Is Deferred
 

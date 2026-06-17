@@ -118,7 +118,7 @@ No errors reference `local-content`, `localcontent`, or LocalContentOS paths. Pe
 
 - `src/lib/sales/**`, `src/app/sales/**`, `src/actions/sales-actions.ts`
 - `prisma/migrations/20260601140000_*`, `20260601150000_*`, `20260601160000_*`
-- `scripts/seed-sales-demo.ts`, `prisma/seed.ts` (SalesOS-only diff)
+- `prisma/seed-sales.ts`, `prisma/seed.ts` (SalesOS-only diff)
 - `src/lib/platform/audit-logger.ts` (SalesOS product key)
 - `tmp-*` scratch files (7)
 - Other doc folders outside Commit 6 scope

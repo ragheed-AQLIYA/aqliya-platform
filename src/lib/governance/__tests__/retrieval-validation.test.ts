@@ -13,6 +13,7 @@ const ALL_TASK_TYPES: GovernanceTaskType[] = [
   "evidence_review",
   "audit_findings",
   "commercial_claim_review",
+  "pattern_improvement",
   "pilot_decision",
   "approval_review",
   "disclosure_enrichment",

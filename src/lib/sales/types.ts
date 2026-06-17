@@ -419,6 +419,7 @@ export interface SalesNextAction {
 export interface SalesWinLossInsight {
   id: string;
   organizationId: string;
+  accountId: string;
   opportunityId: string;
   outcome: "won" | "lost";
   primaryReason: string;

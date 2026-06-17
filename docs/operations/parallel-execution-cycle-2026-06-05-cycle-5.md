@@ -100,7 +100,7 @@ Program State: Pilot-Ready + AI Foundation Operational + Execution Governance Ma
 
 **Migration:** `prisma/migrations/20260605000001_ic01_pgvector_document_chunk/`
 
-**Scripts:** `scripts/ic-cycle5-smoke.ts`, `scripts/verify-pgvector-staging.ts`, `scripts/mock-server-only.cjs`
+**Scripts:** `scripts/ic/ic-cycle5-smoke.ts`, `scripts/platform/verify-pgvector-staging.ts`, `scripts/mock-server-only.cjs`
 
 **Tests:** `intelligence-core-rag.test.ts`, `rag-ic01.test.ts` (governance metadata)
 

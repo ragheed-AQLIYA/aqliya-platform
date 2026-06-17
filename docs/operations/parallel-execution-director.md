@@ -177,7 +177,7 @@ Director must mark **blocked** and not start dependent tasks (e.g. IC-02 before 
 
 | Step | Agent | Task ID | Typical paths |
 | ---- | ----- | ------- | ------------- |
-| 1 | Agent-IC | IC-04, IC-06 | `src/lib/ai/eval*`, `scripts/ai-eval-runner.ts`, budget in `src/lib/ai/budget-manager.ts` |
+| 1 | Agent-IC | IC-04, IC-06 | `src/lib/ai/eval*`, `scripts/ic/ai-eval-runner.ts`, budget in `src/lib/ai/budget-manager.ts` |
 | 2 | Agent-Platform | L0-07 | `src/__tests__/cross-tenant-isolation.test.ts`, tenant guards |
 | 3 | Agent-AuditOS | A1-01 | Six engagement tabs: loading + error boundaries |
 | 4 | Agent-QA | validation | CI, tests, gate snapshot |

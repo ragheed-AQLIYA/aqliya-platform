@@ -26,7 +26,7 @@ All other documentation files, READMEs, AGENTS.md, official docs, source-of-trut
 | **3** | `AGENTS.md`                                        | Agent operating contract      | Execution instructions for AI agents                          |
 | **3** | `docs/README.md`                                   | Documentation index           | Navigation aid                                                |
 | **4** | `docs/source-of-truth/*`                           | Supporting references         | Architecture, taxonomy, route strategy, product status        |
-| **5** | `docs/product/*`, `docs/systems/*`, `docs/pilot/*` | Product / system / pilot docs | Product-specific detail and operations                        |
+| **5** | `docs/products/*`, `docs/systems/*`, `docs/pilot/*` | Product / system / pilot docs | Product-specific detail and operations                        |
 | **6** | `docs/reports/*`                                   | Reports and evidence          | Implementation status evidence, not doctrine                  |
 | **7** | `docs/theoretical-reference/*`                     | Background theory             | Intellectual foundation, background only                      |
 | **8** | `docs/archive/*`                                   | Historical docs               | Historical reference only                                     |
@@ -41,7 +41,7 @@ All other documentation files, READMEs, AGENTS.md, official docs, source-of-trut
 | `README.md`                    | Entry-level project orientation                                                                             | Product status, detailed architecture, conflict resolution    |
 | `AGENTS.md`                    | Agent execution contract, coding rules                                                                      | Product taxonomy, implementation status                       |
 | `docs/source-of-truth/*`       | Architecture model, system taxonomy, route strategy, product status matrix, readiness gates                 | Doctrine, identity, governance principles                     |
-| `docs/product/*`               | Product-specific detail, commercial specs                                                                   | Taxonomy classification, architecture decisions               |
+| `docs/products/*`               | Product-specific detail, commercial specs                                                                   | Taxonomy classification, architecture decisions               |
 | `docs/reports/*`               | Evidence of implementation progress, validation results                                                     | Doctrine, taxonomy, product status definitions                |
 | `docs/theoretical-reference/*` | Intellectual foundation, domain theory                                                                      | Implementation status, product claims, route decisions        |
 | `docs/archive/*`               | Historical record                                                                                           | Current policy, status, or doctrine                           |
@@ -110,7 +110,7 @@ AI agents must load documentation in this order:
 3. `AGENTS.md`
 4. Relevant `docs/official/*.md` doctrine docs
 5. Relevant `docs/source-of-truth/*` support docs
-6. Relevant `docs/product/*` or `docs/systems/*` docs
+6. Relevant `docs/products/*` or `docs/systems/*` docs
 7. Relevant `docs/reports/*` for implementation evidence
 
 ---

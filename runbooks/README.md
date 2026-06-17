@@ -2,10 +2,14 @@
 
 Operational guides for managing the AQLIYA platform.
 
+> **Canonical operations docs:** Detailed procedures also live under [`docs/operations/`](../docs/operations/). Prefer `docs/operations/backup-restore-procedure.md` for script-level backup steps; this folder holds operator quick-reference runbooks.
+
 ## Table of Contents
 
 | Runbook | Description |
 |---------|-------------|
+| [Backup & Restore](backup-restore.md) | Backup strategy, manual backup, restore drills (see also `docs/operations/backup-restore-procedure.md`) |
+| [Disaster Recovery](disaster-recovery.md) | DR procedures |
 | [Alerting](alerting.md) | Alert definitions, severity levels, response procedures, escalation matrix |
 | [Monitoring](monitoring.md) | Monitoring tools, health endpoints, key metrics, dashboard instructions |
 | [Staging Environment](staging-environment.md) | Local staging setup, CI deployment, verification, and seeding |

@@ -75,6 +75,8 @@ export async function requireServerActionAccess(
       resource,
       action,
       resourceId: options?.resourceId,
+      role: user.role,
+      requiredRole: minRole,
     });
     if (result.decision !== "granted") {
       throw new Error(result.reason ?? "Access denied");
@@ -92,6 +94,8 @@ export async function requireServerActionAccess(
     resource,
     action,
     resourceId: options?.resourceId,
+    role: user.role,
+    requiredRole: minRole,
   });
 
   if (result.decision !== "granted") {

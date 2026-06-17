@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { setSecurityHeaders } from "@/middleware-security";
 import { rateLimitMiddleware } from "@/middleware-rate-limit";
-import { isMFARequiredForRoleName } from "@/lib/auth/mfa-roles";
+import { resolveMfaGateState } from "@/lib/auth/mfa-gate";
 
 const secret = process.env.AUTH_SECRET;
 
@@ -102,6 +102,7 @@ const routeMinRoles: Record<string, string> = {
   "/api/metrics": "viewer",
   "/api/ai": "viewer",
   "/api/monitoring": "admin",
+  "/api/skills": "admin",
 };
 
 const roleHierarchy: Record<string, number> = {
@@ -201,29 +202,34 @@ export async function middleware(request: NextRequest) {
     const role = tok.role as string | undefined;
     const mfaEnabled = tok.mfaEnabled as boolean | undefined;
     const mfaVerified = tok.mfaVerified as boolean | undefined;
-    if (role && isMFARequiredForRoleName(role)) {
-      const isMfaExempt = mfaExemptPrefixes.some((p) => pathname.startsWith(p));
-      if (!isMfaExempt && (!mfaEnabled || !mfaVerified)) {
-        if (isApiPath(pathname) || pathname.startsWith("/api/")) {
-          return withTiming(
-            setSecurityHeaders(
-              NextResponse.json(
-                { error: "MFA_REQUIRED", code: "MFA_REQUIRED" },
-                { status: 403 },
-              ),
+    const isMfaExempt = mfaExemptPrefixes.some((p) => pathname.startsWith(p));
+    const mfaGate = resolveMfaGateState({
+      role,
+      mfaEnabled,
+      mfaVerified,
+      isExempt: isMfaExempt,
+    });
+
+    if (mfaGate !== "allow") {
+      if (isApiPath(pathname) || pathname.startsWith("/api/")) {
+        return withTiming(
+          setSecurityHeaders(
+            NextResponse.json(
+              { error: "MFA_REQUIRED", code: "MFA_REQUIRED" },
+              { status: 403 },
             ),
-          );
-        }
-        const url = request.nextUrl.clone();
-        if (!mfaEnabled) {
-          url.pathname = "/settings/mfa";
-        } else {
-          url.pathname = "/login";
-          url.searchParams.set("mfa", "true");
-        }
-        url.searchParams.set("callbackUrl", request.nextUrl.pathname + request.nextUrl.search);
-        return withTiming(setSecurityHeaders(NextResponse.redirect(url)));
+          ),
+        );
       }
+      const url = request.nextUrl.clone();
+      if (mfaGate === "enroll") {
+        url.pathname = "/settings/mfa";
+      } else {
+        url.pathname = "/login";
+        url.searchParams.set("mfa", "true");
+      }
+      url.searchParams.set("callbackUrl", request.nextUrl.pathname + request.nextUrl.search);
+      return withTiming(setSecurityHeaders(NextResponse.redirect(url)));
     }
   }
 
@@ -308,5 +314,6 @@ export const config = {
     "/api/custom-product-submit",
     "/api/pilot-review",
     "/api/platform/:path*",
+    "/api/skills/:path*",
   ],
 };

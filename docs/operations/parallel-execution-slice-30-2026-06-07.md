@@ -7,7 +7,7 @@
 
 | ID | Deliverable |
 | -- | ----------- |
-| **OPS** | `npm run start:standalone` — `scripts/start-standalone.mjs` |
+| **OPS** | `npm run start:standalone` — `scripts/platform/start-standalone.mjs` |
 | **DOC** | `audit-sampling-browser-smoke.md` — build + standalone note |
 | **DOC** | `L6_READINESS_SCORECARD`, `phase-4-entry-checklist` — Jest evidence |
 

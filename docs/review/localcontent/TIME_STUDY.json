@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "generatedAt": "2026-06-16T17:42:01.171Z"
+  },
+  "manualPreparation": {
+    "totalHours": 20,
+    "breakdown": {
+      "Company info collection": 1,
+      "FS financial data extraction": 3,
+      "TB financial data extraction": 2,
+      "Supplier data collection": 3,
+      "Workforce data collection": 2,
+      "LC classification & calculation": 2,
+      "Evidence gathering": 3,
+      "Review & adjustments": 2,
+      "Final report preparation": 2
+    },
+    "note": "Based on typical senior analyst preparing LC workbook manually"
+  },
+  "workbookEngine": {
+    "totalHours": 6.26,
+    "breakdown": {
+      "Upload TB to system": 0.08,
+      "Run Workbook Population Engine": 0.02,
+      "Review auto-filled output": 0.5,
+      "Generate missing data request": 0.08,
+      "Manual entry for non-auto-fillable fields": 1.5,
+      "Manual entry — supplier data": 2,
+      "Manual entry — workforce data": 1,
+      "Review & adjustments": 1,
+      "Export final workbook": 0.08
+    },
+    "note": "Includes automated population + manual review + data entry"
+  },
+  "savings": {
+    "hoursSaved": 13.74,
+    "reductionPct": "69%",
+    "reductionPctNum": 69,
+    "oneTimeSetup": "15-30 minutes initial configuration"
+  },
+  "scalingEstimate": {
+    "perWorkbookManual": 20,
+    "perWorkbookWithEngine": 6.26,
+    "annualSavings_10Workbooks": 137.4,
+    "annualSavings_50Workbooks": 687
+  }
+}

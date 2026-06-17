@@ -68,4 +68,4 @@ FS Engine v2 adds cash flow — RC-006 active when `audit.fs-v2` is on.
 ## Seed Validation (2026-06-13)
 
 On `eng-gulf-2025` with factory flags on: **RC-001..006 all pass**, `failedCount: 0`.  
-Diagnostic script: `scripts/recon-rc002-detail.mjs`
+Diagnostic script: `scripts/audit/recon-rc002-detail.mjs`

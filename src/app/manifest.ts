@@ -15,13 +15,13 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "ar",
     icons: [
       {
-        src: "/brand/Favicons/symbol (1).svg",
+        src: "/favicon.svg",
         sizes: "any",
         type: "image/svg+xml",
         purpose: "any",
       },
       {
-        src: "/brand/Favicons/symbol (1).svg",
+        src: "/brand/aqliya-mark.svg",
         sizes: "any",
         type: "image/svg+xml",
         purpose: "maskable",

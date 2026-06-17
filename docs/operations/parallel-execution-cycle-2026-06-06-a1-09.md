@@ -41,7 +41,7 @@ AuditOS AI generation flows now route through **`runGovernedAuditAI()`** instead
 ## Still required (ops)
 
 - **Cycle 6 G6-2:** `docs/operations/cycle-6-staging-operator-checklist.md`
-- Staging pgvector: `scripts/staging-ic01-activate.ps1` or `pgvector-staging-validation-runbook.md`
+- Staging pgvector: `scripts/ic/staging-ic01-activate.ps1` or `pgvector-staging-validation-runbook.md`
 - Evidence bundle: `docs/validation/cycle-6/` — Director **BLOCKED** @ `1d5ea8b`
 
 **Not claimed:** AI-Enabled AuditOS in production until live validation on remote staging.

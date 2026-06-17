@@ -1311,7 +1311,7 @@ Integration tests use a **separate** DB on port **5433**: `npm run test:integrat
 ### First-time / after clone
 
 1. `cp .env.example .env` (or rely on the VM update script to create `.env`).
-2. Set **`AUTH_SECRET`** to the same value as **`NEXTAUTH_SECRET`** in `.env` (runtime auth reads `AUTH_SECRET`; `scripts/validate-env.mjs` only checks `NEXTAUTH_SECRET`).
+2. Set **`AUTH_SECRET`** to the same value as **`NEXTAUTH_SECRET`** in `.env` (runtime auth reads `AUTH_SECRET`; `scripts/platform/validate-env.mjs` only checks `NEXTAUTH_SECRET`).
 3. `sudo docker compose up -d db`, then `npx prisma db push` and `npx prisma db seed` (seed users: `admin@aqliya.com` / `admin123`, etc. in `prisma/seed.ts`).
 4. `npm install` must run with env loaded (`postinstall` runs `validate-env.mjs`).
 

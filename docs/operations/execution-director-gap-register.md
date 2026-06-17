@@ -72,7 +72,7 @@
 
 ## Handoff to OpenCode
 
-1. Run `scripts/staging-ic01-activate.ps1` on staging host with Docker.
+1. Run `scripts/ic/staging-ic01-activate.ps1` on staging host with Docker.
 2. Fill live row in `ai-intelligence-activation.md` § Staging smoke log.
 3. Re-run full validation bundle and attach commit hash to cycle report.
 4. Director may then mark Cycle 6 commercially unblocked for pilot AI.

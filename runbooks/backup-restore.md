@@ -1,8 +1,10 @@
-﻿# AQLIYA Backup & Restore Runbook
+# AQLIYA Backup & Restore Runbook
 
 **Status:** Operational  
-**Last updated:** 2026-06-08  
+**Last updated:** 2026-06-17  
 **Scope:** Covers backup strategy, manual backup, restore procedures, restore drills, verification, offsite storage, and disaster recovery for the AQLIYA platform database.
+
+> **Cross-reference:** Script-level commands and env vars are documented in [`docs/operations/backup-restore-procedure.md`](../docs/operations/backup-restore-procedure.md). This runbook is the operator narrative; use both together.
 
 ---
 
@@ -27,10 +29,10 @@ AQLIYA uses **daily automated backups** with optional manual on-demand backups.
 
 | Layer | Method | Schedule | Retention |
 |-------|--------|----------|-----------|
-| CI Automated (GitHub Actions) | pg_dump custom format via scripts/backup.mjs | Daily at 02:00 AST (UTC+3) | 30 days (artifact retention) |
-| Local/Manual | tsx scripts/db-backup.ts | On demand | Unlimited (manual cleanup) |
+| CI Automated (GitHub Actions) | pg_dump custom format via scripts/platform/backup.mjs | Daily at 02:00 AST (UTC+3) | 30 days (artifact retention) |
+| Local/Manual | tsx scripts/platform/db-backup.ts | On demand | Unlimited (manual cleanup) |
 | CI Workflow Trigger | workflow_dispatch on backup.yml | Manual via GitHub UI | 30 days |
-| Scheduler (dev) | scripts/db-backup-scheduler.ts | Configurable interval (default: 1h) | 30 files max |
+| Scheduler (dev) | scripts/platform/db-backup-scheduler.ts | Configurable interval (default: 1h) | 30 files max |
 
 ### Backup Types
 
@@ -60,7 +62,7 @@ AQLIYA uses **daily automated backups** with optional manual on-demand backups.
 npm run backup
 ```
 
-This runs scripts/backup.mjs which:
+This runs scripts/platform/backup.mjs which:
 1. Reads DATABASE_URL from environment
 2. Creates backups/ directory if missing
 3. Runs pg_dump with custom format (--format=c)
@@ -74,7 +76,7 @@ This runs scripts/backup.mjs which:
 npm run db:backup
 ```
 
-This runs scripts/db-backup.ts which:
+This runs scripts/platform/db-backup.ts which:
 1. Tries to locate pg_dump across common Windows/Unix paths (uses PGDUMP_PATH if set)
 2. Parses DATABASE_URL for connection details
 3. Runs pg_dump with explicit connection parameters
@@ -178,7 +180,7 @@ Restore drills validate that backups are usable. They should be run **at least w
 npm run db:restore-drill
 ```
 
-The drill script (scripts/db-restore-drill.ts) performs:
+The drill script (scripts/platform/db-restore-drill.ts) performs:
 
 | Step | Action | What it validates |
 |------|--------|-------------------|
@@ -232,7 +234,7 @@ Step 3: Verification (read-only data check)...
 npm run backup:verify
 ```
 
-This runs scripts/backup-verify.ts which checks:
+This runs scripts/platform/backup-verify.ts which checks:
 1. **Database connectivity** -- can connect to the database
 2. **Engagement count** -- ensures audit engagements exist
 3. **Core table data** -- verifies these tables have >0 records:
@@ -391,9 +393,9 @@ Backups are created with --no-owner --no-acl. If you see role errors, ensure the
 
 | Script | Path | Invocation |
 |--------|------|------------|
-| Primary backup (CI) | scripts/backup.mjs | npm run backup |
-| TypeScript backup | scripts/db-backup.ts | npm run db:backup |
-| Backup scheduler | scripts/db-backup-scheduler.ts | npm run db:backup (via scheduler) |
-| Restore | scripts/db-restore.ts | npm run db:restore -- <file> |
-| Restore drill | scripts/db-restore-drill.ts | npm run db:restore-drill |
-| Backup verification | scripts/backup-verify.ts | npm run backup:verify |
+| Primary backup (CI) | scripts/platform/backup.mjs | npm run backup |
+| TypeScript backup | scripts/platform/db-backup.ts | npm run db:backup |
+| Backup scheduler | scripts/platform/db-backup-scheduler.ts | npm run db:backup (via scheduler) |
+| Restore | scripts/platform/db-restore.ts | npm run db:restore -- <file> |
+| Restore drill | scripts/platform/db-restore-drill.ts | npm run db:restore-drill |
+| Backup verification | scripts/platform/backup-verify.ts | npm run backup:verify |

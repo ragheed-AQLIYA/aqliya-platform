@@ -11,7 +11,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readdirSync, existsSync } from "fs"
 import { join } from "path"
-import { auth } from "@/lib/auth-next"
+import { requireUserContext } from "@/lib/auth"
 import { loadManifest } from "@/lib/skill-runtime/runtime"
 import {
   evaluateSkill,
@@ -95,9 +95,32 @@ function discoverEvaluatableSkills(): SkillInfo[] {
   return skills
 }
 
+function skillsAuthErrorResponse(error: unknown): NextResponse | null {
+  const msg = error instanceof Error ? error.message : "Unknown error"
+  if (msg === "Unauthenticated") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+  if (msg.startsWith("Access denied")) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
+  return null
+}
+
+async function requireSkillsEvaluateAccess(): Promise<void> {
+  await requireUserContext("ADMIN")
+}
+
 // ─── GET — List evaluatable skills ───
 
 export async function GET() {
+  try {
+    await requireSkillsEvaluateAccess()
+  } catch (error) {
+    const response = skillsAuthErrorResponse(error)
+    if (response) return response
+    throw error
+  }
+
   const skills = discoverEvaluatableSkills()
 
   const summary = {
@@ -122,12 +145,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    // Auth check
-    const session = await auth()
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+    await requireSkillsEvaluateAccess()
+  } catch (error) {
+    const response = skillsAuthErrorResponse(error)
+    if (response) return response
+    throw error
+  }
 
+  try {
     // Parse body
     let body: Record<string, unknown>
     try {

@@ -112,7 +112,7 @@ All factory flags default **off** for baseline pilot safety.
 
 | Factory map UI | `src/app/audit/engagements/[id]/factory-map/` |
 
-| Smoke scripts | `scripts/factory-pilot-smoke.ts`, `factory-pilot-smoke-static.mjs` |
+| Smoke scripts | `scripts/audit/factory-pilot-smoke.ts`, `scripts/audit/factory-pilot-smoke-static.mjs` |
 
 | Flags | `src/lib/platform/feature-flags/registry.ts` |
 

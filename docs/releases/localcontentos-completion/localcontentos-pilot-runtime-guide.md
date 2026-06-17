@@ -35,17 +35,17 @@ npm run dev:localcontent-pilot
 Equivalent:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/run-localcontent-pilot.ps1
+powershell -ExecutionPolicy Bypass -File scripts/localcontent/run-localcontent-pilot.ps1
 ```
 
 Optional flags:
 
 ```powershell
 # Custom port (default 3001)
-powershell -ExecutionPolicy Bypass -File scripts/run-localcontent-pilot.ps1 -Port 3002
+powershell -ExecutionPolicy Bypass -File scripts/localcontent/run-localcontent-pilot.ps1 -Port 3002
 
 # Use Turbopack instead of webpack (not recommended on all hosts — see AGENTS.md)
-powershell -ExecutionPolicy Bypass -File scripts/run-localcontent-pilot.ps1 -Turbopack
+powershell -ExecutionPolicy Bypass -File scripts/localcontent/run-localcontent-pilot.ps1 -Turbopack
 ```
 
 Open **`http://localhost:3001`** and sign in per `localcontentos-l5-pilot-operator-quickstart.md`.

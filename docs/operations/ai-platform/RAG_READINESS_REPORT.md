@@ -34,7 +34,7 @@
 ## Blockers (external)
 
 1. Migration `20260605000001_ic01_pgvector_document_chunk` deploy — **OpenCode**
-2. Staging smoke — `scripts/verify-pgvector-staging.ts`, `ai-intelligence-activation.md`
+2. Staging smoke — `scripts/platform/verify-pgvector-staging.ts`, `ai-intelligence-activation.md`
 
 ## Readiness label
 

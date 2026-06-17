@@ -54,10 +54,10 @@ function monthsSince(date: Date, now = new Date()): number {
 
 function isWithinTrustWindow(
   lastConfirmedAt: Date | null,
-  lastUsedAt: Date,
+  lastUsedAt: Date | null,
   now = new Date(),
 ): boolean {
-  const anchor = lastConfirmedAt ?? lastUsedAt;
+  const anchor = lastConfirmedAt ?? lastUsedAt ?? now;
   return monthsSince(anchor, now) < MEMORY_TRUST_MAX_AGE_MONTHS;
 }
 

@@ -635,7 +635,7 @@ However, from the perspective of **LCGPA certification methodology**, the system
 | `src/lib/local-content/__tests__/scoring.test.ts` | Scoring tests | 258 |
 | `src/lib/local-content/__tests__/services.test.ts` | Services tests | ~200 |
 | `knowledge/local-content/verification-audit-matrix-v1.json` | 36-item LCGPA audit matrix | 332 |
-| `docs/product/localcontentos-discovery-pack/local-content-logic-model.md` | Conceptual logic model | 217 |
+| `docs/products/localcontentos-discovery-pack/local-content-logic-model.md` | Conceptual logic model | 217 |
 | `docs/research/LCGPA_DEEP_RESEARCH_COMPLETE.md` | LCGPA methodology research | 1879 |
 | `docs/releases/localcontentos-completion/localcontentos-v01-readiness-scorecard.md` | Readiness scorecard | 93 |
 | `src/lib/local-content-intelligence/audit-engagement-bridge.ts` | AuditOS bridge | 70 |

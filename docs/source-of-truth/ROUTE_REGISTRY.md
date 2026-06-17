@@ -192,8 +192,11 @@ All routes under `/audit` require **auth** and **tenant isolation**.
 
 | Route | Type | Auth | Status | Product | Notes |
 |-------|------|------|--------|---------|-------|
-| `/decision/gov` | page+error+loading | ✓ | ✅ | DecisionOS | Governance console |
-| `/decision/gov/escalation-rules` | page | ✓ | ✅ | DecisionOS | Escalation rules |
+| `/decisions/gov` | page+error+loading+layout | ✓ | ✅ | DecisionOS | Platform governance console |
+| `/decisions/gov/escalation-rules` | page | ✓ | ✅ | DecisionOS | Escalation rules |
+| `/decision` | redirect | ✓ | ✅ | DecisionOS | → `/decisions` (legacy) |
+| `/decision/gov` | redirect | ✓ | ✅ | DecisionOS | → `/decisions/gov` (legacy) |
+| `/decision/gov/escalation-rules` | redirect | ✓ | ✅ | DecisionOS | → `/decisions/gov/escalation-rules` (legacy) |
 | `/published/recommendation/[decisionId]` | page | ✓ | ✅ | DecisionOS | Published recommendation |
 
 ---
@@ -208,6 +211,7 @@ All routes under `/audit` require **auth** and **tenant isolation**.
 | `/local-content/campaigns/[id]` | page+loading | ✓ | ✅ | LocalContentOS | Campaign detail |
 | `/local-content/classification-rules` | page | ✓ | ✅ | LocalContentOS | Classification rules |
 | `/local-content/outputs` | page+loading | ✓ | ✅ | LocalContentOS | Generated outputs |
+| `/local-content/pilot-readiness` | page | ✓ | ✅ | LocalContentOS | Pilot Readiness Dashboard (V3.5: 11-dimension readiness) |
 | `/local-content/projects` | page+loading | ✓ | ✅ | LocalContentOS | Project list |
 | `/local-content/projects/[projectId]` | page+error+loading+not-found | ✓ | ✅ | LocalContentOS | Project detail |
 | `/local-content/projects/[projectId]/approval` | page | ✓ | ✅ | LocalContentOS | Approval |
@@ -481,7 +485,7 @@ These directories exist but have **no page.tsx or route.ts** — currently inact
 | AuditOS | 21 | 2 | ✅ Active |
 | auditos (Demo) | 6 | 0 | ✅ Active (no auth) |
 | DecisionOS | 24 | 1 | ✅ Active |
-| LocalContentOS | 21 | 2 | ✅ Active |
+| LocalContentOS | 22 | 2 | ✅ Active |
 | SalesOS | 32 | 2 | ✅ Active |
 | LocalContactOS | 5 | 0 | ✅ Active |
 | Content Studio | 5 | 0 | ⚠️ Prototype |
@@ -498,10 +502,10 @@ These directories exist but have **no page.tsx or route.ts** — currently inact
 
 ## Governance Notes
 
-1. **All workspace routes** under `/audit`, `/sales`, `/local-content`, `/contacts`, `/decision`, `/decision/gov`, `/workflowos`, `/sunbul`, `/content-studio`, `/risk` require authentication.
+1. **All workspace routes** under `/audit`, `/sales`, `/local-content`, `/contacts`, `/decisions`, `/decisions/gov`, `/workflowos`, `/sunbul`, `/content-studio`, `/risk` require authentication. Legacy `/decision/*` redirects to `/decisions/*`.
 2. **All download API routes** are protected with auth + tenant-safe 404 + audit trail (hardened May 2026).
 3. **Demo routes** (`/auditos/*`) are the only authenticated-exempt workspace routes — no mutations, no customer data.
 4. **Route changes** must update this registry and `docs/source-of-truth/ROUTE_STRATEGY.md`.
 5. **New workspace routes** must include error, loading, and not-found states where applicable.
 
-*Last updated: 2026-06-08*
+*Last updated: 2026-06-17* — Added /local-content/pilot-readiness (LocalContentOS V3.5 Pilot Readiness Dashboard)

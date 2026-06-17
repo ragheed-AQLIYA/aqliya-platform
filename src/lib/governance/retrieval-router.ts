@@ -526,6 +526,58 @@ const GOVERNANCE_TASK_MAP: Record<GovernanceTaskType, GovernanceContext> = {
       "task_specific",
     ],
   },
+  pattern_improvement: {
+    taskType: "pattern_improvement",
+    doctrineReferences: [
+      {
+        documentId: "aqliya-product-completion",
+        title: "Product Completion Rules",
+        principle: "AI features must produce suggestions, never final decisions",
+        relevance: "Pattern improvement is an AI-assisted recommendation",
+      },
+      {
+        documentId: "AQ-12.01",
+        title: "Match Quality Theory",
+        principle: "Pattern matching quality improves with verified outcome data",
+        relevance: "Pattern improvement uses FP data to refine matching",
+      },
+    ],
+    governanceReferences: [
+      {
+        source: "AGENTS.md §12",
+        rule: "Every AI action must include source input references",
+        enforcement: "Pattern suggestions include FP evidence and unmatched accounts",
+      },
+      {
+        source: "AGENTS.md §12",
+        rule: "AI must not approve outputs automatically",
+        enforcement: "All pattern suggestions require human approval",
+      },
+    ],
+    evidenceRequirements: [
+      {
+        description: "False positive accounts with confirmed reviews",
+        status: "partial",
+        requiredForApproval: true,
+      },
+      {
+        description: "Unmatched account names for missed matches",
+        status: "partial",
+        requiredForApproval: true,
+      },
+    ],
+    humanApprovalRequired: true,
+    escalationTriggers: ["missing_evidence", "governance_ambiguity"],
+    outputBoundary: "review_required",
+    recommendedPromptLayers: [
+      "system_doctrine",
+      "product_doctrine",
+      "governance",
+      "evidence",
+      "human_approval",
+      "task_specific",
+    ],
+  },
 };
 
 export function getGovernanceContext(

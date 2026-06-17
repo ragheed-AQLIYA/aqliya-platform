@@ -39,7 +39,7 @@ Pattern: `AuditWorkflowTabLoading` / `AuditWorkflowTabError` (Arabic tab titles)
 
 ### L0 ops — pgvector staging prep
 
-- Fixed `scripts/check-pgvector-health.mjs` (query before `client.release()`)
+- Fixed `scripts/platform/check-pgvector-health.mjs` (query before `client.release()`)
 - Fixed `docker-compose.staging.yml` (`STORAGE_PROVIDER`, `staging.aqliya.ai`)
 - Added npm scripts: `db:verify-pgvector`, `db:pgvector-health`, `ic:smoke:cycle5`, `test:ic01:pgvector`
 

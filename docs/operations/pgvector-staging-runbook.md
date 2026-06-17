@@ -29,7 +29,7 @@ npx prisma migrate deploy
 npm run db:verify-pgvector
 ```
 
-Or run `powershell -File scripts/staging-ic01-activate.ps1` when Docker is available.
+Or run `powershell -File scripts/ic/staging-ic01-activate.ps1` when Docker is available.
 
 ---
 

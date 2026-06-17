@@ -1,3 +1,6 @@
+import type { UserRole } from "@prisma/client";
+import type { RequiredRole } from "@/lib/auth";
+
 export type AccessResource =
   | "organization"
   | "settings"
@@ -21,6 +24,10 @@ export interface AccessRequest {
   resource: AccessResource;
   action: AccessAction;
   resourceId?: string;
+  /** Session role — required for grant decisions */
+  role?: UserRole | null;
+  /** Override minimum role for this check */
+  requiredRole?: RequiredRole;
 }
 
 export interface AccessResult {

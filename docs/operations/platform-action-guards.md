@@ -5,7 +5,7 @@
 
 ## CI script
 
-Run: `node scripts/audit-action-guards.mjs`
+Run: `node scripts/platform/audit-action-guards.mjs`
 
 Recognized guard signals:
 

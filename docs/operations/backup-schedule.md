@@ -2,8 +2,8 @@
 
 ## Current State
 
-- `npm run db:backup` — executes `pg_dump` via `scripts/db-backup.ts`
-- `npm run db:restore` — executes `pg_restore` via `scripts/db-restore.ts` (dry-run by default)
+- `npm run db:backup` — executes `pg_dump` via `scripts/platform/db-backup.ts`
+- `npm run db:restore` — executes `pg_restore` via `scripts/platform/db-restore.ts` (dry-run by default)
 - `npm run backup:verify` — data integrity check (validates tables have records)
 - Backup files written to: `backups/` (gitignored)
 

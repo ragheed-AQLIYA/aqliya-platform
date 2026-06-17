@@ -22,7 +22,7 @@
 
 | Item | Reason |
 | ---- | ------ |
-| `scripts/demo-smoke-check.mjs` | Stale paths vs repo; `npm run demo:smoke` fails — fix in separate slice |
+| `scripts/platform/demo-smoke-check.mjs` | Stale paths vs repo; `npm run demo:smoke` fails — fix in separate slice |
 | Cycle 6 CLOSED | Remote staging — operator |
 
 **Status:** DONE

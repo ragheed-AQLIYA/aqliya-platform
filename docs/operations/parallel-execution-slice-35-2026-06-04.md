@@ -12,9 +12,9 @@ ADMIN users hit **MFA middleware** → redirect to `/settings/mfa` before `/audi
 | Fix | File |
 | --- | ---- |
 | API login (CSRF cookie + credentials callback) | `cypress/support/commands.ts` |
-| `start:standalone --e2e` clears `MFA_REQUIRED_ROLES` | `scripts/start-standalone.mjs` |
+| `start:standalone --e2e` clears `MFA_REQUIRED_ROLES` | `scripts/platform/start-standalone.mjs` |
 | `npm run start:standalone:e2e`, `auth:smoke-local` | `package.json` |
-| CSRF probe with cookie jar | `scripts/test-auth-csrf-login.mjs` |
+| CSRF probe with cookie jar | `scripts/platform/test-auth-csrf-login.mjs` |
 
 ## Validation (with `start:standalone:e2e`)
 

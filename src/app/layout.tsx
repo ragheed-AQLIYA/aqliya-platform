@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description:
     "عقلية منصة ذكاء مؤسسي خاص ومحكوم: تقدم خطوط أنظمة مؤسسية ذكية مع حوكمة القرار، ربط الأدلة، المراجعة البشرية، سير العمل، الصلاحيات، وسجل التدقيق. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.",
   icons: {
-    icon: "/brand/Favicons/symbol (1).svg",
+    icon: "/favicon.svg",
   },
   openGraph: {
     title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",

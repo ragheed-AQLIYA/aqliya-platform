@@ -135,13 +135,13 @@ Use the staging probe script — it checks DNS, HTTP reachability, and critical 
 
 ```bash
 # Check default staging host (staging.aqliya.ai)
-node scripts/staging-probe.mjs
+node scripts/platform/staging-probe.mjs
 
 # Check custom host
-STAGING_HOST=staging.custom.com node scripts/staging-probe.mjs
+STAGING_HOST=staging.custom.com node scripts/platform/staging-probe.mjs
 
 # Check a different base URL
-STAGING_BASE_URL=https://staging.aqliya.ai node scripts/staging-probe.mjs
+STAGING_BASE_URL=https://staging.aqliya.ai node scripts/platform/staging-probe.mjs
 ```
 
 The probe tests:
@@ -163,7 +163,7 @@ The full post-deploy smoke test runs automatically in CI but can be run locally:
 npm run smoke:local  # targets http://localhost:3000
 
 # Against remote staging
-BASE_URL=https://staging.aqliya.ai node scripts/post-deploy-smoke.mjs --base-url "$BASE_URL"
+BASE_URL=https://staging.aqliya.ai node scripts/platform/post-deploy-smoke.mjs --base-url "$BASE_URL"
 ```
 
 This checks:
@@ -322,7 +322,7 @@ Check that the Terraform state file in `infra/terraform/environments/staging/bac
 The staging host `staging.aqliya.ai` must resolve in public DNS. If testing locally, ensure your network can reach the target. For local-only checks, use:
 
 ```bash
-STAGING_BASE_URL=http://localhost:3000 node scripts/staging-probe.mjs
+STAGING_BASE_URL=http://localhost:3000 node scripts/platform/staging-probe.mjs
 ```
 
 ### Post-deploy smoke test fails on SCIM
@@ -343,5 +343,5 @@ docker compose -f docker-compose.staging.yml -f docker-compose.staging-local.yml
 - [Staging compose](../docker-compose.staging.yml) — Staging service definitions
 - [Local staging overlay](../docker-compose.staging-local.yml) — Port remapping for local use
 - [Pilot env template](../.env.pilot.example) — LocalContentOS pilot configuration
-- [Post-deploy smoke test](../scripts/post-deploy-smoke.mjs) — Comprehensive smoke test
-- [Staging probe](../scripts/staging-probe.mjs) — Quick reachability probe
+- [Post-deploy smoke test](../scripts/platform/post-deploy-smoke.mjs) — Comprehensive smoke test
+- [Staging probe](../scripts/platform/staging-probe.mjs) — Quick reachability probe

@@ -33,7 +33,7 @@ jobs:
       - run: npm ci
 
       - name: Run database backup
-        run: node scripts/backup.mjs
+        run: node scripts/platform/backup.mjs
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 

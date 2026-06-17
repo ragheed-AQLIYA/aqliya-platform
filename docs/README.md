@@ -15,7 +15,8 @@ See `DOCUMENTATION_AUTHORITY.md` for the definitive documentation hierarchy, con
 | `../AGENTS.md`                        | Agent operating contract                             | Level 3           | Active — entry      |
 | `README.md` (this file)               | Documentation index                                  | Level 3           | Active — navigation |
 | `source-of-truth/*`                   | Architecture, taxonomy, routes, product status       | Level 4           | Active — supporting |
-| `product/*`                           | Product definitions and commercial chain             | Level 5           | Active — supporting |
+| `products/*`                          | Product definitions and commercial chain             | Level 5           | Active — supporting |
+| `product/README.md`                   | Redirect stub → `products/` (2026-06-17 cleanup)     | Level 5           | Navigation only     |
 | `systems/*`                           | System and operator documentation                    | Level 5           | Active — supporting |
 | `pilot/*`                             | Pilot execution and readiness                        | Level 5           | Active — supporting |
 | `reports/*`                           | Validation reports and implementation evidence       | Level 6           | Evidence only       |
@@ -112,7 +113,9 @@ These README files provide navigation and recommended reading order for each doc
 
 | Directory          | README                                                                               |
 | ------------------ | ------------------------------------------------------------------------------------ |
-| `product/`         | `product/README.md` — Product definitions and commercial chain                       |
+| `products/`        | Product specs under `docs/products/` — see subfolder READMEs where present           |
+| `product/`         | Redirect stub → `products/`                                                          |
+| `recovery/`        | Redirect stub → `archive/2026-06/recovery/`                                          |
 | `commercial/`      | `commercial/README.md` — Commercial and go-to-market materials (demo storyline)      |
 | `commercial-pack/` | `commercial-pack/README.md` — Primary AuditOS pilot commercial pack (Arabic-first) |
 | `releases/`        | Release scope, known limitations, release notes                                      |

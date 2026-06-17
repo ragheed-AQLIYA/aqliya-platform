@@ -32,8 +32,8 @@
 **Runbook:** `cycle-6-staging-operator-checklist.md`  
 **One-page packet:** `cycle-6-remote-operator-packet.md`  
 **Blockers:** `docs/validation/cycle-6/CERTIFICATION_BLOCKERS.md`  
-**Preflight:** `node scripts/cycle6-operator-preflight.mjs`  
-**Stamp helper:** `node scripts/cycle6-smoke-report-stamp.mjs`  
+**Preflight:** `node scripts/ic/cycle6-operator-preflight.mjs`  
+**Stamp helper:** `node scripts/ic/cycle6-smoke-report-stamp.mjs`  
 **Remote smoke:** `npm run cycle6:remote-smoke`
 
 ---

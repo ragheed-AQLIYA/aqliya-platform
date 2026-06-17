@@ -12,7 +12,7 @@
 
 - **Task ID(s):** IC-04, IC-06 (verify)
 - **Description:** Confirm CI eval gate and budget alerts are wired; no new architecture.
-- **Files (actual):** None modified — already present: `npm run ai:eval:ci` in `.github/workflows/ci.yml`, `scripts/ai-eval-runner.ts`, `src/lib/ai/budget-manager.ts`
+- **Files (actual):** None modified — already present: `npm run ai:eval:ci` in `.github/workflows/ci.yml`, `scripts/ic/ai-eval-runner.ts`, `src/lib/ai/budget-manager.ts`
 - **Status:** done (verified)
 
 ### Agent-Platform

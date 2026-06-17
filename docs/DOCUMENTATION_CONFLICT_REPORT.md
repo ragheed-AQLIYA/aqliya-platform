@@ -72,7 +72,7 @@
 
 | Field                  | Value                                                                                                                                                |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Files**              | Various product definition packs in `docs/product/`                                                                                                  |
+| **Files**              | Various product definition packs in `docs/products/`                                                                                                  |
 | **Term**               | Naming patterns                                                                                                                                      |
 | **Context**            | Some older product docs may use `AQLIYA AuditOS` format instead of `AuditOS` (product) built on `AQLIYA` (platform)                                  |
 | **Risk**               | Low — product packs are internal and pre-date v1.1 naming discipline                                                                                 |

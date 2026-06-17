@@ -32,8 +32,8 @@ Expand the AuditOS canonical chart of accounts from **23 → 33** lines so Saudi
 ## Operational Apply (existing DB)
 
 ```bash
-node scripts/coa-phase-81-upsert.mjs
-node scripts/coa-phase-81-upsert.mjs --remap eng-gulf-2025
+node scripts/audit/coa-phase-81-upsert.mjs
+node scripts/audit/coa-phase-81-upsert.mjs --remap eng-gulf-2025
 ```
 
 Then rebuild FS v2 and re-run reconciliation on the engagement.

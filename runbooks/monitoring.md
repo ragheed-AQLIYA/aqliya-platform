@@ -1,4 +1,4 @@
-﻿# AQLIYA Monitoring Runbook
+# AQLIYA Monitoring Runbook
 
 **Document Owner:** Observability Agent
 **Last Updated:** 2026-06-08
@@ -120,8 +120,8 @@ export async function register() {
 
 ### 3.4 Pilot Daily Monitor
 
-**Script:** `scripts/pilot-daily-monitor.ts`
-**Run:** `npm run pilot:daily` (or `npx tsx scripts/pilot-daily-monitor.ts`)
+**Script:** `scripts/platform/pilot-daily-monitor.ts`
+**Run:** `npm run pilot:daily` (or `npx tsx scripts/platform/pilot-daily-monitor.ts`)
 
 This is the primary operational health report for the AuditOS pilot. It validates:
 - Database connectivity and data presence
@@ -133,8 +133,8 @@ This is the primary operational health report for the AuditOS pilot. It validate
 
 ### 3.5 Audit Health Check
 
-**Script:** `scripts/audit-health-check.ts`
-**Run:** `npm run audit:health` (or `npx tsx scripts/audit-health-check.ts`)
+**Script:** `scripts/platform/audit-health-check.ts`
+**Run:** `npm run audit:health` (or `npx tsx scripts/platform/audit-health-check.ts`)
 
 Quick health check for AuditOS: DB connectivity, record counts, and open blockers. Exits 0 on success, 1 on failure.
 
@@ -304,10 +304,10 @@ curl http://localhost:3000/api/health/ready
 npm run smoke:local
 
 # Against remote target
-node scripts/post-deploy-smoke.mjs --base-url "https://staging.aqliya.ai"
+node scripts/platform/post-deploy-smoke.mjs --base-url "https://staging.aqliya.ai"
 
 # With auth token for protected routes
-AUTH_TOKEN=xxx node scripts/post-deploy-smoke.mjs --base-url "https://staging.aqliya.ai"
+AUTH_TOKEN=xxx node scripts/platform/post-deploy-smoke.mjs --base-url "https://staging.aqliya.ai"
 ```
 
 **Exit codes:**
@@ -319,7 +319,7 @@ AUTH_TOKEN=xxx node scripts/post-deploy-smoke.mjs --base-url "https://staging.aq
 ```bash
 npm run audit:health
 # or
-npx tsx scripts/audit-health-check.ts
+npx tsx scripts/platform/audit-health-check.ts
 ```
 
 **Exit codes:**
@@ -331,7 +331,7 @@ npx tsx scripts/audit-health-check.ts
 ```bash
 npm run pilot:daily
 # or
-npx tsx scripts/pilot-daily-monitor.ts
+npx tsx scripts/platform/pilot-daily-monitor.ts
 ```
 
 Produces a full report to stdout. Recommended to run daily as a cron job. Output includes:
@@ -496,9 +496,9 @@ The following monitoring capabilities are **not yet implemented** and represent 
 - `src/app/api/health/` — Health endpoint implementation
 - `src/app/api/health/__tests__/health-routes.test.ts` — Health endpoint tests
 - `src/app/api/metrics/route.ts` — Metrics endpoint (ADMIN-only)
-- `scripts/post-deploy-smoke.mjs` — CI/CD smoke test
-- `scripts/pilot-daily-monitor.ts` — Daily pilot health report
-- `scripts/audit-health-check.ts` — AuditOS health check
+- `scripts/platform/post-deploy-smoke.mjs` — CI/CD smoke test
+- `scripts/platform/pilot-daily-monitor.ts` — Daily pilot health report
+- `scripts/platform/audit-health-check.ts` — AuditOS health check
 - `src/lib/ai/budget-manager.ts` — AI budget tracking and alerts
 - `src/lib/platform/notification/` — Notification engine
 

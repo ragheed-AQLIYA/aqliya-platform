@@ -7,7 +7,7 @@
 
 | ID | Deliverable |
 | -- | ----------- |
-| **OPS** | `scripts/demo-smoke-check.mjs` — paths synced to real RAG/tenant/pgvector tests |
+| **OPS** | `scripts/platform/demo-smoke-check.mjs` — paths synced to real RAG/tenant/pgvector tests |
 | **OPS** | `npm run demo:smoke` — **PASS** (static, no server) |
 
 ## Changes

@@ -2,7 +2,7 @@
   describe("Authentication gates", () => {
     const protectedRoutes: string[] = [
       // Sprint 3
-      "/decision/gov",
+      "/decisions/gov",
       "/sampling",
       "/risk",
       "/settings/audit-bridge",
@@ -37,9 +37,9 @@
     });
 
     // Decision Gov Routes
-    describe("/decision/gov", () => {
+    describe("/decisions/gov", () => {
       it("should load the governance dashboard", () => {
-        cy.visit("/decision/gov");
+        cy.visit("/decisions/gov");
         cy.get("html").should("have.attr", "dir", "rtl");
         cy.contains(/حوكمة|governance|تصعيد|escalation/i).should("exist");
       });

@@ -1,4 +1,4 @@
-﻿# AQLIYA Alerting Runbook
+# AQLIYA Alerting Runbook
 
 **Document Owner:** Observability Agent
 **Last Updated:** 2026-06-08
@@ -90,7 +90,7 @@ await triggerBudgetAlerts(organizationId);
 
 ### 3.3 Post-Deploy Smoke Test (CI Pipeline)
 
-**Source file:** `scripts/post-deploy-smoke.mjs`
+**Source file:** `scripts/platform/post-deploy-smoke.mjs`
 
 **When it runs:** Automatically after CI deployment (`deploy.yml` -> post-deploy job)
 
@@ -129,7 +129,7 @@ Risk identified → Signal generated (system) → Alert created → OPEN
 
 ### 3.5 Pilot Daily Monitor
 
-**Source file:** `scripts/pilot-daily-monitor.ts`
+**Source file:** `scripts/platform/pilot-daily-monitor.ts`
 
 **Run command:** `npm run pilot:daily`
 
@@ -147,7 +147,7 @@ Risk identified → Signal generated (system) → Alert created → OPEN
 
 ### 3.6 Audit Health Check
 
-**Source file:** `scripts/audit-health-check.ts`
+**Source file:** `scripts/platform/audit-health-check.ts`
 
 **Run command:** `npm run audit:health`
 
@@ -263,7 +263,7 @@ Run as a cron job (recommended: daily at 08:00 UTC):
 
 ```bash
 # crontab entry
-0 8 * * * cd /opt/aqliya && /usr/bin/node scripts/pilot-daily-monitor.ts >> /var/log/pilot-daily.log 2>&1
+0 8 * * * cd /opt/aqliya && /usr/bin/node scripts/platform/pilot-daily-monitor.ts >> /var/log/pilot-daily.log 2>&1
 ```
 
 ---
@@ -375,9 +375,9 @@ Run as a cron job (recommended: daily at 08:00 UTC):
 - `src/lib/ai/budget-manager.ts` — AI budget alert implementation
 - `src/lib/decision/signals-alerts.ts` — Decision risk alert lifecycle
 - `src/lib/platform/notification/` — Notification engine (in-app, email, webhook)
-- `scripts/post-deploy-smoke.mjs` — CI/CD smoke test
-- `scripts/pilot-daily-monitor.ts` — Daily pilot health report
-- `scripts/audit-health-check.ts` — AuditOS health check
+- `scripts/platform/post-deploy-smoke.mjs` — CI/CD smoke test
+- `scripts/platform/pilot-daily-monitor.ts` — Daily pilot health report
+- `scripts/platform/audit-health-check.ts` — AuditOS health check
 
 ---
 

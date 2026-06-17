@@ -22,8 +22,8 @@ Then paste `cycle6-smoke-report-stamp` output into `docs/validation/cycle-6/LIVE
 ```powershell
 $env:DATABASE_URL="<staging-connection-string>"
 $env:STAGING_BASE_URL="https://staging.aqliya.ai"
-node scripts/cycle6-operator-preflight.mjs
-node scripts/cycle6-smoke-report-stamp.mjs
+node scripts/ic/cycle6-operator-preflight.mjs
+node scripts/ic/cycle6-smoke-report-stamp.mjs
 ```
 
 Exits 0 when required env vars are present (preflight does not hit the network). Stamp prints commit/timestamp rows for `LIVE_SMOKE_REPORT.md`.

@@ -290,4 +290,4 @@ See `docs/reports/auditos-v0.1-internal-rehearsal-c5-2026-05-28.md` (Track C.5 f
 
 - Deployment guide: `docs/deployment/auditos-v0.1-deployment-guide.md`
 - Go/No-Go review: `docs/reports/auditos-v0.1-go-no-go-review-2026-05-28.md`
-- Seeded dataset details: `docs/product/auditos-demo-dataset.md` (if present)
+- Seeded dataset details: `docs/products/auditos-demo-dataset.md` (if present)

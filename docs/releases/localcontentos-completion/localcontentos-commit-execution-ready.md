@@ -28,10 +28,10 @@
 
 - `src/lib/sales/**`, `src/app/sales/**`, `src/actions/sales-actions.ts`
 - `prisma/migrations/20260601140000_*`, `20260601150000_*`, `20260601160000_*`
-- `scripts/seed-sales-demo.ts`
+- `prisma/seed-sales.ts`
 - `src/app/sales/page.tsx` (modified — SalesOS dashboard refactor)
 - `src/lib/platform/audit-logger.ts` (SalesOS product key)
-- `SOFT_LAUNCH_APPROVAL_REQUESTS.md`, `docs/operations/salesos-*`, `docs/product/salesos-*`, `docs/releases/website-soft-launch/**`
+- `SOFT_LAUNCH_APPROVAL_REQUESTS.md`, `docs/operations/salesos-*`, `docs/products/salesos-*`, `docs/releases/website-soft-launch/**`
 - `tmp-q.ts`, `tmp-query-projects.*`, `tmp-seed-smoke.*`, `tmp-write-status.mjs`
 
 ---

@@ -11,10 +11,10 @@
 | Step | Command | Pass when |
 | ---- | ------- | --------- |
 | 1 | `npm run staging:probe` | DNS + HTTP 2xx |
-| 2 | Set `DATABASE_URL`, `STAGING_BASE_URL`, `AUTH_SECRET` on staging | `node scripts/cycle6-operator-preflight.mjs` exit 0 |
+| 2 | Set `DATABASE_URL`, `STAGING_BASE_URL`, `AUTH_SECRET` on staging | `node scripts/ic/cycle6-operator-preflight.mjs` exit 0 |
 | 3 | `npx prisma migrate deploy` | No failed migrations |
 | 4 | `npm run cycle6:remote-smoke` | Evidence JSON updated |
-| 5 | `node scripts/cycle6-smoke-report-stamp.mjs` | Remote row in `LIVE_SMOKE_REPORT.md` |
+| 5 | `node scripts/ic/cycle6-smoke-report-stamp.mjs` | Remote row in `LIVE_SMOKE_REPORT.md` |
 | 6 | Director G6-7 | `cycle-6-close.md` → CLOSED |
 
 **Local substitute (engineering):** `npm run cycle6:full-run` — does **not** close program.

@@ -7,7 +7,7 @@
 
 | Track | Action | Result |
 | ----- | ------ | ------ |
-| **A — Remote** | `node scripts/staging-probe.mjs` | **DNS FAIL** — `staging.aqliya.ai` |
+| **A — Remote** | `node scripts/platform/staging-probe.mjs` | **DNS FAIL** — `staging.aqliya.ai` |
 | **A — Preflight** | `cycle6-operator-preflight.mjs` | **BLOCKED** — no `DATABASE_URL` in shell (staging host) |
 | **A — Local** | `npm run cycle6:full-run` | **PASS** @ `326c4aa` |
 | **B — Gate 4** | `npm run build` | **PASS** (~155s, webpack warnings only) |
@@ -17,7 +17,7 @@
 
 ## New artifacts
 
-- `scripts/staging-probe.mjs`
+- `scripts/platform/staging-probe.mjs`
 - `npm run staging:probe`
 - `docs/operations/parallel-tracks-runbook.md`
 

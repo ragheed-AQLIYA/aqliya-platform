@@ -124,7 +124,7 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | **Office AI Assistant** | Governed shared application         | **L4**                             | Workspace at `/assistant/*`. Task categories, document-aware responses, action logs, user review, evidence references, permission checks, audit events. Shared application, not primary product.                                                                                                                                                                                                                     |
 | **Sunbul**              | Legacy redirect alias to WorkflowOS | **N/A**                            | Routes at `/sunbul/*` are `permanentRedirect(302)` to matching `/workflowos/*` routes. No standalone components or data. Preserved for backward compatibility.                                                                                                                                                                                                                                                       |
 | **WorkflowOS**          | Governed custom/client workspace    | **L4**                             | Canonical governed workspace at `/workflowos/*`. Real CRUD, workflow states, evidence upload, audit trail, dashboard metrics, review queue, PDF export. Sunbul data models reused.                                                                                                                                                                                                                                     |
-| **SalesOS**             | Prototype / internal preview        | **L3**                             | Dashboard at `/sales`, marketing at `/products/sales`. Static dashboard only. No backend/workspace implementation.                                                                                                                                                                                                                                                                                                   |
+| **SalesOS**             | Prototype / internal preview        | **L4**                             | Workspace at `/sales/*` (27 routes). Prisma-backed CRM-lite flows, RBAC, audit trail, CRM sync admin UI. Builds and tests pass. **Not L5 pilot-ready** — internal demo only; not production CRM. |
 | **SimulationOS**        | Marketing label                     | **L1**                             | Page at `/products/simulation`. Not a standalone system.                                                                                                                                                                                                                                                                                                                                                             |
 | **LocalContactOS**      | Governed contact workspace          | **L4**                             | Workspace at `/contacts/*` (4 routes). Contact registry (name, email, phone, position, department), relations (colleague/report etc.), interactions (meeting/call/email), evidence upload, review/approval cycle, export profile, sensitivity levels, RBAC, audit trail. Arabic-first. Not full L5 (no export approval gate).                                                                                      |
 | **RiskOS**              | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -149,7 +149,7 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | `/sunbul/*`                | Sunbul legacy redirect alias to WorkflowOS | Active — redirect alias     |
 | `/contacts/*`              | LocalContactOS governed contact workspace  | Active — L4                 |
 | `/workflowos/*`            | WorkflowOS governed workspace              | Active — L4                 |
-| `/sales`                   | SalesOS prototype dashboard                | Active — L3 prototype       |
+| `/sales`                   | SalesOS workspace (internal preview)       | Active — L4 prototype       |
 | `/organizations/*`         | Generic organizations prototype            | Active — L3 prototype       |
 | `/settings/*`              | Platform diagnostics + prototype settings  | Active — L2/L4              |
 | `/monitoring`              | Platform monitoring                        | Active — L4                 |
@@ -202,9 +202,9 @@ All surfaces with active routes, server actions, database models, seed data, tes
 
 ---
 
-## 11. What Is Prototype (L3)
+## 11. What Is Prototype / Internal Preview (L3–L4)
 
-- **SalesOS** — Static dashboard only. No backend, no data persistence, no workflow.
+- **SalesOS** — L4 usable v0.1 internal preview at `/sales/*`. Real persistence and governance patterns; not L5 pilot-ready and not production CRM.
 - **Organizations surface** — Mock/internal preview only.
 - **Generic settings** — Local-state-only preview.
 

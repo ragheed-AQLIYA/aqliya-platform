@@ -1776,6 +1776,7 @@ model LocalContentProject {
   approvals       LocalContentApproval[]
   reports         LocalContentReport[]
   auditEvents     LocalContentAuditEvent[]
+  workbooks       LcWorkbook[]
 
   @@index([organizationId, createdAt])
   @@index([platformOrganizationId, createdAt])
@@ -4633,4 +4634,380 @@ model AuditRiskProcedure {
 
   @@index([assessmentId])
   @@index([organizationId, status])
+}
+
+// ─── LocalContentOS Workbook Engine ───
+// Phase 1: Workbook Population + Missing Data Collection
+// Not: Recommendation, Simulation, Benchmarking, ERP expansion
+
+model LcWorkbook {
+  id              String   @id @default(cuid())
+  projectId       String
+  project         LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title           String
+  reportingPeriod String
+  status          String   @default("draft") // draft, populated, partial, complete, exported
+  totalLines      Int      @default(0)
+  autoFilledLines Int      @default(0)
+  missingLines    Int      @default(0)
+  completionPct   Float    @default(0)
+  exportedAt      DateTime?
+  lcScore         Float?          // NEW
+  lcScoreComputedAt DateTime?     // NEW
+  createdById     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  lines          LcWorkbookLine[]
+  dataRequests   LcDataRequest[]
+
+  @@index([projectId, status])
+  @@index([projectId, createdAt])
+}
+
+model LcWorkbookLine {
+  id              String   @id @default(cuid())
+  workbookId      String
+  workbook        LcWorkbook @relation(fields: [workbookId], references: [id], onDelete: Cascade)
+  section         String   // revenue, cost_of_sales, gross_profit, supplier_spend, workforce, assets
+  code            String   // e.g. "REV-01", "COS-01"
+  name            String   // Human-readable line name
+  autoFillable    Boolean  @default(false)
+  autoFilled      Boolean  @default(false)
+  autoFillValue   Float?
+  autoFillSource  String?  // Source reference (TB account code)
+  manualValue     Float?
+  source          String   @default("tb") // tb, manual, formula
+  confidence      String   @default("high") // high, medium, low
+  evidenceRequired Boolean @default(false)
+  evidenceTypes   String?  // JSON array
+  notes           String?
+  displayOrder    Int      @default(0)
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  missingItems LcDataRequestItem[]
+
+  @@index([workbookId, section])
+  @@index([workbookId, displayOrder])
+  @@index([workbookId, autoFilled])
+  @@index([workbookId, confidence])
+}
+
+model LcDataRequest {
+  id              String   @id @default(cuid())
+  workbookId      String
+  workbook        LcWorkbook @relation(fields: [workbookId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  status          String   @default("draft") // draft, sent, partially_received, received, closed
+  sentAt          DateTime?
+  respondedAt     DateTime?
+  createdById     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items LcDataRequestItem[]
+
+  @@index([workbookId, status])
+  @@index([workbookId, createdAt])
+}
+
+model LcDataRequestItem {
+  id               String   @id @default(cuid())
+  requestId        String
+  request          LcDataRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  lineId           String?
+  line             LcWorkbookLine? @relation(fields: [lineId], references: [id], onDelete: SetNull)
+  fieldName        String   // e.g. "manualValue", "notes", "evidence_file"
+  category         String   // financial_data, evidence, classification, narrative
+  subcategory      String?
+  label            String   // Human-readable label
+  description      String?
+  evidenceRequired Boolean  @default(false)
+  evidenceTypes    String?  // JSON array
+  status           String   @default("open") // open, fulfilled, waived
+  responseValue    String?
+  responseFile     String?
+  createdById      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([requestId, category])
+  @@index([requestId, status])
+  @@index([lineId])
+}
+
+// ── LocalContentOS AI Advisor V2 ──
+
+/// Stores AI-suggested pattern changes for workbook population patterns
+/// P0 — Pattern Learning Assistant
+model LcPatternSuggestion {
+  id                  String   @id @default(cuid())
+  organizationId      String
+  workbookLineCode    String   // e.g. "COS-03", "AST-01"
+  currentPattern      String   // The existing pattern being improved
+  suggestedPattern    String   // The AI-recommended replacement
+  reasoning           String?  // Why the change is suggested
+  falsePositiveAccounts Json?  // JSON array of account codes that triggered this
+  unmatchedAccounts   Json?    // JSON array of accounts that should have matched
+  confidence          Float    @default(0) // 0-100
+  status              String   @default("pending") // pending, approved, rejected
+  reviewedById        String?
+  reviewedAt          DateTime?
+  reviewNotes         String?
+  source              String   @default("ai") // ai, manual
+  createdById         String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  /// Learning Loop metrics
+  acceptanceScore    Float?   // 0-1: how often this type of suggestion is accepted
+  successScore       Float?   // 0-1: how often accepted suggestions lead to correct matches
+  falsePositiveRate  Float?   // 0-1: FP rate of applied pattern
+  decayScore         Float    @default(1.0) // 0-1: recency-weight, decays over time
+  appliedAt          DateTime? // when the suggestion was actually applied
+  healthScore        Float?   // 0-100: composite pattern health
+
+  @@index([organizationId, status])
+  @@index([organizationId, workbookLineCode])
+  @@index([organizationId, createdAt])
+}
+
+/// Stores per-match confidence, risk level, and evidence for workbook line matches
+/// P0 — Account Explanation Engine + False Positive Reviewer
+model LcMatchReview {
+  id              String   @id @default(cuid())
+  organizationId  String
+  workbookLineId  String?
+  workbookLineCode String  // e.g. "REV-01"
+  accountCode     String   // TB account code
+  accountName     String   // TB account name
+  patternUsed     String?  // The pattern that caused the match
+  matchType       String   // code_range, pattern, formula, manual
+  confidence      Float    @default(0) // 0-100
+  riskLevel       String   @default("low") // low, medium, high
+  riskReason      String?  // Why this risk level was assigned
+  evidence        Json?    // Reasons for match (code range, pattern text, etc.)
+  isFalsePositive Boolean  @default(false)
+  status          String   @default("pending") // pending, confirmed, rejected
+  reviewedById    String?
+  reviewedAt      DateTime?
+  reviewNotes     String?
+  createdById     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([organizationId, riskLevel])
+  @@index([organizationId, status])
+  @@index([organizationId, workbookLineCode])
+  @@index([organizationId, accountCode])
+}
+
+/// Stores per-industry pattern intelligence for reducing false positives
+/// P1 — Industry Memory
+model LcIndustryPatternMemory {
+  id                String   @id @default(cuid())
+  industry          String   // construction, manufacturing, services, trading, industrial
+  workbookLineCode  String   // e.g. "AST-01"
+  pattern           String   // The pattern text
+  totalMatches      Int      @default(0)
+  correctMatches    Int      @default(0)
+  falsePositives    Int      @default(0)
+  effectivenessPct  Float    @default(0) // correct / total * 100
+  notes             String?
+  metadata          Json?
+  createdById       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([industry, workbookLineCode, pattern])
+  @@index([industry])
+  @@index([workbookLineCode])
+}
+
+/// Stores per-organization match history for decision reuse
+/// P1 — Organization Memory
+model LcOrganizationMatchMemory {
+  id                String   @id @default(cuid())
+  organizationId    String
+  workbookLineCode  String
+  accountCode       String
+  accountName       String
+  previousResult    String   // matched, rejected, overridden
+  currentPattern    String?
+  manualOverride    Boolean  @default(false)
+  overrideReason    String?
+  classification    Json?    // Arbitrary classification data
+  createdById       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([organizationId, workbookLineCode, accountCode])
+  @@index([organizationId])
+  @@index([organizationId, workbookLineCode])
+}
+
+
+// ── LocalContentOS AI Advisor V3 — AI Audit Events ──
+
+/// Captures every AI action for traceability
+/// Phase 6 — Full AI auditability
+model LcAiAuditEvent {
+  id              String   @id @default(cuid())
+  organizationId  String
+  projectId       String?
+  workbookId      String?
+  action          String   // AI_REVIEW_RUN, PATTERN_SUGGESTED, RECOMMENDATION_GENERATED, SIMULATION_RUN, etc.
+  actorId         String?
+  providerId      String?  // local, deterministic, openai, anthropic, cloud
+  modelVersion    String?  // qwen3:8b, gpt-4, etc.
+  promptVersion   String?  // prompt template version used
+  confidence      Float?   // confidence of the AI output
+  status          String   // success, partial, failed
+  inputSummary    Json?    // Summary of what was sent
+  outputSummary   Json?    // Summary of what was returned
+  warningCount    Int      @default(0)
+  durationMs      Int      @default(0)
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  @@index([organizationId, action])
+  @@index([organizationId, workbookId])
+  @@index([organizationId, createdAt])
+}
+
+/// Stores AI-generated recommendations for improving local content score
+/// Phase 2 — Recommendation Engine
+/// V3.5 — Enhanced with grounding fields (source, rationale, groundingConfidence)
+model LcRecommendation {
+  id                   String   @id @default(cuid())
+  organizationId       String
+  workbookId           String
+  category             String   // supplier_optimization, workforce_localization, asset_localization, missing_data_resolution, evidence_improvement
+  title                String   // Short human-readable title
+  description          String   // Detailed recommendation
+  impactScore          Float    // 0-100: estimated impact on local content score
+  priority             String   // critical, high, medium, low
+  estimatedValue       Float?   // Estimated score improvement if implemented
+  effort               String?  // low, medium, high
+  evidenceRefs         Json?    // References to supporting evidence
+  status               String   @default("pending") // pending, accepted, rejected, implemented
+  // V3.5 Grounding fields
+  source               String?  // industry_memory, organization_history, baseline_study, workbook_analysis, pattern_history, knowledge
+  rationale            String?  // Why this recommendation exists — grounded explanation
+  groundingConfidence  Float?   // 0-1: confidence in the evidence backing
+  reviewedById         String?
+  reviewedAt           DateTime?
+  reviewNotes          String?
+  createdById          String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([organizationId, workbookId, category])
+  @@index([organizationId, workbookId, priority])
+  @@index([organizationId, workbookId, status])
+  @@index([organizationId, source])
+}
+
+/// Stores the result of a "what-if" simulation
+/// Phase 3 — Simulation Engine
+/// V3.5 — Enhanced with drivers explainability field
+model LcSimulationResult {
+  id              String   @id @default(cuid())
+  organizationId  String
+  workbookId      String
+  scenarioType    String   // supplier, workforce, asset, mixed
+  scenarioLabel   String   // Human-readable label for the scenario
+  parameters      Json     // Scenario parameters (which lines to modify)
+  currentScore    Float?   // Current LC score before simulation
+  projectedScore  Float?   // Projected LC score after scenario
+  delta           Float?   // projectedScore - currentScore
+  confidence      Float?   // Confidence in the projection
+  assumptions     Json?    // Assumptions made during simulation
+  // V3.5 Explainability — decomposition of delta into contributing factors
+  drivers         Json?    // [{ factor: "Supplier Localization", impact: 4.2, contributionPct: 50.6 }, ...]
+  reviewedById    String?
+  reviewedAt      DateTime?
+  createdById     String?
+  createdAt       DateTime @default(now())
+
+  @@index([organizationId, workbookId, scenarioType])
+  @@index([organizationId, workbookId, createdAt])
+}
+
+/// Tracks each AI review run on a workbook
+/// Phase 1 — Auto AI Review Pipeline
+model LcAiReviewRun {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  workbookId            String
+  status                String   @default("in_progress") // in_progress, completed, failed
+  explanationsGenerated Int      @default(0)
+  patternSuggestions    Int      @default(0)
+  falsePositives        Int      @default(0)
+  confidenceCalibrated  Boolean  @default(false)
+  recommendationsGenerated Int  @default(0)
+  errorMessage          String?
+  startedAt             DateTime @default(now())
+  completedAt           DateTime?
+  createdById           String?
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId, workbookId])
+  @@index([organizationId, workbookId, status])
+  @@index([organizationId, createdAt])
+}
+
+/// Stores pattern health snapshots for the learning loop
+/// Phase 4 — Learning Loop
+model LcPatternHealthRecord {
+  id                String   @id @default(cuid())
+  organizationId    String
+  workbookLineCode  String
+  pattern           String
+  healthScore       Float    // 0-100
+  acceptanceRate    Float?   // 0-1
+  successRate       Float?   // 0-1
+  falsePositiveRate Float?   // 0-1
+  decayScore        Float    @default(1.0)
+  totalSuggestions  Int      @default(0)
+  totalAccepted     Int      @default(0)
+  totalSuccessful   Int      @default(0)
+  lastSuggestedAt   DateTime?
+  lastAppliedAt     DateTime?
+  status            String   @default("active") // active, decaying, obsolete, high_performing
+  notes             String?
+  metadata          Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([organizationId, workbookLineCode])
+  @@index([organizationId, healthScore])
+  @@index([organizationId, status])
+  @@index([organizationId, workbookLineCode, status])
+}
+
+/// Tracks actual outcomes of implemented recommendations
+/// Phase 4 — Recommendation Feedback Loop (V3.5)
+/// Records whether the predicted impact was realized
+model LcRecommendationOutcome {
+  id                  String   @id @default(cuid())
+  organizationId      String
+  recommendationId    String
+  workbookId          String
+  scoreBefore         Float?   // LC score before implementation
+  scoreAfter          Float?   // LC score after implementation
+  realizedDelta       Float?   // Actual score change
+  expectedDelta       Float?   // What was predicted
+  accuracyScore       Float?   // 0-1: how accurate the prediction was (1 = perfect)
+  timeToImplement     Int?     // Days from accepted to implemented
+  notes               String?
+  createdById         String?
+  createdAt           DateTime @default(now())
+
+  @@index([organizationId, recommendationId])
+  @@index([organizationId, workbookId])
+  @@index([organizationId, accuracyScore])
 }

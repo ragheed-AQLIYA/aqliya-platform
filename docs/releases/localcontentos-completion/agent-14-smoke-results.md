@@ -193,7 +193,7 @@ Program level after reconciliation: **L5 with conditions — NOT L6**. See `loca
 |------|--------|----------|
 | 1 Command center | **PASS** | Browser `/local-content` |
 | 2 Project + campaign | **PASS** | Campaign `cmpuhodmc0000popq7524zwlc` |
-| 3 Source + item | **PASS** | `scripts/_l6-smoke-worker2.ts setup` → source `csrc_mpulibib_su7s4gp`, item `citem_mpulibpz_eb760wn` |
+| 3 Source + item | **PASS** | `scripts/archived/_l6-smoke-worker2.ts setup` → source `csrc_mpulibib_su7s4gp`, item `citem_mpulibpz_eb760wn` |
 | 4 Draft assist | **PASS** | Item body + `aiGenerated=true` |
 | 5 Review + approve | **PASS** | Browser: 5 dimension checkboxes + **تسجيل مراجعة** (`completeContentStudioReviewAction`) → `ContentStudioReview` `crev_mpulmiwi_nzagcrh` (all dimensions true, governance `localcontentos`); ADMIN approve → `ContentStudioApproval` `cappr_mpulobgg_kmya6z1`, item `approved` |
 | 6 Output export | **PASS** | Browser: **L6 Smoke Step 6 Pack** create + **تصدير (ADMIN)** → **مُصدّر** |

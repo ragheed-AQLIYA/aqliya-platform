@@ -61,7 +61,7 @@ Same as staging with additional gates:
 | Change window | Approved maintenance window |
 | Rollback plan | App rollback + migrations are forward-only; deprecate patterns instead of delete |
 | No mass backfill | Run backfill only for approved pilot engagements |
-| Post-deploy | `scripts/post-deploy-smoke.mjs` + mapping page manual check |
+| Post-deploy | `scripts/platform/post-deploy-smoke.mjs` + mapping page manual check |
 | Monitoring | Watch AuditOS mapping errors in Sentry/CloudWatch |
 
 ---
@@ -94,7 +94,7 @@ Optional:
 | ------- | ------------------------------- |
 | `npm run phase-3c:validate` | 100% memory-only accuracy |
 | `npm run phase-3d:validate-governance` | 0 TRUSTED, 0 auto-suggest, all CONFIRMED |
-| `node scripts/tb-memory-reuse-rate.mjs` | Baseline KPI artifact |
+| `node scripts/audit/tb-memory-reuse-rate.mjs` | Baseline KPI artifact |
 
 ---
 

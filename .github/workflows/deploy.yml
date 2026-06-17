@@ -178,4 +178,4 @@ jobs:
           AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
           GIT_SHA: ${{ github.sha }}
           NODE_ENV: production
-        run: node scripts/post-deploy-smoke.mjs --base-url "$BASE_URL"
+        run: node scripts/platform/post-deploy-smoke.mjs --base-url "$BASE_URL"

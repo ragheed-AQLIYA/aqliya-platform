@@ -105,7 +105,7 @@ jobs:
         run: sleep 60
 
       - name: Run Smoke Test
-        run: node scripts/post-deploy-smoke.mjs --base-url https://aqliya.com
+        run: node scripts/platform/post-deploy-smoke.mjs --base-url https://aqliya.com
         env:
           AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
 

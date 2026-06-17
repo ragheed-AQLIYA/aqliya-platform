@@ -69,7 +69,7 @@ The selected scope delivers a **complete, coherent story** that demonstrates the
 
 5. **Immediate tangible output** — The demo produces a published recommendation with full evidence trace and an immutable audit trail. This gives stakeholders something concrete to evaluate.
 
-6. **`docs/product/auditos-mvp-prd.md` §17 defines pilot success metrics** — The prototype directly supports measurement of review time reduction, evidence gap detection, mapping accuracy, finding trace completeness, and governance confidence. Every metric has a corresponding prototype module.
+6. **`docs/products/auditos-mvp-prd.md` §17 defines pilot success metrics** — The prototype directly supports measurement of review time reduction, evidence gap detection, mapping accuracy, finding trace completeness, and governance confidence. Every metric has a corresponding prototype module.
 
 ---
 

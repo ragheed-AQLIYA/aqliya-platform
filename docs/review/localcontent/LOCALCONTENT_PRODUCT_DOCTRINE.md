@@ -21,7 +21,7 @@
 |--------|---------|--------|
 | Export disclaimers | "هذا ليس تقرير امتثال نظامي معتمد من جهة تنظيمية" — explicitly disclaims regulatory certification | `src/lib/local-content/export.ts` lines 28-33 |
 | Scoring engine | Proprietary composite weights (locality 40 + ownership 25 + workforce 20 + declaredContent 15), NOT the official LCGPA 4-component formula | `src/lib/local-content/scoring.ts` lines 15-20 |
-| Original product definition | "NOT a regulatory submission system" and "NOT an official local content calculation engine with binding legal formulas" | `docs/product/localcontentos-discovery-pack/product-definition.md` lines 44-49 |
+| Original product definition | "NOT a regulatory submission system" and "NOT an official local content calculation engine with binding legal formulas" | `docs/products/localcontentos-discovery-pack/product-definition.md` lines 44-49 |
 | Product taxonomy | Classified as "Specialized Operating System" — a capability on the AQLIYA platform, not a compliance product | `docs/official/aqliya-product-taxonomy-v1.1.md` line 29 |
 | What exists in code | Supplier classification, spend analytics, evidence management, review/approval workflows, readiness checklist — NOT an LCGPA certificate generator | `prisma/schema.prisma` lines 1751-1997, `src/lib/local-content/services.ts` |
 
@@ -52,10 +52,10 @@
 **Evidence from discovery pack:**
 > ICP segments: Large Saudi private companies, Government suppliers, Semi-government contractors, Procurement-heavy companies, Companies with local content obligations
 > Buyers: CFO, Procurement Director, Local Content Manager, Compliance Officer
-> Source: `docs/product/localcontentos-discovery-pack/icp-and-use-cases.md`
+> Source: `docs/products/localcontentos-discovery-pack/icp-and-use-cases.md`
 
 > "LocalContentOS is an internal governance system that helps you prepare evidence-backed reports. Direct regulatory integration is a future possibility, not a current feature."
-> Source: `docs/product/localcontentos-discovery-pack/commercial-positioning.md` line 104
+> Source: `docs/products/localcontentos-discovery-pack/commercial-positioning.md` line 104
 
 ---
 

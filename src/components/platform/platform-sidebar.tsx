@@ -20,6 +20,7 @@ import {
   Bot,
   Globe,
   FileText,
+  FileSpreadsheet,
   FolderKanban,
   BarChart3,
 } from "lucide-react";
@@ -288,6 +289,12 @@ const localContentNav = [
     nameAr: "المشاريع",
     href: "/local-content/projects",
     icon: Globe,
+  },
+  {
+    name: "Workbook Engine",
+    nameAr: "محرك الدفتر",
+    href: "/local-content/workbook",
+    icon: FileSpreadsheet,
   },
   {
     name: "Platform Organization",

@@ -41,7 +41,7 @@ Previously, the name "Sunbul" was incorrectly used for the WorkflowOS product. T
 Within WorkflowOS, Sunbul operates through product-level clients (SunbulClient records). Each client represents an internal unit or case type with isolated data.
 
 Pilot clients:
-- `sunbul-pilot-client` — created by `scripts/seed-sunbul-pilot.ts`
+- `sunbul-pilot-client` — created by `scripts/workflowos/seed-sunbul-pilot.ts`
 
 ---
 
@@ -61,5 +61,5 @@ Pilot clients:
 npx tsx prisma/seed.ts
 
 # Seed Sunbul as organization reference
-npx tsx scripts/seed-sunbul-organization.ts
+npx tsx scripts/workflowos/seed-sunbul-organization.ts
 ```

@@ -1,4 +1,4 @@
-﻿# LocalContentOS — Follow-up Docs Commit Pack (Post-B4)
+# LocalContentOS — Follow-up Docs Commit Pack (Post-B4)
 
 **Date:** 2026-06-01  
 **Status:** AWAITING USER APPROVAL — **DO NOT RUN** until user explicitly requests commit  
@@ -52,7 +52,7 @@
 
 - All SalesOS WIP (`src/lib/sales/**`, `src/app/sales/**`, sales migrations, `prisma/seed.ts`)
 - `prisma/schema.prisma`, `src/lib/platform/audit-logger.ts`, `src/app/sales/page.tsx`
-- `SOFT_LAUNCH_APPROVAL_REQUESTS.md`, `docs/operations/salesos-*`, `docs/product/salesos-*`, `docs/releases/website-soft-launch/**`
+- `SOFT_LAUNCH_APPROVAL_REQUESTS.md`, `docs/operations/salesos-*`, `docs/products/salesos-*`, `docs/releases/website-soft-launch/**`
 - `tmp-*` scratch files
 
 ---

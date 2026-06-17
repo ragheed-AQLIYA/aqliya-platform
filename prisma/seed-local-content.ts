@@ -795,6 +795,96 @@ async function main() {
   ]);
   console.log(`  Audit events: ${auditEvents.length}`);
 
+  // ─── Workbook Seed ───
+  console.log("\nSeeding Workbook Engine demo data...");
+
+  // Clean existing workbook data
+  await prisma.lcDataRequestItem.deleteMany();
+  await prisma.lcDataRequest.deleteMany();
+  await prisma.lcWorkbookLine.deleteMany();
+  await prisma.lcWorkbook.deleteMany();
+
+  const workbook = await prisma.lcWorkbook.create({
+    data: {
+      projectId: project.id,
+      title: `Workbook - ${project.name} (${project.reportingPeriod})`,
+      reportingPeriod: project.reportingPeriod,
+      status: "partial",
+      totalLines: 23,
+      autoFilledLines: 8,
+      missingLines: 15,
+      completionPct: 35,
+    },
+  });
+
+  const workbookLines = [
+    // Company info (not auto-fillable)
+    { code: "INF-01", name: "اسم المنشأة / Company Name", section: "company_info", autoFillable: false, autoFilled: false, displayOrder: 10, evidenceRequired: true, evidenceTypes: '["registration","commercial_registration"]' },
+    { code: "INF-02", name: "السجل التجاري / CR Number", section: "company_info", autoFillable: false, autoFilled: false, displayOrder: 20, evidenceRequired: true, evidenceTypes: '["registration"]' },
+    { code: "INF-03", name: "تاريخ التأسيس / Date of Incorporation", section: "company_info", autoFillable: false, autoFilled: false, displayOrder: 30, evidenceRequired: true, evidenceTypes: '["registration"]' },
+    // Revenue (auto-filled from TB)
+    { code: "REV-01", name: "إيرادات العملاء المحليين / Local Customer Revenue", section: "revenue", autoFillable: true, autoFilled: true, autoFillValue: 12500000, autoFillSource: "tb:local_sales", displayOrder: 100, source: "tb", confidence: "medium" },
+    { code: "REV-02", name: "إيرادات العملاء الأجانب / Foreign Customer Revenue", section: "revenue", autoFillable: true, autoFilled: true, autoFillValue: 3400000, autoFillSource: "tb:foreign_sales", displayOrder: 110, source: "tb", confidence: "medium" },
+    { code: "REV-03", name: "إجمالي الإيرادات / Total Revenue", section: "revenue", autoFillable: true, autoFilled: true, autoFillValue: 15900000, autoFillSource: "tb:total_revenue", displayOrder: 120, source: "tb", confidence: "high" },
+    // Cost of sales
+    { code: "COS-01", name: "تكلفة المبيعات من موردين محليين / Local Supplier COS", section: "cost_of_sales", autoFillable: true, autoFilled: true, autoFillValue: 5200000, autoFillSource: "tb:local_cos", displayOrder: 200, source: "tb", confidence: "medium" },
+    { code: "COS-02", name: "تكلفة المبيعات من موردين أجانب / Foreign Supplier COS", section: "cost_of_sales", autoFillable: true, autoFilled: true, autoFillValue: 2800000, autoFillSource: "tb:foreign_cos", displayOrder: 210, source: "tb", confidence: "medium" },
+    { code: "COS-03", name: "إجمالي تكلفة المبيعات / Total Cost of Sales", section: "cost_of_sales", autoFillable: true, autoFilled: true, autoFillValue: 8000000, autoFillSource: "tb:total_cos", displayOrder: 220, source: "tb", confidence: "high" },
+    // Gross profit
+    { code: "GP-01", name: "إجمالي الربح / Gross Profit", section: "gross_profit", autoFillable: true, autoFilled: true, autoFillValue: 7900000, autoFillSource: "tb:gross_profit", displayOrder: 300, source: "tb", confidence: "high" },
+    // Supplier spend (partially empty)
+    // Note: SPN-01/SPN-03 are monetary amounts (SAR) for the scoring engine ratio
+    { code: "SPN-01", name: "إجمالي المشتريات من موردين سعوديين / Saudi Supplier Spend", section: "supplier_spend", autoFillable: true, autoFilled: false, manualValue: 18000000, displayOrder: 400, source: "tb", confidence: "low", evidenceRequired: true, evidenceTypes: '["invoice","contract"]' },
+    { code: "SPN-02", name: "إجمالي المشتريات من موردين غير سعوديين / Non-Saudi Supplier Spend", section: "supplier_spend", autoFillable: true, autoFilled: false, manualValue: 7000000, displayOrder: 410, source: "tb", confidence: "low", evidenceRequired: true, evidenceTypes: '["invoice","contract"]' },
+    { code: "SPN-03", name: "إجمالي المشتريات / Total Procurement Spend", section: "supplier_spend", autoFillable: true, autoFilled: false, manualValue: 25000000, displayOrder: 420, source: "tb", confidence: "low" },
+    // Workforce (manual only)
+    { code: "WRK-01", name: "عدد الموظفين السعوديين / Saudi Workforce Count", section: "workforce", autoFillable: false, autoFilled: false, manualValue: 85, displayOrder: 500, evidenceRequired: true, evidenceTypes: '["gosi_certificate","payroll"]' },
+    // WRK-02 headcount: 85 Saudi + ~18 non-Saudi = ~103 total → 100
+    { code: "WRK-02", name: "إجمالي عدد الموظفين / Total Workforce Count", section: "workforce", autoFillable: false, autoFilled: false, manualValue: 100, displayOrder: 510, evidenceRequired: true, evidenceTypes: '["gosi_certificate","payroll"]' },
+    { code: "WRK-03", name: "نسبة التوطين / Saudization Percentage", section: "workforce", autoFillable: false, autoFilled: false, manualValue: 3, displayOrder: 520 },
+    { code: "WRK-04", name: "إجمالي الرواتب / Total Payroll", section: "workforce", autoFillable: true, autoFilled: true, autoFillValue: 3600000, autoFillSource: "tb:payroll", displayOrder: 530, source: "tb", confidence: "high" },
+    // Assets (partially filled)
+    // AST-01: 30% local content = 4.5M SAR of 15M total
+    { code: "AST-01", name: "الأصول الثابتة المحلية / Local Fixed Assets", section: "assets", autoFillable: true, autoFilled: false, manualValue: 4500000, displayOrder: 600, evidenceRequired: true, evidenceTypes: '["asset_register","invoice"]' },
+    { code: "AST-02", name: "إجمالي الأصول الثابتة / Total Fixed Assets", section: "assets", autoFillable: true, autoFilled: true, autoFillValue: 15000000, autoFillSource: "tb:fixed_assets", displayOrder: 610, source: "tb", confidence: "high" },
+    // Declarations (all empty)
+    { code: "DEC-01", name: "حالة شهادة المحتوى المحلي / LC Certificate Status", section: "declarations", autoFillable: false, autoFilled: false, manualValue: 3, displayOrder: 700, evidenceRequired: true, evidenceTypes: '["certificate"]' },
+    { code: "DEC-02", name: "نسبة المحتوى المحلي المعلنة / Declared LC Percentage", section: "declarations", autoFillable: false, autoFilled: false, manualValue: 55, displayOrder: 710, evidenceRequired: true, evidenceTypes: '["certificate"]' },
+    { code: "DEC-03", name: "ملاحظات إضافية / Additional Notes", section: "declarations", autoFillable: false, autoFilled: false, manualValue: 4, displayOrder: 800 },
+  ];
+
+  for (const line of workbookLines) {
+    await prisma.lcWorkbookLine.create({
+      data: {
+        workbookId: workbook.id,
+        ...line,
+      },
+    });
+  }
+
+  console.log(`  Workbook: ${workbook.id}`);
+  console.log(`  Lines: ${workbookLines.length}`);
+
+  // ─── Pipeline Orchestrator ───
+  console.log("\nRunning LocalContent pipeline orchestrator...");
+  try {
+    const { runLocalContentPipeline, formatPipelineSummary } = await import(
+      "../src/lib/local-content/pipeline-orchestrator"
+    );
+    const pipelineResult = await runLocalContentPipeline(
+      adminUser.organizationId,
+      project.id,
+      workbook.id,
+    );
+    console.log(formatPipelineSummary(pipelineResult));
+    console.log(`  Pipeline: ${pipelineResult.status} (${(pipelineResult.totalDurationMs / 1000).toFixed(1)}s)`);
+  } catch (pipelineErr) {
+    console.warn(
+      `[Seed] Pipeline orchestrator warning: ${pipelineErr instanceof Error ? pipelineErr.message : "unknown"}`,
+    );
+    console.warn("[Seed] Seed data is still complete — pipeline can be re-run manually.");
+  }
+
   console.log("\nLocalContentOS seed complete.");
 }
 

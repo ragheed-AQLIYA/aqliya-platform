@@ -19,7 +19,7 @@ $env:FF_AI_REAL_PROVIDERS = "true"   # required for live row; use deterministic 
 
 | Check | Command |
 | ----- | ------- |
-| Preflight (no network) | `node scripts/cycle6-operator-preflight.mjs` |
+| Preflight (no network) | `node scripts/ic/cycle6-operator-preflight.mjs` |
 | DNS / health | `curl -fsS "$env:STAGING_BASE_URL/api/health"` |
 
 If preflight warns `localhost:5435` — you are still on **proxy**; Cycle 6 will not close.
@@ -62,7 +62,7 @@ Runs (in order): migrate deploy → verify pgvector → `ic:smoke:cycle5:live` �
 ## 4. Evidence capture
 
 ```powershell
-node scripts/cycle6-smoke-report-stamp.mjs
+node scripts/ic/cycle6-smoke-report-stamp.mjs
 ```
 
 Paste output into `docs/validation/cycle-6/LIVE_SMOKE_REPORT.md`:

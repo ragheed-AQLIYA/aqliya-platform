@@ -128,7 +128,7 @@ function toClassificationResult(
       trustedForAutoSuggest: governance.trustedForAutoSuggest,
       hitCount: pattern.hitCount,
       reviewerCount: governance.reviewerCount,
-      lastUsedAt: pattern.lastUsedAt.toISOString(),
+      lastUsedAt: pattern.lastUsedAt?.toISOString() ?? new Date(0).toISOString(),
       lastConfirmedAt: pattern.lastConfirmedAt?.toISOString(),
     },
   };

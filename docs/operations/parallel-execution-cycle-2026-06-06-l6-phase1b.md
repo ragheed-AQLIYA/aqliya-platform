@@ -9,7 +9,7 @@
 
 | ID | Item | Result |
 | --- | --- | --- |
-| B1 | `scripts/verify-pgvector-staging.ts` — `pg` client, no `server-only` | PASS on `localhost:5434/aqliya_pilot` |
+| B1 | `scripts/platform/verify-pgvector-staging.ts` — `pg` client, no `server-only` | PASS on `localhost:5434/aqliya_pilot` |
 | B2 | `.github/workflows/deploy.yml` — ECR `id: login-ecr`, explicit image push | Fixed |
 | B3 | `.github/workflows/promote.yml` — ECR login, registry env, rollback `needs: smoke-test` | Fixed |
 | B4 | `.github/workflows/backup.yml` | Staged for commit (scheduled backup + verify) |

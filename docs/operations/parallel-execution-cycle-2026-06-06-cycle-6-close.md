@@ -7,7 +7,7 @@
 **Operator packet:** `docs/operations/cycle-6-remote-operator-packet.md`  
 **Blockers:** `docs/validation/cycle-6/CERTIFICATION_BLOCKERS.md`
 
-**Post–Phase 3 operator note:** Before remote G6-2, run `npx prisma migrate deploy` on staging (through `20260608000002`). Stamp commit with `node scripts/cycle6-smoke-report-stamp.mjs`.
+**Post–Phase 3 operator note:** Before remote G6-2, run `npx prisma migrate deploy` on staging (through `20260608000002`). Stamp commit with `node scripts/ic/cycle6-smoke-report-stamp.mjs`.
 
 ---
 

@@ -10,7 +10,8 @@ export type GovernanceTaskType =
   | 'pilot_decision'
   | 'approval_review'
   | 'disclosure_enrichment'
-  | 'skill_execution';
+  | 'skill_execution'
+  | 'pattern_improvement';
 
 // ===== Core Governance Types =====
 

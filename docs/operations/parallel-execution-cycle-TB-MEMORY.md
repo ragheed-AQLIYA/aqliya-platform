@@ -119,19 +119,19 @@
    - Assert auto-suggest eligible = 0 until hit/reviewer thresholds met
    - Output JSON to `docs/audits/evidence/phase-3d-governance-validation.json`
 2. **Integration test:** confirm mapping → `recordFirmMemoryFeedback` → lookup returns same Map1/Map2 (mock or test DB)
-3. **Reuse rate KPI script** (scaffold): `scripts/tb-memory-reuse-rate.mjs` — formula: `memory_hits / total_classifications` per engagement
+3. **Reuse rate KPI script** (scaffold): `scripts/audit/tb-memory-reuse-rate.mjs` — formula: `memory_hits / total_classifications` per engagement
 
 **Files (planned):**
 
-- `scripts/phase-3d-validate-governance.mjs`
+- `scripts/audit/phase-3d-validate-governance.mjs`
 - `package.json` (script entry)
 - `src/lib/tb-intelligence/__tests__/firm-memory-integration.test.ts` (or extend governance test)
 - `docs/audits/PHASE_3D_GOVERNANCE_VALIDATION.md`
 
 **Files (actual):**
 
-- `scripts/phase-3d-validate-governance.ts`
-- `scripts/tb-memory-reuse-rate.mjs`
+- `scripts/audit/phase-3d-validate-governance.ts`
+- `scripts/audit/tb-memory-reuse-rate.mjs`
 - `package.json`
 - `src/lib/tb-intelligence/__tests__/firm-memory-lifecycle.test.ts`
 
@@ -229,7 +229,7 @@
 
 | Step | Agent | Deliverable | Validation |
 | ---- | ----- | ----------- | ---------- |
-| 1 | Agent-QA | Scripts + tests + evidence doc | `npm test -- firm-memory`, `node scripts/phase-3d-validate-governance.mjs` |
+| 1 | Agent-QA | Scripts + tests + evidence doc | `npm test -- firm-memory`, `node scripts/audit/phase-3d-validate-governance.mjs` |
 | 2 | Agent-Platform | Runbook + client-2 checklist | Doc review |
 | 3 | Director | Mapping API + governance fields | `npx tsc --noEmit` |
 | 4 | Agent-AuditOS | Mapping UI badges | Manual smoke on `/audit/.../mapping` |
@@ -242,8 +242,8 @@
 ## Files Modified (Cycle 1 — planned)
 
 ```
-scripts/phase-3d-validate-governance.mjs
-scripts/tb-memory-reuse-rate.mjs
+scripts/audit/phase-3d-validate-governance.mjs
+scripts/audit/tb-memory-reuse-rate.mjs
 package.json
 src/lib/tb-intelligence/__tests__/firm-memory-integration.test.ts
 docs/audits/PHASE_3D_GOVERNANCE_VALIDATION.md

@@ -1,4 +1,4 @@
-﻿# Cycle 6 Close Readiness
+# Cycle 6 Close Readiness
 
 **Status:** PREPARED (waiting on remote staging access)
 **Date:** 2026-06-08
@@ -67,7 +67,7 @@ npm run cycle6:remote-smoke
 ### Phase 3: Evidence Collection
 `ash
 # 7. Generate stamp
-node scripts/cycle6-smoke-report-stamp.mjs
+node scripts/ic/cycle6-smoke-report-stamp.mjs
 
 # 8. Fill live smoke report
 # Edit docs/validation/cycle-6/LIVE_SMOKE_REPORT.md

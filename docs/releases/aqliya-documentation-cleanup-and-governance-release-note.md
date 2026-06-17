@@ -41,7 +41,7 @@ This release establishes the current documentation governance baseline and proje
 - `docs/DOCUMENTATION_CONFLICT_REPORT.md` tracks known conflicts.
 - Active docs no longer contain `Mind The Future`.
 - `Mind The Future` remains only in historical archive docs if present.
-- `docs/product/auditos-commercial-master-index.md` is the AuditOS commercial navigation entrypoint.
+- `docs/products/auditos-commercial-master-index.md` is the AuditOS commercial navigation entrypoint.
 - `docs/systems/decisionos/README.md` indexes DecisionOS system docs.
 - `docs/systems/auditos/README.md` links to the AuditOS operator manual.
 - GovernanceOS is treated as governance-layer concept/future direction, not current standalone production product.

@@ -59,6 +59,21 @@ const nextConfig = {
         destination: "/procurement-pack",
         permanent: true,
       },
+      {
+        source: "/decision",
+        destination: "/decisions",
+        permanent: true,
+      },
+      {
+        source: "/decision/gov",
+        destination: "/decisions/gov",
+        permanent: true,
+      },
+      {
+        source: "/decision/gov/:path*",
+        destination: "/decisions/gov/:path*",
+        permanent: true,
+      },
     ]
   },
 

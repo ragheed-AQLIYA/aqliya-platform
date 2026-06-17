@@ -1,7 +1,7 @@
 {
   "phase": "0",
-  "startedAt": "2026-06-14T12:16:06.409Z",
-  "finishedAt": "2026-06-14T12:16:20.473Z",
+  "startedAt": "2026-06-16T23:30:09.277Z",
+  "finishedAt": "2026-06-16T23:30:30.118Z",
   "pass": true,
   "env": {
     "FF_AI_REAL_PROVIDERS": "true",
@@ -13,8 +13,8 @@
   "providerSelected": "local",
   "modelUsed": "ollama/qwen3:8b",
   "latencyMs": {
-    "directLocalProvider": 2458,
-    "runInference": 11562
+    "directLocalProvider": 9672,
+    "runInference": 11115
   },
   "checks": [
     {
@@ -59,7 +59,7 @@
         "providerId": "local",
         "healthy": true,
         "circuitOpen": false,
-        "lastCheck": "2026-06-14T12:16:06.441Z"
+        "lastCheck": "2026-06-16T23:30:09.309Z"
       }
     },
     {
@@ -106,7 +106,7 @@
       "detail": {
         "model": "ollama/qwen3:8b",
         "provider": "local",
-        "latencyMs": 2458,
+        "latencyMs": 9672,
         "preview": "AQLIYA_LOCAL_OK"
       }
     },
@@ -117,8 +117,8 @@
         "providerId": "local",
         "modelVersion": "ollama/qwen3:8b",
         "runtimeMode": "hybrid",
-        "latencyMs": 11562,
-        "preview": "**Draft Output: Account Mapping Task**  \n**Status:** `draft`  \n**Escalation Triggers:** None triggered (no low-confidenc"
+        "latencyMs": 11115,
+        "preview": "**Account Mapping Task Draft**  \n**Status:** DRAFT (requires human approval)  \n\n**Account Details:**  \n- **Unmapped Acco"
       }
     }
   ]

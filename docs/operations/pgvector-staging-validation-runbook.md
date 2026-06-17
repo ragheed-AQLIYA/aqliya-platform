@@ -36,7 +36,7 @@
 ### 1.3 Artifacts to have ready
 
 - `prisma/migrations/20260605000001_ic01_pgvector_document_chunk/` — migration SQL (canonical source)
-- `scripts/verify-pgvector-staging.ts` — verification script (requires `tsx`)
+- `scripts/platform/verify-pgvector-staging.ts` — verification script (requires `tsx`)
 - `prisma/schema.prisma` — Prisma schema with `DocumentChunk` model (for `prisma generate`)
 
 ### 1.4 Required tooling on staging host
@@ -212,7 +212,7 @@ Expected:
 ```bash
 # From the application repository root (any host with DB access)
 DATABASE_URL="postgresql://postgres:<password>@<host>:5432/aqliya_pilot?schema=public" \
-  npx tsx scripts/verify-pgvector-staging.ts
+  npx tsx scripts/platform/verify-pgvector-staging.ts
 ```
 
 **Expected output:**
@@ -278,7 +278,7 @@ Expected: JSON health response with all key checks `ok`.
 
 ```bash
 DATABASE_URL="postgresql://postgres:<password>@<host>:5432/aqliya_pilot?schema=public" \
-  npx tsx scripts/ic-cycle5-smoke.ts
+  npx tsx scripts/ic/ic-cycle5-smoke.ts
 ```
 
 Expected output: All smoke checks pass.
@@ -298,7 +298,7 @@ Expected output: All smoke checks pass.
 | Table | `information_schema.tables` shows DocumentChunk | ✅ |
 | Column | `udt_name = 'vector'` for embedding column | ✅ |
 | Index | HNSW index present | ✅ |
-| Verify script | `scripts/verify-pgvector-staging.ts` exits 0 with `{tableExists: true, pgvector: true}` | ✅ |
+| Verify script | `scripts/platform/verify-pgvector-staging.ts` exits 0 with `{tableExists: true, pgvector: true}` | ✅ |
 | Health API | `GET /api/health` returns 200 | ✅ |
 | Rollback tested | Rollback procedure documented and verified | ✅ |
 
@@ -360,7 +360,7 @@ npx prisma generate
 ### 6.4 Verify rollback
 
 ```bash
-npx tsx scripts/verify-pgvector-staging.ts
+npx tsx scripts/platform/verify-pgvector-staging.ts
 ```
 
 Expected:
@@ -573,7 +573,7 @@ psql "$DATABASE_URL" -c 'DROP TABLE IF EXISTS "DocumentChunk" CASCADE;'
 npx prisma migrate resolve --rolled-back 20260605000001_ic01_pgvector_document_chunk
 
 # 4. Verify
-npx tsx scripts/verify-pgvector-staging.ts
+npx tsx scripts/platform/verify-pgvector-staging.ts
 
 # 5. Document reason for rollback
 ```
@@ -611,7 +611,7 @@ Add to staging deployment pipeline:
     DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
 
 - name: Verify pgvector staging
-  run: npx tsx scripts/verify-pgvector-staging.ts
+  run: npx tsx scripts/platform/verify-pgvector-staging.ts
   env:
     DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
 ```

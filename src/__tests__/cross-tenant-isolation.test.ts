@@ -505,8 +505,8 @@ describe("L0-07: Cross-Tenant Isolation", () => {
     })
   })
 
-  describe("6. CoreAccessControl stub", () => {
-    it("grants at core layer; tenant RBAC is enforced in server-action-guard", async () => {
+  describe("6. CoreAccessControl deny-by-default", () => {
+    it("denies at core layer when role is missing", async () => {
       const { CoreAccessControl } = await import(
         "@/core/access/access-control"
       )
@@ -517,6 +517,23 @@ describe("L0-07: Cross-Tenant Isolation", () => {
           organizationId: "org-a",
           resource: "sales",
           action: "read",
+          role: null,
+        }),
+      ).resolves.toMatchObject({ decision: "denied" })
+    })
+
+    it("grants when role satisfies action minimum", async () => {
+      const { CoreAccessControl } = await import(
+        "@/core/access/access-control"
+      )
+      const ctrl = new CoreAccessControl()
+      await expect(
+        ctrl.check({
+          userId: "u1",
+          organizationId: "org-a",
+          resource: "sales",
+          action: "read",
+          role: "VIEWER",
         }),
       ).resolves.toEqual({ decision: "granted" })
     })

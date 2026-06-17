@@ -19,6 +19,7 @@ async function attachUserToToken(
       name: true,
       role: true,
       organizationId: true,
+      mfaEnabled: true,
       organization: {
         select: { id: true, name: true, platformOrganizationId: true },
       },
@@ -33,6 +34,7 @@ async function attachUserToToken(
   token.organization = dbUser.organization;
   token.platformOrganizationId =
     dbUser.organization?.platformOrganizationId ?? undefined;
+  token.mfaEnabled = dbUser.mfaEnabled ?? false;
 }
 
 export const authConfig: NextAuthConfig = {
@@ -60,6 +62,7 @@ export const authConfig: NextAuthConfig = {
             name: true,
             role: true,
             passwordHash: true,
+            mfaEnabled: true,
             organizationId: true,
             organization: {
               select: { id: true, name: true, platformOrganizationId: true },
@@ -81,6 +84,7 @@ export const authConfig: NextAuthConfig = {
           email: user.email,
           name: user.name,
           role: user.role,
+          mfaEnabled: user.mfaEnabled,
           organizationId: user.organizationId,
           organization: user.organization,
           platformOrganizationId:
@@ -91,7 +95,7 @@ export const authConfig: NextAuthConfig = {
     ...getEnvOAuthProviders(),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
       if (user) {
         const u = user as Record<string, unknown>;
         if (u.organizationId) {
@@ -102,11 +106,14 @@ export const authConfig: NextAuthConfig = {
           token.organizationId = u.organizationId;
           token.organization = u.organization;
           token.platformOrganizationId = u.platformOrganizationId;
+          token.mfaEnabled = (u.mfaEnabled as boolean | undefined) ?? false;
+          token.mfaVerified = false;
         } else if (user.email) {
           await attachUserToToken(
             token as Record<string, unknown>,
             user.email,
           );
+          token.mfaVerified = false;
         }
       } else if (account && token.email) {
         await attachUserToToken(
@@ -114,6 +121,17 @@ export const authConfig: NextAuthConfig = {
           token.email as string,
         );
       }
+
+      if (trigger === "update" && session) {
+        const sessionPatch = session as Record<string, unknown>;
+        if (sessionPatch.mfaVerified === true) {
+          token.mfaVerified = true;
+        }
+        if (typeof sessionPatch.mfaEnabled === "boolean") {
+          token.mfaEnabled = sessionPatch.mfaEnabled;
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {

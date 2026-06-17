@@ -12,7 +12,7 @@
 
 | Step | English | العربية |
 |------|---------|---------|
-| 1 | From repo root, start dev against pilot DB `aqliya_lc_pilot`: `npm run dev:localcontent-pilot` **or** `powershell -ExecutionPolicy Bypass -File scripts/run-localcontent-pilot.ps1` | من جذر المستودع: `npm run dev:localcontent-pilot` أو السكربت أعلاه |
+| 1 | From repo root, start dev against pilot DB `aqliya_lc_pilot`: `npm run dev:localcontent-pilot` **or** `powershell -ExecutionPolicy Bypass -File scripts/localcontent/run-localcontent-pilot.ps1` | من جذر المستودع: `npm run dev:localcontent-pilot` أو السكربت أعلاه |
 | 2 | Script reads `.env.local` or `.env`, swaps **dbname only** to `aqliya_lc_pilot`, sets `LOCALCONTENT_CONTENT_BACKEND=prisma`. Does **not** edit `.env`. | يقرأ `.env` ويستبدل اسم قاعدة البيانات فقط؛ لا يعدّل الملف |
 | 3 | Opens **http://localhost:3001** (default; pass `-Port` to override). | افتح **http://localhost:3001** |
 | 4 | Full setup: `localcontentos-pilot-runtime-guide.md` | التفاصيل: `localcontentos-pilot-runtime-guide.md` |
