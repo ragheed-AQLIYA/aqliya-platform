@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-06-17 — LocalContentOS V3.5: added /local-content/pilot-readiness route (Pilot Readiness Dashboard)
+> **Last updated:** 2026-06-17 — LocalContentOS quality dashboard + review center: added /local-content/quality-dashboard and /local-content/review-center routes
 
 ---
 
@@ -171,7 +171,9 @@ These pages serve as detail references for specialized operating systems. They a
 | `/local-content/projects/[projectId]`                | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Project detail, navigation to sub-pages, workbook link |
 | `/local-content/workbook`                            | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Workbook dashboard: status, completion metrics, score summary |
 | `/local-content/workbook/[workbookId]`               | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Workbook detail with 3 tabs (lines/missing/requests) + gating. Scoring UI card showing contributions analysis + section breakdown |
-| `/local-content/pilot-readiness`                     | LocalContentOS | Dashboard          | Protected        | L4 Usable v0.1    | V3.5: 11-dimension operational readiness assessment with GREEN/AMBER/RED status per metric and overall pilot score |
+| `/local-content/pilot-readiness`                     | LocalContentOS | Dashboard          | Protected        | L5 Pilot-ready     | V3.5: 11-dimension operational readiness assessment with GREEN/AMBER/RED status per metric and overall pilot score |
+| `/local-content/review-center`                       | LocalContentOS | Governed workspace | Protected        | L5 Pilot-ready     | AI review center with batch approve/reject, inline audit events (last 10), bilingual PDF export |
+| `/local-content/quality-dashboard`                   | LocalContentOS | Dashboard          | Protected        | L5 Pilot-ready     | AI Quality Score composite, confidence distribution (4 buckets), acceptance rate time-series (4-week), pipeline runs visual bar, explanations + health + risk overview, industry memory patterns |
 | `/local-content/projects/[projectId]/suppliers`      | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Supplier/vendor records                              |
 | `/local-content/projects/[projectId]/spend`          | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Spend/procurement records                            |
 | `/local-content/projects/[projectId]/classification` | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Local content classification workflow                |
@@ -184,12 +186,13 @@ These pages serve as detail references for specialized operating systems. They a
 
 **LocalContentOS route limitations:**
 
-- L4 Usable v0.1 - not L6 production-hardened
+- L5 Pilot-ready — not L6 production-hardened
 - Scoring engine (LcScore): 4 metrics - revenue 35%, supplier_spend 35%, workforce 20%, assets 10%
 - Formula engine active: GP-01 (REV-03 - COS-03), WRK-03 (WRK-01 / WRK-02 x 100), SPN-03 (SPN-01 + SPN-02)
 - Tab-level gating enforced: population, recalculation, edits, exports are gated per tab
 - Score persistence: lcScore + lcScoreComputedAt saved to DB; export includes score data
-- 265 passing LocalContent tests
+- 265+ passing LocalContent tests (275 total suite)
+- Quality dashboard at /local-content/quality-dashboard with 10 integration tests
 - See `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`
 ### Office AI Assistant — Shared Application
 
