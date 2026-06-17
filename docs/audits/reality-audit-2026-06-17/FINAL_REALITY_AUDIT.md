@@ -220,17 +220,50 @@ See [strategic-roadmap.md](./strategic-roadmap.md) for full horizon.
 
 | Command | Result | Date |
 |---------|--------|------|
-| `npx tsc --noEmit` | **FAIL** (9 errors) | 2026-06-17 |
-| `npm run build` | **FAIL** | 2026-06-17 |
+| `npx tsc --noEmit` | **FAIL** (9 errors) | 2026-06-17 (audit) |
+| `npm run build` | **FAIL** | 2026-06-17 (audit) |
 | `npx prisma validate` | **PASS** | 2026-06-17 |
 | `npm test` | **PARTIAL** (238/272 suites, 96.4% tests) | 2026-06-17 |
-| `npm run lint` | **FAIL** (scope issue) | 2026-06-17 |
+| `npm run lint` | **FAIL** (scope issue) | 2026-06-17 (audit) |
 | `npm run local-ai:smoke` | **PASS** | 2026-06-17 |
 | `npm install` | Not run | — |
 | Browser/runtime E2E | Not run | — |
 | AWS live state | Not verified | — |
 | Pen test | Not run | — |
 | Coverage report | Not run | — |
+
+## Post-Audit Fix Snapshot (2026-06-17, same day)
+
+Immediate remediation sprint executed after audit completion.
+
+| Item | Status Before | Status After |
+|------|--------------|-------------|
+| `npx tsc --noEmit` | FAIL (9 errors) | **PASS (0 errors)** |
+| `npm run lint` | FAIL (191+ errors) | **PASS (0 errors)** |
+| D-01: `/api/test-token` JWT exposure | Critical | **DELETED** |
+| D-02: Build blocked | Critical | **RESOLVED** |
+| D-03: CoreAccessControl stub | Critical | **CONFIRMED REAL** (deny-by-default, logged) |
+| D-04: CSRF bypass | High | **FIXED** (CSRF token on all mutations) |
+| D-05: MFA gate ineffective | High | **FIXED** (challenge UI + session expose) |
+| D-06: File uploads unscanned | High | **FIXED** (ClamAV integration, fail-closed) |
+| D-07: Stale docs | Medium | **UPDATED** |
+| D-08: Schema drift | High | **DOCUMENTED** (platformAuditEvent aligned) |
+| GAP-08: SSO DB→NextAuth | High | **DONE** (SAML end-to-end + DB OAuth) |
+| GAP-09: File scanning | High | **DONE** (ClamAV + fail-closed scanner) |
+| GAP-10: Backup restore drill | Medium | **DONE** (restore-drill.mjs) |
+| ESLint 191→0 | — | **DONE** |
+| CI: Postgres service, npm audit | — | **DONE** |
+| CI: ECS rollback (N-1 revision) | — | **DONE** |
+| Node.js 20→22 Dockerfile | — | **DONE** |
+| MFA challenge UI at `/login?mfa=true` | Missing | **DONE** |
+
+**Remaining open after sprint:**
+- GAP-07: Runtime E2E (Cypress) — requires running environment
+- GAP-11: Content Studio schema mismatch (`contentWorkspace` vs `ContentStudioProject`) — 3d refactor
+- GAP-12: SalesOS consolidation — 2-4w
+- GAP-13: Pen test — external vendor
+- GAP-14: SOC2 — 3-6 month program
+- I-01 to I-04: Live infrastructure configuration (requires AWS access)
 
 ---
 
