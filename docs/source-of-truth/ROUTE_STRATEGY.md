@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-06-17 — LocalContentOS quality dashboard + review center: added /local-content/quality-dashboard and /local-content/review-center routes
+> **Last updated:** 2026-06-17 — Added /settings/ai-governance route (AI Governance Dashboard)
 
 ---
 
@@ -262,6 +262,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/settings/platform-organization` | Platform       | Settings/admin | Protected        | Active (L4)           | Real platform org diagnostics     |
 | `/settings/audit-logs`            | Platform       | Settings/admin | Protected        | Active (L4)           | Real audit log viewer             |
 | `/settings/skills/evaluate`       | Platform       | Settings/admin | Protected        | Active (L4)           | Skills evaluation dashboard       |
+| `/settings/ai-governance`         | Platform       | Settings/admin | Protected        | Active (L4)           | Centralized AI governance dashboard: AI audit events across products, stats, model/provider tracking |
 | `/monitoring`                     | Platform       | Settings/admin | Protected        | Active (L4)           | Real aggregate counts             |
 
 ### WorkflowOS — Governed Workspace
