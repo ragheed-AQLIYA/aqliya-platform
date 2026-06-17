@@ -5,11 +5,10 @@ import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import type { Prisma } from '@prisma/client'
 import { CS_STRINGS } from './cs-strings'
 
-// ContentWorkspace / ContentItem / ContentVersion / ContentTemplate are standalone models
-// for the Content Studio feature (separate from ContentStudio* campaign models).
-// These models exist in the Prisma schema but Prisma client typings lag behind the
-// generated client — typed access via (prisma as unknown) until schema types are regenerated.
-// TODO (R-03): Run `npx prisma generate` to resolve once DB is available.
+// ContentWorkspace / ContentItem / ContentVersion / ContentTemplate are defined in
+// prisma/schema.prisma (added 2026-06-17). Run `npx prisma generate` then `npx prisma db push`
+// to apply the schema to the database. Until `prisma generate` runs in this environment
+// the Prisma client typings may not include these models; the cast below is a fallback.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const p = prisma as any
 
