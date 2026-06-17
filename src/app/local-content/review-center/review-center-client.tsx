@@ -22,11 +22,22 @@ import type {
 
 // ─── Props ───
 
+interface AuditEventItem {
+  id: string;
+  action: string;
+  status: string;
+  confidence?: number;
+  durationMs: number;
+  createdAt: string;
+}
+
 interface ReviewCenterProps {
   initialQueue: ReviewQueue;
   organizationId: string;
   projectId?: string;
   workbookId?: string;
+  auditEventCount?: number;
+  recentAuditEvents?: AuditEventItem[];
 }
 
 // ─── Type Badge Config ───
@@ -57,6 +68,8 @@ const typeConfig: Record<
 export function ReviewCenter({
   initialQueue,
   organizationId,
+  auditEventCount = 0,
+  recentAuditEvents = [],
 }: ReviewCenterProps) {
   const router = useRouter();
   const [queue] = useState<ReviewQueue>(initialQueue);
@@ -68,6 +81,7 @@ export function ReviewCenter({
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const [exporting, setExporting] = useState(false);
   // Filter items based on active tab
   const filteredItems =
     activeTab === "all"
@@ -206,15 +220,57 @@ export function ReviewCenter({
               Review Center — Queued AI outputs awaiting human review
             </p>
           </div>
-          <Link href="/local-content/ai-advisor">
-            <Button variant="outline" size="sm">
-              ← لوحة المستشار / Advisor Panel
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={exporting}
+              onClick={async () => {
+                setExporting(true);
+                try {
+                  const mod = await import(
+                    "@/actions/localcontent-review-export"
+                  );
+                  const res = await mod.exportReviewSummaryPdfAction();
+                  if (res.success && res.data) {
+                    // Decode base64 → Uint8Array → Blob
+                    const binaryStr = atob(res.data.base64);
+                    const bytes = new Uint8Array(binaryStr.length);
+                    for (let i = 0; i < binaryStr.length; i++) {
+                      bytes[i] = binaryStr.charCodeAt(i);
+                    }
+                    const blob = new Blob([bytes], {
+                      type: res.data.contentType,
+                    });
+                    const url = URL.createObjectURL(blob);
+                    const a = window.document.createElement("a");
+                    a.href = url;
+                    a.download = res.data.filename;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showStatus("success", "✅ تم تصدير التقرير بنجاح");
+                  } else {
+                    showStatus("error", res.error || "فشل التصدير");
+                  }
+                } catch {
+                  showStatus("error", "فشل تصدير التقرير");
+                } finally {
+                  setExporting(false);
+                }
+              }}
+            >
+              {exporting ? "جاري التصدير..." : "📄 تصدير ملخص PDF"}
             </Button>
-          </Link>
+            <Link href="/local-content/ai-advisor">
+              <Button variant="outline" size="sm">
+                ← لوحة المستشار / Advisor Panel
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* ── Stats Bar ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
           <Card>
             <CardHeader className="py-2 px-3">
               <CardTitle className="text-xs text-muted-foreground">
@@ -258,6 +314,18 @@ export function ReviewCenter({
             <CardContent className="py-1 px-3">
               <span className="text-xl font-bold text-green-600">
                 {queue.stats.totalMemoryRecords}
+              </span>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="py-2 px-3">
+              <CardTitle className="text-xs text-muted-foreground">
+                أحداث التدقيق / Audit Events
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="py-1 px-3">
+              <span className="text-xl font-bold text-amber-600">
+                {auditEventCount}
               </span>
             </CardContent>
           </Card>
@@ -491,6 +559,68 @@ export function ReviewCenter({
               </Card>
             );
           })}
+        </div>
+      )}
+
+      {/* ── Recent Audit Events ── */}
+      {recentAuditEvents.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold mb-3">
+            📋 آخر أحداث التدقيق / Recent Audit Events
+          </h2>
+          <Card>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b bg-muted/50">
+                    <th className="text-right px-3 py-2 font-medium">الإجراء / Action</th>
+                    <th className="text-right px-3 py-2 font-medium">الحالة / Status</th>
+                    <th className="text-right px-3 py-2 font-medium">الثقة / Confidence</th>
+                    <th className="text-right px-3 py-2 font-medium">المدة (مللي) / Duration</th>
+                    <th className="text-right px-3 py-2 font-medium">التاريخ / Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentAuditEvents.map((event) => (
+                    <tr key={event.id} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2 font-mono text-xs">{event.action}</td>
+                      <td className="px-3 py-2">
+                        <Badge
+                          variant={
+                            event.status === "success"
+                              ? "default"
+                              : event.status === "partial"
+                                ? "secondary"
+                                : "destructive"
+                          }
+                          className="text-xs"
+                        >
+                          {event.status}
+                        </Badge>
+                      </td>
+                      <td className="px-3 py-2">
+                        {event.confidence != null
+                          ? `${Math.round(event.confidence * 100)}%`
+                          : "—"}
+                      </td>
+                      <td className="px-3 py-2 font-mono text-xs">
+                        {event.durationMs.toLocaleString()}ms
+                      </td>
+                      <td className="px-3 py-2 text-xs text-muted-foreground">
+                        {new Date(event.createdAt).toLocaleDateString("ar-SA", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
         </div>
       )}
     </div>

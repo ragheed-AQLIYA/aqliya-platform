@@ -285,6 +285,30 @@ const localContentNav = [
     icon: LayoutDashboard,
   },
   {
+    name: "AI Quality",
+    nameAr: "جودة الذكاء",
+    href: "/local-content/quality-dashboard",
+    icon: BarChart3,
+  },
+  {
+    name: "AI Advisor",
+    nameAr: "المستشار الذكي",
+    href: "/local-content/ai-advisor",
+    icon: Brain,
+  },
+  {
+    name: "Review Center",
+    nameAr: "مركز المراجعة",
+    href: "/local-content/review-center",
+    icon: FileText,
+  },
+  {
+    name: "Pilot Readiness",
+    nameAr: "الجاهزية التشغيلية",
+    href: "/local-content/pilot-readiness",
+    icon: ShieldCheck,
+  },
+  {
     name: "Projects",
     nameAr: "المشاريع",
     href: "/local-content/projects",
