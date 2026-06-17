@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import type { AvailableProvider } from "@/actions/sso-login-actions";
+import type { AvailableProvider, SamlLoginProvider } from "@/actions/sso-login-actions";
 
 const PROVIDER_LABELS: Record<string, string> = {
   google: "Google",
@@ -30,6 +30,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [ssoProviders, setSsoProviders] = useState<AvailableProvider[]>([]);
+  const [samlProviders, setSamlProviders] = useState<SamlLoginProvider[]>([]);
   const [ssoLoading, setSsoLoading] = useState<string | null>(null);
   const [ssoError, setSsoError] = useState("");
 
@@ -47,11 +48,15 @@ export default function LoginPage() {
 
   async function loadSsoProviders() {
     try {
-      const { getAvailableSsoProvidersAction } = await import(
+      const { getAvailableSsoProvidersAction, getAvailableSamlProvidersAction } = await import(
         "@/actions/sso-login-actions"
       );
-      const providers = await getAvailableSsoProvidersAction();
-      setSsoProviders(providers);
+      const [oauthProviders, samlList] = await Promise.all([
+        getAvailableSsoProvidersAction(),
+        getAvailableSamlProvidersAction(),
+      ]);
+      setSsoProviders(oauthProviders);
+      setSamlProviders(samlList);
     } catch {
       // SSO providers check failed silently
     }
@@ -72,6 +77,18 @@ export default function LoginPage() {
       setSsoError("فشل تسجيل الدخول عبر المزود الخارجي");
       setSsoLoading(null);
     }
+  }
+
+  function handleSamlSignIn(dbProviderId: string) {
+    setSsoLoading(`saml-${dbProviderId}`);
+    setSsoError("");
+    const url = new URL(window.location.href);
+    const rawCallback = url.searchParams.get("callbackUrl") || "/";
+    const callbackUrl =
+      rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+        ? rawCallback
+        : "/";
+    window.location.href = `/api/auth/saml/${dbProviderId}/initiate?callbackUrl=${encodeURIComponent(callbackUrl)}`;
   }
 
   function fillDemoAccount(demoEmail: string, demoPassword: string) {
@@ -184,7 +201,7 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {ssoProviders.length > 0 && (
+          {(ssoProviders.length > 0 || samlProviders.length > 0) && (
             <>
               <div className="relative my-4">
                 <Separator />
@@ -210,6 +227,25 @@ export default function LoginPage() {
                       </span>
                     )}
                     {PROVIDER_LABELS[provider.id] || provider.label}
+                  </Button>
+                ))}
+
+                {samlProviders.map((provider) => (
+                  <Button
+                    key={provider.id}
+                    variant="outline"
+                    className="w-full gap-2"
+                    onClick={() => handleSamlSignIn(provider.providerId)}
+                    disabled={ssoLoading !== null}
+                  >
+                    {ssoLoading === provider.id ? (
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    ) : (
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-muted text-[10px] font-bold">
+                        S
+                      </span>
+                    )}
+                    {provider.label}
                   </Button>
                 ))}
               </div>

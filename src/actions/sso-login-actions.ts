@@ -15,6 +15,12 @@ export interface AvailableProvider {
   icon: string;
 }
 
+export interface SamlLoginProvider {
+  id: string;
+  providerId: string;
+  label: string;
+}
+
 const ENV_PROVIDER_IDS = new Set(["google", "github", "azure-ad", "okta"]);
 
 function envProviders(): AvailableProvider[] {
@@ -91,4 +97,28 @@ export async function getAvailableSsoProvidersAction(): Promise<
   }
 
   return providers;
+}
+
+/** Enabled SAML providers for the login page (redirect-based, not signIn()). */
+export async function getAvailableSamlProvidersAction(): Promise<
+  SamlLoginProvider[]
+> {
+  try {
+    const records = await prisma.ssoProvider.findMany({
+      where: {
+        enabled: true,
+        providerType: "saml",
+      },
+      orderBy: { createdAt: "asc" },
+      select: { id: true, label: true },
+    });
+
+    return records.map((r) => ({
+      id: `saml-${r.id}`,
+      providerId: r.id,
+      label: r.label,
+    }));
+  } catch {
+    return [];
+  }
 }
