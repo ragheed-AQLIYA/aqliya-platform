@@ -42,25 +42,46 @@ export interface OAuthProviderConfig {
 
 export function buildProviderConfig(
   ssoProvider: SsoProvider,
+  options?: { authProviderId?: string },
 ): OAuthConfig<Record<string, unknown>> | OIDCConfig<Record<string, unknown>> | null {
   const providerType = ssoProvider.providerType;
+  const authProviderId = options?.authProviderId ?? providerType;
+
+  let config: OAuthConfig<Record<string, unknown>> | OIDCConfig<Record<string, unknown>> | null =
+    null;
 
   switch (providerType) {
     case "google":
-      return buildGoogleProvider(ssoProvider);
+      config = buildGoogleProvider(ssoProvider);
+      break;
     case "github":
-      return buildGitHubProvider(ssoProvider);
+      config = buildGitHubProvider(ssoProvider);
+      break;
     case "azure-ad":
-      return buildAzureAdProvider(ssoProvider);
+      config = buildAzureAdProvider(ssoProvider);
+      break;
     case "okta":
-      return buildOktaProvider(ssoProvider);
+      config = buildOktaProvider(ssoProvider);
+      break;
     case "custom-oidc":
-      return buildCustomOidcProvider(ssoProvider);
+      config = buildCustomOidcProvider(ssoProvider);
+      break;
     case "saml":
-      return buildSamlProvider(ssoProvider);
+      config = buildSamlProvider(ssoProvider);
+      break;
     default:
       return null;
   }
+
+  if (!config) {
+    return null;
+  }
+
+  if (authProviderId !== providerType) {
+    return { ...config, id: authProviderId };
+  }
+
+  return config;
 }
 
 function buildGoogleProvider(

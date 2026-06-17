@@ -6,6 +6,9 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { isOAuthInviteAllowed } from "@/lib/auth/oauth-invite-only";
 import { getEnvOAuthProviders } from "@/lib/auth/oauth-env-providers";
+import { loadEnabledDbOAuthProviders } from "@/lib/auth/db-oauth-providers";
+
+const dbOAuthProviders = await loadEnabledDbOAuthProviders();
 
 async function attachUserToToken(
   token: Record<string, unknown>,
@@ -93,6 +96,7 @@ export const authConfig: NextAuthConfig = {
       },
     }),
     ...getEnvOAuthProviders(),
+    ...dbOAuthProviders,
   ],
   callbacks: {
     async jwt({ token, user, account, trigger, session }) {
