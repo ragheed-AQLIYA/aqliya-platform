@@ -1,8 +1,12 @@
 # AQLIYA Production Deployment Runbook
 
-> **Version:** 1.0  
-> **Last updated:** 2026-06-04  
-> **Scope:** Production deployment of AQLIYA platform (Next.js 16, PostgreSQL 16, Prisma 7)
+> **Version:** 1.3  
+> **Last updated:** 2026-06-17  
+> **Scope:** Production deployment of AQLIYA platform (Next.js 16, PostgreSQL 16, Prisma 7, Node.js 22)  
+> **Changelog:**
+> - v1.3 (2026-06-17): Added SAML SSO, ClamAV scanner, rate limiter guidance, ECS rollback, restore-drill script, CI Postgres service. Reflected current validated build state.
+> - v1.2 (2026-06-09): Domain migration `aqliya.ai → aqliya.com`.
+> - v1.1 (2026-06-04): Initial AWS ECS Fargate runbook.
 
 ---
 
@@ -59,6 +63,33 @@ cp .env.example .env
 | `AUTH_OKTA_ID` / `AUTH_OKTA_SECRET` / `AUTH_OKTA_ISSUER` | Okta OAuth | Okta sign-in |
 | `AUTH_OIDC_ISSUER` / `AUTH_OIDC_CLIENT_ID` / `AUTH_OIDC_CLIENT_SECRET` | Custom OIDC | Custom OIDC sign-in |
 
+### SAML SSO (if using SAML providers)
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_APP_URL` | Used as SAML SP issuer and callback base URL |
+
+SAML provider configuration (entry point, certificate, issuer) is stored encrypted in the `SsoProvider` database table. No env vars are needed for individual SAML providers.
+
+### Security & Scanning
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `SCANNER_PROVIDER` | `none` or `clamav` | `none` |
+| `CLAMAV_HOST` | ClamAV daemon hostname | `localhost` |
+| `CLAMAV_PORT` | ClamAV daemon port | `3310` |
+
+> **Production requirement:** Set `SCANNER_PROVIDER=clamav` and deploy a ClamAV daemon alongside the app container. `none` is fail-open (no scanning) — acceptable only in dev.
+
+### Rate Limiting
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `RATE_LIMITER` | `memory` or `redis` | `memory` |
+| `REDIS_URL` | Redis connection string | required if `redis` |
+
+> **Production requirement:** Set `RATE_LIMITER=redis` for all multi-instance deployments (ECS Fargate, etc.). `memory` limits are per-process and not shared across tasks — use only for single-instance dev/staging.
+
 ### Optional but recommended
 
 | Variable | Description |
@@ -93,7 +124,9 @@ npm run build
 ### Expected outcomes
 
 - `npx prisma generate` — Generates `@prisma/client` with zero errors
-- `npm run build` — Produces `.next/` directory, no TypeScript errors, no ESLint warnings
+- `npm run build` — Produces `.next/` directory; **validated clean** as of 2026-06-17
+- `npx tsc --noEmit` — **0 errors** as of 2026-06-17
+- `npm test` — All unit/integration tests pass as of 2026-06-17
 
 ### Build troubleshooting
 
@@ -319,4 +352,54 @@ git stash && git checkout deploy/v1.2.3 && npm ci && npx prisma generate && npm 
 
 ---
 
-> **Note:** This runbook covers standard Cloud deployment. On-Prem / Air-Gapped deployment requires separate procedures not yet documented.
+---
+
+## 9. Backup Restore Drill
+
+Run periodically to verify backups are restorable (recommended: monthly in staging):
+
+```bash
+# Uses most-recent backup in ./backups/
+DATABASE_URL=<pg-url> node scripts/platform/restore-drill.mjs
+
+# Or pass a specific backup file
+DATABASE_URL=<pg-url> node scripts/platform/restore-drill.mjs backups/aqliya-backup-2026-06-17.dump
+```
+
+The script:
+1. Creates a temporary scratch database (`aqliya_drill_<timestamp>`)
+2. Restores the backup using `pg_restore` (custom format) or `psql` (SQL format)
+3. Spot-checks row counts in `Organization`, `User`, `AuditEngagement`, `PlatformAuditLog`
+4. Drops the scratch database
+5. Writes a JSON report to `backups/drill-reports/`
+
+Exit code: `0` = pass, `1` = failure. Safe to run from CI or cron.
+
+---
+
+## 10. ECS Rollback (Production)
+
+The GitHub Actions `promote.yml` workflow includes an automatic rollback job that activates when smoke tests fail after deployment.
+
+**Automatic rollback:** The workflow rolls back to the previous ECS task definition revision (`family:N-1`), not just a force-restart. This ensures the previous known-good image is used.
+
+**Manual rollback:**
+
+```bash
+# 1. Find previous task definition revision
+aws ecs list-task-definitions --family-prefix aqliya --sort DESC --max-items 3
+
+# 2. Update service to previous revision
+aws ecs update-service \
+  --cluster aqliya-prod \
+  --service aqliya-app \
+  --task-definition aqliya:N-1 \
+  --force-new-deployment
+
+# 3. Confirm rollback
+aws ecs describe-services --cluster aqliya-prod --services aqliya-app
+```
+
+---
+
+> **Note:** This runbook covers standard Cloud deployment (AWS ECS Fargate). On-Prem / Air-Gapped deployment requires separate procedures not yet documented.

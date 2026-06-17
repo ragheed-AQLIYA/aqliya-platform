@@ -140,6 +140,62 @@ export function QualityDashboardClient({ metrics }: Props) {
         </div>
       </div>
 
+      {/* Quality Score Banner */}
+      {(() => {
+        const scores: number[] = [];
+        if (metrics.suggestionAcceptanceRate !== null) scores.push(metrics.suggestionAcceptanceRate);
+        if (metrics.avgSuggestionConfidence !== null) scores.push(metrics.avgSuggestionConfidence);
+        if (metrics.avgExplanationConfidence !== null) scores.push(metrics.avgExplanationConfidence);
+        const pipelineSuccessRate =
+          metrics.totalReviewRuns > 0
+            ? Math.round((metrics.completedRuns / metrics.totalReviewRuns) * 100)
+            : null;
+        if (pipelineSuccessRate !== null) scores.push(pipelineSuccessRate);
+        const compositeScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+        const scoreColor =
+          compositeScore === null
+            ? "border-gray-200"
+            : compositeScore >= 80
+              ? "border-green-400 bg-green-50 dark:bg-green-950/20"
+              : compositeScore >= 50
+                ? "border-amber-400 bg-amber-50 dark:bg-amber-950/20"
+                : "border-red-400 bg-red-50 dark:bg-red-950/20";
+        const scoreLabel =
+          compositeScore === null
+            ? "لا توجد بيانات كافية"
+            : compositeScore >= 80
+              ? "جودة عالية / High Quality"
+              : compositeScore >= 50
+                ? "جودة متوسطة / Moderate Quality"
+                : "جودة منخفضة / Low Quality";
+        return (
+          <div className={`rounded-lg border-2 p-4 ${scoreColor}`}>
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-3">
+                <ShieldCheck className={`h-8 w-8 ${compositeScore !== null && compositeScore >= 80 ? "text-green-600" : "text-amber-600"}`} />
+                <div>
+                  <p className="text-sm font-bold">مؤشر جودة AI / AI Quality Score</p>
+                  <p className="text-xs text-muted-foreground">{scoreLabel}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-center">
+                  <p className="text-2xl font-black">{compositeScore !== null ? `${compositeScore}%` : "—"}</p>
+                  <p className="text-[10px] text-muted-foreground">Composite</p>
+                </div>
+                {scores.length > 0 && (
+                  <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground">
+                    <span>↗ ACC {metrics.suggestionAcceptanceRate ?? "—"}%</span>
+                    <span>↗ CONF {metrics.avgSuggestionConfidence ?? "—"}%</span>
+                    <span>✓ PIPELINE {pipelineSuccessRate ?? "—"}%</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Row 1: Overview metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <MetricCard
@@ -176,7 +232,132 @@ export function QualityDashboardClient({ metrics }: Props) {
         />
       </div>
 
-      {/* Row 2: Explanations + Health */}
+      {/* Row 2: Confidence Distribution */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-primary" />
+            توزيع الثقة / Confidence Distribution
+          </CardTitle>
+          <CardDescription className="text-xs">
+            عدد العناصر في كل نطاق ثقة (الاقتراحات والتفسيرات)
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Suggestions */}
+            <div>
+              <p className="text-xs font-medium text-muted-foreground mb-2">
+                الاقتراحات / Suggestions
+              </p>
+              <div className="space-y-1.5">
+                {[
+                  { label: "0–25%", color: "bg-red-400", idx: 0 },
+                  { label: "25–50%", color: "bg-amber-400", idx: 1 },
+                  { label: "50–75%", color: "bg-blue-400", idx: 2 },
+                  { label: "75–100%", color: "bg-green-400", idx: 3 },
+                ].map(({ label, color, idx }) => {
+                  const count = metrics.suggestionConfidenceBuckets[idx];
+                  const total = Math.max(1, metrics.suggestionConfidenceBuckets.reduce((a, b) => a + b, 0));
+                  const pct = (count / total) * 100;
+                  return (
+                    <div key={idx} className="flex items-center gap-2 text-xs">
+                      <span className="w-12 shrink-0 text-muted-foreground">{label}</span>
+                      <div className="flex-1 h-4 rounded bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                        <div
+                          className={`h-full rounded ${color} transition-all duration-500`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <span className="w-16 shrink-0 text-left font-medium">{count} ({Math.round(pct)}%)</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            {/* Explanations */}
+            <div>
+              <p className="text-xs font-medium text-muted-foreground mb-2">
+                التفسيرات / Explanations
+              </p>
+              <div className="space-y-1.5">
+                {[
+                  { label: "0–25%", color: "bg-red-400", idx: 0 },
+                  { label: "25–50%", color: "bg-amber-400", idx: 1 },
+                  { label: "50–75%", color: "bg-blue-400", idx: 2 },
+                  { label: "75–100%", color: "bg-green-400", idx: 3 },
+                ].map(({ label, color, idx }) => {
+                  const count = metrics.explanationConfidenceBuckets[idx];
+                  const total = Math.max(1, metrics.explanationConfidenceBuckets.reduce((a, b) => a + b, 0));
+                  const pct = (count / total) * 100;
+                  return (
+                    <div key={idx} className="flex items-center gap-2 text-xs">
+                      <span className="w-12 shrink-0 text-muted-foreground">{label}</span>
+                      <div className="flex-1 h-4 rounded bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                        <div
+                          className={`h-full rounded ${color} transition-all duration-500`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <span className="w-16 shrink-0 text-left font-medium">{count} ({Math.round(pct)}%)</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Row 3: Time-Series Acceptance Rate */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 text-primary" />
+            اتجاه معدل القبول / Acceptance Rate Trend
+          </CardTitle>
+          <CardDescription className="text-xs">
+            أسبوعي — عدد المقترحات المعتمدة مقابل الإجمالي
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {metrics.acceptanceOverTime.every((p) => p.total === 0) ? (
+            <div className="text-center py-4 text-muted-foreground text-sm">
+              لا توجد بيانات كافية لرسم الاتجاه
+            </div>
+          ) : (
+            <div className="flex items-end justify-around gap-3 pt-2">
+              {metrics.acceptanceOverTime.map((p, i) => {
+                const barH = p.total > 0 ? Math.max(4, (p.total / Math.max(...metrics.acceptanceOverTime.map((x) => x.total))) * 100) : 4;
+                const filledH = p.total > 0 ? (p.approved / p.total) * barH : 0;
+                return (
+                  <div key={i} className="flex flex-col items-center gap-1 flex-1">
+                    <p className="text-[10px] font-medium">{p.rate !== null ? `${p.rate}%` : "—"}</p>
+                    <div className="w-full flex justify-center">
+                      <div className="w-6 sm:w-8 rounded-t relative" style={{ height: `${Math.max(4, barH)}px` }}>
+                        <div
+                          className="absolute bottom-0 w-full rounded-t bg-blue-500 transition-all duration-500"
+                          style={{ height: `${Math.max(0, filledH)}px` }}
+                        />
+                        <div
+                          className="absolute bottom-0 w-full rounded-t bg-gray-200"
+                          style={{ height: `${Math.max(0, barH)}px`, zIndex: -1 }}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                      <span>{p.approved}/{p.total}</span>
+                    </div>
+                    <p className="text-[9px] text-muted-foreground">{p.label}</p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Row 4: Explanations + Health */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Explanations Card */}
         <Card>
@@ -298,7 +479,7 @@ export function QualityDashboardClient({ metrics }: Props) {
         </Card>
       </div>
 
-      {/* Row 3: Pipeline Runs */}
+      {/* Row 5: Pipeline Runs */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm flex items-center gap-2">
@@ -306,7 +487,7 @@ export function QualityDashboardClient({ metrics }: Props) {
             تشغيلات pipeline / Pipeline Runs
           </CardTitle>
           <CardDescription className="text-xs">
-            آخر 10 تشغيلات للمراجعة الذكية
+            آخر 10 تشغيلات للمراجعة الذكية — حجم الشريط يتناسب مع إجمالي المخرجات
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -323,27 +504,51 @@ export function QualityDashboardClient({ metrics }: Props) {
                     <th className="pb-2 font-medium">التفسيرات</th>
                     <th className="pb-2 font-medium">الاقتراحات</th>
                     <th className="pb-2 font-medium">FP</th>
+                    <th className="pb-2 font-medium">الإجمالي</th>
                     <th className="pb-2 font-medium">تاريخ التشغيل</th>
                     <th className="pb-2 font-medium">المدة</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {metrics.recentRuns.map((run) => (
-                    <tr key={run.id} className="border-b last:border-0 hover:bg-muted/30">
-                      <td className="py-2">
-                        <StatusBadge status={run.status} />
-                      </td>
-                      <td className="py-2">{run.explanationsGenerated}</td>
-                      <td className="py-2">{run.patternSuggestions}</td>
-                      <td className="py-2">{run.falsePositives}</td>
-                      <td className="py-2 text-xs text-muted-foreground">
-                        {formatDate(run.startedAt)}
-                      </td>
-                      <td className="py-2 text-xs text-muted-foreground">
-                        {run.durationMs > 0 ? `${(run.durationMs / 1000).toFixed(1)}s` : "—"}
-                      </td>
-                    </tr>
-                  ))}
+                  {metrics.recentRuns.map((run, i) => {
+                    const total = run.explanationsGenerated + run.patternSuggestions + run.falsePositives;
+                    const maxTotal = Math.max(
+                      1,
+                      ...metrics.recentRuns.map(
+                        (r) => r.explanationsGenerated + r.patternSuggestions + r.falsePositives,
+                      ),
+                    );
+                    const barWidth = (total / maxTotal) * 100;
+                    return (
+                      <tr key={run.id} className="border-b last:border-0 hover:bg-muted/30">
+                        <td className="py-2">
+                          <StatusBadge status={run.status} />
+                        </td>
+                        <td className="py-2">{run.explanationsGenerated}</td>
+                        <td className="py-2">{run.patternSuggestions}</td>
+                        <td className="py-2">{run.falsePositives}</td>
+                        <td className="py-2 min-w-[80px]">
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-12 h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                              <div
+                                className={`h-full rounded transition-all duration-500 ${
+                                  i === 0 ? "bg-primary" : "bg-gray-400"
+                                }`}
+                                style={{ width: `${barWidth}%` }}
+                              />
+                            </div>
+                            <span className="text-xs font-medium">{total}</span>
+                          </div>
+                        </td>
+                        <td className="py-2 text-xs text-muted-foreground">
+                          {formatDate(run.startedAt)}
+                        </td>
+                        <td className="py-2 text-xs text-muted-foreground">
+                          {run.durationMs > 0 ? `${(run.durationMs / 1000).toFixed(1)}s` : "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -351,7 +556,7 @@ export function QualityDashboardClient({ metrics }: Props) {
         </CardContent>
       </Card>
 
-      {/* Row 4: Summary + Actions */}
+      {/* Row 6: Summary + Actions */}
       <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/30">
         <div className="flex items-center gap-4 text-sm">
           <div className="flex items-center gap-2">

@@ -7,6 +7,24 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import type { SsoProvider } from "@prisma/client";
+import { encrypt, decrypt } from "@/lib/auth/encryption";
+
+// ─── Encryption helpers for clientSecret ───
+// Secrets stored with "enc:" prefix to detect encrypted vs legacy plaintext.
+
+function encryptSecret(plain: string): string {
+  return "enc:" + encrypt(plain);
+}
+
+function decryptSecret(stored: string | null): string | null {
+  if (!stored) return null;
+  if (!stored.startsWith("enc:")) return stored; // legacy plaintext — backward compat
+  try {
+    return decrypt(stored.slice(4));
+  } catch {
+    return null; // decryption failed — return null rather than expose garbled data
+  }
+}
 
 // ─── Types ───
 
@@ -82,7 +100,7 @@ function toResponse(provider: SsoProvider): SsoProviderResponse {
     userInfoUrl: provider.userInfoUrl,
     jwksUri: provider.jwksUri,
     clientId: provider.clientId,
-    clientSecret: provider.clientSecret,
+    clientSecret: decryptSecret(provider.clientSecret),
     samlEntryPoint: provider.samlEntryPoint,
     samlIssuer: provider.samlIssuer,
     samlCert: provider.samlCert,
@@ -129,7 +147,7 @@ export async function createProvider(
       userInfoUrl: data.userInfoUrl ?? null,
       jwksUri: data.jwksUri ?? null,
       clientId: data.clientId ?? null,
-      clientSecret: data.clientSecret ?? null,
+      clientSecret: data.clientSecret ? encryptSecret(data.clientSecret) : null,
       samlEntryPoint: data.samlEntryPoint ?? null,
       samlIssuer: data.samlIssuer ?? null,
       samlCert: data.samlCert ?? null,
@@ -175,7 +193,9 @@ export async function updateProvider(
   if (data.userInfoUrl !== undefined) updateData.userInfoUrl = data.userInfoUrl;
   if (data.jwksUri !== undefined) updateData.jwksUri = data.jwksUri;
   if (data.clientId !== undefined) updateData.clientId = data.clientId;
-  if (data.clientSecret !== undefined) updateData.clientSecret = data.clientSecret;
+  if (data.clientSecret !== undefined) {
+    updateData.clientSecret = data.clientSecret ? encryptSecret(data.clientSecret) : null;
+  }
   if (data.samlEntryPoint !== undefined) updateData.samlEntryPoint = data.samlEntryPoint;
   if (data.samlIssuer !== undefined) updateData.samlIssuer = data.samlIssuer;
   if (data.samlCert !== undefined) updateData.samlCert = data.samlCert;

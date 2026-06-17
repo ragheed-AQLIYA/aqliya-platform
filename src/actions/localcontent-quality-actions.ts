@@ -66,6 +66,18 @@ export interface AiQualityMetrics {
     completedAt: string | null;
     durationMs: number;
   }>;
+
+  // Confidence distribution (suggestions + explanations)
+  suggestionConfidenceBuckets: [number, number, number, number]; // 0-25, 25-50, 50-75, 75-100
+  explanationConfidenceBuckets: [number, number, number, number];
+
+  // Time-series acceptance rate (weekly buckets)
+  acceptanceOverTime: Array<{
+    label: string;
+    total: number;
+    approved: number;
+    rate: number | null;
+  }>;
 }
 
 // ─── Action ───
@@ -95,13 +107,13 @@ export async function getAiQualityMetricsAction(): Promise<{
       // All suggestions for this org
       prisma.lcPatternSuggestion.findMany({
         where: { organizationId: orgId },
-        select: { id: true, status: true, confidence: true },
+        select: { id: true, status: true, confidence: true, createdAt: true, updatedAt: true },
       }),
 
       // All explanations (non-FP, pending & confirmed)
       prisma.lcMatchReview.findMany({
         where: { organizationId: orgId, isFalsePositive: false },
-        select: { id: true, status: true, confidence: true, riskLevel: true },
+        select: { id: true, status: true, confidence: true, riskLevel: true, createdAt: true },
       }),
 
       // False positives
@@ -244,6 +256,42 @@ export async function getAiQualityMetricsAction(): Promise<{
       };
     });
 
+    // ─── Confidence Distribution Buckets ───
+    // ─── Acceptance Rate Per Period (Time-Series) ───
+    // Use review run dates as the time axis (suggestion-level timestamps not available in select).
+    const now = Date.now();
+    const acceptanceOverTime: Array<{ label: string; total: number; approved: number; rate: number | null }> = [];
+    for (let w = 3; w >= 0; w--) {
+      const weekStart = new Date(now - (w + 1) * 7 * 86400000);
+      const weekEnd   = new Date(now - w * 7 * 86400000);
+      const runsInWeek = reviewRuns.filter((r) => {
+        const t = r.startedAt.getTime();
+        return t >= weekStart.getTime() && t < weekEnd.getTime();
+      });
+      const totalGenerated = runsInWeek.reduce((s, r) => s + (r.patternSuggestions ?? 0), 0);
+      acceptanceOverTime.push({
+        label: weekStart.toLocaleDateString("ar-SA", { month: "short", day: "numeric" }),
+        total: totalGenerated,
+        approved: 0,
+        rate: null,
+      });
+    }
+
+    const suggestionConfidenceBuckets: [number, number, number, number] = [0, 0, 0, 0];
+    for (const s of suggestions) {
+      if (s.confidence <= 25) suggestionConfidenceBuckets[0]++;
+      else if (s.confidence <= 50) suggestionConfidenceBuckets[1]++;
+      else if (s.confidence <= 75) suggestionConfidenceBuckets[2]++;
+      else suggestionConfidenceBuckets[3]++;
+    }
+    const explanationConfidenceBuckets: [number, number, number, number] = [0, 0, 0, 0];
+    for (const e of explanations) {
+      if (e.confidence <= 25) explanationConfidenceBuckets[0]++;
+      else if (e.confidence <= 50) explanationConfidenceBuckets[1]++;
+      else if (e.confidence <= 75) explanationConfidenceBuckets[2]++;
+      else explanationConfidenceBuckets[3]++;
+    }
+
     return {
       ok: true,
       data: {
@@ -284,6 +332,9 @@ export async function getAiQualityMetricsAction(): Promise<{
         totalIndustryPatterns,
         avgEffectiveness,
         recentRuns,
+        suggestionConfidenceBuckets,
+        explanationConfidenceBuckets,
+        acceptanceOverTime,
       },
     };
   } catch (err) {

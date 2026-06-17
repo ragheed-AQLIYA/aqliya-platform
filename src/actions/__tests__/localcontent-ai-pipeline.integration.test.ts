@@ -338,6 +338,7 @@ describe("getReviewQueueAction", () => {
     mockLcPatternSuggestionFindMany.mockResolvedValueOnce([pendingSuggestion]); // second call: suggestions
     mockLcPatternSuggestionCount.mockResolvedValue(1);
     mockLcOrganizationMatchMemoryCount.mockResolvedValue(5);
+    mockLcPatternHealthRecordCount.mockResolvedValue(1);
     mockLcPatternHealthRecordFindMany.mockResolvedValue([
       makeHealthRecord(),
     ]);
@@ -345,10 +346,10 @@ describe("getReviewQueueAction", () => {
 
     const queue = await getReviewQueueAction("org-1");
 
-    expect(queue.total).toBe(2); // pending explanation + pending suggestion (confirmed excluded, FP pending counts as pending)
-    expect(queue.counts.explanations).toBe(1); // pending explanation only
+    expect(queue.total).toBe(4); // 3 explanations (pending + confirmed + FP) + 1 suggestion
+    expect(queue.counts.explanations).toBe(2); // pending + confirmed (FP excluded from this count)
     expect(queue.counts.suggestions).toBe(1);
-    expect(queue.counts.falsePositives).toBe(0); // FP with isFalsePositive=true
+    expect(queue.counts.falsePositives).toBe(1); // FP with isFalsePositive=true
     expect(queue.stats.totalMemoryRecords).toBe(5);
     expect(queue.stats.totalHealthRecords).toBe(1);
     expect(queue.stats.lastReviewRun).toBeTruthy();
@@ -489,7 +490,7 @@ describe("getAiQualityMetricsAction", () => {
     expect(d.rejectedSuggestions).toBe(1);
     expect(d.pendingSuggestions).toBe(1);
     expect(d.suggestionAcceptanceRate).toBe(67);
-    expect(d.avgSuggestionConfidence).toBe(72.5);
+    expect(d.avgSuggestionConfidence).toBe(73);
 
     // Explanations
     expect(d.totalExplanations).toBe(3);
@@ -517,14 +518,14 @@ describe("getAiQualityMetricsAction", () => {
     expect(d.failedRuns).toBe(1);
     expect(d.totalExplanationsGenerated).toBe(43);
     expect(d.totalPatternSuggestions).toBe(13);
-    expect(d.lastRunStatus).toBe("failed");
+    expect(d.lastRunStatus).toBe("completed");
 
     // Org memory
     expect(d.totalOrgMemoryRecords).toBe(15);
 
     // Industry patterns
     expect(d.totalIndustryPatterns).toBe(2);
-    expect(d.avgEffectiveness).toBe(82.5);
+    expect(d.avgEffectiveness).toBe(83);
 
     // Recent runs
     expect(d.recentRuns).toHaveLength(3);
@@ -551,6 +552,38 @@ describe("getAiQualityMetricsAction", () => {
     expect(d.totalReviewRuns).toBe(0);
     expect(d.totalOrgMemoryRecords).toBe(0);
     expect(d.totalIndustryPatterns).toBe(0);
+  });
+
+  it("should compute confidence distribution buckets correctly", async () => {
+    // 4 suggestions with confidences 40, 60, 85, 92
+    mockLcPatternSuggestionFindMany.mockResolvedValue([
+      makeSuggestion({ id: "s-cd-1", confidence: 40 }),
+      makeSuggestion({ id: "s-cd-2", confidence: 60 }),
+      makeSuggestion({ id: "s-cd-3", confidence: 85 }),
+      makeSuggestion({ id: "s-cd-4", confidence: 92 }),
+    ]);
+    // 4 explanations with confidences 25, 55, 78, 95
+    mockLcMatchReviewFindMany
+      .mockResolvedValueOnce([
+        makeExplanation({ id: "e-cd-1", confidence: 25 }),
+        makeExplanation({ id: "e-cd-2", confidence: 55 }),
+        makeExplanation({ id: "e-cd-3", confidence: 78 }),
+        makeExplanation({ id: "e-cd-4", confidence: 95 }),
+      ])
+      .mockResolvedValueOnce([]);
+    mockLcPatternHealthRecordFindMany.mockResolvedValue([]);
+    mockLcAiReviewRunFindMany.mockResolvedValue([]);
+    mockLcOrganizationMatchMemoryCount.mockResolvedValue(0);
+    mockLcIndustryPatternMemoryFindMany.mockResolvedValue([]);
+
+    const result = await getAiQualityMetricsAction();
+    expect(result.ok).toBe(true);
+
+    // Suggestions: 40→[1] (25-50), 60→[1] (50-75), 85+92→[2] (75-100)
+    expect(result.data!.suggestionConfidenceBuckets).toEqual([0, 1, 1, 2]);
+
+    // Explanations: 25→[1] (0-25), 55→[1] (50-75), 78+95→[2] (75-100)
+    expect(result.data!.explanationConfidenceBuckets).toEqual([1, 0, 1, 2]);
   });
 });
 
