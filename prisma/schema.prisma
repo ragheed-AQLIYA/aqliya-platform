@@ -5011,3 +5011,87 @@ model LcRecommendationOutcome {
   @@index([organizationId, workbookId])
   @@index([organizationId, accuracyScore])
 }
+
+// ─── Content Studio Workspace Layer ───────────────────────────────────────────
+// Standalone content authoring models for the Content Studio feature
+// (separate from ContentStudioProject which covers campaigns/media projects).
+
+model ContentWorkspace {
+  id             String        @id @default(cuid())
+  organizationId String
+  name           String
+  description    String?
+  category       String?
+  isActive       Boolean       @default(true)
+  createdById    String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  items          ContentItem[]
+
+  @@index([organizationId])
+  @@index([organizationId, isActive])
+}
+
+model ContentItem {
+  id             String          @id @default(cuid())
+  workspaceId    String
+  organizationId String
+  title          String
+  body           String          @db.Text
+  summary        String?
+  locale         String          @default("ar")
+  tags           String[]
+  status         String          @default("DRAFT")
+  contentType    String          @default("article")
+  version        Int             @default(1)
+  templateId     String?
+  createdById    String
+  reviewedById   String?
+  approvedById   String?
+  publishedAt    DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  workspace      ContentWorkspace @relation(fields: [workspaceId], references: [id])
+  versions       ContentVersion[]
+
+  @@index([organizationId])
+  @@index([workspaceId, status])
+  @@index([organizationId, status])
+  @@index([organizationId, contentType])
+}
+
+model ContentVersion {
+  id            String      @id @default(cuid())
+  contentId     String
+  version       Int
+  title         String
+  body          String      @db.Text
+  summary       String?
+  tags          String[]
+  metadata      Json?
+  changeSummary String?
+  createdById   String
+  createdAt     DateTime    @default(now())
+  content       ContentItem @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([contentId])
+  @@index([contentId, version])
+}
+
+model ContentTemplate {
+  id                  String   @id @default(cuid())
+  organizationId      String
+  name                String
+  description         String?
+  category            String?
+  bodyTemplate        String   @db.Text
+  metadataTemplate    Json?
+  defaultReviewRoles  String[]
+  isActive            Boolean  @default(true)
+  createdById         String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([organizationId, isActive])
+}
