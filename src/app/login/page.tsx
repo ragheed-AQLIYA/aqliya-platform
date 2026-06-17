@@ -23,28 +23,26 @@ const PROVIDER_LABELS: Record<string, string> = {
 };
 
 export default function LoginPage() {
-  const [justRegistered, setJustRegistered] = useState(false);
+  // Lazy initialisers read URL params once on first render — avoids setState inside an effect.
+  const [justRegistered] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return new URL(window.location.href).searchParams.get("registered") === "true";
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>(() => {
+    if (typeof window === "undefined") return "";
+    const authError = new URL(window.location.href).searchParams.get("error");
+    if (authError === "CredentialsSignin") return "بريد إلكتروني أو كلمة مرور غير صحيحة";
+    if (authError) return "فشل تسجيل الدخول. حاول مرة أخرى.";
+    return "";
+  });
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [ssoProviders, setSsoProviders] = useState<AvailableProvider[]>([]);
   const [samlProviders, setSamlProviders] = useState<SamlLoginProvider[]>([]);
   const [ssoLoading, setSsoLoading] = useState<string | null>(null);
   const [ssoError, setSsoError] = useState("");
-
-  useEffect(() => {
-    const params = new URL(window.location.href).searchParams;
-    setJustRegistered(params.get("registered") === "true");
-    const authError = params.get("error");
-    if (authError === "CredentialsSignin") {
-      setError("بريد إلكتروني أو كلمة مرور غير صحيحة");
-    } else if (authError) {
-      setError("فشل تسجيل الدخول. حاول مرة أخرى.");
-    }
-    loadSsoProviders();
-  }, []);
 
   async function loadSsoProviders() {
     try {
@@ -61,6 +59,9 @@ export default function LoginPage() {
       // SSO providers check failed silently
     }
   }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
+  useEffect(() => { loadSsoProviders(); }, []);
 
   async function handleSsoSignIn(providerId: string) {
     setSsoLoading(providerId);
@@ -88,6 +89,7 @@ export default function LoginPage() {
       rawCallback.startsWith("/") && !rawCallback.startsWith("//")
         ? rawCallback
         : "/";
+    // eslint-disable-next-line react-hooks/immutability
     window.location.href = `/api/auth/saml/${dbProviderId}/initiate?callbackUrl=${encodeURIComponent(callbackUrl)}`;
   }
 

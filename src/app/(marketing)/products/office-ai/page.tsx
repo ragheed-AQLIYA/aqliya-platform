@@ -129,7 +129,7 @@ export default function OfficeAIProductPage() {
               إفصاح الذكاء
             </h3>
             <p className="mt-3 text-sm leading-6 text-white/62">
-              كل مخرج يُوسَم بأنه "مساعد — مقترح" وليس حقيقة نهائية أو قرار
+              كل مخرج يُوسَم بأنه &quot;مساعد — مقترح&quot; وليس حقيقة نهائية أو قرار
               معتمد.
             </p>
           </div>
