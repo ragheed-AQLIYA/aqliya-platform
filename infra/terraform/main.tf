@@ -84,6 +84,7 @@ module "monitoring" {
 
   project_name            = var.project_name
   environment             = var.environment
+  domain_name             = var.domain_name
   log_retention_days      = var.log_retention_days
   db_backup_retention_days = var.db_backup_retention_days
   ecs_cluster_name        = module.compute.ecs_cluster_name
