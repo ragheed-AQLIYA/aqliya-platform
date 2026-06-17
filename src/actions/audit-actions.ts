@@ -59,7 +59,7 @@ import { linkEvidenceToEntity as svcLinkEvidenceToEntity } from "@/lib/audit/ser
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
 import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
 import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
-import { scanEvidenceFile } from "@/lib/audit/file-scanner";
+import { isScanRejected, scanEvidenceFile } from "@/lib/audit/file-scanner";
 import {
   checkPublicationGovernance,
   evaluateFindingEscalation,
@@ -381,7 +381,7 @@ export async function createEvidenceAction(params: {
     fileType: params.fileType,
     fileSize: params.fileSize,
   });
-  if (scanResult.status === "error" || scanResult.status === "infected") {
+  if (isScanRejected(scanResult)) {
     throw new Error(scanResult.details || "File rejected by security scanner");
   }
   const evidence = await svcCreateEvidence({
@@ -519,8 +519,9 @@ export async function uploadEvidenceFileAction(params: {
     filename: params.filename,
     fileType: params.fileType,
     fileSize: content.length,
+    content,
   });
-  if (scanResult.status === "infected") {
+  if (isScanRejected(scanResult)) {
     throw new Error(scanResult.details || "File rejected by security scanner");
   }
 

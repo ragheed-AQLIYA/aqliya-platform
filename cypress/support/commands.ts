@@ -12,14 +12,24 @@ function loginViaCredentials(email: string, password: string, sessionId: string)
   cy.session(
     sessionId,
     () => {
-      cy.request({
-        method: "POST",
-        url: "/api/auth/custom-login",
-        body: { email, password },
-      }).then((res) => {
-        expect(res.status).to.eq(200);
-        expect(res.body.ok).to.eq(true);
-        expect(res.body.user.email).to.eq(email);
+      cy.request("/api/auth/csrf").then((csrfRes) => {
+        const csrfToken = csrfRes.body.csrfToken as string;
+        expect(csrfToken).to.be.a("string").and.not.be.empty;
+
+        cy.request({
+          method: "POST",
+          url: "/api/auth/callback/credentials",
+          form: true,
+          body: {
+            csrfToken,
+            email,
+            password,
+            redirect: "false",
+            json: "true",
+          },
+        }).then((res) => {
+          expect(res.status).to.be.oneOf([200, 302]);
+        });
       });
     },
     {
@@ -32,7 +42,7 @@ function loginViaCredentials(email: string, password: string, sessionId: string)
   );
 }
 
-/** Programmatic NextAuth login (CSRF cookie + credentials callback). */
+/** Programmatic NextAuth login (CSRF token + credentials callback). */
 Cypress.Commands.add("loginAdmin", () => {
   loginViaCredentials("admin@aqliya.com", "admin123", "admin-aqliya-api");
 });

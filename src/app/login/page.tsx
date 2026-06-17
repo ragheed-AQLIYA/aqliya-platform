@@ -88,29 +88,21 @@ export default function LoginPage() {
     const normalizedEmail = email.trim().toLowerCase();
 
     try {
-      // Use custom login endpoint to bypass NextAuth v5 beta CSRF issue
-      const res = await fetch("/api/auth/custom-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: normalizedEmail, password }),
-        credentials: "include",
+      const url = new URL(window.location.href);
+      const rawCallback = url.searchParams.get("callbackUrl") || "/audit";
+      const callbackUrl =
+        rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+          ? rawCallback
+          : "/audit";
+
+      const result = await signIn("credentials", {
+        email: normalizedEmail,
+        password,
+        redirect: false,
+        callbackUrl,
       });
 
-      const data = await res.json().catch(() => null);
-
-      if (res.status === 429) {
-        setError("محاولات كثيرة. انتظر دقيقة ثم حاول مرة أخرى.");
-        setLoading(false);
-        return;
-      }
-
-      if (res.status >= 500) {
-        setError("خطأ في الخادم. تحقق من قاعدة البيانات و AUTH_SECRET.");
-        setLoading(false);
-        return;
-      }
-
-      if (!res.ok || data?.error) {
+      if (result?.error) {
         setError(
           normalizedEmail === "admin@aqliya.com"
             ? "بيانات الدخول غير صحيحة. للحساب التجريبي استخدم admin123 (انقر «مدير» بالأسفل للتعبئة التلقائية)."
@@ -120,20 +112,14 @@ export default function LoginPage() {
         return;
       }
 
-      if (data?.ok && data?.user) {
+      if (result?.ok) {
         setRedirecting(true);
-        const url = new URL(window.location.href);
-        const rawCallback = url.searchParams.get("callbackUrl") || "/audit";
-        // Prevent open redirects: accept only relative, same-origin paths.
-        const callbackUrl =
-          rawCallback.startsWith("/") && !rawCallback.startsWith("//")
-            ? rawCallback
-            : "/audit";
         window.location.href = callbackUrl;
-      } else {
-        setError("تم تسجيل الدخول ولكن الجلسة لم تُنشأ. حاول مرة أخرى.");
-        setLoading(false);
+        return;
       }
+
+      setError("تم تسجيل الدخول ولكن الجلسة لم تُنشأ. حاول مرة أخرى.");
+      setLoading(false);
     } catch {
       setError("حدث خطأ في الاتصال. حاول مرة أخرى.");
       setLoading(false);
