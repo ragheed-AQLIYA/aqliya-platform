@@ -123,11 +123,38 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Rollback ECS Service
+      - name: Rollback ECS to previous task definition revision
         run: |
-          echo "Smoke test failed. Rolling back production service..."
+          echo "Smoke test failed. Rolling back production ECS to previous stable task definition..."
+          CLUSTER="aqliya-production-cluster"
+          SERVICE="aqliya-production-service"
+
+          # Get the current (just-deployed) task definition ARN
+          CURRENT_TASK_DEF=$(aws ecs describe-services \
+            --cluster "$CLUSTER" \
+            --services "$SERVICE" \
+            --query 'services[0].taskDefinition' \
+            --output text \
+            --region $AWS_REGION)
+          echo "Current task definition: $CURRENT_TASK_DEF"
+
+          # Extract the family and current revision number
+          TASK_FAMILY=$(echo "$CURRENT_TASK_DEF" | cut -d: -f6 | cut -d/ -f2)
+          CURRENT_REVISION=$(echo "$CURRENT_TASK_DEF" | cut -d: -f7)
+          PREVIOUS_REVISION=$((CURRENT_REVISION - 1))
+
+          if [ "$PREVIOUS_REVISION" -lt 1 ]; then
+            echo "No previous revision available (current is revision 1). Cannot roll back."
+            exit 1
+          fi
+
+          PREVIOUS_TASK_DEF="${TASK_FAMILY}:${PREVIOUS_REVISION}"
+          echo "Rolling back to: $PREVIOUS_TASK_DEF"
+
           aws ecs update-service \
-            --cluster aqliya-production-cluster \
-            --service aqliya-production-service \
-            --force-new-deployment \
+            --cluster "$CLUSTER" \
+            --service "$SERVICE" \
+            --task-definition "$PREVIOUS_TASK_DEF" \
             --region $AWS_REGION
+
+          echo "Rollback initiated. ECS will drain current tasks and start previous revision."
