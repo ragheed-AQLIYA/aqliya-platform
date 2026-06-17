@@ -151,8 +151,9 @@ Response headers: `Cache-Control: private, no-store`, `X-Content-Type-Options: n
 - `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L4).
 - `Sunbul` is a legacy redirect alias: `/sunbul/*` routes → `permanentRedirect(302)` to `/workflowos/*`.
 - `/organizations`, `/settings`, and `/sales` are protected surfaces — not yet v0.1 workspace complete.
-- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 20+ routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, and pilot readiness dashboard. L5 pilot-ready with conditions.
+- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 20+ routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, and pilot readiness dashboard. **L5 Pilot-ready** — AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. See `docs/deliverables/mission-summary-2026-06-17.md`.
 - `DecisionOS` includes stored evidence files plus protected download routes.
 - `AuditOS` is the most mature operating system with 12-station audit lifecycle, ISQM1 quality management, and interactive demo at `/auditos`.
 - **Schema v0.2 (2026-05-28)**: `createdById` added to 10 models, `DecisionEvidence` model added, `platformOrganizationId` added to SunbulClient.
 - **Website repositioning (2026-06-09)**: Navigation changed to `المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية`. Homepage redesigned with 9-section platform-first architecture. Products moved inside `/platform#capabilities`. Proof Center established at `/proof`. Sectors page at `/industries`.
+- **Script Utils (2026-06-17)**: `scripts/db-utils/prisma.mjs` created as a shared Prisma client for scripts (bypasses `server-only` guard). All script-based database operations should import from this module instead of creating inline PrismaClients.

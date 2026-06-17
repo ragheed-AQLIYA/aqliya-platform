@@ -1274,7 +1274,18 @@ The initial v0.1 reality hardening pass (Phase 1-7) was **completed 2026-05-28**
 | 6. Build restoration                  | ✅ Done | 18 TypeScript errors, 135 ESLint warnings, build failure all resolved                                            |
 | 7. Seed + governance                  | ✅ Done | createdById on 10 models, DecisionEvidence model, SunbulClient platformOrganizationId, seed-audit.ts createdById |
 
-The codebase now produces a clean build, zero lint warnings, full test pass, and validated database schema.
+### Post-hardening milestone (2026-06-17)
+
+| Priority                              | Status  | Details                                                                                                          |
+| ------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| **LocalContentOS AI Quality Re-Run**  | ✅ Done | 8 phases: cleaned 156 garbage → 39 grounded suggestions. 95% acceptance, 88% avg confidence, 100% pilot readiness |
+| **Confidence re-scoring**             | ✅ Done | 50% uniform → 88% average gradient (4 levels: 20-90%)                                                            |
+| **Health records**                    | ✅ Done | 13 records created (12 high_performing, 1 active)                                                                |
+| **Industry memory seeded**            | ✅ Done | 13 patterns for "services" industry                                                                              |
+| **Script db-utils**                   | ✅ Done | `scripts/db-utils/prisma.mjs` — shared Prisma client for scripts (bypasses server-only)                          |
+| **Docs updated**                      | ✅ Done | PRODUCT_STATUS_MATRIX.md, AQLIYA_ARCHITECTURE.md, deliverables in docs/deliverables/                             |
+
+The codebase now produces a clean build, zero lint warnings, full test pass, and validated database schema. LocalContentOS at **L5 Pilot-ready** (100% readiness, 7/7 GREEN).
 
 ---
 
