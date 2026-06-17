@@ -184,7 +184,7 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - GPU local inference
 - Kubernetes deployment
 - SIEM integration
-- SSO/LDAP/Active Directory integration
+- LDAP/Active Directory direct integration (OAuth/OIDC providers exist at L4; SAML stub)
 - Model Governance registry
 - Institutional Memory engine
 - AQLIYA Studio builder
@@ -242,7 +242,7 @@ The following claims are not supported by current code, routes, schema, or valid
 - On-Prem package is available for deployment
 - Air-Gapped mode is operational
 - Local AI runtime is functional
-- SSO/LDAP/AD integration is implemented
+- LDAP/AD direct integration is implemented (OAuth/OIDC admin UI exists; SAML is a stub)
 - SIEM integration exists
 - Kubernetes deployment is configured
 - GPU inference is available

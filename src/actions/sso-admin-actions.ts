@@ -5,7 +5,7 @@
 // All mutations logged to PlatformAuditLog.
 
 import "server-only";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, requireUserContext } from "@/lib/auth";
 import {
   getSsoProviders,
   createProvider,
@@ -41,7 +41,7 @@ export async function listSsoProvidersAction() {
 }
 
 export async function createSsoProviderAction(data: SsoProviderFormData) {
-  const user = await getCurrentUser();
+  const user = await requireUserContext("ADMIN");
 
   if (!data.providerType) {
     throw new Error("نوع المزود مطلوب");
@@ -81,7 +81,7 @@ export async function updateSsoProviderAction(
   providerId: string,
   data: Partial<SsoProviderFormData>,
 ) {
-  const user = await getCurrentUser();
+  const user = await requireUserContext("ADMIN");
 
   const updated = await updateProvider(
     user.organizationId,
@@ -114,7 +114,7 @@ export async function updateSsoProviderAction(
 }
 
 export async function deleteSsoProviderAction(providerId: string) {
-  const user = await getCurrentUser();
+  const user = await requireUserContext("ADMIN");
 
   const deleted = await deleteProvider(user.organizationId, providerId, user.id);
   if (!deleted) {
@@ -128,7 +128,7 @@ export async function toggleSsoProviderAction(
   providerId: string,
   enabled: boolean,
 ) {
-  const user = await getCurrentUser();
+  const user = await requireUserContext("ADMIN");
 
   const updated = await updateProvider(
     user.organizationId,

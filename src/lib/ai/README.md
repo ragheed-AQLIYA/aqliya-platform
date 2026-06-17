@@ -13,7 +13,8 @@
 | AuditOS AI (A1-09) | `audit-ai-bridge.ts` → orchestrator (tenant + RAG + budget) |
 | Office AI | `deterministic-generators.ts` — separate from orchestrator unless wired |
 | Model registry (IC-05) | `model-registry.ts` — file-based catalog; wired into provider routing + `/api/ai/providers` |
-| **Not implemented** | local GPU runtime (IC-10), institutional memory store |
+| Local AI (Ollama) | L4 operational — `local-ai:smoke` PASS, qwen3:8b; default-off, needs `OLLAMA_BASE_URL` |
+| **Not implemented** | local GPU packaging (IC-10), institutional memory store |
 
 ---
 
@@ -47,7 +48,7 @@ audit-actions.ts → services/ai.ts → runGovernedAuditAI()  [A1-09]
 | **OpenAIProvider** | Env-gated | `FF_AI_REAL_PROVIDERS` + `OPENAI_API_KEY` |
 | **AnthropicProvider** | Env-gated | `FF_AI_REAL_PROVIDERS` + `ANTHROPIC_API_KEY` |
 | **CloudAIProvider** | Partial | Legacy cloud config path |
-| **LocalAIProvider** | Not implemented | IC-10 future |
+| **LocalAIProvider** | Ollama operational (L4) | `OLLAMA_BASE_URL` env; qwen3:8b smoke PASS. IC-10 GPU runtime = future |
 
 ---
 

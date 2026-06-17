@@ -30,26 +30,31 @@ AQLIYA is NOT:
 AQLIYA IS:
 
 - A Private Governed Institutional Intelligence Platform
-- A Cloud + Private/On-Prem dual-deployment platform
+- A Cloud-deployed platform (AWS ECS/RDS/Redis) with strategic Private/On-Prem direction
 - A multi-product company (AuditOS, LocalContentOS, DecisionOS, etc.)
-- A builder of custom institutional systems (via AQLIYA Studio)
+- A platform factory for governed institutional workflows (AQLIYA Studio: strategic, not yet implemented)
 
 ---
 
 ## Products (built on AQLIYA Intelligence Core)
 
-| Product            | Status                               | Route                                                                 |
-| ------------------ | ------------------------------------ | --------------------------------------------------------------------- |
-| **AuditOS**        | L5 pilot-ready / v0.1 conditional go | `/audit` (workspace), `/auditos` (demo)                               |
-| **LocalContentOS** | L5 Pilot-ready with conditions       | `/local-content/*` (workspace), `/products/local-content` (marketing) |
-| **DecisionOS**     | Active adjacent system               | `/decisions`                                                          |
-| **SalesOS**        | Prototype dashboard                  | `/sales`                                                              |
-| **SimulationOS**   | Marketing-only                       | `/products/simulation`                                                |
-| **AQLIYA Studio**  | Future (custom systems builder)      | —                                                                     |
+| Product               | Status                               | Route                                                                 |
+| --------------------- | ------------------------------------ | --------------------------------------------------------------------- |
+| **AuditOS**           | L5 pilot-ready / v0.1 conditional go | `/audit` (workspace), `/auditos` (demo)                               |
+| **LocalContentOS**    | L4→L5 partial pilot-ready            | `/local-content/*` (workspace), `/products/local-content` (marketing) |
+| **DecisionOS**        | L4 usable v0.1                       | `/decisions`                                                          |
+| **WorkflowOS**        | L4→L5 partial                        | `/workflowos/*`                                                       |
+| **Office AI Assistant** | L4 usable v0.1                     | `/assistant/*`                                                        |
+| **SalesOS**           | L4 internal preview                  | `/sales/*`                                                            |
+| **LocalContactOS**    | L4→L5 partial                        | `/contacts/*`                                                         |
+| **SimulationOS**      | Marketing redirect only              | `/products/simulation` → `/products`                                  |
+| **AQLIYA Studio**     | L0 strategic future                  | —                                                                     |
 
 **LocalContentOS evidence (2026-05-23):** Real workspace at `/local-content/*` with server-action mutations. Mutation feedback loop verified (`revalidatePath` + client refresh). Focused smoke **PASS** on finding create at `/local-content/projects/lc-project-demo-001/findings`. CLI validation passed (`prisma generate`, `tsc`, `lint`, `build`, local-content tests). Not L6 production-hardened; binary PDF/XLSX export deferred.
 
 **AuditOS v0.1 Real Program (2026-05-28):** Waves A–F complete. Build + test gate passed (27 suites / 213 tests). Go/No-Go: **Conditional GO** for controlled internal / limited pilot — not production-certified. See `docs/reports/auditos-v0.1-go-no-go-review-2026-05-28.md`.
+
+**Build verification (2026-06-17):** `tsc --noEmit` PASS, `npm run build` PASS (127 static pages), 2,321 tests pass (242 suites). Security ship gate: `/api/test-token` removed, CoreAccessControl deny-by-default, MFA JWT populated. See `docs/reports/validation-snapshot-2026-06-17.md`.
 
 ---
 

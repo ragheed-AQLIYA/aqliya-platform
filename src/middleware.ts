@@ -89,6 +89,7 @@ const routeMinRoles: Record<string, string> = {
   "/sales": "viewer",
   "/workflowos": "viewer",
   "/sunbul": "viewer",
+  "/settings/sso": "admin",
   "/settings": "viewer",
   "/organizations": "admin",
   "/intelligence": "viewer",
