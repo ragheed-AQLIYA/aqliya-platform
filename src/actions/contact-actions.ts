@@ -480,6 +480,164 @@ export async function rejectContactReview(reviewId: string, note?: string) {
   });
 }
 
+// ─── Risk Flags ────────────────────────────────────────
+
+export interface RiskFlag {
+  id: string;
+  type: "compliance" | "data_privacy" | "relationship" | "contractual" | "financial" | "other";
+  severity: "low" | "medium" | "high" | "critical";
+  description: string;
+  createdBy: string;
+  createdAt: string;
+  resolvedAt?: string;
+}
+
+function generateFlagId(): string {
+  return `flag-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+async function logContactAuditEvent(params: {
+  contactId: string;
+  organizationId: string;
+  platformOrganizationId?: string | null;
+  actorId: string;
+  actorName?: string | null;
+  action: string;
+  details?: string;
+  metadata?: Record<string, unknown>;
+}) {
+  try {
+    await prisma.platformAuditLog.create({
+      data: {
+        platformOrganizationId: params.platformOrganizationId,
+        clientWorkspaceId: null,
+        productKey: "localcontactos",
+        actorId: params.actorId,
+        actorName: params.actorName,
+        actorEmail: null,
+        action: params.action,
+        targetType: "LocalContact",
+        targetId: params.contactId,
+        targetLabel: null,
+        severity: "info",
+        metadata: (params.metadata ?? {}) as any,
+      },
+    });
+  } catch (e) {
+    console.error("[Contact Audit Log Error]", e);
+  }
+}
+
+export async function getContactRiskFlags(contactId: string) {
+  return safe(async () => {
+    const user = await requireUserContext("VIEWER");
+    const contact = await prisma.localContact.findUnique({
+      where: { id: contactId },
+      select: { id: true, organizationId: true, metadata: true },
+    });
+    if (!contact || contact.organizationId !== user.organizationId) {
+      throw new Error("Contact not found or access denied");
+    }
+    const metadata = (contact.metadata as Record<string, unknown>) || {};
+    return (metadata.riskFlags as RiskFlag[]) || [];
+  });
+}
+
+export async function addContactRiskFlag(
+  contactId: string,
+  flag: Omit<RiskFlag, "id" | "createdAt" | "createdBy">,
+) {
+  return safe(async () => {
+    const user = await requireUserContext("OPERATOR");
+    const contact = await prisma.localContact.findUnique({
+      where: { id: contactId },
+      select: { id: true, organizationId: true, metadata: true },
+    });
+    if (!contact || contact.organizationId !== user.organizationId) {
+      throw new Error("Contact not found or access denied");
+    }
+
+    const metadata = (contact.metadata as Record<string, unknown>) || {};
+    const existingFlags = (metadata.riskFlags as RiskFlag[]) || [];
+
+    const newFlag: RiskFlag = {
+      id: generateFlagId(),
+      ...flag,
+      createdBy: user.name ?? user.email,
+      createdAt: new Date().toISOString(),
+    };
+
+    await prisma.localContact.update({
+      where: { id: contactId },
+      data: {
+        metadata: {
+          ...metadata,
+          riskFlags: [...existingFlags, newFlag],
+        } as any,
+      },
+    });
+
+    // Audit event
+    await logContactAuditEvent({
+      contactId,
+      organizationId: user.organizationId,
+      platformOrganizationId: user.platformOrganizationId,
+      actorId: user.id,
+      actorName: user.name,
+      action: "riskFlagAdded",
+      details: `Risk flag added: ${flag.type} (${flag.severity}) — ${flag.description}`,
+      metadata: { flagId: newFlag.id, ...flag },
+    });
+
+    revalidatePath(`/contacts/${contactId}`);
+    return newFlag;
+  });
+}
+
+export async function resolveContactRiskFlag(contactId: string, flagId: string) {
+  return safe(async () => {
+    const user = await requireUserContext("OPERATOR");
+    const contact = await prisma.localContact.findUnique({
+      where: { id: contactId },
+      select: { id: true, organizationId: true, metadata: true },
+    });
+    if (!contact || contact.organizationId !== user.organizationId) {
+      throw new Error("Contact not found or access denied");
+    }
+
+    const metadata = (contact.metadata as Record<string, unknown>) || {};
+    const existingFlags = (metadata.riskFlags as RiskFlag[]) || [];
+
+    const updatedFlags = existingFlags.map((f) =>
+      f.id === flagId ? { ...f, resolvedAt: new Date().toISOString() } : f,
+    );
+
+    await prisma.localContact.update({
+      where: { id: contactId },
+      data: {
+        metadata: {
+          ...metadata,
+          riskFlags: updatedFlags,
+        } as any,
+      },
+    });
+
+    await logContactAuditEvent({
+      contactId,
+      organizationId: user.organizationId,
+      platformOrganizationId: user.platformOrganizationId,
+      actorId: user.id,
+      actorName: user.name,
+      action: "riskFlagResolved",
+      details: `Risk flag ${flagId} resolved by ${user.name}`,
+      metadata: { flagId },
+    });
+
+    revalidatePath(`/contacts/${contactId}`);
+    return { resolved: true };
+  });
+}
+
 // ─── Export ────────────────────────────────────────────
 
 import { format } from "date-fns";

@@ -282,11 +282,13 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                              | Product/System | Route Type         | Public/Protected | Implementation Status | Notes              |
 | ---------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------ |
-| `/contacts`                        | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Contact registry   |
-| `/contacts/new`                    | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Create contact     |
-| `/contacts/[id]`                   | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Contact detail     |
-| `/contacts/[id]/relations/new`     | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Add relation       |
-| `/contacts/[id]/interactions/new`  | LocalContactOS | Governed workspace | Protected        | Usable v0.1 (L4)      | Log interaction    |
+| `/contacts`                        | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Contact registry with search + sensitivity filter |
+| `/contacts/dashboard`              | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | KPIs, charts, recent activity |
+| `/contacts/new`                    | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Create contact     |
+| `/contacts/[id]`                   | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Detail: info, relations, interactions, evidence, reviews, export, risk flags |
+| `/contacts/[id]/edit`              | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Edit contact form (pre-populated) |
+| `/contacts/[id]/relations/new`     | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Add relation       |
+| `/contacts/[id]/interactions/new`  | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Log interaction    |
 
 ### Sunbul — Redirect Alias to WorkflowOS
 

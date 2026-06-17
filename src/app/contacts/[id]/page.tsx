@@ -35,6 +35,7 @@ import { CompliancePanel } from "@/components/contacts/compliance-panel";
 import { ExportApprovalBadge } from "@/components/contacts/export-approval-badge";
 import { ExportApprovalDialog } from "@/components/contacts/export-approval-dialog";
 import { ReviewAssignmentPanel } from "@/components/contacts/review-assignment-panel";
+import { RiskFlagsPanel } from "@/components/contacts/risk-flags-panel";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -273,6 +274,7 @@ export default async function ContactDetailPage({ params }: PageProps) {
                 </form>
               </>
             ) : null}
+            <RiskFlagsSidebarSection contactId={contact.id} metadata={contact.metadata} />
             <ComplianceSidebarSection contactId={contact.id} orgId={user.organizationId} userId={user.id} />
             <ExportApprovalSidebarSection contactId={contact.id} orgId={user.organizationId} userId={user.id} userRole={user.role} />
           </div>
@@ -428,6 +430,25 @@ async function ReviewsSection({
       userRole={userRole}
     />
   );
+}
+
+// ─── Risk Flags Sidebar Section ─────────────────────────
+
+async function RiskFlagsSidebarSection({
+  contactId,
+  metadata,
+}: {
+  contactId: string;
+  metadata: unknown;
+}) {
+  const riskFlags = extractRiskFlags(metadata);
+  return <RiskFlagsPanel contactId={contactId} initialFlags={riskFlags} />;
+}
+
+function extractRiskFlags(metadata: unknown): import("@/actions/contact-actions").RiskFlag[] {
+  if (!metadata || typeof metadata !== "object") return [];
+  const meta = metadata as Record<string, unknown>;
+  return (meta.riskFlags as import("@/actions/contact-actions").RiskFlag[]) || [];
 }
 
 // ─── Compliance Sidebar Section ─────────────────────────

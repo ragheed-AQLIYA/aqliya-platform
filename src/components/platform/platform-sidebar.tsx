@@ -83,6 +83,18 @@ const platformNav = [
     icon: Building2,
   },
   { name: "الذكاء", href: "/intelligence/sectors", icon: Brain },
+  {
+    name: "Contacts Dashboard",
+    nameAr: "لوحة علاقات المؤسسات",
+    href: "/contacts/dashboard",
+    icon: Users,
+  },
+  {
+    name: "All Contacts",
+    nameAr: "جهات الاتصال",
+    href: "/contacts",
+    icon: Users,
+  },
   { name: "الإعدادات", href: "/settings", icon: Settings },
   {
     name: "Platform Organization",

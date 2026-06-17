@@ -865,6 +865,304 @@ async function main() {
     `  AuditOS engagement: eng-gulf-2025 (${auditOrg.name} / ${auditClient.name})`,
   );
 
+  // ─── LocalContactOS Seed Data ─────────────────────────────
+  console.log("Seeding LocalContactOS...");
+
+  const contactsData = [
+    {
+      name: "سارة القحطاني",
+      email: "sara.alqahtani@mci.gov.sa",
+      phone: "+966 55 123 4567",
+      position: "مدير إدارة المشتريات",
+      department: "المشتريات",
+      organizationName: "وزارة التجارة والصناعة",
+      sensitivityLevel: "sensitive",
+      notes: "الجهة المسؤولة عن العقود الحكومية في قطاع المشتريات. تفضل التواصل عبر البريد الإلكتروني الرسمي.",
+      tags: ["حكومي", "مشتريات", "عقود"],
+    },
+    {
+      name: "فيصل الدوسري",
+      email: "faisal@dossary-holding.com",
+      phone: "+966 50 234 5678",
+      position: "الرئيس التنفيذي",
+      department: "الإدارة التنفيذية",
+      organizationName: "مؤسسة الدوسري القابضة",
+      sensitivityLevel: "normal",
+      notes: "شريك استراتيجي في قطاع المقاولات. اهتمام بمبادرات المحتوى المحلي.",
+      tags: ["شريك", "قطاع خاص", "مقاولات"],
+    },
+    {
+      name: "نورة الشمري",
+      email: "noura.shamri@nemr.com.sa",
+      phone: "+966 56 345 6789",
+      position: "مدير الموارد البشرية",
+      department: "الموارد البشرية",
+      organizationName: "شركة نمر للصناعة",
+      sensitivityLevel: "sensitive",
+      notes: "التواصل بخصوص برامج التوطين وتطوير الكوادر الوطنية. سابقة أعمال في برامج التدريب المشترك.",
+      tags: ["قطاع خاص", "صناعة", "موارد بشرية", "توطين"],
+    },
+    {
+      name: "عبدالرحمن العتيبي",
+      email: "abdulrahman@otaibi-consulting.com",
+      phone: "+966 54 456 7890",
+      position: "مستشار قانوني",
+      department: "الشؤون القانونية",
+      organizationName: "مكتب العتيبي للاستشارات",
+      sensitivityLevel: "confidential",
+      notes: "مستشار قانوني للعديد من العقود الحكومية. المعلومات سرية - لا تشارك بدون موافقة.",
+      tags: ["قانوني", "استشارات", "سري"],
+    },
+    {
+      name: "مريم الزهراني",
+      email: "maryam.zahrani@kafaa.gov.sa",
+      phone: "+966 55 567 8901",
+      position: "أخصائي محتوى محلي",
+      department: "إدارة المحتوى المحلي",
+      organizationName: "هيئة كفاءة المحتوى المحلي",
+      sensitivityLevel: "normal",
+      notes: "مسؤولة عن متابعة تقارير المحتوى المحلي للجهات الحكومية.",
+      tags: ["حكومي", "محتوى محلي", "هيئة"],
+    },
+    {
+      name: "خالد الغامدي",
+      email: "khalid.ghamdi@bayanatech.com",
+      phone: "+966 53 678 9012",
+      position: "نائب الرئيس لتقنية المعلومات",
+      department: "تقنية المعلومات",
+      organizationName: "شركة بيانة للتقنية",
+      sensitivityLevel: "normal",
+      notes: "شريك تقني محتمل لمنصة عقلية. اجتماعات سابقة حول تكامل الأنظمة.",
+      tags: ["تقنية", "شريك محتمل", "تكامل"],
+    },
+  ];
+
+  const createdContacts: any[] = [];
+  for (const c of contactsData) {
+    const contact = await prisma.localContact.create({
+      data: {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        name: c.name,
+        email: c.email,
+        phone: c.phone,
+        position: c.position,
+        department: c.department,
+        organizationName: c.organizationName,
+        sensitivityLevel: c.sensitivityLevel,
+        notes: c.notes,
+        tags: c.tags,
+        createdById: admin.id,
+      },
+    });
+    createdContacts.push(contact);
+  }
+  console.log(`Created ${createdContacts.length} contacts`);
+
+  // Create relations between contacts
+  await prisma.localContactRelation.createMany({
+    data: [
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        sourceContactId: createdContacts[0].id, // سارة القحطاني
+        targetContactId: createdContacts[4].id, // مريم الزهراني
+        relationType: "partner",
+        description: "تعاون مشترك في متابعة عقود المشتريات الحكومية ومتطلبات المحتوى المحلي",
+        strength: 8,
+        createdById: admin.id,
+      },
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        sourceContactId: createdContacts[2].id, // نورة الشمري
+        targetContactId: createdContacts[5].id, // خالد الغامدي
+        relationType: "colleague",
+        description: "شراكة سابقة في مشروع توطين التقنية",
+        strength: 6,
+        createdById: admin.id,
+      },
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        sourceContactId: createdContacts[3].id, // عبدالرحمن العتيبي
+        targetContactId: createdContacts[0].id, // سارة القحطاني
+        relationType: "client",
+        description: "استشارات قانونية لعقود وزارة التجارة",
+        strength: 9,
+        createdById: admin.id,
+      },
+    ],
+  });
+  console.log("Created 3 contact relations");
+
+  // Create interactions
+  const now = new Date();
+  await prisma.localContactInteraction.createMany({
+    data: [
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        contactId: createdContacts[0].id,
+        interactionType: "meeting",
+        subject: "اجتماع مناقشة متطلبات المحتوى المحلي للعقود الجديدة",
+        summary: "تم مناقشة آلية تطبيق متطلبات المحتوى المحلي في العقود الحكومية الجديدة. تم الاتفاق على عقد ورشة عمل للأطراف المعنية.",
+        occurredAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        duration: 90,
+        createdById: admin.id,
+      },
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        contactId: createdContacts[1].id,
+        interactionType: "call",
+        subject: "متابعة عرض الشراكة الاستراتيجية",
+        summary: "اتصال هاتفي لمناقشة بنود مذكرة التفاهم المقترحة. أبدى فيصل اهتمامه بالتفاصيل.",
+        occurredAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        duration: 30,
+        createdById: admin.id,
+      },
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        contactId: createdContacts[4].id,
+        interactionType: "email",
+        subject: "طلب تقرير المحتوى المحلي الربعي",
+        summary: "تم إرسال طلب رسمي للحصول على تقرير المحتوى المحلي للربع الثاني.",
+        occurredAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        createdById: admin.id,
+      },
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        contactId: createdContacts[5].id,
+        interactionType: "meeting",
+        subject: "اجتماع عرض منصة عقلية",
+        summary: "عرض توضيحي لمنصة عقلية وقدراتها في إدارة العلاقات المؤسسية. إهتمام واضح بتكامل الأنظمة.",
+        occurredAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        duration: 120,
+        createdById: admin.id,
+      },
+    ],
+  });
+  console.log("Created 4 contact interactions");
+
+  // Create evidence (confidential contact)
+  const confContact = createdContacts[3]; // عبدالرحمن العتيبي
+  await prisma.contactEvidence.createMany({
+    data: [
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        contactId: confContact.id,
+        filename: "اتفاقية_سرية_الاستشارات_القانونية.pdf",
+        fileType: "pdf",
+        description: "اتفاقية السرية الموقعة مع مكتب العتيبي للاستشارات القانونية",
+        evidenceType: "document",
+        sizeBytes: 245760,
+        uploadedById: admin.id,
+      },
+      {
+        organizationId: org.id,
+        platformOrganizationId: platformOrg.id,
+        contactId: createdContacts[0].id,
+        filename: "ملخص_اجتماع_المشتريات.docx",
+        fileType: "docx",
+        description: "ملخص اجتماع مناقشة متطلبات المحتوى المحلي",
+        evidenceType: "reference",
+        sizeBytes: 51200,
+        uploadedById: admin.id,
+      },
+    ],
+  });
+  console.log("Created 2 evidence records");
+
+  // Create a review for the confidential contact + approval
+  const confReview = await prisma.contactReview.create({
+    data: {
+      organizationId: org.id,
+      platformOrganizationId: platformOrg.id,
+      contactId: confContact.id,
+      reviewType: "sensitivity",
+      status: "approved",
+      reviewerId: admin.id,
+      reviewerName: admin.name,
+      reason: "مراجعة دورية لمستوى حساسية البيانات",
+      findings: [
+        { category: "بيانات شخصية", level: "high", note: "يحتوي على معلومات تعريفية حساسة" },
+        { category: "بيانات تعاقدية", level: "critical", note: "يشمل عقودًا سرية مع جهات حكومية" },
+      ],
+      reviewerNotes: "تمت المراجعة والتأكيد على المستوى السري. التصدير يتطلب موافقة مسبقة.",
+      completedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+    },
+  });
+
+  await prisma.contactApproval.create({
+    data: {
+      organizationId: org.id,
+      platformOrganizationId: platformOrg.id,
+      reviewId: confReview.id,
+      approverId: admin.id,
+      approverName: admin.name,
+      status: "approved",
+      note: "موافق على تصنيف جهة الاتصال كمستوى سري",
+    },
+  });
+  console.log("Created 1 review + 1 approval");
+
+  // Create an export request for a sensitive contact
+  await prisma.contactExportRequest.create({
+    data: {
+      organizationId: org.id,
+      platformOrganizationId: platformOrg.id,
+      contactId: createdContacts[0].id, // سارة القحطاني (sensitive)
+      status: "approved",
+      requestedById: admin.id,
+      requestedByName: admin.name,
+      reason: "تصدير معلومات جهة الاتصال لتضمينها في تقرير الشركاء",
+      reviewedById: admin.id,
+      reviewedByName: admin.name,
+      reviewNote: "موافق - معلومات عامة للجهة",
+      reviewedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+      requiresLegalReview: false,
+      legalReviewStatus: "not_required",
+    },
+  });
+  console.log("Created 1 export request");
+
+  // Audit events for the seed data
+  await prisma.platformAuditLog.createMany({
+    data: [
+      {
+        platformOrganizationId: platformOrg.id,
+        productKey: "localcontactos",
+        actorId: admin.id,
+        actorName: admin.name,
+        action: "seed",
+        targetType: "LocalContact",
+        targetId: "bulk",
+        targetLabel: "6 contacts seeded",
+        severity: "info",
+        metadata: { source: "seed" },
+      },
+      {
+        platformOrganizationId: platformOrg.id,
+        productKey: "localcontactos",
+        actorId: admin.id,
+        actorName: admin.name,
+        action: "seed",
+        targetType: "ContactEvidence",
+        targetId: "bulk",
+        targetLabel: "2 evidence records seeded",
+        severity: "info",
+        metadata: { source: "seed" },
+      },
+    ],
+  });
+  console.log("Created 2 audit events for contacts");
+
+  // ─── End LocalContactOS Seed Data ─────────────────────────
+
   console.log("Seeding completed successfully!");
 }
 
