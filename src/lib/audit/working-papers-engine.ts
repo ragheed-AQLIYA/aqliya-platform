@@ -112,9 +112,9 @@ export class WorkingPapersEngine {
         accountName: input.accountName,
         priorYearBalance: input.priorYearBalance,
         currentYearBalance: input.currentYearBalance,
-        adjustments: (input.adjustments ?? []) as any,
+        adjustments: (input.adjustments ?? []) as Prisma.InputJsonValue,
         finalBalance: input.finalBalance,
-        assertionCoverage: input.assertionCoverage as any,
+        assertionCoverage: input.assertionCoverage as Prisma.InputJsonValue,
         notes: input.notes,
         createdById: actor.actorId,
       },
@@ -247,7 +247,7 @@ export class WorkingPapersEngine {
         engagementId: input.engagementId,
         workingPaperIndexId: input.workingPaperIndexId,
         checklistType: input.checklistType,
-        items: (input.items ?? []) as any,
+        items: (input.items ?? []) as Prisma.InputJsonValue,
         overallCompletionAssessment: input.overallAssessment,
         createdById: actor.actorId,
       },
@@ -338,3 +338,4 @@ export class WorkingPapersEngine {
 }
 
 export const workingPapersEngine = new WorkingPapersEngine();
+

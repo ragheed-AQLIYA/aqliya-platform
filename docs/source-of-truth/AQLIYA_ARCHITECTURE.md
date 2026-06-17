@@ -124,7 +124,7 @@ Deployment models: Cloud (active), Private/On-Prem (strategic), Air-Gapped (stra
 | `/assistant`                             | Office AI Assistant workspace               | Shared Application     |
 | `/workflowos`                            | WorkflowOS governed workspace               | Custom Workspace       |
 | `/sunbul`                                | Legacy redirect → /workflowos               | Custom Workspace Alias |
-| `/local-content`                         | LocalContentOS governed workspace           | Workspace              |
+| `/local-content`                         | LocalContentOS governed workspace (14 routes including review-center, quality-dashboard)           | Workspace              |
 | `/sales`                                 | SalesOS prototype dashboard                 | Workspace/Prototype    |
 | `/contacts`                              | LocalContactOS governed workspace           | Workspace              |
 | `/organizations`                         | Protected mock organizations surface        | Workspace/Prototype    |
@@ -151,7 +151,7 @@ Response headers: `Cache-Control: private, no-store`, `X-Content-Type-Options: n
 - `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L4).
 - `Sunbul` is a legacy redirect alias: `/sunbul/*` routes → `permanentRedirect(302)` to `/workflowos/*`.
 - `/organizations`, `/settings`, and `/sales` are protected surfaces — not yet v0.1 workspace complete.
-- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 20+ routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, and pilot readiness dashboard. **L5 Pilot-ready** — AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. See `docs/deliverables/mission-summary-2026-06-17.md`.
+- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 20+ routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, and pilot readiness dashboard. **L5 Pilot-ready** — AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. See `docs/deliverables/mission-summary-2026-06-17.md`. AI Quality Dashboard at `/local-content/quality-dashboard` (2026-06-17): composite quality score, 4-bucket confidence distribution, 4-week acceptance rate time-series, inline audit events table, bilingual PDF export. Review Center at `/local-content/review-center` with inline audit event viewer and export controls.
 - `DecisionOS` includes stored evidence files plus protected download routes.
 - `AuditOS` is the most mature operating system with 12-station audit lifecycle, ISQM1 quality management, and interactive demo at `/auditos`.
 - **Schema v0.2 (2026-05-28)**: `createdById` added to 10 models, `DecisionEvidence` model added, `platformOrganizationId` added to SunbulClient.

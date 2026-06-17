@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { loadReportingGraph } from "./graph-query";
 import type { GraphSnapshotRecord, ReportingGraphStats } from "./types";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
@@ -39,7 +40,7 @@ export async function captureReportingGraphSnapshot(params: {
         stats: graph.stats,
         capturedAt: graph.builtAt,
         graph,
-      } as any,
+      } as Prisma.InputJsonValue,
     },
   });
 

@@ -73,7 +73,7 @@ export class IndependenceEngine {
     if (roleFilter) where.entityRole = roleFilter;
 
     return prisma.independenceRegister.findMany({
-      where: where as any,
+      where: where as Prisma.IndependenceRegisterWhereInput,
       include: {
         financialInterests: true,
         employmentRelationships: true,
@@ -212,7 +212,7 @@ export class IndependenceEngine {
     if (filters?.category) where.threatCategory = filters.category;
 
     return prisma.independenceThreat.findMany({
-      where: where as any,
+      where: where as Prisma.IndependenceRegisterWhereInput,
       include: {
         register: { select: { entityName: true, entityRole: true } },
         safeguards: true,
@@ -374,8 +374,8 @@ export class IndependenceEngine {
       data: {
         status: "completed",
         confirmedAt: new Date(),
-        interestsDeclared: interestsDeclared as any,
-        relationshipsDeclared: relationshipsDeclared as any,
+        interestsDeclared: interestsDeclared as Prisma.InputJsonValue,
+        relationshipsDeclared: relationshipsDeclared as Prisma.InputJsonValue,
         signedById: actor.actorId,
       },
     });
@@ -464,3 +464,4 @@ export class IndependenceEngine {
 }
 
 export const independenceEngine = new IndependenceEngine();
+

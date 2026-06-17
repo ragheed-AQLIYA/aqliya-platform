@@ -4,6 +4,7 @@
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { AuditActor } from "./actor-context";
 import { assertClientAccess, assertEngagementAccess } from "./tenant-guard";
 
@@ -162,9 +163,9 @@ export class ClientAcceptanceEngine {
             status: "completed",
             completedById: actor.actorId,
             completedAt: new Date(),
-            ownershipStructure: data.ownershipStructure as any,
-            financialHealth: data.financialHealth as any,
-            litigationHistory: data.litigationHistory as any,
+            ownershipStructure: data.ownershipStructure as Prisma.InputJsonValue,
+            financialHealth: data.financialHealth as Prisma.InputJsonValue,
+            litigationHistory: data.litigationHistory as Prisma.InputJsonValue,
           },
         })
       : await prisma.kycPackage.create({
@@ -174,9 +175,9 @@ export class ClientAcceptanceEngine {
             status: "completed",
             completedById: actor.actorId,
             completedAt: new Date(),
-            ownershipStructure: data.ownershipStructure as any,
-            financialHealth: data.financialHealth as any,
-            litigationHistory: data.litigationHistory as any,
+            ownershipStructure: data.ownershipStructure as Prisma.InputJsonValue,
+            financialHealth: data.financialHealth as Prisma.InputJsonValue,
+            litigationHistory: data.litigationHistory as Prisma.InputJsonValue,
           },
         });
 
@@ -248,8 +249,8 @@ export class ClientAcceptanceEngine {
         governanceRiskLevel: governanceRisk ? calcLevel(governanceRisk.score) : null,
         regulatoryRiskScore: regulatoryRisk?.score ?? null,
         regulatoryRiskLevel: regulatoryRisk ? calcLevel(regulatoryRisk.score) : null,
-        riskFactors: input.riskFactors as any,
-        mitigatingFactors: (input.mitigatingFactors ?? []) as any,
+        riskFactors: input.riskFactors as Prisma.InputJsonValue,
+        mitigatingFactors: (input.mitigatingFactors ?? []) as Prisma.InputJsonValue,
         methodology: input.methodology ?? DEFAULT_METHODOLOGY.name,
         assessedById: actor.actorId,
         assessedAt: new Date(),
@@ -259,8 +260,8 @@ export class ClientAcceptanceEngine {
         overallRiskScore: Math.round(normalizedScore * 10) / 10,
         overallRiskLevel: overallLevel,
         clientId: input.clientId,
-        riskFactors: input.riskFactors as any,
-        mitigatingFactors: (input.mitigatingFactors ?? []) as any,
+        riskFactors: input.riskFactors as Prisma.InputJsonValue,
+        mitigatingFactors: (input.mitigatingFactors ?? []) as Prisma.InputJsonValue,
         assessedById: actor.actorId,
         assessedAt: new Date(),
       },
@@ -313,7 +314,7 @@ export class ClientAcceptanceEngine {
         decisionType: input.decisionType,
         decision: input.decision,
         rationale: input.rationale,
-        conditions: (input.conditions ?? []) as any,
+        conditions: (input.conditions ?? []) as Prisma.InputJsonValue,
         effectiveDate: input.effectiveDate,
         expiryDate: input.expiryDate,
         approvedById: actor.actorId,
@@ -395,9 +396,9 @@ export class ClientAcceptanceEngine {
         organizationId: input.organizationId,
         clientId: input.clientId,
         reviewYear: input.reviewYear,
-        engagementHistory: input.engagementHistory as any,
-        feeHistory: input.feeHistory as any,
-        clientChanges: input.clientChanges as any,
+        engagementHistory: input.engagementHistory as Prisma.InputJsonValue,
+        feeHistory: input.feeHistory as Prisma.InputJsonValue,
+        clientChanges: input.clientChanges as Prisma.InputJsonValue,
         createdById: actor.actorId,
       },
     });

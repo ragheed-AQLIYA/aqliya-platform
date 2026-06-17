@@ -168,7 +168,7 @@ export class ReviewNotesEngine {
     const note = await prisma.reviewNote.update({
       where: { id: noteId },
       data: {
-        evidenceRef: evidenceRef as any,
+        evidenceRef: evidenceRef as Prisma.InputJsonValue,
         status: "evidenced",
       },
     });
@@ -304,7 +304,7 @@ export class ReviewNotesEngine {
     if (filters?.raiserId) where.raiserId = filters.raiserId;
 
     return prisma.reviewNote.findMany({
-      where: where as any,
+      where: where as Prisma.InputJsonValue,
       include: { escalations: true },
       orderBy: [
         { priority: "asc" },
@@ -413,3 +413,4 @@ export class ReviewNotesEngine {
 }
 
 export const reviewNotesEngine = new ReviewNotesEngine();
+

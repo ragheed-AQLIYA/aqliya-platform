@@ -172,17 +172,17 @@ export class AuditKnowledgeEngine {
       create: {
         engagementId,
         organizationId: data.organizationId,
-        industryProfile: data.industryProfile as any,
-        entityCharacteristics: data.entityCharacteristics as any,
+        industryProfile: data.industryProfile as Prisma.InputJsonValue,
+        entityCharacteristics: data.entityCharacteristics as Prisma.InputJsonValue,
         riskProfileSummary: data.riskProfileSummary,
-        riskAreas: (data.riskAreas ?? []) as any,
-        findingsSummary: data.findingsSummary as any,
-        keyAdjustments: data.keyAdjustments as any,
+        riskAreas: (data.riskAreas ?? []) as Prisma.InputJsonValue,
+        findingsSummary: data.findingsSummary as Prisma.InputJsonValue,
+        keyAdjustments: data.keyAdjustments as Prisma.InputJsonValue,
         priorYearEngagementId: data.priorYearEngagementId,
-        knowledgeTags: (data.knowledgeTags ?? []) as any,
+        knowledgeTags: (data.knowledgeTags ?? []) as Prisma.InputJsonValue,
         isCompleted: data.isCompleted ?? false,
       },
-      update: data as any,
+      update: data as Prisma.InputJsonValue,
     });
   }
 
@@ -241,7 +241,7 @@ export class AuditKnowledgeEngine {
     const [patternCount, totalRecommendations, profileCount, topPatterns, benchmarks] =
       await Promise.all([
         prisma.knowledgePattern.count({ where: { organizationId, isActive: true } }),
-        prisma.knowledgeRecommendation.count({ where: { engagement: { organizationId } } } as any),
+        prisma.knowledgeRecommendation.count({ where: { engagement: { organizationId } } } as Prisma.InputJsonValue),
         prisma.engagementProfile.count({ where: { organizationId } }),
         prisma.knowledgePattern.findMany({
           where: { organizationId, isActive: true },
@@ -266,3 +266,4 @@ export class AuditKnowledgeEngine {
 }
 
 export const auditKnowledgeEngine = new AuditKnowledgeEngine();
+

@@ -308,6 +308,24 @@ describe("getReviewQueueAction", () => {
     expect(queue.stats.totalMemoryRecords).toBe(0);
   });
 
+  it("should return queue with only non-pending items (empty actionable queue)", async () => {
+    mockLcMatchReviewFindMany
+      .mockResolvedValueOnce([]) // pending explanations
+      .mockResolvedValueOnce([]); // false positives
+    mockLcPatternSuggestionFindMany.mockResolvedValue([]);
+    mockLcPatternSuggestionCount.mockResolvedValue(0);
+    mockLcOrganizationMatchMemoryCount.mockResolvedValue(0);
+    mockLcPatternHealthRecordCount.mockResolvedValue(0);
+    mockLcPatternHealthRecordFindMany.mockResolvedValue([]);
+    mockLcAiReviewRunFindMany.mockResolvedValue([]);
+
+    const queue = await getReviewQueueAction("org-1");
+    expect(queue.total).toBe(0);
+    expect(queue.items).toHaveLength(0);
+    expect(queue.counts.explanations).toBe(0);
+    expect(queue.counts.suggestions).toBe(0);
+  });
+
   it("should return mixed queue with explanations, suggestions, and false positives", async () => {
     const pendingExplanation = makeExplanation({
       id: "exp-pending-1",
@@ -394,6 +412,18 @@ describe("batchReviewAction", () => {
     expect(result.success).toBe(false);
     expect(result.processed).toBe(0);
     expect(result.errors).toBe(1);
+  });
+
+  it("should handle empty selection list gracefully", async () => {
+    const result = await batchReviewAction(
+      "suggestion",
+      [],
+      "approved",
+      "Batch with empty list",
+    );
+    expect(result.success).toBe(true);
+    expect(result.processed).toBe(0);
+    expect(result.errors).toBe(0);
   });
 
   it("should process explanations via mocked service", async () => {
@@ -554,6 +584,67 @@ describe("getAiQualityMetricsAction", () => {
     expect(d.totalIndustryPatterns).toBe(0);
   });
 
+  it("should compute acceptanceOverTime with weekly buckets", async () => {
+    const now = Date.now();
+    // Place suggestions across 3 weeks (spread enough to hit different buckets)
+    mockLcPatternSuggestionFindMany.mockResolvedValue([
+      makeSuggestion({
+        id: "s-t-1",
+        status: "approved",
+        createdAt: new Date(now - 2 * 86400000), // ~2 days ago
+      }),
+      makeSuggestion({
+        id: "s-t-2",
+        status: "approved",
+        createdAt: new Date(now - 15 * 86400000), // ~15 days ago
+      }),
+      makeSuggestion({
+        id: "s-t-3",
+        status: "rejected",
+        createdAt: new Date(now - 25 * 86400000), // ~25 days ago
+      }),
+    ]);
+    mockLcMatchReviewFindMany
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    mockLcPatternHealthRecordFindMany.mockResolvedValue([]);
+    mockLcAiReviewRunFindMany.mockResolvedValue([]);
+    mockLcOrganizationMatchMemoryCount.mockResolvedValue(0);
+    mockLcIndustryPatternMemoryFindMany.mockResolvedValue([]);
+
+    const result = await getAiQualityMetricsAction();
+    expect(result.ok).toBe(true);
+
+    // 4 weekly buckets returned
+    expect(result.data!.acceptanceOverTime).toHaveLength(4);
+
+    // Each bucket should have label, total, approved, rate
+    result.data!.acceptanceOverTime.forEach((p) => {
+      expect(typeof p.label).toBe("string");
+      expect(typeof p.total).toBe("number");
+      expect(typeof p.approved).toBe("number");
+      expect(p.rate === null || typeof p.rate === "number").toBe(true);
+    });
+  });
+
+  it("should handle acceptanceOverTime with zero data", async () => {
+    mockLcPatternSuggestionFindMany.mockResolvedValue([]);
+    mockLcMatchReviewFindMany.mockResolvedValue([]);
+    mockLcPatternHealthRecordFindMany.mockResolvedValue([]);
+    mockLcAiReviewRunFindMany.mockResolvedValue([]);
+    mockLcOrganizationMatchMemoryCount.mockResolvedValue(0);
+    mockLcIndustryPatternMemoryFindMany.mockResolvedValue([]);
+
+    const result = await getAiQualityMetricsAction();
+    expect(result.ok).toBe(true);
+
+    // All buckets should have zero data
+    result.data!.acceptanceOverTime.forEach((p) => {
+      expect(p.total).toBe(0);
+      expect(p.rate).toBeNull();
+    });
+  });
+
   it("should compute confidence distribution buckets correctly", async () => {
     // 4 suggestions with confidences 40, 60, 85, 92
     mockLcPatternSuggestionFindMany.mockResolvedValue([
@@ -584,6 +675,29 @@ describe("getAiQualityMetricsAction", () => {
 
     // Explanations: 25→[1] (0-25), 55→[1] (50-75), 78+95→[2] (75-100)
     expect(result.data!.explanationConfidenceBuckets).toEqual([1, 0, 1, 2]);
+  });
+
+  it("should place confidence boundary values (25, 50, 75, 100) in correct buckets", async () => {
+    // Exactly at boundaries
+    mockLcPatternSuggestionFindMany.mockResolvedValue([
+      makeSuggestion({ id: "s-b1", confidence: 25 }),
+      makeSuggestion({ id: "s-b2", confidence: 50 }),
+      makeSuggestion({ id: "s-b3", confidence: 75 }),
+      makeSuggestion({ id: "s-b4", confidence: 100 }),
+    ]);
+    mockLcMatchReviewFindMany
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    mockLcPatternHealthRecordFindMany.mockResolvedValue([]);
+    mockLcAiReviewRunFindMany.mockResolvedValue([]);
+    mockLcOrganizationMatchMemoryCount.mockResolvedValue(0);
+    mockLcIndustryPatternMemoryFindMany.mockResolvedValue([]);
+
+    const result = await getAiQualityMetricsAction();
+    expect(result.ok).toBe(true);
+
+    // 25 → bucket[0] (0-25), 50 → bucket[1] (25-50), 75 → bucket[2] (50-75), 100 → bucket[3] (75-100)
+    expect(result.data!.suggestionConfidenceBuckets).toEqual([1, 1, 1, 1]);
   });
 });
 

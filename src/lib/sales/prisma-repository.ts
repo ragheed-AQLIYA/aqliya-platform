@@ -1,9 +1,23 @@
-// @ts-nocheck
 // ─── SalesOS Prisma persistence layer ───
 // Tenant-scoped CRUD. Enabled via SALESOS_PRISMA_PERSISTENCE=1.
+//
+// Tier B/A models (salesMarketSignal, salesKnowledgeGraphNode, etc.) are optional
+// schema extensions — present in DB only when the full SalesOS schema is applied.
+// FlexPrisma provides a typed escape hatch for runtime-optional models.
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
+
+// ─── Typed escape-hatch for optional SalesOS Tier B/A models ───
+// These models exist in the Prisma schema but may not be present in all DB instances.
+// We use a typed record to avoid spreading `as any` through the entire file.
+type FlexModel = {
+  findMany: (args?: { where?: Record<string, unknown> }) => Promise<Array<{ id: string } & Record<string, unknown>>>;
+  create: (args: { data: Record<string, unknown> }) => Promise<{ id: string } & Record<string, unknown>>;
+  updateMany: (args: { where: Record<string, unknown>; data: Record<string, unknown> }) => Promise<unknown>;
+  deleteMany: (args: { where: Record<string, unknown> }) => Promise<unknown>;
+};
+type FlexPrisma = typeof prisma & Record<string, FlexModel | undefined>;
 import type {
   SalesAccount,
   SalesContact,
@@ -429,7 +443,7 @@ function toTierB3Edge(row: TierB3EdgeRow) {
 // ─── Tier B1 (market signals, commercial recommendations) ───
 
 export function isTierB1PrismaReady(): boolean {
-  const db = prisma as any;
+  const db = prisma as unknown as FlexPrisma;
   return !!(db.salesMarketSignal?.findMany && db.salesCommercialRecommendation?.findMany);
 }
 
@@ -440,14 +454,14 @@ export async function prismaLoadTierB1Intelligence(
   commercialRecommendations: Map<string, unknown>;
 } | null> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     const [signals, recs] = await Promise.all([
       db.salesMarketSignal.findMany({ where: { organizationId } }),
       db.salesCommercialRecommendation.findMany({ where: { organizationId } }),
     ]);
     return {
-      marketSignals: new Map(signals.map((r: any) => [r.id, r])),
-      commercialRecommendations: new Map(recs.map((r: any) => [r.id, r])),
+      marketSignals: new Map(signals.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
+      commercialRecommendations: new Map(recs.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
     };
   } catch {
     return null;
@@ -456,7 +470,7 @@ export async function prismaLoadTierB1Intelligence(
 
 export async function prismaCreateMarketSignal(data: Record<string, unknown>): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesMarketSignal.create({ data });
   } catch {
     // fail-soft
@@ -469,7 +483,7 @@ export async function prismaUpdateMarketSignal(
   data: Record<string, unknown>,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesMarketSignal.updateMany({ where: { id, organizationId }, data });
   } catch {
     // fail-soft
@@ -481,7 +495,7 @@ export async function prismaDeleteMarketSignal(
   id: string,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesMarketSignal.deleteMany({ where: { id, organizationId } });
   } catch {
     // fail-soft
@@ -492,7 +506,7 @@ export async function prismaCreateCommercialRecommendation(
   data: Record<string, unknown>,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesCommercialRecommendation.create({ data });
   } catch {
     // fail-soft
@@ -505,7 +519,7 @@ export async function prismaUpdateCommercialRecommendation(
   data: Record<string, unknown>,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesCommercialRecommendation.updateMany({ where: { id, organizationId }, data });
   } catch {
     // fail-soft
@@ -517,7 +531,7 @@ export async function prismaDeleteCommercialRecommendation(
   id: string,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesCommercialRecommendation.deleteMany({ where: { id, organizationId } });
   } catch {
     // fail-soft
@@ -527,7 +541,7 @@ export async function prismaDeleteCommercialRecommendation(
 // ─── Tier B2 (institutional learning insights) ───
 
 export function isTierB2PrismaReady(): boolean {
-  const db = prisma as any;
+  const db = prisma as unknown as FlexPrisma;
   return !!(db.salesInstitutionalLearningInsight?.findMany);
 }
 
@@ -537,12 +551,12 @@ export async function prismaLoadTierB2Intelligence(
   institutionalLearningInsights: Map<string, unknown>;
 } | null> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     const rows = await db.salesInstitutionalLearningInsight.findMany({
       where: { organizationId },
     });
     return {
-      institutionalLearningInsights: new Map(rows.map((r: any) => [r.id, r])),
+      institutionalLearningInsights: new Map(rows.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
     };
   } catch {
     return null;
@@ -553,7 +567,7 @@ export async function prismaCreateInstitutionalLearningInsight(
   data: Record<string, unknown>,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesInstitutionalLearningInsight.create({ data });
   } catch {
     // fail-soft
@@ -566,7 +580,7 @@ export async function prismaUpdateInstitutionalLearningInsight(
   data: Record<string, unknown>,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesInstitutionalLearningInsight.updateMany({ where: { id, organizationId }, data });
   } catch {
     // fail-soft
@@ -578,7 +592,7 @@ export async function prismaDeleteInstitutionalLearningInsight(
   id: string,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesInstitutionalLearningInsight.deleteMany({ where: { id, organizationId } });
   } catch {
     // fail-soft
@@ -588,7 +602,7 @@ export async function prismaDeleteInstitutionalLearningInsight(
 // ─── Tier B3 (knowledge graph) ───
 
 export function isTierB3PrismaReady(): boolean {
-  return !!(prisma as any).salesKnowledgeGraphNode;
+  return !!(prisma as unknown as FlexPrisma).salesKnowledgeGraphNode;
 }
 
 export async function prismaLoadTierB3Intelligence(
@@ -598,7 +612,7 @@ export async function prismaLoadTierB3Intelligence(
   knowledgeGraphEdges: Map<string, ReturnType<typeof toTierB3Edge>>;
 } | null> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     if (!db.salesKnowledgeGraphNode || !db.salesKnowledgeGraphEdge) return null;
 
     const [nodes, edges] = await Promise.all([
@@ -634,7 +648,7 @@ export async function prismaCreateKnowledgeGraphNode(node: {
   createdById: string;
 }): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesKnowledgeGraphNode.create({
       data: {
         id: node.id,
@@ -671,7 +685,7 @@ export async function prismaCreateKnowledgeGraphEdge(edge: {
   createdById: string;
 }): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesKnowledgeGraphEdge.create({
       data: {
         id: edge.id,
@@ -699,7 +713,7 @@ export async function prismaUpdateKnowledgeGraphNode(
   patch: Record<string, unknown>,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesKnowledgeGraphNode.updateMany({
       where: { id: nodeId, organizationId },
       data: patch,
@@ -714,7 +728,7 @@ export async function prismaDeleteKnowledgeGraphEdge(
   edgeId: string,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesKnowledgeGraphEdge.deleteMany({
       where: { id: edgeId, organizationId },
     });
@@ -736,7 +750,7 @@ const TIER_A_DELEGATES = [
 ] as const;
 
 export function isTierAPrismaIntelligenceReady(): boolean {
-  const db = prisma as any;
+  const db = prisma as unknown as FlexPrisma;
   return TIER_A_DELEGATES.every((name) => !!db[name]?.findMany);
 }
 
@@ -744,7 +758,7 @@ export async function prismaLoadTierAIntelligence(
   organizationId: string,
 ): Promise<Record<string, Map<string, unknown>> | null> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     const [signals, objections, mentions, winLoss, icp, actions, proofs] =
       await Promise.all([
         db.salesSignal.findMany({ where: { organizationId } }),
@@ -756,13 +770,13 @@ export async function prismaLoadTierAIntelligence(
         db.salesProofAsset.findMany({ where: { organizationId } }),
       ]);
     return {
-      signals: new Map(signals.map((r: any) => [r.id, r])),
-      objections: new Map(objections.map((r: any) => [r.id, r])),
-      competitorMentions: new Map(mentions.map((r: any) => [r.id, r])),
-      winLossInsights: new Map(winLoss.map((r: any) => [r.id, r])),
-      icpInsights: new Map(icp.map((r: any) => [r.id, r])),
-      nextActions: new Map(actions.map((r: any) => [r.id, r])),
-      proofAssets: new Map(proofs.map((r: any) => [r.id, r])),
+      signals: new Map(signals.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
+      objections: new Map(objections.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
+      competitorMentions: new Map(mentions.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
+      winLossInsights: new Map(winLoss.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
+      icpInsights: new Map(icp.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
+      nextActions: new Map(actions.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
+      proofAssets: new Map(proofs.map((r: { id: string } & Record<string, unknown>) => [r.id, r])),
     };
   } catch {
     return null;
@@ -771,7 +785,7 @@ export async function prismaLoadTierAIntelligence(
 
 export async function prismaCreateSignal(data: Record<string, unknown>): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesSignal.create({ data });
   } catch {
     // fail-soft
@@ -784,7 +798,7 @@ export async function prismaUpdateSignal(
   data: Record<string, unknown>,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesSignal.updateMany({ where: { id, organizationId }, data });
   } catch {
     // fail-soft
@@ -796,7 +810,7 @@ export async function prismaDeleteSignal(
   id: string,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesSignal.deleteMany({ where: { id, organizationId } });
   } catch {
     // fail-soft
@@ -805,7 +819,7 @@ export async function prismaDeleteSignal(
 
 export async function prismaCreateObjection(data: Record<string, unknown>): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesObjection.create({ data });
   } catch {
     // fail-soft
@@ -814,7 +828,7 @@ export async function prismaCreateObjection(data: Record<string, unknown>): Prom
 
 export async function prismaCreateCompetitorMention(data: Record<string, unknown>): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesCompetitorMention.create({ data });
   } catch {
     // fail-soft
@@ -823,7 +837,7 @@ export async function prismaCreateCompetitorMention(data: Record<string, unknown
 
 export async function prismaCreateWinLossInsight(data: Record<string, unknown>): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesWinLossInsight.create({ data });
   } catch {
     // fail-soft
@@ -832,7 +846,7 @@ export async function prismaCreateWinLossInsight(data: Record<string, unknown>):
 
 export async function prismaCreateICPInsight(data: Record<string, unknown>): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesICPInsight.create({ data });
   } catch {
     // fail-soft
@@ -841,7 +855,7 @@ export async function prismaCreateICPInsight(data: Record<string, unknown>): Pro
 
 export async function prismaCreateNextAction(data: Record<string, unknown>): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesNextAction.create({ data });
   } catch {
     // fail-soft
@@ -850,7 +864,7 @@ export async function prismaCreateNextAction(data: Record<string, unknown>): Pro
 
 export async function prismaCreateProofAsset(data: Record<string, unknown>): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesProofAsset.create({ data });
   } catch {
     // fail-soft
@@ -862,7 +876,7 @@ export async function prismaDeleteProofAsset(
   id: string,
 ): Promise<void> {
   try {
-    const db = prisma as any;
+    const db = prisma as unknown as FlexPrisma;
     await db.salesProofAsset.deleteMany({ where: { id, organizationId } });
   } catch {
     // fail-soft
