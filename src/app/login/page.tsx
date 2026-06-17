@@ -28,6 +28,13 @@ export default function LoginPage() {
     if (typeof window === "undefined") return false;
     return new URL(window.location.href).searchParams.get("registered") === "true";
   });
+  // MFA challenge mode: middleware redirects here with ?mfa=true after first-factor login.
+  const [isMfaChallenge] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return new URL(window.location.href).searchParams.get("mfa") === "true";
+  });
+  const [mfaCode, setMfaCode] = useState("");
+  const [mfaLoading, setMfaLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string>(() => {
@@ -93,6 +100,34 @@ export default function LoginPage() {
     window.location.href = `/api/auth/saml/${dbProviderId}/initiate?callbackUrl=${encodeURIComponent(callbackUrl)}`;
   }
 
+  async function handleMfaVerify(e: React.FormEvent) {
+    e.preventDefault();
+    setMfaLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/auth/mfa/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: mfaCode }),
+      });
+      const data = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setError(data.error || "رمز التحقق غير صحيح");
+        setMfaLoading(false);
+        return;
+      }
+      const url = new URL(window.location.href);
+      const raw = url.searchParams.get("callbackUrl") || "/audit";
+      const dest = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/audit";
+      setRedirecting(true);
+      // eslint-disable-next-line react-hooks/immutability
+      window.location.href = dest;
+    } catch {
+      setError("حدث خطأ في الاتصال. حاول مرة أخرى.");
+      setMfaLoading(false);
+    }
+  }
+
   function fillDemoAccount(demoEmail: string, demoPassword: string) {
     setEmail(demoEmail);
     setPassword(demoPassword);
@@ -145,6 +180,61 @@ export default function LoginPage() {
     }
   }
 
+  // ── MFA Challenge View ──────────────────────────────────────────────
+  if (isMfaChallenge) {
+    return (
+      <main
+        className="flex min-h-screen flex-col items-center justify-center p-8"
+        dir="rtl"
+      >
+        <Card className="w-full max-w-sm">
+          <CardHeader className="text-center">
+            <CardTitle>التحقق بعاملين (MFA)</CardTitle>
+            <CardDescription>
+              أدخل رمز التحقق من تطبيق المصادقة الخاص بك.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleMfaVerify} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="mfaCode">رمز التحقق</Label>
+                <Input
+                  id="mfaCode"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  placeholder="123456"
+                  value={mfaCode}
+                  onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ""))}
+                  required
+                  autoFocus
+                  dir="ltr"
+                  className="text-center tracking-widest text-lg"
+                />
+              </div>
+              {error && <p className="text-sm text-destructive">{error}</p>}
+              {redirecting && (
+                <p className="text-sm text-muted-foreground">جارٍ التوجيه...</p>
+              )}
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={mfaLoading || redirecting || mfaCode.length < 6}
+              >
+                {mfaLoading ? "جارٍ التحقق..." : "تأكيد الرمز"}
+              </Button>
+            </form>
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              جلستك نشطة. أدخل رمز تطبيق المصادقة للمتابعة.
+            </p>
+          </CardContent>
+        </Card>
+      </main>
+    );
+  }
+
+  // ── Standard Login View ──────────────────────────────────────────────
   return (
     <main
       className="flex min-h-screen flex-col items-center justify-center p-8"

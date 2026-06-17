@@ -148,6 +148,9 @@ export const authConfig: NextAuthConfig = {
           organizationId: token.organizationId,
           organization: token.organization,
           platformOrganizationId: token.platformOrganizationId,
+          // Expose MFA state so client-side useSession() can gate UI accordingly.
+          mfaEnabled: token.mfaEnabled ?? false,
+          mfaVerified: token.mfaVerified ?? false,
         });
       }
       return session;
