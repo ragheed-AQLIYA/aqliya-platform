@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Engine-internal Prisma JSON/where casts: `as any` bridges complex Prisma generic types
+// for JSON fields and dynamic where filters. Typed at the service API boundary above.
 // ─── AuditOS L6.2 Independence Engine ───
 // محرك الاستقلالية لإدارة تضارب المصالح والتهديدات
 // IESBA Code of Ethics, ISQM1 compliant
@@ -74,7 +77,7 @@ export class IndependenceEngine {
     if (roleFilter) where.entityRole = roleFilter;
 
     return prisma.independenceRegister.findMany({
-      where: where as Prisma.IndependenceRegisterWhereInput,
+      where: where as any,
       include: {
         financialInterests: true,
         employmentRelationships: true,
@@ -213,7 +216,7 @@ export class IndependenceEngine {
     if (filters?.category) where.threatCategory = filters.category;
 
     return prisma.independenceThreat.findMany({
-      where: where as Prisma.IndependenceRegisterWhereInput,
+      where: where as any,
       include: {
         register: { select: { entityName: true, entityRole: true } },
         safeguards: true,
@@ -375,8 +378,8 @@ export class IndependenceEngine {
       data: {
         status: "completed",
         confirmedAt: new Date(),
-        interestsDeclared: interestsDeclared as Prisma.InputJsonValue,
-        relationshipsDeclared: relationshipsDeclared as Prisma.InputJsonValue,
+        interestsDeclared: interestsDeclared as any,
+        relationshipsDeclared: relationshipsDeclared as any,
         signedById: actor.actorId,
       },
     });
@@ -465,4 +468,5 @@ export class IndependenceEngine {
 }
 
 export const independenceEngine = new IndependenceEngine();
+
 

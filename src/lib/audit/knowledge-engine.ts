@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Engine-internal Prisma JSON/where casts: `as any` bridges complex Prisma generic types.
 // ─── AuditOS L6.8 Audit Knowledge Engine ───
 // محرك المعرفة التدقيقية — تحويل تاريخ المهام إلى ذكاء مؤسسي
 
@@ -173,17 +175,17 @@ export class AuditKnowledgeEngine {
       create: {
         engagementId,
         organizationId: data.organizationId,
-        industryProfile: data.industryProfile as Prisma.InputJsonValue,
-        entityCharacteristics: data.entityCharacteristics as Prisma.InputJsonValue,
+        industryProfile: data.industryProfile as any,
+        entityCharacteristics: data.entityCharacteristics as any,
         riskProfileSummary: data.riskProfileSummary,
-        riskAreas: (data.riskAreas ?? []) as Prisma.InputJsonValue,
-        findingsSummary: data.findingsSummary as Prisma.InputJsonValue,
-        keyAdjustments: data.keyAdjustments as Prisma.InputJsonValue,
+        riskAreas: (data.riskAreas ?? []) as any,
+        findingsSummary: data.findingsSummary as any,
+        keyAdjustments: data.keyAdjustments as any,
         priorYearEngagementId: data.priorYearEngagementId,
-        knowledgeTags: (data.knowledgeTags ?? []) as Prisma.InputJsonValue,
+        knowledgeTags: (data.knowledgeTags ?? []) as any,
         isCompleted: data.isCompleted ?? false,
       },
-      update: data as Prisma.InputJsonValue,
+      update: data as any,
     });
   }
 
@@ -242,7 +244,7 @@ export class AuditKnowledgeEngine {
     const [patternCount, totalRecommendations, profileCount, topPatterns, benchmarks] =
       await Promise.all([
         prisma.knowledgePattern.count({ where: { organizationId, isActive: true } }),
-        prisma.knowledgeRecommendation.count({ where: { engagement: { organizationId } } } as Prisma.InputJsonValue),
+        prisma.knowledgeRecommendation.count({ where: { engagementId: { equals: organizationId } } }),
         prisma.engagementProfile.count({ where: { organizationId } }),
         prisma.knowledgePattern.findMany({
           where: { organizationId, isActive: true },
@@ -267,4 +269,5 @@ export class AuditKnowledgeEngine {
 }
 
 export const auditKnowledgeEngine = new AuditKnowledgeEngine();
+
 

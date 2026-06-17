@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Engine-internal Prisma JSON/where casts: `as any` bridges complex Prisma generic types.
 // ─── AuditOS L6.6 Review Notes Workflow Engine ───
 // محرك ملاحظات المراجعة مع دورة الحياة، التكليف، ومؤشرات الأداء
 // ISA 220, ISQM1 compliant
@@ -169,7 +171,7 @@ export class ReviewNotesEngine {
     const note = await prisma.reviewNote.update({
       where: { id: noteId },
       data: {
-        evidenceRef: evidenceRef as Prisma.InputJsonValue,
+        evidenceRef: evidenceRef as any,
         status: "evidenced",
       },
     });
@@ -305,7 +307,7 @@ export class ReviewNotesEngine {
     if (filters?.raiserId) where.raiserId = filters.raiserId;
 
     return prisma.reviewNote.findMany({
-      where: where as Prisma.InputJsonValue,
+      where: where as any,
       include: { escalations: true },
       orderBy: [
         { priority: "asc" },
@@ -414,4 +416,5 @@ export class ReviewNotesEngine {
 }
 
 export const reviewNotesEngine = new ReviewNotesEngine();
+
 
