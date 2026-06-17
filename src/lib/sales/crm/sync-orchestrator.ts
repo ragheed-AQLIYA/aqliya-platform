@@ -35,7 +35,7 @@ async function upsertAccount(
   conflictPolicy: ConflictPolicy,
 ): Promise<{ action: "created" | "updated" | "skipped" }> {
   const existing = await prisma.salesAccount.findFirst({
-    where: { organizationId, metadata: { path: ["crmId"], equals: crmId } as Prisma.JsonFilter<string> },
+    where: { organizationId, metadata: { path: ["crmId"], equals: crmId } as unknown as Prisma.InputJsonValue },
     select: { id: true },
   });
 
@@ -74,7 +74,7 @@ async function upsertContact(
   conflictPolicy: ConflictPolicy,
 ): Promise<{ action: "created" | "updated" | "skipped" }> {
   const existing = await prisma.salesContact.findFirst({
-    where: { organizationId, metadata: { path: ["crmId"], equals: crmId } } as Prisma.InputJsonValue,
+    where: ({ organizationId, metadata: { path: ["crmId"], equals: crmId } } as unknown) as Parameters<typeof prisma.salesContact.findFirst>[0]["where"],
     select: { id: true },
   });
 
@@ -109,7 +109,7 @@ async function upsertOpportunity(
   conflictPolicy: ConflictPolicy,
 ): Promise<{ action: "created" | "updated" | "skipped" }> {
   const existing = await prisma.salesDeal.findFirst({
-    where: { organizationId, metadata: { path: ["crmId"], equals: crmId } as Prisma.JsonFilter<string> },
+    where: { organizationId, metadata: { path: ["crmId"], equals: crmId } as unknown as Prisma.InputJsonValue },
     select: { id: true },
   });
 

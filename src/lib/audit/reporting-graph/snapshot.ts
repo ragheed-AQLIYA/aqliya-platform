@@ -40,7 +40,7 @@ export async function captureReportingGraphSnapshot(params: {
         stats: graph.stats,
         capturedAt: graph.builtAt,
         graph,
-      } as Prisma.InputJsonValue,
+      } as unknown as Prisma.InputJsonValue,
     },
   });
 

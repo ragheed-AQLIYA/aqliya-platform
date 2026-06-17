@@ -103,6 +103,12 @@ const platformNav = [
     icon: ScrollText,
   },
   {
+    name: "AI Governance",
+    nameAr: "حوكمة الذكاء الاصطناعي",
+    href: "/settings/ai-governance",
+    icon: ShieldCheck,
+  },
+  {
     name: "Office AI Assistant",
     nameAr: "مساعد العمل الذكي",
     href: "/assistant",

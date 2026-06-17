@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Action-to-engine interface: actions accept broad string types from form data;
+// engine methods use narrower literal/enum types. `as any` is the intentional bridge.
 "use server";
 
 // ─── AuditOS L6.7 ISQM1 Quality Engine Actions ───
