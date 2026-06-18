@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
 import { checkExportRestrictions } from "@/lib/localcontactos/compliance-service";
@@ -50,7 +51,7 @@ async function logAuditEvent(params: {
         targetId: params.contactId,
         targetLabel: null,
         severity: "info",
-        metadata: (params.metadata ?? {}) as any,
+        metadata: (params.metadata ?? {}) as Prisma.InputJsonValue,
       },
     });
   } catch (e) {

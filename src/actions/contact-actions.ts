@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
 
@@ -520,7 +521,7 @@ async function logContactAuditEvent(params: {
         targetId: params.contactId,
         targetLabel: null,
         severity: "info",
-        metadata: (params.metadata ?? {}) as any,
+        metadata: (params.metadata ?? {}) as Prisma.InputJsonValue,
       },
     });
   } catch (e) {
@@ -573,7 +574,7 @@ export async function addContactRiskFlag(
         metadata: {
           ...metadata,
           riskFlags: [...existingFlags, newFlag],
-        } as any,
+        } as unknown as Prisma.InputJsonValue,
       },
     });
 
@@ -618,7 +619,7 @@ export async function resolveContactRiskFlag(contactId: string, flagId: string) 
         metadata: {
           ...metadata,
           riskFlags: updatedFlags,
-        } as any,
+        } as unknown as Prisma.InputJsonValue,
       },
     });
 

@@ -1,5 +1,6 @@
 "use server";
 
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireUserContext } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
@@ -61,7 +62,15 @@ const EVENT_INCLUDE = {
   createdBy: { select: { id: true, name: true } },
 } as const;
 
-function mapEvent(e: any): MemoryEventData {
+type EventWithCreator = Prisma.InstitutionalMemoryEventGetPayload<{
+  include: typeof EVENT_INCLUDE;
+}>;
+
+type CollectionWithCreator = Prisma.InstitutionalMemoryCollectionGetPayload<{
+  include: { createdBy: { select: { id: true; name: true } } };
+}>;
+
+function mapEvent(e: EventWithCreator): MemoryEventData {
   return {
     id: e.id,
     sourceProduct: e.sourceProduct,
@@ -78,6 +87,14 @@ function mapEvent(e: any): MemoryEventData {
   };
 }
 
+function isAuthRedirectError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  return (
+    error.message.includes("unauthorized") ||
+    error.message.includes("NEXT_REDIRECT")
+  );
+}
+
 async function getUserCtx() {
   const user = await requireUserContext();
   return {
@@ -85,8 +102,6 @@ async function getUserCtx() {
     userId: user.id,
   };
 }
-
-const p = prisma as any;
 
 // ─── Server Actions ───
 
@@ -96,17 +111,16 @@ export async function getMemoryEvents(
 ): Promise<{ success: boolean; data?: MemoryEventData[]; error?: string }> {
   try {
     const { organizationId: orgId } = await getUserCtx();
-    const events = await p.institutionalMemoryEvent.findMany({
+    void organizationId;
+    const events = await prisma.institutionalMemoryEvent.findMany({
       where: { organizationId: orgId },
-      include: EVENT_INCLUDE as any,
+      include: EVENT_INCLUDE,
       orderBy: { createdAt: "desc" },
       take: limit,
     });
     return { success: true, data: events.map(mapEvent) };
-  } catch (error: any) {
-    if (error?.message?.includes("unauthorized") || error?.message?.includes("NEXT_REDIRECT")) {
-      throw error;
-    }
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to fetch memory events" };
   }
 }
@@ -124,7 +138,7 @@ export async function createMemoryEvent(input: {
 }): Promise<{ success: boolean; data?: MemoryEventData; error?: string }> {
   try {
     const { organizationId: orgId, userId } = await getUserCtx();
-    const event = await p.institutionalMemoryEvent.create({
+    const event = await prisma.institutionalMemoryEvent.create({
       data: {
         organizationId: orgId,
         sourceProduct: input.sourceProduct,
@@ -138,7 +152,7 @@ export async function createMemoryEvent(input: {
         confidence: input.confidence ?? 1,
         createdById: userId,
       },
-      include: EVENT_INCLUDE as any,
+      include: EVENT_INCLUDE,
     });
     await auditLogger({
       productKey: Product.PLATFORM,
@@ -153,10 +167,8 @@ export async function createMemoryEvent(input: {
       metadata: { sourceProduct: input.sourceProduct, targetProduct: input.targetProduct, eventType: input.eventType },
     });
     return { success: true, data: mapEvent(event) };
-  } catch (error: any) {
-    if (error?.message?.includes("unauthorized") || error?.message?.includes("NEXT_REDIRECT")) {
-      throw error;
-    }
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to create memory event" };
   }
 }
@@ -166,18 +178,16 @@ export async function deleteMemoryEvent(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const { organizationId: orgId } = await getUserCtx();
-    const existing = await p.institutionalMemoryEvent.findUnique({
+    const existing = await prisma.institutionalMemoryEvent.findUnique({
       where: { id: eventId },
       select: { id: true, organizationId: true },
     });
     if (!existing) return { success: false, error: "Event not found" };
     if (existing.organizationId !== orgId) return { success: false, error: "Unauthorized" };
-    await p.institutionalMemoryEvent.delete({ where: { id: eventId } });
+    await prisma.institutionalMemoryEvent.delete({ where: { id: eventId } });
     return { success: true };
-  } catch (error: any) {
-    if (error?.message?.includes("unauthorized") || error?.message?.includes("NEXT_REDIRECT")) {
-      throw error;
-    }
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to delete memory event" };
   }
 }
@@ -189,15 +199,15 @@ export async function getCollections(): Promise<{
 }> {
   try {
     const { organizationId: orgId } = await getUserCtx();
-    const collections = await p.institutionalMemoryCollection.findMany({
+    const collections = await prisma.institutionalMemoryCollection.findMany({
       where: { organizationId: orgId },
-      include: { createdBy: { select: { id: true, name: true } } } as any,
+      include: { createdBy: { select: { id: true, name: true } } },
       orderBy: { createdAt: "desc" },
     });
     const data: CollectionData[] = await Promise.all(
-      collections.map(async (c: any) => {
-        const eventCount = await p.institutionalMemoryEvent.count({
-          where: { organizationId: orgId } as any,
+      collections.map(async (c: CollectionWithCreator) => {
+        const eventCount = await prisma.institutionalMemoryEvent.count({
+          where: { organizationId: orgId },
         });
         return {
           id: c.id,
@@ -211,10 +221,8 @@ export async function getCollections(): Promise<{
       }),
     );
     return { success: true, data };
-  } catch (error: any) {
-    if (error?.message?.includes("unauthorized") || error?.message?.includes("NEXT_REDIRECT")) {
-      throw error;
-    }
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to fetch collections" };
   }
 }
@@ -225,16 +233,16 @@ export async function createCollection(input: {
 }): Promise<{ success: boolean; data?: CollectionData; error?: string }> {
   try {
     const { organizationId: orgId, userId } = await getUserCtx();
-    const collection = await p.institutionalMemoryCollection.create({
+    const collection = await prisma.institutionalMemoryCollection.create({
       data: {
         organizationId: orgId,
         name: input.name,
         description: input.description ?? "",
-        filterCriteria: {},
+        filterCriteria: {} as Prisma.InputJsonValue,
         createdById: userId,
         updatedById: userId,
       },
-      include: { createdBy: { select: { id: true, name: true } } } as any,
+      include: { createdBy: { select: { id: true, name: true } } },
     });
     return {
       success: true,
@@ -248,10 +256,8 @@ export async function createCollection(input: {
         createdAt: collection.createdAt,
       },
     };
-  } catch (error: any) {
-    if (error?.message?.includes("unauthorized") || error?.message?.includes("NEXT_REDIRECT")) {
-      throw error;
-    }
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to create collection" };
   }
 }
@@ -261,18 +267,16 @@ export async function deleteCollection(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const { organizationId: orgId } = await getUserCtx();
-    const existing = await p.institutionalMemoryCollection.findUnique({
+    const existing = await prisma.institutionalMemoryCollection.findUnique({
       where: { id: collectionId },
       select: { id: true, organizationId: true },
     });
     if (!existing) return { success: false, error: "Collection not found" };
     if (existing.organizationId !== orgId) return { success: false, error: "Unauthorized" };
-    await p.institutionalMemoryCollection.delete({ where: { id: collectionId } });
+    await prisma.institutionalMemoryCollection.delete({ where: { id: collectionId } });
     return { success: true };
-  } catch (error: any) {
-    if (error?.message?.includes("unauthorized") || error?.message?.includes("NEXT_REDIRECT")) {
-      throw error;
-    }
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to delete collection" };
   }
 }
@@ -315,10 +319,8 @@ export async function getGraphData(): Promise<{
         })),
       },
     };
-  } catch (error: any) {
-    if (error?.message?.includes("unauthorized") || error?.message?.includes("NEXT_REDIRECT")) {
-      throw error;
-    }
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to fetch graph data" };
   }
 }
@@ -339,14 +341,14 @@ export async function getMemoryDashboardStats(): Promise<{
       recentEvents,
       eventsByProduct,
     ] = await Promise.all([
-      p.institutionalMemoryEvent.count({ where: { organizationId: orgId } }),
-      p.institutionalMemoryCollection.count({ where: { organizationId: orgId } }),
+      prisma.institutionalMemoryEvent.count({ where: { organizationId: orgId } }),
+      prisma.institutionalMemoryCollection.count({ where: { organizationId: orgId } }),
       prisma.intelligenceGraphNode.count({ where: { organizationId: orgId } }),
       prisma.intelligenceGraphEdge.count({ where: { organizationId: orgId } }),
-      p.institutionalMemoryEvent.count({
+      prisma.institutionalMemoryEvent.count({
         where: { organizationId: orgId, createdAt: { gte: thirtyDaysAgo } },
       }),
-      p.institutionalMemoryEvent.groupBy({
+      prisma.institutionalMemoryEvent.groupBy({
         by: ["sourceProduct"],
         where: { organizationId: orgId },
         _count: { id: true },
@@ -361,14 +363,12 @@ export async function getMemoryDashboardStats(): Promise<{
         totalGraphEdges,
         recentEvents,
         eventsByProduct: Object.fromEntries(
-          eventsByProduct.map((e: any) => [e.sourceProduct, e._count.id]),
+          eventsByProduct.map((e) => [e.sourceProduct, e._count.id]),
         ),
       },
     };
-  } catch (error: any) {
-    if (error?.message?.includes("unauthorized") || error?.message?.includes("NEXT_REDIRECT")) {
-      throw error;
-    }
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to fetch dashboard stats" };
   }
 }

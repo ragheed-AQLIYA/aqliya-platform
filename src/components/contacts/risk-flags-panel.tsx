@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -81,8 +81,7 @@ export function RiskFlagsPanel({ contactId, initialFlags }: RiskFlagsPanelProps)
     }
   }
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { setFlags(initialFlags); }, [initialFlags]);
+  // initialFlags applied via parent key={contactId} remount on navigation
 
   return (
     <Card>

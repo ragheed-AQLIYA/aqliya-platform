@@ -126,8 +126,8 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | **WorkflowOS**          | Governed custom/client workspace    | **L4**                             | Canonical governed workspace at `/workflowos/*`. Real CRUD, workflow states, evidence upload, audit trail, dashboard metrics, review queue, PDF export. Sunbul data models reused.                                                                                                                                                                                                                                     |
 | **SalesOS**             | Prototype / internal preview        | **L4**                             | Workspace at `/sales/*` (27 routes). Prisma-backed CRM-lite flows, RBAC, audit trail, CRM sync admin UI. Builds and tests pass. **Not L5 pilot-ready** — internal demo only; not production CRM. |
 | **SimulationOS**        | Marketing label                     | **L1**                             | Page at `/products/simulation`. Not a standalone system.                                                                                                                                                                                                                                                                                                                                                             |
-| **LocalContactOS**      | Governed contact workspace          | **L4**                             | Workspace at `/contacts/*` (4 routes). Contact registry (name, email, phone, position, department), relations (colleague/report etc.), interactions (meeting/call/email), evidence upload, review/approval cycle, export profile, sensitivity levels, RBAC, audit trail. Arabic-first. Not full L5 (no export approval gate).                                                                                      |
-| **RiskOS**              | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **LocalContactOS**      | Governed contact workspace          | **L4→L5 partial**                  | Workspace at `/contacts/*`. Registry, relations, interactions, evidence, review/export, risk flags, audit trail. Evidence: `docs/reports/2026-06-18-final-test.txt`. Not L6. |
+| **RiskOS**              | AuditOS submodule (internal)        | **L3**                             | Routes at `/risk/*`; uses `AuditRiskModel`; not a standalone marketed product. |
 | **ComplianceOS**        | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **LegalOS**             | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **GovOS**               | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -176,22 +176,26 @@ All surfaces with active routes, server actions, database models, seed data, tes
 
 ---
 
-## 9. What Is NOT Implemented
+## 9. What Is NOT Implemented (production packages)
 
 - Production On-Prem package
-- Air-Gapped deployment
-- Local AI runtime
-- GPU local inference
-- Kubernetes deployment
-- SIEM integration
-- LDAP/Active Directory direct integration (OAuth/OIDC providers exist at L4; SAML stub)
-- Model Governance registry
-- Institutional Memory engine
+- Air-Gapped deployment package
+- GPU local inference as managed product
+- Kubernetes deployment as supported package
+- Production SIEM integration (settings stub only)
+- LDAP/Active Directory direct integration (OAuth/OIDC/SAML at L4 with operator setup)
+- Model Governance operational UI (schema exists; not L6)
 - AQLIYA Studio builder
-- SalesOS backend/workspace
-- RiskOS, ComplianceOS, LegalOS, GovOS implementations
+- **ComplianceOS, LegalOS, GovOS** as standalone products
 - Fully autonomous AI decisions (AI is assistive only)
-- Automated backup/restore
+- Automated production backup/restore (scripts exist; live DR unverified)
+
+**Moved out of this list (partial implementation — see §8 and `AQLIYA_CURRENT_STATE.md`):**
+
+- SalesOS — L4 internal workspace at `/sales/*` (not production CRM)
+- Local AI runtime — L4 pilot with Ollama/hybrid router (operator-configured; not default-on)
+- Institutional Memory — L3→L4 partial (`InstitutionalMemoryEvent`, `/institutional-memory/*`, Intelligence Graph)
+- RiskOS — L3 submodule at `/risk/*` (AuditOS risk models; not standalone product)
 
 ---
 
@@ -217,18 +221,15 @@ All surfaces with active routes, server actions, database models, seed data, tes
 
 ---
 
-## 13. What Is Strategic / Future (L0)
+## 13. What Is Strategic / Future (L0 production packages)
 
-- **RiskOS**
-- **ComplianceOS**
-- **LegalOS**
-- **GovOS**
+- **ComplianceOS, LegalOS, GovOS** (standalone products)
 - **AQLIYA Studio**
 - **Private / On-Prem package**
-- **Air-Gapped deployment**
-- **Local AI runtime**
-- **Model Governance**
-- **Institutional Memory**
+- **Air-Gapped deployment package**
+- **Model Governance** as L6 operational product (schema partial only)
+
+**Note:** Local AI runtime, Institutional Memory, and RiskOS submodule are **partially implemented** — see §8–§9 and `AQLIYA_CURRENT_STATE.md`. Do not list them here as L0.
 
 ---
 
@@ -241,8 +242,8 @@ The following claims are not supported by current code, routes, schema, or valid
 - AQLIYA browser verification is fully complete for all products
 - On-Prem package is available for deployment
 - Air-Gapped mode is operational
-- Local AI runtime is functional
-- LDAP/AD direct integration is implemented (OAuth/OIDC admin UI exists; SAML is a stub)
+- Local AI runtime as **L6 production package** or default-on without operator config (L4 pilot connectivity exists — see `docs/audits/evidence/local-ai-phase0-smoke.json`)
+- LDAP/AD direct integration is implemented (OAuth/OIDC/SAML at L4 with operator setup)
 - SIEM integration exists
 - Kubernetes deployment is configured
 - GPU inference is available

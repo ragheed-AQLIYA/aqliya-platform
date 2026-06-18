@@ -447,7 +447,7 @@ async function RiskFlagsSidebarSection({
   metadata: unknown;
 }) {
   const riskFlags = extractRiskFlags(metadata);
-  return <RiskFlagsPanel contactId={contactId} initialFlags={riskFlags} />;
+  return <RiskFlagsPanel key={contactId} contactId={contactId} initialFlags={riskFlags} />;
 }
 
 function extractRiskFlags(metadata: unknown): import("@/actions/contact-actions").RiskFlag[] {

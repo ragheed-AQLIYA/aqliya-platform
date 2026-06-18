@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { getContactAuditTrail } from "@/actions/contact-actions";
 import type { AuditTrailEntry } from "@/actions/contact-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +17,6 @@ export function AuditTrailViewer({ contactId }: AuditTrailViewerProps) {
   useEffect(() => {
     let cancelled = false;
     async function load() {
-      setLoading(true);
       const result = await getContactAuditTrail(contactId);
       if (!cancelled) {
         if (result.ok) {

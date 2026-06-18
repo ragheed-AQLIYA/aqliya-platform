@@ -1,5 +1,9 @@
 # TB Classification Benchmark — Deterministic Rules vs Local Qwen3:8b
 
+> **⚠ SUPERSEDED for Local AI accuracy — 2026-06-14**  
+> Phase 1A results (0% local AI) were fixed in Phase 1B. Use **`docs/audits/TB_CLASSIFICATION_REBENCHMARK.md`** and `docs/audits/evidence/tb-classification-rebenchmark.json`.  
+> Deterministic baseline (65%) in this document remains valid historical evidence.
+
 **Date:** 2026-06-14  
 **Scope:** Evaluation only — no production code, schema, or architecture changes  
 **Model:** Ollama `qwen3:8b` @ `http://localhost:11434`  

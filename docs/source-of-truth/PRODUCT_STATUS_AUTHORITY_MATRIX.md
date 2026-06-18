@@ -2,7 +2,8 @@
 
 **Purpose:** Single source of truth for product/layer status classification.
 **Authority:** Repository reality > Code evidence > Schema > Tests > Documentation > Historical assumptions.
-**Date:** 2026-06-03
+**Date:** 2026-06-03  
+**Last reconciled:** 2026-06-18 — see `docs/source-of-truth/AQLIYA_CURRENT_STATE.md`
 
 ---
 
@@ -16,7 +17,7 @@
 | **Experimental** | Prototype or proof-of-concept. Not reliable for production. | Investigation and prototyping allowed. No production claims. No customer exposure. | Organizations |
 | **Frozen** | No development. Exception: critical security fixes only. | Only security patches. No new code. | — (no current matches) |
 | **Deprecated** | Being removed. No new development. Migration path required. | Removal planning. Do not invest. | — (no current matches) |
-| **Future** | Not implemented. Strategic direction only. | No investment. Document in roadmap only. Do not claim as live. | Air-Gapped, Local AI, Enterprise Hardening, Compliance |
+| **Future** | Not implemented. Strategic direction only. | No investment. Document in roadmap only. Do not claim as live. | On-Prem/Air-Gap packages, ComplianceOS, LegalOS, GovOS, AQLIYA Studio |
 
 ---
 
@@ -46,17 +47,18 @@
 | L7 | SalesOS | **Active with Caution** | L4 | L6 | See SalesOS Evidence below. |
 | L7 | Sunbul | **Deprecated** | Redirect alias | — | permanentRedirect(302) to WorkflowOS. | 
 | — | SimulationOS | **Internal** | L1 | — | Capability under DecisionOS. Not standalone. |
-| — | LocalContactOS | **Future** | L0 | — | Not implemented. |
-| — | RiskOS | **Future** | L0 | — | Not implemented. |
+| — | LocalContactOS | **Active with Caution** | L4→L5 partial | L5 | Routes + Prisma + governance; lint/tests pass; not L6 |
+| — | RiskOS | **Internal** | L3 submodule | — | `/risk/*` uses AuditOS risk models; not standalone product |
 | — | ComplianceOS | **Future** | L0 | — | Not implemented. |
 | — | LegalOS | **Future** | L0 | — | Not implemented. |
 | — | GovOS | **Future** | L0 | — | Not implemented. |
 | — | AQLIYA Studio | **Future** | L0 | — | Not implemented. |
-| — | Model Governance | **Future** | L0 | — | Not implemented. |
-| — | Institutional Memory | **Future** | L0 | — | Not implemented. |
+| — | Model Governance | **Partial** | L3 schema | L6 | `AiModelRegistry` in schema; no operational UI |
+| — | Institutional Memory | **Active with Caution** | L3→L4 partial | L5 | `InstitutionalMemoryEvent`/`Collection` models + `/institutional-memory/*` routes + actions; Intelligence Graph coexists |
 | L8 | Enterprise Hardening | **Future** | L0 | — | Contract-gated. |
 | L9 | Compliance | **Future** | L0 | — | Contract-gated. |
-| L10 | Air-Gapped / Local AI | **Future** | L0 | — | Contract-gated. |
+| L10 | Local AI Runtime | **Active with Caution** | L4 pilot | L6 | Ollama + hybrid router; operator-configured; evidence in `docs/audits/evidence/local-ai-phase0-smoke.json` |
+| — | On-Prem / Air-Gapped | **Future** | L0 | — | Strategic only; not production packages |
 
 ---
 

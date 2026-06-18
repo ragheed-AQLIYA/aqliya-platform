@@ -51,14 +51,18 @@ Minimum bar for general availability.
 
 **Current gate: Pilot-ready candidate**
 
-The repository meets the Internal Reviewable, Demo-ready with governance, and Pilot-ready candidate bars. See `AQLIYA_STABILIZATION_AND_ARCHITECTURE_PLAN.md` for the full gap analysis and prioritized roadmap.
+**Authoritative operational snapshot:** `docs/source-of-truth/AQLIYA_CURRENT_STATE.md`  
+**Validation evidence:** `docs/reports/README.md` (latest: `2026-06-18-final-*.txt`)
+
+The repository meets the Internal Reviewable, Demo-ready with governance, and Pilot-ready candidate bars.
 
 Pilot-ready blockers:
 - Jest integration tests require PostgreSQL (Docker Compose setup exists — `docker-compose.test.yml`)
-- Pre-existing ESLint warnings/errors remain in pre-existing shared lib code (count varies by lint run; documented in `PRODUCT_STATUS_MATRIX.md`)
-- Backup not automated (manual only; scheduling guidance exists — `docs/operations/backup-schedule.md`)
+- ESLint: **0 errors**, ~240 warnings (2026-06-18-final-lint.txt); warnings documented
+- Backup not automated on live AWS (manual scripts exist)
 - Production malware scanner not integrated (fail-closed blocks uploads)
 - No external penetration test executed
+- Live AWS ECS/RDS restore drill **not verified** in this cycle
 
 Pilot hardening documentation exists:
 - `docs/SECURITY_REVIEW.md` — Internal security review

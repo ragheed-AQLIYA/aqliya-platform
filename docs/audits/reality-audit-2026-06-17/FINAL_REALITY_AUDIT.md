@@ -1,5 +1,11 @@
 # FINAL REALITY AUDIT — AQLIYA Platform
 
+> **⚠ PARTIALLY SUPERSEDED — 2026-06-18**  
+> Build/MFA/RBAC/SSO claims in this document are stale. Use instead:  
+> - `docs/source-of-truth/AQLIYA_CURRENT_STATE.md` (operational truth)  
+> - `docs/reports/2026-06-18-final-*.txt` (validation artifacts)  
+> - Truth Reconciliation Audit (2026-06-18 conversation)
+
 **Protocol:** Deep Reality Audit v1.0  
 **Date:** 2026-06-17  
 **Classification:** Technical Due Diligence — CTO / Enterprise Procurement / Investor  

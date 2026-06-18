@@ -50,20 +50,35 @@ export default function MemoryEventsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (refresh = false) => {
+    if (refresh) setLoading(true);
     const res = await getMemoryEvents();
     setLoading(false);
     if (res.success && res.data) {
       setEvents(res.data);
+      setError(null);
     } else {
       setError(res.error ?? "فشل في تحميل الأحداث");
     }
   }, []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    let cancelled = false;
+    void (async () => {
+      const res = await getMemoryEvents();
+      if (cancelled) return;
+      setLoading(false);
+      if (res.success && res.data) {
+        setEvents(res.data);
+        setError(null);
+      } else {
+        setError(res.error ?? "فشل في تحميل الأحداث");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (!confirm("هل أنت متأكد من حذف هذا الحدث؟")) return;
@@ -82,7 +97,7 @@ export default function MemoryEventsPage() {
             Institutional Memory Events — سجل الروابط بين الكيانات عبر المنتجات
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={load} disabled={loading}>
+        <Button variant="outline" size="sm" onClick={() => void load(true)} disabled={loading}>
           <RefreshCw className={`h-4 w-4 ml-1 ${loading ? "animate-spin" : ""}`} />
           تحديث
         </Button>

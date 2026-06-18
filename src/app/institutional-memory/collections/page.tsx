@@ -34,20 +34,35 @@ export default function CollectionsPage() {
   const [description, setDescription] = useState("");
   const [creating, setCreating] = useState(false);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (refresh = false) => {
+    if (refresh) setLoading(true);
     const res = await getCollections();
     setLoading(false);
     if (res.success && res.data) {
       setCollections(res.data);
+      setError(null);
     } else {
       setError(res.error ?? "فشل في تحميل المجموعات");
     }
   }, []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    let cancelled = false;
+    void (async () => {
+      const res = await getCollections();
+      if (cancelled) return;
+      setLoading(false);
+      if (res.success && res.data) {
+        setCollections(res.data);
+        setError(null);
+      } else {
+        setError(res.error ?? "فشل في تحميل المجموعات");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleCreate = async () => {
     if (!name.trim()) return;
@@ -58,7 +73,7 @@ export default function CollectionsPage() {
       setDialogOpen(false);
       setName("");
       setDescription("");
-      load();
+      load(true);
     }
   };
 
@@ -80,7 +95,7 @@ export default function CollectionsPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={load} disabled={loading}>
+          <Button variant="outline" size="sm" onClick={() => void load(true)} disabled={loading}>
             <RefreshCw className={`h-4 w-4 ml-1 ${loading ? "animate-spin" : ""}`} />
             تحديث
           </Button>
