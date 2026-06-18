@@ -118,6 +118,9 @@ export default async function DecisionsPage() {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <AIIndicator type="insight" label="ذكاء القرارات" />
+          <Link href="/decisions/pilot-readiness">
+            <Button variant="outline">جاهزية التجربة</Button>
+          </Link>
           <Link href="/decisions/new">
             <Button>قرار جديد</Button>
           </Link>

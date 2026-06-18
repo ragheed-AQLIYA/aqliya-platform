@@ -28,11 +28,11 @@ const STATUS_COLORS: Record<string, string> = {
 export default async function WorkflowRecordsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; q?: string }>;
 }) {
-  const { status } = await searchParams;
+  const { status, q } = await searchParams;
   const user = await requireUserContext();
-  const result = await workflow_listOrgRecords(user.organizationId, status);
+  const result = await workflow_listOrgRecords(user.organizationId, status, q);
 
   const records = result.success && result.data ? result.data : [];
   const activeStatus = status ?? "all";
@@ -43,11 +43,40 @@ export default async function WorkflowRecordsPage({
         <h1 className="text-2xl font-bold">سجلات سير العمل</h1>
       </div>
 
+      {/* Search bar */}
+      <form
+        method="GET"
+        action="/workflowos/records"
+        className="flex gap-2 mb-4"
+      >
+        <input
+          type="search"
+          name="q"
+          defaultValue={q ?? ""}
+          placeholder="بحث عن سجل..."
+          className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        />
+        {q && (
+          <Link
+            href={status ? `/workflowos/records?status=${status}` : "/workflowos/records"}
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+          >
+            إلغاء
+          </Link>
+        )}
+        <button
+          type="submit"
+          className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+        >
+          بحث
+        </button>
+      </form>
+
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
         {Object.entries(STATUS_LABELS).map(([key, label]) => (
           <Link
             key={key}
-            href={key === "all" ? "/workflowos/records" : `/workflowos/records?status=${key}`}
+            href={key === "all" ? (q ? `/workflowos/records?q=${q}` : "/workflowos/records") : (q ? `/workflowos/records?status=${key}&q=${q}` : `/workflowos/records?status=${key}`)}
           >
             <Badge
               variant={activeStatus === key ? "default" : "outline"}

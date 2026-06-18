@@ -1,9 +1,9 @@
-# AQLIYA Route Strategy
+﻿# AQLIYA Route Strategy
 
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-06-17 — Added /settings/ai-governance route (AI Governance Dashboard)
+> **Last updated:** 2026-06-18 — DecisionOS → L5 pilot-ready, WorkflowOS → L5 pilot-ready, Institutional Memory workspace added (L4)
 
 ---
 
@@ -131,33 +131,33 @@ These pages serve as detail references for specialized operating systems. They a
 | `/auditos/evidence`      | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
 | `/auditos/traceability`  | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
 
-### DecisionOS — Active Adjacent System
+### DecisionOS — Pilot-ready Governed Workspace (L5)
 
 | Route                            | Product/System | Route Type         | Public/Protected | Implementation Status | Notes           |
 | -------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | --------------- |
-| `/decisions/gov`                 | DecisionOS     | Dashboard          | Protected        | Active (L4)           | Platform governance console: escalation rules, audit events |
-| `/decisions/gov/escalation-rules`| DecisionOS     | Dashboard          | Protected        | Active (L4)           | Escalation rule management |
+| `/decisions/gov`                 | DecisionOS     | Dashboard          | Protected        | Pilot-ready (L5)           | Platform governance console: escalation rules, audit events |
+| `/decisions/gov/escalation-rules`| DecisionOS     | Dashboard          | Protected        | Pilot-ready (L5)           | Escalation rule management |
 | `/decision`                      | DecisionOS     | Redirect           | Protected        | Redirect → `/decisions` | Legacy path (2026-06-17 cleanup) |
 | `/decision/gov`                  | DecisionOS     | Redirect           | Protected        | Redirect → `/decisions/gov` | Legacy path (2026-06-17 cleanup) |
-| `/decisions`                     | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Decision list   |
-| `/decisions/new`                 | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Create decision |
-| `/decisions/[id]`                | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Decision detail |
-| `/decisions/[id]/overview`       | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/intake`         | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/signals`        | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/sector`         | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/risks`          | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/scenarios`      | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/simulation`     | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/recommendation` | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/governance`     | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/framework`      | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/alerts`         | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/insight`        | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/outcome`        | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/report`         | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/tender`         | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
-| `/decisions/[id]/what-to-do`     | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  |                 |
+| `/decisions`                     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Decision list   |
+| `/decisions/new`                 | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Create decision |
+| `/decisions/[id]`                | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Decision detail |
+| `/decisions/[id]/overview`       | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/intake`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/signals`        | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/sector`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/risks`          | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/scenarios`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/simulation`     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/recommendation` | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/governance`     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/framework`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/alerts`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/insight`        | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/outcome`        | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/report`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/tender`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions/[id]/what-to-do`     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
 
 ### LocalContentOS — Usable v0.1 Product Workspace (20 routes)
 
@@ -205,8 +205,8 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                        | Product/System | Route Type         | Public/Protected | Implementation Status | Notes               |
 | ---------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------- |
-| `/intelligence/sectors`      | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Sector intelligence |
-| `/intelligence/sectors/[id]` | DecisionOS     | Governed workspace | Protected        | Active adjacent (L4)  | Sector detail       |
+| `/intelligence/sectors`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector intelligence |
+| `/intelligence/sectors/[id]` | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector detail       |
 
 ### SalesOS — Governed CRM-lite Workspace (27 routes)
 
@@ -269,14 +269,14 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                                               | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                  |
 | --------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------- |
-| `/workflowos`                                       | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Dashboard with real metrics via WorkflowDashboard + getWorkflowDashboardStats |
-| `/workflowos/admin`                                 | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      |                        |
-| `/workflowos/clients/[clientId]/records/[recordId]` | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Record detail          |
-| `/workflowos/templates`                             | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Template list          |
-| `/workflowos/templates/new`                         | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Create template        |
-| `/workflowos/templates/[id]`                        | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Template detail        |
-| `/workflowos/records`                               | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Org workflow records   |
-| `/workflowos/records/[id]`                          | WorkflowOS     | Governed workspace | Protected        | Usable v0.1 (L4)      | Record from template   |
+| `/workflowos`                                       | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Dashboard with real metrics via WorkflowDashboard + getWorkflowDashboardStats |
+| `/workflowos/admin`                                 | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      |                        |
+| `/workflowos/clients/[clientId]/records/[recordId]` | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Record detail          |
+| `/workflowos/templates`                             | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Template list          |
+| `/workflowos/templates/new`                         | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Create template        |
+| `/workflowos/templates/[id]`                        | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Template detail        |
+| `/workflowos/records`                               | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Org workflow records   |
+| `/workflowos/records/[id]`                          | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Record from template   |
 
 ### LocalContactOS — Governed Workspace (v0.1 slice)
 
@@ -289,6 +289,14 @@ These pages serve as detail references for specialized operating systems. They a
 | `/contacts/[id]/edit`              | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Edit contact form (pre-populated) |
 | `/contacts/[id]/relations/new`     | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Add relation       |
 | `/contacts/[id]/interactions/new`  | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Log interaction    |
+
+### Institutional Memory — Cross-Product Knowledge Graph (L4)
+
+| Route                         | Product/System      | Route Type         | Public/Protected | Implementation Status | Notes                                        |
+| ----------------------------- | ------------------- | ------------------ | ---------------- | --------------------- | -------------------------------------------- |
+| `/institutional-memory`              | Institutional Memory| Governed workspace | Protected        | Usable v0.1 (L4)      | Cross-product knowledge graph dashboard      |
+| `/institutional-memory/collections`  | Institutional Memory| Governed workspace | Protected        | Usable v0.1 (L4)      | Saved collections of memory event links      |
+| `/institutional-memory/graph`        | Institutional Memory| Governed workspace | Protected        | Usable v0.1 (L4)      | Interactive knowledge graph visualization    |
 
 ### Sunbul — Redirect Alias to WorkflowOS
 
@@ -341,6 +349,8 @@ Current code reality uses `src/middleware.ts` for route protection. It uses `get
 - `/monitoring`
 - `/intelligence`
 - `/sunbul`
+- `/contacts`
+- `/institutional-memory`
 - `/workflowos`
 - `/sales`
 - `/published/recommendation`
@@ -371,16 +381,17 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 2. `/auditos/*` = guided demo (public, mock-backed, read-only). Always label as `Demo` in UI and docs.
    `/auditos/*` is intentionally public because it is a sanitized, mock-only, read-only guided demo. It must not use customer data, uploads, mutations, exports/downloads, tenant state, or operational audit workflows. If any of these are introduced, the route must move behind authentication/gating before release.
 3. `/assistant/*` = governed shared application on AQLIYA Core. Do not market it as a standalone product unless explicitly reclassified.
-4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). Usable v0.1 (L4). See limitations in route table above.
-5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). WorkflowOS is the canonical product name.
+4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). L5 Pilot-ready at 100% (7/7 GREEN). See limitations in route table above.
+5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). L5 Pilot-ready — template workflows, SLA monitoring, gated export, 31 action tests, seed data.
 6. `/sunbul/*` = redirect alias family over WorkflowOS implementation. Every route is a `permanentRedirect(302)` wrapper.
 7. `/organizations/*` and `/settings` must be labeled prototype/internal preview until they have real persistence and workflow backing. SalesOS is no longer prototype-only — 27 routes with real Prisma schema, server actions, RBAC, audit trail, and evidence links now compile and build. Remaining gaps: seed data verification and browser smoke test.
 8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/download`) must remain permissioned.
 9. Do not create `/simulation` top-level routes until that system has a real workspace implementation.
 10. Product marketing pages belong under `/products/*`.
 11. Company and marketing pages must not imply future products are already implemented.
-12. `/decisions/*` = DecisionOS active adjacent governed workspace (authenticated, DB-backed).
+12. `/decisions/*` = DecisionOS pilot-ready governed workspace (L5). Authenticated, DB-backed, evidence upload, bilingual PDF export, 42 action tests, seed data.
 13. `/published/recommendation/*` is protected in current code reality because the backing action requires an authenticated user from the same organization.
 14. `/executive-brief` is the canonical executive brief route. `/executive-briefing` is preserved only as a redirect alias.
 
 15. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`.
+16. `/institutional-memory/*` = governed knowledge graph workspace (L4). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent. Routes: workspace, collections, graph view.

@@ -4,6 +4,7 @@ import {
   workflow_getRecordById,
   updateWorkflowRecordStatus,
 } from "@/actions/workflowos-actions";
+import { getSlaInfoForRecord } from "@/actions/workflowos-sla-actions";
 import {
   requestWorkflowExport,
   approveWorkflowExport,
@@ -132,6 +133,8 @@ export default async function WorkflowRecordDetailPage({
     redirect(`/workflowos/records/${id}`);
   }
 
+  const slaResult = await getSlaInfoForRecord(id);
+
   const evidence = await prisma.workflowEvidence.findMany({
     where: { organizationId: record.organizationId, recordId: id },
     orderBy: { createdAt: "desc" },
@@ -199,6 +202,41 @@ export default async function WorkflowRecordDetailPage({
             </CardContent>
           </Card>
         )}
+        {/* SLA Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">مؤشر SLA</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {slaResult.success && slaResult.data ? (
+              <div>
+                <p className={`text-lg font-bold ${
+                  slaResult.data.status === "on_track" ? "text-green-600" :
+                  slaResult.data.status === "approaching" ? "text-amber-600" :
+                  slaResult.data.status === "overdue" ? "text-orange-600" :
+                  "text-red-600"
+                }`}>
+                  {slaResult.data.status === "on_track" ? "ضمن المدة" :
+                   slaResult.data.status === "approaching" ? "يقترب من الموعد" :
+                   slaResult.data.status === "overdue" ? "متأخر" :
+                   "تجاوز المدة"}
+                </p>
+                {slaResult.data.remainingMinutes !== null && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {slaResult.data.remainingMinutes > 0
+                      ? `${Math.round(slaResult.data.remainingMinutes)} دقيقة متبقية`
+                      : "انتهت المدة"}
+                  </p>
+                )}
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  {slaResult.data.stepLabel}
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">غير محدد</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       <Card className="mb-6">

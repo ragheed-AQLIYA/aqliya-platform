@@ -578,6 +578,7 @@ export async function startWorkflowFromTemplate(
 export async function workflow_listOrgRecords(
   organizationId: string,
   status?: string,
+  searchQuery?: string,
 ) {
   try {
     const user = await requireUserContext();
@@ -586,6 +587,9 @@ export async function workflow_listOrgRecords(
     }
     const where: Record<string, unknown> = { organizationId };
     if (status) where.status = status;
+    if (searchQuery?.trim()) {
+      where.title = { contains: searchQuery.trim(), mode: "insensitive" };
+    }
     const records = await prisma.workflowRecord.findMany({
       where,
       include: { template: { select: { name: true } } },

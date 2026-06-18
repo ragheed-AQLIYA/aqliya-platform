@@ -167,6 +167,27 @@ export async function createDecision(data: {
 export async function updateDecisionStatus(id: string, status: string) {
   try {
     await requireDecisionAccess(id, "OPERATOR");
+
+    // Evidence review gate: require all evidence reviewed before approval
+    if (status === "APPROVED" || status === "IMPLEMENTED") {
+      const allEvidence = await prisma.decisionEvidence.findMany({
+        where: { decisionId: id },
+        select: { metadata: true },
+      });
+      if (allEvidence.length > 0) {
+        const unreviewed = allEvidence.filter((e) => {
+          const meta = e.metadata as Record<string, unknown> | null;
+          return !meta?.reviewedAt;
+        });
+        if (unreviewed.length > 0) {
+          return {
+            success: false,
+            error: `لا يمكن ${status === "APPROVED" ? "الموافقة" : "التنفيذ"} على القرار قبل مراجعة جميع مستندات الدعم. العدد غير المراجع: ${unreviewed.length}`,
+          };
+        }
+      }
+    }
+
     const decision = await prisma.decision.update({
       where: { id },
       data: { status: status as DecisionStatus },

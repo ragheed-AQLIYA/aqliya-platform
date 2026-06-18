@@ -1,4 +1,4 @@
-# AQLIYA Architecture (aligned with v1.1 — repositioned)
+﻿# AQLIYA Architecture (aligned with v1.1 — repositioned)
 
 ## Official Hierarchy
 
@@ -25,24 +25,21 @@ AQLIYA Platform Company
 │
 ├── Specialized Operating Systems (capabilities — built on Core)
 │   ├── AuditOS                 (audit workflow — L5 pilot-ready)
-│   ├── DecisionOS              (decision governance — L4 usable)
+│   ├── DecisionOS              (decision governance — L5 pilot-ready)
 │   ├── LocalContentOS          (local content & supply chain — L5 conditional)
 │   ├── SalesOS                 (business development — early access)
 │   └── SimulationOS            (capability label — not standalone)
 │
 ├── Custom / Client-Specific Workspaces
-│   └── WorkflowOS              (/workflowos) — governed custom workflow
+│   └── WorkflowOS              (/workflowos) — governed custom workflow (L5 pilot-ready)
 │
 ├── Workspaces (execution environments)
 │   ├── AuditOS Workspace       (/audit)
 │   ├── DecisionOS Workspace    (/decisions, /intelligence/sectors)
 │   ├── Office AI Workspace     (/assistant)
-│   ├── WorkflowOS Workspace    (/workflowos)
+│   ├── WorkflowOS Workspace    (/workflowos) — L5 pilot-ready
+│   ├── Institutional Memory   (/institutional-memory) — L4 knowledge graph
 │   ├── Sunbul Workspace        (/sunbul) — legacy redirect → /workflowos
-│   ├── Organizations Surface   (/organizations) — prototype only
-│   ├── Generic Settings        (/settings) — prototype only
-│   └── SalesOS Workspace       (/sales) — prototype/dashboard
-│
 ├── Governance (cross-cutting)
 │   ├── RBAC                     (multi-level permissions)
 │   ├── Audit Trail              (immutable event log)
@@ -72,7 +69,7 @@ AQLIYA Platform Company
     ├── Insights                 (/insights/*)
     └── Case Studies             (/case-studies)
 
-Future products (not yet implemented): LocalContactOS, RiskOS, ComplianceOS, LegalOS, GovOS.
+Future products (not yet implemented): RiskOS, ComplianceOS, LegalOS, GovOS.
 Deployment models: Cloud (active), Private/On-Prem (strategic), Air-Gapped (strategic).
 ```
 
@@ -128,6 +125,9 @@ Deployment models: Cloud (active), Private/On-Prem (strategic), Air-Gapped (stra
 | `/sales`                                 | SalesOS prototype dashboard                 | Workspace/Prototype    |
 | `/contacts`                              | LocalContactOS governed workspace           | Workspace              |
 | `/organizations`                         | Protected mock organizations surface        | Workspace/Prototype    |
+| `/institutional-memory`              | Institutional Memory governed workspace     | Workspace              |
+| `/institutional-memory/collections`  | Institutional Memory collections            | Workspace              |
+| `/institutional-memory/graph`        | Institutional Memory knowledge graph view   | Workspace              |
 | `/settings`                              | Protected generic settings preview          | Workspace/Prototype    |
 | `/login`                                 | Authentication                              | Internal               |
 | `/access-denied`                         | Access control                              | Internal               |
@@ -148,12 +148,49 @@ Response headers: `Cache-Control: private, no-store`, `X-Content-Type-Options: n
 
 - AQLIYA is positioned as an **institutional operating platform**, not a product company. The homepage presents the platform first; operating systems are surfaced inside `/platform#capabilities`.
 - `Office AI Assistant` is implemented in code today as a governed shared application.
-- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L4).
+- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L5 Pilot-ready). Template workflows, SLA monitoring, gated export, 31 action tests, seed data. Not full L6.
 - `Sunbul` is a legacy redirect alias: `/sunbul/*` routes → `permanentRedirect(302)` to `/workflowos/*`.
 - `/organizations`, `/settings`, and `/sales` are protected surfaces — not yet v0.1 workspace complete.
 - `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 20+ routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, and pilot readiness dashboard. **L5 Pilot-ready** — AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. See `docs/deliverables/mission-summary-2026-06-17.md`. AI Quality Dashboard at `/local-content/quality-dashboard` (2026-06-17): composite quality score, 4-bucket confidence distribution, 4-week acceptance rate time-series, inline audit events table, bilingual PDF export. Review Center at `/local-content/review-center` with inline audit event viewer and export controls.
-- `DecisionOS` includes stored evidence files plus protected download routes.
+- `DecisionOS` is a pilot-ready governed workspace at `/decisions/*` (L5). Full lifecycle (draft → in_review → approved/rejected), evidence upload, bilingual PDF export, 42 action tests, seed data.
 - `AuditOS` is the most mature operating system with 12-station audit lifecycle, ISQM1 quality management, and interactive demo at `/auditos`.
 - **Schema v0.2 (2026-05-28)**: `createdById` added to 10 models, `DecisionEvidence` model added, `platformOrganizationId` added to SunbulClient.
 - **Website repositioning (2026-06-09)**: Navigation changed to `المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية`. Homepage redesigned with 9-section platform-first architecture. Products moved inside `/platform#capabilities`. Proof Center established at `/proof`. Sectors page at `/industries`.
+- **Script Utils (2026-06-17)**: `scripts/db-utils/prisma.mjs` created as a shared Prisma client for scripts (bypasses `server-only` guard). All script-based database operations should import from this module instead of creating inline PrismaClients.
+
+### Institutional Memory Architecture
+
+Institutional Memory bridges products via the `InstitutionalMemoryEvent` model, creating a cross-product knowledge graph.
+
+#### Cross-Product Linking Pattern
+
+```
+sourceProduct/sourceEntityId → eventType → targetProduct/targetEntityId
+
+Example:
+  decisions/decision-abc → "generated_by" → sales/account-xyz
+  workflow/record-def → "linked" → contacts/contact-456
+  audit/engagement-ghi → "referenced" → decisions/decision-abc
+```
+
+**Event types**: `linked`, `referenced`, `generated_by`, `approved_by`, `related_to`
+
+**Models**:
+- `InstitutionalMemoryEvent` — individual cross-product link with sourceProduct, sourceEntityId, sourceEntityType, targetProduct, targetEntityId, targetEntityType, eventType, description, metadata, confidence
+- `InstitutionalMemoryCollection` — saved query/filter for organizing related links (`filterCriteria` JSON field)
+- `IntelligenceGraphNode` — named graph nodes (entity, concept, insight, document, topic) with optional vector embeddings
+- `IntelligenceGraphEdge` — typed relationships between nodes (related_to, derives_from, evidence_for, contradicts, supports, references)
+
+#### Collections
+
+Collections allow users to save specific queries for later reference. The `filterCriteria` field stores the query parameters, enabling dynamic reloading.
+
+#### Knowledge Graph View
+
+Located at `/institutional-memory/graph`. Uses `IntelligenceGraphNode` and `IntelligenceGraphEdge` models for interactive visualization. Supports finding paths between entities, subgraph extraction, and node neighbor exploration.
+
+#### Agent Memory Integration
+
+SalesOS integrates with Institutional Memory via `src/lib/sales/institutional-memory-sync.ts`, which collects memory candidates from various SalesOS activities (account updates, deal changes, etc.) and syncs them to the knowledge graph. The `src/lib/sales/institutional-memory-shared.ts` module provides shared types and utility functions for cross-product memory.
+
 - **Script Utils (2026-06-17)**: `scripts/db-utils/prisma.mjs` created as a shared Prisma client for scripts (bypasses `server-only` guard). All script-based database operations should import from this module instead of creating inline PrismaClients.

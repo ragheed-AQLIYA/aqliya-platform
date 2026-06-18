@@ -408,6 +408,8 @@ model Organization {
   tbMappingPatterns        TBMappingPattern[]
   tbMappingFeedback        TBMappingFeedback[]
   tbClassificationHistory  TBClassificationHistory[]
+  institutionalMemoryEvents       InstitutionalMemoryEvent[]
+  institutionalMemoryCollections  InstitutionalMemoryCollection[]
 
   @@index([createdAt])
   @@index([platformOrganizationId])
@@ -438,6 +440,9 @@ model User {
   scimEvents               ScimProvisioningEvent[]  @relation("ScimEventPerformer")
   reviewedImportBatches    ErpImportBatch[]       @relation("BatchReviewer")
   approvedImportBatches    ErpImportBatch[]       @relation("BatchApprover")
+  institutionalMemoryEventsCreated       InstitutionalMemoryEvent[]         @relation("IMEventCreator")
+  institutionalMemoryCollectionsCreated  InstitutionalMemoryCollection[]    @relation("IMCollectionCreator")
+  institutionalMemoryCollectionsUpdated  InstitutionalMemoryCollection[]    @relation("IMCollectionUpdater")
   createdAt                DateTime          @default(now())
   updatedAt                DateTime          @updatedAt
 
@@ -2753,6 +2758,62 @@ model ContactExportRequest {
   @@index([organizationId, requiresLegalReview])
 }
 
+
+// ─── Institutional Memory — Cross-Product Links ────────────────────
+
+/// A cross-product link between any two entities in the platform.
+/// This is the core of Institutional Memory — it bridges DecisionOS, SalesOS, AuditOS,
+/// WorkflowOS, LocalContactOS, and any other product without circular dependencies.
+model InstitutionalMemoryEvent {
+  id              String   @id @default(cuid())
+  organizationId  String
+  sourceProduct   String   /// e.g. "sales", "decisions", "audit", "workflow", "contacts"
+  sourceEntityId  String
+  sourceEntityType String  /// e.g. "Account", "Decision", "AuditEngagement"
+  targetProduct   String
+  targetEntityId  String
+  targetEntityType String
+  eventType       String   /// e.g. "linked", "referenced", "generated_by", "approved_by", "related_to"
+  description     String   @default("")
+  metadata        Json     @default("{}")
+  confidence      Float    @default(1.0)
+
+  createdById     String
+  createdBy       User     @relation("IMEventCreator", fields: [createdById], references: [id])
+  organization    Organization @relation(fields: [organizationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([sourceProduct, sourceEntityId])
+  @@index([targetProduct, targetEntityId])
+  @@index([organizationId, eventType])
+  @@map("institutional_memory_events")
+}
+
+/// A saved collection/folder of InstitutionalMemoryEvent links for a specific purpose.
+model InstitutionalMemoryCollection {
+  id              String   @id @default(cuid())
+  organizationId  String
+  name            String
+  description     String   @default("")
+  filterCriteria  Json     @default("{}")  /// Saved query filters for dynamic collection
+
+  createdById     String
+  createdBy       User     @relation("IMCollectionCreator", fields: [createdById], references: [id])
+  updatedById     String
+  updatedBy       User     @relation("IMCollectionUpdater", fields: [updatedById], references: [id])
+
+  organization    Organization @relation(fields: [organizationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([organizationId, createdById])
+  @@map("institutional_memory_collections")
+}
 // ==================== Intelligence Core — Institutional Memory (IC-01/AGENT-5) ====================
 
 model IntelligenceGraphNode {

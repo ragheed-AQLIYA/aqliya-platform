@@ -228,3 +228,94 @@ export async function deleteDecisionEvidenceAction(evidenceId: string) {
     return { success: false, error: "فشل حذف المستند" };
   }
 }
+
+export async function reviewDecisionEvidenceAction(
+  evidenceId: string,
+  notes?: string,
+) {
+  try {
+    const evidence = await prisma.decisionEvidence.findUnique({
+      where: { id: evidenceId },
+    });
+    if (!evidence) {
+      return { success: false, error: "المستند غير موجود" };
+    }
+
+    const { user } = await requireDecisionAccess(
+      evidence.decisionId,
+      "OPERATOR",
+    );
+
+    const meta = (evidence.metadata as Record<string, unknown>) ?? {};
+    const now = new Date().toISOString();
+
+    const updated = await prisma.decisionEvidence.update({
+      where: { id: evidenceId },
+      data: {
+        metadata: {
+          ...meta,
+          reviewedAt: now,
+          reviewedById: user.id,
+          reviewedByName: user.name || user.email,
+          reviewNotes: notes || null,
+        },
+      },
+    });
+
+    const alog = auditLogger({
+      productKey: Product.DECISION_OS,
+      sourceSystem: "decision_os",
+      organization: {
+        platformOrganizationId: user.platformOrganizationId ?? undefined,
+      },
+      actor: { id: user.id, type: "user", name: user.name || user.email },
+    });
+    await alog.record(
+      "EVIDENCE_REVIEWED",
+      {
+        type: "decision_evidence",
+        id: evidenceId,
+        label: evidence.filename,
+      },
+      {
+        severity: "info",
+        status: "recorded",
+        sourceModel: "DecisionEvidence",
+        metadata: {
+          decisionId: evidence.decisionId,
+          reviewed: true,
+          hasNotes: !!notes,
+        },
+      },
+    );
+
+    return { success: true, data: updated };
+  } catch (error) {
+    return { success: false, error: "فشل مراجعة المستند" };
+  }
+}
+
+export async function getUnreviewedEvidenceCount(decisionId: string): Promise<{
+  success: boolean;
+  data?: { total: number; unreviewed: number };
+  error?: string;
+}> {
+  try {
+    await requireDecisionAccess(decisionId, "VIEWER");
+
+    const allEvidence = await prisma.decisionEvidence.findMany({
+      where: { decisionId },
+      select: { metadata: true },
+    });
+
+    const total = allEvidence.length;
+    const unreviewed = allEvidence.filter((e) => {
+      const meta = e.metadata as Record<string, unknown> | null;
+      return !meta?.reviewedAt;
+    }).length;
+
+    return { success: true, data: { total, unreviewed } };
+  } catch (error) {
+    return { success: false, error: "فشل في حساب المستندات غير المراجعة" };
+  }
+}
