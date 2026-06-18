@@ -25,6 +25,7 @@ export const DEFAULT_RETENTION_POLICIES: RetentionPolicy[] = [
   },
   { modelName: "User", retentionDays: 0, action: "archive", enabled: false },
   { modelName: "PlatformSecret", retentionDays: 0, action: "archive", enabled: false },
+  { modelName: "LocalContact", retentionDays: 730, action: "archive", enabled: true, notifyBeforeDelete: true },
 ];
 
 export interface PolicyStoreEntry {

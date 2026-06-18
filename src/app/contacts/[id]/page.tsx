@@ -34,8 +34,10 @@ import {
 import { CompliancePanel } from "@/components/contacts/compliance-panel";
 import { ExportApprovalBadge } from "@/components/contacts/export-approval-badge";
 import { ExportApprovalDialog } from "@/components/contacts/export-approval-dialog";
+import { ContactExportButton } from "@/components/contacts/contact-export-button";
 import { ReviewAssignmentPanel } from "@/components/contacts/review-assignment-panel";
 import { RiskFlagsPanel } from "@/components/contacts/risk-flags-panel";
+import { AuditTrailViewer } from "@/components/contacts/audit-trail-viewer";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -255,6 +257,9 @@ export default async function ContactDetailPage({ params }: PageProps) {
 
             {/* Reviews Section */}
             <ReviewsSection contactId={contact.id} orgId={user.organizationId} userId={user.id} userRole={user.role} />
+
+            {/* Audit Trail Section */}
+            <AuditTrailViewer contactId={contact.id} />
           </div>
 
           <div className="space-y-4">
@@ -505,16 +510,21 @@ async function ExportApprovalSidebarSection({
   const requiresLegal = contact.sensitivityLevel === "confidential";
 
   return (
-    <ExportApprovalDialog
-      contactId={contactId}
-      exportStatus={contact.exportStatus}
-      sensitivityLevel={contact.sensitivityLevel}
-      canExport={contact.exportStatus === "approved" || (!requiresApproval && contact.exportStatus === "none")}
-      hasPendingRequest={exportRequests.some((r) => r.status === "pending")}
-      requiresExportApproval={requiresApproval}
-      requiresLegalReview={requiresLegal}
-      exportRequests={serializedRequests}
-    />
+    <>
+      <ExportApprovalDialog
+        contactId={contactId}
+        exportStatus={contact.exportStatus}
+        sensitivityLevel={contact.sensitivityLevel}
+        canExport={contact.exportStatus === "approved" || (!requiresApproval && contact.exportStatus === "none")}
+        hasPendingRequest={exportRequests.some((r) => r.status === "pending")}
+        requiresExportApproval={requiresApproval}
+        requiresLegalReview={requiresLegal}
+        exportRequests={serializedRequests}
+      />
+      {contact.exportStatus === "approved" && (
+        <ContactExportButton contactId={contactId} />
+      )}
+    </>
   );
 }
 

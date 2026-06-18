@@ -1,4 +1,4 @@
-// ─── Unit/Integration Test: LocalContactOS Actions ───
+﻿// ─── Unit/Integration Test: LocalContactOS Actions ───
 // Tests CRUD operations, risk flags, relations, and interactions for contacts.
 // Uses mocked Prisma — no database required.
 
@@ -72,9 +72,10 @@ jest.mock("@/lib/prisma", () => ({
       create: mockPlatformAuditLogCreate,
       createMany: mockPlatformAuditLogCreateMany,
     },
-    $transaction: jest.fn((ops: any[]) => Promise.all(ops)),
+    $transaction: jest.fn((ops) => Promise.all(ops)),
   },
 }));
+
 
 // ─── Imports (after mocks) ───
 
@@ -196,6 +197,88 @@ describe("listContacts", () => {
   });
 });
 
+// ─── Dashboard-style listContacts tests ───
+
+describe("listContacts — dashboard", () => {
+  it("returns all active contacts for the organization when no filter is applied", async () => {
+    const contacts = [
+      { ...mockContact, id: "c1", sensitivityLevel: "normal" },
+      { ...mockContact, id: "c2", sensitivityLevel: "sensitive" },
+      { ...mockContact, id: "c3", sensitivityLevel: "confidential" },
+    ];
+    mockLocalContactFindMany.mockResolvedValue(contacts);
+
+    const result = await listContacts("org-1");
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toHaveLength(3);
+    }
+    expect(mockLocalContactFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ organizationId: "org-1", isActive: true }),
+      }),
+    );
+  });
+
+  it("returns only contacts matching the requested sensitivity level", async () => {
+    const sensitiveContacts = [
+      { ...mockContact, id: "c2", sensitivityLevel: "sensitive" },
+    ];
+    mockLocalContactFindMany.mockResolvedValue(sensitiveContacts);
+
+    const result = await listContacts("org-1", { sensitivityLevel: "sensitive" });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toHaveLength(1);
+      expect(result.data[0].sensitivityLevel).toBe("sensitive");
+    }
+    expect(mockLocalContactFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ sensitivityLevel: "sensitive" }),
+      }),
+    );
+  });
+
+  it("returns empty array when sensitivity filter matches no contacts", async () => {
+    mockLocalContactFindMany.mockResolvedValue([]);
+
+    const result = await listContacts("org-1", { sensitivityLevel: "critical" });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toHaveLength(0);
+    }
+  });
+
+  it("provides correct count per sensitivity level via sequential queries", async () => {
+    // Simulates what a dashboard might show: contact counts per sensitivity level
+    mockLocalContactFindMany.mockResolvedValue([]);
+    let result = await listContacts("org-1", { sensitivityLevel: "normal" });
+    expect(result.ok).toBe(true);
+    expect(mockLocalContactFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ sensitivityLevel: "normal" }),
+      }),
+    );
+
+    mockLocalContactFindMany.mockResolvedValue([
+      { ...mockContact, id: "c2", sensitivityLevel: "sensitive" },
+    ]);
+    result = await listContacts("org-1", { sensitivityLevel: "sensitive" });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toHaveLength(1);
+    }
+    expect(mockLocalContactFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ sensitivityLevel: "sensitive" }),
+      }),
+    );
+  });
+});
+
 describe("createContact", () => {
   it("creates a contact with required fields", async () => {
     mockLocalContactCreate.mockResolvedValue(mockContact);
@@ -310,6 +393,50 @@ describe("updateContact", () => {
     const result = await updateContact("nonexistent", { name: "New" });
 
     expect(result.ok).toBe(false);
+  });
+
+  it("updates a subset including sensitivityLevel and tags", async () => {
+    mockLocalContactFindFirst.mockResolvedValue(mockContact);
+    mockLocalContactUpdate.mockResolvedValue({
+      ...mockContact,
+      sensitivityLevel: "sensitive",
+      tags: ["عميل", "شريك", "مهم"],
+    });
+
+    const result = await updateContact("contact-1", {
+      sensitivityLevel: "sensitive",
+      tags: "عميل,شريك,مهم",
+    });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.sensitivityLevel).toBe("sensitive");
+    }
+    expect(mockLocalContactUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "contact-1" },
+        data: expect.objectContaining({
+          sensitivityLevel: "sensitive",
+          tags: expect.any(String),
+        }),
+      }),
+    );
+  });
+
+  it("scopes update to the correct organization", async () => {
+    mockLocalContactFindFirst.mockResolvedValue(mockContact);
+    mockLocalContactUpdate.mockResolvedValue(mockContact);
+
+    await updateContact("contact-1", { name: "Update" });
+
+    expect(mockLocalContactFindFirst).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          id: "contact-1",
+          organizationId: "org-1",
+        }),
+      }),
+    );
   });
 });
 

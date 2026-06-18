@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { unstable_noStore as noStore } from "next/cache";
 import { requireUserContext } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getDashboardMetrics } from "@/lib/localcontactos/dashboard-cache";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,48 +43,21 @@ function exportStatusBadge(status: string) {
 }
 
 export default async function ContactsDashboardPage() {
-  noStore();
   const user = await requireUserContext("VIEWER");
 
   const orgId = user.organizationId;
 
   // Aggregate metrics in parallel
-  const [
+  // Fetch dashboard metrics via in-memory cache (5-minute TTL)
+  const {
     totalContacts,
     sensitivityCounts,
     exportStatusCounts,
     recentInteractions,
     reviewStats,
     recentContacts,
-  ] = await Promise.all([
-    prisma.localContact.count({ where: { organizationId: orgId, isActive: true } }),
-    prisma.localContact.groupBy({
-      by: ["sensitivityLevel"],
-      where: { organizationId: orgId, isActive: true },
-      _count: true,
-    }),
-    prisma.localContact.groupBy({
-      by: ["exportStatus"],
-      where: { organizationId: orgId, isActive: true },
-      _count: true,
-    }),
-    prisma.localContactInteraction.findMany({
-      where: { organizationId: orgId },
-      include: { contact: { select: { id: true, name: true } } },
-      orderBy: { occurredAt: "desc" },
-      take: 10,
-    }),
-    prisma.contactReview.findMany({
-      where: { organizationId: orgId },
-      select: { status: true },
-    }),
-    prisma.localContact.findMany({
-      where: { organizationId: orgId, isActive: true },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      select: { id: true, name: true, sensitivityLevel: true, position: true, organizationName: true, createdAt: true },
-    }),
-  ]);
+  } = await getDashboardMetrics(orgId);
+
 
   const getCount = (items: { _count: number }[], key: string) => {
     const found = items.find((i) => (i as any).sensitivityLevel === key || (i as any).exportStatus === key);

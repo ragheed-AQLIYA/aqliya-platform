@@ -638,6 +638,41 @@ export async function resolveContactRiskFlag(contactId: string, flagId: string) 
   });
 }
 
+// ─── Audit Trail ────────────────────────────────────────
+
+export interface AuditTrailEntry {
+  id: string;
+  actorName: string | null;
+  actorEmail: string | null;
+  action: string;
+  createdAt: string;
+  metadata: Record<string, unknown> | null;
+}
+
+export async function getContactAuditTrail(contactId: string) {
+  return safe(async () => {
+    const user = await requireUserContext("VIEWER");
+
+    const entries = await prisma.platformAuditLog.findMany({
+      where: {
+        targetType: "LocalContact",
+        targetId: contactId,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 200,
+    });
+
+    return entries.map((entry) => ({
+      id: entry.id,
+      actorName: entry.actorName,
+      actorEmail: entry.actorEmail,
+      action: entry.action,
+      createdAt: entry.createdAt.toISOString(),
+      metadata: entry.metadata as Record<string, unknown> | null,
+    }));
+  });
+}
+
 // ─── Export ────────────────────────────────────────────
 
 import { format } from "date-fns";

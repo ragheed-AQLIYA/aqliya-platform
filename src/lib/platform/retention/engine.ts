@@ -36,6 +36,7 @@ const MODEL_ACCESSORS: Record<string, PrismaModel | (() => PrismaModel)> = {
   Decision: asRetentionModel(prisma.decision),
   AuditEngagement: asRetentionModel(prisma.auditEngagement),
   User: asRetentionModel(prisma.user),
+  LocalContact: asRetentionModel(prisma.localContact),
 };
 
 function resolveModel(modelName: string): PrismaModel | undefined {
@@ -44,10 +45,11 @@ function resolveModel(modelName: string): PrismaModel | undefined {
   return typeof accessor === "function" ? accessor() : accessor;
 }
 
-const SOFT_DELETE_MODELS: Record<string, { statusField?: string; deletedAtField?: string; archivedAtField?: string }> = {
+const SOFT_DELETE_MODELS: Record<string, { statusField?: string; deletedAtField?: string; archivedAtField?: string; isActiveField?: string }> = {
   AuditEngagement: { statusField: "status" },
   PlatformNotification: { statusField: "status" },
   Decision: { statusField: "status" },
+  LocalContact: { isActiveField: "isActive" },
 };
 
 async function applySoftDelete(
@@ -83,6 +85,14 @@ async function applySoftDelete(
     return result.count;
   }
 
+  if (config.isActiveField) {
+    const result = await model.updateMany({
+      where: { id: { in: recordIds }, createdAt: { lte: cutoff } },
+      data: { [config.isActiveField]: false },
+    });
+    return result.count;
+  }
+
   if (config.statusField) {
     const result = await model.updateMany({
       where: { id: { in: recordIds }, createdAt: { lte: cutoff } },
@@ -111,6 +121,7 @@ function getModelLabel(modelName: string): string {
     Decision: "القرارات",
     AuditEngagement: "مهام المراجعة",
     User: "المستخدمين",
+    LocalContact: "جهات الاتصال المؤسسية",
   };
   return labels[modelName] ?? modelName;
 }
