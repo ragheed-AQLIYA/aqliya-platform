@@ -2,15 +2,64 @@ import 'server-only'
 
 import { prisma } from '@/lib/prisma'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
-import type { Prisma } from '@prisma/client'
 import { CS_STRINGS } from './cs-strings'
 
-// ContentWorkspace / ContentItem / ContentVersion / ContentTemplate are defined in
-// prisma/schema.prisma (added 2026-06-17). Run `npx prisma generate` then `npx prisma db push`
-// to apply the schema to the database. Until `prisma generate` runs in this environment
-// the Prisma client typings may not include these models; the cast below is a fallback.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const p = prisma as any
+// ContentWorkspace / ContentItem / ContentVersion / ContentTemplate were added to
+// prisma/schema.prisma (2026-06-17). Once `npx prisma generate` runs in this environment
+// the generated client will include these models. Until then we use a hand-crafted delegate
+// interface that matches every call site in this file, so TypeScript stays strict without
+// relying on `as any`.
+interface ContentStudioDb {
+  contentWorkspace: {
+    create(args: { data: Record<string, unknown> }): Promise<ContentWorkspace>
+    findUnique(args: {
+      where: { id: string }
+      select?: Record<string, boolean>
+    }): Promise<ContentWorkspace | null>
+    findMany(args?: {
+      where?: Record<string, unknown>
+      orderBy?: Record<string, unknown>
+    }): Promise<ContentWorkspace[]>
+    update(args: {
+      where: { id: string }
+      data: Record<string, unknown>
+    }): Promise<ContentWorkspace>
+  }
+  contentItem: {
+    create(args: { data: Record<string, unknown> }): Promise<ContentItem>
+    findUnique(args: { where: { id: string } }): Promise<ContentItem | null>
+    findMany(args?: {
+      where?: Record<string, unknown>
+      orderBy?: Record<string, unknown>
+      select?: Record<string, boolean>
+    }): Promise<ContentItem[]>
+    update(args: {
+      where: { id: string }
+      data: Record<string, unknown>
+    }): Promise<ContentItem>
+    count(args?: { where?: Record<string, unknown> }): Promise<number>
+    groupBy(args: Record<string, unknown>): Promise<{ status: string; _count: { id: number } }[]>
+  }
+  contentVersion: {
+    create(args: { data: Record<string, unknown> }): Promise<ContentVersion>
+    findUnique(args: { where: { id: string } }): Promise<ContentVersion | null>
+    findMany(args?: {
+      where?: Record<string, unknown>
+      orderBy?: Record<string, unknown>
+    }): Promise<ContentVersion[]>
+    count(args?: { where?: Record<string, unknown> }): Promise<number>
+  }
+  contentTemplate: {
+    create(args: { data: Record<string, unknown> }): Promise<ContentTemplate>
+    findUnique(args: { where: { id: string } }): Promise<ContentTemplate | null>
+    findMany(args?: {
+      where?: Record<string, unknown>
+      orderBy?: Record<string, unknown>
+    }): Promise<ContentTemplate[]>
+  }
+}
+
+const p = prisma as unknown as ContentStudioDb
 
 export class ContentStudioError extends Error {
   constructor(message: string) {
@@ -339,7 +388,7 @@ export async function listContent(
     where.status = filter.status
   }
   const items = await p.contentItem.findMany({
-    where: where as any,
+    where,
     orderBy: { updatedAt: 'desc' },
   })
   return items as unknown as ContentItem[]
@@ -380,7 +429,7 @@ export async function updateContent(
 
   const updated = await p.contentItem.update({
     where: { id: contentId },
-    data: updateData as any,
+    data: updateData,
   })
 
   await auditLog('content_studio.content_updated', {
@@ -423,7 +472,7 @@ async function transitionContent(
 
   const updated = await p.contentItem.update({
     where: { id: contentId },
-    data: updateData as any,
+    data: updateData,
   })
 
   const auditActionMap: Record<string, string> = {
@@ -508,7 +557,7 @@ export async function createTemplate(
       description: data.description ?? null,
       category: data.category ?? null,
       bodyTemplate: data.bodyTemplate,
-      metadataTemplate: (data.metadataTemplate ?? undefined) as any,
+      metadataTemplate: data.metadataTemplate ?? undefined,
       defaultReviewRoles: data.defaultReviewRoles ?? [],
       createdById: userId,
     },
