@@ -11,7 +11,9 @@
 | Artifact | Command | Result |
 |----------|---------|--------|
 | [2026-06-18-final-git-head.txt](./2026-06-18-final-git-head.txt) | `git rev-parse HEAD` | commit hash |
-| [2026-06-18-final-tsc.txt](./2026-06-18-final-tsc.txt) | `npx tsc --noEmit` | Run after build |
+| [2026-06-18-final-tsc.txt](./2026-06-18-final-tsc.txt) | `npx tsc --noEmit` | **PASS** (post-build) |
+| [2026-06-18-local-ai-smoke.txt](./2026-06-18-local-ai-smoke.txt) | `npm run local-ai:smoke` | **PASS** — Ollama qwen3:8b |
+| [2026-06-18-tb-benchmark.txt](./2026-06-18-tb-benchmark.txt) | `npm run tb:benchmark -- --limit 20` | **PASS** — AI 100% (20/20) |
 | [2026-06-18-final-test.txt](./2026-06-18-final-test.txt) | `npm test` | **PASS** — 247 suites, 2383 tests |
 | [2026-06-18-final-lint.txt](./2026-06-18-final-lint.txt) | `npm run lint` | **PASS** — 0 errors, ~240 warnings |
 | [2026-06-18-final-build.txt](./2026-06-18-final-build.txt) | `npm run build` | **PASS** — 131 static pages |

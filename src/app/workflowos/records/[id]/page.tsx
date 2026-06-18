@@ -28,6 +28,7 @@ import {
   Clock,
   AlertTriangle,
 } from "lucide-react";
+import { LinkToInstMem } from "@/components/institutional-memory/link-button";
 
 export const dynamic = "force-dynamic";
 
@@ -147,7 +148,7 @@ export default async function WorkflowRecordDetailPage({
 
   return (
     <div dir="rtl" className="max-w-3xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold">{record.title}</h1>
           <div className="flex gap-2 mt-1">
@@ -159,6 +160,11 @@ export default async function WorkflowRecordDetailPage({
             )}
           </div>
         </div>
+        <LinkToInstMem
+          sourceProduct="workflow"
+          sourceEntityId={id}
+          sourceEntityName={record.title}
+        />
       </div>
 
       <div className="grid gap-4 md:grid-cols-4 mb-6">

@@ -106,12 +106,14 @@ When documents conflict, do not silently choose an interpretation. Document the 
 AI agents must load documentation in this order:
 
 1. `docs/DOCUMENTATION_AUTHORITY.md` (this file)
-2. `docs/official/AQLIYA_MASTER_REFERENCE.md`
-3. `AGENTS.md`
-4. Relevant `docs/official/*.md` doctrine docs
-5. Relevant `docs/source-of-truth/*` support docs
-6. Relevant `docs/products/*` or `docs/systems/*` docs
-7. Relevant `docs/reports/*` for implementation evidence
+2. `docs/source-of-truth/AQLIYA_CURRENT_STATE.md` — **operational truth** (implementation status snapshot)
+3. `docs/source-of-truth/DOCUMENTATION_LINEAGE.md` — authority graph + superseded docs
+4. `docs/official/AQLIYA_MASTER_REFERENCE.md`
+5. `AGENTS.md`
+6. Relevant `docs/official/*.md` doctrine docs
+7. Relevant `docs/source-of-truth/*` support docs (matrix, routes, gates)
+8. Relevant `docs/products/*` or `docs/systems/*` docs
+9. Relevant `docs/reports/*` for validation evidence (build/test/lint logs)
 
 ---
 
@@ -134,9 +136,10 @@ When determining product implementation status:
 
 1. Inspect code (routes, actions, schema, tests, seed data).
 2. Inspect validation reports in `docs/reports/*`.
-3. Consult `docs/official/AQLIYA_MASTER_REFERENCE.md` for current status summary.
-4. Consult `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for detailed matrix.
-5. Consult `docs/official/aqliya-product-taxonomy-v1.1.md` for taxonomy classification.
+3. Consult `docs/source-of-truth/AQLIYA_CURRENT_STATE.md` for the latest operational snapshot.
+4. Consult `docs/official/AQLIYA_MASTER_REFERENCE.md` for summary.
+5. Consult `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for detailed matrix.
+6. Consult `docs/official/aqliya-product-taxonomy-v1.1.md` for taxonomy classification.
 
 If doctrine doc status contradicts code evidence, code evidence governs.
 

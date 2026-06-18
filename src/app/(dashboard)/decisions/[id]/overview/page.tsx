@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { LinkToInstMem } from "@/components/institutional-memory/link-button";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -56,17 +57,24 @@ export default async function ExecutiveOverviewPage({ params }: PageProps) {
                 تُحسَب عند الطلب من مراحل أ-١. موجّهة للجهات التنفيذية.
               </CardDescription>
             </div>
-            <Badge
-              variant={
-                overview.decisionQuality >= 80
-                  ? "default"
-                  : overview.decisionQuality >= 60
-                    ? "secondary"
-                    : "destructive"
-              }
-            >
-              الجودة: {overview.decisionQuality}%
-            </Badge>
+            <div className="flex items-center gap-2">
+              <LinkToInstMem
+                sourceProduct="decision"
+                sourceEntityId={id}
+                sourceEntityName={"قرار رقم " + id.slice(0, 8)}
+              />
+              <Badge
+                variant={
+                  overview.decisionQuality >= 80
+                    ? "default"
+                    : overview.decisionQuality >= 60
+                      ? "secondary"
+                      : "destructive"
+                }
+              >
+                الجودة: {overview.decisionQuality}%
+              </Badge>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">

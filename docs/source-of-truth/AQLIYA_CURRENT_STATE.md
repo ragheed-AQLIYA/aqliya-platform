@@ -14,10 +14,12 @@ Evidence: `docs/reports/2026-06-18-final-*.txt`
 
 | Check | Result |
 |-------|--------|
-| TypeScript | **PASS** (after build; see final-tsc.txt) |
+| TypeScript | **PASS** — `docs/reports/2026-06-18-final-tsc.txt` |
 | Tests | **PASS** — 247 suites, **2383** tests, 21 skipped |
 | Lint | **PASS** — **0 errors**, ~240 warnings |
 | Build | **PASS** — 131 pages, institutional-memory routes included |
+| Local AI smoke | **PASS** — 2026-06-18, Ollama qwen3:8b |
+| TB benchmark (n=20) | **PASS** — AI 100% exact, rules 95% |
 
 ---
 
@@ -66,7 +68,7 @@ Pilot-capable for AuditOS + LocalContentOS. Not enterprise-production-ready (liv
 - AWS ECS / RDS / Redis live state
 - Backup restore on production RDS
 - Cypress E2E
-- `local-ai:smoke` / `tb:benchmark` re-run 2026-06-18
+- Full TB benchmark (100 accounts) — sample n=20 re-run 2026-06-18
 - External pen test
 
 ---

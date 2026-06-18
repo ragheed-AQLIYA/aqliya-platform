@@ -1,6 +1,6 @@
 {
-  "finishedAt": "2026-06-14T13:07:41.470Z",
-  "accountCount": 100,
+  "finishedAt": "2026-06-18T07:42:08.643Z",
+  "accountCount": 20,
   "rulesOnly": false,
   "env": {
     "AI_MODE": "hybrid",
@@ -9,114 +9,78 @@
   },
   "deterministic": {
     "method": "deterministic",
-    "total": 100,
-    "exactMatch": 65,
-    "exactAccuracy": 0.65,
-    "categoryAccuracy": 0.7,
-    "noPrediction": 25,
-    "avgConfidence": 0.8800000000000009,
+    "total": 20,
+    "exactMatch": 19,
+    "exactAccuracy": 0.95,
+    "categoryAccuracy": 1,
+    "noPrediction": 0,
+    "avgConfidence": 0.8800000000000002,
     "latencyMs": {
-      "avg": 0.08,
+      "avg": 0.05,
       "p50": 0,
-      "p95": 1,
+      "p95": 0,
       "max": 1
     },
     "misclassification": {
-      "exact_match": 65,
-      "wrong_code_same_section": 5,
-      "no_prediction": 25,
-      "wrong_section": 5
+      "exact_match": 19,
+      "wrong_code_same_section": 1
     },
     "byDifficulty": {
       "easy": {
-        "total": 66,
-        "exact": 61
+        "total": 20,
+        "exact": 19
       },
       "hard": {
-        "total": 34,
-        "exact": 4
+        "total": 0,
+        "exact": 0
       }
     },
     "byCategory": {
       "asset": {
-        "total": 25,
+        "total": 20,
         "exact": 19
-      },
-      "liability": {
-        "total": 20,
-        "exact": 16
-      },
-      "equity": {
-        "total": 10,
-        "exact": 8
-      },
-      "revenue": {
-        "total": 20,
-        "exact": 9
-      },
-      "expense": {
-        "total": 25,
-        "exact": 13
       }
     }
   },
   "localAi": {
     "method": "localAi",
-    "total": 100,
-    "exactMatch": 85,
-    "exactAccuracy": 0.85,
-    "categoryAccuracy": 0.95,
+    "total": 20,
+    "exactMatch": 20,
+    "exactAccuracy": 1,
+    "categoryAccuracy": 1,
     "noPrediction": 0,
-    "avgConfidence": 0.8509999999999994,
+    "avgConfidence": 0.8499999999999999,
     "latencyMs": {
-      "avg": 7654.51,
-      "p50": 7172,
-      "p95": 12298,
-      "max": 20183
+      "avg": 7007.45,
+      "p50": 6721,
+      "p95": 8731,
+      "max": 9102
     },
     "misclassification": {
-      "exact_match": 85,
-      "wrong_code_same_section": 10,
-      "wrong_section": 5
+      "exact_match": 20
     },
     "byDifficulty": {
       "easy": {
-        "total": 66,
-        "exact": 62
+        "total": 20,
+        "exact": 20
       },
       "hard": {
-        "total": 34,
-        "exact": 23
+        "total": 0,
+        "exact": 0
       }
     },
     "byCategory": {
       "asset": {
-        "total": 25,
-        "exact": 22
-      },
-      "liability": {
         "total": 20,
-        "exact": 16
-      },
-      "equity": {
-        "total": 10,
-        "exact": 10
-      },
-      "revenue": {
-        "total": 20,
-        "exact": 13
-      },
-      "expense": {
-        "total": 25,
-        "exact": 24
+        "exact": 20
       }
     }
   },
   "incremental": {
-    "hardAccounts": 34,
-    "deterministicExactOnHard": 4,
-    "localAiExactOnHard": 23,
-    "rulesMissLocalHit": 21
+    "hardAccounts": 0,
+    "deterministicExactOnHard": 0,
+    "localAiExactOnHard": 0,
+    "rulesMissLocalHit": 0
   },
   "results": [
     {
@@ -140,10 +104,10 @@
         "canonicalCode": "CA-1010",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 6763,
-        "evidence": "Petty Cash is a form of cash asset, aligning with CA-1010 'Cash and Cash Equivalents (Current Assets)' as it represents liquid funds available for immediate use.",
+        "latencyMs": 8731,
+        "evidence": "Petty Cash is a form of cash asset, aligning with CA-1010 'Cash and Cash Equivalents (Current Assets)' in the canonical COA.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Petty Cash is a form of cash asset, aligning with CA-1010 'Cash and Cash Equivalents (Current Assets)' as it represents liquid funds available for immediate use.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Petty Cash is a form of cash asset, aligning with CA-1010 'Cash and Cash Equivalents (Current Assets)' in the canonical COA.\"\n}"
       }
     },
     {
@@ -160,17 +124,17 @@
         "canonicalCode": "CA-1010",
         "confidence": 0.88,
         "source": "rule",
-        "latencyMs": 1,
+        "latencyMs": 0,
         "evidence": "COA synonym match: cash"
       },
       "localAi": {
         "canonicalCode": "CA-1010",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 5649,
-        "evidence": "The account name 'Cash and Cash Equivalents' directly matches the canonical line 'CA-1010: Cash and Cash Equivalents (Current Assets)' in the allowed current assets category.",
+        "latencyMs": 9102,
+        "evidence": "The account 'Cash and Cash Equivalents' directly matches the canonical code CA-1010, which is designated for Cash and Cash Equivalents in Current Assets.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Cash and Cash Equivalents' directly matches the canonical line 'CA-1010: Cash and Cash Equivalents (Current Assets)' in the allowed current assets category.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'Cash and Cash Equivalents' directly matches the canonical code CA-1010, which is designated for Cash and Cash Equivalents in Current Assets.\"\n}"
       }
     },
     {
@@ -194,7 +158,7 @@
         "canonicalCode": "CA-1010",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 6146,
+        "latencyMs": 6578,
         "evidence": "The account name 'صندوق النقدية' translates to 'Cash Fund' which directly maps to CA-1010: Cash and Cash Equivalents (Current Assets) in the canonical COA.",
         "providerId": "local",
         "rawPreview": "{\n  \"accountCode\": \"CA-1010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'صندوق النقدية' translates to 'Cash Fund' which directly maps to CA-1010: Cash and Cash Equivalents (Current Assets) in the canonical COA.\"\n}"
@@ -221,10 +185,10 @@
         "canonicalCode": "CA-1010",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 4040,
-        "evidence": "The account name 'الخزينة - فرع الرياض' translates to 'Cash - Riyadh Branch,' directly aligning with CA-1010: Cash and Cash Equivalents (Current Assets).",
+        "latencyMs": 4676,
+        "evidence": "The account name 'الخزينة - فرع الرياض' translates to 'Cash - Riyadh Branch,' aligning with CA-1010: Cash and Cash Equivalents (Current Assets).",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'الخزينة - فرع الرياض' translates to 'Cash - Riyadh Branch,' directly aligning with CA-1010: Cash and Cash Equivalents (Current Assets).\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'الخزينة - فرع الرياض' translates to 'Cash - Riyadh Branch,' aligning with CA-1010: Cash and Cash Equivalents (Current Assets).\"\n}"
       }
     },
     {
@@ -248,10 +212,10 @@
         "canonicalCode": "CA-1020",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 5511,
-        "evidence": "The account name 'Trade Receivables' directly matches the canonical code CA-1020's description of 'Trade Receivables (Current Assets)' in the allowed canonical lines.",
+        "latencyMs": 6721,
+        "evidence": "The account name 'Trade Receivables' directly matches the canonical line 'CA-1020: Trade Receivables (Current Assets)' in the allowed current assets category.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Trade Receivables' directly matches the canonical code CA-1020's description of 'Trade Receivables (Current Assets)' in the allowed canonical lines.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Trade Receivables' directly matches the canonical line 'CA-1020: Trade Receivables (Current Assets)' in the allowed current assets category.\"\n}"
       }
     },
     {
@@ -275,10 +239,10 @@
         "canonicalCode": "CA-1020",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 6254,
-        "evidence": "The account name 'Accounts Receivable - Local Customers' directly matches the canonical 'Trade Receivables (Current Assets)' category (CA-1020), which is explicitly listed as a current asset in the allowed canonical lines.",
+        "latencyMs": 6731,
+        "evidence": "The account 'Accounts Receivable - Local Customers' represents trade receivables, which directly maps to CA-1020: Trade Receivables (Current Assets) in the canonical COA.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Accounts Receivable - Local Customers' directly matches the canonical 'Trade Receivables (Current Assets)' category (CA-1020), which is explicitly listed as a current asset in the allowed canonical lines.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'Accounts Receivable - Local Customers' represents trade receivables, which directly maps to CA-1020: Trade Receivables (Current Assets) in the canonical COA.\"\n}"
       }
     },
     {
@@ -302,10 +266,10 @@
         "canonicalCode": "CA-1020",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 5454,
-        "evidence": "The account 'ذمم مدينة - عملاء' translates to 'Customer Receivables', which aligns with CA-1020: Trade Receivables (Current Assets) in the canonical COA.",
+        "latencyMs": 6286,
+        "evidence": "The account name 'ذمم مدينة - عملاء' translates to 'Customer Receivables', which directly maps to 'Trade Receivables (Current Assets)' listed as CA-1020 in the candidate accounts.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'ذمم مدينة - عملاء' translates to 'Customer Receivables', which aligns with CA-1020: Trade Receivables (Current Assets) in the canonical COA.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'ذمم مدينة - عملاء' translates to 'Customer Receivables', which directly maps to 'Trade Receivables (Current Assets)' listed as CA-1020 in the candidate accounts.\"\n}"
       }
     },
     {
@@ -329,7 +293,7 @@
         "canonicalCode": "CA-1030",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 6596,
+        "latencyMs": 6153,
         "evidence": "The account name 'Inventories' directly matches the canonical line 'CA-1030: Inventories (Current Assets)' in the allowed current assets category.",
         "providerId": "local",
         "rawPreview": "{\n  \"accountCode\": \"CA-1030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Inventories' directly matches the canonical line 'CA-1030: Inventories (Current Assets)' in the allowed current assets category.\"\n}"
@@ -356,10 +320,10 @@
         "canonicalCode": "CA-1030",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 6155,
-        "evidence": "The account name 'مخزون مواد خام' (Raw Materials Inventory) directly corresponds to 'Inventories (Current Assets)' in the canonical COA, which is classified under current assets.",
+        "latencyMs": 6373,
+        "evidence": "The account name 'مخزون مواد خام' (Raw Materials Inventory) directly corresponds to 'Inventories (Current Assets)' in the canonical COA, which is classified under CA-1030.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'مخزون مواد خام' (Raw Materials Inventory) directly corresponds to 'Inventories (Current Assets)' in the canonical COA, which is classified under current assets.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'مخزون مواد خام' (Raw Materials Inventory) directly corresponds to 'Inventories (Current Assets)' in the canonical COA, which is classified under CA-1030.\"\n}"
       }
     },
     {
@@ -383,10 +347,10 @@
         "canonicalCode": "CA-1040",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 5572,
-        "evidence": "Prepaid Expenses aligns with 'Prepayments (Current Assets)' listed as CA-1040 in the candidate accounts, which is explicitly categorized as a current asset in the canonical COA.",
+        "latencyMs": 8109,
+        "evidence": "Prepaid Expenses align with CA-1040 Prepayments (Current Assets) as both represent advance payments for goods/services, matching the definition of current assets under IFRS for SMEs.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Prepaid Expenses aligns with 'Prepayments (Current Assets)' listed as CA-1040 in the candidate accounts, which is explicitly categorized as a current asset in the canonical COA.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Prepaid Expenses align with CA-1040 Prepayments (Current Assets) as both represent advance payments for goods/services, matching the definition of current assets under IFRS for SMEs.\"\n}"
       }
     },
     {
@@ -410,10 +374,10 @@
         "canonicalCode": "CA-1040",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 8187,
-        "evidence": "The account name 'مصروفات مدفوعة مقدما' translates to 'Prepaid Expenses', which aligns with CA-1040 'Prepayments (Current Assets)' as both represent advance payments for goods/services to be consumed in the future.",
+        "latencyMs": 8544,
+        "evidence": "The account 'مصروفات مدفوعة مقدما' (Prepaid Expenses) aligns with CA-1040 Prepayments (Current Assets) as it represents advance payments for future expenses, consistent with IFRS for SMEs classification.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'مصروفات مدفوعة مقدما' translates to 'Prepaid Expenses', which aligns with CA-1040 'Prepayments (Current Assets)' as both represent advance payments for goods/services to be consumed in the future.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'مصروفات مدفوعة مقدما' (Prepaid Expenses) aligns with CA-1040 Prepayments (Current Assets) as it represents advance payments for future expenses, consistent with IFRS for SMEs classification.\"\n}"
       }
     },
     {
@@ -437,7 +401,7 @@
         "canonicalCode": "CA-1050",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 5825,
+        "latencyMs": 5875,
         "evidence": "The account name 'Property Plant and Equipment' directly matches the canonical line CA-1050: Property, Plant and Equipment (Non-Current Assets) in the allowed canonical lines.",
         "providerId": "local",
         "rawPreview": "{\n  \"accountCode\": \"CA-1050\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Property Plant and Equipment' directly matches the canonical line CA-1050: Property, Plant and Equipment (Non-Current Assets) in the allowed canonical lines.\"\n}"
@@ -464,10 +428,10 @@
         "canonicalCode": "CA-1050",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 6476,
-        "evidence": "The account name 'ممتلكات ومعدات' translates to 'Properties and Equipment' which directly maps to the non-current asset category 'Property, Plant and Equipment' defined for CA-1050.",
+        "latencyMs": 6829,
+        "evidence": "The account name 'ممتلكات ومعدات' (Properties and Equipment) directly matches the canonical line 'Property, Plant and Equipment' classified as Non-Current Assets.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1050\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'ممتلكات ومعدات' translates to 'Properties and Equipment' which directly maps to the non-current asset category 'Property, Plant and Equipment' defined for CA-1050.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1050\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'ممتلكات ومعدات' (Properties and Equipment) directly matches the canonical line 'Property, Plant and Equipment' classified as Non-Current Assets.\"\n}"
       }
     },
     {
@@ -491,10 +455,10 @@
         "canonicalCode": "CA-1060",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 8292,
-        "evidence": "The account name 'Accumulated Depreciation PPE' directly matches the canonical line CA-1060: Accumulated Depreciation (Non-Current Assets) in the allowed canonical lines.",
+        "latencyMs": 7756,
+        "evidence": "The account 'Accumulated Depreciation PPE' directly corresponds to the non-current asset category for accumulated depreciation (CA-1060) as per the allowed canonical lines.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1060\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Accumulated Depreciation PPE' directly matches the canonical line CA-1060: Accumulated Depreciation (Non-Current Assets) in the allowed canonical lines.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1060\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'Accumulated Depreciation PPE' directly corresponds to the non-current asset category for accumulated depreciation (CA-1060) as per the allowed canonical lines.\"\n}"
       }
     },
     {
@@ -511,17 +475,17 @@
         "canonicalCode": "CA-1070",
         "confidence": 0.88,
         "source": "rule",
-        "latencyMs": 0,
+        "latencyMs": 1,
         "evidence": "COA synonym match: right of use assets"
       },
       "localAi": {
         "canonicalCode": "CA-1070",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 7970,
-        "evidence": "The account name 'Right of Use Assets' directly matches the canonical line 'Right-of-Use Assets (Non-Current Assets)' in the allowed non-current assets category.",
+        "latencyMs": 8401,
+        "evidence": "The account name 'Right of Use Assets' directly matches the canonical line CA-1070: Right-of-Use Assets (Non-Current Assets) in the allowed canonical lines for Non-Current Assets.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1070\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Right of Use Assets' directly matches the canonical line 'Right-of-Use Assets (Non-Current Assets)' in the allowed non-current assets category.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1070\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Right of Use Assets' directly matches the canonical line CA-1070: Right-of-Use Assets (Non-Current Assets) in the allowed canonical lines for Non-Current Assets.\"\n}"
       }
     },
     {
@@ -545,7 +509,7 @@
         "canonicalCode": "CA-1070",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 6303,
+        "latencyMs": 6031,
         "evidence": "The account name 'اصول حق الاستخدام' translates to 'Right-of-Use Assets', which directly matches the canonical line CA-1070: Right-of-Use Assets (Non-Current Assets).",
         "providerId": "local",
         "rawPreview": "{\n  \"accountCode\": \"CA-1070\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'اصول حق الاستخدام' translates to 'Right-of-Use Assets', which directly matches the canonical line CA-1070: Right-of-Use Assets (Non-Current Assets).\"\n}"
@@ -572,10 +536,10 @@
         "canonicalCode": "CA-1071",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 9125,
-        "evidence": "The account name 'ROU Accumulated Depreciation' directly matches the canonical line 'CA-1071: ROU Accumulated Depreciation (Non-Current Assets)' in the allowed non-current assets category.",
+        "latencyMs": 7841,
+        "evidence": "The account name 'ROU Accumulated Depreciation' directly matches the canonical line 'CA-1071: ROU Accumulated Depreciation (Non-Current Assets)' in the chart of accounts context.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1071\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'ROU Accumulated Depreciation' directly matches the canonical line 'CA-1071: ROU Accumulated Depreciation (Non-Current Assets)' in the allowed non-current assets category.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1071\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'ROU Accumulated Depreciation' directly matches the canonical line 'CA-1071: ROU Accumulated Depreciation (Non-Current Assets)' in the chart of accounts context.\"\n}"
       }
     },
     {
@@ -599,10 +563,10 @@
         "canonicalCode": "CA-1071",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 7812,
-        "evidence": "The account name 'مجمع اهلاك حق الاستخدام' translates to 'Accumulated Depreciation of Right-of-Use Asset', matching CA-1071's description of 'ROU Accumulated Depreciation (Non-Current Assets)' under IFRS for SMEs.",
+        "latencyMs": 7176,
+        "evidence": "The account name 'مجمع اهلاك حق الاستخدام' translates to 'Accumulated Depreciation of Right-of-Use Asset', directly matching CA-1071: ROU Accumulated Depreciation (Non-Current Assets) in the canonical COA.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1071\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'مجمع اهلاك حق الاستخدام' translates to 'Accumulated Depreciation of Right-of-Use Asset', matching CA-1071's description of 'ROU Accumulated Depreciation (Non-Current Assets)' under IFRS for SMEs.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1071\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'مجمع اهلاك حق الاستخدام' translates to 'Accumulated Depreciation of Right-of-Use Asset', directly matching CA-1071: ROU Accumulated Depreciation (Non-Current Assets) in the canonical COA.\"\n}"
       }
     },
     {
@@ -626,7 +590,7 @@
         "canonicalCode": "CA-1080",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 6441,
+        "latencyMs": 6314,
         "evidence": "The account name 'Contract Assets' directly matches the canonical line 'CA-1080: Contract Assets (Current Assets)' in the allowed current assets category.",
         "providerId": "local",
         "rawPreview": "{\n  \"accountCode\": \"CA-1080\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Contract Assets' directly matches the canonical line 'CA-1080: Contract Assets (Current Assets)' in the allowed current assets category.\"\n}"
@@ -653,2145 +617,10 @@
         "canonicalCode": "CA-1080",
         "confidence": 0.85,
         "source": "local",
-        "latencyMs": 5116,
-        "evidence": "The account name 'أصول العقود' directly translates to 'Contract Assets', which matches the canonical line CA-1080: Contract Assets (Current Assets) in the allowed current assets category.",
+        "latencyMs": 5922,
+        "evidence": "The account name 'assets of contracts' directly corresponds to 'Contract Assets (Current Assets)' mapped to CA-1080 in the canonical COA.",
         "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1080\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'أصول العقود' directly translates to 'Contract Assets', which matches the canonical line CA-1080: Contract Assets (Current Assets) in the allowed current assets category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "A21",
-        "accountCode": "110401",
-        "accountName": "Bank Account - Al Rajhi Operating",
-        "expectedCode": "CA-1010",
-        "category": "asset",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-1010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6760,
-        "evidence": "The 'Bank Account' is a cash asset, matching CA-1010: Cash and Cash Equivalents (Current Assets) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The 'Bank Account' is a cash asset, matching CA-1010: Cash and Cash Equivalents (Current Assets) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "A22",
-        "accountCode": "120401",
-        "accountName": "Retention receivable from contractors",
-        "expectedCode": "CA-1020",
-        "category": "asset",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 1
-      },
-      "localAi": {
-        "canonicalCode": "CA-1080",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 9814,
-        "evidence": "Retention receivable from contractors aligns with 'Contract Assets (Current Assets)' (CA-1080) as it represents amounts owed for completed contract work, fitting the definition of contract assets under IFRS for SMEs.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1080\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Retention receivable from contractors aligns with 'Contract Assets (Current Assets)' (CA-1080) as it represents amounts owed for completed contract work, fitting the definition of contract assets under IFRS for SMEs.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "A23",
-        "accountCode": "130301",
-        "accountName": "Finished goods at warehouse Jeddah",
-        "expectedCode": "CA-1030",
-        "category": "asset",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-1030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7172,
-        "evidence": "The account 'Finished goods at warehouse Jeddah' represents inventory assets, which maps to CA-1030: Inventories (Current Assets) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'Finished goods at warehouse Jeddah' represents inventory assets, which maps to CA-1030: Inventories (Current Assets) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "A24",
-        "accountCode": "140301",
-        "accountName": "VAT input recoverable",
-        "expectedCode": "CA-1040",
-        "category": "asset",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 1
-      },
-      "localAi": {
-        "canonicalCode": "CA-2030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 10247,
-        "evidence": "VAT input recoverable represents a tax liability related to VAT paid on purchases, aligning with 'Tax and Zakat Payable' (CA-2030) as a current liability for tax obligations.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"VAT input recoverable represents a tax liability related to VAT paid on purchases, aligning with 'Tax and Zakat Payable' (CA-2030) as a current liability for tax obligations.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "A25",
-        "accountCode": "140401",
-        "accountName": "سلف موظفين",
-        "expectedCode": "CA-1040",
-        "category": "asset",
-        "language": "ar",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-2040",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 12707,
-        "evidence": "The account 'سلف موظفين' (Employee Advances) represents short-term liabilities owed to employees, aligning with CA-2040: Short-term Borrowings (Current Liabilities).",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'سلف موظفين' (Employee Advances) represents short-term liabilities owed to employees, aligning with CA-2040: Short-term Borrowings (Current Liabilities).\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L01",
-        "accountCode": "210101",
-        "accountName": "Trade Payables",
-        "expectedCode": "CA-2010",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: trade payables"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6889,
-        "evidence": "The account name 'Trade Payables' directly matches the canonical line CA-2010: Trade Payables (Current Liabilities) in the allowed canonical lines for current liabilities.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Trade Payables' directly matches the canonical line CA-2010: Trade Payables (Current Liabilities) in the allowed canonical lines for current liabilities.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L02",
-        "accountCode": "210201",
-        "accountName": "Accounts Payable - Suppliers",
-        "expectedCode": "CA-2010",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: accounts payable"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7465,
-        "evidence": "Accounts Payable - Suppliers is a liability account for amounts owed to suppliers, matching CA-2010: Trade Payables (Current Liabilities) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Accounts Payable - Suppliers is a liability account for amounts owed to suppliers, matching CA-2010: Trade Payables (Current Liabilities) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L03",
-        "accountCode": "210301",
-        "accountName": "ذمم دائنة - موردون",
-        "expectedCode": "CA-2010",
-        "category": "liability",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: ذمم دائنة"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6515,
-        "evidence": "The account 'ذمم دائنة - موردون' (Accounts Payable - Suppliers) corresponds to 'Trade Payables (Current Liabilities)' in the canonical COA, which is explicitly listed as CA-2010.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'ذمم دائنة - موردون' (Accounts Payable - Suppliers) corresponds to 'Trade Payables (Current Liabilities)' in the canonical COA, which is explicitly listed as CA-2010.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L04",
-        "accountCode": "220101",
-        "accountName": "Accrued Expenses",
-        "expectedCode": "CA-2020",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: accrued expenses and other credit balances"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6869,
-        "evidence": "The account name 'Accrued Expenses' directly matches the canonical line CA-2020: Accrued Expenses (Current Liabilities) in the provided chart of accounts context.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Accrued Expenses' directly matches the canonical line CA-2020: Accrued Expenses (Current Liabilities) in the provided chart of accounts context.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L05",
-        "accountCode": "220201",
-        "accountName": "Contract Liabilities",
-        "expectedCode": "CA-2020",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: contract liabilities"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 14454,
-        "evidence": "Contract Liabilities are a current liability similar to Trade Payables (CA-2010), both representing obligations to deliver goods/services in the future.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Contract Liabilities are a current liability similar to Trade Payables (CA-2010), both representing obligations to deliver goods/services in the future.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L06",
-        "accountCode": "220301",
-        "accountName": "مصروفات مستحقة",
-        "expectedCode": "CA-2020",
-        "category": "liability",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 1,
-        "evidence": "COA synonym match: مصروفات مستحقة"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 4872,
-        "evidence": "The account name 'مصروفات مستحقة' translates to 'Accrued Expenses', which directly matches the canonical line CA-2020: Accrued Expenses (Current Liabilities).",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'مصروفات مستحقة' translates to 'Accrued Expenses', which directly matches the canonical line CA-2020: Accrued Expenses (Current Liabilities).\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L07",
-        "accountCode": "230101",
-        "accountName": "Zakat Payable",
-        "expectedCode": "CA-2030",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2030",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: tax and zakat payable"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6313,
-        "evidence": "Zakat Payable directly matches 'Tax and Zakat Payable' in Current Liabilities, aligning with IFRS for SMEs liability classification.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Zakat Payable directly matches 'Tax and Zakat Payable' in Current Liabilities, aligning with IFRS for SMEs liability classification.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L08",
-        "accountCode": "230201",
-        "accountName": "زكاة مستحقة",
-        "expectedCode": "CA-2030",
-        "category": "liability",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2030",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: زكاة مستحقة"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2035",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 15436,
-        "evidence": "The account name 'زكاة مستحقة' (Zakat Payable) aligns with 'Zakat Provision (Current Liabilities)' (CA-2035) as both represent obligations related to zakat, a religious tax liability under current liabilities.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2035\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'زكاة مستحقة' (Zakat Payable) aligns with 'Zakat Provision (Current Liabilities)' (CA-2035) as both represent obligations related to zakat, a religious tax liability under current liabilities.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L09",
-        "accountCode": "230301",
-        "accountName": "Provision for Zakat",
-        "expectedCode": "CA-2035",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2035",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: provision for zakat"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2035",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6730,
-        "evidence": "The account name 'Provision for Zakat' directly matches the canonical line 'Zakat Provision (Current Liabilities)' in the chart of accounts context.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2035\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Provision for Zakat' directly matches the canonical line 'Zakat Provision (Current Liabilities)' in the chart of accounts context.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L10",
-        "accountCode": "230401",
-        "accountName": "مخصص الزكاة",
-        "expectedCode": "CA-2035",
-        "category": "liability",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2035",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: مخصص الزكاة"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2035",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7895,
-        "evidence": "The account name 'مخصص الزكاة' (Zakat Provision) directly matches the canonical line 'Zakat Provision (Current Liabilities)' in candidateAccounts. This is a precise match for a liability account related to zakat obligations.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2035\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'مخصص الزكاة' (Zakat Provision) directly matches the canonical line 'Zakat Provision (Current Liabilities)' in candidateAccounts. This is a precise match for a liability account related to zakat obligations.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L11",
-        "accountCode": "240101",
-        "accountName": "Short Term Loans",
-        "expectedCode": "CA-2040",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2040",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: short term loans"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2040",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7694,
-        "evidence": "Short Term Loans aligns with 'Short-term Borrowings (Current Liabilities)' as both represent obligations due within one year, matching the canonical CA-2040 category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Short Term Loans aligns with 'Short-term Borrowings (Current Liabilities)' as both represent obligations due within one year, matching the canonical CA-2040 category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L12",
-        "accountCode": "250101",
-        "accountName": "Lease Liabilities Current Portion",
-        "expectedCode": "CA-2110",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2110",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: lease liabilities current portion"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2110",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 5851,
-        "evidence": "The account name 'Lease Liabilities Current Portion' directly matches the canonical line 'Lease Liabilities - Current' in Current Liabilities category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2110\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Lease Liabilities Current Portion' directly matches the canonical line 'Lease Liabilities - Current' in Current Liabilities category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L13",
-        "accountCode": "260101",
-        "accountName": "Lease Liability Non Current",
-        "expectedCode": "CA-2120",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2120",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: lease liability non current"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2120",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7360,
-        "evidence": "The account name 'Lease Liability Non Current' directly matches the canonical line 'Lease Liabilities - Non-Current' in Non-Current Liabilities category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2120\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Lease Liability Non Current' directly matches the canonical line 'Lease Liabilities - Non-Current' in Non-Current Liabilities category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L14",
-        "accountCode": "270101",
-        "accountName": "Long Term Debt",
-        "expectedCode": "CA-2130",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2130",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: long-term debt"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2130",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6929,
-        "evidence": "The account name 'Long Term Debt' directly corresponds to CA-2130: Long-Term Debt (Non-Current Liabilities) in the canonical COA, which matches the liability classification and nature of the account.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2130\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Long Term Debt' directly corresponds to CA-2130: Long-Term Debt (Non-Current Liabilities) in the canonical COA, which matches the liability classification and nature of the account.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L15",
-        "accountCode": "270201",
-        "accountName": "قرض طويل الاجل",
-        "expectedCode": "CA-2130",
-        "category": "liability",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2130",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: قرض طويل الاجل"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2130",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7091,
-        "evidence": "The account name 'قرض طويل الاجل' translates to 'Long-term Loan', which aligns with CA-2130: Long-Term Debt (Non-Current Liabilities) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2130\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'قرض طويل الاجل' translates to 'Long-term Loan', which aligns with CA-2130: Long-Term Debt (Non-Current Liabilities) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L16",
-        "accountCode": "280101",
-        "accountName": "Deferred Tax Liability",
-        "expectedCode": "CA-2140",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2140",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: deferred tax"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2140",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7291,
-        "evidence": "Deferred Tax Liability aligns with CA-2140: Deferred Tax (Non-Current Liabilities) as it represents a non-current liability arising from temporary tax differences.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2140\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Deferred Tax Liability aligns with CA-2140: Deferred Tax (Non-Current Liabilities) as it represents a non-current liability arising from temporary tax differences.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L17",
-        "accountCode": "220401",
-        "accountName": "End of service benefits provision",
-        "expectedCode": "CA-2020",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 9656,
-        "evidence": "The account 'End of service benefits provision' aligns with 'Employee Benefits (Expenses)' as it represents a provision for employee benefits, which is classified under expenses in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'End of service benefits provision' aligns with 'Employee Benefits (Expenses)' as it represents a provision for employee benefits, which is classified under expenses in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L18",
-        "accountCode": "230501",
-        "accountName": "VAT output payable",
-        "expectedCode": "CA-2030",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-2030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7730,
-        "evidence": "VAT output payable is a tax liability, aligning with CA-2030: Tax and Zakat Payable (Current Liabilities) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"VAT output payable is a tax liability, aligning with CA-2030: Tax and Zakat Payable (Current Liabilities) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L19",
-        "accountCode": "240201",
-        "accountName": "Murabaha facility - current",
-        "expectedCode": "CA-2040",
-        "category": "liability",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-1080",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7690,
-        "evidence": "The account 'Murabaha facility - current' relates to a short-term financing arrangement, aligning with 'Contract Assets (Current Assets)' (CA-1080) as a receivable for goods/services sold under a cost-plus markup agreement.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-1080\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'Murabaha facility - current' relates to a short-term financing arrangement, aligning with 'Contract Assets (Current Assets)' (CA-1080) as a receivable for goods/services sold under a cost-plus markup agreement.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "L20",
-        "accountCode": "250201",
-        "accountName": "التزامات إيجار - الجزء المتداول",
-        "expectedCode": "CA-2110",
-        "category": "liability",
-        "language": "ar",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: التزامات"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2110",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 5798,
-        "evidence": "The account name 'Lease Liabilities - Current' directly matches the canonical line CA-2110: Lease Liabilities - Current (Current Liabilities), which is explicitly defined in the chart of accounts context.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2110\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Lease Liabilities - Current' directly matches the canonical line CA-2110: Lease Liabilities - Current (Current Liabilities), which is explicitly defined in the chart of accounts context.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E01",
-        "accountCode": "310101",
-        "accountName": "Share Capital",
-        "expectedCode": "CA-3010",
-        "category": "equity",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-3010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: share capital"
-      },
-      "localAi": {
-        "canonicalCode": "CA-3010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7274,
-        "evidence": "The account name 'Share Capital' directly matches the canonical code CA-3010 description in the Equity category, which is explicitly defined for share capital in the chart of accounts context.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Share Capital' directly matches the canonical code CA-3010 description in the Equity category, which is explicitly defined for share capital in the chart of accounts context.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E02",
-        "accountCode": "310201",
-        "accountName": "رأس المال",
-        "expectedCode": "CA-3010",
-        "category": "equity",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-3010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: رأس المال"
-      },
-      "localAi": {
-        "canonicalCode": "CA-3010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6980,
-        "evidence": "The account name 'رأس المال' translates to 'Capital' which aligns with the 'Share Capital (Equity)' canonical line CA-3010. This mapping matches the equity classification in the chart of accounts context.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'رأس المال' translates to 'Capital' which aligns with the 'Share Capital (Equity)' canonical line CA-3010. This mapping matches the equity classification in the chart of accounts context.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E03",
-        "accountCode": "320101",
-        "accountName": "Retained Earnings",
-        "expectedCode": "CA-3020",
-        "category": "equity",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-3020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: retained earnings"
-      },
-      "localAi": {
-        "canonicalCode": "CA-3020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7420,
-        "evidence": "The account name 'Retained Earnings' directly matches the canonical line 'CA-3020: Retained Earnings (Equity)' in the Equity category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Retained Earnings' directly matches the canonical line 'CA-3020: Retained Earnings (Equity)' in the Equity category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E04",
-        "accountCode": "320201",
-        "accountName": "أرباح محتجزة",
-        "expectedCode": "CA-3020",
-        "category": "equity",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-3020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: أرباح محتجزة"
-      },
-      "localAi": {
-        "canonicalCode": "CA-3020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7578,
-        "evidence": "The account name 'أرباح محتجزة' translates to 'Retained Earnings', which directly maps to the Equity category's CA-3020 code. The zero balance does not affect classification as retained earnings is an equity account.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'أرباح محتجزة' translates to 'Retained Earnings', which directly maps to the Equity category's CA-3020 code. The zero balance does not affect classification as retained earnings is an equity account.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E05",
-        "accountCode": "330101",
-        "accountName": "Actuarial Reserve",
-        "expectedCode": "CA-3030",
-        "category": "equity",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-3030",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: actuarial reserve"
-      },
-      "localAi": {
-        "canonicalCode": "CA-3030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6731,
-        "evidence": "The account name 'Actuarial Reserve' directly matches the canonical line 'CA-3030: Actuarial Reserve (Equity)' in the allowed Equity category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Actuarial Reserve' directly matches the canonical line 'CA-3030: Actuarial Reserve (Equity)' in the allowed Equity category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E06",
-        "accountCode": "330201",
-        "accountName": "احتياطي اكتواري",
-        "expectedCode": "CA-3030",
-        "category": "equity",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-3030",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: احتياطي اكتواري"
-      },
-      "localAi": {
-        "canonicalCode": "CA-3030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 4651,
-        "evidence": "The account name 'احتياطي اكتواري' translates to 'Actuarial Reserve', which directly matches the canonical code CA-3030 labeled as 'Actuarial Reserve (Equity)' in the candidate accounts.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'احتياطي اكتواري' translates to 'Actuarial Reserve', which directly matches the canonical code CA-3030 labeled as 'Actuarial Reserve (Equity)' in the candidate accounts.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E07",
-        "accountCode": "340101",
-        "accountName": "OCI Reserve",
-        "expectedCode": "CA-3040",
-        "category": "equity",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-3040",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: oci reserve"
-      },
-      "localAi": {
-        "canonicalCode": "CA-3040",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7852,
-        "evidence": "The account name 'OCI Reserve' directly matches the canonical code CA-3040's description of 'OCI Reserve (Equity)' in the AuditOS COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'OCI Reserve' directly matches the canonical code CA-3040's description of 'OCI Reserve (Equity)' in the AuditOS COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E08",
-        "accountCode": "320301",
-        "accountName": "Statutory reserve per by-laws",
-        "expectedCode": "CA-3020",
-        "category": "equity",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-3020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 12298,
-        "evidence": "Statutory reserve per by-laws is an equity account representing legally mandated reserves, most closely matching CA-3020 Retained Earnings in the equity category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Statutory reserve per by-laws is an equity account representing legally mandated reserves, most closely matching CA-3020 Retained Earnings in the equity category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E09",
-        "accountCode": "310301",
-        "accountName": "Issued capital - ordinary shares",
-        "expectedCode": "CA-3010",
-        "category": "equity",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-3010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: capital"
-      },
-      "localAi": {
-        "canonicalCode": "CA-3010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6675,
-        "evidence": "The account 'Issued capital - ordinary shares' directly corresponds to 'Share Capital (Equity)' in the canonical COA, which is explicitly categorized under Equity in the AuditOS framework.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'Issued capital - ordinary shares' directly corresponds to 'Share Capital (Equity)' in the canonical COA, which is explicitly categorized under Equity in the AuditOS framework.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "E10",
-        "accountCode": "340201",
-        "accountName": "Foreign currency translation reserve",
-        "expectedCode": "CA-3040",
-        "category": "equity",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-3040",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7957,
-        "evidence": "Foreign currency translation reserve is an OCI reserve, matching CA-3040: OCI Reserve (Equity). The account's zero balance aligns with reserve accounts that are not directly tied to operational transactions.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-3040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Foreign currency translation reserve is an OCI reserve, matching CA-3040: OCI Reserve (Equity). The account's zero balance aligns with reserve accounts that are not directly tied to operational transactions.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R01",
-        "accountCode": "410101",
-        "accountName": "Revenue",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: revenue"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 14784,
-        "evidence": "The account name 'Revenue' aligns with the 'Revenue - Sale of Goods' canonical line (CA-4010) in the Revenue category, which is explicitly designated for revenue recognition under IFRS for SMEs.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Revenue' aligns with the 'Revenue - Sale of Goods' canonical line (CA-4010) in the Revenue category, which is explicitly designated for revenue recognition under IFRS for SMEs.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R02",
-        "accountCode": "410201",
-        "accountName": "Sales",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: sales"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7883,
-        "evidence": "The account name 'Sales' directly corresponds to revenue from the sale of goods, which is explicitly mapped to CA-4010 in the canonical Revenue category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Sales' directly corresponds to revenue from the sale of goods, which is explicitly mapped to CA-4010 in the canonical Revenue category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R03",
-        "accountCode": "410301",
-        "accountName": "إيرادات",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: إيرادات الشركات الشقيقة"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 11194,
-        "evidence": "The account name 'إيرادات' translates to 'Revenues', and CA-5100 'Other Income (Revenue)' is the closest canonical line for general revenue categories in the Revenue section.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'إيرادات' translates to 'Revenues', and CA-5100 'Other Income (Revenue)' is the closest canonical line for general revenue categories in the Revenue section.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R04",
-        "accountCode": "410401",
-        "accountName": "مبيعات",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: مبيعات"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7321,
-        "evidence": "The account name 'مبيعات' translates to 'sales' which directly maps to 'Revenue - Sale of Goods' (CA-4010) in the canonical revenue categories.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'مبيعات' translates to 'sales' which directly maps to 'Revenue - Sale of Goods' (CA-4010) in the canonical revenue categories.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R05",
-        "accountCode": "410501",
-        "accountName": "Related Party Revenue",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: revenue"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 9314,
-        "evidence": "Related Party Revenue is a type of revenue not specifically categorized under sales or services, making CA-5100 (Other Income) the most appropriate canonical line for this account.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Related Party Revenue is a type of revenue not specifically categorized under sales or services, making CA-5100 (Other Income) the most appropriate canonical line for this account.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R06",
-        "accountCode": "420101",
-        "accountName": "Other Income",
-        "expectedCode": "CA-5100",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: other income"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7335,
-        "evidence": "The account name 'Other Income' directly matches the canonical line 'CA-5100: Other Income (Revenue)' in the Revenue category, aligning with IFRS for SMEs classification.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Other Income' directly matches the canonical line 'CA-5100: Other Income (Revenue)' in the Revenue category, aligning with IFRS for SMEs classification.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R07",
-        "accountCode": "420201",
-        "accountName": "إيرادات أخرى",
-        "expectedCode": "CA-5100",
-        "category": "revenue",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: إيرادات"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 5857,
-        "evidence": "The account name 'إيرادات أخرى' translates to 'Other Revenues' which directly aligns with the 'Other Income (Revenue)' category in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'إيرادات أخرى' translates to 'Other Revenues' which directly aligns with the 'Other Income (Revenue)' category in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R08",
-        "accountCode": "410601",
-        "accountName": "Maintenance service revenue",
-        "expectedCode": "CA-4020",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: revenue"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8060,
-        "evidence": "The account name 'Maintenance service revenue' indicates service revenue, which maps to the 'Revenue - Services' category in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Maintenance service revenue' indicates service revenue, which maps to the 'Revenue - Services' category in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R09",
-        "accountCode": "410701",
-        "accountName": "Consulting fees earned",
-        "expectedCode": "CA-4020",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5060",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: consulting fees"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8266,
-        "evidence": "Consulting fees earned aligns with 'Revenue - Services' (CA-4020) as it represents service revenue under IFRS for SMEs.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Consulting fees earned aligns with 'Revenue - Services' (CA-4020) as it represents service revenue under IFRS for SMEs.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R10",
-        "accountCode": "410801",
-        "accountName": "إيرادات خدمات",
-        "expectedCode": "CA-4020",
-        "category": "revenue",
-        "language": "ar",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: إيرادات"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7016,
-        "evidence": "The account name 'إيرادات خدمات' (Services Revenue) directly maps to CA-4020 'Revenue - Services' in the canonical revenue category. This aligns with IFRS for SMEs revenue classification for service-based income.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'إيرادات خدمات' (Services Revenue) directly maps to CA-4020 'Revenue - Services' in the canonical revenue category. This aligns with IFRS for SMEs revenue classification for service-based income.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R11",
-        "accountCode": "410901",
-        "accountName": "Export sales - GCC",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: sales"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 9143,
-        "evidence": "The account name 'Export sales - GCC' represents revenue from goods sales, aligning with the 'Revenue - Sale of Goods' canonical line (CA-4010) in the chart of accounts context.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Export sales - GCC' represents revenue from goods sales, aligning with the 'Revenue - Sale of Goods' canonical line (CA-4010) in the chart of accounts context.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R12",
-        "accountCode": "411001",
-        "accountName": "Progress billing revenue",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: revenue"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 9869,
-        "evidence": "The account 'Progress billing revenue' represents service revenue recognition, aligning with CA-4020 'Revenue - Services' in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'Progress billing revenue' represents service revenue recognition, aligning with CA-4020 'Revenue - Services' in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R13",
-        "accountCode": "411101",
-        "accountName": "Rental income from staff housing",
-        "expectedCode": "CA-5100",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6021,
-        "evidence": "Rental income from staff housing qualifies as other income under the Revenue category, matching CA-5100: Other Income (Revenue).",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Rental income from staff housing qualifies as other income under the Revenue category, matching CA-5100: Other Income (Revenue).\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R14",
-        "accountCode": "411201",
-        "accountName": "Gain on disposal of assets",
-        "expectedCode": "CA-5100",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5070",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: g&a"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6970,
-        "evidence": "Gain on disposal of assets represents a non-operational income item, aligning with 'Other Income (Revenue)' in the canonical COA. This classification matches the account's nature as a revenue component outside core operating activities.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Gain on disposal of assets represents a non-operational income item, aligning with 'Other Income (Revenue)' in the canonical COA. This classification matches the account's nature as a revenue component outside core operating activit"
-      }
-    },
-    {
-      "row": {
-        "id": "R15",
-        "accountCode": "411301",
-        "accountName": "Discount received",
-        "expectedCode": "CA-5100",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 20183,
-        "evidence": "Discount received is classified as other income under the canonical Revenue category (CA-5100), representing a contra liability or gain related to payable reductions.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Discount received is classified as other income under the canonical Revenue category (CA-5100), representing a contra liability or gain related to payable reductions.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R16",
-        "accountCode": "411401",
-        "accountName": "ايرادات عقود طويلة الاجل",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "ar",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-4020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8330,
-        "evidence": "The account name 'ايرادات عقود طويلة الاجل' (Revenue from Long-Term Contracts) aligns with 'Revenue - Services' (CA-4020) as it represents service revenue from extended contracts, fitting the IFRS for SMEs revenue classification.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'ايرادات عقود طويلة الاجل' (Revenue from Long-Term Contracts) aligns with 'Revenue - Services' (CA-4020) as it represents service revenue from extended contracts, fitting the IFRS for SMEs revenue classification.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R17",
-        "accountCode": "411501",
-        "accountName": "Intercompany management fees income",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7282,
-        "evidence": "The account 'Intercompany management fees income' represents revenue from administrative fees, which aligns with 'Other Income' (CA-5100) in the canonical revenue categories. No closer match exists in services or sales revenue codes.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'Intercompany management fees income' represents revenue from administrative fees, which aligns with 'Other Income' (CA-5100) in the canonical revenue categories. No closer match exists in services or sales revenue codes"
-      }
-    },
-    {
-      "row": {
-        "id": "R18",
-        "accountCode": "411601",
-        "accountName": "Commission income",
-        "expectedCode": "CA-5100",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5100",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7717,
-        "evidence": "Commission income is classified as other revenue since it does not fit specific revenue categories like sales or services, and is mapped to CA-5100: Other Income under the revenue section.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5100\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Commission income is classified as other revenue since it does not fit specific revenue categories like sales or services, and is mapped to CA-5100: Other Income under the revenue section.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "R19",
-        "accountCode": "411701",
-        "accountName": "Training workshop fees",
-        "expectedCode": "CA-4020",
-        "category": "revenue",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5060",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7865,
-        "evidence": "Training workshop fees represent professional services incurred, aligning with 'Professional and Consulting Fees' (CA-5060) in expenses. The zero balance suggests it may be a contra account, but the core classification remains consistent with professional service expenses.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5060\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Training workshop fees represent professional services incurred, aligning with 'Professional and Consulting Fees' (CA-5060) in expenses. The zero balance suggests it may be a contra account, but the core classification remains consi"
-      }
-    },
-    {
-      "row": {
-        "id": "R20",
-        "accountCode": "411801",
-        "accountName": "دخل تشغيلي - مشاريع",
-        "expectedCode": "CA-4010",
-        "category": "revenue",
-        "language": "ar",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: دخل"
-      },
-      "localAi": {
-        "canonicalCode": "CA-4020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7085,
-        "evidence": "The account 'دخل تشغيلي - مشاريع' (Operational Income - Projects) aligns with 'Revenue - Services' (CA-4020) as both represent service-related revenue streams under IFRS for SMEs.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-4020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'دخل تشغيلي - مشاريع' (Operational Income - Projects) aligns with 'Revenue - Services' (CA-4020) as both represent service-related revenue streams under IFRS for SMEs.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X01",
-        "accountCode": "510101",
-        "accountName": "Cost of Sales",
-        "expectedCode": "CA-5010",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: sales"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7661,
-        "evidence": "The account name 'Cost of Sales' directly matches the canonical code CA-5010 description 'Cost of Sales (Expenses)' in the Expenses category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Cost of Sales' directly matches the canonical code CA-5010 description 'Cost of Sales (Expenses)' in the Expenses category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X02",
-        "accountCode": "510201",
-        "accountName": "Cost of Goods Sold",
-        "expectedCode": "CA-5010",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 1,
-        "evidence": "COA synonym match: cost of goods sold"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8003,
-        "evidence": "Cost of Goods Sold is an expense account that directly aligns with 'Cost of Sales (Expenses)' in the canonical COA, which is explicitly categorized under expenses.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Cost of Goods Sold is an expense account that directly aligns with 'Cost of Sales (Expenses)' in the canonical COA, which is explicitly categorized under expenses.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X03",
-        "accountCode": "510301",
-        "accountName": "تكلفة المبيعات",
-        "expectedCode": "CA-5010",
-        "category": "expense",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-4010",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: مبيعات"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8423,
-        "evidence": "The account name 'تكلفة المبيعات' directly translates to 'Cost of Sales', which matches the canonical code CA-5010's description of 'Cost of Sales (Expenses)' in the IFRS for SMEs framework.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'تكلفة المبيعات' directly translates to 'Cost of Sales', which matches the canonical code CA-5010's description of 'Cost of Sales (Expenses)' in the IFRS for SMEs framework.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X04",
-        "accountCode": "520101",
-        "accountName": "Salaries and Wages",
-        "expectedCode": "CA-5020",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: salaries and wages"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6425,
-        "evidence": "Salaries and Wages is an employee benefit expense, matching the 'Employee Benefits (Expenses)' canonical line CA-5020 in the IFRS for SMEs framework.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Salaries and Wages is an employee benefit expense, matching the 'Employee Benefits (Expenses)' canonical line CA-5020 in the IFRS for SMEs framework.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X05",
-        "accountCode": "520201",
-        "accountName": "Employee Benefits",
-        "expectedCode": "CA-5020",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: employee benefits"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6652,
-        "evidence": "The account name 'Employee Benefits' directly matches the canonical code CA-5020 (Expenses) in the chart of accounts context, which explicitly categorizes employee benefits as an expense.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Employee Benefits' directly matches the canonical code CA-5020 (Expenses) in the chart of accounts context, which explicitly categorizes employee benefits as an expense.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X06",
-        "accountCode": "520301",
-        "accountName": "رواتب وأجور",
-        "expectedCode": "CA-5020",
-        "category": "expense",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5020",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: رواتب"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8441,
-        "evidence": "The account name 'رواتب وأجور' (Salaries and Wages) directly corresponds to 'Employee Benefits (Expenses)' in the canonical COA, which is explicitly listed as an expense category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'رواتب وأجور' (Salaries and Wages) directly corresponds to 'Employee Benefits (Expenses)' in the canonical COA, which is explicitly listed as an expense category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X07",
-        "accountCode": "530101",
-        "accountName": "Utilities",
-        "expectedCode": "CA-5040",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5040",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: utilities"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5040",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7448,
-        "evidence": "The account name 'Utilities' directly matches the 'Utilities (Expenses)' category in the candidate accounts, which is explicitly listed as an expense line in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Utilities' directly matches the 'Utilities (Expenses)' category in the candidate accounts, which is explicitly listed as an expense line in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X08",
-        "accountCode": "530201",
-        "accountName": "كهرباء ومياه",
-        "expectedCode": "CA-5040",
-        "category": "expense",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5040",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: كهرباء"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5040",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7139,
-        "evidence": "The account name 'كهرباء ومياه' translates to 'Electricity and Water', which directly corresponds to the 'Utilities (Expenses)' category in the canonical COA. This matches the expense classification for utility costs.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5040\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'كهرباء ومياه' translates to 'Electricity and Water', which directly corresponds to the 'Utilities (Expenses)' category in the canonical COA. This matches the expense classification for utility costs.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X09",
-        "accountCode": "540101",
-        "accountName": "Depreciation",
-        "expectedCode": "CA-5050",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-1071",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: rou accumulated depreciation"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5050",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7960,
-        "evidence": "The account name 'Depreciation' directly matches the canonical code CA-5050 'Depreciation and Amortisation (Expenses)' in the Expenses category.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5050\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Depreciation' directly matches the canonical code CA-5050 'Depreciation and Amortisation (Expenses)' in the Expenses category.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X10",
-        "accountCode": "540201",
-        "accountName": "إهلاك",
-        "expectedCode": "CA-5050",
-        "category": "expense",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5050",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: إهلاك"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5050",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6193,
-        "evidence": "The account name 'إهلاك' translates to 'depreciation' which aligns with the 'Depreciation and Amortisation (Expenses)' category in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5050\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'إهلاك' translates to 'depreciation' which aligns with the 'Depreciation and Amortisation (Expenses)' category in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X11",
-        "accountCode": "550101",
-        "accountName": "Professional Fees",
-        "expectedCode": "CA-5060",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5060",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: professional fees"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5060",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6785,
-        "evidence": "Professional Fees aligns with 'Professional and Consulting Fees (Expenses)' in the canonical COA, which directly categorizes external service costs under expenses.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5060\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Professional Fees aligns with 'Professional and Consulting Fees (Expenses)' in the canonical COA, which directly categorizes external service costs under expenses.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X12",
-        "accountCode": "560101",
-        "accountName": "General and Administrative Expenses",
-        "expectedCode": "CA-5070",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5070",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: general and administrative expenses"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5070",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6118,
-        "evidence": "The account name 'General and Administrative Expenses' directly matches the canonical code CA-5070 description, which is explicitly listed under Expenses in the allowed canonical lines.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5070\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'General and Administrative Expenses' directly matches the canonical code CA-5070 description, which is explicitly listed under Expenses in the allowed canonical lines.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X13",
-        "accountCode": "560201",
-        "accountName": "مصروفات عمومية وإدارية",
-        "expectedCode": "CA-5070",
-        "category": "expense",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-5070",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: مصروفات عمومية"
-      },
-      "localAi": {
-        "canonicalCode": "CA-5070",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 7460,
-        "evidence": "The account 'General and Administrative Expenses' matches the canonical code CA-5070, which is designated for General and Administrative Expenses in the AuditOS COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5070\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account 'General and Administrative Expenses' matches the canonical code CA-5070, which is designated for General and Administrative Expenses in the AuditOS COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X14",
-        "accountCode": "570101",
-        "accountName": "Finance Cost",
-        "expectedCode": "CA-2050",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2050",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 0,
-        "evidence": "COA synonym match: finance cost"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2050",
-        "confidence": 0.95,
-        "source": "local",
-        "latencyMs": 6010,
-        "evidence": "The account name 'Finance Cost' directly matches the canonical code CA-2050 description 'Finance Cost (Expenses)' in the allowed canonical lines for expenses.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2050\",\n  \"confidence\": 0.95,\n  \"reasoning\": \"The account name 'Finance Cost' directly matches the canonical code CA-2050 description 'Finance Cost (Expenses)' in the allowed canonical lines for expenses.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X15",
-        "accountCode": "570201",
-        "accountName": "Finance Costs - Borwings",
-        "expectedCode": "CA-2050",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2050",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 1,
-        "evidence": "COA synonym match: finance cost"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2050",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 5749,
-        "evidence": "The account name 'Finance Costs - Borwings' directly aligns with the 'Finance Cost (Expenses)' category in the canonical COA, which explicitly covers interest expenses on borrowings.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2050\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'Finance Costs - Borwings' directly aligns with the 'Finance Cost (Expenses)' category in the canonical COA, which explicitly covers interest expenses on borrowings.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X16",
-        "accountCode": "570301",
-        "accountName": "تكلفة تمويل",
-        "expectedCode": "CA-2050",
-        "category": "expense",
-        "language": "ar",
-        "difficulty": "easy"
-      },
-      "deterministic": {
-        "canonicalCode": "CA-2050",
-        "confidence": 0.88,
-        "source": "rule",
-        "latencyMs": 1,
-        "evidence": "COA synonym match: تكلفة تمويل"
-      },
-      "localAi": {
-        "canonicalCode": "CA-2050",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6197,
-        "evidence": "The account name 'تكلفة تمويل' translates to 'Financing Cost', which directly matches the canonical code CA-2050: Finance Cost (Expenses). This aligns with the expense category in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-2050\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'تكلفة تمويل' translates to 'Financing Cost', which directly matches the canonical code CA-2050: Finance Cost (Expenses). This aligns with the expense category in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X17",
-        "accountCode": "530301",
-        "accountName": "Warehouse rent expense",
-        "expectedCode": "CA-5030",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6912,
-        "evidence": "Warehouse rent expense is an occupancy cost, matching CA-5030: Occupancy Expenses (Expenses) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Warehouse rent expense is an occupancy cost, matching CA-5030: Occupancy Expenses (Expenses) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X18",
-        "accountCode": "530401",
-        "accountName": "Office lease payments",
-        "expectedCode": "CA-5030",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 1
-      },
-      "localAi": {
-        "canonicalCode": "CA-5030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8042,
-        "evidence": "Office lease payments represent occupancy expenses, which align with CA-5030: Occupancy Expenses (Expenses) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Office lease payments represent occupancy expenses, which align with CA-5030: Occupancy Expenses (Expenses) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X19",
-        "accountCode": "530501",
-        "accountName": "إيجار مستودع",
-        "expectedCode": "CA-5030",
-        "category": "expense",
-        "language": "ar",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5030",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6723,
-        "evidence": "The account name 'إيجار مستودع' (Warehouse Rent) aligns with 'Occupancy Expenses' (CA-5030) as rent for leased property is a standard occupancy cost category under expenses.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5030\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'إيجار مستودع' (Warehouse Rent) aligns with 'Occupancy Expenses' (CA-5030) as rent for leased property is a standard occupancy cost category under expenses.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X20",
-        "accountCode": "550201",
-        "accountName": "External audit fees",
-        "expectedCode": "CA-5060",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5060",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6566,
-        "evidence": "External audit fees represent professional services expenses, aligning with CA-5060: Professional and Consulting Fees (Expenses) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5060\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"External audit fees represent professional services expenses, aligning with CA-5060: Professional and Consulting Fees (Expenses) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X21",
-        "accountCode": "560301",
-        "accountName": "IT software subscription",
-        "expectedCode": "CA-5070",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5060",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8891,
-        "evidence": "The 'IT software subscription' account represents a recurring expense for external software services, aligning with 'Professional and Consulting Fees (Expenses)' in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5060\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The 'IT software subscription' account represents a recurring expense for external software services, aligning with 'Professional and Consulting Fees (Expenses)' in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X22",
-        "accountCode": "560401",
-        "accountName": "Marketing and advertising",
-        "expectedCode": "CA-5070",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5070",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 6191,
-        "evidence": "Marketing and advertising expenses are typically categorized under general administrative expenses, matching CA-5070: General and Administrative Expenses (Expenses)",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5070\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Marketing and advertising expenses are typically categorized under general administrative expenses, matching CA-5070: General and Administrative Expenses (Expenses)\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X23",
-        "accountCode": "560501",
-        "accountName": "Stationery and printing",
-        "expectedCode": "CA-5070",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5070",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 10162,
-        "evidence": "Stationery and printing expenses are operational costs typically classified under general and administrative expenses in the canonical model.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5070\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Stationery and printing expenses are operational costs typically classified under general and administrative expenses in the canonical model.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X24",
-        "accountCode": "520401",
-        "accountName": "GOSI employer contribution",
-        "expectedCode": "CA-5020",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5020",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 5337,
-        "evidence": "The 'GOSI employer contribution' represents an employee benefit expense, aligning with CA-5020: Employee Benefits (Expenses) in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5020\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The 'GOSI employer contribution' represents an employee benefit expense, aligning with CA-5020: Employee Benefits (Expenses) in the canonical COA.\"\n}"
-      }
-    },
-    {
-      "row": {
-        "id": "X25",
-        "accountCode": "510401",
-        "accountName": "Subcontractor direct costs",
-        "expectedCode": "CA-5010",
-        "category": "expense",
-        "language": "en",
-        "difficulty": "hard"
-      },
-      "deterministic": {
-        "canonicalCode": null,
-        "confidence": 0,
-        "source": "none",
-        "latencyMs": 0
-      },
-      "localAi": {
-        "canonicalCode": "CA-5010",
-        "confidence": 0.85,
-        "source": "local",
-        "latencyMs": 8137,
-        "evidence": "Subcontractor direct costs represent expenses directly tied to production, aligning with 'Cost of Sales (Expenses)' in the canonical COA.",
-        "providerId": "local",
-        "rawPreview": "{\n  \"accountCode\": \"CA-5010\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"Subcontractor direct costs represent expenses directly tied to production, aligning with 'Cost of Sales (Expenses)' in the canonical COA.\"\n}"
+        "rawPreview": "{\n  \"accountCode\": \"CA-1080\",\n  \"confidence\": 0.85,\n  \"reasoning\": \"The account name 'assets of contracts' directly corresponds to 'Contract Assets (Current Assets)' mapped to CA-1080 in the canonical COA.\"\n}"
       }
     }
   ]
