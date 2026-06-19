@@ -44,10 +44,15 @@ async function main() {
   }
 
   await copyIfMissing(join(root, "public"), join(standaloneDir, "public"));
-  await copyIfMissing(
-    join(root, ".next", "static"),
-    join(standaloneDir, ".next", "static"),
-  );
+  await cp(join(root, ".next", "static"), join(standaloneDir, ".next", "static"), {
+    recursive: true,
+    force: true,
+  });
+  // Standalone output may omit middleware manifest until server tree is synced (E2E/Cypress).
+  await cp(join(root, ".next", "server"), join(standaloneDir, ".next", "server"), {
+    recursive: true,
+    force: true,
+  });
 
   const port = process.env.PORT || "3000";
   console.log(`Starting standalone server on http://localhost:${port}`);

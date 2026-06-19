@@ -120,16 +120,20 @@ export default function AuditBridgePage() {
 
   if (loading) {
     return (
-      <main className="p-8 max-w-5xl mx-auto" dir="rtl">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center gap-3 mb-6">
+          <Link2 className="h-6 w-6 text-primary" />
+          <h1 className="text-2xl font-bold">قواعد ربط التدقيق</h1>
+        </div>
         <div className="flex items-center justify-center min-h-[200px]">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="p-8 max-w-5xl mx-auto" dir="rtl">
+    <div className="max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Link2 className="h-6 w-6 text-primary" />
@@ -270,6 +274,6 @@ export default function AuditBridgePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </main>
+    </div>
   )
 }

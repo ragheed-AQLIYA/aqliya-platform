@@ -39,6 +39,8 @@ async function main() {
   await prisma.workflowEvidence.deleteMany();
   await prisma.workflowRecord.deleteMany();
   await prisma.workflowTemplate.deleteMany();
+  await prisma.intelligenceGraphEdge.deleteMany();
+  await prisma.intelligenceGraphNode.deleteMany();
   await prisma.institutionalMemoryEvent.deleteMany();
   await prisma.institutionalMemoryCollection.deleteMany();
   await prisma.tenantIntegration.deleteMany();
@@ -1509,6 +1511,69 @@ async function main() {
     ],
   });
   console.log("Created 2 InstitutionalMemory collections");
+
+  // ─── IntelligenceGraphNode + Edge seeds ───
+  const graphNodes = await Promise.all([
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "مناقصة التدريب والتأهيل", type: "decision", metadata: { sourceProduct: "decisions", entityId: tenderDecision.id } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "الهجرة إلى البنية السحابية", type: "decision", metadata: { sourceProduct: "decisions", entityId: investmentDecision.id } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "التوسع في سوق الإمارات", type: "decision", metadata: { sourceProduct: "decisions", entityId: strategicDecision.id } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "تعيين محلل مالي أول", type: "decision", metadata: { sourceProduct: "decisions", entityId: hiringDecision.id } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "مراجعة عقود الموردين", type: "workflow", metadata: { sourceProduct: "workflow", entityId: "wfr-review-doc-001" } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "مراجعة سياسة الخصوصية", type: "workflow", metadata: { sourceProduct: "workflow", entityId: "wfr-review-doc-002" } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "اعتماد مدفوعات التشغيل", type: "workflow", metadata: { sourceProduct: "workflow", entityId: "wfr-approve-payment-001" } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "صرف مكافآت الموظفين", type: "workflow", metadata: { sourceProduct: "workflow", entityId: "wfr-approve-payment-002" } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "تفتيش الفرع", type: "workflow", metadata: { sourceProduct: "workflow", entityId: "wfr-inspect-site-001" } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: "مراجعة الخليج للحسابات", type: "entity", metadata: { sourceProduct: "audit", entityId: "eng-gulf-2025" } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: createdContacts[0].name, type: "contact", metadata: { sourceProduct: "contacts", entityId: createdContacts[0].id } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: createdContacts[2].name, type: "contact", metadata: { sourceProduct: "contacts", entityId: createdContacts[2].id } },
+    }),
+    prisma.intelligenceGraphNode.create({
+      data: { organizationId: org.id, name: createdContacts[4].name, type: "contact", metadata: { sourceProduct: "contacts", entityId: createdContacts[4].id } },
+    }),
+  ]);
+  console.log(`Created ${graphNodes.length} IntelligenceGraphNodes`);
+
+  // Named references for clarity
+  const [nTender, nCloud, nUAE, nHire, nReviewDoc1, nReviewDoc2, nPay1, nPay2, nInspect, nAudit, nContact0, nContact2, nContact4] = graphNodes;
+
+  await prisma.intelligenceGraphEdge.createMany({
+    data: [
+      { organizationId: org.id, sourceId: nTender.id, targetId: nReviewDoc1.id, relationType: "references", weight: 0.95 },
+      { organizationId: org.id, sourceId: nCloud.id, targetId: nPay1.id, relationType: "references", weight: 0.90 },
+      { organizationId: org.id, sourceId: nInspect.id, targetId: nContact2.id, relationType: "references", weight: 0.85 },
+      { organizationId: org.id, sourceId: nUAE.id, targetId: nContact0.id, relationType: "related_to", weight: 0.80 },
+      { organizationId: org.id, sourceId: nAudit.id, targetId: nTender.id, relationType: "references", weight: 0.75 },
+      { organizationId: org.id, sourceId: nPay2.id, targetId: nAudit.id, relationType: "evidence_for", weight: 0.70 },
+      { organizationId: org.id, sourceId: nReviewDoc1.id, targetId: nReviewDoc2.id, relationType: "related_to", weight: 0.60 },
+      { organizationId: org.id, sourceId: nHire.id, targetId: nPay2.id, relationType: "derives_from", weight: 0.65 },
+      { organizationId: org.id, sourceId: nContact4.id, targetId: nAudit.id, relationType: "related_to", weight: 0.90 },
+      { organizationId: org.id, sourceId: nTender.id, targetId: nAudit.id, relationType: "derives_from", weight: 0.70 },
+    ],
+  });
+  console.log("Created 10 IntelligenceGraphEdges");
 
   // ─── RiskOS seeds ───
   const riskModel = await prisma.auditRiskModel.create({

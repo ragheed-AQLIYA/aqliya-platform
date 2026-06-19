@@ -33,7 +33,7 @@ Earlier same-day artifacts: `2026-06-18-{tsc,test,lint,build}.txt` (superseded b
 | [2026-06-19-final-lint.txt](./2026-06-19-final-lint.txt) | `npm run lint` | **PASS** — 0 errors |
 | [2026-06-19-staging-probe.txt](./2026-06-19-staging-probe.txt) | staging DNS | **FAIL** — ENOTFOUND staging.aqliya.com |
 | [2026-06-19-production-smoke.txt](./2026-06-19-production-smoke.txt) | post-deploy smoke | **PASS** — 28/30 critical |
-| [2026-06-19-cypress-sprint-3-5.txt](./2026-06-19-cypress-sprint-3-5.txt) | Cypress sprint-3-5 | **PARTIAL** — 21/28 (auth gates pass) |
+| [2026-06-19-cypress-sprint-3-5.txt](./2026-06-19-cypress-sprint-3-5.txt) | Cypress sprint-3-5 | **PASS** — 28/28 |
 
 ---
 

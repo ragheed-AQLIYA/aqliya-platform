@@ -244,6 +244,18 @@ export async function createCollection(input: {
       },
       include: { createdBy: { select: { id: true, name: true } } },
     });
+    await auditLogger({
+      productKey: Product.PLATFORM,
+      sourceSystem: "institutional_memory",
+      organization: { platformOrganizationId: orgId },
+      actor: { id: userId, type: "user" },
+    }).record("COLLECTION_CREATED", { type: "institutional_memory_collection", id: collection.id }, {
+      severity: "info",
+      status: "recorded",
+      sourceModel: "InstitutionalMemoryCollection",
+      sourceId: collection.id,
+      metadata: { name: input.name },
+    });
     return {
       success: true,
       data: {
@@ -266,7 +278,7 @@ export async function deleteCollection(
   collectionId: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { organizationId: orgId } = await getUserCtx();
+    const { organizationId: orgId, userId } = await getUserCtx();
     const existing = await prisma.institutionalMemoryCollection.findUnique({
       where: { id: collectionId },
       select: { id: true, organizationId: true },
@@ -274,6 +286,17 @@ export async function deleteCollection(
     if (!existing) return { success: false, error: "Collection not found" };
     if (existing.organizationId !== orgId) return { success: false, error: "Unauthorized" };
     await prisma.institutionalMemoryCollection.delete({ where: { id: collectionId } });
+    await auditLogger({
+      productKey: Product.PLATFORM,
+      sourceSystem: "institutional_memory",
+      organization: { platformOrganizationId: orgId },
+      actor: { id: userId, type: "user" },
+    }).record("COLLECTION_DELETED", { type: "institutional_memory_collection", id: collectionId }, {
+      severity: "info",
+      status: "recorded",
+      sourceModel: "InstitutionalMemoryCollection",
+      sourceId: collectionId,
+    });
     return { success: true };
   } catch (error: unknown) {
     if (isAuthRedirectError(error)) throw error;
@@ -370,6 +393,45 @@ export async function getMemoryDashboardStats(): Promise<{
   } catch (error: unknown) {
     if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to fetch dashboard stats" };
+  }
+}
+
+// ─── Export ───
+
+export async function exportMemoryEventsAction(): Promise<{
+  success: boolean;
+  data?: { events: MemoryEventData[]; exportedAt: string };
+  error?: string;
+}> {
+  try {
+    const { organizationId: orgId, userId } = await getUserCtx();
+    const events = await prisma.institutionalMemoryEvent.findMany({
+      where: { organizationId: orgId },
+      include: EVENT_INCLUDE,
+      orderBy: { createdAt: "desc" },
+    });
+    await auditLogger({
+      productKey: Product.PLATFORM,
+      sourceSystem: "institutional_memory",
+      organization: { platformOrganizationId: orgId },
+      actor: { id: userId, type: "user" },
+    }).record("MEMORY_EVENTS_EXPORTED", { type: "export", id: `export-${Date.now()}` }, {
+      severity: "info",
+      status: "recorded",
+      sourceModel: "InstitutionalMemoryEvent",
+      sourceId: `export-${Date.now()}`,
+      metadata: { eventCount: events.length },
+    });
+    return {
+      success: true,
+      data: {
+        events: events.map(mapEvent),
+        exportedAt: new Date().toISOString(),
+      },
+    };
+  } catch (error: unknown) {
+    if (isAuthRedirectError(error)) throw error;
+    return { success: false, error: "Failed to export memory events" };
   }
 }
 

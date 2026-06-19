@@ -294,9 +294,10 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                         | Product/System      | Route Type         | Public/Protected | Implementation Status | Notes                                        |
 | ----------------------------- | ------------------- | ------------------ | ---------------- | --------------------- | -------------------------------------------- |
-| `/institutional-memory`              | Institutional Memory| Governed workspace | Protected        | Usable v0.1 (L4)      | Cross-product knowledge graph dashboard      |
-| `/institutional-memory/collections`  | Institutional Memory| Governed workspace | Protected        | Usable v0.1 (L4)      | Saved collections of memory event links      |
-| `/institutional-memory/graph`        | Institutional Memory| Governed workspace | Protected        | Usable v0.1 (L4)      | Interactive knowledge graph visualization    |
+| `/institutional-memory`              | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5)      | Cross-product knowledge graph dashboard      |
+| `/institutional-memory/events`       | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5)      | Memory event list with delete & JSON export |
+| `/institutional-memory/collections`  | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5)      | Saved collections of memory event links      |
+| `/institutional-memory/graph`        | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5)      | Interactive knowledge graph visualization    |
 
 ### RiskOS — Governed Risk Workspace (L4)
 
@@ -404,4 +405,4 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 15. `/risk/*` = RiskOS governed workspace (L5 Pilot-ready). Authenticated, dashboard with 4 KPI cards + risk distribution, seed data with 1 model / 1 assessment / 2 procedures. Assessment detail page with DRAFT→REVIEWED→APPROVED workflow, procedure step tracking with interactive checkboxes, audit trail panel, JSON export. Uses AuditOS risk models (AuditRiskModel) — no separate RiskOS product model. Do not market as standalone product.
 
 16. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`.
-17. `/institutional-memory/*` = governed knowledge graph workspace (L4). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent. Routes: workspace, collections, graph view.
+17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.

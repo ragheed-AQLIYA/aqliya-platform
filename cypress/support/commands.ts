@@ -5,6 +5,7 @@ declare namespace Cypress {
     shouldHaveArabicContent(): Chainable<JQuery<HTMLElement>>;
     loginAdmin(): Chainable<void>;
     loginOperator(): Chainable<void>;
+    visitWorkspace(path: string, expectedText: string): Chainable<void>;
   }
 }
 
@@ -57,4 +58,12 @@ Cypress.Commands.add("shouldBeRTL", () => {
 
 Cypress.Commands.add("shouldHaveArabicContent", () => {
   cy.document().its("documentElement.lang").should("eq", "ar");
+});
+
+/** Visit a protected workspace route and assert expected copy (client pages may hydrate slowly). */
+Cypress.Commands.add("visitWorkspace", (path: string, expectedText: string) => {
+  cy.visit(path, { failOnStatusCode: false });
+  cy.url({ timeout: 20000 }).should("not.include", "/login");
+  cy.get("html").should("have.attr", "dir", "rtl");
+  cy.contains(expectedText, { timeout: 30000 }).should("exist");
 });

@@ -16,7 +16,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, RefreshCw } from "lucide-react";
+import { Trash2, RefreshCw, Download } from "lucide-react";
+import { exportMemoryEventsAction } from "@/actions/institutional-memory-actions";
 
 const CONFIDENCE_COLORS: Record<string, string> = {
   "1": "bg-green-100 text-green-800",
@@ -88,6 +89,19 @@ export default function MemoryEventsPage() {
     }
   };
 
+  const handleExport = async () => {
+    const res = await exportMemoryEventsAction();
+    if (res.success && res.data) {
+      const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `memory-events-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -97,10 +111,16 @@ export default function MemoryEventsPage() {
             Institutional Memory Events — سجل الروابط بين الكيانات عبر المنتجات
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => void load(true)} disabled={loading}>
-          <RefreshCw className={`h-4 w-4 ml-1 ${loading ? "animate-spin" : ""}`} />
-          تحديث
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={handleExport}>
+            <Download className="h-4 w-4 ml-1" />
+            تصدير JSON
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => void load(true)} disabled={loading}>
+            <RefreshCw className={`h-4 w-4 ml-1 ${loading ? "animate-spin" : ""}`} />
+            تحديث
+          </Button>
+        </div>
       </div>
 
       {loading && (

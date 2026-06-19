@@ -1,12 +1,10 @@
 ﻿describe("Sprint 3-5 Routes", () => {
   describe("Authentication gates", () => {
     const protectedRoutes: string[] = [
-      // Sprint 3
       "/decisions/gov",
       "/sampling",
       "/risk",
       "/settings/audit-bridge",
-      // Sprint 4-5
       "/content-studio",
       "/sales/intelligence",
       "/sales/intelligence/forecasts",
@@ -27,116 +25,74 @@
   });
 
   describe("Authenticated route loading", () => {
-    before(() => {
+    beforeEach(() => {
       cy.loginAdmin();
     });
 
-    // Decision Gov Routes
-    describe("/decisions/gov", () => {
-      it("should load the governance dashboard", () => {
-        cy.visit("/decisions/gov");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/حوكمة|governance|تصعيد|escalation/i).should("exist");
-      });
+    it("loads /decisions/gov", () => {
+      cy.visitWorkspace("/decisions/gov", "حوكمة");
     });
 
-    // Sampling Routes
-    describe("/sampling", () => {
-      it("should load the sampling dashboard", () => {
-        cy.visit("/sampling");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/عينات|sampling|خطة|plan/i).should("exist");
-      });
+    it("loads /sampling", () => {
+      cy.visitWorkspace("/sampling", "عينات التدقيق");
     });
 
-    // Risk Routes
-    describe("/risk", () => {
-      it("should load the risk assessment dashboard", () => {
-        cy.visit("/risk");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains("مخاطر المنشأة", { timeout: 15000 }).should("exist");
-      });
+    it("loads /risk", () => {
+      cy.visitWorkspace("/risk", "مخاطر المنشأة");
     });
 
-    // Audit Bridge Routes
-    describe("/settings/audit-bridge", () => {
-      it("should load the audit bridge page", () => {
-        cy.visit("/settings/audit-bridge");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/جسر|bridge|ربط|rule/i).should("exist");
-      });
-
-      it("should load audit bridge logs", () => {
-        cy.visit("/settings/audit-bridge/logs");
-        cy.get("html").should("have.attr", "dir", "rtl");
-      });
+    it("loads /settings/audit-bridge", () => {
+      cy.visitWorkspace("/settings/audit-bridge", "قواعد ربط التدقيق");
     });
 
-    // Content Studio Routes
-    describe("/content-studio", () => {
-      it("should load the content studio page", () => {
-        cy.visit("/content-studio");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/استوديو|content|محتوى/i).should("exist");
-      });
-
-      it("should load content templates", () => {
-        cy.visit("/content-studio/templates");
-        cy.get("html").should("have.attr", "dir", "rtl");
-      });
+    it("loads /settings/audit-bridge/logs", () => {
+      cy.visit("/settings/audit-bridge/logs");
+      cy.get("html").should("have.attr", "dir", "rtl");
     });
 
-    // Sales Intelligence Routes
-    describe("/sales/intelligence", () => {
-      it("should load the sales intelligence page", () => {
-        cy.visit("/sales/intelligence");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/ذكاء|intelligence|مبيعات/i).should("exist");
-      });
-
-      it("should load sales forecasts", () => {
-        cy.visit("/sales/intelligence/forecasts");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/توقعات|forecast/i).should("exist");
-      });
+    it("loads /content-studio", () => {
+      cy.visitWorkspace("/content-studio", "استوديو");
     });
 
-    // Office AI Advanced Routes
-    describe("/office-ai/advanced", () => {
-      it("should load the office AI advanced page", () => {
-        cy.visit("/office-ai/advanced");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/ذكاء مكتبي|advanced/i).should("exist");
-      });
-
-      it("should load templates sub-page", () => {
-        cy.visit("/office-ai/advanced/templates");
-        cy.get("html").should("have.attr", "dir", "rtl");
-      });
-
-      it("should load schedules sub-page", () => {
-        cy.visit("/office-ai/advanced/schedules");
-        cy.get("html").should("have.attr", "dir", "rtl");
-      });
-
-      it("should load role config sub-page", () => {
-        cy.visit("/office-ai/advanced/role-config");
-        cy.get("html").should("have.attr", "dir", "rtl");
-      });
+    it("loads /content-studio/templates", () => {
+      cy.visit("/content-studio/templates");
+      cy.get("html").should("have.attr", "dir", "rtl");
     });
 
-    // Organization Advanced Routes
-    describe("/settings/organization/advanced", () => {
-      it("should load the org advanced page", () => {
-        cy.visit("/settings/organization/advanced");
-        cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/إعدادات|advanced|هيكل|hierarchy/i).should("exist");
-      });
+    it("loads /sales/intelligence", () => {
+      cy.visitWorkspace("/sales/intelligence", "مركز الذكاء التجاري");
+    });
 
-      it("should load lifecycle events page", () => {
-        cy.visit("/settings/organization/advanced/events");
-        cy.get("html").should("have.attr", "dir", "rtl");
-      });
+    it("loads /sales/intelligence/forecasts", () => {
+      cy.visitWorkspace("/sales/intelligence/forecasts", "التنبؤات");
+    });
+
+    it("loads /office-ai/advanced", () => {
+      cy.visitWorkspace("/office-ai/advanced", "الذكاء المكتبي المتقدم");
+    });
+
+    it("loads /office-ai/advanced/templates", () => {
+      cy.visit("/office-ai/advanced/templates");
+      cy.get("html").should("have.attr", "dir", "rtl");
+    });
+
+    it("loads /office-ai/advanced/schedules", () => {
+      cy.visit("/office-ai/advanced/schedules");
+      cy.get("html").should("have.attr", "dir", "rtl");
+    });
+
+    it("loads /office-ai/advanced/role-config", () => {
+      cy.visit("/office-ai/advanced/role-config");
+      cy.get("html").should("have.attr", "dir", "rtl");
+    });
+
+    it("loads /settings/organization/advanced", () => {
+      cy.visitWorkspace("/settings/organization/advanced", "إعدادات المنظمة المتقدمة");
+    });
+
+    it("loads /settings/organization/advanced/events", () => {
+      cy.visit("/settings/organization/advanced/events");
+      cy.get("html").should("have.attr", "dir", "rtl");
     });
   });
 });

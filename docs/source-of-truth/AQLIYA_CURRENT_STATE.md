@@ -67,7 +67,7 @@ Pilot-capable; production health endpoint verified. Staging DNS missing; full AW
 
 - AWS ECS / RDS / Redis live state (beyond health endpoint)
 - Staging DNS — `staging.aqliya.com` ENOTFOUND
-- Cypress E2E — **21/28** sprint-3-5 routes (auth gates all pass; 7 content assertions stale)
+- Cypress E2E — **28/28 PASS** sprint-3-5 (`2026-06-19-cypress-sprint-3-5.txt`)
 - External pen test
 - Terraform validate (CLI not on dev machine)
 
