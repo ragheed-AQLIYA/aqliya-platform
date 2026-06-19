@@ -73,7 +73,15 @@ async function main() {
   }
 
   const port = process.env.PORT || "3000";
-  console.log(`Starting standalone server on http://localhost:${port}`);
+  const localBase = `http://localhost:${port}`;
+  if (!process.env.NEXTAUTH_URL) {
+    process.env.NEXTAUTH_URL = localBase;
+  }
+  if (!process.env.AUTH_URL) {
+    process.env.AUTH_URL = process.env.NEXTAUTH_URL;
+  }
+
+  console.log(`Starting standalone server on ${localBase}`);
 
   const child = spawn(process.execPath, [serverJs], {
     cwd: standaloneDir,

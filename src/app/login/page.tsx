@@ -70,6 +70,19 @@ export default function LoginPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   useEffect(() => { loadSsoProviders(); }, []);
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has("error")) return;
+    url.searchParams.delete("error");
+    const qs = url.searchParams.toString();
+    window.history.replaceState(
+      {},
+      "",
+      qs ? `${url.pathname}?${qs}` : url.pathname,
+    );
+    setError("");
+  }, []);
+
   async function handleSsoSignIn(providerId: string) {
     setSsoLoading(providerId);
     setSsoError("");
@@ -180,9 +193,12 @@ export default function LoginPage() {
     await performLogin(demoEmail, demoPassword);
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await performLogin(email, password);
+    const fd = new FormData(e.currentTarget);
+    const formEmail = String(fd.get("email") ?? "").trim();
+    const formPassword = String(fd.get("password") ?? "");
+    await performLogin(formEmail || email, formPassword || password);
   }
 
   // ── MFA Challenge View ──────────────────────────────────────────────
@@ -263,7 +279,9 @@ export default function LoginPage() {
               <Label htmlFor="email">البريد الإلكتروني</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
+                autoComplete="username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -273,7 +291,9 @@ export default function LoginPage() {
               <Label htmlFor="password">كلمة المرور</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
