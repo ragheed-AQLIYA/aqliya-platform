@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-06-18 — DecisionOS → L5 pilot-ready, WorkflowOS → L5 pilot-ready, Institutional Memory workspace added (L4)
+> **Last updated:** 2026-06-19 — RiskOS → L5 Pilot-ready (procedure step tracking, audit trail, export, docs update)
 
 ---
 
@@ -298,6 +298,14 @@ These pages serve as detail references for specialized operating systems. They a
 | `/institutional-memory/collections`  | Institutional Memory| Governed workspace | Protected        | Usable v0.1 (L4)      | Saved collections of memory event links      |
 | `/institutional-memory/graph`        | Institutional Memory| Governed workspace | Protected        | Usable v0.1 (L4)      | Interactive knowledge graph visualization    |
 
+### RiskOS — Governed Risk Workspace (L4)
+
+| Route                              | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                                        |
+| ---------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | -------------------------------------------- |
+| `/risk`                            | RiskOS         | Governed workspace | Protected        | Usable v0.1 (L4)      | Dashboard with 4 KPI cards, risk distribution, recent assessments + model list toggle |
+| `/risk/[id]`                       | RiskOS         | Governed workspace | Protected        | Usable v0.1 (L4)      | Risk model detail (existing route)           |
+| `/risk/assessments/[id]`           | RiskOS         | Governed workspace | Protected        | Pilot-ready (L5)      | Assessment detail: score bars, category scores, procedure step tracking, audit trail, JSON export |
+
 ### Sunbul — Redirect Alias to WorkflowOS
 
 | Route                                           | Product/System | Route Type        | Public/Protected | Implementation Status | Notes                                                                  |
@@ -393,5 +401,7 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 13. `/published/recommendation/*` is protected in current code reality because the backing action requires an authenticated user from the same organization.
 14. `/executive-brief` is the canonical executive brief route. `/executive-briefing` is preserved only as a redirect alias.
 
-15. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`.
-16. `/institutional-memory/*` = governed knowledge graph workspace (L4). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent. Routes: workspace, collections, graph view.
+15. `/risk/*` = RiskOS governed workspace (L5 Pilot-ready). Authenticated, dashboard with 4 KPI cards + risk distribution, seed data with 1 model / 1 assessment / 2 procedures. Assessment detail page with DRAFT→REVIEWED→APPROVED workflow, procedure step tracking with interactive checkboxes, audit trail panel, JSON export. Uses AuditOS risk models (AuditRiskModel) — no separate RiskOS product model. Do not market as standalone product.
+
+16. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`.
+17. `/institutional-memory/*` = governed knowledge graph workspace (L4). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent. Routes: workspace, collections, graph view.

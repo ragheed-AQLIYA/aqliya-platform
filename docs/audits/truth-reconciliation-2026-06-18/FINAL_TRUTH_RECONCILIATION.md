@@ -26,7 +26,7 @@ This pass closed **Truth Debt** between doctrine docs, audit reports, and valida
 | Factory static smoke | PASS — 33 checks | `docs/reports/2026-06-18-factory-smoke-static.txt` |
 | Local AI smoke | PASS | `docs/reports/2026-06-18-local-ai-smoke.txt` |
 | TB benchmark (n=20) | PASS — AI 100% | `docs/reports/2026-06-18-tb-benchmark.txt` |
-| TB benchmark (n=100) | See full artifact | `docs/reports/2026-06-18-tb-benchmark-full.txt` |
+| TB benchmark (n=100) | PASS — AI **87%**, rules 65% | `docs/reports/2026-06-18-tb-benchmark-full.txt` |
 
 ---
 
@@ -34,9 +34,9 @@ This pass closed **Truth Debt** between doctrine docs, audit reports, and valida
 
 | Stale claim | Corrected reality |
 |-------------|-------------------|
-| InstMem L0 / future | L4 partial — models + `/institutional-memory/*` |
+| InstMem L0 / future | L4 partial — models + `/institutional-memory/*` + graph |
 | Local AI not implemented | L4 pilot — Ollama hybrid, smoke PASS |
-| RiskOS L0 | L3 submodule at `/risk/*` |
+| RiskOS L0 / L3 only | L4 usable v0.1 — dashboard + seed (2026-06-19) |
 | SalesOS "not implemented" in Master Ref §9 | L4 active — aligned with §6 |
 | FINAL_REALITY_AUDIT build/MFA fail | Superseded — build passes |
 | TB Local AI 0% (Phase 1A only) | Phase 1B rebenchmark ~85%; 2026-06-18 samples documented |
@@ -68,11 +68,13 @@ This pass closed **Truth Debt** between doctrine docs, audit reports, and valida
 
 | Item | Blocker |
 |------|---------|
-| AWS ECS / RDS / Redis live | No local terraform CLI; needs staging/prod access |
+| AWS ECS / RDS / Redis live | No terraform CLI locally |
 | RDS backup restore drill | Production credentials |
 | Cypress E2E | Running server + DB |
 | External pen test | Vendor schedule |
-| Terraform validate | `terraform` not installed on dev machine |
+| Staging DNS | `staging.aqliya.com` ENOTFOUND (2026-06-19) |
+
+**Verified 2026-06-19:** Production `https://aqliya.com/api/health` → HTTP 200, database check ok (`docs/reports/2026-06-19-production-probe.txt`).
 
 See [`ENTERPRISE_OPS_CHECKLIST.md`](./ENTERPRISE_OPS_CHECKLIST.md) for Phase D handoff.
 

@@ -52,6 +52,7 @@ Minimum bar for general availability.
 **Current gate: Pilot-ready candidate**
 
 **Authoritative operational snapshot:** `docs/source-of-truth/AQLIYA_CURRENT_STATE.md`  
+**Truth reconciliation audit:** `docs/audits/truth-reconciliation-2026-06-18/FINAL_TRUTH_RECONCILIATION.md`  
 **Validation evidence:** `docs/reports/README.md` (latest: `2026-06-18-final-*.txt`)
 
 The repository meets the Internal Reviewable, Demo-ready with governance, and Pilot-ready candidate bars.

@@ -48,7 +48,7 @@
 | L7 | Sunbul | **Deprecated** | Redirect alias | — | permanentRedirect(302) to WorkflowOS. | 
 | — | SimulationOS | **Internal** | L1 | — | Capability under DecisionOS. Not standalone. |
 | — | LocalContactOS | **Active with Caution** | L4→L5 partial | L5 | Routes + Prisma + governance; lint/tests pass; not L6 |
-| — | RiskOS | **Internal** | L3 submodule | — | `/risk/*` uses AuditOS risk models; not standalone product |
+| — | RiskOS | **Internal** | L4 usable v0.1 | — | `/risk/*` dashboard + seed; AuditOS risk models; not standalone product |
 | — | ComplianceOS | **Future** | L0 | — | Not implemented. |
 | — | LegalOS | **Future** | L0 | — | Not implemented. |
 | — | GovOS | **Future** | L0 | — | Not implemented. |

@@ -18,9 +18,18 @@ import { Label } from '@/components/ui/label'
 import {
   Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog'
-import { Loader2, AlertTriangle, X, ArrowRight, ClipboardList } from 'lucide-react'
-import type { AuditRiskAssessment, AuditRiskProcedure, UpdateProcedureData } from '@/lib/platform/audit-risk'
-import { getAssessmentAction, updateProcedureAction, transitionAssessmentAction } from '../../actions'
+import {
+  Loader2, AlertTriangle, X, ArrowRight, ClipboardList, Download, CheckCircle2, Circle, History,
+} from 'lucide-react'
+import type { AuditRiskAssessment, AuditRiskProcedure, UpdateProcedureData, ProcedureStep } from '@/lib/platform/audit-risk'
+import {
+  getAssessmentAction,
+  updateProcedureAction,
+  transitionAssessmentAction,
+  getAssessmentAuditTrailAction,
+  exportAssessmentAction,
+  type AuditTrailEntry,
+} from '../../actions'
 
 const LEVEL_VARIANTS: Record<string, string> = {
   LOW: 'bg-green-100 text-green-800 dark:bg-green-900',
@@ -75,6 +84,11 @@ export default function AssessmentDetailPage() {
   const [editProc, setEditProc] = useState<AuditRiskProcedure | null>(null)
   const [editDesc, setEditDesc] = useState('')
   const [editStatus, setEditStatus] = useState('')
+  const [auditTrail, setAuditTrail] = useState<AuditTrailEntry[]>([])
+  const [showAuditTrail, setShowAuditTrail] = useState(false)
+  const [exporting, setExporting] = useState(false)
+  const [stepStates, setStepStates] = useState<Record<string, boolean[]>>({})
+  const [stepLoading, setStepLoading] = useState<Record<string, boolean>>({})
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -84,10 +98,21 @@ export default function AssessmentDetailPage() {
       const data = res.data as { assessment: AuditRiskAssessment; procedures: AuditRiskProcedure[] }
       setAssessment(data.assessment)
       setProcedures(data.procedures)
+      // Initialize step states from procedure step data
+      const initial: Record<string, boolean[]> = {}
+      for (const p of data.procedures) {
+        initial[p.id] = p.procedureSteps.map((s: ProcedureStep) => (s as any).completed ?? false)
+      }
+      setStepStates(initial)
     } else {
       setError(res.error)
     }
     setLoading(false)
+  }, [assessmentId])
+
+  const loadAuditTrail = useCallback(async () => {
+    const res = await getAssessmentAuditTrailAction(assessmentId)
+    if (res.ok) setAuditTrail(res.data as AuditTrailEntry[])
   }, [assessmentId])
 
   useEffect(() => { fetchData() }, [fetchData])
@@ -101,6 +126,43 @@ export default function AssessmentDetailPage() {
       setError(res.error)
     }
     setActionLoading(false)
+  }
+
+  async function handleExport() {
+    setExporting(true)
+    const res = await exportAssessmentAction(assessmentId)
+    if (res.ok) {
+      const data = res.data
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `risk-assessment-${assessmentId.slice(0, 8)}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+    } else {
+      setError(res.error)
+    }
+    setExporting(false)
+  }
+
+  async function handleToggleStep(procId: string, stepIndex: number) {
+    setStepLoading(prev => ({ ...prev, [`${procId}-${stepIndex}`]: true }))
+    const current = [...(stepStates[procId] ?? [])]
+    current[stepIndex] = !current[stepIndex]
+    const proc = procedures.find(p => p.id === procId)
+    if (!proc) return
+    const updatedSteps = proc.procedureSteps.map((s: ProcedureStep, i: number) => ({
+      ...s,
+      completed: current[i] ?? false,
+    }))
+    const res = await updateProcedureAction(procId, { procedureSteps: updatedSteps as any })
+    if (res.ok) {
+      setStepStates(prev => ({ ...prev, [procId]: current }))
+    } else {
+      setError(res.error)
+    }
+    setStepLoading(prev => ({ ...prev, [`${procId}-${stepIndex}`]: false }))
   }
 
   async function handleUpdateProcedure() {
@@ -220,30 +282,76 @@ export default function AssessmentDetailPage() {
         </CardContent>
       </Card>
 
-      {/* Status Actions */}
-      {assessment.status === 'DRAFT' && (
+      {/* Actions Bar */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {/* Status Actions */}
+        {assessment.status === 'DRAFT' && (
+          <Button onClick={() => handleTransition('REVIEWED')} disabled={actionLoading}>
+            {actionLoading && <Loader2 className="h-4 w-4 ml-1 animate-spin" />}
+            تقديم للمراجعة
+          </Button>
+        )}
+        {assessment.status === 'REVIEWED' && (
+          <Button onClick={() => handleTransition('APPROVED')} disabled={actionLoading}>
+            {actionLoading && <Loader2 className="h-4 w-4 ml-1 animate-spin" />}
+            اعتماد التقييم
+          </Button>
+        )}
+        <Button variant="outline" onClick={handleExport} disabled={exporting}>
+          {exporting ? <Loader2 className="h-4 w-4 ml-1 animate-spin" /> : <Download className="h-4 w-4 ml-1" />}
+          تصدير JSON
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            if (!showAuditTrail) loadAuditTrail()
+            setShowAuditTrail(v => !v)
+          }}
+        >
+          <History className="h-4 w-4 ml-1" />
+          سجل التدقيق
+        </Button>
+      </div>
+
+      {/* Audit Trail Panel */}
+      {showAuditTrail && (
         <Card className="mb-6">
-          <CardContent className="p-4 flex gap-2">
-            <Button onClick={() => handleTransition('REVIEWED')} disabled={actionLoading}>
-              {actionLoading && <Loader2 className="h-4 w-4 ml-1 animate-spin" />}
-              تقديم للمراجعة
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-      {assessment.status === 'REVIEWED' && (
-        <Card className="mb-6">
-          <CardContent className="p-4 flex gap-2">
-            <Button onClick={() => handleTransition('APPROVED')} disabled={actionLoading}>
-              {actionLoading && <Loader2 className="h-4 w-4 ml-1 animate-spin" />}
-              اعتماد التقييم
-            </Button>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <History className="h-4 w-4" /> سجل التدقيق
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {auditTrail.length === 0 ? (
+              <p className="text-sm text-muted-foreground italic">لا توجد أحداث</p>
+            ) : (
+              <div className="space-y-2">
+                {auditTrail.map((e) => (
+                  <div key={e.id} className="flex items-center gap-3 text-sm p-2 bg-muted/30 rounded-lg">
+                    <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
+                    <div className="flex-1">
+                      <span className="font-medium">{e.action}</span>
+                      {(e.metadata as Record<string, string> | null)?.fromStatus && (e.metadata as Record<string, string> | null)?.toStatus && (
+                        <span className="text-muted-foreground">
+                          {' '}({(e.metadata as Record<string, string>).fromStatus} → {(e.metadata as Record<string, string>).toStatus})
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(e.createdAt).toLocaleDateString('ar-SA', {
+                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
 
       {/* Procedures */}
-      <Card>
+      <Card className="mb-6">
         <CardHeader>
           <CardTitle className="text-lg">إجراءات المخاطر</CardTitle>
           <CardDescription>{procedures.length} إجراء</CardDescription>
@@ -252,50 +360,83 @@ export default function AssessmentDetailPage() {
           {procedures.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">لا توجد إجراءات</p>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>الكود</TableHead>
-                  <TableHead>الوصف</TableHead>
-                  <TableHead>الفئة</TableHead>
-                  <TableHead>الخطوات</TableHead>
-                  <TableHead>أدلة</TableHead>
-                  <TableHead>الحالة</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {procedures.map(p => (
-                  <TableRow key={p.id}>
-                    <TableCell className="font-mono text-xs">{p.procedureCode}</TableCell>
-                    <TableCell className="max-w-[200px] truncate">{p.description}</TableCell>
-                    <TableCell>{p.riskCategory}</TableCell>
-                    <TableCell>{p.procedureSteps.length}</TableCell>
-                    <TableCell>
-                      <Badge variant={p.evidenceRequired ? 'default' : 'secondary'}>
-                        {p.evidenceRequired ? 'مطلوب' : 'اختياري'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{PROCEDURE_STATUS_LABELS[p.status] ?? p.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setEditProc(p)
-                          setEditDesc(p.description)
-                          setEditStatus(p.status)
-                        }}
-                      >
-                        تعديل
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <div className="space-y-4">
+              {procedures.map(p => {
+                const completedSteps = (stepStates[p.id] ?? []).filter(Boolean).length
+                const totalSteps = p.procedureSteps.length
+                const stepProgress = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0
+                return (
+                  <Card key={p.id} className="border-l-4" style={{
+                    borderLeftColor: p.status === 'COMPLETED' ? '#22c55e' : p.status === 'IN_PROGRESS' ? '#eab308' : '#6b7280',
+                  }}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs text-muted-foreground">{p.procedureCode}</span>
+                          <span className="font-medium">{p.description}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{PROCEDURE_STATUS_LABELS[p.status] ?? p.status}</Badge>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setEditProc(p)
+                              setEditDesc(p.description)
+                              setEditStatus(p.status)
+                            }}
+                          >
+                            تعديل
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground mb-2">
+                        <span className="bg-muted px-2 py-0.5 rounded">{p.riskCategory}</span>
+                        <span className="bg-muted px-2 py-0.5 rounded">
+                          {p.evidenceRequired ? 'أدلة مطلوبة' : 'أدلة اختيارية'}
+                        </span>
+                        {totalSteps > 0 && (
+                          <span className="bg-muted px-2 py-0.5 rounded">
+                            {completedSteps}/{totalSteps} خطوات ({stepProgress}%)
+                          </span>
+                        )}
+                      </div>
+                      {/* Step Checklist */}
+                      {totalSteps > 0 && (
+                        <div className="space-y-1 pr-2 border-r-2 border-muted mr-2">
+                          {p.procedureSteps.map((step: ProcedureStep, si: number) => {
+                            const done = (stepStates[p.id] ?? [])[si] ?? false
+                            const loadingKey = `${p.id}-${si}`
+                            const isStepLoading = stepLoading[loadingKey]
+                            return (
+                              <div key={si} className="flex items-center gap-2 py-1">
+                                <button
+                                  type="button"
+                                  onClick={() => handleToggleStep(p.id, si)}
+                                  disabled={isStepLoading}
+                                  className="shrink-0"
+                                >
+                                  {isStepLoading ? (
+                                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                                  ) : done ? (
+                                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                  ) : (
+                                    <Circle className="h-4 w-4 text-muted-foreground" />
+                                  )}
+                                </button>
+                                <span className={`text-sm ${done ? 'line-through text-muted-foreground' : ''}`}>
+                                  {(step as ProcedureStep).instruction}
+                                </span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
           )}
         </CardContent>
       </Card>

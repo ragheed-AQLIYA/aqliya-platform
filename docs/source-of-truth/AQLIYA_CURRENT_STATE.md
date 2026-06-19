@@ -1,31 +1,33 @@
 # AQLIYA Current State — Operational Single Source of Truth
 
 **Status:** Active  
-**Version:** 1.1  
-**Effective:** 2026-06-18 (Truth Reconciliation completion pass)
+**Version:** 1.3  
+**Effective:** 2026-06-19
 
-**Authority:** See `docs/source-of-truth/DOCUMENTATION_LINEAGE.md`
+**Authority:** See `docs/source-of-truth/DOCUMENTATION_LINEAGE.md`  
+**Full audit:** `docs/audits/truth-reconciliation-2026-06-18/FINAL_TRUTH_RECONCILIATION.md`
 
 ---
 
-## Validation snapshot (2026-06-18 final)
+## Validation snapshot
 
-Evidence: `docs/reports/2026-06-18-final-*.txt`
+Evidence: `docs/reports/2026-06-19-final-*.txt` (+ 2026-06-18 benchmark/smoke)
 
 | Check | Result |
 |-------|--------|
-| TypeScript | **PASS** — `docs/reports/2026-06-18-final-tsc.txt` |
-| Tests | **PASS** — 247 suites, **2383** tests, 21 skipped |
-| Lint | **PASS** — **0 errors**, ~240 warnings |
-| Build | **PASS** — 131 pages, institutional-memory routes included |
-| Local AI smoke | **PASS** — 2026-06-18, Ollama qwen3:8b |
-| TB benchmark (n=20) | **PASS** — AI 100% exact, rules 95% |
+| TypeScript | **PASS** — `docs/reports/2026-06-19-final-tsc.txt` |
+| Tests | **PASS** — 249 suites, **2462** tests (re-run 2026-06-19) |
+| Lint | **PASS** — **0 errors**, ~241 warnings — `2026-06-19-final-lint.txt` |
+| Build | **PASS** — 131 pages — `docs/reports/2026-06-19-final-build.txt` |
+| Factory static smoke | **PASS** — 33 checks |
+| Local AI smoke | **PASS** — Ollama qwen3:8b |
+| TB benchmark (n=100) | **AI 87%** exact, rules 65% |
 
 ---
 
-## Overall score: **70/100**
+## Overall score: **72/100**
 
-Pilot-capable for AuditOS + LocalContentOS. Not enterprise-production-ready (live AWS/DR unverified).
+Pilot-capable; production health endpoint verified. Staging DNS missing; full AWS audit incomplete.
 
 ---
 
@@ -34,46 +36,50 @@ Pilot-capable for AuditOS + LocalContentOS. Not enterprise-production-ready (liv
 ### Strong (pilot core)
 - **AuditOS** L5 — TB/IFRS/SOCPA/FS/reconciliation factory + 86 targeted tests
 - **LocalContentOS** L5 conditional — workbook, AI advisor, review/quality
-- **AI Core + TB Factory** L4→L5 conditional
+- **AI Core + TB Factory** L4→L5 conditional — Local AI 87% on full benchmark
 
 ### Medium
 - **DecisionOS** L4→L5 conditional
-- **WorkflowOS** L4 internal
+- **WorkflowOS** L4→L5 conditional
 - **Office AI** L4 shared app
 - **SalesOS** L4 active-with-caution
-- **LocalContactOS** L4→L5 partial
-- **Institutional Memory** L4 partial — `/institutional-memory/*`, Prisma models, typed actions
+- **LocalContactOS** L5 pilot-ready
+- **Institutional Memory** L4 partial — `/institutional-memory/*`, graph, typed actions
+- **RiskOS** L4 usable v0.1 — `/risk/*` dashboard, KPIs, seed model/assessment (AuditOS models; not standalone product)
 
 ### Weak / strategic
 - **Organizations** L3 mock
-- **RiskOS** L3 submodule (`/risk/*`)
-- **Local AI** L4 pilot (operator; smoke evidence 2026-06-16)
+- **Local AI runtime** L4 pilot (operator Ollama required)
 - **On-Prem / Air-Gap** L0
-- **Enterprise ops** L2→L3 (IaC exists; live unverified)
+- **Enterprise ops** L2→L3 — IaC in repo; see `ENTERPRISE_OPS_CHECKLIST.md`
 
 ---
 
-## Truth debt closed (2026-06-18)
+## Recent changes (2026-06-19)
 
-- `PRODUCT_STATUS_AUTHORITY_MATRIX.md` reconciled
-- `AQLIYA_MASTER_REFERENCE.md` §9/§13/§14 fixed
-- `FINAL_REALITY_AUDIT.md` superseded banner
-- `TB_CLASSIFICATION_BENCHMARK.md` superseded banner
-- `DOCUMENTATION_LINEAGE.md` created
+- RiskOS dashboard rewrite — KPI cards, distribution chart, assessments table, `getRiskDashboardStatsAction`
+- Seed: AuditRiskModel + Assessment + 2 Procedures
+- Sidebar: مخاطر المنشأة link
 
 ---
 
 ## Not verified this cycle
 
-- AWS ECS / RDS / Redis live state
-- Backup restore on production RDS
-- Cypress E2E
-- Full TB benchmark (100 accounts) — sample n=20 re-run 2026-06-18
+- AWS ECS / RDS / Redis live state (beyond health endpoint)
+- Staging DNS — `staging.aqliya.com` ENOTFOUND
+- Cypress E2E — **21/28** sprint-3-5 routes (auth gates all pass; 7 content assertions stale)
 - External pen test
+- Terraform validate (CLI not on dev machine)
+
+## Verified 2026-06-19
+
+- Production post-deploy smoke — **28/30 critical PASS** (`2026-06-19-production-smoke.txt`)
+- Production health — DB ok (`2026-06-19-production-probe.txt`)
+- Build at HEAD — **131 routes PASS** (`2026-06-19-final-build.txt`)
 
 ---
 
 ## Unsupported claims
 
-Do not claim L6, enterprise-ready, On-Prem/Air-Gap packages, or autonomous AI.  
-Cite test count only with link to `docs/reports/2026-06-18-final-test.txt`.
+Do not claim L6, enterprise-ready, On-Prem/Air-Gap packages, autonomous AI, or RiskOS as standalone marketed product.  
+Cite test count only with link to `docs/reports/2026-06-19-final-test.txt`.

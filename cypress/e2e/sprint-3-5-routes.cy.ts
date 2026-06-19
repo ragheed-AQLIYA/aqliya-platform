@@ -27,13 +27,8 @@
   });
 
   describe("Authenticated route loading", () => {
-    // Login once before all authenticated tests
     before(() => {
-      cy.visit("/login");
-      cy.get('input[name="email"]').type("admin@aqliya.com");
-      cy.get('input[name="password"]').type("admin123");
-      cy.get('button[type="submit"]').click();
-      cy.url().should("not.include", "/login");
+      cy.loginAdmin();
     });
 
     // Decision Gov Routes
@@ -59,7 +54,7 @@
       it("should load the risk assessment dashboard", () => {
         cy.visit("/risk");
         cy.get("html").should("have.attr", "dir", "rtl");
-        cy.contains(/مخاطر|risk|نموذج|model/i).should("exist");
+        cy.contains("مخاطر المنشأة", { timeout: 15000 }).should("exist");
       });
     });
 

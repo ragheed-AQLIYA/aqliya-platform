@@ -82,6 +82,7 @@ export interface AuditRiskAssessment {
 export interface ProcedureStep {
   stepNumber: number
   instruction: string
+  completed?: boolean
 }
 
 export interface AuditRiskProcedure {

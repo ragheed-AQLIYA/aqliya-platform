@@ -24,6 +24,8 @@
 | 5 | Backup retention | RDS backup window + 30-day retention | Matches runbook | reports |
 | 6 | Restore drill | `scripts/platform/restore-drill.mjs` on staging RDS | Row-count spot-check PASS | JSON report in reports |
 | 7 | Post-deploy smoke | `scripts/post-deploy-smoke.mjs --base-url https://staging.aqliya.com` | All checks green | reports |
+| 7a | Staging DNS | `node scripts/platform/staging-probe.mjs` | DNS + health 2xx | **FAIL 2026-06-19:** staging.aqliya.com ENOTFOUND |
+| 7b | Production health | `STAGING_BASE_URL=https://aqliya.com node scripts/platform/staging-probe.mjs` | HTTP 200 + DB check | **PASS 2026-06-19** — see `docs/reports/2026-06-19-production-probe.txt` |
 | 8 | ClamAV | `SCANNER_PROVIDER=clamav` + daemon | Upload scan PASS | ops log |
 | 9 | Rate limiter | `RATE_LIMITER=redis` in ECS task def | No in-memory drift across tasks | task def export |
 | 10 | CloudWatch alarms | Alarm state OK for CPU, memory, 5xx | No INSUFFICIENT_DATA on critical | reports |

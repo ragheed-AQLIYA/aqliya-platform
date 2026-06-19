@@ -4,10 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, Settings, Shield } from "lucide-react";
+import { LayoutDashboard, Users, Settings, Shield, AlertTriangle } from "lucide-react";
 
 const navigation = [
   { name: "حوكمة القرارات", href: "/decisions", icon: LayoutDashboard },
+  { name: "مخاطر المنشأة", href: "/risk", icon: AlertTriangle },
   { name: "المنظمات", href: "/organizations", icon: Users },
   { name: "الإعدادات", href: "/settings", icon: Settings },
   { name: "إعدادات الدخول الموحد", href: "/settings/sso", icon: Shield },

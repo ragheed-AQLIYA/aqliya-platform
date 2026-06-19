@@ -33,6 +33,14 @@ async function main() {
   await prisma.objective.deleteMany();
   await prisma.tenderProfile.deleteMany();
   await prisma.decision.deleteMany();
+  await prisma.auditRiskProcedure.deleteMany();
+  await prisma.auditRiskAssessment.deleteMany();
+  await prisma.auditRiskModel.deleteMany();
+  await prisma.workflowEvidence.deleteMany();
+  await prisma.workflowRecord.deleteMany();
+  await prisma.workflowTemplate.deleteMany();
+  await prisma.institutionalMemoryEvent.deleteMany();
+  await prisma.institutionalMemoryCollection.deleteMany();
   await prisma.tenantIntegration.deleteMany();
   await prisma.user.deleteMany();
   await prisma.organization.deleteMany();
@@ -1501,6 +1509,119 @@ async function main() {
     ],
   });
   console.log("Created 2 InstitutionalMemory collections");
+
+  // ─── RiskOS seeds ───
+  const riskModel = await prisma.auditRiskModel.create({
+    data: {
+      organizationId: org.id,
+      name: "نموذج مخاطر التدقيق الأساسي",
+      description: "نموذج شامل لتقييم مخاطر التدقيق المالي والتشغيلي",
+      categories: [
+        {
+          name: "مخاطر مالية",
+          weight: 40,
+          questions: [
+            { id: "rq-fin-1", text: "هل توجد أخطاء جوهرية في القوائم المالية؟", weight: 40, type: "scale" },
+            { id: "rq-fin-2", text: "هل الضوابط الداخلية على التدفق النقدي كافية؟", weight: 30, type: "scale" },
+            { id: "rq-fin-3", text: "هل الالتزام بالمعايير المحاسبية مناسب؟", weight: 30, type: "scale" },
+          ],
+        },
+        {
+          name: "مخاطر تشغيلية",
+          weight: 35,
+          questions: [
+            { id: "rq-ops-1", text: "هل هناك انقطاعات متكررة في العمليات؟", weight: 35, type: "scale" },
+            { id: "rq-ops-2", text: "هل سياسات الصيانة والسلامة محدثة؟", weight: 30, type: "scale" },
+            { id: "rq-ops-3", text: "هل كفاءة الموارد البشرية كافية؟", weight: 35, type: "scale" },
+          ],
+        },
+        {
+          name: "مخاطر امتثال",
+          weight: 25,
+          questions: [
+            { id: "rq-comp-1", text: "هل المنشأة ملتزمة باللوائح التنظيمية؟", weight: 40, type: "scale" },
+            { id: "rq-comp-2", text: "هل هناك تقارير امتثال حديثة؟", weight: 30, type: "scale" },
+            { id: "rq-comp-3", text: "هل التصاريح والتراخيص سارية؟", weight: 30, type: "scale" },
+          ],
+        },
+      ],
+      thresholds: { low: 30, medium: 60, high: 80 },
+      version: 1,
+      isActive: true,
+      createdById: admin.id,
+    },
+  });
+  console.log(`Created AuditRiskModel: ${riskModel.name}`);
+
+  const riskAssessment = await prisma.auditRiskAssessment.create({
+    data: {
+      modelId: riskModel.id,
+      organizationId: org.id,
+      engagementId: "eng-gulf-2025",
+      title: "تقييم مخاطر التدقيق المالي - الخليج",
+      inherentScore: 72,
+      inherentLevel: "HIGH",
+      residualScore: 58,
+      residualLevel: "MEDIUM",
+      riskResponse: "MITIGATE",
+      responseNotes: "تطبيق ضوابط إضافية على التدفق النقدي والتقارير المالية",
+      answers: {
+        "rq-fin-1": 8,
+        "rq-fin-2": 7,
+        "rq-fin-3": 6,
+        "rq-ops-1": 5,
+        "rq-ops-2": 6,
+        "rq-ops-3": 7,
+        "rq-comp-1": 8,
+        "rq-comp-2": 7,
+        "rq-comp-3": 9,
+      },
+      categoryScores: {
+        "مخاطر مالية": { score: 75, level: "HIGH" },
+        "مخاطر تشغيلية": { score: 60, level: "MEDIUM" },
+        "مخاطر امتثال": { score: 80, level: "HIGH" },
+      },
+      status: "reviewed",
+      assessedById: admin.id,
+      reviewedById: reviewer.id,
+    },
+  });
+  console.log(`Created AuditRiskAssessment: ${riskAssessment.title}`);
+
+  await prisma.auditRiskProcedure.createMany({
+    data: [
+      {
+        assessmentId: riskAssessment.id,
+        organizationId: org.id,
+        procedureCode: "P-FIN-001",
+        description: "مراجعة دورة الإيرادات والمقبوضات النقدية",
+        riskCategory: "مخاطر مالية",
+        procedureSteps: [
+          { step: 1, action: "جمع كشوف الحسابات البنكية", owner: "finance" },
+          { step: 2, action: "مطابقة الإيرادات مع العقود", owner: "audit" },
+          { step: 3, action: "اختبار عينة من القيود المحاسبية", owner: "audit" },
+        ],
+        evidenceRequired: true,
+        status: "draft",
+        createdById: admin.id,
+      },
+      {
+        assessmentId: riskAssessment.id,
+        organizationId: org.id,
+        procedureCode: "P-COMP-001",
+        description: "التحقق من الالتزام باللوائح التنظيمية",
+        riskCategory: "مخاطر امتثال",
+        procedureSteps: [
+          { step: 1, action: "مراجعة قائمة التراخيص", owner: "compliance" },
+          { step: 2, action: "التحقق من تواريخ التجديد", owner: "compliance" },
+        ],
+        evidenceRequired: true,
+        status: "draft",
+        createdById: admin.id,
+      },
+    ],
+  });
+  console.log("Created 2 AuditRiskProcedures");
 
   console.log("Seeding completed successfully!");
 }

@@ -5,7 +5,7 @@
  */
 import { lookup } from "node:dns/promises";
 
-const host = process.env.STAGING_HOST || "staging.aqliya.ai";
+const host = process.env.STAGING_HOST || "staging.aqliya.com";
 const base =
   process.env.STAGING_BASE_URL || `https://${host}`;
 const healthUrl = `${base.replace(/\/$/, "")}/api/health`;

@@ -294,10 +294,10 @@ All routes under `/audit` require **auth** and **tenant isolation**.
 
 | Route | Type | Auth | Status | Product | Notes |
 |-------|------|------|--------|---------|-------|
-| `/risk` | page+error+loading | ✓ | ⚠️ | RiskOS | Dashboard |
-| `/risk/assessments` | page | ✓ | ⚠️ | RiskOS | Assessment list |
-| `/risk/assessments/[id]` | page | ✓ | ⚠️ | RiskOS | Assessment detail |
-| `/risk/[id]` | page | ✓ | ⚠️ | RiskOS | Risk detail |
+| `/risk` | page+layout | ✓ | ✅ | RiskOS | L4 dashboard — KPIs, distribution chart, assessments table, model CRUD |
+| `/risk/assessments` | page | ✓ | ✅ | RiskOS | Assessment list |
+| `/risk/assessments/[id]` | page | ✓ | ✅ | RiskOS | Assessment detail + procedures |
+| `/risk/[id]` | page | ✓ | ✅ | RiskOS | Model detail |
 
 ---
 
