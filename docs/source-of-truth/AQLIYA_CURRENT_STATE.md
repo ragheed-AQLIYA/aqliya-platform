@@ -1,7 +1,7 @@
 # AQLIYA Current State — Operational Single Source of Truth
 
 **Status:** Active  
-**Version:** 1.4  
+**Version:** 1.5  
 **Effective:** 2026-06-18
 
 **Authority:** See `docs/source-of-truth/DOCUMENTATION_LINEAGE.md`  
@@ -11,76 +11,75 @@
 
 ## Validation snapshot
 
-Evidence: `docs/reports/2026-06-19-final-*.txt`, `docs/reports/2026-06-18-cypress-*.txt`
+Evidence: `docs/reports/2026-06-18-*`, `docs/reports/2026-06-19-final-*.txt`
 
 | Check | Result |
 |-------|--------|
 | TypeScript | **PASS** — `docs/reports/2026-06-19-final-tsc.txt` |
-| Tests | **PASS** — 249 suites, **2462** tests (2026-06-19) |
+| Tests | **PASS** — 249 suites, **2462** tests |
 | Lint | **PASS** — **0 errors**, ~241 warnings |
-| Build | **PASS** — 131 routes (re-build 2026-06-18 with SalesOS sidebar) |
+| Build | **PASS** — 131 routes |
 | Factory static smoke | **PASS** — 33 checks |
 | Local AI smoke | **PASS** — Ollama qwen3:8b |
 | TB benchmark (n=100) | **AI 87%** exact, rules 65% |
-| Cypress E2E (11 specs) | **161 executed PASS**, **3 pending** (DB seed optional) — `2026-06-18-cypress-full-v2.txt` |
+| Cypress E2E (11 specs) | **162 pass** (incl. sampling 3/3 after `seed:audit`) — `2026-06-18-cypress-full-v2.txt` |
+| Production health | **PASS** — `2026-06-18-production-probe.txt` |
+| Production smoke | **PASS** — 28/30 critical — `2026-06-18-production-smoke.txt` |
+| Staging DNS | **FAIL** — `staging.aqliya.com` ENOTFOUND — `2026-06-18-staging-probe.txt` |
 
 ---
 
-## Overall score: **74/100**
+## Overall score: **75/100**
 
-Pilot-capable with broad E2E coverage. Staging DNS missing; full AWS audit incomplete.
+Pilot-capable; production verified remotely. Staging DNS missing; AWS live audit blocked (no CLI on dev machine).
 
 ---
 
 ## Product layers
 
 ### Strong (pilot core)
-- **AuditOS** L5 — TB/IFRS/SOCPA/FS/reconciliation factory + 86 targeted tests
-- **LocalContentOS** L5 conditional — workbook, AI advisor, review/quality
+- **AuditOS** L5 — TB/IFRS/SOCPA/FS/reconciliation factory; full seed via `npm run seed:audit` (23 TB lines on eng-gulf-2025)
+- **LocalContentOS** L5 conditional
 - **AI Core + TB Factory** L4→L5 conditional — Local AI 87% on full benchmark
 
 ### Medium
 - **DecisionOS** L4→L5 conditional
 - **WorkflowOS** L4→L5 conditional
 - **Office AI** L4 shared app
-- **SalesOS** L5 pilot-ready — sidebar entry, Prisma seed, product nav (pipeline/deals/accounts/intelligence/activities/reports)
+- **SalesOS** L5 pilot-ready — sidebar, seed, product nav
 - **LocalContactOS** L5 pilot-ready
-- **Institutional Memory** L4 partial — `/institutional-memory/*`, graph, typed actions
-- **RiskOS** L4 usable v0.1 — `/risk/*` dashboard (AuditOS models; not standalone product)
+- **Institutional Memory** L4 partial
+- **RiskOS** L4 usable v0.1 — `/risk/*` (not standalone product)
 
 ### Weak / strategic
 - **Organizations** L3 mock
-- **Local AI runtime** L4 pilot (operator Ollama required)
 - **On-Prem / Air-Gap** L0
-- **Enterprise ops** L2→L3 — IaC in repo; see `ENTERPRISE_OPS_CHECKLIST.md`
+- **Enterprise ops** L2→L3 — IaC in repo; production health/smoke verified; staging/AWS CLI checks pending operator
 
 ---
 
-## Recent changes (2026-06-18)
+## Recent changes (2026-06-18 Phase 2)
 
-- **SalesOS L5** — platform-sidebar module + sales nav; ProductWorkspaceNotice pilot; seedSalesOS in main seed
-- **Cypress** — 11 specs aligned to routes/copy; `cy.loginAdmin()` session; marketing contact/buyers text; optional skip when TB/decision seed missing
-- **E2E** — full suite 161/162 pass (3 pending when DB lacks trial-balance lines or tender recommendation seed)
+- Production probe re-run — HTTP 200, DB ok (commit `da2e2fb` deployed)
+- Production post-deploy smoke — 28/30 critical PASS
+- Staging probe — DNS ENOTFOUND (blocker for staging smoke)
+- `npm run seed:audit` — 23 TB lines for eng-gulf-2025 (sampling E2E precondition)
+- `staging-probe.mjs` — Windows exit fix (libuv crash)
 
 ---
 
-## Not verified this cycle
+## Operator blockers (Phase 3)
 
-- AWS ECS / RDS / Redis live state (beyond health endpoint)
-- Staging DNS — `staging.aqliya.com` ENOTFOUND
-- External pen test
-- Terraform validate (CLI not on dev machine)
-- Sampling generation E2E (requires seeded trial-balance lines)
-
-## Verified 2026-06-18 / 2026-06-19
-
-- Production post-deploy smoke — **28/30 critical PASS**
-- Production health — DB ok
-- Cypress — audit-os 16/16, auth 9/9, routing-and-gates 39/39, sprint-3-5 28/28, sales-os 24/24, marketing 7/7, local-content 9/9, audit-factory 9/9
+| Item | Status |
+|------|--------|
+| Terraform validate | **BLOCKED** — CLI not installed locally |
+| AWS ECS/RDS/Redis | **BLOCKED** — AWS CLI not on dev machine |
+| Restore drill on live RDS | **NOT RUN** — requires staging/prod access |
+| Staging DNS + smoke | **BLOCKED** — ENOTFOUND |
+| External pen test | **NOT SCHEDULED** |
 
 ---
 
 ## Unsupported claims
 
-Do not claim L6, enterprise-ready, On-Prem/Air-Gap packages, autonomous AI, or RiskOS as standalone marketed product.  
-Cite test count only with link to `docs/reports/2026-06-19-final-test.txt`.
+Do not claim L6, enterprise-ready, On-Prem/Air-Gap packages, autonomous AI, or RiskOS as standalone marketed product.

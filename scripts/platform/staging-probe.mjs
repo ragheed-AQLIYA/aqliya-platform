@@ -19,7 +19,8 @@ async function probe() {
     console.log(`DNS OK: ${host} → ${addrs.address}`);
   } catch (err) {
     console.error(`DNS FAIL: ${host} — ${err.message}`);
-    process.exit(1);
+    setTimeout(() => process.exit(1), 0);
+    return;
   }
 
   const ac = new AbortController();
@@ -32,13 +33,14 @@ async function probe() {
     if (res.ok) {
       const text = await res.text();
       if (text.length < 500) console.log(text);
-      process.exit(0);
+      setTimeout(() => process.exit(0), 0);
+      return;
     }
-    process.exit(2);
+    setTimeout(() => process.exit(2), 0);
   } catch (err) {
     clearTimeout(timer);
     console.error(`HTTP FAIL: ${err.message}`);
-    process.exit(1);
+    setTimeout(() => process.exit(1), 0);
   }
 }
 

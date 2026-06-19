@@ -1,7 +1,25 @@
 # AuditOS — Pilot Runbook
 
-**Phase:** 5 — Pilot Hardening
+**Phase:** 5 — Pilot Hardening  
 **Target:** First controlled pilot customer
+
+## Platform pilot quick reference (2026-06)
+
+Multi-product pilots on AQLIYA share these prerequisites:
+
+| Step | Command / route | Pass |
+|------|-----------------|------|
+| Health | `STAGING_BASE_URL=https://aqliya.com node scripts/platform/staging-probe.mjs` | HTTP 200 + DB |
+| Smoke | `node scripts/platform/post-deploy-smoke.mjs --base-url https://aqliya.com` | 28/30 critical |
+| AuditOS data | `npm run seed:audit` | 23 TB lines on `eng-gulf-2025` |
+| E2E (local) | `npm run build && npm run start:standalone:e2e` + `npx cypress run` | 11 specs |
+| Truth doc | `docs/source-of-truth/AQLIYA_CURRENT_STATE.md` | Current score + limits |
+
+**Blockers:** Staging DNS (`staging.aqliya.com` ENOTFOUND), AWS CLI/terraform on operator machine, external pen test.
+
+Product-specific sections below start with **AuditOS**.
+
+---
 
 ## 1. Pilot Objective
 

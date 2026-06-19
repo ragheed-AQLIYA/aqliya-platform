@@ -23,6 +23,16 @@
 
 Earlier same-day artifacts: `2026-06-18-{tsc,test,lint,build}.txt` (superseded by `-final-` after lint/code fixes).
 
+## Follow-up — 2026-06-18 (Phase 2)
+
+| Artifact | Command | Result |
+|----------|---------|--------|
+| [2026-06-18-staging-probe.txt](./2026-06-18-staging-probe.txt) | `STAGING_HOST=staging.aqliya.com npm run staging:probe` | **FAIL** — ENOTFOUND |
+| [2026-06-18-production-probe.txt](./2026-06-18-production-probe.txt) | production health | **PASS** — HTTP 200, DB ok |
+| [2026-06-18-production-smoke.txt](./2026-06-18-production-smoke.txt) | post-deploy smoke | **PASS** — 28/30 critical |
+| [2026-06-18-cypress-full-v2.txt](./2026-06-18-cypress-full-v2.txt) | Cypress 11 specs | **152 pass**, 10 fail → fixed in `728df9d` |
+| seed:audit (local) | `npm run seed:audit` | **PASS** — 23 TB lines |
+
 ## Follow-up — 2026-06-19
 
 | Artifact | Command | Result |
