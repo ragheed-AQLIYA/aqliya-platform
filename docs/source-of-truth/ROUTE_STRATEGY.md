@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-06-19 — RiskOS → L5 Pilot-ready (procedure step tracking, audit trail, export, docs update)
+> **Last updated:** 2026-06-19 — SalesOS → L5 Pilot-ready (sidebar, seed wiring, warning cleanup, docs update)
 
 ---
 
@@ -208,42 +208,42 @@ These pages serve as detail references for specialized operating systems. They a
 | `/intelligence/sectors`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector intelligence |
 | `/intelligence/sectors/[id]` | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector detail       |
 
-### SalesOS — Governed CRM-lite Workspace (27 routes)
+### SalesOS — Governed Commercial Intelligence Workspace (30 routes)
 
-| Route                                  | Product/System | Route Type         | Public/Protected | Implementation Status    | Notes                                            |
-| -------------------------------------- | -------------- | ------------------ | ---------------- | ------------------------ | ------------------------------------------------ |
-| `/sales`                               | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Dashboard, server-action-backed                  |
-| `/sales/accounts`                      | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Account list                                     |
-| `/sales/accounts/new`                  | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Create account                                   |
-| `/sales/accounts/[id]`                 | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Account detail                                   |
-| `/sales/accounts/[id]/brief`           | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Account brief export preview                     |
-| `/sales/accounts/[id]/brief/export`    | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Account brief export                             |
-| `/sales/activities`                    | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Activity stream                                  |
-| `/sales/approval`                      | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Approval queue                                   |
-| `/sales/audit-trail`                   | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Audit log viewer                                 |
-| `/sales/command-center`                | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Command center                                   |
-| `/sales/deals`                         | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Deal list                                        |
-| `/sales/deals/new`                     | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Create deal                                      |
-| `/sales/deals/[id]`                    | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Deal detail                                      |
-| `/sales/deals/[id]/pilot`              | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Deal pilot handoff                               |
-| `/sales/deals/[id]/pilot/export`       | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Pilot export                                     |
-| `/sales/icp`                           | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | ICP scoring & analysis                           |
-| `/sales/intelligence`                  | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Sales intelligence hub (S7-01)                   |
-| `/sales/forecast`                      | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | S7-02 pipeline forecast (deterministic)          |
-| `/sales/funnel`                        | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | S7-06 conversion funnel analytics              |
-| `/sales/pipeline-depth`                | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | S7-07 pipeline depth analytics                 |
-| `/sales/opportunities`                 | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Opportunity list                                 |
-| `/sales/opportunities/new`             | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Create opportunity                               |
-| `/sales/opportunities/[id]`            | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Opportunity detail                               |
-| `/sales/outreach`                      | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Governed outreach drafts (no auto-send)          |
-| `/sales/pilot-handoff/[dealId]`        | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Pilot handoff page                               |
-| `/sales/pipeline`                      | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Pipeline view                                    |
-| `/sales/reports`                       | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Reports                                          |
-| `/sales/revenue`                       | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Revenue tracking                                 |
-| `/sales/review`                        | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Review queue                                     |
-| `/sales/signals`                       | SalesOS        | Governed workspace | Protected        | Prototype (L3→L4)       | Signal feed                                      |
+| Route                               | Product/System | Route Type             | Public/Protected | Implementation Status | Notes                                       |
+| ----------------------------------- | -------------- | ---------------------- | ---------------- | --------------------- | ------------------------------------------- |
+| `/sales`                               | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Dashboard, server-action-backed                  |
+| `/sales/accounts`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Account list                                     |
+| `/sales/accounts/new`                  | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Create account                                   |
+| `/sales/accounts/[id]`                 | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Account detail                                   |
+| `/sales/accounts/[id]/brief`           | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Account brief export preview                     |
+| `/sales/accounts/[id]/brief/export`    | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Account brief export                             |
+| `/sales/activities`                    | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Activity stream                                  |
+| `/sales/approval`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Approval queue                                   |
+| `/sales/audit-trail`                   | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Audit log viewer                                 |
+| `/sales/command-center`                | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Command center                                   |
+| `/sales/deals`                         | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Deal list                                        |
+| `/sales/deals/new`                     | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Create deal                                      |
+| `/sales/deals/[id]`                    | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Deal detail                                      |
+| `/sales/deals/[id]/pilot`              | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Deal pilot handoff                               |
+| `/sales/deals/[id]/pilot/export`       | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Pilot export                                     |
+| `/sales/icp`                           | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | ICP scoring & analysis                           |
+| `/sales/intelligence`                  | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Sales intelligence hub (S7-01)                   |
+| `/sales/forecast`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | S7-02 pipeline forecast (deterministic)          |
+| `/sales/funnel`                        | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | S7-06 conversion funnel analytics              |
+| `/sales/pipeline-depth`                | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | S7-07 pipeline depth analytics                 |
+| `/sales/opportunities`                 | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Opportunity list                                 |
+| `/sales/opportunities/new`             | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Create opportunity                               |
+| `/sales/opportunities/[id]`            | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Opportunity detail                               |
+| `/sales/outreach`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Governed outreach drafts (no auto-send)          |
+| `/sales/pilot-handoff/[dealId]`        | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Pilot handoff page                               |
+| `/sales/pipeline`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Pipeline view                                    |
+| `/sales/reports`                       | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Reports                                          |
+| `/sales/revenue`                       | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Revenue tracking                                 |
+| `/sales/review`                        | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Review queue                                     |
+| `/sales/signals`                       | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Signal feed                                      |
 
-**SalesOS maturity notes:** Builds and compiles (2026-06-02) after Phantom Imports Gate. Real Prisma schema, server actions, RBAC, audit trail, evidence links. Test suite: 138 suites, 1069 tests, 0 failed. Not yet L4 production-usable — pending seed data verification and browser smoke test.
+**SalesOS maturity notes (2026-06-19):** Upgraded to L5 Pilot-ready — sidebar entry in both sidebars, Prisma seed wired in main prisma/seed.ts, prototype warnings replaced with L5 pilot status. Prisma-backed P0 Core models (13). All ~80 components compile. Test suite: 2,462 tests pass, 249 suites. Dashboard uses in-memory store as fallback (Prisma-backed client available as sales-dashboard-client.tsx). Not L6 — no automated CRM sync or email/calendar integration.
 
 ### Organizations — Prototype Surface
 
@@ -393,7 +393,7 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). L5 Pilot-ready at 100% (7/7 GREEN). See limitations in route table above.
 5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). L5 Pilot-ready — template workflows, SLA monitoring, gated export, 31 action tests, seed data.
 6. `/sunbul/*` = redirect alias family over WorkflowOS implementation. Every route is a `permanentRedirect(302)` wrapper.
-7. `/organizations/*` and `/settings` must be labeled prototype/internal preview until they have real persistence and workflow backing. SalesOS is no longer prototype-only — 27 routes with real Prisma schema, server actions, RBAC, audit trail, and evidence links now compile and build. Remaining gaps: seed data verification and browser smoke test.
+7. `/organizations/*` and `/settings` must be labeled prototype/internal preview until they have real persistence and workflow backing. SalesOS is now L5 Pilot-ready — 30 routes with real Prisma models, server actions, RBAC, audit trail, evidence links, seed data, and sidebar navigation. In-memory dashboard remains as fallback.
 8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/download`) must remain permissioned.
 9. Do not create `/simulation` top-level routes until that system has a real workspace implementation.
 10. Product marketing pages belong under `/products/*`.

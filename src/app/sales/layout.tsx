@@ -23,7 +23,7 @@ export default async function SalesLayout({
         <PlatformHeader />
         <main className="flex-1 overflow-y-auto">
           <div className="p-4 sm:p-6 lg:p-8">
-            <ProductWorkspaceNotice productNameAr="SalesOS" level="prototype" />
+            <ProductWorkspaceNotice productNameAr="SalesOS" level="pilot" />
             <SalesNav />
             {children}
           </div>

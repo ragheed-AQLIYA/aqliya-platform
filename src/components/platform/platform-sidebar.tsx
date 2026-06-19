@@ -67,6 +67,16 @@ const modules = [
     bgActive: "bg-module-localcontent/10",
     borderActive: "border-l-module-localcontent",
   },
+  {
+    id: "sales",
+    name: "SalesOS",
+    nameAr: "نظام المبيعات",
+    icon: TrendingUp,
+    href: "/sales",
+    color: "text-module-sales",
+    bgActive: "bg-module-sales/10",
+    borderActive: "border-l-module-sales",
+  },
 ];
 
 const platformNav = [
@@ -201,6 +211,7 @@ function getActiveModule(pathname: string | null) {
   if (pathname.startsWith("/local-content")) return "localContent";
   if (pathname.startsWith("/workflowos") || pathname.startsWith("/sunbul"))
     return "workflowos";
+  if (pathname.startsWith("/sales")) return "sales";
   if (
     pathname.startsWith("/decisions") ||
     pathname.startsWith("/organizations") ||
@@ -234,31 +245,41 @@ const salesNav = [
     href: "/sales",
     icon: LayoutDashboard,
   },
-  { name: "المنظمات", href: "/organizations", icon: Users },
-  { name: "الإعدادات", href: "/settings", icon: Settings },
   {
-    name: "Platform Organization",
-    nameAr: "منظمة المنصة",
-    href: "/settings/platform-organization",
-    icon: ShieldCheck,
+    name: "Pipeline",
+    nameAr: "مسار المبيعات",
+    href: "/sales/pipeline",
+    icon: TrendingUp,
   },
   {
-    name: "Client Workspaces",
-    nameAr: "مساحات العملاء",
-    href: "/settings/workspaces",
-    icon: LayoutDashboard,
+    name: "Deals",
+    nameAr: "الصفقات",
+    href: "/sales/deals",
+    icon: FileSpreadsheet,
   },
   {
-    name: "Platform Audit Logs",
-    nameAr: "سجلات تدقيق المنصة",
-    href: "/settings/audit-logs",
-    icon: ScrollText,
+    name: "Accounts",
+    nameAr: "الحسابات",
+    href: "/sales/accounts",
+    icon: Building2,
   },
   {
-    name: "Office AI Assistant",
-    nameAr: "مساعد العمل الذكي",
-    href: "/assistant",
-    icon: Bot,
+    name: "Intelligence",
+    nameAr: "الذكاء التجاري",
+    href: "/sales/intelligence",
+    icon: Brain,
+  },
+  {
+    name: "Activities",
+    nameAr: "النشاطات",
+    href: "/sales/activities",
+    icon: BarChart3,
+  },
+  {
+    name: "Reports",
+    nameAr: "التقارير",
+    href: "/sales/reports",
+    icon: FileText,
   },
 ];
 

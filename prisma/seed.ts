@@ -11,6 +11,7 @@ import {
   ApprovalStatus,
 } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { seedSalesOS } from "./seed-sales";
 
 // Load .env file explicitly
 config({ path: resolve(__dirname, "../.env") });
@@ -20,6 +21,17 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   // Clean existing data
+  await prisma.salesAuditEvent.deleteMany();
+  await prisma.salesApproval.deleteMany();
+  await prisma.salesReview.deleteMany();
+  await prisma.salesProposal.deleteMany();
+  await prisma.salesEvidenceLink.deleteMany();
+  await prisma.salesInteraction.deleteMany();
+  await prisma.salesContact.deleteMany();
+  await prisma.salesDeal.deleteMany();
+  await prisma.salesAccount.deleteMany();
+  await prisma.salesPipelineStage.deleteMany();
+  await prisma.salesPipeline.deleteMany();
   await prisma.auditLog.deleteMany();
   await prisma.decisionReport.deleteMany();
   await prisma.approval.deleteMany();
@@ -1687,6 +1699,10 @@ async function main() {
     ],
   });
   console.log("Created 2 AuditRiskProcedures");
+
+  // ─── SalesOS Seed ───
+  await seedSalesOS(prisma, platformOrg.id, org.id, admin.id);
+  console.log("SalesOS seeded successfully!");
 
   console.log("Seeding completed successfully!");
 }

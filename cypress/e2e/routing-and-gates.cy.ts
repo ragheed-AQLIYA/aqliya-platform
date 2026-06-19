@@ -31,7 +31,7 @@
       { path: "/about", title: /عن|about/i },
       { path: "/products", title: /منتجات|products/i },
       { path: "/how-we-work", title: /منهجية|how we work/i },
-      { path: "/contact", title: /اتصل|contact/i },
+      { path: "/contact", title: /جلسة تشخيص|تشخيص|contact/i },
       { path: "/platform", title: /منصة|platform/i },
       { path: "/security", title: /أمن|security/i },
       { path: "/privacy", title: /خصوصية|privacy/i },
@@ -45,7 +45,7 @@
       { path: "/pilot-proof", title: /pilot|اثبات/i },
       { path: "/proof-library", title: /مكتبة|proof/i },
       { path: "/executive-brief", title: /تنفيذي|executive/i },
-      { path: "/buyers", title: /مشترين|buyers/i },
+      { path: "/buyers", title: /دليل المشتري|buyers/i },
     ];
 
     publicPages.forEach(({ path, title }) => {

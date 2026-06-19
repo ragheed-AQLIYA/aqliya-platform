@@ -4,7 +4,7 @@ describe("Marketing Pages - Arabic Content", () => {
     { path: "/about", title: "عن" },
     { path: "/products", title: "منتجات" },
     { path: "/how-we-work", title: "منهجية" },
-    { path: "/contact", title: "اتصل" },
+    { path: "/contact", title: "جلسة تشخيص" },
     { path: "/auditos", title: "AuditOS" },
   ];
 
@@ -17,6 +17,8 @@ describe("Marketing Pages - Arabic Content", () => {
   });
 
   it("should have RTL direction on all pages", () => {
+    cy.visit("/");
     cy.document().its("documentElement.lang").should("eq", "ar");
+    cy.get("html").should("have.attr", "dir", "rtl");
   });
 });

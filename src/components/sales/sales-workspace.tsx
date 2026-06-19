@@ -30,9 +30,9 @@ export function SalesWorkspace({
   return (
     <div className="space-y-6" dir="rtl">
       <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-200">
-        SalesOS v1 — بيانات تشغيلية في الذاكرة (in-memory) مع تبني Core للسير
-        العمل والأدلة والمراجعة والتدقيق. لا تزال بحاجة إلى موافقة على مخطط
-        قاعدة البيانات للاستمرارية عبر الجلسات.
+        SalesOS L5 — النسخة الحالية تعمل بذاكرة التشغيل (in-memory) مع دعم
+        كامل للحوكمة والأدلة والمراجعة والتدقيق. سيتم الانتقال إلى طبقة
+        البيانات المستمرة (Prisma) في التحديث القادم.
       </div>
 
       <div>

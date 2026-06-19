@@ -111,10 +111,10 @@ export function SalesDashboardClient({
 
   return (
     <div className="space-y-6" dir="rtl">
-      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
+      <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-200">
         {hasDbData
-          ? "SalesOS v0.3 PR-1 — KPIs ومسار الصفقات موصولان ببيانات Prisma (P0). الذكاء الاصطناعي والمتابعة لا تزال توضيحية."
-          : "SalesOS v0.3 PR-1 — Schema + services جاهزة. شغّل migration `salesos_p0_core` ثم `tsx scripts/seed-sales-demo.ts` لعرض بيانات حقيقية."}
+          ? "SalesOS L5 — بيانات حقيقية من Prisma (P0). جميع التدفقات الأساسية تعمل مع الحوكمة وسجل التدقيق."
+          : "SalesOS L5 — قاعدة البيانات جاهزة. شغّل `npx prisma db seed` لعرض بيانات حقيقية."}
       </div>
 
       {statsError ? (
@@ -139,9 +139,9 @@ export function SalesDashboardClient({
           <p className="mt-1 text-body-sm text-muted-foreground">
             ذكاء الإيرادات وإدارة مسارات البيع المؤسسي
           </p>
-          <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-semibold text-amber-700 dark:bg-amber-900 dark:text-amber-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-            {hasDbData ? "P0 foundation — بيانات تجريبية" : "P0 foundation — schema only"}
+          <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            {hasDbData ? "L5 Pilot-ready — Prisma" : "L5 — database connected"}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">

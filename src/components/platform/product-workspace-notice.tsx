@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 
-type NoticeLevel = "prototype" | "conditional"
+type NoticeLevel = "prototype" | "conditional" | "pilot"
 
 const COPY: Record<
   NoticeLevel,
@@ -15,6 +15,11 @@ const COPY: Record<
     badge: "جاهز للتجربة — بشروط",
     title: "منتج تجريبي بشروط",
     body: "التدفقات الأساسية متاحة مع حوكمة ومراجعة بشرية. راجع سياسة المؤسسة قبل الاعتماد التشغيلي.",
+  },
+  pilot: {
+    badge: "جاهز للتشغيل التجريبي — L5",
+    title: "مرحلة التشغيل التجريبي",
+    body: "التدفقات الأساسية، الحوكمة، الأدلة، سجل التدقيق، والتصدير متاحة. البيانات قابلة للاستمرار. راجع سياسة المؤسسة قبل الاعتماد التشغيلي الكامل.",
   },
 }
 

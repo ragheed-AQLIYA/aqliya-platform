@@ -1,10 +1,6 @@
 ﻿describe("LocalContentOS — Local Content Workspace", () => {
   beforeEach(() => {
-    cy.visit("/login");
-    cy.get('input[type="email"]').type("admin@aqliya.com");
-    cy.get('input[type="password"]').type("admin123");
-    cy.get('button[type="submit"]').click();
-    cy.url({ timeout: 15000 }).should("not.include", "/login");
+    cy.loginAdmin();
   });
 
   it("should load LocalContentOS dashboard with title", () => {
@@ -46,8 +42,8 @@
   });
 
   it("should navigate to settings page", () => {
-    cy.visit("/local-content/settings");
-    cy.url().should("include", "/settings");
+    cy.visit("/local-content/settings/integrations");
+    cy.url().should("include", "/settings/integrations");
   });
 
   it("should have workspace status indicator on dashboard", () => {

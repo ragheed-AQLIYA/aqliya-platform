@@ -1,10 +1,6 @@
 ﻿describe("SalesOS — Sales Workspace", () => {
   beforeEach(() => {
-    cy.visit("/login");
-    cy.get('input[type="email"]').type("admin@aqliya.com");
-    cy.get('input[type="password"]').type("admin123");
-    cy.get('button[type="submit"]').click();
-    cy.url({ timeout: 15000 }).should("not.include", "/login");
+    cy.loginAdmin();
   });
 
   it("should load SalesOS dashboard with title", () => {
@@ -34,9 +30,10 @@
     cy.url().should("include", "/opportunities");
   });
 
-  it("should navigate to contacts page", () => {
-    cy.visit("/sales/contacts");
-    cy.url().should("include", "/contacts");
+  it("should navigate to accounts page for stakeholder contacts", () => {
+    cy.visit("/sales/accounts");
+    cy.url().should("include", "/sales/accounts");
+    cy.contains(/الحسابات|Accounts/i).should("exist");
   });
 
   it("should navigate to forecast page", () => {
@@ -90,8 +87,8 @@
   });
 
   it("should navigate to settings page", () => {
-    cy.visit("/sales/settings");
-    cy.url().should("include", "/settings");
+    cy.visit("/sales/settings/crm");
+    cy.url().should("include", "/settings/crm");
   });
 
   it("should navigate to icp page", () => {

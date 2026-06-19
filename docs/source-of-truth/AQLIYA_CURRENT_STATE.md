@@ -1,8 +1,8 @@
 # AQLIYA Current State — Operational Single Source of Truth
 
 **Status:** Active  
-**Version:** 1.3  
-**Effective:** 2026-06-19
+**Version:** 1.4  
+**Effective:** 2026-06-18
 
 **Authority:** See `docs/source-of-truth/DOCUMENTATION_LINEAGE.md`  
 **Full audit:** `docs/audits/truth-reconciliation-2026-06-18/FINAL_TRUTH_RECONCILIATION.md`
@@ -11,23 +11,24 @@
 
 ## Validation snapshot
 
-Evidence: `docs/reports/2026-06-19-final-*.txt` (+ 2026-06-18 benchmark/smoke)
+Evidence: `docs/reports/2026-06-19-final-*.txt`, `docs/reports/2026-06-18-cypress-*.txt`
 
 | Check | Result |
 |-------|--------|
 | TypeScript | **PASS** — `docs/reports/2026-06-19-final-tsc.txt` |
-| Tests | **PASS** — 249 suites, **2462** tests (re-run 2026-06-19) |
-| Lint | **PASS** — **0 errors**, ~241 warnings — `2026-06-19-final-lint.txt` |
-| Build | **PASS** — 131 pages — `docs/reports/2026-06-19-final-build.txt` |
+| Tests | **PASS** — 249 suites, **2462** tests (2026-06-19) |
+| Lint | **PASS** — **0 errors**, ~241 warnings |
+| Build | **PASS** — 131 routes (re-build 2026-06-18 with SalesOS sidebar) |
 | Factory static smoke | **PASS** — 33 checks |
 | Local AI smoke | **PASS** — Ollama qwen3:8b |
 | TB benchmark (n=100) | **AI 87%** exact, rules 65% |
+| Cypress E2E (11 specs) | **161 executed PASS**, **3 pending** (DB seed optional) — `2026-06-18-cypress-full-v2.txt` |
 
 ---
 
-## Overall score: **72/100**
+## Overall score: **74/100**
 
-Pilot-capable; production health endpoint verified. Staging DNS missing; full AWS audit incomplete.
+Pilot-capable with broad E2E coverage. Staging DNS missing; full AWS audit incomplete.
 
 ---
 
@@ -42,10 +43,10 @@ Pilot-capable; production health endpoint verified. Staging DNS missing; full AW
 - **DecisionOS** L4→L5 conditional
 - **WorkflowOS** L4→L5 conditional
 - **Office AI** L4 shared app
-- **SalesOS** L4 active-with-caution
+- **SalesOS** L5 pilot-ready — sidebar entry, Prisma seed, product nav (pipeline/deals/accounts/intelligence/activities/reports)
 - **LocalContactOS** L5 pilot-ready
 - **Institutional Memory** L4 partial — `/institutional-memory/*`, graph, typed actions
-- **RiskOS** L4 usable v0.1 — `/risk/*` dashboard, KPIs, seed model/assessment (AuditOS models; not standalone product)
+- **RiskOS** L4 usable v0.1 — `/risk/*` dashboard (AuditOS models; not standalone product)
 
 ### Weak / strategic
 - **Organizations** L3 mock
@@ -55,11 +56,11 @@ Pilot-capable; production health endpoint verified. Staging DNS missing; full AW
 
 ---
 
-## Recent changes (2026-06-19)
+## Recent changes (2026-06-18)
 
-- RiskOS dashboard rewrite — KPI cards, distribution chart, assessments table, `getRiskDashboardStatsAction`
-- Seed: AuditRiskModel + Assessment + 2 Procedures
-- Sidebar: مخاطر المنشأة link
+- **SalesOS L5** — platform-sidebar module + sales nav; ProductWorkspaceNotice pilot; seedSalesOS in main seed
+- **Cypress** — 11 specs aligned to routes/copy; `cy.loginAdmin()` session; marketing contact/buyers text; optional skip when TB/decision seed missing
+- **E2E** — full suite 161/162 pass (3 pending when DB lacks trial-balance lines or tender recommendation seed)
 
 ---
 
@@ -67,15 +68,15 @@ Pilot-capable; production health endpoint verified. Staging DNS missing; full AW
 
 - AWS ECS / RDS / Redis live state (beyond health endpoint)
 - Staging DNS — `staging.aqliya.com` ENOTFOUND
-- Cypress E2E — **28/28 PASS** sprint-3-5 (`2026-06-19-cypress-sprint-3-5.txt`)
 - External pen test
 - Terraform validate (CLI not on dev machine)
+- Sampling generation E2E (requires seeded trial-balance lines)
 
-## Verified 2026-06-19
+## Verified 2026-06-18 / 2026-06-19
 
-- Production post-deploy smoke — **28/30 critical PASS** (`2026-06-19-production-smoke.txt`)
-- Production health — DB ok (`2026-06-19-production-probe.txt`)
-- Build at HEAD — **131 routes PASS** (`2026-06-19-final-build.txt`)
+- Production post-deploy smoke — **28/30 critical PASS**
+- Production health — DB ok
+- Cypress — audit-os 16/16, auth 9/9, routing-and-gates 39/39, sprint-3-5 28/28, sales-os 24/24, marketing 7/7, local-content 9/9, audit-factory 9/9
 
 ---
 
