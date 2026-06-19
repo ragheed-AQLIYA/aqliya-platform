@@ -6,7 +6,7 @@ import { WebVitals } from "@/components/platform/web-vitals";
 import { Analytics } from "@/components/platform/analytics";
 import { jsonLd } from "@/components/platform/json-ld";
 import { SkipToContent } from "@/components/platform/skip-to-content";
-import { ServiceWorkerRegister } from "@/components/platform/service-worker-register";
+import { SwUnregister } from "@/components/platform/sw-unregister";
 import { A11yProvider } from "@/components/platform/a11y-provider";
 import "./globals.css";
 
@@ -63,7 +63,7 @@ export default async function RootLayout({
         className={`${notoSansArabic.variable} h-full font-sans antialiased`}
       >
         <SkipToContent />
-        <ServiceWorkerRegister />
+        <SwUnregister />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
