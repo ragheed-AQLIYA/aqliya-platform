@@ -12,6 +12,8 @@ import {
 } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { seedSalesOS } from "./seed-sales";
+import { seedOfficeAI } from "./seed-office-ai";
+import { seedOrganizations } from "./seed-organizations";
 
 // Load .env file explicitly
 config({ path: resolve(__dirname, "../.env") });
@@ -55,6 +57,9 @@ async function main() {
   await prisma.intelligenceGraphNode.deleteMany();
   await prisma.institutionalMemoryEvent.deleteMany();
   await prisma.institutionalMemoryCollection.deleteMany();
+  await prisma.officeAiFile.deleteMany();
+  await prisma.officeAiOutput.deleteMany();
+  await prisma.officeAiTask.deleteMany();
   await prisma.tenantIntegration.deleteMany();
   await prisma.user.deleteMany();
   await prisma.organization.deleteMany();
@@ -82,6 +87,9 @@ async function main() {
     },
   });
   console.log(`Created organization: ${org.name}`);
+
+  // ─── Additional organizations for multi-org demo ───
+  await seedOrganizations(prisma, platformOrg.id);
 
   await prisma.tenantIntegration.upsert({
     where: { id: `ai-${org.id}` },
@@ -1703,6 +1711,10 @@ async function main() {
   // ─── SalesOS Seed ───
   await seedSalesOS(prisma, platformOrg.id, org.id, admin.id);
   console.log("SalesOS seeded successfully!");
+
+  // ─── Office AI Assistant Seed ───
+  await seedOfficeAI(prisma, platformOrg.id, org.id, admin.id);
+  console.log("Office AI Assistant seeded successfully!");
 
   console.log("Seeding completed successfully!");
 }

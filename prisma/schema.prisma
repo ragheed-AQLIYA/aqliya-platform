@@ -298,7 +298,7 @@ model OfficeAiTask {
   clientWorkspaceId      String?
   projectId              String?
   taskType               String // summarize | analyze | draft | outline | exec_summary | meeting_notes
-  status                 String    @default("draft") // draft | finalized | rejected | archived
+  status                 String    @default("draft") // draft | generated | needs_review | reviewed | approved | rejected | archived
   language               String    @default("ar") // ar | en
   title                  String?
   instructions           String?

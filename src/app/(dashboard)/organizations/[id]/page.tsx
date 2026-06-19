@@ -1,72 +1,113 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { notFound } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth";
+import { OrganizationWorkspace } from "@/components/organization/organization-workspace";
 import Link from "next/link";
+import { ArrowRight, Settings } from "lucide-react";
 
-const mockOrg = {
-  id: "org_1",
-  name: "AQLIYA",
-  createdAt: "2025-01-15",
-  members: [
-    { name: "Ahmed Al-Mansouri", email: "ahmed@aqliya.com", role: "ADMIN" },
-    { name: "Sara Al-Otaibi", email: "sara@aqliya.com", role: "MEMBER" },
-    { name: "Mohammad Al-Harbi", email: "mohammad@aqliya.com", role: "ADMIN" },
-  ],
-  decisionCount: 34,
-};
+export const dynamic = "force-dynamic";
 
-export default function OrganizationDetailPage() {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function OrganizationDetailPage({ params }: PageProps) {
+  const { id } = await params;
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  const org = await prisma.organization.findFirst({
+    where: {
+      id,
+      ...(user.organizationId
+        ? { platformOrganizationId: user.organizationId }
+        : {}),
+    },
+    include: {
+      _count: {
+        select: { users: true, decisions: true },
+      },
+      users: {
+        select: { role: true },
+      },
+    },
+  });
+
+  if (!org) {
+    notFound();
+  }
+
+  // Count users by role
+  const roleCounts: Record<string, number> = {
+    ADMIN: 0,
+    OPERATOR: 0,
+    VIEWER: 0,
+  };
+  for (const u of org.users) {
+    const key = u.role as string;
+    roleCounts[key] = (roleCounts[key] || 0) + 1;
+  }
+
+  // Sunbul / WorkflowOS counts
+  const platformOrgId = org.platformOrganizationId;
+  let sunbulClientCount = 0;
+  let sunbulRecordCount = 0;
+  let sunbulMembershipCount = 0;
+
+  if (platformOrgId) {
+    sunbulClientCount = await prisma.sunbulClient.count({
+      where: { platformOrganizationId: platformOrgId },
+    });
+    sunbulRecordCount = await prisma.workflowRecord.count({
+      where: {
+        template: { platformOrganizationId: platformOrgId },
+      },
+    });
+    sunbulMembershipCount = await prisma.workflowTemplate.count({
+      where: { platformOrganizationId: platformOrgId },
+    });
+  }
+
+  const sunbulStatus =
+    sunbulRecordCount > 0
+      ? "نشط"
+      : sunbulClientCount > 0
+        ? "جاهز"
+        : "غير مفعل";
+
+  const orgData = {
+    orgId: org.id,
+    name: org.name,
+    nameAr: org.name,
+    platformOrgId: org.platformOrganizationId || undefined,
+    userCounts: {
+      admin: roleCounts["ADMIN"] || 0,
+      operator: roleCounts["OPERATOR"] || 0,
+      viewer: roleCounts["VIEWER"] || 0,
+      total: org._count.users,
+    },
+    sunbulClientCount,
+    sunbulMembershipCount,
+    sunbulRecordCount,
+    sunbulStatus,
+  };
+
   return (
-    <main className="p-8 max-w-4xl mx-auto">
-      <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
-        معاينة داخلية فقط. تفاصيل المؤسسة والأعضاء هنا ثابتة لأغراض العرض وليست
-        سجلًا تشغيليًا معتمدًا ضمن v0.1.
-      </div>
-
-      <div className="flex items-center gap-4 mb-6">
-        <Link href="/organizations">
-          <Button variant="outline" size="sm">
-            رجوع
-          </Button>
+    <div className="p-8 max-w-5xl mx-auto" dir="rtl">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+        <Link
+          href="/organizations"
+          className="hover:text-foreground transition-colors"
+        >
+          المؤسسات
         </Link>
-        <h1 className="text-2xl font-bold">{mockOrg.name}</h1>
-        <Badge variant="outline">Prototype</Badge>
+        <span>/</span>
+        <span className="text-foreground font-medium">{org.name}</span>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
-        <Card className="p-4">
-          <div className="text-sm text-muted-foreground">إجمالي الأعضاء</div>
-          <div className="text-2xl font-bold">{mockOrg.members.length}</div>
-        </Card>
-        <Card className="p-4">
-          <div className="text-sm text-muted-foreground">القرارات</div>
-          <div className="text-2xl font-bold">{mockOrg.decisionCount}</div>
-        </Card>
-        <Card className="p-4">
-          <div className="text-sm text-muted-foreground">تاريخ الإنشاء</div>
-          <div className="text-lg font-medium">{mockOrg.createdAt}</div>
-        </Card>
-      </div>
-
-      <section>
-        <h2 className="text-xl font-semibold mb-4">الأعضاء</h2>
-        <div className="space-y-2">
-          {mockOrg.members.map((member) => (
-            <Card
-              key={member.email}
-              className="p-3 flex items-center justify-between"
-            >
-              <div>
-                <div className="font-medium">{member.name}</div>
-                <div className="text-sm text-muted-foreground">
-                  {member.email}
-                </div>
-              </div>
-              <Badge variant="outline">{member.role}</Badge>
-            </Card>
-          ))}
-        </div>
-      </section>
-    </main>
+      {/* Organization Workspace */}
+      <OrganizationWorkspace data={orgData} />
+    </div>
   );
 }

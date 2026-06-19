@@ -198,8 +198,8 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                 | Product/System      | Route Type         | Public/Protected | Implementation Status   | Notes                          |
 | --------------------- | ------------------- | ------------------ | ---------------- | ----------------------- | ------------------------------ |
-| `/assistant`          | Office AI Assistant | Shared application | Protected        | Shared application (L4) | Real governed task workspace   |
-| `/assistant/[taskId]` | Office AI Assistant | Shared application | Protected        | Shared application (L4) | Real files/outputs/review flow |
+| `/assistant`          | Office AI Assistant | Shared application | Protected        | Pilot-ready (L5)        | Real governed task workspace — 6 task types, bilingual UX, seed data |
+| `/assistant/[taskId]` | Office AI Assistant | Shared application | Protected        | Pilot-ready (L5)        | Real files/outputs/review flow |
 
 ### Intelligence / Sector Routes
 
@@ -245,13 +245,13 @@ These pages serve as detail references for specialized operating systems. They a
 
 **SalesOS maturity notes (2026-06-19):** Upgraded to L5 Pilot-ready — sidebar entry in both sidebars, Prisma seed wired in main prisma/seed.ts, prototype warnings replaced with L5 pilot status. Prisma-backed P0 Core models (13). All ~80 components compile. Test suite: 2,462 tests pass, 249 suites. Dashboard uses in-memory store as fallback (Prisma-backed client available as sales-dashboard-client.tsx). Not L6 — no automated CRM sync or email/calendar integration.
 
-### Organizations — Prototype Surface
+### Organizations — Pilot-Ready Surface
 
-| Route                   | Product/System | Route Type      | Public/Protected | Implementation Status | Notes                      |
-| ----------------------- | -------------- | --------------- | ---------------- | --------------------- | -------------------------- |
-| `/organizations`        | Organizations  | Prototype/shell | Protected        | Prototype (L3)        | Mock/internal preview only |
-| `/organizations/[id]`   | Organizations  | Prototype/shell | Protected        | Prototype (L3)        | Mock/internal preview only |
-| `/organizations/sunbul` | Organizations  | Workspace       | Protected        | Prototype (L3)        | Links to Sunbul surface    |
+| Route                   | Product/System | Route Type      | Public/Protected | Implementation Status | Notes                                          |
+| ----------------------- | -------------- | --------------- | ---------------- | --------------------- | ---------------------------------------------- |
+| `/organizations`        | Organizations  | List workspace  | Protected        | Pilot-ready (L5)      | Real Prisma data — org cards with counts       |
+| `/organizations/[id]`   | Organizations  | Detail workspace| Protected        | Pilot-ready (L5)      | OrgWorkspace dashboard — users, products, edit |
+| `/organizations/sunbul` | Organizations  | Workspace       | Protected        | Pilot-ready (L5)      | Sunbul org workspace with real data             |
 
 ### Platform Settings / Admin / Diagnostics
 

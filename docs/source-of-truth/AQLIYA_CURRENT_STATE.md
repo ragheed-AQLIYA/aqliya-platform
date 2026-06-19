@@ -1,7 +1,7 @@
 # AQLIYA Current State — Operational Single Source of Truth
 
 **Status:** Active  
-**Version:** 1.5  
+**Version:** 1.6  
 **Effective:** 2026-06-18
 
 **Authority:** See `docs/source-of-truth/DOCUMENTATION_LINEAGE.md`  
@@ -45,18 +45,24 @@ Pilot-capable; production verified remotely. Staging DNS missing; AWS live audit
 ### Medium
 - **DecisionOS** L4→L5 conditional
 - **WorkflowOS** L4→L5 conditional
-- **Office AI** L4 shared app
-- **SalesOS** L5 pilot-ready — sidebar, seed, product nav
+- **SalesOS** L5 pilot-ready — sidebar, seed, Prisma dashboard
 - **LocalContactOS** L5 pilot-ready
+- **Organizations** L5 pilot-ready — Prisma CRUD, `/organizations/*`, seed (3 orgs)
+- **Office AI Assistant** L5 pilot-ready — 7 seeded tasks, review lifecycle
 - **Institutional Memory** L4 partial
 - **RiskOS** L4 usable v0.1 — `/risk/*` (not standalone product)
 
 ### Weak / strategic
-- **Organizations** L3 mock
 - **On-Prem / Air-Gap** L0
 - **Enterprise ops** L2→L3 — IaC in repo; production health/smoke verified; staging/AWS CLI checks pending operator
 
 ---
+
+## Recent changes (2026-06-18 Phase 3 — local)
+
+- **Organizations L5** — Prisma list/detail, CRUD actions + audit log, 3 seed orgs, loading/error boundaries
+- **Office AI L5** — `seed-office-ai.ts` (7 tasks), assistant route boundaries
+- **Sales dashboard** — Prisma-backed KPIs (accounts, deals, pipeline stages)
 
 ## Recent changes (2026-06-18 Phase 2)
 
