@@ -20,6 +20,7 @@
     "parallel:local-bundle": "npm run demo:smoke && npm test && npm run build",
     "smoke:local": "node scripts/platform/post-deploy-smoke.mjs --base-url http://localhost:3000",
     "auth:smoke-local": "node scripts/platform/test-auth-csrf-login.mjs",
+    "ensure:admin": "node scripts/ops/ensure-admin-user.mjs",
     "lint": "eslint src/",
     "test": "jest --ci --passWithNoTests --forceExit",
     "test:unit": "jest --testPathPatterns='src/__tests__/unit/'",

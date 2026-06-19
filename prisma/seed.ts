@@ -1716,6 +1716,20 @@ async function main() {
   await seedOfficeAI(prisma, platformOrg.id, org.id, admin.id);
   console.log("Office AI Assistant seeded successfully!");
 
+  // Guarantee demo login passwords (safe after partial seeds / audit re-seeds)
+  const demoPasswords: Array<{ email: string; password: string }> = [
+    { email: "admin@aqliya.com", password: "admin123" },
+    { email: "sara@aqliya.com", password: "operator123" },
+    { email: "mohammad@aqliya.com", password: "viewer123" },
+  ];
+  for (const { email, password } of demoPasswords) {
+    await prisma.user.update({
+      where: { email },
+      data: { passwordHash: await bcrypt.hash(password, 10) },
+    });
+  }
+  console.log("Demo login passwords ensured (admin123 / operator123 / viewer123)");
+
   console.log("Seeding completed successfully!");
 }
 

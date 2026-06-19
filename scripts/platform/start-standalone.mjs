@@ -54,6 +54,24 @@ async function main() {
     force: true,
   });
 
+  const envFile = join(root, ".env");
+  if (await exists(envFile)) {
+    await cp(envFile, join(standaloneDir, ".env"), { force: true });
+  }
+
+  if (!process.env.AUTH_SECRET) {
+    console.error(
+      "AUTH_SECRET is missing. Copy .env.example → .env and set AUTH_SECRET (same as NEXTAUTH_SECRET).",
+    );
+    process.exit(1);
+  }
+  if (!process.env.DATABASE_URL) {
+    console.error(
+      "DATABASE_URL is missing. Start Postgres (docker compose up -d db) and set DATABASE_URL in .env.",
+    );
+    process.exit(1);
+  }
+
   const port = process.env.PORT || "3000";
   console.log(`Starting standalone server on http://localhost:${port}`);
 

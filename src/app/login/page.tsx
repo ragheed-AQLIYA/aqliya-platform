@@ -128,18 +128,12 @@ export default function LoginPage() {
     }
   }
 
-  function fillDemoAccount(demoEmail: string, demoPassword: string) {
-    setEmail(demoEmail);
-    setPassword(demoPassword);
-    setError("");
-  }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function performLogin(loginEmail: string, loginPassword: string) {
     setLoading(true);
     setError("");
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail = loginEmail.trim().toLowerCase();
 
     try {
       const url = new URL(window.location.href);
@@ -151,7 +145,7 @@ export default function LoginPage() {
 
       const result = await signIn("credentials", {
         email: normalizedEmail,
-        password,
+        password: loginPassword,
         redirect: false,
         callbackUrl,
       });
@@ -159,7 +153,7 @@ export default function LoginPage() {
       if (result?.error) {
         setError(
           normalizedEmail === "admin@aqliya.com"
-            ? "بيانات الدخول غير صحيحة. للحساب التجريبي استخدم admin123 (انقر «مدير» بالأسفل للتعبئة التلقائية)."
+            ? "بيانات الدخول غير صحيحة. شغّل: npm run ensure:admin ثم أعد تشغيل السيرفر — أو انقر «مدير» للدخول التلقائي."
             : "بريد إلكتروني أو كلمة مرور غير صحيحة",
         );
         setLoading(false);
@@ -178,6 +172,17 @@ export default function LoginPage() {
       setError("حدث خطأ في الاتصال. حاول مرة أخرى.");
       setLoading(false);
     }
+  }
+
+  async function handleDemoLogin(demoEmail: string, demoPassword: string) {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    await performLogin(demoEmail, demoPassword);
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    await performLogin(email, password);
   }
 
   // ── MFA Challenge View ──────────────────────────────────────────────
@@ -373,17 +378,19 @@ export default function LoginPage() {
         <CardContent className="text-xs text-muted-foreground space-y-1.5">
           <button
             type="button"
-            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted"
-            onClick={() => fillDemoAccount("admin@aqliya.com", "admin123")}
+            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted disabled:opacity-50"
+            disabled={loading || redirecting}
+            onClick={() => handleDemoLogin("admin@aqliya.com", "admin123")}
           >
             <span className="font-medium">مدير</span>
             <span dir="ltr">admin@aqliya.com / admin123</span>
           </button>
           <button
             type="button"
-            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted"
+            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted disabled:opacity-50"
+            disabled={loading || redirecting}
             onClick={() =>
-              fillDemoAccount("sara@aqliya.com", "operator123")
+              handleDemoLogin("sara@aqliya.com", "operator123")
             }
           >
             <span className="font-medium">مشغّل</span>
@@ -391,16 +398,17 @@ export default function LoginPage() {
           </button>
           <button
             type="button"
-            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted"
+            className="flex w-full justify-between gap-4 rounded-md px-2 py-1.5 text-start transition-colors hover:bg-muted disabled:opacity-50"
+            disabled={loading || redirecting}
             onClick={() =>
-              fillDemoAccount("mohammad@aqliya.com", "viewer123")
+              handleDemoLogin("mohammad@aqliya.com", "viewer123")
             }
           >
             <span className="font-medium">مشاهد</span>
             <span dir="ltr">mohammad@aqliya.com / viewer123</span>
           </button>
           <p className="pt-1 text-center text-[10px]">
-            انقر أي صف لتعبئة البريد وكلمة المرور تلقائياً
+            انقر أي صف لتسجيل الدخول مباشرة (حسابات العرض التجريبي)
           </p>
         </CardContent>
       </Card>
