@@ -168,7 +168,7 @@ describe("GET /api/scim/v2/users — auth guard", () => {
       "@/app/api/scim/v2/Users/route"
     );
 
-    const req = makeRequest("http://localhost/api/scim/v2/users", {
+    const req = makeRequest("http://localhost/api/scim/v2/Users", {
       headers: { Authorization: "Bearer wrong-key-32-characters-exactly" },
     });
     const response = await GET(req);
