@@ -152,10 +152,10 @@ describe("GET /api/scim/v2/users — auth guard", () => {
 
   it("returns 401 when Authorization header is missing", async () => {
     const { GET } = await import(
-      "@/app/api/scim/v2/users/route"
+      "@/app/api/scim/v2/Users/route"
     );
 
-    const req = makeRequest("http://localhost/api/scim/v2/users");
+    const req = makeRequest("http://localhost/api/scim/v2/Users");
     const response = await GET(req);
 
     expect(response.status).toBe(401);
@@ -165,7 +165,7 @@ describe("GET /api/scim/v2/users — auth guard", () => {
     process.env.SCIM_API_KEY = "correct-key-32-characters-exactly";
 
     const { GET } = await import(
-      "@/app/api/scim/v2/users/route"
+      "@/app/api/scim/v2/Users/route"
     );
 
     const req = makeRequest("http://localhost/api/scim/v2/users", {
@@ -178,7 +178,7 @@ describe("GET /api/scim/v2/users — auth guard", () => {
 
   it("exports GET and POST handlers", async () => {
     const routeModule = await import(
-      "@/app/api/scim/v2/users/route"
+      "@/app/api/scim/v2/Users/route"
     );
     expect(typeof routeModule.GET).toBe("function");
     expect(typeof routeModule.POST).toBe("function");
