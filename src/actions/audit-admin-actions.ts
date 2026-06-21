@@ -6,6 +6,7 @@ import { assertOrganizationAccess } from "@/lib/audit/tenant-guard"
 
 // Inline DB access via prisma to avoid circular dependencies
 import { prisma } from "@/lib/prisma"
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events"
 
 export interface AuditUserResult {
   id: string
@@ -36,19 +37,17 @@ async function recordOrgEvent(actor: { actorId: string; actorName: string; actor
       console.warn(`[AdminAudit] No engagement found for org ${actor.organizationId}; skipping audit event for ${params.eventType}`)
       return
     }
-    await prisma.auditEvent.create({
-      data: {
-        engagementId: engagement.id,
-        eventType: params.eventType,
-        actorId: actor.actorId,
-        actorName: actor.actorName,
-        actorRole: actor.actorRole,
-        targetType: params.targetType,
-        targetId: params.targetId,
-        previousState: params.previousState ?? '',
-        newState: params.newState,
-        description: params.description,
-      },
+    await recordAuditOsAuditEvent({
+      engagementId: engagement.id,
+      eventType: params.eventType,
+      actorId: actor.actorId,
+      actorName: actor.actorName,
+      actorRole: actor.actorRole,
+      targetType: params.targetType,
+      targetId: params.targetId,
+      previousState: params.previousState ?? '',
+      newState: params.newState,
+      description: params.description,
     })
   } catch (e) {
     console.warn(`[AdminAudit] Failed to record audit event ${params.eventType}:`, (e as Error).message)

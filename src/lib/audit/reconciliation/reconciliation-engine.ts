@@ -2,6 +2,9 @@ import "server-only";
 
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
 import { prisma } from "@/lib/prisma";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
+
+// ── Types ──
 import {
   checkBalanceSheetEquation,
   checkIncomeToEquityFlow,
@@ -150,19 +153,17 @@ export async function runReconciliationForEngagement(
     runAt: new Date().toISOString(),
   };
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId,
-      eventType: "reconciliation.completed",
-      actorId: "system",
-      actorName: "Reconciliation Engine",
-      actorRole: "system",
-      targetType: "reconciliation",
-      targetId: engagementId,
-      newState: result.passed ? "passed" : "failed",
-      description: `Reconciliation: ${result.checkCount} checks, ${result.failedCount} failed`,
-      metadata: { checks: result.checks } as object,
-    },
+  await recordAuditOsAuditEvent({
+    engagementId,
+    eventType: "reconciliation.completed",
+    actorId: "system",
+    actorName: "Reconciliation Engine",
+    actorRole: "system",
+    targetType: "reconciliation",
+    targetId: engagementId,
+    newState: result.passed ? "passed" : "failed",
+    description: `Reconciliation: ${result.checkCount} checks, ${result.failedCount} failed`,
+    metadata: { checks: result.checks } as Record<string, unknown>,
   });
 
   try {

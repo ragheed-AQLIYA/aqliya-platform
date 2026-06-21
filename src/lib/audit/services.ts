@@ -877,6 +877,7 @@ export async function recordAuditEvent(params: {
   // Dual-write to PlatformAuditLog (safe mode — never blocks)
   try {
     const { writePlatformAuditLog } = await import("@/lib/platform/audit-log");
+    const { appendToAuditChain } = await import("@/lib/platform/audit/audit-store");
     const { getProjectByEngagementId } =
       await import("@/lib/platform/project-context");
     const { getClientWorkspaceById } =
@@ -925,6 +926,14 @@ export async function recordAuditEvent(params: {
         newState: params.newState,
         aiRelated: params.aiRelated,
       },
+    }).then(async (platformResult) => {
+      if (platformResult?.ok && platformResult?.id) {
+        await appendToAuditChain(
+          platformResult.id,
+          params.eventType,
+          params.actorId,
+        );
+      }
     });
   } catch {
     // Dual-write failure must never affect the primary action

@@ -55,7 +55,9 @@ If documentation conflicts:
 | **Office AI Assistant** | Shared application      | L4 usable v0.1                 | Shared governed app at `/assistant/*`, not standalone product |
 | **WorkflowOS**          | Custom/client workspace | L4→L5 partial                 | Governed workspace at `/workflowos/*`                         |
 | **Sunbul**              | Legacy alias            | Redirect only                  | Redirect alias to WorkflowOS, not a separate product          |
-| **SalesOS**             | Product concept in repo | L4 (builds + tests pass)       | `/sales` workspace (27 routes), CRM sync v0.3                 |
+| **SalesOS**             | Active prototype (L4+) | L4+ (prototype, 270 lib files, 82 components) | `/sales` workspace, documented schema drift R-04, not released |
+| **RiskOS**              | Prototype (contradicts docs) | L2 routes exist         | `/risk/*` routes + middleware entry — contradicts "do not build" in AGENTS.md |
+| **ContentStudio**       | Active surface          | L3 prototype                   | `/content-studio/*` workspace, undocumented in official taxonomy |
 | **SimulationOS**        | Marketing label         | L1 marketing only              | Redirects to `/products`, not a standalone system             |
 | **LocalContactOS**      | Governed workspace      | L4→L5 partial                 | `/contacts/*` with evidence, review, export                   |
 | **SSO (SAML/OIDC)**     | Enterprise auth         | L4 usable v0.1                 | `/settings/sso`, provider CRUD, login buttons                 |
@@ -66,36 +68,55 @@ Keep these distinctions explicit. Do not collapse AQLIYA into AuditOS. Do not pr
 
 ## Route Boundaries
 
-- `/audit/*` = protected, governed, database-backed AuditOS workspace.
-- `/auditos/*` = public, sanitized, mock-backed, read-only guided demo.
-- `/decisions/*` = protected DecisionOS workspace.
-- `/local-content/*` = protected LocalContentOS workspace (+ `/local-content/settings/integrations` for ERP).
-- `/assistant/*` = protected Office AI Assistant workspace.
-- `/workflowos/*` = protected WorkflowOS governed workspace.
-- `/sunbul/*` = redirect alias to `/workflowos/*`.
-- `/contacts/*` = protected LocalContactOS workspace.
-- `/sales/*` = protected SalesOS workspace (intelligence, forecast, pipeline, ICP, CRM settings).
-- `/settings/sso` = SSO provider configuration UI.
-- `/settings/audit-logs` = platform audit log viewer.
-- `/settings/platform-organization` = platform organization admin.
-- `/settings/workspaces` = workspace admin.
-- `/products/*` = public marketing pages.
-- `/insights/*` = public blog/insights.
-- `/buyers/*` = public buyer persona pages.
-- `/custom-product` = public commercial funnel.
-- `/api/scim/v2/*` = SCIM provisioning API (API key auth).
-- `/api/integration/*` = integration APIs.
-- `/api/custom-product-submit` = custom product inquiry API.
-- `/monitoring` = platform monitoring dashboard.
-- Sensitive `/api/*` routes must remain permissioned.
+| Route | Type | Purpose |
+|-------|------|---------|
+| `/audit/*` | Protected | AuditOS governed workspace |
+| `/auditos/*` | Public | Sanitized, mock-backed, read-only guided demo |
+| `/decisions/*` | Protected | DecisionOS governed workspace |
+| `/local-content/*` | Protected | LocalContentOS workspace (+ `/local-content/settings/integrations` for ERP) |
+| `/assistant/*` | Protected | Office AI Assistant workspace |
+| `/workflowos/*` | Protected | WorkflowOS governed workspace |
+| `/sunbul/*` | Redirect | Redirect alias to `/workflowos/*` |
+| `/contacts/*` | Protected | LocalContactOS workspace |
+| `/sales/*` | Protected | SalesOS workspace (intelligence, forecast, pipeline, ICP, CRM settings) |
+| `/risk/*` | Protected | RiskOS workspace (prototype, routes exist per middleware matcher) |
+| `/content-studio/*` | Protected | Content Studio workspace |
+| `/intelligence/*` | Protected | Intelligence Core workspace |
+| `/governance-hub/*` | Protected | Governance Hub dashboard |
+| `/operator/*` | Protected | Operator admin dashboard |
+| `/(dashboard)/overview` | Protected | Platform overview dashboard |
+| `/(dashboard)/notifications` | Protected | Platform notifications center |
+| `/settings/sso` | Protected | SSO provider configuration UI |
+| `/settings/audit-logs` | Protected | Platform audit log viewer |
+| `/settings/platform-organization` | Protected | Platform organization admin |
+| `/settings/workspaces` | Protected | Workspace admin |
+| `/monitoring` | Protected | Platform monitoring dashboard |
+| `/products/*` | Public | Marketing pages |
+| `/insights/*` | Public | Blog/insights |
+| `/buyers/*` | Public | Buyer persona pages |
+| `/custom-product` | Public | Commercial funnel |
+| `/api/scim/v2/*` | Protected | SCIM provisioning API (API key auth) |
+| `/api/integration/*` | Protected | Integration APIs |
+| `/api/custom-product-submit` | Public | Custom product inquiry API |
+| `/api/pilot-review` | Public | Pilot review submission |
+| `/api/sales/*` | Protected | SalesOS API (export) |
+| `/api/notifications/*` | Protected | Platform notifications SSE stream |
+
+Sensitive `/api/*` routes must remain permissioned. All protected routes are enforced by `src/middleware.ts` matcher + RBAC.
 
 ### Redirects (defined in `next.config.mjs`)
-- `/sunbul` → `/workflowos` (permanent)
-- `/sunbul/admin` → `/workflowos/admin` (permanent)
-- `/sunbul/clients/*/records/*` → `/workflowos/clients/*/records/*` (permanent)
-- `/products/simulation` → `/products` (permanent)
-- `/solutions` → `/products` (temporary)
-- `/executive-briefing` → `/executive-brief` (permanent)
+| From | To | Type |
+|------|----|------|
+| `/sunbul` | `/workflowos` | permanent |
+| `/sunbul/admin` | `/workflowos/admin` | permanent |
+| `/sunbul/clients/*/records/*` | `/workflowos/clients/*/records/*` | permanent |
+| `/products/simulation` | `/products` | permanent |
+| `/solutions` | `/products` | temporary |
+| `/executive-briefing` | `/executive-brief` | permanent |
+| `/decision` | `/decisions` | permanent |
+| `/decision/gov` | `/decisions/gov` | permanent |
+| `/decision/gov/:path*` | `/decisions/gov/:path*` | permanent |
+| `/buyers/procurement` | `/procurement-pack` | permanent |
 
 If route scope changes, update `docs/source-of-truth/ROUTE_STRATEGY.md` and `docs/source-of-truth/ROUTE_REGISTRY.md`. Preserve truthful status labels.
 
@@ -194,7 +215,9 @@ Never inspect or print secrets. Never use destructive git commands.
 ## Forbidden Behaviors
 
 - Describing AQLIYA as AuditOS only, SaaS only, or a generic chatbot.
-- Claiming SalesOS, SimulationOS, LocalContactOS, or AQLIYA Studio are implemented when they are not.
+- Claiming SalesOS, LocalContactOS, or AQLIYA Studio as released production products when they are not.
+- Claiming SimulationOS is a standalone product (marketing label only, redirects to `/products`).
+- Claiming RiskOS is production-ready (routes exist but contradict "do not build" directive).
 - Treating `/auditos/*` as a real workspace.
 - Introducing real customer data or mutations into `/auditos/*` without explicit reclassification.
 - Bypassing auth, RBAC, tenant isolation, audit logging, or review gates.

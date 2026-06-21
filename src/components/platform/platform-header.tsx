@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Search, Bell, Command, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { PlatformCommandPalette } from "./command-palette";
+import { useSSENotifications } from "@/lib/hooks/use-sse-notifications";
 
 function getWorkspaceInfo(pathname: string | null) {
   if (!pathname)
@@ -120,6 +121,29 @@ function getPageTitle(pathname: string | null) {
   return map[last] ?? last.replace(/-/g, " ");
 }
 
+// ─── Notification badge ─────────────────────────────────────────────────────
+
+function NotificationBadge() {
+  const { counts, connected } = useSSENotifications();
+  const total = counts.critical + counts.warning;
+
+  if (total === 0) {
+    return (
+      <span
+        className={`absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ${
+          connected ? "bg-emerald-500" : "bg-gray-400"
+        }`}
+      />
+    );
+  }
+
+  return (
+    <span className="absolute -top-1.5 -right-1.5 flex min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 py-0.5 text-[9px] font-bold text-white leading-none">
+      {total > 9 ? "9+" : total}
+    </span>
+  );
+}
+
 export function PlatformHeader() {
   const pathname = usePathname();
   const [commandOpen, setCommandOpen] = useState(false);
@@ -190,13 +214,14 @@ export function PlatformHeader() {
             </button>
 
             {/* Notifications */}
-            <button
+            <Link
+              href="/notifications"
               className="relative rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
               aria-label="Notifications"
             >
               <Bell className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-status-error" />
-            </button>
+              <NotificationBadge />
+            </Link>
 
             {/* User Menu */}
             <button className="flex items-center gap-2 rounded-md p-1.5 hover:bg-muted transition-colors">

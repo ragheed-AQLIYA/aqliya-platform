@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { AuditAction as PrismaAuditAction } from "@prisma/client";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
+import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
 
 export type AuditAction =
   | "DECISION_CREATED"
@@ -115,7 +116,7 @@ export async function logAudit(
       organization: { platformOrganizationId: platformOrgId },
       actor: { id: userId, type: "user", name: actorName },
     });
-    await alog.record(
+    const platformResult = await alog.record(
       action.toString(),
       {
         type: entity,
@@ -135,6 +136,11 @@ export async function logAudit(
         },
       },
     );
+
+    // ── Append to hash chain (best-effort, never throws) ──
+    if (platformResult.ok && platformResult.id) {
+      await appendToAuditChain(platformResult.id, action.toString(), userId);
+    }
   } catch {
     // Dual-write failure must never affect the primary action
   }

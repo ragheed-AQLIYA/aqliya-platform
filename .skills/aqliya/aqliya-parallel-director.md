@@ -23,19 +23,33 @@ You are **NOT** allowed to invent new architecture, products, layers, workflows,
 
 ## 2. Primary Authority Order
 
-Read in this exact order before assigning tasks:
+Read in this exact order before assigning tasks. This hierarchy **must** align with `AGENTS.md` §2 (Highest Authority Documents) and `docs/DOCUMENTATION_AUTHORITY.md` (Conflict-Resolution Authority).
 
-1. `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`
-2. `docs/source-of-truth/READINESS_GATES.md`
-3. `docs/source-of-truth/EXECUTION_DEPENDENCY_GRAPH.md`
-4. `docs/official/AQLIYA_MASTER_REFERENCE.md`
-5. `docs/source-of-truth/ROUTE_STRATEGY.md`
-6. `docs/source-of-truth/AQLIYA_SYSTEM_TAXONOMY.md`
-7. `docs/official/aqliya-core-architecture-v1.1.md`
-8. `docs/official/aqliya-agent-context-v1.1.md`
-9. `docs/official/aqliya-implementation-rules-v1.1.md`
+1. `docs/DOCUMENTATION_AUTHORITY.md` — **Highest conflict-resolution authority**
+2. `docs/official/AQLIYA_MASTER_REFERENCE.md` — Current master reference
+3. `docs/official/aqliya-vision-v1.1.md` — Identity and positioning
+4. `docs/official/aqliya-implementation-rules-v1.1.md` — Implementation rules
+5. `docs/official/aqliya-product-taxonomy-v1.1.md` — Product taxonomy
+6. `docs/official/aqliya-core-architecture-v1.1.md` — Core architecture
+7. `docs/official/aqliya-skill-context-v1.1.md` — Skill context
+8. `docs/official/aqliya-glossary-v1.1.md` — Glossary
+9. `docs/official/aqliya-roadmap-v1.1.md` — Roadmap
+10. `docs/official/aqliya-agent-context-v1.1.md` — Agent context
+11. `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` — Product status (code-evidence based)
+12. `docs/source-of-truth/READINESS_GATES.md` — Readiness gates
+13. `docs/source-of-truth/EXECUTION_DEPENDENCY_GRAPH.md` — Execution dependencies
+14. `docs/source-of-truth/ROUTE_STRATEGY.md` — Route strategy
+15. `docs/source-of-truth/AQLIYA_SYSTEM_TAXONOMY.md` — System taxonomy
 
-If any document conflicts: **STOP.** Follow `PRODUCT_STATUS_MATRIX.md`.
+### If any document conflicts
+
+1. **For identity, naming, trust principles, governance boundaries, strategic positioning:** Follow `docs/official/*` doctrine docs. These are non-negotiable.
+2. **For implementation status:** Inspect current code, schema, routes, actions, seeds, tests, validation reports. Code evidence governs over status claims in docs.
+3. **If official docs conflict with proven code reality:** Update the stale official docs and document the correction.
+4. **Reports are evidence, not doctrine.**
+5. **Theoretical docs are background, not authority.**
+6. **Archived docs are historical only.**
+7. **Document any conflict resolution.** Do not silently choose an interpretation.
 
 Task backlog: `docs/execution-backlog/v1.2-execution-backlog.md` (gap IDs from `L6_COMPLETION_PROGRAM.md`).
 

@@ -7,6 +7,7 @@ import { resolveMfaGateState } from "@/lib/auth/mfa-gate";
 
 const secret = process.env.AUTH_SECRET;
 
+
 function isApiPath(pathname: string): boolean {
   return (
     pathname.startsWith("/api/") &&
@@ -106,6 +107,10 @@ const routeMinRoles: Record<string, string> = {
   "/api/ai": "viewer",
   "/api/monitoring": "admin",
   "/api/skills": "admin",
+  "/api/sales": "viewer",
+  "/api/notifications": "viewer",
+  "/governance-hub": "viewer",
+  "/operator": "admin",
 };
 
 const roleHierarchy: Record<string, number> = {
@@ -320,5 +325,11 @@ export const config = {
     "/api/pilot-review",
     "/api/platform/:path*",
     "/api/skills/:path*",
+    "/api/sales/:path*",
+    "/api/notifications/:path*",
+    "/governance-hub",
+    "/governance-hub/:path*",
+    "/operator",
+    "/operator/:path*",
   ],
 };

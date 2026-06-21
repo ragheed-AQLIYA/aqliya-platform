@@ -7,6 +7,7 @@ import {
   getDisclosureNotes,
   updateDisclosureNote,
 } from "@/lib/audit/db/index";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 import {
   isIfrsRulesEnabled,
   isSocpaRulesEnabled,
@@ -101,18 +102,16 @@ export async function runDisclosureAutoForEngagement(
     runAt: new Date().toISOString(),
   };
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId,
-      eventType: "disclosure.auto_completed",
-      actorId: "system",
-      actorName: "Disclosure Auto Engine",
-      actorRole: "system",
-      targetType: "disclosure_auto",
-      targetId: engagementId,
-      description: `Disclosure auto: ${notesCreated} created, ${notesUpdated} updated, ${notesSkipped} skipped`,
-      metadata: result as unknown as object,
-    },
+  await recordAuditOsAuditEvent({
+    engagementId,
+    eventType: "disclosure.auto_completed",
+    actorId: "system",
+    actorName: "Disclosure Auto Engine",
+    actorRole: "system",
+    targetType: "disclosure_auto",
+    targetId: engagementId,
+    description: `Disclosure auto: ${notesCreated} created, ${notesUpdated} updated, ${notesSkipped} skipped`,
+    metadata: result as unknown as Record<string, unknown>,
   });
 
   try {

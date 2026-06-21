@@ -23,6 +23,7 @@ import {
   FileSpreadsheet,
   FolderKanban,
   BarChart3,
+  Hash,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -125,10 +126,28 @@ const platformNav = [
     icon: ScrollText,
   },
   {
+    name: "Chain Verification",
+    nameAr: "التحقق من سلسلة التجزئة",
+    href: "/settings/chain-verification",
+    icon: Hash,
+  },
+  {
     name: "AI Governance",
     nameAr: "حوكمة الذكاء الاصطناعي",
     href: "/settings/ai-governance",
     icon: ShieldCheck,
+  },
+  {
+    name: "Governance Hub",
+    nameAr: "مركز الحوكمة",
+    href: "/governance-hub",
+    icon: ShieldCheck,
+  },
+  {
+    name: "Operator Dashboard",
+    nameAr: "لوحة المشغل",
+    href: "/operator",
+    icon: BarChart3,
   },
   {
     name: "Office AI Assistant",

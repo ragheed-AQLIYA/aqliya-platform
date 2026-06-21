@@ -6,6 +6,7 @@ import { calculatePerformanceMateriality } from "@/lib/audit/materiality";
 import type { FinancialStatementLine } from "@/types/audit";
 import { formatRuleCitationMarker } from "@/lib/audit/notes/disclosure-types";
 import { buildDisclosureTriggersFromEvaluations } from "./disclosure-triggers";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 import {
   evaluateIfrsRule,
   type IfrsEvaluationContext,
@@ -167,23 +168,21 @@ export async function runIfrsRulesForEngagement(
 
   await attachIfrsCitationsToStatements(engagementId, evaluations);
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId,
-      eventType: "ifrs_rules.completed",
-      actorId: "system",
-      actorName: "IFRS Rules Engine",
-      actorRole: "system",
-      targetType: "ifrs_rules",
-      targetId: engagementId,
-      newState: result.passed ? "passed" : "failed",
-      description: `IFRS rules: ${result.ruleCount} evaluated, ${result.failedCount} failed, ${result.warningCount} warnings`,
-      metadata: {
-        failedCount: result.failedCount,
-        warningCount: result.warningCount,
-        triggerCount: result.disclosureTriggers.length,
-      } as object,
-    },
+  await recordAuditOsAuditEvent({
+    engagementId,
+    eventType: "ifrs_rules.completed",
+    actorId: "system",
+    actorName: "IFRS Rules Engine",
+    actorRole: "system",
+    targetType: "ifrs_rules",
+    targetId: engagementId,
+    newState: result.passed ? "passed" : "failed",
+    description: `IFRS rules: ${result.ruleCount} evaluated, ${result.failedCount} failed, ${result.warningCount} warnings`,
+    metadata: {
+      failedCount: result.failedCount,
+      warningCount: result.warningCount,
+      triggerCount: result.disclosureTriggers.length,
+    } as Record<string, unknown>,
   });
 
   return result;

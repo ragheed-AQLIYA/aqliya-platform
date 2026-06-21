@@ -5,6 +5,7 @@ import { isEnabled } from "@/lib/platform/feature-flags/registry";
 import type { FinancialStatementLine } from "@/types/audit";
 import { formatRuleCitationMarker } from "@/lib/audit/notes/disclosure-types";
 import { buildSocpaDisclosureTriggersFromEvaluations } from "./socpa-disclosure-triggers";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 import {
   evaluateSocpaRule,
   isSocpaJurisdiction,
@@ -154,24 +155,22 @@ export async function runSocpaRulesForEngagement(
     await attachSocpaCitationsToStatements(engagementId, evaluations);
   }
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId,
-      eventType: "socpa_rules.completed",
-      actorId: "system",
-      actorName: "SOCPA Rules Engine",
-      actorRole: "system",
-      targetType: "socpa_rules",
-      targetId: engagementId,
-      newState: result.passed ? "passed" : "failed",
-      description: `SOCPA rules: ${result.ruleCount} evaluated, ${result.failedCount} failed (jurisdiction: ${jurisdictionApplicable ? "SA" : "skipped"})`,
-      metadata: {
-        jurisdictionApplicable,
-        failedCount: result.failedCount,
-        warningCount: result.warningCount,
-        triggerCount: result.disclosureTriggers.length,
-      } as object,
-    },
+  await recordAuditOsAuditEvent({
+    engagementId,
+    eventType: "socpa_rules.completed",
+    actorId: "system",
+    actorName: "SOCPA Rules Engine",
+    actorRole: "system",
+    targetType: "socpa_rules",
+    targetId: engagementId,
+    newState: result.passed ? "passed" : "failed",
+    description: `SOCPA rules: ${result.ruleCount} evaluated, ${result.failedCount} failed (jurisdiction: ${jurisdictionApplicable ? "SA" : "skipped"})`,
+    metadata: {
+      jurisdictionApplicable,
+      failedCount: result.failedCount,
+      warningCount: result.warningCount,
+      triggerCount: result.disclosureTriggers.length,
+    } as Record<string, unknown>,
   });
 
   return result;

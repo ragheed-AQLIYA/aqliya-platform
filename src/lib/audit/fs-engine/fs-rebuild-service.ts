@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 import {
   buildStatementLinesFromMappings,
   type MappingWithCanonical,
@@ -102,18 +103,16 @@ export async function rebuildFinancialStatementsV2(
     }
   }
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId,
-      eventType: "financial_statement.v2_rebuilt",
-      actorId: "system",
-      actorName: "FS Engine v2",
-      actorRole: "system",
-      targetType: "engagement",
-      targetId: engagementId,
-      description: `Rebuilt ${FS_TYPES.length} financial statements (v2)`,
-      metadata: { statementTypes: FS_TYPES } as object,
-    },
+  await recordAuditOsAuditEvent({
+    engagementId,
+    eventType: "financial_statement.v2_rebuilt",
+    actorId: "system",
+    actorName: "FS Engine v2",
+    actorRole: "system",
+    targetType: "engagement",
+    targetId: engagementId,
+    description: `Rebuilt ${FS_TYPES.length} financial statements (v2)`,
+    metadata: { statementTypes: FS_TYPES } as Record<string, unknown>,
   });
 
   return {

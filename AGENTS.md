@@ -1597,6 +1597,23 @@ Before any release/deployment:
 
 ---
 
+## 36. Modified Sections Index
+
+| Section             | Change                                                                                                                                      | Date       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| §3 (Known patterns) | Added `.skills/aqliya/` reference                                                                                                           | 2026-05-27 |
+| §28.1               | Reality hardening — status updated to complete                                                                                              | 2026-05-28 |
+| §28.1 (Phase 6)     | Governance: createdById pass, DecisionEvidence model, governance fields, pilot review API, platform export utility (`src/lib/platform/export.ts`) | 2026-05-28 |
+| §30 (new)           | Cursor Cloud specific instructions                                                                                                          | 2026-05-28 |
+| §31 (new)           | Adopted Operational Patterns (from gstack review)                                                                                           | 2026-05-27 |
+| §32 (new)           | Skill Selection and Auto-Load Rules                                                                                                         | 2026-05-27 |
+| §33 (new)           | Low-Load Execution Protocol                                                                                                                 | 2026-05-27 |
+| §34 (new)           | Module Classification Before Every Task                                                                                                     | 2026-05-27 |
+| §35 (new)           | Security/Demo/Docs Gates Quick Reference                                                                                                    | 2026-05-27 |
+| §37 (new)           | External Toolchain Policy                                                                                                                   | 2026-05-27 |
+
+---
+
 ## 37. External Toolchain Policy
 
 **Status:** Active  
@@ -1748,20 +1765,3 @@ This policy is enforced by:
 - Final reports documenting compliance
 
 Violations must be reported and corrected before proceeding.
-
----
-
-## 36. Modified Sections Index
-
-| Section             | Change                                                                                                                                    | Date       |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| §3 (Known patterns) | Added `.skills/aqliya/` reference                                                                                                         | 2026-05-27 |
-| §28.1               | Reality hardening — status updated to ✅ complete                                                                                         | 2026-05-28 |
-| §28.1 (Phase 6)     | Governance: createdById pass, DecisionEvidence model, governance fields, pilot review API, platform export utility (`src/lib/platform/export.ts`) | 2026-05-28 |
-| §30 (new)           | Cursor Cloud specific instructions                                                                                                        | 2026-05-28 |
-| §31 (new)           | Adopted Operational Patterns (from gstack review)                                                                                         | 2026-05-27 |
-| §32 (new)           | Skill Selection and Auto-Load Rules                                                                                                       | 2026-05-27 |
-| §33 (new)           | Low-Load Execution Protocol                                                                                                               | 2026-05-27 |
-| §34 (new)           | Module Classification Before Every Task                                                                                                   | 2026-05-27 |
-| §35 (new)           | Security/Demo/Docs Gates Quick Reference                                                                                                    | 2026-05-27 |
-| §37 (new)           | External Toolchain Policy                                                                                                                 | 2026-05-27 |

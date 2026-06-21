@@ -14,6 +14,7 @@ import {
   type DisclosureEnrichmentInput,
 } from "./types";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
 
 export async function enrichDisclosureNote(
   engagementId: string,
@@ -152,7 +153,7 @@ export async function runAuditIntelligenceWithAuditLog(
     organizationId,
   );
 
-  await writePlatformAuditLog({
+  const platformResult = await writePlatformAuditLog({
     productKey: "auditos",
     action: "audit_intelligence.enriched",
     targetType: "disclosure_notes",
@@ -168,6 +169,14 @@ export async function runAuditIntelligenceWithAuditLog(
       notesSkipped: result.notesSkipped,
     } as Record<string, unknown>,
   });
+  if (platformResult?.ok && platformResult?.id) {
+    await appendToAuditChain(
+      platformResult.id,
+      "audit_intelligence.enriched",
+      "system",
+      new Date(),
+    );
+  }
 
   return result;
 }

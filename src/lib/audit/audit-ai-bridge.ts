@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { runInference } from "@/lib/ai/runtime";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
 import type { GovernanceTaskType } from "@/lib/governance/runtime-types";
 import type { AIAssistanceOutput } from "@/types/audit";
 
@@ -135,6 +136,15 @@ export async function runGovernedAuditAI(
         realProviders: isEnabled("ai.real-providers"),
       },
     },
+  }).then(async (platformResult) => {
+    if (platformResult?.ok && platformResult?.id) {
+      await appendToAuditChain(
+        platformResult.id,
+        "auditos_ai_generation",
+        params.userId ?? "system",
+        new Date(),
+      );
+    }
   }).catch(() => {});
 
   return {

@@ -2,6 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import type { FinancialStatementStatus } from "./types";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 
 const ALLOWED: Record<FinancialStatementStatus, FinancialStatementStatus[]> = {
   draft: ["reviewed"],
@@ -40,19 +41,17 @@ export async function transitionFinancialStatementStatus(input: {
     data: { status: input.toStatus },
   });
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId: input.engagementId,
-      eventType: "financial_statement.status_changed",
-      actorId: input.actorId,
-      actorName: input.actorName,
-      actorRole: "reviewer",
-      targetType: "financial_statement",
-      targetId: stmt.id,
-      previousState: fromStatus,
-      newState: input.toStatus,
-      description: `FS ${stmt.statementType} → ${input.toStatus}`,
-    },
+  await recordAuditOsAuditEvent({
+    engagementId: input.engagementId,
+    eventType: "financial_statement.status_changed",
+    actorId: input.actorId,
+    actorName: input.actorName,
+    actorRole: "reviewer",
+    targetType: "financial_statement",
+    targetId: stmt.id,
+    previousState: fromStatus,
+    newState: input.toStatus,
+    description: `FS ${stmt.statementType} → ${input.toStatus}`,
   });
 }
 

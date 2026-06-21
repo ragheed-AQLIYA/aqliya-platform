@@ -3,16 +3,32 @@
 // ─── SalesOS Prisma persistence layer ───
 // Tenant-scoped CRUD. Enabled via SALESOS_PRISMA_PERSISTENCE=1.
 //
-// Schema alignment note (R-04 tech debt):
-//   This file references model names and field names from an earlier SalesOS schema design
-//   (salesOpportunity, salesInteractionLog, nameAr, ownerId, etc.) that differ from the
-//   current Prisma schema (SalesDeal, SalesInteraction, etc.). Aligning these requires a
-//   full SalesOS data-layer refactor scoped to a dedicated task.
-//   @ts-nocheck suppresses the mismatches until that refactor is done.
-//   TODO (R-04): Align prisma-repository.ts with current Prisma schema.
+// === R-04 Tech Debt: Schema Drift ===
+// This file references model names and field names from an earlier SalesOS schema design
+// that differ from the current Prisma schema. @ts-nocheck is necessary because:
+//
+//   Model name drift:
+//     - prisma.salesOpportunity → current schema: SalesDeal
+//     - prisma.salesInteractionLog → current schema: SalesInteraction
+//
+//   Field name drift:
+//     - Account: nameAr, ownerId → not in current schema
+//     - Contact: title, sensitivityLevel, ownerId → not in current schema
+//     - Opportunity: name, stage, valueEstimate, currency, qualificationScore,
+//       ownerId, reviewStatus, approvalStatus → mapped differently in SalesDeal
+//     - Interaction: summary, evidenceRef, loggedById, opportunityId →
+//       mapped differently in SalesInteraction
+//
+// The functions prismaCreateOpportunity and prismaCreateInteraction correctly write to
+// the current schema models (salesDeal, salesInteraction) with proper field mappings.
+// Legacy seed/read functions still reference the old model/field names.
 //
 // Tier B/A models (salesMarketSignal, salesKnowledgeGraphNode, etc.) are optional
-// schema extensions — present in DB only when the full SalesOS advanced schema is applied.
+// schema extensions — only present when the full SalesOS advanced schema is applied.
+// These use `as any` with fail-soft try/catch and are intentionally not typed.
+//
+// Full fix: ALIGN ALL references to match current Prisma schema via dedicated refactor task.
+// TODO (R-04): https://github.com/aqliya/aqliya/issues/R-04
 
 import "server-only";
 import { prisma } from "@/lib/prisma";

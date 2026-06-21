@@ -36,6 +36,7 @@ import type {
   ProductionBlocker,
   PilotSignoff,
 } from "@/types/audit";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 import {
   buildStatementLinesFromMappings,
   type MappingWithCanonical,
@@ -1483,19 +1484,16 @@ export async function runValidation(
       },
     });
 
-    await prisma.auditEvent.create({
-      data: {
-        engagementId,
-        eventType: "validation.run_completed",
-        actorId,
-        actorName: "System",
-        actorRole: "system",
-        targetType: "validation_run",
-        targetId: runId,
-        newState: "completed",
-        description: `Validation run completed: ${issues.length} issue(s) found`,
-        timestamp: now,
-      },
+    await recordAuditOsAuditEvent({
+      engagementId,
+      eventType: "validation.run_completed",
+      actorId,
+      actorName: "System",
+      actorRole: "system",
+      targetType: "validation_run",
+      targetId: runId,
+      newState: "completed",
+      description: `Validation run completed: ${issues.length} issue(s) found`,
     });
 
     // Return the persisted run
@@ -1547,19 +1545,16 @@ export async function disposeValidationIssue(
       data: { status: newStatus },
     });
 
-    await prisma.auditEvent.create({
-      data: {
-        engagementId: issue.engagementId,
-        eventType: "validation.issue_disposed",
-        actorId,
-        actorName,
-        actorRole: "reviewer",
-        targetType: "validation_issue",
-        targetId: issueId,
-        newState: newStatus,
-        description: `Validation issue ${action}${rationale ? ": " + rationale.substring(0, 80) : ""}`,
-        timestamp: new Date(),
-      },
+    await recordAuditOsAuditEvent({
+      engagementId: issue.engagementId,
+      eventType: "validation.issue_disposed",
+      actorId,
+      actorName,
+      actorRole: "reviewer",
+      targetType: "validation_issue",
+      targetId: issueId,
+      newState: newStatus,
+      description: `Validation issue ${action}${rationale ? ": " + rationale.substring(0, 80) : ""}`,
     });
 
     return getValidationRun(issue.engagementId);
@@ -2869,21 +2864,19 @@ export async function recordAuditEvent(params: {
   aiRelated?: boolean;
   metadata?: Record<string, unknown>;
 }): Promise<AuditEvent> {
-  const event = await prisma.auditEvent.create({
-    data: {
-      engagementId: params.engagementId,
-      eventType: params.eventType,
-      actorId: params.actorId,
-      actorName: params.actorName,
-      actorRole: params.actorRole,
-      targetType: params.targetType,
-      targetId: params.targetId,
-      previousState: params.previousState ?? "",
-      newState: params.newState ?? "",
-      description: params.description,
-      aiRelated: params.aiRelated ?? false,
-      metadata: (params.metadata ?? undefined) as any,
-    },
+  const event = await recordAuditOsAuditEvent({
+    engagementId: params.engagementId,
+    eventType: params.eventType,
+    actorId: params.actorId,
+    actorName: params.actorName,
+    actorRole: params.actorRole,
+    targetType: params.targetType,
+    targetId: params.targetId,
+    previousState: params.previousState ?? "",
+    newState: params.newState ?? "",
+    description: params.description,
+    aiRelated: params.aiRelated ?? false,
+    metadata: params.metadata ?? undefined,
   });
   return toAuditEvent(event);
 }
@@ -3542,19 +3535,16 @@ export async function publishEngagement(
         data: { status: "published" },
       });
     }
-    await prisma.auditEvent.create({
-      data: {
-        engagementId,
-        eventType: "publication.published",
-        actorId,
-        actorName,
-        actorRole: "partner",
-        targetType: "publication_package",
-        targetId: pkg.id,
-        newState: "published",
-        description: `Engagement published by ${actorName}`,
-        timestamp: now,
-      },
+    await recordAuditOsAuditEvent({
+      engagementId,
+      eventType: "publication.published",
+      actorId,
+      actorName,
+      actorRole: "partner",
+      targetType: "publication_package",
+      targetId: pkg.id,
+      newState: "published",
+      description: `Engagement published by ${actorName}`,
     });
     const result = await getPublicationPackage(engagementId);
     return { package: result };
@@ -3581,20 +3571,17 @@ export async function archiveEngagement(
     where: { id: engagementId },
     data: { status: "archived" },
   });
-  await prisma.auditEvent.create({
-    data: {
-      engagementId,
-      eventType: "engagement.archived",
-      actorId,
-      actorName,
-      actorRole: "admin",
-      targetType: "engagement",
-      targetId: engagementId,
-      previousState: engagement.status,
-      newState: "archived",
-      description: `Engagement archived by ${actorName}`,
-      timestamp: new Date(),
-    },
+  await recordAuditOsAuditEvent({
+    engagementId,
+    eventType: "engagement.archived",
+    actorId,
+    actorName,
+    actorRole: "admin",
+    targetType: "engagement",
+    targetId: engagementId,
+    previousState: engagement.status,
+    newState: "archived",
+    description: `Engagement archived by ${actorName}`,
   });
 }
 
@@ -3626,20 +3613,17 @@ export async function restoreEngagement(
     where: { id: engagementId },
     data: { status: restoreStatus },
   });
-  await prisma.auditEvent.create({
-    data: {
-      engagementId,
-      eventType: "engagement.restored",
-      actorId,
-      actorName,
-      actorRole: "admin",
-      targetType: "engagement",
-      targetId: engagementId,
-      previousState: "archived",
-      newState: restoreStatus,
-      description: `Engagement restored by ${actorName}`,
-      timestamp: new Date(),
-    },
+  await recordAuditOsAuditEvent({
+    engagementId,
+    eventType: "engagement.restored",
+    actorId,
+    actorName,
+    actorRole: "admin",
+    targetType: "engagement",
+    targetId: engagementId,
+    previousState: "archived",
+    newState: restoreStatus,
+    description: `Engagement restored by ${actorName}`,
   });
   return restoreStatus;
 }

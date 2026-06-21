@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
 import {
   REPORTING_GRAPH_EDGE_TYPES,
   REPORTING_GRAPH_ENTITY_TYPES,
@@ -28,7 +29,7 @@ async function logGraphSync(
       where: { id: engagementId },
       select: { organizationId: true },
     });
-    await writePlatformAuditLog({
+    const platformResult = await writePlatformAuditLog({
       productKey: "auditos",
       action,
       targetType: "reporting_graph",
@@ -42,6 +43,14 @@ async function logGraphSync(
         ...metadata,
       } as Record<string, unknown>,
     });
+    if (platformResult?.ok && platformResult?.id) {
+      await appendToAuditChain(
+        platformResult.id,
+        action,
+        "system",
+        new Date(),
+      );
+    }
   } catch (err) {
     console.error(`[ReportingGraph] audit log failed for ${engagementId}`, err);
   }

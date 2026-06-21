@@ -3,6 +3,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { getMappingClosingBalance } from "./balance-utils";
 import { resolveCategoryLabel } from "./category-labels";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 import {
   fetchLeadSchedulesWithLines,
   upsertLeadScheduleBundle,
@@ -97,19 +98,17 @@ export async function generateLeadSchedulesFromMappings(
     });
   }
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId,
-      eventType: "lead_schedule.generated",
-      actorId: createdById ?? "system",
-      actorName: "System",
-      actorRole: "operator",
-      targetType: "lead_schedule",
-      targetId: engagementId,
-      newState: "generated",
-      description: `Generated ${schedules.length} lead schedules from confirmed mappings`,
-      metadata: { scheduleCount: schedules.length },
-    },
+  await recordAuditOsAuditEvent({
+    engagementId,
+    eventType: "lead_schedule.generated",
+    actorId: createdById ?? "system",
+    actorName: "System",
+    actorRole: "operator",
+    targetType: "lead_schedule",
+    targetId: engagementId,
+    newState: "generated",
+    description: `Generated ${schedules.length} lead schedules from confirmed mappings`,
+    metadata: { scheduleCount: schedules.length } as Record<string, unknown>,
   });
 
   return {

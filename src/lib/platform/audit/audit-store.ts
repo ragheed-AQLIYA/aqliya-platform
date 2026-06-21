@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma"
 import { computeHash, findNonce, verifyChain } from "./hash-chain"
 import type { HashChainProof, ChainVerificationResult } from "./types"
 import type { ChainEntryData } from "./hash-chain"
+import type { Prisma } from "@prisma/client"
 
 async function loadEntryData(
   auditLogId: string,
@@ -182,5 +183,161 @@ export async function getChainEntry(
     }
   } catch {
     return null
+  }
+}
+
+// ─── Cross-Product Audit Log Search ───
+// بحث موحد عبر جميع منتجات سجلات التدقيق
+
+export interface AuditLogQuery {
+  productKey?: string | string[]
+  action?: string | string[]
+  actorId?: string
+  targetType?: string
+  targetId?: string
+  platformOrganizationId?: string
+  clientWorkspaceId?: string
+  projectId?: string
+  severity?: string | string[]
+  sourceSystem?: string
+  sourceId?: string
+  fromDate?: Date
+  toDate?: Date
+  limit?: number
+  offset?: number
+}
+
+export interface AuditLogSearchResult {
+  entries: Array<{
+    id: string
+    productKey: string
+    action: string
+    actorId: string | null
+    actorType: string | null
+    actorName: string | null
+    actorEmail: string | null
+    targetType: string | null
+    targetId: string | null
+    targetLabel: string | null
+    severity: string
+    status: string
+    platformOrganizationId: string | null
+    clientWorkspaceId: string | null
+    projectId: string | null
+    sourceSystem: string | null
+    sourceId: string | null
+    metadata: Prisma.JsonValue | null
+    createdAt: Date
+    chainVerified: boolean
+  }>
+  total: number
+  hasMore: boolean
+}
+
+/**
+ * Search platform audit logs across all products with flexible filtering.
+ * يبحث في سجلات التدقيق عبر جميع المنتجات مع تصفية مرنة
+ */
+export async function searchAuditLogs(
+  query: AuditLogQuery,
+): Promise<AuditLogSearchResult> {
+  const where: Prisma.PlatformAuditLogWhereInput = {}
+
+  if (query.productKey) {
+    where.productKey = Array.isArray(query.productKey)
+      ? { in: query.productKey }
+      : query.productKey
+  }
+  if (query.action) {
+    where.action = Array.isArray(query.action)
+      ? { in: query.action }
+      : query.action
+  }
+  if (query.actorId) {
+    where.actorId = query.actorId
+  }
+  if (query.targetType) {
+    where.targetType = query.targetType
+  }
+  if (query.targetId) {
+    where.targetId = query.targetId
+  }
+  if (query.platformOrganizationId) {
+    where.platformOrganizationId = query.platformOrganizationId
+  }
+  if (query.clientWorkspaceId) {
+    where.clientWorkspaceId = query.clientWorkspaceId
+  }
+  if (query.projectId) {
+    where.projectId = query.projectId
+  }
+  if (query.severity) {
+    where.severity = Array.isArray(query.severity)
+      ? { in: query.severity }
+      : query.severity
+  }
+  if (query.sourceSystem) {
+    where.sourceSystem = query.sourceSystem
+  }
+  if (query.sourceId) {
+    where.sourceId = query.sourceId
+  }
+  if (query.fromDate || query.toDate) {
+    where.createdAt = {}
+    if (query.fromDate) where.createdAt.gte = query.fromDate
+    if (query.toDate) where.createdAt.lte = query.toDate
+  }
+
+  const limit = Math.min(query.limit ?? 50, 200)
+  const offset = query.offset ?? 0
+
+  try {
+    const [rows, total] = await Promise.all([
+      prisma.platformAuditLog.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        skip: offset,
+        include: {
+          hashChainEntry: {
+            select: { id: true },
+          },
+        },
+      }),
+      prisma.platformAuditLog.count({ where }),
+    ])
+
+    const entries = rows.map((r) => ({
+      id: r.id,
+      productKey: r.productKey,
+      action: r.action,
+      actorId: r.actorId,
+      actorType: r.actorType,
+      actorName: r.actorName,
+      actorEmail: r.actorEmail,
+      targetType: r.targetType,
+      targetId: r.targetId,
+      targetLabel: r.targetLabel,
+      severity: r.severity,
+      status: r.status,
+      platformOrganizationId: r.platformOrganizationId,
+      clientWorkspaceId: r.clientWorkspaceId,
+      projectId: r.projectId,
+      sourceSystem: r.sourceSystem,
+      sourceId: r.sourceId,
+      metadata: r.metadata,
+      createdAt: r.createdAt,
+      chainVerified: r.hashChainEntry !== null,
+    }))
+
+    return {
+      entries,
+      total,
+      hasMore: offset + entries.length < total,
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error"
+    console.warn(`[AuditSearch] Query failed: ${message}`)
+    return { entries: [], total: 0, hasMore: false }
   }
 }

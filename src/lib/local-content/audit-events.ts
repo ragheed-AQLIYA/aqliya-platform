@@ -1,8 +1,11 @@
 // LocalContentOS audit event writer
 // Uses domain-specific audit events for detailed traceability.
-// PlatformAuditLog dual-write can be added later for cross-product visibility.
+// Dual-writes to PlatformAuditLog for cross-product visibility.
 
 import { prisma } from "@/lib/prisma";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { Product } from "@/lib/platform/audit-logger";
+import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
 import type { Prisma } from "@prisma/client";
 
 export interface AuditEventInput {
@@ -15,6 +18,7 @@ export interface AuditEventInput {
   before?: string;
   after?: string;
   metadata?: Record<string, unknown>;
+  platformOrganizationId?: string;
 }
 
 export async function createLocalContentAuditEvent(
@@ -39,6 +43,30 @@ export async function createLocalContentAuditEvent(
   } catch (error) {
     console.warn(
       `[LocalContentOS] Audit event write failed: ${error instanceof Error ? error.message : "unknown"}`,
+    );
+  }
+
+  // ── Dual-write to PlatformAuditLog + hash chain ──
+  const platformResult = await writePlatformAuditLog({
+    productKey: Product.LOCAL_CONTENT,
+    action: `local_content.${input.action}`,
+    projectId: input.projectId,
+    platformOrganizationId: input.platformOrganizationId ?? undefined,
+    actorId: input.actorId,
+    actorName: input.actorName,
+    targetType: input.entityType,
+    targetId: input.entityId,
+    metadata: (input.metadata ?? undefined) as
+      | Record<string, unknown>
+      | undefined,
+  });
+
+  // ── Append to hash chain (best-effort, never throws) ──
+  if (platformResult.ok && platformResult.id) {
+    await appendToAuditChain(
+      platformResult.id,
+      `local_content.${input.action}`,
+      input.actorId,
     );
   }
 }
@@ -107,6 +135,7 @@ export interface AiAuditInput {
 /**
  * Write an AI audit event to the LcAiAuditEvent table.
  * Never throws — best-effort write for traceability.
+ * Dual-writes to PlatformAuditLog with AI provenance fields.
  */
 export async function createAiAuditEvent(
   input: AiAuditInput,
@@ -134,6 +163,37 @@ export async function createAiAuditEvent(
   } catch (error) {
     console.warn(
       `[LocalContentOS] AI audit event write failed: ${error instanceof Error ? error.message : "unknown"}`,
+    );
+  }
+
+  // ── Dual-write to PlatformAuditLog (with AI provenance + hash chain) ──
+  const platformResult = await writePlatformAuditLog({
+    productKey: Product.LOCAL_CONTENT,
+    action: `local_content.ai.${input.action}`,
+    platformOrganizationId: input.organizationId,
+    projectId: input.projectId,
+    actorId: input.actorId,
+    aiProvider: input.providerId,
+    aiModel: input.modelVersion,
+    aiPromptVersion: input.promptVersion,
+    targetType: "AiAuditEvent",
+    targetId: input.action,
+    severity: input.status === "failed" ? "error" : input.status === "partial" ? "warning" : "info",
+    metadata: {
+      ...(input.metadata ?? {}),
+      workbookId: input.workbookId,
+      confidence: input.confidence,
+      warningCount: input.warningCount,
+      durationMs: input.durationMs,
+    } as Record<string, unknown>,
+  });
+
+  // ── Append to hash chain (best-effort, never throws) ──
+  if (platformResult.ok && platformResult.id) {
+    await appendToAuditChain(
+      platformResult.id,
+      `local_content.ai.${input.action}`,
+      input.actorId ?? "system",
     );
   }
 }

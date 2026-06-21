@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
 import { loadReportingGraph } from "./graph-query";
 import type { GraphSnapshotRecord, ReportingGraphStats } from "./types";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 
 function isMindMapEnabled(): boolean {
   return isEnabled("audit.mind-map");
@@ -22,26 +22,23 @@ export async function captureReportingGraphSnapshot(params: {
   const graph = await loadReportingGraph(params.engagementId);
   const snapshotId = `snap-${Date.now()}`;
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId: params.engagementId,
-      eventType: SNAPSHOT_EVENT,
-      actorId: params.actorId,
-      actorName: params.actorName,
-      actorRole: params.actorRole,
-      targetType: "reporting_graph",
-      targetId: snapshotId,
-      previousState: "",
-      newState: params.milestone,
-      description: `Factory graph snapshot captured at ${params.milestone} milestone`,
-      metadata: {
-        milestone: params.milestone,
-        graphVersion: graph.graphVersion,
-        stats: graph.stats,
-        capturedAt: graph.builtAt,
-        graph,
-      } as unknown as Prisma.InputJsonValue,
-    },
+  await recordAuditOsAuditEvent({
+    engagementId: params.engagementId,
+    eventType: SNAPSHOT_EVENT,
+    actorId: params.actorId,
+    actorName: params.actorName,
+    actorRole: params.actorRole,
+    targetType: "reporting_graph",
+    targetId: snapshotId,
+    newState: params.milestone,
+    description: `Factory graph snapshot captured at ${params.milestone} milestone`,
+    metadata: {
+      milestone: params.milestone,
+      graphVersion: graph.graphVersion,
+      stats: graph.stats,
+      capturedAt: graph.builtAt,
+      graph,
+    } as Record<string, unknown>,
   });
 
   return {

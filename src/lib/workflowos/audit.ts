@@ -1,6 +1,9 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { Product } from "@/lib/platform/audit-logger";
+import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
 import type { Prisma } from "@prisma/client";
 import type { WorkflowAuditAction } from "@/lib/workflowos/types";
 import { requireClientAccess } from "@/lib/workflowos/tenant-guard";
@@ -18,7 +21,7 @@ export interface CreateWorkflowAuditEventInput {
 export async function createWorkflowAuditEvent(
   input: CreateWorkflowAuditEventInput,
 ) {
-  return prisma.sunbulAuditEvent.create({
+  const result = await prisma.sunbulAuditEvent.create({
     data: {
       clientId: input.clientId,
       recordId: input.recordId ?? null,
@@ -29,6 +32,32 @@ export async function createWorkflowAuditEvent(
       metadata: (input.metadata ?? {}) as Prisma.InputJsonValue,
     },
   });
+
+  // ── Dual-write to PlatformAuditLog + hash chain ──
+  const platformResult = await writePlatformAuditLog({
+    productKey: Product.WORKFLOWOS,
+    action: `workflowos.${input.action}`,
+    clientWorkspaceId: input.clientId,
+    actorId: input.actorId,
+    targetType: input.entityType,
+    targetId: input.entityId,
+    sourceModel: "SunbulAuditEvent",
+    sourceId: result.id,
+    metadata: (input.metadata ?? undefined) as
+      | Record<string, unknown>
+      | undefined,
+  });
+
+  // ── Append to hash chain (best-effort, never throws) ──
+  if (platformResult.ok && platformResult.id) {
+    await appendToAuditChain(
+      platformResult.id,
+      `workflowos.${input.action}`,
+      input.actorId,
+    );
+  }
+
+  return result;
 }
 
 export async function listWorkflowAuditEvents(options: {

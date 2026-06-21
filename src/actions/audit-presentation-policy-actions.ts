@@ -13,6 +13,7 @@ import {
 } from "@/lib/audit/presentation/presentation-policy-service";
 import { rebuildFinancialStatementsAfterProfileChange } from "@/lib/audit/presentation/presentation-profile-rebuild";
 import { prisma } from "@/lib/prisma";
+import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 
 export async function listPresentationPoliciesAction() {
   const actor = await getAuditActor();
@@ -96,19 +97,17 @@ export async function assignEngagementPresentationPolicyAction(params: {
     policyId: params.policyId,
   });
 
-  await prisma.auditEvent.create({
-    data: {
-      engagementId: params.engagementId,
-      eventType: "engagement.presentation_policy_assigned",
-      actorId: actor.actorId,
-      actorName: actor.actorName,
-      actorRole: actor.actorRole,
-      targetType: "engagement",
-      targetId: params.engagementId,
-      previousState: previous?.presentationPolicyId ?? "",
-      newState: params.policyId,
-      description: `Presentation policy assigned: ${params.policyId}`,
-    },
+  await recordAuditOsAuditEvent({
+    engagementId: params.engagementId,
+    eventType: "engagement.presentation_policy_assigned",
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: "engagement",
+    targetId: params.engagementId,
+    previousState: previous?.presentationPolicyId ?? "",
+    newState: params.policyId,
+    description: `Presentation policy assigned: ${params.policyId}`,
   });
 
   const fsRebuild = await rebuildFinancialStatementsAfterProfileChange(
