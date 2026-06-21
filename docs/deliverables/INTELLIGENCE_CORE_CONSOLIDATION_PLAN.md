@@ -165,7 +165,7 @@
 
 | Capability | Current Location | Decision | Rationale |
 |------------|-----------------|----------|-----------|
-| Institutional memory service | `src/lib/platform/institutional-memory/` | MERGE → `src/lib/core/memory/` | Canonical memory engine |
+| Institutional memory service | `src/lib/platform/institutional-memory/` | MERGED ✅ → `src/lib/core/memory/institutional-memory-service.ts` | Copied to core/memory/. Core facade updated to import locally. |
 | AI query memory | `src/lib/ai/memory/institutional-memory.ts` | MERGED ✅ → `src/lib/core/memory/ai-memory.ts` | Merged into core/memory/ai-memory.ts, re-exported through core/memory/index.ts. Orphaned AI source deleted. |
 | Agent memory | `src/lib/platform/agent-memory.ts` | KEEP | Distinct key-value use case |
 | TB firm memory | `src/lib/tb-intelligence/firm-memory.ts` | KEEP | Domain-specific |
@@ -186,11 +186,11 @@
 
 | Capability | Current Location | Decision | Rationale |
 |------------|-----------------|----------|-----------|
-| Signal contracts | `src/lib/platform/intelligence.ts` | MERGE → `src/lib/core/signals/` | Core signal contracts |
-| Runtime signal types | `src/lib/platform/signals/types.ts` | MERGE → core/signals/types.ts | Merge with intelligence.ts |
-| Audit signal producer | `src/lib/platform/signals/audit-signal-producer.ts` | KEEP (move to core) | Well-implemented |
-| Sales signal producer | `src/lib/platform/signals/sales-signal-producer.ts` | KEEP (move to core) | Well-implemented |
-| LC signal producer | `src/lib/platform/signals/localcontent-signal-producer.ts` | KEEP (move to core) | Well-implemented |
+| Signal contracts | `src/lib/platform/intelligence.ts` | MERGED ✅ → `src/lib/core/signals/engine.ts` | Core Signal Engine facade with produce/acknowledge/resolve |
+| Runtime signal types | `src/lib/platform/signals/types.ts` | MERGED ✅ → `src/lib/core/signals/types.ts` | Core types, backward-compat re-export in platform |
+| Audit signal producer | `src/lib/platform/signals/audit-signal-producer.ts` | MERGED ✅ → `src/lib/core/signals/producers/` | Moved with updated import |
+| Sales signal producer | `src/lib/platform/signals/sales-signal-producer.ts` | MERGED ✅ → `src/lib/core/signals/producers/` | Moved with updated import |
+| LC signal producer | `src/lib/platform/signals/localcontent-signal-producer.ts` | MERGED ✅ → `src/lib/core/signals/producers/` | Moved with updated import |
 | Decision signals | `src/lib/decision/signal-automation.ts` | MERGE → core/signals/ | Route through Signal Engine |
 | Decision risk alerts | `src/lib/decision/signals-alerts.ts` | KEEP (decision-specific) | Decision-specific resolution flow |
 
@@ -210,22 +210,21 @@
 ## Phase 3: Policy & Decision Extraction (Week 7-8)
 
 ### P3.1 Policy Engine
-**Effort:** 3 days | **Risk:** MEDIUM | **Complexity:** MEDIUM
+**Effort:** 3 days | **Risk:** MEDIUM | **Complexity:** MEDIUM — DONE ✅
 
 | Capability | Current Location | Decision | Rationale |
 |------------|-----------------|----------|-----------|
-| ABAC policies | `src/lib/platform/abac/` | MERGE → `src/lib/core/policy/` | Core policy engine |
-| Retention policies | `src/lib/platform/retention/` | MERGE → core/policy/retention/ | Policy sub-module |
+| ABAC policies | `src/lib/platform/abac/` | MERGED ✅ → `src/lib/core/policy/access/` | Core policy engine |
+| Retention policies | `src/lib/platform/retention/` | MERGED ✅ → `src/lib/core/policy/retention/` | Policy sub-module |
 | Governance policy refs | `src/lib/governance/retrieval-router.ts` | MERGE → core/policy/governance/ | Policy references |
 | Access/rbac | `src/lib/platform/access/` | KEEP (wraps Policy Engine) | Execution layer |
 
 **Steps:**
-1. Create `src/lib/core/policy/` directory
-2. Create Policy Engine interface
-3. Move ABAC to core/policy/access/
-4. Move retention to core/policy/retention/
-5. Extract governance policy references from retrieval-router
-6. Create unified Policy Evaluation API
+1. ~~Create `src/lib/core/policy/` directory~~ ✅ Done
+2. ~~Create Policy Engine interface~~ ✅ Done (core/policy/index.ts)
+3. ~~Move ABAC to core/policy/access/~~ ✅ Done
+4. ~~Move retention to core/policy/retention/~~ ✅ Done
+5. ~~Register Policy in core registry~~ ✅ Done
 
 **Dependencies:** P1.1, P0.1
 
@@ -343,3 +342,9 @@
 | P3 | No | Code moves only |
 | P4 | Yes (Evidence) | CoreEvidence table + 9 product model migration |
 | P5 | No | Registry only |
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 # AQLIYA Core Architecture v1.1
 
-**Version:** 1.1  
-**Status:** Official architecture baseline aligned to v0.1 operational baseline  
+**Version:** 1.2  
+**Status:** Official architecture baseline aligned to v0.1 operational baseline. Intelligence Core consolidation complete (2026-06-21).  
 **Current tech stack:** Next.js + TypeScript + PostgreSQL + Prisma  
 **Note:** Implementation-status claims updated to match code reality. LocalContentOS is now included under active domain surfaces.
 
@@ -27,12 +27,32 @@
 │ ACTIONS LAYER                                               │
 │ src/actions/      server actions and product mutations      │
 ├─────────────────────────────────────────────────────────────┤
+│ INTELLIGENCE CORE LAYER                                      │
+│ src/lib/core/     Canonical engine registry (12 engines)    │
+│   ├── core/index.ts     Unified barrel (Access, Audit,      │
+│   │                      Contracts, Evidence, Governance,   │
+│   │                      AI, Knowledge, Memory, Signals,    │
+│   │                      Events, Workflow, Policy)          │
+│   ├── core/ai/          AI execution (orchestrator,         │
+│   │                      providers, routing, budget)        │
+│   ├── core/governance/  Governance (retrieval, approval,    │
+│   │                      escalation, provenance)            │
+│   ├── core/knowledge/   RAG pipeline + knowledge service    │
+│   ├── core/memory/      Institutional + AI memory (graph)   │
+│   ├── core/signals/     Signal types + producers + engine   │
+│   ├── core/policy/      ABAC + Retention                    │
+│   ├── core/audit/       Audit write + hash chain            │
+│   ├── core/workflow/    State machine + product adapters    │
+│   ├── core/events/      Outbox service + handlers           │
+│   ├── core/evidence/    Evidence graph + linkage            │
+│   ├── core/contracts/   Event envelope contracts            │
+│   └── core/access/      Core access controls                │
 │ DOMAIN LAYER                                                │
 │ src/lib/audit/         AuditOS domain logic                 │
 │ src/lib/decision/      DecisionOS domain logic              │
 │ src/lib/office-ai/     Office AI shared application logic   │
 │ src/lib/sunbul/        Sunbul custom workspace logic        │
-│ src/lib/governance/    Shared governance runtime            │
+│ src/lib/governance/    Legacy re-exports → core/governance  │
 │ src/lib/platform/      Platform audit/org/workspace logic   │
 ├─────────────────────────────────────────────────────────────┤
 │ DATA LAYER                                                  │

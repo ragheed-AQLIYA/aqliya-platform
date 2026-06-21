@@ -1,28 +1,26 @@
 /**
- * Evidence Engine facade (Tier 1 registry + future graph linkage).
+ * Evidence Engine — cross-product evidence registry + graph.
+ * IC-P4.1: Evidence Engine consolidation.
  */
-export type {
-  EvidenceProductSlug,
-  EvidenceRegistryRecord,
-  EvidenceSensitivity,
-  LookupEvidenceInput,
-  RegisterEvidenceInput,
-} from "@/lib/platform/evidence/evidence-service";
+export {
+  lookupEvidence,
+  assertEvidenceDownloadAccess,
+  registerEvidence,
+  type EvidenceProductSlug,
+  type EvidenceRegistryRecord,
+  type EvidenceSensitivity,
+  type LookupEvidenceInput,
+  type RegisterEvidenceInput,
+} from "./evidence-service";
 
 export {
-  assertEvidenceDownloadAccess,
-  lookupEvidence,
-  registerEvidence,
-} from "@/lib/platform/evidence/evidence-service";
+  linkLocalContentEvidenceAfterUpload,
+  linkAuditEvidenceAfterUpload,
+} from "./link-after-upload";
 
 export {
   EvidenceGraph,
-  createEdge,
   ensureResourceGraphNode,
+  createEdge,
   linkEvidenceToGraph,
 } from "./graph";
-
-export {
-  linkAuditEvidenceAfterUpload,
-  linkLocalContentEvidenceAfterUpload,
-} from "./link-after-upload";

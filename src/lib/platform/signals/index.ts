@@ -1,8 +1,12 @@
+/**
+ * Backward-compatible re-exports. Signals moved to @/lib/core/signals/.
+ * New code should import from @/lib/core/signals/ instead.
+ */
 export type {
   ProductMetricSignals,
   RuntimeSignal,
   RuntimeSignalSeverity,
-} from "./types";
+} from "@/lib/core/signals/types";
 
 export {
   collectAuditActivitySignals,
@@ -11,18 +15,18 @@ export {
   collectAuditMetricSignals,
   collectAuditReviewSignals,
   collectAuditTaskSignals,
-} from "./audit-signal-producer";
+} from "@/lib/core/signals/producers/audit-signal-producer";
 
 export {
   collectLocalContentActivitySignals,
   collectLocalContentApprovalSignals,
   collectLocalContentReviewSignals,
   collectLocalContentTaskSignals,
-} from "./localcontent-signal-producer";
+} from "@/lib/core/signals/producers/localcontent-signal-producer";
 
 export {
   collectSalesActivitySignals,
   collectSalesApprovalSignals,
   collectSalesReviewSignals,
   collectSalesTaskSignals,
-} from "./sales-signal-producer";
+} from "@/lib/core/signals/producers/sales-signal-producer";

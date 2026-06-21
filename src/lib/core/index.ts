@@ -13,6 +13,8 @@ export * as AI from "./ai";
 export * as Knowledge from "./knowledge";
 export * as Memory from "./memory";
 export * as Signals from "./signals";
+export * as Decision from "./decision";
+export * as Policy from "./policy";
 export * as Events from "./events";
 export * as Workflow from "./workflow";
 

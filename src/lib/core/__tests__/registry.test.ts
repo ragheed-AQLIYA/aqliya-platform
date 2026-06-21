@@ -14,16 +14,20 @@ import * as Governance from "@/lib/core/governance";
 import * as Knowledge from "@/lib/core/knowledge";
 import * as Memory from "@/lib/core/memory";
 import * as Signals from "@/lib/core/signals";
+import * as Policy from "@/lib/core/policy";
+import * as Decision from "@/lib/core/decision";
 
 describe("Intelligence Core registry (IC-P1-01)", () => {
-  it("declares eleven engine keys", () => {
-    expect(CORE_ENGINE_KEYS).toHaveLength(11);
+  it("declares thirteen engine keys", () => {
+    expect(CORE_ENGINE_KEYS).toHaveLength(13);
     expect(CORE_ENGINE_KEYS).toContain("evidence");
     expect(CORE_ENGINE_KEYS).toContain("signals");
     expect(CORE_ENGINE_KEYS).toContain("access");
     expect(CORE_ENGINE_KEYS).toContain("ai");
     expect(CORE_ENGINE_KEYS).toContain("events");
     expect(CORE_ENGINE_KEYS).toContain("workflow");
+    expect(CORE_ENGINE_KEYS).toContain("policy");
+    expect(CORE_ENGINE_KEYS).toContain("decision");
   });
 
   it("re-exports audit write path", () => {
@@ -55,6 +59,15 @@ describe("Intelligence Core registry (IC-P1-01)", () => {
   it("re-exports signal collectors", () => {
     expect(typeof Signals.collectAuditTaskSignals).toBe("function");
     expect(typeof Signals.collectSalesActivitySignals).toBe("function");
+  });
+
+  it("re-exports policy engine", () => {
+    expect(typeof Policy.Retention).toBe("object");
+    expect(typeof Policy.Access.evaluateAccess).toBe("function");
+  });
+
+  it("re-exports decision engine", () => {
+    expect(typeof Decision.getDecisionCompletionState).toBe("function");
   });
 
   it("re-exports intelligence contracts", () => {

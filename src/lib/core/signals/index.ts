@@ -1,11 +1,19 @@
 /**
- * Signal Engine facade — cross-product runtime signals.
+ * Signal Engine — cross-product runtime signals.
+ * IC-P2.2: Signal Engine Consolidation.
  */
 export type {
   ProductMetricSignals,
   RuntimeSignal,
   RuntimeSignalSeverity,
-} from "@/lib/platform/signals";
+} from "./types";
+
+export {
+  SignalEngine,
+  type SignalEngineAckInput,
+  type SignalEngineProduceInput,
+  type SignalEngineResolveInput,
+} from "./engine";
 
 export {
   collectAuditActivitySignals,
@@ -14,12 +22,18 @@ export {
   collectAuditMetricSignals,
   collectAuditReviewSignals,
   collectAuditTaskSignals,
+} from "./producers/audit-signal-producer";
+
+export {
   collectLocalContentActivitySignals,
   collectLocalContentApprovalSignals,
   collectLocalContentReviewSignals,
   collectLocalContentTaskSignals,
+} from "./producers/localcontent-signal-producer";
+
+export {
   collectSalesActivitySignals,
   collectSalesApprovalSignals,
   collectSalesReviewSignals,
   collectSalesTaskSignals,
-} from "@/lib/platform/signals";
+} from "./producers/sales-signal-producer";
