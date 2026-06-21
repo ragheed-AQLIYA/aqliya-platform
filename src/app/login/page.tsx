@@ -80,6 +80,7 @@ export default function LoginPage() {
       "",
       qs ? `${url.pathname}?${qs}` : url.pathname,
     );
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- clear OAuth error after URL cleanup
     setError("");
   }, []);
 
