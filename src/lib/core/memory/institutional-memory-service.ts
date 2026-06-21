@@ -1,9 +1,9 @@
 import "server-only"
+/* eslint-disable @typescript-eslint/no-explicit-any -- R-IM-01: graph memory vs InstitutionalMemoryEvent schema drift */
 import { prisma } from "@/lib/prisma"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
-import type { Prisma } from "@prisma/client"
 
-// Cast for models not yet generated in PrismaClient
+// Cast for legacy collection/event APIs not aligned with current Prisma models (R-IM-01).
 const p = prisma as any
 
 // ─── Types ───
