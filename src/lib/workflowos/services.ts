@@ -7,6 +7,7 @@ import {
   requireWorkflowAdmin,
 } from "@/lib/workflowos/tenant-guard";
 import { createWorkflowAuditEvent } from "@/lib/workflowos/audit";
+import { assertWorkflowOsTransition } from "@/lib/core/workflow/workflowos-adapter";
 import type {
   CreateWorkflowRecordInput,
   UpdateWorkflowRecordInput,
@@ -360,6 +361,8 @@ export async function submitWorkflowRecordForReview(
   if (record.createdById !== ctx.id)
     throw new Error("Access denied: can only submit own records");
 
+  assertWorkflowOsTransition(record.status, "submit");
+
   const updated = await prisma.sunbulRecord.update({
     where: { id: recordId },
     data: { status: "UnderReview", submittedAt: new Date() },
@@ -390,6 +393,8 @@ export async function approveWorkflowRecord(
   if (!record) throw new Error("Record not found");
   if (record.status !== "UnderReview")
     throw new Error("Only records under review can be approved");
+
+  assertWorkflowOsTransition(record.status, "approve");
 
   const updated = await prisma.sunbulRecord.update({
     where: { id: recordId },
@@ -422,6 +427,8 @@ export async function returnWorkflowRecord(
   if (!record) throw new Error("Record not found");
   if (record.status !== "UnderReview")
     throw new Error("Only records under review can be returned");
+
+  assertWorkflowOsTransition(record.status, "return");
 
   const updated = await prisma.sunbulRecord.update({
     where: { id: recordId },
@@ -458,6 +465,8 @@ export async function archiveWorkflowRecord(
   if (!record) throw new Error("Record not found");
   if (record.status !== "Approved")
     throw new Error("Only approved records can be archived");
+
+  assertWorkflowOsTransition(record.status, "archive");
 
   const updated = await prisma.sunbulRecord.update({
     where: { id: recordId },

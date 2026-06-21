@@ -4,7 +4,7 @@
 
 "use server";
 
-import { getCurrentUser } from "@/lib/auth";
+import { requireServerActionAccess } from "@/core/access/server-action-guard";
 import { prisma } from "@/lib/prisma";
 import PDFDocument from "pdfkit";
 import {
@@ -30,8 +30,7 @@ export interface ReviewExportResult {
 
 export async function exportReviewSummaryPdfAction(): Promise<ReviewExportResult> {
   try {
-    const user = await getCurrentUser();
-    if (!user) return { success: false, error: "Not authenticated" };
+    const user = await requireServerActionAccess("local_content", "export");
 
     const orgId = user.organizationId;
 

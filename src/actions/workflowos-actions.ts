@@ -27,7 +27,7 @@ import {
   uploadWorkflowDocument,
   deleteStoredWorkflowDocument,
 } from "@/lib/workflowos/storage";
-import { listWorkflowAuditEvents } from "@/lib/workflowos/audit";
+import { listWorkflowAuditEvents, recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
 import { getUserWorkflowRole } from "@/lib/workflowos/tenant-guard";
 import { isExpectedAccessDeniedError, requireUserContext } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -686,17 +686,15 @@ export async function logWorkflowAuditEvent(params: {
   comment?: string;
 }) {
   try {
-    await prisma.workflowAuditEvent.create({
-      data: {
-        organizationId: params.organizationId,
-        recordId: params.recordId,
-        actorId: params.actorId,
-        actorName: params.actorName,
-        action: params.action,
-        fromStatus: params.fromStatus,
-        toStatus: params.toStatus,
-        comment: params.comment,
-      },
+    await recordWorkflowAuditEvent({
+      organizationId: params.organizationId,
+      recordId: params.recordId,
+      actorId: params.actorId,
+      actorName: params.actorName,
+      action: params.action,
+      fromStatus: params.fromStatus,
+      toStatus: params.toStatus,
+      comment: params.comment,
     });
     return { success: true };
   } catch (error) {

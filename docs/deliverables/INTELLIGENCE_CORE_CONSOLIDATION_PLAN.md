@@ -1,293 +1,344 @@
-# Phase 3 — Intelligence Core Consolidation Plan
+# Intelligence Core Consolidation Plan
 
-**Date:** 2026-06-20  
-**Scope:** Identification and consolidation of intelligence, governance, audit, workflow, notification, and permission implementations  
-**Data Sources:** `src/lib/ai/`, `src/lib/governance/`, `src/lib/platform/intelligence.ts`, `src/lib/platform/institutional-memory/`, `src/lib/platform/signals/`, `src/lib/platform/cross-product-ai/`, `src/lib/platform/workflow/`, `src/lib/platform/operations/`, `src/lib/rag/`, `src/lib/audit-intelligence/`, `src/lib/local-content-intelligence/`, `src/lib/tb-intelligence/`
-
----
-
-## Executive Summary
-
-The codebase describes an "Intelligence Core" in architectural documentation, but no unified engine exists. Instead, intelligence capabilities are distributed across **12+ separate locations** with overlapping responsibilities. The governance abstraction (`src/lib/governance/`) is mature and should form the foundation of a consolidated Intelligence Core. The RAG engine is product-agnostic and well-designed. The institutional memory graph is full-featured.
-
-**Intelligence Core Consolidation Score: 4.5/10** — scattered but salvageable
+**Generated:** 2026-06-21  
+**Based on:** INTELLIGENCE_CORE_MAP.md, INTELLIGENCE_DUPLICATION_REPORT.md, INTELLIGENCE_DEPENDENCY_GRAPH.md, INTELLIGENCE_CORE_V2_ARCHITECTURE.md
 
 ---
 
-## 1. Current State: 12 Locations Claiming "Intelligence Core"
+## Decision Key
 
-| # | Location | Files | Role | Overlaps With |
-|---|----------|-------|------|---------------|
-| IC-01 | `src/lib/ai/` | 33 | AI orchestration, providers, routing | IC-04, IC-06, IC-09 |
-| IC-02 | `src/lib/governance/` | 22 | Cross-product governance framework | IC-06 (governance bridge in audit/) |
-| IC-03 | `src/lib/platform/intelligence.ts` | 1 | Types/scoring only | — (pure types, no overlap) |
-| IC-04 | `src/lib/platform/cross-product-ai/` | 4 | AI sessions, action registry | IC-01, IC-09 |
-| IC-05 | `src/lib/platform/institutional-memory/` | 4 | Knowledge graph, collections | — (unique capability) |
-| IC-06 | `src/lib/platform/signals/` | 7 | Cross-product runtime signals | IC-02 (governance events) |
-| IC-07 | `src/lib/platform/workflow/` | 1 | Stub | IC-08 (contracts runtime) |
-| IC-08 | `src/lib/platform/contracts/` | 4 | Audit trail + review/approval contracts | IC-07 |
-| IC-09 | `src/lib/audit/governance/` | 6 | Audit-specific governance | IC-02 (duplicates governance concepts) |
-| IC-10 | `src/lib/audit-intelligence/` | 1 | Thin bridge | — (1 file, minimal) |
-| IC-11 | `src/lib/local-content-intelligence/` | 1 | Thin bridge | — (1 file, minimal) |
-| IC-12 | `src/lib/tb-intelligence/` | 20 | Trial balance AI | IC-01 (AI orchestration) |
-| IC-13 | `src/lib/rag/` | ~15 | RAG engine | IC-01 (orchestrator-rag-inject) |
-| IC-14 | `src/lib/platform/operations/` | 8 | Task center, activity stream | IC-06 (signals produce tasks) |
+| Decision | Meaning |
+|----------|---------|
+| KEEP | Module stays as-is (correct location, proper design) |
+| MERGE | Module should merge into another with its functionality absorbed |
+| REPLACE | Module should be replaced with a new implementation |
+| REMOVE | Module should be deleted (no value, superseded, or dead code) |
 
 ---
 
-## 2. Duplicate Governance Implementations
+## Phase 0: Foundation (Week 1-2)
 
-### G-01: Governance Context — `governance/` vs `audit/governance/`
+### P0.1 Audit Engine Consolidation
+**Effort:** 3 days | **Risk:** LOW | **Complexity:** LOW
 
-| Feature | `src/lib/governance/` | `src/lib/audit/governance/` |
-|---------|----------------------|---------------------------|
-| Scope | Cross-product | AuditOS-specific |
-| Files | 22 (types, provenance, approval, escalation, prompts, retrieval) | 6 (approval-gates, governance-engine, types) |
-| Maturity | L5 — comprehensive | L4 — audit-specific wrapper |
-| Reuse | Should be shared by all products | Currently only used by AuditOS |
-| Overlap | Governance task types, approval states, escalation | Wraps governance concepts for audit domain |
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| `writePlatformAuditLog` | `src/lib/platform/audit-log.ts` | KEEP | Canonical — single write path |
+| `AuditLogger` | `src/lib/platform/audit-logger.ts` | MERGE → audit-log.ts | Thin wrapper, add builder pattern to canonical |
+| `writeAuditEvent` | `src/lib/platform/audit-event-service.ts` | REPLACE | Duplicate of writePlatformAuditLog |
+| `platform-audit.ts` | `src/lib/platform-audit.ts` | REMOVE | Legacy — all callers migrated to writePlatformAuditLog |
+| Hash chain | `src/lib/platform/audit/` | KEEP | Well-designed, no changes needed |
+| Audit search | `src/lib/platform/audit/` | KEEP | Already unified in Phase 0 audit event unification |
 
-**Impact:** `audit/governance/` duplicates or wraps governance concepts that already exist in `governance/`. Approval gates and governance engines are re-implemented for the audit domain when they could reuse the shared framework.
+**Steps:**
+1. Add AuditEventInput → PlatformAuditLogInput adapter to audit-log.ts
+2. Migrate all writeAuditEvent call sites to writePlatformAuditLog
+3. Delete audit-event-service.ts
+4. Migrate all platform-audit.ts call sites
+5. Delete platform-audit.ts
+6. Verify all 300+ call sites compile
 
-**Recommendation:** Deprecate `audit/governance/`. The audit domain should use `governance/` directly or via thin product-specific adapters.
-
-### G-02: Provenance Tracking — `governance/provenance.ts`
-
-Well-designed functional provenance engine. However:
-- No product has adopted it
-- AuditOS tracks provenance through `AuditEvent.previousState/newState`
-- LocalContentOS tracks through `LocalContentAuditEvent.before/after`
-- SalesOS uses in-memory audit entries
-
-**Recommendation:** Provenance should become the canonical cross-product provenance tracker, adopted by all products.
-
-### G-03: Approval State Machine — `governance/approval-state.ts`
-
-Rules are comprehensive:
-- 8 states (draft_generated → human_review → approved_by_human → finalized)
-- AI cannot auto-approve (hard-coded rule)
-- 3 professional tasks always require human approval
-
-**However:** This state machine is NOT enforced at the middleware, API, or database level — it's an in-memory contract. Actual enforcement depends on each product implementing its own approval gates.
-
-**Recommendation:** Wire approval state machine into a middleware guard for all product routes that require human approval.
+**Dependencies:** None (standalone refactor)
 
 ---
 
-## 3. Duplicate Audit Implementations
+### P0.2 Notification Consolidation
+**Effort:** 2 days | **Risk:** LOW | **Complexity:** LOW
 
-### See Phase 4 (Audit Unification) for complete audit analysis.
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| Notification engine | `src/lib/platform/notification/` | KEEP | Canonical multi-channel engine |
+| Alternative engine | `src/lib/platform/notifications/` | MERGE → notification/ | Merge features, remove duplicate |
+| WorkflowOS wrapper | `src/lib/workflowos/notification-service.ts` | KEEP | Legitimate adapter pattern |
 
-Summary of audit duplication:
-- 11 separate Prisma audit models
-- 5 product-specific audit write services
-- 3 platform-level audit write paths
-- 0 product adoptions of platform audit
-- Hash chain only protects PlatformAuditLog (not any product audit table)
+**Steps:**
+1. Move any unique features from `platform/notifications/` into `platform/notification/`
+2. Update all imports from `platform/notifications/` to `platform/notification/`
+3. Delete `src/lib/platform/notifications/`
+4. Verify WorkflowOS notification service still works
 
----
-
-## 4. Duplicate Workflow Implementations
-
-### W-01: Workflow Engine — 4 Incomplete Locations
-
-| Location | What Exists | Status |
-|----------|------------|--------|
-| `lib/platform/workflow/product-templates.ts` | `getWorkflowTemplateForProduct()` | Returns null — shell |
-| `lib/platform/contracts/review-approval-runtime.ts` | In-memory review state machine | Not connected to any product |
-| `lib/workflowos/` | Full workflow service layer (14 files) | Product-specific to WorkflowOS |
-| `lib/decision/` | Decision templates (7 types) | Template definitions, no workflow runtime |
-
-**Impact:** Workflow is simultaneously over-engineered (4 locations) and non-existent (no actual cross-product workflow engine).
-
-**Recommendation:** Consolidate into `lib/platform/workflow/` with:
-1. Product-agnostic workflow engine
-2. Template definitions per product
-3. Review/approval as a plug-in state machine
-4. Integration with governance framework
+**Dependencies:** None
 
 ---
 
-## 5. Duplicate Notification Implementations
+### P0.3 Platform Stub Cleanup
+**Effort:** 1 day | **Risk:** LOW | **Complexity:** LOW
 
-### N-01: See Phase 2 D-01
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| `platform/workflow/product-templates.ts` | REAL (15 lines) | KEEP | Has real logic — calls getProductTemplate from core/workflow. Not a stub. Plan outdated. |
+| `platform/evidence/evidence-service.ts` | REAL (240 lines) | KEEP | Not a stub — has lookupEvidence, assertEvidenceDownloadAccess, registerEvidence. registerEvidence returns registered:false (facade phase). |
+| `platform/signals/index.ts` | Signal producers | KEEP | Real implementations for audit, sales, local-content signals. Cross-product commercial stub deleted. |
+| `platform/signals/cross-product-commercial.ts` | STUB (returns []) | REMOVED ✅ | Dead code, no callers — deleted 2026-06-21 |
 
-Two notification engines: `notification/` (12 files) and `notifications/` (3 files). Both write to `PlatformNotification`.
+**Steps:**
+1. ~~Delete `product-templates.ts`~~ ⏭️ Has real code, not a stub
+2. ~~Delete `cross-product-commercial.ts`~~ ✅ Done
+3. Mark `evidence-service.ts` as TARGET for Evidence Engine — done (below)
+4. Mark `signals/index.ts` stubs for Signal Engine replacement — done (below)
 
----
-
-## 6. Duplicate Permission Systems
-
-### P-01: Authorization — 4 Layers
-
-| Layer | Location | Maturity | Integration |
-|-------|----------|----------|-------------|
-| Middleware | `src/middleware.ts` (routeMinRoles) | L5 | Used by all protected routes |
-| RBAC Service | `access/` | L5 | Used by server actions and API routes |
-| ABAC | `abac/` | L3 | NOT wired into any authorization path |
-| Core Access | `core/access/` | L4 | Re-exports platform access |
-
-**Issue:** Middleware uses static `routeMinRoles` map. RBAC service does database-backed permission checks. ABAC is separate and unused. These don't compose.
-
-The middleware does not call the RBAC service and has no knowledge of ABAC policies. Server actions that call the RBAC service go through a second authorization path. This means:
-- A route allowed by middleware could be denied by the RBAC service
-- ABAC policies could contradict both
-- No single audit trail of authorization decisions
-
-**Recommendation:** Create `authorize()` that composes:
-1. Middleware gate (route-level)
-2. RBAC check (permission-level)
-3. ABAC evaluation (policy-level) — if policies exist for the resource
-4. Tenant guard (organization-level)
+**Dependencies:** None
 
 ---
 
-## 7. Intelligence Core Target Architecture
+## Phase 1: Core Engine Extraction (Week 3-4)
 
-### Proposed Unified Intelligence Core
+### P1.1 Governance Engine Move
+**Effort:** 2 days | **Risk:** LOW | **Complexity:** LOW
 
-```
-src/lib/intelligence-core/
-├── index.ts                    # Public API
-├── types.ts                    # Shared types
-│
-├── governance/                 # ← from src/lib/governance/
-│   ├── runtime-types.ts
-│   ├── retrieval-router.ts     # Master governance context
-│   ├── provenance.ts
-│   ├── approval-state.ts
-│   ├── escalation.ts
-│   └── prompt-framework.ts
-│
-├── ai/                         # ← from src/lib/ai/
-│   ├── orchestrator.ts
-│   ├── providers/
-│   ├── hybrid-router.ts
-│   ├── governed-ai-executor.ts
-│   └── budget-manager.ts
-│
-├── rag/                        # ← from src/lib/rag/
-│   ├── intelligence-core-rag.ts
-│   ├── rag-retriever.ts
-│   ├── chunking-engine.ts
-│   └── embedding-service.ts
-│
-├── memory/                     # ← from src/lib/platform/institutional-memory/
-│   ├── institutional-memory-service.ts
-│   └── knowledge-graph.ts
-│
-├── signals/                    # ← from src/lib/platform/signals/
-│   ├── signal-types.ts
-│   ├── audit-signal-producer.ts
-│   ├── sales-signal-producer.ts
-│   └── localcontent-signal-producer.ts
-│
-├── workflow/                   # Consolidated
-│   ├── workflow-engine.ts
-│   ├── review-approval.ts
-│   └── templates/
-│
-├── events/                     # NEW — unified event system
-│   ├── event-types.ts
-│   ├── event-bus.ts
-│   └── event-persistence.ts
-│
-├── operations/                 # ← from src/lib/platform/operations/
-│   ├── task-center.ts
-│   ├── activity-stream.ts
-│   └── queue-runtime.ts
-│
-└── contracts/                  # ← from src/lib/platform/contracts/
-    ├── audit-event-contract.ts
-    ├── audit-trail-runtime.ts
-    ├── review-approval-contract.ts
-    └── review-approval-runtime.ts
-```
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| retrieval-router | `src/lib/governance/` | MERGE → `src/lib/core/governance/` | Move to canonical location |
+| runtime-types | `src/lib/governance/` | MERGE → `src/lib/core/contracts/` | Move types to contracts |
+| approval-state | `src/lib/governance/` | KEEP (move) | Well-designed |
+| escalation | `src/lib/governance/` | KEEP (move) | Well-designed |
+| provenance | `src/lib/governance/` | KEEP (move) | Well-designed |
+| actor-lineage | `src/lib/governance/` | KEEP (move) | Well-designed |
+| prompt-framework | `src/lib/governance/` | KEEP (move) | Well-designed |
 
-### Key Design Principles
+**Steps:**
+1. Create `src/lib/core/contracts/governance-types.ts` (runtime-types)
+2. Move governance modules to `src/lib/core/governance/`
+3. Add barrel exports in `src/lib/core/governance/index.ts`
+4. Keep backward-compatible re-exports in `src/lib/governance/`
+5. Verify all imports resolve
 
-1. **Governance-first:** Every AI task, workflow transition, and signal is governed by `governance/` context
-2. **Single provider resolution:** One routing path with consistent fallback chain
-3. **Unified audit client:** Every intelligence operation writes to PlatformAuditLog + hash chain
-4. **Event-driven:** Signals, audit events, and workflow transitions share a common event taxonomy
-5. **Product-agnostic core:** Product-specific adapters live in product directories, not in the core
-6. **Configurable governance:** Task-type-to-governance mapping from `retrieval-router.ts` should be extensible per organization
+**Dependencies:** P0.1
 
 ---
 
-## 8. Consolidation Migration Plan
+### P1.2 AI Execution Engine Move
+**Effort:** 2 days | **Risk:** LOW | **Complexity:** LOW
 
-### Phase 1 — Governance Unification (2 weeks)
-| Step | Action | Effort | Risk |
-|------|--------|--------|------|
-| 1.1 | Move `governance/` to `intelligence-core/governance/` | 1 day | Low |
-| 1.2 | Deprecate `audit/governance/`, update AuditOS to use shared | 2 days | Medium |
-| 1.3 | Add governance context to platform-level types | 1 day | Low |
-| 1.4 | Wire approval state machine into middleware guard | 2 days | Medium |
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| AIOrchestrator | `src/lib/ai/orchestrator.ts` | MERGE → `src/lib/core/ai/engine.ts` | Move to canonical location |
+| governedAIExecute | `src/lib/ai/governed-ai-executor.ts` | MERGED ✅ → `src/lib/core/ai/governed-ai-executor.ts` | Moved to core/ai/ with absolute import paths. Deleted original. Exported through core/ai/index.ts. |
+| providers | `src/lib/ai/providers/` | KEEP → `src/lib/core/ai/providers/` | Well-designed |
+| intelligence-runtime | `src/lib/ai/intelligence-runtime.ts` | KEEP → `src/lib/core/ai/` | Well-designed |
+| handlers | `src/lib/ai/handlers/` | KEEP (product-specific) | Keep in products, not core |
+| memory | `src/lib/ai/memory/` | MERGE → Memory Engine | Absorb into core/memory/ |
+| product-ai-bridge | `src/lib/platform/product-ai-bridge.ts` | KEEP | Legitimate product gateway |
 
-### Phase 2 — AI Runtime Unification (2 weeks)
-| Step | Action | Effort | Risk |
-|------|--------|--------|------|
-| 2.1 | Consolidate provider resolution (C-01, C-02, C-03) | 2 days | Medium |
-| 2.2 | Move `ai/` to `intelligence-core/ai/` | 1 day | Low |
-| 2.3 | Integrate `governed-ai-executor` into orchestrator | 2 days | Medium |
-| 2.4 | Move `rag/` to `intelligence-core/rag/` | 1 day | Low |
+**Steps:**
+1. Create `src/lib/core/ai/` directory structure
+2. Move orchestrator, executor, providers, runtime router
+3. Keep backward-compatible exports in `src/lib/ai/`
+4. Add AI Execution Engine interface
 
-### Phase 3 — Memory & Signals (1 week)
-| Step | Action | Effort | Risk |
-|------|--------|--------|------|
-| 3.1 | Move institutional memory to `intelligence-core/memory/` | 1 day | Low |
-| 3.2 | Consolidate signals into `intelligence-core/signals/` | 2 days | Low |
-| 3.3 | Remove signal index stubs | 0.5 days | Low |
-
-### Phase 4 — Unified Event System (3 weeks)
-| Step | Action | Effort | Risk |
-|------|--------|--------|------|
-| 4.1 | Define platform event taxonomy | 2 days | Medium |
-| 4.2 | Create event bus abstraction | 3 days | High |
-| 4.3 | Migrate audit to unified event system | 5 days | High |
-| 4.4 | Migrate signals to event system | 2 days | Medium |
-
-### Phase 5 — Workflow Engine (3 weeks)
-| Step | Action | Effort | Risk |
-|------|--------|--------|------|
-| 5.1 | Design workflow engine architecture | 2 days | Medium |
-| 5.2 | Implement core workflow engine | 5 days | High |
-| 5.3 | Migrate product workflow templates | 3 days | Medium |
-| 5.4 | Connect review/approval state machine | 3 days | Medium |
-
-### Phase 6 — Operations Runtime (1 week)
-| Step | Action | Effort | Risk |
-|------|--------|--------|------|
-| 6.1 | Move operations to `intelligence-core/operations/` | 1 day | Low |
-| 6.2 | Enable queue by default with Redis persistence | 2 days | Medium |
-| 6.3 | Implement task persistence | 3 days | High |
-| 6.4 | Enable output queue | 2 days | High |
-
-**Total Estimated Effort:** **13-14 weeks** (3-4 months for full consolidation)
+**Dependencies:** P0.1, P1.1
 
 ---
 
-## 9. Key Risks
+### P1.3 Knowledge Engine Extraction
+**Effort:** 3 days | **Risk:** MEDIUM | **Complexity:** MEDIUM
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Moving files breaks imports across 100+ files | Build failure | Scripted migration + thorough test suite |
-| Governance unification requires AuditOS changes | AuditOS destabilization | Keep old path for AuditOS during migration, add deprecation warnings |
-| Workflow engine takes longer than estimated | Scope creep | Ship Phase 1-3 first (governance + AI + signals), defer workflow |
-| Event bus changes affect all products | Coordination overhead | Define contract first, then migrate products one by one |
-| Queue enablement with Redis dependency | Operational complexity | Keep fallback mode (in-memory) as default until deployment tested |
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| RAG pipeline | `src/lib/rag/` | MERGE → `src/lib/core/knowledge/` | Core engine — move from rag/ namespace |
+| knowledge-service | `src/lib/rag/knowledge-service.ts` | KEEP → core/knowledge/ | Well-designed |
+| intelligence-core-rag | `src/lib/rag/intelligence-core-rag.ts` | KEEP → core/knowledge/ | Governed retrieval |
+| governed-rag-metrics | `src/lib/rag/governed-rag-metrics.ts` | KEEP → core/knowledge/ | Evidence refs |
+| hybrid-search | `src/lib/rag/hybrid-search.ts` | KEEP → core/knowledge/ | Search implementation |
+| embedding-service | `src/lib/rag/embedding-service.ts` | KEEP → core/knowledge/ | Embedding pipeline |
+| knowledge-foundation | `knowledge-foundation/` | KEEP | Frozen charter — no code changes |
+| knowledge/ | `knowledge/` | KEEP | Data files — no code changes |
+| audit knowledge-engine | `src/lib/audit/knowledge-engine.ts` | KEEP (product) | Audit-specific, not RAG |
+| TB intelligence | `src/lib/tb-intelligence/` | KEEP | Domain-specific |
+
+**Steps:**
+1. Create `src/lib/core/knowledge/` directory
+2. Move RAG pipeline (12 files) to core/knowledge/
+3. Extract Knowledge Engine interface
+4. Add Knowledge Engine to core registry
+5. Keep backward-compatible re-exports in `src/lib/rag/`
+
+**Dependencies:** P0.1, P1.1
 
 ---
 
-## 10. Scoring
+## Phase 2: Memory & Signal Consolidation (Week 5-6)
 
-| Metric | Current | Target | Gap |
-|--------|---------|--------|-----|
-| Governance reuse | 2/10 | 9/10 | 7 |
-| AI runtime coherence | 4/10 | 8/10 | 4 |
-| Workflow consistency | 2/10 | 8/10 | 6 |
-| Audit event consistency | 3/10 | 9/10 | 6 |
-| Notification consistency | 5/10 | 9/10 | 4 |
-| Authorization consistency | 4/10 | 8/10 | 4 |
-| **Composite** | **3.5/10** | **8.5/10** | **5.0** |
+### P2.1 Memory Engine Consolidation
+**Effort:** 4 days | **Risk:** MEDIUM | **Complexity:** HIGH
+
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| Institutional memory service | `src/lib/platform/institutional-memory/` | MERGE → `src/lib/core/memory/` | Canonical memory engine |
+| AI query memory | `src/lib/ai/memory/institutional-memory.ts` | MERGED ✅ → `src/lib/core/memory/ai-memory.ts` | Merged into core/memory/ai-memory.ts, re-exported through core/memory/index.ts. Orphaned AI source deleted. |
+| Agent memory | `src/lib/platform/agent-memory.ts` | KEEP | Distinct key-value use case |
+| TB firm memory | `src/lib/tb-intelligence/firm-memory.ts` | KEEP | Domain-specific |
+
+**Steps:**
+1. Create `src/lib/core/memory/` directory
+2. Move institutional-memory-service.ts (842 lines) to core/memory/
+3. Add IntelligenceQuery storage as a graph node ingestion path
+4. Create unified Memory Engine interface
+5. Migrate AI memory callers to use core/memory/
+
+**Dependencies:** P1.2, P1.3
+
+---
+
+### P2.2 Signal Engine Consolidation
+**Effort:** 5 days | **Risk:** HIGH | **Complexity:** HIGH
+
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| Signal contracts | `src/lib/platform/intelligence.ts` | MERGE → `src/lib/core/signals/` | Core signal contracts |
+| Runtime signal types | `src/lib/platform/signals/types.ts` | MERGE → core/signals/types.ts | Merge with intelligence.ts |
+| Audit signal producer | `src/lib/platform/signals/audit-signal-producer.ts` | KEEP (move to core) | Well-implemented |
+| Sales signal producer | `src/lib/platform/signals/sales-signal-producer.ts` | KEEP (move to core) | Well-implemented |
+| LC signal producer | `src/lib/platform/signals/localcontent-signal-producer.ts` | KEEP (move to core) | Well-implemented |
+| Decision signals | `src/lib/decision/signal-automation.ts` | MERGE → core/signals/ | Route through Signal Engine |
+| Decision risk alerts | `src/lib/decision/signals-alerts.ts` | KEEP (decision-specific) | Decision-specific resolution flow |
+
+**Steps:**
+1. Create `src/lib/core/signals/` directory
+2. Unify signal types (IntelligenceSignal + RuntimeSignal → CoreSignal)
+3. Move product signal producers to core/signals/producers/
+4. Create Signal Engine interface with produce/acknowledge/resolve
+5. Add signal routing and classification
+6. Wire Decision monitoring signals through Signal Engine
+7. Mark product-specific signal stubs for deprecation
+
+**Dependencies:** P0.1, P1.1, P2.1
+
+---
+
+## Phase 3: Policy & Decision Extraction (Week 7-8)
+
+### P3.1 Policy Engine
+**Effort:** 3 days | **Risk:** MEDIUM | **Complexity:** MEDIUM
+
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| ABAC policies | `src/lib/platform/abac/` | MERGE → `src/lib/core/policy/` | Core policy engine |
+| Retention policies | `src/lib/platform/retention/` | MERGE → core/policy/retention/ | Policy sub-module |
+| Governance policy refs | `src/lib/governance/retrieval-router.ts` | MERGE → core/policy/governance/ | Policy references |
+| Access/rbac | `src/lib/platform/access/` | KEEP (wraps Policy Engine) | Execution layer |
+
+**Steps:**
+1. Create `src/lib/core/policy/` directory
+2. Create Policy Engine interface
+3. Move ABAC to core/policy/access/
+4. Move retention to core/policy/retention/
+5. Extract governance policy references from retrieval-router
+6. Create unified Policy Evaluation API
+
+**Dependencies:** P1.1, P0.1
+
+---
+
+### P3.2 Decision Engine Extraction
+**Effort:** 3 days | **Risk:** MEDIUM | **Complexity:** MEDIUM
+
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| Decision Engine | `src/lib/decision/decision-engine.ts` | EXTRACT → `src/lib/core/decision/` | Generalize multi-criteria engine |
+| Decision contracts | `src/lib/decision/decision-type-config.ts` | KEEP (product) | DecisionOS-specific config |
+| Decision intake | `src/lib/decision/intake.ts` | EXTRACT → core/decision/ | General evaluation |
+| Decision framework | `src/lib/decision/framework.ts` | EXTRACT → core/decision/ | General evaluation |
+| Decision recommendation | `src/lib/decision/recommendation.ts` | EXTRACT → core/decision/ | General evaluation |
+| Decision-specific | `src/lib/decision/sector*.ts, outcome*.ts` | KEEP (product) | DecisionOS-specific |
+
+**Steps:**
+1. Create `src/lib/core/decision/` directory
+2. Extract generic evaluation logic from DecisionOS
+3. Create Decision Engine interface
+4. Keep product-specific logic in DecisionOS
+5. Wire DecisionOS to use core engine
+
+**Dependencies:** P1.2 (AI), P1.1 (Governance), P0.1 (Audit)
+
+---
+
+## Phase 4: Evidence & Workflow (Week 9)
+
+### P4.1 Evidence Engine
+**Effort:** 5 days | **Risk:** HIGH | **Complexity:** HIGH
+
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| Evidence Service stub | `src/lib/platform/evidence/evidence-service.ts` | REPLACE | Replace with full engine |
+| Product evidence models (9) | `prisma/schema.prisma` | MERGE → core evidence | Unify evidence registry |
+| RAG evidence metrics | `src/lib/rag/governed-rag-metrics.ts` | MERGE → core/evidence/ | Evidence refs from RAG |
+| Governance provenance | `src/lib/governance/provenance.ts` | MERGE → core/evidence/ | Evidence status tracking |
+
+**Steps:**
+1. Design canonical Evidence model in Prisma (superset of all 9 product models)
+2. Create `src/lib/core/evidence/` with full engine
+3. Add migration: create CoreEvidence table
+4. Add evidence registration API
+5. Gradually migrate products to register evidence through Core
+6. Keep product-specific evidence models as views/legacy during transition
+
+**Dependencies:** P0.1, P1.3, P2.1
+
+---
+
+### P4.2 Workflow Engine
+**Effort:** 3 days | **Risk:** LOW | **Complexity:** MEDIUM
+
+| Capability | Current Location | Decision | Rationale |
+|------------|-----------------|----------|-----------|
+| WorkflowOS | `src/lib/workflowos/` | KEEP (product) | Product-specific workflow (template-based) |
+| Platform stub | `src/lib/platform/workflow/product-templates.ts` | REMOVE | Already planned in P0.3 |
+
+**Note:** Workflow Engine in the core is a cross-product state machine, NOT a replacement for WorkflowOS. WorkflowOS provides template-based custom workflows. Core Workflow Engine provides workflow primitives (transitions, gates, conditions) for other core engines.
+
+**Dependencies:** P1.1
+
+---
+
+## Phase 5: Core Integration (Week 10)
+
+### P5.1 Core Registry & Event Wiring
+**Effort:** 3 days | **Risk:** MEDIUM | **Complexity:** MEDIUM
+
+| Capability | Decision | Rationale |
+|------------|----------|-----------|
+| Core module registry | CREATE | Central registry of all core engines |
+| Core-to-product adapters | CREATE | Bridge between Core interfaces and product implementations |
+| Export path cleanup | TASK | Clean up all import paths post-moves |
+| Documentation update | TASK | Update ARCHITECTURE, MAP, STATUS docs |
+
+**Dependencies:** All prior phases
+
+---
+
+## Summary
+
+| Phase | Scope | Effort | Risk | Dependencies |
+|-------|-------|--------|------|-------------|
+| P0.1 | Audit Engine consolidation | 3 days | LOW | None |
+| P0.2 | Notification consolidation | 2 days | LOW | None |
+| P0.3 | Platform stub cleanup | 1 day | LOW | None |
+| P1.1 | Governance Engine move | 2 days | LOW | P0.1 |
+| P1.2 | AI Execution Engine move | 2 days | LOW | P0.1, P1.1 |
+| P1.3 | Knowledge Engine extraction | 3 days | MEDIUM | P0.1, P1.1 |
+| P2.1 | Memory Engine consolidation | 4 days | MEDIUM | P1.2, P1.3 |
+| P2.2 | Signal Engine consolidation | 5 days | HIGH | P0.1, P1.1, P2.1 |
+| P3.1 | Policy Engine | 3 days | MEDIUM | P1.1, P0.1 |
+| P3.2 | Decision Engine extraction | 3 days | MEDIUM | P1.2, P1.1, P0.1 |
+| P4.1 | Evidence Engine | 5 days | HIGH | P0.1, P1.3, P2.1 |
+| P4.2 | Workflow Engine | 3 days | LOW | P1.1 |
+| P5.1 | Core integration | 3 days | MEDIUM | All prior |
+
+**Total effort:** ~39 days (8 weeks)
+**Total risk:** 2 HIGH, 4 MEDIUM, 4 LOW
+**Blueprint stability:** HIGH — no new Prisma migrations required for Phases 0-1 (code moves only); Phases 2-4 require schema changes
+
+---
+
+## Prisma Migration Impact
+
+| Phase | Requires Migration | Impact |
+|-------|-------------------|--------|
+| P0 | No | Code moves only |
+| P1 | No | Code moves only |
+| P2 | Yes (Memory) | IntelligenceQuery → graph node data migration |
+| P2 | Yes (Signals) | Unified signal table |
+| P3 | No | Code moves only |
+| P4 | Yes (Evidence) | CoreEvidence table + 9 product model migration |
+| P5 | No | Registry only |

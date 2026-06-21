@@ -290,6 +290,24 @@ model PlatformAuditLog {
   @@index([createdAt])
 }
 
+model PlatformOutboxEvent {
+  id                 String    @id @default(cuid())
+  organizationId     String?
+  eventType          String
+  payload            Json
+  status             String    @default("pending")
+  attempts           Int       @default(0)
+  lastError          String?
+  platformAuditLogId String?
+  processedAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([status, createdAt])
+  @@index([organizationId, createdAt])
+  @@index([eventType, status])
+}
+
 // ==================== Office AI Assistant (Shared Application) ====================
 
 model OfficeAiTask {
@@ -2210,8 +2228,10 @@ model SalesAccount {
   organizationId         String
   platformOrganizationId String?
   name                   String
+  nameAr                 String?
   status                 String   @default("active")
   industry               String?
+  ownerId                String?
   isDemo                 Boolean  @default(false)
   metadata               Json?
   createdById            String?
@@ -2228,6 +2248,7 @@ model SalesAccount {
   @@index([platformOrganizationId, createdAt])
   @@index([organizationId, isDemo])
   @@index([status])
+  @@index([ownerId])
 }
 
 model SalesDeal {
@@ -2238,12 +2259,18 @@ model SalesDeal {
   account                SalesAccount          @relation(fields: [accountId], references: [id], onDelete: Restrict)
   stageId                String?
   stage                  SalesPipelineStage? @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  name                   String?
   title                  String
+  pipelineStage          String              @default("new")
   status                 String              @default("open")
   amount                 Float?
   currency               String              @default("SAR")
   probability            Float?
+  qualificationScore     Float?
   expectedCloseDate      DateTime?
+  reviewStatus           String?
+  approvalStatus         String?
+  ownerId                String?
   isDemo                 Boolean             @default(false)
   metadata               Json?
   createdById            String?
@@ -2263,6 +2290,8 @@ model SalesDeal {
   @@index([stageId])
   @@index([platformOrganizationId, updatedAt])
   @@index([isDemo])
+  @@index([pipelineStage])
+  @@index([ownerId])
 }
 
 model SalesEvidenceLink {
@@ -2300,9 +2329,11 @@ model SalesInteraction {
   account                SalesAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   dealId                 String?
   deal                   SalesDeal?   @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  contactId              String?
   type                   String
   subject                String?
   summary                String?
+  evidenceRef            String?
   occurredAt             DateTime
   metadata               Json?
   createdById            String?
@@ -2314,6 +2345,7 @@ model SalesInteraction {
   @@index([accountId, occurredAt])
   @@index([dealId, occurredAt])
   @@index([organizationId, accountId])
+  @@index([contactId])
 }
 
 model SalesContact {
@@ -2323,14 +2355,20 @@ model SalesContact {
   accountId              String
   account                SalesAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   name                   String
+  title                  String?
   email                  String?
+  phone                  String?
   role                   String?
+  sensitivityLevel       String       @default("standard")
+  ownerId                String?
+  createdById            String?
   createdAt              DateTime     @default(now())
   updatedAt              DateTime     @updatedAt
 
   @@index([organizationId, accountId])
   @@index([platformOrganizationId, accountId])
   @@index([accountId])
+  @@index([ownerId])
 }
 
 model SalesProposal {

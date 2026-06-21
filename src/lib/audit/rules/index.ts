@@ -10,6 +10,10 @@ export function isSocpaRulesEnabled(): boolean {
   return isEnabled("audit.socpa-rules");
 }
 
+export function isIsaRulesEnabled(): boolean {
+  return isEnabled("audit.isa-rules");
+}
+
 export {
   runIfrsRulesForEngagement,
   appendIfrsValidationIssues,
@@ -22,6 +26,12 @@ export {
 
 export { loadIfrsKnowledgeRules, clearIfrsRulesCache } from "./ifrs-rules-loader";
 export { loadSocpaKnowledgeRules, clearSocpaRulesCache } from "./socpa-rules-loader";
+export { loadIsaKnowledgeRules, getIsa320KnowledgeRules, clearIsaRulesCache } from "./isa-rules-loader";
+export { evaluateIsaRule } from "./isa-rule-checks";
+export {
+  runIsaRulesForEngagement,
+  maybeRunIsaRulesAfterFsRebuild,
+} from "./isa-rules-engine";
 export { evaluateIfrsRule } from "./ifrs-rule-checks";
 export { evaluateSocpaRule, isSocpaJurisdiction } from "./socpa-rule-checks";
 export { buildDisclosureTriggersFromEvaluations } from "./disclosure-triggers";
@@ -36,6 +46,9 @@ export type {
   SocpaRuleEvaluation,
   SocpaDisclosureTrigger,
   SocpaKnowledgeRule,
+  IsaKnowledgeRule,
+  IsaRuleEvaluation,
+  IsaRulesRunResult,
 } from "./types";
 
 /** Non-blocking hook after FS rebuild */

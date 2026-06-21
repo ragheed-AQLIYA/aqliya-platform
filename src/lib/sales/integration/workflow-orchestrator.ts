@@ -1,7 +1,13 @@
 import type { SalesOpportunity } from "../types";
 import { buildAccountIntelligence } from "../vnext/account-intelligence";
 import { initProposalWorkflow, advanceProposalWorkflow } from "../vnext/proposal-workflow";
-import type { ReviewApprovalActor } from "@/lib/platform/contracts/review-approval-contract";
+/** Inline replacement for deleted contracts/review-approval-contract */
+interface ReviewApprovalActor {
+  id: string;
+  role: string;
+  organizationId?: string;
+  displayName?: string;
+}
 
 export type SalesOperatingStage =
   | "account"

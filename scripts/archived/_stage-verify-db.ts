@@ -23,7 +23,7 @@ async function main() {
   r.LCAuditEvents = await p.localContentAuditEvent.count();
   r.SalesAccounts = await p.salesAccount.count();
   r.SalesContacts = await p.salesContact.count();
-  r.SalesOpportunities = await p.salesOpportunity.count();
+  r.SalesDeals = await p.salesDeal.count();
   r.PlatformAuditLogs = await p.platformAuditLog.count();
 
   for (const [k, v] of Object.entries(r)) {

@@ -32,8 +32,10 @@ function evaluateRoleSlugCondition(
 ): boolean {
   const slugs = context.roleSlugs ?? [];
   switch (operator) {
+    case "EQ":
     case "EQUALS":
       return slugs.includes(value);
+    case "NEQ":
     case "NOT_EQUALS":
       return !slugs.includes(value);
     case "IN": {
@@ -78,8 +80,10 @@ function applyOperator(
   conditionValue: string,
 ): boolean {
   switch (operator) {
+    case "EQ":
     case "EQUALS":
       return String(contextValue) === conditionValue;
+    case "NEQ":
     case "NOT_EQUALS":
       return String(contextValue) !== conditionValue;
     case "IN": {

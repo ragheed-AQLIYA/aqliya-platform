@@ -16,8 +16,9 @@ import {
   buildTimeline,
   type TimelineEvent,
 } from "@/lib/decision/decision-timeline";
-import { logAudit } from "@/lib/platform-audit";
+import { logAudit } from "@/lib/decision/decision-audit";
 import { notifyOnEvent } from "@/lib/platform/notification/integration";
+import { assertDecisionOsTransition } from "@/lib/core/workflow/decision-os-adapter";
 
 function buildSnapshotData(
   recommendation: {
@@ -99,6 +100,8 @@ export async function submitForReview(decisionId: string) {
       };
     }
 
+    assertDecisionOsTransition(decision.status, "submit");
+
     const updated = await prisma.decision.update({
       where: { id: decisionId },
       data: { status: "IN_REVIEW" },
@@ -161,6 +164,8 @@ export async function approveDecision(
         error: `Decision cannot be approved in ${decision.status} status`,
       };
     }
+
+    assertDecisionOsTransition(decision.status, "approve");
 
     if (!decision.recommendation && !overrideReason) {
       return {
@@ -352,6 +357,8 @@ export async function rejectDecision(decisionId: string, reason: string) {
       return { success: false, error: "Rejection reason is required" };
     }
 
+    assertDecisionOsTransition(decision.status, "reject");
+
     const snapshot = buildSnapshotData(decision.recommendation);
 
     const updated = await prisma.decision.update({
@@ -425,6 +432,8 @@ export async function requestRevision(decisionId: string, reason: string) {
     if (!reason || reason.trim().length === 0) {
       return { success: false, error: "Revision reason is required" };
     }
+
+    assertDecisionOsTransition(decision.status, "return");
 
     const updated = await prisma.decision.update({
       where: { id: decisionId },

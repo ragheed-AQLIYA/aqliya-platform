@@ -313,11 +313,13 @@ export async function getUserRoles(
 export async function hasPermission(
   userId: string,
   permissionSlug: string,
+  organizationId: string,
   resource?: string,
 ): Promise<boolean> {
   const assignments = await prisma.userRoleAssignment.findMany({
     where: {
       userId,
+      organizationId,
       isActive: true,
     },
     include: {
@@ -436,9 +438,10 @@ export class RbacService {
   async hasPermission(
     userId: string,
     permissionSlug: string,
+    organizationId: string,
     resource?: string,
   ): Promise<boolean> {
-    return hasPermission(userId, permissionSlug, resource);
+    return hasPermission(userId, permissionSlug, organizationId, resource);
   }
 
   async getEffectivePermissions(

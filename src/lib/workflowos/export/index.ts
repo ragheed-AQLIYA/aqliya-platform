@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { requireServerActionAccess } from "@/core/access/server-action-guard";
 import { requireClientAccess } from "@/lib/workflowos/tenant-guard";
 import { createWorkflowAuditEvent } from "@/lib/workflowos/audit";
 import { generateWorkflowPdf } from "@/lib/workflowos/export/pdf-export";
@@ -21,6 +22,10 @@ export async function exportWorkflowRecord(
   input: WorkflowExportInput,
 ): Promise<WorkflowExportResult> {
   const ctx = await requireClientAccess(input.clientId);
+  await requireServerActionAccess("workflow", "export", {
+    organizationId: ctx.organizationId,
+    resourceId: input.recordId,
+  });
 
   const record = await prisma.sunbulRecord.findFirst({
     where: { id: input.recordId, clientId: input.clientId },

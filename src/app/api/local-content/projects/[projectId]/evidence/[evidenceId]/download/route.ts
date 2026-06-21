@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { assertProjectAccess } from "@/lib/local-content/guards";
+import { requireServerActionAccess } from "@/core/access/server-action-guard";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { getStorageProvider } from "@/lib/platform/storage";
+import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 
 export async function GET(
   _request: NextRequest,
@@ -13,27 +14,19 @@ export async function GET(
 
   try {
     const { user, project } = await assertProjectAccess(projectId, "view");
-
-    const evidence = await prisma.localContentEvidence.findUnique({
-      where: { id: evidenceId },
-      select: {
-        id: true,
-        projectId: true,
-        filename: true,
-        fileType: true,
-        sizeBytes: true,
-        storageKey: true,
-      },
+    await requireServerActionAccess("local_content", "read", {
+      organizationId: user.organizationId,
+      resourceId: projectId,
     });
 
-    if (!evidence || evidence.projectId !== projectId || !evidence.storageKey) {
-      return NextResponse.json(
-        { error: "Evidence not found" },
-        { status: 404 },
-      );
-    }
+    const evidenceRecord = await assertEvidenceDownloadAccess({
+      productSlug: "local_content",
+      evidenceId,
+      organizationId: user.organizationId,
+      resourceId: projectId,
+    });
 
-    const file = await getStorageProvider().retrieve(evidence.storageKey);
+    const file = await getStorageProvider().retrieve(evidenceRecord.storageKey!);
     if (!file) {
       return NextResponse.json(
         { error: "Stored file not found" },
@@ -57,23 +50,22 @@ export async function GET(
       {
         type: "local_content_evidence",
         id: evidenceId,
-        label: evidence.filename,
+        label: evidenceRecord.filename,
       },
       {
         status: "success",
         sourceModel: "LocalContentEvidence",
-        sourceId: evidence.id,
+        sourceId: evidenceRecord.id,
         metadata: {
           projectId,
-          fileType: evidence.fileType,
-          fileSize: evidence.sizeBytes,
+          fileType: evidenceRecord.fileType,
         },
       },
     );
 
     return buildDownloadResponse({
       content: file.content,
-      filename: evidence.filename,
+      filename: evidenceRecord.filename,
       mimeType: file.mimeType,
       sizeBytes: file.sizeBytes,
     });

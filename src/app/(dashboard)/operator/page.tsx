@@ -9,6 +9,7 @@ import { getRecentAuditEventsAction } from "@/actions/operator-actions";
 import { getSystemPerformanceAction } from "@/actions/operator-actions";
 
 import { OperatorDashboardClient } from "./operator-dashboard-client";
+import { EnterpriseHealthPanel } from "@/components/monitoring/enterprise-health-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +29,15 @@ export default async function OperatorDashboardPage() {
   ]);
 
   return (
-    <OperatorDashboardClient
-      health={health}
-      queue={queue}
-      db={db}
-      recentEvents={recentEvents ?? []}
-      performance={performance}
-    />
+    <div className="space-y-8">
+      <OperatorDashboardClient
+        health={health}
+        queue={queue}
+        db={db}
+        recentEvents={recentEvents ?? []}
+        performance={performance}
+      />
+      <EnterpriseHealthPanel />
+    </div>
   );
 }

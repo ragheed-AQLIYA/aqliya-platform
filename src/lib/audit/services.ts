@@ -26,6 +26,7 @@ import type {
   PilotSignoff,
 } from "@/types/audit";
 import { classifyTrialBalanceRows } from "@/lib/tb-intelligence";
+import { prisma } from "@/lib/prisma";
 import type { PaginatedResult } from "@/lib/audit/pagination";
 import { type FinancialStatementLine } from "@/types/audit";
 import * as mock from "./mock-data";
@@ -1362,6 +1363,28 @@ export async function createEvidence(params: {
     newState: evidence.state,
     description: `Evidence created: ${params.filename}`,
   });
+
+  try {
+    const engagement = await prisma.auditEngagement.findUnique({
+      where: { id: params.engagementId },
+      select: { organizationId: true },
+    });
+    if (engagement?.organizationId) {
+      const { linkAuditEvidenceAfterUpload } = await import(
+        "@/lib/core/evidence/link-after-upload"
+      );
+      await linkAuditEvidenceAfterUpload({
+        organizationId: engagement.organizationId,
+        engagementId: params.engagementId,
+        evidenceId: evidence.id,
+        filename: params.filename,
+        actorId: params.actorId,
+      });
+    }
+  } catch {
+    // Graph linkage is best-effort
+  }
+
   return { evidence };
 }
 
@@ -1405,6 +1428,28 @@ export async function createEvidenceWithStorage(params: {
       storageKey: params.storageKey,
     },
   });
+
+  try {
+    const engagement = await prisma.auditEngagement.findUnique({
+      where: { id: params.engagementId },
+      select: { organizationId: true },
+    });
+    if (engagement?.organizationId) {
+      const { linkAuditEvidenceAfterUpload } = await import(
+        "@/lib/core/evidence/link-after-upload"
+      );
+      await linkAuditEvidenceAfterUpload({
+        organizationId: engagement.organizationId,
+        engagementId: params.engagementId,
+        evidenceId: evidence.id,
+        filename: params.filename,
+        actorId: params.actorId,
+      });
+    }
+  } catch {
+    // Graph linkage is best-effort
+  }
+
   return { evidence };
 }
 

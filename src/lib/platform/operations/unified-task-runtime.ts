@@ -335,23 +335,24 @@ export function deriveApprovalTasks(
   }));
 }
 
+import {
+  collectAuditApprovalSignals,
+  collectAuditReviewSignals,
+  collectAuditTaskSignals,
+  collectLocalContentApprovalSignals,
+  collectLocalContentReviewSignals,
+  collectLocalContentTaskSignals,
+  collectSalesApprovalSignals,
+  collectSalesReviewSignals,
+  collectSalesTaskSignals,
+} from "@/lib/core/signals";
+
 /** Collect and sync derived tasks from product signals (read-only derivation). */
 export async function collectProductTasks(
   organizationId: string,
   ownerId = "system",
 ): Promise<TaskCenterItem[]> {
   await ensureTasksHydrated();
-  const {
-    collectAuditTaskSignals,
-    collectAuditReviewSignals,
-    collectAuditApprovalSignals,
-    collectLocalContentTaskSignals,
-    collectLocalContentReviewSignals,
-    collectLocalContentApprovalSignals,
-    collectSalesTaskSignals,
-    collectSalesReviewSignals,
-    collectSalesApprovalSignals,
-  } = await import("@/lib/platform/signals");
 
   const [
     auditTasks,

@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { RiskLevel } from "@prisma/client"
 import { isExpectedAccessDeniedError, requireDecisionAccess } from "@/lib/auth"
-import { logAudit, toAuditJson } from "@/lib/platform-audit"
+import { logAudit, toAuditJson } from "@/lib/decision/decision-audit"
 
 export async function getTenderProfile(decisionId: string) {
   try {

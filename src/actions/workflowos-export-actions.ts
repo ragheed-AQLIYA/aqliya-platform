@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
 import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import {
@@ -9,6 +8,7 @@ import {
   notifyExportApproved,
   notifyExportRejected,
 } from "@/lib/workflowos/notification-service";
+import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
 
 function mapAuthError(error: unknown): string {
   const msg = error instanceof Error ? error.message : "";
@@ -40,16 +40,14 @@ async function logExportAuditEvent(
     where: { id: actorId },
     select: { name: true },
   });
-  await prisma.workflowAuditEvent.create({
-    data: {
-      organizationId,
-      recordId,
-      actorId,
-      actorName: actor?.name ?? null,
-      action,
-      comment: comment ?? null,
-      metadata: (metadata ?? undefined) as Prisma.InputJsonValue | undefined,
-    },
+  await recordWorkflowAuditEvent({
+    organizationId,
+    recordId,
+    actorId,
+    actorName: actor?.name ?? null,
+    action,
+    comment: comment ?? null,
+    metadata,
   });
 }
 

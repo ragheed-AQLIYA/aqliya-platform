@@ -3,7 +3,7 @@
 > **Status:** Level 4 — Supporting reference  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
-> **Last updated:** 2026-06-19 — SalesOS → L5 Pilot-ready (sidebar, seed wiring, warning cleanup, docs update)
+> **Last updated:** 2026-06-21 — ContentStudio PDF export + route resilience hardening
 
 ---
 
@@ -74,7 +74,7 @@ The primary navigation presents AQLIYA as a platform, not a product company:
 | `/insights/*`         | AQLIYA Platform| Individual articles    | Public           | Active                |                                        |
 | `/buyers/*`           | AQLIYA Platform| Buyer persona guides   | Public           | Active                | Audit partner, CFO, CIO, government |
 | `/use-cases`          | AQLIYA Platform| Use case listing       | Public           | Active                |                                        |
-| `/how-we-work`        | AQLIYA Platform| Methodology page       | Public           | Loading                | Requires content fix |
+| `/how-we-work`        | AQLIYA Platform| Methodology page       | Public           | Active                 | 4-phase methodology, trust principle, AI governance, CTA |
 
 ### Operating System Reference Pages (deep-links from /platform#capabilities)
 
@@ -205,8 +205,23 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                        | Product/System | Route Type         | Public/Protected | Implementation Status | Notes               |
 | ---------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------- |
+| `/intelligence`              | Intelligence Core | Platform workspace | Protected     | Usable v0.1 (L4)      | Core engines dashboard, ABAC readiness, outbox stats, audit feed |
 | `/intelligence/sectors`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector intelligence |
 | `/intelligence/sectors/[id]` | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector detail       |
+
+### Platform Operator APIs (Intelligence Core / Tier 3)
+
+| Route | Product/System | Route Type | Public/Protected | Implementation Status | Notes |
+|-------|----------------|------------|------------------|----------------------|-------|
+| `/api/platform/enterprise-health` | Intelligence Core | Operator API | Protected (ADMIN) | Usable v0.1 (L4) | Tier 3 readiness snapshot |
+| `/api/platform/outbox/status` | Intelligence Core | Operator API | Protected (ADMIN) | Usable v0.1 (L4) | Outbox queue counts + failed rows |
+| `/api/platform/outbox/process` | Intelligence Core | Operator API | Protected (ADMIN) | Usable v0.1 (L4) | Process pending outbox batch |
+| `/api/platform/outbox/retry` | Intelligence Core | Operator API | Protected (ADMIN) | Usable v0.1 (L4) | Reset failed → pending (audited) |
+| `/api/platform/events/registry` | Intelligence Core | Operator API | Protected (ADMIN) | Usable v0.1 (L4) | Event schema registry (Phase 2) |
+| `/api/platform/abac/shadow-report` | Intelligence Core | Operator API | Protected (ADMIN) | Usable v0.1 (L4) | ABAC shadow mismatch report |
+| `/api/platform/abac/pilot-status` | Intelligence Core | Operator API | Protected (ADMIN) | Usable v0.1 (L4) | ABAC enforce pilot readiness |
+| `/monitoring` | Platform | Operator workspace | Protected (ADMIN) | Usable v0.1 (L4) | Enterprise health panel + outbox actions |
+| `/operator` | Platform | Operator workspace | Protected (ADMIN) | Usable v0.1 (L4) | Operator dashboard + enterprise health |
 
 ### SalesOS — Governed Commercial Intelligence Workspace (30 routes)
 
@@ -307,17 +322,17 @@ These pages serve as detail references for specialized operating systems. They a
 | `/risk/[id]`                       | RiskOS         | Governed workspace | Protected        | Usable v0.1 (L4)      | Risk model detail (existing route)           |
 | `/risk/assessments/[id]`           | RiskOS         | Governed workspace | Protected        | Pilot-ready (L5)      | Assessment detail: score bars, category scores, procedure step tracking, audit trail, JSON export |
 
-### ContentStudio — Content Workspace Prototype (L3)
+### ContentStudio — Content Workspace (L4)
 
 | Route                                     | Product/System | Route Type            | Public/Protected | Implementation Status | Notes                                                            |
 | ----------------------------------------- | -------------- | --------------------- | ---------------- | --------------------- | ---------------------------------------------------------------- |
-| \/content-studio\                       | ContentStudio  | Dashboard             | Protected        | Prototype (L3)        | Dashboard with workspace cards, KPI stats (workspaces, content, published), workspace creation dialog. AR-first RTL UI. |
-| \/content-studio/[workspaceId]\          | ContentStudio  | Governed workspace    | Protected        | Prototype (L3)        | Workspace detail with status-filtered tabs (ALL/DRAFT/IN_REVIEW/APPROVED/PUBLISHED/ARCHIVED), per-workspace stats. |
-| \/content-studio/[workspaceId]/create\   | ContentStudio  | Governed workspace    | Protected        | Prototype (L3)        | Content creation form with optional template pre-fill.           |
-| \/content-studio/[workspaceId]/[contentId]\ | ContentStudio  | Governed workspace | Protected        | Prototype (L3)        | Content detail: title, body, metadata, version history, lifecycle actions (submit for review, approve, reject, publish, archive). |
-| \/content-studio/templates\              | ContentStudio  | Governed workspace    | Protected        | Prototype (L3)        | Template list + inline create form with variable interpolation (\{{variable}}\). |
+| \/content-studio\                       | ContentStudio  | Dashboard             | Protected        | Usable v0.1 (L4)      | Dashboard with workspace cards, KPI stats (workspaces, content, published), workspace creation dialog. AR-first RTL UI. |
+| \/content-studio/[workspaceId]\          | ContentStudio  | Governed workspace    | Protected        | Usable v0.1 (L4)      | Workspace detail with status-filtered tabs (ALL/DRAFT/IN_REVIEW/APPROVED/PUBLISHED/ARCHIVED), per-workspace stats. |
+| \/content-studio/[workspaceId]/create\   | ContentStudio  | Governed workspace    | Protected        | Usable v0.1 (L4)      | Content creation form with optional template pre-fill.           |
+| \/content-studio/[workspaceId]/[contentId]\ | ContentStudio  | Governed workspace | Protected        | Usable v0.1 (L4)      | Content detail: title, body, metadata, version history, lifecycle actions (submit for review, approve, reject, publish, archive). |
+| \/content-studio/templates\              | ContentStudio  | Governed workspace    | Protected        | Usable v0.1 (L4)      | Template list + inline create form with variable interpolation (\{{variable}}\). |
 
-**ContentStudio maturity notes:** L3 Prototype — real Prisma models (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), server actions, audit trail via writePlatformAuditLog, content lifecycle with 5 states, bilingual AR-first UI. Missing: seed data, sidebar entry, PDF/export, dedicated test coverage. Not classified in official product taxonomy — listed here for transparency.
+**ContentStudio maturity notes:** L4 Usable v0.1 — real Prisma models (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), server actions, audit trail via writePlatformAuditLog, content lifecycle with 5 states, bilingual AR-first UI. Seed data added: 3 workspaces, 7 content items, version history, 2 templates. Sidebar entry added "استوديو المحتوى" with FileText icon. PDF export with bilingual Arabic/English rendering via pdfkit, markdown-aware formatting, audit trail. Missing: dedicated test coverage. Not classified in official product taxonomy — listed here for transparency.
 ### Sunbul — Redirect Alias to WorkflowOS
 
 | Route                                           | Product/System | Route Type        | Public/Protected | Implementation Status | Notes                                                                  |

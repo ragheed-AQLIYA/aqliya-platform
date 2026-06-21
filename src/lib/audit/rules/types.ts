@@ -134,3 +134,47 @@ export const EXECUTABLE_SOCPA_TOPICS = new Set([
   "routing-gate",
   "lineage-required",
 ]);
+
+/** ISA knowledge runtime — Tier 2 IC-P3-02 */
+export type IsaRuleStatus = IfrsRuleStatus;
+
+export interface IsaKnowledgeRule {
+  ruleId: string;
+  paragraphReference: string;
+  ruleText: string;
+  topic: string;
+  standardCode: string;
+  versionLabel?: string;
+  confidenceScore?: number;
+}
+
+export interface IsaRuleEvaluation {
+  ruleId: string;
+  standardCode: string;
+  paragraphReference: string;
+  topic: string;
+  status: IsaRuleStatus;
+  messageAr: string;
+  messageEn: string;
+}
+
+export interface IsaRulesRunResult {
+  engagementId: string;
+  passed: boolean;
+  ruleCount: number;
+  failedCount: number;
+  warningCount: number;
+  evaluations: IsaRuleEvaluation[];
+  runAt: string;
+}
+
+export const EXECUTABLE_ISA_TOPICS = new Set([
+  "risk-assessment",
+  "understanding-entity",
+  "identify-risks",
+  "pervasive-risks",
+  "engagement-partner",
+  "competence",
+  "direction-supervision",
+  "report-responsibility",
+]);

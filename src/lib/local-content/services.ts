@@ -6,6 +6,7 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { createLocalContentAuditEvent, AuditActions } from "./audit-events";
+import { assertLocalContentGovernanceTransition } from "@/lib/core/workflow/local-content-adapter";
 import type { ScoringResult } from "./types";
 import { calculateFullScoring } from "./scoring";
 import { buildOrganizationSpendAnalytics } from "./spend-analytics";
@@ -120,8 +121,12 @@ export async function updateProjectStatus(
 ) {
   const old = await prisma.localContentProject.findUnique({
     where: { id: projectId },
-    select: { status: true, localContentScore: true },
+    select: { status: true, localContentScore: true, organizationId: true },
   });
+
+  if (old?.status && old.status !== status) {
+    assertLocalContentGovernanceTransition(old.status, status);
+  }
 
   const project = await prisma.localContentProject.update({
     where: { id: projectId },
@@ -410,6 +415,23 @@ export async function createEvidenceEntry(
         filename: evidence.filename,
         evidenceType: evidence.evidenceType,
       }),
+    });
+  }
+
+  const project = await prisma.localContentProject.findUnique({
+    where: { id: evidence.projectId },
+    select: { organizationId: true },
+  });
+  if (project?.organizationId) {
+    const { linkLocalContentEvidenceAfterUpload } = await import(
+      "@/lib/core/evidence/link-after-upload"
+    );
+    await linkLocalContentEvidenceAfterUpload({
+      organizationId: project.organizationId,
+      projectId: evidence.projectId,
+      evidenceId: evidence.id,
+      filename: evidence.filename,
+      actorId: actor?.id,
     });
   }
 

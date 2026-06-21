@@ -5,6 +5,13 @@
 
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
+import { stampPlatformAuditEvent } from "@/lib/core/contracts/event-envelope";
+import {
+  buildOutboxPayloadFromAuditLog,
+  insertOutboxEvent,
+  isOutboxEnabled,
+  PLATFORM_AUDIT_OUTBOX_EVENT,
+} from "@/lib/core/events/outbox-service";
 
 // ─── Types ───
 
@@ -95,47 +102,70 @@ export async function writePlatformAuditLog(
       throw new Error("action is required");
     }
 
+    const stamped = isOutboxEnabled() ? stampPlatformAuditEvent(input) : input;
+
     const data = {
-      productKey: input.productKey,
-      action: input.action,
+      productKey: stamped.productKey,
+      action: stamped.action,
 
-      platformOrganizationId: input.platformOrganizationId ?? null,
-      clientWorkspaceId: input.clientWorkspaceId ?? null,
-      projectId: input.projectId ?? null,
-      environment: input.environment ?? process.env.NODE_ENV ?? null,
+      platformOrganizationId: stamped.platformOrganizationId ?? null,
+      clientWorkspaceId: stamped.clientWorkspaceId ?? null,
+      projectId: stamped.projectId ?? null,
+      environment: stamped.environment ?? process.env.NODE_ENV ?? null,
 
-      actorId: input.actorId ?? null,
-      actorType: input.actorType ?? null,
-      actorEmail: input.actorEmail ?? null,
-      actorName: input.actorName ?? null,
+      actorId: stamped.actorId ?? null,
+      actorType: stamped.actorType ?? null,
+      actorEmail: stamped.actorEmail ?? null,
+      actorName: stamped.actorName ?? null,
 
-      targetType: input.targetType ?? null,
-      targetId: input.targetId ?? null,
-      targetLabel: input.targetLabel ?? null,
+      targetType: stamped.targetType ?? null,
+      targetId: stamped.targetId ?? null,
+      targetLabel: stamped.targetLabel ?? null,
 
-      severity: normalizePlatformAuditSeverity(input.severity ?? "info"),
-      status: normalizePlatformAuditStatus(input.status ?? "recorded"),
+      severity: normalizePlatformAuditSeverity(stamped.severity ?? "info"),
+      status: normalizePlatformAuditStatus(stamped.status ?? "recorded"),
 
-      sourceSystem: input.sourceSystem ?? null,
-      sourceModel: input.sourceModel ?? null,
-      sourceId: input.sourceId ?? null,
-      requestId: input.requestId ?? null,
-      sessionId: input.sessionId ?? null,
-      ipAddress: input.ipAddress ?? null,
-      userAgent: input.userAgent ?? null,
+      sourceSystem: stamped.sourceSystem ?? null,
+      sourceModel: stamped.sourceModel ?? null,
+      sourceId: stamped.sourceId ?? null,
+      requestId: stamped.requestId ?? null,
+      sessionId: stamped.sessionId ?? null,
+      ipAddress: stamped.ipAddress ?? null,
+      userAgent: stamped.userAgent ?? null,
 
-      aiProvider: input.aiProvider ?? null,
-      aiModel: input.aiModel ?? null,
-      aiPromptVersion: input.aiPromptVersion ?? null,
-      aiOutputReviewStatus: input.aiOutputReviewStatus ?? null,
+      aiProvider: stamped.aiProvider ?? null,
+      aiModel: stamped.aiModel ?? null,
+      aiPromptVersion: stamped.aiPromptVersion ?? null,
+      aiOutputReviewStatus: stamped.aiOutputReviewStatus ?? null,
 
-      evidenceRefs: (input.evidenceRefs ?? undefined) as unknown as
+      evidenceRefs: (stamped.evidenceRefs ?? undefined) as unknown as
         | Prisma.InputJsonValue
         | undefined,
-      metadata: (input.metadata ?? undefined) as unknown as
+      metadata: (stamped.metadata ?? undefined) as unknown as
         | Prisma.InputJsonValue
         | undefined,
     };
+
+    if (isOutboxEnabled()) {
+      const log = await prisma.$transaction(async (tx) => {
+        const created = await tx.platformAuditLog.create({ data });
+        const payload = buildOutboxPayloadFromAuditLog({
+          platformAuditLogId: created.id,
+          organizationId: created.platformOrganizationId,
+          metadata: created.metadata,
+        });
+        if (payload) {
+          await insertOutboxEvent(tx, {
+            organizationId: created.platformOrganizationId,
+            eventType: payload.eventType,
+            payload,
+            platformAuditLogId: created.id,
+          });
+        }
+        return created;
+      });
+      return { ok: true, id: log.id };
+    }
 
     const log = await prisma.platformAuditLog.create({ data });
 

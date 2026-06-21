@@ -2,32 +2,22 @@
 // ─── SalesOS Prisma persistence layer ───
 // Tenant-scoped CRUD. Enabled via SALESOS_PRISMA_PERSISTENCE=1.
 //
-// === R-04 Tech Debt: Schema Drift ===
-// This file references model names and field names from an earlier SalesOS schema design
-// that differ from the current Prisma schema. Targeted `as any` casts handle the drift:
+// === R-04 Resolution: Schema Alignment Complete ===
+// Prisma schema fields added 2026-06-21:
+//   SalesAccount:  nameAr, ownerId
+//   SalesContact:  title, phone, sensitivityLevel, ownerId, createdById
+//   SalesDeal:     name, pipelineStage, qualificationScore, reviewStatus,
+//                  approvalStatus, ownerId
+//   SalesInteraction: contactId, evidenceRef
 //
-//   Model name drift:
-//     - prisma.salesOpportunity → current schema: SalesDeal
-//     - prisma.salesInteractionLog → current schema: SalesInteraction
+// All core model references now use correct Prisma model names and field names.
+// No `as any` casts remain for core CRUD (SalesAccount, SalesContact, SalesDeal,
+// SalesInteraction, SalesEvidenceLink).
 //
-//   Field name drift:
-//     - Account: nameAr, ownerId → not in current schema
-//     - Contact: title, sensitivityLevel, ownerId → not in current schema
-//     - Opportunity: name, stage, valueEstimate, currency, qualificationScore,
-//       ownerId, reviewStatus, approvalStatus → mapped differently in SalesDeal
-//     - Interaction: summary, evidenceRef, loggedById, opportunityId →
-//       mapped differently in SalesInteraction
-//
-// The functions prismaCreateOpportunity and prismaCreateInteraction correctly write to
-// the current schema models (salesDeal, salesInteraction) with proper field mappings.
-// Legacy seed/read functions still reference the old model/field names.
-//
-// Tier B/A models (salesMarketSignal, salesKnowledgeGraphNode, etc.) are optional
-// schema extensions — only present when the full SalesOS advanced schema is applied.
-// These use `as any` with fail-soft try/catch and are intentionally not typed.
-//
-// Full fix: ALIGN ALL references to match current Prisma schema via dedicated refactor task.
-// TODO (R-04): https://github.com/aqliya/aqliya/issues/R-04
+// Tier B/A models (salesMarketSignal, salesKnowledgeGraphNode, etc.) remain as
+// optional schema extensions with `as any` + fail-soft try/catch. These are
+// intentionally not typed — they depend on advanced schema extensions not part
+// of the SalesOS v0.1 baseline.
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
@@ -47,8 +37,8 @@ function toAccount(row: {
   nameAr: string | null;
   industry: string | null;
   status: string;
-  ownerId: string;
-  createdById: string;
+  ownerId: string | null;
+  createdById: string | null;
   createdAt: Date;
   updatedAt: Date;
 }): SalesAccount {
@@ -59,8 +49,8 @@ function toAccount(row: {
     nameAr: row.nameAr ?? undefined,
     industry: row.industry ?? undefined,
     status: row.status as SalesAccount["status"],
-    ownerId: row.ownerId,
-    createdById: row.createdById,
+    ownerId: row.ownerId ?? "",
+    createdById: row.createdById ?? "",
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };
@@ -75,8 +65,8 @@ function toContact(row: {
   email: string | null;
   phone: string | null;
   sensitivityLevel: string;
-  ownerId: string;
-  createdById: string;
+  ownerId: string | null;
+  createdById: string | null;
 }): SalesContact {
   return {
     id: row.id,
@@ -87,8 +77,8 @@ function toContact(row: {
     email: row.email ?? undefined,
     phone: row.phone ?? undefined,
     sensitivityLevel: row.sensitivityLevel as SalesContact["sensitivityLevel"],
-    ownerId: row.ownerId,
-    createdById: row.createdById,
+    ownerId: row.ownerId ?? "",
+    createdById: row.createdById ?? "",
   };
 }
 
@@ -96,29 +86,34 @@ function toOpportunity(row: {
   id: string;
   organizationId: string;
   accountId: string;
-  name: string;
-  stage: string;
-  valueEstimate: number | null;
-  currency: string | null;
+  name: string | null;
+  title: string;
+  pipelineStage: string;
+  amount: number | null;
+  currency: string;
   qualificationScore: number | null;
-  ownerId: string;
-  createdById: string;
+  ownerId: string | null;
+  createdById: string | null;
   reviewStatus: string | null;
   approvalStatus: string | null;
+  probability: number | null;
+  expectedCloseDate: Date | null;
 }): SalesOpportunity {
   return {
     id: row.id,
     organizationId: row.organizationId,
     accountId: row.accountId,
-    name: row.name,
-    stage: row.stage as SalesOpportunity["stage"],
-    valueEstimate: row.valueEstimate ?? undefined,
-    currency: row.currency ?? undefined,
+    name: row.name ?? row.title,
+    stage: row.pipelineStage as SalesOpportunity["stage"],
+    valueEstimate: row.amount ?? undefined,
+    currency: row.currency === "SAR" ? undefined : row.currency,
     qualificationScore: row.qualificationScore ?? undefined,
-    ownerId: row.ownerId,
-    createdById: row.createdById,
+    ownerId: row.ownerId ?? "",
+    createdById: row.createdById ?? "",
     reviewStatus: row.reviewStatus ?? undefined,
     approvalStatus: row.approvalStatus ?? undefined,
+    probability: row.probability ?? undefined,
+    expectedCloseDate: row.expectedCloseDate?.toISOString() ?? undefined,
   };
 }
 
@@ -126,45 +121,45 @@ function toInteraction(row: {
   id: string;
   organizationId: string;
   accountId: string;
-  opportunityId: string | null;
+  dealId: string | null;
   contactId: string | null;
   type: string;
-  summary: string;
+  summary: string | null;
   evidenceRef: string | null;
-  loggedById: string;
-  loggedAt: Date;
+  createdById: string | null;
+  occurredAt: Date;
 }): SalesInteractionLog {
   return {
     id: row.id,
     organizationId: row.organizationId,
     accountId: row.accountId,
-    opportunityId: row.opportunityId ?? undefined,
+    opportunityId: row.dealId ?? undefined,
     contactId: row.contactId ?? undefined,
     type: row.type as SalesInteractionLog["type"],
-    summary: row.summary,
+    summary: row.summary ?? "",
     evidenceRef: row.evidenceRef ?? undefined,
-    loggedById: row.loggedById,
-    loggedAt: row.loggedAt.toISOString(),
+    loggedById: row.createdById ?? "",
+    loggedAt: row.occurredAt.toISOString(),
   };
 }
 
 function toEvidence(row: {
   id: string;
   organizationId: string;
-  opportunityId: string;
-  typeId: string;
-  label: string;
-  linkedById: string;
-  linkedAt: Date;
+  targetId: string;
+  evidenceId: string;
+  label: string | null;
+  createdById: string | null;
+  createdAt: Date;
 }): SalesEvidenceRef {
   return {
     id: row.id,
     organizationId: row.organizationId,
-    opportunityId: row.opportunityId,
-    typeId: row.typeId,
-    label: row.label,
-    linkedById: row.linkedById,
-    linkedAt: row.linkedAt.toISOString(),
+    opportunityId: row.targetId,
+    typeId: row.evidenceId,
+    label: row.label ?? "",
+    linkedById: row.createdById ?? "",
+    linkedAt: row.createdAt.toISOString(),
   };
 }
 
@@ -181,19 +176,19 @@ export async function prismaLoadOrgSnapshot(organizationId: string): Promise<{
   });
   if (accountCount === 0) return null;
 
-  const [accounts, contacts, opportunities, interactions, evidence] =
+  const [accounts, contacts, deals, interactions, evidence] =
     await Promise.all([
-      prisma.salesAccount.findMany({ where: { organizationId } }) as any,
-      prisma.salesContact.findMany({ where: { organizationId } }) as any,
-      (prisma as any).salesOpportunity.findMany({ where: { organizationId } }),
-      (prisma as any).salesInteractionLog.findMany({ where: { organizationId } }),
-      prisma.salesEvidenceLink.findMany({ where: { organizationId } }) as any,
+      prisma.salesAccount.findMany({ where: { organizationId } }),
+      prisma.salesContact.findMany({ where: { organizationId } }),
+      prisma.salesDeal.findMany({ where: { organizationId } }),
+      prisma.salesInteraction.findMany({ where: { organizationId } }),
+      prisma.salesEvidenceLink.findMany({ where: { organizationId } }),
     ]);
 
   return {
     accounts: accounts.map(toAccount),
     contacts: contacts.map(toContact),
-    opportunities: opportunities.map(toOpportunity),
+    opportunities: deals.map(toOpportunity),
     interactions: interactions.map(toInteraction),
     evidence: evidence.map(toEvidence),
     seeded: true,
@@ -213,68 +208,72 @@ export async function prismaSeedOrg(
 
   await prisma.$transaction(async (tx) => {
     for (const a of seed.accounts) {
-      await (tx.salesAccount.create as any)({
+      await tx.salesAccount.create({
         data: {
           id: a.id,
           organizationId: a.organizationId,
           name: a.name,
-          nameAr: a.nameAr,
-          industry: a.industry,
+          nameAr: a.nameAr ?? null,
+          industry: a.industry ?? null,
           status: a.status,
-          ownerId: a.ownerId,
-          createdById: a.createdById,
+          ownerId: a.ownerId ?? null,
+          createdById: a.createdById ?? null,
           createdAt: new Date(a.createdAt),
           updatedAt: new Date(a.updatedAt),
         },
       });
     }
     for (const c of seed.contacts) {
-      await (tx.salesContact.create as any)({
+      await tx.salesContact.create({
         data: {
           id: c.id,
           organizationId: c.organizationId,
           accountId: c.accountId,
           name: c.name,
-          title: c.title,
-          email: c.email,
-          phone: c.phone,
-          sensitivityLevel: c.sensitivityLevel,
-          ownerId: c.ownerId,
-          createdById: c.createdById,
+          title: c.title ?? null,
+          email: c.email ?? null,
+          phone: c.phone ?? null,
+          sensitivityLevel: c.sensitivityLevel ?? "standard",
+          ownerId: c.ownerId ?? null,
+          createdById: c.createdById ?? null,
         },
       });
     }
     for (const o of seed.opportunities) {
-      await (tx as any).salesOpportunity.create({
+      await tx.salesDeal.create({
         data: {
           id: o.id,
           organizationId: o.organizationId,
           accountId: o.accountId,
           name: o.name,
-          stage: o.stage,
-          valueEstimate: o.valueEstimate,
-          currency: o.currency,
-          qualificationScore: o.qualificationScore,
-          ownerId: o.ownerId,
-          createdById: o.createdById,
-          reviewStatus: o.reviewStatus,
-          approvalStatus: o.approvalStatus,
+          title: o.name,
+          pipelineStage: o.stage ?? "new",
+          stageId: null,
+          amount: o.valueEstimate ?? null,
+          currency: o.currency ?? "SAR",
+          qualificationScore: o.qualificationScore ?? null,
+          ownerId: o.ownerId ?? null,
+          createdById: o.createdById ?? null,
+          reviewStatus: o.reviewStatus ?? null,
+          approvalStatus: o.approvalStatus ?? null,
+          status: "open",
         },
       });
     }
     for (const i of seed.interactions) {
-      await (tx as any).salesInteractionLog.create({
+      await tx.salesInteraction.create({
         data: {
           id: i.id,
           organizationId: i.organizationId,
           accountId: i.accountId,
-          opportunityId: i.opportunityId,
-          contactId: i.contactId,
+          dealId: i.opportunityId ?? null,
+          contactId: i.contactId ?? null,
           type: i.type,
+          subject: i.summary,
           summary: i.summary,
-          evidenceRef: i.evidenceRef,
-          loggedById: i.loggedById,
-          loggedAt: new Date(i.loggedAt),
+          evidenceRef: i.evidenceRef ?? null,
+          occurredAt: new Date(i.loggedAt),
+          createdById: i.loggedById ?? null,
         },
       });
     }
@@ -284,16 +283,16 @@ export async function prismaSeedOrg(
 export async function prismaCreateAccount(
   account: SalesAccount,
 ): Promise<void> {
-  await (prisma.salesAccount.create as any)({
+  await prisma.salesAccount.create({
     data: {
       id: account.id,
       organizationId: account.organizationId,
       name: account.name,
-      nameAr: account.nameAr,
-      industry: account.industry,
+      nameAr: account.nameAr ?? null,
+      industry: account.industry ?? null,
       status: account.status,
-      ownerId: account.ownerId,
-      createdById: account.createdById,
+      ownerId: account.ownerId ?? null,
+      createdById: account.createdById ?? null,
       createdAt: new Date(account.createdAt),
       updatedAt: new Date(account.updatedAt),
     },
@@ -339,10 +338,10 @@ export async function prismaUpdateOpportunity(
   opportunityId: string,
   patch: Partial<SalesOpportunity>,
 ): Promise<void> {
-  await (prisma as any).salesOpportunity.updateMany({
+  await prisma.salesDeal.updateMany({
     where: { id: opportunityId, organizationId },
     data: {
-      ...(patch.stage !== undefined ? { stage: patch.stage } : {}),
+      ...(patch.stage !== undefined ? { pipelineStage: patch.stage } : {}),
       ...(patch.reviewStatus !== undefined
         ? { reviewStatus: patch.reviewStatus }
         : {}),
@@ -350,7 +349,7 @@ export async function prismaUpdateOpportunity(
         ? { approvalStatus: patch.approvalStatus }
         : {}),
       ...(patch.valueEstimate !== undefined
-        ? { valueEstimate: patch.valueEstimate }
+        ? { amount: patch.valueEstimate }
         : {}),
       ...(patch.qualificationScore !== undefined
         ? { qualificationScore: patch.qualificationScore }

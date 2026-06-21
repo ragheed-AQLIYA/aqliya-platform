@@ -4,11 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, Settings, Shield, AlertTriangle, Network, TrendingUp } from "lucide-react";
+import { LayoutDashboard, Users, Settings, Shield, AlertTriangle, Network, TrendingUp, FileText, Brain } from "lucide-react";
 
 const navigation = [
   { name: "حوكمة القرارات", href: "/decisions", icon: LayoutDashboard },
+  { name: "الذكاء المؤسسي", href: "/intelligence", icon: Brain },
   { name: "مخاطر المنشأة", href: "/risk", icon: AlertTriangle },
+  { name: "استوديو المحتوى", href: "/content-studio", icon: FileText },
   { name: "نظام المبيعات", href: "/sales", icon: TrendingUp },
   { name: "الذاكرة المؤسسية", href: "/institutional-memory", icon: Network },
   { name: "المنظمات", href: "/organizations", icon: Users },

@@ -18,6 +18,66 @@ export interface CreateWorkflowAuditEventInput {
   metadata?: Record<string, unknown>;
 }
 
+export interface RecordWorkflowAuditEventInput {
+  organizationId: string;
+  platformOrganizationId?: string;
+  recordId: string;
+  actorId: string;
+  actorName?: string | null;
+  action: string;
+  fromStatus?: string | null;
+  toStatus?: string | null;
+  comment?: string | null;
+  metadata?: Record<string, unknown>;
+}
+
+/** L5 WorkflowAuditEvent write with PlatformAuditLog dual-write + hash chain. */
+export async function recordWorkflowAuditEvent(
+  input: RecordWorkflowAuditEventInput,
+) {
+  const result = await prisma.workflowAuditEvent.create({
+    data: {
+      organizationId: input.organizationId,
+      platformOrganizationId: input.platformOrganizationId ?? null,
+      recordId: input.recordId,
+      actorId: input.actorId,
+      actorName: input.actorName ?? null,
+      action: input.action,
+      fromStatus: input.fromStatus ?? null,
+      toStatus: input.toStatus ?? null,
+      comment: input.comment ?? null,
+      metadata: (input.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
+    },
+  });
+
+  const platformResult = await writePlatformAuditLog({
+    productKey: Product.WORKFLOWOS,
+    action: `workflowos.${input.action}`,
+    platformOrganizationId: input.platformOrganizationId ?? input.organizationId,
+    actorId: input.actorId,
+    targetType: "WorkflowRecord",
+    targetId: input.recordId,
+    sourceModel: "WorkflowAuditEvent",
+    sourceId: result.id,
+    metadata: {
+      ...(input.metadata ?? {}),
+      fromStatus: input.fromStatus ?? undefined,
+      toStatus: input.toStatus ?? undefined,
+      comment: input.comment ?? undefined,
+    },
+  });
+
+  if (platformResult.ok && platformResult.id) {
+    await appendToAuditChain(
+      platformResult.id,
+      `workflowos.${input.action}`,
+      input.actorId,
+    );
+  }
+
+  return result;
+}
+
 export async function createWorkflowAuditEvent(
   input: CreateWorkflowAuditEventInput,
 ) {

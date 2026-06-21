@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getContentAction, getVersionHistoryAction } from "../../actions";
 import { ContentLifecycleActions } from "./content-lifecycle-actions";
+import { ContentExportButton } from "./content-export-button";
 import type { ContentVersion } from "@/lib/platform/content-studio";
 
 export const dynamic = "force-dynamic";
@@ -81,6 +82,7 @@ export default async function ContentDetailPage({
                   status={content.status}
                   workspaceId={workspaceId}
                 />
+                <ContentExportButton contentId={content.id} />
               </div>
             </CardHeader>
             <CardContent className="space-y-4">

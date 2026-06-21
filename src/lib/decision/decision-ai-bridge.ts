@@ -1,8 +1,7 @@
 import "server-only"
 
 import { prisma } from "@/lib/prisma"
-import { runGovernedProductAI } from "@/lib/platform/product-ai-bridge"
-import { isEnabled } from "@/lib/platform/feature-flags/registry"
+import { execute, isCoreAIEnabled } from "@/lib/core/ai"
 
 export async function resolveDecisionAIContext(decisionId: string): Promise<{
   organizationId: string
@@ -51,13 +50,14 @@ export async function runGovernedDecisionAI(params: {
   userRole?: string
   focus?: "insight" | "recommendation" | "overview"
 }): Promise<GovernedDecisionAIResult | null> {
-  if (!isEnabled("ai.rag") && !isEnabled("ai.real-providers")) {
+  if (!isCoreAIEnabled()) {
     return null
   }
 
   const ctx = await resolveDecisionAIContext(params.decisionId)
 
-  const result = await runGovernedProductAI({
+  const response = await execute({
+    domain: "product",
     productKey: "decisionos",
     useCase: "pilot_decision",
     organizationId: ctx.organizationId,
@@ -72,12 +72,12 @@ export async function runGovernedDecisionAI(params: {
     },
   })
 
-  if (!result) return null
+  if (response.domain !== "product" || !response.result) return null
 
   return {
-    output: result.output,
-    providerId: result.providerId,
-    warnings: result.warnings,
+    output: response.result.output,
+    providerId: response.result.providerId,
+    warnings: response.result.warnings,
   }
 }
 

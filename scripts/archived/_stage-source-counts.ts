@@ -9,7 +9,7 @@ const p = new PrismaClient({ adapter: new PrismaPg(process.env.DATABASE_URL!) })
 async function main() {
   console.log("SalesAccounts:", await p.salesAccount.count());
   console.log("SalesContacts:", await p.salesContact.count());
-  console.log("SalesOpportunities:", await p.salesOpportunity.count());
+  console.log("SalesDeals:", await p.salesDeal.count());
   console.log("LCProjects:", await p.localContentProject.count());
   console.log("LCAuditEvents:", await p.localContentAuditEvent.count());
   console.log("PlatformAuditLogs:", await p.platformAuditLog.count());

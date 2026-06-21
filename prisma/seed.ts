@@ -14,6 +14,8 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { seedSalesOS } from "./seed-sales";
 import { seedOfficeAI } from "./seed-office-ai";
 import { seedOrganizations } from "./seed-organizations";
+import { seedContentStudio } from "./seed-content-studio";
+import { seedDefaultAbacPolicies } from "./seed-abac-policies";
 
 // Load .env file explicitly
 config({ path: resolve(__dirname, "../.env") });
@@ -60,6 +62,10 @@ async function main() {
   await prisma.officeAiFile.deleteMany();
   await prisma.officeAiOutput.deleteMany();
   await prisma.officeAiTask.deleteMany();
+  await prisma.contentVersion.deleteMany();
+  await prisma.contentItem.deleteMany();
+  await prisma.contentTemplate.deleteMany();
+  await prisma.contentWorkspace.deleteMany();
   await prisma.tenantIntegration.deleteMany();
   await prisma.user.deleteMany();
   await prisma.organization.deleteMany();
@@ -1715,6 +1721,13 @@ async function main() {
   // ─── Office AI Assistant Seed ───
   await seedOfficeAI(prisma, platformOrg.id, org.id, admin.id);
   console.log("Office AI Assistant seeded successfully!");
+
+  // ─── ContentStudio Seed ───
+  await seedContentStudio(prisma, platformOrg.id, org.id, admin.id, reviewer.id, approver.id);
+  console.log("ContentStudio seeded successfully!");
+
+  await seedDefaultAbacPolicies(prisma);
+  console.log("Default ABAC policies seeded (ORG-01, SENS-02, APR-01)");
 
   // Guarantee demo login passwords (safe after partial seeds / audit re-seeds)
   const demoPasswords: Array<{ email: string; password: string }> = [

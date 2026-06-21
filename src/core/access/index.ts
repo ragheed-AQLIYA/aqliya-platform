@@ -10,6 +10,17 @@ export {
   requireServerActionRead,
   type ServerActionAccessOptions,
 } from "./server-action-guard";
+export {
+  mapAuditRoleToUserRole,
+  requireAuditCoreAccess,
+} from "./audit-access-adapter";
+export { AbacShadow, runAbacShadowEvaluation } from "./abac-shadow";
+export type { AbacShadowEvaluation } from "./abac-shadow";
+export { getAbacShadowMismatchReport, AbacShadowReport } from "./abac-shadow-report";
+export type {
+  AbacShadowMismatchReport,
+  AbacShadowMismatchRow,
+} from "./abac-shadow-report";
 export type { RequiredRole } from "@/lib/auth";
 
 import type { RequiredRole } from "@/lib/auth";

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { logAudit } from "@/lib/platform-audit";
+import { logDecisionAudit as logAudit } from "@/lib/decision/decision-audit";
 
 // Cleanup helper
 async function cleanup() {

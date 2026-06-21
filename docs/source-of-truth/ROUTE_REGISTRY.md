@@ -418,6 +418,18 @@ All routes under `/audit` require **auth** and **tenant isolation**.
 | `/api/platform/retention/dry-run` | POST | ✓ | ✅ | Dry run |
 | `/api/platform/siem` | POST | ✓ | ⚠️ | SIEM event ingestion |
 
+### Platform — Intelligence Core / Event Bus (Tier 2–3)
+
+| Route | Methods | Auth | Status | Notes |
+|-------|---------|------|--------|-------|
+| `/api/platform/enterprise-health` | GET | ✓ (ADMIN) | ✅ | Tier 3 enterprise readiness snapshot |
+| `/api/platform/events/registry` | GET | ✓ (ADMIN) | ✅ | Event schema registry |
+| `/api/platform/outbox/status` | GET | ✓ (ADMIN) | ✅ | Outbox queue status |
+| `/api/platform/outbox/process` | POST | ✓ (ADMIN) | ✅ | Process pending outbox batch |
+| `/api/platform/outbox/retry` | POST | ✓ (ADMIN) | ✅ | Retry failed outbox events |
+| `/api/platform/abac/shadow-report` | GET | ✓ (ADMIN) | ✅ | ABAC shadow mismatch report |
+| `/api/platform/abac/pilot-status` | GET | ✓ (ADMIN) | ✅ | ABAC enforce pilot status |
+
 ### SCIM v2
 
 | Route | Methods | Auth | Status | Notes |

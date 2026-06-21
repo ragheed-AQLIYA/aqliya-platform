@@ -54,7 +54,8 @@ jest.mock("@/lib/auth", () => ({
   ),
 }));
 
-jest.mock("@/lib/platform-audit", () => ({
+jest.mock("@/lib/decision/decision-audit", () => ({
+  logDecisionAudit: jest.fn().mockResolvedValue(undefined),
   logAudit: jest.fn().mockResolvedValue(undefined),
   toAuditJson: jest.fn((o) => JSON.stringify(o)),
 }));
@@ -201,7 +202,7 @@ jest.mock("@/lib/prisma", () => ({
 }));
 // ─── Imports (after mocks) ───
 
-import { logAudit } from "@/lib/platform-audit";
+import { logDecisionAudit, logAudit } from "@/lib/decision/decision-audit";
 
 import {
   createDecision,

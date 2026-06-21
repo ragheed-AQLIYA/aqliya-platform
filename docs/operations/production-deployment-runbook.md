@@ -1,9 +1,10 @@
 # AQLIYA Production Deployment Runbook
 
-> **Version:** 1.3  
-> **Last updated:** 2026-06-17  
+> **Version:** 1.4  
+> **Last updated:** 2026-06-21  
 > **Scope:** Production deployment of AQLIYA platform (Next.js 16, PostgreSQL 16, Prisma 7, Node.js 22)  
 > **Changelog:**
+> - v1.4 (2026-06-21): Tier 3 enterprise prep — Intelligence Core operator APIs, SSO/SCIM hardening checklist, Redis rate limiter verification, ABAC enforce pilot env vars.
 > - v1.3 (2026-06-17): Added SAML SSO, ClamAV scanner, rate limiter guidance, ECS rollback, restore-drill script, CI Postgres service. Reflected current validated build state.
 > - v1.2 (2026-06-09): Domain migration `aqliya.ai → aqliya.com`.
 > - v1.1 (2026-06-04): Initial AWS ECS Fargate runbook.
@@ -89,6 +90,63 @@ SAML provider configuration (entry point, certificate, issuer) is stored encrypt
 | `REDIS_URL` | Redis connection string | required if `redis` |
 
 > **Production requirement:** Set `RATE_LIMITER=redis` for all multi-instance deployments (ECS Fargate, etc.). `memory` limits are per-process and not shared across tasks — use only for single-instance dev/staging.
+
+**Verify before production deploy (I-03):**
+
+```bash
+# With RATE_LIMITER=redis and REDIS_URL set in .env
+npm run verify:redis-rate-limiter
+```
+
+### Intelligence Core (Tier 2/3 — off by default)
+
+| Variable | Description | Production pilot |
+|----------|-------------|------------------|
+| `FF_EVENT_OUTBOX` | Transactional outbox on audit writes | `true` when event fan-out needed |
+| `FF_EVENT_SCHEMA_REGISTRY` | Validate event envelopes at outbox | `true` with outbox |
+| `FF_ABAC_SHADOW` | ABAC shadow evaluation logging | default on; set `false` to disable |
+| `FF_ABAC_ENFORCE` | Block on ABAC denial | `true` only after pilot review |
+| `ABAC_ENFORCE_ORG_IDS` | Comma-separated org IDs for enforce | Required when enforce on |
+| `FF_AUDIT_ISA_RULES` | ISA rules after FS rebuild | opt-in per engagement |
+
+**Operator APIs (ADMIN, authenticated):**
+
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /api/platform/enterprise-health` | Tier 3 readiness snapshot |
+| `GET /api/platform/outbox/status` | Outbox queue counts + failed rows |
+| `POST /api/platform/outbox/process` | Process pending outbox batch |
+| `POST /api/platform/outbox/retry` | Reset failed rows to pending |
+| `GET /api/platform/abac/pilot-status` | ABAC enforce pilot readiness |
+| `GET /api/platform/abac/shadow-report` | Shadow mismatch detail |
+
+**Smoke (after deploy):**
+
+```bash
+npm run smoke:tier2
+npm run smoke:tier3:http -- --base-url https://staging.aqliya.com
+```
+
+### SSO / SCIM production hardening (L4 built — Tier 3 scope)
+
+SSO and SCIM are implemented; production scope is **configuration, scale, and operator procedure** — not new feature development.
+
+| Check | Action |
+|-------|--------|
+| SAML metadata | Confirm SP metadata URL matches `NEXT_PUBLIC_APP_URL` |
+| SSO secrets | `clientSecret` encrypted at rest (AES-256-GCM) — verify provider CRUD at `/settings/sso` |
+| SCIM auth | Rotate `SCIM_API_KEY`; never commit to repo |
+| SCIM org binding | Set `SCIM_DEFAULT_ORG_ID` / `SSO_DEFAULT_ORG_ID` in ECS task definition |
+| Session scale | Redis required for multi-instance session consistency if not using sticky sessions |
+| Audit | Confirm SCIM provisioning events in PlatformAuditLog |
+| Login smoke | OAuth + SAML login buttons on `/login` with real IdP (staging first) |
+
+**Staging validation checklist:**
+
+1. Create SAML provider in `/settings/sso` with staging IdP metadata
+2. Login via SAML → confirm user lands in correct org
+3. `GET /api/scim/v2/Users` with Bearer `SCIM_API_KEY` → 200
+4. Provision test user via SCIM → verify audit event + org assignment
 
 ### Optional but recommended
 

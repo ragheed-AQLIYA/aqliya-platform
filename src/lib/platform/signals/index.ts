@@ -1,58 +1,28 @@
-import type { RuntimeSignal } from "./types";
+export type {
+  ProductMetricSignals,
+  RuntimeSignal,
+  RuntimeSignalSeverity,
+} from "./types";
 
-export async function collectAuditTaskSignals(
-  _organizationId: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
+export {
+  collectAuditActivitySignals,
+  collectAuditApprovalSignals,
+  collectAuditEvidenceSignals,
+  collectAuditMetricSignals,
+  collectAuditReviewSignals,
+  collectAuditTaskSignals,
+} from "./audit-signal-producer";
 
-export async function collectAuditReviewSignals(
-  _organizationId: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
+export {
+  collectLocalContentActivitySignals,
+  collectLocalContentApprovalSignals,
+  collectLocalContentReviewSignals,
+  collectLocalContentTaskSignals,
+} from "./localcontent-signal-producer";
 
-export async function collectAuditApprovalSignals(
-  _organizationId: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
-
-export async function collectLocalContentTaskSignals(
-  _organizationId: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
-
-export async function collectLocalContentReviewSignals(
-  _organizationId: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
-
-export async function collectLocalContentApprovalSignals(
-  _organizationId: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
-
-export async function collectSalesTaskSignals(
-  _organizationId: string,
-  _ownerId?: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
-
-export async function collectSalesReviewSignals(
-  _organizationId: string,
-  _ownerId?: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
-
-export async function collectSalesApprovalSignals(
-  _organizationId: string,
-  _ownerId?: string,
-): Promise<RuntimeSignal[]> {
-  return [];
-}
+export {
+  collectSalesActivitySignals,
+  collectSalesApprovalSignals,
+  collectSalesReviewSignals,
+  collectSalesTaskSignals,
+} from "./sales-signal-producer";

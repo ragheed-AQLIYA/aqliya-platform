@@ -2,9 +2,40 @@
 // Aggregates audit trail buffer, SalesOS audit log, and LC-shaped events into one stream.
 
 import type { V1ProductKey } from "@/lib/platform/registry/product-contracts";
-import type { AuditEventContract } from "@/lib/platform/contracts/audit-event-contract";
-import { getRecentAuditBuffer } from "@/lib/platform/contracts/audit-trail-runtime";
 import { enforceCoreOnMutation } from "@/lib/platform/integration/core-adoption-enforcer";
+
+/** Inline replacement for deleted contracts/audit-event-contract */
+interface AuditEventContract {
+  id: string;
+  organizationId?: string;
+  productSlug: string;
+  action: string;
+  actorId: string;
+  targetType: string;
+  targetId: string;
+  timestamp: string;
+  category?: string;
+  severity?: string;
+  metadata?: Record<string, unknown>;
+  correlationId?: string;
+  tenantId?: string;
+}
+
+/** Inline replacement for deleted contracts/audit-trail-runtime */
+import { getRecentAuditEvents } from "@/lib/platform/audit/recent-audit-buffer";
+
+function getRecentAuditBuffer(count: number) {
+  return getRecentAuditEvents(undefined, count).map((event) => ({
+    organizationId: event.organizationId,
+    productSlug: event.productSlug,
+    action: event.action,
+    actorId: event.actorId,
+    targetType: event.targetType,
+    targetId: event.targetId,
+    timestamp: event.timestamp,
+    metadata: event.metadata,
+  }));
+}
 import {
   filterActivityStream,
   mergeActivityStreams,
@@ -113,7 +144,7 @@ export function listActivitiesForOrg(
   const trail =
     (sources.auditTrail as readonly AuditEventContract[]) ??
     (getRecentAuditBuffer(200).filter(
-      (e: { organizationId?: string }) => e.organizationId === organizationId || !e.organizationId,
+      (e) => e.organizationId === organizationId || !e.organizationId,
     ) as unknown as AuditEventContract[]);
 
   const streams: ActivityStreamEntry[][] = [
@@ -174,22 +205,26 @@ function runtimeSignalToActivity(signal: {
   };
 }
 
+import {
+  collectAuditActivitySignals,
+  collectLocalContentActivitySignals,
+  collectSalesActivitySignals,
+} from "@/lib/core/signals";
+
 /** Collect cross-product activities from signal producers into one stream. */
 export async function collectProductActivities(
   organizationId: string,
   userId: string,
 ): Promise<ActivityStreamEntry[]> {
-  const streams: ActivityStreamEntry[][] = [];
+  const [audit, localContent, sales] = await Promise.all([
+    collectAuditActivitySignals(organizationId),
+    collectLocalContentActivitySignals(organizationId),
+    collectSalesActivitySignals(organizationId, userId),
+  ]);
 
-  try {
-    const { collectSalesActivitySignals } = await import(
-      "@/lib/platform/signals/sales-signal-producer"
-    );
-    const sales = await collectSalesActivitySignals(organizationId, userId);
-    streams.push(sales.map(runtimeSignalToActivity));
-  } catch {
-    // optional bridge
-  }
+  const streams: ActivityStreamEntry[][] = [
+    [...audit, ...localContent, ...sales].map(runtimeSignalToActivity),
+  ];
 
   return mergeActivityStreams(streams).slice(0, 50);
 }

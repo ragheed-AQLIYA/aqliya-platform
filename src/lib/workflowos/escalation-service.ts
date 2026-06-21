@@ -2,6 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { notifyEscalation } from "@/lib/workflowos/notification-service";
+import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
 
 const ESCALATION_THRESHOLD_DAYS = 2;
 
@@ -64,16 +65,14 @@ export async function escalateExportRequest(
     },
   });
 
-  await prisma.workflowAuditEvent.create({
-    data: {
-      organizationId,
-      recordId,
-      actorId: "system",
-      actorName: "النظام",
-      action: "escalation_triggered",
-      comment: `تصعيد تلقائي: طلب التصدير معلق منذ أكثر من ${ESCALATION_THRESHOLD_DAYS} أيام`,
-      metadata: { escalatedToId },
-    },
+  await recordWorkflowAuditEvent({
+    organizationId,
+    recordId,
+    actorId: "system",
+    actorName: "النظام",
+    action: "escalation_triggered",
+    comment: `تصعيد تلقائي: طلب التصدير معلق منذ أكثر من ${ESCALATION_THRESHOLD_DAYS} أيام`,
+    metadata: { escalatedToId },
   });
 
   const daysPending = Math.floor(

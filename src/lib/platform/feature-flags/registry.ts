@@ -195,6 +195,66 @@ const FLAG_REGISTRY: Record<string, FeatureFlag> = {
     createdAt: "2026-06-13",
     updatedAt: "2026-06-13",
   },
+  "platform.abac-shadow": {
+    key: "platform.abac-shadow",
+    name: "ABAC Shadow Evaluation",
+    description: "Log-only ABAC evaluation at unified access gate.",
+    variant: "on",
+    owner: "platform",
+    dependencies: [],
+    createdAt: "2026-06-21",
+    updatedAt: "2026-06-21",
+  },
+  "platform.abac-shadow-verbose": {
+    key: "platform.abac-shadow-verbose",
+    name: "ABAC Shadow Verbose Logging",
+    description: "Log every ABAC shadow evaluation, not only mismatches.",
+    variant: "off",
+    owner: "platform",
+    dependencies: ["platform.abac-shadow"],
+    createdAt: "2026-06-21",
+    updatedAt: "2026-06-21",
+  },
+  "platform.abac-enforce": {
+    key: "platform.abac-enforce",
+    name: "ABAC Enforce Mode",
+    description: "When on, ABAC denial blocks access for allowlisted orgs.",
+    variant: "off",
+    owner: "platform",
+    dependencies: ["platform.abac-shadow"],
+    createdAt: "2026-06-21",
+    updatedAt: "2026-06-21",
+  },
+  "platform.event-outbox": {
+    key: "platform.event-outbox",
+    name: "Platform Event Outbox",
+    description: "Transactional outbox on platform audit writes (Event Bus Phase 1).",
+    variant: "off",
+    owner: "platform",
+    dependencies: [],
+    createdAt: "2026-06-21",
+    updatedAt: "2026-06-21",
+  },
+  "platform.event-schema-registry": {
+    key: "platform.event-schema-registry",
+    name: "Event Schema Registry",
+    description: "Validate core event envelopes against registered schemas (Event Bus Phase 2).",
+    variant: "off",
+    owner: "platform",
+    dependencies: ["platform.event-outbox"],
+    createdAt: "2026-06-21",
+    updatedAt: "2026-06-21",
+  },
+  "audit.isa-rules": {
+    key: "audit.isa-rules",
+    name: "AuditOS ISA Rules Runtime",
+    description: "When on, evaluates admitted ISA knowledge packs after FS rebuild.",
+    variant: "off",
+    owner: "eng",
+    dependencies: [],
+    createdAt: "2026-06-21",
+    updatedAt: "2026-06-21",
+  },
   "queue.enabled": {
     key: "queue.enabled",
     name: "Async Queue Runtime",
@@ -276,6 +336,16 @@ function getEnvOverride(key: string): FlagVariant | undefined {
       return process.env.FF_AUDIT_APPROVAL_GATES === "true" ? "on" : undefined
     case "audit.mind-map":
       return process.env.FF_AUDIT_MIND_MAP === "true" ? "on" : undefined
+    case "platform.abac-shadow":
+      return process.env.FF_ABAC_SHADOW === "false" ? "off" : undefined
+    case "platform.abac-enforce":
+      return process.env.FF_ABAC_ENFORCE === "true" ? "on" : undefined
+    case "platform.event-outbox":
+      return process.env.FF_EVENT_OUTBOX === "true" ? "on" : undefined
+    case "platform.event-schema-registry":
+      return process.env.FF_EVENT_SCHEMA_REGISTRY === "true" ? "on" : undefined
+    case "audit.isa-rules":
+      return process.env.FF_AUDIT_ISA_RULES === "true" ? "on" : undefined
     case "queue.enabled":
       return process.env.FF_QUEUE_ENABLED === "true" ? "on" : undefined
     case "tenant.self-service":

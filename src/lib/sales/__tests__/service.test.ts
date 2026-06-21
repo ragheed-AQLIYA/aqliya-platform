@@ -29,14 +29,6 @@ jest.mock("@/lib/platform/integration/core-adoption-enforcer", () => ({
   enforceCoreOnMutation: jest.fn(),
 }));
 
-jest.mock("@/lib/platform/contracts/audit-trail-runtime", () => ({
-  mapMutationToAuditEvent: jest.fn(() => ({
-    category: "workflow_transition",
-    action: "sales.account.created",
-  })),
-  recordAuditEventSafe: jest.fn(),
-}));
-
 const ORG = "org-test-sales";
 const USER: CurrentUser = {
   id: "user-sales-001",

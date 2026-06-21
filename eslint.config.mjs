@@ -46,7 +46,6 @@ const eslintConfig = defineConfig([
     "src/lib/simulation/**",
     "src/lib/decision/**",
     "src/lib/platform/**",
-    "src/lib/platform-audit.ts",
     "src/lib/decision-type-config.ts",
     "src/actions/approval.ts",
     "src/actions/decisions.ts",

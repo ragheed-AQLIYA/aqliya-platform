@@ -11,7 +11,7 @@ import {
   getAllTemplates,
   type DecisionTemplate,
 } from "@/lib/decision/decision-templates";
-import { logAudit } from "@/lib/platform-audit";
+import { logAudit } from "@/lib/decision/decision-audit";
 
 const VALID_DECISION_TYPES = [
   "TENDER",

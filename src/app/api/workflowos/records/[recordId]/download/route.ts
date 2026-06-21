@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUserContext } from "@/lib/auth";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { buildExportMetadata } from "@/lib/platform/production-export";
+import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
 
 export async function GET(
   _request: NextRequest,
@@ -44,16 +45,14 @@ export async function GET(
       select: { name: true, category: true },
     });
 
-    await prisma.workflowAuditEvent.create({
-      data: {
-        organizationId: record.organizationId,
-        recordId,
-        actorId: user.id,
-        actorName: user.name ?? null,
-        action: "export_downloaded",
-        comment: "تم تنزيل التصدير",
-        metadata: { downloadedBy: user.id },
-      },
+    await recordWorkflowAuditEvent({
+      organizationId: record.organizationId,
+      recordId,
+      actorId: user.id,
+      actorName: user.name ?? null,
+      action: "export_downloaded",
+      comment: "تم تنزيل التصدير",
+      metadata: { downloadedBy: user.id },
     });
 
     const exportHeader = buildExportMetadata({

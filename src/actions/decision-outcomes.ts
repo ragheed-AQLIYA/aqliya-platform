@@ -7,7 +7,7 @@ import {
   getCurrentUser,
 } from "@/lib/auth";
 import type { OutcomeStatus, Prisma } from "@prisma/client";
-import { logAudit } from "@/lib/platform-audit";
+import { logAudit } from "@/lib/decision/decision-audit";
 
 export async function getDecisionOutcome(decisionId: string) {
   try {

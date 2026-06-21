@@ -11,7 +11,7 @@ import { buildMonitoringSignalsFromRisks } from "@/lib/decision/signal-automatio
 import { validateIntelligenceGate } from "@/lib/decision/intelligence-gate";
 import { revalidatePath } from "next/cache";
 import { requireDecisionAccess } from "@/lib/auth";
-import { logAudit, toAuditJson } from "@/lib/platform-audit";
+import { logAudit, toAuditJson } from "@/lib/decision/decision-audit";
 import { prisma } from "@/lib/prisma";
 
 // Signals - acknowledge requires operator (or admin)

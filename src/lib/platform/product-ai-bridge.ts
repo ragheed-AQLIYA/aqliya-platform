@@ -1,6 +1,7 @@
 import "server-only"
 
 import { aiOrchestrator } from "@/lib/ai/orchestrator"
+import { requireServerActionAccess } from "@/core/access/server-action-guard"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import { routeIntelligenceRequest } from "@/lib/ai/intelligence-runtime"
@@ -50,6 +51,15 @@ export async function runGovernedProductAI(
   if (!isProductAICoreEnabled()) {
     return null
   }
+
+  if (!input.userId) {
+    throw new Error("Access denied: authenticated user required for governed AI")
+  }
+
+  await requireServerActionAccess(input.productKey, "create", {
+    organizationId: input.organizationId,
+    resourceId: input.resourceId,
+  })
 
   const route = routeIntelligenceRequest({
     productId: input.productKey,

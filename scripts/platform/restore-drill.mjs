@@ -113,7 +113,13 @@ try {
   }
 
   // ─── Spot-check: count rows in key tables ──────────────────────────────
-  const tables = ["Organization", "User", "AuditEngagement", "PlatformAuditLog"];
+  const tables = [
+    "Organization",
+    "User",
+    "AuditEngagement",
+    "PlatformAuditLog",
+    "PlatformOutboxEvent",
+  ];
   const counts = {};
   for (const table of tables) {
     try {

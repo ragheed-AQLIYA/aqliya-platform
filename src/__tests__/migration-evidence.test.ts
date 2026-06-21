@@ -5,6 +5,9 @@ const migrationsDir = join(__dirname, "../../prisma/migrations")
 const LEAD_SCHEDULE_MIGRATION = "20260615110000_add_lead_schedule"
 const LC_V35_MIGRATION = "20260616234035_add_lc_v35_grounding_feedback"
 const INSTITUTIONAL_MEMORY_MIGRATION = "20260618015723_add_institutional_memory"
+const R04_SCHEMA_ALIGNMENT = "20260621120430_r04_salesos_schema_alignment"
+const R04_DEAL_EXTRA_FIELDS = "20260621120611_r04_salesdeal_extra_fields"
+const PLATFORM_OUTBOX_MIGRATION = "20260621150000_platform_outbox_event"
 
 describe("Migration Evidence", () => {
   describe("20260615110000_add_lead_schedule", () => {
@@ -91,7 +94,108 @@ describe("Migration Evidence", () => {
         .sort()
       // Skip the create-only migration for institutional memory
       const appliedMigrations = dirs.filter(d => d !== INSTITUTIONAL_MEMORY_MIGRATION)
-      expect(appliedMigrations[appliedMigrations.length - 1]).toBe(LC_V35_MIGRATION)
+      expect(appliedMigrations[appliedMigrations.length - 1]).toBe(PLATFORM_OUTBOX_MIGRATION)
+    })
+  })
+
+  describe("20260621120430_r04_salesos_schema_alignment", () => {
+    const migrationDir = join(migrationsDir, R04_SCHEMA_ALIGNMENT)
+
+    it("migration directory exists", () => {
+      expect(existsSync(migrationDir)).toBe(true)
+    })
+
+    it("migration SQL file exists", () => {
+      expect(existsSync(join(migrationDir, "migration.sql"))).toBe(true)
+    })
+
+    it("adds governance fields to SalesAccount (nameAr, ownerId)", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('ALTER TABLE "SalesAccount"')
+      expect(sql).toContain("nameAr")
+      expect(sql).toContain("ownerId")
+    })
+
+    it("adds governance fields to SalesContact (ownerId, createdById, sensitivityLevel)", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('ALTER TABLE "SalesContact"')
+      expect(sql).toContain("ownerId")
+      expect(sql).toContain("createdById")
+      expect(sql).toContain("sensitivityLevel")
+    })
+
+    it("adds pipelineStage and ownerId to SalesDeal", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('ALTER TABLE "SalesDeal"')
+      expect(sql).toContain("pipelineStage")
+      expect(sql).toContain("ownerId")
+    })
+
+    it("adds contactId and evidenceRef to SalesInteraction", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('ALTER TABLE "SalesInteraction"')
+      expect(sql).toContain("contactId")
+      expect(sql).toContain("evidenceRef")
+    })
+
+    it("creates indexes for new foreign keys", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('CREATE INDEX "SalesAccount_ownerId_idx"')
+      expect(sql).toContain('CREATE INDEX "SalesContact_ownerId_idx"')
+      expect(sql).toContain('CREATE INDEX "SalesDeal_pipelineStage_idx"')
+      expect(sql).toContain('CREATE INDEX "SalesInteraction_contactId_idx"')
+    })
+  })
+
+  describe("20260621120611_r04_salesdeal_extra_fields", () => {
+    const migrationDir = join(migrationsDir, R04_DEAL_EXTRA_FIELDS)
+
+    it("migration directory exists", () => {
+      expect(existsSync(migrationDir)).toBe(true)
+    })
+
+    it("migration SQL file exists", () => {
+      expect(existsSync(join(migrationDir, "migration.sql"))).toBe(true)
+    })
+
+    it("adds qualificationScore, reviewStatus, approvalStatus to SalesDeal", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('ALTER TABLE "SalesDeal"')
+      expect(sql).toContain("qualificationScore")
+      expect(sql).toContain("reviewStatus")
+      expect(sql).toContain("approvalStatus")
+    })
+
+    it("is additive-only (no DROP or RENAME)", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).not.toContain("DROP")
+      expect(sql).not.toContain("RENAME")
+    })
+  })
+
+  describe("20260621150000_platform_outbox_event", () => {
+    const migrationDir = join(migrationsDir, PLATFORM_OUTBOX_MIGRATION)
+
+    it("migration directory exists", () => {
+      expect(existsSync(migrationDir)).toBe(true)
+    })
+
+    it("migration SQL file exists", () => {
+      expect(existsSync(join(migrationDir, "migration.sql"))).toBe(true)
+    })
+
+    it("creates PlatformOutboxEvent table with status indexes", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('CREATE TABLE "PlatformOutboxEvent"')
+      expect(sql).toContain('"status" TEXT NOT NULL DEFAULT \'pending\'')
+      expect(sql).toContain("PlatformOutboxEvent_status_createdAt_idx")
+      expect(sql).toContain("PlatformOutboxEvent_eventType_status_idx")
+    })
+
+    it("is additive-only (no DROP or RENAME)", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).not.toContain("DROP")
+      expect(sql).not.toContain("RENAME")
     })
   })
 

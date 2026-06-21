@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireDecisionAccess } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { requireServerActionAccess } from "@/core/access/server-action-guard";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { getStorageProvider } from "@/lib/platform/storage";
+import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 
 export async function GET(
   _request: NextRequest,
@@ -12,32 +13,23 @@ export async function GET(
   const { decisionId, evidenceId } = await params;
 
   try {
-    const { user } = await requireDecisionAccess(decisionId, "VIEWER");
-
-    const evidence = await prisma.decisionEvidence.findUnique({
-      where: { id: evidenceId },
-      select: {
-        id: true,
-        decisionId: true,
-        filename: true,
-        fileType: true,
-        fileSize: true,
-        storageKey: true,
-      },
+    const { user, organizationId } = await requireDecisionAccess(
+      decisionId,
+      "VIEWER",
+    );
+    await requireServerActionAccess("decision", "read", {
+      organizationId,
+      resourceId: decisionId,
     });
 
-    if (
-      !evidence ||
-      evidence.decisionId !== decisionId ||
-      !evidence.storageKey
-    ) {
-      return NextResponse.json(
-        { error: "Evidence not found" },
-        { status: 404 },
-      );
-    }
+    const evidenceRecord = await assertEvidenceDownloadAccess({
+      productSlug: "decision",
+      evidenceId,
+      organizationId,
+      resourceId: decisionId,
+    });
 
-    const file = await getStorageProvider().retrieve(evidence.storageKey);
+    const file = await getStorageProvider().retrieve(evidenceRecord.storageKey!);
     if (!file) {
       return NextResponse.json(
         { error: "Stored file not found" },
@@ -56,23 +48,22 @@ export async function GET(
       {
         type: "decision_evidence",
         id: evidenceId,
-        label: evidence.filename,
+        label: evidenceRecord.filename,
       },
       {
         status: "success",
         sourceModel: "DecisionEvidence",
-        sourceId: evidence.id,
+        sourceId: evidenceRecord.id,
         metadata: {
           decisionId,
-          fileType: evidence.fileType,
-          fileSize: evidence.fileSize,
+          fileType: evidenceRecord.fileType,
         },
       },
     );
 
     return buildDownloadResponse({
       content: file.content,
-      filename: evidence.filename,
+      filename: evidenceRecord.filename,
       mimeType: file.mimeType,
       sizeBytes: file.sizeBytes,
     });

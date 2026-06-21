@@ -9,6 +9,22 @@ export interface Principal {
   email?: string;
 }
 
+/** Maps session UserRole (ADMIN) and AuditUser slugs to download-gate PrincipalRole. */
+export function normalizePrincipalRole(role: string): PrincipalRole {
+  switch (role.toLowerCase()) {
+    case "admin":
+      return "admin";
+    case "manager":
+    case "partner":
+      return "manager";
+    case "operator":
+    case "reviewer":
+      return "operator";
+    default:
+      return "viewer";
+  }
+}
+
 export function getPrincipalRole(principal: Principal): PrincipalRole {
   return principal.role;
 }
@@ -25,7 +41,7 @@ export function principalFromCurrentUser(user: {
   return {
     id: user.id,
     organizationId: user.organizationId,
-    role: user.role as PrincipalRole,
+    role: normalizePrincipalRole(user.role),
     userId: user.id,
   };
 }
