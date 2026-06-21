@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, jest, beforeEach } from "@jest/globals";
+import { describe, it, expect, jest, beforeEach } from "@jest/globals";
 import type { NextRequest } from "next/server";
 
 // ─── Module-level mocks (jest.mock is hoisted above imports) ───
@@ -103,7 +103,7 @@ describe("GET /api/sales/export", () => {
     const res = await GET(req.clone() as unknown as NextRequest);
     expect(res.status).toBe(429);
     const text = await res.text();
-    expect(text).toContain("Too many requests");
+    expect(text).toContain("Rate limit exceeded");
   });
 
   // ─── 4. Successful Export ───

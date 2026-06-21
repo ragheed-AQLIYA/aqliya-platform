@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// @ts-nocheck
 // ─── SalesOS Prisma persistence layer ───
 // Tenant-scoped CRUD. Enabled via SALESOS_PRISMA_PERSISTENCE=1.
 //
 // === R-04 Tech Debt: Schema Drift ===
 // This file references model names and field names from an earlier SalesOS schema design
-// that differ from the current Prisma schema. @ts-nocheck is necessary because:
+// that differ from the current Prisma schema. Targeted `as any` casts handle the drift:
 //
 //   Model name drift:
 //     - prisma.salesOpportunity → current schema: SalesDeal
@@ -184,11 +183,11 @@ export async function prismaLoadOrgSnapshot(organizationId: string): Promise<{
 
   const [accounts, contacts, opportunities, interactions, evidence] =
     await Promise.all([
-      prisma.salesAccount.findMany({ where: { organizationId } }),
-      prisma.salesContact.findMany({ where: { organizationId } }),
-      prisma.salesOpportunity.findMany({ where: { organizationId } }),
-      prisma.salesInteractionLog.findMany({ where: { organizationId } }),
-      prisma.salesEvidenceLink.findMany({ where: { organizationId } }),
+      prisma.salesAccount.findMany({ where: { organizationId } }) as any,
+      prisma.salesContact.findMany({ where: { organizationId } }) as any,
+      (prisma as any).salesOpportunity.findMany({ where: { organizationId } }),
+      (prisma as any).salesInteractionLog.findMany({ where: { organizationId } }),
+      prisma.salesEvidenceLink.findMany({ where: { organizationId } }) as any,
     ]);
 
   return {
@@ -214,7 +213,7 @@ export async function prismaSeedOrg(
 
   await prisma.$transaction(async (tx) => {
     for (const a of seed.accounts) {
-      await tx.salesAccount.create({
+      await (tx.salesAccount.create as any)({
         data: {
           id: a.id,
           organizationId: a.organizationId,
@@ -230,7 +229,7 @@ export async function prismaSeedOrg(
       });
     }
     for (const c of seed.contacts) {
-      await tx.salesContact.create({
+      await (tx.salesContact.create as any)({
         data: {
           id: c.id,
           organizationId: c.organizationId,
@@ -246,7 +245,7 @@ export async function prismaSeedOrg(
       });
     }
     for (const o of seed.opportunities) {
-      await tx.salesOpportunity.create({
+      await (tx as any).salesOpportunity.create({
         data: {
           id: o.id,
           organizationId: o.organizationId,
@@ -264,7 +263,7 @@ export async function prismaSeedOrg(
       });
     }
     for (const i of seed.interactions) {
-      await tx.salesInteractionLog.create({
+      await (tx as any).salesInteractionLog.create({
         data: {
           id: i.id,
           organizationId: i.organizationId,
@@ -285,7 +284,7 @@ export async function prismaSeedOrg(
 export async function prismaCreateAccount(
   account: SalesAccount,
 ): Promise<void> {
-  await prisma.salesAccount.create({
+  await (prisma.salesAccount.create as any)({
     data: {
       id: account.id,
       organizationId: account.organizationId,
@@ -340,7 +339,7 @@ export async function prismaUpdateOpportunity(
   opportunityId: string,
   patch: Partial<SalesOpportunity>,
 ): Promise<void> {
-  await prisma.salesOpportunity.updateMany({
+  await (prisma as any).salesOpportunity.updateMany({
     where: { id: opportunityId, organizationId },
     data: {
       ...(patch.stage !== undefined ? { stage: patch.stage } : {}),

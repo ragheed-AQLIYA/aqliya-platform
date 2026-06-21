@@ -1,4 +1,4 @@
-<!-- BEGIN:nextjs-agent-rules -->
+﻿<!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
 
@@ -207,7 +207,7 @@ Products and systems must not be confused with the platform itself.
 | SalesOS             | Future governed revenue intelligence              | Do not treat as CRM only; build with governance     |
 | LocalContactOS      | Institutional relationship intelligence           | Sensitive relationship memory; requires strict RBAC |
 | Office AI Assistant | Shared governed work assistant                    | Application on Core, not standalone product         |
-| RiskOS              | Future risk intelligence                          | Do not build unless explicitly tasked               |
+| RiskOS              | AuditOS-adjacent risk workspace                    | Built as audit-adjacent risk workspace — not marketed as standalone product. Dashboard + assessment detail + audit trail + export at L5. See PRODUCT_STATUS_MATRIX.md. |
 | ComplianceOS        | Future compliance system                          | Do not build unless explicitly tasked               |
 | LegalOS             | Future legal intelligence assistant               | Do not claim lawyer replacement                     |
 | GovOS               | Future government institutional system            | Do not build unless explicitly tasked               |

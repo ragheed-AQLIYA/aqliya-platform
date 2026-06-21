@@ -24,6 +24,8 @@ import {
   FolderKanban,
   BarChart3,
   Hash,
+  Bell,
+  HeartPulse,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -81,6 +83,18 @@ const modules = [
 ];
 
 const platformNav = [
+  {
+    name: "Platform Overview",
+    nameAr: "نظرة عامة على المنصة",
+    href: "/overview",
+    icon: HeartPulse,
+  },
+  {
+    name: "Notifications",
+    nameAr: "التنبيهات",
+    href: "/notifications",
+    icon: Bell,
+  },
   {
     name: "Decision Intelligence",
     nameAr: "الذكاء القرارات",

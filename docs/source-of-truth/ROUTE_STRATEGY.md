@@ -307,6 +307,17 @@ These pages serve as detail references for specialized operating systems. They a
 | `/risk/[id]`                       | RiskOS         | Governed workspace | Protected        | Usable v0.1 (L4)      | Risk model detail (existing route)           |
 | `/risk/assessments/[id]`           | RiskOS         | Governed workspace | Protected        | Pilot-ready (L5)      | Assessment detail: score bars, category scores, procedure step tracking, audit trail, JSON export |
 
+### ContentStudio — Content Workspace Prototype (L3)
+
+| Route                                     | Product/System | Route Type            | Public/Protected | Implementation Status | Notes                                                            |
+| ----------------------------------------- | -------------- | --------------------- | ---------------- | --------------------- | ---------------------------------------------------------------- |
+| \/content-studio\                       | ContentStudio  | Dashboard             | Protected        | Prototype (L3)        | Dashboard with workspace cards, KPI stats (workspaces, content, published), workspace creation dialog. AR-first RTL UI. |
+| \/content-studio/[workspaceId]\          | ContentStudio  | Governed workspace    | Protected        | Prototype (L3)        | Workspace detail with status-filtered tabs (ALL/DRAFT/IN_REVIEW/APPROVED/PUBLISHED/ARCHIVED), per-workspace stats. |
+| \/content-studio/[workspaceId]/create\   | ContentStudio  | Governed workspace    | Protected        | Prototype (L3)        | Content creation form with optional template pre-fill.           |
+| \/content-studio/[workspaceId]/[contentId]\ | ContentStudio  | Governed workspace | Protected        | Prototype (L3)        | Content detail: title, body, metadata, version history, lifecycle actions (submit for review, approve, reject, publish, archive). |
+| \/content-studio/templates\              | ContentStudio  | Governed workspace    | Protected        | Prototype (L3)        | Template list + inline create form with variable interpolation (\{{variable}}\). |
+
+**ContentStudio maturity notes:** L3 Prototype — real Prisma models (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), server actions, audit trail via writePlatformAuditLog, content lifecycle with 5 states, bilingual AR-first UI. Missing: seed data, sidebar entry, PDF/export, dedicated test coverage. Not classified in official product taxonomy — listed here for transparency.
 ### Sunbul — Redirect Alias to WorkflowOS
 
 | Route                                           | Product/System | Route Type        | Public/Protected | Implementation Status | Notes                                                                  |
@@ -361,6 +372,7 @@ Current code reality uses `src/middleware.ts` for route protection. It uses `get
 - `/contacts`
 - `/institutional-memory`
 - `/workflowos`
+- /content-studio
 - `/sales`
 - `/published/recommendation`
 
@@ -405,4 +417,8 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 15. `/risk/*` = RiskOS governed workspace (L5 Pilot-ready). Authenticated, dashboard with 4 KPI cards + risk distribution, seed data with 1 model / 1 assessment / 2 procedures. Assessment detail page with DRAFT→REVIEWED→APPROVED workflow, procedure step tracking with interactive checkboxes, audit trail panel, JSON export. Uses AuditOS risk models (AuditRiskModel) — no separate RiskOS product model. Do not market as standalone product.
 
 16. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`.
+17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.
+
+18. `/content-studio/*` = ContentStudio prototype content workspace (L3). Authenticated, Prisma-backed (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), Arabic-first RTL UI, content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning, template variable interpolation, audit trail. Missing: seed data, sidebar entry, PDF/export, test coverage. Not classified in official taxonomy — listed here for transparency. Not L4 usable v0.1 — prototype maturity only.
+
 17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.

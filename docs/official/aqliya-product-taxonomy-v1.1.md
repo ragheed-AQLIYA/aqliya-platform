@@ -1,4 +1,4 @@
-# AQLIYA Product Taxonomy v1.1
+﻿# AQLIYA Product Taxonomy v1.1
 
 **Version:** 1.1  
 **Status:** Official — aligned to v0.1 operational baseline  
@@ -32,9 +32,11 @@ AQLIYA Platform Company
 ├── Custom / Client-Specific Workspaces
 │   ├── WorkflowOS (canonical governed workspace)
 │   └── Sunbul (legacy redirect alias to WorkflowOS)
+├── Internal Prototype Surfaces (code reality — undocumented in earlier taxonomy)
+│   └── ContentStudio (content workspace — L3 prototype, documented for transparency)
 ├── Future Systems (not yet implemented)
 │   ├── LocalContactOS
-│   ├── RiskOS
+│   ├── RiskOS (L5 workspace at /risk/* exists — not standalone product; see PRODUCT_STATUS_MATRIX.md)
 │   ├── ComplianceOS
 │   ├── LegalOS
 │   └── GovOS
@@ -95,7 +97,8 @@ AQLIYA Platform Company
 | **LocalContentOS**      | Product / System                   | Included as pilot-ready with conditions | L5 Pilot-ready with conditions | Safe to show with explanation |
 | **SimulationOS**        | Marketing capability label         | Do not claim as live                    | L1 Marketing                   | Do not show as implemented    |
 | **LocalContactOS**      | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
-| **RiskOS**              | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
+| **ContentStudio**      | Internal Prototype Surface           | Prototype / internal preview            | L3 Prototype                   | Internal only                 |
+| **RiskOS**              | AuditOS submodule (workspace exists) | Included as usable v0.1                    | L5 Pilot-ready (not standalone)          | Safe with context             |
 | **ComplianceOS**        | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
 | **LegalOS**             | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
 | **GovOS**               | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |

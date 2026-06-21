@@ -1,4 +1,4 @@
-# AQLIYA v1.1 — Official Vision
+﻿# AQLIYA v1.1 — Official Vision
 
 **Version:** 1.1  
 **Status:** Official doctrine — identity, governance, and strategic positioning  
@@ -109,7 +109,7 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 - Institutional Memory engine
 - SalesOS backend/workflow
 - LocalContactOS backend
-- RiskOS, ComplianceOS, LegalOS, GovOS product implementations
+- RiskOS (as standalone product — `/risk/*` workspace exists as audit-adjacent risk capability, not standalone product), ComplianceOS, LegalOS, GovOS product implementations
 
 ---
 

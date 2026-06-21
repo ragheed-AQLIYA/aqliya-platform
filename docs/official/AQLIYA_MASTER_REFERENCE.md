@@ -1,4 +1,4 @@
-# AQLIYA Master Reference v0.1
+﻿# AQLIYA Master Reference v0.1
 
 **Status:** Current master reference for AQLIYA v0.1 operational baseline  
 **Version:** 0.1  
@@ -88,9 +88,11 @@ AQLIYA Platform Company
 ├── Custom / Client-Specific Workspaces
 │   ├── WorkflowOS
 │   └── Sunbul (legacy redirect alias to WorkflowOS)
+├── Internal Prototype Surfaces (code reality — undocumented in earlier taxonomy)
+│   └── ContentStudio (content workspace — L3 prototype)
 ├── Future Systems (not yet implemented)
 │   ├── LocalContactOS
-│   ├── RiskOS
+│   ├── RiskOS (L5 workspace at /risk/* exists — not standalone product)
 │   ├── ComplianceOS
 │   ├── LegalOS
 │   └── GovOS
@@ -127,7 +129,7 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | **SalesOS**             | Prototype / internal preview        | **L4**                             | Workspace at `/sales/*` (27 routes). Prisma-backed CRM-lite flows, RBAC, audit trail, CRM sync admin UI. Builds and tests pass. **Not L5 pilot-ready** — internal demo only; not production CRM. |
 | **SimulationOS**        | Marketing label                     | **L1**                             | Page at `/products/simulation`. Not a standalone system.                                                                                                                                                                                                                                                                                                                                                             |
 | **LocalContactOS**      | Governed contact workspace          | **L4→L5 partial**                  | Workspace at `/contacts/*`. Registry, relations, interactions, evidence, review/export, risk flags, audit trail. Evidence: `docs/reports/2026-06-18-final-test.txt`. Not L6. |
-| **RiskOS**              | AuditOS submodule (internal)        | **L4**                             | Dashboard at `/risk/*` with KPIs, distribution chart, assessments table; seed model/assessment; uses `AuditRiskModel`; not a standalone marketed product. Evidence: `docs/reports/2026-06-19-final-test.txt`. |
+| **RiskOS**              | AuditOS submodule (internal)        | **L5**                             | Dashboard at `/risk/*` with KPIs, distribution chart, assessments table, assessment detail with DRAFT->REVIEWED->APPROVED workflow, procedure step tracking, audit trail, JSON export; seed model/assessment/procedures; uses `AuditRiskModel`; not a standalone marketed product. Evidence: `docs/reports/2026-06-19-final-test.txt`. |
 | **ComplianceOS**        | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **LegalOS**             | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **GovOS**               | Not implemented                     | **L0**                             | Future product.                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -149,6 +151,7 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | `/sunbul/*`                | Sunbul legacy redirect alias to WorkflowOS | Active — redirect alias     |
 | `/contacts/*`              | LocalContactOS governed contact workspace  | Active — L4                 |
 | `/workflowos/*`            | WorkflowOS governed workspace              | Active — L4                 |
+| /content-studio/*       | ContentStudio prototype workspace       | Active - L3 prototype       |
 | `/sales`                   | SalesOS workspace (internal preview)       | Active — L4 prototype       |
 | `/organizations/*`         | Generic organizations prototype            | Active — L3 prototype       |
 | `/settings/*`              | Platform diagnostics + prototype settings  | Active — L2/L4              |
@@ -195,7 +198,7 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - SalesOS — L4 internal workspace at `/sales/*` (not production CRM)
 - Local AI runtime — L4 pilot with Ollama/hybrid router (operator-configured; not default-on)
 - Institutional Memory — L3→L4 partial (`InstitutionalMemoryEvent`, `/institutional-memory/*`, Intelligence Graph)
-- RiskOS — L4 usable v0.1 at `/risk/*` (AuditOS risk models + dashboard; not standalone product)
+- RiskOS — L5 Pilot-ready at `/risk/*` (AuditOS risk models + dashboard + procedure tracking + audit trail + export; not standalone product)
 
 ---
 
@@ -211,6 +214,7 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - **SalesOS** — L4 usable v0.1 internal preview at `/sales/*`. Real persistence and governance patterns; not L5 pilot-ready and not production CRM.
 - **Organizations surface** — Mock/internal preview only.
 - **Generic settings** — Local-state-only preview.
+- **ContentStudio** — L3 prototype content workspace at `/content-studio/*`. Real Prisma models (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), server actions, Arabic-first RTL UI, content lifecycle with 5 states, versioning, template variable interpolation, audit trail. Missing: seed data, sidebar entry, PDF/export, test coverage.
 
 ---
 
