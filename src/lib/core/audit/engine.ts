@@ -17,7 +17,7 @@ export interface AuditWriteInput extends StampAuditEventInput {
   appendToChain?: boolean;
 }
 
-export interface AuditWriteOptions extends PlatformAuditLogWriteOptions {}
+export type AuditWriteOptions = PlatformAuditLogWriteOptions;
 
 export async function write(
   input: AuditWriteInput,

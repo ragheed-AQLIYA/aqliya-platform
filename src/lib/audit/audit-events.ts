@@ -10,7 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { Product } from "@/lib/platform/audit-logger";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
-import type { Prisma } from "@prisma/client";
+import type { AuditEvent, Prisma } from "@prisma/client";
 
 export interface AuditOsAuditInput {
   engagementId: string;
@@ -32,10 +32,9 @@ export interface AuditOsAuditInput {
   clientWorkspaceId?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function recordAuditOsAuditEvent(
   input: AuditOsAuditInput,
-): Promise<any> {
+): Promise<AuditEvent> {
   // ── Primary write ──
   const event = await prisma.auditEvent.create({
     data: {
