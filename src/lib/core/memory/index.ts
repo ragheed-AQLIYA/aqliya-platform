@@ -1,5 +1,5 @@
 /**
- * Institutional Memory Engine facade — unifies platform institutional memory
+ * Institutional Memory Engine — unifies platform institutional memory
  * (graph, collections, search) and AI memory (queries, insights, entities).
  * IC-P1-06: Memory Engine Consolidation.
  */
@@ -23,7 +23,7 @@ export {
   removeNodeFromCollection,
   searchMemory,
   updateNode,
-} from "@/lib/platform/institutional-memory";
+} from "./institutional-memory-service";
 
 export type {
   CollectionInput,
@@ -32,10 +32,9 @@ export type {
   IngestDocumentInput,
   MemoryStats,
   SearchMemoryInput,
-} from "@/lib/platform/institutional-memory";
+} from "./institutional-memory-service";
 
 // Unified AI memory — queries, insights, entity/relation CRUD
-// Merged from src/lib/ai/memory/institutional-memory.ts (IC-P1-06)
 export {
   createEntity,
   createRelation,

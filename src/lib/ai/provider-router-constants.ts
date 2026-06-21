@@ -1,10 +1,5 @@
-import type { AIProviderId } from "@/lib/ai/types"
-
-/** Fallback order — shared by router and CLI smoke (no server-only). */
-export const PROVIDER_FALLBACK_CHAIN: AIProviderId[] = [
-  "openai",
-  "anthropic",
-  "local",
-  "cloud",
-  "deterministic",
-]
+/**
+ * Backward-compatible re-export. provider-router-constants moved to @/lib/core/ai/provider-router-constants.
+ * New code should import from @/lib/core/ai instead.
+ */
+export * from "@/lib/core/ai/provider-router-constants";
