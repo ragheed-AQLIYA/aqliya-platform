@@ -1,5 +1,5 @@
-export { OpenAIProvider } from "./openai-provider"
-export { AnthropicProvider } from "./anthropic-provider"
-export { CloudAIProvider } from "./cloud-provider"
-export { DeterministicAIProvider, deterministicProvider } from "./deterministic-provider"
-export { LocalAIProvider } from "./local-provider"
+/**
+ * Backward-compatible re-export. Providers moved to @/lib/core/ai/providers/.
+ * New code should import from @/lib/core/ai instead.
+ */
+export * from "@/lib/core/ai/providers";

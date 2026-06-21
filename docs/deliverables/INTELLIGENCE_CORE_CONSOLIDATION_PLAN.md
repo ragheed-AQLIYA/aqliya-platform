@@ -62,20 +62,16 @@
 ---
 
 ### P0.3 Platform Stub Cleanup
-**Effort:** 1 day | **Risk:** LOW | **Complexity:** LOW
+**Effort:** 1 day | **Risk:** LOW | **Complexity:** LOW — COMPLETED ✅
 
 | Capability | Current Location | Decision | Rationale |
 |------------|-----------------|----------|-----------|
-| `platform/workflow/product-templates.ts` | REAL (15 lines) | KEEP | Has real logic — calls getProductTemplate from core/workflow. Not a stub. Plan outdated. |
-| `platform/evidence/evidence-service.ts` | REAL (240 lines) | KEEP | Not a stub — has lookupEvidence, assertEvidenceDownloadAccess, registerEvidence. registerEvidence returns registered:false (facade phase). |
-| `platform/signals/index.ts` | Signal producers | KEEP | Real implementations for audit, sales, local-content signals. Cross-product commercial stub deleted. |
-| `platform/signals/cross-product-commercial.ts` | STUB (returns []) | REMOVED ✅ | Dead code, no callers — deleted 2026-06-21 |
+| `platform/workflow/product-templates.ts` | REAL (15 lines) | REMOVED ✅ | Dead code — zero importers |
+| `platform/evidence/evidence-service.ts` | REAL (240 lines) | KEEP | Facade phase — registerEvidence returns registered:false |
+| `platform/signals/index.ts` | Signal producers | KEEP | Real implementations for audit, sales, local-content |
+| `platform/signals/cross-product-commercial.ts` | STUB (returns []) | REMOVED ✅ | Dead code, no callers |
 
-**Steps:**
-1. ~~Delete `product-templates.ts`~~ ⏭️ Has real code, not a stub
-2. ~~Delete `cross-product-commercial.ts`~~ ✅ Done
-3. Mark `evidence-service.ts` as TARGET for Evidence Engine — done (below)
-4. Mark `signals/index.ts` stubs for Signal Engine replacement — done (below)
+**All P0 items delivered.**|
 
 **Dependencies:** None
 
@@ -113,18 +109,23 @@
 | Capability | Current Location | Decision | Rationale |
 |------------|-----------------|----------|-----------|
 | AIOrchestrator | `src/lib/ai/orchestrator.ts` | MERGE → `src/lib/core/ai/engine.ts` | Move to canonical location |
-| governedAIExecute | `src/lib/ai/governed-ai-executor.ts` | MERGED ✅ → `src/lib/core/ai/governed-ai-executor.ts` | Moved to core/ai/ with absolute import paths. Deleted original. Exported through core/ai/index.ts. |
-| providers | `src/lib/ai/providers/` | KEEP → `src/lib/core/ai/providers/` | Well-designed |
-| intelligence-runtime | `src/lib/ai/intelligence-runtime.ts` | KEEP → `src/lib/core/ai/` | Well-designed |
+| governedAIExecute | `src/lib/ai/governed-ai-executor.ts` | MERGED ✅ → `src/lib/core/ai/governed-ai-executor.ts` | Moved to core/ai/. Original deleted. |
+| providers | `src/lib/ai/providers/` | MERGED ✅ → `src/lib/core/ai/providers/` | 14 files copied, backward-compat re-export in old location |
+| types | `src/lib/ai/types.ts` | MERGED ✅ → `src/lib/core/ai/types.ts` | Moved, backward-compat re-export in old location |
+| intelligence-runtime | `src/lib/ai/intelligence-runtime.ts` | MERGED ✅ → `src/lib/core/ai/intelligence-runtime.ts` | Moved, backward-compat re-export stub |
 | handlers | `src/lib/ai/handlers/` | KEEP (product-specific) | Keep in products, not core |
-| memory | `src/lib/ai/memory/` | MERGE → Memory Engine | Absorb into core/memory/ |
+| memory | `src/lib/ai/memory/` | MERGED ✅ → Memory Engine | Absorbed into `src/lib/core/memory/ai-memory.ts` |
 | product-ai-bridge | `src/lib/platform/product-ai-bridge.ts` | KEEP | Legitimate product gateway |
 
 **Steps:**
-1. Create `src/lib/core/ai/` directory structure
-2. Move orchestrator, executor, providers, runtime router
-3. Keep backward-compatible exports in `src/lib/ai/`
-4. Add AI Execution Engine interface
+1. ~~Create `src/lib/core/ai/` directory structure~~ ✅ Done
+2. ~~Move governed-ai-executor~~ ✅ Done
+3. ~~Move intelligence-runtime~~ ✅ Done
+4. ~~Move providers/ to core/ai/providers/~~ ✅ Done (14 files)
+5. ~~Move types.ts to core/ai/types~~ ✅ Done
+6. Move orchestrator, provider-router, budget-manager, cost-mapping (have relative import chain)
+7. Keep backward-compatible exports in `@/lib/ai/`
+8. Add AI Execution Engine interface
 
 **Dependencies:** P0.1, P1.1
 

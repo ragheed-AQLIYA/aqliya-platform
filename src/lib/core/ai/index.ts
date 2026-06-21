@@ -47,3 +47,5 @@ export {
 } from "./governed-ai-executor";
 
 export type { AIProviderId, AIRequest, AIResponse } from "@/lib/ai/types";
+
+export * from "./providers";
