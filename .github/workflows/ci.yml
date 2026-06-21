@@ -47,9 +47,9 @@ jobs:
 
       - name: Push schema to CI database
         run: |
-          npx prisma db push --force-reset || true
+          npx prisma db push --force-reset --accept-data-loss || true
           PGPASSWORD=ci psql -h localhost -U ci -d aqliya_ci -c "CREATE EXTENSION IF NOT EXISTS vector;"
-          npx prisma db push
+          npx prisma db push --accept-data-loss
         env:
           DATABASE_URL: postgresql://ci:ci@localhost:5432/aqliya_ci
 
