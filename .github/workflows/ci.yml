@@ -45,11 +45,11 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Enable pgvector extension
-        run: PGPASSWORD=ci psql -h localhost -U ci -d aqliya_ci -c "CREATE EXTENSION IF NOT EXISTS vector;"
-
       - name: Push schema to CI database
-        run: npx prisma db push --force-reset
+        run: |
+          npx prisma db push --force-reset || true
+          PGPASSWORD=ci psql -h localhost -U ci -d aqliya_ci -c "CREATE EXTENSION IF NOT EXISTS vector;"
+          npx prisma db push
         env:
           DATABASE_URL: postgresql://ci:ci@localhost:5432/aqliya_ci
 
