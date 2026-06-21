@@ -22,6 +22,11 @@ import { runAbacShadowEvaluation } from "@/core/access/abac-shadow";
 describe("ABAC shadow evaluation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    process.env.FF_ABAC_SHADOW = "true";
+  });
+
+  afterEach(() => {
+    delete process.env.FF_ABAC_SHADOW;
   });
 
   it("logs mismatch when RBAC grants but ABAC denies", async () => {

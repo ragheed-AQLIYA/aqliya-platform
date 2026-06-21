@@ -27,7 +27,10 @@ describe("deliverToFile", () => {
   });
 
   it("returns ok: false on invalid path", async () => {
-    const result = await deliverToFile(testData, "Z:\\invalid\\path\\file.json");
+    const result = await deliverToFile(
+      testData,
+      join(tmpDir, "missing-parent-dir", "file.json"),
+    );
     expect(result.ok).toBe(false);
     expect(result.error).toBeDefined();
   });

@@ -8,6 +8,16 @@ on:
       - "**.md"
       - ".github/**"
       - "!.github/workflows/deploy.yml"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target branch environment (main=production, staging=staging)"
+        required: false
+        default: "main"
+        type: choice
+        options:
+          - main
+          - staging
 
 env:
   NODE_VERSION: "22"

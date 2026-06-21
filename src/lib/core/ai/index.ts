@@ -19,7 +19,7 @@ export {
   type RunGovernedAuditAIParams,
 } from "./engine";
 
-export { aiOrchestrator, type GenerateEvent, type OrchestratorConfig } from "@/lib/ai/orchestrator";
+export { aiOrchestrator, type GenerateEvent, type OrchestratorConfig } from "./orchestrator";
 
 export {
   isProductAICoreEnabled,

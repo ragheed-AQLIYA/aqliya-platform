@@ -5,6 +5,8 @@ export async function register() {
     const { logStartupEnvWarnings } =
       await import("./lib/platform/runtime-env-check");
     logStartupEnvWarnings();
+    const { warmAuthConfig } = await import("./lib/auth-config");
+    await warmAuthConfig();
     await import("../sentry.server.config");
   }
   if (process.env.NEXT_RUNTIME === "edge") {

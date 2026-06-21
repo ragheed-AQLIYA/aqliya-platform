@@ -7,10 +7,12 @@ jest.mock("@/lib/auth", () => ({
   requireDecisionAccess: jest.fn(),
 }));
 
-jest.mock("@/lib/prisma", () => ({
-  prisma: {
-    decisionEvidence: { findUnique: jest.fn() },
-  },
+jest.mock("@/core/access/server-action-guard", () => ({
+  requireServerActionAccess: jest.fn(),
+}));
+
+jest.mock("@/lib/core/evidence", () => ({
+  assertEvidenceDownloadAccess: jest.fn(),
 }));
 
 jest.mock("@/lib/platform/storage", () => ({
@@ -25,7 +27,8 @@ jest.mock("@/lib/platform/audit-logger", () => ({
 // ── Imports (picks up mocked modules) ──
 
 import { requireDecisionAccess } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { requireServerActionAccess } from "@/core/access/server-action-guard";
+import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { auditLogger } from "@/lib/platform/audit-logger";
 
@@ -78,6 +81,7 @@ function makeFile(overrides: Record<string, unknown> = {}) {
 describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mock(requireServerActionAccess).mockResolvedValue(makeUser());
   });
 
   // ── 1. Authentication ──
@@ -135,7 +139,9 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
       user: makeUser(),
       organizationId: "org-1",
     });
-    mock(prisma.decisionEvidence.findUnique).mockResolvedValue(null);
+    mock(assertEvidenceDownloadAccess).mockRejectedValue(
+      new Error("Evidence not found"),
+    );
 
     const { GET } = await import("@/app/api/decisions/[decisionId]/evidence/[evidenceId]/download/route");
     const req = new Request("http://localhost/api/decisions/dec-1/evidence/ev-1/download") as unknown as NextRequest;
@@ -155,8 +161,8 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
       user: makeUser(),
       organizationId: "org-1",
     });
-    mock(prisma.decisionEvidence.findUnique).mockResolvedValue(
-      makeEvidence({ decisionId: "dec-other" }),
+    mock(assertEvidenceDownloadAccess).mockRejectedValue(
+      new Error("Evidence not found"),
     );
 
     const { GET } = await import("@/app/api/decisions/[decisionId]/evidence/[evidenceId]/download/route");
@@ -177,8 +183,8 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
       user: makeUser(),
       organizationId: "org-1",
     });
-    mock(prisma.decisionEvidence.findUnique).mockResolvedValue(
-      makeEvidence({ storageKey: null }),
+    mock(assertEvidenceDownloadAccess).mockRejectedValue(
+      new Error("Evidence not found or no file stored"),
     );
 
     const { GET } = await import("@/app/api/decisions/[decisionId]/evidence/[evidenceId]/download/route");
@@ -199,7 +205,13 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
       user: makeUser(),
       organizationId: "org-1",
     });
-    mock(prisma.decisionEvidence.findUnique).mockResolvedValue(makeEvidence());
+    mock(assertEvidenceDownloadAccess).mockResolvedValue({
+      id: "ev-1",
+      filename: "report.pdf",
+      fileType: "application/pdf",
+      storageKey: "uploads/ev-1/report.pdf",
+      organizationId: "org-1",
+    });
     mock(getStorageProvider).mockReturnValue({
       retrieve: jest.fn().mockResolvedValue(null),
     });
@@ -224,7 +236,13 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
       organizationId: "org-1",
     });
     const evidence = makeEvidence({ filename: "audit-report.pdf" });
-    mock(prisma.decisionEvidence.findUnique).mockResolvedValue(evidence);
+    mock(assertEvidenceDownloadAccess).mockResolvedValue({
+      id: evidence.id,
+      filename: evidence.filename,
+      fileType: evidence.fileType,
+      storageKey: evidence.storageKey,
+      organizationId: "org-1",
+    });
     const file = makeFile({ content: Buffer.from("PDF binary data"), mimeType: "application/pdf", sizeBytes: 14 });
     mock(getStorageProvider).mockReturnValue({
       retrieve: jest.fn().mockResolvedValue(file),
@@ -255,7 +273,13 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
       user,
       organizationId: "org-1",
     });
-    mock(prisma.decisionEvidence.findUnique).mockResolvedValue(makeEvidence({ filename: "report.pdf", fileType: "application/pdf", fileSize: 1024 }));
+    mock(assertEvidenceDownloadAccess).mockResolvedValue({
+      id: "ev-1",
+      filename: "report.pdf",
+      fileType: "application/pdf",
+      storageKey: "uploads/ev-1/report.pdf",
+      organizationId: "org-1",
+    });
     mock(getStorageProvider).mockReturnValue({
       retrieve: jest.fn().mockResolvedValue(makeFile()),
     });
@@ -288,7 +312,13 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
       user: makeUser(),
       organizationId: "org-1",
     });
-    mock(prisma.decisionEvidence.findUnique).mockResolvedValue(makeEvidence());
+    mock(assertEvidenceDownloadAccess).mockResolvedValue({
+      id: "ev-1",
+      filename: "report.pdf",
+      fileType: "application/pdf",
+      storageKey: "uploads/ev-1/report.pdf",
+      organizationId: "org-1",
+    });
     mock(getStorageProvider).mockReturnValue({
       retrieve: jest.fn().mockRejectedValue(new Error("Storage connection failed")),
     });

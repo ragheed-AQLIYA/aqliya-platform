@@ -108,7 +108,7 @@
 
 | Capability | Current Location | Decision | Rationale |
 |------------|-----------------|----------|-----------|
-| AIOrchestrator | `src/lib/ai/orchestrator.ts` | MERGE → `src/lib/core/ai/engine.ts` | Move to canonical location |
+| AIOrchestrator | `src/lib/ai/orchestrator.ts` | MERGED ✅ → `src/lib/core/ai/orchestrator.ts` | Moved to core/ai/ with updated dynamic import. Backward-compat re-export in old location. |
 | governedAIExecute | `src/lib/ai/governed-ai-executor.ts` | MERGED ✅ → `src/lib/core/ai/governed-ai-executor.ts` | Moved to core/ai/. Original deleted. |
 | providers | `src/lib/ai/providers/` | MERGED ✅ → `src/lib/core/ai/providers/` | 14 files copied, backward-compat re-export in old location |
 | types | `src/lib/ai/types.ts` | MERGED ✅ → `src/lib/core/ai/types.ts` | Moved, backward-compat re-export in old location |
@@ -123,7 +123,7 @@
 3. ~~Move intelligence-runtime~~ ✅ Done
 4. ~~Move providers/ to core/ai/providers/~~ ✅ Done (14 files)
 5. ~~Move types.ts to core/ai/types~~ ✅ Done
-6. Move orchestrator, provider-router, budget-manager, cost-mapping (have relative import chain)
+6. ~~Move orchestrator (with dynamic import fix)~~ ✅ Done
 7. Keep backward-compatible exports in `@/lib/ai/`
 8. Add AI Execution Engine interface
 
@@ -136,23 +136,23 @@
 
 | Capability | Current Location | Decision | Rationale |
 |------------|-----------------|----------|-----------|
-| RAG pipeline | `src/lib/rag/` | MERGE → `src/lib/core/knowledge/` | Core engine — move from rag/ namespace |
-| knowledge-service | `src/lib/rag/knowledge-service.ts` | KEEP → core/knowledge/ | Well-designed |
-| intelligence-core-rag | `src/lib/rag/intelligence-core-rag.ts` | KEEP → core/knowledge/ | Governed retrieval |
-| governed-rag-metrics | `src/lib/rag/governed-rag-metrics.ts` | KEEP → core/knowledge/ | Evidence refs |
-| hybrid-search | `src/lib/rag/hybrid-search.ts` | KEEP → core/knowledge/ | Search implementation |
-| embedding-service | `src/lib/rag/embedding-service.ts` | KEEP → core/knowledge/ | Embedding pipeline |
+| RAG pipeline | `src/lib/rag/` | MERGED ✅ → `src/lib/core/knowledge/rag/` | 11 files moved to core/knowledge/rag/. Backward-compat re-export in old location. |
+| knowledge-service | `src/lib/rag/knowledge-service.ts` | MERGED ✅ → core/knowledge/rag/ | Moved with full pipeline |
+| intelligence-core-rag | `src/lib/rag/intelligence-core-rag.ts` | MERGED ✅ → core/knowledge/rag/ | Moved with full pipeline |
+| governed-rag-metrics | `src/lib/rag/governed-rag-metrics.ts` | MERGED ✅ → core/knowledge/rag/ | Moved with full pipeline |
+| hybrid-search | `src/lib/rag/hybrid-search.ts` | MERGED ✅ → core/knowledge/rag/ | Moved with full pipeline |
+| embedding-service | `src/lib/rag/embedding-service.ts` | MERGED ✅ → core/knowledge/rag/ | Moved with full pipeline |
 | knowledge-foundation | `knowledge-foundation/` | KEEP | Frozen charter — no code changes |
 | knowledge/ | `knowledge/` | KEEP | Data files — no code changes |
 | audit knowledge-engine | `src/lib/audit/knowledge-engine.ts` | KEEP (product) | Audit-specific, not RAG |
 | TB intelligence | `src/lib/tb-intelligence/` | KEEP | Domain-specific |
 
 **Steps:**
-1. Create `src/lib/core/knowledge/` directory
-2. Move RAG pipeline (12 files) to core/knowledge/
-3. Extract Knowledge Engine interface
-4. Add Knowledge Engine to core registry
-5. Keep backward-compatible re-exports in `src/lib/rag/`
+1. ~~Create `src/lib/core/knowledge/` directory~~ ✅ Done
+2. ~~Move RAG pipeline (11 files) to core/knowledge/rag/~~ ✅ Done
+3. ~~Extract Knowledge Engine interface~~ ✅ Done (engine.ts)
+4. ~~Add Knowledge Engine to core registry~~ ✅ Done (core/index.ts)
+5. ~~Keep backward-compatible re-exports in `src/lib/rag/`~~ ✅ Done (index.ts re-exports to core)
 
 **Dependencies:** P0.1, P1.1
 

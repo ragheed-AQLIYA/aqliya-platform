@@ -269,6 +269,11 @@ describe("CoreAccessControl — deny unknown actions", () => {
 // ──────────────────────────────────────────────────────────────────────────────
 
 describe("resolveMfaGateState — challenge flow", () => {
+  beforeEach(() => {
+    resetMFARequiredRolesCache();
+    delete process.env.MFA_REQUIRED_ROLES;
+  });
+
   afterEach(() => {
     resetMFARequiredRolesCache();
     delete process.env.MFA_REQUIRED_ROLES;

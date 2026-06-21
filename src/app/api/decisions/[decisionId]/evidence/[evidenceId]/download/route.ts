@@ -85,6 +85,12 @@ export async function GET(
     if (message.includes("Access denied")) {
       return NextResponse.json({ error: message }, { status: 403 });
     }
+    if (
+      message.includes("Evidence not found") ||
+      message.includes("no file stored")
+    ) {
+      return NextResponse.json({ error: "Evidence not found" }, { status: 404 });
+    }
     console.error("[DecisionEvidenceDownload] Error:", message);
     return NextResponse.json(
       { error: "Failed to serve file" },

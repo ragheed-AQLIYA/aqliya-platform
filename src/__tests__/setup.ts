@@ -5,3 +5,7 @@ process.env.NODE_ENV = "test";
 // Isolate Jest from developer .env (Ollama/real providers cause flaky timeouts).
 process.env.FF_AI_REAL_PROVIDERS = "false";
 delete process.env.AI_LOCAL_BASE_URL;
+// Tier 2 ABAC shadow is on in production registry; disable in unit tests (no abacPolicy mock).
+process.env.FF_ABAC_SHADOW = "false";
+process.env.FF_ABAC_ENFORCE = "false";
+process.env.FF_EVENT_OUTBOX = "false";

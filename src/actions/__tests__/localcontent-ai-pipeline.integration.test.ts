@@ -22,9 +22,43 @@ jest.mock("next/cache", () => ({
 
 jest.mock("@/lib/auth", () => ({
   getCurrentUser: jest.fn().mockResolvedValue({
-    userId: "user-1",
+    id: "user-1",
+    email: "admin@test.com",
+    name: "Admin",
+    role: "ADMIN",
     organizationId: "org-1",
-    role: "admin",
+    platformOrganizationId: "plat-1",
+    organization: { id: "org-1", name: "Test Org" },
+  }),
+  requireUserContext: jest.fn().mockResolvedValue({
+    id: "user-1",
+    email: "admin@test.com",
+    name: "Admin",
+    role: "ADMIN",
+    organizationId: "org-1",
+    platformOrganizationId: "plat-1",
+    organization: { id: "org-1", name: "Test Org" },
+  }),
+  hasRequiredRole: (
+    user: { role: string },
+    requiredRole: string,
+  ): boolean => {
+    if (requiredRole === "ADMIN") return user.role === "ADMIN";
+    if (requiredRole === "OPERATOR")
+      return ["OPERATOR", "ADMIN"].includes(user.role);
+    return ["VIEWER", "OPERATOR", "ADMIN"].includes(user.role);
+  },
+}));
+
+jest.mock("@/core/access/server-action-guard", () => ({
+  requireServerActionAccess: jest.fn().mockResolvedValue({
+    id: "user-1",
+    email: "admin@test.com",
+    name: "Admin",
+    role: "ADMIN",
+    organizationId: "org-1",
+    platformOrganizationId: "plat-1",
+    organization: { id: "org-1", name: "Test Org" },
   }),
 }));
 
