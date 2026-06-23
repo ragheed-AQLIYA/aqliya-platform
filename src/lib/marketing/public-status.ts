@@ -15,55 +15,55 @@ export const publicOsStatus: Record<
   PublicOsKey,
   { label: string; tone: "success" | "primary" | "amber" | "muted" }
 > = {
-  auditOS: { label: "جاهز للتفعيل المؤسسي", tone: "success" },
+  auditOS: { label: "متاح للتطبيق", tone: "success" },
   decisionOS: { label: "متكامل في المنصة", tone: "primary" },
-  localContentOS: { label: "نطاق تفعيل مؤسسي", tone: "amber" },
-  officeAI: { label: "قدرة مشتركة", tone: "primary" },
-  salesOS: { label: "في خارطة المنصة", tone: "muted" },
-  simulationOS: { label: "في خارطة المنصة", tone: "muted" },
+  localContentOS: { label: "متاح باتفاق النطاق", tone: "amber" },
+  officeAI: { label: "خدمة مشتركة", tone: "primary" },
+  salesOS: { label: "قريباً على خارطة المنصة", tone: "muted" },
+  simulationOS: { label: "قريباً على خارطة المنصة", tone: "muted" },
 };
 
 export const publicCapabilityNote: Record<PublicOsKey, string> = {
-  auditOS: "مسار مراجعة كامل من المصدر إلى الاعتماد",
-  decisionOS: "مذكرات قرار محكومة مع مراجعة بشرية",
-  localContentOS: "موردون، إنفاق، امتثال، وتقارير تنظيمية",
-  officeAI: "مساعد مؤسسي عبر جميع أنظمة التشغيل",
-  salesOS: "ذاكرة تجارية وذكاء مبيعات مؤسسي",
+  auditOS: "من رفع ميزان المراجعة إلى ملف جاهز للاعتماد",
+  decisionOS: "قرارات موثقة: السياق، البدائل، والموافقات",
+  localContentOS: "موردون، إنفاق، محتوى محلي، وتقارير للجهات الرقابية",
+  officeAI: "مساعد مؤسسي عبر حلول المنصة",
+  salesOS: "ذاكرة تجارية ومتابعة فرص",
   simulationOS: "محاكاة سيناريوهات قبل القرار",
 };
 
 export const publicEngagementGate =
-  "نبدأ بتشخيص، ثم تقييم تشغيلي، ثم قرار بالأدلة";
+  "مكالمة أولاً، ثم تجربة على بياناتكم، ثم قراركم";
 
 export const publicOsStatusEn: Record<
   PublicOsKey,
   { label: string; capabilityNote: string }
 > = {
   auditOS: {
-    label: "Ready for institutional activation",
-    capabilityNote: "Full audit path from source to approval",
+    label: "Available to deploy",
+    capabilityNote: "From trial balance upload to a file ready for sign-off",
   },
   decisionOS: {
     label: "Integrated into platform",
-    capabilityNote: "Governed decision memos with human review",
+    capabilityNote: "Documented decisions: context, options, and approvals",
   },
   localContentOS: {
-    label: "Institution activation scope",
-    capabilityNote: "Suppliers, spend, compliance, regulatory reports",
+    label: "Available by agreed scope",
+    capabilityNote: "Suppliers, spend, local content, and regulatory reports",
   },
   officeAI: {
-    label: "Shared capability",
-    capabilityNote: "Governed assistant across all operating systems",
+    label: "Shared service",
+    capabilityNote: "Institutional assistant across platform solutions",
   },
   salesOS: {
-    label: "On platform roadmap",
-    capabilityNote: "Commercial intelligence and institutional memory",
+    label: "Coming on platform roadmap",
+    capabilityNote: "Commercial memory and opportunity tracking",
   },
   simulationOS: {
-    label: "On platform roadmap",
+    label: "Coming on platform roadmap",
     capabilityNote: "Scenario simulation before decisions",
   },
 };
 
 export const publicEngagementGateEn =
-  "Diagnostic session → operational evaluation → evidence-based decision";
+  "Intro call first, then a trial on your data, then your decision";

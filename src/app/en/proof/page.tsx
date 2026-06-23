@@ -11,58 +11,38 @@ import {
   outcomesFutureMetricsEn,
   pilotDecisionOutcomesEn,
   proofDimensionsEn,
+  proofPageCopyEn,
   proofScenariosEn,
-} from "@/lib/marketing/proof-hub-content-en";
-import { publicEngagementGateEn } from "@/lib/marketing/public-status";
+} from "@/lib/marketing/copy-proof-en";
 
 export const metadata: Metadata = {
-  title: "Proof Center | AQLIYA",
-  description:
-    "Unified proof hub: demo, executive brief, operational evaluation framework, evidence samples, and procurement — before any commitment.",
+  title: proofPageCopyEn.metadata.title,
+  description: proofPageCopyEn.metadata.description,
 };
 
-const anchorNav = [
-  { id: "demo", label: "Demo" },
-  { id: "executive-brief", label: "Executive brief" },
-  { id: "evaluation-framework", label: "Evaluation" },
-  { id: "evidence-samples", label: "Evidence library" },
-  { id: "outcomes", label: "Outcomes" },
-  { id: "procurement", label: "Procurement" },
-];
-
-const externalLinks = [
-  { label: "Procurement pack", href: "/en/procurement-pack" },
-  { label: "Security", href: "/en/security" },
-  { label: "Case studies", href: "/case-studies" },
-  { label: "Where to start", href: "/en/start" },
-];
-
 export default function EnglishProofCenterPage() {
+  const c = proofPageCopyEn;
+
   return (
     <div className="flex flex-col">
       <section className="hero-gradient relative overflow-hidden">
         <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto max-w-3xl text-center">
             <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
-              Proof Center
+              {c.hero.eyebrow}
             </span>
             <h1 className="mt-4 text-4xl font-black text-white sm:text-5xl">
-              Proof Center
+              {c.hero.title}
             </h1>
-            <p className="mt-4 text-lg leading-8 text-white/60">
-              Everything you need to evaluate AQLIYA in one place — demo, documents,
-              criteria, and sample outputs. {publicEngagementGateEn}
-            </p>
-            <p className="mt-2 text-sm text-white/40">
-              Sanitized data only — no real customer records.
-            </p>
+            <p className="mt-4 text-lg leading-8 text-white/60">{c.hero.subtitle}</p>
+            <p className="mt-2 text-sm text-white/40">{c.hero.sampleNote}</p>
           </div>
         </div>
       </section>
 
       <section className="sticky top-14 z-40 border-b bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-2 px-6 py-3">
-          {anchorNav.map((a) => (
+          {c.anchorNav.map((a) => (
             <a
               key={a.id}
               href={`#${a.id}`}
@@ -92,16 +72,16 @@ export default function EnglishProofCenterPage() {
 
       <section id="demo" className="scroll-mt-28 border-t">
         <div className="mx-auto max-w-7xl px-6 py-14">
-          <h2 className="text-2xl font-black">Interactive demo</h2>
+          <h2 className="text-2xl font-black">{c.sections.demo.title}</h2>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Full operational path in 10–13 minutes on sanitized data — no login.
+            {c.sections.demo.subtitle}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/en/demo" className="btn-primary h-10 px-6 text-sm">
-              Start demo
+              {c.sections.demo.primaryCta}
             </Link>
             <Link href="/auditos" className="btn-outline h-10 px-6 text-sm">
-              AuditOS guided path
+              {c.sections.demo.secondaryCta}
             </Link>
           </div>
         </div>
@@ -110,8 +90,8 @@ export default function EnglishProofCenterPage() {
 
       <section id="executive-brief" className="scroll-mt-28 border-t bg-muted/10">
         <div className="mx-auto max-w-7xl px-6 py-14">
-          <h2 className="text-2xl font-black">Executive brief</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Five minutes for leadership</p>
+          <h2 className="text-2xl font-black">{c.sections.brief.title}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{c.sections.brief.subtitle}</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             {executiveBriefLayersEn.map((layer) => (
               <div key={layer.name} className="rounded-xl border border-border/60 bg-background p-5">
@@ -153,10 +133,8 @@ export default function EnglishProofCenterPage() {
 
       <section id="evaluation-framework" className="scroll-mt-28 border-t">
         <div className="mx-auto max-w-7xl px-6 py-14">
-          <h2 className="text-2xl font-black">Operational evaluation framework</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Six dimensions + verifiable scenarios in the demo
-          </p>
+          <h2 className="text-2xl font-black">{c.sections.evaluation.title}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{c.sections.evaluation.subtitle}</p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             {proofDimensionsEn.map((d) => (
               <div key={d.dimension} className="rounded-xl border border-border/60 p-4">
@@ -182,17 +160,15 @@ export default function EnglishProofCenterPage() {
             ))}
           </div>
           <Link href="/en/start#engagement" className="mt-6 inline-block text-sm font-medium text-primary hover:underline">
-            Engagement models & free evaluation →
+            {c.sections.evaluation.engagementLink} →
           </Link>
         </div>
       </section>
 
       <section id="evidence-samples" className="scroll-mt-28 border-t bg-muted/10">
         <div className="mx-auto max-w-7xl px-6 py-14">
-          <h2 className="text-2xl font-black">Evidence library</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Sample outputs on trial data — for review, not final sign-off
-          </p>
+          <h2 className="text-2xl font-black">{c.sections.evidence.title}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{c.sections.evidence.subtitle}</p>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {evidenceSamplesEn.map((sample) => (
               <div key={sample.id} className="rounded-xl border border-border/60 bg-background p-5">
@@ -201,7 +177,9 @@ export default function EnglishProofCenterPage() {
                 </p>
                 <h3 className="mt-1 font-bold">{sample.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{sample.highlight}</p>
-                <span className="mt-3 inline-block text-[10px] text-amber-600">Trial data</span>
+                <span className="mt-3 inline-block text-[10px] text-amber-600">
+                  {c.sections.evidence.sampleBadge}
+                </span>
               </div>
             ))}
           </div>
@@ -210,14 +188,11 @@ export default function EnglishProofCenterPage() {
 
       <section id="outcomes" className="scroll-mt-28 border-t">
         <div className="mx-auto max-w-3xl px-6 py-14">
-          <h2 className="text-2xl font-black text-center">Operational evaluation outcomes</h2>
+          <h2 className="text-center text-2xl font-black">{c.sections.outcomes.title}</h2>
           <div className="mt-8 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-8 text-center">
-            <p className="text-sm font-semibold text-amber-700">Current status</p>
-            <p className="mt-2 text-xl font-black">Institutional references in preparation</p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              No vanity metrics. Measured outcomes publish here after the first
-              operational evaluation with an evidence-based decision.
-            </p>
+            <p className="text-sm font-semibold text-amber-700">{c.sections.outcomes.statusLabel}</p>
+            <p className="mt-2 text-xl font-black">{c.sections.outcomes.statusTitle}</p>
+            <p className="mt-3 text-sm text-muted-foreground">{c.sections.outcomes.statusBody}</p>
           </div>
           <ul className="mt-8 space-y-2">
             {outcomesFutureMetricsEn.map((m) => (
@@ -231,9 +206,9 @@ export default function EnglishProofCenterPage() {
 
       <section id="procurement" className="scroll-mt-28 border-t bg-muted/10">
         <div className="mx-auto max-w-7xl px-6 py-14 text-center">
-          <h2 className="text-xl font-black">Additional resources</h2>
+          <h2 className="text-xl font-black">{c.sections.procurement.title}</h2>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            {externalLinks.map((r) => (
+            {c.externalLinks.map((r) => (
               <Link
                 key={r.href}
                 href={r.href}
@@ -247,12 +222,12 @@ export default function EnglishProofCenterPage() {
       </section>
 
       <ConversionBand
-        title="Start with a diagnostic session — free"
-        body="We understand your institution's context and recommend the next step — no sales pitch."
+        title="We start by understanding your context"
+        body="Free intro call — we explain the platform and suggest a sensible next step. No sales pitch."
         primaryHref="/en/contact"
-        primaryLabel="Book diagnostic session"
+        primaryLabel="Book a call"
         secondaryHref="/en/proof"
-        secondaryLabel="Proof center"
+        secondaryLabel="Proof materials"
       />
     </div>
   );

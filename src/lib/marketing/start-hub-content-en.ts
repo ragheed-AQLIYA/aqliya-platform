@@ -1,104 +1,69 @@
-import type { EngagementModelCard, ProcessPhase, EngagementPricingBand } from "./start-hub-content";
+import type {
+  EngagementModelCard,
+  EngagementPricingBand,
+  ProcessPhase,
+} from "./start-hub-content";
+
+export const engagementPricingEn: EngagementPricingBand[] = [
+  { model: "Intro call", from: "SAR 0", to: "SAR 0", note: "No commitment" },
+  { model: "Trial on your data", from: "SAR 0", to: "SAR 0", note: "Limited scope agreed upfront" },
+  { model: "Rollout (cloud)", from: "After trial", to: "By users and paths", note: "Quote after you see results" },
+  { model: "Private or air-gapped", from: "Feasibility study", to: "Design project", note: "For exceptional requirements" },
+];
 
 export const engagementModelsEn: EngagementModelCard[] = [
   {
     id: "diagnostic",
-    name: "Executive diagnostic",
-    tagline: "Understand context before commitment",
-    duration: "45–90 min",
+    name: "Intro call",
+    tagline: "Understand your context first",
+    duration: "About one hour",
     cost: "Free",
-    description: "Structured session — no sales pitch. Fit assessment and next step.",
+    description: "We listen to your need and explain if AQLIYA fits — no sales pitch.",
   },
   {
     id: "pilot",
-    name: "Operational evaluation",
-    tagline: "Prove value on your data",
+    name: "Trial on your data",
+    tagline: "See results before the contract",
     duration: "2–4 weeks",
     cost: "Free",
-    description:
-      "One scoped path on real data — agreed criteria and evidence-based decision report.",
+    description: "One limited path on your files — clear criteria and a report at the end.",
     featured: true,
   },
   {
     id: "deployment",
-    name: "Institutional activation",
-    tagline: "From evaluation to production",
-    duration: "Scope-dependent",
-    cost: "After evaluation",
-    description: "Managed cloud with production auth, backups, and team training.",
+    name: "Go live",
+    tagline: "From trial to daily use",
+    duration: "By agreement",
+    cost: "After trial",
+    description: "Accounts, permissions, backups, and team training on cloud.",
   },
   {
     id: "private-assessment",
-    name: "Private deployment assessment",
-    tagline: "Data sovereignty requirements",
+    name: "Deploy in your environment",
+    tagline: "When data must stay with you",
     duration: "4–8 weeks",
-    cost: "Scope-dependent",
-    description:
-      "Joint technical assessment — On-Prem/Air-Gapped is strategic, not a ready package.",
+    cost: "By scope",
+    description: "Joint study for private or air-gapped deployment — not an off-the-shelf order.",
   },
   {
     id: "custom",
-    name: "Custom institutional system",
-    tagline: "On Intelligence Core",
+    name: "Custom workflow",
+    tagline: "When standard products are not enough",
     duration: "Requirements-driven",
     cost: "Custom",
-    description: "Workflow designed for your context — same governance and evidence chain.",
+    description: "A path designed for your context — same permissions and log.",
   },
 ];
 
 export const processPhasesEn: ProcessPhase[] = [
-  {
-    num: "1",
-    title: "Diagnostic",
-    desc: "Structured session — institution context and fit. No sales pitch.",
-  },
-  {
-    num: "2",
-    title: "Operational evaluation",
-    desc: "Full path on real data — criteria agreed upfront.",
-  },
-  {
-    num: "3",
-    title: "Evidence-based decision",
-    desc: "Proceed · revise scope · or stop — based on measured outcomes.",
-  },
-  {
-    num: "4",
-    title: "Activation & expand",
-    desc: "Institutional rollout — additional paths with governance preserved.",
-  },
+  { num: "1", title: "Call", desc: "We understand the institution and suggest a next step." },
+  { num: "2", title: "Trial", desc: "We work on your data within agreed scope." },
+  { num: "3", title: "Your decision", desc: "Proceed, adjust scope, or stop — based on results." },
+  { num: "4", title: "Rollout", desc: "Expand use while permissions and log stay in place." },
 ];
 
 export const processPrinciplesEn = [
-  "AI assists — humans decide",
-  "Evidence governs — every output linked to source",
-  "Governance built in — not bolted on later",
-  "Start from institution reality — not generic templates",
-];
-
-export const engagementPricingEn: EngagementPricingBand[] = [
-  {
-    model: "Executive diagnostic",
-    from: "SAR 0",
-    to: "SAR 0",
-    note: "Single session — no commitment",
-  },
-  {
-    model: "Operational evaluation",
-    from: "SAR 0",
-    to: "SAR 0",
-    note: "Agreed limited scope upfront",
-  },
-  {
-    model: "Institutional activation (cloud)",
-    from: "After evaluation",
-    to: "By users and paths",
-    note: "Quote after measured outcomes — no broad pre-contract",
-  },
-  {
-    model: "Private / air-gapped",
-    from: "Feasibility assessment",
-    to: "Co-design project",
-    note: "Strategic — joint engineering scope",
-  },
+  "AI suggests — your team approves",
+  "Every output links to a file or log",
+  "We start from your reality — not a generic template",
 ];

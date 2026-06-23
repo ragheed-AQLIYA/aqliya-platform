@@ -18,7 +18,7 @@ export function ScheduleDiagnosticCta({
   const href = getBookingUrl(locale);
   const text =
     label ??
-    (locale === "en" ? "Schedule diagnostic session" : "احجز جلسة تشخيص");
+    (locale === "en" ? "Book a call" : "احجز مكالمة");
   const classes = cn(
     variant === "primary" ? "btn-primary" : "btn-outline",
     "inline-flex h-11 items-center justify-center px-6 text-sm font-semibold",

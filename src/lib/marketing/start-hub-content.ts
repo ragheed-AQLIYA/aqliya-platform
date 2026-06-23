@@ -1,6 +1,5 @@
 /**
- * Start hub sections — engagement models + process (R4 merge)
- * @see docs/marketing/MARKETING_REDESIGN_PLAN.md §7.2
+ * Start hub — engagement + process (R6 plain language)
  */
 
 export type EngagementModelCard = {
@@ -19,7 +18,6 @@ export type ProcessPhase = {
   desc: string;
 };
 
-/** Approximate pricing bands for procurement — not a quote */
 export type EngagementPricingBand = {
   model: string;
   from: string;
@@ -29,104 +27,100 @@ export type EngagementPricingBand = {
 
 export const engagementPricingAr: EngagementPricingBand[] = [
   {
-    model: "التشخيص التنفيذي",
+    model: "مكالمة تعريفية",
     from: "٠ ر.س",
     to: "٠ ر.س",
-    note: "جلسة واحدة — بدون التزام",
+    note: "بدون التزام",
   },
   {
-    model: "التقييم التشغيلي",
+    model: "تجربة على بياناتكم",
     from: "٠ ر.س",
     to: "٠ ر.س",
-    note: "نطاق محدود متفق عليه مسبقاً",
+    note: "نطاق محدود نتفق عليه مسبقاً",
   },
   {
-    model: "تفعيل مؤسسي (Cloud)",
-    from: "يُحدد بعد التقييم",
+    model: "تشغيل (سحابة)",
+    from: "بعد التجربة",
     to: "حسب المستخدمين والمسارات",
-    note: "عرض سعر بعد نتائج التقييم — لا عقد واسع مسبقاً",
+    note: "عرض سعر بعد ما تشوفون النتيجة",
   },
   {
-    model: "نشر خاص / معزول",
-    from: "تقييم جدوى",
+    model: "نشر خاص أو معزول",
+    from: "دراسة جدوى",
     to: "مشروع تصميم",
-    note: "استراتيجي — نطاق هندسي مشترك",
+    note: "للجهات ذات متطلبات استثنائية",
   },
 ];
 
 export const engagementModelsAr: EngagementModelCard[] = [
   {
     id: "diagnostic",
-    name: "التشخيص التنفيذي",
-    tagline: "فهم الوضع قبل أي قرار",
-    duration: "٤٥–٩٠ دقيقة",
-    cost: "مجاني",
-    description:
-      "جلسة تشخيص — لا عرض مبيعات. نحدد ملاءمة عقلية والخطوة التالية.",
+    name: "مكالمة تعريفية",
+    tagline: "نفهم وضعكم قبل أي التزام",
+    duration: "حوالي ساعة",
+    cost: "مجانية",
+    description: "نسمع عن احتياجكم ونوضح إذا عقلية مناسبة — بدون عرض مبيعات.",
   },
   {
     id: "pilot",
-    name: "التقييم التشغيلي",
-    tagline: "إثبات القيمة على بياناتك",
+    name: "تجربة على بياناتكم",
+    tagline: "تشوفون النتيجة قبل العقد",
     duration: "٢–٤ أسابيع",
-    cost: "مجاني",
-    description:
-      "مسار واحد محدود على بيانات فعلية — معايير متفق عليها وتقرير قرار بالأدلة.",
+    cost: "مجانية",
+    description: "مسار واحد محدود على ملفاتكم — معايير واضحة وتقرير في النهاية.",
     featured: true,
   },
   {
     id: "deployment",
-    name: "تفعيل مؤسسي",
-    tagline: "من التقييم إلى التشغيل",
-    duration: "حسب النطاق",
-    cost: "بعد التقييم",
-    description: "Cloud Managed مع مصادقة إنتاجية، نسخ احتياطي، وتدريب الفريق.",
+    name: "بدء التشغيل",
+    tagline: "من التجربة إلى الاستخدام اليومي",
+    duration: "حسب الاتفاق",
+    cost: "بعد التجربة",
+    description: "حسابات، صلاحيات، نسخ احتياطي، وتدريب الفريق على السحابة.",
   },
   {
     id: "private-assessment",
-    name: "تقييم النشر الخاص",
-    tagline: "سيادة البيانات والخصوصية",
+    name: "نشر داخل بيئتكم",
+    tagline: "عندما تريدون البيانات عندكم",
     duration: "٤–٨ أسابيع",
     cost: "حسب النطاق",
-    description:
-      "تقييم تقني مشترك — On-Prem/Air-Gapped استراتيجي، ليس حزمة جاهزة.",
+    description: "دراسة مشتركة للنشر الخاص أو المعزول — ليس طلباً جاهزاً من الرف.",
   },
   {
     id: "custom",
-    name: "نظام مؤسسي مخصص",
-    tagline: "فوق Intelligence Core",
+    name: "سير عمل مخصص",
+    tagline: "لاحتياج لا يغطيه الحل الجاهز",
     duration: "حسب المتطلبات",
-    cost: "مخصص",
-    description: "سير عمل مصمم لسياقك — نفس الحوكمة والأدلة والـ RBAC.",
+    cost: "حسب المتطلبات",
+    description: "نصمم مساراً لسياقكم — بنفس الصلاحيات والسجل.",
   },
 ];
 
 export const processPhasesAr: ProcessPhase[] = [
   {
     num: "١",
-    title: "التشخيص",
-    desc: "جلسة منظمة — سياق المؤسسة ومدى الملاءمة. بدون عرض مبيعات.",
+    title: "مكالمة",
+    desc: "نفهم المؤسسة والاحتياج — ونقترح الخطوة التالية.",
   },
   {
     num: "٢",
-    title: "التقييم التشغيلي",
-    desc: "مسار كامل على بيانات فعلية — معايير متفق عليها مسبقاً.",
+    title: "تجربة",
+    desc: "نشتغل على بياناتكم ضمن نطاق متفق عليه.",
   },
   {
     num: "٣",
-    title: "قرار بالأدلة",
-    desc: "متابعة · مراجعة نطاق · أو إيقاف — بناءً على نتائج مقاسة.",
+    title: "قراركم",
+    desc: "نكمل · نعدّل النطاق · أو نتوقف — حسب النتائج.",
   },
   {
     num: "٤",
-    title: "تفعيل وتوسع",
-    desc: "تشغيل مؤسسي — مسارات إضافية مع استمرار الحوكمة.",
+    title: "تشغيل",
+    desc: "نوسّع الاستخدام مع بقاء الصلاحيات والسجل كما هي.",
   },
 ];
 
 export const processPrinciplesAr = [
-  "الذكاء يساعد — الإنسان يقرر",
-  "الدليل يحكم — كل مخرج مرتبط بمصدر",
-  "الحوكمة مضمنة — ليست إضافة لاحقة",
-  "نبدأ من واقع المؤسسة — لا حلول افتراضية",
+  "الذكاء يقترح — فريقكم يعتمد",
+  "كل مخرج مربوط بملف أو سجل",
+  "نبدأ من واقعكم — لا من قالب عام",
 ];

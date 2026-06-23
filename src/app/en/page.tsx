@@ -1,19 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { publicOsStatusEn } from "@/lib/marketing/public-status";
 import { ConversionBand } from "@/components/marketing/v2/marketing-shell";
+import { homeCopyEn } from "@/lib/marketing/copy-plain-en";
+import { publicOsStatusEn } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
-  title: "AQLIYA | Institutional Operating Platform",
-  description:
-    "Governed paths for audit, decisions, and compliance — AI assists. Humans decide. Evidence governs.",
+  title: homeCopyEn.metadata.title,
+  description: homeCopyEn.metadata.description,
 };
-
-const problemTools = [
-  { name: "Excel", line: "Calculates. Doesn't govern." },
-  { name: "Email / chat", line: "Delivers. Doesn't document." },
-  { name: "Generic AI", line: "Produces. Doesn't get reviewed." },
-];
 
 const systems = [
   {
@@ -36,22 +30,9 @@ const systems = [
   },
 ];
 
-const proofQuick = [
-  { title: "Interactive demo", body: "Full path in 10–13 min — no login.", href: "/en/demo" },
-  { title: "Executive brief", body: "5 min for leadership.", href: "/en/proof#executive-brief" },
-  { title: "Procurement pack", body: "Brief, security, SOW — PDF ready.", href: "/en/procurement-pack" },
-];
-
-const personaChips = [
-  { label: "Executive", href: "/en/start#executive" },
-  { label: "CFO", href: "/en/start#cfo" },
-  { label: "Contracting / LC", href: "/en/start#contracting" },
-  { label: "Audit", href: "/en/start#audit" },
-  { label: "Procurement", href: "/en/start#procurement" },
-  { label: "Government", href: "/en/start#government" },
-];
-
 export default function EnglishHomePage() {
+  const c = homeCopyEn;
+
   return (
     <div className="flex flex-col">
       <section className="hero-gradient relative overflow-hidden">
@@ -59,31 +40,27 @@ export default function EnglishHomePage() {
         <div className="relative mx-auto max-w-7xl px-6 py-18 sm:py-24">
           <div className="mx-auto max-w-4xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
-              Institutional Operating Platform
+              {c.hero.eyebrow}
             </span>
             <h1 className="mt-6 text-4xl font-black leading-[1.08] text-white sm:text-5xl">
-              Audit, decision, and compliance paths — not lost in Excel and email
+              {c.hero.title}
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/65">
-              Not a chatbot. Not an ERP. One governed operating platform linking
-              data, review, and approval.
-            </p>
-            <p className="mt-4 text-sm font-bold text-aqliya-cyan">
-              AI assists. Humans decide. Evidence governs.
+              {c.hero.subtitle}
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/en/start" className="btn-primary h-12 px-8 text-base font-bold">
-                Where to start
+                {c.ctas.start}
               </Link>
               <Link href="/en/demo" className="btn-outline border-white/15 text-white/70 h-12 px-8 hover:bg-white/5">
-                Watch demo
+                {c.ctas.demo}
               </Link>
               <Link href="/en/contact" className="btn-outline border-white/15 text-white/70 h-12 px-8 hover:bg-white/5">
-                Book diagnostic
+                {c.ctas.contact}
               </Link>
             </div>
             <div className="mt-6 flex flex-wrap justify-center gap-2">
-              {personaChips.map((chip) => (
+              {c.personaChips.map((chip) => (
                 <Link
                   key={chip.href}
                   href={chip.href}
@@ -99,21 +76,45 @@ export default function EnglishHomePage() {
 
       <section className="border-t bg-muted/10 py-14">
         <div className="mx-auto max-w-7xl px-6">
-          <h2 className="text-center text-xl font-black">Tools vs platform</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            {problemTools.map((t) => (
-              <div key={t.name} className="rounded-xl border border-border/60 bg-background p-5 text-center">
-                <p className="font-bold">{t.name}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{t.line}</p>
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-xl font-black sm:text-2xl">{c.problem.title}</h2>
+            <p className="mt-3 text-sm text-muted-foreground">{c.problem.subtitle}</p>
+          </div>
+          <div className="mt-8 grid gap-6 lg:grid-cols-2">
+            <ul className="space-y-3 rounded-2xl border border-border/60 bg-background p-6">
+              {c.problem.tools.map((t) => (
+                <li key={t.name} className="text-sm">
+                  <span className="font-semibold">{t.name}</span>
+                  <span className="text-muted-foreground"> — {t.line}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="rounded-2xl border border-primary/15 bg-primary/[0.03] p-6">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                {c.problem.pathLabel}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {c.problem.pathSteps.map((step, i) => (
+                  <span key={step} className="flex items-center gap-2 text-sm font-medium">
+                    {i > 0 && <span className="text-muted-foreground/40">→</span>}
+                    {step}
+                  </span>
+                ))}
               </div>
-            ))}
+              <Link href="/en/use-cases" className="mt-5 inline-block text-sm font-medium text-primary hover:underline">
+                {c.problem.pathCta} →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="border-t py-14">
         <div className="mx-auto max-w-7xl px-6">
-          <h2 className="text-center text-xl font-black">Operating systems</h2>
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-xl font-black sm:text-2xl">{c.systems.title}</h2>
+            <p className="mt-3 text-sm text-muted-foreground">{c.systems.subtitle}</p>
+          </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {systems.map((s) => (
               <Link
@@ -129,7 +130,7 @@ export default function EnglishHomePage() {
           </div>
           <p className="mt-6 text-center">
             <Link href="/en/products" className="text-sm font-medium text-primary hover:underline">
-              All operating systems →
+              {c.systems.ctaAll} →
             </Link>
           </p>
         </div>
@@ -137,9 +138,12 @@ export default function EnglishHomePage() {
 
       <section className="border-t bg-muted/10 py-14">
         <div className="mx-auto max-w-7xl px-6">
-          <h2 className="text-center text-xl font-black">Validate before you commit</h2>
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-xl font-black sm:text-2xl">{c.proof.title}</h2>
+            <p className="mt-3 text-sm text-muted-foreground">{c.proof.subtitle}</p>
+          </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {proofQuick.map((p) => (
+            {c.proof.items.map((p) => (
               <Link
                 key={p.href}
                 href={p.href}
@@ -150,16 +154,21 @@ export default function EnglishHomePage() {
               </Link>
             ))}
           </div>
+          <p className="mt-6 text-center">
+            <Link href="/en/proof" className="text-sm font-medium text-primary hover:underline">
+              {c.proof.ctaFull} →
+            </Link>
+          </p>
         </div>
       </section>
 
       <ConversionBand
-        title="Start with a diagnostic session — free"
-        body="We map your institution's context and recommend the next step — no sales pitch."
+        title={c.conversion.title}
+        body={c.conversion.body}
         primaryHref="/en/contact"
-        primaryLabel="Book diagnostic session"
-        secondaryHref="/en/start"
-        secondaryLabel="Choose your role"
+        primaryLabel={c.conversion.primaryLabel}
+        secondaryHref="/en/proof"
+        secondaryLabel={c.conversion.secondaryLabel}
       />
     </div>
   );

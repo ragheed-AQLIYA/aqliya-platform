@@ -87,12 +87,12 @@ type ConversionBandProps = {
 };
 
 export function ConversionBand({
-  title = "ابدأ بجلسة تشخيص — مجاناً",
-  body = "نفهم سياق مؤسستك ونوصي بالخطوة التالية — بدون عرض مبيعات.",
+  title = "نفهم وضعكم أولاً",
+  body = "مكالمة تعريفية مجانية — نشرح المنصة ونقترح الخطوة المناسبة. بدون عرض مبيعات.",
   primaryHref = "/contact",
-  primaryLabel = "احجز جلسة تشخيص",
+  primaryLabel = "احجز مكالمة",
   secondaryHref = "/proof",
-  secondaryLabel = "مركز الإثبات",
+  secondaryLabel = "مواد الإثبات",
 }: ConversionBandProps) {
   return (
     <section className="border-t bg-muted/20">

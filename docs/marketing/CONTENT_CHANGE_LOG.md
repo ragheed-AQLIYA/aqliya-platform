@@ -203,6 +203,31 @@
 
 ---
 
+## R6 — Voice Reset (2026-06-23)
+
+| File | Change |
+|------|--------|
+| `docs/marketing/VOICE_GUIDE.md` | **New** — customer-facing tone, say/don't say, CTA standards |
+| `src/lib/marketing/copy-plain.ts` | **New** — home + start AR copy |
+| `src/lib/marketing/copy-plain-en.ts` | **New** — EN mirror |
+| `src/lib/marketing/copy-proof.ts` | **New** — proof hub AR copy + content arrays |
+| `src/lib/marketing/copy-proof-en.ts` | **New** — EN mirror |
+| `src/lib/marketing/proof-hub-content*.ts` | Re-export from `copy-proof*` |
+| `src/lib/marketing/buyer-journeys*.ts` | Plain language hooks, CTAs, time labels |
+| `src/lib/marketing/start-hub-content*.ts` | Engagement models + process in plain Arabic/EN |
+| `src/lib/marketing/public-status.ts` | Softer capability labels (AR + EN) |
+| `src/app/(marketing)/page.tsx` | Wired to `homeCopyAr` |
+| `src/app/en/page.tsx` | Wired to `homeCopyEn` |
+| `src/app/(marketing)/start/page.tsx` | Wired to `startCopyAr` |
+| `src/app/en/start/page.tsx` | Wired to `startCopyEn` |
+| `src/app/(marketing)/proof/page.tsx` | Wired to `proofPageCopyAr` |
+| `src/app/en/proof/page.tsx` | Wired to `proofPageCopyEn` |
+| `src/components/marketing/v2/marketing-shell.tsx` | ConversionBand defaults → «احجز مكالمة» |
+| `src/components/marketing/v2/start-hub-page.tsx` | CTA copy aligned |
+| `src/components/marketing/schedule-diagnostic-cta.tsx` | Default label → «احجز مكالمة» |
+
+---
+
 ## Not Modified (by design)
 
 - `PRODUCT_STATUS_MATRIX.md`, `READINESS_GATES.md`, roadmaps, architecture docs
