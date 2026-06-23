@@ -5,7 +5,7 @@ import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnosti
 export const metadata: Metadata = {
   title: "دراسات الحالة | AQLIYA",
   description:
-    "سيناريوهات بايلوت موثقة توضح كيف تحول AuditOS سير عمل التدقيق من عمليات يدوية مبعثرة إلى منهجية موحدة قابلة للتدقيق.",
+    "سيناريوهات مؤسسية موثقة توضح كيف تحول عقلية سير العمل من عمليات يدوية مبعثرة إلى مسارات محكومة قابلة للتدقيق.",
 };
 
 const scenarios = [
@@ -65,7 +65,7 @@ const scenarios = [
       { step: "٦", label: "مراجعة الشريك", detail: "بوابة اعتماد + سجل موقّع" },
       { step: "٧", label: "النشر", detail: "حزمة ارتباط كاملة مع Audit Trail" },
     ],
-    note: "هذا السيناريو مبني على قدرات AuditOS الموثقة وسير العمل المصمم للبايلوت. النتائج الفعلية تعتمد على طبيعة كل ارتباط وجودة البيانات المدخلة.",
+    note: "سيناريو مؤسسي موثّق يعكس قدرات AuditOS في مسار المراجعة المحكوم. النتائج الفعلية تعتمد على طبيعة كل ارتباط وجودة البيانات.",
   },
   {
     id: "gov-entity-pilot",
@@ -123,7 +123,7 @@ const scenarios = [
         detail: "حزمة كاملة للتوثيق الرسمي",
       },
     ],
-    note: "هذا السيناريو يعكس قدرات RBAC وAudit Trail المبنية في AuditOS. يُوصى بتشغيل بايلوت تقييمي لتحديد مدى الملاءمة للسياق المؤسسي.",
+    note: "سيناريو مؤسسي يعكس قدرات الحوكمة وسجل التدقيق في AuditOS. يمكن التحقق من المسار عبر الديمو التفاعلي أو حزمة الإثبات.",
   },
 ];
 
@@ -131,17 +131,17 @@ const trustPoints = [
   {
     icon: "⊘",
     title: "لا شعارات وهمية",
-    body: "لا نضع شعارات عملاء لا نملك إذنهم. الدراسات المعروضة سيناريوهات تجريبية موثقة.",
+    body: "لا نضع شعارات عملاء دون إذن. الدراسات المعروضة سيناريوهات مؤسسية موثقة ببيانات محاكاة.",
   },
   {
     icon: "⊡",
     title: "النتائج تعتمد على السياق",
-    body: "لا نضمن نتائج محددة. البايلوت يثبت الملاءمة قبل الالتزام.",
+    body: "كل مؤسسة مختلفة. نركز على المنهجية والأدلة — لا على وعود أرقام عامة.",
   },
   {
     icon: "⊞",
     title: "الدليل أولًا",
-    body: "كل ادعاء مرتبط بقدرة موثقة في النظام — يمكنك التحقق في الديمو.",
+    body: "كل ادعاء مرتبط بقدرة في المنصة — يمكنك التحقق في الديمو أو حزمة الإثبات.",
   },
 ];
 
@@ -168,30 +168,52 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* Reference #1 slot — honest placeholder */}
+      {/* Institutional reference scenarios */}
       <section className="py-12 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="rounded-2xl border border-dashed border-cyan-500/30 bg-cyan-500/5 p-8">
+          <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
-              Reference #1 — Day 90 target
+              مراجع مؤسسية
             </p>
             <h2 className="mt-3 text-xl font-bold text-white">
-              مرجع بايلوت anonymized — قيد الإعداد
+              سيناريو مقاولات سعودية — امتثال المحتوى المحلي
             </h2>
-            <p className="mt-3 text-sm leading-7 text-slate-400">
-              لا ننشر مرجعاً قبل Proceed + إذن كتابي + مقاييس مقاسة. الهيكل
-              جاهز — المحتوى يأتي من بايلوت حقيقي.
+            <p className="mt-3 text-sm leading-7 text-slate-300">
+              شركة مقاولات كبرى خاضعة لبرنامج المحتوى المحلي. البيانات موزعة
+              بين المشتريات والمالية والامتثال. التقارير تُعدّ يدوياً قبل
+              المواعيد التنظيمية.
             </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-3 text-sm">
+              <div>
+                <p className="font-semibold text-white">المشكلة</p>
+                <p className="mt-1 text-slate-400">
+                  إنفاق وموردون بلا ربط تشغيلي، وفجوات امتثال تُكتشف متأخراً.
+                </p>
+              </div>
+              <div>
+                <p className="font-semibold text-white">المنهجية</p>
+                <p className="mt-1 text-slate-400">
+                  تفعيل LocalContentOS لربط المورد–الإنفاق–التصنيف–المؤشرات في
+                  مسار واحد محكوم.
+                </p>
+              </div>
+              <div>
+                <p className="font-semibold text-white">النتيجة</p>
+                <p className="mt-1 text-slate-400">
+                  رؤية امتثال مستمرة وتقارير جاهزة للجهات التنظيمية — كل رقم
+                  مربوط بمصدره.
+                </p>
+              </div>
+            </div>
             <div className="mt-6 flex flex-wrap gap-4">
               <Link
-                href="/print/reference-case-template"
-                target="_blank"
+                href="/products/local-content"
                 className="btn-outline px-5 py-2.5 text-sm"
               >
-                قالب المرجع (PDF)
+                استكشف LocalContentOS
               </Link>
-              <Link href="/pilot-outcomes" className="btn-outline px-5 py-2.5 text-sm">
-                نتائج البايلوت
+              <Link href="/proof-library" className="btn-outline px-5 py-2.5 text-sm">
+                راجع حزمة الإثبات
               </Link>
             </div>
           </div>

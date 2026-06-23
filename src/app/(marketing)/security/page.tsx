@@ -456,8 +456,8 @@ export default function SecurityPage() {
               وثائق جاهزة لفريق المشتريات والأمن
             </h2>
             <p className="mt-3 text-sm leading-7 text-white/60">
-              نطاق البايلوت، معايير النجاح، ملخص الأمن، نماذج التعاون، وإطار
-              Go/No-Go — متاحة عبر{" "}
+              نطاق التقييم التشغيلي، معايير النجاح، ملخص الأمن، نماذج التعاون، وإطار
+              قرار بالأدلة — متاحة عبر{" "}
               <Link href="/proof" className="text-aqliya-cyan underline">
                 مركز الإثبات
               </Link>{" "}

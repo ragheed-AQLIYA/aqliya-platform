@@ -3,18 +3,18 @@ import type { Metadata } from "next";
 import { PrintToolbar } from "@/components/marketing/print-toolbar";
 
 export const metadata: Metadata = {
-  title: "قالب مرجع بايلوت — PDF | AQLIYA",
+  title: "قالب مرجع تقييم — PDF | AQLIYA",
   description:
-    "هيكل case study anonymized — يُملأ بعد بايلوت مكتمل وموافقة العميل.",
+    "هيكل case study anonymized — يُملأ بعد تقييم تشغيلي مكتمل وموافقة العميل.",
 };
 
 const sections = [
   "وصف anonymized: حجم المكتب، عدد الارتباطات/سنة (نطاق)",
   "المشكلة قبل: workflow baseline (qualitative)",
-  "نطاق الباilot: سير عمل واحد، مدة، معايير مختارة",
+  "نطاق التقييم: مسار واحد، مدة، معايير مختارة",
   "النتائج المقاسة (ليس تقدير marketing): cycle time، evidence %، gates",
   "اقتباس معتمد (Partner / Audit Director) — بإذن كتابي",
-  "قرار Go/No-Go وخطوة ما بعد الباilot",
+  "قرار بالأدلة وخطوة ما بعد التقييم",
   "رابط الديمو للتحقق من القدرات المذكورة",
 ];
 
@@ -30,10 +30,10 @@ export default function PrintReferenceCaseTemplatePage() {
       <PrintToolbar title="طباعة / حفظ PDF" />
       <article className="print-doc" dir="rtl">
         <p className="print-meta">AQLIYA — Reference template · {generated}</p>
-        <h1>قالب مرجع باilot #1 (anonymized)</h1>
+        <h1>قالب مرجع تقييم #1 (anonymized)</h1>
         <p>
           <strong>الحالة:</strong> لا مرجع منشور بعد — هذا الهيكل الذي سيُستخدم
-          عند أول Proceed + إذن كتابي. لا نسب وهمية.
+          عند أول قرار بالأدلة + إذن كتابي. لا نسب وهمية.
         </p>
 
         {sections.map((s) => (
@@ -44,7 +44,7 @@ export default function PrintReferenceCaseTemplatePage() {
         ))}
 
         <footer className="print-footer">
-          Target: publish by Day 90 of launch program when pilot completes.
+          Target: publish by Day 90 of launch program when evaluation completes.
         </footer>
       </article>
     </>

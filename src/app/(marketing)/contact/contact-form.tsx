@@ -13,8 +13,8 @@ const productOptions = [
 
 const interestOptions = [
   "جلسة تشخيص — ٤٥ دقيقة",
-  "Pilot Review — تقييم على بيانات فعلية",
-  "Product Demo — مشاهدة تفاعلية",
+  "تقييم تشغيلي — على بيانات فعلية",
+  "عرض تفاعلي — مشاهدة مسار كامل",
   "General Inquiry — استفسار عام",
 ];
 
@@ -101,14 +101,14 @@ export function ContactForm() {
         <div className="grid gap-8 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
           <div className="space-y-4">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-aqliya-cyan">
-              طلب البايلوت
+              طلب التقييم التشغيلي
             </p>
             <h2 className="text-3xl font-black text-white">
-              احجز جلسة تشخيص أو قدّم طلب بايلوت
+              احجز جلسة تشخيص أو قدّم طلب تقييم
             </h2>
             <p className="text-base leading-8 text-white/62">
               ابدأ بخمس حقول فقط — سنراجع طلبك خلال ٢-٣ أيام عمل ونحدد الخطوة
-              التالية: تشخيص، ديمو، أو بايلوت.
+              التالية: تشخيص، ديمو، أو تقييم تشغيلي.
             </p>
             <div className="space-y-3">
               {[

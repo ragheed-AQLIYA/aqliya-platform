@@ -26,16 +26,16 @@ const coreItems = [
   "التقارير",
 ];
 
-const activeSystems = [
-  { name: "AuditOS", desc: "نظام التدقيق والذكاء المالي — جاهز للبايلوت" },
-  { name: "DecisionOS", desc: "نظام حوكمة القرارات — نشط" },
-  { name: "LocalContentOS", desc: "نظام المحتوى المحلي — بايلوت منسّق (12 مسار)" },
+const operatingSystems = [
+  { name: "AuditOS", desc: "نظام التدقيق والذكاء المالي — مسار مراجعة من المصدر إلى الاعتماد" },
+  { name: "DecisionOS", desc: "نظام حوكمة القرارات — مذكرات قرار محكومة" },
+  { name: "LocalContentOS", desc: "نظام المحتوى المحلي — موردون، إنفاق، امتثال، وتقارير" },
 ];
 
-const strategicSystems = [
-  { name: "SalesOS", desc: "نظام الذاكرة التجارية — قيد التطوير" },
-  { name: "SimulationOS", desc: "نظام محاكاة السيناريوهات — قيد التخطيط" },
-  { name: "Custom Systems", desc: "أنظمة مؤسسية مخصصة — يُفعّل حسب نطاق المؤسسة" },
+const roadmapSystems = [
+  { name: "SalesOS", desc: "نظام الذاكرة التجارية — تأهيل، فرص، ومتابعة مؤسسية" },
+  { name: "SimulationOS", desc: "نظام محاكاة السيناريوهات — اختبار الأثر قبل القرار" },
+  { name: "Custom Systems", desc: "أنظمة مؤسسية مخصصة — يُفعَّل حسب نطاق المؤسسة" },
 ];
 
 const whatAqliyaIsNot = [
@@ -44,7 +44,7 @@ const whatAqliyaIsNot = [
   "الإنسان هو صاحب القرار النهائي — الذكاء يساعد، لا يقرر",
   "قابلة للتتبع والمراجعة — كل خطوة تُوثَّق وتُربط بالأدلة والصلاحيات",
   "جاهزة للتوسع — تُفعّل حسب نطاق المؤسسة، من خط نظام إلى مسار مؤسسي كامل",
-  "Cloud + Private استراتيجيًا — قدرات On-Prem وAir-Gapped وLocal AI تُعرض كمسارات قيد التخطيط الاستراتيجي، ولا تُقدَّم كمنتجات إنتاجية منفذة إلا بعد اكتمالها واعتمادها",
+  "Cloud + Private — نماذج نشر تناسب متطلبات السيادة والأمن المؤسسي",
 ];
 
 const operatingBeliefs = [
@@ -242,17 +242,17 @@ export default function AboutPage() {
           </h2>
           <p className="mt-4 text-base leading-8 text-muted-foreground">
             كل خط نظام تحت عقلية يعالج نمطًا مؤسسيًا متكررًا: تدقيق، محتوى محلي،
-            قرار، مبيعات، محاكاة، أو مسار خاص. الفكرة ليست تنويع المنتجات، بل
+            قرار، مبيعات، محاكاة، أو مسار خاص.             الفكرة ليست تنويع الأنظمة، بل
             توحيد طريقة بناء الأنظمة المؤسسية المحكومة.
           </p>
           <div className="mt-8 space-y-6">
             <div>
               <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-600">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-                أنظمة نشطة
+                أنظمة التشغيل
               </p>
               <div className="grid gap-3 sm:grid-cols-3">
-                {activeSystems.map((item) => (
+                {operatingSystems.map((item) => (
                   <div key={item.name} className="glass-card-light rounded-2xl p-5">
                     <p className="text-sm font-black text-foreground">{item.name}</p>
                     <p className="mt-1.5 text-xs leading-6 text-muted-foreground">{item.desc}</p>
@@ -263,10 +263,10 @@ export default function AboutPage() {
             <div>
               <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
                 <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
-                خطوط استراتيجية
+                خارطة المنصة
               </p>
               <div className="grid gap-3 sm:grid-cols-3">
-                {strategicSystems.map((item) => (
+                {roadmapSystems.map((item) => (
                   <div key={item.name} className="rounded-2xl border border-border/40 bg-muted/10 p-5">
                     <p className="text-sm font-black text-foreground/60">{item.name}</p>
                     <p className="mt-1.5 text-xs leading-6 text-muted-foreground/60">{item.desc}</p>
@@ -424,7 +424,7 @@ export default function AboutPage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href="/contact" className="btn-primary h-12 px-8 text-base">
-              طلب جلسة تنفيذية
+              احجز جلسة تشخيص
             </Link>
             <Link href="/platform#capabilities" className="btn-outline h-12 px-8 text-base">
               أنظمة التشغيل

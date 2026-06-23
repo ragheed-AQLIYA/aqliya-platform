@@ -41,8 +41,8 @@ export default function PrintDataResidencyPage() {
 
         <h2>ما ليس متاحاً كحزمة إنتاج</h2>
         <ul>
-          <li>On-Premises أو Air-Gapped كمنتج جاهز — استراتيجي / تقييم فقط</li>
-          <li>استضافة محلية داخل KSA خارج AWS — يُقيّم case-by-case بعد البايلوت</li>
+          <li>On-Premises أو Air-Gapped كنظام جاهز للتفعيل — استراتيجي / تقييم فقط</li>
+          <li>استضافة محلية داخل KSA خارج AWS — يُقيّم case-by-case بعد التقييم التشغيلي</li>
         </ul>
 
         <h2>للمشتريات الحكومية</h2>

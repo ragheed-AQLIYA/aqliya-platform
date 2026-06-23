@@ -6,7 +6,7 @@ import { publicOsStatus } from "@/lib/marketing/public-status";
 export const metadata: Metadata = {
   title: "احجز جلسة تشخيص | AQLIYA",
   description:
-    "ابدأ بجلسة تشخيص أو بايلوت محكوم — سير عمل واحد، بيانات محدودة، ومعايير نجاح واضحة قبل أي التزام واسع.",
+    "ابدأ بجلسة تشخيص أو تقييم تشغيلي محكوم — مسار واحد، بيانات محدودة، ومعايير نجاح واضحة قبل أي التزام واسع.",
 };
 
 const products = [
@@ -62,7 +62,7 @@ const reviewElements = [
   },
   {
     label: "معايير النجاح",
-    detail: "كيف نقيس نجاح التجربة؟ ما المخرجات المتوقعة في نطاق البايلوت؟",
+    detail: "كيف نقيس نجاح التجربة؟ ما المخرجات المتوقعة في نطاق التقييم؟",
   },
 ];
 
@@ -70,7 +70,7 @@ const boundaries = [
   "لا ضمان امتثال — المخرجات أداة مساعدة، المسؤولية القانونية تبقى على عاتق الفريق المهني.",
   "لا استبدال للفرق المهنية — النظام يدعم، لا يحل محل الحكم البشري.",
   "لا أتمتة كاملة بدون مراجعة — كل مخرج يمر بمراجعة إنسانية قبل الاعتماد.",
-  "لا التزام نشر قبل تقييم النطاق — البايلوت تقييمي، لا يلزم بنشر كامل.",
+  "لا التزام تفعيل قبل تقييم النطاق — التقييم التشغيلي لا يلزم بنشر كامل.",
   "لا استخدام بيانات حساسة بدون ترتيبات — نوضح معًا متطلبات الأمان والخصوصية قبل البداية.",
 ];
 
@@ -84,10 +84,10 @@ export default function ContactPage() {
           <div className="relative mx-auto max-w-4xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-              طلب مراجعة Pilot محكومة
+              طلب تقييم تشغيلي محكوم
             </span>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              احجز جلسة تشخيص أو بايلوت محكوم
+              احجز جلسة تشخيص أو ناقش التفعيل المؤسسي
             </h1>
             <p className="mt-5 text-base leading-8 text-white/62 sm:text-lg">
               سير عمل واحد، مجموعة بيانات محدودة، ومعايير نجاح واضحة — قبل أي
@@ -95,7 +95,7 @@ export default function ContactPage() {
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-white/45">
               {[
-                "اختيار المنتج المناسب",
+                "اختيار نظام التشغيل المناسب",
                 "تقييم use case",
                 "مخرجات مدعومة بالأدلة",
               ].map((item) => (
@@ -116,19 +116,19 @@ export default function ContactPage() {
             كيف تعمل المراجعة
           </p>
           <h2 className="mt-4 text-3xl font-black text-white">
-            الهدف ليس بيعًا مباشرًا — بل تقييم use case منظم
+            الهدف ليس بيعًا مباشرًا — بل تقييم مسار تشغيلي منظم
           </h2>
           <p className="mt-4 text-base leading-8 text-white/62">
             لا نبدأ بعقود أو التزامات طويلة. نحدد معًا سير العمل، البيانات، فريق
             المراجعة، معايير النجاح، والمخرجات المتوقعة. خلال ٢-٤ أسابيع، تخرج
-            بتقييم واقعي: هل هذا المنتج مناسب لمؤسستك، وما الخطوة التالية
+            بتقييم واقعي: هل هذا النظام مناسب لمؤسستك، وما الخطوة التالية
             المنطقية.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-white/10 bg-white/[0.04] p-5">
               <p className="text-2xl font-bold text-white">١</p>
               <p className="mt-2 text-sm text-white/62">
-                نحدد المنتج وسير العمل المناسب
+                نحدد نظام التشغيل والمسار المناسب
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/[0.04] p-5">
@@ -154,10 +154,10 @@ export default function ContactPage() {
             اختر نقطة البداية
           </p>
           <h2 className="mt-4 text-3xl font-black text-white">
-            أي منتج يناسب use case الخاص بك؟
+            أي نظام تشغيل يناسب حالة الاستخدام لديك؟
           </h2>
           <p className="mt-4 text-base leading-8 text-white/62">
-            كل منتج يُبني على نواة AQLIYA Intelligence Core — حوكمة، أدلة، سجل
+            كل نظام يُبني على نواة AQLIYA Intelligence Core — حوكمة، أدلة، سجل
             تدقيق، ومراجعة بشرية إلزامية.
           </p>
         </div>
@@ -180,7 +180,7 @@ export default function ContactPage() {
                 href={product.href}
                 className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-aqliya-cyan hover:text-cyan-300 transition-colors"
               >
-                عرض الصفحة التعريفية ←
+                استكشف نظام التشغيل ←
               </Link>
             </div>
           ))}
@@ -194,7 +194,7 @@ export default function ContactPage() {
             عناصر المراجعة
           </p>
           <h2 className="mt-4 text-3xl font-black text-white text-center">
-            ماذا نقيّم قبل البايلوت
+            ماذا نقيّم قبل التقييم التشغيلي
           </h2>
           <p className="mt-4 text-base leading-8 text-white/62 text-center mb-10">
             خمسة عناصر نناقشها معك قبل البدء — لنضمن أن التجربة تقيس ما يهم
@@ -253,7 +253,7 @@ export default function ContactPage() {
               ابدأ صغيرًا. راجع بوضوح. قرر بناءً على الدليل.
             </h2>
             <p className="mt-3 text-sm leading-7 text-white/62">
-              بايلوت واحد لا يحدد مستقبل المؤسسة — لكنه يحدد بوضوح إذا كان
+              تقييم واحد لا يحدد مستقبل المؤسسة — لكنه يحدد بوضوح إذا كان
               المسار صحيحًا.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
@@ -262,7 +262,7 @@ export default function ContactPage() {
                 className="btn-outline px-6 py-2.5 rounded-xl text-sm"
                 data-event="click_view_pilot_proof"
               >
-                ← إطار إثبات الـ Pilot
+                ← إطار التقييم التشغيلي
               </Link>
               <a
                 href="mailto:ragheed@aqliya.com"

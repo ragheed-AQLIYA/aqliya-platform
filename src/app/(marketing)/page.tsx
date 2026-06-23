@@ -2,10 +2,33 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AQLIYA | منصة تشغيل مؤسسية للقرارات والأدلة",
+  title: "AQLIYA | منصة تشغيل مؤسسية للقرارات والامتثال والأدلة",
   description:
-    "منصة تشغيل مؤسسية تحول العمليات الحرجة من ملفات متفرقة إلى مسارات محكومة. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.",
+    "منصة تشغيل مؤسسية تساعد المؤسسات على قرارات أسرع، مراجعة أقوى، امتثال أوضح، ومعرفة محكومة. الذكاء يساعد. الإنسان يقرر. الدليل يحكم.",
 };
+
+const businessOutcomes = [
+  {
+    title: "قرارات أسرع وأوضح",
+    body: "مذكرات قرار موثقة — سياق، بدائل، مخاطر، واعتماد — بدل نقاشات تضيع في الاجتماعات.",
+  },
+  {
+    title: "تتبع مراجعة أقوى",
+    body: "كل رقم مرتبط بمصدره، وكل اعتماد مسجّل — من ميزان المراجعة إلى حزمة الارتباط.",
+  },
+  {
+    title: "جاهزية امتثال أعلى",
+    body: "مسارات محتوى محلي، امتثال، وموردين — مع تقارير جاهزة للجهات التنظيمية.",
+  },
+  {
+    title: "معرفة مؤسسية محكومة",
+    body: "المعرفة تبقى داخل المؤسسة — مربوطة بالأدلة والصلاحيات، لا بذاكرة الأفراد.",
+  },
+  {
+    title: "مخاطر تشغيلية أقل",
+    body: "بوابات مراجعة واعتماد تمنع المخرجات غير الموثقة قبل الوصول للقرار النهائي.",
+  },
+];
 
 const problemTools = [
   {
@@ -142,9 +165,9 @@ const trustReasons = [
 
 const journeySteps = [
   { label: "تشخيص", detail: "جلسة مجانية لفهم السياق والنطاق" },
-  { label: "Pilot", detail: "تجربة محدودة على سير عمل واحد" },
-  { label: "اعتماد", detail: "تقييم النتائج وقرار Go/No-Go" },
-  { label: "نشر", detail: "تفعيل تشغيلي في بيئة الإنتاج" },
+  { label: "تقييم تشغيلي", detail: "تجربة محدودة على مسار واحد بالأدلة" },
+  { label: "قرار بالأدلة", detail: "تقييم النتائج ومسار التفعيل التالي" },
+  { label: "تفعيل", detail: "نشر تشغيلي في بيئة المؤسسة" },
   { label: "توسع", detail: "مسارات إضافية فوق نفس المنصة" },
 ];
 
@@ -160,8 +183,8 @@ const proofAssets = [
     href: "/executive-brief",
   },
   {
-    title: "إطار البايلوت",
-    body: "كيف نقيس النجاح: معايير، أدلة، ومخرجات Go/No-Go.",
+    title: "إطار التقييم التشغيلي",
+    body: "كيف نقيس النجاح: معايير، أدلة، وقرار بالأدلة قبل الالتزام.",
     href: "/pilot-proof",
   },
   {
@@ -176,7 +199,7 @@ const proofAssets = [
   },
   {
     title: "دراسات الحالة",
-    body: "سيناريوهات موثقة + placeholder لمرجع بايلوت حقيقي.",
+    body: "سيناريوهات مؤسسية موثقة — مشاكل، منهجية، أدلة، ونتائج.",
     href: "/case-studies",
   },
   {
@@ -200,12 +223,13 @@ export default function HomePage() {
             </span>
 
             <h1 className="mt-6 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.25rem]">
-              منصة تشغيل مؤسسية للقرارات والعمليات والأدلة
+              منصة تشغيل مؤسسية للمراجعة والقرارات والامتثال والحوكمة
             </h1>
 
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-white/65">
-              تساعد عقلية المؤسسات على تحويل العمليات الحرجة من ملفات متفرقة
-              واجتهادات فردية إلى مسارات تشغيلية محكومة وقابلة للمراجعة.
+              تساعد عقلية المؤسسات على تحويل العمليات الحرجة — من التدقيق
+              والقرار إلى المحتوى المحلي والامتثال — إلى مسارات محكومة بأدلة
+              ومراجعة بشرية وقابلة للمساءلة.
             </p>
 
             <div className="mx-auto mt-6 max-w-md rounded-2xl border border-aqliya-cyan/18 bg-aqliya-cyan/[0.05] px-5 py-4 backdrop-blur-sm">
@@ -224,18 +248,48 @@ export default function HomePage() {
                 احجز جلسة تشخيص
               </Link>
               <Link
-                href="/platform"
+                href="/use-cases"
                 className="btn-outline border-white/15 text-white/70 hover:bg-white/5 h-12 px-8 text-base"
               >
-                شاهد كيف تعمل عقلية
+                استكشف حالات الاستخدام
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* §2 — المشكلة */}
+      {/* §2 — النتائج المؤسسية */}
       <section className="section-gradient-light border-t">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl font-black text-foreground sm:text-4xl">
+              ماذا تكسب مؤسستك؟
+            </h2>
+            <p className="mt-4 text-base leading-7 text-muted-foreground">
+              عقلية لا تبيع ذكاءً معزولاً — تبني قدرة مؤسسية على القرار
+              والمراجعة والامتثال بأدلة قابلة للدفاع.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {businessOutcomes.map((outcome) => (
+              <div
+                key={outcome.title}
+                className="rounded-2xl border border-border/60 bg-background p-6"
+              >
+                <h3 className="text-base font-black text-foreground">
+                  {outcome.title}
+                </h3>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                  {outcome.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* §3 — المشكلة */}
+      <section className="border-t bg-muted/10">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-black text-foreground sm:text-4xl">
@@ -379,7 +433,7 @@ export default function HomePage() {
                 {ind.body}
               </p>
               <span className="mt-4 inline-block text-xs font-medium text-primary">
-                اعرف المزيد ←
+                استكشف القطاع ←
               </span>
             </Link>
           ))}

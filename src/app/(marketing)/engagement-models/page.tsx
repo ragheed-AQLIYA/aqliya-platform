@@ -38,7 +38,7 @@ const models = [
   {
     id: "pilot",
     number: "٠٢",
-    name: "البايلوت التقييمي",
+    name: "التقييم التشغيلي",
     tagline: "الخطوة الأولى لإثبات القيمة",
     whoFor: "مكاتب التدقيق، وحدات المراجعة الداخلية، إدارات المالية",
     duration: "٢-٤ أسابيع",
@@ -48,7 +48,7 @@ const models = [
     outputs: [
       "تشغيل سير عمل AuditOS كاملًا على ارتباط فعلي",
       "٢٨ معيار تقييم موثقة مع نتائج قابلة للقياس",
-      "تقرير Go/No-Go لقرار الاشتراك",
+      "تقرير قرار بالأدلة لمسار التفعيل التالي",
       "حزمة ارتباط مكتملة: قوائم + أدلة + Audit Trail",
       "جلسة مراجعة نتائج مع فريقك",
     ],
@@ -59,12 +59,12 @@ const models = [
       "نقطة تواصل واحدة من جانبكم",
     ],
     limitations: [
-      "تصدير JSON/XLSX — PDF عربي قيد التطوير",
-      "إدارة المستخدمين من فريق AQLIYA",
-      "تخزين محلي في بيئة البايلوت",
-      "لا تكامل مع أنظمة خارجية في البايلوت",
+      "تصدير JSON/XLSX — تقرير PDF عربي يُناقش في نطاق التفعيل",
+      "إدارة المستخدمين من فريق عقلية خلال التقييم",
+      "تخزين محلي في بيئة التقييم التشغيلي",
+      "لا تكامل مع أنظمة خارجية في نطاق التقييم الأولي",
     ],
-    nextStep: "طلب بدء بايلوت",
+    nextStep: "طلب تقييم تشغيلي",
     nextStepHref: "/contact",
     accent: "cyan",
     featured: true,
@@ -72,13 +72,13 @@ const models = [
   {
     id: "deployment",
     number: "٠٣",
-    name: "نشر المنتج",
-    tagline: "الانتقال من البايلوت إلى الاشتراك",
-    whoFor: "العملاء الذين أكملوا البايلوت بنجاح",
-    duration: "يُحدَّد بعد تقرير Go/No-Go",
-    cost: "حسب النطاق — يُحدَّد بعد البايلوت",
+    name: "تفعيل المؤسسي",
+    tagline: "الانتقال من التقييم إلى التشغيل",
+    whoFor: "المؤسسات التي أكملت التقييم التشغيلي بنجاح",
+    duration: "يُحدَّد بعد تقرير القرار بالأدلة",
+    cost: "حسب النطاق — يُحدَّد بعد التقييم",
     description:
-      "بعد البايلوت الناجح، الانتقال إلى اشتراك Cloud Managed Deployment مع استيفاء متطلبات ما قبل الإنتاج: فحص الفيروسات، المصادقة الإنتاجية، النسخ الاحتياطي الآلي، والمراجعة الأمنية الخارجية.",
+      "بعد تقييم تشغيلي ناجح، الانتقال إلى تشغيل Cloud Managed مع استيفاء متطلبات التفعيل: فحص الفيروسات، المصادقة الإنتاجية، النسخ الاحتياطي الآلي، والمراجعة الأمنية الخارجية.",
     outputs: [
       "بيئة إنتاج مكتملة على Cloud Managed Deployment",
       "مصادقة إنتاجية مع إدارة المستخدمين",
@@ -87,11 +87,11 @@ const models = [
       "دعم فني مستمر",
     ],
     clientRequirements: [
-      "إكمال البايلوت التقييمي بنجاح",
+      "إكمال التقييم التشغيلي بنجاح",
       "الموافقة على متطلبات البنية التحتية",
       "تعيين مسؤول تقني داخلي",
     ],
-    nextStep: "مراجعة تقرير البايلوت",
+    nextStep: "مراجعة تقرير التقييم",
     nextStepHref: "/contact",
     accent: "indigo",
     featured: false,
@@ -128,7 +128,7 @@ const models = [
     number: "٠٥",
     name: "النظام المؤسسي المخصص",
     tagline: "منظومة مبنية على AQLIYA Core لسياقك",
-    whoFor: "المؤسسات ذات سير عمل متخصص لا تغطيه المنتجات الجاهزة",
+    whoFor: "المؤسسات ذات سير عمل متخصص لا تغطيه الأنظمة الجاهزة",
     duration: "يُحدَّد بالمتطلبات",
     cost: "مخصص — يُحدَّد بعد التشخيص",
     description:
@@ -159,12 +159,12 @@ const fitGuide = [
   },
   {
     situation: "عندك workflow واضح",
-    model: "البايلوت التقييمي",
+    model: "التقييم التشغيلي",
     color: "text-emerald-400",
   },
   {
     situation: "عندك فريق جاهز",
-    model: "نشر المنتج",
+    model: "تفعيل المؤسسي",
     color: "text-cyan-400",
   },
   {
@@ -202,8 +202,8 @@ const whatWeNeed = [
 ];
 
 const boundaries = [
-  "لا نعد بنتيجة pilot مضمونة — التقييم يحدد الوضع، لا النتيجة النهائية.",
-  "لا deployment بدون تقييم نطاق كامل — البايلوت لا يلزم بنشر إنتاجي.",
+  "لا نعد بنتيجة تقييم مضمونة — التقييم يحدد الوضع، لا النتيجة النهائية.",
+  "لا تفعيل كامل بدون تقييم نطاق — التقييم التشغيلي لا يلزم بنشر إنتاجي.",
   "لا استخدام بيانات حساسة بدون ترتيبات مناسبة — نحدد معًا متطلبات الأمان قبل البدء.",
   "لا استبدال للفرق المهنية — النظام يدعم الحكم البشري، لا يحل محله.",
   "لا ادعاء امتثال أو اعتماد غير موثق — المخرجات أداة مساعدة، المسؤولية المهنية تبقى على عاتق الفريق.",
@@ -415,7 +415,7 @@ export default function EngagementModelsPage() {
               {m.limitations && (
                 <div className="p-6 border-b border-white/5 bg-amber-500/3">
                   <h3 className="text-xs font-semibold text-amber-400/70 uppercase tracking-wider mb-3">
-                    قيود البايلوت
+                    قيود التقييم التشغيلي
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {m.limitations.map((l, i) => (
@@ -540,13 +540,13 @@ export default function EngagementModelsPage() {
       <section className="py-20 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
-            نقطة البداية حسب المنتج
+            نقطة البداية حسب نظام التشغيل
           </p>
           <h2 className="text-2xl font-bold text-white mt-4 mb-4 text-center">
-            ما المنتج المناسب لسير عملك؟
+            أي نظام يناسب سير عملك؟
           </h2>
           <p className="text-slate-400 text-center mb-10 max-w-2xl mx-auto">
-            كل منتج مبني على AQLIYA Intelligence Core — الحوكمة، الأدلة، وسجل
+            كل نظام تشغيل مبني على AQLIYA Intelligence Core — الحوكمة، الأدلة، وسجل
             التدقيق مشتركة بينهم.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -566,7 +566,7 @@ export default function EngagementModelsPage() {
                   href={p.href}
                   className="inline-flex items-center gap-1 text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
                 >
-                  عرض الصفحة التعريفية ←
+                  استكشف نظام التشغيل ←
                 </Link>
               </div>
             ))}
@@ -581,29 +581,29 @@ export default function EngagementModelsPage() {
             الاستثمار
           </p>
           <h2 className="mt-4 text-2xl font-bold text-white">
-            التشخيص والبايلوت — مجاني. النشر — بعد Go/No-Go
+            التشخيص والتقييم التشغيلي — مجاني. التفعيل — بعد قرار بالأدلة
           </h2>
           <p className="mt-4 text-sm leading-7 text-slate-400">
-            لا نحدد تسعيرة الإنتاج قبل تقييم النطاق. بعد بايلوت ناجح، نقدم
+            لا نحدد تسعيرة الإنتاج قبل تقييم النطاق. بعد تقييم تشغيلي ناجح، نقدم
             عرضًا مبنيًا على عدد المستخدمين، أنظمة التشغيل المفعّلة، ومتطلبات
-            النشر. البايلوت التقييمي مجاني دائمًا للمسار الأول.
+            النشر. التقييم التشغيلي مجاني دائمًا للمسار الأول.
           </p>
           <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-6 text-right">
             <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
-              نطاق تقديري (بعد Go/No-Go — ليس عرضاً ملزماً)
+              نطاق تقديري (بعد القرار بالأدلة — ليس عرضاً ملزماً)
             </p>
             <ul className="mt-4 space-y-2 text-sm text-slate-300">
               <li>• جلسة تشخيص — مجانية</li>
-              <li>• بايلوت تقييمي (مسار واحد) — مجاني</li>
+              <li>• تقييم تشغيلي (مسار واحد) — مجاني</li>
               <li>
-                • نشر إنتاج: يبدأ تقريباً من{" "}
+                • تفعيل مؤسسي: يبدأ تقريباً من{" "}
                 <strong className="text-white">15,000 ريال/شهر</strong> لمكتب
-                مراجعة صغير — يُحدد في عرض مكتوب بعد البايلوت
+                مراجعة صغير — يُحدد في عرض مكتوب بعد التقييم
               </li>
               <li>• مؤسسات أكبر / أنظمة متعددة — تسعير حسب النطاق والنشر</li>
             </ul>
             <p className="mt-4 text-xs text-slate-500">
-              الأرقام إرشادية للتأهيل فقط. لا التزام تعاقدي قبل SOW وGo/No-Go.
+              الأرقام إرشادية للتأهيل فقط. لا التزام تعاقدي قبل SOW وقرار بالأدلة.
             </p>
           </div>
         </div>
@@ -617,8 +617,7 @@ export default function EngagementModelsPage() {
               ابدأ بمراجعة محدودة. لا توسّع قبل الدليل.
             </h2>
             <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-              الخطوة الصحيحة تبدأ بفهم سياقك — جدولة جلسة تشخيص أو مراجعة
-              المنتجات أولاً.
+              الخطوة الصحيحة تبدأ بفهم سياقك — احجز جلسة تشخيص أو راجع حزمة الإثبات.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <ScheduleDiagnosticCta className="px-8 py-3 rounded-xl text-sm font-medium" />
@@ -633,7 +632,7 @@ export default function EngagementModelsPage() {
                 className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
                 data-event="click_view_pilot_proof"
               >
-                إطار إثبات الـ Pilot ←
+                إطار التقييم التشغيلي ←
               </Link>
               <Link
                 href="/executive-brief"

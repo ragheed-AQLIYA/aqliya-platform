@@ -5,7 +5,7 @@ import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnosti
 export const metadata: Metadata = {
   title: "Proof Center | AQLIYA",
   description:
-    "Interactive demo, executive brief, pilot framework, security summary, and procurement pack — everything to evaluate AQLIYA honestly.",
+    "Interactive demo, executive brief, operational evaluation framework, security summary, and procurement pack — everything to evaluate AQLIYA honestly.",
 };
 
 const sections = [
@@ -17,9 +17,15 @@ const sections = [
   },
   {
     title: "Executive brief",
-    body: "Five-minute leadership summary — what is ready, what is not.",
+    body: "Five-minute leadership summary — platform vision and engagement path.",
     href: "/en/executive-brief",
     cta: "Read brief",
+  },
+  {
+    title: "Operational evaluation framework",
+    body: "Six evaluation dimensions, evidence-based decision criteria, and captured proof examples.",
+    href: "/pilot-proof",
+    cta: "Evaluation framework",
   },
   {
     title: "Security summary",
@@ -29,9 +35,21 @@ const sections = [
   },
   {
     title: "Procurement pack",
-    body: "PDF briefs, DPA summary, pilot SOW, data residency — one hub.",
-    href: "/procurement-pack",
+    body: "PDF briefs, DPA summary, evaluation SOW, data residency — one hub.",
+    href: "/en/procurement-pack",
     cta: "Procurement pack",
+  },
+  {
+    title: "Engagement models",
+    body: "Diagnostic → operational evaluation → institutional activation.",
+    href: "/en/engagement-models",
+    cta: "Engagement models",
+  },
+  {
+    title: "Deployment options",
+    body: "Managed cloud, private (planned), air-gapped (strategic).",
+    href: "/en/deployment",
+    cta: "Deployment",
   },
   {
     title: "Industry brief (audit firms)",
@@ -50,13 +68,13 @@ export default function EnglishProofPage() {
             Proof Center
           </h1>
           <p className="mt-6 text-lg text-white/60">
-            We don&apos;t ask for faith in slides. Demo, documents, pilot
-            criteria, and security — in one place.
+            We don&apos;t ask for faith in slides. Demo, documents, operational
+            evaluation criteria, and security — in one place.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-6 py-16 space-y-5">
+      <section className="mx-auto max-w-4xl space-y-5 px-6 py-16">
         {sections.map((s) => (
           <article
             key={s.title}

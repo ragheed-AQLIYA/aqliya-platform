@@ -1,11 +1,15 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import {
+  publicOsStatusEn,
+  publicEngagementGateEn,
+} from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "Executive Brief | AQLIYA",
   description:
-    "Five-minute executive summary: what AQLIYA is, governance model, deployment options, and pilot readiness.",
+    "Five-minute executive summary: governed institutional platform, operating systems, deployment models, and operational evaluation path.",
 };
 
 export default function EnglishExecutiveBriefPage() {
@@ -42,43 +46,41 @@ export default function EnglishExecutiveBriefPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-16 space-y-10 text-slate-300">
+      <section className="mx-auto max-w-3xl space-y-10 px-6 py-16 text-slate-300">
         <div>
           <h2 className="text-xl font-bold text-white">What AQLIYA is</h2>
           <p className="mt-3 leading-7">
             A private governed institutional intelligence platform. One core
-            (AQLIYA Intelligence Core) hosts specialized operating systems —
-            AuditOS, DecisionOS, LocalContentOS — with shared RBAC, evidence
-            graph, workflow gates, and immutable audit trail.
+            (AQLIYA Intelligence Core) hosts specialized operating systems with
+            shared RBAC, evidence graph, workflow gates, and immutable audit
+            trail.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-bold text-white">Commercial wedge</h2>
+          <h2 className="text-xl font-bold text-white">Operating systems</h2>
           <ul className="mt-3 space-y-2 text-sm">
-            <li>• AuditOS — Pilot-ready</li>
-            <li>• DecisionOS — Active</li>
-            <li>• LocalContentOS — Coordinated pilot</li>
+            <li>• AuditOS — {publicOsStatusEn.auditOS.label}</li>
+            <li>• DecisionOS — {publicOsStatusEn.decisionOS.label}</li>
+            <li>• LocalContentOS — {publicOsStatusEn.localContentOS.label}</li>
           </ul>
         </div>
 
         <div>
           <h2 className="text-xl font-bold text-white">Deployment</h2>
           <ul className="mt-3 space-y-2 text-sm">
-            <li>• Cloud Managed — available now (default)</li>
-            <li>• Private / On-Prem — strategic, not production package</li>
-            <li>• Air-Gapped — strategic only</li>
+            <li>• AQLIYA Cloud — available now (default)</li>
+            <li>• AQLIYA Private — on platform roadmap</li>
+            <li>• AQLIYA Air-Gapped — strategic direction</li>
           </ul>
         </div>
 
         <div>
-          <h2 className="text-xl font-bold text-white">Readiness</h2>
-          <p className="mt-3 text-sm text-slate-300">
-            Pilot evaluation environment — scale after Go/No-Go.
-          </p>
+          <h2 className="text-xl font-bold text-white">How we engage</h2>
+          <p className="mt-3 text-sm text-slate-300">{publicEngagementGateEn}</p>
           <p className="mt-2 text-sm text-slate-400">
-            Not claimed: SOC2/ISO certification, ERP integrations, On-Prem
-            production package.
+            Not claimed: SOC2/ISO certification, ERP integrations, or a
+            production On-Prem package.
           </p>
         </div>
 
@@ -88,6 +90,9 @@ export default function EnglishExecutiveBriefPage() {
           </Link>
           <Link href="/procurement-pack" className="text-cyan-400 underline">
             Procurement pack →
+          </Link>
+          <Link href="/pilot-proof" className="text-cyan-400 underline">
+            Operational evaluation framework →
           </Link>
         </div>
       </section>

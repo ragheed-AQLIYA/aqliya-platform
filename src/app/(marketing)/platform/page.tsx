@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SectionEyebrow } from "@/components/enterprise";
 import { OperatingSystemMapVisual } from "@/components/visuals";
+import { publicOsStatus } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "المنصة | AQLIYA Intelligence Core",
@@ -30,9 +31,9 @@ const deploymentModels = [
     title: "AQLIYA Private",
     titleAr: "خوادم خاصة",
     status: "planned",
-    statusLabel: "قيد التطوير",
+    statusLabel: "نشر خاص",
     description:
-      "نشر داخل بنية تحتية المؤسسة مع قاعدة بيانات محلية وتحكم كامل في البيانات. قيد التطوير للمؤسسات ذات المتطلبات الأمنية العالية.",
+      "نشر داخل بنية تحتية المؤسسة مع قاعدة بيانات محلية وتحكم كامل في البيانات — للمؤسسات ذات متطلبات السيادة والأمن العالية.",
     points: [
       "بيانات تبقى داخل بنية المؤسسة",
       "تحكم كامل في قواعد البيانات والتخزين",
@@ -62,24 +63,21 @@ const operatingSystems = [
     useCase: "إدارة ارتباطات المراجعة",
     system: "AuditOS",
     description: "من قبول العميل إلى التقرير — دورة مراجعة كاملة محكومة.",
-    status: "pilot-ready",
-    statusLabel: "جاهز للبايلوت",
+    statusLabel: publicOsStatus.auditOS.label,
     href: "/products/audit",
   },
   {
     useCase: "توثيق القرارات المؤسسية",
     system: "DecisionOS",
     description: "بدائل، مخاطر، أدلة، توصية، واعتماد — في مسار واحد.",
-    status: "active",
-    statusLabel: "نشط",
+    statusLabel: publicOsStatus.decisionOS.label,
     href: "/products/decision",
   },
   {
     useCase: "برامج المحتوى المحلي",
     system: "LocalContentOS",
     description: "موردون، إنفاق، عقود، امتثال، وتقارير — للسوق السعودي.",
-    status: "pilot-ready",
-    statusLabel: "بايلوت منسّق",
+    statusLabel: publicOsStatus.localContentOS.label,
     href: "/products/local-content",
   },
 ];
@@ -165,8 +163,8 @@ export default function PlatformPage() {
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <SectionEyebrow
             label="الخريطة المعمارية"
-            title="بنية المنصة من الأساس إلى المنتجات"
-            description="AQLIYA Intelligence Core يُشكّل الطبقة الوسطى بين البنية التحتية والمنتجات المؤسسية — كل منتج يستفيد من نفس المكونات المشتركة دون تكرار."
+            title="بنية المنصة من الأساس إلى أنظمة التشغيل"
+            description="AQLIYA Intelligence Core يُشكّل الطبقة الوسطى بين البنية التحتية وأنظمة التشغيل المؤسسية — كل نظام يستفيد من نفس المكونات المشتركة دون تكرار."
           />
           <div className="mt-12">
             <div className="gradient-border rounded-[24px] bg-white/[0.01] p-4 shadow-sm">
@@ -277,15 +275,7 @@ export default function PlatformPage() {
                 <h3 className="text-base font-black text-foreground group-hover:text-primary">
                   {sys.useCase}
                 </h3>
-                <span
-                  className={`shrink-0 rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
-                    sys.status === "pilot-ready"
-                      ? "bg-status-success/15 text-status-success"
-                      : sys.status === "active"
-                        ? "bg-primary/10 text-primary"
-                        : "bg-amber-500/15 text-amber-600"
-                  }`}
-                >
+                <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-[9px] font-bold text-primary">
                   {sys.statusLabel}
                 </span>
               </div>
@@ -308,17 +298,14 @@ export default function PlatformPage() {
           </Link>
         </p>
         <p className="mt-4 text-center text-xs text-muted-foreground/70">
-          SalesOS و SimulationOS في خارطة التطوير —{" "}
-          <span className="text-muted-foreground">
-            غير متاحين للشراء أو البايلوت حاليًا
-          </span>
-          .{" "}
+          SalesOS و SimulationOS في خارطة المنصة —{" "}
           <Link
-            href="/products#strategic"
+            href="/products#roadmap"
             className="text-primary underline underline-offset-4"
           >
-            الخطوط الاستراتيجية
+            استكشف الخطوط القادمة
           </Link>
+          .
         </p>
       </section>
 
@@ -395,7 +382,7 @@ export default function PlatformPage() {
               جاهز لبناء أنظمتك المؤسسية فوق منصة عقلية؟
             </h2>
             <p className="mt-4 text-sm leading-7 text-white/55">
-              جلسة تنفيذية لفهم نطاق مؤسستك وتحديد المنتجات المناسبة ووضع مسار
+              جلسة تنفيذية لفهم نطاق مؤسستك وتحديد أنظمة التشغيل المناسبة ووضع مسار
               تشغيلي واقعي.
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-4">

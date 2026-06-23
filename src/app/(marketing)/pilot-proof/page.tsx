@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "دليل البايلوت | AQLIYA",
+  title: "إطار التقييم التشغيلي | AQLIYA",
   description:
-    "الأدلة التشغيلية لقدرات AuditOS — ما يمكن إثباته في البايلوت، وكيف يتم التحقق منه، وما هي شروط النجاح.",
+    "الأدلة التشغيلية لقدرات AuditOS — ما يمكن إثباته في التقييم التشغيلي، وكيف يتم التحقق منه، وما هي معايير النجاح.",
 };
 
 const proofScenarios = [
@@ -160,7 +160,7 @@ const proofDimensions = [
   {
     dimension: "جاهزية البيانات",
     question:
-      "هل البيانات متوفرة؟ هل هي بالجودة والصيغة المطلوبة لبدء البايلوت؟",
+      "هل البيانات متوفرة؟ هل هي بالجودة والصيغة المطلوبة لبدء التقييم التشغيلي؟",
   },
   {
     dimension: "إمكانية تتبع الأدلة",
@@ -179,34 +179,34 @@ const proofDimensions = [
   {
     dimension: "ثقة القرار",
     question:
-      "هل يثق الفريق في المخرجات؟ هل يمكن اتخاذ قرار go/no-go بناءً على التجربة؟",
+      "هل يمكن اتخاذ قرار بالأدلة بناءً على التجربة؟",
   },
 ];
 
 const pilotDecisionOutputs = [
   {
-    outcome: "Proceed — توسّع",
+    outcome: "متابعة — توسّع",
     detail:
-      "الـ pilot أثبت القيمة. الانتقال إلى Product Workspace Deployment مع النطاق نفسه.",
+      "التقييم أثبت القيمة. الانتقال إلى تفعيل مؤسسي مع النطاق نفسه.",
   },
   {
-    outcome: "Revise Scope — تعديل النطاق",
+    outcome: "مراجعة النطاق — تعديل",
     detail:
-      "الـ pilot أظهر فجوة في اختيار سير العمل أو البيانات. نعدّل ونعيد التقييم.",
+      "التقييم أظهر فجوة في اختيار المسار أو البيانات. نعدّل ونعيد التقييم.",
   },
   {
-    outcome: "Extend Pilot — تمديد التجربة",
+    outcome: "تمديد التقييم",
     detail: "النتائج واعدة لكنها تحتاج نطاقًا أوسع أو فترة أطول لتأكيد القرار.",
   },
   {
-    outcome: "Stop — إيقاف",
+    outcome: "إيقاف",
     detail:
-      "الـ pilot بيّن أن هذا السير أو النطاق غير مناسب. نوصي ببديل أو نغلق الملف.",
+      "التقييم بيّن أن هذا المسار غير مناسب. نوصي ببديل أو نغلق الملف.",
   },
   {
-    outcome: "Custom Build — بناء مخصص",
+    outcome: "نظام مخصص",
     detail:
-      "الاحتياج يتجاوز المنتجات الجاهزة. ننتقل إلى جلسة تصميم نظام مؤسسي مخصص.",
+      "الاحتياج يتجاوز الأنظمة الجاهزة. ننتقل إلى جلسة تصميم نظام مؤسسي مخصص.",
   },
 ];
 
@@ -245,11 +245,11 @@ export default function PilotProofPage() {
             إطار إثبات القيمة
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-            إطار إثبات قيمة الـ Pilot
+            إطار إثبات القيمة التشغيلية
           </h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            لا نبدأ بتوسّع واسع. نبدأ بسير عمل واحد، نلتقط الأدلة، نقيس النتائج،
-            ثم نقرر بناءً على proof واضح.
+            لا نبدأ بتوسّع واسع. نبدأ بمسار واحد، نلتقط الأدلة، نقيس النتائج،
+            ثم نقرر بناءً على أدلة واضحة.
           </p>
         </div>
       </section>
@@ -262,7 +262,7 @@ export default function PilotProofPage() {
               ما يعنيه الإثبات
             </p>
             <h2 className="text-2xl font-bold text-white mt-4 mb-6">
-              Pilot proof ليس وعدًا تجاريًا — هو طريقة منظمة للإجابة
+              إطار التقييم التشغيلي ليس وعدًا تجاريًا — هو طريقة منظمة للإجابة
             </h2>
           </div>
           <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -292,7 +292,7 @@ export default function PilotProofPage() {
             أبعاد الإثبات
           </p>
           <h2 className="text-2xl font-bold text-white mt-4 mb-10 text-center">
-            ستة أبعاد نقيس بها الـ pilot
+            ستة أبعاد نقيس بها التقييم التشغيلي
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {proofDimensions.map((pd) => (
@@ -317,7 +317,7 @@ export default function PilotProofPage() {
               الأدلة الملتقطة
             </p>
             <h2 className="text-2xl font-bold text-white mt-4 mb-3">
-              ما نلتقطه أثناء الـ Pilot
+              ما نلتقطه أثناء التقييم التشغيلي
             </h2>
             <p className="text-slate-400">
               أمثلة على الأدلة التي توثقها كل تجربة — قابلة للمراجعة والتصدير
@@ -369,10 +369,10 @@ export default function PilotProofPage() {
               معايير التقييم
             </p>
             <h2 className="text-2xl font-bold text-white mt-4 mb-3">
-              كيف نقيّم نجاح الـ Pilot
+              كيف نقيّم نجاح التقييم التشغيلي
             </h2>
             <p className="text-slate-400">
-              البايلوت ليس إثباتًا أعمى — له معايير واضحة ومتفق عليها مسبقًا
+              التقييم ليس إثباتًا أعمى — له معايير واضحة ومتفق عليها مسبقًا
               تُجيب على: هل ننتقل أم نعدّل أم نوقف؟
             </p>
           </div>
@@ -396,7 +396,7 @@ export default function PilotProofPage() {
           </div>
           <div className="mt-8 glass-card rounded-xl p-6 border border-cyan-500/10">
             <p className="text-slate-300 text-sm leading-relaxed text-center">
-              في نهاية البايلوت، تحصل على تقرير Go/No-Go يوثق النتائج ويحدد
+              في نهاية التقييم، تحصل على تقرير قرار بالأدلة يوثق النتائج ويحدد
               الخطوة التالية — سواء كانت التوسع أو التعديل أو إغلاق التجربة.
             </p>
           </div>
@@ -407,14 +407,14 @@ export default function PilotProofPage() {
       <section className="py-20 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
-            أمثلة حسب المنتج
+            أمثلة حسب نظام التشغيل
           </p>
           <h2 className="text-2xl font-bold text-white mt-4 mb-4 text-center">
-            نموذج الإثبات لكل منتج
+            نموذج الإثبات لكل نظام
           </h2>
           <p className="text-slate-400 text-center mb-10 max-w-2xl mx-auto">
-            كل منتج له مسار إثبات مختلف. هذه أمثلة على ما نختبره في pilot نموذجي
-            — بدون نتائج موثقة مسبقًا.
+            كل نظام له مسار إثبات مختلف. هذه أمثلة على ما نختبره في تقييم
+            تشغيلي نموذجي — بدون نتائج موثقة مسبقًا.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {productProofExamples.map((p) => (
@@ -434,7 +434,7 @@ export default function PilotProofPage() {
                   href={p.href}
                   className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
                 >
-                  عرض الصفحة التعريفية ←
+                  استكشف نظام التشغيل ←
                 </Link>
               </div>
             ))}
@@ -449,10 +449,10 @@ export default function PilotProofPage() {
             مخرجات القرار
           </p>
           <h2 className="text-2xl font-bold text-white mt-4 mb-4 text-center">
-            نهاية الـ Pilot — مخرج واحد من خمسة
+            نهاية التقييم — مخرج واحد من خمسة
           </h2>
           <p className="text-slate-400 text-center mb-10 max-w-2xl mx-auto">
-            البايلوت لا ينتهي بـ &ldquo;ناجح&rdquo; أو &ldquo;فاشل&rdquo; فقط.
+            التقييم لا ينتهي بـ &ldquo;ناجح&rdquo; أو &ldquo;فاشل&rdquo; فقط.
             له خمسة مخرجات ممكنة، كلها مفيدة.
           </p>
           <div className="max-w-3xl mx-auto space-y-3">
@@ -475,13 +475,13 @@ export default function PilotProofPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="glass-card rounded-2xl p-8 border border-amber-500/10">
             <h2 className="text-xl font-bold text-white mb-6">
-              ما لا يُدّعى في البايلوت
+              ما لا يُدّعى في التقييم التشغيلي
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 "لا ندّعي أن النظام يستبدل المدقق أو المحاسب",
                 "لا ندّعي شهادات SOC2 أو ISO في هذه المرحلة",
-                "لا ندّعي أن البايلوت بيئة إنتاجية مكتملة",
+                "لا ندّعي أن التقييم بيئة إنتاجية مكتملة",
                 "لا ندّعي أن مخرجات الذكاء الاصطناعي نهائية دون مراجعة بشرية",
                 "لا ندّعي تكاملًا مع ERP أو أنظمة خارجية حاليًا",
                 "لا ندّعي تصدير PDF عربي مكتمل التنسيق في هذا الإصدار",
@@ -501,7 +501,7 @@ export default function PilotProofPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className="glass-card rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-white mb-3">
-              حوّل أول use case إلى proof قابل للمراجعة
+              حوّل أول مسار تشغيلي إلى أدلة قابلة للمراجعة
             </h2>
             <p className="text-slate-400 mb-8 max-w-xl mx-auto">
               جلسة تشخيص مجانية تحدد سير العمل المناسب، معايير النجاح، والخطوة

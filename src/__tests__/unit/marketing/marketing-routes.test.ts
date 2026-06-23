@@ -1,0 +1,47 @@
+import fs from "node:fs";
+import path from "node:path";
+import { toEnglishPath } from "@/lib/marketing/locale-paths";
+
+const APP_ROOT = path.join(process.cwd(), "src", "app");
+
+/** Public marketing routes that must have a page module (Phase 1.5 smoke guard). */
+const MARKETING_ROUTES: Array<{ route: string; file: string }> = [
+  { route: "/", file: "(marketing)/page.tsx" },
+  { route: "/platform", file: "(marketing)/platform/page.tsx" },
+  { route: "/proof", file: "(marketing)/proof/page.tsx" },
+  { route: "/procurement-pack", file: "(marketing)/procurement-pack/page.tsx" },
+  { route: "/engagement-models", file: "(marketing)/engagement-models/page.tsx" },
+  { route: "/deployment", file: "(marketing)/deployment/page.tsx" },
+  { route: "/en", file: "en/page.tsx" },
+  { route: "/en/platform", file: "en/platform/page.tsx" },
+  { route: "/en/proof", file: "en/proof/page.tsx" },
+  { route: "/en/procurement-pack", file: "en/procurement-pack/page.tsx" },
+  { route: "/en/engagement-models", file: "en/engagement-models/page.tsx" },
+  { route: "/en/deployment", file: "en/deployment/page.tsx" },
+  { route: "/en/how-we-work", file: "en/how-we-work/page.tsx" },
+  { route: "/en/products/audit", file: "en/products/audit/page.tsx" },
+  { route: "/en/products/decision", file: "en/products/decision/page.tsx" },
+  { route: "/en/products/local-content", file: "en/products/local-content/page.tsx" },
+  { route: "/print/evaluation-sow-en", file: "print/evaluation-sow-en/page.tsx" },
+];
+
+describe("marketing route modules exist", () => {
+  it.each(MARKETING_ROUTES)("$route → $file", ({ file }) => {
+    const full = path.join(APP_ROOT, file);
+    expect(fs.existsSync(full)).toBe(true);
+  });
+});
+
+describe("locale path mappings for EN proof layer", () => {
+  it.each([
+    ["/procurement-pack", "/en/procurement-pack"],
+    ["/engagement-models", "/en/engagement-models"],
+    ["/deployment", "/en/deployment"],
+    ["/how-we-work", "/en/how-we-work"],
+    ["/products/decision", "/en/products/decision"],
+    ["/en", "/en"],
+    ["/en/platform", "/en/platform"],
+  ])("maps %s → %s", (ar, en) => {
+    expect(toEnglishPath(ar)).toBe(en);
+  });
+});

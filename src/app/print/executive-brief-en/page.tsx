@@ -1,7 +1,10 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PrintToolbar } from "@/components/marketing/print-toolbar";
-import { BOOKING_EMAIL } from "@/lib/marketing/booking";
+import {
+  publicOsStatusEn,
+  publicEngagementGateEn,
+} from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "Executive Brief (EN) — PDF | AQLIYA",
@@ -36,38 +39,37 @@ export default function PrintExecutiveBriefEnPage() {
         <h2>What AQLIYA is not</h2>
         <ul>
           <li>Not a generic chatbot or CRM</li>
-          <li>Not AuditOS-only — the platform is broader than one product</li>
+          <li>Not AuditOS-only — the platform is broader than one system</li>
           <li>No autonomous final decisions — AI outputs are drafts</li>
         </ul>
 
-        <h2>Operating systems (public status)</h2>
+        <h2>Operating systems</h2>
         <ul>
-          <li>AuditOS — Pilot-ready commercial wedge</li>
-          <li>DecisionOS — Active</li>
-          <li>LocalContentOS — Coordinated pilot</li>
+          <li>AuditOS — {publicOsStatusEn.auditOS.label}</li>
+          <li>DecisionOS — {publicOsStatusEn.decisionOS.label}</li>
+          <li>LocalContentOS — {publicOsStatusEn.localContentOS.label}</li>
         </ul>
 
         <h2>Deployment</h2>
         <ul>
-          <li>Cloud Managed — available (default)</li>
-          <li>Private / On-Prem — strategic, not a production package today</li>
-          <li>Air-Gapped — strategic only</li>
+          <li>AQLIYA Cloud — available (default)</li>
+          <li>AQLIYA Private — on platform roadmap</li>
+          <li>AQLIYA Air-Gapped — strategic direction</li>
         </ul>
 
-        <h2>Readiness</h2>
-        <p>Pilot evaluation environment — scale after written Go/No-Go.</p>
+        <h2>Engagement path</h2>
+        <p>{publicEngagementGateEn}</p>
         <p>
-          Not claimed: SOC2/ISO certification, ERP integrations as turnkey
-          product, On-Prem production package.
+          Not claimed: SOC2/ISO certification, turnkey ERP integrations, or a
+          production On-Prem package.
         </p>
 
         <h2>Next step</h2>
         <p>
-          Diagnostic session → bounded pilot → Go/No-Go report. No wide contract
-          before evidence.
+          Diagnostic session → bounded operational evaluation → evidence-based
+          decision report. No wide contract before proof.
         </p>
         <p>
-          {BOOKING_EMAIL} ·{" "}
           <Link href="https://aqliya.com/en/contact">aqliya.com/en/contact</Link>
         </p>
 

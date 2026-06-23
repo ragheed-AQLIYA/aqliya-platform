@@ -24,10 +24,10 @@ const navItemsAr = [
 
 const navItemsEn = [
   { label: "Platform", href: "/en/platform" },
+  { label: "Industries", href: "/en/industries" },
   { label: "Proof", href: "/en/proof" },
-  { label: "Security", href: "/en/security" },
-  { label: "AuditOS", href: "/en/products/audit" },
-  { label: "Brief", href: "/en/executive-brief" },
+  { label: "Governance", href: "/en/governance" },
+  { label: "About", href: "/en/about" },
 ];
 
 type SiteHeaderProps = {
@@ -66,8 +66,8 @@ export function SiteHeader({ locale: localeProp }: SiteHeaderProps = {}) {
           <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground/70">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-status-success" />
             {locale === "en"
-              ? "Cloud available — pilot evaluation ready"
-              : "منصة تشغيل مؤسسية — السحابة متاحة"}
+              ? "Institutional operating platform — managed cloud"
+              : "منصة تشغيل مؤسسية — السحابة المُدارة"}
           </span>
         </div>
       </div>

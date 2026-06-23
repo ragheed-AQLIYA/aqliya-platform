@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
-import { publicOsStatus } from "@/lib/marketing/public-status";
+import { publicOsStatus, publicCapabilityNote } from "@/lib/marketing/public-status";
 import {
   AuditTraceVisual,
   DecisionMatrixVisual,
@@ -10,12 +10,11 @@ import {
 } from "@/components/visuals";
 
 export const metadata: Metadata = {
-  title: "المنتجات | AQLIYA",
+  title: "أنظمة التشغيل | AQLIYA",
   description:
-    "أنظمة مؤسسية مبنية على AQLIYA Intelligence Core. ثلاثة أنظمة نشطة، خطوط استراتيجية مخططة، وقدرة مخصصة — كل شيء داخل منطق حوكمة واحد.",
+    "أنظمة تشغيل مؤسسية مبنية على AQLIYA Intelligence Core — تدقيق، قرارات، محتوى محلي، وذاكرة تجارية — داخل منطق حوكمة واحد.",
 };
 
-// Tier 1: Operational systems — proven/active
 const tier1Systems = [
   {
     id: "auditos",
@@ -25,7 +24,7 @@ const tier1Systems = [
     problem:
       "بيانات مالية متفرقة، تصنيفات يدوية، أدلة غير مرتبطة، ومراجعة يصعب تتبعها.",
     system:
-      "أول تطبيق مُثبت على AQLIYA Intelligence Core. يربط البيانات المالية بالتصنيف الذكي، القوائم، الأدلة، الملاحظات، ومسار المراجعة الكامل من المصدر حتى الاعتماد البشري.",
+      "يربط البيانات المالية بالتصنيف الذكي، القوائم، الأدلة، الملاحظات، ومسار المراجعة الكامل من المصدر حتى الاعتماد البشري — فوق AQLIYA Intelligence Core.",
     output: "مخرجات مراجعة منظمة وقابلة للتتبع الكامل — كل قرار مرتبط بمصدره.",
     flow: ["بيانات", "تصنيف", "مخرجات", "أدلة", "مراجعة", "اعتماد"],
     highlights: [
@@ -35,7 +34,7 @@ const tier1Systems = [
     ],
     href: "/products/audit",
     visual: AuditTraceVisual,
-    proofNote: "أول تطبيق مُثبت — قائم ومُختبر",
+    capabilityNote: publicCapabilityNote.auditOS,
   },
   {
     id: "decisionos",
@@ -55,27 +54,27 @@ const tier1Systems = [
     ],
     href: "/products/decision",
     visual: DecisionMatrixVisual,
-    proofNote: "نشط — نظام مجاور في الإنتاج",
+    capabilityNote: publicCapabilityNote.decisionOS,
   },
   {
     id: "localcontentos",
     title: "LocalContentOS",
-    subtitle: "نظام المحتوى المحلي",
+    subtitle: "نظام المحتوى المحلي والامتثال",
     statusLabel: publicOsStatus.localContentOS.label,
     problem:
       "بيانات موردين، إنفاق، التزام، وتصنيفات موزعة بين فرق ومصادر متعددة.",
     system:
-      "يربط الموردين بالإنفاق، التصنيف، نسب الالتزام، والفجوات. 12 مسار تشغيلي جاهزة. يُنشر بالتنسيق مع الجهة لضمان جودة البيانات وتحديد نطاق البايلوت.",
+      "يربط الموردين بالإنفاق، التصنيف، نسب الالتزام، والفجوات في مسار تشغيلي واحد — مع تقارير جاهزة للجهات التنظيمية.",
     output: "رؤية واضحة لمؤشرات المحتوى المحلي وأثر القرارات الشرائية.",
     flow: ["موردون", "إنفاق", "تصنيف", "فجوات", "مؤشرات", "تقارير"],
     highlights: [
-      "12 مسار تشغيلي جاهز",
+      "مسار مورد–إنفاق–امتثال",
       "ربط المورد بالإنفاق الفعلي",
-      "مؤشرات الالتزام تلقائياً",
+      "مؤشرات الالتزام والتقارير",
     ],
     href: "/products/local-content",
     visual: LocalContentMapVisual,
-    proofNote: "النشر بالتنسيق مع الجهة",
+    capabilityNote: publicCapabilityNote.localContentOS,
   },
 ];
 
@@ -89,7 +88,7 @@ const tier2Systems = [
     problem:
       "فرص غير مؤهلة، أولويات غير واضحة، متابعة عشوائية، وتعلم ضعيف من الحملات.",
     outline:
-      "نظام ذاكرة تجارية محكومة قيد التطوير، يستكشف التأهيل، الترتيب، المتابعة، والتعلم المؤسسي.",
+      "نظام ذاكرة تجارية محكومة يربط التأهيل، الترتيب، المتابعة، والتعلم المؤسسي في مسار واحد.",
     flow: ["ICP", "تأهيل", "ترتيب", "تواصل", "متابعة"],
   },
   {
@@ -100,7 +99,7 @@ const tier2Systems = [
     problem:
       "قرارات تُنفذ قبل اختبار أثرها على التكلفة، المخاطر، الأداء، أو النتائج.",
     outline:
-      "نظام قيد التخطيط يهدف إلى ربط المدخلات بالافتراضات، السيناريوهات، المقارنة، ودعم القرار قبل التنفيذ.",
+      "يربط المدخلات بالافتراضات، السيناريوهات، المقارنة، ودعم القرار قبل التنفيذ.",
     flow: ["مدخلات", "افتراضات", "سيناريوهات", "أثر", "مقارنة"],
   },
 ];
@@ -115,29 +114,29 @@ export default function ProductsPage() {
           <div className="relative mx-auto max-w-4xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
               <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
-              عائلة المنتجات
+              عائلة أنظمة التشغيل
             </span>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              منتجات مؤسسية مبنية على نواة واحدة
+              أنظمة تشغيل مؤسسية مبنية على نواة واحدة
             </h1>
             <p className="mt-5 text-base leading-8 text-white/62 sm:text-lg">
-              كل نظام من أنظمة عقلية يعالج مساراً مؤسسياً محدداً، لكن جميعها
-              تشترك في نفس طبقة الحوكمة، سجل التدقيق، وآلية الاعتماد البشري.
+              كل نظام يعالج مساراً مؤسسياً محدداً — تدقيق، قرار، محتوى محلي،
+              أو ذاكرة تجارية — داخل نفس طبقة الحوكمة، الأدلة، والاعتماد البشري.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-white/45">
               <span className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                <span>3 أنظمة نشطة</span>
-              </span>
-              <span className="text-white/20">|</span>
-              <span className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-amber-400" />
-                <span>2 خطوط استراتيجية</span>
+                <span>تدقيق ومراجعة</span>
               </span>
               <span className="text-white/20">|</span>
               <span className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-primary/80" />
-                <span>قدرة مخصصة</span>
+                <span>قرارات وحوكمة</span>
+              </span>
+              <span className="text-white/20">|</span>
+              <span className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-amber-400" />
+                <span>امتثال ومحتوى محلي</span>
               </span>
             </div>
           </div>
@@ -151,11 +150,11 @@ export default function ProductsPage() {
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-400">
-                الأنظمة النشطة
+                أنظمة التشغيل الأساسية
               </p>
             </div>
             <p className="text-xs text-white/35">
-              أنظمة قائمة ومُختبرة — جاهزة للتجريب المؤسسي أو النشر الفعلي
+              مسارات مؤسسية جاهزة للتفعيل — تدقيق، قرارات، ومحتوى محلي
             </p>
           </div>
         </div>
@@ -215,7 +214,7 @@ export default function ProductsPage() {
                         : "border-emerald-500/20 bg-emerald-500/8 text-emerald-400",
                     )}
                   >
-                    ✓ {system.proofNote}
+                    ✓ {system.capabilityNote}
                   </div>
 
                   {/* Problem / System / Output */}
@@ -397,7 +396,7 @@ export default function ProductsPage() {
           <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-start">
             <div>
               <p className="text-sm font-bold text-foreground">
-                كل نظام نشط يعمل داخل نفس بنية الحوكمة
+                كل نظام يعمل داخل نفس بنية الحوكمة
               </p>
               <p className="mt-1 text-xs leading-6 text-muted-foreground">
                 Evidence Chain · RBAC متعدد المستويات · Audit Trail لا يُعدَّل ·
@@ -423,7 +422,7 @@ export default function ProductsPage() {
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-amber-400" />
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-amber-400/80">
-                خطوط الخارطة الاستراتيجية
+                خطوط خارطة المنصة
               </p>
             </div>
             <p className="text-xs text-white/30">
@@ -435,7 +434,7 @@ export default function ProductsPage() {
 
       {/* Tier 2 Systems — compact, visually demoted */}
       <section
-        id="strategic"
+        id="roadmap"
         className="section-gradient-dark scroll-mt-20 border-b border-white/5"
       >
         <div className="mx-auto max-w-7xl px-6 py-14">
@@ -490,7 +489,7 @@ export default function ProductsPage() {
                 </div>
                 <div className="mt-5 border-t border-white/8 pt-4">
                   <p className="text-[10px] text-white/25">
-                    {system.statusLabel} — لا يُعرض للشراء أو البايلوت حاليًا
+                    {system.statusLabel} — يُناقش ضمن نطاق التفعيل المؤسسي
                   </p>
                 </div>
               </div>

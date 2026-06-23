@@ -36,7 +36,7 @@ export default function CustomProductPage() {
               نظام مؤسسي مخصص
             </span>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              عندما لا يكفي المنتج الجاهز، يمكن تصميم نظامك فوق نواة عقلية نفسها
+              عندما لا يكفي النظام الجاهز، يمكن تصميم نظامك فوق نواة عقلية نفسها
             </h1>
             <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-white/62 sm:text-lg">
               هذه الصفحة مخصصة للمؤسسات التي لا تحتاج أداة إضافية فقط، بل تحتاج

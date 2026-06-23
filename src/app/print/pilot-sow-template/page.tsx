@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { PrintToolbar } from "@/components/marketing/print-toolbar";
 
 export const metadata: Metadata = {
-  title: "نموذج نطاق البايلوت — PDF | AQLIYA",
-  description: "قالب SOW مختصر لبايلوت AuditOS محكوم.",
+  title: "نموذج نطاق التقييم التشغيلي — PDF | AQLIYA",
+  description: "قالب SOW مختصر لتقييم AuditOS محكوم.",
 };
 
 export default function PrintPilotSowTemplatePage() {
@@ -18,21 +18,21 @@ export default function PrintPilotSowTemplatePage() {
     <>
       <PrintToolbar title="طباعة / حفظ PDF" />
       <article className="print-doc" dir="rtl">
-        <p className="print-meta">AQLIYA — نموذج SOW بايلوت · {generated}</p>
-        <h1>نموذج نطاق بايلوت تقييمي (SOW)</h1>
+        <p className="print-meta">AQLIYA — نموذج SOW تقييم تشغيلي · {generated}</p>
+        <h1>نموذج نطاق تقييم تشغيلي (SOW)</h1>
         <p>
           قالب للمناقشة — ليس عقداً نهائياً. يُخصص مع العميل قبل Kickoff.
         </p>
 
         <h2>1. الهدف</h2>
         <p>
-          تقييم قيمة AuditOS على <strong>ارتباط واحد</strong> (أو سير عمل
-          واحد محدد) خلال 2–4 أسابيع — مجاناً — مع تقرير Go/No-Go مكتوب.
+          تقييم قيمة AuditOS على <strong>ارتباط واحد</strong> (أو مسار تشغيلي
+          واحد محدد) خلال 2–4 أسابيع — مجاناً — مع تقرير قرار بالأدلة مكتوب.
         </p>
 
-        <h2>2. النطاق الم included</h2>
+        <h2>2. النطاق المُدرج</h2>
         <ul>
-          <li>سير عمل: من ميزان المراجعة → تصنيف → مسودات → أدلة → مراجعة → حزمة (حسب الاتفاق)</li>
+          <li>مسار: من ميزان المراجعة → تصنيف → مسودات → أدلة → مراجعة → حزمة (حسب الاتفاق)</li>
           <li>مستخدمون: حتى [N] مستخدمين محددين مسبقاً</li>
           <li>بيئة: Cloud Managed — tenant معزول</li>
           <li>دعم: kickoff + checkpoint أسبوعي 30 دقيقة</li>
@@ -42,7 +42,7 @@ export default function PrintPilotSowTemplatePage() {
         <ul>
           <li>تكامل ERP / أنظمة خارجية</li>
           <li>On-Prem أو Air-Gapped</li>
-          <li>عدة ارتباطات متزامنة أو منتجات إضافية (DecisionOS، إلخ) دون SOW منفصل</li>
+          <li>عدة ارتباطات متزامنة أو أنظمة إضافية (DecisionOS، إلخ) دون SOW منفصل</li>
           <li>رأي تدقيق أو اعتماد مهني — AQLIYA أداة مساعدة فقط</li>
         </ul>
 
@@ -55,9 +55,9 @@ export default function PrintPilotSowTemplatePage() {
 
         <h2>5. المخرجات</h2>
         <ul>
-          <li>تقرير Go/No-Go: Proceed | Revise | Stop</li>
+          <li>تقرير قرار بالأدلة: متابعة | مراجعة نطاق | إيقاف</li>
           <li>ملخص أدلة (screenshots / exports على بيانات العميل)</li>
-          <li>توصية نشر إنتاج إن Proceed</li>
+          <li>توصية تفعيل مؤسسي عند المتابعة</li>
         </ul>
 
         <h2>6. المسؤولية والذكاء الاصطناعي</h2>

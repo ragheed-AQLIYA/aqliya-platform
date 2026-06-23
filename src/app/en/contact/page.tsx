@@ -6,7 +6,7 @@ import { BOOKING_EMAIL } from "@/lib/marketing/booking";
 export const metadata: Metadata = {
   title: "Schedule Diagnostic | AQLIYA",
   description:
-    "Book a 45-minute diagnostic session or request a governed pilot review.",
+    "Book a 45-minute diagnostic session or request an operational evaluation on your data.",
 };
 
 export default function EnglishContactPage() {
@@ -35,14 +35,14 @@ export default function EnglishContactPage() {
 
       <section className="mx-auto max-w-xl px-6 py-16 text-center">
         <p className="text-sm leading-7 text-muted-foreground">
-          Full intake form (Arabic UI) with pilot fields:{" "}
+          Full intake form (Arabic UI) with evaluation fields:{" "}
           <Link href="/contact" className="text-primary underline">
             /contact
           </Link>
         </p>
         <p className="mt-4 text-sm text-muted-foreground">
           Procurement pack:{" "}
-          <Link href="/procurement-pack" className="text-primary underline">
+          <Link href="/en/procurement-pack" className="text-primary underline">
             evaluation documents
           </Link>
         </p>

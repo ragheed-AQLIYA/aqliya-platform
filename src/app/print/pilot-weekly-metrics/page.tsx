@@ -3,19 +3,19 @@ import type { Metadata } from "next";
 import { PrintToolbar } from "@/components/marketing/print-toolbar";
 
 export const metadata: Metadata = {
-  title: "قالب metrics البايلوت الأسبوعي — PDF | AQLIYA",
-  description: "قالب checkpoint أسبوعي لبايلوت AuditOS — للاستخدام الداخلي مع العميل.",
+  title: "قالب metrics التقييم الأسبوعي — PDF | AQLIYA",
+  description: "قالب checkpoint أسبوعي لتقييم AuditOS — للاستخدام الداخلي مع العميل.",
 };
 
 const sections = [
   {
-    title: "أسبوع البايلوت",
+    title: "أسبوع التقييم",
     fields: ["#", "التاريخ", "حضور: workflow owner + AQLIYA lead"],
   },
   {
     title: "التقدم التشغيلي",
     fields: [
-      "مراحل سير العمل المكتملة هذا الأسبوع",
+      "مراحل المسار المكتملة هذا الأسبوع",
       "Human gates passed / blocked",
       "أدلة مرتبطة vs ناقصة",
       "blockers (تقنية / بيانات / صلاحيات)",
@@ -50,15 +50,15 @@ export default function PrintPilotWeeklyMetricsPage() {
     <>
       <PrintToolbar title="طباعة / حفظ PDF" />
       <article className="print-doc" dir="rtl">
-        <p className="print-meta">AQLIYA — Pilot Weekly Checkpoint · {generated}</p>
-        <h1>قالب metrics البايلوت — checkpoint أسبوعي</h1>
+        <p className="print-meta">AQLIYA — Weekly Evaluation Checkpoint · {generated}</p>
+        <h1>قالب metrics التقييم — checkpoint أسبوعي</h1>
         <p>
-          يُملأ في اجتماع 30 دقيقة أسبوعياً. يُ archived مع Go/No-Go report. لا
-          يُستخدم كادعاء marketing دون موافقة العميل.
+          يُملأ في اجتماع 30 دقيقة أسبوعياً. يُ archived مع تقرير قرار بالأدلة.
+          لا يُستخدم كادعاء marketing دون موافقة العميل.
         </p>
 
         <p>
-          <strong>عميل:</strong> _______________ · <strong>ارتباط/سير عمل:</strong>{" "}
+          <strong>عميل:</strong> _______________ · <strong>ارتباط/مسار:</strong>{" "}
           _______________
         </p>
 
@@ -73,9 +73,9 @@ export default function PrintPilotWeeklyMetricsPage() {
           </section>
         ))}
 
-        <h2>ربط بإطار البايلوت</h2>
+        <h2>ربط بإطار التقييم</h2>
         <p>
-          معايير Go/No-Go:{" "}
+          معايير قرار بالأدلة:{" "}
           <Link href="https://aqliya.com/pilot-proof">aqliya.com/pilot-proof</Link>
         </p>
 

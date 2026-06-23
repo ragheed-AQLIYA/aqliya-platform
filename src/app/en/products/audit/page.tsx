@@ -1,11 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { publicOsStatusEn } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "AuditOS — Governed Audit Operating System | AQLIYA",
   description:
-    "From trial balance to engagement pack. Pilot-ready audit workflow with human gates, evidence vault, and immutable audit trail.",
+    "From trial balance to engagement pack. Governed audit workflow with human gates, evidence vault, and immutable audit trail.",
 };
 
 const journey = [
@@ -42,14 +43,14 @@ export default function EnglishAuditProductPage() {
       <section className="hero-gradient py-20">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <span className="text-[10px] font-bold uppercase tracking-wider text-aqliya-cyan">
-            Pilot-ready wedge
+            {publicOsStatusEn.auditOS.label}
           </span>
           <h1 className="mt-4 text-4xl font-black text-white sm:text-5xl">
             AuditOS
           </h1>
           <p className="mt-6 text-lg text-white/65">
-            Governed audit operating system — from trial balance to engagement
-            pack. AI assists drafting; humans approve exports.
+            {publicOsStatusEn.auditOS.capabilityNote}. AI assists drafting;
+            humans approve exports.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href="/auditos" className="btn-primary px-6 py-3">

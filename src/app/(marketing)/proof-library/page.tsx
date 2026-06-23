@@ -134,7 +134,7 @@ const outputExamples: OutputExample[] = [
 
 const assetCategories = [
   {
-    name: "Pilot Planning",
+    name: "Evaluation Planning",
     description: "قوالب تحديد النطاق، المعايير، المسؤوليات، وجدول التقييم.",
   },
   {
@@ -147,16 +147,16 @@ const assetCategories = [
   },
   {
     name: "Decision Outputs",
-    description: "نماذج مذكرات القرار، تقارير Go/No-Go، وتوصيات التوسّع.",
+    description: "نماذج مذكرات القرار، تقارير قرار بالأدلة، وتوصيات التوسّع.",
   },
   {
     name: "Risk & Issues",
     description: "سجلات المخاطر، الملاحظات، وقرارات التسوية مع أثر أدلة.",
   },
   {
-    name: "Product-Specific Samples",
+    name: "System-Specific Samples",
     description:
-      "أمثلة مخرجات لكل منتج — AuditOS، LocalContentOS، DecisionOS، Office AI.",
+      "أمثلة مخرجات لكل نظام تشغيل — AuditOS، LocalContentOS، DecisionOS، Office AI.",
   },
 ];
 
@@ -189,19 +189,19 @@ const productAssets = [
 
 const howToUseSteps = [
   {
-    phase: "قبل الـ Pilot",
+    phase: "قبل التقييم التشغيلي",
     detail:
-      "استخدم قالب Pilot Scope Memo لتحديد النطاق، المعايير، والمسؤوليات قبل البدء.",
+      "استخدم قالب نطاق التقييم لتحديد النطاق، المعايير، والمسؤوليات قبل البدء.",
   },
   {
-    phase: "أثناء الـ Pilot",
+    phase: "أثناء التقييم التشغيلي",
     detail:
       "جمّع الأدلة باستخدام Evidence Checklist، وسجّل الملاحظات والمخاطر مباشرة.",
   },
   {
-    phase: "بعد الـ Pilot",
+    phase: "بعد التقييم التشغيلي",
     detail:
-      "استخدم Pilot Success Review و Decision Memo لتقييم النتائج واتخاذ قرار Go/No-Go.",
+      "استخدم مراجعة نجاح التقييم و Decision Memo لتقييم النتائج واتخاذ قرار بالأدلة.",
   },
 ];
 
@@ -231,7 +231,7 @@ export default function ProofLibraryPage() {
           </h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
             ليست مكتبة قصص نجاح. هذه مكتبة أصول تساعدك على فهم ما يتم قياسه،
-            توثيقه، ومراجعته خلال pilot محكوم — لكل منتجات AQLIYA.
+            توثيقه، ومراجعته خلال تقييم تشغيلي محكوم — لجميع أنظمة عقلية.
           </p>
           <div className="mt-6 inline-block px-4 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
             <p className="text-amber-300 text-sm">
@@ -259,7 +259,7 @@ export default function ProofLibraryPage() {
                     "قوالب ونماذج مرجعية للتخطيط والتقييم",
                     "هياكل عينة للأدلة والمخرجات",
                     "أدوات توثيق المراجعة والاعتماد",
-                    "أمثلة تشغيلية لكل منتج — على بيانات تجريبية",
+                    "أمثلة تشغيلية لكل نظام — على بيانات تجريبية",
                     "مواد مساعدة لفهم مسار الإثبات",
                   ].map((item) => (
                     <li
@@ -284,7 +284,7 @@ export default function ProofLibraryPage() {
                     "ادعاءات ROI أو نتائج مضمونة",
                     "شهادات امتثال أو اعتماد رسمي",
                     "بديلًا عن المراجعة المهنية أو الحكم البشري",
-                    "ضمان نجاح pilot — النتائج تعتمد على جودة البيانات وسير العمل",
+                    "ضمان نجاح التقييم — النتائج تعتمد على جودة البيانات وسير العمل",
                   ].map((item) => (
                     <li
                       key={item}
@@ -418,14 +418,14 @@ export default function ProofLibraryPage() {
       <section className="section-gradient-dark py-20 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400 text-center">
-            أصول حسب المنتج
+            أصول حسب نظام التشغيل
           </p>
           <h2 className="text-2xl font-bold text-white mt-4 mb-4 text-center">
-            أمثلة أصول لكل منتج
+            أمثلة أصول لكل نظام
           </h2>
           <p className="text-slate-400 text-center mb-10 max-w-2xl mx-auto">
-            كل منتج له مسار إثبات وأصول خاصة به. هذه أمثلة تشغيلية على ما يتم
-            توثيقه في pilot نموذجي.
+            كل نظام له مسار إثبات وأصول خاصة به. هذه أمثلة تشغيلية على ما يتم
+            توثيقه في تقييم تشغيلي نموذجي.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {productAssets.map((pa) => (
@@ -456,7 +456,7 @@ export default function ProofLibraryPage() {
             </p>
             <p className="text-slate-300 text-sm leading-relaxed">
               الأصول المعروضة هنا مرجعية/وصفية. يتم توفير النسخ التشغيلية
-              الفعلية (قوالب، نماذج، تقارير) ضمن pilot أو engagement محدد بعد
+              الفعلية (قوالب، نماذج، تقارير) ضمن تقييم تشغيلي أو نموذج تعاون محدد بعد
               الاتفاق على النطاق والمعايير.
             </p>
             <p className="text-slate-500 text-xs mt-3">
@@ -500,7 +500,7 @@ export default function ProofLibraryPage() {
               ابدأ بإطار إثبات واضح قبل أن تطلب التوسّع
             </h2>
             <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-              المكتبة مرجع. الـ pilot هو الإثبات. ابدأ بجلسة تشخيص لتحديد النطاق
+              المكتبة مرجع. التقييم التشغيلي هو الإثبات. ابدأ بجلسة تشخيص لتحديد النطاق
               والمعايير.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
@@ -523,7 +523,7 @@ export default function ProofLibraryPage() {
                 className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
                 data-event="click_view_pilot_proof"
               >
-                إطار إثبات الـ Pilot
+                إطار التقييم التشغيلي
               </Link>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PrintToolbar } from "@/components/marketing/print-toolbar";
-import { publicOsStatus, publicReadinessGate } from "@/lib/marketing/public-status";
+import { publicOsStatus, publicEngagementGate } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "الإحاطة التنفيذية — PDF | AQLIYA",
@@ -55,7 +55,7 @@ export default function PrintExecutiveBriefPage() {
         </ul>
 
         <h2>الجاهزية</h2>
-        <p>{publicReadinessGate}</p>
+        <p>{publicEngagementGate}</p>
 
         <h2>غير متاح / غير مُعلَن</h2>
         <ul>
@@ -66,7 +66,7 @@ export default function PrintExecutiveBriefPage() {
 
         <h2>الخطوة التالية</h2>
         <p>
-          جلسة تشخيص → بايلوت محدود → تقرير Go/No-Go. لا عقد واسع قبل
+          جلسة تشخيص → تقييم تشغيلي محدود → تقرير قرار بالأدلة. لا عقد واسع قبل
           الإثبات.
         </p>
         <p>

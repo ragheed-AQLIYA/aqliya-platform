@@ -33,7 +33,7 @@ export default function DecisionProductPage() {
             href="/products"
             className="relative text-sm text-white/45 hover:text-white/70 transition-colors"
           >
-            ← العودة إلى المنتجات
+            ← العودة إلى أنظمة التشغيل
           </Link>
           <div className="relative max-w-4xl">
             <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
@@ -42,7 +42,7 @@ export default function DecisionProductPage() {
             </span>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              L4 — نشط
+              متكامل في المنصة
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               مؤسستك تحتاج نظام تشغيل للقرارات، لا مجرد مذكرات ونقاشات متفرقة
@@ -56,7 +56,7 @@ export default function DecisionProductPage() {
                 ناقش تفعيل النظام
               </Link>
               <Link href="/products" className="btn-secondary px-6">
-استكشف المنتجات
+استكشف أنظمة التشغيل
               </Link>
             </div>
           </div>
@@ -187,7 +187,7 @@ export default function DecisionProductPage() {
           title="هل تحتاج نظام قرار واضح لمؤسستك؟"
           primaryLabel="ناقش تفعيل النظام"
           primaryHref="/custom-product"
-          secondaryLabel="استكشف المنتجات"
+          secondaryLabel="استكشف أنظمة التشغيل"
           secondaryHref="/contact"
         />
       </section>

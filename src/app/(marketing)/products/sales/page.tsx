@@ -34,7 +34,7 @@ export default function SalesProductPage() {
             href="/products"
             className="relative text-sm text-white/45 hover:text-white/70 transition-colors"
           >
-            ← العودة إلى المنتجات
+            ← العودة إلى أنظمة التشغيل
           </Link>
           <div className="relative max-w-4xl">
             <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
@@ -46,19 +46,18 @@ export default function SalesProductPage() {
               {publicOsStatus.salesOS.label}
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              نظام ذاكرة تجارية محكوم — قيد التطوير
+              نظام الذاكرة التجارية — في خارطة المنصة
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              SalesOS خط استراتيجي على AQLIYA Intelligence Core — ليس متاحًا
-              للشراء أو البايلوت حاليًا. هذه الصفحة تصف الاتجاه فقط، لا منتجًا
-              جاهزًا للتفعيل.
+              SalesOS يوسّع عقلية إلى تطوير الأعمال والمبيعات المؤسسية — حسابات،
+              فرص، متابعة، وذاكرة تجارية محكومة. ناقش نطاق التفعيل مع الفريق.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/contact" className="btn-primary px-6">
-                ناقش الاتجاه مع الفريق
+                ناقش التفعيل المؤسسي
               </Link>
-              <Link href="/products#strategic" className="btn-secondary px-6">
-                الخطوط الاستراتيجية
+              <Link href="/products#roadmap" className="btn-secondary px-6">
+                خارطة المنصة
               </Link>
             </div>
           </div>
@@ -189,7 +188,7 @@ export default function SalesProductPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="مهتم بمسار الذاكرة التجارية المحكومة؟"
-          description="SalesOS قيد التطوير — لا بايلوت ولا شراء حاليًا. يمكننا مناقشة الاتجاه أو مسار AuditOS/DecisionOS إذا كان لديك حاجة تشغيلية فورية."
+          description="SalesOS في خارطة المنصة — ناقش نطاق التفعيل أو استكشف AuditOS وDecisionOS لحاجتك التشغيلية الفورية."
           primaryLabel="احجز جلسة تشخيص"
           primaryHref="/contact"
           secondaryLabel="مركز الإثبات"

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
-import { publicOsStatus, publicReadinessGate } from "@/lib/marketing/public-status";
+import { publicOsStatus, publicCapabilityNote, publicEngagementGate } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "الإحاطة التنفيذية | AQLIYA",
@@ -13,26 +13,23 @@ const platformLayers = [
   {
     name: "AQLIYA Intelligence Core",
     description:
-      "الطبقة الأساسية المشتركة بين جميع المنتجات — AI Orchestration، Governance Engine، Evidence Graph، RBAC، Audit Logs، Document Intelligence.",
+      "الطبقة الأساسية المشتركة — تنسيق الذكاء، الحوكمة، شبكة الأدلة، الصلاحيات، وسجل التدقيق.",
     role: "الأساس",
   },
   {
     name: "AuditOS",
-    description:
-      "نظام سير عمل التدقيق المالي — من ميزان المراجعة إلى حزمة الارتباط. جاهز للبايلوت.",
-    role: "المنتج الرئيسي",
+    description: `${publicCapabilityNote.auditOS}. ${publicOsStatus.auditOS.label}.`,
+    role: "نظام تشغيل",
   },
   {
     name: "DecisionOS",
-    description:
-      "توثيق القرارات المؤسسية — سياق + بدائل + أدلة + اعتماد + Audit Trail. نشط.",
-    role: "المنتج الثاني",
+    description: `${publicCapabilityNote.decisionOS}. ${publicOsStatus.decisionOS.label}.`,
+    role: "نظام تشغيل",
   },
   {
     name: "LocalContentOS",
-    description:
-      "إدارة محتوى العمالة والمقاولين وفق متطلبات نظام المحتوى المحلي. قيد التطوير التسويقي — اطلب إحاطة للمسار.",
-    role: "استراتيجي",
+    description: `${publicCapabilityNote.localContentOS}. ${publicOsStatus.localContentOS.label}.`,
+    role: "نظام تشغيل",
   },
 ];
 
@@ -61,13 +58,13 @@ const deploymentModels = [
   },
   {
     name: "Private Cloud",
-    status: "قيد التخطيط",
+    status: "نشر خاص — حسب نطاق المؤسسة",
     suitable: "المؤسسات ذات متطلبات خصوصية البيانات",
     statusColor: "text-amber-400",
   },
   {
     name: "On-Premises / Air-Gapped",
-    status: "قيد الدراسة — غير متاح حاليًا",
+    status: "بيئة معزولة — للمتطلبات الأمنية القصوى",
     suitable: "الجهات الحكومية ذات أعلى متطلبات الأمن",
     statusColor: "text-slate-500",
   },
@@ -123,7 +120,7 @@ const whyNow = [
 ];
 
 const currentStatus = {
-  readinessGate: publicReadinessGate,
+  readinessGate: publicEngagementGate,
   availableNow: [
     `AuditOS — ${publicOsStatus.auditOS.label}`,
     `DecisionOS — ${publicOsStatus.decisionOS.label}`,
@@ -231,7 +228,7 @@ export default function ExecutiveBriefPage() {
                   <li className="flex gap-3 text-slate-300 text-sm">
                     <span className="text-emerald-400 mt-0.5 shrink-0">✓</span>
                     <span>
-                      نظام متعدد المنتجات — AuditOS، DecisionOS، وغيرها — يشترك
+                      نظام متعدد الأنظمة — AuditOS، DecisionOS، وغيرها — يشترك
                       في نواة واحدة
                     </span>
                   </li>
@@ -617,7 +614,7 @@ export default function ExecutiveBriefPage() {
                 <span className="text-cyan-400 font-bold text-sm">٣</span>
               </div>
               <h3 className="text-white font-semibold mb-2">
-                بايلوت تقييمي (مجاني)
+                تقييم تشغيلي (مجاني)
               </h3>
               <p className="text-slate-400 text-sm mb-5">
                 ٢-٤ أسابيع — على بياناتك الحقيقية
