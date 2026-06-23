@@ -28,9 +28,9 @@ const footerColumns = [
     links: [
       { label: "مركز الإثبات", href: "/proof" },
       { label: "الديمو التفاعلي", href: "/demo" },
-      { label: "الملخص التنفيذي", href: "/executive-brief" },
-      { label: "إطار التقييم التشغيلي", href: "/pilot-proof" },
-      { label: "مكتبة الأدلة", href: "/proof-library" },
+      { label: "الملخص التنفيذي", href: "/proof#executive-brief" },
+      { label: "إطار التقييم التشغيلي", href: "/proof#evaluation-framework" },
+      { label: "مكتبة الأدلة", href: "/proof#evidence-samples" },
     ],
   },
   {

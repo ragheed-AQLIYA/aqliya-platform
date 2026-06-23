@@ -4,7 +4,7 @@ const AR_TO_EN: Record<string, string> = {
   "/platform": "/en/platform",
   "/about": "/en/about",
   "/industries": "/en/industries",
-  "/executive-brief": "/en/executive-brief",
+  "/executive-brief": "/en/proof",
   "/security": "/en/security",
   "/products/audit": "/en/products/audit",
   "/products/decision": "/en/products/decision",
@@ -21,7 +21,9 @@ const AR_TO_EN: Record<string, string> = {
   "/products": "/en/products",
   "/start": "/en/start",
   "/use-cases": "/en/use-cases",
-  "/pilot-proof": "/pilot-proof",
+  "/pilot-proof": "/en/proof",
+  "/proof-library": "/en/proof",
+  "/pilot-outcomes": "/en/proof",
 };
 
 const EN_TO_AR: Record<string, string> = Object.fromEntries(

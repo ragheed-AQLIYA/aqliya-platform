@@ -337,7 +337,7 @@ export default function DemoPage() {
                 مخرجات فعلية من النظام
               </p>
               <Link
-                href="/proof-library"
+                href="/proof#evidence-samples"
                 className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center"
               >
                 استعرض المخرجات

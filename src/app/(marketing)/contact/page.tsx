@@ -258,7 +258,7 @@ export default function ContactPage() {
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
               <Link
-                href="/pilot-proof"
+                href="/proof#evaluation-framework"
                 className="btn-outline px-6 py-2.5 rounded-xl text-sm"
                 data-event="click_view_pilot_proof"
               >

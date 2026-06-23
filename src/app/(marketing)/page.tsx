@@ -53,7 +53,7 @@ const proofQuick = [
   {
     title: "الملخص التنفيذي",
     body: "٥ دقائق للقيادة: المنصة ومسار التعاون.",
-    href: "/executive-brief",
+    href: "/proof#executive-brief",
   },
   {
     title: "حزمة المشتريات",

@@ -628,14 +628,14 @@ export default function EngagementModelsPage() {
                 حزمة المشتريات
               </Link>
               <Link
-                href="/pilot-proof"
+                href="/proof#evaluation-framework"
                 className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
                 data-event="click_view_pilot_proof"
               >
                 إطار التقييم التشغيلي ←
               </Link>
               <Link
-                href="/executive-brief"
+                href="/proof#executive-brief"
                 className="btn-outline px-8 py-3 rounded-xl text-sm font-medium"
                 data-event="click_read_executive_brief"
               >

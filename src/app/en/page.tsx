@@ -151,7 +151,7 @@ export default function EnglishHomePage() {
             <Link href="/en/proof" className="btn-outline h-11 px-6">
               Review proof package
             </Link>
-            <Link href="/en/executive-brief" className="btn-outline h-11 px-6">
+            <Link href="/en/proof#executive-brief" className="btn-outline h-11 px-6">
               Request executive briefing
             </Link>
             <ScheduleDiagnosticCta locale="en" variant="outline" />

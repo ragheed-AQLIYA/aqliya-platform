@@ -117,7 +117,7 @@ const personas = [
     outputs: [],
     ctas: [
       { label: "طلب جلسة استشارية", href: "/contact", primary: true },
-      { label: "الإحاطة التنفيذية", href: "/executive-brief", primary: false },
+      { label: "الإحاطة التنفيذية", href: "/proof#executive-brief", primary: false },
     ],
   },
   {

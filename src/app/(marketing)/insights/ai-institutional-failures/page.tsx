@@ -172,7 +172,7 @@ export default function Article1() {
                   لماذا الحوكمة أهم من الذكاء →
                 </Link>
               </div>
-              <Link href="/executive-brief" className="btn-primary px-6">
+              <Link href="/proof#executive-brief" className="btn-primary px-6">
                 طلب إحاطة تنفيذية
               </Link>
             </div>

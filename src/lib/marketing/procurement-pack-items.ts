@@ -107,7 +107,7 @@ export const procurementPackItems: ProcurementPackItem[] = [
   {
     title: "نتائج التقييم التشغيلي",
     body: "مقاييس مجمّعة — تُنشر بصدق عند اكتمال تقييمين تشغيليين أو أكثر.",
-    href: "/pilot-outcomes",
+    href: "/proof#outcomes",
     cta: "نتائج التقييم",
   },
   {
@@ -119,7 +119,7 @@ export const procurementPackItems: ProcurementPackItem[] = [
   {
     title: "إطار التقييم التشغيلي",
     body: "معايير قرار بالأدلة، أبعاد التقييم، وأمثلة أدلة تُلتقط أثناء التجربة.",
-    href: "/pilot-proof",
+    href: "/proof#evaluation-framework",
     cta: "إطار التقييم",
   },
   {

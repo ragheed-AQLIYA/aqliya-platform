@@ -212,7 +212,7 @@ export default function CaseStudiesPage() {
               >
                 استكشف LocalContentOS
               </Link>
-              <Link href="/proof-library" className="btn-outline px-5 py-2.5 text-sm">
+              <Link href="/proof#evidence-samples" className="btn-outline px-5 py-2.5 text-sm">
                 راجع حزمة الإثبات
               </Link>
             </div>

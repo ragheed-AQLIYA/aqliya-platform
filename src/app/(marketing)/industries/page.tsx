@@ -48,7 +48,7 @@ const sectors = [
       "توثيق قرارات المشتريات والترسية",
       "الجاهزية التنظيمية",
     ],
-    proofHref: "/executive-brief",
+    proofHref: "/proof#executive-brief",
   },
   {
     id: "enterprise",
@@ -111,7 +111,7 @@ const sectors = [
       "تقارير المحتوى المحلي",
       "أثر القرارات الشرائية",
     ],
-    proofHref: "/proof-library",
+    proofHref: "/proof#evidence-samples",
   },
 ];
 

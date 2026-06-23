@@ -54,7 +54,7 @@ export default function PrintEvaluationSowEnPage() {
         <h2>4. Success criteria</h2>
         <p>
           Derived from{" "}
-          <Link href="https://aqliya.com/pilot-proof">aqliya.com/pilot-proof</Link>{" "}
+          <Link href="https://aqliya.com/proof#evaluation-framework">aqliya.com/proof</Link>{" "}
           — client and AQLIYA select 5–8 critical criteria before start.
         </p>
 

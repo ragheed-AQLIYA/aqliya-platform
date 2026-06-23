@@ -49,7 +49,7 @@ export default function PrintPilotSowTemplatePage() {
         <h2>4. معايير النجاح (28 بُعداً)</h2>
         <p>
           تُستمد من{" "}
-          <Link href="https://aqliya.com/pilot-proof">/pilot-proof</Link> —
+          <Link href="https://aqliya.com/proof#evaluation-framework">/proof</Link> —
           يختار العميل وAQLIYA 5–8 معايير حاسمة قبل البدء.
         </p>
 

@@ -76,7 +76,7 @@ export default function PrintPilotWeeklyMetricsPage() {
         <h2>ربط بإطار التقييم</h2>
         <p>
           معايير قرار بالأدلة:{" "}
-          <Link href="https://aqliya.com/pilot-proof">aqliya.com/pilot-proof</Link>
+          <Link href="https://aqliya.com/proof#evaluation-framework">aqliya.com/proof</Link>
         </p>
 
         <footer className="print-footer">

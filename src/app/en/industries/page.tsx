@@ -49,7 +49,7 @@ const sectors = [
       "Procurement and award decision documentation",
       "Regulatory readiness",
     ],
-    proofHref: "/en/executive-brief",
+    proofHref: "/en/proof#executive-brief",
   },
   {
     id: "enterprise",
@@ -112,7 +112,7 @@ const sectors = [
       "Local content reports",
       "Impact of procurement decisions",
     ],
-    proofHref: "/proof-library",
+    proofHref: "/en/proof#evidence-samples",
   },
 ];
 

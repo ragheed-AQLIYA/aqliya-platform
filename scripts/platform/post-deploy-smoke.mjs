@@ -277,7 +277,10 @@ async function main() {
   await checkHttp("Proof Center (/proof)", "/proof");
   await checkHttp("Procurement pack (/procurement-pack)", "/procurement-pack");
   await checkHttp("SOC2 roadmap (/soc2-roadmap)", "/soc2-roadmap");
-  await checkHttp("Pilot outcomes (/pilot-outcomes)", "/pilot-outcomes");
+  await checkRedirect("Legacy executive brief (/executive-brief)", "/executive-brief");
+  await checkRedirect("Legacy pilot proof (/pilot-proof)", "/pilot-proof");
+  await checkRedirect("Legacy proof library (/proof-library)", "/proof-library");
+  await checkRedirect("Legacy pilot outcomes (/pilot-outcomes)", "/pilot-outcomes");
   await checkHttp("Executive brief PDF (/print/executive-brief)", "/print/executive-brief");
   await checkHttp("Security summary PDF (/print/security-summary)", "/print/security-summary");
   await checkHttp("English home (/en)", "/en");

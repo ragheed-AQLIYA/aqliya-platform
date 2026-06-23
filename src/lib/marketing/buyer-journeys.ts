@@ -25,7 +25,7 @@ export const buyerJourneys: BuyerJourney[] = [
     subtitle: "CEO · مجلس إدارة · مدير عام",
     hook: "قرار استثمار في ٥ دقائق — ثم إثبات قبل أي التزام واسع.",
     steps: [
-      { label: "الملخص التنفيذي", href: "/executive-brief", time: "٥ دقائق" },
+      { label: "الملخص التنفيذي", href: "/proof#executive-brief", time: "٥ دقائق" },
       { label: "مركز الإثبات", href: "/proof", time: "١٥ دقيقة" },
       { label: "الديمو التفاعلي", href: "/demo", time: "١٠ دقائق" },
     ],
@@ -40,7 +40,7 @@ export const buyerJourneys: BuyerJourney[] = [
     steps: [
       { label: "دليل المدير المالي", href: "/buyers/cfo", time: "١٠ دقائق" },
       { label: "نظام AuditOS", href: "/products/audit", time: "٨ دقائق" },
-      { label: "مكتبة الأدلة", href: "/proof-library", time: "١٥ دقيقة" },
+      { label: "مكتبة الأدلة", href: "/proof#evidence-samples", time: "١٥ دقيقة" },
     ],
     primaryCta: { label: "طلب جلسة تنفيذية", href: "/contact" },
     secondaryCta: { label: "مشاهدة الديمو", href: "/demo" },
@@ -79,7 +79,7 @@ export const buyerJourneys: BuyerJourney[] = [
     steps: [
       { label: "دليل شريك التدقيق", href: "/buyers/audit-partner", time: "١٠ دقائق" },
       { label: "ديمو AuditOS", href: "/auditos", time: "١٣ دقيقة" },
-      { label: "إطار التقييم", href: "/pilot-proof", time: "١٠ دقائق" },
+      { label: "إطار التقييم", href: "/proof#evaluation-framework", time: "١٠ دقائق" },
     ],
     primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
     secondaryCta: { label: "قطاع المراجعة", href: "/industries#audit-firms" },
@@ -92,7 +92,7 @@ export const buyerJourneys: BuyerJourney[] = [
     steps: [
       { label: "حزمة المشتريات", href: "/procurement-pack", time: "٢٠ دقيقة" },
       { label: "نماذج التعاون", href: "/engagement-models", time: "١٠ دقائق" },
-      { label: "إطار التقييم التشغيلي", href: "/pilot-proof", time: "١٠ دقائق" },
+      { label: "إطار التقييم التشغيلي", href: "/proof#evaluation-framework", time: "١٠ دقائق" },
     ],
     primaryCta: { label: "طلب حزمة التقييم", href: "/contact" },
     secondaryCta: { label: "مركز الإثبات", href: "/proof" },
@@ -114,7 +114,7 @@ export const buyerJourneys: BuyerJourney[] = [
 
 export const universalJourneySteps: BuyerJourneyStep[] = [
   { label: "تشخيص", href: "/contact", time: "٤٥ دقيقة" },
-  { label: "تقييم تشغيلي", href: "/pilot-proof", time: "٢–٤ أسابيع" },
+  { label: "تقييم تشغيلي", href: "/proof#evaluation-framework", time: "٢–٤ أسابيع" },
   { label: "قرار بالأدلة", href: "/engagement-models", time: "جلسة واحدة" },
   { label: "تفعيل", href: "/how-we-work", time: "حسب النطاق" },
 ];

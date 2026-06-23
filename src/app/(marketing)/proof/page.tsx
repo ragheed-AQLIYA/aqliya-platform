@@ -1,131 +1,87 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { buyerJourneys } from "@/lib/marketing/buyer-journeys";
+import { DemoVideoSection } from "@/components/marketing/demo-video-section";
+import { ConversionBand } from "@/components/marketing/v2/marketing-shell";
+import {
+  deploymentOptions,
+  evidenceSamples,
+  executiveBriefLayers,
+  governancePrinciples,
+  outcomesFutureMetrics,
+  pilotDecisionOutcomes,
+  proofDimensions,
+  proofScenarios,
+} from "@/lib/marketing/proof-hub-content";
+import { publicEngagementGate } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
   title: "الإثبات | AQLIYA",
   description:
-    "ديمو تفاعلي، إطار تقييم تشغيلي، مكتبة مخرجات، وملخص أمن — كل ما تحتاجه لتقييم عقلية قبل أي قرار.",
+    "مركز إثبات موحّد: ديمو، ملخص تنفيذي، إطار تقييم تشغيلي، مكتبة مخرجات، وأمن — قبل أي التزام.",
 };
 
-const proofSections = [
-  {
-    id: "demo",
-    title: "الديمو التفاعلي",
-    subtitle: "شاهد — لا تقرأ فقط",
-    body: "رحلة تشغيلية كاملة على بيانات تجريبية. ١٠–١٣ دقيقة، بدون تسجيل، كل خطوة قابلة للتحقق.",
-    href: "/demo",
-    cta: "ابدأ الديمو",
-    secondaryHref: "/auditos",
-    secondaryCta: "مسار AuditOS المباشر",
-  },
-  {
-    id: "executive-brief",
-    title: "الملخص التنفيذي",
-    subtitle: "٥ دقائق للقيادة",
-    body: "ما هي عقلية، لماذا تهم مؤسستك، وكيف نثبت القيمة قبل أي التزام واسع.",
-    href: "/executive-brief",
-    cta: "اقرأ الملخص",
-  },
-  {
-    id: "pilot-framework",
-    title: "إطار التقييم التشغيلي",
-    subtitle: "كيف نثبت القيمة",
-    body: "ستة أبعاد تقييم، معايير قرار بالأدلة، وأمثلة أدلة تُلتقط أثناء التجربة — قبل أي التزام.",
-    href: "/pilot-proof",
-    cta: "إطار التقييم التشغيلي",
-  },
-  {
-    id: "evidence-library",
-    title: "مكتبة الأدلة",
-    subtitle: "مخرجات قابلة للمراجعة",
-    body: "نماذج ميزان مراجعة، قوائم مالية، سجل تدقيق، وحزم إغلاق — على بيانات تجريبية موثقة.",
-    href: "/proof-library",
-    cta: "مكتبة الإثبات",
-  },
-  {
-    id: "pilot-outcomes",
-    title: "نتائج التقييم التشغيلي",
-    subtitle: "مقاييس موثقة — عند الاكتمال",
-    body: "لا أرقام وهمية. مراجع مؤسسية تُنشر عند اكتمال تقييمات تشغيلية مع قرار بالأدلة.",
-    href: "/pilot-outcomes",
-    cta: "نتائج التقييم",
-  },
-  {
-    id: "procurement-pack",
-    title: "حزمة المشتريات",
-    subtitle: "PDF + وثائق التقييم",
-    body: "ملخص تنفيذي، ملخص أمن، إطار تقييم تشغيلي، ونماذج تعاون — لفريق المشتريات.",
-    href: "/procurement-pack",
-    cta: "حزمة التقييم",
-  },
-  {
-    id: "security",
-    title: "ملخص الأمن",
-    subtitle: "شفافية للمسؤول التقني",
-    body: "الصلاحيات، العزل بين المستأجرين، ملكية البيانات، نماذج النشر، وحدود الذكاء الاصطناعي.",
-    href: "/security",
-    cta: "الأمن المؤسسي",
-    secondaryHref: "/deployment",
-    secondaryCta: "بيئات النشر",
-  },
+const anchorNav = [
+  { id: "demo", label: "الديمو" },
+  { id: "executive-brief", label: "ملخص تنفيذي" },
+  { id: "evaluation-framework", label: "إطار التقييم" },
+  { id: "evidence-samples", label: "مكتبة الأدلة" },
+  { id: "outcomes", label: "النتائج" },
+  { id: "procurement", label: "المشتريات" },
 ];
 
-const supportingResources = [
-  { label: "حزمة المشتريات (PDF)", href: "/procurement-pack" },
-  { label: "دراسات الحالة (سيناريوهات تجريبية)", href: "/case-studies" },
-  { label: "دليل المشتري حسب الدور", href: "/buyers" },
-  { label: "نماذج التعاون", href: "/engagement-models" },
-  { label: "بنية الحوكمة", href: "/governance" },
+const externalLinks = [
+  { label: "حزمة المشتريات", href: "/procurement-pack" },
+  { label: "الأمن والنشر", href: "/security" },
+  { label: "دراسات الحالة", href: "/case-studies" },
+  { label: "من أين تبدأ", href: "/start" },
 ];
 
 export default function ProofCenterPage() {
   return (
     <div className="flex flex-col">
       <section className="hero-gradient relative overflow-hidden">
-        <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-22">
+        <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
               Proof Center
             </span>
-            <h1 className="mt-5 text-4xl font-black text-white sm:text-5xl">
+            <h1 className="mt-4 text-4xl font-black text-white sm:text-5xl">
               مركز الإثبات
             </h1>
-            <p className="mt-5 text-lg leading-8 text-white/60">
-              لا نطلب منك الإيمان بالكلام. كل ما تحتاجه لتقييم عقلية — ديمو،
-              وثائق، معايير تقييم تشغيلي، وأمن — في مكان واحد.
+            <p className="mt-4 text-lg leading-8 text-white/60">
+              كل ما تحتاجه لتقييم عقلية في مكان واحد — ديمو، وثائق، معايير،
+              ومخرجات تجريبية. {publicEngagementGate}
             </p>
-            <p className="mt-3 text-sm text-white/40">
-              جميع الأمثلة على بيانات تجريبية. لا بيانات عملاء حقيقيين.
+            <p className="mt-2 text-sm text-white/40">
+              بيانات تجريبية فقط — لا بيانات عملاء حقيقيين.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href="/start" className="btn-primary h-11 px-6">
-                من أين تبدأ؟
-              </Link>
-              <Link href="/demo" className="btn-outline border-white/15 text-white/70 h-11 px-6">
-                ابدأ الديمو
-              </Link>
-            </div>
           </div>
         </div>
       </section>
 
-      <section className="border-t bg-muted/10 py-12">
+      <section className="sticky top-14 z-40 border-b bg-background/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-2 px-6 py-3">
+          {anchorNav.map((a) => (
+            <a
+              key={a.id}
+              href={`#${a.id}`}
+              className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium hover:border-primary/40 hover:text-primary"
+            >
+              {a.label}
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t bg-muted/10 py-10">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-lg font-black text-foreground">
-              اختر مسارك حسب الدور
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              كل دور له ترتيب محتوى مقترح — قبل جلسة التشخيص.
-            </p>
-          </div>
-          <div className="mt-8 flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             {buyerJourneys.map((j) => (
               <Link
                 key={j.id}
                 href={`/start#${j.id}`}
-                className="rounded-full border border-border/60 bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+                className="rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs hover:border-primary/30"
               >
                 {j.label}
               </Link>
@@ -134,56 +90,159 @@ export default function ProofCenterPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-        <div className="space-y-6">
-          {proofSections.map((section) => (
-            <article
-              key={section.id}
-              id={section.id}
-              className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/15 p-6 sm:p-8"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div className="max-w-2xl">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">
-                    {section.subtitle}
-                  </p>
-                  <h2 className="mt-2 text-xl font-black text-foreground sm:text-2xl">
-                    {section.title}
-                  </h2>
-                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                    {section.body}
-                  </p>
-                </div>
-                <div className="flex shrink-0 flex-col gap-2">
-                  <Link href={section.href} className="btn-primary h-10 px-6 text-sm">
-                    {section.cta}
-                  </Link>
-                  {section.secondaryHref && (
-                    <Link
-                      href={section.secondaryHref}
-                      className="btn-outline h-10 px-6 text-sm text-center"
-                    >
-                      {section.secondaryCta}
-                    </Link>
-                  )}
-                </div>
+      {/* Demo */}
+      <section id="demo" className="scroll-mt-28 border-t">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <h2 className="text-2xl font-black">الديمو التفاعلي</h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            مسار تشغيلي كامل ١٠–١٣ دقيقة على بيانات تجريبية — بدون تسجيل.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/demo" className="btn-primary h-10 px-6 text-sm">
+              ابدأ الديمو
+            </Link>
+            <Link href="/auditos" className="btn-outline h-10 px-6 text-sm">
+              مسار AuditOS المباشر
+            </Link>
+          </div>
+        </div>
+        <DemoVideoSection locale="ar" />
+      </section>
+
+      {/* Executive brief */}
+      <section id="executive-brief" className="scroll-mt-28 border-t bg-muted/10">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <h2 className="text-2xl font-black">الملخص التنفيذي</h2>
+          <p className="mt-2 text-sm text-muted-foreground">٥ دقائق للقيادة</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {executiveBriefLayers.map((layer) => (
+              <div key={layer.name} className="rounded-xl border border-border/60 bg-background p-5">
+                <h3 className="font-bold">{layer.name}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{layer.description}</p>
               </div>
-            </article>
-          ))}
+            ))}
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {governancePrinciples.map((p) => (
+              <div key={p.title} className="rounded-xl border border-primary/15 bg-primary/[0.03] p-5">
+                <h3 className="text-sm font-bold text-primary">{p.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{p.detail}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 space-y-3">
+            {deploymentOptions.map((d) => (
+              <div
+                key={d.name}
+                className="flex flex-wrap items-baseline justify-between gap-2 rounded-lg border border-border/50 px-4 py-3 text-sm"
+              >
+                <span className="font-semibold">{d.name}</span>
+                <span className="text-muted-foreground">{d.status}</span>
+                <span className="w-full text-xs text-muted-foreground/80">{d.note}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/print/executive-brief" target="_blank" className="btn-outline h-10 px-5 text-sm">
+              PDF للطباعة
+            </Link>
+            <Link href="/en/proof#executive-brief" className="btn-outline h-10 px-5 text-sm">
+              English brief
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section className="section-gradient-light border-t">
-        <div className="mx-auto max-w-7xl px-6 py-14 sm:py-16">
-          <h2 className="text-center text-lg font-black text-foreground">
-            موارد داعمة
-          </h2>
+      {/* Evaluation framework */}
+      <section id="evaluation-framework" className="scroll-mt-28 border-t">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <h2 className="text-2xl font-black">إطار التقييم التشغيلي</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            ستة أبعاد + سيناريوهات قابلة للتحقق في الديمو
+          </p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            {proofDimensions.map((d) => (
+              <div key={d.dimension} className="rounded-xl border border-border/60 p-4">
+                <h3 className="text-sm font-bold">{d.dimension}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{d.question}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 space-y-3">
+            {proofScenarios.map((s) => (
+              <div key={s.title} className="rounded-xl border border-border/60 p-4">
+                <h3 className="font-semibold">{s.title}</h3>
+                <p className="mt-1 text-sm text-primary">{s.verifiable}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {pilotDecisionOutcomes.map((o) => (
+              <div key={o.outcome} className="rounded-xl border border-border/60 p-4 text-sm">
+                <p className="font-bold">{o.outcome}</p>
+                <p className="mt-1 text-muted-foreground">{o.detail}</p>
+              </div>
+            ))}
+          </div>
+          <Link href="/engagement-models" className="mt-6 inline-block text-sm font-medium text-primary hover:underline">
+            نماذج التعاون والتقييم المجاني ←
+          </Link>
+        </div>
+      </section>
+
+      {/* Evidence samples */}
+      <section id="evidence-samples" className="scroll-mt-28 border-t bg-muted/10">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <h2 className="text-2xl font-black">مكتبة الأدلة</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            نماذج مخرجات على بيانات تجريبية — للمراجعة لا للاعتماد النهائي
+          </p>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {evidenceSamples.map((sample) => (
+              <div key={sample.id} className="rounded-xl border border-border/60 bg-background p-5">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                  {sample.category}
+                </p>
+                <h3 className="mt-1 font-bold">{sample.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{sample.highlight}</p>
+                <span className="mt-3 inline-block text-[10px] text-amber-600">بيانات تجريبية</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Outcomes */}
+      <section id="outcomes" className="scroll-mt-28 border-t">
+        <div className="mx-auto max-w-3xl px-6 py-14">
+          <h2 className="text-2xl font-black text-center">نتائج التقييم التشغيلي</h2>
+          <div className="mt-8 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-8 text-center">
+            <p className="text-sm font-semibold text-amber-700">الحالة الحالية</p>
+            <p className="mt-2 text-xl font-black">مراجع مؤسسية قيد الإعداد للنشر</p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              لا أرقام وهمية. النتائج المقاسة تُنشر هنا عند اكتمال أول تقييم تشغيلي مع قرار بالأدلة.
+            </p>
+          </div>
+          <ul className="mt-8 space-y-2">
+            {outcomesFutureMetrics.map((m) => (
+              <li key={m} className="rounded-lg border border-border/60 px-4 py-3 text-sm text-muted-foreground">
+                {m}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Procurement + external */}
+      <section id="procurement" className="scroll-mt-28 border-t bg-muted/10">
+        <div className="mx-auto max-w-7xl px-6 py-14 text-center">
+          <h2 className="text-xl font-black">موارد إضافية</h2>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            {supportingResources.map((r) => (
+            {externalLinks.map((r) => (
               <Link
                 key={r.href}
                 href={r.href}
-                className="rounded-full border border-border/60 bg-background px-4 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
+                className="rounded-full border border-border/60 bg-background px-4 py-2 text-sm hover:border-primary/30"
               >
                 {r.label}
               </Link>
@@ -192,27 +251,7 @@ export default function ProofCenterPage() {
         </div>
       </section>
 
-      <section className="section-gradient-dark border-t border-white/5">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-2xl font-black text-white">
-              جاهز للخطوة التالية؟
-            </h2>
-            <p className="mt-4 text-sm leading-7 text-white/55">
-              بعد مراجعة الإثبات، احجز جلسة تشخيص مجانية — نحدد معاً إذا كانت
-              عقلية مناسبة لسياقك وما المسار التشغيلي الأنسب.
-            </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-4">
-              <Link href="/contact" className="btn-primary h-11 px-8">
-                احجز جلسة تشخيص
-              </Link>
-              <Link href="/platform" className="btn-secondary h-11 px-8">
-                المنصة
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ConversionBand />
     </div>
   );
 }

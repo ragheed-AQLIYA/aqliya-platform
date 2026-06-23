@@ -11,7 +11,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     subtitle: "CEO · Board · Managing Director",
     hook: "Five-minute investment read — then proof before any wide commitment.",
     steps: [
-      { label: "Executive brief", href: "/en/executive-brief", time: "5 min" },
+      { label: "Executive brief", href: "/en/proof#executive-brief", time: "5 min" },
       { label: "Proof center", href: "/en/proof", time: "15 min" },
       { label: "Interactive demo", href: "/en/demo", time: "10 min" },
     ],
@@ -26,7 +26,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     steps: [
       { label: "CFO buyer guide", href: "/buyers#cfo", time: "10 min" },
       { label: "AuditOS", href: "/en/products/audit", time: "8 min" },
-      { label: "Evidence library", href: "/proof-library", time: "15 min" },
+      { label: "Evidence library", href: "/en/proof#evidence-samples", time: "15 min" },
     ],
     primaryCta: { label: "Request executive session", href: "/en/contact" },
     secondaryCta: { label: "Watch demo", href: "/en/demo" },
@@ -65,7 +65,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     steps: [
       { label: "Audit partner guide", href: "/buyers#audit-partner", time: "10 min" },
       { label: "AuditOS demo", href: "/auditos", time: "13 min" },
-      { label: "Evaluation framework", href: "/pilot-proof", time: "10 min" },
+      { label: "Evaluation framework", href: "/en/proof#evaluation-framework", time: "10 min" },
     ],
     primaryCta: { label: "Book diagnostic session", href: "/en/contact" },
     secondaryCta: { label: "Audit sector", href: "/en/industries#audit-firms" },
@@ -78,7 +78,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     steps: [
       { label: "Procurement pack", href: "/en/procurement-pack", time: "20 min" },
       { label: "Engagement models", href: "/en/engagement-models", time: "10 min" },
-      { label: "Evaluation framework", href: "/pilot-proof", time: "10 min" },
+      { label: "Evaluation framework", href: "/en/proof#evaluation-framework", time: "10 min" },
     ],
     primaryCta: { label: "Request evaluation pack", href: "/en/contact" },
     secondaryCta: { label: "Proof center", href: "/en/proof" },
@@ -100,7 +100,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
 
 export const universalJourneyStepsEn: BuyerJourneyStep[] = [
   { label: "Diagnostic", href: "/en/contact", time: "45 min" },
-  { label: "Operational evaluation", href: "/pilot-proof", time: "2–4 weeks" },
+  { label: "Operational evaluation", href: "/en/proof#evaluation-framework", time: "2–4 weeks" },
   { label: "Evidence-based decision", href: "/en/engagement-models", time: "One session" },
   { label: "Activation", href: "/en/how-we-work", time: "Scope-dependent" },
 ];

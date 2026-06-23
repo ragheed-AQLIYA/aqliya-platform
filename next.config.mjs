@@ -26,7 +26,7 @@ const nextConfig = {
     return [
       {
         source: "/executive-briefing",
-        destination: "/executive-brief",
+        destination: "/proof#executive-brief",
         permanent: true,
       },
       {
@@ -78,6 +78,31 @@ const nextConfig = {
         source: "/how-we-work",
         destination: "/start",
         permanent: false,
+      },
+      {
+        source: "/executive-brief",
+        destination: "/proof#executive-brief",
+        permanent: true,
+      },
+      {
+        source: "/pilot-proof",
+        destination: "/proof#evaluation-framework",
+        permanent: true,
+      },
+      {
+        source: "/proof-library",
+        destination: "/proof#evidence-samples",
+        permanent: true,
+      },
+      {
+        source: "/pilot-outcomes",
+        destination: "/proof#outcomes",
+        permanent: true,
+      },
+      {
+        source: "/en/executive-brief",
+        destination: "/en/proof#executive-brief",
+        permanent: true,
       },
     ]
   },

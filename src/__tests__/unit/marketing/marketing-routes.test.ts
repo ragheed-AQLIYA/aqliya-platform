@@ -47,6 +47,10 @@ describe("locale path mappings for EN proof layer", () => {
     ["/products", "/en/products"],
     ["/start", "/en/start"],
     ["/use-cases", "/en/use-cases"],
+    ["/executive-brief", "/en/proof"],
+    ["/pilot-proof", "/en/proof"],
+    ["/proof-library", "/en/proof"],
+    ["/pilot-outcomes", "/en/proof"],
     ["/en", "/en"],
     ["/en/platform", "/en/platform"],
   ])("maps %s → %s", (ar, en) => {
