@@ -424,7 +424,7 @@ export default function AboutPage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href="/contact" className="btn-primary h-12 px-8 text-base">
-              احجز جلسة تشخيص
+              احجز مكالمة
             </Link>
             <Link href="/platform#capabilities" className="btn-outline h-12 px-8 text-base">
               أنظمة التشغيل

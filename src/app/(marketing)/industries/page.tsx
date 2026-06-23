@@ -220,7 +220,7 @@ export default function IndustriesPage() {
                   </Link>
                 )}
                 <Link href="/contact" className="btn-primary h-10 px-6 text-sm">
-                  احجز جلسة تشخيص
+                  احجز مكالمة
                 </Link>
               </div>
             </article>

@@ -132,16 +132,16 @@ export function ProductPageTemplate({
       )}
 
       <ConversionBand
-        title={locale === "en" ? "Start with a diagnostic session — free" : undefined}
+        title={locale === "en" ? "We start by understanding your context" : undefined}
         body={
           locale === "en"
-            ? "We map your institution's context and recommend the next step."
+            ? "Free intro call — we explain the platform and suggest a sensible next step."
             : undefined
         }
         primaryHref={locale === "en" ? "/en/contact" : "/contact"}
-        primaryLabel={locale === "en" ? "Book diagnostic session" : undefined}
+        primaryLabel={locale === "en" ? "Book a call" : undefined}
         secondaryHref={locale === "en" ? "/en/proof" : "/proof"}
-        secondaryLabel={locale === "en" ? "Proof center" : undefined}
+        secondaryLabel={locale === "en" ? "Proof materials" : undefined}
       />
     </div>
   );

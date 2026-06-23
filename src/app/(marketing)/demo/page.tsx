@@ -345,7 +345,7 @@ export default function DemoPage() {
             </div>
             <div className="glass-card rounded-xl p-6 text-center">
               <h3 className="text-white font-semibold mb-2">
-                تقييم تشغيلي على بياناتك
+                تجربة على بياناتكم
               </h3>
               <p className="text-slate-400 text-sm mb-5">٢-٤ أسابيع، مجاني</p>
               <Link
@@ -356,7 +356,7 @@ export default function DemoPage() {
               </Link>
             </div>
             <div className="glass-card rounded-xl p-6 text-center">
-              <h3 className="text-white font-semibold mb-2">جلسة تنفيذية</h3>
+              <h3 className="text-white font-semibold mb-2">مكالمة للقيادة</h3>
               <p className="text-slate-400 text-sm mb-5">للقيادة والمدراء</p>
               <ScheduleDiagnosticCta className="w-full rounded-xl py-2.5 text-sm font-medium" />
             </div>

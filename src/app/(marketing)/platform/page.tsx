@@ -387,7 +387,7 @@ export default function PlatformPage() {
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-4">
               <Link href="/contact" className="btn-primary h-11 px-8">
-                احجز جلسة تشخيص
+                احجز مكالمة
               </Link>
               <Link href="/proof" className="btn-secondary h-11 px-8">
                 مركز الإثبات

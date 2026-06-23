@@ -1,9 +1,11 @@
 # AQLIYA Marketing Terminology System
 
-**Version:** 1.0  
-**Status:** Official — public-facing website copy only  
+**Version:** 1.1 (R6.5 — aligned with `VOICE_GUIDE.md`)  
+**Status:** Official — internal terminology reference  
 **Scope:** Marketing routes, labels, navigation, CTAs, and customer-facing copy  
 **Does NOT apply to:** `PRODUCT_STATUS_MATRIX.md`, `READINESS_GATES.md`, roadmap, architecture, or internal engineering docs
+
+**Customer copy authority:** For live website text, follow `docs/marketing/VOICE_GUIDE.md` and `src/lib/marketing/copy-*.ts`. This document defines **internal ↔ public mapping** — do not paste it verbatim into Hero or CTAs.
 
 ---
 
@@ -30,24 +32,25 @@ Never appear on **vision-layer** pages (homepage, platform, about, `/products/*`
 | internal preview, placeholder | Engineering honesty markers |
 | قيد التطوير, جاهز للبايلوت, نشط (as status) | Arabic equivalents of build state |
 
-**Proof-layer** pages (`/proof`, `/pilot-proof`, `/pilot-outcomes`, `/buyers`, `/engagement-models`, `/procurement-pack`, `/deployment`) may describe **operational evaluation** and **institution activation** processes — but still avoid L-levels and engineering jargon.
+**Proof-layer** pages (`/proof`, `/demo`, `/procurement-pack`, `/deployment`, `/security`, `/contact`) may describe **trials on customer data** and **rollout** — but use plain language per `VOICE_GUIDE.md` (e.g. «تجربة على بياناتكم» not «تقييم تشغيلي»). Still avoid L-levels and engineering jargon.
 
 ---
 
 ## Approved Vocabulary
 
-| Avoid | Use (Arabic) | Use (English) |
-|-------|--------------|---------------|
-| Product / Products | نظام تشغيل / أنظمة التشغيل | Operating system / Operating systems |
-| Product family | أنظمة التشغيل على المنصة | Operating systems on the platform |
-| Pilot | تقييم تشغيلي | Operational evaluation |
-| Conditional / coordinated pilot | نطاق تفعيل مؤسسي | Institution activation scope |
-| Active | متكامل في المنصة | Integrated into the platform |
-| Under development | في خارطة المنصة | On the platform roadmap |
-| Shared application | قدرة مشتركة | Shared capability |
-| Ready for pilot | جاهز للتفعيل المؤسسي | Ready for institutional activation |
-| Go/No-Go | قرار بالأدلة | Evidence-based decision |
-| Learn more | استكشف حالات الاستخدام / راجع حزمة الإثبات | Explore use cases / Review proof package |
+| Internal / legacy (avoid on site) | Customer-facing (AR) | Customer-facing (EN) |
+|-----------------------------------|----------------------|----------------------|
+| Product / Products | حل / حلول عقلية | Solution / AQLIYA solutions |
+| Pilot / operational evaluation | تجربة على بياناتكم | Trial on your data |
+| Diagnostic session | مكالمة تعريفية | Intro call |
+| Institution activation | تشغيل / البدء في التطبيق | Rollout / go live |
+| Ready for institutional activation | متاح للتطبيق | Available to deploy |
+| Integrated (system) | متكامل في المنصة | Integrated into platform |
+| On platform roadmap | قريباً على خارطة المنصة | Coming on platform roadmap |
+| Shared capability | خدمة مشتركة | Shared service |
+| Evidence-based decision | تقرير بعد النتائج | Report after you see results |
+| Go/No-Go | قراركم بعد التجربة | Your decision after the trial |
+| Learn more | استكشف الأمثلة / راجع الإثبات | Explore examples / Review proof |
 
 ---
 
@@ -67,7 +70,7 @@ Language: problems, outcomes, institutional capability, governance philosophy.
 
 Routes: `/proof`, `/demo`, `/pilot-proof`, `/pilot-outcomes`, `/proof-library`, `/executive-brief`, `/buyers/*`, `/engagement-models`, `/procurement-pack`, `/deployment`, `/security`, `/contact`
 
-Language: operational evaluation, diagnostic session, proof package, activation scope.
+Language: trials on customer data, intro calls, proof materials, rollout scope.
 
 ---
 
@@ -75,11 +78,11 @@ Language: operational evaluation, diagnostic session, proof package, activation 
 
 | Context | Arabic CTA | English CTA |
 |---------|------------|---------------|
-| Primary conversion | احجز جلسة تشخيص | Book diagnostic session |
-| Enterprise buyer | ناقش التفعيل المؤسسي | Discuss institutional activation |
-| Executive | اطلب الملخص التنفيذي | Request executive briefing |
-| Evaluation | راجع حزمة الإثبات | Review proof package |
-| Exploration | استكشف حالات الاستخدام | Explore use cases |
+| Primary conversion | احجز مكالمة / تواصل معنا | Book a call / Talk to us |
+| Demo | شاهد الديمو | Watch the demo |
+| Proof | راجع الإثبات / مواد الإثبات | Review proof |
+| Start | من أين تبدأ؟ | Where to start? |
+| Executive | ملخص للقيادة | Leadership summary |
 
 Avoid: اعرف المزيد، اقرأ المزيد، انقر هنا (without context).
 
@@ -102,8 +105,8 @@ Avoid: اعرف المزيد، اقرأ المزيد، انقر هنا (without 
 | Context | Arabic | English |
 |---------|--------|---------|
 | Full identity | منصة ذكاء مؤسسي خاص ومحكوم | Private Governed Institutional Intelligence Platform |
-| Hero shorthand | منصة تشغيل مؤسسية | Institutional operating platform |
-| Trust principle | الذكاء يساعد. الإنسان يقرر. الدليل يحكم. | AI assists. Humans decide. Evidence governs. |
+| Hero shorthand | منصة للمراجعة والقرار والامتثال | Platform for audit, decisions, and compliance |
+| Trust principle | (Footer / `/governance` only — once) | (Footer / `/governance` only — once) |
 
 ---
 

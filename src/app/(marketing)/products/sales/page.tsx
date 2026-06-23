@@ -189,7 +189,7 @@ export default function SalesProductPage() {
         <EnterpriseCTA
           title="مهتم بمسار الذاكرة التجارية المحكومة؟"
           description="SalesOS في خارطة المنصة — ناقش نطاق التفعيل أو استكشف AuditOS وDecisionOS لحاجتك التشغيلية الفورية."
-          primaryLabel="احجز جلسة تشخيص"
+          primaryLabel="احجز مكالمة"
           primaryHref="/contact"
           secondaryLabel="مركز الإثبات"
           secondaryHref="/proof"

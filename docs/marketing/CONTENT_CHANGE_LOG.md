@@ -228,6 +228,27 @@
 
 ---
 
+## R6.5 — Convert layer + product CTAs (2026-06-23)
+
+| File | Change |
+|------|--------|
+| `src/lib/marketing/copy-contact.ts` | **New** — contact page + form AR copy |
+| `src/lib/marketing/copy-contact-en.ts` | **New** — EN mirror |
+| `src/app/(marketing)/contact/page.tsx` | Wired to `copy-contact` |
+| `src/app/(marketing)/contact/contact-form.tsx` | Plain interest options + locale support |
+| `src/app/en/contact/page.tsx` | Plain EN hero |
+| `src/lib/marketing/product-pages-content*.ts` | Status labels + CTAs aligned with R6 |
+| `src/components/layout/site-header.tsx` | Header CTA → «احجز مكالمة» |
+| `src/components/marketing/v2/product-page-template.tsx` | EN ConversionBand plain copy |
+| `src/app/(marketing)/about/page.tsx` | CTA |
+| `src/app/(marketing)/platform/page.tsx` | CTA |
+| `src/app/(marketing)/industries/page.tsx` | CTA |
+| `src/app/(marketing)/demo/page.tsx` | Trial + leadership call labels |
+| `src/app/(marketing)/procurement-pack/page.tsx` | Metadata wording |
+| `docs/marketing/MARKETING_TERMINOLOGY.md` | v1.1 — VOICE_GUIDE alignment, CTA table |
+
+---
+
 ## Not Modified (by design)
 
 - `PRODUCT_STATUS_MATRIX.md`, `READINESS_GATES.md`, roadmaps, architecture docs

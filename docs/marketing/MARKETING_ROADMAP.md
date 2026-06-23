@@ -68,6 +68,8 @@
 | R3 | ProductPageTemplate + `/products` مختصر | ✅ |
 | R4 | `/start` hub (engagement + process + personas) + EN | ✅ |
 | R5 | `/security` + `/deployment` مختصر، pricing band، `/use-cases` ×4 | ✅ |
+| R6 | Voice reset — plain copy home/start/proof | ✅ |
+| R6.5 | Contact + header + product CTAs + terminology sync | ✅ |
 
 **مرجع:** `MARKETING_REDESIGN_PLAN.md`
 

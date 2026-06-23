@@ -7,7 +7,7 @@ import { procurementPackItems } from "@/lib/marketing/procurement-pack-items";
 export const metadata: Metadata = {
   title: "حزمة التقييم للمشتريات | AQLIYA",
   description:
-    "وثائق جاهزة لفريق المشتريات والأمن: ملخص تنفيذي، أمن، DPA، إقامة بيانات، SOW تقييم تشغيلي، ومركز الإثبات.",
+    "وثائق جاهزة لفريق المشتريات والأمن: ملخص تنفيذي، أمن، DPA، إقامة بيانات، نموذج تجربة، ومواد الإثبات.",
 };
 
 export default function ProcurementPackPage() {

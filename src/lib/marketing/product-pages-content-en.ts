@@ -8,7 +8,7 @@ export const auditProductContentEn: ProductPageContent = {
   },
   eyebrow: "AuditOS",
   productName: "Audit & compliance operating system",
-  statusLabel: "Ready for institutional activation",
+  statusLabel: "Available to deploy",
   problemLine:
     "Spreadsheets and email — audit work that is hard to defend to partners or regulators.",
   outcomeLine:
@@ -34,9 +34,9 @@ export const auditProductContentEn: ProductPageContent = {
     "Immutable audit trail",
   ],
   demoHref: "/auditos",
-  demoLabel: "AuditOS demo — 13 min",
-  primaryCta: { label: "Book diagnostic session", href: "/en/contact" },
-  secondaryCta: { label: "Proof center", href: "/en/proof" },
+  demoLabel: "AuditOS demo",
+  primaryCta: { label: "Book a call", href: "/en/contact" },
+  secondaryCta: { label: "Proof materials", href: "/en/proof" },
 };
 
 export const decisionProductContentEn: ProductPageContent = {
@@ -72,7 +72,7 @@ export const decisionProductContentEn: ProductPageContent = {
   ],
   demoHref: "/en/demo",
   demoLabel: "Interactive demo",
-  primaryCta: { label: "Discuss activation", href: "/en/contact" },
+  primaryCta: { label: "Talk to us", href: "/en/contact" },
   secondaryCta: { label: "Use cases", href: "/en/use-cases" },
 };
 
@@ -84,7 +84,7 @@ export const localContentProductContentEn: ProductPageContent = {
   },
   eyebrow: "LocalContentOS",
   productName: "Local content & supply chain operating system",
-  statusLabel: "Institutional activation scope",
+  statusLabel: "Available by agreed scope",
   problemLine:
     "Fragmented supplier and spend data — delayed local content reports that are hard to defend.",
   outcomeLine:
@@ -111,6 +111,6 @@ export const localContentProductContentEn: ProductPageContent = {
   ],
   demoHref: "/en/proof#evidence-samples",
   demoLabel: "Sample outputs",
-  primaryCta: { label: "Discuss activation", href: "/en/contact" },
+  primaryCta: { label: "Talk to us", href: "/en/contact" },
   secondaryCta: { label: "Government sector", href: "/en/industries#government" },
 };

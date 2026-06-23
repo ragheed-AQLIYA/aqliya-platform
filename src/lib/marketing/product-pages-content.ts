@@ -31,7 +31,7 @@ export const auditProductContent: ProductPageContent = {
   },
   eyebrow: "AuditOS",
   productName: "نظام تشغيل المراجعة والالتزام",
-  statusLabel: "جاهز للتفعيل المؤسسي",
+  statusLabel: "متاح للتطبيق",
   problemLine: "Excel وبريد وملفات متفرقة — مراجعة يصعب الدفاع عنها أمام الشريك أو الجهة التنظيمية.",
   outcomeLine: "مسار واحد من المصدر إلى الاعتماد — كل رقم مرتبط بمصدره، كل قرار موثّق.",
   before: [
@@ -55,9 +55,9 @@ export const auditProductContent: ProductPageContent = {
     "سجل تدقيق لا يُعدَّل",
   ],
   demoHref: "/auditos",
-  demoLabel: "ديمو AuditOS — ١٣ دقيقة",
-  primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
-  secondaryCta: { label: "مركز الإثبات", href: "/proof" },
+  demoLabel: "ديمو AuditOS",
+  primaryCta: { label: "احجز مكالمة", href: "/contact" },
+  secondaryCta: { label: "مواد الإثبات", href: "/proof" },
   technicalDetails: {
     title: "المحطات التقنية (١٢ محطة)",
     steps: [
@@ -104,7 +104,7 @@ export const decisionProductContent: ProductPageContent = {
   ],
   demoHref: "/demo",
   demoLabel: "ديمو تفاعلي",
-  primaryCta: { label: "ناقش تفعيل النظام", href: "/contact" },
+  primaryCta: { label: "تواصل معنا", href: "/contact" },
   secondaryCta: { label: "حالات الاستخدام", href: "/use-cases" },
 };
 
@@ -116,7 +116,7 @@ export const localContentProductContent: ProductPageContent = {
   },
   eyebrow: "LocalContentOS",
   productName: "نظام المحتوى المحلي وسلاسل التوريد",
-  statusLabel: "نطاق تفعيل مؤسسي",
+  statusLabel: "متاح باتفاق النطاق",
   problemLine: "بيانات موردين وإنفاق متفرقة — تقارير محتوى محلي متأخرة وغير قابلة للدفاع.",
   outcomeLine: "امتثال ومحتوى محلي كمسار تشغيلي — ليس تقارير لحظية من جداول.",
   before: [
@@ -141,7 +141,7 @@ export const localContentProductContent: ProductPageContent = {
   ],
   demoHref: "/proof#evidence-samples",
   demoLabel: "نماذج مخرجات",
-  primaryCta: { label: "ناقش التفعيل", href: "/contact" },
+  primaryCta: { label: "تواصل معنا", href: "/contact" },
   secondaryCta: { label: "قطاع الحكومة", href: "/industries#government" },
 };
 
@@ -160,7 +160,7 @@ export const tier1ProductCards: ProductIndexCard[] = [
     id: "audit",
     title: "AuditOS",
     subtitle: "مراجعة وامتثال مالي",
-    statusLabel: "جاهز للتفعيل المؤسسي",
+    statusLabel: "متاح للتطبيق",
     problem: "من ميزان المراجعة إلى حزمة الارتباط — مسار أدلة كامل.",
     href: "/products/audit",
   },
@@ -176,7 +176,7 @@ export const tier1ProductCards: ProductIndexCard[] = [
     id: "local-content",
     title: "LocalContentOS",
     subtitle: "محتوى محلي وامتثال",
-    statusLabel: "نطاق تفعيل مؤسسي",
+    statusLabel: "متاح باتفاق النطاق",
     problem: "موردون، إنفاق، مؤشرات، وتقارير تنظيمية في مسار واحد.",
     href: "/products/local-content",
   },
@@ -187,8 +187,8 @@ export const roadmapProductCards: ProductIndexCard[] = [
     id: "office-ai",
     title: "Office AI Assistant",
     subtitle: "مساعد مؤسسي مشترك",
-    statusLabel: "قدرة مشتركة",
-    problem: "مساعد محكوم عبر أنظمة التشغيل — ليس chatbot عام.",
+    statusLabel: "خدمة مشتركة",
+    problem: "مساعد مؤسسي عبر حلول المنصة.",
     href: "/products/office-ai",
     muted: true,
   },
@@ -196,7 +196,7 @@ export const roadmapProductCards: ProductIndexCard[] = [
     id: "sales",
     title: "SalesOS",
     subtitle: "ذاكرة تجارية",
-    statusLabel: "في خارطة المنصة",
+    statusLabel: "قريباً على خارطة المنصة",
     problem: "تأهيل، pipeline، وذاكرة مبيعات — نموذج أولي.",
     href: "/products/sales",
     muted: true,

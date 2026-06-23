@@ -136,7 +136,7 @@ export function SiteHeader({ locale: localeProp }: SiteHeaderProps = {}) {
             href={contactHref}
             className="mr-1 inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/15 transition-all duration-200 hover:bg-primary/90 hover:shadow-md hover:shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            {locale === "en" ? "Schedule diagnostic" : "احجز جلسة تشخيص"}
+            {locale === "en" ? "Book a call" : "احجز مكالمة"}
           </Link>
         </nav>
 
@@ -205,7 +205,7 @@ export function SiteHeader({ locale: localeProp }: SiteHeaderProps = {}) {
               onClick={() => setOpen(false)}
               className="btn-primary mt-2 h-11 text-sm"
             >
-              {locale === "en" ? "Schedule diagnostic" : "احجز جلسة تشخيص"}
+              {locale === "en" ? "Book a call" : "احجز مكالمة"}
             </Link>
           </nav>
         </div>
