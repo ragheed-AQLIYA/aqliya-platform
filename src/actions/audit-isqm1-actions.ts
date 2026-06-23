@@ -6,7 +6,7 @@
 // ─── AuditOS L6.7 ISQM1 Quality Engine Actions ───
 
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
-import { isqm1Engine, type QualityObjectiveType, type QualityCategory, type QualityStatus, type FindingType, type FindingSeverity, type MonitorStatus, type ResponseStatus, type RemediationStatus } from "@/lib/audit/isqm1-engine";
+import { isqm1Engine } from "@/lib/audit/isqm1-engine";
 
 // ==================== Quality Objectives ====================
 

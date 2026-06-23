@@ -2,7 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { evaluateCondition } from "./condition-evaluator";
 
-import type { AbacEffect, AbacOperator } from "@prisma/client";
+import type { AbacEffect, AbacOperator, Prisma } from "@prisma/client";
+
+type AbacPolicyWithRelations = Prisma.AbacPolicyGetPayload<{
+  include: { conditions: true; assignments: true };
+}>;
 
 export interface AbacContext {
   userId: string;
@@ -264,8 +268,8 @@ export async function evaluateAccess(
     orderBy: { priority: "asc" },
   });
 
-  const applicablePolicies = policies.filter((policy: Record<string, unknown>) => {
-    const assignments = (policy as any).assignments as { userId?: string; roleId?: string }[] | undefined;
+  const applicablePolicies = policies.filter((policy: AbacPolicyWithRelations) => {
+    const assignments = policy.assignments;
     if (!assignments || assignments.length === 0) return true;
     return assignments.some((a) => {
       if (a.userId === context.userId) return true;
@@ -274,12 +278,11 @@ export async function evaluateAccess(
     });
   });
 
-  let allowMatch: (typeof applicablePolicies)[0] | null = null;
-  let denyMatch: (typeof applicablePolicies)[0] | null = null;
+  let allowMatch: AbacPolicyWithRelations | null = null;
+  let denyMatch: AbacPolicyWithRelations | null = null;
 
   for (const policy of applicablePolicies) {
-    const p = policy as any;
-    const conditions = p.conditions as { attribute: string; operator: string; value: string }[] | undefined;
+    const conditions = policy.conditions;
     const conditionsMatch =
       !conditions || conditions.length === 0
         ? true
@@ -288,9 +291,9 @@ export async function evaluateAccess(
           );
 
     if (conditionsMatch) {
-      if (p.effect === "DENY") {
+      if (policy.effect === "DENY") {
         denyMatch = policy;
-      } else if (p.effect === "ALLOW" && !allowMatch) {
+      } else if (policy.effect === "ALLOW" && !allowMatch) {
         allowMatch = policy;
       }
     }

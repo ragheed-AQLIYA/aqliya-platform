@@ -1,0 +1,91 @@
+/**
+ * Phase 9 — Knowledge Foundation Version Table.
+ *
+ * Server component rendering version list.
+ */
+import type { VersionListItem } from "@/lib/knowledge-foundation/types";
+
+const STATUS_LABELS: Record<string, string> = {
+  DRAFT: "مسودة",
+  APPROVED: "معتمد",
+  RELEASED: "مطلق",
+  ACTIVE: "نشط",
+  DEPRECATED: "متقاعد",
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  DRAFT: "bg-gray-100 text-gray-700",
+  APPROVED: "bg-blue-100 text-blue-700",
+  RELEASED: "bg-indigo-100 text-indigo-700",
+  ACTIVE: "bg-green-100 text-green-700",
+  DEPRECATED: "bg-amber-100 text-amber-700",
+};
+
+export function VersionTable({
+  versions,
+}: {
+  versions: VersionListItem[];
+}) {
+  console.error(JSON.stringify({ event: "KF_RENDER_ENTER", component: "VersionTable" }));
+
+  if (!versions || versions.length === 0) {
+    console.error(JSON.stringify({ event: "KF_RENDER_EXIT", component: "VersionTable" }));
+    return (
+      <div className="rounded-xl border bg-card p-8 text-center text-sm text-muted-foreground">
+        لا توجد إصدارات بعد. ابدأ بإنشاء أول إصدار معرفة مؤسسية.
+      </div>
+    );
+  }
+
+  console.error(JSON.stringify({ event: "KF_RENDER_EXIT", component: "VersionTable" }));
+  return (
+    <div className="overflow-x-auto rounded-xl border bg-card shadow-sm">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b bg-muted/50 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            <th className="px-4 py-3 text-right">الإصدار</th>
+            <th className="px-4 py-3 text-right">الحالة</th>
+            <th className="px-4 py-3 text-right">المرشّحات</th>
+            <th className="px-4 py-3 text-right">المنشئ</th>
+            <th className="px-4 py-3 text-right">المعتمد</th>
+            <th className="px-4 py-3 text-right">التاريخ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {versions.map((v) => (
+            <tr
+              key={v.id}
+              className="border-b last:border-0 hover:bg-muted/30"
+            >
+              <td className="px-4 py-3 font-medium">
+                <a
+                  href={`/knowledge-foundation/${v.id}`}
+                  className="text-primary underline-offset-4 hover:underline"
+                >
+                  v{v.versionNumber}
+                </a>
+              </td>
+              <td className="px-4 py-3">
+                <span
+                  className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    STATUS_COLORS[v.status] ?? ""
+                  }`}
+                >
+                  {STATUS_LABELS[v.status] ?? v.status}
+                </span>
+              </td>
+              <td className="px-4 py-3">{v.candidateCount}</td>
+              <td className="px-4 py-3">{v.createdByName ?? v.createdById}</td>
+              <td className="px-4 py-3">
+                {v.approvedByName ?? v.approvedById ?? "—"}
+              </td>
+              <td className="px-4 py-3 text-muted-foreground">
+                {new Date(v.createdAt).toLocaleDateString("ar-SA")}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}

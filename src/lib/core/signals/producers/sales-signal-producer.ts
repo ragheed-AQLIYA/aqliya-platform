@@ -1,4 +1,3 @@
-// @ts-nocheck
 // ─── SalesOS signal producer (in-memory store + optional prisma) ───
 
 import {
@@ -45,7 +44,7 @@ export async function collectSalesTaskSignals(
       (o) =>
         o.reviewStatus === "Draft" ||
         o.reviewStatus === "InReview" ||
-        o.stage === "qualification",
+        o.stage === "Qualification",
     )
     .map((o) => ({
       id: `opp-${o.id}`,
@@ -55,9 +54,9 @@ export async function collectSalesTaskSignals(
       action: `opportunity.${o.stage}`,
       resourceType: "SalesOpportunity",
       resourceId: o.id,
-      timestamp: o.updatedAt ?? o.createdAt,
-      summaryAr: `فرصة: ${o.title}`,
-      summaryEn: `Opportunity: ${o.title}`,
+      timestamp: o.updatedAt ?? o.createdAt ?? new Date().toISOString(),
+      summaryAr: `فرصة: ${o.name}`,
+      summaryEn: `Opportunity: ${o.name}`,
       metadata: {
         stage: o.stage,
         reviewStatus: o.reviewStatus,
@@ -82,9 +81,9 @@ export async function collectSalesReviewSignals(
       action: "review.pending",
       resourceType: "SalesOpportunity",
       resourceId: o.id,
-      timestamp: o.updatedAt ?? o.createdAt,
-      summaryAr: `مراجعة تجارية: ${o.title}`,
-      summaryEn: `Commercial review: ${o.title}`,
+      timestamp: o.updatedAt ?? o.createdAt ?? new Date().toISOString(),
+      summaryAr: `مراجعة تجارية: ${o.name}`,
+      summaryEn: `Commercial review: ${o.name}`,
       metadata: { reviewStatus: o.reviewStatus },
       severity: "warning" as const,
     }));
@@ -109,9 +108,9 @@ export async function collectSalesApprovalSignals(
       action: "approval.pending",
       resourceType: "SalesOpportunity",
       resourceId: o.id,
-      timestamp: o.updatedAt ?? o.createdAt,
-      summaryAr: `اعتماد تجاري: ${o.title}`,
-      summaryEn: `Commercial approval: ${o.title}`,
+      timestamp: o.updatedAt ?? o.createdAt ?? new Date().toISOString(),
+      summaryAr: `اعتماد تجاري: ${o.name}`,
+      summaryEn: `Commercial approval: ${o.name}`,
       severity: "warning" as const,
     }));
 }
@@ -134,11 +133,13 @@ export async function collectSalesMetricSignals(
   ).length;
 
   return {
-    accounts: accounts.length,
-    opportunities: opportunities.length,
+    productSlug: "sales",
+    organizationId,
+    signals: [],
+    generatedAt: new Date().toISOString(),
     pendingReviews,
     pendingApprovals,
-    evidenceAlerts: opportunities.filter((o) => o.stage === "qualification")
+    evidenceAlerts: opportunities.filter((o) => o.stage === "Qualification")
       .length,
   };
 }
