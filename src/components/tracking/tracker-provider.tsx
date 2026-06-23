@@ -6,9 +6,9 @@ import { trackEvent } from "@/lib/tracking";
 
 const pageViewEvents: Record<string, string> = {
   "/products/audit": "view_auditos",
+  "/start": "view_start_hub",
   "/proof": "view_proof_center",
   "/contact": "view_contact_pilot_review",
-  "/engagement-models": "view_engagement_models",
 };
 
 export function TrackerProvider({ children }: { children: React.ReactNode }) {

@@ -76,8 +76,28 @@ const nextConfig = {
       },
       {
         source: "/how-we-work",
+        destination: "/start#process",
+        permanent: true,
+      },
+      {
+        source: "/engagement-models",
+        destination: "/start#engagement",
+        permanent: true,
+      },
+      {
+        source: "/buyers",
         destination: "/start",
-        permanent: false,
+        permanent: true,
+      },
+      {
+        source: "/en/how-we-work",
+        destination: "/en/start#process",
+        permanent: true,
+      },
+      {
+        source: "/en/engagement-models",
+        destination: "/en/start#engagement",
+        permanent: true,
       },
       {
         source: "/executive-brief",

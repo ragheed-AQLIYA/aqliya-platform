@@ -37,8 +37,8 @@ const footerColumns = [
     title: "الشركة",
     links: [
       { label: "عن عقلية", href: "/about" },
-      { label: "نماذج التعاون", href: "/engagement-models" },
-      { label: "دليل المشتري", href: "/buyers" },
+      { label: "نماذج التعاون", href: "/start#engagement" },
+      { label: "من أين تبدأ", href: "/start" },
       { label: "رؤى ومقالات", href: "/insights" },
       { label: "تواصل", href: "/contact" },
     ],

@@ -349,7 +349,7 @@ export default function DemoPage() {
               </h3>
               <p className="text-slate-400 text-sm mb-5">٢-٤ أسابيع، مجاني</p>
               <Link
-                href="/engagement-models"
+                href="/start#engagement"
                 className="btn-outline w-full block py-2.5 rounded-xl text-sm font-medium text-center"
               >
                 نماذج التعاون

@@ -184,7 +184,7 @@ export default function ProofCenterPage() {
               </div>
             ))}
           </div>
-          <Link href="/engagement-models" className="mt-6 inline-block text-sm font-medium text-primary hover:underline">
+          <Link href="/start#engagement" className="mt-6 inline-block text-sm font-medium text-primary hover:underline">
             نماذج التعاون والتقييم المجاني ←
           </Link>
         </div>

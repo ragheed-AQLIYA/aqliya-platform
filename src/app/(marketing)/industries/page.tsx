@@ -69,7 +69,7 @@ const sectors = [
       "حوكمة مالية واعتمادات",
       "ذاكرة مؤسسية ومعرفة تشغيلية",
     ],
-    proofHref: "/buyers",
+    proofHref: "/start#executive",
   },
   {
     id: "professional-services",

@@ -70,7 +70,7 @@ const sectors = [
       "Financial governance and approvals",
       "Institutional memory and operational knowledge",
     ],
-    proofHref: "/buyers",
+    proofHref: "/en/start",
   },
   {
     id: "professional-services",

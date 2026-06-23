@@ -30,7 +30,7 @@
       { path: "/", title: "AQLIYA" },
       { path: "/about", title: /عن|about/i },
       { path: "/products", title: /منتجات|products/i },
-      { path: "/how-we-work", title: /منهجية|how we work/i },
+      { path: "/start", title: /من أين تبدأ|start with/i },
       { path: "/contact", title: /جلسة تشخيص|تشخيص|contact/i },
       { path: "/platform", title: /منصة|platform/i },
       { path: "/security", title: /أمن|security/i },
@@ -42,10 +42,7 @@
       { path: "/case-studies", title: /دراسات|case studies/i },
       { path: "/insights", title: /رؤى|insights/i },
       { path: "/demo", title: /تجريبي|demo/i },
-      { path: "/pilot-proof", title: /pilot|اثبات/i },
-      { path: "/proof-library", title: /مكتبة|proof/i },
-      { path: "/executive-brief", title: /تنفيذي|executive/i },
-      { path: "/buyers", title: /دليل المشتري|buyers/i },
+      { path: "/proof", title: /إثبات|proof/i },
     ];
 
     publicPages.forEach(({ path, title }) => {

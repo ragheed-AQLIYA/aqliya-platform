@@ -125,13 +125,13 @@ export const procurementPackItems: ProcurementPackItem[] = [
   {
     title: "نماذج التعاون",
     body: "تشخيص → تقييم تشغيلي محدود → تفعيل مؤسسي — بدون عقد واسع قبل الإثبات.",
-    href: "/engagement-models",
+    href: "/start#engagement",
     cta: "نماذج التعاون",
   },
   {
     title: "دليل المشتريات",
     body: "أسئلة التقييم، نطاق التقييم التشغيلي، ومتطلبات الأدلة للمشتريات.",
-    href: "/buyers#procurement",
+    href: "/start#procurement",
     cta: "دليل المشتريات",
   },
 ];
@@ -215,7 +215,7 @@ export const procurementPackItemsEn: ProcurementPackItem[] = [
   {
     title: "Engagement models",
     body: "Diagnostic → operational evaluation → institutional activation.",
-    href: "/en/engagement-models",
+    href: "/en/start#engagement",
     cta: "Engagement models",
   },
   {

@@ -3,7 +3,7 @@ describe("Marketing Pages - Arabic Content", () => {
     { path: "/", title: "AQLIYA" },
     { path: "/about", title: "عن" },
     { path: "/products", title: "منتجات" },
-    { path: "/how-we-work", title: "منهجية" },
+    { path: "/start", title: "من أين تبدأ" },
     { path: "/contact", title: "جلسة تشخيص" },
     { path: "/auditos", title: "AuditOS" },
   ];

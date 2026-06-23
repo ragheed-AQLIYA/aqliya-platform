@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function BuyerCIOPage() {
-  redirect("/buyers#cio");
+export default function BuyersCioRedirect() {
+  redirect("/start#cio");
 }

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function BuyerGovernmentPage() {
-  redirect("/buyers#government");
+export default function BuyersGovernmentRedirect() {
+  redirect("/start#government");
 }

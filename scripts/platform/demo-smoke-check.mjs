@@ -51,7 +51,7 @@ async function main() {
 
   const marketingEnRoutes = [
     ["src/app/en/procurement-pack/page.tsx", "EN procurement pack"],
-    ["src/app/en/engagement-models/page.tsx", "EN engagement models"],
+    ["src/app/en/start/page.tsx", "EN start hub"],
     ["src/app/en/deployment/page.tsx", "EN deployment"],
     ["src/app/en/products/decision/page.tsx", "EN DecisionOS product"],
     ["src/app/en/products/local-content/page.tsx", "EN LocalContentOS product"],

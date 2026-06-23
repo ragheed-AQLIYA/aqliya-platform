@@ -462,7 +462,7 @@ export default function SecurityPage() {
                 مركز الإثبات
               </Link>{" "}
               و{" "}
-              <Link href="/buyers/procurement" className="text-aqliya-cyan underline">
+              <Link href="/start#procurement" className="text-aqliya-cyan underline">
                 دليل المشتريات
               </Link>
               .
@@ -474,7 +474,7 @@ export default function SecurityPage() {
               <Link href="/proof" className="btn-secondary px-6 py-2.5 text-sm">
                 مركز الإثبات
               </Link>
-              <Link href="/engagement-models" className="btn-outline px-6 py-2.5 text-sm">
+              <Link href="/start#engagement" className="btn-outline px-6 py-2.5 text-sm">
                 نماذج التعاون
               </Link>
             </div>

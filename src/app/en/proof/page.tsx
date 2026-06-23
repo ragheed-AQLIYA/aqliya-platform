@@ -181,7 +181,7 @@ export default function EnglishProofCenterPage() {
               </div>
             ))}
           </div>
-          <Link href="/en/engagement-models" className="mt-6 inline-block text-sm font-medium text-primary hover:underline">
+          <Link href="/en/start#engagement" className="mt-6 inline-block text-sm font-medium text-primary hover:underline">
             Engagement models & free evaluation →
           </Link>
         </div>

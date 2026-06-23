@@ -16,7 +16,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
       { label: "Interactive demo", href: "/en/demo", time: "10 min" },
     ],
     primaryCta: { label: "Book diagnostic session", href: "/en/contact" },
-    secondaryCta: { label: "How we work", href: "/en/how-we-work" },
+    secondaryCta: { label: "How we work", href: "/en/start#process" },
   },
   {
     id: "cfo",
@@ -24,7 +24,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     subtitle: "CFO · Internal audit",
     hook: "Every figure linked to source — from trial balance to engagement pack.",
     steps: [
-      { label: "CFO buyer guide", href: "/buyers#cfo", time: "10 min" },
+      { label: "CFO buyer guide", href: "/en/start#cfo", time: "10 min" },
       { label: "AuditOS", href: "/en/products/audit", time: "8 min" },
       { label: "Evidence library", href: "/en/proof#evidence-samples", time: "15 min" },
     ],
@@ -52,7 +52,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     steps: [
       { label: "Security summary", href: "/en/security", time: "10 min" },
       { label: "Deployment options", href: "/en/deployment", time: "8 min" },
-      { label: "CIO buyer guide", href: "/buyers#cio", time: "12 min" },
+      { label: "CIO buyer guide", href: "/en/start#cio", time: "12 min" },
     ],
     primaryCta: { label: "Request technical session", href: "/en/contact" },
     secondaryCta: { label: "Procurement pack", href: "/en/procurement-pack" },
@@ -63,7 +63,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     subtitle: "Audit firms · engagement delivery",
     hook: "Your sign-off protects your reputation — immutable evidence chain after approval.",
     steps: [
-      { label: "Audit partner guide", href: "/buyers#audit-partner", time: "10 min" },
+      { label: "Audit partner guide", href: "/en/start#audit", time: "10 min" },
       { label: "AuditOS demo", href: "/auditos", time: "13 min" },
       { label: "Evaluation framework", href: "/en/proof#evaluation-framework", time: "10 min" },
     ],
@@ -77,7 +77,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     hook: "Ready PDF pack: brief, security, SOW, and comparison with current tools.",
     steps: [
       { label: "Procurement pack", href: "/en/procurement-pack", time: "20 min" },
-      { label: "Engagement models", href: "/en/engagement-models", time: "10 min" },
+      { label: "Engagement models", href: "/en/start#engagement", time: "10 min" },
       { label: "Evaluation framework", href: "/en/proof#evaluation-framework", time: "10 min" },
     ],
     primaryCta: { label: "Request evaluation pack", href: "/en/contact" },
@@ -89,7 +89,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     subtitle: "Compliance · local content · accountability",
     hook: "Local content and compliance paths with reports ready for regulators.",
     steps: [
-      { label: "Government buyer guide", href: "/buyers#government", time: "12 min" },
+      { label: "Government buyer guide", href: "/en/start#government", time: "12 min" },
       { label: "LocalContentOS", href: "/en/products/local-content", time: "8 min" },
       { label: "Governance architecture", href: "/en/governance", time: "10 min" },
     ],
@@ -101,6 +101,6 @@ export const buyerJourneysEn: BuyerJourney[] = [
 export const universalJourneyStepsEn: BuyerJourneyStep[] = [
   { label: "Diagnostic", href: "/en/contact", time: "45 min" },
   { label: "Operational evaluation", href: "/en/proof#evaluation-framework", time: "2–4 weeks" },
-  { label: "Evidence-based decision", href: "/en/engagement-models", time: "One session" },
-  { label: "Activation", href: "/en/how-we-work", time: "Scope-dependent" },
+  { label: "Evidence-based decision", href: "/en/start#engagement", time: "One session" },
+  { label: "Activation", href: "/en/start#process", time: "Scope-dependent" },
 ];

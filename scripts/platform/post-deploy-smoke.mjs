@@ -281,6 +281,11 @@ async function main() {
   await checkRedirect("Legacy pilot proof (/pilot-proof)", "/pilot-proof");
   await checkRedirect("Legacy proof library (/proof-library)", "/proof-library");
   await checkRedirect("Legacy pilot outcomes (/pilot-outcomes)", "/pilot-outcomes");
+  await checkRedirect("Legacy engagement models (/engagement-models)", "/engagement-models");
+  await checkRedirect("Legacy how we work (/how-we-work)", "/how-we-work");
+  await checkRedirect("Legacy buyers hub (/buyers)", "/buyers");
+  await checkRedirect("Legacy EN engagement models (/en/engagement-models)", "/en/engagement-models");
+  await checkRedirect("Legacy EN how we work (/en/how-we-work)", "/en/how-we-work");
   await checkHttp("Executive brief PDF (/print/executive-brief)", "/print/executive-brief");
   await checkHttp("Security summary PDF (/print/security-summary)", "/print/security-summary");
   await checkHttp("English home (/en)", "/en");
@@ -291,15 +296,14 @@ async function main() {
   await checkHttp("English governance (/en/governance)", "/en/governance");
   await checkHttp("English industries (/en/industries)", "/en/industries");
   await checkHttp("English contact (/en/contact)", "/en/contact");
-  await checkHttp("English engagement models (/en/engagement-models)", "/en/engagement-models");
+  await checkHttp("English start hub (/en/start)", "/en/start");
+  await checkHttp("Start hub AR (/start)", "/start");
   await checkHttp("English deployment (/en/deployment)", "/en/deployment");
   await checkHttp("English procurement pack (/en/procurement-pack)", "/en/procurement-pack");
-  await checkHttp("English how we work (/en/how-we-work)", "/en/how-we-work");
   await checkHttp("English AuditOS product (/en/products/audit)", "/en/products/audit");
   await checkHttp("English DecisionOS product (/en/products/decision)", "/en/products/decision");
   await checkHttp("English LocalContent product (/en/products/local-content)", "/en/products/local-content");
   await checkHttp("Evaluation SOW EN PDF (/print/evaluation-sow-en)", "/print/evaluation-sow-en");
-  await checkHttp("Engagement models AR (/engagement-models)", "/engagement-models");
   await checkHttp("Deployment AR (/deployment)", "/deployment");
   await checkRedirect("Buyers procurement → pack", "/buyers/procurement");
 
