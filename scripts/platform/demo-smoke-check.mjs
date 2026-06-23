@@ -78,6 +78,28 @@ async function main() {
     await mustExist(path, label);
   }
 
+  const localContentRoutes = [
+    ["src/app/local-content/page.tsx", "LocalContentOS dashboard"],
+    ["src/app/local-content/projects/page.tsx", "LocalContentOS projects"],
+    ["src/app/local-content/pilot-readiness/page.tsx", "LocalContentOS readiness"],
+    ["src/app/local-content/projects/[projectId]/approval/page.tsx", "LC project approval"],
+    ["src/lib/local-content/workflow-gating.ts", "LC workbook workflow gating"],
+    ["src/lib/local-content/pilot-readiness.ts", "LC pilot readiness engine"],
+  ];
+  for (const [path, label] of localContentRoutes) {
+    await mustExist(path, label);
+  }
+
+  const decisionRoutes = [
+    ["src/app/(dashboard)/decisions/page.tsx", "DecisionOS list"],
+    ["src/app/(dashboard)/decisions/[id]/governance/page.tsx", "DecisionOS governance tab"],
+    ["src/app/(dashboard)/decisions/[id]/recommendation/page.tsx", "DecisionOS recommendation tab"],
+    ["src/lib/decision/decision-engine.ts", "DecisionOS engine"],
+  ];
+  for (const [path, label] of decisionRoutes) {
+    await mustExist(path, label);
+  }
+
   const runbook = await readFile(
     join(root, "docs/operations/customer-demo-runbook.md"),
     "utf8",

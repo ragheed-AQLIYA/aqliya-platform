@@ -71,12 +71,31 @@ export async function getPilotReadiness(
     contextCoverage,
   ];
 
+  const { overallScore, overallStatus } = computeOverallPilotStatus(allMetrics);
+
+  return {
+    organizationId,
+    metrics: allMetrics,
+    overallScore,
+    overallStatus,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+/** Pure readiness rollup for tests and dashboards (internal ops — not public marketing copy). */
+export function computeOverallPilotStatus(
+  metrics: Array<{ level: ReadinessLevel; score: number }>,
+): { overallScore: number; overallStatus: OverallStatus } {
+  if (metrics.length === 0) {
+    return { overallScore: 0, overallStatus: "Not Ready" };
+  }
+
   const overallScore = Math.round(
-    allMetrics.reduce((sum, m) => sum + m.score, 0) / allMetrics.length,
+    metrics.reduce((sum, m) => sum + m.score, 0) / metrics.length,
   );
 
-  const redCount = allMetrics.filter((m) => m.level === "RED").length;
-  const amberCount = allMetrics.filter((m) => m.level === "AMBER").length;
+  const redCount = metrics.filter((m) => m.level === "RED").length;
+  const amberCount = metrics.filter((m) => m.level === "AMBER").length;
 
   let overallStatus: OverallStatus;
   if (redCount === 0 && amberCount <= 2 && overallScore >= 80) {
@@ -87,13 +106,7 @@ export async function getPilotReadiness(
     overallStatus = "Not Ready";
   }
 
-  return {
-    organizationId,
-    metrics: allMetrics,
-    overallScore,
-    overallStatus,
-    generatedAt: new Date().toISOString(),
-  };
+  return { overallScore, overallStatus };
 }
 
 // ─── Individual Metric Measures ───

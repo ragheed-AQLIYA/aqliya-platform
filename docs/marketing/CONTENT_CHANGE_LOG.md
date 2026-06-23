@@ -124,6 +124,18 @@
 | `scripts/platform/demo-smoke-check.mjs` | AuditOS workflow module static checks |
 | `scripts/platform/post-deploy-smoke.mjs` | `/en/demo` smoke URL |
 
+### Round 9 — Phase 2-B/C product entry (2026-06-23)
+
+| File | What changed |
+|------|----------------|
+| `src/lib/local-content/pilot-readiness.ts` | Exported `computeOverallPilotStatus` |
+| `src/__tests__/unit/local-content/pilot-readiness-status.test.ts` | **New** |
+| `src/__tests__/unit/local-content/project-workflow-routes.test.ts` | **New** — 12 project tabs |
+| `src/__tests__/unit/decision/workflow-routes.test.ts` | **New** — DecisionOS routes |
+| `scripts/platform/demo-smoke-check.mjs` | LC + Decision static checks |
+| `docs/deliverables/PHASE_2_LOCALCONTENT_ENTRY.md` | **New** |
+| `docs/deliverables/PHASE_2_DECISION_ENTRY.md` | **New** |
+
 ---
 
 ## Not Modified (by design)
