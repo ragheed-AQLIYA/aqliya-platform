@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 type MarketingPageShellProps = {
   eyebrow?: string;
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   children?: ReactNode;
   actions?: ReactNode;
   dark?: boolean;
