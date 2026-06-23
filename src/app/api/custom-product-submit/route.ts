@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { checkRateLimit, clientIpRateLimitKey } from "@/lib/rate-limit";
+
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 6;
 
 const schema = z.object({
   orgName: z.string().min(1, "مطلوب"),
@@ -20,6 +24,20 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   try {
+    const { allowed } = await checkRateLimit(
+      clientIpRateLimitKey("custom-product", request),
+      {
+        maxRequests: RATE_LIMIT_MAX,
+        windowMs: RATE_LIMIT_WINDOW_MS,
+      },
+    );
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429 },
+      );
+    }
+
     const body = await request.json();
     const data = schema.parse(body);
 

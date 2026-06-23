@@ -284,7 +284,30 @@ async function main() {
   await checkHttp("English proof (/en/proof)", "/en/proof");
   await checkHttp("English platform (/en/platform)", "/en/platform");
   await checkHttp("English SOC2 (/en/soc2-roadmap)", "/en/soc2-roadmap");
+  await checkHttp("English about (/en/about)", "/en/about");
+  await checkHttp("English governance (/en/governance)", "/en/governance");
+  await checkHttp("English industries (/en/industries)", "/en/industries");
+  await checkHttp("English contact (/en/contact)", "/en/contact");
+  await checkHttp("English engagement models (/en/engagement-models)", "/en/engagement-models");
+  await checkHttp("English deployment (/en/deployment)", "/en/deployment");
+  await checkHttp("English procurement pack (/en/procurement-pack)", "/en/procurement-pack");
+  await checkHttp("English how we work (/en/how-we-work)", "/en/how-we-work");
+  await checkHttp("English AuditOS product (/en/products/audit)", "/en/products/audit");
+  await checkHttp("English DecisionOS product (/en/products/decision)", "/en/products/decision");
+  await checkHttp("English LocalContent product (/en/products/local-content)", "/en/products/local-content");
+  await checkHttp("Evaluation SOW EN PDF (/print/evaluation-sow-en)", "/print/evaluation-sow-en");
+  await checkHttp("Engagement models AR (/engagement-models)", "/engagement-models");
+  await checkHttp("Deployment AR (/deployment)", "/deployment");
   await checkRedirect("Buyers procurement → pack", "/buyers/procurement");
+
+  console.log("\n── AuditOS public demo (/auditos) ──\n");
+
+  await checkHttp("AuditOS demo home (/auditos)", "/auditos");
+  await checkHttp("AuditOS demo trial balance", "/auditos/trial-balance");
+  await checkHttp("AuditOS demo mapping", "/auditos/mapping");
+  await checkHttp("AuditOS demo statements", "/auditos/statements");
+  await checkHttp("AuditOS demo evidence", "/auditos/evidence");
+  await checkHttp("AuditOS demo traceability", "/auditos/traceability");
 
   // ── 5. Feature Flags / Env Vars ───────────────────────────────────────────
 

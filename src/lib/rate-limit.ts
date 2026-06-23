@@ -30,3 +30,12 @@ export async function checkRateLimit(
   }
   return _instance.check(key, config);
 }
+
+/** Rate-limit key for unauthenticated public POST endpoints (IP from proxy headers). */
+export function clientIpRateLimitKey(prefix: string, request: Request): string {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) return `${prefix}:${forwarded.split(",")[0]?.trim()}`;
+  const realIp = request.headers.get("x-real-ip");
+  if (realIp) return `${prefix}:${realIp}`;
+  return `${prefix}:unknown`;
+}

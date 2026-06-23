@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, clientIpRateLimitKey } from "@/lib/rate-limit";
 
 const MAX_FIELD_LENGTH = 2000;
 const MAX_BODY_BYTES = 50_000;
@@ -69,20 +69,15 @@ function safeDevLog(data: PilotReviewPayload) {
   );
 }
 
-function clientRateLimitKey(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) return `pilot-review:${forwarded.split(",")[0]?.trim()}`;
-  const realIp = request.headers.get("x-real-ip");
-  if (realIp) return `pilot-review:${realIp}`;
-  return "pilot-review:unknown";
-}
-
 export async function POST(request: Request) {
   try {
-    const { allowed } = await checkRateLimit(clientRateLimitKey(request), {
-      maxRequests: RATE_LIMIT_MAX,
-      windowMs: RATE_LIMIT_WINDOW_MS,
-    });
+    const { allowed } = await checkRateLimit(
+      clientIpRateLimitKey("pilot-review", request),
+      {
+        maxRequests: RATE_LIMIT_MAX,
+        windowMs: RATE_LIMIT_WINDOW_MS,
+      },
+    );
     if (!allowed) {
       return NextResponse.json(
         { ok: false, error: "Too many requests. Please try again later." },

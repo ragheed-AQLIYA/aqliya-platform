@@ -77,8 +77,33 @@
 | Endpoint | Check |
 |----------|--------|
 | `POST /api/pilot-review` | 200 on valid body; 429 after burst |
+| `POST /api/custom-product-submit` | 200 on valid body; 429 after burst |
 
 ---
+
+## AuditOS public demo (`/auditos`)
+
+| URL | Check |
+|-----|--------|
+| `/auditos` | Demo Only banner; mock data overview |
+| `/auditos/trial-balance` | Step navigates; no upload mutation |
+| `/auditos/mapping` | AI suggest + human approve framing |
+| `/auditos/statements` | Traceable figures |
+| `/auditos/evidence` | Evidence vault mock |
+| `/auditos/traceability` | Audit trail chain |
+| `/en/demo` | CTA → `/auditos` |
+
+**Automated:** `npm run demo:smoke` + `src/__tests__/unit/auditos/demo-routes.test.ts`
+
+---
+
+## Post-deploy smoke (staging)
+
+```bash
+npm run smoke:local
+# or
+node scripts/platform/post-deploy-smoke.mjs --base-url https://staging.aqliya.com
+```
 
 ## Sign-off
 

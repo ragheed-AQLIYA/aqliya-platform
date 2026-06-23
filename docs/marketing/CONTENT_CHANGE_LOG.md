@@ -102,6 +102,18 @@
 | `src/__tests__/unit/marketing/marketing-routes.test.ts` | **New** — route + locale smoke |
 | `docs/marketing/STAGING_QA_CHECKLIST.md` | **New** — Phase 0.2/0.3 QA |
 
+### Round 7 — Phase 1.3–1.5 + smoke hardening (2026-06-23)
+
+| File | What changed |
+|------|----------------|
+| `src/lib/rate-limit.ts` | `clientIpRateLimitKey` for public POST APIs |
+| `src/app/api/pilot-review/route.ts` | Use shared IP rate-limit helper |
+| `src/app/api/custom-product-submit/route.ts` | IP rate limit (6/min) |
+| `scripts/platform/post-deploy-smoke.mjs` | EN marketing routes + `/auditos` demo path |
+| `scripts/platform/demo-smoke-check.mjs` | AuditOS demo files + EN marketing + banner check |
+| `src/__tests__/unit/auditos/demo-routes.test.ts` | **New** — demo route + safety tests |
+| `docs/marketing/STAGING_QA_CHECKLIST.md` | AuditOS + post-deploy smoke section |
+
 ---
 
 ## Not Modified (by design)

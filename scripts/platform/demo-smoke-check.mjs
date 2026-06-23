@@ -33,6 +33,13 @@ async function main() {
     ["src/components/audit/sampling/audit-sampling-form.tsx", "AuditOS sampling form"],
     ["src/app/local-content/page.tsx", "LocalContentOS workspace"],
     ["src/app/auditos/page.tsx", "AuditOS public demo"],
+    ["src/app/auditos/trial-balance/page.tsx", "AuditOS demo trial balance"],
+    ["src/app/auditos/mapping/page.tsx", "AuditOS demo mapping"],
+    ["src/app/auditos/statements/page.tsx", "AuditOS demo statements"],
+    ["src/app/auditos/evidence/page.tsx", "AuditOS demo evidence"],
+    ["src/app/auditos/traceability/page.tsx", "AuditOS demo traceability"],
+    ["src/app/auditos/demo-safety.ts", "AuditOS demo safety sanitizer"],
+    ["src/app/auditos/layout.tsx", "AuditOS demo layout banner"],
     ["src/app/(dashboard)/decisions/page.tsx", "DecisionOS list"],
     ["docs/operations/customer-demo-runbook.md", "demo runbook"],
     ["docs/operations/audit-sampling-browser-smoke.md", "sampling browser smoke"],
@@ -41,6 +48,24 @@ async function main() {
   for (const [path, label] of demoRoutes) {
     await mustExist(path, label);
   }
+
+  const marketingEnRoutes = [
+    ["src/app/en/procurement-pack/page.tsx", "EN procurement pack"],
+    ["src/app/en/engagement-models/page.tsx", "EN engagement models"],
+    ["src/app/en/deployment/page.tsx", "EN deployment"],
+    ["src/app/en/products/decision/page.tsx", "EN DecisionOS product"],
+    ["src/app/en/products/local-content/page.tsx", "EN LocalContentOS product"],
+    ["src/app/print/evaluation-sow-en/page.tsx", "EN evaluation SOW print"],
+  ];
+  for (const [path, label] of marketingEnRoutes) {
+    await mustExist(path, label);
+  }
+
+  await mustMatch(
+    "src/app/auditos/layout.tsx",
+    /Demo Only/,
+    "AuditOS demo layout must show Demo Only banner",
+  );
 
   const runbook = await readFile(
     join(root, "docs/operations/customer-demo-runbook.md"),
