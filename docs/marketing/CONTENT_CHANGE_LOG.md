@@ -136,6 +136,51 @@
 | `docs/deliverables/PHASE_2_LOCALCONTENT_ENTRY.md` | **New** |
 | `docs/deliverables/PHASE_2_DECISION_ENTRY.md` | **New** |
 
+### Round 10 — Marketing gap closure + journey structure (2026-06-23)
+
+| File | What changed |
+|------|----------------|
+| `docs/marketing/MARKETING_GAP_ASSESSMENT.md` | **New** — honest scorecard (2.8/5) |
+| `docs/marketing/MARKETING_ROADMAP.md` | **New** — 6-phase commercial roadmap |
+| `src/lib/marketing/buyer-journeys.ts` | **New** — 6 persona paths |
+| `src/lib/marketing/institutional-use-cases.ts` | **New** — shared use-case content |
+| `src/app/(marketing)/start/page.tsx` | **New** — «من أين تبدأ» hub |
+| `src/app/(marketing)/use-cases/page.tsx` | **Fixed** — real page (was redirect to insights) |
+| `src/components/layout/site-header.tsx` | Systems + Get Started in nav |
+| `src/components/layout/site-footer.tsx` | Fixed pilot label; /products, /start links |
+| `src/app/(marketing)/page.tsx` | Sharper hero, persona chips, journey CTAs |
+| `src/app/(marketing)/proof/page.tsx` | Persona path strip → `/start` |
+| `src/app/(marketing)/insights/page.tsx` | Imports shared use cases |
+
+### Round 11 — Redesign plan (2026-06-23)
+
+| File | What changed |
+|------|----------------|
+| `docs/marketing/MARKETING_REDESIGN_PLAN.md` | **New** — full IA, merge map, R1–R5 waves, −62% LOC target |
+| `docs/marketing/MARKETING_ROADMAP.md` | Linked redesign waves R1–R5 |
+
+### Round 12 — Audit bug-fix B1–B4 + EN parity (2026-06-23)
+
+| File | What changed |
+|------|----------------|
+| `src/components/layout/site-header.tsx` | EN: Systems → `/en/products`, Get Started → `/en/start` |
+| `src/lib/marketing/locale-paths.ts` | `/products` → `/en/products`, `/start` → `/en/start`, `/use-cases` → `/en/use-cases` |
+| `src/app/en/products/page.tsx` | **New** — EN operating systems hub |
+| `src/app/en/start/page.tsx` | **New** — EN buyer journey hub |
+| `src/app/en/use-cases/page.tsx` | **New** — EN use cases (4 core) |
+| `src/lib/marketing/buyer-journeys-en.ts` | **New** — 7 EN personas incl. contracting |
+| `src/lib/marketing/buyer-journeys.ts` | Added `contracting` persona (AR) |
+| `src/app/(marketing)/page.tsx` | Chip: مقاولات / محتوى محلي |
+| `marketing-routes.test.ts` | EN route + locale mapping tests |
+
+### Round 13 — R1 homepage + bug-fix commit (2026-06-23)
+
+| File | What changed |
+|------|----------------|
+| `src/components/marketing/v2/marketing-shell.tsx` | **New** — MarketingPageShell + ConversionBand |
+| `src/app/(marketing)/page.tsx` | R1: 9 sections → 4 blocks (~240 lines) |
+| `next.config.mjs` | `/how-we-work` → `/start` redirect |
+
 ---
 
 ## Not Modified (by design)

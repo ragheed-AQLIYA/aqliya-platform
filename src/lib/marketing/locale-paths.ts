@@ -18,6 +18,10 @@ const AR_TO_EN: Record<string, string> = {
   "/deployment": "/en/deployment",
   "/procurement-pack": "/en/procurement-pack",
   "/how-we-work": "/en/how-we-work",
+  "/products": "/en/products",
+  "/start": "/en/start",
+  "/use-cases": "/en/use-cases",
+  "/pilot-proof": "/pilot-proof",
 };
 
 const EN_TO_AR: Record<string, string> = Object.fromEntries(

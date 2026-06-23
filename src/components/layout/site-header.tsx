@@ -16,17 +16,17 @@ import { Menu, X } from "lucide-react";
 
 const navItemsAr = [
   { label: "المنصة", href: "/platform" },
-  { label: "القطاعات", href: "/industries" },
+  { label: "أنظمة التشغيل", href: "/products" },
+  { label: "من أين تبدأ", href: "/start" },
   { label: "الإثبات", href: "/proof" },
-  { label: "الحوكمة", href: "/governance" },
   { label: "عن عقلية", href: "/about" },
 ];
 
 const navItemsEn = [
   { label: "Platform", href: "/en/platform" },
-  { label: "Industries", href: "/en/industries" },
+  { label: "Systems", href: "/en/products" },
+  { label: "Get Started", href: "/en/start" },
   { label: "Proof", href: "/en/proof" },
-  { label: "Governance", href: "/en/governance" },
   { label: "About", href: "/en/about" },
 ];
 

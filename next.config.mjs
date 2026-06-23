@@ -74,6 +74,11 @@ const nextConfig = {
         destination: "/decisions/gov/:path*",
         permanent: true,
       },
+      {
+        source: "/how-we-work",
+        destination: "/start",
+        permanent: false,
+      },
     ]
   },
 

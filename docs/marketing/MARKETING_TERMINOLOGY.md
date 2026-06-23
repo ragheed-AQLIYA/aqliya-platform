@@ -57,7 +57,7 @@ Never appear on **vision-layer** pages (homepage, platform, about, `/products/*`
 
 **What AQLIYA is and what outcomes it delivers.**
 
-Routes: `/`, `/platform`, `/about`, `/products/*`, `/industries`, `/governance`, `/use-cases`, `/case-studies`, `/custom-product`, `/how-we-work`
+Routes: `/`, `/platform`, `/about`, `/products/*`, `/industries`, `/governance`, `/use-cases`, `/start`, `/case-studies`, `/custom-product`, `/how-we-work`
 
 Language: problems, outcomes, institutional capability, governance philosophy.
 

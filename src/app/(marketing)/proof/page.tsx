@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buyerJourneys } from "@/lib/marketing/buyer-journeys";
 
 export const metadata: Metadata = {
   title: "الإثبات | AQLIYA",
@@ -97,6 +98,38 @@ export default function ProofCenterPage() {
             <p className="mt-3 text-sm text-white/40">
               جميع الأمثلة على بيانات تجريبية. لا بيانات عملاء حقيقيين.
             </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link href="/start" className="btn-primary h-11 px-6">
+                من أين تبدأ؟
+              </Link>
+              <Link href="/demo" className="btn-outline border-white/15 text-white/70 h-11 px-6">
+                ابدأ الديمو
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t bg-muted/10 py-12">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-lg font-black text-foreground">
+              اختر مسارك حسب الدور
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              كل دور له ترتيب محتوى مقترح — قبل جلسة التشخيص.
+            </p>
+          </div>
+          <div className="mt-8 flex flex-wrap justify-center gap-2">
+            {buyerJourneys.map((j) => (
+              <Link
+                key={j.id}
+                href={`/start#${j.id}`}
+                className="rounded-full border border-border/60 bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+              >
+                {j.label}
+              </Link>
+            ))}
           </div>
         </div>
       </section>
