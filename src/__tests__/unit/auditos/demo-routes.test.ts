@@ -46,6 +46,11 @@ describe("AuditOS public demo (/auditos)", () => {
     expect(getSafeDemoActorLabel("Ahmed Al Ghamdi")).toBe("فريق العرض");
     expect(getSafeDemoActorLabel("AI Assistant")).toBe("المساعد الذكي");
   });
+
+  it.each(AUDITOS_PAGES)("step navigation present on %s", (rel) => {
+    const content = fs.readFileSync(path.join(ROOT, rel), "utf8");
+    expect(content).toMatch(/StepNav/);
+  });
 });
 
 describe("AuditOS demo pages avoid engineering maturity language", () => {

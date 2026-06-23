@@ -308,6 +308,7 @@ async function main() {
   await checkHttp("AuditOS demo statements", "/auditos/statements");
   await checkHttp("AuditOS demo evidence", "/auditos/evidence");
   await checkHttp("AuditOS demo traceability", "/auditos/traceability");
+  await checkHttp("English demo page (/en/demo)", "/en/demo");
 
   // ── 5. Feature Flags / Env Vars ───────────────────────────────────────────
 

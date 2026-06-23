@@ -67,6 +67,17 @@ async function main() {
     "AuditOS demo layout must show Demo Only banner",
   );
 
+  const auditWorkflowRoutes = [
+    ["src/app/audit/page.tsx", "AuditOS dashboard"],
+    ["src/app/audit/engagements/[engagementId]/exports/page.tsx", "AuditOS exports tab"],
+    ["src/app/audit/engagements/[engagementId]/approval/page.tsx", "AuditOS approval tab"],
+    ["src/lib/audit/workflow-next-action.ts", "AuditOS workflow next action"],
+    ["src/lib/audit/governance/approval-gates.ts", "AuditOS factory approval gates"],
+  ];
+  for (const [path, label] of auditWorkflowRoutes) {
+    await mustExist(path, label);
+  }
+
   const runbook = await readFile(
     join(root, "docs/operations/customer-demo-runbook.md"),
     "utf8",

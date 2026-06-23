@@ -114,6 +114,16 @@
 | `src/__tests__/unit/auditos/demo-routes.test.ts` | **New** — demo route + safety tests |
 | `docs/marketing/STAGING_QA_CHECKLIST.md` | AuditOS + post-deploy smoke section |
 
+### Round 8 — Phase 2 AuditOS entry (2026-06-23)
+
+| File | What changed |
+|------|----------------|
+| `src/__tests__/unit/audit/workflow-next-action.test.ts` | **New** — engagement next-step routing tests |
+| `src/__tests__/unit/audit/engagement-workflow-routes.test.ts` | **New** — 19-tab route + export governance guards |
+| `src/__tests__/unit/auditos/demo-routes.test.ts` | StepNav presence on all demo pages |
+| `scripts/platform/demo-smoke-check.mjs` | AuditOS workflow module static checks |
+| `scripts/platform/post-deploy-smoke.mjs` | `/en/demo` smoke URL |
+
 ---
 
 ## Not Modified (by design)
