@@ -19,6 +19,41 @@ export type ProcessPhase = {
   desc: string;
 };
 
+/** Approximate pricing bands for procurement — not a quote */
+export type EngagementPricingBand = {
+  model: string;
+  from: string;
+  to: string;
+  note: string;
+};
+
+export const engagementPricingAr: EngagementPricingBand[] = [
+  {
+    model: "التشخيص التنفيذي",
+    from: "٠ ر.س",
+    to: "٠ ر.س",
+    note: "جلسة واحدة — بدون التزام",
+  },
+  {
+    model: "التقييم التشغيلي",
+    from: "٠ ر.س",
+    to: "٠ ر.س",
+    note: "نطاق محدود متفق عليه مسبقاً",
+  },
+  {
+    model: "تفعيل مؤسسي (Cloud)",
+    from: "يُحدد بعد التقييم",
+    to: "حسب المستخدمين والمسارات",
+    note: "عرض سعر بعد نتائج التقييم — لا عقد واسع مسبقاً",
+  },
+  {
+    model: "نشر خاص / معزول",
+    from: "تقييم جدوى",
+    to: "مشروع تصميم",
+    note: "استراتيجي — نطاق هندسي مشترك",
+  },
+];
+
 export const engagementModelsAr: EngagementModelCard[] = [
   {
     id: "diagnostic",

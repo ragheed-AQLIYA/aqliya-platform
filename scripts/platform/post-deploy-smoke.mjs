@@ -298,6 +298,9 @@ async function main() {
   await checkHttp("English contact (/en/contact)", "/en/contact");
   await checkHttp("English start hub (/en/start)", "/en/start");
   await checkHttp("Start hub AR (/start)", "/start");
+  await checkHttp("Security AR (/security)", "/security");
+  await checkHttp("Use cases AR (/use-cases)", "/use-cases");
+  await checkHttp("English security (/en/security)", "/en/security");
   await checkHttp("English deployment (/en/deployment)", "/en/deployment");
   await checkHttp("English procurement pack (/en/procurement-pack)", "/en/procurement-pack");
   await checkHttp("English AuditOS product (/en/products/audit)", "/en/products/audit");

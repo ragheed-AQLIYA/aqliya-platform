@@ -181,6 +181,26 @@
 | `src/app/(marketing)/page.tsx` | R1: 9 sections → 4 blocks (~240 lines) |
 | `next.config.mjs` | `/how-we-work` → `/start` redirect |
 
+### Round 14 — R5 depth + procurement (2026-06-23)
+
+| File | What changed |
+|------|----------------|
+| `src/lib/marketing/security-page-content.ts` | **New** — condensed AR security pillars + controls |
+| `src/lib/marketing/security-page-content-en.ts` | **New** — EN mirror |
+| `src/lib/marketing/deployment-page-content.ts` | **New** — 3 honest deployment models |
+| `src/lib/marketing/deployment-page-content-en.ts` | **New** — EN mirror |
+| `src/components/marketing/v2/security-depth-page.tsx` | **New** — shared security template |
+| `src/components/marketing/v2/deployment-depth-page.tsx` | **New** — shared deployment template |
+| `src/app/(marketing)/security/page.tsx` | R5: ~509 → ~25 lines (shell) |
+| `src/app/en/security/page.tsx` | Uses shared SecurityDepthPage |
+| `src/app/(marketing)/deployment/page.tsx` | R5: condensed via template |
+| `src/app/en/deployment/page.tsx` | Uses shared DeploymentDepthPage |
+| `src/lib/marketing/start-hub-content*.ts` | Engagement pricing band (from–to) |
+| `src/components/marketing/v2/start-hub-page.tsx` | Pricing table in `#engagement` |
+| `src/lib/marketing/institutional-use-cases.ts` | `tier1InstitutionalUseCases` (4 cases) |
+| `src/app/(marketing)/use-cases/page.tsx` | Tier-1 only + MarketingPageShell |
+| `docs/marketing/MARKETING_ROADMAP.md` | R1–R5 completion table |
+
 ---
 
 ## Not Modified (by design)

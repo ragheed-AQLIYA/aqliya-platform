@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { BuyerJourney, BuyerJourneyStep } from "@/lib/marketing/buyer-journeys";
-import type { EngagementModelCard, ProcessPhase } from "@/lib/marketing/start-hub-content";
+import type { EngagementModelCard, ProcessPhase, EngagementPricingBand } from "@/lib/marketing/start-hub-content";
 import { publicEngagementGate, publicEngagementGateEn } from "@/lib/marketing/public-status";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/marketing-shell";
@@ -14,6 +14,8 @@ type StartHubCopy = {
   chooseRoleHint: string;
   engagementTitle: string;
   engagementHint: string;
+  pricingTitle: string;
+  pricingHint: string;
   processTitle: string;
   processHint: string;
   proof: string;
@@ -26,6 +28,7 @@ type StartHubPageProps = {
   journeys: BuyerJourney[];
   universalSteps: BuyerJourneyStep[];
   engagementModels: EngagementModelCard[];
+  engagementPricing: EngagementPricingBand[];
   processPhases: ProcessPhase[];
   processPrinciples: string[];
   copy: StartHubCopy;
@@ -36,6 +39,7 @@ export function StartHubPage({
   journeys,
   universalSteps,
   engagementModels,
+  engagementPricing,
   processPhases,
   processPrinciples,
   copy,
@@ -137,6 +141,40 @@ export function StartHubPage({
               </div>
             ))}
           </div>
+          <h3 className="mt-10 text-lg font-black">{copy.pricingTitle}</h3>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-border/60">
+            <table className="w-full min-w-[520px] text-sm">
+              <thead>
+                <tr className="border-b bg-muted/30 text-start">
+                  <th className="px-4 py-3 font-semibold">
+                    {locale === "en" ? "Model" : "النموذج"}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {locale === "en" ? "From" : "من"}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {locale === "en" ? "To" : "إلى"}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {locale === "en" ? "Note" : "ملاحظة"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {engagementPricing.map((row) => (
+                  <tr key={row.model} className="border-b border-border/40 last:border-0">
+                    <td className="px-4 py-3 font-medium">{row.model}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.from}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.to}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{row.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-[11px] text-muted-foreground">
+            {copy.pricingHint}
+          </p>
           <Link
             href={copy.contactHref}
             className="mt-6 inline-block text-sm font-medium text-primary hover:underline"

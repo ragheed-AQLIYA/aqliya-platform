@@ -153,3 +153,15 @@ export const institutionalUseCases: InstitutionalUseCase[] = [
     systemLabel: "تصميم نظام مخصص",
   },
 ];
+
+/** Tier-1 use cases shown on /use-cases (R5 trim) */
+export const tier1UseCaseIds = [
+  "audit-compliance",
+  "decision-governance",
+  "local-content",
+  "regulatory-readiness",
+] as const;
+
+export const tier1InstitutionalUseCases = institutionalUseCases.filter((uc) =>
+  (tier1UseCaseIds as readonly string[]).includes(uc.id),
+);

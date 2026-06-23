@@ -1,4 +1,4 @@
-import type { EngagementModelCard, ProcessPhase } from "./start-hub-content";
+import type { EngagementModelCard, ProcessPhase, EngagementPricingBand } from "./start-hub-content";
 
 export const engagementModelsEn: EngagementModelCard[] = [
   {
@@ -74,4 +74,31 @@ export const processPrinciplesEn = [
   "Evidence governs — every output linked to source",
   "Governance built in — not bolted on later",
   "Start from institution reality — not generic templates",
+];
+
+export const engagementPricingEn: EngagementPricingBand[] = [
+  {
+    model: "Executive diagnostic",
+    from: "SAR 0",
+    to: "SAR 0",
+    note: "Single session — no commitment",
+  },
+  {
+    model: "Operational evaluation",
+    from: "SAR 0",
+    to: "SAR 0",
+    note: "Agreed limited scope upfront",
+  },
+  {
+    model: "Institutional activation (cloud)",
+    from: "After evaluation",
+    to: "By users and paths",
+    note: "Quote after measured outcomes — no broad pre-contract",
+  },
+  {
+    model: "Private / air-gapped",
+    from: "Feasibility assessment",
+    to: "Co-design project",
+    note: "Strategic — joint engineering scope",
+  },
 ];

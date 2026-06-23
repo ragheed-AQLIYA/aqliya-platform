@@ -19,7 +19,7 @@
 ┌─────────────────────────────────────────────────────────┐
 │  VISION — ماذا نحل؟ (/, /platform, /products, /about)   │
 ├─────────────────────────────────────────────────────────┤
-│  JOURNEY — من أين أبدأ؟ (/start, /buyers, /how-we-work) │
+│  JOURNEY — من أين أبدأ؟ (/start, /use-cases) │
 ├─────────────────────────────────────────────────────────┤
 │  PROOF — كيف أثبت؟ (/proof, /demo, /procurement-pack)   │
 ├─────────────────────────────────────────────────────────┤
@@ -56,6 +56,20 @@
 | 1.6 | تقييم الفجوات + هذه الخارطة | `docs/marketing/` | ✅ |
 
 **معيار الإغلاق:** زائر ينقر «من أين تبدأ» ويصل لمسار دوره في ≤ 2 نقرة.
+
+---
+
+### برنامج إعادة التصميم R1–R5 ✅ (2026-06-23)
+
+| موجة | المخرج | الحالة |
+|------|--------|--------|
+| R1 | رئيسية 4 blocks + MarketingPageShell | ✅ |
+| R2 | `/proof` hub موحّد + redirects | ✅ |
+| R3 | ProductPageTemplate + `/products` مختصر | ✅ |
+| R4 | `/start` hub (engagement + process + personas) + EN | ✅ |
+| R5 | `/security` + `/deployment` مختصر، pricing band، `/use-cases` ×4 | ✅ |
+
+**مرجع:** `MARKETING_REDESIGN_PLAN.md`
 
 ---
 

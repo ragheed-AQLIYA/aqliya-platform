@@ -6,6 +6,7 @@ import {
 } from "@/lib/marketing/buyer-journeys-en";
 import {
   engagementModelsEn,
+  engagementPricingEn,
   processPhasesEn,
   processPrinciplesEn,
 } from "@/lib/marketing/start-hub-content-en";
@@ -23,6 +24,7 @@ export default function EnglishStartPage() {
       journeys={buyerJourneysEn}
       universalSteps={universalJourneyStepsEn}
       engagementModels={engagementModelsEn}
+      engagementPricing={engagementPricingEn}
       processPhases={processPhasesEn}
       processPrinciples={processPrinciplesEn}
       copy={{
@@ -34,6 +36,8 @@ export default function EnglishStartPage() {
         chooseRoleHint: "Each path: 3 content steps → then a diagnostic session when ready.",
         engagementTitle: "Engagement models",
         engagementHint: "From free diagnostic to institutional activation — no wide contract before proof.",
+        pricingTitle: "Approximate investment range",
+        pricingHint: "Not a binding quote — for procurement planning only. Operational evaluation is free when scope is agreed.",
         processTitle: "How we work",
         processHint: "Same methodology for every role — diagnostic through expansion.",
         proof: "Proof center",
