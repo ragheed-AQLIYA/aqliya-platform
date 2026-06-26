@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts
 
       - name: Run database backup
         run: node scripts/platform/backup.mjs
@@ -57,7 +57,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts
+
+      - name: Generate Prisma client
+        run: npx prisma generate
 
       - name: Verify latest backup
         run: npm run backup:verify
