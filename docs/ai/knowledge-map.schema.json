@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aqliya.com/schemas/knowledge-map.schema.json",
+  "title": "AQLIYA Knowledge Map Schema",
+  "description": "Machine-validatable schema for docs/ai/knowledge-map.json — the complete registry of every significant documentation file in the AQLIYA repository.",
+  "type": "object",
+  "required": ["version", "lastUpdated", "documents", "deprecated", "superseded", "tags"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Schema version (major.minor)"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of last update in YYYY-MM-DD format"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of this knowledge map"
+    },
+    "documents": {
+      "type": "array",
+      "description": "All active documentation files with metadata",
+      "items": {
+        "$ref": "#/$defs/documentEntry"
+      }
+    },
+    "deprecated": {
+      "type": "array",
+      "description": "Deprecated documentation files (still present but should not be referenced)",
+      "items": {
+        "$ref": "#/$defs/statusEntry"
+      }
+    },
+    "superseded": {
+      "type": "array",
+      "description": "Superseded documentation files (replaced by newer versions)",
+      "items": {
+        "$ref": "#/$defs/statusEntry"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "description": "Tag-based index for quick lookup",
+      "patternProperties": {
+        "^[a-z-]+$": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of document IDs matching this tag"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "documentEntry": {
+      "type": "object",
+      "required": ["id", "title", "path", "owner", "priority", "sourceOfTruth", "readWhen"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z_]+$",
+          "description": "Unique uppercase-with-underscores identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable title"
+        },
+        "path": {
+          "type": "string",
+          "description": "Relative filesystem path from repository root (must exist or be marked 'planned')"
+        },
+        "owner": {
+          "type": "string",
+          "description": "Owning team or role"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["P0-critical", "P1-high", "P2-medium", "P3-low", "P4-archive"],
+          "description": "Priority level for reading and maintenance"
+        },
+        "sourceOfTruth": {
+          "type": "boolean",
+          "description": "Whether this document is a source of truth (versus derivative or index)"
+        },
+        "readWhen": {
+          "type": "string",
+          "description": "Guidance on when an AI agent should read this document"
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Document IDs that should be read before this one"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "draft", "planned", "superseded", "archived"],
+          "description": "Current document lifecycle status"
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional contextual note about this document"
+        }
+      }
+    },
+    "statusEntry": {
+      "type": "object",
+      "required": ["path", "status"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Relative filesystem path"
+        },
+        "supersededBy": {
+          "type": "string",
+          "description": "Path or ID of the document that supersedes this one"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["deprecated", "superseded"],
+          "description": "Lifecycle status"
+        }
+      }
+    }
+  }
+}
