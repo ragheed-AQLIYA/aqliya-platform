@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ContactForm } from "../contact-form";
+import { ContactForm } from "./contact-form";
 import {
   contactPageCopyAr,
   contactProductsAr,

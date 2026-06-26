@@ -23,6 +23,12 @@ if (!existsSync(BACKUP_DIR)) {
 
 const url = new URL(DATABASE_URL)
 const dbName = url.pathname.replace(/^\//, "")
+
+// Strip Prisma-specific query parameters that pg_dump cannot parse
+// (e.g. ?schema=public, ?connection_limit=1, ?pool_timeout=0, ?pgbouncer=true)
+url.search = ""
+
+const pgUrl = url.toString()
 const filename = `aqliya-backup-${TIMESTAMP}.sql`
 const filepath = path.join(BACKUP_DIR, filename)
 
@@ -31,7 +37,7 @@ try {
   console.log(`📍 Output: ${filepath}\n`)
 
   execSync(
-    `pg_dump "${DATABASE_URL}" --no-owner --no-acl --format=c > "${filepath}"`,
+    `pg_dump "${pgUrl}" --no-owner --no-acl --format=c > "${filepath}"`,
     { stdio: "inherit", timeout: 120_000 }
   )
 
