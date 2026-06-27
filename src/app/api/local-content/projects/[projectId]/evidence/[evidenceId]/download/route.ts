@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { assertProjectAccess } from "@/lib/local-content/guards";
-import { requireServerActionAccess } from "@/core/access/server-action-guard";
+import { enforce } from "@/lib/authorization";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { getStorageProvider } from "@/lib/platform/storage";
@@ -14,10 +14,7 @@ export async function GET(
 
   try {
     const { user, project } = await assertProjectAccess(projectId, "view");
-    await requireServerActionAccess("local_content", "read", {
-      organizationId: user.organizationId,
-      resourceId: projectId,
-    });
+    await enforce(user, { type: "project", id: projectId, tenantId: user.organizationId }, "read");
 
     const evidenceRecord = await assertEvidenceDownloadAccess({
       productSlug: "local_content",

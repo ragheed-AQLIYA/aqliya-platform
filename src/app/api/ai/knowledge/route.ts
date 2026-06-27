@@ -4,7 +4,7 @@ import { handleAiApiError } from "@/lib/ai/api-errors"
 import {
   deleteKnowledgeDocument,
   resolveKnowledgeOrganizationId,
-} from "@/lib/rag/knowledge-service"
+} from "@/lib/core/knowledge/rag/knowledge-service"
 
 export const dynamic = "force-dynamic"
 

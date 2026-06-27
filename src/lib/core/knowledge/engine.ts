@@ -3,7 +3,7 @@ import "server-only";
 import {
   retrieveGovernedContext,
   type GovernedRAGContext,
-} from "@/lib/rag/intelligence-core-rag";
+} from "@/lib/core/knowledge/rag/intelligence-core-rag";
 
 export interface KnowledgeRetrieveInput {
   organizationId: string;

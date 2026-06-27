@@ -4,8 +4,8 @@ import {
   retrieveGovernedContext,
   formatGovernedRAGForPrompt,
   toGovernedRAGPayload,
-} from "@/lib/rag/intelligence-core-rag"
-import type { AIRequest } from "@/lib/ai/types"
+} from "@/lib/core/knowledge/rag/intelligence-core-rag"
+import type { AIRequest } from "@/lib/core/ai/types"
 
 function extractRagQuery(taskInput: Record<string, unknown>): string | null {
   if (typeof taskInput.query === "string" && taskInput.query.trim()) {

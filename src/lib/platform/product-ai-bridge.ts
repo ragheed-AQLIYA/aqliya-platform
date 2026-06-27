@@ -1,7 +1,8 @@
 import "server-only"
 
 import { aiOrchestrator } from "@/lib/ai/orchestrator"
-import { requireServerActionAccess } from "@/core/access/server-action-guard"
+import type { UserRole } from "@prisma/client";
+import { enforce } from "@/lib/authorization"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import { routeIntelligenceRequest } from "@/lib/ai/intelligence-runtime"
@@ -56,10 +57,15 @@ export async function runGovernedProductAI(
     throw new Error("Access denied: authenticated user required for governed AI")
   }
 
-  await requireServerActionAccess(input.productKey, "create", {
+  const user = {
+    id: input.userId,
+    email: "",
+    name: input.userId,
+    role: (input.userRole ?? "OPERATOR") as UserRole,
     organizationId: input.organizationId,
-    resourceId: input.resourceId,
-  })
+    organization: { id: input.organizationId, name: "" },
+  };
+  await enforce(user, { type: input.productKey as any, id: input.resourceId, tenantId: input.organizationId }, "create")
 
   const route = routeIntelligenceRequest({
     productId: input.productKey,

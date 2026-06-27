@@ -4,7 +4,7 @@ import { getAuditActor } from "@/lib/audit/actor-context";
 import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
 import { verifyDownloadToken } from "@/lib/download-token";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
-import { requireAuditCoreAccess } from "@/core/access/audit-access-adapter";
+import { enforce, mapAuditRoleToUserRole } from "@/lib/authorization";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 
 export async function GET(
@@ -38,11 +38,18 @@ export async function GET(
       };
     } else {
       actor = await getAuditActor();
-      await requireAuditCoreAccess(
-        actor,
-        "audit_evidence",
+      const auditUser = {
+        id: actor.actorId,
+        email: "",
+        name: actor.actorName,
+        role: mapAuditRoleToUserRole(actor.actorRole),
+        organizationId: actor.organizationId,
+        organization: { id: actor.organizationId, name: "" },
+      };
+      await enforce(
+        auditUser,
+        { type: "evidence", id: evidenceId, tenantId: actor.organizationId },
         "read",
-        evidenceId,
       );
     }
 

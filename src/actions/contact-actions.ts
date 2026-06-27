@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
-import { requireServerActionAccess } from "@/core/access/server-action-guard";
+import { getCurrentUser, requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -711,10 +711,7 @@ export async function exportContactProfile(contactId: string) {
       throw new Error("Contact not found or access denied");
     }
 
-    await requireServerActionAccess("contact", "export", {
-      organizationId: contact.organizationId,
-      resourceId: contactId,
-    });
+    await enforce(user, { type: "contact", id: contactId, tenantId: contact.organizationId }, "export");
 
     // L5: Export approval gate — only approved exports can proceed
     if (contact.sensitivityLevel !== "normal" && contact.exportStatus !== "approved") {

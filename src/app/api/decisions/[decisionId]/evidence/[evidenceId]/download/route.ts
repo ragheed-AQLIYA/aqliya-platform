@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireDecisionAccess } from "@/lib/auth";
-import { requireServerActionAccess } from "@/core/access/server-action-guard";
+import { enforce } from "@/lib/authorization";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { getStorageProvider } from "@/lib/platform/storage";
@@ -17,10 +17,7 @@ export async function GET(
       decisionId,
       "VIEWER",
     );
-    await requireServerActionAccess("decision", "read", {
-      organizationId,
-      resourceId: decisionId,
-    });
+    await enforce(user, { type: "decision", id: decisionId, tenantId: organizationId }, "read");
 
     const evidenceRecord = await assertEvidenceDownloadAccess({
       productSlug: "decision",

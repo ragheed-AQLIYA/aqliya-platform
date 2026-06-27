@@ -15,7 +15,7 @@ import {
   requireUserContext,
   requireDecisionAccess,
 } from "@/lib/auth";
-import { requireServerActionAccess } from "@/core/access/server-action-guard";
+import { enforce } from "@/lib/authorization";
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit";
 
 // --- Decision List ---
@@ -1483,10 +1483,7 @@ export async function exportDecisionReport(decisionId: string) {
       decisionId,
       "OPERATOR",
     );
-    await requireServerActionAccess("decision", "export", {
-      organizationId,
-      resourceId: decisionId,
-    });
+    await enforce(user, { type: "decision", id: decisionId, tenantId: organizationId }, "export");
     const decision = (await prisma.decision.findUnique({
       where: { id: decisionId },
       include: {
@@ -1554,7 +1551,7 @@ export async function exportDecisionReport(decisionId: string) {
       return { success: false, error: "Access denied" };
     }
 
-    const { buildDecisionReportPDF } = await import("@/lib/decisions/export");
+    const { buildDecisionReportPDF } = await import("@/lib/decision/decision-export-pdf");
 
     const pdfResult = await buildDecisionReportPDF({
       decisionId,
