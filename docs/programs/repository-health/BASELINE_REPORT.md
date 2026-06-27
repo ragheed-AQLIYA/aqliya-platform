@@ -255,7 +255,7 @@ Phase 1 targeted the root cause identified in Phase 0: **34 tracked files delete
 
 | Issue | Notes | Target Phase |
 |-------|-------|-------------|
-| 4 null-byte files | Non-critical paths | Phase 2 (P2) |
+| 6 null-byte files (4 git + 2 disk) | 4 corrupted in git (UTF-16), 2 on disk only → all cleaned/restored | ✅ **Phase 2 P2.1 Complete** |
 | 6 lint errors | `@typescript-eslint/no-explicit-any` | Phase 2 (P4) |
 | 723 lint warnings | Mostly `security/detect-object-injection` | Phase 2 (P5) |
 | 268 stale knowledge map entries | References untracked/missing files | Separate program (Knowledge Foundation) |

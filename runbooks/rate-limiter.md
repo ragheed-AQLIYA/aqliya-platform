@@ -1,4 +1,4 @@
-﻿# Rate Limiter Runbook
+﻿﻿# Rate Limiter Runbook
 
 **Document Owner:** Infrastructure Agent
 **Last Updated:** 2026-06-08
@@ -261,7 +261,7 @@ When rate-limited (429), the response includes:
 |--------|---------|-------------|
 | Retry-After | 45 | Seconds until the rate limit window resets |
 | X-RateLimit-Limit | 100 | Maximum requests allowed in the window |
-| X-RateLimit-Remaining |   | Requests remaining in the current window |
+| X-RateLimit-Remaining |   | Requests remaining in the current window |
 
 ### 7.3 What is NOT monitored (gaps)
 
