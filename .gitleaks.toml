@@ -1,0 +1,60 @@
+# AQLIYA — Gitleaks Secret Scanning Configuration
+# Run: gitleaks detect --source . --config .gitleaks.toml
+# Install: brew install gitleaks or https://github.com/gitleaks/gitleaks/releases
+
+title = "AQLIYA Secret Scanning Config"
+
+# Extend the default ruleset with project-specific patterns
+[extend]
+useDefault = true
+
+# Allowlist known false-positives / test tokens
+[allowlist]
+description = "Known safe values and test fixtures"
+paths = [
+  # Test fixtures with dummy secrets
+  "(?i)__tests__",
+  "(?i)test",
+  "(?i)mock",
+  "(?i)fixture",
+  # Example files
+  ".env.example",
+  ".env.test.example",
+  ".env.pilot.example",
+  # Migration SQL files may contain example values
+  "prisma/migrations/",
+  # Documentation with placeholder examples
+  "docs/",
+]
+
+# ── Custom rules ──
+
+[[rules]]
+id = "aqliya-auth-secret"
+description = "AQLIYA Auth Secret (AUTH_SECRET)"
+regex = '''(?i)AUTH_SECRET\s*=\s*['"][^'"]{8,}['"]'''
+tags = ["aqliya", "auth"]
+
+[[rules]]
+id = "aqliya-download-token"
+description = "AQLIYA Download Token Secret"
+regex = '''(?i)DOWNLOAD_TOKEN_SECRET\s*=\s*['"][^'"]{8,}['"]'''
+tags = ["aqliya", "auth"]
+
+[[rules]]
+id = "aqliya-scim-key"
+description = "AQLIYA SCIM API Key"
+regex = '''(?i)SCIM_API_KEY\s*=\s*['"][^'"]{6,}['"]'''
+tags = ["aqliya", "auth"]
+
+[[rules]]
+id = "aqliya-openai-key"
+description = "OpenAI API Key"
+regex = '''(?i)OPENAI_API_KEY\s*=\s*['\"](sk-[A-Za-z0-9]{20,})['\"]'''
+tags = ["aqliya", "ai", "secret"]
+
+[[rules]]
+id = "aqliya-anthropic-key"
+description = "Anthropic API Key"
+regex = '''(?i)ANTHROPIC_API_KEY\s*=\s*['\"](sk-ant-[A-Za-z0-9]{20,})['\"]'''
+tags = ["aqliya", "ai", "secret"]
