@@ -4,7 +4,6 @@
  * Dependency rule: products → @/lib/core/* → legacy implementation modules.
  * Legacy import paths remain supported during transition.
  */
-export * as Access from "./access";
 export * as Audit from "./audit";
 export * as Contracts from "./contracts";
 export * as Evidence from "./evidence";
