@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUserContext } from "@/lib/auth";
-import { runScheduledRetention } from "@/lib/platform/retention/engine";
+import { runScheduledRetention } from "@/lib/core/policy/retention/engine";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
-import { addHistory } from "@/lib/platform/retention/history-store";
+import { addHistory } from "@/lib/core/policy/retention/history-store";
 
 export async function POST(request: NextRequest) {
   try {

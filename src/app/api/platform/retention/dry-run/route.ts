@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUserContext } from "@/lib/auth";
-import { dryRun } from "@/lib/platform/retention/engine";
-import { getPolicyForModel } from "@/lib/platform/retention/policies";
+import { dryRun } from "@/lib/core/policy/retention/engine";
+import { getPolicyForModel } from "@/lib/core/policy/retention/policies";
 
 export async function POST(request: NextRequest) {
   try {

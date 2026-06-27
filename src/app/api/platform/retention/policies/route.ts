@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUserContext } from "@/lib/auth";
-import { getAllPolicies, setPolicyOverride, resetPolicyOverride } from "@/lib/platform/retention/policies";
+import { getAllPolicies, setPolicyOverride, resetPolicyOverride } from "@/lib/core/policy/retention/policies";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 
 export async function GET() {

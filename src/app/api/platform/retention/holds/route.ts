@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUserContext } from "@/lib/auth";
-import { addHold, listHolds } from "@/lib/platform/retention/holds";
+import { addHold, listHolds } from "@/lib/core/policy/retention/holds";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 
 export async function GET() {

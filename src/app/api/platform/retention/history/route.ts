@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireUserContext } from "@/lib/auth";
-import { getHistory } from "@/lib/platform/retention/history-store";
+import { getHistory } from "@/lib/core/policy/retention/history-store";
 
 export async function GET() {
   try {

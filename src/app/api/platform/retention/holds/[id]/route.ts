@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUserContext } from "@/lib/auth";
-import { removeHold } from "@/lib/platform/retention/holds";
+import { removeHold } from "@/lib/core/policy/retention/holds";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 
 export async function DELETE(
