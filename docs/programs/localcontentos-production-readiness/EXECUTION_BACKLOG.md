@@ -219,7 +219,7 @@ P0-F (Operational Readiness — runbooks, DR plan, AI auth)
 | Wave | Status | Gate | Regression Guard | Evidence Package | Commit |
 |------|:------:|:----:|:----------------:|:----------------:|:------:|
 | **B2A-1** Workbook Actions | ✅ Passed | 🟢 PASS | 27/27 checks | RB-01/B2A-1/ complete | `916144f` |
-| **B2A-2** Review/V3 Actions | ✅ Passed | 🟢 PASS | 16/16 checks | RB-01/B2A-2/ complete | _(next commit)_ |
+| **B2A-2** Review/V3 Actions | ✅ Passed | 🟢 PASS | 16/16 checks | RB-01/B2A-2/ complete | `d172742` |
 | **B2A-3** Prisma Layer | ⏳ Pending | — | — | — | — |
 | **B2A-4** Library Layer | ⏳ Pending | — | — | — | — |
 | **B2A-5** Final Proof | ⏳ Pending | — | — | — | — |
