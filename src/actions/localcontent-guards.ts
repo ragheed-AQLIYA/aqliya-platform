@@ -1,0 +1,104 @@
+// ─── LocalContentOS Tenant Isolation Guards ───
+// Extracted shared guard pattern for verifying entity access belongs to the
+// current user's organization. Each guard:
+//   1. Calls requireUserContext() to get the authenticated user + org
+//   2. Verifies the target entity belongs to that org via Prisma chain
+//   3. Throws "Access denied" if not found or not owned
+//
+// Pattern: entity → parent → ... → LocalContentProject.organizationId
+//
+// These guards are consumed by server actions (B2A-1 workbook actions,
+// B2A-2 review/v3 actions, etc.) and integrate with the existing safe()
+// wrapper pattern (errors are caught and returned as { ok: false }).
+
+import { prisma } from "@/lib/prisma";
+import { requireUserContext } from "@/lib/auth";
+
+/**
+ * Verify that a project belongs to the current user's organization.
+ * Used by actions accepting a projectId from the client.
+ */
+export async function requireProjectAccess(projectId: string): Promise<string> {
+  const user = await requireUserContext();
+  const project = await prisma.localContentProject.findFirst({
+    where: { id: projectId, organizationId: user.organizationId },
+    select: { id: true },
+  });
+  if (!project) throw new Error("Access denied: project access required");
+  return user.organizationId;
+}
+
+/**
+ * Verify that a workbook belongs to the current user's organization.
+ * Chain: LcWorkbook → project → LocalContentProject.organizationId
+ * Used by actions accepting a workbookId from the client.
+ */
+export async function requireWorkbookAccess(workbookId: string): Promise<string> {
+  const user = await requireUserContext();
+  const workbook = await prisma.lcWorkbook.findFirst({
+    where: {
+      id: workbookId,
+      project: { organizationId: user.organizationId },
+    },
+    select: { id: true },
+  });
+  if (!workbook) throw new Error("Access denied: workbook access required");
+  return user.organizationId;
+}
+
+/**
+ * Verify that a workbook line belongs to a workbook in the current user's org.
+ * Chain: LcWorkbookLine → workbook → project → organizationId
+ * Used by actions accepting a lineId from the client.
+ */
+export async function requireWorkbookLineAccess(lineId: string): Promise<string> {
+  const user = await requireUserContext();
+  const line = await prisma.lcWorkbookLine.findFirst({
+    where: {
+      id: lineId,
+      workbook: { project: { organizationId: user.organizationId } },
+    },
+    select: { id: true },
+  });
+  if (!line) throw new Error("Access denied: workbook line access required");
+  return user.organizationId;
+}
+
+/**
+ * Verify that a data request belongs to a workbook in the current user's org.
+ * Chain: LcDataRequest → workbook → project → organizationId
+ * Used by actions accepting a requestId from the client.
+ */
+export async function requireDataRequestAccess(requestId: string): Promise<string> {
+  const user = await requireUserContext();
+  const request = await prisma.lcDataRequest.findFirst({
+    where: {
+      id: requestId,
+      workbook: { project: { organizationId: user.organizationId } },
+    },
+    select: { id: true },
+  });
+  if (!request) throw new Error("Access denied: data request access required");
+  return user.organizationId;
+}
+
+/**
+ * Verify that a data request item belongs to a request in a workbook
+ * in the current user's organization.
+ * Chain: LcDataRequestItem → request → workbook → project → organizationId
+ * Used by actions accepting an itemId from the client.
+ */
+export async function requireDataRequestItemAccess(itemId: string): Promise<string> {
+  const user = await requireUserContext();
+  const item = await prisma.lcDataRequestItem.findFirst({
+    where: {
+      id: itemId,
+      request: {
+        workbook: { project: { organizationId: user.organizationId } },
+      },
+    },
+    select: { id: true },
+  });
+  if (!item) throw new Error("Access denied: data request item access required");
+  return user.organizationId;
+}
