@@ -6,6 +6,10 @@
 import { revalidatePath } from "next/cache";
 import { requireUserContext } from "@/lib/auth";
 import {
+  requireOrganizationAccess,
+  requireWorkbookAccess,
+} from "@/actions/localcontent-guards";
+import {
   runWorkbookAiReview,
   getWorkbookReviewStatus,
 } from "@/lib/local-content/workbook/ai-auto-review";
@@ -28,6 +32,8 @@ import {
 } from "@/lib/local-content/workbook/learning-loop";
 import { checkAiHealth, isAiHealthy } from "@/lib/local-content/workbook/ai-health";
 import type { TbLine } from "@/lib/local-content/workbook/types";
+import { parseOrError } from "@/lib/local-content/schemas/common";
+import { runSimulationSchema } from "@/lib/local-content/schemas/ai-review";
 
 // ─── Action Result ───
 
@@ -51,7 +57,7 @@ function fail<T = unknown>(error: string): ActionResult<T> {
 
 export async function checkAiHealthAction(): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
     const report = await checkAiHealth();
     return ok(report);
   } catch (error) {
@@ -80,6 +86,8 @@ export async function runWorkbookAiReviewAction(
 ): Promise<ActionResult> {
   try {
     const user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
+    await requireWorkbookAccess(workbookId);
 
     const result = await runWorkbookAiReview(
       organizationId,
@@ -100,7 +108,9 @@ export async function getWorkbookReviewStatusAction(
   workbookId: string,
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
+    await requireWorkbookAccess(workbookId);
 
     const status = await getWorkbookReviewStatus(organizationId, workbookId);
     return ok(status);
@@ -118,7 +128,9 @@ export async function generateRecommendationsAction(
   workbookId: string,
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
+    await requireWorkbookAccess(workbookId);
 
     const result = await generateRecommendations(organizationId, workbookId);
 
@@ -135,7 +147,7 @@ export async function listWorkbookRecommendationsAction(
   status?: string,
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
 
     const recs = await listWorkbookRecommendations(organizationId, workbookId, status);
     return ok(recs);
@@ -169,45 +181,53 @@ export async function runSimulationAction(
   scenarioType: "supplier" | "workforce" | "asset" | "mixed",
   params: Record<string, number>,
 ): Promise<ActionResult> {
+  const parsed = parseOrError(runSimulationSchema, { organizationId, workbookId, scenarioType, params });
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input" };
+  }
+  const { scenarioType: validatedScenario, params: validatedParams } = parsed.data;
+
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
+    await requireWorkbookAccess(workbookId);
 
     let scenario;
-    switch (scenarioType) {
+    switch (validatedScenario) {
       case "supplier":
-        scenario = createSupplierOptimizationScenario(params.localSpendIncrease ?? 0);
+        scenario = createSupplierOptimizationScenario(validatedParams.localSpendIncrease ?? 0);
         // Fill in the actual value
         scenario.parameters[0] = {
           ...scenario.parameters[0],
-          newValue: params.localSpendValue ?? params.localSpendIncrease ?? 0,
+          newValue: validatedParams.localSpendValue ?? validatedParams.localSpendIncrease ?? 0,
         };
         break;
       case "workforce":
-        scenario = createWorkforceLocalizationScenario(params.saudiHireCount ?? 0);
+        scenario = createWorkforceLocalizationScenario(validatedParams.saudiHireCount ?? 0);
         scenario.parameters[0] = {
           ...scenario.parameters[0],
-          newValue: params.saudiWorkforceValue ?? params.saudiHireCount ?? 0,
+          newValue: validatedParams.saudiWorkforceValue ?? validatedParams.saudiHireCount ?? 0,
         };
         break;
       case "asset":
-        scenario = createAssetLocalizationScenario(params.localAssetIncrease ?? 0);
+        scenario = createAssetLocalizationScenario(validatedParams.localAssetIncrease ?? 0);
         scenario.parameters[0] = {
           ...scenario.parameters[0],
-          newValue: params.localAssetValue ?? params.localAssetIncrease ?? 0,
+          newValue: validatedParams.localAssetValue ?? validatedParams.localAssetIncrease ?? 0,
         };
         break;
       case "mixed":
         scenario = createMixedScenario(
-          params.supplierDelta ?? 0,
-          params.workforceDelta ?? 0,
-          params.totalSaudiWorkforce ?? 0,
-          params.totalWorkforce ?? 0,
-          params.localAssetDelta ?? 0,
-          params.totalAsset ?? 0,
+          validatedParams.supplierDelta ?? 0,
+          validatedParams.workforceDelta ?? 0,
+          validatedParams.totalSaudiWorkforce ?? 0,
+          validatedParams.totalWorkforce ?? 0,
+          validatedParams.localAssetDelta ?? 0,
+          validatedParams.totalAsset ?? 0,
         );
         break;
       default:
-        return fail(`Unknown scenario type: ${scenarioType}`);
+        return fail(`Unknown scenario type: ${validatedScenario}`);
     }
 
     const result = await runSimulation(organizationId, workbookId, scenario);
@@ -224,7 +244,7 @@ export async function listWorkbookSimulationsAction(
   workbookId: string,
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
 
     const sims = await listWorkbookSimulations(organizationId, workbookId);
     return ok(sims);
@@ -241,7 +261,7 @@ export async function getPatternHealthScoresAction(
   organizationId: string,
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
 
     const scores = await getPatternHealthScores(organizationId);
     return ok(scores);
@@ -254,7 +274,7 @@ export async function getLearningLoopSummaryAction(
   organizationId: string,
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
 
     const summary = await getLearningLoopSummary(organizationId);
     return ok(summary);
@@ -272,7 +292,9 @@ export async function getWorkbookAiDashboardDataAction(
   workbookId: string,
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
+    await requireWorkbookAccess(workbookId);
 
     const [reviewStatus, recommendations, simulations, health] = await Promise.all([
       getWorkbookReviewStatus(organizationId, workbookId),
@@ -291,3 +313,4 @@ export async function getWorkbookAiDashboardDataAction(
     return fail(error instanceof Error ? error.message : "Failed to get dashboard data");
   }
 }
+

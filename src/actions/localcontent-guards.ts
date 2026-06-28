@@ -102,3 +102,47 @@ export async function requireDataRequestItemAccess(itemId: string): Promise<stri
   if (!item) throw new Error("Access denied: data request item access required");
   return user.organizationId;
 }
+
+/**
+ * Verify that a client-supplied organizationId matches the current user's
+ * organization. Used by actions that accept organizationId as a parameter
+ * (e.g., review queue queries, AI advisor V3 actions) to prevent
+ * cross-tenant data access through parameter manipulation.
+ */
+export async function requireOrganizationAccess(organizationId: string): Promise<string> {
+  const user = await requireUserContext();
+  if (organizationId !== user.organizationId) {
+    throw new Error("Access denied: organization mismatch");
+  }
+  return user.organizationId;
+}
+
+/**
+ * Verify that a pattern suggestion belongs to the current user's organization.
+ * LcPatternSuggestion has organizationId directly on the model.
+ * Used by reviewSuggestionAction and batchReviewAction (type=suggestion).
+ */
+export async function requirePatternSuggestionAccess(suggestionId: string): Promise<string> {
+  const user = await requireUserContext();
+  const suggestion = await prisma.lcPatternSuggestion.findFirst({
+    where: { id: suggestionId, organizationId: user.organizationId },
+    select: { id: true },
+  });
+  if (!suggestion) throw new Error("Access denied: pattern suggestion access required");
+  return user.organizationId;
+}
+
+/**
+ * Verify that a match review belongs to the current user's organization.
+ * LcMatchReview has organizationId directly on the model.
+ * Used by reviewExplanationAction and batchReviewAction (type=explanation/false_positive).
+ */
+export async function requireMatchReviewAccess(matchReviewId: string): Promise<string> {
+  const user = await requireUserContext();
+  const review = await prisma.lcMatchReview.findFirst({
+    where: { id: matchReviewId, organizationId: user.organizationId },
+    select: { id: true },
+  });
+  if (!review) throw new Error("Access denied: match review access required");
+  return user.organizationId;
+}

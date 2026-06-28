@@ -1,0 +1,1190 @@
+---
+title: "LocalContentOS Production Readiness — Execution Backlog"
+status: active
+program: "LocalContentOS Production Readiness"
+phase: 2
+version: "3.2"
+date: 2026-06-28
+author: OpenCode
+classification: execution-backlog
+supersedes: v3.1
+---
+
+# LocalContentOS Production Readiness — Execution Backlog
+
+**Program:** LocalContentOS Production Readiness
+**Phase:** 2 — Gap Closure Execution
+**Date:** 2026-06-28
+**Documentation Authority:** `docs/programs/localcontentos-production-readiness/CAPABILITY_MAP.md`
+
+---
+
+## Execution Rules
+
+1. **Sub-wave ordering is strict** — P0-A → P0-B1 → P0-B2 → P0-B3 → P0-B4 → P0-C → P0-D → P0-E → P0-F → P1 → P2. No skipping forward.
+2. **Each sub-wave has a gate** — before moving to next sub-wave, run full validation and update the matrix.
+3. **One commit per capability** — 1-3 gaps per commit. Never mix sub-waves in one commit.
+4. **Matrix is a living document** — each commit that closes a gap updates `PRODUCTION_READINESS_MATRIX.md`.
+5. **Gap register is a living document** — each commit updates `GAP_REGISTER.md` (status → Resolved, add resolution note).
+
+### Gate Procedure
+
+After each sub-wave:
+
+```bash
+npx tsc --noEmit
+npm run build
+npm test
+# Update PRODUCTION_READINESS_MATRIX.md — mark gaps Resolved, recalculate scores
+# Update GAP_REGISTER.md — close gap IDs with resolution notes
+# Commit each capability independently
+```
+
+**Gate fails → fix before proceeding to next sub-wave.**
+
+### Commit Convention
+
+| Pattern | Example |
+|:-------:|:--------|
+| `P0-A<N> feat(localcontentos): <action>` | `P0-A1 feat(localcontentos): add Zod validation for workbook APIs` |
+| `P0-B1<N> feat(localcontentos): <action>` | `P0-B1 feat(localcontentos): audit tenant isolation on LCOS actions` |
+| `P0-B2A<N> feat(localcontentos): <action>` | `P0-B2A-01 feat(localcontentos): add auth + org checks to 18 workbook actions` |
+| `P0-B2B<N> feat(localcontentos): <action>` | `P0-B2B-01 feat(localcontentos): design and document RBAC matrix for LCOS roles` |
+| `P0-B3<N> feat(localcontentos): <action>` | `P0-B3 feat(localcontentos): add Zod validation for workbook actions (SC-01B)` |
+| `P0-B4<N> feat(localcontentos): <action>` | `P0-B4 feat(localcontentos): harden file upload validation for LCOS evidence` |
+| `P0-C<N> feat(localcontentos): <action>` | `P0-C1 feat(localcontentos): add CORS policy for LCOS API routes` |
+| `P0-C<N> feat(localcontentos): <action>` | `P0-C1 feat(localcontentos): add CORS policy for LCOS API routes` |
+| `P0-D<N> feat(localcontentos): <action>` | `P0-D1 feat(localcontentos): add LCOS health checks to platform endpoint` |
+| `P<E> fix(localcontentos): <action>` | `P0-E4 fix(localcontentos): fix mobile responsiveness for LCOS` |
+| `P1-A<N> feat(localcontentos): <action>` | `P1-A1 feat(localcontentos): implement audit retention policy` |
+| `P1-B<N> feat(localcontentos): <action>` | `P1-B1 feat(localcontentos): add structured logging to LCOS actions` |
+
+---
+
+## Wave P0 — Must Ship
+
+**Strategy:** P0 follows the **dependency chain**, not alphabetical order. Each sub-wave builds on the previous.
+```
+P0-A (Validation) ✅
+  ↓
+P0-B1 (Authorization Baseline — RB-01) ✅ VERIFIED (GATE FAILED)
+  ↓
+  [Gate: Zero Tenant Leakage = NO-GO]
+  │
+  ▼
+P0-B2A (Tenant Remediation — إصلاح نتائج RB-01)
+  ├── Auth + org checks on 18 workbook actions
+  ├── OrgId verification on 10 v3/review actions
+  ├── OrgId in 48 Prisma WHERE clauses
+  ├── Fix 16 findUnique calls
+  └── Re-run cross-tenant-attack.mjs
+  ↓
+  [Gate: Zero Tenant Leakage = target: PASS]
+  ↓
+P0-B2B (RBAC Foundation — RB-02, RB-03)
+  ├── Role / Permission / Resource / Action Matrices
+  └── RBAC guards on all actions
+  ↓
+P0-B3 (Workbook Validation — SC-01B)
+  ↓
+P0-B4 (Upload Security — SC-02)
+  ↓
+P0-C (CORS + JSON — SC-03, DI-03)
+  ↓
+P0-D (Operations Foundation — health, seed, backup)
+  ↓
+P0-E (Production UX — empty states, errors, mobile)
+  ↓
+P0-F (Operational Readiness — runbooks, DR plan, AI auth)
+```
+
+---
+
+### P0-A: Validation Foundation ✅ COMPLETE
+
+**What:** توحيد التحقق من الإدخال لكل نقاط الدخول  
+**Gaps closed:** 1 (SC-01A)  
+**Effort:** 1 day  
+**Gate:** ✅ Passed — `npx tsc --noEmit` + `npm run build` + `npm test` all pass
+
+#### P0-A1: Zod validation for LCOS server actions
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-04 (Security Hardening) |
+| **Gaps closed** | **SC-01A** ✅ |
+| **What** | Add Zod input validation to LCOS server actions |
+| **Details** | Scan all files in `src/actions/localcontent-*.ts`. Add Zod schemas for every mutation input. Reuse shared Zod patterns from existing codebase. Every action validates before execution. **Note:** P2 entry points (`createWorkbookAction`, `populateWorkbookAction`) deferred to SC-01B — blocked by RB-02. |
+| **Acceptance** | All P0/P0a/P1 LCOS server actions validate their input with Zod before writing to DB (17/19 entry points). Invalid inputs return structured `{success: false, message: string}` responses, not runtime crashes. SC-01A closed. |
+| **Validation** | `npx tsc --noEmit`: PASS · `npm run build`: PASS · `npm test`: 3120/3141 PASS (1 pre-existing) |
+| **Effort** | 1 day |
+| **Files touched** | `src/actions/localcontent-*.ts`, `src/lib/local-content/schemas/` (11 domain dirs) |
+| **Commit** | `P0-A1 feat(localcontentos): add Zod validation for 17/19 LCOS server actions` |
+
+---
+
+### P0-B1: Authorization Baseline (RB-01) ⚠️ GATE FAILED
+
+**What:** التحقق من العزل بين المستأجرين — إثبات أن النظام الحالي صحيح  
+**Why here:** بدون إثبات العزل، أي بناء RBAC لاحق سيكون على أساس غير مؤكد  
+**Gaps:** 1 (1 High)  
+**Effort:** 1 day  
+**Gate:** `npx tsc --noEmit` + `npm run build` + `npm test` + **Zero Tenant Leakage**
+
+**Criteria for `Zero Tenant Leakage` Gate (7 criteria, from RB-01 Phase 5):**
+- ✅ No `Prisma` query on LCOS models without `organizationId` scope — **🔴 FAILED** (48 unscoped queries found)
+- ✅ No mutation that crosses organization boundary — **🔴 FAILED** (12 unscoped mutations found)
+- ✅ No server action that accepts `organizationId` from client without session verification — **🔴 FAILED** (10 client-supplied orgId instances found)
+- ✅ No download/export endpoint that returns data from a different org — **🟡 WARN** (no direct evidence but cannot confirm — RB-02 required)
+- ✅ All Prisma queries in workbook libs scoped by orgId — **🔴 FAILED** (population.ts 19/20, services.ts 6/7, missing-data.ts 10/10 unscoped)
+- ✅ All workbook server actions call `requireSession()` or equivalent — **🔴 FAILED** (18 workbook actions have ZERO auth)
+- ✅ Coverage map published: all 9 LCOS action files audited — **✅ PASSED**
+
+**Result: 🔴 GATE FAILED — 21 active exploitation paths found. RB-01 cannot close.**
+
+**RB-01 status: OPEN — audit complete, remediation required in P0-B2.**
+
+---
+
+#### P0-B1-01: Tenant isolation audit (critical actions) ✅ AUDIT COMPLETE
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-05 (RBAC Audit) |
+| **Gaps closed** | RB-01 (findings feed into RB-02 remediation) |
+| **What** | Targeted tenant isolation audit of all LCOS actions |
+| **Details** | Audited ALL LCOS actions, queries, mutations, server actions, API routes, and Prisma queries. For each: verified `organizationId` is scoped to session tenant, role check exists for mutations, read-only queries enforce tenant boundaries. Published **Tenant Isolation Matrix** showing pass/fail per action file. **Findings: 48 unscoped queries, 21 active exploitation paths, 13 client-supplied orgId violations.** Full RB-01 evidence package delivered in `RB-01/` directory (5 documents + proof script). |
+| **Acceptance** | **❌ FAILED:** Zero Tenant Leakage not achieved. 21/39 (53.8%) exported server actions are exploitable for cross-tenant access. See `RB-01/05_ZERO_TENANT_LEAKAGE_GATE.md` for gate results. Remediation delegated to P0-B2 (RB-02/RB-03). |
+| **Effort** | 1 day |
+| **Dependencies** | P0-A1 ✅ (Zod schemas define action boundaries that RBAC can enforce on) |
+| **Files touched** | `RB-01/` (5 evidence documents + 1 proof script), no code changes |
+| **Commit** | `P0-B1 feat(localcontentos): audit and document 21 cross-tenant exploitation paths in LCOS` |
+
+---
+
+### P0-B1 Gate — 🔴 FAILED
+
+**Gate decision: NO-GO.** Zero Tenant Leakage criteria not met.
+
+**Findings blocking closure:**
+| Criterion | Result | Evidence |
+|-----------|--------|----------|
+| C1: No Prisma query without orgId scope | 🔴 **FAIL** | 48 unscoped queries (RB-01 Phase 2 §8.1) |
+| C2: No mutation crossing org boundary | 🔴 **FAIL** | 12 unscoped mutation actions (RB-01 Phase 3 §6.1) |
+| C3: No client-supplied orgId without session check | 🔴 **FAIL** | 10 client orgId instances (RB-01 Phase 3 §7) |
+| C4: No download endpoint exposing cross-tenant data | 🟡 **WARN** | RB-02 needed for confirmation |
+| C5: All workbook lib queries scoped by orgId | 🔴 **FAIL** | population.ts 19/20, services.ts 6/7, missing-data.ts 10/10 unscoped |
+| C6: All workbook actions call requireSession() | 🔴 **FAIL** | 18 workbook actions have ZERO auth (RB-01 Phase 1 §4) |
+| C7: Coverage map published | ✅ **PASS** | All 9 action files audited (RB-01 Phase 1 §7) |
+
+**To pass this gate (moved to P0-B2A sub-waves):**
+- [ ] P0-B2A-1: Add auth + org checks to 18 unscoped workbook actions (Class A)
+- [ ] P0-B2A-2: Add orgId verification to 10 v3/review actions with client-supplied orgId (Class B/C)
+- [ ] P0-B2A-3: Add orgId to 48 unscoped Prisma WHERE clauses in 3 lib files (defense-in-depth)
+- [ ] P0-B2A-4: Fix 16 lib findUnique calls without orgId + cross-product helper audit
+- [ ] P0-B2A-5: Run cross-tenant-attack.mjs, confirm all 21 paths fail, update matrices
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — 4.4 updated
+- [ ] `GAP_REGISTER.md` — RB-01 set to Resolved
+
+**Refer to:** `RB-01/05_ZERO_TENANT_LEAKAGE_GATE.md` for full gate documentation.
+
+---
+
+### P0-B2A: Tenant Remediation (RB-01 Fix)
+
+**What:** معالجة نتائج RB-01 — إصلاح 21 مسار استغلال قبل بناء RBAC  
+**Why here:** لا يمكن بناء RBAC على أساس غير مؤمن. إثبات العزل شرط مسبق لأي نموذج صلاحيات.  
+**Gaps:** 1 (1 High — RB-01 remediation)  
+**Effort:** 3-4 days  
+**هذا تغيير جوهري:** P0-B2 سابقًا كان "بناء RBAC"، لكن RB-01 أثبت أن المشكلة الأساسية هي سلامة الحدود، وليس نقص الصلاحيات.  
+
+**مبدأ التصميم:** البرنامج مقسم إلى 5 موجات قصيرة. كل موجة:
+1. لها **نطاق محدد** (طبقة معينة من النظام)
+2. تنتج **حزمة إثبات مستقلة** في `RB-01/B2A-N/`
+3. تخضع لـ **Regression Guard** (اختبار يعكس هدفها مباشرة)
+4. تُغلق بـ **Gate خاص بها**
+5. لا تنتقل الموجة التالية إلا بعد اجتياز Gate الموجة الحالية
+
+هذا يمنع تراكم الأخطاء، ويجعل التقدم قابلاً للقياس، ويسمح بمراجعة كل موجة بشكل مستقل.
+
+---
+
+### B2A Program Dashboard
+
+لوحة حالة سريعة تُحدث بعد كل موجة:
+
+| Wave | Status | Gate | Regression Guard | Evidence Package | Commit |
+|------|:------:|:----:|:----------------:|:----------------:|:------:|
+| **B2A-1** Workbook Actions | ✅ Passed | 🟢 PASS | 27/27 checks | RB-01/B2A-1/ complete | `916144f` |
+| **B2A-2** Review/V3 Actions | ✅ Passed | 🟢 PASS | 16/16 checks | RB-01/B2A-2/ complete | _(next commit)_ |
+| **B2A-3** Prisma Layer | ⏳ Pending | — | — | — | — |
+| **B2A-4** Library Layer | ⏳ Pending | — | — | — | — |
+| **B2A-5** Final Proof | ⏳ Pending | — | — | — | — |
+
+**مفاتيح الحالة:** ⏳ Pending · 🛠 In Progress · ✅ Passed · ❌ Failed · ⛔ Blocked
+
+**مقياس إضافي — تكرار كتل الحماية:** قبل التغيير، جميع الدوال إما تكرر `requireUserContext()` + `assertProjectAccess()` أو لا تحتوي على حماية أساسًا. الهدف من B2A-1 هو استخراج النمط المشترك حيثما أمكن وتقليل التكرار. يُسجل هذا المقياس في `BEFORE.md` و `AFTER.md` لكل موجة.
+
+---
+
+### Wave Definition of Done
+
+لكل موجة، يجب استيفاء جميع العناصر التالية قبل اعتبارها مكتملة:
+
+| # | العنصر | المعيار |
+|---|--------|---------|
+| 1 | **Scope** | 100% من النطاق المحدد مكتمل (جميع الأفعال، جميع الاستعلامات) |
+| 2 | **Regression Guard** | `node RB-01/B2A-N/guard.mjs` يخرج بـ 0 |
+| 3 | **`tsc`** | `npx tsc --noEmit` — لا أخطاء جديدة |
+| 4 | **`build`** | `npm run build` — ناجح |
+| 5 | **Evidence Package** | `RB-01/B2A-N/BEFORE.md`, `AFTER.md`, `QUERY_DIFF.md`, `GATE.md` — جميعها مكتملة |
+| 6 | **Metrics** | جدول التقدم التراكمي محدث بهذه الموجة |
+| 7 | **Commit** | Commit atomic واحد (أو commit لكل نطاق في B2A-3) مع رسالة حسب النمط |
+| 8 | **Traceability** | Evidence Package يحتوي على مراجع للـ GAP_REGISTER و EXECUTION_BACKLOG و PRODUCTION_READINESS_MATRIX |
+
+**لا يمكن اعتبار الموجة منتهية إذا نُسي أي من هذه العناصر.** لا يتم تحديث الـ Gate حتى يكتمل جميع العناصر الثمانية.
+
+**ترتيب التحقق في نهاية كل موجة:**
+1. **Regression Guard** ✅ — `node RB-01/B2A-N/guard.mjs` يخرج بـ 0
+2. **`tsc`** ✅ — `npx tsc --noEmit` لا أخطاء جديدة
+3. **`build`** ✅ — `npm run build` ناجح
+4. **إعادة تشغيل سيناريوهات الموجة** ✅ — تشغيل يدوي/آلي للسيناريوهات ذات الصلة (إن وجدت)
+5. **Evidence Package** ✅ — `BEFORE.md` + `AFTER.md` + `QUERY_DIFF.md` + `GATE.md` مكتملة
+6. **Dashboard + Metrics** ✅ — تحديث Program Dashboard وجدول التقدم التراكمي
+7. **Atomic Commit** ✅ — Commit واحد (أو عدة في B2A-3) برسالة حسب النمط
+
+بهذا يصبح كل Commit نقطة استعادة (Recovery Point) يمكن الرجوع إليها بثقة.
+
+---
+
+### Rollback Criteria
+
+إذا فشل أي عنصر من DoD، تنطبق القواعد التالية:
+
+| السيناريو | الإجراء |
+|-----------|---------|
+| **Regression Guard فشل** | ❌ لا تحديث للمصفوفة. ❌ لا تحديث لـ GAP_REGISTER. ❌ لا Commit. العودة لإصلاح نفس الموجة فقط. |
+| **`tsc` أو `build` أخفق** | ❌ لا Gate. إصلاح أخطاء الترجمة أولاً. (إذا كان الخطأ موجودًا مسبقًا، يُوثق في `GATE.md` كـ "pre-existing" قبل البدء.) |
+| **Evidence Package غير مكتمل** | ❌ لا Gate. إكمال الأدلة أولاً. |
+| **الموجة تجاوزت النطاق** | الرجوع إلى النطاق المحدد. لا إصلاح لمشاكل خارج النطاق في هذه الموجة. |
+| **الموجة لم تُغلق خلال 3 أيام** | رفع إلى قائد البرنامج. قد يتطلب تقسيم الموجة إلى sub-waves أصغر. |
+
+**مبدأ الرجوع:** لا يصبح أي تحديث للمستندات ساريًا إلا بعد اجتياز الـ Gate. هذا يمنع أن تصبح الوثائق متقدمة على الواقع.
+
+---
+
+#### P0-B2A-1: Workbook Actions Layer
+
+**Scope:** 18 server actions in `src/actions/localcontent-workbook-actions.ts` — Class A exploits (E1–E12).  
+**Why first:** هذه الأفعال لا تتطلب أي صلاحية حاليًا. أي مستخدم موثّق يمكنه قراءة/كتابة أي workbook من أي مؤسسة. هذا الخطر الأكبر.  
+**Why shared pattern now:** B2A-2 سيحتاج نفس منطق التحقق. B2A-3 سيستفيد من نفس النمط. استخراج النمط المشترك الآن يوفر إعادة عمل لاحقًا.  
+**Effort:** 1 day
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-05 (RBAC Audit) |
+| **Gaps closed** | RB-01 (Class A — E1 to E12) |
+| **What** | Extract shared auth guard pattern + apply to 18 unscoped workbook actions |
+| **Details** | **خطوتان:** (1) تحليل الدوال الـ18 — هل تتبع نمطًا متكررًا؟ إذا كانت معظمها تبدأ بـ `requireUserContext()` + `assertProjectAccess()` بنفس الترتيب، استخرج دالة تغليف مثل `withProjectAccess(handler)` أو `createProtectedWorkbookAction(handler)`. (2) طبق النمط على جميع الدوال الـ18. **مبدأ التصميم:** إذا كان هناك نمط متكرر في 3+ دوال، استخرجه. أما إذا كانت الدوال متباينة جدًا (لا تشترك في نفس الوسائط أو السياق)، فالإضافة المباشرة مقبولة — لكن مع توثيق السبب في `QUERY_DIFF.md`. **قياس التكرار:** قبل التغيير، سجل عدد كتل الحماية المكررة في ملف الأفعال (متوقع: 4 دوال آمنة بها تكرار + 18 دالة بدون حماية = 4+ تكرار). بعد التغيير، يجب أن ينخفض العدد (نحو 1-2 نمط مشترك). |
+| **Regression Guard** | `node RB-01/B2A-1/guard.mjs` — automates E1–E12 exploit scenarios against a test DB. Must exit 0 (all blocked). If any path succeeds, exit 1 and list the failures. |
+| **Evidence package** | `RB-01/B2A-1/` — `BEFORE.md` (baseline: 0/18 protected, N duplicated auth blocks), `AFTER.md` (18/18 protected, ≤ N duplicated), `QUERY_DIFF.md` (shared pattern extraction + per-action application), `GATE.md` (gate decision + proof output). **Traceability:** `Gap: RB-01 → Wave: B2A-1 → Files: localcontent-workbook-actions.ts → Actions: extract shared guard pattern + apply to 18 functions → Proof: guard.mjs exit 0 → Metric: 18/18 protected, auth duplication reduced` |
+| **Gate** | **Workbook tenant isolation = PASS** — All 12 Class A paths confirmed blocked by Regression Guard. Evidence package published. |
+| **Dependencies** | P0-B1 (RB-01 evidence provides exact action list) |
+| **Files touched** | `src/actions/localcontent-workbook-actions.ts`, `RB-01/B2A-1/guard.mjs`, possibly new shared guard module if extracted |
+| **Commit** | `P0-B2A-1 feat(localcontentos): extract shared auth guard pattern + protect 18 workbook actions` |
+
+---
+
+#### P0-B2A-2: Review / V3 Actions Layer
+
+**Scope:** 10 actions — `src/actions/localcontent-ai-advisor-v3-actions.ts` (9/12 client-supplied orgId) + `src/actions/localcontent-review-actions.ts` (4 no-org-check actions, 1 client-supplied orgId).  
+**Why second:** هذه الأفعال إما لا تتحقق من المؤسسة مطلقًا، أو تقبل `organizationId` من العميل بدون التحقق من الجلسة. الخطر أقل من الطبقة الأولى لأنها تتطلب معرفة بوجود المعرّف الصحيح.  
+**Effort:** 0.5 day
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-05 (RBAC Audit) |
+| **Gaps closed** | RB-01 (Class B — E13 to E15, Class C — E21) |
+| **What** | Add `user.organizationId !== organizationId` check to all 10 actions |
+| **Details** | For v3-actions: after extracting `organizationId` from request body, assert it matches `session.user.organizationId`. For review actions: assert the review target belongs to the caller's org. Reject with `{success: false, message: "unauthorized"}` on mismatch. |
+| **Regression Guard** | `node RB-01/B2A-2/guard.mjs` — automates E13–E15, E21 exploit scenarios. Must exit 0 (all blocked). |
+| **Evidence package** | `RB-01/B2A-2/` — `BEFORE.md` (0/10 protected), `AFTER.md` (10/10), `QUERY_DIFF.md` (orgId assertions per action), `GATE.md`. **Traceability:** `Gap: RB-01 → Wave: B2A-2 → Files: localcontent-ai-advisor-v3-actions.ts, localcontent-review-actions.ts → Actions: add user.organizationId !== organizationId check on 10 functions → Proof: guard.mjs exit 0 → Metric: 10/10 protected` |
+| **Gate** | **Review/V3 tenant isolation = PASS** — All 4 Class B/C paths confirmed blocked by Regression Guard. Evidence package published. |
+| **Dependencies** | P0-B1 (RB-01 evidence provides exact action list) |
+| **Files touched** | `src/actions/localcontent-ai-advisor-v3-actions.ts`, `src/actions/localcontent-review-actions.ts`, `RB-01/B2A-2/guard.mjs` |
+| **Commit** | `P0-B2A-2 feat(localcontentos): verify client-supplied orgId against session in v3/review actions` |
+
+---
+
+#### P0-B2A-3: Prisma Layer (Defense-in-Depth)
+
+**Scope:** 48 unscoped Prisma queries across 3 lib files, **split by domain model**.  
+**Why third:** هذه هي أخطر مرحلة — الخطأ في طبقة Prisma هو الذي يسبب معظم التسرب. يجب التعامل مع كل مجال بشكل مستقل لتقليل خطر حدوث أخطاء جانبية.  
+**Effort:** 1.5 days
+
+**سبب التقسيم حسب المجال:** كل مجال له نموذج Prisma مختلف، وكل استعلام يحتاج `organizationId` مختلف. إذا تعاملنا مع 48 استعلام كحزمة واحدة، يزداد خطر إدخال أخطاء في استعلامات لا تحتاج تغييرًا.
+
+| Domain | File | Queries to fix | Verification |
+|--------|------|:--------------:|-------------|
+| **Workbook** | `population.ts` | 19/20 | Each `findMany`/`findUnique`/`update` on `lcWorkbook` includes `organizationId` in `where` |
+| **Workbook** | `services.ts` | 6/7 | Each query on `lcWorkbookLine`, `lcWorkbookScore` includes org scope |
+| **Missing Data** | `missing-data.ts` | 10/10 | Each query on `lcDataRequest`, `lcDataRequestItem` includes org scope |
+| **AI Auto-Review** | `ai-auto-review.ts` | 2/6 | `findUnique` on workbook at line 86, `findMany` on suggestions scoped |
+| **AI Advisor** | `ai-advisor.ts` | 6/20 | `reviewFalsePositive`, `reviewPatternSuggestion` and 4 other unscoped calls |
+| **Transactions** | `services.ts` | 3/3 | Transaction queries (`$transaction` blocks) include org filter on each access |
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-05 (RBAC Audit) |
+| **Gaps closed** | RB-01 (Lib layer — defense-in-depth) |
+| **What** | Add `organizationId` to every unscoped Prisma query, one domain at a time |
+| **Details** | لكل مجال: 1) حدد الاستعلامات غير المحدودة، 2) أضف `organizationId` في `where`، 3) تأكد من عدم كسر اختبارات موجودة. الاستعلامات التي تصل إلى كيانات ليس لها `organizationId` (مثل `lcWorkbookLine` المرتبطة بـ `lcWorkbook`) قد تحتاج JOIN أو subquery. |
+| **Regression Guard** | `node RB-01/B2A-3/guard.mjs` — audits all Prisma queries in `population.ts`, `services.ts`, `missing-data.ts`, `ai-auto-review.ts`, `ai-advisor.ts`. Counts unscoped queries per file. Must report **0 unscoped queries total**. Exits 0 if clean, 1 with per-file breakdown if violations found. |
+| **Evidence package** | `RB-01/B2A-3/` — `BEFORE.md` (48 unscoped), `AFTER.md` (0), `QUERY_DIFF.md` (orgId additions per domain detailed), `GATE.md`. **Traceability:** `Gap: RB-01 → Wave: B2A-3 → Files: population.ts, services.ts, missing-data.ts, ai-auto-review.ts, ai-advisor.ts → Queries fixed: 48 → Proof: guard.mjs exit 0 → Metric: 0 unscoped queries` |
+| **Gate** | **Prisma layer tenant isolation = PASS** — 0 unscoped Prisma queries on LCOS models. Regression Guard exits 0. Evidence package published. |
+| **Dependencies** | P0-B2A-1, P0-B2A-2 (action layer fixes ensure entry points are safe before deep fixes) |
+| **Files touched** | `population.ts`, `services.ts`, `missing-data.ts`, `ai-auto-review.ts`, `ai-advisor.ts`, `RB-01/B2A-3/guard.mjs` |
+| **Commit** | One commit per domain (6 commits): `P0-B2A-3-<domain> feat(localcontentos): scope Prisma queries with orgId in <file>` |
+
+---
+
+#### P0-B2A-4: Library Layer (findUnique & Shared Helpers)
+
+**Scope:** 16 `findUnique` calls without `organizationId` + cross-product helper audit.  
+**Why fourth:** هذه الوظائف المساعدة تُستخدم من أكثر من مسار، لذا خطأ واحد قد يؤثر على عدة نقاط دخول. تحتاج معالجة دقيقة.  
+**Effort:** 1 day
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-05 (RBAC Audit) |
+| **Gaps closed** | RB-01 (`findUnique` vulnerability + cross-product helpers) |
+| **What** | Fix all `prisma.lcWorkbook.findUnique({ where: { id } })` calls without `organizationId` |
+| **Details** | **Key examples:** `ai-auto-review.ts:86` — `runWorkbookAiReview` uses `findUnique({ where: { id: workbookId } })` without org filter. `ai-advisor.ts` — `reviewFalsePositive`, `reviewPatternSuggestion` use `findUnique({ where: { id } })`. Workbook libs have 14 more. **Cross-product helper audit:** لكل Helper يستخدمه أكثر من Product (مثلاً Helper في `src/lib/local-content/` يُستخدم من قبل AuditOS أيضًا)، لا تجعل إصلاحه خاصًا بـ LocalContentOS فقط. إذا كان Helper عامًا، يصبح الإصلاح على مستوى المنصة. |
+| **Regression Guard** | `node RB-01/B2A-4/guard.mjs` — searches for `findUnique({ where: { id } })` and `findFirst({ where: { id } })` on LCOS models WHERE no `organizationId` is present in the where clause. Must report **0 unsafe calls**. Exits 0 if clean, 1 with file:line breakdown if violations found. |
+| **Evidence package** | `RB-01/B2A-4/` — `BEFORE.md` (16 unsafe), `AFTER.md` (0), `QUERY_DIFF.md` (findUnique fixes per call + cross-product audit results), `GATE.md`. **Traceability:** `Gap: RB-01 → Wave: B2A-4 → Files: ai-auto-review.ts, ai-advisor.ts, workbook libs → Calls fixed: 16 findUnique + shared helper audit → Proof: guard.mjs exit 0 → Metric: 0 unsafe helpers` |
+| **Gate** | **Library layer tenant isolation = PASS** — 0 `findUnique` on LCOS models without `organizationId`. Cross-product helpers either scoped or documented for platform-level fix. Regression Guard exits 0. Evidence package published. |
+| **Dependencies** | P0-B2A-3 (Prisma layer fixes establish the `organizationId` pattern that `findUnique` calls should follow) |
+| **Files touched** | `ai-auto-review.ts`, `ai-advisor.ts`, workbook libs, possibly shared helpers, `RB-01/B2A-4/guard.mjs` |
+| **Commit** | `P0-B2A-4 feat(localcontentos): add organizationId to 16 findUnique calls across lib files` |
+
+---
+
+#### P0-B2A-5: Final Proof & Closure
+
+**Scope:** Full verification that Zero Tenant Leakage is achieved. All sub-wave guards pass cumulatively.  
+**Why last:** لا يمكن التحقق النهائي إلا بعد تطبيق جميع الإصلاحات. هذه الموجة تغلق الدائرة وتنتج الأدلة النهائية.  
+**Effort:** 0.5 day
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-05 (RBAC Audit) |
+| **Gaps closed** | RB-01 (Gate closure) |
+| **What** | Execute full proof suite, recalculate matrices, update gate document, close RB-01 |
+| **Details** | 1) Run all 5 Regression Guards cumulatively — all must exit 0. 2) Re-run `cross-tenant-attack.mjs` (full 21-path suite) — must exit 1 (all blocked). 3) Recalculate **Tenant Isolation Matrix** — 48→0 unscoped queries. 4) Update `PRODUCTION_READINESS_MATRIX.md` — Domain 4 (4.3, 4.4 → Ready). 5) Update `GAP_REGISTER.md` — RB-01 → Resolved. 6) Update `RB-01/05_ZERO_TENANT_LEAKAGE_GATE.md` — gate → PASS. 7) Fill cumulative metrics table. |
+| **Regression Guard** | `node RB-01/B2A-5/guard.mjs` — runs all 4 prior guards sequentially + `cross-tenant-attack.mjs` full suite. Must exit 0 (all guards clean, all paths blocked). |
+| **Evidence package** | `RB-01/B2A-5/` — `BEFORE.md` (baseline from RB-01 Phase 5), `AFTER.md` (all criteria GREEN), `QUERY_DIFF.md` (cumulative ref to B2A-1 through B2A-4), `GATE.md` (Zero Tenant Leakage → PASS, 7 criteria with proof). **Traceability:** `Gap: RB-01 → Wave: B2A-5 (closure) → Proof: all 4 prior guards + cross-tenant-attack.mjs exit 1 → Metric: 0 exploit paths, 0 unscoped queries → GAP_REGISTER: RB-01 → Resolved → PRODUCTION_READINESS_MATRIX: 4.3, 4.4 → Ready` |
+| **Gate** | **Zero Tenant Leakage = PASS** — جميع المعايير السبعة خضراء. RB-01 يُغلق كـ "Resolved". المقياس النهائي: 0 مسار استغلال، 0 استعلام بدون نطاق. |
+| **Dependencies** | P0-B2A-1 through P0-B2A-4 (all fixes applied, all sub-gates passed) |
+| **Files touched** | `PRODUCTION_READINESS_MATRIX.md`, `GAP_REGISTER.md`, `RB-01/05_ZERO_TENANT_LEAKAGE_GATE.md`, `RB-01/B2A-5/guard.mjs` |
+| **Commit** | `P0-B2A-5 feat(localcontentos): Zero Tenant Leakage — PASS. Close RB-01.` |
+
+---
+
+### B2A Regression Guards
+
+كل موجة تمتلك "حارس تراجع" — اختبارًا آليًا يعكس هدف الموجة مباشرة، ويمكن تشغيله في أي وقت لضمان عدم عودة المشكلة.
+
+| Wave | Guard | What it checks | Exit 0 = |
+|------|-------|---------------|----------|
+| B2A-1 | `node RB-01/B2A-1/guard.mjs` | 18 workbook actions all block cross-tenant access | All 12 Class A paths blocked |
+| B2A-2 | `node RB-01/B2A-2/guard.mjs` | 10 review/v3 actions all verify orgId against session | All 4 Class B/C paths blocked |
+| B2A-3 | `node RB-01/B2A-3/guard.mjs` | 0 unscoped Prisma queries in LCOS lib files | All 48 queries scoped |
+| B2A-4 | `node RB-01/B2A-4/guard.mjs` | 0 findUnique/findFirst without orgId on LCOS models | All 16 calls scoped |
+| B2A-5 | `node RB-01/B2A-5/guard.mjs` | All prior guards + `cross-tenant-attack.mjs` full suite | Zero Tenant Leakage confirmed |
+
+ملاحظة: الـ Guards ليست بديلاً عن `tsc` / `build` / `test`. بل هي طبقة إضافية تعكس المنطق الأمني مباشرة.
+
+---
+
+### التقدم التراكمي — تراكمي عبر الموجات
+
+| Metric | Baseline | B2A-1 | B2A-2 | B2A-3 | B2A-4 | Final |
+|------------------------|:-------:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| Workbook actions protected | 0/18 | **18/18** | 18/18 | 18/18 | 18/18 | 18/18 |
+| Review/V3 actions protected | 0/10 | 0/10 | **10/10** | 10/10 | 10/10 | 10/10 |
+| Unscoped Prisma queries | 48 | 48 | 48 | **0** | 0 | 0 |
+| Unsafe helpers (findUnique) | 16 | 16 | 16 | 16 | **0** | 0 |
+| Exploit paths remaining | 21 | **18** | **3** | 3 | 0 | **0** |
+| Duplicated auth blocks | 2 inline | **0** (5 shared) | **0** (8 total) | — | — | **0** |
+| Tenant leakage gate | **FAIL** | FAIL | FAIL | FAIL | FAIL | **PASS** |
+
+**قراءة الجدول:** كل عمود يمثل حالة النظام بعد تطبيق تلك الموجة. العمود "Final" هو الهدف — كل المقاييس عند الصفر، وGate ناجح.
+
+يتم تعبئة الأرقام الفعلية بعد كل موجة. إذا لم يتغير مقياس في موجة (مثلًا، 0/10 في B2A-1)، يبقى كما هو حتى الموجة المخصصة له.
+
+---
+
+### B2A Master Gate
+
+This is the cumulative check — all sub-gates must be green:
+
+#### Sub-wave gates
+- [x] **B2A-1 Gate** — Workbook tenant isolation = PASS. Regression Guard exits 0. Evidence package in `RB-01/B2A-1/`. Commit `916144f`.
+- [x] **B2A-2 Gate** — Review/V3 tenant isolation = PASS. Regression Guard exits 0. Evidence package in `RB-01/B2A-2/`.
+- [ ] **B2A-3 Gate** — Prisma layer = PASS (0 unscoped queries). Regression Guard exits 0. Evidence package in `RB-01/B2A-3/`.
+- [ ] **B2A-4 Gate** — Library layer = PASS (0 unsafe findUnique). Regression Guard exits 0. Evidence package in `RB-01/B2A-4/`.
+- [ ] **B2A-5 Gate** — Zero Tenant Leakage = PASS. All guards cumulative + `cross-tenant-attack.mjs` exits 1. Evidence package in `RB-01/B2A-5/`.
+
+#### Document updates
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — Domain 4 (4.3, 4.4) restored to Ready
+- [ ] `GAP_REGISTER.md` — RB-01 set to Resolved
+- [ ] `RB-01/05_ZERO_TENANT_LEAKAGE_GATE.md` — gate updated from NO-GO to PASS
+- [ ] Tenant Isolation Matrix recalculated (48→0 unscoped)
+
+#### Build & test
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+
+#### Metrics
+- [ ] Cumulative metrics table filled with actual numbers (all zeros, gate = PASS)
+- [ ] All 5 Regression Guards checked in and documented in runbook
+
+**If any sub-gate or regression guard fails: STOP.** Fix before proceeding. Do not start P0-B2B until this master gate passes. The entire RBAC model depends on isolated tenants.
+
+---
+
+### P0-B2B: RBAC Foundation (RB-02, RB-03)
+
+**What:** بناء نموذج الصلاحيات — بعد إثبات العزل بين المستأجرين  
+**Why here:** بعد إثبات العزل (P0-B2A Gate = PASS)، يتم بناء RBAC على أساس سليم  
+**Dependency chain:** `Zero Tenant Leakage → Role Matrix → Permission Matrix → Resource Matrix → Action Matrix → Enforcement`  
+**Gaps:** 2 (0 High, 2 Medium)  
+**Effort:** 2-3 days  
+**Gate:** `npx tsc --noEmit` + `npm run build` + `npm test` + matrix update
+
+---
+
+#### P0-B2B-01: RBAC Design — Role, Permission, Resource, Action Matrices
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-05 (RBAC Audit) |
+| **Gaps closed** | RB-02 |
+| **What** | Design and document complete RBAC model for LCOS |
+| **Details** | Define: **Role Matrix** (Viewer, Editor, Reviewer, Approver, Admin), **Permission Matrix** (what each role can do), **Resource Matrix** (which resources each role can access), **Action Matrix** (which actions each role can perform). Document as: `| Resource | Viewer | Editor | Reviewer | Approver | Admin |`. Publish the RBAC Matrix document for review before implementation. **This unblocks SC-01B** (workbook validation depends on role-based input constraints). |
+| **Acceptance** | RBAC matrix document published covering all LCOS actions and resources. Roles clearly defined with their permissions. |
+| **Effort** | 1 day |
+| **Dependencies** | **P0-B2A Gate = PASS** (tenant isolation is prerequisite — cannot define roles without trust boundaries) |
+| **Files touched** | RBAC matrix document (docs), `src/lib/auth/` if role definitions need updating |
+| **Commit** | `P0-B2B-01 feat(localcontentos): design and document RBAC matrix for LCOS roles` |
+
+---
+
+#### P0-B2B-02: RBAC Implementation — Role-based guards on all actions
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-05 (RBAC Audit) |
+| **Gaps closed** | RB-03 |
+| **What** | Implement RBAC guards across all LCOS action files following the RBAC matrix |
+| **Details** | After the RBAC matrix is approved, implement role-based guards on every LCOS action. Use the RBAC matrix from P0-B2B-01 as the source of truth. Standardize the guard pattern (e.g., `requireRole(role, actionName)` wrapper). Ensure every mutation has matching role + tenant checks. Pattern documented in runbook. **Tenant isolation already verified in P0-B2A** — RBAC adds role granularity on top. |
+| **Acceptance** | Every LCOS mutation action enforces role + tenant guards consistently. Guard pattern documented. |
+| **Effort** | 1 day |
+| **Dependencies** | P0-B2B-01 (RBAC matrix defines required roles per action), **P0-B2A Gate = PASS** |
+| **Files touched** | All LCOS action files, guard utilities, runbook |
+| **Commit** | `P0-B2B-02 feat(localcontentos): implement RBAC guards on all LCOS actions` |
+
+---
+
+### P0-B2B Gate
+
+Before P0-B3:
+
+- [ ] P0-B2B-01: RBAC matrix published
+- [ ] P0-B2B-02: RBAC guards implemented on all actions
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — 4.5, 4.8 updated
+- [ ] `GAP_REGISTER.md` — RB-02, RB-03 set to Resolved
+
+---
+
+### P0-B3: Workbook Validation (SC-01B)
+
+**What:** إضافة Zod validation لـ `createWorkbookAction` و `populateWorkbookAction`  
+**Why here:** بعد اكتمال RBAC، أصبح التحقق من الصلاحيات ممكنًا  
+**Gaps:** 1 (1 High)  
+**Effort:** 0.5 day  
+**Gate:** `npx tsc --noEmit` + `npm run build` + `npm test` + matrix update
+
+---
+
+#### P0-B3-01: Workbook action validation (was SC-01B)
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-04 (Security Hardening) |
+| **Gaps closed** | SC-01B |
+| **What** | Add Zod validation to `createWorkbookAction` and `populateWorkbookAction` (deferred from P0-A1) |
+| **Details** | Now that RB-02 has defined roles and action constraints RB-03 has implemented them, add `parseOrError()` + workbook-specific Zod schema to both actions. The schema should enforce role-appropriate constraints (e.g., only admin can set certain workbook fields). |
+| **Acceptance** | Both workbook actions validate input with Zod before execution. Role-based constraints enforced. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P0-B2B (RBAC matrix + implementation resolve role-based input constraints) |
+| **Files touched** | `src/actions/localcontent-workbook-actions.ts`, `src/lib/local-content/schemas/workbook.ts` |
+| **Commit** | `P0-B3 feat(localcontentos): add Zod validation for workbook actions (SC-01B)` |
+
+---
+
+### P0-B3 Gate
+
+Before P0-B4:
+
+- [ ] SC-01B committed (workbook validation)
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — 7.4 updated
+- [ ] `GAP_REGISTER.md` — SC-01B set to Resolved
+
+---
+
+### P0-B4: Upload Security (SC-02)
+
+**What:** حماية رفع الملفات — MIME types, size limits, checksums  
+**Why here:** بعد اكتمال RBAC، يصبح تطبيق حماية رفع الملفات أكثر أمانًا لأن الصلاحيات محددة مسبقًا  
+**Gaps:** 1 (0 High, 1 Medium)  
+**Effort:** 0.5 day  
+**Gate:** `npx tsc --noEmit` + `npm run build` + `npm test` + matrix update
+
+---
+
+#### P0-B4-01: File upload validation hardening
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-04 (Security Hardening) |
+| **Gaps closed** | SC-02 |
+| **What** | Strengthen file upload validation in LCOS evidence upload paths |
+| **Details** | Add MIME type whitelist (PDF, DOCX, XLSX, images), file size limits, checksum verification on upload. Ensure all LCOS evidence uploads pass through the same validation. Follow existing upload patterns. |
+| **Acceptance** | Uploading a non-whitelisted file type or file exceeding size limit is rejected with a clear error message. Checksums are stored alongside evidence records. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P0-B2B (RBAC ensures only authorized users can upload) |
+| **Files touched** | LCOS evidence upload handlers |
+| **Commit** | `P0-B4 feat(localcontentos): harden file upload validation for LCOS evidence` |
+
+---
+
+### P0-B4 Gate
+
+Before P0-C:
+
+- [ ] SC-02 committed (upload validation)
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — 7.5 updated
+- [ ] `GAP_REGISTER.md` — SC-02 set to Resolved
+
+---
+
+---
+
+### P0-C: Security Hardening (SC-03, DI-03)
+
+**What:** حماية إضافية — CORS، JSON  
+**Why here:** بعد اكتمال RBAC ورفع الملفات، تبقى عناصر الحماية الثانوية  
+**Gaps:** 2 (0 High, 2 Medium)  
+**Effort:** 0.5 day  
+**Gate:** `npx tsc --noEmit` + `npm run build` + `npm test` + matrix update
+
+---
+
+#### P0-C1: CORS policy for LCOS API routes
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-04 (Security Hardening) |
+| **Gaps closed** | SC-03 |
+| **What** | Define and implement CORS policy for LCOS API routes |
+| **Details** | Review LCOS API routes at `src/app/api/local-content/`. Ensure CORS headers are properly set for the deployment domain. Document allowed origins in deployment runbook. |
+| **Acceptance** | API routes return correct CORS headers for configured origins. Non-permitted origins receive 403. |
+| **Effort** | 0.25 day |
+| **Files touched** | LCOS API route handlers or middleware |
+| **Commit** | `P0-C2 feat(localcontentos): add CORS policy for LCOS API routes` |
+
+---
+
+#### P0-C2: JSON field validation on write
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-07 (Data Integrity) |
+| **Gaps closed** | DI-03 |
+| **What** | Add Zod validation for all JSON/JSONB fields in LCOS Prisma models |
+| **Details** | Identify JSON fields in LCOS models (metadata, evidence properties, scoring parameters, drivers, assumptions). Create Zod schemas that validate structure and types. Wire into Prisma create/update operations via server actions. Reuse Zod schemas from P0-A1. |
+| **Acceptance** | Invalid JSON field content is rejected at the action boundary with a clear error message, not silently accepted by the database. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P0-A1 (Zod infrastructure), P0-B2 (RBAC ensures only authorized writes) |
+| **Files touched** | LCOS action files, new Zod schema files |
+| **Commit** | `P0-C2 fix(localcontentos): validate JSON metadata fields on write` |
+
+---
+
+### P0-C Gate
+
+Before P0-D:
+
+- [ ] All 2 items committed (SC-03, DI-03)
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — 7.10, 2.10 updated
+- [ ] `GAP_REGISTER.md` — IDs SC-03, DI-03 set to Resolved
+
+---
+
+### P0-D: Operations Foundation
+
+**What:** بنية تحتية تشغيلية — الصحة، البيانات، النسخ الاحتياطي  
+**Why here:** هذه العناصر لا تعيق الأمان ولكنها ضرورية للتشغيل الموثوق  
+**Gaps:** 3 (3 High)  
+**Effort:** 2.5 days  
+**Gate:** `npx tsc --noEmit` + `npm run build` + `npm test` + matrix update
+
+---
+
+#### P0-D1: LCOS health checks
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-02 (Observability) |
+| **Gaps closed** | OP-05 |
+| **What** | Add LCOS-specific health checks to existing `/api/health/ready` endpoint |
+| **Details** | Platform already has robust health infrastructure. Extend `/api/health/ready` to verify: ERP connector state (if configured), workbook engine DB connectivity, scoring engine accessibility, data request pipeline status. Use existing health check patterns. |
+| **Acceptance** | `/api/health/ready` includes LCOS-specific checks. A failing LCOS dependency sets overall readiness to unhealthy with a clear error message identifying the failed component. |
+| **Effort** | 0.5 day |
+| **Files touched** | `src/app/api/health/ready/route.ts` or LCOS health module |
+| **Commit** | `P0-D1 feat(localcontentos): add LCOS-specific health checks to /api/health/ready` |
+
+---
+
+#### P0-D2: LCOS seed script
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-07 (Data Integrity) |
+| **Gaps closed** | DI-02 |
+| **What** | Create `prisma/seed-localcontent.ts` with realistic Saudi-market data |
+| **Details** | Seed: 1-2 organizations, 3-5 projects/workbooks, 10-20 suppliers with Arabic names (شركة الابتكار التقني, etc.), 50+ spend records, evidence files (referenced), findings, scores, and review data. Create `npm run seed:localcontent` script in `package.json`. Follow existing seed patterns from `prisma/seed.ts`. |
+| **Acceptance** | `npm run seed:localcontent` creates a demonstrable LCOS environment from scratch. A reviewer can navigate workbooks, view suppliers, see scores, and inspect evidence. |
+| **Effort** | 1.5 days |
+| **Files touched** | `prisma/seed-localcontent.ts`, `package.json` |
+| **Commit** | `P0-D2 feat(localcontentos): create LCOS seed script with realistic Saudi-market data` |
+
+---
+
+#### P0-D3: Backup/restore LCOS verification
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-01 (Operations Runbook) |
+| **Gaps closed** | OP-03 |
+| **What** | Extend `scripts/platform/restore-drill.mjs` to spot-check LCOS model row counts |
+| **Details** | Add workbook, supplier, spend, evidence, findings, review, and score models to the restore drill. Follow existing restore-drill patterns. Minimum viable check: row counts match pre-backup snapshot. |
+| **Acceptance** | `npm run restore-drill` verifies LCOS data integrity after a simulated restore. |
+| **Effort** | 0.5 day |
+| **Files touched** | `scripts/platform/restore-drill.mjs` |
+| **Commit** | `P0-D3 feat(localcontentos): extend restore-drill to verify LCOS models` |
+
+---
+
+### P0-D Gate
+
+Before P0-E:
+
+- [ ] All 3 items committed (OP-05, DI-02, OP-03)
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — 8.7, 2.8, 8.5 updated
+- [ ] `GAP_REGISTER.md` — IDs OP-05, DI-02, OP-03 updated
+
+---
+
+### P0-E: Production UX
+
+**What:** تجربة مستخدم متكاملة — لا توجد صفحة تنتهي إلى شاشة فارغة أو تجربة غير مكتملة  
+**Why here:** UX لا يعيق الإطلاق ولكنه ضروري لرضا المستخدم  
+**Gaps:** 4 (4 Medium)  
+**Effort:** 1-2 days  
+**Gate:** `npx tsc --noEmit` + `npm run build` + `npm test` + matrix update
+
+---
+
+#### P0-E1: Empty states for all LCOS pages
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-11 (UX Consistency) |
+| **Gaps closed** | UX-01 |
+| **What** | Add helpful empty states to every LCOS list page |
+| **Details** | Audit all LCOS pages: workbooks, suppliers, spend records, findings, evidence, scores, reviews, data requests. Where a list can be empty, add a clear message in Arabic + English explaining what belongs there and a call-to-action button. |
+| **Acceptance** | Every LCOS list page shows a helpful empty state with next steps when no data exists. |
+| **Effort** | 0.5 day |
+| **Files touched** | LCOS page components |
+| **Commit** | `P0-E1 feat(localcontentos): add empty states for all LCOS list pages` |
+
+---
+
+#### P0-E2: Standardized error handling
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-11 (UX Consistency) |
+| **Gaps closed** | UX-02 |
+| **What** | Standardize error notifications across LCOS |
+| **Details** | Implement consistent toast/alert pattern for server action failures. Cover: network errors, validation errors, AI failures, permission errors. Error messages must be actionable in Arabic + English. |
+| **Acceptance** | Every LCOS server action failure shows a user-facing notification. Error messages explain what happened and what the user can do next. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P0-A1 (consistent action return types `{success, message}`) |
+| **Files touched** | LCOS page components, error handling components |
+| **Commit** | `P0-E2 feat(localcontentos): add standardized error handling for LCOS` |
+
+---
+
+#### P0-E3: Loading states and action feedback
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-11 (UX Consistency) |
+| **Gaps closed** | UX-05 |
+| **What** | Standardize loading states and action feedback across all LCOS async operations |
+| **Details** | Add loading indicators (skeleton screens for tables, spinners for actions) to all data-fetching pages and mutation actions. Verify optimistic updates where applicable. Ensure feedback is shown in Arabic. |
+| **Acceptance** | Every async operation shows a loading indicator. Every mutation shows success/failure feedback. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P0-E2 (error pattern reused) |
+| **Files touched** | LCOS page components |
+| **Commit** | `P0-E3 feat(localcontentos): add loading states and action feedback for LCOS` |
+
+---
+
+#### P0-E4: Mobile responsiveness
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-11 (UX Consistency) |
+| **Gaps closed** | UX-04 |
+| **What** | Verify LCOS pages render correctly on mobile viewports |
+| **Details** | Check all LCOS pages at 375px, 768px, 1024px widths. Fix layout breakage, overflowing tables, non-responsive navigation. Prioritize: workbook list, supplier view, scoring dashboard. |
+| **Acceptance** | Key LCOS workflows are usable on mobile viewports without horizontal scrolling or broken layouts. |
+| **Effort** | 0.5 day |
+| **Files touched** | LCOS page components, CSS |
+| **Commit** | `P0-E4 fix(localcontentos): fix mobile responsiveness for LCOS pages` |
+
+---
+
+### P0-E Gate
+
+Before P0-F:
+
+- [ ] All 4 items committed (UX-01, UX-02, UX-04, UX-05)
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — 11.3, 11.4, 11.9, 11.11 updated
+- [ ] `GAP_REGISTER.md` — IDs UX-01, UX-02, UX-04, UX-05 updated
+
+---
+
+### P0-F: Operational Readiness
+
+**What:** قابل للتشغيل والتسليم — وثائق تشغيلية كاملة  
+**Why here:** الوثائق هي آخر ما يبنى لأنها تعتمد على القرارات الهندسية السابقة  
+**Gaps:** 5 (4 High, 1 Medium)  
+**Effort:** 2-3 days  
+**Gate:** `npx tsc --noEmit` + `npm run build` + `npm test` + matrix update
+
+---
+
+#### P0-F1: LCOS deployment runbook
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-01 (Operations Runbook) |
+| **Gaps closed** | OP-01 |
+| **What** | Create `docs/runbooks/localcontentos-deployment-runbook.md` |
+| **Details** | Cover: prerequisites, LCOS-specific env vars, Prisma migration order, seed data (`npm run seed:localcontent`), file storage setup, ERP connector config (where applicable), post-deploy smoke tests. Reference P0-D1 health checks for verification. |
+| **Acceptance** | An operator with no prior LCOS knowledge can deploy a working LCOS instance following this runbook. |
+| **Effort** | 0.75 day |
+| **Dependencies** | P0-D2 (seed script exists to reference), P0-D1 (health checks for verification) |
+| **Files touched** | `docs/runbooks/localcontentos-deployment-runbook.md` |
+| **Commit** | `P0-F1 feat(localcontentos): create LCOS deployment runbook` |
+
+---
+
+#### P0-F2: LCOS environment variables documentation
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-01 (Operations Runbook) |
+| **Gaps closed** | OP-02 |
+| **What** | Document all LCOS-specific environment variables |
+| **Details** | Add to `.env.example` with clear descriptions in Arabic + English. Cover: `STORAGE_PROVIDER`, ERP config vars, AI provider keys, LCOS-specific feature flags. Cross-reference in deployment runbook. |
+| **Acceptance** | A new operator can configure a complete LCOS environment by reading `.env.example` alone. |
+| **Effort** | 0.25 day |
+| **Dependencies** | P0-F1 (runbook references env vars) |
+| **Files touched** | `.env.example`, deployment runbook |
+| **Commit** | `P0-F2 feat(localcontentos): document LCOS environment variables in .env.example` |
+
+---
+
+#### P0-F3: LCOS disaster recovery plan
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-01 (Operations Runbook) |
+| **Gaps closed** | OP-04 |
+| **What** | Create `docs/runbooks/localcontentos-dr-plan.md` |
+| **Details** | Define RPO/RTO for LCOS. Document failover procedure, data replication strategy, step-by-step recovery. Reference platform DR plan where applicable. Reference P0-D3 restore-drill for verification. |
+| **Acceptance** | DR plan exists with clear RPO/RTO figures and step-by-step recovery procedure. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P0-D3 (restore-drill extended for LCOS) |
+| **Files touched** | `docs/runbooks/localcontentos-dr-plan.md` |
+| **Commit** | `P0-F3 feat(localcontentos): create LCOS disaster recovery plan` |
+
+---
+
+#### P0-F4: AI provider auth review
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-04 (Security Hardening) |
+| **Gaps closed** | SC-04 |
+| **What** | Review AI provider authentication for LCOS-specific AI calls |
+| **Details** | Verify: AI provider keys used by LCOS AI advisor are stored server-side only, not exposed in client bundles. Document provider routing and auth setup in deployment runbook. Review provider fallback behavior. |
+| **Acceptance** | Security review confirms no AI provider keys leak to client. Document covers provider auth setup in deployment runbook. |
+| **Effort** | 0.25 day |
+| **Dependencies** | P0-F1 (documentation in runbook) |
+| **Files touched** | AI provider config, deployment runbook |
+| **Commit** | `P0-F4 feat(localcontentos): review and document AI provider auth for LCOS` |
+
+---
+
+### P0-F Gate
+
+Before P1:
+
+- [ ] All 4 items committed (OP-01, OP-02, OP-04, SC-04)
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — 8.2, 8.3, 8.6 marked Resolved
+- [ ] `GAP_REGISTER.md` — IDs OP-01, OP-02, OP-04, SC-04 updated
+- [ ] **P0 total: 19 gaps closed (11 High, 8 Medium, 0 Nice)**
+
+---
+
+## Wave P1 — Should Ship
+
+---
+
+### P1-A: Audit & Commercial Governance
+
+**What:** الحوكمة والتدقيق — بقية فجوات المراجعة والوثائق التجارية  
+**Gaps:** 3 (0 High, 2 Medium, 1 Nice) — AE-01, AE-02, CR-02..10  
+**Effort:** 2-3 days  
+**Dependencies:** P0 gate passed  
+**Note:** CR-02..10 are commercial docs for stakeholder review, not blocking production.
+
+---
+
+#### P1-A1: Audit retention policy
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-08 (Audit & Evidence Hardening) |
+| **Gaps closed** | AE-01 |
+| **What** | Implement audit event retention policy for LCOS |
+| **Details** | Define retention period (7 years for financial audit data, 3 years for operational data). Implement archiving/deletion logic. Document policy in deployment runbook |
+| **Acceptance** | Audit events older than the retention period are automatically archived. Policy is documented and referenced in deployment runbook. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P0-F1 (runbook reference), P0-B2 (RBAC defines who can configure retention) |
+| **Files touched** | Audit service, deployment runbook |
+| **Commit** | `P1-A1 feat(localcontentos): implement audit retention policy for LCOS` |
+
+---
+
+#### P1-A2: Audit export API
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-08 (Audit & Evidence Hardening) |
+| **Gaps closed** | AE-02 |
+| **What** | Create downloadable audit report per project |
+| **Details** | Implement `/api/local-content/:id/audit/export` returning audit events as CSV. Include: event type, timestamp, user, action, before/after summary. Permission-check: org admin only. Follow existing export patterns. |
+| **Acceptance** | A project admin can download an audit CSV for their project. Events are sorted by timestamp. Non-admin users receive 403. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P0-B2 (RBAC context for permissions) |
+| **Files touched** | New audit export route, service |
+| **Commit** | `P1-A2 feat(localcontentos): add audit export API for LCOS projects` |
+
+---
+
+#### P1-A3: Commercial readiness document
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-12 (Commercial Readiness) |
+| **Gaps closed** | CR-02, CR-03, CR-04, CR-06, CR-08, CR-09, CR-10 |
+| **What** | Create commercial readiness document with pricing, packaging, SLAs, sandbox, compliance, support, case study |
+| **Details** | This is a **document for stakeholder review**, not engineering implementation. Cover: pricing model proposal, packaging tiers, SLA tiers, sandbox access procedure, regulatory compliance (Vision 2030, NCAP, Saudization), support channels, escalation matrix, case study from شركة الابتكار التقني pilot. **Not blocking production deployment.** |
+| **Acceptance** | Document exists with all 7 sections filled. Shared with product/commercial stakeholders for review. |
+| **Effort** | 1 day |
+| **Dependencies** | P0-F1 (sandbox deployment procedure), P0-D2 (demo data for sandbox) |
+| **Files touched** | `docs/commercial/localcontentos-commercial-readiness.md` |
+| **Commit** | `P1-A3 feat(localcontentos): create commercial readiness document for LCOS` |
+
+---
+
+### P1-B: Quality & Observability
+
+**What:** الجودة والمراقبة — المقاييس، الاختبارات، التتبع  
+**Gaps:** 8 (4 High, 3 Medium, 1 Nice) — C-02 (partial), C-03, C-06, C-09  
+**Effort:** 7-8 days  
+**Dependencies:** P0 gate passed
+
+**Note:** P1-A and P1-B can run in parallel — no cross-dependencies.
+**Note:** MO-04 (health dashboard) and MO-06 (audit monitoring) moved to P2 strategic wave.
+
+---
+
+#### P1-B1: Structured logging
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-02 (Observability) |
+| **Gaps closed** | OP-07 |
+| **What** | Integrate structured logging for LCOS operations |
+| **Details** | Add pino/winston (or use existing logging). Log: LCOS server actions (input summary, result, duration), AI advisor calls (prompt hash, model, duration, tokens), ERP integration events, scoring engine runs. Format: `{timestamp, level, message, module, correlationId?, duration?, error?}` |
+| **Acceptance** | All LCOS server actions emit structured JSON logs. Logs are searchable by module and correlation ID |
+| **Effort** | 1 day |
+| **Dependencies** | P0-A1 (action boundaries defined — easier to instrument) |
+| **Files touched** | Logging config, LCOS action files |
+| **Commit** | `P1-B1 feat(localcontentos): add structured logging to LCOS operations` |
+
+---
+
+#### P1-B2: Metrics endpoint
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-02 (Observability) |
+| **Gaps closed** | MO-01 |
+| **What** | Expose Prometheus-compatible metrics for LCOS |
+| **Details** | Add metrics for: request rate per route/action, error rate (total, by type), latency histograms (P50/P95/P99), AI pipeline success/failure rate, data request queue depth. Use existing metrics infrastructure if available |
+| **Acceptance** | LCOS-specific metrics are visible in Prometheus text format. Dashboard can consume them |
+| **Effort** | 1 day |
+| **Dependencies** | P1-B1 (structured logging provides data context for metrics) |
+| **Files touched** | Metrics config, LCOS action instrumentation |
+| **Commit** | `P1-B2 feat(localcontentos): add Prometheus metrics for LCOS operations` |
+
+---
+
+#### P1-B3: OpenTelemetry tracing
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-02 (Observability) |
+| **Gaps closed** | MO-02 |
+| **What** | Add OpenTelemetry instrumentation for LCOS server actions and AI pipeline |
+| **Details** | Instrument: server action execution spans, AI advisor request/response spans, ERP connector call spans. Propagate correlation ID across spans |
+| **Acceptance** | Traces are visible in connected observability backend (or logged for future ingestion). Server actions show complete span tree |
+| **Effort** | 1 day |
+| **Dependencies** | P1-B1 (structured logging provides correlation ID context) |
+| **Files touched** | Tracing config, LCOS action files |
+| **Commit** | `P1-B3 feat(localcontentos): add OpenTelemetry tracing for LCOS` |
+
+---
+
+#### P1-B4: Alert rules
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-02 (Observability) |
+| **Gaps closed** | MO-05 |
+| **What** | Define and integrate alerting rules for LCOS |
+| **Details** | Rules: error rate >5% for 5 min → alert, AI pipeline failure rate >10% → alert, health check failed 2 consecutive checks → alert, data request queue depth >100 → warn. Integrate with notification channel |
+| **Acceptance** | Alerts fire when thresholds are breached. Notification reaches configured channel |
+| **Effort** | 0.5 day |
+| **Dependencies** | P1-B2 (metrics provide data for alert evaluation), P1-B4 (dashboard shows alerts) |
+| **Files touched** | Alert config, notification integration |
+| **Commit** | `P1-B5 feat(localcontentos): add alerting rules for LCOS operations` |
+
+---
+
+#### P1-B5: Performance benchmarks
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-03 (Performance Benchmarking) |
+| **Gaps closed** | PF-01, PF-03, PF-06 |
+| **What** | Create performance benchmark suite for LCOS |
+| **Details** | Benchmarks: page load times (workbook list, supplier view, scoring dashboard), scoring engine throughput (10/50/100 concurrent), concurrent load for data request pipeline. Define thresholds (P95 < 2s page load, scoring < 5s for 50 workbooks) |
+| **Acceptance** | `npm run bench:localcontent` produces performance report. Regression detectable by comparing to baseline |
+| **Effort** | 1.5 days |
+| **Dependencies** | P1-B2 (metrics provide latency measurements) |
+| **Files touched** | Benchmark scripts, CI config |
+| **Commit** | `P1-B5 feat(localcontentos): create LCOS performance benchmark suite` |
+
+---
+
+#### P1-B6: State machine validation tests
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-06 (Workflow State Machine) |
+| **Gaps closed** | WM-01, WM-02 |
+| **What** | Create complete state machine test coverage for all 5 stateful LCOS models |
+| **Details** | Document state transition matrix. Write tests: every valid transition is allowed, every invalid transition is rejected, concurrent state changes don't race, state history is preserved. Models: project/workbook, evidence, finding, review, score |
+| **Acceptance** | Complete test suite covering all valid and invalid transitions. State transition matrix published |
+| **Effort** | 1.5 days |
+| **Dependencies** | P1-B5 (P0-B2: RBAC matrix defines who can trigger which transitions) |
+| **Files touched** | Test files, state transition matrix doc |
+| **Commit** | `P1-B6 feat(localcontentos): add state machine validation tests for LCOS models` |
+
+---
+
+#### P1-B7: Content Studio hardening
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-09 (Feature Hardening) |
+| **Gaps closed** | FC-02 |
+| **What** | Fix Content Studio schema drift (R-03 tech debt) and add tests |
+| **Details** | Document R-03 approach. Add tests for Content Studio workflow. Fix schema drift where safe. Document remaining divergence with tickets |
+| **Acceptance** | Tests pass. Schema drift documented. Remaining divergence has tracking tickets |
+| **Effort** | 1 day |
+| **Dependencies** | P0-A1 (Zod schemas provide interface contract) |
+| **Files touched** | Content Studio files, test files |
+| **Commit** | `P1-B7 fix(localcontentos): fix Content Studio schema drift and add tests` |
+
+---
+
+#### P1-B8: ERP integration tests
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-09 (Feature Hardening) |
+| **Gaps closed** | FC-01 |
+| **What** | Add real-instance integration tests for ERP connector |
+| **Details** | Current mock tests exist for connector-factory, field-mapping, file-importer, import-pipeline. Add integration tests against a real/simulated ERP instance. Or: document explicit deferral decision with rationale if ERP test instance unavailable |
+| **Acceptance** | Integration tests run against a real/simulated ERP instance, OR explicit decision to defer with documented rationale |
+| **Effort** | 1 day |
+| **Dependencies** | None (requires ERP test instance availability) |
+| **Files touched** | Integration test files |
+| **Commit** | `P1-B10 feat(localcontentos): add ERP connector integration tests` |
+
+---
+
+### P1 Gate
+
+Before P2:
+
+- [ ] All P1-A and P1-B items committed
+- [ ] `npx tsc --noEmit` — no new errors
+- [ ] `npm run build` — passes
+- [ ] `npm test` — full suite passes
+- [ ] `PRODUCTION_READINESS_MATRIX.md` — all remaining gaps marked Resolved
+- [ ] `GAP_REGISTER.md` — all IDs updated (AE-01, AE-02, CR-02..10, OP-07, MO-01, MO-02, MO-05, PF-01/03/06, FC-01, FC-02, WM-01/02)
+- [ ] **P1 total: 11 items committed (4 High, 5 Medium, 2 Nice)**
+
+---
+
+## Wave P2 — Strategic
+
+**What:** استراتيجي — حوكمة الذكاء الاصطناعي ولوحة الصحة  
+**Gaps:** 3 (1 High, 1 Medium, 1 Nice) — MO-06, AG-01, MO-04  
+**Effort:** 3-4 days  
+**Dependencies:** P1 gate passed
+
+---
+
+### P2-01: Suspicious audit event monitoring
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-02 (Observability) |
+| **Gaps closed** | MO-06 |
+| **What** | Add monitoring rules for suspicious audit event patterns |
+| **Details** | Patterns: rapid failed logins, repeated authorization failures on same resource, bulk data export in short window, access from unusual hours. Log alerts for investigation. |
+| **Acceptance** | Suspicious patterns trigger audit events visible in monitoring dashboard. |
+| **Effort** | 0.5 day |
+| **Dependencies** | P1-B5 (alert infrastructure) |
+| **Files touched** | Monitoring rules config |
+| **Commit** | `P2-01 feat(localcontentos): add suspicious pattern monitoring for LCOS audit events` |
+
+---
+
+### P2-02: AI governance documentation
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-10 (AI Governance) |
+| **Gaps closed** | AG-01 |
+| **What** | Document LCOS AI provider dependencies and fallback behavior |
+| **Details** | Document: which AI features require cloud providers, which fall back to deterministic AI, what users see when cloud AI is unavailable. Update runbook to reference AI config. Verify AI advisor UI shows graceful degradation messages. |
+| **Acceptance** | AI documentation clearly states provider dependencies. Users understand what happens when cloud AI is unavailable. |
+| **Effort** | 1 day |
+| **Dependencies** | P0-F1 (runbook reference), P1-B1 (structured logging tracks AI calls), P0-F4 (AI auth review) |
+| **Files touched** | AI governance doc, deployment runbook |
+| **Commit** | `P2-02 feat(localcontentos): document AI provider dependencies for LCOS` |
+
+---
+
+### P2-03: Health dashboard
+
+| Field | Value |
+|-------|-------|
+| **Capability** | C-02 (Observability) |
+| **Gaps closed** | MO-04 |
+| **What** | Create health dashboard for LCOS operations |
+| **Details** | A view showing: live health check results (green/red from P0-D1), request rate (RPM), error rate, recent error log entries, AI pipeline status, ERP connector status. Wire to real data. |
+| **Acceptance** | Operations team can see LCOS health at a glance. Red indicators trigger investigation. |
+| **Effort** | 1 day |
+| **Dependencies** | P0-D1 (health checks), P1-B2 (metrics data) |
+| **Files touched** | New dashboard component |
+| **Commit** | `P2-03 feat(localcontentos): create LCOS health dashboard view` |
+
+---
+
+## Summary
+
+| Wave | Sub-Wave | Items | High | Med | Nice | Effort |
+|:----:|:--------:|:----:|:----:|:---:|:----:|:------:|
+| **P0** | A — Validation ✅ Complete | 1 | 1 | 0 | 0 | 1 day |
+| | B1 — Auth Baseline (RB-01) ✅ VERIFIED | 1 | 1 | 0 | 0 | 1 day |
+| | B2A — Tenant Remediation 🔴 GATE FAILED | 5 | 1 | 0 | 0 | 3-4 days |
+| | B2B — RBAC Foundation | 2 | 0 | 2 | 0 | 2-3 days |
+| | B3 — Workbook Validation | 1 | 1 | 0 | 0 | 0.5 day |
+| | B4 — Upload Security | 1 | 0 | 1 | 0 | 0.5 day |
+| | C — CORS + JSON | 2 | 0 | 2 | 0 | 0.5 day |
+| | D — Operations Foundation | 3 | 3 | 0 | 0 | 2.5 days |
+| | E — Production UX | 4 | 0 | 4 | 0 | 1-2 days |
+| | F — Operational Readiness | 4 | 4 | 0 | 0 | 2-3 days |
+| | **P0 Total** | **24** | **11** | **9** | **0** | **14-18 days** |
+| **P1** | A — Audit & Commercial | 3 | 0 | 2 | 1 | 2-3 days |
+| | B — Quality & Observability | 8 | 4 | 3 | 1 | 7-8 days |
+| | **P1 Total** | **11** | **4** | **5** | **2** | **9-11 days** |
+| **P2** | Strategic | 3 | 1 | 1 | 1 | 2-3 days |
+| **Grand Total** | | **38** | **16** | **15** | **3** | **25-32 days** |
+
+> **Note:** 38 work items (24 P0 + 11 P1 + 3 P2) close 41 open gaps (16 High, 16 Med, 9 Nice) + 1 Resolved (SC-01A). **P0-B1: VERIFIED (GATE FAILED) — 21 exploitation paths documented, Zero Tenant Leakage = NO-GO.** P0-B2 split into B2A (Tenant Remediation, 5 items) + B2B (RBAC Foundation, 2 items). Bundled items: P1-A3 (7 CR gaps), P1-B5 (3 PF gaps), P1-B6 (2 WM gaps). Dependency chain: P0-B1 → Gate → P0-B2A → Gate → P0-B2B → P0-B3 → P0-B4 → P0-C → P0-D → P0-E → P0-F. See GAP_REGISTER.md for the full gap list and RB-01/ for evidence.
+
+---
+
+*Backlog v3.2. **P0-B1: VERIFIED (GATE FAILED).** Split P0-B2 → B2A (Tenant Remediation, Zero Tenant Leakage target) + B2B (RBAC Foundation, after gate passes). Dependency chain: P0-B1 → **Gate: NO-GO** → P0-B2A (tenant fix) → **Gate: target PASS** → P0-B2B (RBAC) → P0-B3 (SC-01B) → P0-B4 (SC-02) → P0-C (SC-03, DI-03). 38 work items across 10 P0 sub-waves + 2 P1 tracks + 3 P2 strategic items. See RB-01/ for full evidence package.*

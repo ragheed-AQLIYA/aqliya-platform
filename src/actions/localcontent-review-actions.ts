@@ -12,6 +12,11 @@ import {
   reviewFalsePositive,
 } from "@/lib/local-content/workbook/ai-advisor";
 import { createAiAuditEvent, AuditActions } from "@/lib/local-content/audit-events";
+import {
+  requireOrganizationAccess,
+  requirePatternSuggestionAccess,
+  requireMatchReviewAccess,
+} from "@/actions/localcontent-guards";
 
 // ─── Types ───
 
@@ -50,6 +55,8 @@ export async function getReviewQueueAction(
   organizationId: string,
   type?: "explanation" | "suggestion" | "false_positive",
 ): Promise<ReviewQueue> {
+  await requireOrganizationAccess(organizationId);
+
   const [explanations, suggestions, falsePositives, memCount, healthCount, runs] =
     await Promise.all([
       prisma.lcMatchReview.findMany({
@@ -151,6 +158,8 @@ export async function reviewSuggestionAction(
   if (!user) return { success: false, error: "Not authenticated" };
 
   try {
+    await requirePatternSuggestionAccess(suggestionId);
+
     const result = await reviewPatternSuggestion(
       suggestionId,
       decision,
@@ -181,6 +190,8 @@ export async function reviewExplanationAction(
   if (!user) return { success: false, error: "Not authenticated" };
 
   try {
+    await requireMatchReviewAccess(matchReviewId);
+
     const result = await reviewFalsePositive(
       matchReviewId,
       decision,
@@ -267,11 +278,13 @@ export async function batchReviewAction(
   for (const id of ids) {
     try {
       if (type === "suggestion") {
+        await requirePatternSuggestionAccess(id);
         const d = decision as "approved" | "rejected";
         const result = await reviewPatternSuggestion(id, d, reviewNotes, user.id);
         if (result.success) processed++;
         else errors++;
       } else {
+        await requireMatchReviewAccess(id);
         const d = decision as "confirmed" | "rejected";
         const result = await reviewFalsePositive(id, d, reviewNotes, user.id);
         if (result.success) processed++;
