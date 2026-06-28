@@ -28,12 +28,12 @@ export default async function WorkbookAiAdvisorPage({
     redirect("/login");
   }
 
-  const workbook = await getWorkbookWithLines(workbookId);
+  const organizationId = user.organizationId;
+
+  const workbook = await getWorkbookWithLines(workbookId, organizationId);
   if (!workbook) {
     notFound();
   }
-
-  const organizationId = user.organizationId;
 
   const [fpResult, suggestionsResult, orgMemResult, benchmarksResult] = await Promise.all([
     listPendingFalsePositives(organizationId),

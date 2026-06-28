@@ -39,7 +39,6 @@ import {
 } from "./workbook/learning-loop";
 import { getPilotReadiness } from "@/lib/local-content/pilot-readiness";
 import { createAiAuditEvent, AuditActions } from "@/lib/local-content/audit-events";
-import type { LcWorkbookLine } from "@prisma/client";
 import type { TbLine } from "./workbook/types";
 import type { LcScoreResult } from "./workbook/types";
 
@@ -93,7 +92,7 @@ export async function runLocalContentPipeline(
 
   // ── Stage 1: Populate Workbook ──
   stages.push(await runStage(1, "populateWorkbook", async () => {
-    const populated = await populateWorkbookFromProject(projectId, workbookId);
+    const populated = await populateWorkbookFromProject(projectId, organizationId, workbookId);
     return {
       status: "success" as PipelineStageStatus,
       summary: `Population: ${populated.autoFilledLines}/${populated.totalLines} lines auto-filled (${populated.completionPct}% complete)`,
@@ -108,7 +107,7 @@ export async function runLocalContentPipeline(
 
   // ── Stage 2: Detect Missing Data ──
   stages.push(await runStage(2, "detectMissing", async () => {
-    const missing = await detectMissingData(workbookId);
+    const missing = await detectMissingData(workbookId, organizationId);
     const categoryCount = Object.keys(missing.byCategory).length;
     return {
       status: "success" as PipelineStageStatus,
@@ -122,7 +121,7 @@ export async function runLocalContentPipeline(
 
   // ── Stage 3: Generate Data Requests ──
   stages.push(await runStage(3, "generateRequests", async () => {
-    const missing = await detectMissingData(workbookId);
+    const missing = await detectMissingData(workbookId, organizationId);
     if (missing.items.length === 0) {
       return {
         status: "skipped" as PipelineStageStatus,
@@ -148,14 +147,14 @@ export async function runLocalContentPipeline(
   let finalScore: LcScoreResult | null = null;
   stages.push(await runStage(4, "computeScore", async () => {
     const lines = await prisma.lcWorkbookLine.findMany({
-      where: { workbookId },
+      where: { workbookId, workbook: { project: { organizationId } } },
     });
     const score = computeLcScore(lines);
     finalScore = score;
 
     // Save score to workbook
     await prisma.lcWorkbook.update({
-      where: { id: workbookId },
+      where: { id: workbookId, project: { organizationId } },
       data: {
         lcScore: score.overallScore,
       },
@@ -202,7 +201,9 @@ export async function runLocalContentPipeline(
 
   // ── Stage 6: Run Simulations ──
   stages.push(await runStage(6, "runSimulations", async () => {
-    const lines = await prisma.lcWorkbookLine.findMany({ where: { workbookId } });
+    const lines = await prisma.lcWorkbookLine.findMany({
+      where: { workbookId, workbook: { project: { organizationId } } },
+    });
     const spn01 = lines.find((l) => l.code === "SPN-01");
     const spn03 = lines.find((l) => l.code === "SPN-03");
     const wrk01 = lines.find((l) => l.code === "WRK-01");
@@ -278,7 +279,7 @@ export async function runLocalContentPipeline(
           ? `+${result.delta.toFixed(1)}%`
           : "N/A";
         simResults.push(`${sim.label}: ${deltaStr}`);
-      } catch (err) {
+      } catch {
         simResults.push(`${sim.label}: failed`);
       }
     }

@@ -52,10 +52,11 @@ export async function getWorkbookDashboardSummary(
  */
 export async function createWorkbook(
   projectId: string,
+  organizationId: string,
   title: string,
 ): Promise<WorkbookWithLines> {
-  const project = await prisma.localContentProject.findUnique({
-    where: { id: projectId },
+  const project = await prisma.localContentProject.findFirst({
+    where: { id: projectId, organizationId },
   });
   if (!project) throw new Error(`Project not found: ${projectId}`);
 
@@ -93,8 +94,8 @@ export async function createWorkbook(
     })),
   });
 
-  return (await prisma.lcWorkbook.findUnique({
-    where: { id: workbook.id },
+  return (await prisma.lcWorkbook.findFirst({
+    where: { id: workbook.id, project: { organizationId } },
     include: { lines: { orderBy: { displayOrder: "asc" } } },
   })) as WorkbookWithLines;
 }
@@ -105,9 +106,10 @@ export async function createWorkbook(
  */
 export async function exportWorkbookJson(
   workbookId: string,
+  organizationId: string,
 ): Promise<object> {
-  const workbook = await prisma.lcWorkbook.findUnique({
-    where: { id: workbookId },
+  const workbook = await prisma.lcWorkbook.findFirst({
+    where: { id: workbookId, project: { organizationId } },
     include: {
       lines: { orderBy: { displayOrder: "asc" } },
       project: true,
@@ -164,9 +166,10 @@ export async function exportWorkbookJson(
  */
 export async function markWorkbookExported(
   workbookId: string,
+  organizationId: string,
 ): Promise<void> {
-  const workbook = await prisma.lcWorkbook.findUnique({
-    where: { id: workbookId },
+  const workbook = await prisma.lcWorkbook.findFirst({
+    where: { id: workbookId, project: { organizationId } },
     select: { status: true, completionPct: true },
   });
 
@@ -181,7 +184,7 @@ export async function markWorkbookExported(
   }
 
   await prisma.lcWorkbook.update({
-    where: { id: workbookId },
+    where: { id: workbookId, project: { organizationId } },
     data: { status: "exported" },
   });
 }

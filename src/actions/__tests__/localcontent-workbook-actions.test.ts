@@ -19,15 +19,24 @@ jest.mock("@/lib/auth", () => ({
   }),
 }));
 
+// Mock guards to simplify action-level tests (each returns orgId)
+jest.mock("@/actions/localcontent-guards", () => ({
+  requireProjectAccess: jest.fn().mockResolvedValue("org-1"),
+  requireWorkbookAccess: jest.fn().mockResolvedValue("org-1"),
+  requireWorkbookLineAccess: jest.fn().mockResolvedValue("org-1"),
+  requireDataRequestAccess: jest.fn().mockResolvedValue("org-1"),
+  requireDataRequestItemAccess: jest.fn().mockResolvedValue("org-1"),
+}));
+
 const mockLcWorkbookLineFindMany = jest.fn();
-const mockLcWorkbookFindUnique = jest.fn();
+const mockLcWorkbookFindFirst = jest.fn();
 const mockLcWorkbookUpdate = jest.fn();
 
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     lcWorkbookLine: { findMany: mockLcWorkbookLineFindMany },
-    lcWorkbook: { findUnique: mockLcWorkbookFindUnique, update: mockLcWorkbookUpdate },
-    localContentProject: { findUnique: jest.fn() },
+    lcWorkbook: { findFirst: mockLcWorkbookFindFirst, update: mockLcWorkbookUpdate },
+    localContentProject: { findFirst: jest.fn() },
   },
 }));
 
@@ -117,9 +126,9 @@ describe("exportWorkbookJson (services)", () => {
       },
     };
 
-    mockLcWorkbookFindUnique.mockResolvedValue(mockData);
+    mockLcWorkbookFindFirst.mockResolvedValue(mockData);
 
-    const result = await exportWorkbookJson("wb-1");
+    const result = await exportWorkbookJson("wb-1", "org-1");
     const json = result as Record<string, unknown>;
     const wb = json.workbook as Record<string, unknown>;
 
@@ -161,9 +170,9 @@ describe("exportWorkbookJson (services)", () => {
       },
     };
 
-    mockLcWorkbookFindUnique.mockResolvedValue(mockData);
+    mockLcWorkbookFindFirst.mockResolvedValue(mockData);
 
-    const result = await exportWorkbookJson("wb-2");
+    const result = await exportWorkbookJson("wb-2", "org-1");
     const json = result as Record<string, unknown>;
     const wb = json.workbook as Record<string, unknown>;
 
@@ -174,8 +183,8 @@ describe("exportWorkbookJson (services)", () => {
   });
 
   it("should throw when workbook is not found", async () => {
-    mockLcWorkbookFindUnique.mockResolvedValue(null);
-    await expect(exportWorkbookJson("nonexistent")).rejects.toThrow(
+    mockLcWorkbookFindFirst.mockResolvedValue(null);
+    await expect(exportWorkbookJson("nonexistent", "org-1")).rejects.toThrow(
       "Workbook not found",
     );
   });

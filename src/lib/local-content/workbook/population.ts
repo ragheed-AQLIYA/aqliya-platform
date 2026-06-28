@@ -192,11 +192,12 @@ export function evaluateFormula(
  */
 export async function populateWorkbookFromProject(
   projectId: string,
+  organizationId: string,
   title?: string,
 ): Promise<WorkbookPopulationResult> {
-  // Get the project
-  const project = await prisma.localContentProject.findUnique({
-    where: { id: projectId },
+  // Get the project (org-scoped)
+  const project = await prisma.localContentProject.findFirst({
+    where: { id: projectId, organizationId },
     include: {
       suppliers: true,
       spendRecords: true,
@@ -208,9 +209,9 @@ export async function populateWorkbookFromProject(
     throw new Error(`Project not found: ${projectId}`);
   }
 
-  // Check if a workbook already exists for this project
+  // Check if a workbook already exists for this project (org-scoped via project)
   const existing = await prisma.lcWorkbook.findFirst({
-    where: { projectId },
+    where: { projectId, project: { organizationId } },
     orderBy: { createdAt: "desc" },
   });
 
@@ -331,13 +332,15 @@ export async function populateWorkbookFromProject(
       },
     });
 
-    // Refresh workbook
-    workbook = await prisma.lcWorkbook.findUnique({ where: { id: workbook.id } });
+    // Refresh workbook (org-scoped)
+    workbook = await prisma.lcWorkbook.findFirst({
+      where: { id: workbook.id, project: { organizationId } },
+    });
   }
 
-  // Calculate section stats
+  // Calculate section stats (org-scoped)
   const lines = await prisma.lcWorkbookLine.findMany({
-    where: { workbookId: workbook!.id },
+    where: { workbookId: workbook!.id, workbook: { project: { organizationId } } },
     orderBy: { displayOrder: "asc" },
   });
 
@@ -371,12 +374,13 @@ export async function populateWorkbookFromProject(
  */
 export async function populateWorkbookFromTb(
   projectId: string,
+  organizationId: string,
   tbLines: TbLine[],
   title?: string,
 ): Promise<WorkbookPopulationResult> {
-  // Get the project
-  const project = await prisma.localContentProject.findUnique({
-    where: { id: projectId },
+  // Get the project (org-scoped)
+  const project = await prisma.localContentProject.findFirst({
+    where: { id: projectId, organizationId },
   });
 
   if (!project) {
@@ -406,9 +410,9 @@ export async function populateWorkbookFromTb(
     }
   }
 
-  // Check if a workbook already exists for this project
+  // Check if a workbook already exists for this project (org-scoped via project)
   const existing = await prisma.lcWorkbook.findFirst({
-    where: { projectId },
+    where: { projectId, project: { organizationId } },
     orderBy: { createdAt: "desc" },
   });
 
@@ -434,9 +438,9 @@ export async function populateWorkbookFromTb(
       },
     });
   } else {
-    // Delete existing lines for re-population
+    // Delete existing lines for re-population (org-scoped via workbook)
     await prisma.lcWorkbookLine.deleteMany({
-      where: { workbookId: workbook.id },
+      where: { workbookId: workbook.id, workbook: { project: { organizationId } } },
     });
   }
 
@@ -484,7 +488,7 @@ export async function populateWorkbookFromTb(
   const pct = total > 0 ? Math.round((autoFilledCount / total) * 100) : 0;
 
   await prisma.lcWorkbook.update({
-    where: { id: workbook.id },
+    where: { id: workbook.id, project: { organizationId } },
     data: {
       autoFilledLines: autoFilledCount,
       missingLines: missing,
@@ -493,12 +497,14 @@ export async function populateWorkbookFromTb(
     },
   });
 
-  // Refresh workbook
-  workbook = await prisma.lcWorkbook.findUnique({ where: { id: workbook.id } });
+  // Refresh workbook (org-scoped)
+  workbook = await prisma.lcWorkbook.findFirst({
+    where: { id: workbook.id, project: { organizationId } },
+  });
 
-  // Calculate section stats
+  // Calculate section stats (org-scoped)
   const lines = await prisma.lcWorkbookLine.findMany({
-    where: { workbookId: workbook!.id },
+    where: { workbookId: workbook!.id, workbook: { project: { organizationId } } },
     orderBy: { displayOrder: "asc" },
   });
 
@@ -545,10 +551,11 @@ export async function populateWorkbookFromTb(
  */
 export async function recalculateWorkbookStats(
   workbookId: string,
+  organizationId: string,
 ): Promise<WorkbookPopulationResult> {
-  // Enforce workflow gating: must be editable
-  const current = await prisma.lcWorkbook.findUnique({
-    where: { id: workbookId },
+  // Enforce workflow gating: must be editable (org-scoped)
+  const current = await prisma.lcWorkbook.findFirst({
+    where: { id: workbookId, project: { organizationId } },
     select: { status: true },
   });
   if (!current) throw new Error("Workbook not found");
@@ -557,7 +564,7 @@ export async function recalculateWorkbookStats(
   }
 
   const lines = await prisma.lcWorkbookLine.findMany({
-    where: { workbookId },
+    where: { workbookId, workbook: { project: { organizationId } } },
   });
 
   // ── Phase 1: Re-evaluate formulas ──
@@ -581,7 +588,7 @@ export async function recalculateWorkbookStats(
       const existingLine = lines.find((l) => l.code === formulaCode);
       if (existingLine && existingLine.autoFillValue !== newValue) {
         await prisma.lcWorkbookLine.update({
-          where: { id: existingLine.id },
+          where: { id: existingLine.id, workbook: { project: { organizationId } } },
           data: {
             autoFillValue: newValue,
             autoFilled: true,
@@ -632,7 +639,7 @@ export async function recalculateWorkbookStats(
   requireTransition(current.status, newStatus);
 
   await prisma.lcWorkbook.update({
-    where: { id: workbookId },
+    where: { id: workbookId, project: { organizationId } },
     data: {
       autoFilledLines: autoFilled,
       missingLines: missing,
@@ -656,9 +663,10 @@ export async function recalculateWorkbookStats(
  */
 export async function getWorkbookWithLines(
   workbookId: string,
+  organizationId: string,
 ): Promise<WorkbookWithLines | null> {
-  const workbook = await prisma.lcWorkbook.findUnique({
-    where: { id: workbookId },
+  const workbook = await prisma.lcWorkbook.findFirst({
+    where: { id: workbookId, project: { organizationId } },
     include: {
       lines: { orderBy: { displayOrder: "asc" } },
     },
@@ -671,17 +679,18 @@ export async function getWorkbookWithLines(
  */
 export async function updateWorkbookLineValue(
   lineId: string,
+  organizationId: string,
   manualValue: number,
   notes?: string,
 ): Promise<void> {
-  // Enforce workflow gating: must be editable
-  const line = await prisma.lcWorkbookLine.findUnique({
-    where: { id: lineId },
+  // Enforce workflow gating: must be editable (org-scoped)
+  const line = await prisma.lcWorkbookLine.findFirst({
+    where: { id: lineId, workbook: { project: { organizationId } } },
     select: { workbookId: true },
   });
   if (!line) throw new Error("Workbook line not found");
-  const workbook = await prisma.lcWorkbook.findUnique({
-    where: { id: line.workbookId },
+  const workbook = await prisma.lcWorkbook.findFirst({
+    where: { id: line.workbookId, project: { organizationId } },
     select: { status: true },
   });
   if (!workbook) throw new Error("Workbook not found");
@@ -690,7 +699,7 @@ export async function updateWorkbookLineValue(
   }
 
   await prisma.lcWorkbookLine.update({
-    where: { id: lineId },
+    where: { id: lineId, workbook: { project: { organizationId } } },
     data: {
       manualValue,
       source: "manual",
@@ -705,9 +714,10 @@ export async function updateWorkbookLineValue(
  */
 export async function listProjectWorkbooks(
   projectId: string,
+  organizationId: string,
 ): Promise<WorkbookWithLines[]> {
   const workbooks = await prisma.lcWorkbook.findMany({
-    where: { projectId },
+    where: { projectId, project: { organizationId } },
     include: {
       lines: { orderBy: { displayOrder: "asc" } },
     },
@@ -737,10 +747,13 @@ export async function listOrganizationWorkbooks(
 /**
  * Delete a workbook and all its lines (cascade handled by Prisma).
  */
-export async function deleteWorkbook(workbookId: string): Promise<void> {
-  // Enforce workflow gating: cannot delete exported workbook
-  const workbook = await prisma.lcWorkbook.findUnique({
-    where: { id: workbookId },
+export async function deleteWorkbook(
+  workbookId: string,
+  organizationId: string,
+): Promise<void> {
+  // Enforce workflow gating: cannot delete exported workbook (org-scoped)
+  const workbook = await prisma.lcWorkbook.findFirst({
+    where: { id: workbookId, project: { organizationId } },
     select: { status: true },
   });
   if (!workbook) throw new Error("Workbook not found");
@@ -748,5 +761,7 @@ export async function deleteWorkbook(workbookId: string): Promise<void> {
     throw new Error("Cannot delete exported workbook");
   }
 
-  await prisma.lcWorkbook.delete({ where: { id: workbookId } });
+  await prisma.lcWorkbook.delete({
+    where: { id: workbookId, project: { organizationId } },
+  });
 }

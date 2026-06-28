@@ -18,9 +18,10 @@ import { WORKBOOK_TEMPLATE } from "./template";
  */
 export async function detectMissingData(
   workbookId: string,
+  organizationId: string,
 ): Promise<MissingDataDetectionResult> {
   const lines = await prisma.lcWorkbookLine.findMany({
-    where: { workbookId },
+    where: { workbookId, workbook: { project: { organizationId } } },
     orderBy: [{ section: "asc" }, { displayOrder: "asc" }],
   });
 
@@ -127,9 +128,10 @@ export async function detectMissingData(
  */
 export async function generateDataRequest(
   workbookId: string,
+  organizationId: string,
 ): Promise<DataRequestWithItems> {
-  const workbook = await prisma.lcWorkbook.findUnique({
-    where: { id: workbookId },
+  const workbook = await prisma.lcWorkbook.findFirst({
+    where: { id: workbookId, project: { organizationId } },
     include: { project: true },
   });
 
@@ -137,7 +139,7 @@ export async function generateDataRequest(
     throw new Error(`Workbook not found: ${workbookId}`);
   }
 
-  const detection = await detectMissingData(workbookId);
+  const detection = await detectMissingData(workbookId, organizationId);
 
   // Create the data request
   const request = await prisma.lcDataRequest.create({
@@ -149,9 +151,9 @@ export async function generateDataRequest(
     },
   });
 
-  // Get the populated workbook lines to link items
+  // Get the populated workbook lines to link items (org-scoped)
   const lines = await prisma.lcWorkbookLine.findMany({
-    where: { workbookId },
+    where: { workbookId, workbook: { project: { organizationId } } },
   });
   const lineMap = new Map(lines.map((l) => [l.code, l]));
 
@@ -193,8 +195,8 @@ export async function generateDataRequest(
   }
 
   // Return the full request with items
-  return (await prisma.lcDataRequest.findUnique({
-    where: { id: request.id },
+  return (await prisma.lcDataRequest.findFirst({
+    where: { id: request.id, workbook: { project: { organizationId } } },
     include: { items: true },
   })) as DataRequestWithItems;
 }
@@ -204,9 +206,10 @@ export async function generateDataRequest(
  */
 export async function getWorkbookDataRequests(
   workbookId: string,
+  organizationId: string,
 ): Promise<DataRequestWithItems[]> {
   return (await prisma.lcDataRequest.findMany({
-    where: { workbookId },
+    where: { workbookId, workbook: { project: { organizationId } } },
     include: { items: { orderBy: { createdAt: "asc" } } },
     orderBy: { createdAt: "desc" },
   })) as DataRequestWithItems[];
@@ -217,10 +220,11 @@ export async function getWorkbookDataRequests(
  */
 export async function fulfillDataRequestItem(
   itemId: string,
+  organizationId: string,
   responseValue: string,
 ): Promise<void> {
   await prisma.lcDataRequestItem.update({
-    where: { id: itemId },
+    where: { id: itemId, request: { workbook: { project: { organizationId } } } },
     data: {
       status: "fulfilled",
       responseValue,
@@ -232,9 +236,12 @@ export async function fulfillDataRequestItem(
 /**
  * Mark a data request item as waived.
  */
-export async function waiveDataRequestItem(itemId: string): Promise<void> {
+export async function waiveDataRequestItem(
+  itemId: string,
+  organizationId: string,
+): Promise<void> {
   await prisma.lcDataRequestItem.update({
-    where: { id: itemId },
+    where: { id: itemId, request: { workbook: { project: { organizationId } } } },
     data: {
       status: "waived",
       updatedAt: new Date(),
@@ -245,9 +252,12 @@ export async function waiveDataRequestItem(itemId: string): Promise<void> {
 /**
  * Send a data request (mark as sent).
  */
-export async function sendDataRequest(requestId: string): Promise<void> {
+export async function sendDataRequest(
+  requestId: string,
+  organizationId: string,
+): Promise<void> {
   await prisma.lcDataRequest.update({
-    where: { id: requestId },
+    where: { id: requestId, workbook: { project: { organizationId } } },
     data: {
       status: "sent",
       sentAt: new Date(),
@@ -261,9 +271,10 @@ export async function sendDataRequest(requestId: string): Promise<void> {
  */
 export async function getClientDataRequestText(
   requestId: string,
+  organizationId: string,
 ): Promise<string> {
-  const request = await prisma.lcDataRequest.findUnique({
-    where: { id: requestId },
+  const request = await prisma.lcDataRequest.findFirst({
+    where: { id: requestId, workbook: { project: { organizationId } } },
     include: {
       items: { orderBy: [{ category: "asc" }, { createdAt: "asc" }] },
       workbook: { include: { project: true } },

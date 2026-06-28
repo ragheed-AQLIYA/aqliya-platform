@@ -65,16 +65,16 @@ export async function createWorkbookAction(
   projectId: string,
   title: string,
 ) {
-  await requireProjectAccess(projectId);
-  return safe(() => createWorkbook(projectId, title));
+  const organizationId = await requireProjectAccess(projectId);
+  return safe(() => createWorkbook(projectId, organizationId, title));
 }
 
 export async function populateWorkbookAction(
   projectId: string,
   title?: string,
 ) {
-  await requireProjectAccess(projectId);
-  const result = await safe(() => populateWorkbookFromProject(projectId, title));
+  const organizationId = await requireProjectAccess(projectId);
+  const result = await safe(() => populateWorkbookFromProject(projectId, organizationId, title));
   revalidatePath(`/local-content/projects/${projectId}`);
   revalidatePath("/local-content/workbook");
   return result;
@@ -85,7 +85,7 @@ export async function populateWorkbookFromTbAction(
   tbLines: TbLine[],
   title?: string,
 ) {
-  await requireProjectAccess(projectId);
+  const organizationId = await requireProjectAccess(projectId);
   const parsed = parseOrError(populateWorkbookFromTbSchema, { projectId, tbLines, title });
   if (!parsed.success) {
     return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
@@ -93,7 +93,7 @@ export async function populateWorkbookFromTbAction(
   const { tbLines: validatedLines, title: validatedTitle } = parsed.data;
 
   const result = await safe(() =>
-    populateWorkbookFromTb(projectId, validatedLines, validatedTitle),
+    populateWorkbookFromTb(projectId, organizationId, validatedLines, validatedTitle),
   );
   revalidatePath(`/local-content/projects/${projectId}`);
   revalidatePath("/local-content/workbook");
@@ -101,13 +101,13 @@ export async function populateWorkbookFromTbAction(
 }
 
 export async function getWorkbookAction(workbookId: string) {
-  await requireWorkbookAccess(workbookId);
-  return safe(() => getWorkbookWithLines(workbookId));
+  const organizationId = await requireWorkbookAccess(workbookId);
+  return safe(() => getWorkbookWithLines(workbookId, organizationId));
 }
 
 export async function listProjectWorkbooksAction(projectId: string) {
-  await requireProjectAccess(projectId);
-  return safe(() => listProjectWorkbooks(projectId));
+  const organizationId = await requireProjectAccess(projectId);
+  return safe(() => listProjectWorkbooks(projectId, organizationId));
 }
 
 export async function listOrganizationWorkbooksAction() {
@@ -122,24 +122,24 @@ export async function updateWorkbookLineAction(
   manualValue: number,
   notes?: string,
 ) {
-  await requireWorkbookLineAccess(lineId);
+  const organizationId = await requireWorkbookLineAccess(lineId);
   const result = await safe(() =>
-    updateWorkbookLineValue(lineId, manualValue, notes),
+    updateWorkbookLineValue(lineId, organizationId, manualValue, notes),
   );
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
 
 export async function recalculateWorkbookAction(workbookId: string) {
-  await requireWorkbookAccess(workbookId);
-  const result = await safe(() => recalculateWorkbookStats(workbookId));
+  const organizationId = await requireWorkbookAccess(workbookId);
+  const result = await safe(() => recalculateWorkbookStats(workbookId, organizationId));
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
 
 export async function deleteWorkbookAction(workbookId: string) {
-  await requireWorkbookAccess(workbookId);
-  const result = await safe(() => deleteWorkbook(workbookId));
+  const organizationId = await requireWorkbookAccess(workbookId);
+  const result = await safe(() => deleteWorkbook(workbookId, organizationId));
   revalidatePath("/local-content/workbook");
   return result;
 }
@@ -156,66 +156,66 @@ export async function getWorkbookDashboardAction() {
 // ─── Missing Data ───
 
 export async function detectMissingDataAction(workbookId: string) {
-  await requireWorkbookAccess(workbookId);
-  return safe(() => detectMissingData(workbookId));
+  const organizationId = await requireWorkbookAccess(workbookId);
+  return safe(() => detectMissingData(workbookId, organizationId));
 }
 
 export async function generateDataRequestAction(workbookId: string) {
-  await requireWorkbookAccess(workbookId);
-  const result = await safe(() => generateDataRequest(workbookId));
+  const organizationId = await requireWorkbookAccess(workbookId);
+  const result = await safe(() => generateDataRequest(workbookId, organizationId));
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
 
 export async function getDataRequestsAction(workbookId: string) {
-  await requireWorkbookAccess(workbookId);
-  return safe(() => getWorkbookDataRequests(workbookId));
+  const organizationId = await requireWorkbookAccess(workbookId);
+  return safe(() => getWorkbookDataRequests(workbookId, organizationId));
 }
 
 export async function fulfillDataRequestItemAction(
   itemId: string,
   responseValue: string,
 ) {
-  await requireDataRequestItemAccess(itemId);
+  const organizationId = await requireDataRequestItemAccess(itemId);
   const result = await safe(() =>
-    fulfillDataRequestItem(itemId, responseValue),
+    fulfillDataRequestItem(itemId, organizationId, responseValue),
   );
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
 
 export async function waiveDataRequestItemAction(itemId: string) {
-  await requireDataRequestItemAccess(itemId);
-  const result = await safe(() => waiveDataRequestItem(itemId));
+  const organizationId = await requireDataRequestItemAccess(itemId);
+  const result = await safe(() => waiveDataRequestItem(itemId, organizationId));
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
 
 export async function sendDataRequestAction(requestId: string) {
-  await requireDataRequestAccess(requestId);
-  const result = await safe(() => sendDataRequest(requestId));
+  const organizationId = await requireDataRequestAccess(requestId);
+  const result = await safe(() => sendDataRequest(requestId, organizationId));
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
 
 export async function getDataRequestTextAction(requestId: string) {
-  await requireDataRequestAccess(requestId);
-  return safe(() => getClientDataRequestText(requestId));
+  const organizationId = await requireDataRequestAccess(requestId);
+  return safe(() => getClientDataRequestText(requestId, organizationId));
 }
 
 // ─── Export ───
 
 export async function exportWorkbookAction(workbookId: string) {
-  await requireWorkbookAccess(workbookId);
+  const organizationId = await requireWorkbookAccess(workbookId);
   return safe(async () => {
-    const data = await exportWorkbookJson(workbookId);
+    const data = await exportWorkbookJson(workbookId, organizationId);
     return { ...data, _exportedAt: new Date().toISOString() };
   });
 }
 
 export async function markWorkbookExportedAction(workbookId: string) {
-  await requireWorkbookAccess(workbookId);
-  const result = await safe(() => markWorkbookExported(workbookId));
+  const organizationId = await requireWorkbookAccess(workbookId);
+  const result = await safe(() => markWorkbookExported(workbookId, organizationId));
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
