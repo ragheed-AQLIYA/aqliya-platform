@@ -133,8 +133,8 @@ export async function suggestPatternImprovements(
   }
 
   try {
-    const workbook = await prisma.lcWorkbook.findUnique({
-      where: { id: workbookId },
+    const workbook = await prisma.lcWorkbook.findFirst({
+      where: { id: workbookId, project: { organizationId } },
       include: { lines: { orderBy: { displayOrder: "asc" } } },
     });
 
@@ -377,8 +377,8 @@ export async function explainAccountMatches(
   }
 
   try {
-    const workbook = await prisma.lcWorkbook.findUnique({
-      where: { id: workbookId },
+    const workbook = await prisma.lcWorkbook.findFirst({
+      where: { id: workbookId, project: { organizationId } },
       include: { lines: { orderBy: { displayOrder: "asc" } } },
     });
 
@@ -578,18 +578,19 @@ export async function listPendingFalsePositives(
  * P0 — Governed action, never auto-approved.
  */
 export async function reviewFalsePositive(
+  organizationId: string,
   matchReviewId: string,
   decision: "confirmed" | "rejected",
   reviewNotes: string,
   reviewerId: string,
 ): Promise<AdvisorResult<unknown>> {
-  if (!matchReviewId || !decision || !reviewerId) {
-    return fail("Match review ID, decision, and reviewer ID are required");
+  if (!organizationId || !matchReviewId || !decision || !reviewerId) {
+    return fail("Organization ID, match review ID, decision, and reviewer ID are required");
   }
 
   try {
-    const existing = await prisma.lcMatchReview.findUnique({
-      where: { id: matchReviewId },
+    const existing = await prisma.lcMatchReview.findFirst({
+      where: { id: matchReviewId, organizationId },
     });
 
     if (!existing) {
@@ -681,7 +682,7 @@ export async function batchReviewFalsePositives(
   try {
     let count = 0;
     for (const id of matchReviewIds) {
-      const result = await reviewFalsePositive(id, decision, reviewNotes, reviewerId);
+      const result = await reviewFalsePositive(organizationId, id, decision, reviewNotes, reviewerId);
       if (result.success) count++;
     }
 
@@ -893,8 +894,8 @@ export async function calibrateWorkbookConfidence(
   }
 
   try {
-    const workbook = await prisma.lcWorkbook.findUnique({
-      where: { id: workbookId },
+    const workbook = await prisma.lcWorkbook.findFirst({
+      where: { id: workbookId, project: { organizationId } },
       include: { lines: { orderBy: { displayOrder: "asc" } } },
     });
 
@@ -1070,18 +1071,19 @@ export async function listPendingPatternSuggestions(
  * P0 — Human approval required before pattern changes take effect.
  */
 export async function reviewPatternSuggestion(
+  organizationId: string,
   suggestionId: string,
   decision: "approved" | "rejected",
   reviewNotes: string,
   reviewerId: string,
 ): Promise<AdvisorResult<unknown>> {
-  if (!suggestionId || !decision || !reviewerId) {
-    return fail("Suggestion ID, decision, and reviewer ID are required");
+  if (!organizationId || !suggestionId || !decision || !reviewerId) {
+    return fail("Organization ID, suggestion ID, decision, and reviewer ID are required");
   }
 
   try {
-    const suggestion = await prisma.lcPatternSuggestion.findUnique({
-      where: { id: suggestionId },
+    const suggestion = await prisma.lcPatternSuggestion.findFirst({
+      where: { id: suggestionId, organizationId },
     });
 
     if (!suggestion) {

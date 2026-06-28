@@ -634,13 +634,14 @@ export async function listWorkbookRecommendations(
  * P0: Always requires human review.
  */
 export async function reviewRecommendation(
+  organizationId: string,
   recommendationId: string,
   decision: "accepted" | "rejected" | "implemented",
   reviewNotes: string,
   reviewerId: string,
 ): Promise<void> {
-  const rec = await prisma.lcRecommendation.findUnique({
-    where: { id: recommendationId },
+  const rec = await prisma.lcRecommendation.findFirst({
+    where: { id: recommendationId, organizationId },
   });
   if (!rec) throw new Error("Recommendation not found");
 

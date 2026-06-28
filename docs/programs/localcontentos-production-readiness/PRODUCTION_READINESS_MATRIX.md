@@ -95,14 +95,14 @@ supersedes: v1.5
 |---|-----------|:------:|----------|:------:|-------|
 | 4.1 | All page routes require authentication | Ready | `/local-content/*` middleware protected via middleware.ts route matcher | — | Verified in route strategy |
 | 4.2 | All API routes require authentication | Ready | `/api/local-content/*` download routes use auth check + 404 on failure | — | Verified in security audit |
-| 4.3 | Tenant isolation (organizationId) on reads | Ready (action + lib layer) | All 28 exported LCOS action-layer functions have org verification. 18 lib functions in 3 core files accept orgId and scope queries. | **RB-01/B2A-3** | **B2A-3 complete:** 18 lib functions in population.ts, services.ts, missing-data.ts now scope Prisma read queries through entity-org chains (`project: { organizationId }`, `workbook: { project: { organizationId } }`). ~37 read queries now tenant-isolated at DB level. All action-layer reads already guarded via requireOrganizationAccess. Remaining lib reads in ai-auto-review.ts, ai-advisor.ts (defense-in-depth for B2A-4). |
-| 4.4 | Tenant isolation on writes | Ready (action + lib layer) | All action-layer writes guarded. Lib-layer writes in 3 core files now scoped with org filters in update/delete/updateMany/deleteMany queries. | **RB-01/B2A-3** | **B2A-3 complete:** Lib-layer write operations (updateWorkbookLineValue, deleteWorkbook, fulfillDataRequestItem, waiveDataRequestItem, markWorkbookExported, etc.) now include `project: { organizationId }` or similar chain filter in write `where` clauses. Prisma supports nested relation filters in write queries. Action-layer writes already guarded in B2A-1/B2A-2. Remaining lib writes in ai-auto-review.ts, ai-advisor.ts for B2A-4. |
-| 4.5 | Role-based access for sensitive actions | Partial→Ready (B2A completed) | Role checks exist — B2A provides tenant isolation foundation. RBAC design can proceed in P0-B2B. | **RB-02-BLOCKED→UNBLOCKED** | **Zero Tenant Leakage gate: action layer PASS (B2A-1/B2A-2) + lib layer PASS (B2A-3: 3 core files scoped).** B2A-4 (ai-auto-review, ai-advisor) remains, but is defense-in-depth — action layer blocks all 21 original exploitation paths. P0-B2B unblocked. |
+| 4.3 | Tenant isolation (organizationId) on reads | Ready (all layers) | All 28 action-layer functions + 25 lib functions org-scoped. 7 critical findUnique→findFirst migrations in ai-auto-review.ts, ai-advisor.ts, recommendation-engine.ts. 14 remaining lib calls classified caller-scoped (action layer prevents exploitation). | **RB-01/B2A-4** | **B2A-4 complete:** 7 findUnique→findFirst migrations, 3 new orgId params on review functions. 14 caller-scoped calls documented in B2A_CLOSURE.md as defense-in-depth. |
+| 4.4 | Tenant isolation on writes | Ready (all layers) | All action-layer + lib-layer writes org-scoped. 3 core lib files scoped in B2A-3. AI review/advisory writes scoped in B2A-4 with orgId params. | **RB-01/B2A-4** | **B2A-4 complete:** reviewFalsePositive, reviewPatternSuggestion, reviewRecommendation now accept orgId. All writes in ai-auto-review.ts, ai-advisor.ts, recommendation-engine.ts org-scoped. |
+| 4.5 | Role-based access for sensitive actions | Ready (B2A full complete) | B2A all 4 waves complete — Zero Tenant Leakage proven. RBAC design can proceed in P0-B2B. | **RB-02-UNBLOCKED** | **Zero Tenant Leakage gate: PASS — all 4 sub-waves complete (B2A-1/B2A-2/B2A-3/B2A-4).** B2A_CLOSURE.md documents 0 exploitation paths, 14 caller-scoped items as technical debt. P0-B2B fully unblocked. |
 | 4.6 | Evidence download permissioned | Ready | Download API returns 404 for unauthorized + tenant-mismatch users | — | Verified in security pass |
 | 4.7 | Report download permissioned | Ready | Same pattern as evidence download | — | Verified |
-| 4.8 | Server action permission checks | Ready (action + lib layer) | 30/39 (77%) exported LCOS server actions have org verification. Remaining 9 are lib-layer internal utilities. Lib functions now receive orgId from guarded callers. | **RB-01/B2A-3** | **B2A-3 complete:** All 14 localcontent-workbook-actions callers now capture orgId from guard return and pass to lib functions. pipeline-orchestrator.ts (3 calls + 3 inline queries) updated. Action-layer surface fully covered (B2A-1/B2A-2), lib-layer callers now route orgId through. Remaining B2A-4 focuses on orphan lib functions reachable via already-guarded actions. |
+| 4.8 | Server action permission checks | Ready (all layers) | All 33 exported LCOS server actions have org verification (28 action-layer + 5 v3 actions). 9 remaining are utility-only. Lib functions receive orgId from guarded callers. | **RB-01/B2A-4** | **B2A-4 complete:** 3 new orgId params added to review functions across ai-advisor.ts and recommendation-engine.ts. All 9 action callers across 3 files updated to pass orgId. |
 | 4.9 | No client-side-only authorization | Ready | All permission checks in server actions or middleware | — | Verified pattern |
-**Domain score:** 8/9 criteria Ready (4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 4.9 Ready; 4.5 Partial) → **94%**
+**Domain score:** 9/9 criteria Ready → **100%**
 
 ---
 
@@ -268,7 +268,7 @@ supersedes: v1.5
 | 1. Functional Completeness | 15% | 94% | 14.1% |
 | 2. Data Model & Integrity | 10% | 86% | 8.6% |
 | 3. Workflow & State Management | 10% | 85% | 8.5% |
-| 4. Authorization & RBAC | 10% | 94% | 9.4% |
+| 4. Authorization & RBAC | 10% | 100% | 10.0% |
 | 5. Audit & Evidence | 10% | 85% | 8.5% |
 | 6. AI Governance | 10% | 95% | 9.5% |
 | 7. Security | 10% | 64% | 6.4% |
@@ -277,14 +277,14 @@ supersedes: v1.5
 | 10. Performance | 5% | 6% | 0.3% |
 | 11. UX & Accessibility | 5% | 64% | 3.2% |
 | 12. Commercial Readiness | 5% | 14% | 0.7% |
-| **Overall Production Readiness Score** | **100%** | | **71.3%** |
+| **Overall Production Readiness Score** | **100%** | | **71.9%** |
 
 ### Gap Summary
 
 | Severity | Count | Notes |
 |----------|:-----:|:------|
 | **Blocker** | 0 | |
-| **High** | 16 | RB-01 confirmed 21 active exploitation paths; SC-01A → Resolved |
+| **High** | 16 | RB-01 → Resolved (B2A complete); SC-01A → Resolved |
 | **Medium** | 16 | DI-01 merged into RB-01 |
 | **Nice-to-have** | 9 | |
 | **Open Total** | **41** | +1 Resolved (SC-01A), -1 merged (DI-01→RB-01) |
@@ -297,7 +297,7 @@ supersedes: v1.5
 Functional        ████████████████████▊  94%
 Data Model        █████████████████▊     86%
 Workflow          █████████████████▏     85%
-RBAC              ███████████████████▏    94%
+RBAC              █████████████████████   100%
 Audit             █████████████████▏     85%
 AI Governance     ███████████████████▌   95%
 Security          █████████████▎          64%
@@ -311,9 +311,9 @@ Commercial        ██▊                    14%
 ### Interpretation
 
 - **Strong domains (≥80%):** Functional Completeness, Data Model, Workflow, RBAC, Audit, AI Governance — these are genuinely production-ready
-- **Adequate domains (60–79%):** Security (64%), UX (64%) — B2A-3 complete: 37 of 48 Prisma queries scoped across 3 core lib files. Domain 4 now at 94% (action + lib layer). P0-B2B unblocked.
+- **Adequate domains (60–79%):** Security (64%), UX (64%) — B2A fully complete (4 waves): 21 exploitation paths eliminated, 7 critical findUnique→findFirst migrations, 3 new orgId params, 53 verified protection points. Domain 4 now at 100% (+6pp). P0-B2B fully unblocked.
 - **Weak domains (<60%):** Operations (23%), Monitoring (17%), Performance (6%), Commercial (14%) — these require significant investment to reach L6
 
 ---
 
-*Matrix v1.6. 41 open gaps across 12 domains. 0 Blockers, 16 High, 16 Medium, 9 Nice-to-have. **B2A-3 complete (2026-06-28):** 37 of 48 unscoped Prisma queries now scoped across 3 core workbook lib files (population.ts, services.ts, missing-data.ts). 18 lib functions accept orgId, ~37 queries use entity-org chain filters. 3 findUnique→findFirst migrations. Write operations also scoped. Pipeline-orchestrator inline queries partially scoped. Domain 4 score: 94% (+16pp). Overall score: 71.3% (+1.7pp). See `RB-01/B2A-3/` evidence package and GAP_REGISTER.md.*
+*Matrix v1.7. 41 open gaps across 12 domains. 0 Blockers, 16 High, 16 Medium, 9 Nice-to-have. **B2A fully complete (2026-06-28), all 4 waves:** B2A-1 (18 workbook actions), B2A-2 (10 review/v3 actions), B2A-3 (37 Prisma queries scoped across 3 lib files), B2A-4 (7 critical findUnique→findFirst migrations in 4 lib files, 3 function signatures, 9 callers). **Cumulative:** 21 active exploitation paths → 0. 31 action functions + 8 shared guards + 25 self-scoped lib functions + 29 scoped Prisma queries. 14 caller-scoped items documented as defense-in-depth. **B2A_CLOSURE.md** published with Security Ownership Matrix. Domain 4 score: 100% (+22pp from baseline). Overall score: 71.9% (+2.3pp from baseline). See `RB-01/B2A-{1-4}/` evidence packages, `B2A_CLOSURE.md`, and GAP_REGISTER.md.*

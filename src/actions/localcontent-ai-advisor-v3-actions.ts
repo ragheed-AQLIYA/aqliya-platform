@@ -164,7 +164,7 @@ export async function reviewRecommendationAction(
   try {
     const user = await requireUserContext();
 
-    await reviewRecommendation(recommendationId, decision, reviewNotes, user.id);
+    await reviewRecommendation(user.organizationId, recommendationId, decision, reviewNotes, user.id);
     return ok({ success: true });
   } catch (error) {
     return fail(error instanceof Error ? error.message : "Failed to review recommendation");

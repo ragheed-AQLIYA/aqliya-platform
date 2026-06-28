@@ -158,9 +158,10 @@ export async function reviewSuggestionAction(
   if (!user) return { success: false, error: "Not authenticated" };
 
   try {
-    await requirePatternSuggestionAccess(suggestionId);
+    const orgId = await requirePatternSuggestionAccess(suggestionId);
 
     const result = await reviewPatternSuggestion(
+      orgId,
       suggestionId,
       decision,
       reviewNotes,
@@ -190,9 +191,10 @@ export async function reviewExplanationAction(
   if (!user) return { success: false, error: "Not authenticated" };
 
   try {
-    await requireMatchReviewAccess(matchReviewId);
+    const orgId = await requireMatchReviewAccess(matchReviewId);
 
     const result = await reviewFalsePositive(
+      orgId,
       matchReviewId,
       decision,
       reviewNotes,
@@ -278,15 +280,15 @@ export async function batchReviewAction(
   for (const id of ids) {
     try {
       if (type === "suggestion") {
-        await requirePatternSuggestionAccess(id);
+        const pOrgId = await requirePatternSuggestionAccess(id);
         const d = decision as "approved" | "rejected";
-        const result = await reviewPatternSuggestion(id, d, reviewNotes, user.id);
+        const result = await reviewPatternSuggestion(pOrgId, id, d, reviewNotes, user.id);
         if (result.success) processed++;
         else errors++;
       } else {
-        await requireMatchReviewAccess(id);
+        const mOrgId = await requireMatchReviewAccess(id);
         const d = decision as "confirmed" | "rejected";
-        const result = await reviewFalsePositive(id, d, reviewNotes, user.id);
+        const result = await reviewFalsePositive(mOrgId, id, d, reviewNotes, user.id);
         if (result.success) processed++;
         else errors++;
       }

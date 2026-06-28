@@ -83,8 +83,8 @@ export async function runWorkbookAiReview(
 
   try {
     // Get projectId from workbook
-    const workbook = await prisma.lcWorkbook.findUnique({
-      where: { id: workbookId },
+    const workbook = await prisma.lcWorkbook.findFirst({
+      where: { id: workbookId, project: { organizationId } },
       select: { projectId: true },
     });
     const projectId = workbook?.projectId;

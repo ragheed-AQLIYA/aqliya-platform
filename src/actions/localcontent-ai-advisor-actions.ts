@@ -35,7 +35,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
   }
 }
 
-function requireUser(): { id: string; name: string; organizationId: string; role: string } {
+function _requireUser(): { id: string; name: string; organizationId: string; role: string } {
   // This is called within safe(), so we don't need try/catch here
   // Using getCurrentUser from the auth layer.
   // In practice, we assert via the guards. For simplicity we re-use the auth pattern.
@@ -97,6 +97,7 @@ export async function reviewPatternSuggestionAction(
   return safe(async () => {
     const user = await getCurrentUser();
     const result = await reviewPatternSuggestion(
+      user.organizationId,
       suggestionId,
       decision,
       reviewNotes,
@@ -187,6 +188,7 @@ export async function reviewFpFlagAction(
   return safe(async () => {
     const user = await getCurrentUser();
     const result = await reviewFalsePositive(
+      user.organizationId,
       matchReviewId,
       decision,
       reviewNotes,
