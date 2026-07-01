@@ -1,4 +1,3 @@
-﻿// @ts-nocheck
 jest.mock("next-auth", () => ({
   __esModule: true,
   default: jest.fn(() => ({

@@ -1,4 +1,4 @@
-import type { AIProviderId } from "../types"
+import type { AIProviderId } from "@/lib/core/ai/types"
 
 export type CircuitState = "closed" | "open" | "half-open"
 

@@ -4,11 +4,11 @@ import { chunkText } from "./chunking-engine"
 import { buildChunkGovernanceMetadata } from "./governance-metadata"
 import { storeChunkEmbedding } from "./vector-store"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
-import type { EmbeddingProvider } from "@/lib/ai/types"
+import type { EmbeddingProvider } from "@/lib/core/ai/types"
+import type { Prisma } from "@prisma/client"
 import { getRagEmbeddingProvider, setRagEmbeddingProvider } from "./embedding-provider"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = prisma as any
+// DocumentChunk model exists in schema — typed access used directly
 
 /** @deprecated Use setRagEmbeddingProvider from embedding-provider.ts */
 export function setEmbeddingProvider(provider: EmbeddingProvider): void {
@@ -40,14 +40,14 @@ export async function embedAndStore(
     const embedding = embedResponse.embeddings[i]
     if (!embedding) continue
 
-    const row = await db.documentChunk.create({
+    const row = await prisma.documentChunk.create({
       data: {
         documentId: chunk.documentId,
         organizationId: chunk.organizationId,
         chunkIndex: chunk.chunkIndex,
         content: chunk.content,
         tokenCount: chunk.tokenCount,
-        metadata: chunk.metadata,
+        metadata: chunk.metadata as Prisma.InputJsonValue,
         createdBy: userId,
       },
     })
@@ -82,7 +82,7 @@ export async function deleteDocumentEmbeddings(
   organizationId: string,
   _userId?: string,
 ): Promise<number> {
-  const result = await db.documentChunk.deleteMany({
+  const result = await prisma.documentChunk.deleteMany({
     where: { documentId, organizationId },
   })
 

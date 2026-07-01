@@ -1,5 +1,4 @@
 import {
-  buildCommercialKnowledgeGraphFromSnapshot,
   buildCommercialKnowledgeGraphSnapshot,
   buildCommercialKnowledgeGraphView,
   getAccountKnowledgeSubgraph,

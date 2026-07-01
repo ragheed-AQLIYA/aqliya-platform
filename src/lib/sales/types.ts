@@ -305,6 +305,7 @@ export interface SalesSignal {
   status: SalesEntityStatus;
   source: SalesRecordSource;
   confidence?: SalesAIConfidence;
+  evidenceRef?: string;
 }
 
 export interface SalesObjection {
@@ -322,6 +323,8 @@ export interface SalesObjection {
   status: SalesEntityStatus;
   source: SalesRecordSource;
   labelAr?: string;
+  confidence?: SalesAIConfidence;
+  evidenceRef?: string;
 }
 
 export interface SalesCompetitorMention {
@@ -337,6 +340,8 @@ export interface SalesCompetitorMention {
   updatedAt: string;
   status: SalesEntityStatus;
   source: SalesRecordSource;
+  confidence?: SalesAIConfidence;
+  evidenceRef?: string;
 }
 
 export const SALES_PROOF_ASSET_TYPES = [
@@ -368,6 +373,7 @@ export interface SalesProofAsset {
   updatedAt: string;
   status: SalesEntityStatus;
   source: SalesRecordSource;
+  confidence?: SalesAIConfidence;
 }
 
 export const SALES_ICP_DIMENSIONS = [
@@ -414,6 +420,7 @@ export interface SalesNextAction {
   updatedAt: string;
   status: SalesEntityStatus;
   source: SalesRecordSource;
+  evidenceRef?: string;
 }
 
 export interface SalesWinLossInsight {
@@ -430,6 +437,8 @@ export interface SalesWinLossInsight {
   updatedAt: string;
   status: SalesEntityStatus;
   source: SalesRecordSource;
+  confidence?: SalesAIConfidence;
+  evidenceRef?: string;
 }
 
 export interface SalesInteractionMetadata {

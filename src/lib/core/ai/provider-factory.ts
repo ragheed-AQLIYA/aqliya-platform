@@ -1,7 +1,7 @@
-import type { AIProvider, AIProviderId } from "@/lib/ai/types"
-import { OpenAIProvider } from "@/lib/ai/providers/openai-provider"
-import { AnthropicProvider } from "@/lib/ai/providers/anthropic-provider"
-import { CloudAIProvider } from "@/lib/ai/providers/cloud-provider"
+import type { AIProvider, AIProviderId } from "@/lib/core/ai/types"
+import { OpenAIProvider } from "@/lib/core/ai/providers/openai-provider"
+import { AnthropicProvider } from "@/lib/core/ai/providers/anthropic-provider"
+import { CloudAIProvider } from "@/lib/core/ai/providers/cloud-provider"
 
 export function createAIProvider(providerName?: AIProviderId): AIProvider {
   const name: AIProviderId =

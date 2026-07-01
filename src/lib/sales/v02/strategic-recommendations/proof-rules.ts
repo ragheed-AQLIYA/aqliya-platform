@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type {
   SalesObjection,
   SalesOpportunity,
@@ -18,11 +17,13 @@ export function deriveProofRecommendations(input: {
   const open = openOpportunities(input.opportunities);
 
   for (const objection of input.objections.filter((o) => !o.resolved)) {
-    const linked = input.proofAssets.some(
-      (p) =>
-        p.assetType === "objection_response" &&
-        p.linkedOpportunityIds?.includes(objection.opportunityId),
-    );
+    const linked =
+      !objection.opportunityId ? false :
+      input.proofAssets.some(
+        (p) =>
+          p.assetType === "objection_response" &&
+          p.linkedOpportunityIds?.includes(objection.opportunityId!),
+      );
     if (linked) continue;
 
     const candidate = input.proofAssets.find(

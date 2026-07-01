@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   getTopObjections,
   getTopSignals,
@@ -302,7 +301,7 @@ function deriveInsights(
   if (topWin) {
     insights.push({
       id: "il-insight-top-win",
-      dimension: "win_loss",
+      category: "win_loss",
       title: `Leading win theme: ${topWin.label}`,
       titleAr: `أبرز فوز: ${topWin.labelAr}`,
       narrative: topWin.recommendation,
@@ -317,7 +316,7 @@ function deriveInsights(
   if (topLoss) {
     insights.push({
       id: "il-insight-top-loss",
-      dimension: "win_loss",
+      category: "win_loss",
       title: `Leading loss theme: ${topLoss.label}`,
       titleAr: `أبرز خسارة: ${topLoss.labelAr}`,
       narrative: topLoss.recommendation,
@@ -333,7 +332,7 @@ function deriveInsights(
   if (contentRefs.length >= 1) {
     insights.push({
       id: "il-insight-content-stub",
-      dimension: "content",
+      category: "content",
       title: `${contentRefs.length} content asset ref(s) (stub)`,
       titleAr: `${contentRefs.length} مرجع محتوى (stub)`,
       narrative:

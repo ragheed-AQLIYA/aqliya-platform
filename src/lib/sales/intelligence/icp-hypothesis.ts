@@ -28,33 +28,6 @@ export function buildICPHypothesis(input: {
     (a, b) => b[1].value - a[1].value,
   )[0];
 
-  const fitDistribution = [
-    { label: "strong", labelAr: "ملاءمة قوية", min: 75 },
-    { label: "moderate", labelAr: "ملاءمة متوسطة", min: 55 },
-    { label: "weak", labelAr: "ملاءمة ضعيفة", min: 1 },
-    { label: "unknown", labelAr: "غير محدد", min: 0 },
-  ].map((bucket) => {
-    let count = 0;
-    for (const account of accounts) {
-      const opps = opportunities.filter((o) => o.accountId === account.id);
-      const avg =
-        opps.length === 0
-          ? 0
-          : opps.reduce((s, o) => s + (o.qualificationScore ?? 40), 0) /
-            opps.length;
-      if (bucket.label === "strong" && avg >= 75) count++;
-      else if (bucket.label === "moderate" && avg >= 55 && avg < 75) count++;
-      else if (bucket.label === "weak" && avg >= 1 && avg < 55) count++;
-      else if (bucket.label === "unknown" && avg === 0) count++;
-    }
-    const total = accounts.length || 1;
-    return {
-      label: bucket.label,
-      labelAr: bucket.labelAr,
-      count,
-      pct: Math.round((count / total) * 100),
-    };
-  });
 
   const evidenceAr: string[] = [];
   if (topIndustry) {

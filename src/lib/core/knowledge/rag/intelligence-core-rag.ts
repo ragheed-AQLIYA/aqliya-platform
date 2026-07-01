@@ -8,7 +8,7 @@ import "server-only"
  */
 
 import { searchChunks, formatRAGContext, type SearchOptions } from "./rag-retriever"
-import type { RAGContext, SearchResult } from "@/lib/ai/types"
+import type { RAGContext } from "@/lib/core/ai/types"
 import {
   buildEvidenceRefs,
   buildRankingMetrics,

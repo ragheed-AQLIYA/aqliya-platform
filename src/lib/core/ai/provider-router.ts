@@ -1,14 +1,14 @@
 import "server-only"
 
-import type { AIProviderId } from "@/lib/ai/types"
+import type { AIProviderId } from "@/lib/core/ai/types"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
-import { PROVIDER_FALLBACK_CHAIN } from "@/lib/ai/provider-router-constants"
+import { PROVIDER_FALLBACK_CHAIN } from "@/lib/core/ai/provider-router-constants"
 import {
   getCircuitBreakerSnapshot,
   isCircuitOpen,
-} from "./providers/provider-circuit-breaker"
+} from "@/lib/core/ai/providers/provider-circuit-breaker"
 
-export { PROVIDER_FALLBACK_CHAIN } from "@/lib/ai/provider-router-constants"
+export { PROVIDER_FALLBACK_CHAIN } from "@/lib/core/ai/provider-router-constants"
 
 export interface ProviderRoutingDecision {
   selected: AIProviderId

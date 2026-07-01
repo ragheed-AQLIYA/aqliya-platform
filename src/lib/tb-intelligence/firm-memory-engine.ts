@@ -265,7 +265,8 @@ export async function recordAuditFirmMemoryFromConfirmation(
     },
   });
 
-  if (!wasAccepted) return;
+  // Rejections (wasAccepted=false) still teach firm memory the reviewer's canonical choice.
+  if (!params.acceptedCanonicalId) return;
 
   const existing = await prisma.tBMappingPattern.findUnique({
     where: {

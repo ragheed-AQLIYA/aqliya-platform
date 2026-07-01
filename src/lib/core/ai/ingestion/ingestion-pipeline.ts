@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getDefaultEmbeddingProvider } from "@/lib/core/ai/embedding/embedding-provider"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import { isPgvectorAvailable } from "@/lib/platform/pgvector-compat"
-import { chunkText as ragChunkText } from "@/lib/core/knowledge/rag/chunking-engine"
+
 
 export interface ChunkOptions {
   chunkSize: number

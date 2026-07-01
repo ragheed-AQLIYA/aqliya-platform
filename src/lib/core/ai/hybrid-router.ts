@@ -2,7 +2,7 @@
  * Hybrid AI routing — task-level local vs cloud (ADR-001 Cycle 2).
  */
 
-import type { AIProviderId } from "@/lib/ai/types";
+import type { AIProviderId } from "@/lib/core/ai/types";
 import type { GovernanceTaskType } from "@/lib/governance/runtime-types";
 import { prisma } from "@/lib/prisma";
 

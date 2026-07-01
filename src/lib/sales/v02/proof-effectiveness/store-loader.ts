@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   listAllInteractions,
   listObjections,

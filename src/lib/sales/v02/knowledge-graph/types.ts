@@ -1,4 +1,3 @@
-// @ts-nocheck
 export const KG_NODE_TYPES = [
   "account",
   "industry",
@@ -32,6 +31,8 @@ export interface KnowledgeGraphNode {
   type: KnowledgeGraphNodeType;
   label: string;
   sourceId: string;
+  /** External entity reference (e.g. account id, proof id). */
+  refId?: string;
   meta?: Record<string, unknown>;
 }
 
@@ -69,3 +70,14 @@ export type KnowledgeGraphFindingKind =
   | "win_loss"
   | "icp"
   | "competitor";
+
+export interface NeighborQueryOptions {
+  edgeKind?: KnowledgeGraphEdgeType;
+  direction?: "out" | "in" | "both";
+  nodeKind?: KnowledgeGraphNodeType;
+}
+
+export interface SubgraphResult {
+  nodes: KnowledgeGraphNode[];
+  edges: KnowledgeGraphEdge[];
+}

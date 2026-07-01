@@ -1,6 +1,6 @@
 import "server-only"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
-import type { EmbeddingProvider, SearchResult, RAGContext } from "@/lib/ai/types"
+import type { EmbeddingProvider, SearchResult, RAGContext } from "@/lib/core/ai/types"
 import { setRagEmbeddingProvider } from "./embedding-provider"
 import { hybridSearchChunks } from "./hybrid-search"
 

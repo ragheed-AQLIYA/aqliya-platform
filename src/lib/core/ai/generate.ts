@@ -3,8 +3,8 @@
  * All products should prefer these entry points over direct provider calls.
  */
 
-import { aiOrchestrator } from "@/lib/ai/orchestrator";
-import type { AIProviderId, AIResponse } from "@/lib/ai/types";
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator";
+import type { AIProviderId, AIResponse } from "@/lib/core/ai/types";
 import type { GovernanceTaskType } from "@/lib/governance/runtime-types";
 
 export interface GenerateOptions {

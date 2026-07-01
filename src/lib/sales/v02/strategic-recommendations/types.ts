@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { STRATEGIC_RECOMMENDATION_LABEL } from "./disclaimers";
 
 export const STRATEGIC_RECOMMENDATION_CATEGORIES = [
@@ -7,6 +6,7 @@ export const STRATEGIC_RECOMMENDATION_CATEGORIES = [
   "account_revisit",
   "opp_at_risk",
   "icp_drift",
+  "messaging_themes",
 ] as const;
 
 export type StrategicRecommendationCategory =

@@ -12,8 +12,7 @@ import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import type { CurrentUser } from "@/lib/auth"
 import type { HybridRetrievalMode } from "./hybrid-search"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = prisma as any
+// DocumentChunk model exists in schema — typed access used directly
 
 export function resolveKnowledgeOrganizationId(
   user: CurrentUser,
@@ -186,7 +185,7 @@ export async function getKnowledgeDocumentMetadata(
 ): Promise<KnowledgeDocumentMetadata | null> {
   assertKnowledgeEnabled()
 
-  const chunks = await db.documentChunk.findMany({
+  const chunks = await prisma.documentChunk.findMany({
     where: { organizationId, documentId },
     select: { metadata: true, tokenCount: true, createdAt: true },
     orderBy: { createdAt: "desc" },

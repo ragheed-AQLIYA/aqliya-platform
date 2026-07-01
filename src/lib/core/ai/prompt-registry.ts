@@ -12,7 +12,7 @@ import {
   buildAuditFindingPrompt,
   buildCommercialClaimReviewPrompt,
 } from "@/lib/governance/prompt-framework"
-import type { AIRequest } from "@/lib/ai/types"
+import type { AIRequest } from "@/lib/core/ai/types"
 
 export type PromptBuilder = (input: Record<string, unknown>) => PromptAssemblyResult
 

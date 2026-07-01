@@ -4,7 +4,7 @@ import type {
   EmbeddingProviderId,
   EmbeddingRequest,
   EmbeddingResponse,
-} from "@/lib/ai/types"
+} from "@/lib/core/ai/types"
 
 const DEFAULT_MODEL = "text-embedding-3-small"
 

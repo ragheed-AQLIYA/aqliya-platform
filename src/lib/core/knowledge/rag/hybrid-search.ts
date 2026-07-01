@@ -1,11 +1,8 @@
 import "server-only"
-import type { SearchResult } from "@/lib/ai/types"
+import type { SearchResult } from "@/lib/core/ai/types"
 import { getRagEmbeddingProvider } from "./embedding-provider"
 import { prisma } from "@/lib/prisma"
 import type { SearchOptions } from "./rag-retriever"
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = prisma as any
 
 const LEXICAL_BASE_SIMILARITY = 0.35
 
@@ -99,7 +96,7 @@ async function searchLexical(
     where.documentId = options.documentId
   }
 
-  const rows = await db.documentChunk.findMany({
+  const rows = await prisma.documentChunk.findMany({
     where: {
       ...where,
       OR: terms.map((term: string) => ({

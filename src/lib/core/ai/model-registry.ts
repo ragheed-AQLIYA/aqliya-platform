@@ -3,7 +3,7 @@
  * Central catalog of allowed model IDs, provider binding, and lifecycle status.
  */
 
-import type { AIProviderId } from "@/lib/ai/types"
+import type { AIProviderId } from "@/lib/core/ai/types"
 import type { GovernanceTaskType } from "@/lib/governance/runtime-types"
 
 export type ModelRegistryStatus = "active" | "deprecated" | "disabled"

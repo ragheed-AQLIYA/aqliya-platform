@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import {
   CROSS_PRODUCT_PROOF_ADAPTERS,

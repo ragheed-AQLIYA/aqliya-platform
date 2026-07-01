@@ -1,4 +1,3 @@
-// @ts-nocheck
 // SalesOS v0.2 Institutional Learning — rule-based, evidence-backed only
 
 import { getWinLossPatterns } from "../../vnext/commercial-memory";
@@ -53,7 +52,7 @@ function patternConfidence(count: number, evidenceCount: number): number {
 }
 
 function bucketReasons(
-  deals: InstitutionalLearningInput["wonDeals"],
+  deals: NonNullable<InstitutionalLearningInput["wonDeals"]>,
   outcome: "won" | "lost",
 ): Map<string, InstitutionalLearningEvidence[]> {
   const buckets = new Map<string, InstitutionalLearningEvidence[]>();
@@ -217,19 +216,9 @@ function deriveWinLossPatterns(
     });
   }
 
-  if (input.winLossInsightIds?.length) {
+  if (input.winLossInsights?.length) {
     const wlFromMemory = getWinLossPatterns({
-      winLoss: input.winLossInsightIds.map((w) => ({
-        id: w.id,
-        organizationId: input.organizationId,
-        opportunityId: w.opportunityId,
-        outcome: w.outcome,
-        primaryReason: w.primaryReason,
-        createdAt: "",
-        updatedAt: "",
-        status: "active" as const,
-        source: "stored" as const,
-      })),
+      winLoss: input.winLossInsights,
       opportunities: [],
       interactions: [],
     });
@@ -295,7 +284,6 @@ function deriveTrends(
     direction: activityDirection,
     currentValue: recentCount,
     priorValue: priorCount,
-    unit: "activities",
     confidence: recentCount + priorCount >= 3 ? 0.62 : 0.35,
     evidence: [...recentActs, ...priorActs].slice(0, 6).map((a) =>
       evidence({
@@ -322,7 +310,6 @@ function deriveTrends(
           ? "up"
           : "down",
     currentValue: Math.round(winRate * 100),
-    unit: "percent",
     confidence: total >= 3 ? 0.7 : 0.4,
     evidence: [
       ...(input.wonDeals ?? []).slice(0, 3).map((d) =>
@@ -357,7 +344,6 @@ function deriveTrends(
           ? "down"
           : "stable",
     currentValue: strongSignals.length,
-    unit: "signals",
     confidence: strongSignals.length >= 2 ? 0.68 : 0.42,
     evidence: strongSignals.slice(0, 5).map((s) =>
       evidence({
@@ -563,10 +549,11 @@ export function buildInstitutionalLearningSnapshot(
     generatedAt: new Date().toISOString(),
     disclaimer: INSTITUTIONAL_LEARNING_DISCLAIMER_EN,
     disclaimerAr: INSTITUTIONAL_LEARNING_DISCLAIMER_AR,
-    insightLabel: INSTITUTIONAL_LEARNING_LABEL,
+    recommendationLabel: INSTITUTIONAL_LEARNING_LABEL,
     overallConfidence: overallConfidence(patterns, insights),
     closedWonCount: (input.wonDeals ?? []).length,
     closedLostCount: (input.lostDeals ?? []).length,
+    contentAssetRefs: input.contentAssetRefs ?? [],
     insights,
     patterns,
     trends,

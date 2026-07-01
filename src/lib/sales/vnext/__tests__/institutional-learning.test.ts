@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import {
   INSTITUTIONAL_LEARNING_WAVE_C_RECOMMENDATION_LABEL,
@@ -89,7 +88,7 @@ describe("vnext institutional-learning Wave C facade", () => {
     });
 
     expect(view.marketIntelligenceIncluded).toBe(true);
-    expect(view.insights.some((row) => row.dimension === "market")).toBe(true);
+    expect(view.insights.some((row) => row.category === "market")).toBe(true);
     expect(view.aggregateConfidence).toBeGreaterThan(0);
     expect(computeAggregateInstitutionalConfidence(view)).toBe(
       view.aggregateConfidence,
@@ -112,7 +111,7 @@ describe("institutional-learning-service Wave C", () => {
   it("builds Wave C view from seed store via service", () => {
     const view = salesGetInstitutionalLearningForOrg(ORG);
     expect(view.organizationId).toBe(ORG);
-    expect(view.insightLabel).toContain("evidence-based");
+    expect(view.recommendationLabel).toContain("evidence-based");
     expect(view.marketIntelligenceIncluded).toBe(true);
     expect(view.patterns.length).toBeGreaterThan(0);
   });

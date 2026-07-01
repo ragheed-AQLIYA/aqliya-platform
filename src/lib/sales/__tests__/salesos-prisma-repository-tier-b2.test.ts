@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, expect, it, beforeEach, jest } from "@jest/globals";
 
 const ORG_A = "org-tier-b2-prisma-a";

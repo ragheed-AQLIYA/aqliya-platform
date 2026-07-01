@@ -1,4 +1,3 @@
-// @ts-nocheck
 // SalesOS v0.2 — Institutional Learning types
 
 import type {
@@ -69,13 +68,13 @@ export interface InstitutionalLearningPattern {
   recommendation: string;
   recommendationAr: string;
   evidence: InstitutionalLearningEvidence[];
-  insightLabel: typeof INSTITUTIONAL_LEARNING_LABEL;
+  insightLabel?: typeof INSTITUTIONAL_LEARNING_LABEL;
   outputStatus: "recommendation";
 }
 
 export interface InstitutionalLearningTrend {
   id: string;
-  trendType: "win_rate" | "activity_volume" | "signal_strength";
+  trendType?: "win_rate" | "activity_volume" | "signal_strength";
   metric: string;
   metricAr: string;
   direction: "up" | "down" | "stable" | "insufficient_data";
@@ -83,26 +82,26 @@ export interface InstitutionalLearningTrend {
   priorValue?: number;
   confidence: number;
   evidence: InstitutionalLearningEvidence[];
-  insightLabel: typeof INSTITUTIONAL_LEARNING_LABEL;
+  insightLabel?: typeof INSTITUTIONAL_LEARNING_LABEL;
   outputStatus: "recommendation";
 }
 
 export interface InstitutionalLearningInsight {
   id: string;
-  dimension: "win_loss" | "engagement" | "proof" | "market" | "content";
+  category: "win_loss" | "engagement" | "proof" | "market" | "content";
   title: string;
   titleAr: string;
   narrative: string;
   narrativeAr: string;
   confidence: number;
   evidence: InstitutionalLearningEvidence[];
-  insightLabel: typeof INSTITUTIONAL_LEARNING_LABEL;
-  outputStatus: "recommendation";
+  insightLabel?: typeof INSTITUTIONAL_LEARNING_LABEL;
+  outputStatus: "recommendation" | "draft";
 }
 
 export interface InstitutionalLearningRecommendation {
   id: string;
-  ruleId: string;
+  ruleId?: string;
   priority: "high" | "medium" | "low";
   title: string;
   titleAr: string;
@@ -110,7 +109,7 @@ export interface InstitutionalLearningRecommendation {
   reasoningAr: string;
   confidence: number;
   evidence: InstitutionalLearningEvidence[];
-  insightLabel: typeof INSTITUTIONAL_LEARNING_LABEL;
+  insightLabel?: typeof INSTITUTIONAL_LEARNING_LABEL;
   outputStatus: "recommendation";
 }
 

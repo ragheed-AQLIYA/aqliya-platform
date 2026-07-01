@@ -2,7 +2,6 @@
 
 import {
   ensureSalesSeed,
-  listAccounts,
   listAuditEntries,
   listOpportunities,
 } from "@/lib/sales/store";
@@ -121,7 +120,6 @@ export async function collectSalesMetricSignals(
 ): Promise<ProductMetricSignals> {
   await ensureSalesSeed(organizationId, ownerId);
   const opportunities = listOpportunities(organizationId);
-  const accounts = listAccounts(organizationId);
 
   const pendingReviews = opportunities.filter(
     (o) => o.reviewStatus === "InReview" || o.reviewStatus === "Draft",

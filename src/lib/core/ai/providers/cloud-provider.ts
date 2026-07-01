@@ -1,6 +1,6 @@
 // CloudAIProvider — wired OpenAI-compatible LLM HTTP (ADR-001 Cycle 1)
 
-import type { AIProvider, AIRequest, AIResponse, AIProviderStatus } from "../types";
+import type { AIProvider, AIRequest, AIResponse, AIProviderStatus } from "@/lib/core/ai/types";
 import {
   aiRequestToCompletion,
   completionToAiResponse,

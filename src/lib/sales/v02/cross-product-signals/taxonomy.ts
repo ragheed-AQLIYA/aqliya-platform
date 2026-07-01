@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Unified institutional (v0.2) and Wave A cross-product signal taxonomy
 
 export const INSTITUTIONAL_COMMERCIAL_KINDS = [

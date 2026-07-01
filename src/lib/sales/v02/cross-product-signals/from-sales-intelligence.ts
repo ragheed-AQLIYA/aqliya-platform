@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Map SalesOS domain + runtime signals to institutional commercial signals
 
 // TODO: platform/signals/types — inline for TS2307 resolution
@@ -16,7 +15,7 @@ interface RuntimeSignal {
   timestamp: string;
   metadata?: Record<string, unknown>;
 }
-import type { CrossProductCommercialSignal } from "./types";
+import type { CrossProductCommercialSignal, RuntimeSignalSeverity } from "./types";
 
 export function mapSalesIntelligenceToInstitutional(
   signals: RuntimeSignal[],
@@ -42,7 +41,7 @@ export function mapSalesIntelligenceToInstitutional(
         signalType: "sales_objection",
         titleAr: s.summaryAr ?? "اعتراض تجاري",
         titleEn: s.summaryEn ?? "Sales objection",
-        severity: s.severity ?? "warning",
+        severity: (s.severity ?? "warning") as RuntimeSignalSeverity,
         payload: s.metadata ?? {},
         evidenceRefs: [s.id],
         outputStatus: "recommendation",
@@ -65,7 +64,7 @@ export function mapSalesIntelligenceToInstitutional(
         signalType: "buying_signal",
         titleAr: s.summaryAr ?? "إشارة شراء",
         titleEn: s.summaryEn ?? "Buying signal",
-        severity: s.severity ?? "info",
+        severity: (s.severity ?? "info") as RuntimeSignalSeverity,
         payload: s.metadata ?? {},
         evidenceRefs: [s.id],
         outputStatus: "draft",

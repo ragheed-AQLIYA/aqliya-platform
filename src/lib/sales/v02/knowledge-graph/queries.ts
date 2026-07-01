@@ -1,57 +1,56 @@
-// @ts-nocheck
 import { graphNodeId } from "./ids";
 import type {
-  CommercialKnowledgeGraph,
+  KnowledgeGraph,
   KnowledgeGraphEdge,
-  KnowledgeGraphEdgeKind,
+  KnowledgeGraphEdgeType,
   KnowledgeGraphNode,
-  KnowledgeGraphNodeKind,
+  KnowledgeGraphNodeType,
   NeighborQueryOptions,
   SubgraphResult,
 } from "./types";
 
 export function getNode(
-  graph: CommercialKnowledgeGraph,
+  graph: KnowledgeGraph,
   nodeId: string,
 ): KnowledgeGraphNode | undefined {
   return graph.indexes.nodesById.get(nodeId);
 }
 
 export function getNodeByRef(
-  graph: CommercialKnowledgeGraph,
-  kind: KnowledgeGraphNodeKind,
+  graph: KnowledgeGraph,
+  kind: KnowledgeGraphNodeType,
   refId: string,
 ): KnowledgeGraphNode | undefined {
   return getNode(graph, graphNodeId(kind, refId));
 }
 
 export function getNodesByKind(
-  graph: CommercialKnowledgeGraph,
-  kind: KnowledgeGraphNodeKind,
+  graph: KnowledgeGraph,
+  kind: KnowledgeGraphNodeType,
 ): KnowledgeGraphNode[] {
-  return graph.indexes.nodesByKind.get(kind) ?? [];
+  return graph.indexes.nodesByType.get(kind) ?? [];
 }
 
 export function getOutgoingEdges(
-  graph: CommercialKnowledgeGraph,
+  graph: KnowledgeGraph,
   nodeId: string,
-  edgeKind?: KnowledgeGraphEdgeKind,
+  edgeKind?: KnowledgeGraphEdgeType,
 ): KnowledgeGraphEdge[] {
-  const edges = graph.indexes.outEdges.get(nodeId) ?? [];
-  return edgeKind ? edges.filter((e) => e.kind === edgeKind) : edges;
+  const edges = graph.indexes.edgesByFrom.get(nodeId) ?? [];
+  return edgeKind ? edges.filter((e) => e.type === edgeKind) : edges;
 }
 
 export function getIncomingEdges(
-  graph: CommercialKnowledgeGraph,
+  graph: KnowledgeGraph,
   nodeId: string,
-  edgeKind?: KnowledgeGraphEdgeKind,
+  edgeKind?: KnowledgeGraphEdgeType,
 ): KnowledgeGraphEdge[] {
-  const edges = graph.indexes.inEdges.get(nodeId) ?? [];
-  return edgeKind ? edges.filter((e) => e.kind === edgeKind) : edges;
+  const edges = graph.indexes.edgesByTo.get(nodeId) ?? [];
+  return edgeKind ? edges.filter((e) => e.type === edgeKind) : edges;
 }
 
 export function getNeighbors(
-  graph: CommercialKnowledgeGraph,
+  graph: KnowledgeGraph,
   nodeId: string,
   options: NeighborQueryOptions = {},
 ): KnowledgeGraphNode[] {
@@ -60,12 +59,12 @@ export function getNeighbors(
 
   if (direction === "out" || direction === "both") {
     for (const edge of getOutgoingEdges(graph, nodeId, edgeKind)) {
-      neighborIds.add(edge.targetId);
+      neighborIds.add(edge.to);
     }
   }
   if (direction === "in" || direction === "both") {
     for (const edge of getIncomingEdges(graph, nodeId, edgeKind)) {
-      neighborIds.add(edge.sourceId);
+      neighborIds.add(edge.from);
     }
   }
 
@@ -73,17 +72,17 @@ export function getNeighbors(
   for (const id of neighborIds) {
     const node = getNode(graph, id);
     if (!node) continue;
-    if (nodeKind && node.kind !== nodeKind) continue;
+    if (nodeKind && node.type !== nodeKind) continue;
     nodes.push(node);
   }
   return nodes;
 }
 
 export function findRelatedNodes(
-  graph: CommercialKnowledgeGraph,
+  graph: KnowledgeGraph,
   startNodeId: string,
   maxDepth = 2,
-  edgeKinds?: KnowledgeGraphEdgeKind[],
+  edgeKinds?: KnowledgeGraphEdgeType[],
 ): KnowledgeGraphNode[] {
   const visited = new Set<string>([startNodeId]);
   let frontier = [startNodeId];
@@ -94,9 +93,9 @@ export function findRelatedNodes(
       const out = getOutgoingEdges(graph, nodeId);
       const inn = getIncomingEdges(graph, nodeId);
       for (const edge of [...out, ...inn]) {
-        if (edgeKinds && !edgeKinds.includes(edge.kind)) continue;
+        if (edgeKinds && !edgeKinds.includes(edge.type)) continue;
         const other =
-          edge.sourceId === nodeId ? edge.targetId : edge.sourceId;
+          edge.from === nodeId ? edge.to : edge.from;
         if (visited.has(other)) continue;
         visited.add(other);
         next.push(other);
@@ -112,7 +111,7 @@ export function findRelatedNodes(
 }
 
 export function getAccountSubgraph(
-  graph: CommercialKnowledgeGraph,
+  graph: KnowledgeGraph,
   accountRefId: string,
 ): SubgraphResult | undefined {
   const root = getNodeByRef(graph, "account", accountRefId);
@@ -121,7 +120,7 @@ export function getAccountSubgraph(
   const related = findRelatedNodes(graph, root.id, 2);
   const nodeIds = new Set([root.id, ...related.map((n) => n.id)]);
   const edges = graph.edges.filter(
-    (e) => nodeIds.has(e.sourceId) && nodeIds.has(e.targetId),
+    (e) => nodeIds.has(e.from) && nodeIds.has(e.to),
   );
 
   return {
@@ -131,7 +130,7 @@ export function getAccountSubgraph(
 }
 
 export function getIndustrySubgraph(
-  graph: CommercialKnowledgeGraph,
+  graph: KnowledgeGraph,
   industryRefId: string,
 ): SubgraphResult | undefined {
   const root = getNodeByRef(graph, "industry", industryRefId);
@@ -140,106 +139,11 @@ export function getIndustrySubgraph(
   const related = findRelatedNodes(graph, root.id, 2);
   const nodeIds = new Set([root.id, ...related.map((n) => n.id)]);
   const edges = graph.edges.filter(
-    (e) => nodeIds.has(e.sourceId) && nodeIds.has(e.targetId),
+    (e) => nodeIds.has(e.from) && nodeIds.has(e.to),
   );
 
   return {
     nodes: [root, ...related],
     edges,
-  };
-}
-
-export function getProofUsageNetwork(
-  graph: CommercialKnowledgeGraph,
-  proofRefId: string,
-): SubgraphResult | undefined {
-  const root = getNodeByRef(graph, "proof", proofRefId);
-  if (!root) return undefined;
-
-  const opps = getNeighbors(graph, root.id, {
-    edgeKind: "uses",
-    direction: "out",
-    nodeKind: "opp",
-  });
-  const accounts = getNeighbors(graph, root.id, {
-    edgeKind: "related_to",
-    direction: "both",
-    nodeKind: "account",
-  });
-
-  const nodeIds = new Set([
-    root.id,
-    ...opps.map((n) => n.id),
-    ...accounts.map((n) => n.id),
-  ]);
-  const edges = graph.edges.filter(
-    (e) => nodeIds.has(e.sourceId) && nodeIds.has(e.targetId),
-  );
-
-  return {
-    nodes: [root, ...opps, ...accounts],
-    edges,
-  };
-}
-
-export function listWinningProofForAccount(
-  graph: CommercialKnowledgeGraph,
-  accountRefId: string,
-): KnowledgeGraphNode[] {
-  const accountNode = getNodeByRef(graph, "account", accountRefId);
-  if (!accountNode) return [];
-
-  const proofNodes = getNeighbors(graph, accountNode.id, {
-    edgeKind: "uses",
-    direction: "out",
-    nodeKind: "proof",
-  });
-
-  return proofNodes.filter((proof) =>
-    getOutgoingEdges(graph, proof.id, "wins_with").some((edge) => {
-      const opp = getNode(graph, edge.targetId);
-      return opp?.kind === "opp";
-    }),
-  );
-}
-
-export function listFindingsForOpportunity(
-  graph: CommercialKnowledgeGraph,
-  oppRefId: string,
-): KnowledgeGraphNode[] {
-  const oppNode = getNodeByRef(graph, "opp", oppRefId);
-  if (!oppNode) return [];
-
-  const viaMentions = getIncomingEdges(graph, oppNode.id, "mentions")
-    .map((e) => getNode(graph, e.sourceId))
-    .filter((n): n is KnowledgeGraphNode => n?.kind === "finding");
-
-  const viaWinLoss = getNeighbors(graph, oppNode.id, {
-    edgeKind: "related_to",
-    direction: "both",
-    nodeKind: "finding",
-  });
-
-  const seen = new Set<string>();
-  const out: KnowledgeGraphNode[] = [];
-  for (const node of [...viaMentions, ...viaWinLoss]) {
-    if (seen.has(node.id)) continue;
-    seen.add(node.id);
-    out.push(node);
-  }
-  return out;
-}
-
-export function summarizeGraph(graph: CommercialKnowledgeGraph): {
-  totalNodes: number;
-  totalEdges: number;
-  nodeCounts: CommercialKnowledgeGraph["stats"]["nodeCounts"];
-  edgeCounts: CommercialKnowledgeGraph["stats"]["edgeCounts"];
-} {
-  return {
-    totalNodes: graph.nodes.length,
-    totalEdges: graph.edges.length,
-    nodeCounts: graph.stats.nodeCounts,
-    edgeCounts: graph.stats.edgeCounts,
   };
 }

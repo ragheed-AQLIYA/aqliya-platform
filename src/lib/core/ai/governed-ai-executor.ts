@@ -1,10 +1,10 @@
 import "server-only"
 
-import type { AIRequest, AIResponse, AIProvider } from "@/lib/ai/types"
+import type { AIRequest, AIResponse, AIProvider } from "@/lib/core/ai/types"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
-import { calculateCost } from "@/lib/ai/cost-mapping"
+import { calculateCost } from "@/lib/core/ai/cost-mapping"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
-import { checkBudgetQuota, triggerBudgetAlerts } from "@/lib/ai/budget-manager"
+import { checkBudgetQuota, triggerBudgetAlerts } from "@/lib/core/ai/budget-manager"
 
 const GOV_PRODUCT = "ai_core"
 

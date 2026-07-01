@@ -1,4 +1,4 @@
-import type { AIResponse, AIRequest } from "@/lib/ai/types";
+import type { AIResponse, AIRequest } from "@/lib/core/ai/types";
 import type { GovernanceTaskType } from "@/lib/governance/runtime-types";
 
 export interface GovernedAIMetadata {

@@ -3,7 +3,7 @@
 // This is the DEFAULT provider — no external API dependency.
 // Preserves existing AuditOS behavior unchanged.
 
-import type { AIProvider, AIRequest, AIResponse, AIProviderStatus, DeterministicTaskHandler } from "../types"
+import type { AIProvider, AIRequest, AIResponse, AIProviderStatus, DeterministicTaskHandler } from "@/lib/core/ai/types"
 
 export class DeterministicAIProvider implements AIProvider {
   readonly providerId = 'deterministic' as const

@@ -2,7 +2,6 @@ import "server-only";
 
 import {
   writePlatformAuditLog,
-  type PlatformAuditLogInput,
   type PlatformAuditLogWriteOptions,
   type PlatformAuditLogWriteResult,
 } from "@/lib/platform/audit-log";

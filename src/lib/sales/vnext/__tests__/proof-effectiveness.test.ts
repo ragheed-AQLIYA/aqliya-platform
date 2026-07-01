@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { ensureSalesSeed, resetSalesStoreForTests } from "@/lib/sales/store";
 import type {

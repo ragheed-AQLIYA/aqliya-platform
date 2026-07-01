@@ -1,10 +1,7 @@
 import "server-only"
-/* eslint-disable @typescript-eslint/no-explicit-any -- R-IM-01: graph memory vs InstitutionalMemoryEvent schema drift */
 import { prisma } from "@/lib/prisma"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
-
-// Cast for legacy collection/event APIs not aligned with current Prisma models (R-IM-01).
-const p = prisma as any
+import type { Prisma } from "@prisma/client"
 
 // ─── Types ───
 
@@ -127,13 +124,22 @@ async function writeEvent(event: {
   performedBy?: string
 }): Promise<void> {
   try {
-    await p.institutionalMemoryEvent.create({
+    await prisma.institutionalMemoryEvent.create({
       data: {
-        organizationId: event.organizationId ?? null,
+        organizationId: event.organizationId ?? "",
+        sourceProduct: event.action,
+        sourceEntityId: event.nodeId ?? "unknown",
+        sourceEntityType: "Event",
+        targetProduct: event.action,
+        targetEntityId: event.nodeId ?? "unknown",
+        targetEntityType: "Event",
+        eventType: event.action,
+        description: "",
         nodeId: event.nodeId ?? null,
         action: event.action,
-        metadata: event.metadata ? JSON.stringify(event.metadata) : null,
+        metadata: (event.metadata ?? {}) as Prisma.InputJsonValue,
         performedBy: event.performedBy ?? null,
+        createdById: event.performedBy ?? "system",
       },
     })
   } catch {
@@ -192,7 +198,7 @@ export async function createNode(input: CreateNodeInput): Promise<{ id: string }
       organizationId: input.organizationId ?? "",
       name: input.label,
       type,
-      metadata: metadata as any,
+      metadata: metadata as Prisma.InputJsonValue,
       createdById: input.createdBy ?? null,
     },
     select: { id: true },
@@ -258,7 +264,7 @@ export async function updateNode(
 
   await prisma.intelligenceGraphNode.update({
     where: { id },
-    data: updateData as any,
+    data: updateData as Prisma.IntelligenceGraphNodeUpdateInput,
   })
 
   await writeEvent({
@@ -338,7 +344,7 @@ export async function createEdge(input: CreateEdgeInput): Promise<{ id: string }
       targetId: input.targetNodeId,
       relationType: relationship,
       weight,
-      metadata: metadata as any,
+      metadata: metadata as Prisma.InputJsonValue,
       createdById: input.createdBy ?? null,
     },
     select: { id: true },
@@ -598,15 +604,15 @@ export async function logQuery(
 // ─── Collection Management ───
 
 export async function createCollection(input: CollectionInput): Promise<{ id: string }> {
-  const collection = await p.institutionalMemoryCollection.create({
+  const collection = await prisma.institutionalMemoryCollection.create({
     data: {
-      organizationId: input.organizationId ?? null,
+      organizationId: input.organizationId ?? "",
       name: input.name,
-      description: input.description ?? null,
+      description: input.description ?? undefined,
       icon: input.icon ?? null,
       color: input.color ?? null,
       isActive: true,
-      createdBy: input.createdBy ?? null,
+      createdById: input.createdBy ?? null,
     },
     select: { id: true },
   })
@@ -634,7 +640,7 @@ export async function addNodeToCollection(
   nodeId: string,
 ): Promise<void> {
   const [collection, node] = await Promise.all([
-    p.institutionalMemoryCollection.findUnique({
+    prisma.institutionalMemoryCollection.findUnique({
       where: { id: collectionId },
       select: { id: true, organizationId: true },
     }),
@@ -669,7 +675,7 @@ export async function removeNodeFromCollection(
   collectionId: string,
   nodeId: string,
 ): Promise<void> {
-  const collection = await p.institutionalMemoryCollection.findUnique({
+  const collection = await prisma.institutionalMemoryCollection.findUnique({
     where: { id: collectionId },
     select: { id: true, organizationId: true },
   })
@@ -686,7 +692,7 @@ export async function removeNodeFromCollection(
 }
 
 export async function getCollectionNodes(collectionId: string): Promise<unknown[]> {
-  const collection = await p.institutionalMemoryCollection.findUnique({
+  const collection = await prisma.institutionalMemoryCollection.findUnique({
     where: { id: collectionId },
     select: { id: true },
   })
@@ -695,13 +701,17 @@ export async function getCollectionNodes(collectionId: string): Promise<unknown[
   }
 
   // Fetch nodes linked to this collection via events
-  const events = await p.institutionalMemoryEvent.findMany({
+  // Application-level JSON filtering since Prisma doesn't support `contains` on Json fields
+  const rawEvents = await prisma.institutionalMemoryEvent.findMany({
     where: {
       nodeId: { not: null },
       action: { in: [MUTATION_ACTIONS.MEMORY_LINKED, "NODE_REMOVED_FROM_COLLECTION"] },
-      metadata: { contains: `"collectionId":"${collectionId}"` },
     },
     orderBy: { createdAt: "desc" },
+  })
+  const events = rawEvents.filter((e) => {
+    const meta = e.metadata as Record<string, unknown> | null
+    return meta?.collectionId === collectionId
   })
 
   // Reconstruct membership from event log
@@ -745,7 +755,7 @@ export async function ingestDocument(input: IngestDocumentInput): Promise<{ batc
         title: doc.title ?? null,
         sourceType: doc.sourceType ?? null,
         status: "pending",
-        metadata: (doc.metadata ?? undefined) as any,
+        metadata: (doc.metadata ?? undefined) as Prisma.InputJsonValue,
         createdById: doc.createdBy ?? null,
       })),
     })
@@ -812,7 +822,7 @@ export async function getMemoryStats(organizationId?: string): Promise<MemorySta
     await Promise.all([
       prisma.intelligenceGraphNode.count({ where: orgFilter }),
       prisma.intelligenceGraphEdge.count({ where: orgFilter }),
-      p.institutionalMemoryCollection.count({
+      prisma.institutionalMemoryCollection.count({
         where: { ...orgFilter, isActive: true } as Record<string, unknown>,
       }),
       prisma.intelligenceQuery.count({ where: orgFilter }),
@@ -821,7 +831,7 @@ export async function getMemoryStats(organizationId?: string): Promise<MemorySta
         where: orgFilter,
         _count: { id: true },
       }),
-      p.institutionalMemoryEvent.count({
+      prisma.institutionalMemoryEvent.count({
         where: {
           ...orgFilter,
           createdAt: { gte: thirtyDaysAgo },

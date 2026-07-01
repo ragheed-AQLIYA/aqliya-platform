@@ -1,23 +1,22 @@
-// @ts-nocheck
-import type { ProofAssetEffectiveness } from "./types";
+import type { ProofAssetEffectivenessRow } from "./types";
 
 export function rankProofAssetsByEffectiveness(
-  assets: ProofAssetEffectiveness[],
-): ProofAssetEffectiveness[] {
+  assets: ProofAssetEffectivenessRow[],
+): ProofAssetEffectivenessRow[] {
   return [...assets].sort((a, b) => {
     if (b.effectivenessScore !== a.effectivenessScore) {
       return b.effectivenessScore - a.effectivenessScore;
     }
-    if (b.usage.score !== a.usage.score) {
-      return b.usage.score - a.usage.score;
+    if (b.usage.usageScore !== a.usage.usageScore) {
+      return b.usage.usageScore - a.usage.usageScore;
     }
     return a.title.localeCompare(b.title);
   });
 }
 
 export function getTopProofAssets(
-  assets: ProofAssetEffectiveness[],
+  assets: ProofAssetEffectivenessRow[],
   limit = 5,
-): ProofAssetEffectiveness[] {
+): ProofAssetEffectivenessRow[] {
   return rankProofAssetsByEffectiveness(assets).slice(0, limit);
 }

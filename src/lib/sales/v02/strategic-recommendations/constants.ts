@@ -1,4 +1,3 @@
-// @ts-nocheck
 export const STALL_DAYS = 14;
 export const REVISIT_DAYS = 21;
 export const HIGH_ICP_THRESHOLD = 75;

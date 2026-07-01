@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, expect, it } from "@jest/globals";
 import { scoreOpportunity } from "../opportunity-scoring";
 import type { SalesOpportunity } from "../../types";

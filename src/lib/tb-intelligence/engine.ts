@@ -3,7 +3,7 @@
  */
 
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
-import { generateClassification } from "@/lib/ai/generate";
+import { generateClassification } from "@/lib/core/ai/generate";
 import {
   lookupFirmMemory,
   logClassificationHistory,

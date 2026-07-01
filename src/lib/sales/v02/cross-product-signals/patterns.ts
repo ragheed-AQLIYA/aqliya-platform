@@ -1,4 +1,3 @@
-// @ts-nocheck
 // ─── Pure pattern detectors for institutional commercial signals ───
 
 // TODO: platform/signals/types — inline for TS2307 resolution
@@ -19,6 +18,7 @@ interface RuntimeSignal {
 import type {
   CrossProductCommercialSignal,
   InstitutionalCommercialKind,
+  RuntimeSignalSeverity,
 } from "./types";
 
 function normalizeKey(text: string): string {
@@ -142,7 +142,7 @@ export function detectMarketConcerns(
       signalType: "market_concern",
       titleAr: s.summaryAr ?? "قلق سوقي / امتثال",
       titleEn: s.summaryEn ?? "Market or compliance concern",
-      severity: s.severity ?? "warning",
+      severity: (s.severity ?? "warning") as RuntimeSignalSeverity,
       payload: {
         action: s.action,
         resourceType: s.resourceType,
@@ -200,7 +200,7 @@ export function detectCustomerRequests(
       signalType: "customer_request",
       titleAr: s.summaryAr ?? "طلب عميل",
       titleEn: s.summaryEn ?? "Customer request",
-      severity: s.severity ?? "info",
+      severity: (s.severity ?? "info") as RuntimeSignalSeverity,
       payload: { action: s.action, metadata: s.metadata },
       evidenceRefs: [s.id],
       outputStatus: "draft",
@@ -241,7 +241,7 @@ export function detectEvidenceGaps(
       signalType: "evidence_gap" as InstitutionalCommercialKind,
       titleAr: e.summaryAr ?? "فجوة دليل",
       titleEn: e.summaryEn ?? "Evidence gap",
-      severity: e.severity ?? "warning",
+      severity: (e.severity ?? "warning") as RuntimeSignalSeverity,
       payload: { action: e.action, metadata: e.metadata },
       evidenceRefs: [e.id],
       outputStatus: "recommendation" as const,
@@ -278,12 +278,12 @@ export function detectGovernancePressure(
       signalType: "governance_pressure",
       titleAr: `ضغط حوكمة عبر المنتجات (${pending.length} عناصر معلقة)`,
       titleEn: `Cross-product governance pressure (${pending.length} pending items)`,
-      severity: pending.some((p) => p.severity === "critical")
+      severity: (pending.some((p) => p.severity === "critical")
         ? "critical"
-        : "warning",
+        : "warning") as RuntimeSignalSeverity,
       payload: { pendingCount: pending.length, byProduct },
       evidenceRefs: pending.slice(0, 20).map((p) => p.id),
-      outputStatus: "recommendation",
+      outputStatus: "recommendation" as const,
       createdAt: new Date().toISOString(),
       sourceSignalIds: pending.map((p) => p.id),
     },

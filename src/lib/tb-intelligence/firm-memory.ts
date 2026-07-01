@@ -3,8 +3,6 @@ import type { ClassificationResult, ClassificationSource } from "./types";
 import {
   lookupAuditFirmMemory,
   recordAuditFirmMemoryFromConfirmation,
-  FIRM_MEMORY_AUTO_SUGGEST_MIN_CONFIDENCE,
-  isFirmMemoryAutoSuggestEligible,
 } from "./firm-memory-engine";
 
 export {
@@ -68,6 +66,36 @@ export async function recordFirmMemoryFeedback(params: {
     reviewerId: params.reviewerId,
     classificationHints: params.classificationHints,
   });
+}
+
+/** Derives accept/reject from prior suggestion vs reviewer choice; always updates firm memory. */
+export async function recordReviewMappingFeedback(params: {
+  organizationId: string;
+  engagementId: string;
+  clientAccountCode: string;
+  clientAccountName: string;
+  suggestedCanonicalId?: string | null;
+  acceptedCanonicalId: string;
+  reviewerId: string;
+  classificationHints?: string[];
+}): Promise<{ wasAccepted: boolean }> {
+  const suggested = params.suggestedCanonicalId ?? null;
+  const wasAccepted =
+    suggested === null || suggested === params.acceptedCanonicalId;
+
+  await recordFirmMemoryFeedback({
+    organizationId: params.organizationId,
+    engagementId: params.engagementId,
+    clientAccountCode: params.clientAccountCode,
+    clientAccountName: params.clientAccountName,
+    suggestedCanonicalId: suggested ?? params.acceptedCanonicalId,
+    acceptedCanonicalId: params.acceptedCanonicalId,
+    wasAccepted,
+    reviewerId: params.reviewerId,
+    classificationHints: params.classificationHints,
+  });
+
+  return { wasAccepted };
 }
 
 export async function getLatestClassificationSources(

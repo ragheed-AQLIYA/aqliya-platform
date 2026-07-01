@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { scoreOpportunity } from "../../intelligence/opportunity-scoring";
 import type {
   SalesInteractionLog,
@@ -23,10 +22,10 @@ export function deriveOppsAtRisk(input: {
   const recs: StrategicRecommendation[] = [];
   const open = openOpportunities(input.opportunities);
   const objectionsByOpp = new Map<string, SalesObjection[]>();
-  for (const obj of input.objections.filter((o) => !o.resolved)) {
-    const list = objectionsByOpp.get(obj.opportunityId) ?? [];
+  for (const obj of input.objections.filter((o) => !o.resolved && o.opportunityId)) {
+    const list = objectionsByOpp.get(obj.opportunityId!) ?? [];
     list.push(obj);
-    objectionsByOpp.set(obj.opportunityId, list);
+    objectionsByOpp.set(obj.opportunityId!, list);
   }
 
   for (const opp of open) {
@@ -54,7 +53,7 @@ export function deriveOppsAtRisk(input: {
     const scored = scoreOpportunity(opp);
     if (
       (opp.valueEstimate ?? 0) >= HIGH_VALUE_THRESHOLD &&
-      (opp.confidence?.score ?? scored.confidence) < 0.65
+      (opp.confidence?.score ?? scored.score) < 0.65
     ) {
       reasons.push("High value with low confidence");
       reasonsAr.push("High value, low confidence");

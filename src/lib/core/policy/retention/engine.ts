@@ -2,7 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
-import { getPolicyForModel, getAllPolicies } from "./policies";
+import { getAllPolicies } from "./policies";
 import { isRecordOnHold } from "./holds";
 import type { RetentionPolicy, RetentionDryRunResult, RetentionRunResult, RetentionJob } from "./types";
 

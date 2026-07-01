@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { buildICPLearningSnapshot } from "../../vnext/icp-learning";
+import { buildICPLearningSnapshot } from "../../icp-learning-snapshot";
 import type {
   SalesAccount,
   SalesICPInsight,

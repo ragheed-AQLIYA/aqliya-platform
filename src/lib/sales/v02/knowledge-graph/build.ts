@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   canonicalizeOpportunityStage,
   type SalesOpportunity,
@@ -10,16 +9,19 @@ import {
   industryRefId,
 } from "./ids";
 import type {
-  CommercialKnowledgeGraph,
+  KnowledgeGraph,
   KnowledgeGraphEdge,
-  KnowledgeGraphEdgeKind,
+  KnowledgeGraphEdgeType,
   KnowledgeGraphIndexes,
   KnowledgeGraphNode,
-  KnowledgeGraphNodeKind,
+  KnowledgeGraphNodeType,
   KnowledgeGraphStats,
-  KnowledgeGraphStoreSnapshot,
 } from "./types";
-import { KNOWLEDGE_GRAPH_EDGE_KINDS, KNOWLEDGE_GRAPH_NODE_KINDS } from "./types";
+import type { KnowledgeGraphStoreSnapshot } from "./store-reader";
+import {
+  KNOWLEDGE_GRAPH_EDGE_KINDS,
+  KNOWLEDGE_GRAPH_NODE_KINDS,
+} from "./types";
 
 function emptyStats(): KnowledgeGraphStats {
   const nodeCounts = Object.fromEntries(
@@ -36,30 +38,30 @@ function buildIndexes(
   edges: KnowledgeGraphEdge[],
 ): KnowledgeGraphIndexes {
   const nodesById = new Map<string, KnowledgeGraphNode>();
-  const nodesByKind = new Map<KnowledgeGraphNodeKind, KnowledgeGraphNode[]>();
-  const outEdges = new Map<string, KnowledgeGraphEdge[]>();
-  const inEdges = new Map<string, KnowledgeGraphEdge[]>();
+  const nodesByType = new Map<KnowledgeGraphNodeType, KnowledgeGraphNode[]>();
+  const edgesByFrom = new Map<string, KnowledgeGraphEdge[]>();
+  const edgesByTo = new Map<string, KnowledgeGraphEdge[]>();
 
   for (const kind of KNOWLEDGE_GRAPH_NODE_KINDS) {
-    nodesByKind.set(kind, []);
+    nodesByType.set(kind, []);
   }
 
   for (const node of nodes) {
     nodesById.set(node.id, node);
-    nodesByKind.get(node.kind)!.push(node);
+    nodesByType.get(node.type)!.push(node);
   }
 
   for (const edge of edges) {
-    const out = outEdges.get(edge.sourceId) ?? [];
+    const out = edgesByFrom.get(edge.from) ?? [];
     out.push(edge);
-    outEdges.set(edge.sourceId, out);
+    edgesByFrom.set(edge.from, out);
 
-    const inn = inEdges.get(edge.targetId) ?? [];
+    const inn = edgesByTo.get(edge.to) ?? [];
     inn.push(edge);
-    inEdges.set(edge.targetId, inn);
+    edgesByTo.set(edge.to, inn);
   }
 
-  return { nodesById, nodesByKind, outEdges, inEdges };
+  return { nodesById, nodesByType, edgesByFrom, edgesByTo };
 }
 
 function computeStats(
@@ -68,10 +70,10 @@ function computeStats(
 ): KnowledgeGraphStats {
   const stats = emptyStats();
   for (const node of nodes) {
-    stats.nodeCounts[node.kind] += 1;
+    stats.nodeCounts[node.type] += 1;
   }
   for (const edge of edges) {
-    stats.edgeCounts[edge.kind] += 1;
+    stats.edgeCounts[edge.type] += 1;
   }
   return stats;
 }
@@ -117,8 +119,8 @@ function ensureIndustryNode(
   const id = graphNodeId("industry", ref);
   builder.addNode({
     id,
-    kind: "industry",
-    refId: ref,
+    type: "industry",
+    sourceId: ref,
     label: trimmed,
     meta: { normalized: ref },
   });
@@ -127,17 +129,17 @@ function ensureIndustryNode(
 
 function link(
   builder: GraphBuilder,
-  kind: KnowledgeGraphEdgeKind,
-  sourceId: string,
-  targetId: string,
+  kind: KnowledgeGraphEdgeType,
+  from: string,
+  to: string,
   meta?: Record<string, unknown>,
   suffix?: string,
 ): void {
   builder.addEdge({
-    id: graphEdgeId(kind, sourceId, targetId, suffix),
-    kind,
-    sourceId,
-    targetId,
+    id: graphEdgeId(kind, from, to, suffix),
+    type: kind,
+    from,
+    to,
     meta,
   });
 }
@@ -145,7 +147,7 @@ function link(
 /** Pure builder — graph is derived from snapshot only, no external graph DB. */
 export function buildKnowledgeGraphFromSnapshot(
   snapshot: KnowledgeGraphStoreSnapshot,
-): CommercialKnowledgeGraph {
+): KnowledgeGraph {
   const builder = createBuilder();
   const oppById = new Map(snapshot.opportunities.map((o) => [o.id, o]));
   const accountIndustry = new Map<string, string>();
@@ -154,8 +156,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const accountNodeId = graphNodeId("account", account.id);
     builder.addNode({
       id: accountNodeId,
-      kind: "account",
-      refId: account.id,
+      type: "account",
+      sourceId: account.id,
       label: account.name,
       meta: {
         status: account.status,
@@ -179,8 +181,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const oppNodeId = graphNodeId("opp", opp.id);
     builder.addNode({
       id: oppNodeId,
-      kind: "opp",
-      refId: opp.id,
+      type: "opp",
+      sourceId: opp.id,
       label: opp.name,
       meta: {
         stage: opp.stage,
@@ -207,8 +209,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const proofNodeId = graphNodeId("proof", proof.id);
     builder.addNode({
       id: proofNodeId,
-      kind: "proof",
-      refId: proof.id,
+      type: "proof",
+      sourceId: proof.id,
       label: proof.title,
       meta: {
         assetType: proof.assetType,
@@ -256,8 +258,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const signalNodeId = graphNodeId("signal", signal.id);
     builder.addNode({
       id: signalNodeId,
-      kind: "signal",
-      refId: signal.id,
+      type: "signal",
+      sourceId: signal.id,
       label: signal.description,
       meta: {
         signalType: signal.signalType,
@@ -290,8 +292,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const contentNodeId = graphNodeId("content", insight.id);
     builder.addNode({
       id: contentNodeId,
-      kind: "content",
-      refId: insight.id,
+      type: "content",
+      sourceId: insight.id,
       label: insight.hypothesis,
       meta: {
         contentType: "icp_insight",
@@ -344,8 +346,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const contentNodeId = graphNodeId("content", ref);
     builder.addNode({
       id: contentNodeId,
-      kind: "content",
-      refId: ref,
+      type: "content",
+      sourceId: ref,
       label: interaction.evidenceRef,
       meta: {
         contentType: "evidence_ref",
@@ -376,8 +378,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const findingNodeId = graphNodeId("finding", objection.id);
     builder.addNode({
       id: findingNodeId,
-      kind: "finding",
-      refId: objection.id,
+      type: "finding",
+      sourceId: objection.id,
       label: objection.description,
       meta: {
         findingType: "objection",
@@ -410,8 +412,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const findingNodeId = graphNodeId("finding", wl.id);
     builder.addNode({
       id: findingNodeId,
-      kind: "finding",
-      refId: wl.id,
+      type: "finding",
+      sourceId: wl.id,
       label: wl.primaryReason,
       meta: {
         findingType: "win_loss",
@@ -450,8 +452,8 @@ export function buildKnowledgeGraphFromSnapshot(
     const findingNodeId = graphNodeId("finding", mention.id);
     builder.addNode({
       id: findingNodeId,
-      kind: "finding",
-      refId: mention.id,
+      type: "finding",
+      sourceId: mention.id,
       label: mention.competitorName,
       meta: {
         findingType: "competitor",

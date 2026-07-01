@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { suggestProofAssetsForObjection } from "../../proof-linkage-service";
 import type { SalesProofAsset } from "../../types";
 import {

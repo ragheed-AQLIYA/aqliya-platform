@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { buildCommercialProofNetworkOverview } from "../commercial-proof-network-overview";
 import { salesBuildCommercialProofNetworkOverview } from "../../services/commercial-proof-network-service";

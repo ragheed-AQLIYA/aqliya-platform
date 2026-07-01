@@ -1,14 +1,9 @@
 import {
   buildProofEffectivenessAnalysis,
-  buildProofEffectivenessSnapshot,
-  buildProofEffectivenessWaveBSnapshot,
   filterProofEffectivenessForOpportunity,
   loadProofEffectivenessSnapshot,
   readProofEffectivenessInput,
   toProofEffectivenessWidgetSummary,
-  PROOF_EFFECTIVENESS_DISCLAIMER_AR,
-  PROOF_EFFECTIVENESS_DISCLAIMER_EN,
-  PROOF_EFFECTIVENESS_RECOMMENDATION_LABEL,
 } from "../vnext/proof-effectiveness";
 import type { ProofEffectivenessWidgetSummary } from "../v02/proof-effectiveness";
 import { listAccounts, listProofAssetsForOpportunity } from "../store";
@@ -23,10 +18,6 @@ export type {
 } from "../vnext/proof-effectiveness";
 
 export {
-  PROOF_EFFECTIVENESS_DISCLAIMER_AR,
-  PROOF_EFFECTIVENESS_DISCLAIMER_EN,
-  PROOF_EFFECTIVENESS_RECOMMENDATION_LABEL,
-  buildProofEffectivenessSnapshot,
   getMostEffectiveProofAssets,
   loadProofEffectivenessSnapshot,
   readProofEffectivenessInput,

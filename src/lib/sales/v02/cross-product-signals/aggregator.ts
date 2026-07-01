@@ -1,4 +1,3 @@
-// @ts-nocheck
 // SalesOS v0.2 entry point for cross-product institutional signals
 //
 // Consumption (via services/cross-product-signals-service.ts):

@@ -1,6 +1,6 @@
 // LocalAIProvider — Ollama REST /api/chat (ADR-001 Cycle 2)
 
-import type { AIProvider, AIRequest, AIResponse, AIProviderStatus } from "../types";
+import type { AIProvider, AIRequest, AIResponse, AIProviderStatus } from "@/lib/core/ai/types";
 import { aiRequestToCompletion, completionToAiResponse } from "./llm-http-client";
 
 export class LocalAIProvider implements AIProvider {

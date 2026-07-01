@@ -1,4 +1,3 @@
-﻿// @ts-nocheck — pilot seed overlay; types drift from domain until v0.2 seed sync
 // ─── SalesOS seed data (in-memory, no schema migration) ───
 
 import type {
@@ -17,8 +16,13 @@ import type {
   SalesInteractionLog,
   SalesWinLossInsight,
 } from "./types";
-import { draftAIConfidence } from "./entity-factory";
 import { interactionToActivity } from "./types";
+import type { SalesAIConfidence } from "./types";
+
+/** Seed-only helper — wraps a raw score into a SalesAIConfidence object. */
+function seedAiConfidence(score: number): SalesAIConfidence {
+  return { score, rationale: "تقدير أولي", generatedAt: NOW, outputStatus: "draft" };
+}
 
 const NOW = new Date().toISOString();
 const SEED = { source: "seed" as const };
@@ -593,7 +597,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       category: "security",
       description: "Data residency concerns raised",
       resolved: false,
-      confidence: draftAIConfidence(0.72),
+      confidence: seedAiConfidence(0.72),
       evidenceRef: "sales-int-008",
     },
     {
@@ -640,7 +644,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       category: "change_management",
       description: "Workflow adoption risk across subsidiaries",
       resolved: false,
-      confidence: draftAIConfidence(0.65),
+      confidence: seedAiConfidence(0.65),
       evidenceRef: "sales-int-017",
     },
     {
@@ -671,7 +675,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       category: "timing",
       description: "Assessment paused until data platform RFP closes",
       resolved: false,
-      confidence: draftAIConfidence(0.69),
+      confidence: seedAiConfidence(0.69),
       evidenceRef: "sales-int-018",
     },
     {
@@ -703,7 +707,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       category: "budget",
       description: "Full rollout contingent on pilot KPI threshold",
       resolved: false,
-      confidence: draftAIConfidence(0.77),
+      confidence: seedAiConfidence(0.77),
       evidenceRef: "sales-int-015",
     },
   ];
@@ -722,7 +726,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "timing",
       description: "Renewal intent confirmed by VP",
       strength: "strong",
-      confidence: draftAIConfidence(0.91),
+      confidence: seedAiConfidence(0.91),
       evidenceRef: "sales-int-004",
     },
     {
@@ -738,7 +742,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "budget",
       description: "Budget freeze signal",
       strength: "strong",
-      confidence: draftAIConfidence(0.87),
+      confidence: seedAiConfidence(0.87),
       evidenceRef: "sales-int-013",
     },
     {
@@ -754,7 +758,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "authority",
       description: "Program director named economic buyer",
       strength: "moderate",
-      confidence: draftAIConfidence(0.79),
+      confidence: seedAiConfidence(0.79),
       evidenceRef: "sales-int-007",
     },
     {
@@ -785,7 +789,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "buying",
       description: "Executive sponsor engaged for enterprise license",
       strength: "moderate",
-      confidence: draftAIConfidence(0.74),
+      confidence: seedAiConfidence(0.74),
       evidenceRef: "sales-int-020",
     },
     {
@@ -801,7 +805,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "timing",
       description: "Commercial review window opens next month",
       strength: "moderate",
-      confidence: draftAIConfidence(0.7),
+      confidence: seedAiConfidence(0.7),
       evidenceRef: "sales-int-011",
     },
     {
@@ -817,7 +821,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "other",
       description: "Subsidiary rollout may require phased licensing",
       strength: "weak",
-      confidence: draftAIConfidence(0.58),
+      confidence: seedAiConfidence(0.58),
       evidenceRef: "sales-int-017",
     },
     {
@@ -848,7 +852,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "budget",
       description: "CFO requested phased payment option",
       strength: "moderate",
-      confidence: draftAIConfidence(0.69),
+      confidence: seedAiConfidence(0.69),
       evidenceRef: "sales-obj-001",
     },
     {
@@ -864,7 +868,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "budget",
       description: "RFP budget band published — within DecisionOS bundle range",
       strength: "strong",
-      confidence: draftAIConfidence(0.83),
+      confidence: seedAiConfidence(0.83),
       evidenceRef: "sales-int-016",
     },
     {
@@ -895,7 +899,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       signalType: "need",
       description: "Compliance lead requested Arabic evidence pack",
       strength: "moderate",
-      confidence: draftAIConfidence(0.75),
+      confidence: seedAiConfidence(0.75),
       evidenceRef: "sales-int-003",
     },
   ];
@@ -959,7 +963,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       competitorName: "Build vs buy",
       context: "Internal analytics team preferred",
       threatLevel: "medium",
-      confidence: draftAIConfidence(0.68),
+      confidence: seedAiConfidence(0.68),
       evidenceRef: "sales-int-013",
     },
     {
@@ -990,7 +994,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       competitorName: "Point workflow tools",
       context: "IT manager evaluating best-of-breed",
       threatLevel: "medium",
-      confidence: draftAIConfidence(0.61),
+      confidence: seedAiConfidence(0.61),
       evidenceRef: "sales-int-009",
     },
     {
@@ -1100,7 +1104,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       linkedOpportunityIds: ["sales-opp-006"],
       externalRef: "proof:security-faq-gov",
       evidenceRef: "sales-int-008",
-      confidence: draftAIConfidence(0.76),
+      confidence: seedAiConfidence(0.76),
     },
     {
       id: "sales-proof-006",
@@ -1144,7 +1148,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       linkedOpportunityIds: ["sales-opp-006"],
       externalRef: "proof:gov-attestation-01",
       evidenceRef: "sales-int-008",
-      confidence: draftAIConfidence(0.8),
+      confidence: seedAiConfidence(0.8),
     },
     {
       id: "sales-proof-009",
@@ -1177,7 +1181,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       hypothesis:
         "Financial services accounts show strong close rates with STANDARD pricing",
       evidenceSummary: "Active account, high qualification scores",
-      confidence: draftAIConfidence(0.88),
+      confidence: seedAiConfidence(0.88),
       evidenceRef: "sales-int-004",
     },
     {
@@ -1193,7 +1197,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       hypothesis:
         "Government bundle opportunities need extended security review",
       evidenceSummary: "Proposal stage, large value",
-      confidence: draftAIConfidence(0.82),
+      confidence: seedAiConfidence(0.82),
       evidenceRef: "sales-int-007",
     },
     {
@@ -1207,7 +1211,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       dimension: "company_size",
       hypothesis: "Mid-market energy accounts convert on pilot-first motion",
       evidenceSummary: "Pilot stage with defined success criteria",
-      confidence: draftAIConfidence(0.8),
+      confidence: seedAiConfidence(0.8),
       evidenceRef: "sales-int-010",
     },
     {
@@ -1221,7 +1225,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       dimension: "pain_point",
       hypothesis: "Prospects without executive sponsor stall in discovery",
       evidenceSummary: "DataFlow assessment still in Draft",
-      confidence: draftAIConfidence(0.71),
+      confidence: seedAiConfidence(0.71),
       evidenceRef: "sales-int-018",
     },
     {
@@ -1237,7 +1241,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       hypothesis: "CFO + Head of Compliance pair accelerates enterprise deals",
       evidenceSummary: "Budget objection paired with compliance follow-up",
       recommendation: "Multi-thread CFO and compliance on qualification",
-      confidence: draftAIConfidence(0.77),
+      confidence: seedAiConfidence(0.77),
       evidenceRef: "sales-int-003",
     },
     {
@@ -1252,7 +1256,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       dimension: "other",
       hypothesis: "Energy sector pilots convert when Arabic UI is in scope",
       evidenceSummary: "Implementation objection resolved via pilot criteria",
-      confidence: draftAIConfidence(0.75),
+      confidence: seedAiConfidence(0.75),
       evidenceRef: "sales-obj-004",
     },
     {
@@ -1268,7 +1272,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       hypothesis:
         "Energy accounts buy on measurable pilot KPIs not feature lists",
       evidenceSummary: "NEC pilot criteria and week-2 checkpoint",
-      confidence: draftAIConfidence(0.86),
+      confidence: seedAiConfidence(0.86),
       evidenceRef: "sales-int-015",
     },
     {
@@ -1284,7 +1288,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       hypothesis:
         "Workflow expansion follows audit license when IT sponsors mapped",
       evidenceSummary: "Workflow stakeholders identified post-discovery",
-      confidence: draftAIConfidence(0.73),
+      confidence: seedAiConfidence(0.73),
       evidenceRef: "sales-int-009",
     },
   ];
@@ -1484,7 +1488,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       outcome: "won",
       primaryReason: "expansion_fit",
       contributingFactors: ["strong_renewal_signal", "approved_pricing"],
-      confidence: draftAIConfidence(0.84),
+      confidence: seedAiConfidence(0.84),
       evidenceRef: "sales-int-014",
     },
     {
@@ -1501,7 +1505,7 @@ export function buildSalesSeedData(organizationId: string, ownerId: string) {
       primaryReason: "pilot_success",
       contributingFactors: ["aligned_kpis", "reference_call"],
       competitorInvolved: "Manual audit checklists",
-      confidence: draftAIConfidence(0.79),
+      confidence: seedAiConfidence(0.79),
       evidenceRef: "sales-int-015",
     },
     {

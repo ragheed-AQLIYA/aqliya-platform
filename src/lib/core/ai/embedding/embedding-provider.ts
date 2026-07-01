@@ -1,5 +1,5 @@
 import "server-only"
-import { getRagEmbeddingProvider, setRagEmbeddingProvider } from "@/lib/core/knowledge/rag/embedding-provider"
+import { getRagEmbeddingProvider } from "@/lib/core/knowledge/rag/embedding-provider"
 import type { EmbeddingProvider as RagEmbeddingProvider } from "@/lib/core/ai/types"
 
 export interface EmbeddingProvider {

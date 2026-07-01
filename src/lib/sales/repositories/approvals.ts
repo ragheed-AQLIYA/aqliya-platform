@@ -3,7 +3,7 @@ import type { Prisma } from "@prisma/client";
 import type { SalesActor, SalesOrgScope } from "../services";
 import type { SalesApprovalKind, SalesApprovalStatus } from "../l5-types";
 import { getSalesReview } from "./reviews";
-import { orgWhere, withPlatformOrg } from "./org-scope";
+import { orgWhere } from "./org-scope";
 
 export async function createSalesApproval(
   scope: SalesOrgScope,

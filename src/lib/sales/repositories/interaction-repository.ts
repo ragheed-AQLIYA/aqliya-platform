@@ -1,7 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import type { SalesInteractionLog } from "../types";
-import type { Prisma } from "@prisma/client";
 import {
   prismaInteractionToDomain,
   domainInteractionToPrisma,

@@ -6,7 +6,7 @@ import {
   getBudgetStatus,
   type BudgetQuotaResult,
   type BudgetStatus,
-} from "@/lib/ai/budget-manager";
+} from "@/lib/core/ai/budget-manager";
 
 /** IC-P3-01 / Tier 2 — AI cost governance under Core AI gate. */
 export async function checkOrgAIBudget(

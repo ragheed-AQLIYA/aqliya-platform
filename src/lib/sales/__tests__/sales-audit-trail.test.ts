@@ -1,4 +1,3 @@
-// @ts-nocheck
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     salesAuditEvent: { findMany: jest.fn() },

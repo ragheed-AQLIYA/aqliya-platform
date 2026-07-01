@@ -1,4 +1,3 @@
-// @ts-nocheck
 jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
 }));

@@ -1,4 +1,4 @@
-import type { Chunk } from "@/lib/ai/types"
+import type { Chunk } from "@/lib/core/ai/types"
 
 export interface ChunkingOptions {
   chunkSize: number

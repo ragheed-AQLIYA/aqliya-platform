@@ -1,4 +1,4 @@
-import type { AIProvider, AIProviderStatus, AIRequest, AIResponse } from "../types"
+import type { AIProvider, AIProviderStatus, AIRequest, AIResponse } from "@/lib/core/ai/types"
 import { CloudAIProvider } from "./cloud-provider"
 
 /** OpenAI routing adapter — delegates to CloudAIProvider with OpenAI env keys. */

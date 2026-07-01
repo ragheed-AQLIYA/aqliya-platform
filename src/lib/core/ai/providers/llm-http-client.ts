@@ -8,7 +8,7 @@ import type {
   AIRequest,
   AIResponse,
   AIProviderId,
-} from "../types";
+} from "@/lib/core/ai/types";
 
 export async function openAiCompatibleComplete(
   apiKey: string,

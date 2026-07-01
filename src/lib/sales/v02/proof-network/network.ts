@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { listCrossProductProofCandidates } from "./adapters";
 import { categorizeProofAsset } from "./categorization";
 import { computeProofLinkageGap, countLinkedProofAssets } from "./linkage";
@@ -86,7 +85,7 @@ function buildObjectionSlice(
   objection: ProofNetworkBuildInput["objections"][number],
 ): ProofNetworkSlice {
   const accountId = objection.accountId;
-  const industry = accountId ? input.accountIndustryById[accountId] : undefined;
+  const _industry = accountId ? input.accountIndustryById[accountId] : undefined;
   return {
     scope: "objection",
     scopeId: objection.id,

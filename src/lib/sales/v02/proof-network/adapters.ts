@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { SalesProofAssetType } from "../../types";
 
 export type AuditOSProofAdapterStatus = "stub" | "unavailable";

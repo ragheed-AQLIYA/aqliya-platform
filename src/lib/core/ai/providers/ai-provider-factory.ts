@@ -9,7 +9,7 @@ import { secretResolver, SecretPurpose } from "@/lib/integration/secret-resolver
 import { OpenAIProvider } from "./openai-provider";
 import { AnthropicProvider } from "./anthropic-provider";
 import { CloudAIProvider } from "./cloud-provider";
-import type { AIProvider } from "../types";
+import type { AIProvider } from "@/lib/core/ai/types";
 
 /**
  * Create an OpenAI provider with SecretResolver-backed credential resolution.

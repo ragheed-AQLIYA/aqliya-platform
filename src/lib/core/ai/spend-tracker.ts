@@ -1,6 +1,6 @@
 import "server-only"
 import { prisma } from "@/lib/prisma"
-import { getModelCost } from "@/lib/ai/cost-mapping"
+import { getModelCost } from "@/lib/core/ai/cost-mapping"
 
 export interface SpendEntry {
   id: string

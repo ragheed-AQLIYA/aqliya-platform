@@ -1,6 +1,6 @@
 /** @jest-environment node */
 
-jest.mock("@/lib/rag/intelligence-core-rag", () => ({
+jest.mock("@/lib/core/knowledge/rag/intelligence-core-rag", () => ({
   retrieveGovernedContext: jest.fn(async () => ({
     chunks: [],
     query: "test",
@@ -13,7 +13,7 @@ jest.mock("@/lib/rag/intelligence-core-rag", () => ({
 }));
 
 import { KnowledgeEngine, retrieve } from "@/lib/core/knowledge/engine";
-import { retrieveGovernedContext } from "@/lib/rag/intelligence-core-rag";
+import { retrieveGovernedContext } from "@/lib/core/knowledge/rag/intelligence-core-rag";
 
 describe("KnowledgeEngine (IC-P1-04)", () => {
   it("delegates retrieve to retrieveGovernedContext", async () => {

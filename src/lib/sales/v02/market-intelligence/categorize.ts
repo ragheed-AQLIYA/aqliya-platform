@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { MarketSignal, MarketSignalCategory } from "./types";
 
 const CATEGORY_RULES: ReadonlyArray<{

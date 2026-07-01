@@ -3,21 +3,21 @@
 // Enforces per-tenant budget quotas before execution (IC-06 integration).
 // Falls back to deterministic provider when real providers are unavailable or disabled.
 
-import type { AIProvider, AIRequest, AIResponse, AIProviderId, AIProviderStatus } from "@/lib/ai/types"
+import type { AIProvider, AIRequest, AIResponse, AIProviderId, AIProviderStatus } from "@/lib/core/ai/types"
 import type { GovernanceTaskType, GovernanceContext } from "@/lib/governance/runtime-types"
-import { deterministicProvider } from "@/lib/ai/providers/deterministic-provider"
-import { CloudAIProvider } from "@/lib/ai/providers/cloud-provider"
-import { LocalAIProvider } from "@/lib/ai/providers/local-provider"
-import { OpenAIProvider } from "@/lib/ai/providers/openai-provider"
-import { AnthropicProvider } from "@/lib/ai/providers/anthropic-provider"
-import { getPromptBuilder, assemblePrompt } from "@/lib/ai/prompt-registry"
+import { deterministicProvider } from "@/lib/core/ai/providers/deterministic-provider"
+import { CloudAIProvider } from "@/lib/core/ai/providers/cloud-provider"
+import { LocalAIProvider } from "@/lib/core/ai/providers/local-provider"
+import { OpenAIProvider } from "@/lib/core/ai/providers/openai-provider"
+import { AnthropicProvider } from "@/lib/core/ai/providers/anthropic-provider"
+import { getPromptBuilder, assemblePrompt } from "@/lib/core/ai/prompt-registry"
 import { getGovernanceContext } from "@/lib/governance/retrieval-router"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
-import { selectOptimalProvider } from "@/lib/ai/provider-router"
-import { selectProviderForTask } from "@/lib/ai/hybrid-router"
+import { selectOptimalProvider } from "@/lib/core/ai/provider-router"
+import { selectProviderForTask } from "@/lib/core/ai/hybrid-router"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
-import { checkBudgetQuota } from "@/lib/ai/budget-manager"
-import { injectGovernedRagIntoRequest } from "@/lib/ai/orchestrator-rag-inject"
+import { checkBudgetQuota } from "@/lib/core/ai/budget-manager"
+import { injectGovernedRagIntoRequest } from "@/lib/core/ai/orchestrator-rag-inject"
 
 export type OrchestratorConfig = {
   defaultProvider?: AIProviderId
@@ -71,13 +71,6 @@ function createDefaultOnGenerate(): (event: GenerateEvent) => Promise<void> {
   };
 }
 
-class AIProviderNotAvailableError extends Error {
-  constructor(providerId: AIProviderId, reason: string) {
-    super(`AI provider "${providerId}" is not available: ${reason}`)
-    this.name = 'AIProviderNotAvailableError'
-  }
-}
-
 export class AIOrchestrator {
   private providers: Map<AIProviderId, AIProvider>
   private defaultProviderId: AIProviderId
@@ -111,7 +104,7 @@ export class AIOrchestrator {
     ) {
       try {
         const { createAnyAIProviderFromResolver } = await import(
-          "@/lib/ai/providers/ai-provider-factory"
+          "@/lib/core/ai/providers/ai-provider-factory"
         );
         return await createAnyAIProviderFromResolver(
           organizationId,

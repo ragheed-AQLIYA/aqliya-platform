@@ -1,5 +1,11 @@
-// @ts-nocheck
-import type { SalesProofAssetType } from "../../types";
+import type {
+  SalesInteractionLog,
+  SalesObjection,
+  SalesOpportunity,
+  SalesProofAsset,
+  SalesProofAssetType,
+  SalesWinLossInsight,
+} from "../../types";
 
 export const PROOF_EFFECTIVENESS_DISCLAIMER_EN =
   "Evidence-based proof effectiveness ranking - recommendation only. Correlation does not imply causation. Human review required before changing proof strategy.";
@@ -71,6 +77,16 @@ export interface ProofEffectivenessSummary {
   topAssetTitle: string | null;
   aggregateAttributedWonValue: number;
   aggregateResolvedObjections: number;
+}
+
+/** Raw input for building a ProofEffectivenessSnapshot. */
+export interface ProofEffectivenessInput {
+  organizationId: string;
+  proofAssets: SalesProofAsset[];
+  opportunities: SalesOpportunity[];
+  objections: SalesObjection[];
+  winLossInsights: SalesWinLossInsight[];
+  interactions: SalesInteractionLog[];
 }
 
 export interface ProofEffectivenessSnapshot {

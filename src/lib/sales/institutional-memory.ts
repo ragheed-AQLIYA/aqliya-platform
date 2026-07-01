@@ -1,6 +1,4 @@
-// @ts-nocheck
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
 import { SalesAuditActions } from "./audit-events";
 import { salesAuditActionLabelAr } from "./audit-trail";
 import { readReviewDecisions, type ReviewDecisionRecord } from "./governance";

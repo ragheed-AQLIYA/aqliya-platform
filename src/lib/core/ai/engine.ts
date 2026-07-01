@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { AIProviderId } from "@/lib/ai/types";
+import type { AIProviderId } from "@/lib/core/ai/types";
 import {
   isAuditAICoreEnabled,
   runGovernedAuditAI,

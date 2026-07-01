@@ -2,7 +2,7 @@
  * Pure governed RAG metrics (no server-only) — safe for CLI smoke and unit tests.
  */
 
-import type { SearchResult } from "@/lib/ai/types"
+import type { SearchResult } from "@/lib/core/ai/types"
 
 export type RAGSensitivity = "public" | "internal" | "confidential" | "restricted"
 

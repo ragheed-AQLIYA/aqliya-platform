@@ -1,0 +1,30 @@
+export type AuditEventCategory =
+  | "mutation"
+  | "ai"
+  | "evidence"
+  | "export"
+  | "governance"
+  | "review"
+  | "approval"
+  | "system";
+
+export type AuditEventSeverity = "info" | "warning" | "error";
+
+export interface AuditLedgerEntry {
+  tenantId: string;
+  productKey: string;
+  action: string;
+  actorId: string;
+  actorRole: string;
+  resourceType: string;
+  resourceId: string;
+  category: AuditEventCategory;
+  severity: AuditEventSeverity;
+  summary: string;
+  metadata?: Record<string, unknown>;
+  changes?: Record<string, { from: unknown; to: unknown }>;
+  ipAddress?: string;
+  userAgent?: string;
+  sessionId?: string;
+  correlationId?: string;
+}

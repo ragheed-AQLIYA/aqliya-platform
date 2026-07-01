@@ -1,5 +1,14 @@
-export { OpenAIProvider } from "./openai-provider"
-export { AnthropicProvider } from "./anthropic-provider"
-export { CloudAIProvider } from "./cloud-provider"
-export { DeterministicAIProvider, deterministicProvider } from "./deterministic-provider"
-export { LocalAIProvider } from "./local-provider"
+/**
+ * Backward-compatible re-export. Canonical providers live in this directory.
+ * New code should import from @/lib/core/ai or individual provider files.
+ */
+export * from "./provider-utils";
+export * from "./provider-circuit-breaker";
+export * from "./openai-provider";
+export * from "./openai-embedding-provider";
+export * from "./llm-http-client";
+export * from "./local-provider";
+export * from "./deterministic-provider";
+export * from "./cloud-provider";
+export * from "./anthropic-provider";
+export * from "./ai-provider-factory";

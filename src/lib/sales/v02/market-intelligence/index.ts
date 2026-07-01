@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type {
   SalesAccount,
   SalesCompetitorMention,
@@ -8,7 +7,7 @@ import type {
   SalesWinLossInsight,
 } from "../../types";
 import { collectMarketSignals, dedupeCollectedSignals } from "./collect";
-import { categorizeMarketSignals, countSignalsByCategory } from "./categorize";
+import { categorizeMarketSignals } from "./categorize";
 import {
   computeOverallMarketScore,
   scoreCompetitorSignals,
@@ -93,7 +92,7 @@ export function buildMarketIntelligenceSnapshot(
 }
 
 export { collectMarketSignals, dedupeCollectedSignals } from "./collect";
-export { categorizeMarketSignals, countSignalsByCategory } from "./categorize";
+export { categorizeMarketSignals } from "./categorize";
 export {
   computeOverallMarketScore,
   scoreCompetitorSignals,

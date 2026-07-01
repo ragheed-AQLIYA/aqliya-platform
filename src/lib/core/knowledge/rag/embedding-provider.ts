@@ -1,6 +1,6 @@
 import "server-only"
-import { OpenAIEmbeddingProvider } from "@/lib/ai/providers/openai-embedding-provider"
-import type { EmbeddingProvider } from "@/lib/ai/types"
+import { OpenAIEmbeddingProvider } from "@/lib/core/ai/providers/openai-embedding-provider"
+import type { EmbeddingProvider } from "@/lib/core/ai/types"
 
 let _embeddingProvider: EmbeddingProvider | null = null
 

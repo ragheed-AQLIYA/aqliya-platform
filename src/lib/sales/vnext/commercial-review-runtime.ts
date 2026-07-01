@@ -3,7 +3,7 @@
 import type { CurrentUser } from "@/lib/auth";
 import { validateProductActionAccess } from "@/lib/platform/access/workspace-access";
 import { SALESOS_PRODUCT_KEY } from "../core-adoption";
-import { routeIntelligenceRequest } from "@/lib/ai/intelligence-runtime";
+import { routeIntelligenceRequest } from "@/lib/core/ai/intelligence-runtime";
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/audit-trail-runtime exists
 function recordAuditEventSafe(input: {

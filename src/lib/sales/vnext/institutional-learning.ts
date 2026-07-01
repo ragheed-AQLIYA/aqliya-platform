@@ -108,7 +108,7 @@ function mergeMarketIntelligence(
 
     extraInsights.push({
       id: `il-insight-market-${insight.id}`,
-      dimension: "market",
+      category: "market",
       title: insight.title,
       titleAr: insight.titleAr,
       narrative: insight.summary,
@@ -168,7 +168,7 @@ function mergeMarketIntelligence(
     if (evidenceLines.length >= 1) {
       extraInsights.push({
         id: `il-insight-market-industry-${topIndustry.id}`,
-        dimension: "market",
+      category: "market",
         title: topIndustry.label,
         titleAr: topIndustry.labelAr,
         narrative: `${topIndustry.accountCount} accounts · ${topIndustry.activeOpportunityCount} active opportunities`,

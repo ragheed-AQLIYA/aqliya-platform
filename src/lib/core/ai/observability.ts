@@ -1,11 +1,10 @@
 import "server-only"
 import { prisma } from "@/lib/prisma"
-import { getAISpendSummary } from "@/lib/ai/spend-tracker"
-import { getAIGovernanceMetrics } from "@/lib/ai/governance-metrics"
-import { getCircuitBreakerSnapshot } from "@/lib/ai/providers/provider-circuit-breaker"
-import { aiOrchestrator } from "@/lib/ai/orchestrator"
+
+import { getCircuitBreakerSnapshot } from "@/lib/core/ai/providers/provider-circuit-breaker"
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator"
 import { getAllCounters, type MetricCounter } from "@/lib/integration/metrics"
-import type { AIProviderStatus } from "@/lib/ai/types"
+import type { AIProviderStatus } from "@/lib/core/ai/types"
 
 export interface AIObservabilityData {
   summary: {
@@ -57,7 +56,6 @@ export async function getAIObservability(days = 30): Promise<AIObservabilityData
   const totalRequests = logs.length
 
   const byProduct: Record<string, { requests: number; cost: number; reviewed: number; reviewedPercent: number; errors: number }> = {}
-  const productCostMap = new Map<string, number>()
 
   for (const l of logs) {
     const pk = l.productKey ?? "unknown"

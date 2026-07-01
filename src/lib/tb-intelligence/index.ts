@@ -37,3 +37,6 @@ export type {
   ClassificationSource,
   ClassifyAccountInput,
 } from "./types";
+
+// Phase 8 — Knowledge Foundation Feedback Loop
+export * as knowledgeMining from "./knowledge-mining";
