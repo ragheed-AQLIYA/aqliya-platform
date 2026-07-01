@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "patterns": [
+    {
+      "name": "rapid-failed-logins",
+      "description": "More than 5 failed login attempts within 5 minutes",
+      "threshold": 5,
+      "window": "5m",
+      "severity": "warning",
+      "action": "log_alert"
+    },
+    {
+      "name": "repeated-auth-failures",
+      "description": "Repeated authorization failures on the same resource",
+      "threshold": 10,
+      "window": "15m",
+      "severity": "warning",
+      "action": "log_alert"
+    },
+    {
+      "name": "bulk-export",
+      "description": "Bulk data export exceeding 1000 records in 1 minute",
+      "threshold": 1000,
+      "window": "1m",
+      "severity": "critical",
+      "action": "log_alert_investigate"
+    },
+    {
+      "name": "unusual-hours-access",
+      "description": "Access outside business hours (22:00-06:00)",
+      "window": "1h",
+      "severity": "info",
+      "action": "log"
+    }
+  ]
+}
