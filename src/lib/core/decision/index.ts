@@ -1,12 +1,65 @@
 /**
- * Decision Engine facade — foundation for cross-product decision evaluation.
- * IC-P3.2: Decision Engine Extraction (facade phase).
+ * Decision Engine — generic multi-criteria decision evaluation.
+ * IC-P3.2: Decision Engine Extraction.
+ *
+ * Architecture:
+ *   Product → Adapter → Core Decision Engine → Evaluators
+ *
+ * Evaluators are pure functions with no product imports.
+ * Adapters bridge product-specific config to the generic engine.
  */
+
+// ─── Core Engine ───
 export {
+  DecisionEngine,
   getDecisionCompletionState,
   getNextDecisionStep,
   getDecisionProgressSummary,
-  type DecisionCompletionState,
-  type DecisionStageState,
-  type DecisionForEngine,
-} from "@/lib/decision/decision-engine";
+} from "./engine";
+
+export type {
+  DecisionCompletionState,
+  DecisionEngineConfig,
+  DecisionForEngine,
+  DecisionModuleConfig,
+  DecisionStageState,
+  StageEvaluator,
+} from "./types";
+
+// ─── Evaluators (pure, reusable) ───
+export {
+  evaluateDecisionIntake,
+  evaluateDecisionFramework,
+  evaluateDecisionScenarios,
+  evaluateDecisionRiskAnalysis,
+  evaluateDecisionRecommendation,
+  createDefaultDecisionScenarios,
+  normalizeDecisionFramework,
+  normalizeDecisionScenario,
+  normalizeDecisionRiskAnalysis,
+  normalizeDecisionRecommendation,
+  withDecisionRecommendation,
+  type DecisionFrameworkInput,
+  type DecisionFrameworkState,
+  type DecisionIntakeInput,
+  type DecisionIntakeResult,
+  type DecisionScenarioInput,
+  type DecisionScenariosState,
+  type DecisionRiskAnalysisInput,
+  type DecisionRiskAnalysisState,
+  type DecisionRecommendationInput,
+  type FrameworkField,
+  type IntakeReasonCode,
+  type IntakeStatus,
+  type RecommendationField,
+  type RiskAnalysisField,
+  type ScenarioField,
+} from "./evaluators";
+
+// ─── Adapters ───
+export {
+  getDecisionOSCompletionState,
+  getDecisionOSNextStep,
+  getDecisionOSProgressSummary,
+  createDecisionOSEngineConfig,
+} from "./adapters/decisionos-adapter";

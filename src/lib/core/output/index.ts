@@ -1,0 +1,99 @@
+export type OutputCategory = "memo" | "report" | "export" | string;
+export type OutputFormat = "json" | "pdf" | "html" | string;
+
+export interface OutputDocument {
+  id: string;
+  tenantId: string;
+  productKey: string;
+  category: OutputCategory;
+  title: string;
+  description?: string;
+  format: OutputFormat;
+  status: string;
+  evidenceIds: string[];
+  createdById: string;
+  approvedById?: string;
+  fileSizeBytes?: number;
+  checksum?: string;
+  disclaimer?: string;
+  metadata?: Record<string, unknown>;
+  exportedAt?: string;
+  fileUrl?: string;
+}
+
+export interface CreateOutputInput {
+  tenantId: string;
+  productKey: string;
+  category: OutputCategory;
+  title: string;
+  description?: string;
+  format: OutputFormat;
+  evidenceIds?: string[];
+  createdById: string;
+  approvedById?: string;
+  fileSizeBytes?: number;
+  checksum?: string;
+  disclaimer?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export class InMemoryOutputService {
+  private docs = new Map<string, OutputDocument>();
+
+  async create(input: CreateOutputInput): Promise<OutputDocument> {
+    const id = `out_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    const doc: OutputDocument = {
+      id,
+      tenantId: input.tenantId,
+      productKey: input.productKey,
+      category: input.category,
+      title: input.title,
+      description: input.description,
+      format: input.format,
+      status: "draft",
+      evidenceIds: input.evidenceIds ?? [],
+      createdById: input.createdById,
+      approvedById: input.approvedById,
+      fileSizeBytes: input.fileSizeBytes,
+      checksum: input.checksum,
+      disclaimer: input.disclaimer,
+      metadata: input.metadata,
+    };
+    this.docs.set(id, doc);
+    return doc;
+  }
+
+  async submitForReview(id: string): Promise<OutputDocument> {
+    const doc = this.docs.get(id);
+    if (!doc) throw new Error("Output not found");
+    const next = { ...doc, status: "in_review" };
+    this.docs.set(id, next);
+    return next;
+  }
+
+  async approve(id: string, approverId: string): Promise<OutputDocument> {
+    const doc = this.docs.get(id);
+    if (!doc) throw new Error("Output not found");
+    const next = { ...doc, status: "approved", approvedById: approverId };
+    this.docs.set(id, next);
+    return next;
+  }
+
+  async markExported(
+    id: string,
+    fileUrl: string,
+    checksum?: string,
+  ): Promise<OutputDocument> {
+    const doc = this.docs.get(id);
+    if (!doc) throw new Error("Output not found");
+    const next = {
+      ...doc,
+      status: "exported",
+      fileUrl,
+      checksum: checksum ?? doc.checksum,
+      exportedAt: new Date().toISOString(),
+    };
+    this.docs.set(id, next);
+    return next;
+  }
+}
