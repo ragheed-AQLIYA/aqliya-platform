@@ -20,6 +20,11 @@ import {
   requirePatternSuggestionAccess,
   requireMatchReviewAccess,
 } from "@/actions/localcontent-guards";
+import {
+  requirePermission,
+  Permission,
+  ResourceType,
+} from "@/actions/localcontent-rbac";
 import type { TbLine } from "@/lib/local-content/workbook/types";
 
 // ─── Result type ───
@@ -61,6 +66,7 @@ export async function runPatternAnalysisAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     const context = await assertProjectAccess(projectId, "review");
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await suggestPatternImprovements(
       context.project.organizationId,
       workbookId,
@@ -82,6 +88,7 @@ export async function listPendingPatternSuggestionsAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     const context = await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await listPendingPatternSuggestions(context.project.organizationId);
     if (!result.success) {
       throw new Error(result.error ?? "Failed to list suggestions");
@@ -100,6 +107,7 @@ export async function reviewPatternSuggestionAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     await requirePatternSuggestionAccess(suggestionId);
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const user = await getCurrentUser();
     const result = await reviewPatternSuggestion(
       user.organizationId,
@@ -129,6 +137,7 @@ export async function explainAccountMatchesAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     const context = await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await explainAccountMatches(
       context.project.organizationId,
       workbookId,
@@ -150,6 +159,7 @@ export async function getLineMatchExplanationsAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     const context = await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const reviews = await prisma.lcMatchReview.findMany({
       where: {
         organizationId: context.project.organizationId,
@@ -174,6 +184,7 @@ export async function listFpFlagsAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     const context = await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await listPendingFalsePositives(context.project.organizationId);
     if (!result.success) {
       throw new Error(result.error ?? "Failed to list FP flags");
@@ -192,6 +203,7 @@ export async function reviewFpFlagAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     await requireMatchReviewAccess(matchReviewId);
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const user = await getCurrentUser();
     const result = await reviewFalsePositive(
       user.organizationId,
@@ -219,6 +231,7 @@ export async function batchReviewFpAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     const context = await assertProjectAccess(projectId, "review");
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const user = await getCurrentUser();
     const result = await batchReviewFalsePositives(
       context.project.organizationId,
@@ -247,6 +260,7 @@ export async function getIndustryBenchmarksAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     await requireUserContext();
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await getIndustryPatternBenchmarks(industry);
     if (!result.success) {
       throw new Error(result.error ?? "Failed to get benchmarks");
@@ -268,6 +282,7 @@ export async function getOrgMatchMemoryAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     const context = await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await getOrganizationMatchMemory(
       context.project.organizationId,
       workbookLineCode,
@@ -292,6 +307,7 @@ export async function calibrateConfidenceAction(
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
     const context = await assertProjectAccess(projectId, "review");
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await calibrateWorkbookConfidence(
       context.project.organizationId,
       workbookId,

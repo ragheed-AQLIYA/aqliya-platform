@@ -77,6 +77,13 @@ import {
   updateSupplierSchema,
 } from "@/lib/local-content/schemas/supplier";
 import { generateReportSchema } from "@/lib/local-content/schemas/report";
+import {
+  requirePermission,
+  requireRole,
+  Permission,
+  ResourceType,
+  PlatformRole,
+} from "@/actions/localcontent-rbac";
 
 // ─── Result types ───
 
@@ -154,6 +161,7 @@ export async function listLocalContentProjectsAction(): Promise<
 > {
   return safe(async () => {
     const user = await requireUserContext("VIEWER");
+    await requirePermission(Permission.PROJECT_MANAGEMENT, ResourceType.PROJECT);
     return listProjectsByOrganization(user.organizationId);
   });
 }
@@ -163,6 +171,7 @@ export async function getLocalContentSpendAnalyticsAction(): Promise<
 > {
   return safe(async () => {
     const user = await requireUserContext("VIEWER");
+    await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
     return getOrganizationSpendAnalytics(user.organizationId);
   });
 }
@@ -172,6 +181,7 @@ export async function getLocalContentClassificationRulesAction(): Promise<
 > {
   return safe(async () => {
     const user = await requireUserContext("OPERATOR");
+    await requirePermission(Permission.CLASSIFICATION_MANAGEMENT, ResourceType.CLASSIFICATION_RULE);
     return getOrganizationClassificationRules(user.organizationId);
   });
 }
@@ -184,6 +194,7 @@ export async function getLocalContentTenderMatchAction(
   return safe(async () => {
     const _user = await requireUserContext("VIEWER");
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
     return getProjectTenderMatchReport(projectId);
   });
 }
@@ -195,6 +206,7 @@ export async function getLocalContentVerificationChecklistAction(
 > {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
     return getProjectVerificationChecklistReport(projectId);
   });
 }
@@ -211,6 +223,7 @@ export async function getLocalContentTbSignalsAction(projectId: string): Promise
 > {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
     const engagementId = await resolveAuditEngagementIdForLcProject(projectId);
     if (!engagementId) return null;
 
@@ -242,6 +255,7 @@ export async function updateLocalContentVerificationItemAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "admin");
+    await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
 
     await updateVerificationChecklistItem(
       projectId,
@@ -269,6 +283,7 @@ export async function getLocalContentProjectAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof getProjectById>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.PROJECT_MANAGEMENT, ResourceType.PROJECT);
     return getProjectById(projectId);
   });
 }
@@ -285,6 +300,7 @@ export async function createLocalContentProjectAction(
 
   return safe(async () => {
     const user = await requireUserContext("ADMIN");
+    await requireRole(PlatformRole.ORG_ADMIN);
 
     const project = await createProject({
       organizationId: user.organizationId,
@@ -319,6 +335,7 @@ export async function updateLocalContentProjectAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof updateProjectStatus>>>> {
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "admin");
+    await requirePermission(Permission.PROJECT_MANAGEMENT, ResourceType.PROJECT);
     const project = await updateProjectStatus(projectId, status, {
       id: user.id,
       name: user.name,
@@ -347,6 +364,7 @@ export async function listLocalContentSuppliersAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof listSuppliers>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.SUPPLIER_MANAGEMENT, ResourceType.SUPPLIER);
     return listSuppliers(projectId);
   });
 }
@@ -364,6 +382,7 @@ export async function createLocalContentSupplierAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_supplier");
+    await requirePermission(Permission.SUPPLIER_MANAGEMENT, ResourceType.SUPPLIER);
 
     const supplier = await createSupplier(
       {
@@ -406,6 +425,7 @@ export async function updateLocalContentSupplierAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_supplier");
+    await requirePermission(Permission.SUPPLIER_MANAGEMENT, ResourceType.SUPPLIER);
     const existing = await prisma.localContentSupplier.findUnique({
       where: { id: supplierId },
     });
@@ -455,6 +475,7 @@ export async function deleteLocalContentSupplierAction(
 ): Promise<ActionResult<void>> {
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_supplier");
+    await requirePermission(Permission.SUPPLIER_MANAGEMENT, ResourceType.SUPPLIER);
     await deleteSupplier(projectId, supplierId, {
       id: user.id,
       name: user.name ?? "",
@@ -481,6 +502,7 @@ export async function listLocalContentSpendRecordsAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof listSpendRecords>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.SPEND_DATA_ENTRY, ResourceType.SPEND_RECORD);
     return listSpendRecords(projectId);
   });
 }
@@ -498,6 +520,7 @@ export async function createLocalContentSpendRecordAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
+    await requirePermission(Permission.SPEND_DATA_ENTRY, ResourceType.SPEND_RECORD);
 
     const record = await createSpendRecord(
       {
@@ -541,6 +564,7 @@ export async function importLocalContentSpendCsvAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
+    await requirePermission(Permission.IMPORT, ResourceType.IMPORT_BATCH);
     const result = parseLocalContentCSV(validatedCsv);
 
     if (result.rejectedRows.length > 0 && result.validRows.length === 0) {
@@ -654,6 +678,7 @@ export async function classifyLocalContentSpendRecordAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "classify");
+    await requirePermission(Permission.SPEND_DATA_ENTRY, ResourceType.SPEND_RECORD);
 
     const classification = await createClassification(
       {
@@ -689,6 +714,7 @@ export async function deleteLocalContentSpendRecordAction(
 ): Promise<ActionResult<void>> {
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
+    await requirePermission(Permission.SPEND_DATA_ENTRY, ResourceType.SPEND_RECORD);
     await deleteSpendRecord(projectId, recordId, {
       id: user.id,
       name: user.name ?? "",
@@ -711,6 +737,7 @@ export async function listLocalContentEvidenceAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof listEvidence>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.EVIDENCE_READ, ResourceType.EVIDENCE);
     return listEvidence(projectId);
   });
 }
@@ -728,6 +755,7 @@ export async function createLocalContentEvidenceAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_evidence");
+    await requirePermission(Permission.EVIDENCE_UPLOAD, ResourceType.EVIDENCE);
 
     const evidence = await createEvidenceEntry(
       {
@@ -769,6 +797,7 @@ export async function updateLocalContentEvidenceStatusAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "review_evidence");
+    await requirePermission(Permission.REVIEW_MANAGEMENT, ResourceType.REVIEW);
     const existing = await prisma.localContentEvidence.findUnique({
       where: { id: evidenceId },
     });
@@ -814,6 +843,7 @@ export async function deleteLocalContentEvidenceAction(
 ): Promise<ActionResult<void>> {
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_evidence");
+    await requirePermission(Permission.EVIDENCE_DELETION, ResourceType.EVIDENCE);
     const deletedEvidence = await deleteEvidence(projectId, evidenceId, {
       id: user.id,
       name: user.name ?? "",
@@ -861,6 +891,7 @@ export async function uploadLocalContentEvidenceFileAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_evidence");
+    await requirePermission(Permission.EVIDENCE_UPLOAD, ResourceType.EVIDENCE);
     const file = formData.get("file") as File | null;
     const filename = formData.get("filename") as string;
 
@@ -967,6 +998,7 @@ export async function listLocalContentFindingsAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof listFindings>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
     return listFindings(projectId);
   });
 }
@@ -984,6 +1016,7 @@ export async function createLocalContentFindingAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "manage_findings");
+    await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
 
     const finding = await createFinding(
       {
@@ -1032,6 +1065,7 @@ export async function updateLocalContentFindingAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "manage_findings");
+    await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
     const existing = await prisma.localContentFinding.findUnique({
       where: { id: findingId },
     });
@@ -1089,6 +1123,7 @@ export async function deleteLocalContentFindingAction(
 ): Promise<ActionResult<void>> {
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "manage_findings");
+    await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
     await deleteFinding(projectId, findingId, {
       id: user.id,
       name: user.name ?? "",
@@ -1124,6 +1159,7 @@ export async function submitLocalContentReviewAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "review");
+    await requirePermission(Permission.REVIEW_APPROVAL, ResourceType.REVIEW);
     const review = await createReview({
       projectId,
       reviewerId: user.id,
@@ -1185,6 +1221,7 @@ export async function submitLocalContentApprovalAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "approve");
+    await requirePermission(Permission.REVIEW_APPROVAL, ResourceType.REVIEW);
     const approval = await createApproval({
       projectId,
       approverId: user.id,
@@ -1226,6 +1263,7 @@ export async function getLocalContentScoreAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof calculateProjectScore>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
     return calculateProjectScore(projectId);
   });
 }
@@ -1237,6 +1275,7 @@ export async function listLocalContentAuditEventsAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof listAuditEvents>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "review");
+    await requirePermission(Permission.AUDIT_LOG_ACCESS, ResourceType.AUDIT_LOG);
     return listAuditEvents(projectId);
   });
 }
@@ -1248,6 +1287,7 @@ export async function listLocalContentReviewsAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof listReviews>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.REVIEW_MANAGEMENT, ResourceType.REVIEW);
     return listReviews(projectId);
   });
 }
@@ -1259,6 +1299,7 @@ export async function getLocalContentApprovalRoutingAction(
 > {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.REVIEW_MANAGEMENT, ResourceType.REVIEW);
     return getProjectApprovalRoutingState(projectId);
   });
 }
@@ -1270,6 +1311,7 @@ export async function listLocalContentApprovalsAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof listApprovals>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.REVIEW_MANAGEMENT, ResourceType.REVIEW);
     return listApprovals(projectId);
   });
 }
@@ -1281,6 +1323,7 @@ export async function listLocalContentReportsAction(
 ): Promise<ActionResult<Awaited<ReturnType<typeof listReports>>>> {
   return safe(async () => {
     await assertProjectAccess(projectId, "view");
+    await requirePermission(Permission.REPORT_MANAGEMENT, ResourceType.REPORT);
     return listReports(projectId);
   });
 }
@@ -1298,6 +1341,7 @@ export async function generateLocalContentReportAction(
 
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
+    await requirePermission(Permission.REPORT_MANAGEMENT, ResourceType.REPORT);
     const score = await calculateProjectScore(projectId);
 
     const disclaimer = [

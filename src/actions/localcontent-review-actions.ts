@@ -17,6 +17,11 @@ import {
   requirePatternSuggestionAccess,
   requireMatchReviewAccess,
 } from "@/actions/localcontent-guards";
+import {
+  requirePermission,
+  Permission,
+  ResourceType,
+} from "@/actions/localcontent-rbac";
 
 // ─── Types ───
 
@@ -56,6 +61,7 @@ export async function getReviewQueueAction(
   type?: "explanation" | "suggestion" | "false_positive",
 ): Promise<ReviewQueue> {
   await requireOrganizationAccess(organizationId);
+  await requirePermission(Permission.REVIEW_MANAGEMENT, ResourceType.REVIEW);
 
   const [explanations, suggestions, falsePositives, memCount, healthCount, runs] =
     await Promise.all([
@@ -159,6 +165,7 @@ export async function reviewSuggestionAction(
 
   try {
     const orgId = await requirePatternSuggestionAccess(suggestionId);
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
 
     const result = await reviewPatternSuggestion(
       orgId,
@@ -192,6 +199,7 @@ export async function reviewExplanationAction(
 
   try {
     const orgId = await requireMatchReviewAccess(matchReviewId);
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
 
     const result = await reviewFalsePositive(
       orgId,
@@ -227,6 +235,7 @@ export async function createPatternOverrideAction(
   if (organizationId !== user.organizationId) {
     return { success: false, error: "Access denied: organization mismatch" };
   }
+  await requirePermission(Permission.REVIEW_OVERRIDE, ResourceType.REVIEW);
 
   try {
     await prisma.lcPatternSuggestion.create({
@@ -276,6 +285,7 @@ export async function batchReviewAction(
 ): Promise<{ success: boolean; processed: number; errors: number; error?: string }> {
   const user = await getCurrentUser();
   if (!user) return { success: false, processed: 0, errors: 1, error: "Not authenticated" };
+  await requirePermission(Permission.REVIEW_APPROVAL, ResourceType.REVIEW);
 
   let processed = 0;
   let errors = 0;
@@ -321,6 +331,7 @@ export async function addReviewCommentAction(
         where: { id, organizationId: user.organizationId },
       });
       if (!existing) return { success: false, error: "Not found" };
+      await requirePermission(Permission.REVIEW_MANAGEMENT, ResourceType.REVIEW);
       const existingNotes = existing.reviewNotes || "";
       await prisma.lcPatternSuggestion.update({
         where: { id },

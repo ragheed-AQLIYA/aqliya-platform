@@ -10,6 +10,11 @@ import {
   requireWorkbookAccess,
 } from "@/actions/localcontent-guards";
 import {
+  requirePermission,
+  Permission,
+  ResourceType,
+} from "@/actions/localcontent-rbac";
+import {
   runWorkbookAiReview,
   getWorkbookReviewStatus,
 } from "@/lib/local-content/workbook/ai-auto-review";
@@ -58,6 +63,7 @@ function fail<T = unknown>(error: string): ActionResult<T> {
 export async function checkAiHealthAction(): Promise<ActionResult> {
   try {
     const _user = await requireUserContext();
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const report = await checkAiHealth();
     return ok(report);
   } catch (error) {
@@ -68,6 +74,7 @@ export async function checkAiHealthAction(): Promise<ActionResult> {
 export async function isAiHealthyAction(): Promise<ActionResult<boolean>> {
   try {
     await requireUserContext();
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const healthy = await isAiHealthy();
     return ok(healthy);
   } catch {
@@ -89,6 +96,7 @@ export async function runWorkbookAiReviewAction(
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await runWorkbookAiReview(
       organizationId,
       workbookId,
@@ -112,6 +120,7 @@ export async function getWorkbookReviewStatusAction(
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const status = await getWorkbookReviewStatus(organizationId, workbookId);
     return ok(status);
   } catch (error) {
@@ -132,6 +141,7 @@ export async function generateRecommendationsAction(
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.RECOMMENDATION);
     const result = await generateRecommendations(organizationId, workbookId);
 
     revalidatePath(`/local-content/workbook/${workbookId}`);
@@ -149,6 +159,7 @@ export async function listWorkbookRecommendationsAction(
   try {
     await requireOrganizationAccess(organizationId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.RECOMMENDATION);
     const recs = await listWorkbookRecommendations(organizationId, workbookId, status);
     return ok(recs);
   } catch (error) {
@@ -164,6 +175,7 @@ export async function reviewRecommendationAction(
   try {
     const user = await requireUserContext();
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.RECOMMENDATION);
     await reviewRecommendation(user.organizationId, recommendationId, decision, reviewNotes, user.id);
     return ok({ success: true });
   } catch (error) {
@@ -192,6 +204,7 @@ export async function runSimulationAction(
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.RECOMMENDATION);
     let scenario;
     switch (validatedScenario) {
       case "supplier":
@@ -246,6 +259,7 @@ export async function listWorkbookSimulationsAction(
   try {
     await requireOrganizationAccess(organizationId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.RECOMMENDATION);
     const sims = await listWorkbookSimulations(organizationId, workbookId);
     return ok(sims);
   } catch (error) {
@@ -263,6 +277,7 @@ export async function getPatternHealthScoresAction(
   try {
     await requireOrganizationAccess(organizationId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const scores = await getPatternHealthScores(organizationId);
     return ok(scores);
   } catch (error) {
@@ -276,6 +291,7 @@ export async function getLearningLoopSummaryAction(
   try {
     await requireOrganizationAccess(organizationId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const summary = await getLearningLoopSummary(organizationId);
     return ok(summary);
   } catch (error) {
@@ -296,6 +312,7 @@ export async function getWorkbookAiDashboardDataAction(
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
+    await requirePermission(Permission.AI_REVIEW, ResourceType.WORKBOOK);
     const [reviewStatus, recommendations, simulations, health] = await Promise.all([
       getWorkbookReviewStatus(organizationId, workbookId),
       listWorkbookRecommendations(organizationId, workbookId).catch(() => []),
