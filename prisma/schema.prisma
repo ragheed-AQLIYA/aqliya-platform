@@ -308,6 +308,54 @@ model PlatformOutboxEvent {
   @@index([eventType, status])
 }
 
+// ==================== Audit Bridge (Bridge Rules & Logs) ====================
+
+/// Rules for bridging external audit events into the platform.
+model AuditBridgeRule {
+  id              String   @id @default(cuid())
+  organizationId  String
+  name            String
+  source          String          /// External source system identifier
+  eventTypeFilter String   @default("*")
+  fieldMappings   Json?
+  isActive        Boolean @default(true)
+  maxRetries      Int      @default(3)
+  retryIntervalMs Int      @default(5000)
+  createdById     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  bridgeLogEntries BridgeLogEntry[]
+
+  @@index([organizationId])
+  @@index([organizationId, source])
+  @@index([organizationId, isActive])
+  @@map("audit_bridge_rules")
+}
+
+/// Persisted log entries from audit bridge operations.
+model BridgeLogEntry {
+  id             String    @id @default(cuid())
+  ruleId         String
+  rule           AuditBridgeRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  organizationId String
+  sourceEventId  String
+  source         String
+  eventType      String
+  targetLogId    String?
+  status         String    @default("pending")    // pending | success | failed | retrying
+  errorMessage   String?
+  retryCount     Int       @default(0)
+  createdAt      DateTime  @default(now())
+  lastRetryAt    DateTime?
+
+  @@index([ruleId, createdAt])
+  @@index([organizationId, createdAt])
+  @@index([status, createdAt])
+  @@index([sourceEventId])
+  @@map("bridge_log_entries")
+}
+
 // ==================== Office AI Assistant (Shared Application) ====================
 
 model OfficeAiTask {
@@ -386,6 +434,78 @@ model OfficeAiFile {
   @@index([fileHash])
 }
 
+// ==================== Office AI Advanced Configurations ====================
+
+/// Workflow templates for Office AI advanced operations.
+model OfficeAiWorkflowTemplate {
+  id              String   @id @default(cuid())
+  organizationId  String
+  name            String
+  description     String?
+  workflowType    String   @default("document_review")
+  steps           Json?          /// Array of WorkflowTemplateStep objects
+  promptTemplate  String   @db.Text @default("")
+  outputFormat    String   @default("markdown") /// markdown | html | json | text
+  parameters      Json?
+  isActive        Boolean  @default(true)
+  createdById     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  schedules OfficeAiSchedule[]
+
+  @@index([organizationId])
+  @@index([organizationId, isActive])
+  @@index([organizationId, workflowType])
+  @@map("office_ai_workflow_templates")
+}
+
+/// Scheduled jobs for Office AI advanced operations.
+model OfficeAiSchedule {
+  id              String    @id @default(cuid())
+  organizationId  String
+  templateId      String?
+  template        OfficeAiWorkflowTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  name            String
+  cronExpression  String?
+  inputs          Json?
+  taskConfig      Json?
+  recurrence      String?
+  status          String    @default("active")     /// active | paused | completed | failed
+  isActive        Boolean   @default(true)
+  lastRunAt       DateTime?
+  lastRunStatus   String?
+  nextRunAt       DateTime?
+  createdById     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([organizationId])
+  @@index([templateId])
+  @@index([status, nextRunAt])
+  @@map("office_ai_schedules")
+}
+
+/// Role-specific AI configurations for Office AI assistants.
+model OfficeAiRoleConfig {
+  id                   String   @id @default(cuid())
+  organizationId       String
+  roleSlug             String
+  maxTasksPerDay       Int      @default(10)
+  allowedTaskTypes     Json     @default("[]")
+  requireApproval      Boolean  @default(true)
+  autoAssignThreshold  Float    @default(0.8)
+  responseStyle        String   @default("formal")
+  confidenceThreshold  Float    @default(0.7)
+  createdById          String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@unique([organizationId, roleSlug])
+  @@index([organizationId])
+  @@map("office_ai_role_configs")
+}
+
 model Organization {
   // @map: المنظمات
   id               String                     @id @default(cuid())
@@ -399,6 +519,8 @@ model Organization {
   reports          DecisionReport[]
   createdAt        DateTime                   @default(now())
   updatedAt        DateTime                   @updatedAt
+  createdById String?
+  createdBy   User?   @relation("OrganizationCreator", fields: [createdById], references: [id])
 
   platformOrganizationId String?
   platformOrganization   PlatformOrganization? @relation("OrgPlatformOrg", fields: [platformOrganizationId], references: [id])
@@ -428,9 +550,76 @@ model Organization {
   tbClassificationHistory  TBClassificationHistory[]
   institutionalMemoryEvents       InstitutionalMemoryEvent[]
   institutionalMemoryCollections  InstitutionalMemoryCollection[]
+  orgHierarchyNodes               OrgHierarchyNode[]
+  orgSettings                     OrgSetting[]
+  orgLifecycleEvents              OrgLifecycleEvent[]
 
   @@index([createdAt])
   @@index([platformOrganizationId])
+}
+
+// ==================== Organization Advanced ====================
+
+/// Hierarchy nodes for organization structure trees.
+model OrgHierarchyNode {
+  id              String   @id @default(cuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  parentOrgId     String?
+  parent          OrgHierarchyNode?  @relation("OrgHierarchyTree", fields: [parentOrgId], references: [id])
+  children        OrgHierarchyNode[] @relation("OrgHierarchyTree")
+  nodeType        String?           /// department | team | division | branch | unit
+  name            String?
+  code            String?
+  headUserId      String?
+  metadata        Json?
+  createdById     String
+  level           Int      @default(0)
+  sortOrder       Int      @default(0)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([organizationId, parentOrgId])
+  @@index([organizationId, isActive])
+  @@map("org_hierarchy_nodes")
+}
+
+/// Organization-level key-value settings.
+model OrgSetting {
+  id              String   @id @default(cuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  key             String
+  value           String   @db.Text
+  description     String?
+  valueType       String   @default("string")   /// string | number | boolean | json
+  isEncrypted     Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  createdById     String
+  updatedById     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([organizationId, key])
+  @@index([organizationId, isActive])
+  @@map("org_settings")
+}
+
+/// Organization lifecycle events.
+model OrgLifecycleEvent {
+  id              String   @id @default(cuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  eventType       String        /// created | onboarded | activated | suspended | reactivated | archived | merged | restructured
+  description     String?
+  metadata        Json?
+  actorId         String?
+  createdAt       DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, eventType])
+  @@map("org_lifecycle_events")
 }
 
 model User {
@@ -461,6 +650,14 @@ model User {
   institutionalMemoryEventsCreated       InstitutionalMemoryEvent[]         @relation("IMEventCreator")
   institutionalMemoryCollectionsCreated  InstitutionalMemoryCollection[]    @relation("IMCollectionCreator")
   institutionalMemoryCollectionsUpdated  InstitutionalMemoryCollection[]    @relation("IMCollectionUpdater")
+  createdKnowledgeCandidates             KnowledgeCandidate[]              @relation("KnowledgeCandidateCreator")
+  kfVersionsCreated                       KnowledgeFoundationVersion[]     @relation("KFVersionCreator")
+  kfVersionsApproved                      KnowledgeFoundationVersion[]     @relation("KFVersionApprover")
+  kfReleasesCreated                       KnowledgeFoundationRelease[]     @relation("KFReleaseCreator")
+  kfReleasesApproved                      KnowledgeFoundationRelease[]     @relation("KFReleaseApprover")
+  kfCandidateBindings                     KnowledgeFoundationVersionCandidate[] @relation("KFCandidateBinder")
+  createdOrganizations   Organization[]   @relation("OrganizationCreator")
+  createdSunbulClients   SunbulClient[]   @relation("SunbulClientCreator")
   createdAt                DateTime          @default(now())
   updatedAt                DateTime          @updatedAt
 
@@ -1243,6 +1440,7 @@ model AuditCanonicalAccount {
   version            String                @default("1.0")
   displayOrder       Int                   @default(0)
   mappings           AuditAccountMapping[]
+  knowledgeCandidates KnowledgeCandidate[]
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
 
@@ -1312,7 +1510,7 @@ model AuditEvidence {
   fileSize     Int                 @default(0)
   fileHash     String?
   storageKey   String?
-  uploadedBy   String?
+  uploadedById   String?
   uploadedAt   DateTime?
   state        String   @default("missing")
   links        AuditEvidenceLink[]
@@ -1603,7 +1801,7 @@ model AuditValidationDisposition {
   engagement   AuditEngagement      @relation(fields: [engagementId], references: [id])
   action       String
   rationale    String?
-  disposedBy   String
+  disposedById   String
   disposedAt   DateTime             @default(now())
 
   @@index([issueId])
@@ -1663,6 +1861,8 @@ model SunbulClient {
   platformOrganizationId String?
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
+  createdById String?
+  createdBy   User?   @relation("SunbulClientCreator", fields: [createdById], references: [id])
 
   platformOrganization PlatformOrganization? @relation(fields: [platformOrganizationId], references: [id])
   memberships          SunbulUserMembership[]
@@ -2813,6 +3013,9 @@ model InstitutionalMemoryEvent {
   targetEntityType String
   eventType       String   /// e.g. "linked", "referenced", "generated_by", "approved_by", "related_to"
   description     String   @default("")
+  nodeId          String?  /// Optional link to IntelligenceGraphNode
+  action          String   @default("") /// Action performed (e.g. "created", "linked", "archived")
+  performedBy     String?  /// Who performed the action (plain string name/reference)
   metadata        Json     @default("{}")
   confidence      Float    @default(1.0)
 
@@ -2836,12 +3039,15 @@ model InstitutionalMemoryCollection {
   organizationId  String
   name            String
   description     String   @default("")
+  icon            String?  /// Icon identifier for the collection
+  color           String?  /// Display color hex code
+  isActive        Boolean  @default(true)
   filterCriteria  Json     @default("{}")  /// Saved query filters for dynamic collection
 
-  createdById     String
-  createdBy       User     @relation("IMCollectionCreator", fields: [createdById], references: [id])
-  updatedById     String
-  updatedBy       User     @relation("IMCollectionUpdater", fields: [updatedById], references: [id])
+  createdById     String?
+  createdBy       User?    @relation("IMCollectionCreator", fields: [createdById], references: [id])
+  updatedById     String?
+  updatedBy       User?    @relation("IMCollectionUpdater", fields: [updatedById], references: [id])
 
   organization    Organization @relation(fields: [organizationId], references: [id])
 
@@ -2889,6 +3095,90 @@ model IntelligenceGraphEdge {
   @@index([organizationId, sourceId, relationType])
   @@index([organizationId, targetId, relationType])
   @@index([organizationId, relationType])
+}
+
+// ─── Core Evidence Platform (Phase 5B) ───
+// Canonical registry mirroring product evidence; product tables remain source of truth during migration.
+
+model CoreEvidence {
+  id                     String   @id @default(cuid())
+  organizationId         String
+  platformOrganizationId String?
+  productSlug            String   // audit | local_content | contact | workflow | sales
+  productEvidenceId      String
+  resourceType           String   // AuditEngagement | LocalContentProject | ...
+  resourceId             String
+  filename               String
+  fileType               String
+  storageKey             String?
+  fileHash               String?
+  evidenceType           String?
+  lifecycleStatus        String   @default("created") // created | reviewed | approved | rejected | archived
+  sensitivity            String   @default("standard") // standard | restricted | confidential
+  uploadedById           String?
+  graphNodeId            String?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  links             EvidenceLink[]
+  relationsAsSource EvidenceRelation[] @relation("EvidenceRelation_source")
+  relationsAsTarget EvidenceRelation[] @relation("EvidenceRelation_target")
+  lifecycleEvents   EvidenceLifecycle[]
+
+  @@unique([productSlug, productEvidenceId])
+  @@index([organizationId, lifecycleStatus])
+  @@index([organizationId, resourceType, resourceId])
+  @@index([platformOrganizationId, createdAt])
+  @@index([fileHash])
+}
+
+model EvidenceLink {
+  id             String       @id @default(cuid())
+  coreEvidenceId String
+  coreEvidence   CoreEvidence @relation(fields: [coreEvidenceId], references: [id], onDelete: Cascade)
+  targetType     String
+  targetId       String
+  linkType       String       @default("supports") // supports | contradicts | references | evidence_for
+  productSlug    String
+  context        String?
+  createdById    String?
+  createdAt      DateTime     @default(now())
+
+  @@index([coreEvidenceId])
+  @@index([targetType, targetId])
+  @@index([productSlug, targetType, targetId])
+}
+
+model EvidenceRelation {
+  id               String       @id @default(cuid())
+  organizationId   String
+  sourceEvidenceId String
+  sourceEvidence   CoreEvidence @relation("EvidenceRelation_source", fields: [sourceEvidenceId], references: [id], onDelete: Cascade)
+  targetEvidenceId String
+  targetEvidence   CoreEvidence @relation("EvidenceRelation_target", fields: [targetEvidenceId], references: [id], onDelete: Cascade)
+  relationType     String       // derives_from | supersedes | duplicates | related_to | lineage
+  metadata         Json?
+  createdById      String?
+  createdAt        DateTime     @default(now())
+
+  @@unique([sourceEvidenceId, targetEvidenceId, relationType])
+  @@index([organizationId, relationType])
+  @@index([targetEvidenceId])
+}
+
+model EvidenceLifecycle {
+  id             String       @id @default(cuid())
+  coreEvidenceId String
+  coreEvidence   CoreEvidence @relation(fields: [coreEvidenceId], references: [id], onDelete: Cascade)
+  fromStatus     String?
+  toStatus       String
+  actorId        String?
+  reason         String?
+  provenance     Json?
+  createdAt      DateTime     @default(now())
+
+  @@index([coreEvidenceId, createdAt])
 }
 
 model IntelligenceQuery {
@@ -3506,6 +3796,80 @@ model TBClassificationHistory {
   @@index([organizationId])
   @@index([engagementId])
   @@index([accountCode])
+}
+
+// ==================== Knowledge Foundation — Candidate Knowledge (Phase 8) ====================
+
+enum KnowledgeCandidateStatus {
+  CANDIDATE
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  PROMOTED
+}
+
+model KnowledgeCandidate {
+  id                 String                   @id @default(cuid())
+  organizationId     String?
+  candidatePhrase    String
+  canonicalAccountId String
+  canonicalCode      String
+  category           String
+  supportCount       Int                      @default(1)
+  organizationCount  Int                      @default(1)
+  confidence         Float                    @default(0.0)
+  status             KnowledgeCandidateStatus @default(CANDIDATE)
+  source             String                   @default("pattern_mining")
+  createdById        String?
+  reviewerId         String?
+  reviewedAt         DateTime?
+  reviewNotes        String?
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+
+  createdBy          User?                        @relation("KnowledgeCandidateCreator", fields: [createdById], references: [id])
+  canonicalAccount   AuditCanonicalAccount        @relation(fields: [canonicalAccountId], references: [id])
+  evidence           KnowledgeCandidateEvidence[]
+  promotionHistory   KnowledgePromotionHistory[]
+  versionBindings    KnowledgeFoundationVersionCandidate[]
+
+  @@index([status])
+  @@index([canonicalCode])
+  @@index([organizationId])
+  @@index([supportCount])
+  @@index([confidence])
+}
+
+model KnowledgeCandidateEvidence {
+  id             String   @id @default(cuid())
+  candidateId    String
+  evidenceType   String
+  evidenceId     String
+  organizationId String
+  accountCode    String
+  accountName    String?
+  createdAt      DateTime @default(now())
+
+  candidate KnowledgeCandidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+  @@index([evidenceType, evidenceId])
+}
+
+model KnowledgePromotionHistory {
+  id              String   @id @default(cuid())
+  candidateId     String
+  promotedBy      String
+  promotedAt      DateTime @default(now())
+  artifactType    String
+  artifactPath    String?
+  artifactVersion String?
+  notes           String?
+
+  candidate KnowledgeCandidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+  @@index([artifactType])
 }
 
 // ==================== Attribute-Based Access Control (ABAC) ====================
@@ -5193,4 +5557,117 @@ model ContentTemplate {
 
   @@index([organizationId])
   @@index([organizationId, isActive])
+}
+
+// ==================== Knowledge Foundation Versioning (Phase 9) ====================
+
+enum KnowledgeFoundationVersionStatus {
+  DRAFT
+  APPROVED
+  RELEASED
+  ACTIVE
+  DEPRECATED
+}
+
+model KnowledgeFoundationVersion {
+  id                String                              @id @default(cuid())
+  versionNumber     String                              // e.g., "1.0.0"
+  status            KnowledgeFoundationVersionStatus     @default(DRAFT)
+  notes             String?
+  artifactPath      String?
+  candidateCount    Int                                 @default(0)
+  rollbackVersionId String?
+  createdById       String
+  approvedById      String?
+  activatedAt       DateTime?
+  createdAt         DateTime                            @default(now())
+  updatedAt         DateTime                            @updatedAt
+
+  createdBy         User                                @relation("KFVersionCreator", fields: [createdById], references: [id])
+  approvedBy        User?                               @relation("KFVersionApprover", fields: [approvedById], references: [id])
+  rollbackVersion   KnowledgeFoundationVersion?         @relation("KFRollbackChain", fields: [rollbackVersionId], references: [id])
+  rolledFrom        KnowledgeFoundationVersion[]        @relation("KFRollbackChain")
+  releases          KnowledgeFoundationRelease[]
+  diffsAsFrom       KnowledgeFoundationDiff[]           @relation("KFDiffFrom")
+  diffsAsTo         KnowledgeFoundationDiff[]            @relation("KFDiffTo")
+  candidateBindings KnowledgeFoundationVersionCandidate[]
+
+  @@index([status])
+  @@index([versionNumber])
+  @@index([createdById])
+  @@index([approvedById])
+}
+
+enum KnowledgeFoundationReleaseArtifactStatus {
+  PENDING
+  COMPLETE
+  FAILED
+}
+
+model KnowledgeFoundationRelease {
+  id               String   @id @default(cuid())
+  versionId        String
+  version          KnowledgeFoundationVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  releaseNotes     String?
+  changeSummary    Json?
+  manifestPath     String?
+  manifestSha256   String?
+  provenanceSnapshot Json?
+  artifactStatus   KnowledgeFoundationReleaseArtifactStatus @default(PENDING)
+  previousReleaseId   String?
+  previousReleaseHash String?
+  previousRelease     KnowledgeFoundationRelease?  @relation("KFReleaseChain", fields: [previousReleaseId], references: [id], onDelete: SetNull)
+  nextReleases        KnowledgeFoundationRelease[] @relation("KFReleaseChain")
+  createdById      String
+  approvedById     String?
+  approvedAt       DateTime?
+  createdAt        DateTime @default(now())
+
+  createdBy        User     @relation("KFReleaseCreator", fields: [createdById], references: [id])
+  approvedBy       User?    @relation("KFReleaseApprover", fields: [approvedById], references: [id])
+
+  @@index([versionId])
+  @@index([createdById])
+  @@index([approvedById])
+  @@index([previousReleaseId])
+}
+
+model KnowledgeFoundationDiff {
+  id              String   @id @default(cuid())
+  fromVersionId   String
+  toVersionId     String
+  addedRules      Json     @default("[]")
+  modifiedRules   Json     @default("[]")
+  removedRules    Json     @default("[]")
+  riskScore       Float    @default(0.0)
+  breakingChange  Boolean  @default(false)
+  summary         String?
+  generatedAt     DateTime @default(now())
+
+  fromVersion     KnowledgeFoundationVersion @relation("KFDiffFrom", fields: [fromVersionId], references: [id])
+  toVersion       KnowledgeFoundationVersion @relation("KFDiffTo", fields: [toVersionId], references: [id])
+
+  @@index([fromVersionId, toVersionId])
+  @@unique([fromVersionId, toVersionId])
+}
+
+model KnowledgeFoundationVersionCandidate {
+  id                String    @id @default(cuid())
+  versionId         String
+  candidateId       String
+  boundById         String
+  boundAt           DateTime  @default(now())
+  includedInRelease Boolean   @default(false)
+  releasedAt        DateTime?
+  notes             String?
+
+  version   KnowledgeFoundationVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  candidate KnowledgeCandidate         @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  boundBy   User                       @relation("KFCandidateBinder", fields: [boundById], references: [id])
+
+  @@unique([versionId, candidateId])
+  @@unique([candidateId])
+  @@index([versionId])
+  @@index([candidateId])
+  @@index([boundById])
 }
