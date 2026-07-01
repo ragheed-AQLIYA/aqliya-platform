@@ -8,7 +8,6 @@ import { verifyReleaseIntegrity } from "./release-integrity";
 import type {
   CreateVersionInput,
   ApproveVersionInput,
-  UpdateVersionStatusInput,
   VersionListItem,
   FoundationKPIs,
 } from "./types";
@@ -112,7 +111,7 @@ export async function approveVersion(input: ApproveVersionInput) {
   return updated;
 }
 
-export async function releaseVersion(input: { versionId: string; releaseNotes?: string }) {
+export async function releaseVersion(_input: { versionId: string; releaseNotes?: string }) {
   throw new Error(
     "releaseVersion is deprecated after Phase 28.2. Use generateReleasePackage via generateFoundationRelease.",
   );
