@@ -1,7 +1,6 @@
-import "server-only";
+﻿import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 
 export type EvidenceProductSlug =
   | "audit"
@@ -89,7 +88,7 @@ export async function lookupEvidence(
         fileType: row.fileType,
         storageKey: row.storageKey,
         sensitivity: mapAuditSensitivity(row.state),
-        uploadedById: row.uploadedBy,
+        uploadedById: row.uploadedById,
         createdAt: row.createdAt,
       };
     }
@@ -207,34 +206,30 @@ export async function assertEvidenceDownloadAccess(params: {
 }
 
 /**
- * Registration hook — facade phase logs intent; product services own persistence.
- * Returns metadata for callers that need a registry audit trail before product write.
+ * Registration hook — persists CoreEvidence registry mirror; product services own file storage.
  */
 export async function registerEvidence(
   input: RegisterEvidenceInput,
-): Promise<{ id: string; registered: false; productSlug: EvidenceProductSlug }> {
-  await writePlatformAuditLog({
-    productKey: input.productSlug,
-    action: "evidence.register.requested",
-    platformOrganizationId: input.organizationId,
+): Promise<{ id: string; registered: true; productSlug: EvidenceProductSlug }> {
+  const { registerCoreEvidence } = await import("./core-evidence-service");
+
+  const core = await registerCoreEvidence({
+    organizationId: input.organizationId,
+    productSlug: input.productSlug,
+    productEvidenceId: `pending-${Date.now()}`,
+    resourceType: input.resourceType,
+    resourceId: input.resourceId,
+    filename: input.filename,
+    fileType: input.fileType,
+    storageKey: input.storageKey,
+    sensitivity: input.sensitivity,
+    uploadedById: input.uploadedById,
     actorId: input.uploadedById,
-    targetType: input.resourceType,
-    targetId: input.resourceId,
-    sourceSystem: "evidence_registry",
-    severity: "info",
-    status: "recorded",
-    metadata: {
-      filename: input.filename,
-      fileType: input.fileType,
-      sensitivity: input.sensitivity ?? "standard",
-      storageKey: input.storageKey ?? null,
-      facadePhase: true,
-    },
-  }).catch(() => {});
+  });
 
   return {
-    id: `ev-pending-${input.productSlug}-${Date.now()}`,
-    registered: false,
+    id: core.id,
+    registered: true,
     productSlug: input.productSlug,
   };
 }

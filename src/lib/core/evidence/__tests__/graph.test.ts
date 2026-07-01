@@ -22,7 +22,9 @@ import { linkEvidenceToGraph } from "@/lib/core/evidence/graph";
 describe("Evidence graph linkage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockFindFirst.mockResolvedValue(null);
+    mockFindFirst
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null);
     mockCreateNode
       .mockResolvedValueOnce({ id: "node-parent" })
       .mockResolvedValueOnce({ id: "node-evidence" });
