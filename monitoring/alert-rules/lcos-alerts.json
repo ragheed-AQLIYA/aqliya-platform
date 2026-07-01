@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "name": "LCOS Error Rate High",
+      "description": "Error rate exceeds 5% for 5 minutes",
+      "threshold": 5,
+      "window": "5m",
+      "severity": "warning",
+      "channels": ["email", "slack"]
+    },
+    {
+      "name": "LCOS AI Pipeline Failure",
+      "description": "AI pipeline failure rate exceeds 10%",
+      "threshold": 10,
+      "window": "5m",
+      "severity": "critical",
+      "channels": ["email", "slack", "pager"]
+    },
+    {
+      "name": "LCOS Health Check Failed",
+      "description": "Health check failed 2 consecutive checks",
+      "threshold": 2,
+      "window": "2m",
+      "severity": "critical",
+      "channels": ["email", "slack"]
+    },
+    {
+      "name": "LCOS Data Request Queue High",
+      "description": "Data request queue depth exceeds 100",
+      "threshold": 100,
+      "window": "1m",
+      "severity": "warning",
+      "channels": ["email"]
+    },
+    {
+      "name": "LCOS Scoring Engine Slow",
+      "description": "Scoring engine P95 response time exceeds 10 seconds",
+      "threshold": 10000,
+      "window": "5m",
+      "severity": "warning",
+      "channels": ["email"]
+    }
+  ]
+}
