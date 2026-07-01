@@ -1,4 +1,4 @@
-import "server-only";
+﻿import "server-only";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 
@@ -29,7 +29,7 @@ export async function createEvidenceVersion(
 ): Promise<EvidenceVersion> {
   const evidence = await prisma.auditEvidence.findUnique({
     where: { id: evidenceId },
-    select: { id: true, filename: true, fileType: true, fileSize: true, fileHash: true, storageKey: true, state: true, uploadedBy: true },
+    select: { id: true, filename: true, fileType: true, fileSize: true, fileHash: true, storageKey: true, state: true, uploadedById: true },
   });
   if (!evidence) throw new Error("Evidence not found");
 
@@ -48,7 +48,7 @@ export async function createEvidenceVersion(
     fileHash: evidence.fileHash,
     storageKey: evidence.storageKey,
     state: evidence.state,
-    uploadedBy: evidence.uploadedBy,
+    uploadedById: evidence.uploadedById,
     ...changes,
   };
 

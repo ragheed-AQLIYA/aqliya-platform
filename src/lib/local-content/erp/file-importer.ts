@@ -122,6 +122,7 @@ function validateRow(
   }
 
   const periodRaw = (data.period ?? "").trim();
+  // eslint-disable-next-line security/detect-unsafe-regex -- Simple date pattern; no nested quantifiers, no ReDoS risk
   if (periodRaw && !/^\d{4}(-Q[1-4]|-\d{2})?$/.test(periodRaw)) {
     warnings.push(
       `صيغة الفترة غير معتادة: "${periodRaw}" (row ${rowNumber}) — متوقعة: 2024-Q1 أو 2024-01`,

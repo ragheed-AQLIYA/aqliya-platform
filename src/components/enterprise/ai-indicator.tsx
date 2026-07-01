@@ -1,5 +1,6 @@
+/* eslint-disable security/detect-object-injection -- union-typed key, provably false positive */
 import { cn } from "@/lib/utils"
-import { Sparkles, Check, AlertTriangle, Info } from "lucide-react"
+import { Sparkles, Check, Info } from "lucide-react"
 
 interface AIIndicatorProps {
   type?: "insight" | "suggestion" | "verified" | "processing" | "confidence"

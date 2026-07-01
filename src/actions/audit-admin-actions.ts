@@ -1,8 +1,7 @@
 "use server"
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context"
-import { assertOrganizationAccess } from "@/lib/audit/tenant-guard"
 
 // Inline DB access via prisma to avoid circular dependencies
 import { prisma } from "@/lib/prisma"

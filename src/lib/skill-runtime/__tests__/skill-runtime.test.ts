@@ -1,12 +1,12 @@
 // ─── AQLIYA Skill Runtime — Unit Tests ───
 
-import { aiOrchestrator } from "@/lib/ai/orchestrator"
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator"
 import { existsSync, mkdirSync, writeFileSync, rmSync } from "fs"
 import { join } from "path"
 import * as yaml from "js-yaml"
 
 // Mock the orchestrator before importing the runtime
-jest.mock("@/lib/ai/orchestrator", () => ({
+jest.mock("@/lib/core/ai/orchestrator", () => ({
   aiOrchestrator: {
     generate: jest.fn().mockResolvedValue({
       response: {

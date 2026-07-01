@@ -92,7 +92,7 @@ export function RecentActivity({ events }: RecentActivityProps) {
     <div className="relative">
       <div className="absolute start-4 top-0 h-full w-px bg-border" />
       <div className="space-y-0">
-        {events.map((event, index) => (
+        {events.map((event, _index) => (
           <div key={event.id} className="relative flex gap-4 pb-6 last:pb-0">
             <div className={`relative z-10 mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white ${eventColors[event.eventType] || "bg-muted-foreground"}`}>
               {eventIcons[event.eventType] || <Activity className="h-4 w-4" />}

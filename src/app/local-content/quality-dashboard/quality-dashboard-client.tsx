@@ -13,12 +13,9 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
   CheckCircle2,
-  XCircle,
-  AlertTriangle,
   Brain,
   BarChart3,
   Activity,
@@ -74,13 +71,13 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function MetricCard({
-  title,
+  title: _title,
   titleAr,
   value,
   subtitle,
   icon: Icon,
   color = "text-primary",
-  trend,
+  trend: _trend,
 }: {
   title: string;
   titleAr: string;

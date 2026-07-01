@@ -1,3 +1,5 @@
+# Table of Contents
+
 ﻿# SOCPA → AuditOS Technical Analysis
 
 **Document ID:** `docs/socpa-auditos-technical-analysis.md`  

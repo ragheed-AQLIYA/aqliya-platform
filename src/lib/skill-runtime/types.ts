@@ -2,8 +2,7 @@
 // Types for the Skill Runtime execution engine.
 // Manifests are parsed from YAML; these are the runtime representations.
 
-import type { GovernanceTaskType } from "@/lib/governance/runtime-types"
-import type { AIProviderId } from "@/lib/ai/types"
+import type { AIProviderId } from "@/lib/core/ai/types"
 
 // ─── Runtime Skill Manifest (parsed from YAML) ───
 

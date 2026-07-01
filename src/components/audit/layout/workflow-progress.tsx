@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Check, Circle } from "lucide-react";
+import { Check } from "lucide-react";
 import type { WorkflowContext } from "@/lib/audit/workflow-gating";
 import { getWorkflowProgressStep } from "@/lib/audit/workflow-next-action";
 

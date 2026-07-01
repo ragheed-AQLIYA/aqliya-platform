@@ -46,6 +46,16 @@ async function main() {
 
   const reuseRate = total > 0 ? memoryHits / total : 0;
 
+  const [feedbackTotal, feedbackAccepted, patternCount] = await Promise.all([
+    prisma.tBMappingFeedback.count({
+      where: { engagementId: ENGAGEMENT_ID },
+    }),
+    prisma.tBMappingFeedback.count({
+      where: { engagementId: ENGAGEMENT_ID, wasAccepted: true },
+    }),
+    prisma.tBMappingPattern.count(),
+  ]);
+
   const artifact = {
     kpi: "memory_reuse_rate",
     engagementId: ENGAGEMENT_ID,
@@ -53,6 +63,10 @@ async function main() {
     totalClassifiedAccounts: total,
     firmMemoryHits: memoryHits,
     reuseRate,
+    feedbackTotal,
+    feedbackAccepted,
+    feedbackRejected: feedbackTotal - feedbackAccepted,
+    learnedPatternCount: patternCount,
     note: "Uses latest TBClassificationHistory source per account. Client 2+ baseline TBD.",
   };
 

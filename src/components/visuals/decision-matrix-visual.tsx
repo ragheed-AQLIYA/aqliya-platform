@@ -13,8 +13,6 @@ const rows = [
 
 export function DecisionMatrixVisual({ variant = "dark", className }: DecisionMatrixVisualProps) {
   const isDark = variant === "dark"
-  const cellBg = isDark ? "rgba(255,255,255,0.03)" : "#FFFFFF"
-  const cellBorder = isDark ? "rgba(255,255,255,0.08)" : "#E2E8F0"
   const textPrimary = isDark ? "rgba(255,255,255,0.85)" : "#0F172A"
   const textSecondary = isDark ? "rgba(255,255,255,0.4)" : "#64748B"
   const accentColor = "#137DC5"

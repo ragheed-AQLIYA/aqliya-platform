@@ -7,7 +7,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import { aiOrchestrator } from "@/lib/ai/orchestrator";
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator";
 import { runGovernedProductAI } from "@/lib/platform/product-ai-bridge";
 
 // ─── Types ───

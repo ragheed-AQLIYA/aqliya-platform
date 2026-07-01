@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, UserPlus, CheckCircle, XCircle, Clock, AlertTriangle, Loader2 } from "lucide-react";
+import { Shield, UserPlus, CheckCircle, Clock, AlertTriangle, Loader2 } from "lucide-react";
 
 interface Reviewer {
   id: string;
@@ -44,7 +44,7 @@ interface ReviewAssignmentPanelProps {
 
 export function ReviewAssignmentPanel({
   contactId,
-  organizationId,
+  organizationId: _organizationId,
   reviews,
   availableReviewers,
   userRole,

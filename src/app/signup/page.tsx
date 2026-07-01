@@ -28,6 +28,8 @@ export default function SignupPage() {
     setLoading(true)
     setError("")
 
+    // Client-side form validation — both values are user-entered, not a credential comparison
+    // eslint-disable-next-line security/detect-possible-timing-attacks
     if (password !== confirmPassword) {
       setError("كلمة المرور وتأكيدها غير متطابقين")
       setLoading(false)

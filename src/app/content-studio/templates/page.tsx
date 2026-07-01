@@ -1,7 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { ArrowRight, FileText } from "lucide-react";
-import { getCurrentUser } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { listTemplatesAction } from "../actions";

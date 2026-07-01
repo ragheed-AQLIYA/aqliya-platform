@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { getGraphData } from "@/actions/institutional-memory-actions";
 import type { GraphNodeData, GraphEdgeData } from "@/actions/institutional-memory-actions";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { RefreshCw, ZoomIn, ZoomOut, Move, Maximize2 } from "lucide-react";
+import { RefreshCw, Move, Maximize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -179,12 +179,12 @@ function GraphCanvas({
   onNodeDrag: (id: string, x: number, y: number) => void;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [pan, _setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [dragging, setDragging] = useState<string | null>(null);
   const [draggingOffset, setDraggingOffset] = useState({ x: 0, y: 0 });
 
-  const nodeMap = new Map(simNodes.map((n) => [n.id, n]));
+  const nodeMap = useMemo(() => new Map(simNodes.map((n) => [n.id, n])), [simNodes]);
 
   // Helper to get SVG coordinates from mouse event
   const svgPoint = useCallback((clientX: number, clientY: number) => {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getHealthRuntime } from "@/lib/integration/health-runtime"
 import { getCircuitSnapshot } from "@/lib/integration/failover-engine"
 import { getAllCounters } from "@/lib/integration/metrics"
+import { requireUserContext } from "@/lib/auth"
 
 /**
  * GET /api/integration/health
@@ -15,6 +16,7 @@ import { getAllCounters } from "@/lib/integration/metrics"
  */
 export async function GET() {
   try {
+      await requireUserContext("VIEWER");
     // Run a health tick to get current state
     const snapshot = await getHealthRuntime().tick()
 

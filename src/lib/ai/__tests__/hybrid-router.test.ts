@@ -1,7 +1,7 @@
 import {
   resolveExecutionModeFromEnv,
   selectProviderForTask,
-} from "@/lib/ai/hybrid-router";
+} from "@/lib/core/ai/hybrid-router";
 
 describe("hybrid-router", () => {
   const originalMode = process.env.AI_MODE;

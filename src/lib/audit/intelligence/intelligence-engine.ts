@@ -2,7 +2,7 @@ import "server-only";
 
 import { getDisclosureNotes, updateDisclosureNote, createAIOutput } from "@/lib/audit/db/index";
 import { extractRuleCitations } from "@/lib/audit/notes/disclosure-types";
-import { runInference } from "@/lib/ai/runtime";
+import { runInference } from "@/lib/core/ai/runtime";
 import { resolveAuditAIContext } from "@/lib/audit/audit-ai-bridge";
 import {
   buildDeterministicEnrichmentSection,

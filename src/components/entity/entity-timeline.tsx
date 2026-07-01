@@ -60,7 +60,6 @@ export function EntityTimeline({
     <div className={cn("space-y-0", className)}>
       {events.slice(0, maxEvents).map((event, i) => {
         const config = typeConfig[event.type] || typeConfig.action
-        const Icon = event.icon || config.defaultIcon
         const isLast = i === Math.min(events.length, maxEvents) - 1
 
         return (

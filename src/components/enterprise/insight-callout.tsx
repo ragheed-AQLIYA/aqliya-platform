@@ -21,6 +21,7 @@ export function InsightCallout({
     <div
       className={cn(
         "flex items-center gap-3 rounded-2xl border px-4 py-3.5 text-sm font-medium shadow-sm",
+        // eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive
         colors[type],
         className,
       )}

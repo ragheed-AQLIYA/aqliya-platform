@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSalesPermission } from "@/lib/sales/guards";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
@@ -9,7 +9,7 @@ import { checkRateLimit } from "@/lib/rate-limit";
 const EXPORT_WINDOW_MS = 60_000;
 const EXPORT_MAX = 10;
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // requireSalesPermission calls getCurrentUser internally (throws "Unauthenticated" if no session)
     // and asserts salesos:read permission.

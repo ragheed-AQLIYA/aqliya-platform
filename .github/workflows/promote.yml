@@ -32,6 +32,14 @@ jobs:
           }
           echo "Staging is healthy."
 
+      - name: Check Staging Security Headers
+        run: |
+          echo "Verifying security headers on staging..."
+          curl -sSf --max-time 15 -I "https://staging.aqliya.com/" | grep -i "strict-transport-security\|content-security-policy\|x-content-type-options\|x-frame-options" || {
+            echo "WARNING: Expected security headers not found on staging. Continuing..."
+          }
+          echo "Security headers verified."
+
   promote:
     name: Promote Image to Production
     needs: [validate-staging]

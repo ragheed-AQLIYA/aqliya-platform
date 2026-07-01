@@ -18,7 +18,6 @@ import {
   AlertTriangle,
   BarChart3,
   Brain,
-  Clock,
   FileText,
   GitBranch,
   ShieldCheck,

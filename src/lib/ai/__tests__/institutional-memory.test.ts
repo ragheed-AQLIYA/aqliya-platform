@@ -3,13 +3,13 @@ import {
   findSimilarChunks,
   type SearchResult,
   type SearchOptions,
-} from "../retrieval/similarity-search"
+} from "@/lib/core/ai/retrieval/similarity-search"
 import {
   formatContext,
   formatContextWithEvidence,
   buildContext,
-} from "../retrieval/context-builder"
-import { MockEmbeddingProvider } from "../embedding/embedding-provider"
+} from "@/lib/core/ai/retrieval/context-builder"
+import { MockEmbeddingProvider } from "@/lib/core/ai/embedding/embedding-provider"
 
 jest.mock("@/lib/prisma", () => ({
   prisma: {

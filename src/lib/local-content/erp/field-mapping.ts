@@ -2,7 +2,7 @@
 // Maps ERP source fields to LocalContentOS spend record fields.
 // Provides default mapping configs for SAP, Oracle, and CSV sources.
 
-import type { ErpSpendRecord, ErpSupplier, ErpProcurementLine } from "./types";
+import type { ErpSpendRecord } from "./types";
 
 export interface FieldMappingConfig {
   sourceField: string;

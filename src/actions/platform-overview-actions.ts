@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { requireUserContext } from "@/lib/auth";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
@@ -37,6 +38,7 @@ export type PlatformNotification = {
 // <70 → critical
 
 export async function getPlatformHealthAction(): Promise<PlatformHealth> {
+  await requireUserContext("VIEWER");
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
@@ -148,6 +150,7 @@ export async function getPlatformNotificationsAction(): Promise<{
   notifications: PlatformNotification[];
   counts: { critical: number; warning: number; info: number };
 }> {
+  await requireUserContext("VIEWER");
   const now = new Date();
   const staleThreshold = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());

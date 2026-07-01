@@ -1,12 +1,12 @@
 import "server-only"
 
-import { aiOrchestrator } from "@/lib/ai/orchestrator"
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator"
 import type { UserRole } from "@prisma/client";
 import { enforce } from "@/lib/authorization"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
-import { routeIntelligenceRequest } from "@/lib/ai/intelligence-runtime"
-import type { AIProviderId } from "@/lib/ai/types"
+import { routeIntelligenceRequest } from "@/lib/core/ai/intelligence-runtime"
+import type { AIProviderId } from "@/lib/core/ai/types"
 import type { GovernanceTaskType } from "@/lib/governance/runtime-types"
 import type { CurrentUser } from "@/lib/auth"
 

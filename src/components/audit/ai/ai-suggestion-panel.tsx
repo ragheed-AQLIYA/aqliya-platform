@@ -3,7 +3,6 @@
 import { Bot, CheckCircle2, XCircle, PencilLine, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 
 interface EvidenceTrace {
   id: string

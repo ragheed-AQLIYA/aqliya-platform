@@ -1,5 +1,6 @@
+/* eslint-disable security/detect-object-injection -- union-typed keys, provably false positive */
 import { cn } from "@/lib/utils"
-import { CheckCircle2, Clock, AlertCircle, XCircle, PauseCircle } from "lucide-react"
+import { CheckCircle2, Clock, XCircle, PauseCircle } from "lucide-react"
 
 export type ReadinessState = "not-ready" | "needs-review" | "ready" | "approved" | "blocked"
 

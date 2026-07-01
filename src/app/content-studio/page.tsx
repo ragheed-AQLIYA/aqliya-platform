@@ -1,9 +1,8 @@
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
-import { Plus, FileText, CheckCircle2, Layers, Activity } from "lucide-react";
+import { FileText, CheckCircle2, Layers, Activity } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   listWorkspacesAction,
@@ -15,7 +14,7 @@ export const dynamic = "force-dynamic";
 
 export default async function ContentStudioPage() {
   noStore();
-  const user = await getCurrentUser();
+  const _user = await getCurrentUser();
   const wsRes = await listWorkspacesAction();
   const workspaces = wsRes.ok ? wsRes.data : [];
 

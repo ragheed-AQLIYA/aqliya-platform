@@ -42,14 +42,38 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
+      - name: Documentation validation
+        run: |
+          echo "::group::Validate knowledge-map"
+          node scripts/validate-documentation.mjs
+          echo "::endgroup::"
+          echo "::group::Check document links"
+          node scripts/check-document-links.mjs
+          echo "::endgroup::"
+          echo "::group::Find orphan documents"
+          node scripts/find-orphan-documents.mjs
+          echo "::endgroup::"
+          echo "::group::Lint documentation"
+          node scripts/lint-documentation.mjs
+          echo "::endgroup::"
+          echo "::group::Validate AI consistency"
+          node scripts/validate-ai-consistency.mjs
+          echo "::endgroup::"
+          echo "::group::Validate metadata"
+          node scripts/validate-metadata.mjs
+          echo "::endgroup::"
+          echo "::group::Validate reading orders"
+          node scripts/validate-reading-orders.mjs
+          echo "::endgroup::"
+
       - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Push schema to CI database
+      - name: Apply migrations to CI database
         run: |
-          npx prisma db push --force-reset --accept-data-loss || true
           PGPASSWORD=ci psql -h localhost -U ci -d aqliya_ci -c "CREATE EXTENSION IF NOT EXISTS vector;"
-          npx prisma db push --accept-data-loss
+          npx prisma migrate deploy
+          npx prisma migrate status
         env:
           DATABASE_URL: postgresql://ci:ci@localhost:5432/aqliya_ci
 
@@ -69,6 +93,21 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Dependency audit
-        run: npm audit --audit-level=high
+      - name: License compliance check
+        run: npx license-checker --failOn "GPL;AGPL;LGPL-3.0" --production --summary
         continue-on-error: true
+
+      - name: Dependency audit (fail on high)
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+        run: npm audit --audit-level=high
+
+      - name: Secret scanning (gitleaks)
+        if: always()
+        continue-on-error: true
+        run: |
+          GITLEAKS_VERSION="8.18.2"
+          GITLEAKS_URL="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sL "$GITLEAKS_URL" -o /tmp/gitleaks.tar.gz && \
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp && \
+          /tmp/gitleaks detect --source . --config .gitleaks.toml --no-git --verbose

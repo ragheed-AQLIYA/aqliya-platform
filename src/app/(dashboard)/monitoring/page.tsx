@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
 import { AiObservabilityCards } from "@/components/monitoring/ai-observability-cards";
 import { EnterpriseHealthPanel } from "@/components/monitoring/enterprise-health-panel";
+import { EvidenceHealthPanel } from "@/components/monitoring/evidence-health-panel";
+import { TbFirmMemoryKpisPanel } from "@/components/monitoring/tb-firm-memory-kpis-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -81,6 +83,24 @@ export default function MonitoringPage() {
         }
       >
         <EnterpriseHealthPanel />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="text-center text-muted-foreground py-8">
+            جار تحميل ذاكرة التصنيف…
+          </div>
+        }
+      >
+        <TbFirmMemoryKpisPanel />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="text-center text-muted-foreground py-8">
+            جار تحميل صحة منصة الأدلة…
+          </div>
+        }
+      >
+        <EvidenceHealthPanel />
       </Suspense>
     </div>
   );

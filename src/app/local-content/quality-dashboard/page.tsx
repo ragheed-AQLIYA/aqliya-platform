@@ -13,9 +13,8 @@ export const dynamic = "force-dynamic";
 export default async function QualityDashboardPage() {
   noStore();
 
-  let user;
   try {
-    user = await getCurrentUser();
+    await getCurrentUser();
   } catch {
     redirect("/login");
   }

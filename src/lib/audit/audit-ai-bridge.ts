@@ -1,7 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import { runInference } from "@/lib/ai/runtime";
+import { runInference } from "@/lib/core/ai/runtime";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";

@@ -2,7 +2,9 @@
 
 **Status:** Active  
 **Version:** 1.6  
-**Effective:** 2026-06-18
+**Effective:** 2026-06-18  
+**Owner:** Governance Team  
+**Last Reviewed:** 2026-06-26
 
 **Authority:** See `docs/source-of-truth/DOCUMENTATION_LINEAGE.md`  
 **Full audit:** `docs/audits/truth-reconciliation-2026-06-18/FINAL_TRUTH_RECONCILIATION.md`

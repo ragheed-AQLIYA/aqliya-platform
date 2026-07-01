@@ -94,7 +94,7 @@ An institutional architecture that makes intelligence useful, understandable, an
 | **SimulationOS** | مفهوم تسويقي — مستقبلي | Marketing concept — future | Referenced inside /platform#capabilities as a future concept. |
 | **Custom Systems** | يُفعّل حسب نطاق المؤسسة | Activated per institutional scope | Described inside /platform#capabilities. /custom-product route exists as form. |
 
-> **Note:** Since 2026-06-09, these are presented as capabilities of the AQLIYA platform, not standalone product pages. See [/platform#capabilities](/platform#capabilities). The primary navigation is: المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية. Product-specific pages still exist in code but are not promoted in primary marketing navigation.
+> **Note:** Since 2026-06-09, these are presented as capabilities of the AQLIYA platform, not standalone product pages. See `/platform#capabilities`. The primary navigation is: المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية. Product-specific pages still exist in code but are not promoted in primary marketing navigation.
 ---
 
 ## 4. Rewritten Website Copy by Page
@@ -237,7 +237,7 @@ Flow: `البيانات` → `سير العمل` → `الأدلة` → `الم�
 
 #### ~~Section: Product Family / عائلة المنتجات (REMOVED)~~
 
-> **REMOVED from homepage in platform-first redesign (2026-06-09).** Product/capability cards now live inside [/platform#capabilities](/platform#capabilities). The homepage is a 9-section platform architecture with NO product names in sections 1-8. Use cases are presented as operational scenarios (نماذج الاستخدام), not product cards.
+> **REMOVED from homepage in platform-first redesign (2026-06-09).** Product/capability cards now live inside `/platform#capabilities`. The homepage is a 9-section platform architecture with NO product names in sections 1-8. Use cases are presented as operational scenarios (نماذج الاستخدام), not product cards.
 
 > The detailed system card content (AuditOS, LocalContentOS, DecisionOS, SalesOS, SimulationOS) is preserved below in the individual system page sections for reference.
 
@@ -248,15 +248,15 @@ Flow: `البيانات` → `سير العمل` → `الأدلة` → `الم�
 
 #### ~~Section: Proof Product — AuditOS (REMOVED)~~
 
-> **REMOVED from homepage in platform-first redesign.** AuditOS is now a use case inside the 9-section homepage (نماذج الاستخدام). Full demo at [/auditos](/auditos). Proof assets at [/proof](/proof).
+> **REMOVED from homepage in platform-first redesign.** AuditOS is now a use case inside the 9-section homepage (نماذج الاستخدام). Full demo at `/auditos`. Proof assets at `/proof`.
 
 #### ~~Section: Strategic Product — LocalContentOS (REMOVED)~~
 
-> **REMOVED from homepage in platform-first redesign.** LocalContentOS is described inside [/platform#capabilities](/platform#capabilities) as a strategic capability.
+> **REMOVED from homepage in platform-first redesign.** LocalContentOS is described inside `/platform#capabilities` as a strategic capability.
 
 #### ~~Section: Trust & Proof Chain (REPLACED)~~
 
-> **Replaced.** The trust principle is now embedded in the hero section. Trust reasons are in §7 of homepage. Full governance page at [/governance](/governance).
+> **Replaced.** The trust principle is now embedded in the hero section. Trust reasons are in §7 of homepage. Full governance page at `/governance`.
 
 #### Section: Final CTA (Homepage Bottom)
 

@@ -1,4 +1,4 @@
-import { getAIObservability } from "@/lib/ai/observability";
+import { getAIObservability } from "@/lib/core/ai/observability";
 
 async function AiObservabilityCards() {
   const data = await getAIObservability(7);

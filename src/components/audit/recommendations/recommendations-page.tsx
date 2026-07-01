@@ -3,12 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import {
-  Lightbulb,
   Sparkles,
   CheckCircle,
   XCircle,
-  ChevronDown,
-  ChevronRight,
   AlertTriangle,
   Target,
   ExternalLink,
@@ -24,7 +21,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

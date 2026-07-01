@@ -8,7 +8,6 @@ import {
   XCircle,
   Circle,
   FileText,
-  ShieldCheck,
   Lock,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -53,8 +52,7 @@ const colorClasses: Record<string, string> = {
   neutral: "text-gray-600 bg-gray-50 border-gray-200 dark:text-gray-400 dark:bg-gray-900 dark:border-gray-700",
 }
 
-const typeMaps: Record<string, string[]> = {
-  engagement: ["draft", "setup", "in_progress", "under_review", "awaiting_client", "ready_for_approval", "approved", "published", "archived"],
+const _typeMaps: Record<string, string[]> = {
   evidence: ["missing", "requested", "uploaded", "linked", "reviewed", "accepted", "rejected"],
   finding: ["draft", "open", "in_review", "accepted", "resolved", "dismissed"],
   recommendation: ["suggested", "under_review", "accepted", "rejected", "implemented"],
@@ -80,7 +78,7 @@ const statusBadgeVariants = cva(
 
 interface StatusBadgeProps extends VariantProps<typeof statusBadgeVariants> {
   status: string
-  type?: keyof typeof typeMaps
+  type?: keyof typeof _typeMaps
   className?: string
 }
 

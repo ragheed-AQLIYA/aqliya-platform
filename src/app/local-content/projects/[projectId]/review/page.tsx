@@ -20,8 +20,6 @@ import {
   ShieldCheck,
   AlertTriangle,
   CheckCircle2,
-  XCircle,
-  Clock,
   FileText,
 } from "lucide-react";
 
@@ -41,7 +39,7 @@ export default async function ReviewPage({
   ]);
   if (!projectRes.ok || !projectRes.data) notFound();
 
-  const project = projectRes.data;
+  const _project = projectRes.data;
   const score = scoreRes.ok ? scoreRes.data : null;
   const reviews = reviewsRes.ok ? reviewsRes.data : [];
   const routing = routingRes.ok ? routingRes.data : null;

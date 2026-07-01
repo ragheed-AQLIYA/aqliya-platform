@@ -8,7 +8,6 @@ import { NextResponse } from "next/server";
 import type { ScimPatchRequest } from "@/lib/auth/scim-types";
 import {
   buildScimError,
-  SCIM_CONTENT_TYPE,
 } from "@/lib/auth/scim-types";
 import { getUser, updateUser, patchUser, deleteUser } from "@/lib/auth/scim-service";
 import { authenticateScimRequest, getScimHeaders } from "../../auth";

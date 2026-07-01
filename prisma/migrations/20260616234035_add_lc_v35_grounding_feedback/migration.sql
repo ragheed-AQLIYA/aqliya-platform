@@ -1,14 +1,21 @@
--- CreateEnum
-CREATE TYPE "ConflictLevel" AS ENUM ('HARD', 'SOFT');
+-- CreateEnum (idempotent for db-push / partial local state)
+DO $$ BEGIN
+  CREATE TYPE "ConflictLevel" AS ENUM ('HARD', 'SOFT');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- CreateEnum
-CREATE TYPE "AbacEffect" AS ENUM ('ALLOW', 'DENY');
+DO $$ BEGIN
+  CREATE TYPE "AbacEffect" AS ENUM ('ALLOW', 'DENY');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- CreateEnum
-CREATE TYPE "AbacOperator" AS ENUM ('EQ', 'NEQ', 'GT', 'GTE', 'LT', 'LTE', 'IN', 'NOT_IN', 'CONTAINS', 'NOT_CONTAINS', 'STARTS_WITH', 'ENDS_WITH', 'EXISTS');
+DO $$ BEGIN
+  CREATE TYPE "AbacOperator" AS ENUM ('EQ', 'NEQ', 'GT', 'GTE', 'LT', 'LTE', 'IN', 'NOT_IN', 'CONTAINS', 'NOT_CONTAINS', 'STARTS_WITH', 'ENDS_WITH', 'EXISTS');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- DropIndex
-DROP INDEX "DocumentChunk_embedding_hnsw_idx";
+DROP INDEX IF EXISTS "DocumentChunk_embedding_hnsw_idx";
 
 -- AlterTable
 ALTER TABLE "ContactReview" ADD COLUMN     "completedAt" TIMESTAMP(3),

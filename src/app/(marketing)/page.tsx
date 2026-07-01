@@ -28,6 +28,18 @@ const systems = [
     status: publicOsStatus.localContentOS.label,
     href: "/products/local-content",
   },
+  {
+    title: "SalesOS",
+    note: publicCapabilityNote.salesOS,
+    status: publicOsStatus.salesOS.label,
+    href: "/products/sales",
+  },
+  {
+    title: "Office AI Assistant",
+    note: publicCapabilityNote.officeAI,
+    status: publicOsStatus.officeAI.label,
+    href: "/products/office-ai",
+  },
 ];
 
 export default function HomePage() {

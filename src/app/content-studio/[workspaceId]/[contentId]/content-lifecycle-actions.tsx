@@ -79,7 +79,7 @@ const ACTIONS: ActionConfig[] = [
 export function ContentLifecycleActions({
   contentId,
   status,
-  workspaceId,
+  workspaceId: _workspaceId,
 }: {
   contentId: string;
   status: ContentStatus;

@@ -12,9 +12,8 @@
  */
 
 import type { CurrentUser } from "@/lib/auth";
-import type { AccessAction, AuthorizeOptions, ResourceType } from "./types";
+import type { AccessAction, AuthorizeOptions } from "./types";
 import { authorize } from "./authorize";
-import { principalFromUser } from "./types";
 
 /**
  * Enforce authorization in a server action.

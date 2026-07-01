@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { setSecurityHeaders } from "@/middleware-security";
@@ -109,8 +109,15 @@ const routeMinRoles: Record<string, string> = {
   "/api/skills": "admin",
   "/api/sales": "viewer",
   "/api/notifications": "viewer",
+  "/api/knowledge-mining": "viewer",
+  "/knowledge-foundation": "viewer",
   "/governance-hub": "viewer",
   "/operator": "admin",
+  "/overview": "viewer",
+  "/notifications": "viewer",
+  "/knowledge-review": "viewer",
+  "/api/integration": "viewer",
+  "/api/sunbul": "viewer",
 };
 
 const roleHierarchy: Record<string, number> = {
@@ -327,9 +334,19 @@ export const config = {
     "/api/skills/:path*",
     "/api/sales/:path*",
     "/api/notifications/:path*",
+    "/api/knowledge-mining",
+    "/api/knowledge-mining/:path*",
+    "/knowledge-foundation",
+    "/knowledge-foundation/:path*",
     "/governance-hub",
     "/governance-hub/:path*",
     "/operator",
     "/operator/:path*",
+    "/overview",
+    "/overview/:path*",
+    "/notifications",
+    "/notifications/:path*",
+    "/knowledge-review",
+    "/knowledge-review/:path*",
   ],
 };

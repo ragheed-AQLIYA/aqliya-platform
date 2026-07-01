@@ -10,7 +10,7 @@ import {
   CommercialClaimPromptInput,
   GovernanceContext,
 } from './runtime-types';
-import { getGovernanceContext, requiresHumanApproval } from './retrieval-router';
+import { getGovernanceContext } from './retrieval-router';
 
 function buildLayerContent(layer: PromptLayerContent['layer'], content: string): PromptLayerContent {
   return { layer, content };

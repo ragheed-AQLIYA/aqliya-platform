@@ -10,7 +10,6 @@ import {
   getEvidenceAction,
   getMissingEvidenceAction,
   getFindingsAction,
-  getReviewCommentsAction,
   getOpenReviewCountAction,
   getApprovalStatusAction,
   getAuditEventsAction,

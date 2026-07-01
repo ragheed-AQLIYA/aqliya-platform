@@ -13,7 +13,6 @@ import {
   deleteProvider,
   getProviderById,
 } from "@/lib/auth/sso-service";
-import { isSupportedProvider } from "@/lib/auth/sso-providers";
 import { revalidatePath } from "next/cache";
 
 export interface SsoProviderFormData {

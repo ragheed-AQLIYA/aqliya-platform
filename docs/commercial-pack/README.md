@@ -72,4 +72,4 @@
 
 ## AuditOS Commercial Master Index
 
-For AuditOS commercial navigation, use the [`auditos-commercial-master-index.md`](../product/auditos-commercial-master-index.md). It points to current primary sources and documents known duplicates.
+For AuditOS commercial navigation, use the `auditos-commercial-master-index.md` (file pending creation under `docs/product/`). It points to current primary sources and documents known duplicates.

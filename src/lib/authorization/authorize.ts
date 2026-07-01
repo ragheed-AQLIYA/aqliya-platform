@@ -11,7 +11,7 @@
 
 import type { UserRole } from "@prisma/client";
 
-import type { CurrentUser, RequiredRole } from "@/lib/auth";
+import type { RequiredRole } from "@/lib/auth";
 import { hasRequiredRole } from "@/lib/auth";
 
 import type {
@@ -70,7 +70,7 @@ export async function authorize(options: AuthorizeOptions): Promise<Authorizatio
 
   // 3. Overridden required role check (used for fine-grained actions)
   if (context?.requiredRole) {
-    const userRoleUpper = user.role.toUpperCase() as UserRole;
+    const _userRoleUpper = user.role.toUpperCase() as UserRole;
     if (!hasRequiredRole(user, context.requiredRole as RequiredRole)) {
       return {
         allowed: false,

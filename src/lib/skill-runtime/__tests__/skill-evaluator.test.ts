@@ -1,7 +1,7 @@
 // ─── AQLIYA Skill Evaluator — Tests ───
 // Tests the evaluation engine: scoring, dataset loading, full evaluation flow.
 
-import { aiOrchestrator } from "@/lib/ai/orchestrator"
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator"
 import { existsSync, mkdirSync, writeFileSync, rmSync } from "fs"
 import { join } from "path"
 import * as yaml from "js-yaml"
@@ -9,7 +9,7 @@ import * as yaml from "js-yaml"
 // Mock the orchestrator — produces a comprehensive output that covers all expected fields
 // across all 11 L0-L1 evaluation datasets. The output is a single JSON object with all
 // possible fields that any dataset might expect.
-jest.mock("@/lib/ai/orchestrator", () => ({
+jest.mock("@/lib/core/ai/orchestrator", () => ({
   aiOrchestrator: {
     generate: jest.fn().mockResolvedValue({
       response: {

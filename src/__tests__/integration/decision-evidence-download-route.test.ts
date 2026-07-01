@@ -7,8 +7,8 @@ jest.mock("@/lib/auth", () => ({
   requireDecisionAccess: jest.fn(),
 }));
 
-jest.mock("@/core/access/server-action-guard", () => ({
-  requireServerActionAccess: jest.fn(),
+jest.mock("@/lib/authorization", () => ({
+  enforce: jest.fn(),
 }));
 
 jest.mock("@/lib/core/evidence", () => ({
@@ -27,7 +27,7 @@ jest.mock("@/lib/platform/audit-logger", () => ({
 // ── Imports (picks up mocked modules) ──
 
 import { requireDecisionAccess } from "@/lib/auth";
-import { requireServerActionAccess } from "@/core/access/server-action-guard";
+import { enforce } from "@/lib/authorization";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { auditLogger } from "@/lib/platform/audit-logger";
@@ -81,7 +81,7 @@ function makeFile(overrides: Record<string, unknown> = {}) {
 describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mock(requireServerActionAccess).mockResolvedValue(makeUser());
+    mock(enforce).mockResolvedValue(undefined);
   });
 
   // ── 1. Authentication ──

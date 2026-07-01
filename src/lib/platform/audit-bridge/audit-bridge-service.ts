@@ -265,7 +265,7 @@ async function writeBridgeLogEntry(
   targetLogId?: string,
   errorMessage?: string,
 ): Promise<void> {
-  await (prisma as any).bridgeLogEntry.create({
+  await prisma.bridgeLogEntry.create({
     data: {
       ruleId,
       organizationId,
@@ -287,7 +287,7 @@ async function updateBridgeLogRetry(
   targetLogId?: string,
   errorMessage?: string,
 ): Promise<void> {
-  await (prisma as any).bridgeLogEntry.update({
+  await prisma.bridgeLogEntry.update({
     where: { id: logId },
     data: {
       retryCount,
@@ -438,14 +438,14 @@ export async function createBridgeRule(
     throw new AuditBridgeError(BRIDGE_STRINGS.error.INVALID_EVENT_TYPE_FILTER)
   }
 
-  const rule = await (prisma as any).auditBridgeRule.create({
+  const rule = await prisma.auditBridgeRule.create({
     data: {
       organizationId: orgId,
       name: data.name,
       source: data.source,
       eventTypeFilter,
       fieldMappings: data.fieldMappings
-        ? (data.fieldMappings as Record<string, unknown>)
+        ? (data.fieldMappings as any)
         : undefined,
       isActive: true,
       maxRetries: data.maxRetries ?? 3,
@@ -472,12 +472,12 @@ export async function createBridgeRule(
 }
 
 export async function getBridgeRule(ruleId: string): Promise<AuditBridgeRule | null> {
-  const rule = await (prisma as any).auditBridgeRule.findUnique({ where: { id: ruleId } })
+  const rule = await prisma.auditBridgeRule.findUnique({ where: { id: ruleId } })
   return rule ? mapRule(rule) : null
 }
 
 export async function listBridgeRules(orgId: string): Promise<AuditBridgeRule[]> {
-  const rules = await (prisma as any).auditBridgeRule.findMany({
+  const rules = await prisma.auditBridgeRule.findMany({
     where: { organizationId: orgId },
     orderBy: { createdAt: 'desc' },
   })
@@ -488,7 +488,7 @@ export async function updateBridgeRule(
   ruleId: string,
   data: UpdateBridgeRuleData,
 ): Promise<AuditBridgeRule> {
-  const existing = await (prisma as any).auditBridgeRule.findUnique({ where: { id: ruleId } })
+  const existing = await prisma.auditBridgeRule.findUnique({ where: { id: ruleId } })
   if (!existing) throw new AuditBridgeError(BRIDGE_STRINGS.error.RULE_NOT_FOUND)
 
   const updatePayload: Record<string, unknown> = {}
@@ -508,7 +508,7 @@ export async function updateBridgeRule(
   if (data.maxRetries !== undefined) updatePayload.maxRetries = data.maxRetries
   if (data.retryIntervalMs !== undefined) updatePayload.retryIntervalMs = data.retryIntervalMs
 
-  const updated = await (prisma as any).auditBridgeRule.update({
+  const updated = await prisma.auditBridgeRule.update({
     where: { id: ruleId },
     data: updatePayload,
   })
@@ -525,10 +525,10 @@ export async function updateBridgeRule(
 }
 
 export async function deleteBridgeRule(ruleId: string): Promise<void> {
-  const existing = await (prisma as any).auditBridgeRule.findUnique({ where: { id: ruleId } })
+  const existing = await prisma.auditBridgeRule.findUnique({ where: { id: ruleId } })
   if (!existing) throw new AuditBridgeError(BRIDGE_STRINGS.error.RULE_NOT_FOUND)
 
-  await (prisma as any).auditBridgeRule.delete({ where: { id: ruleId } })
+  await prisma.auditBridgeRule.delete({ where: { id: ruleId } })
 
   await writePlatformAuditLog({
     productKey: 'platform',
@@ -546,12 +546,13 @@ export async function getBridgeLog(
   orgId: string,
   filter?: BridgeLogFilter,
 ): Promise<BridgeLogEntry[]> {
-  const where: Record<string, unknown> = { organizationId: orgId }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic where builder
+  const where: Record<string, any> = { organizationId: orgId }
   if (filter?.status) where.status = filter.status
   if (filter?.source) where.source = filter.source
   if (filter?.ruleId) where.ruleId = filter.ruleId
 
-  const logs = await (prisma as any).bridgeLogEntry.findMany({
+  const logs = await prisma.bridgeLogEntry.findMany({
     where,
     orderBy: { createdAt: 'desc' },
     take: filter?.limit ?? 100,
@@ -563,11 +564,11 @@ export async function getBridgeLog(
 // ─── Retry Failed ───
 
 export async function retryFailed(ruleId: string): Promise<number> {
-  const rule = await (prisma as any).auditBridgeRule.findUnique({ where: { id: ruleId } })
+  const rule = await prisma.auditBridgeRule.findUnique({ where: { id: ruleId } })
   if (!rule) throw new AuditBridgeError(BRIDGE_STRINGS.error.RULE_NOT_FOUND)
   if (!rule.isActive) throw new AuditBridgeError(BRIDGE_STRINGS.error.RULE_NOT_ACTIVE)
 
-  const failedEntries = await (prisma as any).bridgeLogEntry.findMany({
+  const failedEntries = await prisma.bridgeLogEntry.findMany({
     where: {
       ruleId,
       status: 'FAILED',
@@ -675,7 +676,7 @@ export async function bridgeGenericEvent(
 // ─── Tenant Guard ───
 
 export async function verifyBridgeRuleAccess(ruleId: string, orgId: string): Promise<boolean> {
-  const rule = await (prisma as any).auditBridgeRule.findUnique({
+  const rule = await prisma.auditBridgeRule.findUnique({
     where: { id: ruleId },
     select: { organizationId: true },
   })

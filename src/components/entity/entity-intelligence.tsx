@@ -94,6 +94,7 @@ export function EntityIntelligencePanel({
     <div
       className={cn(
         "rounded-lg border border-l-4 bg-card p-4",
+        // eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive
         moduleBorderClasses[module],
         className
       )}

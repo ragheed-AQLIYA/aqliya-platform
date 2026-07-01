@@ -67,7 +67,7 @@ export default function LoginPage() {
     }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { loadSsoProviders(); }, []);
 
   useEffect(() => {
@@ -134,7 +134,6 @@ export default function LoginPage() {
       const raw = url.searchParams.get("callbackUrl") || "/audit";
       const dest = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/audit";
       setRedirecting(true);
-      // eslint-disable-next-line react-hooks/immutability
       window.location.href = dest;
     } catch {
       setError("حدث خطأ في الاتصال. حاول مرة أخرى.");

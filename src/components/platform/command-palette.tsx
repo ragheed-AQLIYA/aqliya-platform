@@ -17,19 +17,13 @@ import {
   ShieldCheck,
   TrendingUp,
   Brain,
-  Search,
-  FileText,
   Plus,
   Clock,
   Settings,
   Users,
   BarChart3,
-  Command,
   History,
-  Zap,
   FolderOpen,
-  Target,
-  Building2,
 } from "lucide-react"
 
 type CommandCategory = "navigate" | "module" | "create" | "review" | "recent" | "settings" | "entity"
@@ -101,7 +95,7 @@ const searchableEntities: CommandEntry[] = [
 
 export function PlatformCommandPalette({ open, onOpenChange }: PlatformCommandPaletteProps) {
   const router = useRouter()
-  const pathname = usePathname()
+  const _pathname = usePathname()
   const [search, setSearch] = useState("")
 
   const handleAction = useCallback(

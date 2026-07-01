@@ -9,12 +9,12 @@ import {
   isCircuitOpen,
   resetCircuitBreaker,
   getCircuitBreakerSnapshot,
-} from "@/lib/ai/providers/provider-circuit-breaker"
+} from "@/lib/core/ai/providers/provider-circuit-breaker"
 import {
   invalidateHealthCache,
   getProviderObservabilitySnapshot,
   PROVIDER_FALLBACK_CHAIN,
-} from "@/lib/ai/provider-router"
+} from "@/lib/core/ai/provider-router"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
 
 describe("AI Reliability — Circuit Breaker (IC-09)", () => {

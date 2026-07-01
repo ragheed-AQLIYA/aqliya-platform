@@ -97,6 +97,10 @@ function createMockPrisma() {
         const found = findInStore('orgHierarchyNode', where)
         return found ? deepClone(found) : null
       }),
+      findFirst: jest.fn(async ({ where }: { where: Record<string, unknown> } = {}) => {
+        const found = findInStore('orgHierarchyNode', where ?? {})
+        return found ? deepClone(found) : null
+      }),
       findMany: jest.fn(async ({ where, orderBy }: { where?: Record<string, unknown>; orderBy?: Record<string, string> } = {}) => {
         let results = filterStore('orgHierarchyNode', where)
         if (orderBy?.sortOrder === 'asc') {

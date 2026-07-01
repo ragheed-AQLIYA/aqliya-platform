@@ -280,7 +280,7 @@ export async function downloadWorkflowExport(recordId: string) {
 
 export async function getWorkflowExportStatus(recordId: string) {
   try {
-    const { user, record } = await assertRecordAccess(recordId);
+    const { user: _user, record } = await assertRecordAccess(recordId);
 
     return {
       success: true,

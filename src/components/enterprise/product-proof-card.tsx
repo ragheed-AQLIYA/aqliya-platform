@@ -23,7 +23,7 @@ export function ProductProofCard({
   href,
   note,
   maturity,
-  status,
+  status: _status,
   className,
 }: ProductProofCardProps) {
   return (

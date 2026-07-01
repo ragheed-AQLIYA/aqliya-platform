@@ -1,3 +1,5 @@
+# Official Hierarchy
+
 ﻿# AQLIYA Architecture (aligned with v1.1 — repositioned)
 
 ## Official Hierarchy
@@ -46,6 +48,7 @@ AQLIYA Platform Company
 │   ├── Evidence Chain           (source-to-output traceability)
 │   ├── AI Governance            (human-in-the-loop enforcement)
 │   ├── Tenant Isolation         (per-organization data boundaries)
+│   ├── Knowledge Foundation Versioning  (promotion pipeline for institutional knowledge)
 │   └── Deployment Controls      (Cloud / Private / Air-Gapped)
 │
 ├── Proof Center (public evaluation)

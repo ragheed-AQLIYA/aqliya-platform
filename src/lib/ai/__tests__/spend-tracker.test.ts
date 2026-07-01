@@ -1,4 +1,4 @@
-import { getModelCost, calculateCost } from "../cost-mapping"
+import { getModelCost, calculateCost } from "@/lib/core/ai/cost-mapping"
 
 describe("SpendTracker", () => {
   describe("getModelCost", () => {

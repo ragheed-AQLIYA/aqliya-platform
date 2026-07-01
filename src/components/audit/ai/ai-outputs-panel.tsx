@@ -24,7 +24,7 @@ interface AIOutputsPanelProps {
   initialOutputs: AIOutputDisplay[]
 }
 
-export function AIOutputsPanel({ engagementId, initialOutputs }: AIOutputsPanelProps) {
+export function AIOutputsPanel({ engagementId: _engagementId, initialOutputs }: AIOutputsPanelProps) {
   const t = useTranslations("audit.aiOutputs")
   const statusConfig: Record<string, { label: string; color: string }> = {
     suggested: { label: t("aiDraft"), color: "bg-violet-100 text-violet-700 border-violet-200" },

@@ -1,6 +1,6 @@
-import { generateClassification, generateCompletion } from "@/lib/ai/generate";
+﻿import { generateClassification, generateCompletion } from "@/lib/core/ai/generate";
 
-jest.mock("@/lib/ai/orchestrator", () => ({
+jest.mock("@/lib/core/ai/orchestrator", () => ({
   aiOrchestrator: {
     generate: jest.fn().mockResolvedValue({
       response: {
@@ -20,7 +20,7 @@ jest.mock("@/lib/ai/orchestrator", () => ({
 
 describe("generate facade", () => {
   it("generateCompletion delegates to orchestrator", async () => {
-    const { aiOrchestrator } = await import("@/lib/ai/orchestrator");
+    const { aiOrchestrator } = await import("@/lib/core/ai/orchestrator");
     const response = await generateCompletion({
       taskType: "account_mapping",
       taskInput: { foo: "bar" },
@@ -31,7 +31,7 @@ describe("generate facade", () => {
   });
 
   it("generateClassification sets account_mapping task", async () => {
-    const { aiOrchestrator } = await import("@/lib/ai/orchestrator");
+    const { aiOrchestrator } = await import("@/lib/core/ai/orchestrator");
     await generateClassification({
       accountCode: "1101",
       accountName: "Cash",

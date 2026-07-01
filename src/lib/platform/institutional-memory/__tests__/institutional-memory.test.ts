@@ -501,7 +501,7 @@ describe("getCollectionNodes", () => {
   it("returns nodes in a collection", async () => {
     mockPrisma.institutionalMemoryCollection.findUnique.mockResolvedValue(makeCollection())
     mockPrisma.institutionalMemoryEvent.findMany.mockResolvedValue([
-      { nodeId: "node-1", action: "MEMORY_LINKED", metadata: '{"collectionId":"col-1"}' },
+      { nodeId: "node-1", action: "MEMORY_LINKED", metadata: { collectionId: "col-1" } },
     ])
     mockPrisma.intelligenceGraphNode.findMany.mockResolvedValue([makeNode()])
 

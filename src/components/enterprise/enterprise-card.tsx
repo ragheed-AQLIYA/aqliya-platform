@@ -37,7 +37,9 @@ export function EnterpriseCard({
     <div
       className={cn(
         "rounded-[24px] overflow-hidden",
+        // eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive
         variantClasses[variant],
+        // eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive
         module && moduleBorderClasses[module],
         hover && "transition-all hover:shadow-md",
         onClick && "cursor-pointer",

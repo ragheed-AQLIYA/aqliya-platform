@@ -2,37 +2,6 @@
 // Parses CSV text into validated rows for bulk spend-record creation.
 // Supports Arabic and English headers.
 
-const REQUIRED_HEADERS_EN = [
-  "amount",
-  "supplierName",
-  "category",
-  "period",
-] as const;
-
-const REQUIRED_HEADERS_AR = [
-  "المبلغ",
-  "اسم المورد",
-  "تصنيف الإنفاق",
-  "الفترة",
-] as const;
-
-const OPTIONAL_HEADERS = [
-  "contractReference",
-  "currency",
-  "description",
-  "supplierRegistrationNumber",
-  "invoiceNumber",
-  "evidenceReference",
-] as const;
-
-const OPTIONAL_HEADERS_AR = [
-  "رقم العقد",
-  "العملة",
-  "الوصف",
-  "رقم السجل التجاري",
-  "رقم الفاتورة",
-  "مرجع الدليل",
-] as const;
 
 export interface ValidImportRow {
   rowNumber: number;

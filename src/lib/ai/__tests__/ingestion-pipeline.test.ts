@@ -1,4 +1,4 @@
-import { chunkText } from "../ingestion/ingestion-pipeline"
+import { chunkText } from "@/lib/core/ai/ingestion/ingestion-pipeline"
 
 describe("IngestionPipeline", () => {
   describe("chunkText", () => {

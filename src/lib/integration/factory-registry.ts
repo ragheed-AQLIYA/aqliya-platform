@@ -14,7 +14,7 @@ import type { ProviderFactory, ProviderConfig } from "./types";
 const openAIFactory: ProviderFactory = {
   async create(config: ProviderConfig) {
     const { createOpenAIProviderFromResolver } = await import(
-      "@/lib/ai/providers/ai-provider-factory"
+      "@/lib/core/ai/providers/ai-provider-factory"
     );
     return createOpenAIProviderFromResolver(config.organizationId);
   },
@@ -23,7 +23,7 @@ const openAIFactory: ProviderFactory = {
 const anthropicFactory: ProviderFactory = {
   async create(config: ProviderConfig) {
     const { createAnthropicProviderFromResolver } = await import(
-      "@/lib/ai/providers/ai-provider-factory"
+      "@/lib/core/ai/providers/ai-provider-factory"
     );
     return createAnthropicProviderFromResolver(config.organizationId);
   },
@@ -32,7 +32,7 @@ const anthropicFactory: ProviderFactory = {
 const cloudAIFactory: ProviderFactory = {
   async create(config: ProviderConfig) {
     const { createCloudAIProviderFromResolver } = await import(
-      "@/lib/ai/providers/ai-provider-factory"
+      "@/lib/core/ai/providers/ai-provider-factory"
     );
     return createCloudAIProviderFromResolver(config.organizationId);
   },
@@ -40,14 +40,14 @@ const cloudAIFactory: ProviderFactory = {
 
 const ollamaFactory: ProviderFactory = {
   async create(_config: ProviderConfig) {
-    const { LocalAIProvider } = await import("@/lib/ai/providers/local-provider");
+    const { LocalAIProvider } = await import("@/lib/core/ai/providers/local-provider");
     return new LocalAIProvider();
   },
 };
 
 const vllmFactory: ProviderFactory = {
   async create(config: ProviderConfig) {
-    const { CloudAIProvider } = await import("@/lib/ai/providers/cloud-provider");
+    const { CloudAIProvider } = await import("@/lib/core/ai/providers/cloud-provider");
     const baseUrl =
       (config.configMetadata?.baseUrl as string) ??
       process.env.VLLM_BASE_URL ??

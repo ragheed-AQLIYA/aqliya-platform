@@ -173,6 +173,30 @@ export async function createMemoryEvent(input: {
   }
 }
 
+export async function linkMemoryEntities(input: {
+  sourceProduct: string;
+  sourceEntityId: string;
+  sourceEntityType: string;
+  targetProduct: string;
+  targetEntityId: string;
+  targetEntityType: string;
+  eventType?: string;
+  description?: string;
+  confidence?: number;
+}): Promise<{ success: boolean; data?: MemoryEventData; error?: string }> {
+  return createMemoryEvent({
+    sourceProduct: input.sourceProduct,
+    sourceEntityId: input.sourceEntityId,
+    sourceEntityType: input.sourceEntityType,
+    targetProduct: input.targetProduct,
+    targetEntityId: input.targetEntityId,
+    targetEntityType: input.targetEntityType,
+    eventType: input.eventType ?? "linked",
+    description: input.description,
+    confidence: input.confidence ?? 0.8,
+  });
+}
+
 export async function deleteMemoryEvent(
   eventId: string,
 ): Promise<{ success: boolean; error?: string }> {

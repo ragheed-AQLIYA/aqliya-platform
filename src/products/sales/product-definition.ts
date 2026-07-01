@@ -1,4 +1,4 @@
-import { defineProduct, type ProductDefinition } from "@/core/product-runtime"
+import { defineProduct, type ProductDefinition } from "@/lib/core/product-runtime"
 
 export const SALESOS_PRODUCT_KEY = "sales"
 

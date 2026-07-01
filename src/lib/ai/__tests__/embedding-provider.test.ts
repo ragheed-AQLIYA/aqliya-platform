@@ -2,7 +2,7 @@ import {
   MockEmbeddingProvider,
   createEmbeddingProvider,
   type EmbeddingProvider,
-} from "../embedding/embedding-provider"
+} from "@/lib/core/ai/embedding/embedding-provider"
 
 describe("EmbeddingProvider", () => {
   describe("MockEmbeddingProvider", () => {

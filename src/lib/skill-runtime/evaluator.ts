@@ -4,7 +4,7 @@
 // ============================================================
 
 import { readFileSync, existsSync, readdirSync } from "fs"
-import { join, basename } from "path"
+import { join } from "path"
 import * as yaml from "js-yaml"
 
 import { loadManifest } from "./runtime"
@@ -13,7 +13,6 @@ import type { SkillManifest, SkillResult } from "./types"
 
 import type {
   EvaluationDataset,
-  EvaluationSample,
   EvaluationSampleResult,
   EvaluationResult,
   CriterionConfig,

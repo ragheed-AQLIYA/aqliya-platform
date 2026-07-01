@@ -5,7 +5,6 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import type { AuditActor } from "./actor-context";
-import { assertEngagementAccess } from "./tenant-guard";
 import { recordAuditEvent } from "./services";
 
 export class SamplingHardeningEngine {

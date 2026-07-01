@@ -1,15 +1,19 @@
 # AQLIYA Documentation Authority
 
-**Status:** Highest documentation conflict-resolution authority  
-**Version:** 1.0  
+**Status:** Active — Highest documentation conflict-resolution authority  
+**Version:** 1.1  
 **File location:** `docs/DOCUMENTATION_AUTHORITY.md`  
-**Effective date:** 2026-05-22
+**Effective date:** 2026-05-22  
+**Owner:** Documentation Team  
+**Last Reviewed:** 2026-06-26
 
 ---
 
 ## 1. Purpose
 
 This file defines the AQLIYA documentation hierarchy, conflict resolution rules, and the distinction between doctrine authority and implementation reality. It is the single highest authority for documentation conflicts.
+
+For AI agents and new team members, the recommended entry point is `docs/AI_ENTRYPOINT.md`, which provides platform identity and repository orientation before diving into this authority hierarchy.
 
 All other documentation files, READMEs, AGENTS.md, official docs, source-of-truth docs, reports, theoretical reference, and archived material derive from this hierarchy.
 
@@ -22,6 +26,7 @@ All other documentation files, READMEs, AGENTS.md, official docs, source-of-trut
 | **0** | `docs/DOCUMENTATION_AUTHORITY.md`                  | Conflict-resolution authority | Defines the hierarchy and rules                               |
 | **1** | `docs/official/AQLIYA_MASTER_REFERENCE.md`         | Current master reference      | Summarizes current official project reality                   |
 | **2** | `docs/official/*.md` (active doctrine)             | Official doctrine docs        | Identity, governance, trust principles, strategic positioning |
+| **2** | `docs/governance/aqliya-knowledge-governance-charter-v1.md` | Knowledge governance rules | Defines document types, authority rules, conflict resolution, and lifecycle metadata for all documentation |
 | **3** | `README.md`                                        | Project entry point           | Entry-level orientation, not highest authority                |
 | **3** | `AGENTS.md`                                        | Agent operating contract      | Execution instructions for AI agents                          |
 | **3** | `docs/README.md`                                   | Documentation index           | Navigation aid                                                |
@@ -101,19 +106,25 @@ When documents conflict, do not silently choose an interpretation. Document the 
 
 ---
 
-## 6. Agent Loading Order
+## 6. Conflict Resolution Priority — Document Hierarchy
 
-AI agents must load documentation in this order:
+This section defines the **priority order for resolving documentation conflicts**. It is NOT a reading order for AI agents. The canonical reading order is defined in `docs/AI_ENTRYPOINT.md` (§"Reading Order (Mandatory Reading for Every Session)").
 
-1. `docs/DOCUMENTATION_AUTHORITY.md` (this file)
-2. `docs/source-of-truth/AQLIYA_CURRENT_STATE.md` — **operational truth** (implementation status snapshot)
-3. `docs/source-of-truth/DOCUMENTATION_LINEAGE.md` — authority graph + superseded docs
-4. `docs/official/AQLIYA_MASTER_REFERENCE.md`
-5. `AGENTS.md`
-6. Relevant `docs/official/*.md` doctrine docs
-7. Relevant `docs/source-of-truth/*` support docs (matrix, routes, gates)
-8. Relevant `docs/products/*` or `docs/systems/*` docs
-9. Relevant `docs/reports/*` for validation evidence (build/test/lint logs)
+When documents conflict, resolve using this priority (highest first):
+
+| Priority | Level | Directory / File | Role |
+|----------|-------|------------------|------|
+| 1 | L0 | `docs/DOCUMENTATION_AUTHORITY.md` | Conflict-resolution rules (this file) |
+| 2 | L1 | `docs/official/AQLIYA_MASTER_REFERENCE.md` | Current master reference |
+| 3 | L2 | `docs/official/*.md` (active doctrine) | Official doctrine docs |
+| 4 | L3 | `README.md`, `AGENTS.md`, `docs/README.md` | Agent contract / entry points |
+| 5 | L4 | `docs/source-of-truth/*` | Supporting references |
+| 6 | L5 | `docs/products/*`, `docs/systems/*` | Product / system details |
+| 7 | L6 | `docs/reports/*` | Reports and evidence |
+| 8 | L7 | `docs/theoretical-reference/*` | Background theory |
+| 9 | L8 | `docs/archive/*` | Historical only |
+
+**Rule:** For reading order, always follow `docs/AI_ENTRYPOINT.md`. For conflict resolution, follow the hierarchy above.
 
 ---
 
@@ -190,6 +201,46 @@ The v1.1 doctrine docs define the long-term platform identity and governance fra
 
 ---
 
+## 12a. Glossary Precision Rule
+
+> **Adopted per Sprint M2 (2026-06-29).**
+
+### The Rule
+
+Ambiguous terms describing product status are **prohibited** in all governance, official, and source-of-truth documents.
+
+**Forbidden terms:**
+- "Strategic Future"
+- "Planned"
+- "Coming Soon"
+- "Future Product"
+- Any phrase that combines a timeline with a non-specific status
+
+**Required replacement:** Use explicit values from the Four Dimensions model:
+
+| Dimension | Allowed Values |
+|-----------|----------------|
+| Implementation Reality | Implemented / Partially Implemented / Not Implemented |
+| Product Maturity | L0–L6 (with rubric reference) |
+| Commercial Claim | Claimable / Not Claimable / Conditional |
+| Strategic Intent | Approved / Deferred / Frozen / Experimental |
+
+### Examples
+
+| Instead of... | Write... |
+|---------------|---------|
+| "Institutional Memory is a strategic future product" | "Institutional Memory: Implementation Reality = Implemented (4 routes, 4 models). Strategic Intent = Deferred (not yet approved for commercial claim)." |
+| "RiskOS is planned" | "RiskOS: Implementation Reality = Implemented (9 routes, KPI dashboard, audit trail). Commercial Claim = Not Claimable." |
+| "Local AI Provider is a future offering" | "Local AI Provider: Implementation Reality = Partially Implemented (architecture doc exists, no production routes). Strategic Intent = Experimental." |
+
+### Enforcement
+
+- This rule applies to all documents at Levels 0–4 in the hierarchy
+- Violations found during review must be flagged as P2 (cosmetic) or P1 (if they cause confusion) priority
+- The Knowledge Governance Gate (future CI check) will validate compliance
+
+---
+
 ## 13. Amendment
 
 This file may only be amended by:
@@ -199,3 +250,13 @@ This file may only be amended by:
 3. Preservation of the core hierarchy and conflict rules.
 
 Do not bypass this file by creating new "highest authority" documents.
+
+---
+
+## 14. Change Log
+
+| Date | Version | Change | Author |
+|------|---------|--------|--------|
+| 2026-05-22 | 1.0 | Initial creation | OpenCode |
+| 2026-06-26 | 1.1 | §6 redefined from "Agent Loading Order" to "Conflict Resolution Priority" — canonical reading order moved to AI_ENTRYPOINT.md. Added Owner, Last Reviewed, Change Log. | OpenCode |
+| 2026-06-29 | 1.2 | §12a added — Glossary Precision Rule. Bans ambiguous terms (Strategic Future, Planned, Coming Soon). Requires explicit Four Dimensions values. | OpenCode |

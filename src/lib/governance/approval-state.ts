@@ -1,4 +1,4 @@
-import { ApprovalState, ProvenanceMetadata, GovernanceTaskType, EscalationLevel } from './runtime-types';
+import { ApprovalState, ProvenanceMetadata, GovernanceTaskType } from './runtime-types';
 
 const AI_FORBIDDEN_TRANSITIONS: Record<ApprovalState, ApprovalState[]> = {
   draft_generated: ['approved_by_human', 'finalized'],

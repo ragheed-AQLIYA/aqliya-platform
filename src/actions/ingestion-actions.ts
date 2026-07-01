@@ -1,7 +1,7 @@
 "use server"
 
 import { requireUserContext } from "@/lib/auth"
-import { IngestionPipeline, chunkText } from "@/lib/ai/ingestion/ingestion-pipeline"
+import { IngestionPipeline, chunkText } from "@/lib/core/ai/ingestion/ingestion-pipeline"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import { prisma } from "@/lib/prisma"
 

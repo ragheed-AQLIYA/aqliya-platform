@@ -1,4 +1,4 @@
-// ─── AuditOS Demo Data — Local mock for public guided demo ───
+﻿// ─── AuditOS Demo Data — Local mock for public guided demo ───
 // Self-contained, read-only, sanitized. No import from @/lib/audit/*.
 
 const SAR = (v: number) => v;
@@ -779,7 +779,7 @@ const EVIDENCE = [
     fileType: "xlsx",
     fileSize: 245000,
     state: "accepted",
-    uploadedBy: "مشغل العرض",
+    uploadedById: "مشغل العرض",
     linkedEntities: [{ id: "el-demo-1", targetLabel: "جميع الحسابات" }],
   },
   {
@@ -787,7 +787,7 @@ const EVIDENCE = [
     fileType: "pdf",
     fileSize: 180000,
     state: "accepted",
-    uploadedBy: "مشغل العرض",
+    uploadedById: "مشغل العرض",
     linkedEntities: [{ id: "el-demo-2", targetLabel: "النقد والبنوك" }],
   },
   {
@@ -795,7 +795,7 @@ const EVIDENCE = [
     fileType: "pdf",
     fileSize: 320000,
     state: "accepted",
-    uploadedBy: "مراجع العرض",
+    uploadedById: "مراجع العرض",
     linkedEntities: [{ id: "el-demo-3", targetLabel: "الذمم المدينة" }],
   },
   {
@@ -803,7 +803,7 @@ const EVIDENCE = [
     fileType: "xlsx",
     fileSize: 95000,
     state: "accepted",
-    uploadedBy: "مشغل العرض",
+    uploadedById: "مشغل العرض",
     linkedEntities: [{ id: "el-demo-4", targetLabel: "الممتلكات والمعدات" }],
   },
   {
@@ -811,7 +811,7 @@ const EVIDENCE = [
     fileType: "pdf",
     fileSize: 450000,
     state: "reviewed",
-    uploadedBy: "مراجع العرض",
+    uploadedById: "مراجع العرض",
     linkedEntities: [{ id: "el-demo-5", targetLabel: "القرض قصير الأجل" }],
   },
   {
@@ -819,7 +819,7 @@ const EVIDENCE = [
     fileType: "pdf",
     fileSize: 0,
     state: "missing",
-    uploadedBy: "",
+    uploadedById: "",
     linkedEntities: [{ id: "el-demo-6", targetLabel: "المخزون" }],
   },
 ];

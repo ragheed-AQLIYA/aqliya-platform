@@ -40,6 +40,7 @@ export function AuditEngagementStatusBadge({
         size === "sm"
           ? "px-1.5 py-0.5 text-[10px] leading-none"
           : "px-2.5 py-1 text-xs leading-none",
+        // eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive
         toneClasses[tone],
         className,
       )}

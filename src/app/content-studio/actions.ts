@@ -167,7 +167,7 @@ export async function listContentAction(
 
 export async function getContentAction(id: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const _user = await requireUserContext("VIEWER");
     const content = await csGetContent(id);
     if (!content) throw new ContentStudioError("Content item not found");
     return content;
@@ -272,7 +272,7 @@ export async function listTemplatesAction() {
 
 export async function getTemplateAction(id: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const _user = await requireUserContext("VIEWER");
     const template = await csGetTemplate(id);
     if (!template) throw new ContentStudioError("Template not found");
     return template;
@@ -283,21 +283,21 @@ export async function getTemplateAction(id: string) {
 
 export async function getWorkspaceStatsAction(workspaceId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const _user = await requireUserContext("VIEWER");
     return csGetWorkspaceStats(workspaceId);
   });
 }
 
 export async function getVersionHistoryAction(contentId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const _user = await requireUserContext("VIEWER");
     return csGetVersionHistory(contentId);
   });
 }
 
 export async function getVersionAction(versionId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const _user = await requireUserContext("VIEWER");
     return csGetVersion(versionId);
   });
 }

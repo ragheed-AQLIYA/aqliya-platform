@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection -- union-typed keys, provably false positive */
 import { cn } from "@/lib/utils"
 import { AlertTriangle, Shield, ShieldAlert, ShieldCheck } from "lucide-react"
 

@@ -1,10 +1,10 @@
-import { describe, expect, it, jest, beforeEach } from "@jest/globals";
+﻿import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 
 const mockCreateAnyAIProviderFromResolver = jest.fn<
   () => Promise<{ getStatus: () => { configured: boolean; available: boolean }; isAvailable: () => Promise<boolean>; execute: () => Promise<unknown> }>
 >();
 
-jest.mock("@/lib/ai/providers/ai-provider-factory", () => ({
+jest.mock("@/lib/core/ai/providers/ai-provider-factory", () => ({
   createAnyAIProviderFromResolver: mockCreateAnyAIProviderFromResolver,
 }));
 
@@ -19,16 +19,16 @@ jest.mock("@/lib/governance/retrieval-router", () => ({
   }),
 }));
 
-jest.mock("@/lib/ai/orchestrator-rag-inject", () => ({
+jest.mock("@/lib/core/ai/orchestrator-rag-inject", () => ({
   injectGovernedRagIntoRequest: async (req: unknown) => req,
 }));
 
-jest.mock("@/lib/ai/prompt-registry", () => ({
+jest.mock("@/lib/core/ai/prompt-registry", () => ({
   getPromptBuilder: () => null,
   assemblePrompt: (req: unknown) => req,
 }));
 
-import { AIOrchestrator } from "@/lib/ai/orchestrator";
+import { AIOrchestrator } from "@/lib/core/ai/orchestrator";
 
 describe("AIOrchestrator tenant resolver", () => {
   beforeEach(() => {

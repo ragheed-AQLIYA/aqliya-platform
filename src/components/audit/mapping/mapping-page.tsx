@@ -9,9 +9,6 @@ import {
   Clock,
   Sparkles,
   User,
-  ChevronDown,
-  ChevronRight,
-  AlertTriangle,
 } from "lucide-react";
 import {
   Card,

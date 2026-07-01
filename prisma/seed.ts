@@ -16,6 +16,7 @@ import { seedOfficeAI } from "./seed-office-ai";
 import { seedOrganizations } from "./seed-organizations";
 import { seedContentStudio } from "./seed-content-studio";
 import { seedDefaultAbacPolicies } from "./seed-abac-policies";
+import { seedKnowledgeMining } from "./seed-knowledge-mining";
 
 // Load .env file explicitly
 config({ path: resolve(__dirname, "../.env") });
@@ -1729,6 +1730,10 @@ async function main() {
   await seedDefaultAbacPolicies(prisma);
   console.log("Default ABAC policies seeded (ORG-01, SENS-02, APR-01)");
 
+  // ─── Knowledge Foundation Mining Seed (Phase 8) ───
+  await seedKnowledgeMining(prisma, platformOrg.id);
+  console.log("Knowledge Mining seed complete");
+
   // Guarantee demo login passwords (safe after partial seeds / audit re-seeds)
   const demoPasswords: Array<{ email: string; password: string }> = [
     { email: "admin@aqliya.com", password: "admin123" },
@@ -1754,3 +1759,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+

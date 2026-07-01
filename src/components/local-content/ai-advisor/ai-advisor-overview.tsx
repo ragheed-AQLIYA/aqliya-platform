@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -396,7 +395,7 @@ function OrgMemoryTable({ memories }: { memories: OrgMemory[] }) {
 // ─── Main Component ───
 
 export function AiAdvisorOverview(props: AdvisorOverviewProps) {
-  const [reviewing, setReviewing] = useState<string | null>(null);
+  const [_reviewing, setReviewing] = useState<string | null>(null);
 
   const handleReviewFlag = useCallback(
     async (id: string, decision: "confirmed" | "rejected") => {

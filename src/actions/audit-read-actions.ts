@@ -367,7 +367,7 @@ export async function getWorkflowReadinessAction(engagementId: string): Promise<
   requireRole(actor, ["admin", "operator", "reviewer", "partner", "viewer"])
   await assertEngagementAccess(engagementId, actor)
 
-  const [engagement, trialBalance, mappings, statements, notes, evidence, findings, recommendations, reviewComments, approvalRecords, workflowStatus] = await Promise.all([
+  const [engagement, trialBalance, mappings, statements, notes, evidence, findings, recommendations, reviewComments, _approvalRecords, workflowStatus] = await Promise.all([
     getEngagement(actor.organizationId, engagementId),
     getTrialBalance(engagementId),
     getMappings(engagementId),

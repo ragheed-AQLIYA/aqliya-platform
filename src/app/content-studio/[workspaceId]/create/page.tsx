@@ -2,7 +2,6 @@ import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { getCurrentUser } from "@/lib/auth";
 import {
   getWorkspaceAction,
   listTemplatesAction,

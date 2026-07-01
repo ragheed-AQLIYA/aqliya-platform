@@ -140,12 +140,12 @@ async function main() {
   await mustExist("scripts/platform/verify-pgvector-staging.ts", "pgvector verify script");
 
   const ragLibFiles = [
-    ["src/lib/rag/vector-store.ts", "vector-store module"],
-    ["src/lib/rag/rag-retriever.ts", "RAG retriever module"],
-    ["src/lib/rag/embedding-service.ts", "embedding service module"],
-    ["src/lib/rag/chunking-engine.ts", "chunking engine module"],
-    ["src/lib/rag/intelligence-core-rag.ts", "governed RAG module"],
-    ["src/lib/rag/governed-rag-metrics.ts", "RAG governance metrics module"],
+    ["src/lib/core/knowledge/rag/vector-store.ts", "vector-store module"],
+    ["src/lib/core/knowledge/rag/rag-retriever.ts", "RAG retriever module"],
+    ["src/lib/core/knowledge/rag/embedding-service.ts", "embedding service module"],
+    ["src/lib/core/knowledge/rag/chunking-engine.ts", "chunking engine module"],
+    ["src/lib/core/knowledge/rag/intelligence-core-rag.ts", "governed RAG module"],
+    ["src/lib/core/knowledge/rag/governed-rag-metrics.ts", "RAG governance metrics module"],
   ];
   for (const [path, label] of ragLibFiles) {
     await mustExist(path, label);

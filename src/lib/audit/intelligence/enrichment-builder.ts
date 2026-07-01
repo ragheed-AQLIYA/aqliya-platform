@@ -66,7 +66,7 @@ ${input.engagementLabel}
 export function parseEnrichmentFromHandlerOutput(
   output: string,
   input: DisclosureEnrichmentInput,
-  modelVersion: string,
+  _modelVersion: string,
 ): string {
   try {
     const parsed = JSON.parse(output) as { enrichedSection?: string };

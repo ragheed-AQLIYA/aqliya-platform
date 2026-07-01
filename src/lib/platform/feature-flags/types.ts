@@ -9,4 +9,6 @@ export interface FeatureFlag {
   dependencies: string[]
   createdAt: string
   updatedAt: string
+  /** Optional expiry date (YYYY-MM-DD). After this date, the flag is treated as permanently "on" or removed. */
+  expiresAt?: string
 }

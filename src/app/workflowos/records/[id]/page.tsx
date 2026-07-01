@@ -107,7 +107,7 @@ export default async function WorkflowRecordDetailPage({
     redirect(`/workflowos/records/${id}`);
   }
 
-  async function handleDownloadExportAction() {
+  async function _handleDownloadExportAction() {
     "use server";
     const result = await downloadWorkflowExport(id);
     if (result.success && result.data) {
@@ -262,7 +262,6 @@ export default async function WorkflowRecordDetailPage({
                   | undefined;
                 const isComplete = index < currentStep;
                 const isCurrent = index === currentStep;
-                const isPending = index > currentStep;
 
                 return (
                   <li

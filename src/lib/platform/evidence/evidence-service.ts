@@ -1,4 +1,4 @@
-import "server-only";
+﻿import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
@@ -89,7 +89,7 @@ export async function lookupEvidence(
         fileType: row.fileType,
         storageKey: row.storageKey,
         sensitivity: mapAuditSensitivity(row.state),
-        uploadedById: row.uploadedBy,
+        uploadedById: row.uploadedById,
         createdAt: row.createdAt,
       };
     }

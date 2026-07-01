@@ -1,9 +1,9 @@
 import "server-only";
-import { PrismaAuditLedger } from "@/core/audit/audit-ledger-prisma";
+import { PrismaAuditLedger } from "@/lib/core/audit/audit-ledger-prisma";
 import type {
   AuditEventCategory,
   AuditEventSeverity,
-} from "@/core/audit/types";
+} from "@/lib/core/audit/types";
 // SALESOS_PLACEHOLDER: inline type — implement when @/lib/platform/contracts/audit-event-contract exists
 type PlatformAuditCategory =
   | "financial"

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
-import { UserPlus, Shield, UserX, Loader2, AlertTriangle } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { UserPlus, Shield, UserX, AlertTriangle } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { AlertTriangle, CheckCircle, XCircle, Info, AlertOctagon, FileSearch, RotateCcw, ChevronDown, ChevronRight, Scale, MapPin, Activity, MinusCircle, FileSpreadsheet, TrendingUp, Bot, Sparkles, Loader2 } from "lucide-react"
+import { AlertTriangle, CheckCircle, XCircle, Info, RotateCcw, Scale, MapPin, Activity, MinusCircle, FileSpreadsheet, TrendingUp, Bot, Loader2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -196,7 +196,7 @@ export default function ValidationPage() {
 
 function IssueCard({ issue, onDispose }: { issue: ValidationIssue; onDispose: (issue: ValidationIssue, action: "accepted" | "dismissed") => void }) {
   const t = useTranslations("audit.validation")
-  const [expanded, setExpanded] = useState(false)
+  const [_expanded, _setExpanded] = useState(false)
   const severityBg = issue.severity === "error" ? "border-l-red-500 bg-red-50/30" : issue.severity === "warning" ? "border-l-amber-500 bg-amber-50/30" : "border-l-blue-500 bg-blue-50/30"
   const statusColors: Record<string, string> = { open: "bg-blue-100 text-blue-700", accepted: "bg-green-100 text-green-700", dismissed: "bg-gray-100 text-gray-500", investigated: "bg-purple-100 text-purple-700" }
 

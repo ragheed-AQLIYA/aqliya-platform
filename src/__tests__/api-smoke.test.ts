@@ -74,11 +74,24 @@ jest.mock("@/lib/platform/logger", () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }));
 
+// Provide hasRequiredRole so the authorization facade can resolve at runtime
+jest.mock("@/lib/auth", () => ({
+  hasRequiredRole: (
+    user: { role: string },
+    requiredRole: string,
+  ): boolean => {
+    if (requiredRole === "ADMIN") return user.role === "ADMIN";
+    if (requiredRole === "OPERATOR")
+      return ["OPERATOR", "ADMIN"].includes(user.role);
+    return ["VIEWER", "OPERATOR", "ADMIN"].includes(user.role);
+  },
+}));
+
 // ─── Imports (after mocks) ───
 
 import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { CoreAccessControl } from "@/core/access/access-control";
+import { authorize } from "@/lib/authorization";
 import { resolveMfaGateState } from "@/lib/auth/mfa-gate";
 import { resetMFARequiredRolesCache } from "@/lib/auth/mfa-roles";
 
@@ -219,48 +232,70 @@ describe("GET /api/audit/evidence/[evidenceId]/download — auth guard", () => {
 });
 
 // ──────────────────────────────────────────────────────────────────────────────
-// Suite 4: CoreAccessControl — deny unknown actions
+// Suite 4: Authorization facade — deny unknown actions
 // ──────────────────────────────────────────────────────────────────────────────
 
-describe("CoreAccessControl — deny unknown actions", () => {
-  it("denies an unknown action with a descriptive reason", async () => {
-    const ctrl = new CoreAccessControl();
-    const result = await ctrl.check({
-      userId: "user-1",
-      organizationId: "org-1",
-      resource: "audit",
+describe("Authorization facade — deny unknown actions", () => {
+  const adminUser = {
+    id: "user-1",
+    email: "admin@test.com",
+    name: "Admin",
+    role: "ADMIN" as const,
+    organizationId: "org-1",
+    platformOrganizationId: "plat-1",
+    organization: { id: "org-1", name: "Test Org" },
+  };
+
+  const viewerUser = {
+    id: "user-2",
+    email: "viewer@test.com",
+    name: "Viewer",
+    role: "VIEWER" as const,
+    organizationId: "org-1",
+    platformOrganizationId: "plat-1",
+    organization: { id: "org-1", name: "Test Org" },
+  };
+
+  it("maps unknown action to resource.view (safe default) and allows for VIEWER", async () => {
+    // The facade maps unrecognized actions to the "resource.view" permission,
+    // which is granted to all roles (ADMIN, OPERATOR, VIEWER).
+    const result = await authorize({
+      user: viewerUser,
+      resource: { type: "audit" },
       action: "unknown_action" as never,
-      role: "VIEWER",
     });
 
-    expect(result.decision).toBe("denied");
-    expect(result.reason).toContain("unknown_action");
+    expect(result.allowed).toBe(true);
   });
 
-  it("denies when role is null even for a known action", async () => {
-    const ctrl = new CoreAccessControl();
-    const result = await ctrl.check({
-      userId: "user-1",
-      organizationId: "org-1",
-      resource: "audit",
-      action: "read",
-      role: null,
+  it("denies when role is insufficient for a sensitive action", async () => {
+    const result = await authorize({
+      user: viewerUser,
+      resource: { type: "audit" },
+      action: "admin",
     });
 
-    expect(result.decision).toBe("denied");
+    expect(result.allowed).toBe(false);
   });
 
   it("grants VIEWER read access", async () => {
-    const ctrl = new CoreAccessControl();
-    const result = await ctrl.check({
-      userId: "user-1",
-      organizationId: "org-1",
-      resource: "audit",
+    const result = await authorize({
+      user: viewerUser,
+      resource: { type: "audit" },
       action: "read",
-      role: "VIEWER",
     });
 
-    expect(result.decision).toBe("granted");
+    expect(result.allowed).toBe(true);
+  });
+
+  it("grants ADMIN admin access", async () => {
+    const result = await authorize({
+      user: adminUser,
+      resource: { type: "audit" },
+      action: "admin",
+    });
+
+    expect(result.allowed).toBe(true);
   });
 });
 

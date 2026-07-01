@@ -1,4 +1,4 @@
-import { cosineSimilarity } from "../retrieval/similarity-search"
+import { cosineSimilarity } from "@/lib/core/ai/retrieval/similarity-search"
 
 describe("SimilaritySearch", () => {
   describe("cosineSimilarity", () => {

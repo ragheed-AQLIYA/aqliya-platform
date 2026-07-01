@@ -11,12 +11,6 @@ type SecurityDepthPageProps = {
   pdfLinks: Array<{ label: string; href: string }>;
 };
 
-const statusToneClass = {
-  available: "text-emerald-500",
-  planned: "text-amber-500",
-  strategic: "text-muted-foreground",
-};
-
 export function SecurityDepthPage({
   locale = "ar",
   pillars,

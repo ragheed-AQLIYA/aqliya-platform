@@ -1,4 +1,4 @@
-import { getMockCanonicalAccounts } from "@/lib/audit/coa/canonical-coa";
+﻿import { getMockCanonicalAccounts } from "@/lib/audit/coa/canonical-coa";
 // Protected AuditOS workspace reads are database-first.
 // Mock fallback is disabled by default and must be explicitly enabled.
 
@@ -32,7 +32,7 @@ import { type FinancialStatementLine } from "@/types/audit";
 import * as mock from "./mock-data";
 
 // Phase 3B: AI abstraction wiring — imports handlers to register them on deterministicProvider
-import "@/lib/ai/handlers/register-handlers";
+import "@/lib/core/ai/handlers/register-handlers";
 import { runGovernedAuditAITask } from "@/lib/audit/audit-ai-bridge";
 
 export type AuditAIActorContext = {
@@ -194,6 +194,15 @@ export async function confirmAllSuggestedMappings(engagementId: string): Promise
     throw new Error("Database not available for confirmAllSuggestedMappings");
   });
   return db.confirmAllSuggestedMappings(engagementId);
+}
+
+export async function getAccountMappingById(
+  mappingId: string,
+): Promise<AccountMapping | null> {
+  const db = await getDb().catch(() => {
+    throw new Error("Database not available for getAccountMappingById");
+  });
+  return db.getAccountMappingById(mappingId);
 }
 
 export async function updateManualMapping(data: {
@@ -1337,7 +1346,7 @@ export async function createEvidence(params: {
   fileType: string;
   fileSize?: number;
   state?: string;
-  uploadedBy?: string;
+  uploadedById?: string;
   actorId?: string;
   actorName?: string;
 }): Promise<{ evidence: EvidenceObject }> {
@@ -1350,7 +1359,7 @@ export async function createEvidence(params: {
     fileType: params.fileType,
     fileSize: params.fileSize,
     state: params.state,
-    uploadedBy: params.uploadedBy,
+    uploadedById: params.uploadedById,
   });
   await db.recordAuditEvent({
     engagementId: params.engagementId,
@@ -1395,7 +1404,7 @@ export async function createEvidenceWithStorage(params: {
   fileSize: number;
   fileHash: string;
   storageKey: string;
-  uploadedBy?: string;
+  uploadedById?: string;
   actorId?: string;
   actorName?: string;
 }): Promise<{ evidence: EvidenceObject }> {
@@ -1408,7 +1417,7 @@ export async function createEvidenceWithStorage(params: {
     fileType: params.fileType,
     fileSize: params.fileSize,
     state: "uploaded",
-    uploadedBy: params.uploadedBy,
+    uploadedById: params.uploadedById,
     fileHash: params.fileHash,
     storageKey: params.storageKey,
   });
@@ -1493,6 +1502,20 @@ export async function updateEvidenceStateWithEvent(
     newState: state,
     description: `Evidence state changed to ${state}: ${evidence.filename}`,
   });
+
+  try {
+    const { syncAuditEvidenceStateToCore } = await import(
+      "@/lib/core/evidence/adapters/audit-adapter"
+    );
+    await syncAuditEvidenceStateToCore({
+      evidenceId: id,
+      newState: state,
+      actorId: actor.actorId,
+    });
+  } catch {
+    // Platform sync is best-effort
+  }
+
   return { evidence };
 }
 
@@ -1839,6 +1862,22 @@ export async function linkEvidenceToEntity(params: {
       context: params.context,
     },
   });
+
+  try {
+    const { syncAuditEvidenceLinkToCore } = await import(
+      "@/lib/core/evidence/adapters/audit-adapter"
+    );
+    await syncAuditEvidenceLinkToCore({
+      evidenceId: params.evidenceId,
+      targetType: params.targetType,
+      targetId: params.targetId,
+      context: params.context,
+      createdBy: params.actorId,
+    });
+  } catch {
+    // Platform sync is best-effort
+  }
+
   return { link };
 }
 

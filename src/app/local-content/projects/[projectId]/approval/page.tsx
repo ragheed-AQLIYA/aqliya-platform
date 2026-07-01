@@ -32,7 +32,7 @@ export default async function ApprovalPage({
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = await params;
-  const [projectRes, scoreRes, approvalsRes, reviewsRes, routingRes] =
+  const [projectRes, scoreRes, approvalsRes, _reviewsRes, routingRes] =
     await Promise.all([
       getLocalContentProjectAction(projectId),
       getLocalContentScoreAction(projectId),
@@ -45,7 +45,7 @@ export default async function ApprovalPage({
   const project = projectRes.data;
   const score = scoreRes.ok ? scoreRes.data : null;
   const approvals = approvalsRes.ok ? approvalsRes.data : [];
-  const reviews = reviewsRes.ok ? reviewsRes.data : [];
+
   const routing = routingRes.ok ? routingRes.data : null;
   const canApprove = routing?.canSubmitApproval ?? false;
   const lastApproval = approvals[0];

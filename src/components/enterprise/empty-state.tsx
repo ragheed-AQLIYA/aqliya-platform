@@ -1,5 +1,6 @@
+/* eslint-disable security/detect-object-injection -- union-typed variant key, provably false positive */
 import { cn } from "@/lib/utils"
-import { FileText, FolderOpen, AlertCircle } from "lucide-react"
+import { FileText, FolderOpen } from "lucide-react"
 
 interface EmptyStateProps {
   icon?: React.ElementType

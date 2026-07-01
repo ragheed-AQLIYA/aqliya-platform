@@ -1,11 +1,11 @@
 import { jest } from "@jest/globals"
 
-jest.mock("@/lib/rag/embedding-service", () => ({
+jest.mock("@/lib/core/knowledge/rag/embedding-service", () => ({
   embedAndStore: jest.fn(async () => ({ chunkCount: 2, tokenCount: 10 })),
   deleteDocumentEmbeddings: jest.fn(async () => 2),
 }))
 
-jest.mock("@/lib/rag/intelligence-core-rag", () => ({
+jest.mock("@/lib/core/knowledge/rag/intelligence-core-rag", () => ({
   retrieveGovernedContext: jest.fn(async () => ({
     chunks: [{ chunkId: "c1", documentId: "d1", content: "test", metadata: {}, similarity: 0.9 }],
     query: "test",
@@ -18,7 +18,7 @@ jest.mock("@/lib/rag/intelligence-core-rag", () => ({
   toGovernedRAGPayload: jest.fn(() => ({ query: "test" })),
 }))
 
-jest.mock("@/lib/rag/hybrid-search", () => ({
+jest.mock("@/lib/core/knowledge/rag/hybrid-search", () => ({
   hybridSearchChunks: jest.fn(async () => ({
     results: [{ chunkId: "c1", documentId: "d1", content: "test", metadata: {}, similarity: 0.9 }],
     mode: "vector",
@@ -54,7 +54,7 @@ import {
   searchKnowledge,
   getKnowledgeDocumentMetadata,
   deleteKnowledgeDocument,
-} from "@/lib/rag/knowledge-service"
+} from "@/lib/core/knowledge/rag/knowledge-service"
 
 describe("knowledge-service", () => {
   const prev = process.env.FF_AI_RAG

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { evaluateWithGate, getGateThreshold, registerGateThreshold } from "@/lib/ai/eval-gate"
+import { evaluateWithGate, getGateThreshold, registerGateThreshold } from "@/lib/core/ai/eval-gate"
 import { requireUserContext } from "@/lib/auth"
 
 export const dynamic = "force-dynamic"

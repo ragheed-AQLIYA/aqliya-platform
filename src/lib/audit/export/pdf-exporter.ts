@@ -4,7 +4,6 @@ import type { ExportInput, ExportResult, Exporter } from "./types";
 import type { FinancialStatementLine } from "@/types/audit";
 import {
   isArabicText,
-  getPdfFontConfig,
   normalizeArabicNumber,
   ARABIC_LABELS,
 } from "../arabic-pdf-support";

@@ -1,4 +1,4 @@
-﻿// ─── SCIM Provisioning Service ───
+// ─── SCIM Provisioning Service ───
 // Tenant-scoped SCIM v2 operations for User and Group provisioning.
 // All mutations are logged to ScimProvisioningEvent and PlatformAuditLog.
 
@@ -9,34 +9,14 @@ import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import {
   SCIM_CORE_USER_SCHEMA,
   SCIM_CORE_GROUP_SCHEMA,
-  SCIM_CONTENT_TYPE,
   type ScimUser,
   type ScimGroup,
 } from "./scim-types";
 
 // ─── Helpers ───
 
-function toISO(date: Date): string {
-  return date.toISOString();
-}
 
-function buildUserMeta(userId: string, basePath: string): Record<string, unknown> {
-  return {
-    resourceType: "User",
-    created: toISO(new Date()),
-    lastModified: toISO(new Date()),
-    location: `${basePath}/Users/${userId}`,
-  };
-}
 
-function buildGroupMeta(groupId: string, basePath: string): Record<string, unknown> {
-  return {
-    resourceType: "Group",
-    created: toISO(new Date()),
-    lastModified: toISO(new Date()),
-    location: `${basePath}/Groups/${groupId}`,
-  };
-}
 
 function userToScimUser(user: {
   id: string;

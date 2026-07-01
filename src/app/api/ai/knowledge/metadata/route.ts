@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { requireUserContext } from "@/lib/auth"
-import { handleAiApiError } from "@/lib/ai/api-errors"
+import { handleAiApiError } from "@/lib/core/ai/api-errors"
 import {
   getKnowledgeDocumentMetadata,
   resolveKnowledgeOrganizationId,

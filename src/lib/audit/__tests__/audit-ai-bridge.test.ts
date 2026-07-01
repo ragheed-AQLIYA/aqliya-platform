@@ -6,11 +6,11 @@ jest.mock("@/lib/prisma", () => ({
   },
 }));
 
-jest.mock("@/lib/ai/runtime", () => ({
+jest.mock("@/lib/core/ai/runtime", () => ({
   runInference: jest.fn(),
 }));
 
-jest.mock("@/lib/ai/orchestrator", () => ({
+jest.mock("@/lib/core/ai/orchestrator", () => ({
   aiOrchestrator: { generate: jest.fn() },
 }));
 
@@ -24,8 +24,8 @@ jest.mock("@/lib/platform/audit-log", () => ({
 
 import { describe, expect, it, beforeEach, jest } from "@jest/globals";
 import { prisma } from "@/lib/prisma";
-import { aiOrchestrator } from "@/lib/ai/orchestrator";
-import { runInference } from "@/lib/ai/runtime";
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator";
+import { runInference } from "@/lib/core/ai/runtime";
 import {
   resolveAuditAIContext,
   runGovernedAuditAI,

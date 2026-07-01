@@ -76,7 +76,7 @@ jest.mock("@/lib/platform/storage", () => ({
   })),
 }));
 
-jest.mock("@/lib/decisions/export", () => ({
+jest.mock("@/lib/decision/decision-export-pdf", () => ({
   buildDecisionReportPDF: jest.fn().mockResolvedValue({
     content: Buffer.from("mock-pdf-content"),
     mimeType: "application/pdf",

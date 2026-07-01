@@ -50,16 +50,8 @@ jest.mock("@/lib/auth", () => ({
   },
 }));
 
-jest.mock("@/core/access/server-action-guard", () => ({
-  requireServerActionAccess: jest.fn().mockResolvedValue({
-    id: "user-1",
-    email: "admin@test.com",
-    name: "Admin",
-    role: "ADMIN",
-    organizationId: "org-1",
-    platformOrganizationId: "plat-1",
-    organization: { id: "org-1", name: "Test Org" },
-  }),
+jest.mock("@/lib/authorization", () => ({
+  enforce: jest.fn().mockResolvedValue(undefined),
 }));
 
 // Mock the audit-events helper to avoid side effects
@@ -83,10 +75,12 @@ jest.mock("@/lib/local-content/workbook/ai-advisor", () => ({
 
 const mockLcPatternSuggestionFindMany = jest.fn();
 const mockLcPatternSuggestionFindUnique = jest.fn();
+const mockLcPatternSuggestionFindFirst = jest.fn();
 const mockLcPatternSuggestionUpdate = jest.fn();
 const mockLcPatternSuggestionCount = jest.fn();
 const mockLcMatchReviewFindMany = jest.fn();
 const mockLcMatchReviewFindUnique = jest.fn();
+const mockLcMatchReviewFindFirst = jest.fn();
 const mockLcMatchReviewUpdate = jest.fn();
 const mockLcMatchReviewUpdateMany = jest.fn();
 const mockLcPatternHealthRecordFindMany = jest.fn();
@@ -103,12 +97,14 @@ jest.mock("@/lib/prisma", () => ({
     lcPatternSuggestion: {
       findMany: mockLcPatternSuggestionFindMany,
       findUnique: mockLcPatternSuggestionFindUnique,
+      findFirst: mockLcPatternSuggestionFindFirst,
       update: mockLcPatternSuggestionUpdate,
       count: mockLcPatternSuggestionCount,
     },
     lcMatchReview: {
       findMany: mockLcMatchReviewFindMany,
       findUnique: mockLcMatchReviewFindUnique,
+      findFirst: mockLcMatchReviewFindFirst,
       update: mockLcMatchReviewUpdate,
       updateMany: mockLcMatchReviewUpdateMany,
     },
@@ -319,6 +315,10 @@ function makeAuditEvent(
 
 beforeEach(() => {
   jest.clearAllMocks();
+  // Default findFirst mocks so tenant guards pass in batch tests.
+  // Tests may override these for specific guard-verification scenarios.
+  mockLcPatternSuggestionFindFirst.mockResolvedValue({ id: "mock" });
+  mockLcMatchReviewFindFirst.mockResolvedValue({ id: "mock" });
 });
 
 // ─── Tests: Review Queue ───

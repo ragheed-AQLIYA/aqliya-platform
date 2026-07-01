@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth-next";
 import { getAiSettingsAction } from "@/actions/ai-settings-actions";
-import { aiOrchestrator } from "@/lib/ai/orchestrator";
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator";
 
 export async function GET() {
   const session = await auth();

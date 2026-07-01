@@ -9,7 +9,6 @@ import { enforce } from "@/lib/authorization";
 import { prisma } from "@/lib/prisma";
 import PDFDocument from "pdfkit";
 import {
-  formatPdfArabicNumber,
   getLocalContentPdfLocale,
   pdfTextOptions,
 } from "@/lib/local-content/pdf-arabic";

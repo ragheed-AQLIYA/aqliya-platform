@@ -40,6 +40,7 @@ import {
   createOrUpdatePilotSignoff as svcCreateOrUpdatePilotSignoff,
   getPilotSignoffChecklist as svcGetPilotSignoffChecklist,
   updateManualMapping as svcUpdateManualMapping,
+  getAccountMappingById as svcGetAccountMappingById,
   runValidation as svcRunValidation,
   disposeValidationIssue as svcDisposeValidationIssue,
   publishEngagement as svcPublishEngagement,
@@ -75,6 +76,40 @@ import { getStorageProvider, buildStorageKey } from "@/lib/audit/storage";
 import { createHash } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { notifyOnEvent } from "@/lib/platform/notification/integration";
+
+async function persistMappingReviewFirmMemory(params: {
+  engagementId: string;
+  sourceAccountCode: string;
+  sourceAccountName: string;
+  suggestedCanonicalId?: string | null;
+  acceptedCanonicalId: string;
+  reviewerId: string;
+}): Promise<void> {
+  const { resolveFirmMemoryOrganizationIdFromEngagement } = await import(
+    "@/lib/tb-intelligence/org-resolver"
+  );
+  const orgId = await resolveFirmMemoryOrganizationIdFromEngagement(
+    params.engagementId,
+  );
+  if (!orgId) return;
+
+  const { recordReviewMappingFeedback, getClassificationHintsForAccount } =
+    await import("@/lib/tb-intelligence/firm-memory");
+  const classificationHints = await getClassificationHintsForAccount(
+    params.engagementId,
+    params.sourceAccountCode,
+  );
+  await recordReviewMappingFeedback({
+    organizationId: orgId,
+    engagementId: params.engagementId,
+    clientAccountCode: params.sourceAccountCode,
+    clientAccountName: params.sourceAccountName,
+    suggestedCanonicalId: params.suggestedCanonicalId,
+    acceptedCanonicalId: params.acceptedCanonicalId,
+    reviewerId: params.reviewerId,
+    classificationHints,
+  });
+}
 
 export async function createEngagementAction(params: {
   organizationId: string;
@@ -145,14 +180,35 @@ export async function updateManualMappingAction(input: {
   engagementId: string;
   mappingId: string;
   canonicalAccountId: string | null;
+  rejectionReason?: string;
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "operator"]);
   await assertEngagementAccess(input.engagementId, actor);
+
+  const priorMapping = await svcGetAccountMappingById(input.mappingId);
+  if (!priorMapping || priorMapping.engagementId !== input.engagementId) {
+    return null;
+  }
+
   const mapping = await svcUpdateManualMapping({
-    ...input,
+    engagementId: input.engagementId,
+    mappingId: input.mappingId,
+    canonicalAccountId: input.canonicalAccountId,
     mappedBy: actor.actorName,
   });
+
+  if (mapping?.canonicalAccountId) {
+    await persistMappingReviewFirmMemory({
+      engagementId: input.engagementId,
+      sourceAccountCode: mapping.sourceAccountCode,
+      sourceAccountName: mapping.sourceAccountName,
+      suggestedCanonicalId: priorMapping.canonicalAccountId ?? null,
+      acceptedCanonicalId: mapping.canonicalAccountId,
+      reviewerId: actor.actorId,
+    });
+  }
+
   if (mapping) {
     await svcRecordAuditEvent({
       engagementId: input.engagementId,
@@ -164,7 +220,12 @@ export async function updateManualMappingAction(input: {
       targetId: mapping.id,
       newState: mapping.status,
       description: `Manual mapping updated: ${mapping.sourceAccountName} -> ${mapping.canonicalAccountName ?? "unmapped"}`,
-      metadata: { canonicalAccountId: input.canonicalAccountId ?? null },
+      metadata: {
+        canonicalAccountId: input.canonicalAccountId ?? null,
+        priorCanonicalAccountId: priorMapping.canonicalAccountId ?? null,
+        firmMemoryRecorded: Boolean(mapping.canonicalAccountId),
+        rejectionReason: input.rejectionReason ?? null,
+      },
     });
     await svcRecordAuditEvent({
       engagementId: input.engagementId,
@@ -208,29 +269,14 @@ export async function confirmMappingAction(
   const { confirmMapping } = await import("@/lib/audit/services");
   const result = await confirmMapping(engagementId, mappingId);
   if (result) {
-    const { resolveFirmMemoryOrganizationIdFromEngagement } = await import(
-      "@/lib/tb-intelligence/org-resolver"
-    );
-    const orgId = await resolveFirmMemoryOrganizationIdFromEngagement(
-      engagementId,
-    );
-    if (orgId && result.canonicalAccountId) {
-      const { recordFirmMemoryFeedback, getClassificationHintsForAccount } =
-        await import("@/lib/tb-intelligence/firm-memory");
-      const classificationHints = await getClassificationHintsForAccount(
+    if (result.canonicalAccountId) {
+      await persistMappingReviewFirmMemory({
         engagementId,
-        result.sourceAccountCode,
-      );
-      await recordFirmMemoryFeedback({
-        organizationId: orgId,
-        engagementId,
-        clientAccountCode: result.sourceAccountCode,
-        clientAccountName: result.sourceAccountName,
+        sourceAccountCode: result.sourceAccountCode,
+        sourceAccountName: result.sourceAccountName,
         suggestedCanonicalId: result.canonicalAccountId,
         acceptedCanonicalId: result.canonicalAccountId,
-        wasAccepted: true,
         reviewerId: actor.actorId,
-        classificationHints,
       });
     }
     await svcRecordAuditEvent({
@@ -280,32 +326,16 @@ export async function bulkConfirmSuggestedMappingsAction(
     return { confirmedCount: 0 };
   }
 
-  const { resolveFirmMemoryOrganizationIdFromEngagement } = await import(
-    "@/lib/tb-intelligence/org-resolver"
-  );
-  const orgId = await resolveFirmMemoryOrganizationIdFromEngagement(engagementId);
-
-  if (orgId) {
-    const { recordFirmMemoryFeedback, getClassificationHintsForAccount } =
-      await import("@/lib/tb-intelligence/firm-memory");
-    for (const result of mappings) {
-      if (!result.canonicalAccountId) continue;
-      const classificationHints = await getClassificationHintsForAccount(
-        engagementId,
-        result.sourceAccountCode,
-      );
-      await recordFirmMemoryFeedback({
-        organizationId: orgId,
-        engagementId,
-        clientAccountCode: result.sourceAccountCode,
-        clientAccountName: result.sourceAccountName,
-        suggestedCanonicalId: result.canonicalAccountId,
-        acceptedCanonicalId: result.canonicalAccountId,
-        wasAccepted: true,
-        reviewerId: actor.actorId,
-        classificationHints,
-      });
-    }
+  for (const result of mappings) {
+    if (!result.canonicalAccountId) continue;
+    await persistMappingReviewFirmMemory({
+      engagementId,
+      sourceAccountCode: result.sourceAccountCode,
+      sourceAccountName: result.sourceAccountName,
+      suggestedCanonicalId: result.canonicalAccountId,
+      acceptedCanonicalId: result.canonicalAccountId,
+      reviewerId: actor.actorId,
+    });
   }
 
   await svcRecordAuditEvent({

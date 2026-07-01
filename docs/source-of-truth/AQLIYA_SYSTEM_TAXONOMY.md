@@ -8,14 +8,14 @@
 | -------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------- | --------------------------------------------------- |
 | **Company**                      | Parent legal and brand entity                                                    | AQLIYA                                  | Use as top-level identity                               | Do not present as a single product                  |
 | **Platform Layer**               | Shared underlying technical/governance foundation                                | AQLIYA Intelligence Core                | Use for cross-product/shared foundations                | Do not market as a finished product                 |
-| **Product / System**             | Named operational system with route, data, workflow, and governance purpose      | AuditOS, DecisionOS                     | Use for real operational systems                        | Do not apply to marketing-only pages                |
+| **Product / System**             | Named operational system with route, data, workflow, and governance purpose      | AuditOS, DecisionOS, RiskOS             | Use for real operational systems                        | Do not apply to marketing-only pages                |
 | **Shared Application**           | Governed application built on the Core but not a standalone product family       | Office AI Assistant                     | Use for real shared work-assistant style applications   | Do not reframe as product without explicit decision |
 | **Custom Workspace**             | Real governed workspace tailored to a client-specific or custom workflow         | WorkflowOS                              | Use for the canonical governed workflow workspace       | Do not hide if it exists                            |
 | **Legacy Redirect Alias**        | Permanent redirect route family to a canonical workspace                         | Sunbul                                  | Use only for legacy `/sunbul/*` redirect compatibility  | Do not describe as separate product or workspace     |
 | **Demo**                         | Guided, read-only, mock-backed walkthrough                                       | `/auditos`                              | Use only for explicit demo surfaces                     | Do not present as live workspace                    |
 | **Prototype / Internal Preview** | Incomplete or local-state-only workspace-like surface                            | `/sales`, `/organizations`, `/settings` | Use to label real but incomplete surfaces               | Do not present as v0.1-complete product             |
 | **Marketing-only Product Page**  | Product description with no operational implementation                           | SimulationOS, SalesOS marketing page    | Use on `/products/*`                                    | Do not claim as working product                     |
-| **Strategic / Future**           | Planned direction without implemented route/workflow/data proof                  | On-Prem, Air-Gapped, Studio, RiskOS     | Use for roadmap truthfulness                            | Do not present as available                         |
+| **Strategic / Future**           | Planned direction without implemented route/workflow/data proof                  | On-Prem, Air-Gapped, Studio             | Use for roadmap truthfulness                            | Do not present as available                         |
 
 ## Key Distinctions
 
@@ -30,6 +30,14 @@
 - Real product/system
 - Real workspace under `/decisions`
 - Included in v0.1 as active adjacent system
+
+### RiskOS
+
+- Real AuditOS-adjacent risk workspace at `/risk/*`
+- Dashboard with KPI cards, risk distribution, assessments table, model list
+- Assessment detail: score bars, procedure steps, audit trail, JSON export
+- L5 Pilot-ready — not marketed as standalone product
+- Uses `AuditRiskModel`/`AuditRiskAssessment` Prisma models (AuditOS schema)
 
 ### Office AI Assistant
 
@@ -50,6 +58,35 @@
 - `/organizations/*` and `/settings` generic surfaces are internal preview/prototype only
 - These must not be shown as implemented v0.1 operational modules
 
+### ContentStudio
+
+- Real content workspace prototype at `/content-studio/*`
+- Prisma models: ContentWorkspace, ContentItem, ContentVersion, ContentTemplate
+- Content lifecycle: DRAFT → IN_REVIEW → APPROVED → PUBLISHED → ARCHIVED
+- L3 Prototype / internal preview — undocumented in official taxonomy
+- ContentStudio is a front-end content platform, not a governed product
+
+### Institutional Memory
+
+- Real governed workspace at `/institutional-memory/*`
+- Prisma models: InstitutionalMemoryEvent, InstitutionalMemoryCollection
+- Used for collections, events, and graph views of institutional knowledge
+- Currently undocumented — classified as internal capability
+
+### Sampling
+
+- Real workspace at `/sampling/*`
+- Prisma models: SamplingPlan, SamplingResult, SamplingReview, SamplingEvidence
+- Used by AuditOS for engagement sampling workflows
+- Middleware-protected route
+
+### Knowledge Foundation
+
+- Real governance capability at `/knowledge-foundation/*` (inside dashboard)
+- Full governed promotion pipeline for institutional knowledge
+- Version lifecycle: DRAFT→APPROVED→RELEASED→ACTIVE→DEPRECATED
+- Documented in PRODUCT_STATUS_MATRIX.md as L4 usable
+
 ### LocalContentOS and SimulationOS
 
 - `LocalContentOS` = strategic second product with real workspace at `/local-content/*` (L5 pilot-ready with conditions / usable v0.1). Marketing page at `/products/local-content` is not the workspace.
@@ -62,9 +99,14 @@
 | AQLIYA Platform     | Included in v0.1                        | L4 Usable v0.1 | Safe to show with explanation |
 | AuditOS             | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
 | DecisionOS          | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
+| RiskOS              | AuditOS-adjacent risk workspace         | L5 Pilot-ready | Safe to show with explanation |
 | Office AI Assistant | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
 | WorkflowOS          | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
 | Sunbul              | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 |
 | auditos             | Included as demo only                   | L1 Marketing   | Demo only                     |
+| ContentStudio       | Prototype / internal preview            | L3 Prototype   | Internal only                 |
+| Institutional Memory| Internal capability                     | L3 Prototype   | Internal only                 |
+| Sampling            | Internal workspace                      | L3 Prototype   | Internal only                 |
+| Knowledge Foundation| Governance capability                   | L4 Usable v0.1 | Safe to show with explanation |
 | SalesOS             | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
 | LocalContentOS      | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |

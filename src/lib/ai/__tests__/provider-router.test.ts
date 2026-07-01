@@ -1,4 +1,4 @@
-import { selectOptimalProvider, invalidateHealthCache, getAllProviderHealth } from "../provider-router"
+import { selectOptimalProvider, invalidateHealthCache, getAllProviderHealth } from "@/lib/core/ai/provider-router"
 
 describe("ProviderRouter", () => {
   beforeEach(() => {

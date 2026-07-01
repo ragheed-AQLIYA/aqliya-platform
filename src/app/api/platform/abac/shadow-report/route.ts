@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireUserContext } from "@/lib/auth";
-import { getAbacShadowMismatchReport } from "@/core/access/abac-shadow-report";
+import { getAbacShadowMismatchReport } from "@/lib/core/policy/access/abac-shadow-report";
 
 export const dynamic = "force-dynamic";
 

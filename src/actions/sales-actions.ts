@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { isExpectedAccessDeniedError, requireUserContext } from "@/lib/auth";
@@ -39,7 +39,6 @@ import type {
 } from "@/lib/sales/validation";
 import {
   approveOpportunity,
-  createSalesAccount as createInMemoryAccount,
   linkOpportunityEvidence,
   submitOpportunityForReview,
 } from "@/lib/sales/service";
@@ -215,7 +214,7 @@ export async function getSalesAccountAction(accountId: string) {
 
 export async function createSalesAccountAction(formData: FormData) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const _user = await requireUserContext("OPERATOR");
     const ctx = await requireSalesPermission("salesos:create");
     const name = String(formData.get("name") ?? "").trim();
     const industry = String(formData.get("industry") ?? "").trim() || null;

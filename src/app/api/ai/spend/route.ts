@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getAISpendSummary } from "@/lib/ai/spend-tracker"
+import { getAISpendSummary } from "@/lib/core/ai/spend-tracker"
 import { requireUserContext } from "@/lib/auth"
 
 export const dynamic = "force-dynamic"

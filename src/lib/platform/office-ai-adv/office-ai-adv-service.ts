@@ -4,8 +4,6 @@ import { prisma } from '@/lib/prisma'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { ADV_STRINGS } from './adv-strings'
 
-const p = prisma as any
-
 // ─── Error ───
 
 export class OfficeAiAdvError extends Error {
@@ -215,12 +213,12 @@ export async function createWorkflowTemplate(
     if (!step.taskType) throw new OfficeAiAdvError(ADV_STRINGS.error.STEP_TASK_TYPE_REQUIRED)
   }
 
-  const record = await p.officeAiWorkflowTemplate.create({
+  const record = await prisma.officeAiWorkflowTemplate.create({
     data: {
       organizationId: orgId,
       name: data.name,
       description: data.description ?? null,
-      steps: data.steps,
+      steps: data.steps as any,
       isActive: data.isActive ?? true,
       createdById: userId,
     },
@@ -242,7 +240,7 @@ export async function getWorkflowTemplate(
   templateId: string,
 ): Promise<OfficeAiWorkflowTemplate | null> {
   if (!templateId) return null
-  const record = await p.officeAiWorkflowTemplate.findUnique({
+  const record = await prisma.officeAiWorkflowTemplate.findUnique({
     where: { id: templateId },
   }).catch(() => null)
   return record ? mapTemplate(record) : null
@@ -250,7 +248,7 @@ export async function getWorkflowTemplate(
 
 export async function listWorkflowTemplates(orgId: string): Promise<OfficeAiWorkflowTemplate[]> {
   validateOrgId(orgId)
-  const records = await p.officeAiWorkflowTemplate.findMany({
+  const records = await prisma.officeAiWorkflowTemplate.findMany({
     where: { organizationId: orgId },
     orderBy: { createdAt: 'desc' },
   }).catch(() => { throw new OfficeAiAdvError(ADV_STRINGS.error.FETCH_FAILED) })
@@ -322,12 +320,12 @@ export async function createSchedule(
     throw new OfficeAiAdvError('nextRunAt is required')
   }
 
-  const record = await p.officeAiSchedule.create({
+  const record = await prisma.officeAiSchedule.create({
     data: {
       organizationId: orgId,
       name: data.name,
       templateId: data.templateId ?? null,
-      taskConfig: data.taskConfig,
+      taskConfig: data.taskConfig as any,
       recurrence: data.recurrence,
       cronExpression: data.cronExpression ?? null,
       nextRunAt: new Date(data.nextRunAt),
@@ -350,7 +348,7 @@ export async function createSchedule(
 
 export async function getSchedule(scheduleId: string): Promise<OfficeAiSchedule | null> {
   if (!scheduleId) return null
-  const record = await p.officeAiSchedule.findUnique({
+  const record = await prisma.officeAiSchedule.findUnique({
     where: { id: scheduleId },
   }).catch(() => null)
   return record ? mapSchedule(record) : null
@@ -358,7 +356,7 @@ export async function getSchedule(scheduleId: string): Promise<OfficeAiSchedule 
 
 export async function listSchedules(orgId: string): Promise<OfficeAiSchedule[]> {
   validateOrgId(orgId)
-  const records = await p.officeAiSchedule.findMany({
+  const records = await prisma.officeAiSchedule.findMany({
     where: { organizationId: orgId },
     orderBy: { nextRunAt: 'asc' },
   }).catch(() => { throw new OfficeAiAdvError(ADV_STRINGS.error.FETCH_FAILED) })
@@ -367,7 +365,7 @@ export async function listSchedules(orgId: string): Promise<OfficeAiSchedule[]> 
 
 export async function processDueSchedules(): Promise<number> {
   const now = new Date()
-  const due = await p.officeAiSchedule.findMany({
+  const due = await prisma.officeAiSchedule.findMany({
     where: {
       isActive: true,
       nextRunAt: { lte: now },
@@ -397,11 +395,11 @@ export async function processDueSchedules(): Promise<number> {
       totalTasksCreated++
     }
 
-    await p.officeAiSchedule.update({
+    await prisma.officeAiSchedule.update({
       where: { id: schedule.id },
       data: {
         lastRunAt: now,
-        nextRunAt: computeNextRun(schedule.nextRunAt, schedule.recurrence),
+        nextRunAt: computeNextRun(schedule.nextRunAt ?? new Date(), schedule.recurrence ?? ""),
       },
     })
   }
@@ -444,7 +442,7 @@ export async function createRoleConfig(
     throw new OfficeAiAdvError('responseStyle must be CONCISE, DETAILED, or BALANCED')
   }
 
-  const record = await p.officeAiRoleConfig.create({
+  const record = await prisma.officeAiRoleConfig.create({
     data: {
       organizationId: orgId,
       roleSlug: data.roleSlug,
@@ -476,7 +474,7 @@ export async function getRoleConfig(
 ): Promise<OfficeAiRoleConfig | null> {
   validateOrgId(orgId)
   if (!roleSlug) throw new OfficeAiAdvError(ADV_STRINGS.error.ROLE_SLUG_REQUIRED)
-  const record = await p.officeAiRoleConfig.findFirst({
+  const record = await prisma.officeAiRoleConfig.findFirst({
     where: { organizationId: orgId, roleSlug },
   }).catch(() => null)
   return record ? mapRoleConfig(record) : null
@@ -486,7 +484,7 @@ export async function listRoleConfigs(
   orgId: string,
 ): Promise<OfficeAiRoleConfig[]> {
   validateOrgId(orgId)
-  const records = await p.officeAiRoleConfig.findMany({
+  const records = await prisma.officeAiRoleConfig.findMany({
     where: { organizationId: orgId },
     orderBy: { roleSlug: 'asc' },
   }).catch(() => [])

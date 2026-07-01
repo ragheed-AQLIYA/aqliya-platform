@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Download, CheckCircle, XCircle, AlertTriangle, Scale, Loader2 } from "lucide-react";
+import { Download, CheckCircle, XCircle, Scale, Loader2 } from "lucide-react";
 
 interface ExportRequest {
   id: string;
@@ -37,7 +36,7 @@ export function ExportApprovalDialog({
   contactId,
   exportStatus,
   sensitivityLevel,
-  canExport,
+  canExport: _canExport,
   hasPendingRequest,
   requiresExportApproval,
   requiresLegalReview,

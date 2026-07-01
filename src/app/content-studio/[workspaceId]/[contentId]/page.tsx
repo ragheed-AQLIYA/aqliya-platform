@@ -2,7 +2,6 @@ import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Clock, FileText } from "lucide-react";
-import { getCurrentUser } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getContentAction, getVersionHistoryAction } from "../../actions";

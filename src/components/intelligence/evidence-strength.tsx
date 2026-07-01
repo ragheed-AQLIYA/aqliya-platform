@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection -- union-typed keys, provably false positive */
 import { cn } from "@/lib/utils"
 import { FileText, FolderOpen, CheckCircle2, AlertCircle, Shield } from "lucide-react"
 

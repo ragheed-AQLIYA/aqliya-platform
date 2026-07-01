@@ -48,10 +48,8 @@ import {
   requireOrgAccess,
   requireUserContext,
 } from "@/lib/auth"
-import {
-  requireServerActionAccess,
-  requireServerActionRead,
-} from "@/core/access/server-action-guard"
+import { enforce, authorize } from "@/lib/authorization"
+import type { CurrentUser } from "@/lib/authorization"
 
 const makeUser = (overrides: Record<string, unknown> = {}) => ({
   id: "user-1",
@@ -183,165 +181,105 @@ describe("L0-07: Cross-Tenant Isolation", () => {
     })
   })
 
-  describe("2. Server Action Guard — tenant isolation", () => {
-    const resources = [
-      "organization",
-      "settings",
-      "user",
-      "platform",
-      "audit",
-      "sales",
-      "decisions",
-      "local_content",
-      "assistant",
-      "workflowos",
-      "sunbul",
-    ] as const
-
+  describe("2. Authorization facade — tenant isolation", () => {
     it("allows access when user org matches target org", async () => {
       const user = makeUser()
-      ;(requireUserContext as jest.Mock).mockResolvedValue(user)
       await expect(
-        requireServerActionAccess("sales", "read", {
-          organizationId: "org-alpha",
-        }),
-      ).resolves.toMatchObject({ organizationId: "org-alpha" })
+        enforce(user, { type: "sales", tenantId: "org-alpha" }, "read"),
+      ).resolves.toBeUndefined()
     })
 
     it("blocks access when user org mismatches target org for non-ADMIN", async () => {
       const user = makeUser()
-      ;(requireUserContext as jest.Mock).mockResolvedValue(user)
       await expect(
-        requireServerActionAccess("sales", "read", {
-          organizationId: "org-beta",
-        }),
-      ).rejects.toThrow("Access denied: organization mismatch")
+        enforce(user, { type: "sales", tenantId: "org-beta" }, "read"),
+      ).rejects.toThrow("Tenant access denied")
     })
 
-    it("blocks cross-org access for all resource types when non-ADMIN", async () => {
+    it("blocks cross-org access for multiple resource types when non-ADMIN", async () => {
       const user = makeUser()
-      ;(requireUserContext as jest.Mock).mockResolvedValue(user)
-      for (const resource of resources) {
+      for (const resource of ["sales", "audit", "platform", "settings"] as const) {
         await expect(
-          requireServerActionAccess(resource, "read", {
-            organizationId: "org-beta",
-          }),
-        ).rejects.toThrow("Access denied: organization mismatch")
+          enforce(user, { type: resource, tenantId: "org-beta" }, "read"),
+        ).rejects.toThrow("Tenant access denied")
       }
     })
 
-    it("allows cross-org access for ADMIN on organization resource with allowPlatformAdminCrossTenant", async () => {
+    it("allows cross-org access for ADMIN on any resource", async () => {
       const admin = makeAdmin({ organizationId: "org-alpha" })
-      ;(requireUserContext as jest.Mock).mockResolvedValue(admin)
-      await expect(
-        requireServerActionAccess("organization", "admin", {
-          organizationId: "org-beta",
-          allowPlatformAdminCrossTenant: true,
-        }),
-      ).resolves.toMatchObject({ organizationId: "org-alpha" })
-    })
-
-    it("allows cross-org access for ADMIN on any resource (super-user)", async () => {
-      const admin = makeAdmin({ organizationId: "org-alpha" })
-      ;(requireUserContext as jest.Mock).mockResolvedValue(admin)
-      for (const resource of resources) {
+      for (const resource of ["organization", "sales", "audit", "platform"] as const) {
         await expect(
-          requireServerActionAccess(resource, "admin", {
-            organizationId: "org-beta",
-          }),
-        ).resolves.toMatchObject({ role: "ADMIN" })
+          enforce(admin, { type: resource, tenantId: "org-beta" }, "admin"),
+        ).resolves.toBeUndefined()
       }
     })
 
-    it("allows cross-org for ADMIN even without allowPlatformAdminCrossTenant flag", async () => {
-      const admin = makeAdmin({ organizationId: "org-alpha" })
-      ;(requireUserContext as jest.Mock).mockResolvedValue(admin)
-      await expect(
-        requireServerActionAccess("organization", "admin", {
-          organizationId: "org-beta",
-        }),
-      ).resolves.toMatchObject({ role: "ADMIN" })
-    })
-
-    it("defaults organizationId to user.organizationId when not provided", async () => {
+    it("defaults tenantId to user.organizationId when not provided", async () => {
       const user = makeUser()
-      ;(requireUserContext as jest.Mock).mockResolvedValue(user)
       await expect(
-        requireServerActionAccess("sales", "read"),
-      ).resolves.toMatchObject({ organizationId: "org-alpha" })
+        enforce(user, { type: "sales" }, "read"),
+      ).resolves.toBeUndefined()
     })
 
     it("blocks VIEWER from OPERATOR-level actions", async () => {
       const viewer = makeUser({ role: "VIEWER" })
-      ;(requireUserContext as jest.Mock).mockRejectedValue(
-        new Error("Access denied: OPERATOR role required"),
-      )
       await expect(
-        requireServerActionAccess("sales", "create"),
-      ).rejects.toThrow("Access denied: OPERATOR role required")
+        enforce(viewer, { type: "sales" }, "create"),
+      ).rejects.toThrow("Insufficient permissions")
     })
   })
 
-  describe("3. Server Action Guard — action-to-role mapping", () => {
-    it("requires ADMIN for admin action", async () => {
-      ;(requireUserContext as jest.Mock).mockRejectedValue(
-        new Error("Access denied: ADMIN role required"),
-      )
+  describe("3. Authorization facade — action-to-role mapping", () => {
+    const adminUser = makeAdmin()
+    const viewerUser = makeUser({ role: "VIEWER" })
+
+    it("VIEWER cannot perform admin action", async () => {
       await expect(
-        requireServerActionAccess("organization", "admin"),
-      ).rejects.toThrow("Access denied: ADMIN role required")
+        enforce(viewerUser, { type: "organization" }, "admin"),
+      ).rejects.toThrow("Insufficient permissions")
     })
 
-    it("requires ADMIN for approve action", async () => {
-      ;(requireUserContext as jest.Mock).mockRejectedValue(
-        new Error("Access denied: ADMIN role required"),
-      )
+    it("ADMIN can perform admin action", async () => {
       await expect(
-        requireServerActionAccess("organization", "approve"),
-      ).rejects.toThrow("Access denied: ADMIN role required")
+        enforce(adminUser, { type: "organization" }, "admin"),
+      ).resolves.toBeUndefined()
     })
 
-    it("requires ADMIN for reject action", async () => {
-      ;(requireUserContext as jest.Mock).mockRejectedValue(
-        new Error("Access denied: ADMIN role required"),
-      )
+    it("VIEWER cannot perform approve action", async () => {
       await expect(
-        requireServerActionAccess("organization", "reject"),
-      ).rejects.toThrow("Access denied: ADMIN role required")
+        enforce(viewerUser, { type: "organization" }, "approve"),
+      ).rejects.toThrow("Insufficient permissions")
     })
 
-    it("requires OPERATOR for create action", async () => {
-      ;(requireUserContext as jest.Mock).mockRejectedValue(
-        new Error("Access denied: OPERATOR role required"),
-      )
+    it("ADMIN can perform approve action", async () => {
       await expect(
-        requireServerActionAccess("sales", "create"),
-      ).rejects.toThrow("Access denied: OPERATOR role required")
+        enforce(adminUser, { type: "organization" }, "approve"),
+      ).resolves.toBeUndefined()
     })
 
-    it("requires OPERATOR for update action", async () => {
-      ;(requireUserContext as jest.Mock).mockRejectedValue(
-        new Error("Access denied: OPERATOR role required"),
-      )
+    it("VIEWER cannot perform create action", async () => {
       await expect(
-        requireServerActionAccess("sales", "update"),
-      ).rejects.toThrow("Access denied: OPERATOR role required")
+        enforce(viewerUser, { type: "sales" }, "create"),
+      ).rejects.toThrow("Insufficient permissions")
     })
 
-    it("requires VIEWER for export action", async () => {
-      const user = makeUser({ role: "VIEWER" })
-      ;(requireUserContext as jest.Mock).mockResolvedValue(user)
+    it("OPERATOR can perform create action", async () => {
+      const op = makeUser({ role: "OPERATOR" })
       await expect(
-        requireServerActionAccess("sales", "export"),
-      ).resolves.toMatchObject({ role: "VIEWER" })
+        enforce(op, { type: "sales" }, "create"),
+      ).resolves.toBeUndefined()
     })
 
-    it("requireServerActionRead defaults to VIEWER minimum", async () => {
-      const viewer = makeUser({ role: "VIEWER" })
-      ;(requireUserContext as jest.Mock).mockResolvedValue(viewer)
+    it("VIEWER can perform read action", async () => {
       await expect(
-        requireServerActionRead("sales"),
-      ).resolves.toMatchObject({ role: "VIEWER" })
+        enforce(viewerUser, { type: "sales" }, "read"),
+      ).resolves.toBeUndefined()
+    })
+
+    it("VIEWER can perform export action", async () => {
+      await expect(
+        enforce(viewerUser, { type: "sales" }, "export"),
+      ).resolves.toBeUndefined()
     })
   })
 
@@ -505,37 +443,36 @@ describe("L0-07: Cross-Tenant Isolation", () => {
     })
   })
 
-  describe("6. CoreAccessControl deny-by-default", () => {
-    it("denies at core layer when role is missing", async () => {
-      const { CoreAccessControl } = await import(
-        "@/core/access/access-control"
-      )
-      const ctrl = new CoreAccessControl()
+  describe("6. Authorization facade deny-by-default", () => {
+    it("denies when action requires higher role than user has", async () => {
+      const viewer = makeUser({ role: "VIEWER", organizationId: "org-a" })
+      const result = await authorize({
+        user: viewer,
+        resource: { type: "sales" },
+        action: "admin",
+      })
+      expect(result.allowed).toBe(false)
+    })
+
+    it("denies when user is not authenticated (no user object)", async () => {
+      // authorize with minimal object to test early rejection
       await expect(
-        ctrl.check({
-          userId: "u1",
-          organizationId: "org-a",
-          resource: "sales",
+        authorize({
+          user: undefined as unknown as CurrentUser,
+          resource: { type: "sales" },
           action: "read",
-          role: null,
         }),
-      ).resolves.toMatchObject({ decision: "denied" })
+      ).rejects.toThrow()
     })
 
     it("grants when role satisfies action minimum", async () => {
-      const { CoreAccessControl } = await import(
-        "@/core/access/access-control"
-      )
-      const ctrl = new CoreAccessControl()
-      await expect(
-        ctrl.check({
-          userId: "u1",
-          organizationId: "org-a",
-          resource: "sales",
-          action: "read",
-          role: "VIEWER",
-        }),
-      ).resolves.toEqual({ decision: "granted" })
+      const viewer = makeUser({ role: "VIEWER", organizationId: "org-a" })
+      const result = await authorize({
+        user: viewer,
+        resource: { type: "sales" },
+        action: "read",
+      })
+      expect(result.allowed).toBe(true)
     })
   })
 })

@@ -35,7 +35,7 @@ export function SectionHeader({
         {eyebrow && (
           <div className="flex items-center gap-2">
             <div
-              className={cn("h-1.5 w-1.5 rounded-full", moduleAccents[module])}
+              className={cn("h-1.5 w-1.5 rounded-full", moduleAccents[module]) /* eslint-disable-line security/detect-object-injection -- union-typed key, false positive */}
             />
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               {eyebrow}

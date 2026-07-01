@@ -36,11 +36,15 @@ function AiBadge({
       <span
         className={cn(
           "inline-flex items-center rounded-full border border-purple-200 bg-purple-50 font-medium text-purple-700 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300",
+          // eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive
           sizeClasses[size]
         )}
       >
         <Bot className="shrink-0" />
-        <span>{labels[type]}</span>
+        <span>
+          {/* eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive */}
+          {labels[type]}
+        </span>
       </span>
       {showDetails && (modelVersion || confidence !== undefined) && (
         <span

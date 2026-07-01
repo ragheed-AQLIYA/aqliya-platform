@@ -1,4 +1,4 @@
-﻿// ─── SCIM /Users Endpoint ───
+// ─── SCIM /Users Endpoint ───
 // GET  /api/scim/v2/Users      — list users (paginated, filterable)
 // POST /api/scim/v2/Users      — create user
 
@@ -7,7 +7,6 @@ import {
   buildScimListResponse,
   buildScimError,
   validateScimUserPayload,
-  SCIM_CONTENT_TYPE,
   type ScimUser,
 } from "@/lib/auth/scim-types";
 import { listUsers, createUser } from "@/lib/auth/scim-service";

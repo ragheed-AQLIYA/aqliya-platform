@@ -1,4 +1,4 @@
-// ─── AuditOS MVP Mock Data ───
+﻿// ─── AuditOS MVP Mock Data ───
 // Provides fully seeded demo data for the Gulf Trading Co. engagement.
 
 import type {
@@ -1728,7 +1728,7 @@ export const mockEvidence: EvidenceObject[] = [
     fileType: "xlsx",
     fileSize: 245000,
     fileHash: "hash-001",
-    uploadedBy: "Ahmed Al Ghamdi",
+    uploadedById: "Ahmed Al Ghamdi",
     uploadedAt: "2025-04-15T10:30:00Z",
     state: "accepted",
     linkedEntities: [
@@ -1752,7 +1752,7 @@ export const mockEvidence: EvidenceObject[] = [
     fileType: "pdf",
     fileSize: 180000,
     fileHash: "hash-002",
-    uploadedBy: "Ahmed Al Ghamdi",
+    uploadedById: "Ahmed Al Ghamdi",
     uploadedAt: "2025-04-20T09:00:00Z",
     state: "accepted",
     linkedEntities: [
@@ -1776,7 +1776,7 @@ export const mockEvidence: EvidenceObject[] = [
     fileType: "pdf",
     fileSize: 320000,
     fileHash: "hash-003",
-    uploadedBy: "Sarah Al Otaibi",
+    uploadedById: "Sarah Al Otaibi",
     uploadedAt: "2025-04-22T14:00:00Z",
     state: "accepted",
     linkedEntities: [
@@ -1800,7 +1800,7 @@ export const mockEvidence: EvidenceObject[] = [
     fileType: "xlsx",
     fileSize: 95000,
     fileHash: "hash-004",
-    uploadedBy: "Ahmed Al Ghamdi",
+    uploadedById: "Ahmed Al Ghamdi",
     uploadedAt: "2025-04-25T11:00:00Z",
     state: "accepted",
     linkedEntities: [
@@ -1824,7 +1824,7 @@ export const mockEvidence: EvidenceObject[] = [
     fileType: "pdf",
     fileSize: 450000,
     fileHash: "hash-005",
-    uploadedBy: "Sarah Al Otaibi",
+    uploadedById: "Sarah Al Otaibi",
     uploadedAt: "2025-04-28T10:00:00Z",
     state: "reviewed",
     linkedEntities: [
@@ -1849,7 +1849,7 @@ export const mockEvidence: EvidenceObject[] = [
     fileType: "pdf",
     fileSize: 0,
     fileHash: "",
-    uploadedBy: "",
+    uploadedById: "",
     uploadedAt: "",
     state: "missing",
     linkedEntities: [

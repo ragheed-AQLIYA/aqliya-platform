@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { requireUserContext } from "@/lib/auth";
 
 export type GovernanceItem = {
   id: string;
@@ -39,6 +40,7 @@ function isOverdue(item: { deadline: Date | null; priority: string }): boolean {
 }
 
 export async function getGovernanceDashboardAction(): Promise<GovernanceDashboard> {
+  await requireUserContext("VIEWER");
   const now = new Date();
 
   const [decisions, workflowRecords, localContentReviews, salesReviews, riskAssessments, auditFindings] =

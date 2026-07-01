@@ -23,16 +23,9 @@ import {
   MessageSquare,
   Calendar,
   Upload,
-  CheckCircle,
-  XCircle,
-  Shield,
-  Download,
-  Eye,
-  AlertTriangle,
-  Scale,
+
 } from "lucide-react";
 import { CompliancePanel } from "@/components/contacts/compliance-panel";
-import { ExportApprovalBadge } from "@/components/contacts/export-approval-badge";
 import { ExportApprovalDialog } from "@/components/contacts/export-approval-dialog";
 import { ContactExportButton } from "@/components/contacts/contact-export-button";
 import { ReviewAssignmentPanel } from "@/components/contacts/review-assignment-panel";
@@ -391,7 +384,7 @@ async function EvidenceSection({
 async function ReviewsSection({
   contactId,
   orgId,
-  userId,
+  userId: _userId,
   userRole,
 }: {
   contactId: string;
@@ -460,8 +453,8 @@ function extractRiskFlags(metadata: unknown): import("@/actions/contact-actions"
 
 async function ComplianceSidebarSection({
   contactId,
-  orgId,
-  userId,
+  orgId: _orgId,
+  userId: _userId,
 }: {
   contactId: string;
   orgId: string;
@@ -479,8 +472,8 @@ async function ComplianceSidebarSection({
 async function ExportApprovalSidebarSection({
   contactId,
   orgId,
-  userId,
-  userRole,
+  userId: _userId,
+  userRole: _userRole,
 }: {
   contactId: string;
   orgId: string;
@@ -553,40 +546,4 @@ async function uploadEvidenceAction(formData: FormData) {
   });
 }
 
-async function createReviewAction(formData: FormData) {
-  "use server";
-  const { createContactReview } = await import("@/actions/contact-actions");
-  const { getCurrentUser } = await import("@/lib/auth");
-  const user = await getCurrentUser();
-  if (!user) throw new Error("Not authenticated");
 
-  const contactId = formData.get("contactId") as string;
-  const reviewType = formData.get("reviewType") as string;
-
-  await createContactReview({
-    contactId,
-    reviewType: reviewType || "sensitivity",
-    reviewerId: formData.get("reviewerId") as string || user.id,
-    reviewerName: user.name,
-    reason: (formData.get("reason") as string) || undefined,
-  });
-  redirect(`/contacts/${contactId}`);
-}
-
-async function approveReviewAction(formData: FormData) {
-  "use server";
-  const { approveContactReview } = await import("@/actions/contact-actions");
-  const reviewId = formData.get("reviewId") as string;
-  const note = formData.get("note") as string;
-  await approveContactReview(reviewId, note || undefined);
-  redirect(`/contacts/${formData.get("contactId") as string}`);
-}
-
-async function rejectReviewAction(formData: FormData) {
-  "use server";
-  const { rejectContactReview } = await import("@/actions/contact-actions");
-  const reviewId = formData.get("reviewId") as string;
-  const note = formData.get("note") as string;
-  await rejectContactReview(reviewId, note || undefined);
-  redirect(`/contacts/${formData.get("contactId") as string}`);
-}

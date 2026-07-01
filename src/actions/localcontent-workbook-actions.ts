@@ -22,7 +22,7 @@ import {
   listOrganizationWorkbooks,
   deleteWorkbook,
 } from "@/lib/local-content/workbook/population";
-import type { TbLine, WorkbookPopulationResult } from "@/lib/local-content/workbook/types";
+import type { TbLine } from "@/lib/local-content/workbook/types";
 import {
   detectMissingData,
   generateDataRequest,

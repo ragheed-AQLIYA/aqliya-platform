@@ -5,11 +5,11 @@
 // ============================================================
 
 import { readFileSync, existsSync } from "fs"
-import { join } from "path"
+import { join, resolve } from "path"
 import * as yaml from "js-yaml"
 
-import { aiOrchestrator } from "@/lib/ai/orchestrator"
-import type { AIProviderId } from "@/lib/ai/types"
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator"
+import type { AIProviderId } from "@/lib/core/ai/types"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 
 import type {
@@ -21,7 +21,7 @@ import type {
   SkillRuntimeConfig,
   InputDef,
 } from "./types"
-import { SkillManifestError, SkillExecutionError } from "./types"
+import { SkillManifestError } from "./types"
 
 // ─── Default Config ───
 
@@ -278,7 +278,6 @@ async function executePromptStep(
   const resolvedPrompt = resolveTemplate(promptTemplate, context, stepResults)
 
   // Determine model preference from step config
-  const modelConfig = config.model as string | undefined
   const temperature = config.temperature as number | undefined
   const maxTokens = config.maxTokens as number | undefined
 
@@ -381,6 +380,11 @@ async function executeToolStep(
         if (!existsSync(fullPath)) {
           return { status: "failed", output: null, error: `File not found: ${fullPath}`, durationMs: Date.now() - startMs }
         }
+        // Guard: ensure the resolved path stays within the project root
+        const resolvedPath = resolve(fullPath)
+        if (!resolvedPath.startsWith(resolve(process.cwd()))) {
+          return { status: "failed", output: null, error: "Access denied: path escapes project root", durationMs: Date.now() - startMs }
+        }
         const content = readFileSync(fullPath, "utf-8")
         return {
           status: "completed",
@@ -413,7 +417,7 @@ async function executeToolStep(
 async function executeSkillStep(
   step: WorkflowStepDef,
   context: SkillContext,
-  stepResults: Record<string, StepResult>,
+  _stepResults: Record<string, StepResult>,
 ): Promise<StepResult> {
   const startMs = Date.now()
   const skillId = step.skill ?? (step.config?.skill as string) ?? (step.config?.skillId as string) ?? ""
@@ -531,9 +535,9 @@ async function executeTransformStep(
 // ─── Decision Step ───
 
 async function executeDecisionStep(
-  step: WorkflowStepDef,
-  context: SkillContext,
-  stepResults: Record<string, StepResult>,
+  _step: WorkflowStepDef,
+  _context: SkillContext,
+  _stepResults: Record<string, StepResult>,
 ): Promise<StepResult> {
   // Decision steps evaluate a condition and branch — for now, pass through
   return {

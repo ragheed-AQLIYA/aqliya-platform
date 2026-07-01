@@ -14,7 +14,6 @@ import {
   KanbanSquare,
   Building2,
   ChevronDown,
-  ChevronLeft,
   ChevronRight,
   ScrollText,
   Bot,

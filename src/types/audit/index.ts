@@ -1,4 +1,4 @@
-// ─── AuditOS MVP Type Definitions ───
+﻿// ─── AuditOS MVP Type Definitions ───
 
 // ─── Enums / Literal Unions ───
 
@@ -261,7 +261,7 @@ export interface EvidenceObject {
   fileType: string
   fileSize: number
   fileHash: string
-  uploadedBy: string
+  uploadedById: string
   uploadedAt: string
   state: EvidenceState
   linkedEntities: EvidenceLink[]

@@ -19,7 +19,6 @@ import {
   formatEvaluationReport,
   formatBatchEvaluationReport,
 } from "@/lib/skill-runtime/evaluator"
-import type { SkillManifest } from "@/lib/skill-runtime/types"
 import type {
   EvaluationResult,
   BatchEvaluationResult,

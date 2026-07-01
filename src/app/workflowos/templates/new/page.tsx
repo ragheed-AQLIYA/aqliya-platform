@@ -230,7 +230,7 @@ export default function NewWorkflowTemplatePage() {
         name,
         description,
         category,
-        steps: steps.map(({ id, ...step }) => ({
+        steps: steps.map(({ id: _id, ...step }) => ({
           ...step,
           slaConfig: step.slaMinutes
             ? { timeLimitMinutes: step.slaMinutes, warnAtPercent: 80 }

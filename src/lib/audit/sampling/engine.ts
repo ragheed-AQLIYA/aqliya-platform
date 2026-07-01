@@ -94,7 +94,7 @@ function calculateRecommendedSampleSize(
   populationSize: number,
   confidenceLevel: number,
   marginOfError: number,
-  estimatedStdDev?: number,
+  _estimatedStdDev?: number,
 ): number {
   const z = zScore(confidenceLevel);
   const p = 0.5;

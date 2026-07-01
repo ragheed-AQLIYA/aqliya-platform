@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils"
 import { EntityIcon, type EntityIconType } from "./entity-icon"
 import { StatusBadge } from "@/components/enterprise/status-badge"
-import { AIIndicator } from "@/components/enterprise/ai-indicator"
 
 interface EntityHeaderProps {
   icon: EntityIconType
@@ -35,6 +34,7 @@ export function EntityHeader({
     <div
       className={cn(
         "rounded-lg border border-l-4 bg-card p-5",
+        // eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive
         moduleBorderClasses[module],
         className
       )}

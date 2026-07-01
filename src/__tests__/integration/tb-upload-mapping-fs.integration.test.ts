@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { classifyTrialBalanceRows } from "@/lib/tb-intelligence";
 import {
   recordFirmMemoryFeedback,
+  recordReviewMappingFeedback,
   getLatestClassificationSources,
 } from "@/lib/tb-intelligence/firm-memory";
 import { resolveFirmMemoryOrganizationIdFromEngagement } from "@/lib/tb-intelligence/org-resolver";
@@ -273,5 +274,130 @@ describe("TB upload → mapping → FS integration", () => {
 
     expect(classified[0]?.classification?.source).toBe("firm_memory");
     expect(classified[0]?.classification?.confidence).toBe(0.99);
+  });
+
+  it("learns from manual correction rejection and reuses firm memory", async () => {
+    const platformOrg = await prisma.platformOrganization.create({
+      data: {
+        slug: "tb-integ-plat-3",
+        name: "TB Integ Platform 3",
+        displayName: "TB Integ Platform 3",
+      },
+    });
+
+    const org = await prisma.organization.create({
+      data: {
+        name: "TB Integ Org 3",
+        platformOrganizationId: platformOrg.id,
+      },
+    });
+
+    const auditOrg = await prisma.auditOrganization.create({
+      data: {
+        name: "TB Integ Audit Firm 3",
+        slug: "tb-integ-audit-3",
+        jurisdiction: "Saudi Arabia",
+        regulatoryFramework: "IFRS for SMEs",
+        platformOrganizationId: platformOrg.id,
+      },
+    });
+
+    const client = await prisma.auditClient.create({
+      data: {
+        organizationId: auditOrg.id,
+        name: "Demo Client 3",
+        registrationNumber: "CR-TB-003",
+        industry: "Trade",
+        reportingFramework: "ifrs_for_smes",
+        fiscalPeriodEnd: "12-31",
+        currencyCode: "SAR",
+      },
+    });
+
+    const engagement = await prisma.auditEngagement.create({
+      data: {
+        organizationId: auditOrg.id,
+        clientId: client.id,
+        fiscalPeriod: "FY2025",
+        engagementType: "full_audit",
+        status: "in_progress",
+      },
+    });
+
+    await prisma.auditCanonicalAccount.create({
+      data: {
+        id: "ca-wrong-expense",
+        code: "CA-WRONG",
+        name: "Wrong Expense",
+        category: "expense",
+        statementType: "income_statement",
+        displayOrder: 1,
+        reportingFramework: "ifrs_for_smes",
+        version: "1",
+      },
+    });
+    await prisma.auditCanonicalAccount.create({
+      data: {
+        id: "ca-correct-asset",
+        code: "CA-CORRECT",
+        name: "Correct Asset",
+        category: "asset",
+        statementType: "balance_sheet",
+        displayOrder: 2,
+        reportingFramework: "ifrs_for_smes",
+        version: "1",
+      },
+    });
+
+    const { wasAccepted } = await recordReviewMappingFeedback({
+      organizationId: org.id,
+      engagementId: engagement.id,
+      clientAccountCode: "2201",
+      clientAccountName: "حساب مصحّح يدوياً",
+      suggestedCanonicalId: "ca-wrong-expense",
+      acceptedCanonicalId: "ca-correct-asset",
+      reviewerId: "reviewer-manual",
+    });
+
+    expect(wasAccepted).toBe(false);
+
+    const feedback = await prisma.tBMappingFeedback.findFirst({
+      where: {
+        organizationId: org.id,
+        clientAccountCode: "2201",
+      },
+    });
+    expect(feedback?.wasAccepted).toBe(false);
+    expect(feedback?.suggestedCanonicalId).toBe("ca-wrong-expense");
+    expect(feedback?.acceptedCanonicalId).toBe("ca-correct-asset");
+
+    const pattern = await prisma.tBMappingPattern.findUnique({
+      where: {
+        organizationId_clientAccountCode: {
+          organizationId: org.id,
+          clientAccountCode: "2201",
+        },
+      },
+    });
+    expect(pattern?.canonicalAccountId).toBe("ca-correct-asset");
+
+    const classified = await classifyTrialBalanceRows(
+      auditOrg.id,
+      engagement.id,
+      [
+        {
+          accountCode: "2201",
+          accountName: "حساب مصحّح يدوياً",
+          debitAmount: 10_000,
+          creditAmount: 0,
+        },
+      ],
+      { enableCloudAi: false },
+    );
+
+    expect(classified[0]?.classification?.source).toBe("firm_memory");
+    expect(classified[0]?.classification?.canonicalAccountId).toBe(
+      "ca-correct-asset",
+    );
   });
 });

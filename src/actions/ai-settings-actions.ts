@@ -3,7 +3,7 @@
 import { requireUserContext } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
-import { getAIObservability } from "@/lib/ai/observability";
+import { getAIObservability } from "@/lib/core/ai/observability";
 
 export type AiExecutionMode = "cloud" | "local" | "hybrid";
 

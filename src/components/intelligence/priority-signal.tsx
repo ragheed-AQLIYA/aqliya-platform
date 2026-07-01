@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection -- union-typed keys, provably false positive */
 import { cn } from "@/lib/utils"
 import { ArrowUp, ArrowRight, ArrowDown, AlertTriangle } from "lucide-react"
 

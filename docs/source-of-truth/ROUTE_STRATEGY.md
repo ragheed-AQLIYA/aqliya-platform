@@ -1,8 +1,13 @@
+# Route Model
+
 ﻿# AQLIYA Route Strategy
 
 > **Status:** Level 4 — Supporting reference  
+> **Version:** 1.0  
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
+> **Owner:** Platform Architect  
+> **Last Reviewed:** 2026-06-26  
 > **Last updated:** 2026-06-21 — ContentStudio PDF export + route resilience hardening
 
 ---
@@ -209,6 +214,16 @@ These pages serve as detail references for specialized operating systems. They a
 | `/intelligence/sectors`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector intelligence |
 | `/intelligence/sectors/[id]` | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector detail       |
 
+### Knowledge Foundation Versioning (Phase 27)
+
+| Route                                   | Product/System | Route Type         | Public/Protected | Implementation Status | Notes               |
+| --------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------- |
+| `/knowledge-foundation`                 | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Version promotion pipeline, promotion analytics dashboard |
+| `/knowledge-foundation/[id]`           | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Version detail, governance lifecycle, rollback UI |
+| `/knowledge-foundation/new`            | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Create new version form |
+| `/knowledge-foundation/diff`           | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Compare two versions with visual diff |
+| `/knowledge-foundation/history`         | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Audit event log table |
+
 ### Platform Operator APIs (Intelligence Core / Tier 3)
 
 | Route | Product/System | Route Type | Public/Protected | Implementation Status | Notes |
@@ -390,6 +405,7 @@ Current code reality uses `src/middleware.ts` for route protection. It uses `get
 - /content-studio
 - `/sales`
 - `/published/recommendation`
+- `/knowledge-foundation`
 
 Protected route behavior:
 
@@ -421,7 +437,7 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). L5 Pilot-ready — template workflows, SLA monitoring, gated export, 31 action tests, seed data.
 6. `/sunbul/*` = redirect alias family over WorkflowOS implementation. Every route is a `permanentRedirect(302)` wrapper.
 7. `/organizations/*` and `/settings` must be labeled prototype/internal preview until they have real persistence and workflow backing. SalesOS is now L5 Pilot-ready — 30 routes with real Prisma models, server actions, RBAC, audit trail, evidence links, seed data, and sidebar navigation. In-memory dashboard remains as fallback.
-8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/download`) must remain permissioned.
+8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`) must remain permissioned.
 9. Do not create `/simulation` top-level routes until that system has a real workspace implementation.
 10. Product marketing pages belong under `/products/*`.
 11. Company and marketing pages must not imply future products are already implemented.
@@ -432,6 +448,12 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 15. `/risk/*` = RiskOS governed workspace (L5 Pilot-ready). Authenticated, dashboard with 4 KPI cards + risk distribution, seed data with 1 model / 1 assessment / 2 procedures. Assessment detail page with DRAFT→REVIEWED→APPROVED workflow, procedure step tracking with interactive checkboxes, audit trail panel, JSON export. Uses AuditOS risk models (AuditRiskModel) — no separate RiskOS product model. Do not market as standalone product.
 
 16. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`.
+17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.
+
+18. `/content-studio/*` = ContentStudio prototype content workspace (L3). Authenticated, Prisma-backed (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), Arabic-first RTL UI, content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning, template variable interpolation, audit trail. Missing: seed data, sidebar entry, PDF/export, test coverage. Not classified in official taxonomy — listed here for transparency. Not L4 usable v0.1 — prototype maturity only.
+
+19. `/knowledge-foundation/*` = governed Knowledge Foundation Versioning workspace (L4 usable v0.1). Authenticated, DB-backed, promotion pipeline for institutional knowledge: version lifecycle (DRAFT→APPROVED→RELEASED→ACTIVE→DEPRECATED), immutable release packages with SHA-256, structured diff engine, ADMIN-only rollback with reason, 7 audit event types to PlatformAuditLog. Clears the approval → promotion loop for AI-generated institutional knowledge. Sidebar link "أساس المعرفة" with Brain icon.
+
 17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.
 
 18. `/content-studio/*` = ContentStudio prototype content workspace (L3). Authenticated, Prisma-backed (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), Arabic-first RTL UI, content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning, template variable interpolation, audit trail. Missing: seed data, sidebar entry, PDF/export, test coverage. Not classified in official taxonomy — listed here for transparency. Not L4 usable v0.1 — prototype maturity only.

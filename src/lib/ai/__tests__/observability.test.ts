@@ -1,4 +1,4 @@
-// ─── AI Observability — Unit Tests ───
+﻿// ─── AI Observability — Unit Tests ───
 
 jest.mock("@/lib/prisma", () => ({
   prisma: {
@@ -8,11 +8,11 @@ jest.mock("@/lib/prisma", () => ({
   },
 }));
 
-jest.mock("@/lib/ai/providers/provider-circuit-breaker", () => ({
+jest.mock("@/lib/core/ai/providers/provider-circuit-breaker", () => ({
   getCircuitBreakerSnapshot: jest.fn(),
 }));
 
-jest.mock("@/lib/ai/orchestrator", () => ({
+jest.mock("@/lib/core/ai/orchestrator", () => ({
   aiOrchestrator: {
     getAllStatus: jest.fn(),
     getDefaultProviderId: jest.fn(),
@@ -24,8 +24,8 @@ jest.mock("@/lib/integration/metrics", () => ({
 }));
 
 import { prisma } from "@/lib/prisma";
-import { getCircuitBreakerSnapshot } from "@/lib/ai/providers/provider-circuit-breaker";
-import { aiOrchestrator } from "@/lib/ai/orchestrator";
+import { getCircuitBreakerSnapshot } from "@/lib/core/ai/providers/provider-circuit-breaker";
+import { aiOrchestrator } from "@/lib/core/ai/orchestrator";
 import { getAllCounters } from "@/lib/integration/metrics";
 
 const mockFindMany = prisma.platformAuditLog.findMany as jest.Mock;
@@ -68,7 +68,7 @@ describe("AIRealtimeObservability", () => {
     ]);
 
     // Dynamic import to get fresh module state
-    const { getAIRealtimeObservability } = await import("../observability");
+    const { getAIRealtimeObservability } = await import("@/lib/core/ai/observability");
     const result = getAIRealtimeObservability();
 
     expect(result.circuitBreakers).toHaveLength(4);
@@ -96,7 +96,7 @@ describe("AIRealtimeObservability", () => {
     mockGetDefault.mockReturnValue("deterministic");
     mockGetAllCounters.mockReturnValue([]);
 
-    const { getAIRealtimeObservability } = await import("../observability");
+    const { getAIRealtimeObservability } = await import("@/lib/core/ai/observability");
     const result = getAIRealtimeObservability();
 
     expect(result.overallHealth).toEqual({

@@ -25,12 +25,6 @@ export interface LocalContentExportResult {
   content: string | Buffer;
 }
 
-const DISCLAIMER_LINES = [
-  "هذا التقرير مولّد بواسطة LocalContentOS تحت AQLIYA.",
-  "يمثل تقييم محتوى محلي محكوم تمت مراجعته واعتماده.",
-  "هذا ليس تقرير امتثال نظامي معتمد من جهة تنظيمية.",
-  "AI assists. Humans decide. Evidence governs.",
-];
 
 export async function buildAssessmentSummaryPDF(
   input: LocalContentExportInput,

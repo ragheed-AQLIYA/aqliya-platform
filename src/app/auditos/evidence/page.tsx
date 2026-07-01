@@ -1,4 +1,4 @@
-import {
+﻿import {
   getDemoEvidence,
   getDemoFindings,
   getDemoRecommendations,
@@ -108,8 +108,8 @@ export default function AuditosEvidence() {
                       ? "—"
                       : `${(ev.fileSize / 1000).toFixed(0)} KB`}
                     {" · "}
-                    {ev.uploadedBy
-                      ? getSafeDemoActorLabel(ev.uploadedBy)
+                    {ev.uploadedById
+                      ? getSafeDemoActorLabel(ev.uploadedById)
                       : "غير متاح"}
                   </p>
                   {ev.linkedEntities?.map((link, linkIndex) => (

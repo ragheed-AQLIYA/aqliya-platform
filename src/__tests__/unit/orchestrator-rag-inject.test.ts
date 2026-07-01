@@ -1,7 +1,7 @@
-import type { AIRequest } from "@/lib/ai/types"
-import { injectGovernedRagIntoRequest } from "@/lib/ai/orchestrator-rag-inject"
+import type { AIRequest } from "@/lib/core/ai/types"
+import { injectGovernedRagIntoRequest } from "@/lib/core/ai/orchestrator-rag-inject"
 
-jest.mock("@/lib/rag/intelligence-core-rag", () => ({
+jest.mock("@/lib/core/knowledge/rag/intelligence-core-rag", () => ({
   retrieveGovernedContext: jest.fn(async () => ({
     chunks: [
       {

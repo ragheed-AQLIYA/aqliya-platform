@@ -23,8 +23,10 @@ import { execSync } from "child_process";
 import { existsSync, readdirSync, statSync, writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { config } from "dotenv";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+config({ path: path.join(__dirname, "..", "..", ".env") });
 const BACKUP_DIR = path.join(__dirname, "..", "..", "backups");
 const REPORT_DIR = path.join(__dirname, "..", "..", "backups", "drill-reports");
 
@@ -42,6 +44,26 @@ function fail(msg) {
 function run(cmd, opts = {}) {
   log(`$ ${cmd}`);
   return execSync(cmd, { stdio: "pipe", timeout: 300_000, ...opts }).toString().trim();
+}
+
+function psqlAvailable() {
+  try {
+    execSync("psql --version", { stdio: "pipe" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function dockerDbContainer() {
+  return process.env.RESTORE_DRILL_DOCKER_CONTAINER ?? "aqliya-db-1";
+}
+
+/** Wrap psql/pg_restore for host or docker exec */
+function pgCmd(binary, args) {
+  if (psqlAvailable()) return `${binary} ${args}`;
+  const container = dockerDbContainer();
+  return `docker exec ${container} ${binary} ${args.replace(/-h \S+ -p \S+ -U \S+ /, "-U postgres ")}`;
 }
 
 // ─── Config ────────────────────────────────────────────────────────────────
@@ -84,9 +106,13 @@ log(`Drill database: ${drillDb}`);
 
 // ─── Create drill DB ────────────────────────────────────────────────────────
 
+const drillStartMs = Date.now();
+const backupMtimeMs = statSync(backupFile).mtimeMs;
+const rpoMs = drillStartMs - backupMtimeMs;
+
 try {
   run(
-    `psql -h ${host} -p ${port} -U ${user} -c "CREATE DATABASE \\"${drillDb}\\";"`,
+    pgCmd("psql", `-h ${host} -p ${port} -U ${user} -c "CREATE DATABASE \\"${drillDb}\\";"`),
     { env: pgEnv },
   );
 } catch (err) {
@@ -101,13 +127,24 @@ let rowCount = 0;
 try {
   const isCustomFormat = backupFile.endsWith(".dump");
   if (isCustomFormat) {
-    run(
-      `pg_restore -h ${host} -p ${port} -U ${user} -d "${drillDb}" --no-owner --no-acl "${backupFile}"`,
-      { env: pgEnv },
-    );
+    if (psqlAvailable()) {
+      run(
+        `pg_restore -h ${host} -p ${port} -U ${user} -d "${drillDb}" --no-owner --no-acl "${backupFile}"`,
+        { env: pgEnv },
+      );
+    } else {
+      const container = dockerDbContainer();
+      const containerPath = `/tmp/${path.basename(backupFile)}`;
+      run(`docker cp "${backupFile}" ${container}:${containerPath}`);
+      run(
+        `docker exec ${container} pg_restore -U ${user} -d "${drillDb}" --no-owner --no-acl ${containerPath}`,
+        { env: pgEnv },
+      );
+      run(`docker exec ${container} rm -f ${containerPath}`);
+    }
   } else {
     run(
-      `psql -h ${host} -p ${port} -U ${user} -d "${drillDb}" -f "${backupFile}"`,
+      pgCmd("psql", `-h ${host} -p ${port} -U ${user} -d "${drillDb}" -f "${backupFile}"`),
       { env: pgEnv },
     );
   }
@@ -124,7 +161,7 @@ try {
   for (const table of tables) {
     try {
       const result = run(
-        `psql -h ${host} -p ${port} -U ${user} -d "${drillDb}" -t -c "SELECT COUNT(*) FROM \\"${table}\\";"`,
+        pgCmd("psql", `-h ${host} -p ${port} -U ${user} -d "${drillDb}" -t -c "SELECT COUNT(*) FROM \\"${table}\\";"`),
         { env: pgEnv },
       );
       counts[table] = parseInt(result.trim(), 10);
@@ -148,7 +185,7 @@ try {
   // Cleanup before exit
   try {
     run(
-      `psql -h ${host} -p ${port} -U ${user} -c "DROP DATABASE IF EXISTS \\"${drillDb}\\";"`,
+      pgCmd("psql", `-h ${host} -p ${port} -U ${user} -c "DROP DATABASE IF EXISTS \\"${drillDb}\\";"`),
       { env: pgEnv },
     );
   } catch {
@@ -159,7 +196,7 @@ try {
   // ─── Drop drill DB ───────────────────────────────────────────────────────
   try {
     run(
-      `psql -h ${host} -p ${port} -U ${user} -c "DROP DATABASE IF EXISTS \\"${drillDb}\\";"`,
+      pgCmd("psql", `-h ${host} -p ${port} -U ${user} -c "DROP DATABASE IF EXISTS \\"${drillDb}\\";"`),
       { env: pgEnv },
     );
     log(`Drill database dropped: ${drillDb}`);
@@ -178,9 +215,14 @@ try {
   const report = {
     drillAt: new Date().toISOString(),
     backupFile,
+    backupAgeMs: rpoMs,
+    rpoMinutes: Math.round(rpoMs / 60_000),
     drillDatabase: drillDb,
     rowCountSpotCheck: rowCount,
     status: rowCount > 0 ? "PASS" : "WARN_EMPTY",
+    rtoMs: Date.now() - drillStartMs,
+    rtoMinutes: Math.round((Date.now() - drillStartMs) / 60_000),
+    note: "Local drill DB — RDS production drill requires AWS snapshot restore per runbook",
   };
   const reportPath = path.join(REPORT_DIR, `drill-${ts}.json`);
   writeFileSync(reportPath, JSON.stringify(report, null, 2));

@@ -165,7 +165,7 @@ export async function calculateClearlyTrivialThreshold(
 }
 
 export function getMaterialityBasis(
-  engagementId: string,
+  _engagementId: string,
 ): MaterialityBasis {
   return "revenue";
 }

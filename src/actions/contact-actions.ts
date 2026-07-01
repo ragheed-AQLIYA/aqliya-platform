@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser, requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
 import { enforce } from "@/lib/authorization";
 
 type ActionResult<T> =
@@ -653,7 +653,7 @@ export interface AuditTrailEntry {
 
 export async function getContactAuditTrail(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const _user = await requireUserContext("VIEWER");
 
     const entries = await prisma.platformAuditLog.findMany({
       where: {
@@ -677,7 +677,6 @@ export async function getContactAuditTrail(contactId: string) {
 
 // ─── Export ────────────────────────────────────────────
 
-import { format } from "date-fns";
 
 export async function exportContactProfile(contactId: string) {
   return safe(async () => {

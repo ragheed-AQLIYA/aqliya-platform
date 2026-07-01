@@ -16,8 +16,6 @@ import {
   ArrowLeft,
   History,
   User,
-  FileText,
-  AlertTriangle,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";

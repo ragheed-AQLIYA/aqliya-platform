@@ -1,6 +1,6 @@
 "use server"
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 import "server-only"
 import {
@@ -10,12 +10,14 @@ import {
 } from "@/lib/platform/audit/verification"
 import { verifyAuditRange, searchAuditLogs } from "@/lib/platform/audit/audit-store"
 import type { AuditLogQuery } from "@/lib/platform/audit/audit-store"
+import { requireUserContext } from "@/lib/auth"
 
 /**
  * Verify the integrity of ALL hash chain entries across the system.
  * يتحقق من سلامة جميع إدخالات سلسلة التجزئة في النظام
  */
 export async function verifyAllChainsAction() {
+  await requireUserContext("VIEWER");
   try {
     const result = await verifyAllChains()
     return { ok: true, data: result }
@@ -30,6 +32,7 @@ export async function verifyAllChainsAction() {
  * يحصل على حالة الصحة العامة لسلسلة التجزئة
  */
 export async function getChainHealthAction() {
+  await requireUserContext("VIEWER");
   try {
     const health = await getChainHealth()
     return { ok: true, data: health }
@@ -44,6 +47,7 @@ export async function getChainHealthAction() {
  * يُصدر إثباتًا تشفيريًا لسجل تدقيق معين
  */
 export async function exportChainProofAction(auditLogId: string) {
+  await requireUserContext("VIEWER");
   try {
     const proof = await exportChainProof(auditLogId)
     return { ok: true, data: proof }
@@ -61,6 +65,7 @@ export async function verifyAuditRangeAction(
   fromDate?: string,
   toDate?: string,
 ) {
+  await requireUserContext("VIEWER");
   try {
     const result = await verifyAuditRange(
       fromDate ? new Date(fromDate) : undefined,
@@ -78,6 +83,7 @@ export async function verifyAuditRangeAction(
  * بحث موحد عبر سجلات تدقيق المنصة
  */
 export async function searchAuditLogsAction(query: AuditLogQuery) {
+  await requireUserContext("ADMIN");
   try {
     const result = await searchAuditLogs(query)
     return { ok: true, data: result }

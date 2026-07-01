@@ -1,5 +1,5 @@
 import * as svc from "./services"
-import type { FinancialStatement, DisclosureNote, Finding, Recommendation, ReviewComment, ApprovalRecord, AuditEvent, EvidenceObject } from "@/types/audit"
+import type { DisclosureNote, Finding, Recommendation, ReviewComment, ApprovalRecord, AuditEvent, EvidenceObject } from "@/types/audit"
 import { isArabicText } from "./arabic-pdf-support"
 
 export interface ExportPackage {

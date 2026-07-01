@@ -3,8 +3,8 @@ import { requireUserContext } from "@/lib/auth";
 import {
   isAbacEnforceEnabledForOrg,
   listAbacEnforceOrgIds,
-} from "@/core/access/abac-gate";
-import { getAbacShadowMismatchReport } from "@/core/access/abac-shadow-report";
+} from "@/lib/core/policy/access/abac-gate";
+import { getAbacShadowMismatchReport } from "@/lib/core/policy/access/abac-shadow-report";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
 
 export const dynamic = "force-dynamic";

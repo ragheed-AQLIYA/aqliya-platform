@@ -25,7 +25,7 @@ export default async function WorkflowTemplateDetailPage({
 
   async function handleStart() {
     "use server";
-    const user = await requireUserContext();
+    const _user = await requireUserContext();
     const recordResult = await startWorkflowFromTemplate(
       id,
       `سجل: ${template.name} - ${new Date().toLocaleDateString("ar-SA")}`,

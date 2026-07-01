@@ -1,4 +1,4 @@
-import { evaluateWithGate, getGateThreshold, registerGateThreshold } from "../eval-gate"
+import { evaluateWithGate, getGateThreshold, registerGateThreshold } from "@/lib/core/ai/eval-gate"
 
 describe("EvalGate", () => {
   describe("getGateThreshold", () => {

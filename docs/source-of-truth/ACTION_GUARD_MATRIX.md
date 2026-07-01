@@ -1,7 +1,7 @@
 # Server Action Guard Matrix
 
 **Status:** Living document (parallel remediation 2026-06-02, continued)  
-**Authority:** Implementation reality + [`src/core/access/server-action-guard.ts`](../../src/core/access/server-action-guard.ts)
+**Authority:** Implementation reality + [`src/lib/authorization/action-guard.ts`](../../src/lib/authorization/action-guard.ts)
 
 ## Rule
 

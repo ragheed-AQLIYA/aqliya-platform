@@ -5,8 +5,6 @@
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
-import type { AuditActor } from "./actor-context";
 
 export class AuditKnowledgeEngine {
   // ==================== Patterns ====================

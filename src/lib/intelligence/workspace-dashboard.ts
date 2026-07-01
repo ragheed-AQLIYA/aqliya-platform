@@ -7,7 +7,7 @@ import type { ActivityStreamEntry } from "@/lib/platform/operations/activity-str
 import { isOutboxEnabled } from "@/lib/core/events/outbox-service";
 import { CORE_EVENT_SCHEMA_VERSION } from "@/lib/core/contracts/event-envelope";
 import { listEventSchemas } from "@/lib/core/events/schema-registry";
-import { getAbacShadowMismatchReport } from "@/core/access/abac-shadow-report";
+import { getAbacShadowMismatchReport } from "@/lib/core/policy/access/abac-shadow-report";
 
 export type IntelligenceWorkspaceSnapshot = {
   coreEngineCount: number;

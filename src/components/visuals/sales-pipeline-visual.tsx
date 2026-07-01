@@ -28,7 +28,7 @@ export function SalesPipelineVisual({ variant = "dark", className }: SalesPipeli
 
       {/* Funnel */}
       <div className="space-y-2 mb-4">
-        {stages.map((stage, i) => {
+        {stages.map((stage, _i) => {
           const width = (stage.count / maxCount) * 100
           return (
             <div key={stage.label} className="flex items-center gap-3">

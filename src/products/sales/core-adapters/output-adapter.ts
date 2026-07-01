@@ -5,7 +5,7 @@ import {
   type OutputCategory,
   type OutputDocument,
   type OutputFormat,
-} from "@/core/output"
+} from "@/lib/core/output"
 // SALESOS_PLACEHOLDER: TODO: implement when @/lib/platform/output/engine exists
 function getOutputsByProduct(_productKey: string): { id: string; labelEn?: string; labelAr?: string }[] {
   return []

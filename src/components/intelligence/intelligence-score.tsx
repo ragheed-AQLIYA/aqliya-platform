@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection -- union-typed size key, provably false positive */
 import { cn } from "@/lib/utils"
 
 interface IntelligenceScoreProps {

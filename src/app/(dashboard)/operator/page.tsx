@@ -10,6 +10,7 @@ import { getSystemPerformanceAction } from "@/actions/operator-actions";
 
 import { OperatorDashboardClient } from "./operator-dashboard-client";
 import { EnterpriseHealthPanel } from "@/components/monitoring/enterprise-health-panel";
+import { EvidenceHealthPanel } from "@/components/monitoring/evidence-health-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export default async function OperatorDashboardPage() {
         performance={performance}
       />
       <EnterpriseHealthPanel />
+      <EvidenceHealthPanel />
     </div>
   );
 }

@@ -7,7 +7,6 @@ import {
   buildScimListResponse,
   buildScimError,
   validateScimGroupPayload,
-  SCIM_CONTENT_TYPE,
   type ScimGroup,
 } from "@/lib/auth/scim-types";
 import { listGroups, createGroup } from "@/lib/auth/scim-service";

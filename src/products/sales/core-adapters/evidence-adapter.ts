@@ -1,8 +1,8 @@
 import "server-only";
 
-import { InMemoryEvidenceStore } from "@/core/evidence/evidence-store";
-import { PrismaEvidenceStore } from "@/core/evidence/evidence-store-prisma";
-import type { EvidenceCategory, EvidenceStore } from "@/core/evidence/types";
+import { InMemoryEvidenceStore } from "@/lib/core/evidence/evidence-store";
+import { PrismaEvidenceStore } from "@/lib/core/evidence/evidence-store-prisma";
+import type { EvidenceCategory, EvidenceStore } from "@/lib/core/evidence/types";
 import { SALESOS_PRODUCT_KEY } from "@/lib/sales/core-adoption";
 import {
   STAGE_PROOF_REQUIREMENTS,

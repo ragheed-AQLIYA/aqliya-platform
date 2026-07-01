@@ -23,7 +23,7 @@ const moduleColors: Record<string, string> = {
 
 export function KPICard({
   label,
-  labelAr,
+  labelAr: _labelAr,
   value,
   change,
   changeType = "neutral",
@@ -39,6 +39,7 @@ export function KPICard({
     <div
       className={cn(
         "group relative overflow-hidden rounded-lg border border-l-4 bg-card p-5 transition-all hover:shadow-md",
+        // eslint-disable-next-line security/detect-object-injection -- union-typed key, false positive
         moduleColors[module],
         className
       )}

@@ -7,12 +7,9 @@ import {
   CheckCircle,
   XCircle,
   AlertTriangle,
-  Clock,
   User,
   Shield,
   ArrowRight,
-  ChevronDown,
-  ChevronRight,
   ListChecks,
   History,
   Ban,
@@ -139,7 +136,7 @@ export default function ApprovalPage() {
     );
 
   const canApprove = approvalInfo.status === "ready";
-  const isBlocked = approvalInfo.status === "blocked";
+  const _isBlocked = approvalInfo.status === "blocked";
   const isApproved = approvalInfo.status === "approved";
 
   return (

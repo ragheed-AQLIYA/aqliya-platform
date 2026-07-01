@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import {
   paginate,
@@ -345,7 +345,7 @@ function toEvidenceObject(ev: {
   fileSize: number;
   fileHash: string | null;
   storageKey: string | null;
-  uploadedBy: string | null;
+  uploadedById: string | null;
   uploadedAt: Date | null;
   state: string;
   links: Array<{
@@ -368,7 +368,7 @@ function toEvidenceObject(ev: {
     fileType: ev.fileType,
     fileSize: ev.fileSize,
     fileHash: ev.fileHash ?? "",
-    uploadedBy: ev.uploadedBy ?? "",
+    uploadedById: ev.uploadedById ?? "",
     uploadedAt: ev.uploadedAt?.toISOString() ?? "",
     state: ev.state as EvidenceObject["state"],
     linkedEntities: ev.links.map(toEvidenceLink),
@@ -1105,6 +1105,21 @@ export async function confirmAllSuggestedMappings(engagementId: string): Promise
   }
 }
 
+export async function getAccountMappingById(
+  mappingId: string,
+): Promise<AccountMapping | null> {
+  try {
+    const row = await prisma.auditAccountMapping.findUnique({
+      where: { id: mappingId },
+      include: { canonicalAccount: true },
+    });
+    return row ? toAccountMapping(row) : null;
+  } catch (error) {
+    console.warn(`[AuditDB] getAccountMappingById(${mappingId}) error`, error);
+    return null;
+  }
+}
+
 export async function updateManualMapping(data: {
   engagementId: string;
   mappingId: string;
@@ -1195,7 +1210,7 @@ export async function getValidationRun(
         expectedValue: i.expectedValue ?? undefined,
         actualValue: i.actualValue ?? undefined,
         message: i.message ?? "",
-        disposedBy: i.dispositions[0]?.disposedBy ?? undefined,
+        disposedById: i.dispositions[0]?.disposedById ?? undefined,
         disposedAt: i.dispositions[0]?.disposedAt?.toISOString() ?? undefined,
         disposition: i.dispositions[0]?.action ?? undefined,
       })),
@@ -1548,7 +1563,7 @@ export async function disposeValidationIssue(
         engagementId: issue.engagementId,
         action,
         rationale: rationale ?? null,
-        disposedBy: actorId,
+        disposedById: actorId,
       },
     });
 
@@ -2901,7 +2916,7 @@ export async function createEvidence(data: {
   fileType: string;
   fileSize?: number;
   state?: string;
-  uploadedBy?: string;
+  uploadedById?: string;
   fileHash?: string;
   storageKey?: string;
 }): Promise<EvidenceObject> {
@@ -2912,8 +2927,8 @@ export async function createEvidence(data: {
       fileType: data.fileType,
       fileSize: data.fileSize ?? 0,
       state: data.state ?? "missing",
-      uploadedBy: data.uploadedBy ?? null,
-      uploadedAt: data.uploadedBy ? new Date() : null,
+      uploadedById: data.uploadedById ?? null,
+      uploadedAt: data.uploadedById ? new Date() : null,
       fileHash: data.fileHash ?? null,
       storageKey: data.storageKey ?? null,
     },
@@ -2931,7 +2946,7 @@ export async function updateEvidenceState(
     where: { id },
     data: {
       state,
-      uploadedBy: userId ?? undefined,
+      uploadedById: userId ?? undefined,
       uploadedAt: userId ? new Date() : undefined,
     },
     include: { links: true },

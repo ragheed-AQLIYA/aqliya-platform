@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
@@ -412,7 +412,7 @@ export default function EvidencePage() {
                 <TableRow>
                   <TableHead>{t("filenameCol")}</TableHead>
                   <TableHead>{t("typeCol")}</TableHead>
-                  <TableHead>{t("uploadedByCol")}</TableHead>
+                  <TableHead>{t("uploadedByIdCol")}</TableHead>
                   <TableHead>{t("uploadDateCol")}</TableHead>
                   <TableHead>{t("stateCol")}</TableHead>
                   <TableHead>التخزين</TableHead>
@@ -464,7 +464,7 @@ export default function EvidencePage() {
                           {ev.fileType.toUpperCase()}
                         </Badge>
                       </TableCell>
-                      <TableCell>{ev.uploadedBy || "-"}</TableCell>
+                      <TableCell>{ev.uploadedById || "-"}</TableCell>
                       <TableCell>
                         {ev.uploadedAt
                           ? new Date(ev.uploadedAt).toLocaleDateString(
@@ -897,9 +897,9 @@ export default function EvidencePage() {
                 </div>
                 <div>
                   <div className="text-muted-foreground text-xs uppercase tracking-wide">
-                    {t("uploadedByCol")}
+                    {t("uploadedByIdCol")}
                   </div>
-                  <div>{selectedEv.uploadedBy || "-"}</div>
+                  <div>{selectedEv.uploadedById || "-"}</div>
                 </div>
                 <div>
                   <div className="text-muted-foreground text-xs uppercase tracking-wide">

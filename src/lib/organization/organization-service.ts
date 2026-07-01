@@ -115,6 +115,7 @@ export async function getOrganizationDetail(
     });
     sunbulClientCount = sunbulClients.length;
 
+    // Sunbul is a redirect alias → queries WorkflowRecord for accurate stats
     sunbulRecordCount = await prisma.workflowRecord.count({
       where: {
         template: {
@@ -123,11 +124,10 @@ export async function getOrganizationDetail(
       },
     });
 
-    const workflowTemplates = await prisma.workflowTemplate.count({
+    // Sunbul memberships track Workflow templates for the organization
+    sunbulMembershipCount = await prisma.workflowTemplate.count({
       where: { platformOrganizationId: platformOrgId },
     });
-
-    sunbulMembershipCount = workflowTemplates;
     sunbulStatus =
       sunbulRecordCount > 0
         ? "نشط"
@@ -139,9 +139,11 @@ export async function getOrganizationDetail(
     sunbulClientCount = await prisma.sunbulClient.count({
       where: { platformOrganizationId: poId },
     });
+    // Sunbul redirect → WorkflowRecord query
     sunbulRecordCount = await prisma.workflowRecord.count({
       where: { template: { platformOrganizationId: poId } },
     });
+    // Sunbul redirect → WorkflowTemplate count
     sunbulMembershipCount = await prisma.workflowTemplate.count({
       where: { platformOrganizationId: poId },
     });

@@ -3,6 +3,8 @@
 **Private Governed Institutional Intelligence Platform**
 **منصة ذكاء مؤسسي خاص، محكوم، قابل للتدقيق**
 
+**Status:** Active | **Version:** 0.1 | **Owner:** Governance Team | **Last Reviewed:** 2026-06-26
+
 AQLIYA gives institutions private intelligence that runs on their data, within their environment, under their governance.
 
 ---

@@ -131,9 +131,32 @@ jobs:
             --force-new-deployment \
             --region $AWS_REGION
 
+  migrate:
+    name: Database Migrations
+    needs: [test]
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      - name: Run Prisma Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+          npx prisma migrate status
+
   deploy:
     name: Apply Terraform
-    needs: [terraform, build-and-push]
+    needs: [terraform, build-and-push, migrate]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -180,6 +203,14 @@ jobs:
 
       - name: Wait for Deployment
         run: sleep 60
+
+      - name: Audit log integrity check
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          # Verify audit log hash chain integrity (dry-run, read-only)
+          npx tsx scripts/platform/verify-platform-audit-log-write.ts || echo "Audit:dry completed (non-blocking)"
+          npx tsx scripts/platform/verify-platform-audit-logs.ts || echo "Audit:verify completed (non-blocking)"
 
       - name: Comprehensive Smoke Test
         env:

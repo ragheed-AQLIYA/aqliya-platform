@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getAIGovernanceMetrics } from "@/lib/ai/governance-metrics"
+import { getAIGovernanceMetrics } from "@/lib/core/ai/governance-metrics"
 import { requireUserContext } from "@/lib/auth"
 
 export const dynamic = "force-dynamic"

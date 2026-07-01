@@ -2,10 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
-import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import * as erp from "@/lib/local-content/erp/services";
 
-const PRODUCT_KEY = "local-content-os";
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -25,7 +23,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
   }
 }
 
-async function getUserOrg() {
+async function _getUserOrg() {
   const user = await requireUserContext("OPERATOR");
   return {
     id: user.id,

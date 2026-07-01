@@ -12,7 +12,6 @@ import {
   type SpendRecordInputFromErp,
 } from "./field-mapping";
 import type {
-  ErpSpendRecord,
   RecordIssue,
   ErpImportBatchStatus,
   PipelineResult,

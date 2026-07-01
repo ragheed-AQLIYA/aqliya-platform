@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { prisma } from '@/lib/prisma'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { ORG_STRINGS } from './org-strings'
@@ -71,10 +69,6 @@ export class OrgAdvError extends Error {
   }
 }
 
-// ─── Prisma helper — models defined as text-only, not in generated client yet ───
-
-const db = prisma as any
-
 // ─── Hierarchy Methods ───
 
 export async function createOrgNode(
@@ -90,7 +84,7 @@ export async function createOrgNode(
   const org = await prisma.organization.findUnique({ where: { id: orgId } })
   if (!org) throw new OrgAdvError(ORG_STRINGS.error.ORG_NOT_FOUND)
 
-  const existing = await db.orgHierarchyNode.findUnique({
+  const existing = await prisma.orgHierarchyNode.findFirst({
     where: { organizationId: orgId },
   })
   if (existing) {
@@ -99,7 +93,7 @@ export async function createOrgNode(
 
   let level = 0
   if (parentOrgId) {
-    const parentNode = await db.orgHierarchyNode.findUnique({
+    const parentNode = await prisma.orgHierarchyNode.findFirst({
       where: { organizationId: parentOrgId },
     })
     if (!parentNode) {
@@ -111,12 +105,13 @@ export async function createOrgNode(
     level = parentNode.level + 1
   }
 
-  const node = await db.orgHierarchyNode.create({
+  const node = await prisma.orgHierarchyNode.create({
     data: {
       organizationId: orgId,
       parentOrgId: parentOrgId ?? null,
       level,
       sortOrder: data.sortOrder ?? 0,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prisma Json field accepts object
       metadata: (data.metadata ?? undefined) as any,
       createdById: userId,
     },
@@ -138,12 +133,12 @@ export async function createOrgNode(
 export async function getOrgTree(orgId: string): Promise<OrgHierarchyNode[]> {
   if (!orgId) throw new OrgAdvError(ORG_STRINGS.error.ORG_ID_REQUIRED)
 
-  const node = await db.orgHierarchyNode.findUnique({
+  const node = await prisma.orgHierarchyNode.findFirst({
     where: { organizationId: orgId },
   })
   if (!node) return []
 
-  const allNodes = await db.orgHierarchyNode.findMany({
+  const allNodes = await prisma.orgHierarchyNode.findMany({
     orderBy: { sortOrder: 'asc' },
   })
 
@@ -166,12 +161,12 @@ export async function getOrgTree(orgId: string): Promise<OrgHierarchyNode[]> {
 export async function getChildOrgs(orgId: string): Promise<OrgHierarchyNode[]> {
   if (!orgId) throw new OrgAdvError(ORG_STRINGS.error.ORG_ID_REQUIRED)
 
-  const node = await db.orgHierarchyNode.findUnique({
+  const node = await prisma.orgHierarchyNode.findFirst({
     where: { organizationId: orgId },
   })
   if (!node) return []
 
-  const children = await db.orgHierarchyNode.findMany({
+  const children = await prisma.orgHierarchyNode.findMany({
     where: { parentOrgId: orgId },
     orderBy: { sortOrder: 'asc' },
   })
@@ -182,7 +177,7 @@ export async function getChildOrgs(orgId: string): Promise<OrgHierarchyNode[]> {
 export async function getParentChain(orgId: string): Promise<OrgHierarchyNode[]> {
   if (!orgId) throw new OrgAdvError(ORG_STRINGS.error.ORG_ID_REQUIRED)
 
-  const allNodes: any[] = await db.orgHierarchyNode.findMany({})
+  const allNodes: any[] = await prisma.orgHierarchyNode.findMany({})
   const nodeMap = new Map(allNodes.map((n: any) => [n.organizationId, n]))
 
   const chain: OrgHierarchyNode[] = []
@@ -205,7 +200,7 @@ export async function getOrgSetting(
   if (!orgId) throw new OrgAdvError(ORG_STRINGS.error.ORG_ID_REQUIRED)
   if (!key) throw new OrgAdvError(ORG_STRINGS.error.SETTING_KEY_REQUIRED)
 
-  const setting = await db.orgSetting.findUnique({
+  const setting = await prisma.orgSetting.findUnique({
     where: { organizationId_key: { organizationId: orgId, key } },
   })
 
@@ -228,7 +223,7 @@ export async function setOrgSetting(
   const org = await prisma.organization.findUnique({ where: { id: orgId } })
   if (!org) throw new OrgAdvError(ORG_STRINGS.error.ORG_NOT_FOUND)
 
-  const setting = await db.orgSetting.upsert({
+  const setting = await prisma.orgSetting.upsert({
     where: { organizationId_key: { organizationId: orgId, key } },
     create: {
       organizationId: orgId,
@@ -260,7 +255,7 @@ export async function getOrgSettings(
 ): Promise<Record<string, string>> {
   if (!orgId) throw new OrgAdvError(ORG_STRINGS.error.ORG_ID_REQUIRED)
 
-  const settings = await db.orgSetting.findMany({
+  const settings = await prisma.orgSetting.findMany({
     where: { organizationId: orgId },
   })
 
@@ -282,12 +277,12 @@ export async function deleteOrgSetting(orgId: string, key: string): Promise<void
   if (!orgId) throw new OrgAdvError(ORG_STRINGS.error.ORG_ID_REQUIRED)
   if (!key) throw new OrgAdvError(ORG_STRINGS.error.SETTING_KEY_REQUIRED)
 
-  const existing = await db.orgSetting.findUnique({
+  const existing = await prisma.orgSetting.findUnique({
     where: { organizationId_key: { organizationId: orgId, key } },
   })
   if (!existing) return
 
-  await db.orgSetting.delete({
+  await prisma.orgSetting.delete({
     where: { organizationId_key: { organizationId: orgId, key } },
   })
 
@@ -315,11 +310,12 @@ export async function recordLifecycleEvent(
   if (!eventType) throw new OrgAdvError(ORG_STRINGS.error.EVENT_TYPE_REQUIRED)
   if (!description) throw new OrgAdvError(ORG_STRINGS.error.DESCRIPTION_REQUIRED)
 
-  const event = await db.orgLifecycleEvent.create({
+  const event = await prisma.orgLifecycleEvent.create({
     data: {
       organizationId: orgId,
       eventType,
       description,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prisma Json field accepts object
       metadata: (data ?? undefined) as any,
       actorId: userId || null,
     },
@@ -344,7 +340,8 @@ export async function getLifecycleEvents(
 ): Promise<OrgLifecycleEvent[]> {
   if (!orgId) throw new OrgAdvError(ORG_STRINGS.error.ORG_ID_REQUIRED)
 
-  const where: Record<string, unknown> = { organizationId: orgId }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic where builder
+  const where: Record<string, any> = { organizationId: orgId }
 
   if (filter?.eventType) {
     where.eventType = filter.eventType
@@ -357,7 +354,7 @@ export async function getLifecycleEvents(
     where.createdAt = createdAt
   }
 
-  const events = await db.orgLifecycleEvent.findMany({
+  const events = await prisma.orgLifecycleEvent.findMany({
     where,
     orderBy: { createdAt: 'desc' },
   })
@@ -372,14 +369,14 @@ export async function getOrgHealth(orgId: string): Promise<OrgHealth> {
 
   const [settings, users, hierarchyNode, recentEvents, criticalEvents] =
     await Promise.all([
-      db.orgSetting.findMany({ where: { organizationId: orgId } }),
+      prisma.orgSetting.findMany({ where: { organizationId: orgId } }),
       prisma.user.findMany({
         where: { organizationId: orgId },
       }),
-      db.orgHierarchyNode.findUnique({
+      prisma.orgHierarchyNode.findFirst({
         where: { organizationId: orgId },
       }),
-      db.orgLifecycleEvent.findMany({
+      prisma.orgLifecycleEvent.findMany({
         where: {
           organizationId: orgId,
           createdAt: {
@@ -387,7 +384,7 @@ export async function getOrgHealth(orgId: string): Promise<OrgHealth> {
           },
         },
       }),
-      db.orgLifecycleEvent.findMany({
+      prisma.orgLifecycleEvent.findMany({
         where: {
           organizationId: orgId,
           eventType: { in: ['SUSPENDED', 'MERGED'] },
@@ -441,7 +438,7 @@ async function wouldCreateCycle(
   orgId: string,
   parentOrgId: string,
 ): Promise<boolean> {
-  const allNodes: any[] = await db.orgHierarchyNode.findMany({})
+  const allNodes: any[] = await prisma.orgHierarchyNode.findMany({})
   const childMap = new Map<string, string[]>()
   for (const n of allNodes) {
     if (n.parentOrgId) {

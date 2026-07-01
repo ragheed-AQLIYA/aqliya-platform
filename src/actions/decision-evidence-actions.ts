@@ -50,7 +50,7 @@ export async function getDecisionEvidenceAction(decisionId: string) {
       orderBy: { createdAt: "desc" },
     });
     return { success: true, data: evidence };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch evidence" };
   }
 }
@@ -120,9 +120,9 @@ export async function uploadDecisionEvidenceAction(params: {
           },
         },
       });
-    } catch (error) {
+    } catch (_error) {
       await provider.delete(storageKey);
-      throw error;
+      throw _error;
     }
 
     const alog = auditLogger({
@@ -162,7 +162,7 @@ export async function uploadDecisionEvidenceAction(params: {
         fileHash: fileHash.substring(0, 12),
       },
     };
-  } catch (error) {
+  } catch {
     return { success: false, error: "فشل رفع المستند" };
   }
 }
@@ -224,7 +224,7 @@ export async function deleteDecisionEvidenceAction(evidenceId: string) {
     );
 
     return { success: true };
-  } catch (error) {
+  } catch {
     return { success: false, error: "فشل حذف المستند" };
   }
 }
@@ -290,7 +290,7 @@ export async function reviewDecisionEvidenceAction(
     );
 
     return { success: true, data: updated };
-  } catch (error) {
+  } catch {
     return { success: false, error: "فشل مراجعة المستند" };
   }
 }
@@ -315,7 +315,7 @@ export async function getUnreviewedEvidenceCount(decisionId: string): Promise<{
     }).length;
 
     return { success: true, data: { total, unreviewed } };
-  } catch (error) {
+  } catch {
     return { success: false, error: "فشل في حساب المستندات غير المراجعة" };
   }
 }

@@ -52,29 +52,37 @@ import {
 } from "@/lib/local-content-intelligence";
 import { resolveAuditEngagementIdForLcProject } from "@/lib/local-content-intelligence/audit-engagement-bridge";
 import { parseLocalContentCSV } from "@/lib/local-content/import";
+import { parseOrError } from "@/lib/local-content/schemas/common";
 import {
-  validateRequired,
-  validatePositiveNumber,
-  validatePercentage,
-  validateSupplierLocality,
-  validateOwnershipType,
-  validateFindingType,
-  validateFindingSeverity,
-} from "@/lib/local-content/validation";
+  createEvidenceSchema,
+  updateEvidenceStatusSchema,
+  uploadEvidenceFileSchema,
+} from "@/lib/local-content/schemas/evidence";
+import {
+  createFindingSchema,
+  updateFindingSchema,
+} from "@/lib/local-content/schemas/finding";
+import {
+  submitReviewSchema,
+  submitApprovalSchema,
+} from "@/lib/local-content/schemas/review";
+import {
+  createSpendRecordSchema,
+  classifySpendRecordSchema,
+  importSpendCsvSchema,
+} from "@/lib/local-content/schemas/spend";
+import { createProjectSchema, updateVerificationItemSchema } from "@/lib/local-content/schemas/project";
+import {
+  createSupplierSchema,
+  updateSupplierSchema,
+} from "@/lib/local-content/schemas/supplier";
+import { generateReportSchema } from "@/lib/local-content/schemas/report";
 
 // ─── Result types ───
 
 type ActionResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: string; code?: string };
-
-const VALID_FINDING_STATUSES = [
-  "draft",
-  "submitted",
-  "reviewed",
-  "resolved",
-  "dismissed",
-] as const;
 
 async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
   try {
@@ -90,42 +98,6 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error("[LocalContentOS Action]", message);
     return { ok: false, error: message };
-  }
-}
-
-function getOptionalTrimmedValue(
-  formData: FormData,
-  key: string,
-): string | null {
-  const value = formData.get(key);
-  if (typeof value !== "string") return null;
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
-}
-
-function parseOptionalPercentageField(
-  formData: FormData,
-  key: string,
-): number | null {
-  const raw = getOptionalTrimmedValue(formData, key);
-  if (raw === null) return null;
-  const value = Number(raw);
-  if (!Number.isFinite(value)) {
-    throw new Error(`LocalContentOS validation: ${key} must be a valid number`);
-  }
-  validatePercentage(value, key);
-  return value;
-}
-
-function validateFindingStatus(value: string): void {
-  if (
-    !VALID_FINDING_STATUSES.includes(
-      value as (typeof VALID_FINDING_STATUSES)[number],
-    )
-  ) {
-    throw new Error(
-      `LocalContentOS validation: status must be one of: ${VALID_FINDING_STATUSES.join(", ")}`,
-    );
   }
 }
 
@@ -210,7 +182,7 @@ export async function getLocalContentTenderMatchAction(
   ActionResult<Awaited<ReturnType<typeof getProjectTenderMatchReport>>>
 > {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const _user = await requireUserContext("VIEWER");
     await assertProjectAccess(projectId, "view");
     return getProjectTenderMatchReport(projectId);
   });
@@ -261,16 +233,20 @@ export async function updateLocalContentVerificationItemAction(
   itemId: string,
   formData: FormData,
 ): Promise<ActionResult<{ itemId: string; scale: string }>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(updateVerificationItemSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { scale, workingPaperRef } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "admin");
-    const scale = (formData.get("scale") as string)?.trim();
-    validateRequired(scale, "scale");
-    const workingPaperRef = (formData.get("workingPaperRef") as string)?.trim();
 
     await updateVerificationChecklistItem(
       projectId,
       itemId,
-      { scale, workingPaperRef },
+      { scale, workingPaperRef: workingPaperRef || undefined },
       { id: user.id, name: user.name ?? user.email ?? "User" },
     );
 
@@ -300,14 +276,15 @@ export async function getLocalContentProjectAction(
 export async function createLocalContentProjectAction(
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createProject>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(createProjectSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { name, reportingPeriod, scopeDescription } = parsed.data;
+
   return safe(async () => {
     const user = await requireUserContext("ADMIN");
-    const name = formData.get("name") as string;
-    const reportingPeriod = formData.get("reportingPeriod") as string;
-    const scopeDescription = formData.get("scopeDescription") as string;
-
-    validateRequired(name, "name");
-    validateRequired(reportingPeriod, "reportingPeriod");
 
     const project = await createProject({
       organizationId: user.organizationId,
@@ -378,37 +355,25 @@ export async function createLocalContentSupplierAction(
   projectId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createSupplier>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(createSupplierSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { name, crNumber, localityClassification, localContentPercentage, ownershipType, workforceLocalPct } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_supplier");
-    const name = formData.get("name") as string;
-    validateRequired(name, "name");
-
-    const localityClassification = getOptionalTrimmedValue(
-      formData,
-      "localityClassification",
-    );
-    if (localityClassification) {
-      validateSupplierLocality(localityClassification);
-    }
-
-    const ownershipType = getOptionalTrimmedValue(formData, "ownershipType");
-    if (ownershipType) {
-      validateOwnershipType(ownershipType);
-    }
 
     const supplier = await createSupplier(
       {
         projectId,
         name,
-        crNumber: getOptionalTrimmedValue(formData, "crNumber") || undefined,
+        crNumber: crNumber || undefined,
         localityClassification: localityClassification || undefined,
-        localContentPercentage:
-          parseOptionalPercentageField(formData, "localContentPercentage") ??
-          undefined,
+        localContentPercentage: localContentPercentage ?? undefined,
         ownershipType: ownershipType || undefined,
-        workforceLocalPct:
-          parseOptionalPercentageField(formData, "workforceLocalPct") ??
-          undefined,
+        workforceLocalPct: workforceLocalPct ?? undefined,
       },
       { id: user.id, name: user.name },
     );
@@ -432,6 +397,13 @@ export async function updateLocalContentSupplierAction(
   supplierId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createSupplier>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(updateSupplierSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { name, crNumber, localityClassification, localContentPercentage, ownershipType, workforceLocalPct } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_supplier");
     const existing = await prisma.localContentSupplier.findUnique({
@@ -441,40 +413,24 @@ export async function updateLocalContentSupplierAction(
       throw new ProjectAccessError("Supplier not found", "NOT_FOUND");
     }
 
-    const name = (formData.get("name") as string | null)?.trim() || "";
-    validateRequired(name, "name");
-
-    const localityClassification = getOptionalTrimmedValue(
-      formData,
-      "localityClassification",
-    );
-    if (localityClassification) {
-      validateSupplierLocality(localityClassification);
-    }
-
-    const ownershipType = getOptionalTrimmedValue(formData, "ownershipType");
-    if (ownershipType) {
-      validateOwnershipType(ownershipType);
-    }
-
     const supplier = await prisma.localContentSupplier.update({
       where: { id: supplierId },
       data: {
         name,
         crNumber: formData.has("crNumber")
-          ? getOptionalTrimmedValue(formData, "crNumber")
+          ? (crNumber ?? null)
           : existing.crNumber,
         localityClassification: formData.has("localityClassification")
-          ? localityClassification
+          ? (localityClassification ?? null)
           : existing.localityClassification,
         localContentPercentage: formData.has("localContentPercentage")
-          ? parseOptionalPercentageField(formData, "localContentPercentage")
+          ? (localContentPercentage ?? null)
           : existing.localContentPercentage,
         ownershipType: formData.has("ownershipType")
-          ? ownershipType
+          ? (ownershipType ?? null)
           : existing.ownershipType,
         workforceLocalPct: formData.has("workforceLocalPct")
-          ? parseOptionalPercentageField(formData, "workforceLocalPct")
+          ? (workforceLocalPct ?? null)
           : existing.workforceLocalPct,
       },
     });
@@ -533,22 +489,26 @@ export async function createLocalContentSpendRecordAction(
   projectId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createSpendRecord>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(createSpendRecordSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { supplierId, amount, category, currency, contractReference, period, description } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
-    const amount = parseFloat(formData.get("amount") as string);
-    validatePositiveNumber(amount, "amount");
 
     const record = await createSpendRecord(
       {
         projectId,
-        supplierId: formData.get("supplierId") as string,
+        supplierId,
         amount,
-        category: formData.get("category") as string,
-        currency: (formData.get("currency") as string) || undefined,
-        contractReference:
-          (formData.get("contractReference") as string) || undefined,
-        period: formData.get("period") as string,
-        description: (formData.get("description") as string) || undefined,
+        category,
+        currency: currency || undefined,
+        contractReference: contractReference || undefined,
+        period,
+        description: description || undefined,
       },
       { id: user.id, name: user.name },
     );
@@ -573,9 +533,15 @@ export async function importLocalContentSpendCsvAction(
 ): Promise<
   ActionResult<{ created: number; rejected: number; errors: string[] }>
 > {
+  const parsed = parseOrError(importSpendCsvSchema, { csvText });
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { csvText: validatedCsv } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
-    const result = parseLocalContentCSV(csvText);
+    const result = parseLocalContentCSV(validatedCsv);
 
     if (result.rejectedRows.length > 0 && result.validRows.length === 0) {
       throw new Error("No valid rows to import");
@@ -679,23 +645,26 @@ export async function classifyLocalContentSpendRecordAction(
   projectId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createClassification>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(classifySpendRecordSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { supplierId, spendRecordId, localPercentage, classificationBasis, confidence, notes } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "classify");
-    const localPercentage = parseFloat(
-      formData.get("localPercentage") as string,
-    );
-    validatePercentage(localPercentage, "localPercentage");
 
     const classification = await createClassification(
       {
         projectId,
-        supplierId: (formData.get("supplierId") as string) || undefined,
-        spendRecordId: (formData.get("spendRecordId") as string) || undefined,
+        supplierId: supplierId || undefined,
+        spendRecordId: spendRecordId || undefined,
         classifiedBy: user.id,
         localPercentage,
-        classificationBasis: formData.get("classificationBasis") as string,
-        confidence: (formData.get("confidence") as string) || undefined,
-        notes: (formData.get("notes") as string) || undefined,
+        classificationBasis,
+        confidence: confidence || undefined,
+        notes: notes || undefined,
       },
       { id: user.id, name: user.name },
     );
@@ -750,20 +719,25 @@ export async function createLocalContentEvidenceAction(
   projectId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createEvidenceEntry>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(createEvidenceSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { filename, supplierId, spendRecordId, fileType, mimeType, evidenceType } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_evidence");
-    const filename = formData.get("filename") as string;
-    validateRequired(filename, "filename");
 
     const evidence = await createEvidenceEntry(
       {
         projectId,
-        supplierId: (formData.get("supplierId") as string) || undefined,
-        spendRecordId: (formData.get("spendRecordId") as string) || undefined,
+        supplierId: supplierId || undefined,
+        spendRecordId: spendRecordId || undefined,
         filename,
-        fileType: (formData.get("fileType") as string) || "pdf",
-        mimeType: (formData.get("mimeType") as string) || undefined,
-        evidenceType: (formData.get("evidenceType") as string) || "other",
+        fileType: fileType || "pdf",
+        mimeType: mimeType || undefined,
+        evidenceType: evidenceType || "other",
       },
       { id: user.id, name: user.name },
     );
@@ -787,6 +761,12 @@ export async function updateLocalContentEvidenceStatusAction(
   evidenceId: string,
   status: string,
 ): Promise<ActionResult<{ id: string; status: string }>> {
+  const parsed = parseOrError(updateEvidenceStatusSchema, { status });
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { status: validatedStatus } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "review_evidence");
     const existing = await prisma.localContentEvidence.findUnique({
@@ -798,7 +778,7 @@ export async function updateLocalContentEvidenceStatusAction(
 
     const updated = await prisma.localContentEvidence.update({
       where: { id: evidenceId },
-      data: { status, reviewedById: user.id, reviewedAt: new Date() },
+      data: { status: validatedStatus, reviewedById: user.id, reviewedAt: new Date() },
     });
 
     await logToPlatform({
@@ -807,8 +787,21 @@ export async function updateLocalContentEvidenceStatusAction(
       action: "localcontent.evidence.status_updated",
       targetType: "LocalContentEvidence",
       targetId: evidenceId,
-      metadata: { newStatus: status },
+      metadata: { newStatus: validatedStatus },
     });
+
+    try {
+      const { syncLocalContentEvidenceStateToCore } = await import(
+        "@/lib/core/evidence/adapters/local-content-adapter"
+      );
+      await syncLocalContentEvidenceStateToCore({
+        evidenceId,
+        newStatus: validatedStatus,
+        actorId: user.id,
+      });
+    } catch {
+      // Platform sync is best-effort
+    }
 
     revalidateLocalContentPaths(projectId, ["evidence"]);
     return { id: updated.id, status: updated.status };
@@ -859,6 +852,13 @@ export async function uploadLocalContentEvidenceFileAction(
   projectId: string,
   formData: FormData,
 ): Promise<ActionResult<{ id: string; filename: string; storageKey: string }>> {
+  const parsed = parseOrError(uploadEvidenceFileSchema, {
+    filename: formData.get("filename") as string | null,
+  });
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_evidence");
     const file = formData.get("file") as File | null;
@@ -934,6 +934,23 @@ export async function uploadLocalContentEvidenceFileAction(
       metadata: { filename: resolvedFilename, storageKey, sizeBytes },
     });
 
+    const project = await prisma.localContentProject.findUnique({
+      where: { id: projectId },
+      select: { organizationId: true },
+    });
+    if (project?.organizationId) {
+      const { linkLocalContentEvidenceAfterUpload } = await import(
+        "@/lib/core/evidence/link-after-upload"
+      );
+      await linkLocalContentEvidenceAfterUpload({
+        organizationId: project.organizationId,
+        projectId,
+        evidenceId: evidence.id,
+        filename: evidence.filename,
+        actorId: user.id,
+      });
+    }
+
     revalidateLocalContentPaths(projectId, ["evidence"]);
     return {
       id: evidence.id,
@@ -958,21 +975,15 @@ export async function createLocalContentFindingAction(
   projectId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createFinding>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(createFindingSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { type, title, description, severity, linkedSupplierId, linkedSpendRecordId } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "manage_findings");
-    const type = (formData.get("type") as string | null)?.trim() || "";
-    const title = (formData.get("title") as string | null)?.trim() || "";
-    const description =
-      (formData.get("description") as string | null)?.trim() || "";
-    const severity = getOptionalTrimmedValue(formData, "severity");
-
-    validateRequired(type, "type");
-    validateRequired(title, "title");
-    validateRequired(description, "description");
-    validateFindingType(type);
-    if (severity) {
-      validateFindingSeverity(severity);
-    }
 
     const finding = await createFinding(
       {
@@ -981,10 +992,8 @@ export async function createLocalContentFindingAction(
         severity: severity || undefined,
         title,
         description,
-        linkedSupplierId:
-          getOptionalTrimmedValue(formData, "linkedSupplierId") || undefined,
-        linkedSpendRecordId:
-          getOptionalTrimmedValue(formData, "linkedSpendRecordId") || undefined,
+        linkedSupplierId: linkedSupplierId || undefined,
+        linkedSpendRecordId: linkedSpendRecordId || undefined,
         createdById: user.id,
         createdByName: user.name,
       },
@@ -1014,6 +1023,13 @@ export async function updateLocalContentFindingAction(
   findingId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createFinding>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(updateFindingSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { type, title, description, severity, linkedSupplierId, linkedSpendRecordId } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "manage_findings");
     const existing = await prisma.localContentFinding.findUnique({
@@ -1024,23 +1040,6 @@ export async function updateLocalContentFindingAction(
       throw new ProjectAccessError("Finding not found", "NOT_FOUND");
     }
 
-    const type = (formData.get("type") as string | null)?.trim() || "";
-    const title = (formData.get("title") as string | null)?.trim() || "";
-    const description =
-      (formData.get("description") as string | null)?.trim() || "";
-    const severity = getOptionalTrimmedValue(formData, "severity");
-    const status =
-      getOptionalTrimmedValue(formData, "status") || existing.status;
-
-    validateRequired(type, "type");
-    validateRequired(title, "title");
-    validateRequired(description, "description");
-    validateFindingType(type);
-    if (severity) {
-      validateFindingSeverity(severity);
-    }
-    validateFindingStatus(status);
-
     const finding = await prisma.localContentFinding.update({
       where: { id: findingId },
       data: {
@@ -1050,13 +1049,12 @@ export async function updateLocalContentFindingAction(
         severity: formData.has("severity")
           ? (severity ?? undefined)
           : (existing.severity ?? undefined),
-        status,
+        status: formData.has("status") ? raw.status as string : existing.status,
         linkedSupplierId: formData.has("linkedSupplierId")
-          ? (getOptionalTrimmedValue(formData, "linkedSupplierId") ?? undefined)
+          ? (linkedSupplierId ?? undefined)
           : (existing.linkedSupplierId ?? undefined),
         linkedSpendRecordId: formData.has("linkedSpendRecordId")
-          ? (getOptionalTrimmedValue(formData, "linkedSpendRecordId") ??
-            undefined)
+          ? (linkedSpendRecordId ?? undefined)
           : (existing.linkedSpendRecordId ?? undefined),
       },
     });
@@ -1117,14 +1115,21 @@ export async function submitLocalContentReviewAction(
   projectId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createReview>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(submitReviewSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { action, comments } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "review");
     const review = await createReview({
       projectId,
       reviewerId: user.id,
       reviewerName: user.name,
-      action: (formData.get("action") as string) || "submitted",
-      comments: (formData.get("comments") as string) || undefined,
+      action: action || "submitted",
+      comments: comments || undefined,
     });
 
     await logToPlatform({
@@ -1171,14 +1176,21 @@ export async function submitLocalContentApprovalAction(
   projectId: string,
   formData: FormData,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createApproval>>>> {
+  const raw = Object.fromEntries(formData);
+  const parsed = parseOrError(submitApprovalSchema, raw);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { decision, comments } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "approve");
     const approval = await createApproval({
       projectId,
       approverId: user.id,
       approverName: user.name,
-      decision: formData.get("decision") as string,
-      comments: (formData.get("comments") as string) || undefined,
+      decision,
+      comments: comments || undefined,
     });
 
     await logToPlatform({
@@ -1278,6 +1290,12 @@ export async function generateLocalContentReportAction(
   reportType: string,
   format: string,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createReport>>>> {
+  const parsed = parseOrError(generateReportSchema, { reportType, format });
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
+  }
+  const { reportType: validatedType, format: validatedFormat } = parsed.data;
+
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
     const score = await calculateProjectScore(projectId);
@@ -1292,8 +1310,8 @@ export async function generateLocalContentReportAction(
 
     const report = await createReport({
       projectId,
-      reportType,
-      format,
+      reportType: validatedType,
+      format: validatedFormat,
       generatedById: user.id,
       generatedByName: user.name,
       disclaimer,
@@ -1313,7 +1331,7 @@ export async function generateLocalContentReportAction(
       action: "localcontent.report.generated",
       targetType: "LocalContentReport",
       targetId: report.id,
-      metadata: { reportType, format },
+      metadata: { reportType: validatedType, format: validatedFormat },
     });
 
     revalidateLocalContentPaths(projectId, ["reports"]);

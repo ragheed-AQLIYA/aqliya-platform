@@ -1,6 +1,6 @@
-import { hybridSearchChunks } from "@/lib/rag/hybrid-search"
-import { setRagEmbeddingProvider } from "@/lib/rag/embedding-provider"
-import type { EmbeddingProvider } from "@/lib/ai/types"
+import { hybridSearchChunks } from "@/lib/core/knowledge/rag/hybrid-search"
+import { setRagEmbeddingProvider } from "@/lib/core/knowledge/rag/embedding-provider"
+import type { EmbeddingProvider } from "@/lib/core/ai/types"
 
 const mockProvider: EmbeddingProvider = {
   async embed({ input }) {
