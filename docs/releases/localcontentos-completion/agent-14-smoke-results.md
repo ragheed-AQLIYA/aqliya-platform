@@ -1,3 +1,5 @@
+# Classification (Post-L6 Smoke Integrator — 2026-06-01)
+
 ﻿# Agent 14 — Human Smoke Results
 
 **Date:** 2026-06-01  

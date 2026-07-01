@@ -1,0 +1,6 @@
+record_id,record_type,current_classification,proposed_classification,reason,evidence_id,reviewer,review_decision,approval_required,approver,approval_status,notes
+VEN-0001,Vendor,Local,Local,Verified CR and LCGPA certificate,EVD-2025-001;EVD-2025-002,A.Alamri,Accepted,No,,Not Required,Clear local vendor with official docs
+VEN-0005,Vendor,Undetermined,Local,Saudi CR verified via declaration,EVD-2025-004,A.Alamri,Returned for Evidence,Yes,,Pending,Declaration only need manufacturing proof
+INV-2025-1003,Transaction,Mixed,Mixed,Local distributor for international brand 50% attribution,EVD-2025-005,A.Alamri,Accepted,No,,Not Required,Consistent with contract CTR-2023-045
+VEN-0003,Vendor,Non-Local,Non-Local,Bahrain registered no Saudi operations,,A.Alamri,Accepted,No,,Not Required,Clear non-local classification
+VEN-0004,Vendor,Mixed,Local,Customer reclassified based on new manufacturing data,EVD-2025-005,A.Alamri,Overridden,Yes,K.AlOtaibi,Pending,Override submitted for approval

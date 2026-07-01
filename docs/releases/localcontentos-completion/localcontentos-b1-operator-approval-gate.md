@@ -1,3 +1,5 @@
+# What B1 is
+
 ﻿# LocalContentOS — B1 Operator Approval Gate
 
 **Date:** 2026-06-01  

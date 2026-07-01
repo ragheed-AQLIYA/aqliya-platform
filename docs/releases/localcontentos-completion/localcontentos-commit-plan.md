@@ -1,3 +1,5 @@
+# Principles
+
 ﻿# LocalContentOS L6 — Commit Plan (Recommended Split)
 
 **Date:** 2026-06-01  

@@ -1,7 +1,11 @@
+# Taxonomy Layers
+
 ﻿# AQLIYA Product Taxonomy v1.1
 
 **Version:** 1.1  
 **Status:** Official — aligned to v0.1 operational baseline  
+**Owner:** Governance Team  
+**Last Reviewed:** 2026-06-26  
 **Aligned with:** `AQLIYA_MASTER_REFERENCE.md`, `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`  
 **Note:** Implementation-status claims in this file have been corrected to match validated code reality. See `docs/DOCUMENTATION_AUTHORITY.md` for conflict resolution rules.
 
@@ -20,22 +24,24 @@ AQLIYA Platform Company
 │   ├── Audit Logs
 │   ├── Document Intelligence
 │   ├── Reporting Engine
+│   ├── Knowledge Foundation (governance capability — L4 Usable v0.1)
 │   └── Deployment Layer
 ├── Shared Applications (built on Core)
 │   └── Office AI Assistant
 ├── Specialized Operating Systems (capabilities — built on Core)
 │   ├── AuditOS                 (audit workflow)
+│   │   └── Sampling            (internal workspace — L3 Prototype)
 │   ├── DecisionOS              (decision governance)
 │   ├── LocalContentOS          (local content & supply chain)
-│   ├── SalesOS                 (business development)
+│   ├── LocalContactOS         (relationship workspace — L5)
+│   ├── SalesOS                 (commercial intelligence — L5)
 │   └── SimulationOS            (capability label only)
 ├── Custom / Client-Specific Workspaces
 │   ├── WorkflowOS (canonical governed workspace)
 │   └── Sunbul (legacy redirect alias to WorkflowOS)
 ├── Internal Prototype Surfaces (code reality — undocumented in earlier taxonomy)
-│   └── ContentStudio (content workspace — L3 prototype, documented for transparency)
+│   └── ContentStudio (content workspace — L4 Usable v0.1, documented for transparency)
 ├── Future Systems (not yet implemented)
-│   ├── LocalContactOS
 │   ├── RiskOS (L5 workspace at /risk/* exists — not standalone product; see PRODUCT_STATUS_MATRIX.md)
 │   ├── ComplianceOS
 │   ├── LegalOS
@@ -93,11 +99,11 @@ AQLIYA Platform Company
 | **Sunbul**              | Custom / Client-Specific Workspace | Legacy alias / redirect to WorkflowOS   | N/A                            | Internal only                 |
 | **WorkflowOS**          | Custom / Client-Specific Workspace | Included as governed workspace          | L4 Usable v0.1                 | Safe to show with explanation |
 | **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing                   | Demo only                     |
-| **SalesOS**             | Product / System                   | Prototype / internal preview            | L3 Prototype                   | Do not show as implemented    |
+| **SalesOS**             | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready                 | Safe to show with explanation |
 | **LocalContentOS**      | Product / System                   | Included as pilot-ready with conditions | L5 Pilot-ready with conditions | Safe to show with explanation |
 | **SimulationOS**        | Marketing capability label         | Do not claim as live                    | L1 Marketing                   | Do not show as implemented    |
-| **LocalContactOS**      | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
-| **ContentStudio**      | Internal Prototype Surface           | Prototype / internal preview            | L3 Prototype                   | Internal only                 |
+| **LocalContactOS**      | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready                 | Safe to show with explanation |
+| **ContentStudio**      | Internal workspace                   | Included as usable v0.1                 | L4 Usable v0.1                 | Internal only                 |
 | **RiskOS**              | AuditOS submodule (workspace exists) | Included as usable v0.1                    | L5 Pilot-ready (not standalone)          | Safe with context             |
 | **ComplianceOS**        | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
 | **LegalOS**             | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |

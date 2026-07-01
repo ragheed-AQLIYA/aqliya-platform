@@ -1,0 +1,5 @@
+Probe: https://aqliya.com/api/health
+DNS OK: aqliya.com -> 216.198.79.1
+HTTP 200
+status: ok | DB: ok | commit: f8bebfbb | env: production
+EXIT:0

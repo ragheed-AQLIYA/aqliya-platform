@@ -1,0 +1,284 @@
+{
+  "projectName": "شركة الخليج للتجارة والمقاولات",
+  "period": "2025-Q4",
+  "generatedAt": "2026-06-16T13:24:58.941Z",
+  "basedOn": {
+    "trialBalance": "tb-gulf-2025",
+    "financialStatements": true,
+    "notes": true
+  },
+  "overallCompletenessPct": 18,
+  "categories": [
+    {
+      "dataCategory": "supplier_classification",
+      "labelAr": "تصنيف المحتوى المحلي للموردين",
+      "labelEn": "Supplier Local Content Classification",
+      "priority": "high",
+      "impact": "blocks_lc_calculation",
+      "totalItems": 6,
+      "completedItems": 6,
+      "completenessPct": 100,
+      "status": "awaiting_client",
+      "items": [
+        {
+          "id": "sup-1",
+          "label": "مورد",
+          "sourceInfo": "Amount: 1,200,000 SAR | Account: 5020",
+          "suggestedDefault": "0% (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "sup-2",
+          "label": "مؤسسة عبدالعزيز للتجارة",
+          "sourceInfo": "Amount: 520,000 SAR | Account: 5021",
+          "suggestedDefault": "0% (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "sup-3",
+          "label": "الشركة السعودية للخدمات",
+          "sourceInfo": "Amount: 380,000 SAR | Account: 5022",
+          "suggestedDefault": "0% (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "sup-4",
+          "label": "GlobalTech Solutions",
+          "sourceInfo": "Amount: 4,200,000 SAR | Account: 5023",
+          "suggestedDefault": "0% (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "sup-5",
+          "label": "رواتب",
+          "sourceInfo": "Amount: 900,000 SAR | Account: 5030",
+          "suggestedDefault": "0% (Conservative)",
+          "isDefaultConservative": true
+        }
+      ]
+    },
+    {
+      "dataCategory": "supplier_lc_percentage",
+      "labelAr": "نسبة المحتوى المحلي لكل مورد",
+      "labelEn": "Supplier Local Content Percentage",
+      "priority": "high",
+      "impact": "blocks_lc_calculation",
+      "totalItems": 6,
+      "completedItems": 6,
+      "completenessPct": 0,
+      "status": "awaiting_client",
+      "items": [
+        {
+          "id": "lc-1",
+          "label": "مورد",
+          "sourceInfo": "Amount: 1,200,000 SAR | Product: سلع ومنتجات محلية",
+          "suggestedDefault": "0% — prevents overstatement",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "lc-2",
+          "label": "مؤسسة عبدالعزيز للتجارة",
+          "sourceInfo": "Amount: 520,000 SAR | Product: سلع ومنتجات محلية",
+          "suggestedDefault": "0% — prevents overstatement",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "lc-3",
+          "label": "الشركة السعودية للخدمات",
+          "sourceInfo": "Amount: 380,000 SAR | Product: سلع ومنتجات محلية",
+          "suggestedDefault": "0% — prevents overstatement",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "lc-4",
+          "label": "GlobalTech Solutions",
+          "sourceInfo": "Amount: 4,200,000 SAR | Product: سلع ومنتجات مستوردة",
+          "suggestedDefault": "0% — prevents overstatement",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "lc-5",
+          "label": "رواتب",
+          "sourceInfo": "Amount: 900,000 SAR | Product: خدمات القوى العاملة",
+          "suggestedDefault": "0% — prevents overstatement",
+          "isDefaultConservative": true
+        }
+      ]
+    },
+    {
+      "dataCategory": "fsc_gsb",
+      "labelAr": "رموز التصنيف (FSC/GSB)",
+      "labelEn": "FSC/GSB Classification Codes",
+      "priority": "high",
+      "impact": "blocks_lc_calculation",
+      "totalItems": 6,
+      "completedItems": 0,
+      "completenessPct": 0,
+      "status": "awaiting_client",
+      "items": [
+        {
+          "id": "fsc-1",
+          "label": "FSC Code Assignment",
+          "sourceInfo": "Required for all supplier rows",
+          "suggestedDefault": "Pending",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "gsb-1",
+          "label": "GSB Code Assignment",
+          "sourceInfo": "Required for government suppliers",
+          "suggestedDefault": "Pending",
+          "isDefaultConservative": true
+        }
+      ]
+    },
+    {
+      "dataCategory": "workforce",
+      "labelAr": "بيانات القوى العاملة — تفصيل الموظفين السعوديين وغير السعوديين",
+      "labelEn": "Workforce Nationality Breakdown",
+      "priority": "medium",
+      "impact": "improves_accuracy",
+      "totalItems": 35,
+      "completedItems": 0,
+      "completenessPct": 0,
+      "status": "awaiting_client",
+      "items": [
+        {
+          "id": "wf-1",
+          "label": "Total Employee Benefits (from TB)",
+          "sourceInfo": "SAR 900,000",
+          "suggestedDefault": "Auto-filled from TB",
+          "isDefaultConservative": false
+        },
+        {
+          "id": "wf-2",
+          "label": "Saudi headcount per category",
+          "sourceInfo": "35 job categories × Saudi/Non-Saudi split",
+          "suggestedDefault": "0 (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "wf-3",
+          "label": "Non-Saudi headcount per category",
+          "sourceInfo": "35 job categories",
+          "suggestedDefault": "0 (Conservative)",
+          "isDefaultConservative": true
+        }
+      ]
+    },
+    {
+      "dataCategory": "capex_origin",
+      "labelAr": "أصل النفقات الرأسمالية",
+      "labelEn": "CAPEX Origin Details",
+      "priority": "medium",
+      "impact": "improves_accuracy",
+      "totalItems": 5,
+      "completedItems": 0,
+      "completenessPct": 0,
+      "status": "awaiting_client",
+      "items": [
+        {
+          "id": "capex-1",
+          "label": "مبانٍ ومعدات",
+          "sourceInfo": "Amount: 3,500,000 SAR | Desc: أصول ثابتة - مبانٍ ومعدات",
+          "suggestedDefault": "Imported (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "capex-2",
+          "label": "غير مصنف",
+          "sourceInfo": "Amount: 875,000 SAR | Desc: مجمّع الإهلاك",
+          "suggestedDefault": "Imported (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "capex-3",
+          "label": "غير مصنف",
+          "sourceInfo": "Amount: 175,000 SAR | Desc: إهلاك",
+          "suggestedDefault": "Imported (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "capex-4",
+          "label": "معدات",
+          "sourceInfo": "Amount: 800,000 SAR | Desc: معدات وأنظمة - استثمار",
+          "suggestedDefault": "Imported (Conservative)",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "capex-5",
+          "label": "مباني",
+          "sourceInfo": "Amount: 450,000 SAR | Desc: تطوير مباني ومستودعات",
+          "suggestedDefault": "Imported (Conservative)",
+          "isDefaultConservative": true
+        }
+      ]
+    },
+    {
+      "dataCategory": "capacity_building",
+      "labelAr": "برامج تطوير القدرات",
+      "labelEn": "Capacity Building Programs",
+      "priority": "low",
+      "impact": "improves_accuracy",
+      "totalItems": 10,
+      "completedItems": 0,
+      "completenessPct": 0,
+      "status": "awaiting_client",
+      "items": [
+        {
+          "id": "cb-1",
+          "label": "Training programs",
+          "sourceInfo": "No data in TB/FS/Notes",
+          "suggestedDefault": "0 programs",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "cb-2",
+          "label": "Trainee headcount",
+          "sourceInfo": "No data in TB/FS/Notes",
+          "suggestedDefault": "0 trainees",
+          "isDefaultConservative": true
+        },
+        {
+          "id": "cb-3",
+          "label": "Training spend",
+          "sourceInfo": "May be in misc expense accounts",
+          "suggestedDefault": "0 SAR",
+          "isDefaultConservative": true
+        }
+      ]
+    }
+  ],
+  "intelligentDefaults": [
+    {
+      "field": "Supplier LC%",
+      "defaultValue": "0%",
+      "rationale": "Conservative — prevents overstatement. Every classified supplier can only increase the score."
+    },
+    {
+      "field": "Supplier Nationality",
+      "defaultValue": "Unknown",
+      "rationale": "Flagged for mandatory classification. No financial system can determine supplier nationality."
+    },
+    {
+      "field": "FSC/GSB Code",
+      "defaultValue": "Pending",
+      "rationale": "Flagged for client input. Codes are specific to each supplier's registration."
+    },
+    {
+      "field": "Workforce Saudi Ratio",
+      "defaultValue": "0%",
+      "rationale": "Conservative. Total payroll known from FS, but nationality split is HR data."
+    },
+    {
+      "field": "CAPEX Origin",
+      "defaultValue": "Imported",
+      "rationale": "Conservative. Asset purchases from TB show amounts but not supplier origin."
+    },
+    {
+      "field": "Capacity Building",
+      "defaultValue": "0 programs",
+      "rationale": "Conservative. Training data is operational, not financial."
+    }
+  ]
+}

@@ -1,0 +1,2578 @@
+{
+  "phase": "3B.2+3B.3",
+  "engagementId": "eng-shalfa-2025",
+  "finishedAt": "2026-06-14T18:25:16.034Z",
+  "splitMethod": "80/20 stratified within each metric category (sorted GL code, last 20% = test)",
+  "splitByCategory": {
+    "Assets": {
+      "total": 160,
+      "train": 128,
+      "test": 32
+    },
+    "Cash": {
+      "total": 16,
+      "train": 13,
+      "test": 3
+    },
+    "Equity": {
+      "total": 6,
+      "train": 5,
+      "test": 1
+    },
+    "Expenses": {
+      "total": 94,
+      "train": 75,
+      "test": 19
+    },
+    "Lease": {
+      "total": 5,
+      "train": 4,
+      "test": 1
+    },
+    "Liabilities": {
+      "total": 170,
+      "train": 136,
+      "test": 34
+    },
+    "Revenue": {
+      "total": 121,
+      "train": 97,
+      "test": 24
+    },
+    "Zakat": {
+      "total": 6,
+      "train": 5,
+      "test": 1
+    }
+  },
+  "successTarget": 0.65,
+  "evalPolicy": {
+    "allowExactName": false,
+    "allowSynonyms": false,
+    "allowFirmMemory": false
+  },
+  "baseline": {
+    "trainSize": 463,
+    "testSize": 115,
+    "summary": {
+      "total": 115,
+      "exact": 42,
+      "accuracy": 0.3652173913043478,
+      "byCategory": {
+        "Assets": {
+          "total": 32,
+          "exact": 15
+        },
+        "Cash": {
+          "total": 3,
+          "exact": 2
+        },
+        "Equity": {
+          "total": 1,
+          "exact": 0
+        },
+        "Expenses": {
+          "total": 19,
+          "exact": 4
+        },
+        "Lease": {
+          "total": 1,
+          "exact": 0
+        },
+        "Liabilities": {
+          "total": 34,
+          "exact": 8
+        },
+        "Revenue": {
+          "total": 24,
+          "exact": 13
+        },
+        "Zakat": {
+          "total": 1,
+          "exact": 0
+        }
+      },
+      "byLayer": {
+        "prefix": 40,
+        "map1": 38,
+        "map2": 2,
+        "name_pattern": 14
+      },
+      "layerPrecision": {
+        "prefix": {
+          "hits": 40,
+          "correct": 8,
+          "precision": 0.2
+        },
+        "map1": {
+          "hits": 38,
+          "correct": 32,
+          "precision": 0.8421052631578947
+        },
+        "map2": {
+          "hits": 2,
+          "correct": 2,
+          "precision": 1
+        },
+        "name_pattern": {
+          "hits": 14,
+          "correct": 0,
+          "precision": 0
+        }
+      }
+    },
+    "successMet": false,
+    "failures": [
+      {
+        "accountCode": "2103020016",
+        "accountName": "ابراهيم اليحيي - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020100",
+        "accountName": "خالد احمد العطوي - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020123",
+        "accountName": "عبدالله فهد فدعوس - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020125",
+        "accountName": "محمد فواز محمد الصريصري - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020157",
+        "accountName": "عائض عوض الحربي - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020159",
+        "accountName": "ملاذ فهد الحربي -ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020160",
+        "accountName": "موسسة دسر للخدمات العقارية - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020161",
+        "accountName": "ابراهيم صالح الرقيبة - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020162",
+        "accountName": "حمد دهام حمود-ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020163",
+        "accountName": "مصلح معيتق عتيق - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020164",
+        "accountName": "راضي الحيلي طميش الصلبي- ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020165",
+        "accountName": "شركة تطوير الفا المحدودة",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020166",
+        "accountName": "احمد ابراهيم احمد النعمي - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020167",
+        "accountName": "شركة سجايا للخدمات الطبية",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2104010021",
+        "accountName": "دفعات مقدمة/عملاء",
+        "expectedCode": "CA-1020",
+        "hints": [
+          "contracts liabilities"
+        ],
+        "map1": "contracts liabilities",
+        "map2": null,
+        "metricCategory": "Assets",
+        "predicted": "CA-2020",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"contracts liabilities\""
+      },
+      {
+        "accountCode": "2303020001-1",
+        "accountName": "مخصص الديون المشكوك فيها",
+        "expectedCode": "CA-1080",
+        "hints": [
+          "Contract Assets"
+        ],
+        "map1": "Contract Assets",
+        "map2": null,
+        "metricCategory": "Assets",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "3204010091",
+        "accountName": "تكلفة مردم تبوك ( مخزون)",
+        "expectedCode": "CA-1030",
+        "hints": [
+          "Cost of revenue",
+          "Other expenses"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Other expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "1105010055",
+        "accountName": "عهدة فيزا / شركة شلفا العالمية",
+        "expectedCode": "CA-1010",
+        "hints": [
+          "Cash and cash equivalent",
+          "Petty Cash"
+        ],
+        "map1": "Cash and cash equivalent",
+        "map2": "Petty Cash",
+        "metricCategory": "Cash",
+        "predicted": "CA-1040",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 110501* → CA-1040 (100% support, n=34)"
+      },
+      {
+        "accountCode": "2404010001",
+        "accountName": "أرباح وخسائر مستبقاة",
+        "expectedCode": "CA-3020",
+        "hints": [
+          "Retained earninggs"
+        ],
+        "map1": "Retained earninggs",
+        "map2": null,
+        "metricCategory": "Equity",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "3201010003",
+        "accountName": "مكافأة نهاية خدمة",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Salaries and wages"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Salaries and wages",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320101* → CA-4010 (100% support, n=7)"
+      },
+      {
+        "accountCode": "3201010016",
+        "accountName": "مياه",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Utilities"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Utilities",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320101* → CA-4010 (100% support, n=7)"
+      },
+      {
+        "accountCode": "3201010017",
+        "accountName": "كهرباء",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Utilities"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Utilities",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320101* → CA-4010 (100% support, n=7)"
+      },
+      {
+        "accountCode": "3201020002",
+        "accountName": "عمولات بنكية",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Bank fees"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Bank fees",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 3201* → CA-4010 (100% support, n=9)"
+      },
+      {
+        "accountCode": "3202010023",
+        "accountName": "رسوم حكومية",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Government Exp."
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Government Exp.",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320201* → CA-4010 (100% support, n=5)"
+      },
+      {
+        "accountCode": "3202010026",
+        "accountName": "مصروفات متنوعة",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Other Exp."
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Other Exp.",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320201* → CA-4010 (100% support, n=5)"
+      },
+      {
+        "accountCode": "3202010026-1",
+        "accountName": "مصروفات متنوعة",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Impairement expense - Prepayments"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Impairement expense - Prepayments",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320201* → CA-4010 (100% support, n=5)"
+      },
+      {
+        "accountCode": "3204010002",
+        "accountName": "اضافى",
+        "expectedCode": "CA-5020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010005",
+        "accountName": "بدل اجازة",
+        "expectedCode": "CA-5020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010012",
+        "accountName": "مياه",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Utilities"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Utilities",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010013",
+        "accountName": "كهرباء",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Utilities"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Utilities",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010038",
+        "accountName": "منح ومكافأت",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Salaries and wages"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Salaries and wages",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010083",
+        "accountName": "اعمال اضافية-مستعاضة (المياه الوطنية)",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Spare Parts & Consumables"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010084",
+        "accountName": "قطع غيار وخدمات-مستعاضة (المياه الوطنية)",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Spare Parts & Consumables"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3205010001",
+        "accountName": "رواتب قطاع الحاويات",
+        "expectedCode": "CA-5020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320501* → CA-4010 (100% support, n=12)"
+      },
+      {
+        "accountCode": "3301010011-1",
+        "accountName": "اهلاك اصول حق الاستخدام",
+        "expectedCode": "CA-1071",
+        "hints": [
+          "General and administrative expenses",
+          "Amortization ROU"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Amortization ROU",
+        "metricCategory": "Lease",
+        "predicted": "CA-5070",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"General and administrative expenses\""
+      },
+      {
+        "accountCode": "2104010020",
+        "accountName": "التزامات عقود الايجار-الجزء غير المتداول",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Lease Liability Non-current"
+        ],
+        "map1": "Lease Liability Non-current",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2010",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"ايجار\" (mined_name)"
+      },
+      {
+        "accountCode": "2104010022",
+        "accountName": "التزامات عقود الايجار-الجزء المتداول",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Lease liabilities - Current Portion"
+        ],
+        "map1": "Lease liabilities - Current Portion",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2010",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"ايجار\" (mined_name)"
+      },
+      {
+        "accountCode": "2106020125",
+        "accountName": "مستحق الي اطراف ذات علاقة شركة بيت الخبرة الاولي",
+        "expectedCode": "CA-2010",
+        "hints": [
+          "Due to related parties",
+          "شركة بيت الخبرة الأولى المحدودة"
+        ],
+        "map1": "Due to related parties",
+        "map2": "شركة بيت الخبرة الأولى المحدودة",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-1020",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مستحق\" (mined_name)"
+      },
+      {
+        "accountCode": "2108010001",
+        "accountName": "تمويل بنك الرياض",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"تمويل\" (mined_name)"
+      },
+      {
+        "accountCode": "2108010002",
+        "accountName": "تمويل البنك العربي",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"تمويل\" (mined_name)"
+      },
+      {
+        "accountCode": "2108010004",
+        "accountName": "تمويل بنك الجزيرة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"تمويل\" (mined_name)"
+      },
+      {
+        "accountCode": "2108010010",
+        "accountName": "قرض بنك الجزيرة - المياة الوطنية اتفاقية تثبيت اسعار",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Long term loans ( Non Current )"
+        ],
+        "map1": "Long term loans ( Non Current )",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108010012",
+        "accountName": "قرض بنك الرياض- مشروع المديرية العامة للمباحث",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"العامة\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020001",
+        "accountName": "قرض طويل الاجل بنك الرياض شركة المياه الوطنية - ادارة المرافق المتكاملة",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020004",
+        "accountName": "قروض طويله الاجل-بنك الجزيرة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020005",
+        "accountName": "قرض بنك الرياض - مشروع هئية الزكاة حراسات المنافذ",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020008",
+        "accountName": "قرض البنك العربي - مشروع مستشفي قوى الامن الدمام",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Long term loans ( Current )"
+        ],
+        "map1": "Long term loans ( Current )",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020009",
+        "accountName": "قرض البنك العربي - مشروع رئاسة امن الدولة المباحث العامة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"العامة\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020011",
+        "accountName": "قرض بنك الرياض - مشروع مراكز التاهيل المجموعة الرابعة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مراكز\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020013",
+        "accountName": "قرض الرياض -مراكز التاهيل المجموعة الاولي",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مراكز\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020014",
+        "accountName": "قرض بنك الجزيرة -مراكز التاهيل المجموعة الثالثة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مراكز\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020015",
+        "accountName": "قرض بنك الرياض - مراكز التاهيل المجموعة السادسة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مراكز\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020017",
+        "accountName": "قرض بنك الجزيرة - شركة تطوير للمباني - TBC",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020018",
+        "accountName": "قروض طويلة الاجل البنك السعودي للاستثمار",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2109010005",
+        "accountName": "مؤسسة قلعة بيسان للمقاولات-حسن تنفيذ",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2010",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"للمقاولات\" (mined_name)"
+      },
+      {
+        "accountCode": "2303020002",
+        "accountName": "مخصص مكأفاة الخدمة",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Employees Defined Benefits Obligation"
+        ],
+        "map1": "Employees Defined Benefits Obligation",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "3101070016",
+        "accountName": "عمولة قرض طويل الاجل- تجهيز موقع1(شراء اصول)/الجزيرة",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Finance Costs",
+          "Finance costs - Borwings"
+        ],
+        "map1": "Finance Costs",
+        "map2": "Finance costs - Borwings",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"Finance Costs\""
+      },
+      {
+        "accountCode": "3101070017",
+        "accountName": "عمولة قرض طويل الاجل بنك الرياض شركة المياه الوطنية - ادارة المرافق المتكاملة",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Finance Costs",
+          "Finance costs - Borwings"
+        ],
+        "map1": "Finance Costs",
+        "map2": "Finance costs - Borwings",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"Finance Costs\""
+      },
+      {
+        "accountCode": "3101070045",
+        "accountName": "عمولة قروض طويلة الاجل البنك السعودي للاستثمار",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Finance Costs",
+          "Finance costs - Borwings"
+        ],
+        "map1": "Finance Costs",
+        "map2": "Finance costs - Borwings",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"Finance Costs\""
+      },
+      {
+        "accountCode": "3203010001",
+        "accountName": "رواتب",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-4010",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"Cost of revenue\""
+      },
+      {
+        "accountCode": "3204010001",
+        "accountName": "رواتب",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "4301010002",
+        "accountName": "ايرادات قطاع الامن والسلامة.",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "ايرادات قطاع االخدمات البيئيه."
+        ],
+        "map1": "Revenues",
+        "map2": "ايرادات قطاع االخدمات البيئيه.",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4401010001",
+        "accountName": "ايرادات مشاريع التشغيل والصيانة",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "خدمات اداره مرافق"
+        ],
+        "map1": "Revenues",
+        "map2": "خدمات اداره مرافق",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4401010003",
+        "accountName": "ايرادات الصيانه والتشغيل (غير مفوترة)",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "خدمات اداره مرافق"
+        ],
+        "map1": "Revenues",
+        "map2": "خدمات اداره مرافق",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4401010004",
+        "accountName": "ايرادات الصيانه والتشغيل (مطالبات)",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "خدمات اداره مرافق"
+        ],
+        "map1": "Revenues",
+        "map2": "خدمات اداره مرافق",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4401010005",
+        "accountName": "ايرادات الشركات الشقيقة",
+        "expectedCode": "CA-4010",
+        "hints": [],
+        "map1": null,
+        "map2": null,
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4501010001",
+        "accountName": "أ.خ بيع أصول ثابتة",
+        "expectedCode": "CA-5100",
+        "hints": [
+          "Other income",
+          "أرباح بيع أصول ثابتة"
+        ],
+        "map1": "Other income",
+        "map2": "أرباح بيع أصول ثابتة",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4501010003",
+        "accountName": "ايرادات اخرى متنوعه.",
+        "expectedCode": "CA-5100",
+        "hints": [
+          "Other income",
+          "ايرادات اخرى متنوعه."
+        ],
+        "map1": "Other income",
+        "map2": "ايرادات اخرى متنوعه.",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4501010003-2",
+        "accountName": "أرباح استبعاد عقود الايجار",
+        "expectedCode": "CA-5100",
+        "hints": [
+          "Other income",
+          "أرباح استبعاد عقود الايجار"
+        ],
+        "map1": "Other income",
+        "map2": "أرباح استبعاد عقود الايجار",
+        "metricCategory": "Revenue",
+        "predicted": "CA-2010",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"ايجار\" (mined_name)"
+      },
+      {
+        "accountCode": "4601010002",
+        "accountName": "ايرادات قطاع االخدمات البيئيه.",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "ايرادات قطاع االخدمات البيئيه."
+        ],
+        "map1": "Revenues",
+        "map2": "ايرادات قطاع االخدمات البيئيه.",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4601010003",
+        "accountName": "ايرادات مشروع تدوير النفايات بمردم تبوك",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "ايرادات قطاع االخدمات البيئيه."
+        ],
+        "map1": "Revenues",
+        "map2": "ايرادات قطاع االخدمات البيئيه.",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4701010001",
+        "accountName": "ايرادات الحاويات",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "خدمات اداره مرافق"
+        ],
+        "map1": "Revenues",
+        "map2": "خدمات اداره مرافق",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2303010003",
+        "accountName": "مخصص الزكاة الشرعية",
+        "expectedCode": "CA-2035",
+        "hints": [
+          "Zakat provision"
+        ],
+        "map1": "Zakat provision",
+        "map2": null,
+        "metricCategory": "Zakat",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      }
+    ]
+  },
+  "refined": {
+    "summary": {
+      "total": 115,
+      "exact": 41,
+      "accuracy": 0.3565217391304348,
+      "byCategory": {
+        "Assets": {
+          "total": 32,
+          "exact": 15
+        },
+        "Cash": {
+          "total": 3,
+          "exact": 2
+        },
+        "Equity": {
+          "total": 1,
+          "exact": 0
+        },
+        "Expenses": {
+          "total": 19,
+          "exact": 4
+        },
+        "Lease": {
+          "total": 1,
+          "exact": 0
+        },
+        "Liabilities": {
+          "total": 34,
+          "exact": 7
+        },
+        "Revenue": {
+          "total": 24,
+          "exact": 13
+        },
+        "Zakat": {
+          "total": 1,
+          "exact": 0
+        }
+      },
+      "byLayer": {
+        "prefix": 40,
+        "map1": 38,
+        "name_pattern": 14,
+        "map2_global": 1
+      },
+      "layerPrecision": {
+        "prefix": {
+          "hits": 40,
+          "correct": 8,
+          "precision": 0.2
+        },
+        "map1": {
+          "hits": 38,
+          "correct": 32,
+          "precision": 0.8421052631578947
+        },
+        "name_pattern": {
+          "hits": 14,
+          "correct": 0,
+          "precision": 0
+        },
+        "map2_global": {
+          "hits": 1,
+          "correct": 1,
+          "precision": 1
+        }
+      }
+    },
+    "map2Assets": {
+      "global": 36,
+      "composite": 46,
+      "ambiguous": 5
+    },
+    "successMet": false,
+    "failures": [
+      {
+        "accountCode": "2103020016",
+        "accountName": "ابراهيم اليحيي - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020100",
+        "accountName": "خالد احمد العطوي - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020123",
+        "accountName": "عبدالله فهد فدعوس - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020125",
+        "accountName": "محمد فواز محمد الصريصري - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020157",
+        "accountName": "عائض عوض الحربي - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020159",
+        "accountName": "ملاذ فهد الحربي -ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020160",
+        "accountName": "موسسة دسر للخدمات العقارية - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020161",
+        "accountName": "ابراهيم صالح الرقيبة - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020162",
+        "accountName": "حمد دهام حمود-ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020163",
+        "accountName": "مصلح معيتق عتيق - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020164",
+        "accountName": "راضي الحيلي طميش الصلبي- ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020165",
+        "accountName": "شركة تطوير الفا المحدودة",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020166",
+        "accountName": "احمد ابراهيم احمد النعمي - ايجار",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2103020167",
+        "accountName": "شركة سجايا للخدمات الطبية",
+        "expectedCode": "CA-1040",
+        "hints": [
+          "Prepaid expenses and other current assets",
+          "Other Prepaid Expenses"
+        ],
+        "map1": "Prepaid expenses and other current assets",
+        "map2": "Other Prepaid Expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-2010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 210302* → CA-2010 (98% support, n=48)"
+      },
+      {
+        "accountCode": "2104010021",
+        "accountName": "دفعات مقدمة/عملاء",
+        "expectedCode": "CA-1020",
+        "hints": [
+          "contracts liabilities"
+        ],
+        "map1": "contracts liabilities",
+        "map2": null,
+        "metricCategory": "Assets",
+        "predicted": "CA-2020",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"contracts liabilities\""
+      },
+      {
+        "accountCode": "2303020001-1",
+        "accountName": "مخصص الديون المشكوك فيها",
+        "expectedCode": "CA-1080",
+        "hints": [
+          "Contract Assets"
+        ],
+        "map1": "Contract Assets",
+        "map2": null,
+        "metricCategory": "Assets",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "3204010091",
+        "accountName": "تكلفة مردم تبوك ( مخزون)",
+        "expectedCode": "CA-1030",
+        "hints": [
+          "Cost of revenue",
+          "Other expenses"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Other expenses",
+        "metricCategory": "Assets",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "1105010055",
+        "accountName": "عهدة فيزا / شركة شلفا العالمية",
+        "expectedCode": "CA-1010",
+        "hints": [
+          "Cash and cash equivalent",
+          "Petty Cash"
+        ],
+        "map1": "Cash and cash equivalent",
+        "map2": "Petty Cash",
+        "metricCategory": "Cash",
+        "predicted": "CA-1040",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 110501* → CA-1040 (100% support, n=34)"
+      },
+      {
+        "accountCode": "2404010001",
+        "accountName": "أرباح وخسائر مستبقاة",
+        "expectedCode": "CA-3020",
+        "hints": [
+          "Retained earninggs"
+        ],
+        "map1": "Retained earninggs",
+        "map2": null,
+        "metricCategory": "Equity",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "3201010003",
+        "accountName": "مكافأة نهاية خدمة",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Salaries and wages"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Salaries and wages",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320101* → CA-4010 (100% support, n=7)"
+      },
+      {
+        "accountCode": "3201010016",
+        "accountName": "مياه",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Utilities"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Utilities",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320101* → CA-4010 (100% support, n=7)"
+      },
+      {
+        "accountCode": "3201010017",
+        "accountName": "كهرباء",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Utilities"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Utilities",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320101* → CA-4010 (100% support, n=7)"
+      },
+      {
+        "accountCode": "3201020002",
+        "accountName": "عمولات بنكية",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Bank fees"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Bank fees",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 3201* → CA-4010 (100% support, n=9)"
+      },
+      {
+        "accountCode": "3202010023",
+        "accountName": "رسوم حكومية",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Government Exp."
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Government Exp.",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320201* → CA-4010 (100% support, n=5)"
+      },
+      {
+        "accountCode": "3202010026",
+        "accountName": "مصروفات متنوعة",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Other Exp."
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Other Exp.",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320201* → CA-4010 (100% support, n=5)"
+      },
+      {
+        "accountCode": "3202010026-1",
+        "accountName": "مصروفات متنوعة",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Impairement expense - Prepayments"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Impairement expense - Prepayments",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320201* → CA-4010 (100% support, n=5)"
+      },
+      {
+        "accountCode": "3204010002",
+        "accountName": "اضافى",
+        "expectedCode": "CA-5020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010005",
+        "accountName": "بدل اجازة",
+        "expectedCode": "CA-5020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010012",
+        "accountName": "مياه",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Utilities"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Utilities",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010013",
+        "accountName": "كهرباء",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Utilities"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Utilities",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010038",
+        "accountName": "منح ومكافأت",
+        "expectedCode": "CA-5070",
+        "hints": [
+          "General and administrative expenses",
+          "Salaries and wages"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Salaries and wages",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010083",
+        "accountName": "اعمال اضافية-مستعاضة (المياه الوطنية)",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Spare Parts & Consumables"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3204010084",
+        "accountName": "قطع غيار وخدمات-مستعاضة (المياه الوطنية)",
+        "expectedCode": "CA-5040",
+        "hints": [
+          "Cost of revenue",
+          "Spare Parts & Consumables"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Spare Parts & Consumables",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "3205010001",
+        "accountName": "رواتب قطاع الحاويات",
+        "expectedCode": "CA-5020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Expenses",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320501* → CA-4010 (100% support, n=12)"
+      },
+      {
+        "accountCode": "3301010011-1",
+        "accountName": "اهلاك اصول حق الاستخدام",
+        "expectedCode": "CA-1071",
+        "hints": [
+          "General and administrative expenses",
+          "Amortization ROU"
+        ],
+        "map1": "General and administrative expenses",
+        "map2": "Amortization ROU",
+        "metricCategory": "Lease",
+        "predicted": "CA-5070",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"General and administrative expenses\""
+      },
+      {
+        "accountCode": "2104010018",
+        "accountName": "عهد دائنة",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Accrued expenses and other credit balances",
+          "Accrued expenses"
+        ],
+        "map1": "Accrued expenses and other credit balances",
+        "map2": "Accrued expenses",
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2104010020",
+        "accountName": "التزامات عقود الايجار-الجزء غير المتداول",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Lease Liability Non-current"
+        ],
+        "map1": "Lease Liability Non-current",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2010",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"ايجار\" (mined_name)"
+      },
+      {
+        "accountCode": "2104010022",
+        "accountName": "التزامات عقود الايجار-الجزء المتداول",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Lease liabilities - Current Portion"
+        ],
+        "map1": "Lease liabilities - Current Portion",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2010",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"ايجار\" (mined_name)"
+      },
+      {
+        "accountCode": "2106020125",
+        "accountName": "مستحق الي اطراف ذات علاقة شركة بيت الخبرة الاولي",
+        "expectedCode": "CA-2010",
+        "hints": [
+          "Due to related parties",
+          "شركة بيت الخبرة الأولى المحدودة"
+        ],
+        "map1": "Due to related parties",
+        "map2": "شركة بيت الخبرة الأولى المحدودة",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-1020",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مستحق\" (mined_name)"
+      },
+      {
+        "accountCode": "2108010001",
+        "accountName": "تمويل بنك الرياض",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"تمويل\" (mined_name)"
+      },
+      {
+        "accountCode": "2108010002",
+        "accountName": "تمويل البنك العربي",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"تمويل\" (mined_name)"
+      },
+      {
+        "accountCode": "2108010004",
+        "accountName": "تمويل بنك الجزيرة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"تمويل\" (mined_name)"
+      },
+      {
+        "accountCode": "2108010010",
+        "accountName": "قرض بنك الجزيرة - المياة الوطنية اتفاقية تثبيت اسعار",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Long term loans ( Non Current )"
+        ],
+        "map1": "Long term loans ( Non Current )",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108010012",
+        "accountName": "قرض بنك الرياض- مشروع المديرية العامة للمباحث",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"العامة\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020001",
+        "accountName": "قرض طويل الاجل بنك الرياض شركة المياه الوطنية - ادارة المرافق المتكاملة",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020004",
+        "accountName": "قروض طويله الاجل-بنك الجزيرة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020005",
+        "accountName": "قرض بنك الرياض - مشروع هئية الزكاة حراسات المنافذ",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020008",
+        "accountName": "قرض البنك العربي - مشروع مستشفي قوى الامن الدمام",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Long term loans ( Current )"
+        ],
+        "map1": "Long term loans ( Current )",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020009",
+        "accountName": "قرض البنك العربي - مشروع رئاسة امن الدولة المباحث العامة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"العامة\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020011",
+        "accountName": "قرض بنك الرياض - مشروع مراكز التاهيل المجموعة الرابعة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مراكز\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020013",
+        "accountName": "قرض الرياض -مراكز التاهيل المجموعة الاولي",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مراكز\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020014",
+        "accountName": "قرض بنك الجزيرة -مراكز التاهيل المجموعة الثالثة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مراكز\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020015",
+        "accountName": "قرض بنك الرياض - مراكز التاهيل المجموعة السادسة",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"مراكز\" (mined_name)"
+      },
+      {
+        "accountCode": "2108020017",
+        "accountName": "قرض بنك الجزيرة - شركة تطوير للمباني - TBC",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2108020018",
+        "accountName": "قروض طويلة الاجل البنك السعودي للاستثمار",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2109010005",
+        "accountName": "مؤسسة قلعة بيسان للمقاولات-حسن تنفيذ",
+        "expectedCode": "CA-2040",
+        "hints": [
+          "Short Term Loans"
+        ],
+        "map1": "Short Term Loans",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2010",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"للمقاولات\" (mined_name)"
+      },
+      {
+        "accountCode": "2303020002",
+        "accountName": "مخصص مكأفاة الخدمة",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Employees Defined Benefits Obligation"
+        ],
+        "map1": "Employees Defined Benefits Obligation",
+        "map2": null,
+        "metricCategory": "Liabilities",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "3101070016",
+        "accountName": "عمولة قرض طويل الاجل- تجهيز موقع1(شراء اصول)/الجزيرة",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Finance Costs",
+          "Finance costs - Borwings"
+        ],
+        "map1": "Finance Costs",
+        "map2": "Finance costs - Borwings",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"Finance Costs\""
+      },
+      {
+        "accountCode": "3101070017",
+        "accountName": "عمولة قرض طويل الاجل بنك الرياض شركة المياه الوطنية - ادارة المرافق المتكاملة",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Finance Costs",
+          "Finance costs - Borwings"
+        ],
+        "map1": "Finance Costs",
+        "map2": "Finance costs - Borwings",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"Finance Costs\""
+      },
+      {
+        "accountCode": "3101070045",
+        "accountName": "عمولة قروض طويلة الاجل البنك السعودي للاستثمار",
+        "expectedCode": "CA-2130",
+        "hints": [
+          "Finance Costs",
+          "Finance costs - Borwings"
+        ],
+        "map1": "Finance Costs",
+        "map2": "Finance costs - Borwings",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-2050",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"Finance Costs\""
+      },
+      {
+        "accountCode": "3203010001",
+        "accountName": "رواتب",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-4010",
+        "layer": "map1",
+        "correct": false,
+        "evidence": "ERP Map1 dictionary: \"Cost of revenue\""
+      },
+      {
+        "accountCode": "3204010001",
+        "accountName": "رواتب",
+        "expectedCode": "CA-2020",
+        "hints": [
+          "Cost of revenue",
+          "Wages, salaries"
+        ],
+        "map1": "Cost of revenue",
+        "map2": "Wages, salaries",
+        "metricCategory": "Liabilities",
+        "predicted": "CA-4010",
+        "layer": "prefix",
+        "correct": false,
+        "evidence": "ERP prefix 320401* → CA-4010 (100% support, n=69)"
+      },
+      {
+        "accountCode": "4301010002",
+        "accountName": "ايرادات قطاع الامن والسلامة.",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "ايرادات قطاع االخدمات البيئيه."
+        ],
+        "map1": "Revenues",
+        "map2": "ايرادات قطاع االخدمات البيئيه.",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4401010001",
+        "accountName": "ايرادات مشاريع التشغيل والصيانة",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "خدمات اداره مرافق"
+        ],
+        "map1": "Revenues",
+        "map2": "خدمات اداره مرافق",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4401010003",
+        "accountName": "ايرادات الصيانه والتشغيل (غير مفوترة)",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "خدمات اداره مرافق"
+        ],
+        "map1": "Revenues",
+        "map2": "خدمات اداره مرافق",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4401010004",
+        "accountName": "ايرادات الصيانه والتشغيل (مطالبات)",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "خدمات اداره مرافق"
+        ],
+        "map1": "Revenues",
+        "map2": "خدمات اداره مرافق",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4401010005",
+        "accountName": "ايرادات الشركات الشقيقة",
+        "expectedCode": "CA-4010",
+        "hints": [],
+        "map1": null,
+        "map2": null,
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4501010001",
+        "accountName": "أ.خ بيع أصول ثابتة",
+        "expectedCode": "CA-5100",
+        "hints": [
+          "Other income",
+          "أرباح بيع أصول ثابتة"
+        ],
+        "map1": "Other income",
+        "map2": "أرباح بيع أصول ثابتة",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4501010003",
+        "accountName": "ايرادات اخرى متنوعه.",
+        "expectedCode": "CA-5100",
+        "hints": [
+          "Other income",
+          "ايرادات اخرى متنوعه."
+        ],
+        "map1": "Other income",
+        "map2": "ايرادات اخرى متنوعه.",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4501010003-2",
+        "accountName": "أرباح استبعاد عقود الايجار",
+        "expectedCode": "CA-5100",
+        "hints": [
+          "Other income",
+          "أرباح استبعاد عقود الايجار"
+        ],
+        "map1": "Other income",
+        "map2": "أرباح استبعاد عقود الايجار",
+        "metricCategory": "Revenue",
+        "predicted": "CA-2010",
+        "layer": "name_pattern",
+        "correct": false,
+        "evidence": "ERP name pattern: \"ايجار\" (mined_name)"
+      },
+      {
+        "accountCode": "4601010002",
+        "accountName": "ايرادات قطاع االخدمات البيئيه.",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "ايرادات قطاع االخدمات البيئيه."
+        ],
+        "map1": "Revenues",
+        "map2": "ايرادات قطاع االخدمات البيئيه.",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4601010003",
+        "accountName": "ايرادات مشروع تدوير النفايات بمردم تبوك",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "ايرادات قطاع االخدمات البيئيه."
+        ],
+        "map1": "Revenues",
+        "map2": "ايرادات قطاع االخدمات البيئيه.",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "4701010001",
+        "accountName": "ايرادات الحاويات",
+        "expectedCode": "CA-4010",
+        "hints": [
+          "Revenues",
+          "خدمات اداره مرافق"
+        ],
+        "map1": "Revenues",
+        "map2": "خدمات اداره مرافق",
+        "metricCategory": "Revenue",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      },
+      {
+        "accountCode": "2303010003",
+        "accountName": "مخصص الزكاة الشرعية",
+        "expectedCode": "CA-2035",
+        "hints": [
+          "Zakat provision"
+        ],
+        "map1": "Zakat provision",
+        "map2": null,
+        "metricCategory": "Zakat",
+        "predicted": null,
+        "layer": null,
+        "correct": false
+      }
+    ]
+  },
+  "map2ErrorAnalysis": [],
+  "testAccountCodes": [
+    "2103020016",
+    "2103020100",
+    "2103020123",
+    "2103020125",
+    "2103020157",
+    "2103020159",
+    "2103020160",
+    "2103020161",
+    "2103020162",
+    "2103020163",
+    "2103020164",
+    "2103020165",
+    "2103020166",
+    "2103020167",
+    "2104010021",
+    "2106010004",
+    "2106010006",
+    "2106020002",
+    "2106020003",
+    "2106020004",
+    "2302010002",
+    "2302010004",
+    "2302010005",
+    "2302010006",
+    "2302010007",
+    "2302010008",
+    "2303020001",
+    "2303020001-1",
+    "2303020010",
+    "2303020011",
+    "2403010001",
+    "3204010091",
+    "1101020112",
+    "1101020213",
+    "1105010055",
+    "2404010001",
+    "3101070049",
+    "3101070050",
+    "3201010003",
+    "3201010016",
+    "3201010017",
+    "3201020002",
+    "3202010023",
+    "3202010026",
+    "3202010026-1",
+    "3204010002",
+    "3204010005",
+    "3204010012",
+    "3204010013",
+    "3204010038",
+    "3204010083",
+    "3204010084",
+    "3205010001",
+    "3301010003",
+    "4501010003-1",
+    "3301010011-1",
+    "2104010016",
+    "2104010017",
+    "2104010018",
+    "2104010020",
+    "2104010022",
+    "2104010024",
+    "2104010026",
+    "2104010027",
+    "2106010001",
+    "2106020125",
+    "2106030109",
+    "2108010001",
+    "2108010002",
+    "2108010004",
+    "2108010010",
+    "2108010012",
+    "2108020001",
+    "2108020004",
+    "2108020005",
+    "2108020008",
+    "2108020009",
+    "2108020011",
+    "2108020013",
+    "2108020014",
+    "2108020015",
+    "2108020017",
+    "2108020018",
+    "2109010005",
+    "2303020002",
+    "3101070016",
+    "3101070017",
+    "3101070045",
+    "3203010001",
+    "3204010001",
+    "3205010015",
+    "3205010016",
+    "3205010017",
+    "3205010019",
+    "3205010020",
+    "3205010021",
+    "3205010022",
+    "3205010023",
+    "3301010002",
+    "3301010004",
+    "3301010006",
+    "3301010007",
+    "3301010010",
+    "4301010002",
+    "4401010001",
+    "4401010003",
+    "4401010004",
+    "4401010005",
+    "4501010001",
+    "4501010003",
+    "4501010003-2",
+    "4601010002",
+    "4601010003",
+    "4701010001",
+    "2303010003"
+  ]
+}

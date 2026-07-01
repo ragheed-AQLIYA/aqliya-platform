@@ -1,7 +1,11 @@
+# Core Identity
+
 ﻿# AQLIYA v1.1 — Official Vision
 
 **Version:** 1.1  
 **Status:** Official doctrine — identity, governance, and strategic positioning  
+**Owner:** Governance Team  
+**Last Reviewed:** 2026-06-26  
 **Source files:** `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`  
 **Note:** Implementation-status claims in this file reflect v0.1 operational baseline as of 2026-05-22. For current implementation status, see `AQLIYA_MASTER_REFERENCE.md` or inspect code.  
 **Website positioning (2026-06-09):** AQLIYA is presented as a **platform first** — the homepage sells the institutional operating platform, not individual products. Specialized operating systems (formerly called "products") are surfaced inside the platform page as capabilities. See `docs/source-of-truth/AQLIYA_ARCHITECTURE.md` for the updated architecture.
@@ -80,7 +84,7 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 | **Sunbul**              | Legacy redirect alias to WorkflowOS     | N/A                            | Internal only                 |
 | **WorkflowOS**          | Included as governed workspace          | L4 Usable v0.1                 | Safe to show with explanation |
 | **auditos demo**        | Included as demo only                   | L1 Marketing                   | Demo only                     |
-| **SalesOS**             | Prototype / internal preview            | L3 Prototype                   | Do not show as implemented    |
+| **SalesOS**             | Included as pilot-ready product         | L5 Pilot-ready                 | Safe to show with explanation |
 | **LocalContentOS**      | Pilot-ready with conditions             | L5 Pilot-ready with conditions | Safe to show with explanation |
 
 ---
@@ -95,7 +99,7 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 | **Sunbul**              | Legacy redirect alias to WorkflowOS        | Preserved for backward compatibility    |
 | **WorkflowOS**          | Custom/client-specific governed workspace  | Real governed workspace (L4)            |
 | **LocalContentOS**      | Strategic second product                   | L5 Pilot-ready with conditions          |
-| **SalesOS**             | Future governed revenue intelligence       | Prototype only                          |
+| **SalesOS**             | Governed commercial intelligence workspace | L5 Pilot-ready                          |
 
 ---
 
@@ -106,10 +110,7 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 - Local AI runtime
 - AQLIYA Studio builder
 - Model Governance registry
-- Institutional Memory engine
-- SalesOS backend/workflow
-- LocalContactOS backend
-- RiskOS (as standalone product — `/risk/*` workspace exists as audit-adjacent risk capability, not standalone product), ComplianceOS, LegalOS, GovOS product implementations
+- ComplianceOS, LegalOS, GovOS product implementations
 
 ---
 

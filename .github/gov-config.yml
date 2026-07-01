@@ -1,0 +1,16 @@
+governance:
+  strict: true
+  rules:
+    GR-001: blocking
+    GR-002: blocking
+    GR-003: blocking
+    GR-004: warning
+    GR-005: blocking
+    GR-006: blocking
+    GR-007: blocking
+    GR-008: blocking
+    GR-009: blocking
+    GR-010: warning
+    GR-011: warning
+    GR-012: blocking
+    GR-013: blocking

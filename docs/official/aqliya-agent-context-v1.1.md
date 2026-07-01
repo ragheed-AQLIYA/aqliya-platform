@@ -3,6 +3,8 @@
 **Purpose:** Mandatory context for any coding or documentation agent working on the AQLIYA repository.  
 **Version:** 1.1  
 **Status:** Official — agent context for v0.1 operational baseline  
+**Owner:** Governance Team  
+**Last Reviewed:** 2026-06-26  
 **Note:** LocalContentOS status corrected from "not implemented" to "pilot-ready with conditions (L5)". For current status, see `AQLIYA_MASTER_REFERENCE.md`.
 
 ---
@@ -32,7 +34,7 @@
 
 - LocalContentOS is implemented as L5 pilot-ready with conditions / usable v0.1 after mutation feedback loop verification (2026-05-23). SalesOS is not implemented as an operational product.
 
-8. Private/On-Prem, Air-Gapped, Local AI, Studio, Model Governance, and Institutional Memory are not implemented.
+8. Private/On-Prem, Air-Gapped, Local AI, Studio, and Model Governance are not implemented. Institutional Memory is implemented as L5 pilot-ready.
 
 ---
 
@@ -77,8 +79,4 @@ Do not claim these as live unless code, validation, and routes prove them:
 - Local AI runtime
 - AQLIYA Studio builder
 - Model Governance registry
-- Institutional Memory engine
-- LocalContactOS backend
-- SalesOS backend
-- LocalContactOS backend
-- RiskOS / ComplianceOS / LegalOS / GovOS product implementations
+- ComplianceOS / LegalOS / GovOS product implementations

@@ -116,31 +116,18 @@ All validators now pass on local machine. CI will pass after commit (knowledge-m
 
 ## 7. Policy Established & Lesson Learned
 
-### Policy
-Every AQLIYA program MUST end with this format:
+### Policy: Program Closure Checklist
 
-```
-Program:
-<name>
+Following this audit, AQLIYA established a **mandatory Program Closure Checklist** at `docs/PROGRAM_CLOSURE_CHECKLIST.md`.
 
-Status:
-CLOSED WITH BACKLOG
+Every AQLIYA program MUST complete this checklist before closure sign-off. Key requirements:
 
-Acceptance:
-PASSED / FAILED
+1. **Fresh-clone verification gate** — Clone the repo to a temp directory and run all validators. Passing locally is not sufficient.
+2. **`git ls-files` audit** — Verify every CI dependency is tracked in git. Untracked files cannot be accessed by CI.
+3. **Pipeline documentation accuracy** — Pipeline docs must match `.github/workflows/ci.yml` exactly.
+4. **Closure document** — Every closed program produces a document in `docs/releases/` following the template in §9 of the checklist.
 
-Regression:
-NONE / <list>
-
-Blocking Issues:
-NONE / <list>
-
-Backlog:
-<transferred items>
-
-Next Program:
-<name>
-```
+The full checklist is at **`docs/PROGRAM_CLOSURE_CHECKLIST.md`** — it is the single mandatory closure gate for all future programs.
 
 ### Lesson Learned
 Before closing any program that involves CI enforcement, verify:
@@ -148,16 +135,25 @@ Before closing any program that involves CI enforcement, verify:
 1. `git ls-files` includes all files the pipeline depends on
 2. A fresh clone passes the CI workflow (not just local machine)
 3. Pipeline documentation reflects actual pipeline behavior (not intended behavior)
+4. The closure document is written and committed **before** the final sign-off
 
-These checks are now mandatory for all future program closures.
+These checks are now mandatory for all future program closures per `docs/PROGRAM_CLOSURE_CHECKLIST.md`.
 
 ---
 
-## 8. Commemoration
+## 8. Post-Closure Actions (Completed)
+
+| Action | Status | Reference |
+|--------|--------|-----------|
+| Create mandatory PROGRAM_CLOSURE_CHECKLIST.md | ✅ Done | `docs/PROGRAM_CLOSURE_CHECKLIST.md` v1.0 |
+| Link closure policy to the new checklist | ✅ Done | Updated §7 to reference checklist |
+| Fresh-clone verification performed | ✅ Done | All 7 validators pass from `git clone --depth 1` |
+
+## 9. Commemoration
 
 This is the **first officially closed program** under AQLIYA's formal program closure policy.
 
-It underwent an independent audit, had one critical finding corrected post-closure, and now reflects the true state of the repository.
+It underwent an independent audit, had one critical finding corrected post-closure, established the first mandatory closure checklist, and now reflects the true state of the repository.
 
 ---
 

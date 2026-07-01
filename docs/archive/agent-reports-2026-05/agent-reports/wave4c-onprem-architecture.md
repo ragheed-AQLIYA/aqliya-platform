@@ -1,3 +1,5 @@
+# Summary
+
 ## Summary
 
 - Created 7 documentation files covering AQLIYA infrastructure architecture with full commercial honesty

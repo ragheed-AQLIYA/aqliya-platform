@@ -1,0 +1,35 @@
+{
+  "mappedCount": 578,
+  "tbRowCount": 578,
+  "before": {
+    "revenue": 986814510.4599998,
+    "costOfRevenue": 0,
+    "grossProfit": 986814510.4599998,
+    "netProfit": 933723526.3399998
+  },
+  "after": {
+    "revenue": 450305191.84000003,
+    "revenueAffiliate": 68774043.86999999,
+    "revenueContract": 3744151.5399999917,
+    "revenueOther": 458644731.75000006,
+    "costOfRevenue": 384995488.8199998,
+    "grossProfit": 65309703.02000022,
+    "operatingExpenses": 25160097.590000007,
+    "operatingProfit": 40149605.430000216,
+    "financeCosts": 12901271.17,
+    "otherIncome": 735915,
+    "profitBeforeZakat": 27984249.260000214,
+    "zakat": 2575256.63,
+    "netProfit": 25084855.92000027,
+    "signedIsNet": 25084855.92000027,
+    "equityTotal": 112586726.38000028
+  },
+  "audited": {
+    "revenue": 451412506,
+    "costOfRevenue": 384959315,
+    "grossProfit": 66453191,
+    "operatingProfit": 39825465,
+    "netProfit": 25084852
+  },
+  "netProfitVariancePctAfter": 0.000015626961921118933
+}

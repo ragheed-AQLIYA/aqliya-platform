@@ -2,6 +2,8 @@
 
 # This is NOT the Next.js you know
 
+> **Status:** Active | **Version:** 1.0 | **Date:** 2026-06-26 | **Owner:** Governance Team | **Last Reviewed:** 2026-06-26
+
 Before any other file, read `docs/DOCUMENTATION_AUTHORITY.md`.
 
 This file defines the documentation hierarchy, conflict resolution rules, and the distinction between doctrine authority and implementation reality.

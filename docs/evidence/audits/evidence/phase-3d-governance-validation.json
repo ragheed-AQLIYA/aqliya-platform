@@ -1,0 +1,95 @@
+{
+  "phase": "3D",
+  "engagementId": "eng-shalfa-2025",
+  "organizationId": "cmpuy7i0600014kpqcfdcxzba",
+  "finishedAt": "2026-06-15T00:38:30.999Z",
+  "patternCount": 578,
+  "storedStatusCounts": {
+    "DRAFT": 0,
+    "CONFIRMED": 578,
+    "TRUSTED": 0,
+    "DEPRECATED": 0
+  },
+  "evaluatedStatusCounts": {
+    "DRAFT": 0,
+    "CONFIRMED": 578,
+    "TRUSTED": 0,
+    "DEPRECATED": 0
+  },
+  "storedStatusMismatch": 0,
+  "autoSuggestEligible": 0,
+  "autoSuggestMinConfidence": 0.85,
+  "topBlockReasons": [
+    {
+      "reason": "hitCount 1 < 5",
+      "count": 578
+    },
+    {
+      "reason": "0 reviewer(s) < 2",
+      "count": 578
+    }
+  ],
+  "postBackfillExpectationsMet": true,
+  "samples": [
+    {
+      "clientAccountCode": "1101010002",
+      "storedStatus": "CONFIRMED",
+      "evaluatedStatus": "CONFIRMED",
+      "hitCount": 1,
+      "reviewerCount": 0,
+      "autoSuggest": false,
+      "blockReasons": [
+        "hitCount 1 < 5",
+        "0 reviewer(s) < 2"
+      ]
+    },
+    {
+      "clientAccountCode": "1101020001",
+      "storedStatus": "CONFIRMED",
+      "evaluatedStatus": "CONFIRMED",
+      "hitCount": 1,
+      "reviewerCount": 0,
+      "autoSuggest": false,
+      "blockReasons": [
+        "hitCount 1 < 5",
+        "0 reviewer(s) < 2"
+      ]
+    },
+    {
+      "clientAccountCode": "1101020002",
+      "storedStatus": "CONFIRMED",
+      "evaluatedStatus": "CONFIRMED",
+      "hitCount": 1,
+      "reviewerCount": 0,
+      "autoSuggest": false,
+      "blockReasons": [
+        "hitCount 1 < 5",
+        "0 reviewer(s) < 2"
+      ]
+    },
+    {
+      "clientAccountCode": "1101020007",
+      "storedStatus": "CONFIRMED",
+      "evaluatedStatus": "CONFIRMED",
+      "hitCount": 1,
+      "reviewerCount": 0,
+      "autoSuggest": false,
+      "blockReasons": [
+        "hitCount 1 < 5",
+        "0 reviewer(s) < 2"
+      ]
+    },
+    {
+      "clientAccountCode": "1101020008",
+      "storedStatus": "CONFIRMED",
+      "evaluatedStatus": "CONFIRMED",
+      "hitCount": 1,
+      "reviewerCount": 0,
+      "autoSuggest": false,
+      "blockReasons": [
+        "hitCount 1 < 5",
+        "0 reviewer(s) < 2"
+      ]
+    }
+  ]
+}

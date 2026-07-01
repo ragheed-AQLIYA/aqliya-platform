@@ -4,6 +4,8 @@
 
 **Version:** 1.1
 **Status:** Official — mandatory coding and documentation rules
+**Owner:** Governance Team
+**Last Reviewed:** 2026-06-26
 **Note:** Implementation-status claims updated to match v0.1 code reality. See `AQLIYA_MASTER_REFERENCE.md` for current product status.
 
 ---
@@ -101,11 +103,8 @@
 
 - On-Prem deployment package
 - Air-Gapped mode
-- Local AI runtime
 - AQLIYA Studio
-- Institutional Memory engine
 - Model Governance registry
-- SalesOS backend/workflow
 - SSO/LDAP/AD integration
 - SIEM integration
 - Kubernetes deployment

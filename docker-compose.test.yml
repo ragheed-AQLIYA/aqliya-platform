@@ -1,6 +1,7 @@
 services:
   postgres_test:
-    image: postgres:16-alpine
+    # IC-01: pgvector required by schema (DocumentChunk.embedding vector column)
+    image: pgvector/pgvector:pg16
     environment:
       POSTGRES_USER: aqliya_test
       POSTGRES_PASSWORD: aqliya_test

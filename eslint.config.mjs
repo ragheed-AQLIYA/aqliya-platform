@@ -1,10 +1,12 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import security from "eslint-plugin-security";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  security.configs.recommended,
   {
     rules: {
       "@typescript-eslint/no-unused-vars": [
@@ -60,13 +62,10 @@ const eslintConfig = defineConfig([
     "src/actions/tender.ts",
     "src/app/(dashboard)/**",
 
-    // SalesOS v02 intelligence layer — complex domain logic with intentional any
-    "src/lib/sales/v02/**",
+    // SalesOS vnext intelligence layer — planned consolidation after v02 stabilization
     "src/lib/sales/vnext/**",
     "src/lib/sales/prisma-repository.ts",
-    "src/lib/sales/institutional-memory.ts",
     "src/lib/sales/reporting.ts",
-    "src/lib/sales/seed-data.ts",
     "src/lib/sales/crm/**",
 
     // Integration adapters — external API responses require any

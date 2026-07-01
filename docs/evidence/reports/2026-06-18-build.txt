@@ -1,0 +1,352 @@
+﻿AQLIYA Validation — npm run build
+Date: 2026-06-18
+Git commit: ad05b27e57aabc9c563257834576d842a7e9ed93
+Tree: clean (schema drift stashed)
+Command: npm run build
+Started: 2026-06-18T04:55:01+03:00
+
+
+> aqliya-app@0.1.0 build
+> prisma generate && next build --webpack
+
+Loaded Prisma config from prisma.config.ts.
+System.Management.Automation.RemoteException
+Prisma schema loaded from prisma\schema.prisma.
+
+✔ Generated Prisma Client (v7.8.0) to .\node_modules\@prisma\client in 1.10s
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+▲ Next.js 16.2.4 (webpack)
+- Environments: .env
+- Experiments (use with caution):
+  · clientTraceMetadata
+  · optimizePackageImports
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+[@sentry/nextjs] DEPRECATION WARNING: It is recommended renaming your `sentry.client.config.ts` file, or moving its content to `instrumentation-client.ts`. When using Turbopack `sentry.client.config.ts` will no longer work. Read more about the `instrumentation-client.ts` file: https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
+[@sentry/nextjs - Node.js] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+[@sentry/nextjs - Node.js] Warning: No auth token provided. Will not create release. Please set the `authToken` option. You can find information on how to generate a Sentry auth token here: https://docs.sentry.io/api/auth/
+[@sentry/nextjs - Node.js] Warning: No auth token provided. Will not upload source maps. Please set the `authToken` option. You can find information on how to generate a Sentry auth token here: https://docs.sentry.io/api/auth/
+[@sentry/nextjs - Edge] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+[@sentry/nextjs - Edge] Warning: No auth token provided. Will not create release. Please set the `authToken` option. You can find information on how to generate a Sentry auth token here: https://docs.sentry.io/api/auth/
+[@sentry/nextjs - Edge] Warning: No auth token provided. Will not upload source maps. Please set the `authToken` option. You can find information on how to generate a Sentry auth token here: https://docs.sentry.io/api/auth/
+[@sentry/nextjs - Client] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+[@sentry/nextjs - Client] Warning: No auth token provided. Will not create release. Please set the `authToken` option. You can find information on how to generate a Sentry auth token here: https://docs.sentry.io/api/auth/
+[@sentry/nextjs - Client] Warning: No auth token provided. Will not upload source maps. Please set the `authToken` option. You can find information on how to generate a Sentry auth token here: https://docs.sentry.io/api/auth/
+✓ Compiled successfully in 41s
+  Running TypeScript ...
+  Finished TypeScript in 34.0s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/127) ...
+[SalesOS Action] Dynamic server usage: Route /sales/opportunities/new couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[SalesOS Action] Dynamic server usage: Route /sales/opportunities/new couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+  Generating static pages using 15 workers (31/127) 
+  Generating static pages using 15 workers (63/127) 
+  Generating static pages using 15 workers (95/127) 
+✓ Generating static pages using 15 workers (127/127) in 2.5s
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /about
+├ ƒ /access-denied
+├ ƒ /api/agent-memory
+├ ƒ /api/ai/eval-gate
+├ ƒ /api/ai/governance
+├ ƒ /api/ai/knowledge
+├ ƒ /api/ai/knowledge/ingest
+├ ƒ /api/ai/knowledge/metadata
+├ ƒ /api/ai/knowledge/search
+├ ƒ /api/ai/providers
+├ ƒ /api/ai/spend
+├ ƒ /api/audit/engagements/[engagementId]/exports/[format]
+├ ƒ /api/audit/evidence/[evidenceId]/download
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/auth/mfa/verify
+├ ƒ /api/auth/saml/[providerId]/callback
+├ ƒ /api/auth/saml/[providerId]/initiate
+├ ƒ /api/auth/saml/[providerId]/metadata
+├ ƒ /api/custom-product-submit
+├ ƒ /api/decisions/[decisionId]/evidence/[evidenceId]/download
+├ ƒ /api/health
+├ ƒ /api/health/live
+├ ƒ /api/health/ready
+├ ƒ /api/integration/health
+├ ƒ /api/local-content/projects/[projectId]/evidence/[evidenceId]/download
+├ ƒ /api/local-content/projects/[projectId]/reports/[reportId]/download
+├ ƒ /api/metrics
+├ ƒ /api/monitoring/health
+├ ƒ /api/office-ai/download
+├ ƒ /api/pilot-review
+├ ƒ /api/platform/retention
+├ ƒ /api/platform/retention/dry-run
+├ ƒ /api/platform/retention/history
+├ ƒ /api/platform/retention/holds
+├ ƒ /api/platform/retention/holds/[id]
+├ ƒ /api/platform/retention/policies
+├ ƒ /api/platform/retention/run
+├ ƒ /api/platform/siem
+├ ƒ /api/scim/v2/Groups
+├ ƒ /api/scim/v2/Groups/[id]
+├ ƒ /api/scim/v2/Users
+├ ƒ /api/scim/v2/Users/[id]
+├ ƒ /api/skills/evaluate
+├ ƒ /api/workflowos/clients/[clientId]/records/[recordId]/export/pdf
+├ ƒ /api/workflowos/documents/[documentId]/download
+├ ƒ /api/workflowos/escalation-check
+├ ƒ /api/workflowos/records/[recordId]/download
+├ ƒ /assistant
+├ ƒ /assistant/[taskId]
+├ ƒ /assistant/stats
+├ ƒ /audit
+├ ƒ /audit/acceptance
+├ ƒ /audit/admin/users
+├ ƒ /audit/archived
+├ ƒ /audit/engagements/[engagementId]
+├ ƒ /audit/engagements/[engagementId]/approval
+├ ƒ /audit/engagements/[engagementId]/audit-trail
+├ ƒ /audit/engagements/[engagementId]/evidence
+├ ƒ /audit/engagements/[engagementId]/exports
+├ ƒ /audit/engagements/[engagementId]/factory-map
+├ ƒ /audit/engagements/[engagementId]/findings
+├ ƒ /audit/engagements/[engagementId]/lead-schedules
+├ ƒ /audit/engagements/[engagementId]/mapping
+├ ƒ /audit/engagements/[engagementId]/materiality
+├ ƒ /audit/engagements/[engagementId]/notes
+├ ƒ /audit/engagements/[engagementId]/pilot
+├ ƒ /audit/engagements/[engagementId]/publication
+├ ƒ /audit/engagements/[engagementId]/recommendations
+├ ƒ /audit/engagements/[engagementId]/review
+├ ƒ /audit/engagements/[engagementId]/sampling
+├ ƒ /audit/engagements/[engagementId]/statements
+├ ƒ /audit/engagements/[engagementId]/trial-balance
+├ ƒ /audit/engagements/[engagementId]/validation
+├ ƒ /audit/independence
+├ ƒ /audit/knowledge
+├ ƒ /audit/portfolio
+├ ƒ /audit/quality
+├ ƒ /auditos
+├ ƒ /auditos/evidence
+├ ƒ /auditos/mapping
+├ ƒ /auditos/statements
+├ ƒ /auditos/traceability
+├ ƒ /auditos/trial-balance
+├ ƒ /buyers
+├ ƒ /buyers/audit-partner
+├ ƒ /buyers/cfo
+├ ƒ /buyers/cio
+├ ƒ /buyers/government
+├ ƒ /case-studies
+├ ƒ /contact
+├ ƒ /contacts
+├ ƒ /contacts/[id]
+├ ƒ /contacts/[id]/edit
+├ ƒ /contacts/[id]/interactions/new
+├ ƒ /contacts/[id]/relations/new
+├ ƒ /contacts/dashboard
+├ ƒ /contacts/new
+├ ƒ /content-studio
+├ ƒ /content-studio/[workspaceId]
+├ ƒ /content-studio/[workspaceId]/[contentId]
+├ ƒ /content-studio/[workspaceId]/create
+├ ƒ /content-studio/templates
+├ ƒ /custom-product
+├ ƒ /decisions
+├ ƒ /decisions/[id]
+├ ƒ /decisions/[id]/alerts
+├ ƒ /decisions/[id]/framework
+├ ƒ /decisions/[id]/governance
+├ ƒ /decisions/[id]/insight
+├ ƒ /decisions/[id]/intake
+├ ƒ /decisions/[id]/outcome
+├ ƒ /decisions/[id]/overview
+├ ƒ /decisions/[id]/recommendation
+├ ƒ /decisions/[id]/report
+├ ƒ /decisions/[id]/risks
+├ ƒ /decisions/[id]/scenarios
+├ ƒ /decisions/[id]/sector
+├ ƒ /decisions/[id]/signals
+├ ƒ /decisions/[id]/simulation
+├ ƒ /decisions/[id]/tender
+├ ƒ /decisions/[id]/what-to-do
+├ ƒ /decisions/gov
+├ ƒ /decisions/gov/escalation-rules
+├ ƒ /decisions/new
+├ ƒ /demo
+├ ƒ /deployment
+├ ƒ /en
+├ ƒ /en/contact
+├ ƒ /en/demo
+├ ƒ /en/executive-brief
+├ ƒ /en/platform
+├ ƒ /en/products/audit
+├ ƒ /en/proof
+├ ƒ /en/security
+├ ƒ /en/soc2-roadmap
+├ ƒ /engagement-models
+├ ƒ /executive-brief
+├ ƒ /executive-briefing
+├ ƒ /governance
+├ ƒ /how-we-work
+├ ƒ /industries
+├ ƒ /insights
+├ ƒ /insights/ai-institutional-failures
+├ ƒ /insights/assistant-vs-governed-intelligence
+├ ƒ /insights/governance-over-intelligence
+├ ƒ /intelligence/sectors
+├ ƒ /intelligence/sectors/[id]
+├ ƒ /invite/[token]
+├ ƒ /local-content
+├ ƒ /local-content/ai-advisor
+├ ƒ /local-content/analytics
+├ ƒ /local-content/campaigns
+├ ƒ /local-content/campaigns/[id]
+├ ƒ /local-content/classification-rules
+├ ƒ /local-content/outputs
+├ ƒ /local-content/pilot-readiness
+├ ƒ /local-content/projects
+├ ƒ /local-content/projects/[projectId]
+├ ƒ /local-content/projects/[projectId]/approval
+├ ƒ /local-content/projects/[projectId]/audit-trail
+├ ƒ /local-content/projects/[projectId]/classification
+├ ƒ /local-content/projects/[projectId]/evidence
+├ ƒ /local-content/projects/[projectId]/findings
+├ ƒ /local-content/projects/[projectId]/reports
+├ ƒ /local-content/projects/[projectId]/review
+├ ƒ /local-content/projects/[projectId]/spend
+├ ƒ /local-content/projects/[projectId]/suppliers
+├ ƒ /local-content/projects/[projectId]/tender-match
+├ ƒ /local-content/projects/[projectId]/verification
+├ ƒ /local-content/projects/[projectId]/workbook/[workbookId]/ai-advisor
+├ ƒ /local-content/quality-dashboard
+├ ƒ /local-content/review
+├ ƒ /local-content/review-center
+├ ƒ /local-content/settings/integrations
+├ ƒ /local-content/workbook
+├ ƒ /local-content/workbook/[workbookId]
+├ ƒ /login
+├ ○ /manifest.webmanifest
+├ ƒ /monitoring
+├ ƒ /monitoring/ai
+├ ƒ /office-ai/advanced
+├ ƒ /office-ai/advanced/role-config
+├ ƒ /office-ai/advanced/schedules
+├ ƒ /office-ai/advanced/templates
+├ ƒ /organizations
+├ ƒ /organizations/[id]
+├ ƒ /organizations/sunbul
+├ ƒ /pilot-outcomes
+├ ƒ /pilot-proof
+├ ƒ /platform
+├ ƒ /print/comparison-excel-aqliya
+├ ƒ /print/data-residency
+├ ƒ /print/dpa-summary
+├ ƒ /print/executive-brief
+├ ƒ /print/executive-brief-en
+├ ƒ /print/industry-audit-firms
+├ ƒ /print/objection-handling
+├ ƒ /print/pilot-sow-template
+├ ƒ /print/pilot-weekly-metrics
+├ ƒ /print/reference-case-template
+├ ƒ /print/sales-pipeline-stages
+├ ƒ /print/security-summary
+├ ƒ /print/subprocessors
+├ ƒ /privacy
+├ ƒ /procurement-pack
+├ ƒ /products
+├ ƒ /products/audit
+├ ƒ /products/decision
+├ ƒ /products/local-content
+├ ƒ /products/office-ai
+├ ƒ /products/sales
+├ ƒ /products/simulation
+├ ƒ /proof
+├ ƒ /proof-library
+├ ƒ /published/recommendation/[decisionId]
+├ ƒ /risk
+├ ƒ /risk/[id]
+├ ƒ /risk/assessments
+├ ƒ /risk/assessments/[id]
+├ ○ /robots.txt
+├ ƒ /sales
+├ ƒ /sales/accounts
+├ ƒ /sales/accounts/[id]
+├ ƒ /sales/accounts/[id]/brief
+├ ƒ /sales/accounts/[id]/brief/export
+├ ƒ /sales/accounts/new
+├ ƒ /sales/activities
+├ ƒ /sales/approval
+├ ƒ /sales/audit-trail
+├ ƒ /sales/command-center
+├ ƒ /sales/deals
+├ ƒ /sales/deals/[id]
+├ ƒ /sales/deals/[id]/pilot
+├ ƒ /sales/deals/[id]/pilot/export
+├ ƒ /sales/deals/new
+├ ƒ /sales/forecast
+├ ƒ /sales/funnel
+├ ƒ /sales/icp
+├ ƒ /sales/intelligence
+├ ƒ /sales/intelligence/forecasts
+├ ƒ /sales/opportunities
+├ ƒ /sales/opportunities/[id]
+├ ƒ /sales/opportunities/new
+├ ƒ /sales/outreach
+├ ƒ /sales/pilot-handoff/[dealId]
+├ ƒ /sales/pipeline
+├ ƒ /sales/pipeline-depth
+├ ƒ /sales/reports
+├ ƒ /sales/revenue
+├ ƒ /sales/review
+├ ƒ /sales/settings/crm
+├ ƒ /sales/signals
+├ ƒ /sampling
+├ ƒ /sampling/[id]
+├ ƒ /security
+├ ƒ /settings
+├ ƒ /settings/ai
+├ ƒ /settings/ai-governance
+├ ƒ /settings/audit-bridge
+├ ƒ /settings/audit-bridge/logs
+├ ƒ /settings/audit-logs
+├ ƒ /settings/mfa
+├ ƒ /settings/organization/advanced
+├ ƒ /settings/organization/advanced/events
+├ ƒ /settings/platform-organization
+├ ƒ /settings/retention
+├ ƒ /settings/siem
+├ ƒ /settings/skills/evaluate
+├ ƒ /settings/sso
+├ ƒ /settings/team
+├ ƒ /settings/workspaces
+├ ƒ /signup
+├ ○ /sitemap.xml
+├ ƒ /soc2-roadmap
+├ ƒ /sunbul
+├ ƒ /sunbul/admin
+├ ƒ /sunbul/clients/[clientId]/records/[recordId]
+├ ƒ /terms
+├ ƒ /use-cases
+├ ƒ /workflowos
+├ ƒ /workflowos/admin
+├ ƒ /workflowos/clients/[clientId]/records/[recordId]
+├ ƒ /workflowos/records
+├ ƒ /workflowos/records/[id]
+├ ƒ /workflowos/templates
+├ ƒ /workflowos/templates/[id]
+└ ƒ /workflowos/templates/new
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+Exit code: 0
+Finished: 2026-06-18T04:56:55+03:00

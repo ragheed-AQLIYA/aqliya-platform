@@ -1,0 +1,516 @@
+﻿
+> aqliya-app@0.1.0 lint
+> eslint src/
+
+
+C:\Users\PC\Documents\Aqliya\src\actions\ai-settings-actions.ts
+  3:10  warning  'auth' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\audit-admin-actions.ts
+  2:1   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+  5:10  warning  'assertOrganizationAccess' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\audit-isqm1-actions.ts
+  9:28   warning  'QualityObjectiveType' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  9:55   warning  'QualityCategory' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  9:77   warning  'QualityStatus' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  9:97   warning  'FindingType' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  9:115  warning  'FindingSeverity' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  9:137  warning  'MonitorStatus' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  9:157  warning  'ResponseStatus' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  9:178  warning  'RemediationStatus' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\audit-read-actions.ts
+  370:118  warning  'approvalRecords' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\contact-actions.ts
+  655:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  679:10  warning  'format' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\decision-evidence-actions.ts
+   53:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  165:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  227:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  293:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  318:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\erp-actions.ts
+   5:10  warning  'writePlatformAuditLog' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   8:7   warning  'PRODUCT_KEY' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  28:16  warning  'getUserOrg' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\localcontent-actions.ts
+  213:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\localcontent-ai-advisor-actions.ts
+  38:10  warning  'requireUser' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\localcontent-ai-advisor-v3-actions.ts
+   54:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  103:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  121:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  138:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  173:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  227:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  244:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  257:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  275:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\localcontent-review-export.ts
+  11:3  warning  'formatPdfArabicNumber' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\localcontent-workbook-actions.ts
+  4:10  warning  'prisma' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\sales-actions.ts
+   42:25  warning  'createInMemoryAccount' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  218:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\sso-admin-actions.ts
+  16:10  warning  'isSupportedProvider' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\actions\workflowos-export-actions.ts
+  285:13  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\(marketing)\buyers\page.tsx
+  153:3  warning  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\api\office-ai\download\route.ts
+  48:10  warning  'escapeHtmlAttr' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\api\scim\v2\Groups\[id]\route.ts
+  11:3  warning  'SCIM_CONTENT_TYPE' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\api\scim\v2\Groups\route.ts
+  10:3  warning  'SCIM_CONTENT_TYPE' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\api\scim\v2\Users\[id]\route.ts
+  11:3  warning  'SCIM_CONTENT_TYPE' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\api\scim\v2\Users\route.ts
+  10:3  warning  'SCIM_CONTENT_TYPE' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\api\skills\evaluate\route.ts
+  22:15  warning  'SkillManifest' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\contacts\[id]\page.tsx
+   26:3   warning  'CheckCircle' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   27:3   warning  'XCircle' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   28:3   warning  'Shield' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   29:3   warning  'Download' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   30:3   warning  'Eye' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   31:3   warning  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   32:3   warning  'Scale' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   35:10  warning  'ExportApprovalBadge' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  394:3   warning  'userId' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  463:3   warning  'orgId' is defined but never used. Allowed unused args must match /^_/u                @typescript-eslint/no-unused-vars
+  464:3   warning  'userId' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  482:3   warning  'userId' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  483:3   warning  'userRole' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+  556:16  warning  'createReviewAction' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  576:16  warning  'approveReviewAction' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  585:16  warning  'rejectReviewAction' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\contacts\[id]\relations\new\page.tsx
+  7:10  warning  'Input' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\content-studio\[workspaceId]\[contentId]\content-lifecycle-actions.tsx
+  82:3  warning  'workspaceId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\content-studio\[workspaceId]\[contentId]\page.tsx
+  5:10  warning  'getCurrentUser' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\content-studio\[workspaceId]\create\page.tsx
+  5:10  warning  'getCurrentUser' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\content-studio\[workspaceId]\page.tsx
+  5:10  warning  'getCurrentUser' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  6:29  warning  'CardHeader' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  6:41  warning  'CardTitle' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\content-studio\actions.ts
+  170:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  275:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  286:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  293:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  300:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\content-studio\page.tsx
+   3:10  warning  'Plus' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   6:10  warning  'Button' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  18:9   warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\content-studio\templates\page.tsx
+  4:10  warning  'getCurrentUser' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\institutional-memory\collections\page.tsx
+  49:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\PC\Documents\Aqliya\src\app\institutional-memory\collections\page.tsx:49:5
+  47 |
+  48 |   useEffect(() => {
+> 49 |     load();
+     |     ^^^^ Avoid calling setState() directly within an effect
+  50 |   }, [load]);
+  51 |
+  52 |   const handleCreate = async () => {  react-hooks/set-state-in-effect
+
+C:\Users\PC\Documents\Aqliya\src\app\institutional-memory\events\page.tsx
+  15:3  warning  'CardHeader' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  16:3  warning  'CardTitle' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+  65:5  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\PC\Documents\Aqliya\src\app\institutional-memory\events\page.tsx:65:5
+  63 |
+  64 |   useEffect(() => {
+> 65 |     load();
+     |     ^^^^ Avoid calling setState() directly within an effect
+  66 |   }, [load]);
+  67 |
+  68 |   const handleDelete = async (id: string) => {  react-hooks/set-state-in-effect
+
+C:\Users\PC\Documents\Aqliya\src\app\institutional-memory\graph\page.tsx
+  6:29  warning  'CardHeader' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  6:41  warning  'CardTitle' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\local-content\projects\[projectId]\approval\page.tsx
+  48:9  warning  'reviews' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\local-content\projects\[projectId]\audit-trail\page.tsx
+  19:3  warning  'FileText' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  20:3  warning  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\local-content\projects\[projectId]\page.tsx
+   8:3   warning  'PageHeader' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  12:29  warning  'CardHeader' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  12:41  warning  'CardTitle' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\local-content\projects\[projectId]\review\page.tsx
+  23:3  warning  'XCircle' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  24:3  warning  'Clock' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  44:9  warning  'project' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\local-content\projects\[projectId]\tender-match\page.tsx
+  1:10  warning  'notFound' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\local-content\quality-dashboard\page.tsx
+  18:5  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\local-content\quality-dashboard\quality-dashboard-client.tsx
+  16:10  warning  'Progress' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  20:3   warning  'XCircle' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  21:3   warning  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  77:3   warning  'title' is defined but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+  83:3   warning  'trend' is defined but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\login\page.tsx
+   70:3  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  123:7  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/immutability')
+
+C:\Users\PC\Documents\Aqliya\src\app\print\reference-case-template\page.tsx
+  1:8  warning  'Link' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\settings\ai-governance\ai-governance-client.tsx
+  21:3  warning  'Clock' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\workflowos\records\[id]\page.tsx
+  109:18  warning  'handleDownloadExportAction' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  259:23  warning  'isPending' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\workflowos\templates\[id]\page.tsx
+  28:11  warning  'user' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\app\workflowos\templates\new\page.tsx
+  233:29  warning  'id' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\admin\admin-users-page.tsx
+  5:35  warning  'Loader2' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  6:52  warning  'CardDescription' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\ai\ai-outputs-panel.tsx
+  27:34  warning  'engagementId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\ai\ai-suggestion-panel.tsx
+  6:10  warning  'Badge' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\approval\approval-page.tsx
+   10:3  warning  'Clock' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   14:3  warning  'ChevronDown' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   15:3  warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  142:9  warning  'isBlocked' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\audit-trail\audit-trail-page.tsx
+  10:3  warning  'Filter' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  11:3  warning  'ChevronDown' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  12:3  warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  15:3  warning  'Calendar' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  21:3  warning  'CardHeader' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  22:3  warning  'CardTitle' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  23:3  warning  'CardDescription' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\dashboard\recent-activity.tsx
+  95:29  warning  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\engagement\overview-tab.tsx
+  13:3  warning  'getReviewCommentsAction' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\findings\findings-page.tsx
+  11:3  warning  'ChevronDown' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  12:3  warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  14:3  warning  'User' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  15:3  warning  'Calendar' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  16:3  warning  'Filter' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  17:3  warning  'Flag' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  31:3  warning  'CardDescription' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\layout\workflow-progress.tsx
+  4:17  warning  'Circle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\mapping\mapping-page.tsx
+  12:3  warning  'ChevronDown' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  13:3  warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  14:3  warning  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\publication\publication-page.tsx
+  14:3  warning  'Eye' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  29:3  warning  'CardDescription' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\recommendations\recommendations-page.tsx
+   6:3  warning  'Lightbulb' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  10:3  warning  'ChevronDown' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  11:3  warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  27:3  warning  'CardDescription' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\shared\status-badge.tsx
+  11:3  warning  'ShieldCheck' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  56:7  warning  'typeMaps' is assigned a value but only used as a type. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\audit\validation\validation-page.tsx
+    6:53   warning  'AlertOctagon' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+    6:67   warning  'FileSearch' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+    6:90   warning  'ChevronDown' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+    6:103  warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+    6:189  warning  'Sparkles' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  199:10   warning  'expanded' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  199:20   warning  'setExpanded' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\contacts\audit-trail-viewer.tsx
+  3:31  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\contacts\export-approval-dialog.tsx
+   6:10  warning  'Input' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   9:42  warning  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  40:3   warning  'canExport' is defined but never used. Allowed unused args must match /^_/u      @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\contacts\review-assignment-panel.tsx
+   8:41  warning  'XCircle' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  47:3   warning  'organizationId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\enterprise\ai-indicator.tsx
+  2:27  warning  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\enterprise\empty-state.tsx
+  2:32  warning  'AlertCircle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\enterprise\kpi-card.tsx
+  26:3  warning  'labelAr' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\enterprise\product-proof-card.tsx
+  26:3  warning  'status' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\entity\entity-header.tsx
+  4:10  warning  'AIIndicator' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\entity\entity-timeline.tsx
+  63:15  warning  'Icon' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\intelligence\readiness-state.tsx
+  2:31  warning  'AlertCircle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\local-content\ai-advisor\ai-advisor-overview.tsx
+    4:8   warning  'Link' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  399:10  warning  'reviewing' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\local-content\csv-import-form.tsx
+  7:10  warning  'Input' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  9:10  warning  'Badge' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\platform\command-palette.tsx
+   20:3  warning  'Search' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   21:3  warning  'FileText' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   27:3  warning  'Command' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   29:3  warning  'Zap' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   31:3  warning  'Target' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   32:3  warning  'Building2' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  104:9  warning  'pathname' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\platform\platform-sidebar.tsx
+  17:3  warning  'ChevronLeft' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\visuals\decision-matrix-visual.tsx
+  16:9  warning  'cellBg' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  17:9  warning  'cellBorder' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\components\visuals\sales-pipeline-visual.tsx
+  31:29  warning  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\core\access\index.ts
+  19:8  warning  'ServerActionAccessOptions' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\ai\embedding\embedding-provider.ts
+  2:35  warning  'setRagEmbeddingProvider' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\ai\eval-gate.ts
+  30:3  warning  'organizationId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\ai\ingestion\ingestion-pipeline.ts
+  6:23  warning  'ragChunkText' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\ai\observability.ts
+   3:10  warning  'getAISpendSummary' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   4:10  warning  'getAIGovernanceMetrics' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  60:9   warning  'productCostMap' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\ai\orchestrator.ts
+  74:7  warning  'AIProviderNotAvailableError' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\client-acceptance-engine.ts
+  9:10  warning  'assertClientAccess' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  9:30  warning  'assertEngagementAccess' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\export-service.ts
+  2:15  warning  'FinancialStatement' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\export\pdf-exporter.ts
+  7:3  warning  'getPdfFontConfig' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\independence-engine.ts
+  10:15  warning  'Prisma' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\intelligence\enrichment-builder.ts
+  69:3  warning  'modelVersion' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\knowledge-engine.ts
+  8:15  warning  'Prisma' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  9:15  warning  'AuditActor' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\materiality-service.ts
+  168:3  warning  'engagementId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\review-notes-engine.ts
+  9:15  warning  'Prisma' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\sampling-hardening.ts
+  8:10  warning  'assertEngagementAccess' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\sampling\engine.ts
+  97:3  warning  'estimatedStdDev' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\audit\working-papers-engine.ts
+  9:15  warning  'Prisma' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\auth\encryption.ts
+  5:7  warning  'AUTH_TAG_LENGTH' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\auth\scim-service.ts
+  12:3   warning  'SCIM_CONTENT_TYPE' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  23:10  warning  'buildUserMeta' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  32:10  warning  'buildGroupMeta' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\governance\approval-state.ts
+  1:65  warning  'EscalationLevel' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\governance\prompt-framework.ts
+  13:32  warning  'requiresHumanApproval' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\local-content\erp\field-mapping.ts
+  5:31  warning  'ErpSupplier' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  5:44  warning  'ErpProcurementLine' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\local-content\erp\import-pipeline.ts
+  15:3  warning  'ErpSpendRecord' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\local-content\export.ts
+  28:7  warning  'DISCLAIMER_LINES' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\local-content\import.ts
+   5:7  warning  'REQUIRED_HEADERS_EN' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  12:7  warning  'REQUIRED_HEADERS_AR' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  19:7  warning  'OPTIONAL_HEADERS' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  28:7  warning  'OPTIONAL_HEADERS_AR' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\local-content\pipeline-orchestrator.ts
+   42:15  warning  'LcWorkbookLine' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  281:16  warning  'err' is defined but never used                                                   @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\rag\intelligence-core-rag.ts
+  11:27  warning  'SearchResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\sales\evidence-links.ts
+  2:15  warning  'Prisma' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\sales\intelligence\icp-hypothesis.ts
+  31:9  warning  'fitDistribution' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\sales\repositories\approvals.ts
+  6:20  warning  'withPlatformOrg' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\sales\repositories\interaction-repository.ts
+  4:15  warning  'Prisma' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\sales\repositories\proposals.ts
+  5:37  warning  'withPlatformOrg' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\sales\repositories\reviews.ts
+  5:20  warning  'withPlatformOrg' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\sales\services\commercial-knowledge-graph-service.ts
+  2:3  warning  'buildCommercialKnowledgeGraphFromSnapshot' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\sales\services\proof-effectiveness-service.ts
+   3:3  warning  'buildProofEffectivenessSnapshot' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   4:3  warning  'buildProofEffectivenessWaveBSnapshot' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   9:3  warning  'PROOF_EFFECTIVENESS_DISCLAIMER_AR' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  10:3  warning  'PROOF_EFFECTIVENESS_DISCLAIMER_EN' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  11:3  warning  'PROOF_EFFECTIVENESS_RECOMMENDATION_LABEL' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\skill-runtime\evaluator.ts
+   7:16  warning  'basename' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  16:3   warning  'EvaluationSample' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\skill-runtime\runtime.ts
+   24:30  warning  'SkillExecutionError' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  281:9   warning  'modelConfig' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  416:3   warning  'stepResults' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+  534:3   warning  'step' is defined but never used. Allowed unused args must match /^_/u                  @typescript-eslint/no-unused-vars
+  535:3   warning  'context' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  536:3   warning  'stepResults' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\skill-runtime\types.ts
+  5:15  warning  'GovernanceTaskType' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\tb-intelligence\firm-memory.ts
+  6:3  warning  'FIRM_MEMORY_AUTO_SUGGEST_MIN_CONFIDENCE' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:3  warning  'isFirmMemoryAutoSuggestEligible' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\lib\workflowos\sla-service.ts
+  4:15  warning  'Prisma' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\PC\Documents\Aqliya\src\middleware-security.ts
+  2:15  warning  'NextRequest' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+✖ 242 problems (2 errors, 240 warnings)
+  0 errors and 3 warnings potentially fixable with the `--fix` option.
+

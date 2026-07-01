@@ -1,0 +1,7 @@
+evidence_id,evidence_type,related_record_type,related_record_id,file_name,file_owner,received_date,evidence_status,confidence_level,missing_issue,reviewer,review_date,notes
+EVD-2025-001,CR,Vendor,VEN-0001,CR-1010234567.pdf,Procurement,2025-01-10,Verified,High,,A.Alamri,2025-01-15,Saudi CR valid 10 digits
+EVD-2025-002,Certificate,Vendor,VEN-0001,LCGPA-2024-01234.pdf,Vendor,2025-01-10,Verified,High,,A.Alamri,2025-01-15,LCGPA certificate 85% LC expires 2026-06
+EVD-2025-003,Invoice,Transaction,INV-2025-1001,INV-2025-1001.pdf,Procurement,2025-01-20,Verified,Medium,,A.Alamri,2025-01-22,Matches PO-2025-001
+EVD-2025-004,Declaration,Vendor,VEN-0005,VEN0005-self-declaration.pdf,Vendor,2025-02-15,Received,Low,Self-declaration no CR,,,Waiting for CR from vendor
+EVD-2025-005,Certificate,Vendor,VEN-0004,LCGPA-2023-98765.pdf,Procurement,2025-01-10,Verified,Medium,Certificate scope narrow,A.Alamri,2025-01-15,Certificate only covers construction materials
+EVD-2025-006,Contract,Contract,CTR-2024-001,CTR-2024-001-signed.pdf,Legal,2025-01-05,Verified,High,,A.Alamri,2025-01-15,Signed contract with LC clause

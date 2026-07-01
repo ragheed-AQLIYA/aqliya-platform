@@ -1,3 +1,5 @@
+# Executive summary / الملخص
+
 ﻿# LocalContentOS — PO Sign-off Next Steps (Close L6 Program Gate)
 
 **Date / التاريخ:** 2026-06-01  

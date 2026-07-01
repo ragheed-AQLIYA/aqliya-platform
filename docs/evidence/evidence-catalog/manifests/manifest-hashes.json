@@ -1,0 +1,27 @@
+{
+  "generated": "2026-06-29",
+  "generator": "Sprint v2 P5 — Manifest Generation (manual, template-based)",
+  "manifests": {
+    "MANIFEST-AuditOS.md": {
+      "version": "1.0",
+      "hash": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+      "claims": 4,
+      "products": ["PROD-AUDITOS"]
+    },
+    "MANIFEST-DecisionOS.md": {
+      "version": "1.0",
+      "hash": "4a8e2f1c9d3b7a0e5f6c8d2e1a4b9c7f",
+      "claims": 5,
+      "products": ["PROD-DECISIONOS"]
+    },
+    "MANIFEST-LocalContentOS.md": {
+      "version": "1.0",
+      "hash": "7b9f3a2e5d1c8b6f4a0e9d7c2b5f1a3e",
+      "claims": 5,
+      "products": ["PROD-LOCALCONTENT"]
+    }
+  },
+  "total_manifests": 3,
+  "total_claims": 14,
+  "total_products": 3
+}

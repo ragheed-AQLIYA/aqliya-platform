@@ -76,7 +76,7 @@
 | **Document Intelligence** | Partial                 | File extraction/scanning exists; not full OCR platform                      |
 | **Reporting Engine**      | Active                  | Audit and custom export paths exist                                         |
 | **Model Governance**      | Not implemented         | Strategic/future                                                            |
-| **Institutional Memory**  | Not implemented         | Strategic/future                                                            |
+| **Institutional Memory**  | Active (L5 Pilot-ready) | Cross-product entity linking, collections, graph visualization, export. See PRODUCT_STATUS_MATRIX.md. |
 | **Deployment Layer**      | Cloud active only       | No On-Prem or Air-Gapped production package                                 |
 
 ---

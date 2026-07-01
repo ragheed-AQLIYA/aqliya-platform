@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "generatedAt": "2026-06-16T17:42:01.171Z",
+    "source": "Real TB + FS Data Analysis"
+  },
+  "workbookFields": {
+    "total": 22,
+    "autoFilled": 9,
+    "autoFillable": 13,
+    "derived": 0,
+    "clientRequired": 13,
+    "autoFillPct": "41%",
+    "clientRequiredPct": "59%"
+  },
+  "financialCoverage": {
+    "totalRevenue_identified_SAR": 550012611.59,
+    "totalPayroll_identified_SAR": 401480147.89,
+    "totalSupplierSpend_identified_SAR": 21100580.78,
+    "majorRevenueSources": [
+      {
+        "name": "ايرادات قطاع الامن والسلامة.",
+        "balance": 19822495.85
+      },
+      {
+        "name": "ايرادات مشاريع التشغيل والصيانة",
+        "balance": 14081620.39
+      },
+      {
+        "name": "ايرادات الصيانه والتشغيل (غير مفوترة)",
+        "balance": 278006921.39
+      },
+      {
+        "name": "ايرادات الصيانه والتشغيل (مطالبات)",
+        "balance": 221860796.68
+      },
+      {
+        "name": "ايرادات قطاع االخدمات البيئيه.",
+        "balance": 13569394.52
+      },
+      {
+        "name": "ايرادات الحاويات",
+        "balance": 2094910.79
+      }
+    ]
+  },
+  "sectionCoverage": {
+    "company_info": {
+      "total": 3,
+      "filled": 0,
+      "missing": 3
+    },
+    "revenue": {
+      "total": 3,
+      "filled": 2,
+      "missing": 1
+    },
+    "cost_of_sales": {
+      "total": 3,
+      "filled": 2,
+      "missing": 1
+    },
+    "gross_profit": {
+      "total": 1,
+      "filled": 1,
+      "missing": 0
+    },
+    "supplier_spend": {
+      "total": 3,
+      "filled": 1,
+      "missing": 2
+    },
+    "workforce": {
+      "total": 4,
+      "filled": 1,
+      "missing": 3
+    },
+    "assets": {
+      "total": 2,
+      "filled": 2,
+      "missing": 0
+    },
+    "declarations": {
+      "total": 3,
+      "filled": 0,
+      "missing": 3
+    }
+  },
+  "confidenceBreakdown": {
+    "high": 9,
+    "medium": 0,
+    "low": 0
+  }
+}

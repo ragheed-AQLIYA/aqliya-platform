@@ -1,7 +1,10 @@
 # What AQLIYA Does NOT Claim
 
 **Status:** Active — attach to every pilot SOW and enterprise conversation  
+**Version:** 1.0  
 **Date:** 2026-06-19  
+**Owner:** Governance Team  
+**Last Reviewed:** 2026-06-26  
 **Authority:** Board Strategic Assessment 360° · LocalContent Product Doctrine · Master Reference  
 **Audience:** Founders, sales, legal, customers, investors
 

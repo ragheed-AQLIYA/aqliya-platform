@@ -15,15 +15,27 @@ services:
       - DOWNLOAD_TOKEN_SECRET=change-me-in-production-use-openssl-rand-base64-32
       - LOCAL_STORAGE_DIR=/app/uploads
       - STORAGE_PROVIDER=local
+      - SCANNER_PROVIDER=clamav
+      - CLAMAV_HOST=clamav
+      - CLAMAV_PORT=3310
+      - REDIS_URL=redis://redis:6379
+      - RATE_LIMITER=redis
+      - FF_ABAC_ENFORCE=true
+      - FF_ABAC_SHADOW=true
+      - FF_EVENT_OUTBOX=true
+      - FF_EVENT_SCHEMA_REGISTRY=true
     volumes:
       - uploads:/app/uploads
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     restart: unless-stopped
 
   db:
-    image: postgres:16-alpine
+    # IC-01: pgvector required by schema (DocumentChunk.embedding vector column)
+    image: pgvector/pgvector:pg16
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -38,6 +50,53 @@ services:
       timeout: 5s
       retries: 5
 
+  clamav:
+    image: clamav/clamav:latest
+    ports:
+      - "3310:3310"
+    volumes:
+      - clamav_db:/var/lib/clamav
+    environment:
+      - CLAMV_DB_MIRROR=db.local.clamav.net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "clamdcheck.sh || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backup:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["node", "scripts/platform/db-backup-scheduler.mjs"]
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/aqliya
+      - BACKUP_INTERVAL_MS=3600000
+      - BACKUP_MAX_FILES=30
+    volumes:
+      - backups:/app/backups
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   pgdata:
   uploads:
+  clamav_db:
+  redis_data:
+  backups:

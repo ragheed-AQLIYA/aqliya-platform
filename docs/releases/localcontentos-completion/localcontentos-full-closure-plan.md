@@ -1,3 +1,5 @@
+# 1. Purpose
+
 ﻿# LocalContentOS — Full Program Closure Plan
 
 **Document ID:** LC-FULL-CLOSURE-PLAN-2026-06-01  

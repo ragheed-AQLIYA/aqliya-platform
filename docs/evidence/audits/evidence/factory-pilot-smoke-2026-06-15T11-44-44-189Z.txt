@@ -1,0 +1,18 @@
+Factory Pilot Smoke — 2026-06-15T11:44:44.189Z
+Engagement: eng-gulf-2025
+Currency: SAR
+
+PASS FS v2 rebuild: {"rebuilt":true}
+PASS Reporting graph sync: ok
+PASS Lead schedules: ok
+PASS Reconciliation: {"engagementId":"eng-gulf-2025","passed":true,"checkCount":6,"failedCount":0,"checks":[{"code":"RC-001","checkType":"tb_ls_tie","passed":true,"severity":"warning","messageAr":"لا توجد قوائم ربط للمقار
+PASS IFRS rules: {"engagementId":"eng-gulf-2025","passed":true,"ruleCount":21,"failedCount":0,"warningCount":0,"evaluations":[{"ruleId":"ias1-r001","standardCode":"IAS 1","paragraphReference":"IAS 1.10","topic":"compl
+PASS SOCPA rules: {"engagementId":"eng-gulf-2025","jurisdictionApplicable":true,"passed":true,"ruleCount":13,"failedCount":0,"warningCount":1,"evaluations":[{"ruleId":"socpa-accounting-framework-r001","standardCode":"S
+PASS Disclosure auto: {"engagementId":"eng-gulf-2025","triggersCollected":1,"triggersDeduped":1,"notesCreated":0,"notesUpdated":1,"notesSkipped":0,"runAt":"2026-06-15T11:44:44.075Z"}
+PASS Validation run: {"id":"vr-1781523884109","engagementId":"eng-gulf-2025","validationType":"full","status":"completed","summary":"1 medium","trustState":"trusted","validatedAt":"2026-06-15T11:44:44.109Z","issues":[{"id
+PASS FS statements >= 3: income_statement, balance_sheet, equity, cash_flow
+PASS Cash flow statement (FS v2): present
+PASS Disclosure notes persisted: 3 notes
+PASS Reporting graph nodes: 39 nodes
+
+Summary: 12/12 passed

@@ -177,6 +177,27 @@ If success criteria met:
 
 ---
 
+## Appendix B — AI Exclusions (Pilot)
+
+**Effective for pilot engagements signed on or after 2026-06-21 unless explicitly superseded.**
+
+| Item | Pilot status |
+|------|--------------|
+| Cloud LLM inference (OpenAI, Anthropic, etc.) | **Excluded** |
+| AI-generated final reports or opinions | **Excluded** |
+| Autonomous AI approvals | **Excluded** |
+| Rule-based / deterministic scoring (LocalContentOS) | **Included** |
+| Human review and approval workflows | **Included** |
+| Evidence upload, audit trail, exports | **Included** |
+
+**Customer acknowledgment:**
+
+> Provider will not route Customer data to external AI inference providers during this pilot. All decision-bearing outputs require human review. Post-pilot AI enablement requires separate written agreement and data-processing terms.
+
+**Reference:** `docs/operations/PILOT_AI_SCOPE_DECISION.md`
+
+---
+
 ## Internal Checklist (Do Not Send to Customer)
 
 - [ ] Appendix A attached  

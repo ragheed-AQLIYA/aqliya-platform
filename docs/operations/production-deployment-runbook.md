@@ -1,9 +1,10 @@
 # AQLIYA Production Deployment Runbook
 
-> **Version:** 1.4  
+> **Version:** 1.5  
 > **Last updated:** 2026-06-21  
 > **Scope:** Production deployment of AQLIYA platform (Next.js 16, PostgreSQL 16, Prisma 7, Node.js 22)  
 > **Changelog:**
+> - v1.5 (2026-06-21): Pilot Launch Closure — ClamAV ECS sidecar in Terraform, `RATE_LIMITER=redis` + `SCANNER_PROVIDER=clamav` env vars, closure scripts (`platform:pilot-closure`, scanner smoke, rate-limit load), restore-drill RTO/RPO reporting, Pilot Launch Certificate.
 > - v1.4 (2026-06-21): Tier 3 enterprise prep — Intelligence Core operator APIs, SSO/SCIM hardening checklist, Redis rate limiter verification, ABAC enforce pilot env vars.
 > - v1.3 (2026-06-17): Added SAML SSO, ClamAV scanner, rate limiter guidance, ECS rollback, restore-drill script, CI Postgres service. Reflected current validated build state.
 > - v1.2 (2026-06-09): Domain migration `aqliya.ai → aqliya.com`.
@@ -95,7 +96,17 @@ SAML provider configuration (entry point, certificate, issuer) is stored encrypt
 
 ```bash
 # With RATE_LIMITER=redis and REDIS_URL set in .env
-npm run verify:redis-rate-limiter
+npm run platform:rate-limit-load
+npm run verify:redis-rate-limiter   # connectivity ping only
+```
+
+**Pilot launch closure (all checks):**
+
+```bash
+docker compose up -d clamav redis db
+npm run platform:pilot-closure
+# Report: backups/pilot-reports/pilot-launch-closure-*.json
+# Certificate: docs/deliverables/PILOT_LAUNCH_CERTIFICATE.md
 ```
 
 ### Intelligence Core (Tier 2/3 — off by default)

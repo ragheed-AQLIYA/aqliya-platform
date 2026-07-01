@@ -1,0 +1,353 @@
+{
+    "metadata":  {
+                     "generatedAt":  "2026-06-16T17:42:01.168Z",
+                     "templateVersion":  "1.0"
+                 },
+    "summary":  {
+                    "totalFields":  29,
+                    "autoFillableFields":  13,
+                    "autoFilledFromTB":  9,
+                    "autoFillablePct":  "69%",
+                    "manualFields":  9,
+                    "clientRequiredFields":  13,
+                    "completedFields":  7
+                },
+    "lines":  [
+                  {
+                      "code":  "INF-01",
+                      "name":  "اسم المنشأة / Company Name",
+                      "section":  "company_info",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "code":  "INF-02",
+                      "name":  "السجل التجاري / CR Number",
+                      "section":  "company_info",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "code":  "INF-03",
+                      "name":  "تاريخ التأسيس / Date of Incorporation",
+                      "section":  "company_info",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "code":  "REV-01",
+                      "name":  "إيرادات العملاء المحليين / Local Customer Revenue",
+                      "section":  "revenue",
+                      "fillSource":  "A — TB (with value)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "matchedAccount":  {
+                                             "code":  "4401010004",
+                                             "name":  "ايرادات الصيانه والتشغيل (مطالبات)",
+                                             "balance":  221860796.68
+                                         },
+                      "totalMatchedAccounts":  5,
+                      "aggregatedValue":  547341228.83,
+                      "pattern":  "إيرادات.*صيانة.*تشغيل|ايرادات.*صيانة.*تشغيل|إيرادات.*تشغيل|ايرادات.*تشغيل",
+                      "confidence":  "high",
+                      "note":  "Auto-filled from TB (aggregated 5 accounts): 547,341,228.83 SAR"
+                  },
+                  {
+                      "code":  "REV-02",
+                      "name":  "إيرادات العملاء الأجانب / Foreign Customer Revenue",
+                      "section":  "revenue",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  true,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "No matching TB account found with existing patterns"
+                  },
+                  {
+                      "code":  "REV-03",
+                      "name":  "إجمالي الإيرادات / Total Revenue",
+                      "section":  "revenue",
+                      "fillSource":  "A — TB (with value)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "matchedAccount":  {
+                                             "code":  "4401010004",
+                                             "name":  "ايرادات الصيانه والتشغيل (مطالبات)",
+                                             "balance":  221860796.68
+                                         },
+                      "totalMatchedAccounts":  5,
+                      "aggregatedValue":  547341228.83,
+                      "pattern":  "إيرادات.*صيانة|ايرادات.*صيانة|إيرادات.*تشغيل|ايرادات.*تشغيل",
+                      "confidence":  "high",
+                      "note":  "Auto-filled from TB (aggregated 5 accounts): 547,341,228.83 SAR"
+                  },
+                  {
+                      "code":  "COS-01",
+                      "name":  "تكلفة المبيعات من موردين محليين / Local Supplier COS",
+                      "section":  "cost_of_sales",
+                      "fillSource":  "A — TB (with value)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "matchedAccount":  {
+                                             "code":  "3204010088",
+                                             "name":  "مشتريات مستعاضة",
+                                             "balance":  3839810
+                                         },
+                      "totalMatchedAccounts":  1,
+                      "aggregatedValue":  3839810,
+                      "pattern":  "مشتريات مستعاضة|مشتريات.*مستعاضة",
+                      "confidence":  "high",
+                      "note":  "Auto-filled from TB (aggregated 1 accounts): 3,839,810 SAR"
+                  },
+                  {
+                      "code":  "COS-02",
+                      "name":  "تكلفة المبيعات من موردين أجانب / Foreign Supplier COS",
+                      "section":  "cost_of_sales",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  true,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "No matching TB account found with existing patterns"
+                  },
+                  {
+                      "code":  "COS-03",
+                      "name":  "إجمالي تكلفة المبيعات / Total Cost of Sales",
+                      "section":  "cost_of_sales",
+                      "fillSource":  "A — TB (with value)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "matchedAccount":  {
+                                             "code":  "3204010091",
+                                             "name":  "تكلفة مردم تبوك ( مخزون)",
+                                             "balance":  1267242
+                                         },
+                      "totalMatchedAccounts":  1,
+                      "aggregatedValue":  1267242,
+                      "pattern":  "تكلفة|مردم",
+                      "confidence":  "high",
+                      "note":  "Auto-filled from TB (aggregated 1 accounts): 1,267,242 SAR"
+                  },
+                  {
+                      "code":  "GP-01",
+                      "name":  "إجمالي الربح / Gross Profit",
+                      "section":  "gross_profit",
+                      "fillSource":  "B — Formula (derived)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "formula":  "REV-03 - COS-03",
+                      "value":  null,
+                      "note":  "Derived from formula: REV-03 - COS-03 = 546,073,986.83 SAR",
+                      "aggregatedValue":  546073986.83,
+                      "confidence":  "high"
+                  },
+                  {
+                      "code":  "SPN-01",
+                      "name":  "إجمالي المشتريات من موردين سعوديين / Saudi Supplier Spend",
+                      "section":  "supplier_spend",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  true,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "No matching TB account found with existing patterns"
+                  },
+                  {
+                      "code":  "SPN-02",
+                      "name":  "إجمالي المشتريات من موردين غير سعوديين / Non-Saudi Supplier Spend",
+                      "section":  "supplier_spend",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  true,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "No matching TB account found with existing patterns"
+                  },
+                  {
+                      "code":  "SPN-03",
+                      "name":  "إجمالي المشتريات / Total Procurement Spend",
+                      "section":  "supplier_spend",
+                      "fillSource":  "A — TB (with value)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "matchedAccount":  {
+                                             "code":  "3204010088",
+                                             "name":  "مشتريات مستعاضة",
+                                             "balance":  3839810
+                                         },
+                      "totalMatchedAccounts":  1,
+                      "aggregatedValue":  3839810,
+                      "pattern":  "مشتريات مستعاضة|مشتريات",
+                      "confidence":  "high",
+                      "note":  "Auto-filled from TB (aggregated 1 accounts): 3,839,810 SAR"
+                  },
+                  {
+                      "code":  "WRK-01",
+                      "name":  "عدد الموظفين السعوديين / Saudi Workforce Count",
+                      "section":  "workforce",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "code":  "WRK-02",
+                      "name":  "إجمالي عدد الموظفين / Total Workforce Count",
+                      "section":  "workforce",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "code":  "WRK-03",
+                      "name":  "نسبة التوطين / Saudization Percentage",
+                      "section":  "workforce",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "code":  "WRK-04",
+                      "name":  "إجمالي الرواتب / Total Payroll",
+                      "section":  "workforce",
+                      "fillSource":  "A — TB (with value)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "matchedAccount":  {
+                                             "code":  "3205010001",
+                                             "name":  "رواتب قطاع الحاويات",
+                                             "balance":  567190.65
+                                         },
+                      "totalMatchedAccounts":  4,
+                      "aggregatedValue":  198733336.76000002,
+                      "pattern":  "رواتب|مرتبات|أجور|اجور|payroll|salaries|wages",
+                      "confidence":  "high",
+                      "note":  "Auto-filled from TB (aggregated 4 accounts): 198,733,336.76 SAR"
+                  },
+                  {
+                      "code":  "AST-01",
+                      "name":  "الأصول الثابتة المحلية / Local Fixed Assets",
+                      "section":  "assets",
+                      "fillSource":  "A — TB (with value)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "matchedAccount":  {
+                                             "code":  "1301010007",
+                                             "name":  "أثاث مكتبى",
+                                             "balance":  299837.95
+                                         },
+                      "totalMatchedAccounts":  2,
+                      "aggregatedValue":  9883590.29,
+                      "pattern":  "أصول ثابتة|آلات ومعدات|أثاث",
+                      "confidence":  "high",
+                      "note":  "Auto-filled from TB (aggregated 2 accounts): 9,883,590.29 SAR"
+                  },
+                  {
+                      "code":  "AST-02",
+                      "name":  "إجمالي الأصول الثابتة / Total Fixed Assets",
+                      "section":  "assets",
+                      "fillSource":  "A — TB (with value)",
+                      "autoFillable":  true,
+                      "matchFound":  true,
+                      "matchedAccount":  {
+                                             "code":  "1301010007",
+                                             "name":  "أثاث مكتبى",
+                                             "balance":  299837.95
+                                         },
+                      "totalMatchedAccounts":  2,
+                      "aggregatedValue":  9883590.29,
+                      "pattern":  "أصول ثابتة|آلات ومعدات|أثاث",
+                      "confidence":  "high",
+                      "note":  "Auto-filled from TB (aggregated 2 accounts): 9,883,590.29 SAR"
+                  },
+                  {
+                      "code":  "DEC-01",
+                      "name":  "حالة شهادة المحتوى المحلي / LC Certificate Status",
+                      "section":  "declarations",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "code":  "DEC-02",
+                      "name":  "نسبة المحتوى المحلي المعلنة / Declared LC Percentage",
+                      "section":  "declarations",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "code":  "DEC-03",
+                      "name":  "ملاحظات إضافية / Additional Notes",
+                      "section":  "declarations",
+                      "fillSource":  "D — Client Required",
+                      "autoFillable":  false,
+                      "matchFound":  false,
+                      "value":  null,
+                      "note":  "Manual entry required from client"
+                  },
+                  {
+                      "status":  "complete",
+                      "code":  "scoring-engine",
+                      "name":  "LcScore scoring engine",
+                      "description":  "4-metric scoring: revenue 35%, supplier_spend 35%, workforce 20%, assets 10%",
+                      "section":  "scoring"
+                  },
+                  {
+                      "status":  "complete",
+                      "code":  "formula-wrk03",
+                      "name":  "WRK-03 formula",
+                      "description":  "Saudization percentage: WRK-01 / WRK-02 x 100",
+                      "section":  "formulas"
+                  },
+                  {
+                      "status":  "complete",
+                      "code":  "formula-spn03",
+                      "name":  "SPN-03 formula",
+                      "description":  "Total procurement spend: SPN-01 + SPN-02",
+                      "section":  "formulas"
+                  },
+                  {
+                      "status":  "complete",
+                      "code":  "score-persistence",
+                      "name":  "Score persistence to DB",
+                      "description":  "lcScore + lcScoreComputedAt saved to workbook record",
+                      "section":  "scoring"
+                  },
+                  {
+                      "status":  "complete",
+                      "code":  "score-export",
+                      "name":  "Score data in export",
+                      "description":  "Export includes LcScore with contributions analysis",
+                      "section":  "scoring"
+                  },
+                  {
+                      "status":  "complete",
+                      "code":  "tab-gating",
+                      "name":  "Tab-level access control",
+                      "description":  "Lines, missing data, and requests tabs gated by workflow state",
+                      "section":  "workflow"
+                  },
+                  {
+                      "status":  "complete",
+                      "code":  "contributions-analysis",
+                      "name":  "Contributions analysis UI",
+                      "description":  "Scoring detail card showing metric contributions and section breakdown",
+                      "section":  "scoring"
+                  }
+              ]
+}

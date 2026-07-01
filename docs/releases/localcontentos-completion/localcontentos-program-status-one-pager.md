@@ -1,3 +1,5 @@
+# Trust principle
+
 ﻿# LocalContentOS — Stakeholder Program Status One-Pager
 
 **Date:** 2026-06-01 (L6 Final Integrator — complete sync)  

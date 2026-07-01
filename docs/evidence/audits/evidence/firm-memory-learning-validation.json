@@ -1,0 +1,28 @@
+{
+  "validation": "firm_memory_learning_loop",
+  "measuredAt": "2026-06-21T22:01:44.707Z",
+  "testAccountCode": "FM-LEARN-TEST-001",
+  "organizationId": "cmqkxknnz00008wpq99dnhxr2",
+  "steps": {
+    "beforeClassification": {
+      "source": "pattern",
+      "canonicalCode": "FM-VAL-CORRECT"
+    },
+    "manualCorrection": {
+      "suggestedCanonicalId": "fm-val-wrong-expense",
+      "acceptedCanonicalId": "fm-val-correct-asset",
+      "wasAccepted": false
+    },
+    "patternWritten": {
+      "canonicalAccountId": "fm-val-correct-asset",
+      "hitCount": 1
+    },
+    "afterClassification": {
+      "source": "firm_memory",
+      "canonicalCode": "FM-VAL-CORRECT",
+      "canonicalAccountId": "fm-val-correct-asset"
+    }
+  },
+  "passed": true,
+  "verdict": "Correction → feedback → pattern → firm_memory reuse PROVEN"
+}

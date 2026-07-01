@@ -18,7 +18,10 @@ services:
       - STORAGE_PROVIDER=${STORAGE_PROVIDER:-local}
       - RATE_LIMITER=${RATE_LIMITER:-redis}
       - REDIS_URL=redis://redis:6379
-      - FF_AI_REAL_PROVIDERS=true
+      - SCANNER_PROVIDER=clamav
+      - CLAMAV_HOST=clamav
+      - CLAMAV_PORT=3310
+      - FF_AI_REAL_PROVIDERS=false
       - FF_AI_COST_TRACKING=true
       - FF_QUEUE_ENABLED=true
       - FF_TENANT_LIFECYCLE=true
@@ -45,6 +48,22 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      clamav:
+        condition: service_healthy
+    restart: unless-stopped
+
+  clamav:
+    image: clamav/clamav:latest
+    ports:
+      - "3310:3310"
+    volumes:
+      - clamav_staging:/var/lib/clamav
+    healthcheck:
+      test: ["CMD-SHELL", "clamdcheck.sh || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
     restart: unless-stopped
 
   db:
@@ -81,3 +100,4 @@ volumes:
   pgdata_staging:
   uploads:
   redisdata_staging:
+  clamav_staging:

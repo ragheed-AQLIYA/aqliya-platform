@@ -1,0 +1,115 @@
+{
+  "engagementId": "eng-shalfa-2025",
+  "policySlug": "shalfa-pilot-audited-v1",
+  "mappingCount": 578,
+  "auditos": {
+    "revenue": 450305191.84000003,
+    "costOfRevenue": 383760688.2699999,
+    "grossProfit": 66544503.57000011,
+    "operatingExpenses": 26637563.180000007,
+    "operatingProfit": 39906940.390000105,
+    "financeCosts": 12901271.17,
+    "otherIncome": 735915,
+    "netProfit": 25084855.92000009,
+    "totalAssets": 385461575.0899999,
+    "totalEquity": 112586726.3800001,
+    "cash": 62819988.839999944,
+    "signedIsNet": 25084855.92000009,
+    "renderedLines": {
+      "revenue": 450305191.84000003,
+      "costOfRevenue": 197666442
+    }
+  },
+  "variances": {
+    "netProfitPct": 0.000015626961208282618,
+    "revenuePct": -0.2452998411169332,
+    "costOfRevenuePct": -0.3113645217287647,
+    "operatingProfitPct": 0.20458113922864404
+  },
+  "scores": {
+    "structural": 70,
+    "economic": 100,
+    "lineItem": 100,
+    "factoryAccuracy": 94
+  },
+  "lineChecks": [
+    {
+      "label": "Revenue",
+      "auditos": 450305191.84000003,
+      "reference": 451412506,
+      "variancePct": -0.2452998411169332,
+      "match": true
+    },
+    {
+      "label": "Cost of revenue",
+      "auditos": 383760688.2699999,
+      "reference": 384959315,
+      "variancePct": -0.3113645217287647,
+      "match": true
+    },
+    {
+      "label": "Gross profit",
+      "auditos": 66544503.57000011,
+      "reference": 66453191,
+      "variancePct": 0.13740885670954772,
+      "match": true
+    },
+    {
+      "label": "Operating expenses",
+      "auditos": 26637563.180000007,
+      "reference": 26627726,
+      "variancePct": 0.03694337248327984,
+      "match": true
+    },
+    {
+      "label": "Operating profit",
+      "auditos": 39906940.390000105,
+      "reference": 39825465,
+      "variancePct": 0.20458113922864404,
+      "match": true
+    },
+    {
+      "label": "Finance costs",
+      "auditos": 12901271.17,
+      "reference": 12901271,
+      "variancePct": 0.0000013176996276219156,
+      "match": true
+    },
+    {
+      "label": "Other income",
+      "auditos": 735915,
+      "reference": 735915,
+      "variancePct": 0,
+      "match": true
+    },
+    {
+      "label": "Net profit",
+      "auditos": 25084855.92000009,
+      "reference": 25084852,
+      "variancePct": 0.000015626961208282618,
+      "match": true
+    },
+    {
+      "label": "Total assets",
+      "auditos": 385461575.0899999,
+      "reference": 376138426,
+      "variancePct": 2.478648403234376,
+      "match": true
+    },
+    {
+      "label": "Total equity",
+      "auditos": 112586726.3800001,
+      "reference": 112586721,
+      "variancePct": 0.000004778538758171807,
+      "match": true
+    },
+    {
+      "label": "Cash",
+      "auditos": 62819988.839999944,
+      "reference": 62819989,
+      "variancePct": -2.5469609048859606e-7,
+      "match": true
+    }
+  ],
+  "pass": true
+}

@@ -1,3 +1,5 @@
+# Executive Summary
+
 ﻿# Infrastructure Hardening Audit — AQLIYA Platform
 
 **Date:** 2026-06-04

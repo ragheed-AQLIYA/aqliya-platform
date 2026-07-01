@@ -174,6 +174,10 @@ resource "aws_ecs_task_definition" "app" {
         { name = "NODE_ENV", value = var.environment },
         { name = "NEXT_PUBLIC_DEPLOY_ENV", value = var.environment },
         { name = "DOMAIN_NAME", value = var.domain_name },
+        { name = "RATE_LIMITER", value = "redis" },
+        { name = "SCANNER_PROVIDER", value = "clamav" },
+        { name = "CLAMAV_HOST", value = "127.0.0.1" },
+        { name = "CLAMAV_PORT", value = "3310" },
         { name = "FF_AI_RAG", value = "true" },
         { name = "FF_AI_REAL_PROVIDERS", value = var.environment == "production" ? "false" : "true" },
         { name = "FF_QUEUE_ENABLED", value = "true" },
@@ -216,6 +220,39 @@ resource "aws_ecs_task_definition" "app" {
         timeout     = 5
         retries     = 3
         startPeriod = 60
+      }
+      dependsOn = [
+        {
+          containerName = "clamav"
+          condition     = "HEALTHY"
+        }
+      ]
+    },
+    {
+      name      = "clamav"
+      image     = "clamav/clamav:latest"
+      essential = true
+      portMappings = [
+        {
+          containerPort = 3310
+          hostPort      = 3310
+          protocol      = "tcp"
+        }
+      ]
+      healthCheck = {
+        command     = ["CMD-SHELL", "clamdcheck.sh || exit 1"]
+        interval    = 30
+        timeout     = 10
+        retries     = 5
+        startPeriod = 120
+      }
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.ecs.name
+          "awslogs-region"        = data.aws_region.current.name
+          "awslogs-stream-prefix" = "clamav"
+        }
       }
     }
   ])

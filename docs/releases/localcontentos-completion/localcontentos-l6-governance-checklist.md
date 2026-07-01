@@ -1,3 +1,5 @@
+# 1. Permission registry (verified)
+
 ﻿# LocalContentOS L6 — Governance Checklist
 
 **Program:** LocalContentOS L6 — Institutional Pilot-Ready  

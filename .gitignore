@@ -54,12 +54,19 @@ docs/reports/
 !docs/reports/project-organization/
 !docs/reports/project-organization/**
 
-# debug
+# debug — runtime / diagnostic logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 dev*.log
+server*.log
+srv*.log
+ns.log
+npmstart*.log
+std_server*.log
+kf_capture*.png
+kf_diag*.png
 
 # test artifacts
 /test-results/
@@ -92,3 +99,12 @@ temp_*
 
 # Local live test results
 l1-live-results.txt
+
+tmp/
+_*.mjs
+_*.txt
+start-server.ps1
+
+# Generated release artifacts (regenerated from source)
+/knowledge/releases/
+/knowledge/tb-intelligence/

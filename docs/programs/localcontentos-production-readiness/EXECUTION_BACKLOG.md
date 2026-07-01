@@ -476,6 +476,42 @@ P0-B2B (RBAC Foundation) must not start until all conditions below are met. This
 
 ---
 
+### RB-02C: Authorization Validation
+
+A short validation program (~1 day) executed after RB-02B completion. Its purpose is to prove that the implementation matches RB-02A v0.5 — not to write new code.
+
+| Item | Status |
+|------|:------:|
+| **Status** | ⬜ **Pending** — blocked by RB-02B completion |
+| **Program** | Authorization Validation |
+| **Sequence** | After RB-02B, before program closure |
+| **Type** | Validation — no new code |
+| **Effort** | ~1 day |
+
+#### Validation Checklist
+
+1. **Policy Review** — All 9 policies (POL-01 through POL-09) exist in the Policy Registry with correct metadata
+2. **Decision Trace Review** — Sample 25 requests, verify Decision Trace is complete (evaluation order, policy results, winning decision, reason, audit IDs)
+3. **Audit Review** — Verify AuthorizationEvaluated exists for every decision type (ALLOW, DENY, REQUIRE_APPROVAL, READ_ONLY)
+4. **SoD Review** — Verify all 7 SoD rules produce correct DENY/override behavior
+5. **Approval Flow Review** — Verify all 9 approval gates produce ApprovalRequests with correct Approver Authority
+6. **Authorization Attack Tests** — Attempt to bypass guards at each pipeline stage
+7. **Architecture Compliance Re-check** — Verify Prohibitions (§12.3) and Invariants (§12.4) still hold
+
+#### Evidence Package
+
+- `RB-02C/RESULTS.md` — Validation results per checklist item
+- `RB-02C/ATTACK_MATRIX.md` — Attack surface verification
+- `RB-02C/GATE.md` — Gate sign-off
+
+#### Dependencies
+
+| Depends On | Blocks |
+|------------|--------|
+| RB-02B | RB-02 Program Closure |
+
+---
+
 ### P0-B2B: RBAC Foundation (RB-02, RB-03)
 
 **What:** بناء نموذج الصلاحيات — بعد إثبات العزل بين المستأجرين  

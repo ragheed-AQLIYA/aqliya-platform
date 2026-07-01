@@ -1,0 +1,8 @@
+﻿
+> aqliya-app@0.1.0 db:pgvector-health
+> node scripts/check-pgvector-health.mjs
+
+pgvector_extension=true
+document_chunk_table=true
+ff_ai_rag=enabled
+pgvector_health=pass

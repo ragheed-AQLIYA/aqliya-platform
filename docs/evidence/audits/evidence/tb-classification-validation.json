@@ -1,0 +1,90 @@
+{
+  "validationDate": "2026-06-21T20:55:22.028Z",
+  "tbFile": "TB 31-12-2025 Final.xlsx",
+  "totalFileAccounts": 578,
+  "sampleSize": 20,
+  "routingPath": "runInference → aiOrchestrator.generate → resolveProvider → LocalAIProvider.execute → Ollama POST /api/chat",
+  "provider": {
+    "expected": "local",
+    "actual": "local",
+    "modelVersion": "ollama/qwen3:8b",
+    "isOllama": true
+  },
+  "metrics": {
+    "durationMs": 8022,
+    "outputLength": 1144
+  },
+  "checks": [
+    {
+      "name": "tb.file",
+      "pass": true,
+      "detail": "TB 31-12-2025 Final.xlsx"
+    },
+    {
+      "name": "tb.accounts",
+      "pass": true,
+      "detail": 578
+    },
+    {
+      "name": "tb.columns",
+      "pass": true,
+      "detail": "accountCode, accountName, balance"
+    },
+    {
+      "name": "classification.sampleSize",
+      "pass": true,
+      "detail": 20
+    },
+    {
+      "name": "classification.durationMs",
+      "pass": true,
+      "detail": 8022
+    },
+    {
+      "name": "classification.providerId",
+      "pass": true,
+      "detail": "local"
+    },
+    {
+      "name": "classification.modelVersion",
+      "pass": true,
+      "detail": "ollama/qwen3:8b"
+    },
+    {
+      "name": "classification.hasOutput",
+      "pass": true,
+      "detail": true
+    },
+    {
+      "name": "classification.outputLength",
+      "pass": true,
+      "detail": "1144 chars"
+    },
+    {
+      "name": "provider.expected",
+      "pass": true,
+      "detail": "local"
+    },
+    {
+      "name": "provider.actual",
+      "pass": true,
+      "detail": "local"
+    },
+    {
+      "name": "provider.modelVersion",
+      "pass": true,
+      "detail": "ollama/qwen3:8b"
+    },
+    {
+      "name": "provider.isOllama",
+      "pass": true,
+      "detail": true
+    },
+    {
+      "name": "provider.routingPath",
+      "pass": true,
+      "detail": "runInference → aiOrchestrator.generate → resolveProvider → LocalAIProvider.execute → Ollama POST /api/chat"
+    }
+  ],
+  "outputPreview": "**Draft Output: Account Mapping Task Summary**  \n**Status:** `draft`  \n**Task:** `account_mapping`  \n**Parameters:**  \n- `accountCount`: 0  \n- `mappedCount`: 0  \n- `lowConfidenceCount`: 0  \n- `unmappedCount`: 0  \n\n**Observations:**  \n1. **No accounts to process**: The task contains zero accounts, resulting in zero mappings, low-confidence mappings, or unmapped accounts.  \n2. **Evidence requirements unmet**:  \n   - [✗] Low-confidence mappings reviewed and confirmed (missing)  \n   - [✗] All accounts mapped to canonical categories (missing)  \n3. **Governance compliance**: No mappings were suggested or confirmed, avoiding escalation triggers.  \n\n**Next Steps:**  \n- Confirm task parameters (e.g., account data availability).  \n- Approve to proceed with mapping or resolve data gaps.  \n\n**Escalation Status:**  \n- No escalation triggers activated (low_mapping_confidence, unsupported_accounting_treatment).  \n\n**Human Approval Required:**  \nThis task requires explicit confirmation to proceed. Ple"
+}

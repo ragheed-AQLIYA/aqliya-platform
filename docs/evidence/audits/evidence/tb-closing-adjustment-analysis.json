@@ -1,0 +1,284 @@
+﻿{
+  "plug": 16427398.919999957,
+  "totalAssets": 348579752.8499999,
+  "liabilitiesTotal": 244650483.46999997,
+  "equityCore": 87501870.46000001,
+  "currentAssets": 316909578.1099999,
+  "nonCurrentAssets": 31670174.739999995,
+  "currentLiab": 244650483.46999997,
+  "nonCurrentLiab": 0,
+  "computedNetProfit": 497936185.8199999,
+  "tbBsNet": 25084855.890000127,
+  "tbIsNet": -25084855.92000027,
+  "byCategory": {
+    "Current Assets": 316909578.1099999,
+    "Non-Current Assets": 31670174.739999995,
+    "Current Liabilities": 244650483.46999997,
+    "Expenses": 310113424.50000006,
+    "Equity": 87501870.46000001,
+    "Revenue": 808049610.3199999
+  },
+  "equityMap1Labels": {
+    "General reserve": 150000,
+    "Actuarial reserve": 552969,
+    "Share capital": 42000000,
+    "Retained earninggs": 44798901.46
+  },
+  "equityAccounts": [
+    {
+      "code": "2303010002",
+      "name": "احتياطى نظامى",
+      "map1": "General reserve",
+      "bsIs": "Balance Sheet",
+      "tbNet": -150000,
+      "fsAmount": 150000,
+      "canonicalCode": "CA-3020",
+      "canonicalName": "Retained Earnings",
+      "category": "Equity",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "2303020009",
+      "name": "احتياطي اكتواري",
+      "map1": "Actuarial reserve",
+      "bsIs": "Balance Sheet",
+      "tbNet": -552969,
+      "fsAmount": 552969,
+      "canonicalCode": "CA-3020",
+      "canonicalName": "Retained Earnings",
+      "category": "Equity",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "2401010001",
+      "name": "راس المال شريك 1 م / محمد البراهيم",
+      "map1": "Share capital",
+      "bsIs": "Balance Sheet",
+      "tbNet": -14000000,
+      "fsAmount": 14000000,
+      "canonicalCode": "CA-3010",
+      "canonicalName": "Share Capital",
+      "category": "Equity",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "2401010002",
+      "name": "راس المال شريك  2 م/عبد الله",
+      "map1": "Share capital",
+      "bsIs": "Balance Sheet",
+      "tbNet": -14000000,
+      "fsAmount": 14000000,
+      "canonicalCode": "CA-3010",
+      "canonicalName": "Share Capital",
+      "category": "Equity",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "2401010003",
+      "name": "رأس مال الشريك 3 أ / فهد البراهيم",
+      "map1": "Share capital",
+      "bsIs": "Balance Sheet",
+      "tbNet": -14000000,
+      "fsAmount": 14000000,
+      "canonicalCode": "CA-3010",
+      "canonicalName": "Share Capital",
+      "category": "Equity",
+      "statementType": "balance_sheet"
+    },
+    {
+      "code": "2404010001",
+      "name": "أرباح وخسائر مستبقاة",
+      "map1": "Retained earninggs",
+      "bsIs": "Balance Sheet",
+      "tbNet": -44798901.46,
+      "fsAmount": 44798901.46,
+      "canonicalCode": "CA-3020",
+      "canonicalName": "Retained Earnings",
+      "category": "Equity",
+      "statementType": "balance_sheet"
+    }
+  ],
+  "crossClassCount": 10,
+  "sumBsTaggedAsIs": 60276731.7,
+  "sumIsTaggedAsBs": -4362880.98,
+  "bsTaggedMappedToIs": [
+    {
+      "code": "1106010001",
+      "name": "م مدفوعة مقدماً ( رواتب واجور )",
+      "erpBsIs": "Balance Sheet",
+      "map1": "Prepaid expenses and other current assets",
+      "canonical": "CA-5020 Employee Benefits",
+      "tbNet": 0,
+      "fsAmount": 0
+    },
+    {
+      "code": "1106010021",
+      "name": "تجهيزات مشاريع -الاتفاقية تقديم خدمات المرافق المتكاملة - القطاع الجنوبي",
+      "erpBsIs": "Balance Sheet",
+      "map1": "Contract Costs",
+      "canonical": "CA-5040 Utilities",
+      "tbNet": 1364778.07,
+      "fsAmount": 1364778.07
+    },
+    {
+      "code": "1301010011",
+      "name": "اصول حق الاستخدام",
+      "erpBsIs": "Balance Sheet",
+      "map1": "Right of-use-assets",
+      "canonical": "CA-5070 General and Administrative Expenses",
+      "tbNet": 34016514.769999996,
+      "fsAmount": 34016514.769999996
+    },
+    {
+      "code": "2104010001",
+      "name": "رواتب مستحقة",
+      "erpBsIs": "Balance Sheet",
+      "map1": "Accrued expenses and other credit balances",
+      "canonical": "CA-5020 Employee Benefits",
+      "tbNet": -4613253.460000008,
+      "fsAmount": 4613253.460000008
+    },
+    {
+      "code": "2108020001",
+      "name": "قرض طويل الاجل بنك الرياض شركة المياه الوطنية - ادارة المرافق المتكاملة",
+      "erpBsIs": "Balance Sheet",
+      "map1": "Short Term Loans",
+      "canonical": "CA-5040 Utilities",
+      "tbNet": -10222653.939999998,
+      "fsAmount": 10222653.939999998
+    },
+    {
+      "code": "2302010009",
+      "name": "مجمع اهلاك اصول حق الاستخدام",
+      "erpBsIs": "Balance Sheet",
+      "map1": "Right of-use-assets",
+      "canonical": "CA-5070 General and Administrative Expenses",
+      "tbNet": -10059531.46,
+      "fsAmount": 10059531.46
+    }
+  ],
+  "isTaggedMappedToBs": [
+    {
+      "code": "3101020005",
+      "name": "رسوم الزكاة والدخل",
+      "erpBsIs": "Income Statement",
+      "map1": "zakat expense",
+      "canonical": "CA-2030 Tax and Zakat Payable",
+      "tbNet": 2575256.63,
+      "fsAmount": -2575256.63
+    },
+    {
+      "code": "3101070021",
+      "name": "عمولة قرض بنك الرياض - مشروع هئية الزكاة حراسات المنافذ",
+      "erpBsIs": "Income Statement",
+      "map1": "Finance Costs",
+      "canonical": "CA-2030 Tax and Zakat Payable",
+      "tbNet": 513539.1699999999,
+      "fsAmount": -513539.1699999999
+    },
+    {
+      "code": "3101070045",
+      "name": "عمولة قروض طويلة الاجل البنك السعودي للاستثمار",
+      "erpBsIs": "Income Statement",
+      "map1": "Finance Costs",
+      "canonical": "CA-2040 Short-term Borrowings",
+      "tbNet": 6843.179999999999,
+      "fsAmount": -6843.179999999999
+    },
+    {
+      "code": "3204010091",
+      "name": "تكلفة مردم تبوك ( مخزون)",
+      "erpBsIs": "Income Statement",
+      "map1": "Cost of revenue",
+      "canonical": "CA-1030 Inventories",
+      "tbNet": -1267242,
+      "fsAmount": -1267242
+    }
+  ],
+  "zakatAccounts": [
+    {
+      "code": "1103370203",
+      "name": "مبالغ محتجزة-هيئة الزكاة والجمارك",
+      "map1": "Prepaid expenses and other current assets",
+      "canonical": "Tax and Zakat Payable",
+      "amount": -942282.4299999999
+    },
+    {
+      "code": "2108020005",
+      "name": "قرض بنك الرياض - مشروع هئية الزكاة حراسات المنافذ",
+      "map1": "Short Term Loans",
+      "canonical": "Tax and Zakat Payable",
+      "amount": 0
+    },
+    {
+      "code": "2303010003",
+      "name": "مخصص الزكاة الشرعية",
+      "map1": "Zakat provision",
+      "canonical": "Tax and Zakat Payable",
+      "amount": 2575257
+    },
+    {
+      "code": "3101020005",
+      "name": "رسوم الزكاة والدخل",
+      "map1": "zakat expense",
+      "canonical": "Tax and Zakat Payable",
+      "amount": -2575256.63
+    },
+    {
+      "code": "3101070021",
+      "name": "عمولة قرض بنك الرياض - مشروع هئية الزكاة حراسات المنافذ",
+      "map1": "Finance Costs",
+      "canonical": "Tax and Zakat Payable",
+      "amount": -513539.1699999999
+    }
+  ],
+  "actuarialReserve": [
+    {
+      "code": "2303020009",
+      "name": "احتياطي اكتواري",
+      "canonical": "Retained Earnings",
+      "amount": 552969
+    },
+    {
+      "code": "3101070050",
+      "name": "الفوائد الاكتوارية",
+      "canonical": "Finance Cost",
+      "amount": 417620
+    }
+  ],
+  "generalReserve": [
+    {
+      "code": "2303010002",
+      "name": "احتياطى نظامى",
+      "canonical": "Retained Earnings",
+      "amount": 150000
+    },
+    {
+      "code": "2303020009",
+      "name": "احتياطي اكتواري",
+      "canonical": "Retained Earnings",
+      "amount": 552969
+    }
+  ],
+  "retainedEarnings": [
+    {
+      "code": "2303010002",
+      "name": "احتياطى نظامى",
+      "map1": "General reserve",
+      "amount": 150000
+    },
+    {
+      "code": "2303020009",
+      "name": "احتياطي اكتواري",
+      "map1": "Actuarial reserve",
+      "amount": 552969
+    },
+    {
+      "code": "2404010001",
+      "name": "أرباح وخسائر مستبقاة",
+      "map1": "Retained earninggs",
+      "amount": 44798901.46
+    }
+  ],
+  "unmappedTbLines": []
+}

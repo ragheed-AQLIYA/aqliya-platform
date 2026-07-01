@@ -1,0 +1,131 @@
+# LocalContentOS v0.1 — Governance Model
+
+## Reuse Principle
+
+LocalContentOS inherits AQLIYA Core governance. It must NOT duplicate:
+
+- Approval state machine → reuse `src/lib/governance/approval-state.ts`
+- Escalation logic → reuse `src/lib/governance/escalation.ts`
+- Provenance tracking → reuse `src/lib/governance/provenance.ts`
+- Retrieval/context routing → extend `src/lib/governance/retrieval-router.ts`
+- Platform audit log → reuse `src/lib/platform/audit-log.ts`
+- Tenant/organization guard → reuse `src/lib/audit/tenant-guard.ts` pattern
+- Storage → reuse `src/lib/platform/storage/`
+
+## Extensions to Shared Governance
+
+LocalContentOS requires adding these task types to `GovernanceTaskType`:
+
+```typescript
+"local_content_classification";
+"local_content_scoring";
+"local_content_evidence_review";
+"local_content_report_drafting";
+```
+
+Each new task type must be added to `GOVERNANCE_TASK_MAP` with doctrine references, evidence requirements, escalation triggers, and output boundaries.
+
+New escalation triggers specific to LocalContentOS:
+
+```typescript
+"low_content_percentage"; // Content score below threshold
+"unverified_supplier_claim"; // Supplier claim not backed by evidence
+"missing_certificate"; // Required certificate absent
+"conflicting_classification"; // Classification differs from evidence
+"policy_threshold_breach"; // Spend exceeds policy without local content
+```
+
+## Role-Based Access Control
+
+| Role     | Can View | Can Create/Edit   | Can Review | Can Approve | Can Export         |
+| -------- | -------- | ----------------- | ---------- | ----------- | ------------------ |
+| ADMIN    | Yes      | Yes               | Yes        | Yes         | Yes                |
+| OPERATOR | Yes      | Yes               | No         | No          | Yes (draft)        |
+| REVIEWER | Yes      | No (comment only) | Yes        | No          | No                 |
+| VIEWER   | Yes      | No                | No         | No          | No (approved only) |
+
+## Access Guards
+
+```typescript
+// src/actions/localcontent-actions.ts pattern
+async function assertProjectAccess(
+  projectId: string,
+  requiredRole: "OPERATOR" | "REVIEWER" | "ADMIN",
+): Promise<{ user: CurrentUser; project: LocalContentProject }> {
+  const user = await getCurrentUser();
+  const project = await prisma.localContentProject.findUnique({
+    where: { id: projectId },
+    select: { organizationId: true, status: true },
+  });
+  if (!project) throw new Error("Project not found");
+  if (project.organizationId !== user.organizationId)
+    throw new Error("Access denied: organization mismatch");
+  if (!hasRequiredRole(user, requiredRole))
+    throw new Error("Access denied: insufficient role");
+  return { user, project };
+}
+```
+
+## Audit Trail
+
+Every mutation must write to `PlatformAuditLog`:
+
+```typescript
+await writePlatformAuditLog({
+  productKey: "localcontent",
+  action: "localcontent.supplier.created",
+  platformOrganizationId: platformOrgId,
+  clientWorkspaceId: workspaceId,
+  projectId: project.id,
+  actorId: user.id,
+  actorName: user.name,
+  actorType: "user",
+  targetType: "LocalContentSupplier",
+  targetId: supplier.id,
+  severity: "info",
+  status: "recorded",
+  sourceSystem: "localcontent",
+  sourceModel: "LocalContentSupplier",
+  sourceId: supplier.id,
+  metadata: { projectId: project.id, supplierName: supplier.name },
+});
+```
+
+## Approval Rules
+
+1. Classification entries require reviewer confirmation before scoring is final.
+2. Findings require reviewer acknowledgment before appearing in reports.
+3. Final assessment requires approval before export.
+4. AI can suggest but cannot approve, reject, or finalize.
+5. Approval must include identity, timestamp, and decision rationale.
+6. Approval snapshot captures assessment state at approval time.
+
+## Evidence Requirements Per Task
+
+| Task                       | Minimum Evidence                                             |
+| -------------------------- | ------------------------------------------------------------ |
+| Supplier registration      | Supplier CR number or registration proof                     |
+| Spend record               | Contract reference, PO number, or invoice                    |
+| Classification > 50% local | Local content certificate or attestation                     |
+| Classification < 50% local | Analyst note or contract terms                               |
+| Score publication          | All classifications reviewed, all mandatory evidence present |
+| Report export              | Approval recorded, evidence index complete                   |
+
+## Review Rules
+
+1. A reviewer cannot be the same person who created the records.
+2. Review comments must be recorded with identity and timestamp.
+3. Returned items must include specific revision requests.
+4. Reviewer cannot override an approval; only approver can change approval state.
+
+## Export Controls
+
+Exports must include:
+
+- Disclaimer: "This report is generated by LocalContentOS and has been reviewed by [reviewer] and approved by [approver]. It is not a regulator-certified compliance document."
+- Generated timestamp
+- Organization/workspace
+- Reviewer and approver identity
+- Evidence index reference
+- Approval status
+- Export format and version
