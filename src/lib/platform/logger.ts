@@ -8,9 +8,12 @@ interface LogEntry {
   action?: string;
   userId?: string;
   organizationId?: string;
+  correlationId?: string;
   duration?: number;
   error?: string;
   metadata?: Record<string, unknown>;
+  format?: "text" | "json";
+  [key: string]: unknown;
 }
 
 const LOG_LEVELS: Record<LogLevel, number> = {
@@ -27,12 +30,17 @@ function shouldLog(level: LogLevel): boolean {
 }
 
 function formatLog(entry: LogEntry): string {
+  if (entry.format === "json") {
+    const { format: _f, ...rest } = entry;
+    return JSON.stringify(rest);
+  }
   const base = `[${entry.timestamp}] [${entry.level.toUpperCase()}] ${entry.message}`;
   const parts: string[] = [base];
   if (entry.module) parts.push(`module=${entry.module}`);
   if (entry.action) parts.push(`action=${entry.action}`);
   if (entry.userId) parts.push(`userId=${entry.userId}`);
   if (entry.organizationId) parts.push(`orgId=${entry.organizationId}`);
+  if (entry.correlationId) parts.push(`correlationId=${entry.correlationId}`);
   if (entry.duration !== undefined) parts.push(`duration=${entry.duration}ms`);
   if (entry.error) parts.push(`error=${entry.error}`);
   return parts.join(" ");
@@ -68,3 +76,5 @@ export const logger = {
   warn: (message: string, meta?: Partial<LogEntry>) => log("warn", message, meta),
   error: (message: string, meta?: Partial<LogEntry>) => log("error", message, meta),
 };
+
+export type { LogLevel, LogEntry };
