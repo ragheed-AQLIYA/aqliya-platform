@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { setSecurityHeaders } from "@/middleware-security";
+import { setSecurityHeaders, setCorsHeaders } from "@/middleware-security";
 import { rateLimitMiddleware } from "@/middleware-rate-limit";
 import { resolveMfaGateState } from "@/lib/auth/mfa-gate";
 
@@ -161,7 +161,7 @@ export async function middleware(request: NextRequest) {
 
   const withTiming = (response: NextResponse): NextResponse => {
     response.headers.set("X-Response-Time", `${Date.now() - start}ms`);
-    return response;
+    return setCorsHeaders(request, response);
   };
 
   const { pathname } = request.nextUrl;
