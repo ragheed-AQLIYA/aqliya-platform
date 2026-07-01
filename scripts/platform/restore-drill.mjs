@@ -156,6 +156,14 @@ try {
     "AuditEngagement",
     "PlatformAuditLog",
     "PlatformOutboxEvent",
+    // LCOS models (P0-D3)
+    "LocalContentProject",
+    "LcWorkbook",
+    "LcSupplier",
+    "LcSpendRecord",
+    "LcEvidence",
+    "LcFinding",
+    "LcReview",
   ];
   const counts = {};
   for (const table of tables) {
