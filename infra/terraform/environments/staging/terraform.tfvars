@@ -1,7 +1,7 @@
 environment   = "staging"
 domain_name   = "staging.aqliya.com"
 
-container_image = "123456789012.dkr.ecr.me-south-1.amazonaws.com/aqliya/staging/app:latest"
+container_image = "<ACCOUNT_ID>.dkr.ecr.me-south-1.amazonaws.com/aqliya/staging/app:latest"
 
 s3_upload_bucket_name = "aqliya-staging-uploads"
 s3_static_bucket_name = "aqliya-staging-static"

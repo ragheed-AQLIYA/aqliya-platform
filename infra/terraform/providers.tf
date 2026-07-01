@@ -1,14 +1,21 @@
 # ─── Default provider (primary region) ───
 
+locals {
+  common_tags = {
+    Environment        = var.environment
+    Product            = "AQLIYA"
+    ManagedBy          = "terraform"
+    "AQLIYA:application" = "aqliya-platform"
+  }
+}
+
+# ─── Default provider (primary region: me-south-1 Riyadh) ───
+
 provider "aws" {
   region = var.aws_region
 
   default_tags {
-    tags = {
-      Environment = var.environment
-      Product     = "AQLIYA"
-      ManagedBy   = "terraform"
-    }
+    tags = local.common_tags
   }
 }
 
@@ -19,11 +26,7 @@ provider "aws" {
   region = "us-east-1"
 
   default_tags {
-    tags = {
-      Environment = var.environment
-      Product     = "AQLIYA"
-      ManagedBy   = "terraform"
-    }
+    tags = local.common_tags
   }
 }
 
@@ -34,10 +37,6 @@ provider "aws" {
   region = var.dr_region
 
   default_tags {
-    tags = {
-      Environment = var.environment
-      Product     = "AQLIYA"
-      ManagedBy   = "terraform"
-    }
+    tags = local.common_tags
   }
 }

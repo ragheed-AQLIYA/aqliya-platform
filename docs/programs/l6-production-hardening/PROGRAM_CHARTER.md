@@ -48,16 +48,18 @@ L6-G0  Infrastructure Ready ──┐
 
 | Item | Criteria | Status |
 |------|----------|:------:|
-| AWS Accounts | Prod + Staging isolated | ⬜ |
-| IAM | Least-privilege roles | ⬜ |
-| VPC | Private subnets, NAT, security groups | ⬜ |
-| RDS | PostgreSQL 16, Multi-AZ, automated backups | ⬜ |
-| S3 | Evidence storage, access logs, versioning | ⬜ |
-| Secrets | AWS Secrets Manager / Parameter Store | ⬜ |
-| DNS | Route53, TLS certificates | ⬜ |
-| ECS/ECR | Container registry + Fargate service | ⬜ |
-| Logging | CloudWatch logs, structured format | ⬜ |
-| **G0 Gate** | All items PASS or documented exception | ⬜ |
+| AWS Accounts | Prod + Staging isolated | ⬜ (تحتاج AWS creds) |
+| IAM | Least-privilege roles | ✅ Terraform جاهز |
+| VPC | Private subnets, NAT, security groups | ✅ Terraform جاهز |
+| RDS | PostgreSQL 16, Multi-AZ, automated backups | ✅ Terraform جاهز |
+| S3 | Evidence storage, access logs, versioning | ✅ Terraform جاهز |
+| Secrets | AWS Secrets Manager | ✅ Terraform جاهز (18 secret references) |
+| DNS | Route53, TLS certificates | ✅ Terraform جاهز |
+| ECS/ECR | Container registry + Fargate + ClamAV | ✅ Terraform جاهز |
+| Redis | ElastiCache + auto-failover | ✅ Terraform جاهز |
+| Logging | CloudWatch logs, container insights | ✅ Terraform جاهز |
+| Tags | `AQLIYA:application=aqliya-platform` | ✅ Terraform جاهز |
+| **G0 Gate** | All items PASS or documented exception | ⏳ تنتظر `terraform apply` |
 
 ### L6-G1: Operational Readiness
 

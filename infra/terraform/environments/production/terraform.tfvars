@@ -1,7 +1,8 @@
 environment   = "production"
 domain_name   = "aqliya.com"
 
-container_image = "123456789012.dkr.ecr.me-south-1.amazonaws.com/aqliya/production/app:latest"
+# ⚠️ Replace with actual AWS account ID after bootstrap
+container_image = "<ACCOUNT_ID>.dkr.ecr.me-south-1.amazonaws.com/aqliya/production/app:latest"
 
 s3_upload_bucket_name = "aqliya-production-uploads"
 s3_static_bucket_name = "aqliya-production-static"
