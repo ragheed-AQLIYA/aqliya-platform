@@ -57,6 +57,8 @@ import {
   createEvidenceSchema,
   updateEvidenceStatusSchema,
   uploadEvidenceFileSchema,
+  validateEvidenceFile,
+  computeFileChecksum,
 } from "@/lib/local-content/schemas/evidence";
 import {
   createFindingSchema,
@@ -907,25 +909,13 @@ export async function uploadLocalContentEvidenceFileAction(
     let mimeType: string | null = null;
 
     if (file && file.size > 0) {
-      const MAX_SIZE = 10 * 1024 * 1024;
-      if (file.size > MAX_SIZE) throw new Error("File too large (max 10MB)");
+      // SC-02: centralized file validation
+      const fileError = validateEvidenceFile(file);
+      if (fileError) throw new Error(fileError);
 
-      const ALLOWED_TYPES = [
-        "application/pdf",
-        "image/jpeg",
-        "image/png",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "text/csv",
-        "text/plain",
-      ];
-      if (
-        !ALLOWED_TYPES.includes(file.type) &&
-        !file.type.startsWith("image/") &&
-        !file.type.startsWith("text/")
-      ) {
-        // Allow but warn
-      }
+      const fileChecksum = await computeFileChecksum(file);
+      fileHash = fileChecksum;
+      sizeBytes = file.size;
 
       const buffer = Buffer.from(await file.arrayBuffer());
       fileHash = crypto.createHash("sha256").update(buffer).digest("hex");

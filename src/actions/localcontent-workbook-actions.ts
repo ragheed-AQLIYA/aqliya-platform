@@ -15,6 +15,11 @@ import {
   Permission,
   ResourceType,
 } from "@/actions/localcontent-rbac";
+import { parseOrError } from "@/lib/local-content/schemas/common/parse-or-error";
+import {
+  createWorkbookSchema,
+  populateWorkbookSchema,
+} from "@/lib/local-content/schemas/workbook";
 
 // ─── Workbook Engine Actions ───
 
@@ -71,19 +76,23 @@ export async function createWorkbookAction(
   projectId: string,
   title: string,
 ) {
-  const organizationId = await requireProjectAccess(projectId);
+  const parsed = parseOrError(createWorkbookSchema, { projectId, title });
+  if (!parsed.success) return parsed;
+  const organizationId = await requireProjectAccess(parsed.data.projectId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
-  return safe(() => createWorkbook(projectId, organizationId, title));
+  return safe(() => createWorkbook(parsed.data.projectId, organizationId, parsed.data.title));
 }
 
 export async function populateWorkbookAction(
   projectId: string,
   title?: string,
 ) {
-  const organizationId = await requireProjectAccess(projectId);
+  const parsed = parseOrError(populateWorkbookSchema, { projectId, title });
+  if (!parsed.success) return parsed;
+  const organizationId = await requireProjectAccess(parsed.data.projectId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
-  const result = await safe(() => populateWorkbookFromProject(projectId, organizationId, title));
-  revalidatePath(`/local-content/projects/${projectId}`);
+  const result = await safe(() => populateWorkbookFromProject(parsed.data.projectId, organizationId, parsed.data.title));
+  revalidatePath(`/local-content/projects/${parsed.data.projectId}`);
   revalidatePath("/local-content/workbook");
   return result;
 }
