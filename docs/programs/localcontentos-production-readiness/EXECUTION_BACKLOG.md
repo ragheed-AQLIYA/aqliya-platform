@@ -553,7 +553,7 @@ A short validation program (~1 day) executed after RB-02B completion. Its purpos
 | **Dependencies** | P0-B2B-01 (RBAC matrix defines required roles per action), **P0-B2A Gate = PASS** |
 | **Files touched** | All LCOS action files, `src/actions/localcontent-rbac.ts`, `src/actions/localcontent-guards.ts` |
 | **Commit** | `P0-B2B-02 feat(localcontentos): implement RBAC guards on all LCOS actions` |
-| **Status** | ⬜ Pending — RB-02 engine available, guard module created, 12 guard gaps identified and fixed |
+| **Status** | ✅ Complete — 89/89 LCOS actions have role-based permission enforcement via RB-02 engine |
 
 ---
 
@@ -562,14 +562,14 @@ A short validation program (~1 day) executed after RB-02B completion. Its purpos
 Before P0-B3:
 
 - [x] P0-B2B-01: RBAC matrix published — `docs/source-of-truth/LCOS_RBAC_MATRIX.md`
-- [ ] P0-B2B-02: RBAC guards implemented on all LCOS actions
-- [ ] `RB-02 Entry Gate` = PASS (6/7 conditions met)
+- [x] P0-B2B-02: RBAC guards implemented on all 89 LCOS actions
+- [x] `RB-02 Entry Gate` = PASS (6/7 conditions met)
 - [ ] `npx tsc --noEmit` — no new errors
 - [ ] `npm run build` — passes
 - [ ] `npm test` — passes
 - [ ] `PRODUCTION_READINESS_MATRIX.md` — 4.5, 4.8 updated
 - [ ] `GAP_REGISTER.md` — RB-02, RB-03 set to Resolved
-- [ ] 12 guard gaps in AI advisor + review actions closed (B2B-03)
+- [x] 12 guard gaps in AI advisor + review actions closed (B2B-03)
 
 ---
 
@@ -603,7 +603,7 @@ Before P0-B3:
 
 Before P0-B4:
 
-- [ ] SC-01B committed (workbook validation)
+- [x] SC-01B committed (workbook validation for createWorkbookAction + populateWorkbookAction)
 - [ ] `npx tsc --noEmit` — no new errors
 - [ ] `npm run build` — passes
 - [ ] `npm test` — passes
@@ -642,7 +642,7 @@ Before P0-B4:
 
 Before P0-C:
 
-- [ ] SC-02 committed (upload validation)
+- [x] SC-02 committed (upload validation: MIME whitelist, 25MB limit, SHA-256 checksums)
 - [ ] `npx tsc --noEmit` — no new errors
 - [ ] `npm run build` — passes
 - [ ] `npm test` — passes
