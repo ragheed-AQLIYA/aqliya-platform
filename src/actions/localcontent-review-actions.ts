@@ -224,6 +224,9 @@ export async function createPatternOverrideAction(
 ): Promise<{ success: boolean; error?: string }> {
   const user = await getCurrentUser();
   if (!user) return { success: false, error: "Not authenticated" };
+  if (organizationId !== user.organizationId) {
+    return { success: false, error: "Access denied: organization mismatch" };
+  }
 
   try {
     await prisma.lcPatternSuggestion.create({
@@ -314,7 +317,9 @@ export async function addReviewCommentAction(
 
   try {
     if (type === "suggestion") {
-      const existing = await prisma.lcPatternSuggestion.findUnique({ where: { id } });
+      const existing = await prisma.lcPatternSuggestion.findFirst({
+        where: { id, organizationId: user.organizationId },
+      });
       if (!existing) return { success: false, error: "Not found" };
       const existingNotes = existing.reviewNotes || "";
       await prisma.lcPatternSuggestion.update({
@@ -326,7 +331,9 @@ export async function addReviewCommentAction(
         },
       });
     } else {
-      const existing = await prisma.lcMatchReview.findUnique({ where: { id } });
+      const existing = await prisma.lcMatchReview.findFirst({
+        where: { id, organizationId: user.organizationId },
+      });
       if (!existing) return { success: false, error: "Not found" };
       const existingNotes = existing.reviewNotes || "";
       await prisma.lcMatchReview.update({

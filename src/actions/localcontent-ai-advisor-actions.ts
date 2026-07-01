@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, requireUserContext } from "@/lib/auth";
 import {
   suggestPatternImprovements,
   explainAccountMatches,
@@ -16,6 +16,10 @@ import {
   reviewPatternSuggestion,
 } from "@/lib/local-content/workbook/ai-advisor";
 import { assertProjectAccess } from "@/lib/local-content/guards";
+import {
+  requirePatternSuggestionAccess,
+  requireMatchReviewAccess,
+} from "@/actions/localcontent-guards";
 import type { TbLine } from "@/lib/local-content/workbook/types";
 
 // ─── Result type ───
@@ -95,6 +99,7 @@ export async function reviewPatternSuggestionAction(
   reviewNotes: string,
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
+    await requirePatternSuggestionAccess(suggestionId);
     const user = await getCurrentUser();
     const result = await reviewPatternSuggestion(
       user.organizationId,
@@ -186,6 +191,7 @@ export async function reviewFpFlagAction(
   reviewNotes: string,
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
+    await requireMatchReviewAccess(matchReviewId);
     const user = await getCurrentUser();
     const result = await reviewFalsePositive(
       user.organizationId,
@@ -240,6 +246,7 @@ export async function getIndustryBenchmarksAction(
   industry?: string,
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
+    await requireUserContext();
     const result = await getIndustryPatternBenchmarks(industry);
     if (!result.success) {
       throw new Error(result.error ?? "Failed to get benchmarks");

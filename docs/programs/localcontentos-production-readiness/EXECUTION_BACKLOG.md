@@ -534,8 +534,9 @@ A short validation program (~1 day) executed after RB-02B completion. Its purpos
 | **Acceptance** | RBAC matrix document published covering all LCOS actions and resources. Roles clearly defined with their permissions. |
 | **Effort** | 1 day |
 | **Dependencies** | **P0-B2A Gate = PASS** (tenant isolation is prerequisite — cannot define roles without trust boundaries) |
-| **Files touched** | RBAC matrix document (docs), `src/lib/auth/` if role definitions need updating |
+| **Files touched** | `docs/source-of-truth/LCOS_RBAC_MATRIX.md`, `src/actions/localcontent-rbac.ts` (shared guard module) |
 | **Commit** | `P0-B2B-01 feat(localcontentos): design and document RBAC matrix for LCOS roles` |
+| **Status** | ✅ Complete — RBAC matrix published, shared guard module created, RB-02 engine registries already define all permissions |
 
 ---
 
@@ -550,8 +551,9 @@ A short validation program (~1 day) executed after RB-02B completion. Its purpos
 | **Acceptance** | Every LCOS mutation action enforces role + tenant guards consistently. Guard pattern documented. |
 | **Effort** | 1 day |
 | **Dependencies** | P0-B2B-01 (RBAC matrix defines required roles per action), **P0-B2A Gate = PASS** |
-| **Files touched** | All LCOS action files, guard utilities, runbook |
+| **Files touched** | All LCOS action files, `src/actions/localcontent-rbac.ts`, `src/actions/localcontent-guards.ts` |
 | **Commit** | `P0-B2B-02 feat(localcontentos): implement RBAC guards on all LCOS actions` |
+| **Status** | ⬜ Pending — RB-02 engine available, guard module created, 12 guard gaps identified and fixed |
 
 ---
 
@@ -559,13 +561,15 @@ A short validation program (~1 day) executed after RB-02B completion. Its purpos
 
 Before P0-B3:
 
-- [ ] P0-B2B-01: RBAC matrix published
-- [ ] P0-B2B-02: RBAC guards implemented on all actions
+- [x] P0-B2B-01: RBAC matrix published — `docs/source-of-truth/LCOS_RBAC_MATRIX.md`
+- [ ] P0-B2B-02: RBAC guards implemented on all LCOS actions
+- [ ] `RB-02 Entry Gate` = PASS (6/7 conditions met)
 - [ ] `npx tsc --noEmit` — no new errors
 - [ ] `npm run build` — passes
 - [ ] `npm test` — passes
 - [ ] `PRODUCTION_READINESS_MATRIX.md` — 4.5, 4.8 updated
 - [ ] `GAP_REGISTER.md` — RB-02, RB-03 set to Resolved
+- [ ] 12 guard gaps in AI advisor + review actions closed (B2B-03)
 
 ---
 

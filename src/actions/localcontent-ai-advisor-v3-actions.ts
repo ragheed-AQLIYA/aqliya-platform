@@ -147,7 +147,7 @@ export async function listWorkbookRecommendationsAction(
   status?: string,
 ): Promise<ActionResult> {
   try {
-    const _user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
 
     const recs = await listWorkbookRecommendations(organizationId, workbookId, status);
     return ok(recs);
@@ -244,7 +244,7 @@ export async function listWorkbookSimulationsAction(
   workbookId: string,
 ): Promise<ActionResult> {
   try {
-    const _user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
 
     const sims = await listWorkbookSimulations(organizationId, workbookId);
     return ok(sims);
@@ -261,7 +261,7 @@ export async function getPatternHealthScoresAction(
   organizationId: string,
 ): Promise<ActionResult> {
   try {
-    const _user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
 
     const scores = await getPatternHealthScores(organizationId);
     return ok(scores);
@@ -274,7 +274,7 @@ export async function getLearningLoopSummaryAction(
   organizationId: string,
 ): Promise<ActionResult> {
   try {
-    const _user = await requireUserContext();
+    await requireOrganizationAccess(organizationId);
 
     const summary = await getLearningLoopSummary(organizationId);
     return ok(summary);
