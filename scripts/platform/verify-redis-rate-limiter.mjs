@@ -27,10 +27,9 @@ if (!redisUrl) {
 }
 
 try {
-  const { createClient } = await import("redis");
-  const client = createClient({ url: redisUrl });
+  const Redis = (await import("ioredis")).default;
+  const client = new Redis(redisUrl);
   client.on("error", (err) => console.error("redis error", err.message));
-  await client.connect();
   const pong = await client.ping();
   await client.quit();
   console.log(JSON.stringify({ ok: true, ping: pong }));

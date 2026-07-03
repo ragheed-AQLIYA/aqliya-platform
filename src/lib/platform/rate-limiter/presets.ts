@@ -11,6 +11,10 @@ export const RATE_LIMIT_PRESETS = {
   HEALTH_ENDPOINTS: { maxRequests: 300, windowMs: 60_000 } as RateLimitConfig,
   /** SSO OAuth callback — moderate: human-driven but burstable */
   SSO_CALLBACK: { maxRequests: 20, windowMs: 60_000 } as RateLimitConfig,
+  /** LCOS evidence file download — strict: large files, bandwidth-intensive */
+  LCOS_EVIDENCE_DOWNLOAD: { maxRequests: 15, windowMs: 60_000 } as RateLimitConfig,
+  /** LCOS report/audit export — strict: CPU-intensive PDF/XLSX generation */
+  LCOS_EXPORT: { maxRequests: 10, windowMs: 60_000 } as RateLimitConfig,
 } as const
 
 export interface RateLimitHeaders {

@@ -1,7 +1,7 @@
-﻿﻿# Rate Limiter Runbook
+﻿# Rate Limiter Runbook
 
 **Document Owner:** Infrastructure Agent
-**Last Updated:** 2026-06-08
+**Last Updated:** 2026-07-04
 **Status:** Verified
 **Applies to:** AQLIYA Platform Core
 
@@ -38,6 +38,9 @@ AQLIYA has a **two-layer** rate limiting architecture:
 | EXPORT_ENDPOINTS | (defined but not wired in middleware path matcher) | 20 | 60s | 20 req/min |
 | SCIM_ENDPOINTS | /api/scim/* | 15 | 60s | 15 req/min |
 | HEALTH_ENDPOINTS | /api/health | 300 | 60s | 300 req/min |
+| LCOS_EVIDENCE_DOWNLOAD | /api/local-content/projects/*/evidence/*/download | 15 | 60s | 15 req/min |
+| LCOS_EXPORT | /api/local-content/projects/*/reports/*/download | 10 | 60s | 10 req/min |
+| LCOS_EXPORT (same preset) | /api/local-content/projects/*/audit/export | 10 | 60s | 10 req/min |
 
 ### 2.2 AuditOS Action Presets (separate system)
 
@@ -55,6 +58,16 @@ AQLIYA has a **two-layer** rate limiting architecture:
 | Config | Limit | Window |
 |--------|-------|--------|
 | DEFAULT_CONFIG | 60 | 60s |
+
+### 2.4 LocalContentOS Server Action Rate Limits
+
+Applied via `checkRateLimit()` in `src/actions/localcontent-actions.ts`. Keys are per-user (`lcos:<action>:<userId>`).
+
+| Action | Config | Limit | Window | Rationale |
+|--------|--------|-------|--------|-----------|
+| Evidence file upload | `RATE_LIMIT_PRESETS.LCOS_EXPORT` | 10 | 60s | File upload + ClamAV scan is I/O heavy |
+| CSV spend import | custom `{ maxRequests: 5 }` | 5 | 60s | Bulk DB writes (supplier + spend records) |
+| Report generation | `RATE_LIMIT_PRESETS.LCOS_EXPORT` | 10 | 60s | CPU-heavy score calc + PDF/XLSX output |
 
 ---
 
@@ -280,9 +293,9 @@ When rate-limited (429), the response includes:
 |-----------|-------|-------------|
 | src/__tests__/unit/rate-limiter-l014.test.ts | 17 tests: MemoryRateLimiter (9), RedisRateLimiter (4), factory (4), checkRateLimit (2) | 
 px jest src/__tests__/unit/rate-limiter-l014.test.ts |
-| src/__tests__/unit/middleware-rate-limit-l014.test.ts | 4 tests: skip non-API, pass under limit, 429 response, per-IP keys | 
+| src/__tests__/unit/middleware-rate-limit-l014.test.ts | 7 tests: skip non-API, pass under limit, 429 response, per-IP keys, 3× LCOS route routing | 
 px jest src/__tests__/unit/middleware-rate-limit-l014.test.ts |
-| src/lib/platform/__tests__/rate-limiter-presets.test.ts | 6 tests: preset values, headers | 
+| src/lib/platform/__tests__/rate-limiter-presets.test.ts | 9 tests: preset values, headers, 3× LCOS preset values + headers | 
 px jest src/lib/platform/__tests__/rate-limiter-presets.test.ts |
 
 ### 8.2 Manual Testing
@@ -449,3 +462,4 @@ RATE_LIMITER=memory
 | Date | Author | Change |
 |------|--------|--------|
 | 2026-06-08 | Infrastructure Agent | Initial runbook created from codebase verification |
+| 2026-07-04 | Full-stack Agent | Added LCOS_EVIDENCE_DOWNLOAD (15/60s) and LCOS_EXPORT (10/60s) middleware presets; added LCOS server action rate limits (upload 10/60s, CSV import 5/60s, report gen 10/60s); updated test counts |

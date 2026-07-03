@@ -20,6 +20,16 @@ describe("RATE_LIMIT_PRESETS", () => {
     expect(RATE_LIMIT_PRESETS.AI_ENDPOINTS.maxRequests).toBe(30)
     expect(RATE_LIMIT_PRESETS.AI_ENDPOINTS.windowMs).toBe(60_000)
   })
+
+  it("LCOS_EVIDENCE_DOWNLOAD allows 15 requests per minute", () => {
+    expect(RATE_LIMIT_PRESETS.LCOS_EVIDENCE_DOWNLOAD.maxRequests).toBe(15)
+    expect(RATE_LIMIT_PRESETS.LCOS_EVIDENCE_DOWNLOAD.windowMs).toBe(60_000)
+  })
+
+  it("LCOS_EXPORT allows 10 requests per minute", () => {
+    expect(RATE_LIMIT_PRESETS.LCOS_EXPORT.maxRequests).toBe(10)
+    expect(RATE_LIMIT_PRESETS.LCOS_EXPORT.windowMs).toBe(60_000)
+  })
 })
 
 describe("rateLimitHeaders", () => {

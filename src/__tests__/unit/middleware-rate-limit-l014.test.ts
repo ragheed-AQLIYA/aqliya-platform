@@ -63,6 +63,50 @@ describe("rateLimitMiddleware", () => {
     expect(body.error.code).toBe("RATE_LIMITED")
   })
 
+  it("applies LCOS_EVIDENCE_DOWNLOAD preset to evidence download route", async () => {
+    const { rateLimitMiddleware } = await import("@/middleware-rate-limit")
+    const req = makeNextRequest(
+      "/api/local-content/projects/proj-1/evidence/ev-1/download",
+    )
+    // LCOS_EVIDENCE_DOWNLOAD = 15 req/min — exceed it
+    for (let i = 0; i < 16; i++) {
+      await rateLimitMiddleware(req.clone())
+    }
+    const result = await rateLimitMiddleware(req.clone())
+    expect(result).not.toBeNull()
+    expect(result!.status).toBe(429)
+    expect(result!.headers.get("X-RateLimit-Limit")).toBe("15")
+  })
+
+  it("applies LCOS_EXPORT preset to report download route", async () => {
+    const { rateLimitMiddleware } = await import("@/middleware-rate-limit")
+    const req = makeNextRequest(
+      "/api/local-content/projects/proj-1/reports/rpt-1/download",
+    )
+    // LCOS_EXPORT = 10 req/min — exceed it
+    for (let i = 0; i < 11; i++) {
+      await rateLimitMiddleware(req.clone())
+    }
+    const result = await rateLimitMiddleware(req.clone())
+    expect(result).not.toBeNull()
+    expect(result!.status).toBe(429)
+    expect(result!.headers.get("X-RateLimit-Limit")).toBe("10")
+  })
+
+  it("applies LCOS_EXPORT preset to audit export route", async () => {
+    const { rateLimitMiddleware } = await import("@/middleware-rate-limit")
+    const req = makeNextRequest(
+      "/api/local-content/projects/proj-1/audit/export",
+    )
+    for (let i = 0; i < 11; i++) {
+      await rateLimitMiddleware(req.clone())
+    }
+    const result = await rateLimitMiddleware(req.clone())
+    expect(result).not.toBeNull()
+    expect(result!.status).toBe(429)
+    expect(result!.headers.get("X-RateLimit-Limit")).toBe("10")
+  })
+
   it("uses unique keys per IP", async () => {
     const { rateLimitMiddleware } = await import("@/middleware-rate-limit")
     const reqA = makeNextRequest("/api/test", "1.1.1.1")

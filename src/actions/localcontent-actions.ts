@@ -3,10 +3,13 @@
 import crypto from "crypto";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { isScanRejected, scanEvidenceFile } from "@/lib/audit/file-scanner";
 import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { notifyOnEvent } from "@/lib/platform/notification/integration";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { RATE_LIMIT_PRESETS } from "@/lib/platform/rate-limiter/presets";
 import {
   listProjectsByOrganization,
   getProjectById,
@@ -567,6 +570,11 @@ export async function importLocalContentSpendCsvAction(
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
     await requirePermission(Permission.IMPORT, ResourceType.IMPORT_BATCH);
+    // Rate limit: CSV import is DB-heavy (creates suppliers + spend records)
+    const { allowed } = await checkRateLimit(`lcos:import:${user.id}`, { maxRequests: 5, windowMs: 60_000 });
+    if (!allowed) {
+      throw new Error("Rate limit exceeded. Please wait before importing more data.");
+    }
     const result = parseLocalContentCSV(validatedCsv);
 
     if (result.rejectedRows.length > 0 && result.validRows.length === 0) {
@@ -894,6 +902,11 @@ export async function uploadLocalContentEvidenceFileAction(
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_evidence");
     await requirePermission(Permission.EVIDENCE_UPLOAD, ResourceType.EVIDENCE);
+    // Rate limit: file upload + scan is I/O heavy
+    const { allowed } = await checkRateLimit(`lcos:upload:${user.id}`, RATE_LIMIT_PRESETS.LCOS_EXPORT);
+    if (!allowed) {
+      throw new Error("Rate limit exceeded. Please wait before uploading more files.");
+    }
     const file = formData.get("file") as File | null;
     const filename = formData.get("filename") as string;
 
@@ -907,6 +920,9 @@ export async function uploadLocalContentEvidenceFileAction(
     let fileHash: string | null = null;
     let sizeBytes: number | null = null;
     let mimeType: string | null = null;
+    let scanStatus: string = "skipped";
+    let scanProvider: string = "none";
+    let scannedAt: string | null = null;
 
     if (file && file.size > 0) {
       // SC-02: centralized file validation
@@ -921,6 +937,20 @@ export async function uploadLocalContentEvidenceFileAction(
       fileHash = crypto.createHash("sha256").update(buffer).digest("hex");
       sizeBytes = buffer.length;
       mimeType = file.type || "application/octet-stream";
+
+      // SC-02: file scanning — infrastructure exists, now wired for LCOS
+      const scanResult = await scanEvidenceFile({
+        filename: resolvedFilename,
+        fileType: resolvedFilename.split(".").pop()?.toLowerCase() || "pdf",
+        fileSize: sizeBytes,
+        content: buffer,
+      });
+      if (isScanRejected(scanResult)) {
+        throw new Error(scanResult.details || "File rejected by security scanner");
+      }
+      scanStatus = scanResult.status;
+      scanProvider = scanResult.provider;
+      scannedAt = scanResult.scannedAt;
 
       const provider = getStorageProvider();
       storageKey = `localcontent/${projectId}/evidence/${Date.now()}-${resolvedFilename.replace(/[^a-zA-Z0-9._\u0600-\u06FF-]/g, "_")}`;
@@ -952,7 +982,14 @@ export async function uploadLocalContentEvidenceFileAction(
       action: "localcontent.evidence.uploaded",
       targetType: "LocalContentEvidence",
       targetId: evidence.id,
-      metadata: { filename: resolvedFilename, storageKey, sizeBytes },
+      metadata: {
+        filename: resolvedFilename,
+        storageKey,
+        sizeBytes,
+        scanStatus,
+        scanProvider,
+        scannedAt,
+      },
     });
 
     const project = await prisma.localContentProject.findUnique({
@@ -1332,6 +1369,11 @@ export async function generateLocalContentReportAction(
   return safe(async () => {
     const { user } = await assertProjectAccess(projectId, "create_spend");
     await requirePermission(Permission.REPORT_MANAGEMENT, ResourceType.REPORT);
+    // Rate limit: report generation is CPU-heavy (score calc + PDF/XLSX)
+    const { allowed } = await checkRateLimit(`lcos:report:${user.id}`, RATE_LIMIT_PRESETS.LCOS_EXPORT);
+    if (!allowed) {
+      throw new Error("Rate limit exceeded. Please wait before generating more reports.");
+    }
     const score = await calculateProjectScore(projectId);
 
     const disclaimer = [

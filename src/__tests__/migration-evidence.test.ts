@@ -17,6 +17,7 @@ const KNOWLEDGE_FOUNDATION_VERSIONING = "20260622100000_knowledge_foundation_ver
     const KF_RELEASE_ARTIFACT_STATUS = "20260622130000_knowledge_foundation_release_artifact_status"
     const KF_RELEASE_TRUST_CHAIN = "20260622140000_knowledge_foundation_release_trust_chain"
     const KNOLEDGE_CANDIDATE_FK = "20260623000000_add_knowledge_candidate_fk"
+    const CONTENT_EVIDENCE = "20260703000001_add_content_evidence"
 
 /** Migrations excluded from applied-chain ordering (e.g. create-only, not yet applied). */
 const MIGRATIONS_EXCLUDED_FROM_APPLIED_CHAIN = [INSTITUTIONAL_MEMORY_MIGRATION] as const
@@ -522,7 +523,47 @@ describe("Migration Evidence", () => {
     })
 
     it("is the latest applied migration in the repository", () => {
-      expect(latestAppliedMigration()).toBe(KNOLEDGE_CANDIDATE_FK)
+      expect(latestAppliedMigration()).toBe(CONTENT_EVIDENCE)
+    })
+
+    it("is additive-only (no DROP or RENAME)", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).not.toContain("DROP")
+      expect(sql).not.toContain("RENAME")
+    })
+  })
+
+  describe("20260703000001_add_content_evidence", () => {
+    const migrationDir = join(migrationsDir, CONTENT_EVIDENCE)
+
+    it("migration directory exists", () => {
+      expect(existsSync(migrationDir)).toBe(true)
+    })
+
+    it("migration SQL file exists", () => {
+      expect(existsSync(join(migrationDir, "migration.sql"))).toBe(true)
+    })
+
+    it("creates ContentEvidence table", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('CREATE TABLE "ContentEvidence"')
+      expect(sql).toContain('"id" TEXT NOT NULL')
+      expect(sql).toContain('"contentId" TEXT NOT NULL')
+      expect(sql).toContain('"organizationId" TEXT NOT NULL')
+    })
+
+    it("creates required indexes", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('CREATE INDEX "ContentEvidence_contentId_idx"')
+      expect(sql).toContain('CREATE INDEX "ContentEvidence_organizationId_idx"')
+      expect(sql).toContain('CREATE INDEX "ContentEvidence_createdAt_idx"')
+    })
+
+    it("adds foreign key to ContentItem", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain('ALTER TABLE "ContentEvidence"')
+      expect(sql).toContain('ADD CONSTRAINT "ContentEvidence_contentId_fkey"')
+      expect(sql).toContain('FOREIGN KEY ("contentId") REFERENCES "ContentItem"("id")')
     })
 
     it("is additive-only (no DROP or RENAME)", () => {
