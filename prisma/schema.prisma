@@ -4664,9 +4664,10 @@ model PlanningMateriality {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  benchmark              MaterialityBenchmark?  @relation(fields: [benchmarkId], references: [id])
-  performanceMateriality PerformanceMateriality?
-  trivialThreshold       TrivialThreshold?
+  benchmark               MaterialityBenchmark?    @relation(fields: [benchmarkId], references: [id])
+  performanceMateriality  PerformanceMateriality?
+  trivialThreshold        TrivialThreshold?
+  componentMaterialities  ComponentMateriality[]
 
   @@index([engagementId])
   @@index([engagementId, version])
@@ -5670,4 +5671,28 @@ model KnowledgeFoundationVersionCandidate {
   @@index([versionId])
   @@index([candidateId])
   @@index([boundById])
+}
+
+/// L6.3 — Component Materiality (Group Audits)
+model ComponentMateriality {
+  id                      String            @id @default(cuid())
+  groupEngagementId       String
+  componentEntityName     String
+  componentType           String
+  planningMaterialityId   String
+  planningMateriality     PlanningMateriality @relation(fields: [planningMaterialityId], references: [id], onDelete: Cascade)
+  planningMaterialityAmount Float
+  performanceMaterialityAmount Float?
+  trivialThresholdAmount  Float?
+  allocationBasis         String?
+  consolidationNote       String?
+  reviewedById            String?
+  reviewedAt              DateTime?
+  createdById             String?
+
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+
+  @@index([groupEngagementId])
+  @@index([planningMaterialityId])
 }

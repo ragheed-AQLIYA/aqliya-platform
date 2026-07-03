@@ -170,4 +170,60 @@ export function getMaterialityBasis(
   return "revenue";
 }
 
+// ─── Component Materiality (Group Audits / L6.3) ───
+
+export interface CreateComponentMaterialityInput {
+  groupEngagementId: string;
+  componentEntityName: string;
+  componentType: "significant" | "non_significant";
+  planningMaterialityId: string;
+  planningMaterialityAmount: number;
+  performanceMaterialityAmount?: number;
+  trivialThresholdAmount?: number;
+  allocationBasis?: string;
+  consolidationNote?: string;
+}
+
+export async function createComponentMateriality(
+  input: CreateComponentMaterialityInput,
+): Promise<ComponentMaterialityRecord> {
+  const { prisma } = await import("@/lib/prisma");
+  const record = await prisma.componentMateriality.create({
+    data: {
+      groupEngagementId: input.groupEngagementId,
+      componentEntityName: input.componentEntityName,
+      componentType: input.componentType,
+      planningMaterialityId: input.planningMaterialityId,
+      planningMaterialityAmount: input.planningMaterialityAmount,
+      performanceMaterialityAmount: input.performanceMaterialityAmount,
+      trivialThresholdAmount: input.trivialThresholdAmount,
+      allocationBasis: input.allocationBasis,
+      consolidationNote: input.consolidationNote,
+    },
+  });
+  return record as unknown as ComponentMaterialityRecord;
+}
+
+export async function listComponentMaterialities(
+  groupEngagementId: string,
+): Promise<ComponentMaterialityRecord[]> {
+  const { prisma } = await import("@/lib/prisma");
+  const records = await prisma.componentMateriality.findMany({
+    where: { groupEngagementId },
+    include: { planningMateriality: true },
+    orderBy: { createdAt: "desc" },
+  });
+  return records as unknown as ComponentMaterialityRecord[];
+}
+
+export async function deleteComponentMateriality(id: string): Promise<void> {
+  const { prisma } = await import("@/lib/prisma");
+  await prisma.componentMateriality.delete({ where: { id } });
+}
+
+// Re-export for type safety
+export type ComponentMaterialityRecord = Awaited<
+  ReturnType<typeof import("@/lib/prisma").prisma.componentMateriality.create>
+>;
+
 
