@@ -539,6 +539,8 @@ export async function generateOfficeAiTaskOutput(
   taskId: string,
   actor?: { id?: string; name?: string },
 ): Promise<OfficeAiOutputResult> {
+  const generationStart = Date.now();
+
   // Extract all task files first (safe mode — never blocks)
   const { extractAllTaskFiles } = await import("./file-extraction-service");
   await extractAllTaskFiles(taskId).catch(() => {});
@@ -628,6 +630,37 @@ export async function generateOfficeAiTaskOutput(
 
   // Update task status to generated
   await updateOfficeAiTaskStatus(taskId, "generated", actor);
+
+  // Record ai_generation action for global AI observability compatibility
+  const latencyMs = Date.now() - generationStart;
+  await alog.record(
+    "ai_generation",
+    {
+      type: "OfficeAiOutput",
+      id: (outputResult.data as { id?: string } | null)?.id ?? taskId,
+    },
+    {
+      severity: "info",
+      status: "recorded",
+      aiProvider,
+      aiPromptVersion,
+      aiOutputReviewStatus: "pending",
+      platformOrganizationId: task.platformOrganizationId,
+      clientWorkspaceId: task.clientWorkspaceId ?? undefined,
+      projectId: task.projectId ?? undefined,
+      metadata: {
+        governedSharedApplication: true,
+        taskType: task.taskType,
+        taskId: task.id,
+        generationMethod: governed?.content ? "governed" : "deterministic",
+        latencyMs,
+        confidence: 0.85,
+        totalCost: 0,
+        fileCount: files.length,
+        format,
+      },
+    },
+  ).catch(() => {});
 
   return outputResult;
 }
