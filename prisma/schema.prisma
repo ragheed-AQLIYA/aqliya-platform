@@ -4757,11 +4757,31 @@ model ReviewNote {
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
+  slaConfig    ReviewNoteSLA?
   escalations ReviewNoteEscalation[]
 
   @@index([engagementId])
   @@index([engagementId, status])
   @@index([engagementId, priority])
+}
+
+/// L6.6 — Review Note SLA Configuration
+/// إعدادات_مستوى_الخدمة_للملاحظات — تكوين مهلة الرد والتصعيد لكل ملاحظة
+model ReviewNoteSLA {
+  id                    String    @id @default(cuid())
+  reviewNoteId          String    @unique
+  reviewNote            ReviewNote @relation(fields: [reviewNoteId], references: [id], onDelete: Cascade)
+  slaTargetHours        Int
+  slaWarningThreshold   Float     @default(0.8) // % of SLA before warning
+  slaEscalationThreshold Float    @default(1.0) // % of SLA before escalation
+  slaBreached           Boolean   @default(false)
+  slaBreachedAt         DateTime?
+  escalatedToId         String?
+  escalatedAt           DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([reviewNoteId])
 }
 
 model ReviewNoteEscalation {
