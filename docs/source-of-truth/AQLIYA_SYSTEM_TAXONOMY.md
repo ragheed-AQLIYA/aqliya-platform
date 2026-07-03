@@ -127,7 +127,7 @@
 
 | Area                | Release Inclusion Status                | Maturity       | Customer Demo Status          |
 | ------------------- | --------------------------------------- | -------------- | ----------------------------- |
-| AQLIYA Platform     | Included in v0.1                        | L4 Usable v0.1 | Safe to show with explanation |
+| AQLIYA Platform     | Included in v0.1                        | **L5 Pilot-ready** | Safe to show with explanation |
 | AuditOS             | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
 | DecisionOS          | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
 | RiskOS              | AuditOS-adjacent risk workspace         | L5 Pilot-ready | Safe to show with explanation |

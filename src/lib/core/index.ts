@@ -14,6 +14,7 @@ export * as Memory from "./memory";
 export * as Signals from "./signals";
 export * as Decision from "./decision";
 export * as Policy from "./policy";
+export * as Access from "./policy/access";
 export * as Events from "./events";
 export * as Workflow from "./workflow";
 
