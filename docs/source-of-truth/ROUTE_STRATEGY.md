@@ -7,8 +7,8 @@
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
 > **Owner:** Platform Architect  
-> **Last Reviewed:** 2026-06-26  
-> **Last updated:** 2026-06-21 — ContentStudio PDF export + route resilience hardening
+> **Last Reviewed:** 2026-07-03  
+> **Last updated:** 2026-07-03 — Full L6 status sync across all products
 
 ---
 
@@ -29,6 +29,7 @@
 ### Implementation Status Options
 
 - active
+- production-hardened (L6)
 - pilot-ready
 - L5 with conditions
 - active adjacent system (L4)
@@ -136,69 +137,70 @@ These pages serve as detail references for specialized operating systems. They a
 | `/auditos/evidence`      | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
 | `/auditos/traceability`  | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
 
-### DecisionOS — Pilot-ready Governed Workspace (L5)
+### DecisionOS — Production-hardened Governed Workspace (L6)
 
 | Route                            | Product/System | Route Type         | Public/Protected | Implementation Status | Notes           |
 | -------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | --------------- |
-| `/decisions/gov`                 | DecisionOS     | Dashboard          | Protected        | Pilot-ready (L5)           | Platform governance console: escalation rules, audit events |
-| `/decisions/gov/escalation-rules`| DecisionOS     | Dashboard          | Protected        | Pilot-ready (L5)           | Escalation rule management |
+| `/decisions/gov`                 | DecisionOS     | Dashboard          | Protected        | Production-hardened (L6) | Platform governance console: escalation rules, audit events |
+| `/decisions/gov/escalation-rules`| DecisionOS     | Dashboard          | Protected        | Production-hardened (L6) | Escalation rule management |
 | `/decision`                      | DecisionOS     | Redirect           | Protected        | Redirect → `/decisions` | Legacy path (2026-06-17 cleanup) |
 | `/decision/gov`                  | DecisionOS     | Redirect           | Protected        | Redirect → `/decisions/gov` | Legacy path (2026-06-17 cleanup) |
-| `/decisions`                     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Decision list   |
-| `/decisions/new`                 | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Create decision |
-| `/decisions/[id]`                | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Decision detail |
-| `/decisions/[id]/overview`       | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/intake`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/signals`        | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/sector`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/risks`          | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/scenarios`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/simulation`     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/recommendation` | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/governance`     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/framework`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/alerts`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/insight`        | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/outcome`        | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/report`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/tender`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
-| `/decisions/[id]/what-to-do`     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  |                 |
+| `/decisions`                     | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) | Decision list. Outcome-tracking dashboard, cross-decision patterns, portfolio view. |
+| `/decisions/new`                 | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) | Create decision |
+| `/decisions/[id]`                | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) | Decision detail with 15 tabs |
+| `/decisions/[id]/overview`       | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/intake`         | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/signals`        | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) | Signal automation engine wired |
+| `/decisions/[id]/sector`         | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) | Sector intelligence + benchmarks wired |
+| `/decisions/[id]/risks`          | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/scenarios`      | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/simulation`     | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/recommendation` | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/governance`     | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/framework`      | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/alerts`         | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/insight`        | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/outcome`        | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) | Outcome correlation analytics |
+| `/decisions/[id]/report`         | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) | Bilingual PDF export |
+| `/decisions/[id]/tender`         | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
+| `/decisions/[id]/what-to-do`     | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) |                 |
 
-### LocalContentOS — Usable v0.1 Product Workspace (20 routes)
+### LocalContentOS — Production-hardened Governed Workspace (27 routes, L6)
 
 | Route                                                | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                                                |
 | ---------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------------------------------------- |
-| `/local-content`                                     | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Dashboard with project metrics, server-action-backed |
-| `/local-content/analytics`                           | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | LC-06 org spend analytics (deterministic aggregates) |
-| `/local-content/classification-rules`                | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | LC-04 classification rule admin (read)               |
-| `/local-content/projects/[projectId]/tender-match`   | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | LC-02 tender requirement matching (metadata.tender)  |
-| `/local-content/projects`                            | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Project list with create form, server-action-backed  |
-| `/local-content/projects/[projectId]`                | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Project detail, navigation to sub-pages, workbook link |
-| `/local-content/workbook`                            | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Workbook dashboard: status, completion metrics, score summary |
-| `/local-content/workbook/[workbookId]`               | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Workbook detail with 3 tabs (lines/missing/requests) + gating. Scoring UI card showing contributions analysis + section breakdown |
-| `/local-content/pilot-readiness`                     | LocalContentOS | Dashboard          | Protected        | L5 Pilot-ready     | V3.5: 11-dimension operational readiness assessment with GREEN/AMBER/RED status per metric and overall pilot score |
-| `/local-content/review-center`                       | LocalContentOS | Governed workspace | Protected        | L5 Pilot-ready     | AI review center with batch approve/reject, inline audit events (last 10), bilingual PDF export |
-| `/local-content/quality-dashboard`                   | LocalContentOS | Dashboard          | Protected        | L5 Pilot-ready     | AI Quality Score composite, confidence distribution (4 buckets), acceptance rate time-series (4-week), pipeline runs visual bar, explanations + health + risk overview, industry memory patterns |
-| `/local-content/projects/[projectId]/suppliers`      | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Supplier/vendor records                              |
-| `/local-content/projects/[projectId]/spend`          | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Spend/procurement records                            |
-| `/local-content/projects/[projectId]/classification` | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Local content classification workflow                |
-| `/local-content/projects/[projectId]/evidence`       | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Evidence upload + protected file download            |
-| `/local-content/projects/[projectId]/findings`       | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Gap/risk findings                                    |
-| `/local-content/projects/[projectId]/review`         | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Review workflow                                      |
-| `/local-content/projects/[projectId]/approval`       | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Approval workflow                                    |
-| `/local-content/projects/[projectId]/reports`        | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Export/reports generation                            |
-| `/local-content/projects/[projectId]/audit-trail`    | LocalContentOS | Governed workspace | Protected        | L4 Usable v0.1    | Audit log viewer                                     |
+| `/local-content`                                     | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Dashboard with project metrics, server-action-backed |
+| `/local-content/analytics`                           | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | LC-06 org spend analytics (deterministic aggregates) |
+| `/local-content/classification-rules`                | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | LC-04 classification rule admin interface           |
+| `/local-content/projects/[projectId]/tender-match`   | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | LC-02 tender requirement matching (metadata.tender)  |
+| `/local-content/projects`                            | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Project list with create form, server-action-backed  |
+| `/local-content/projects/[projectId]`                | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Project detail, navigation to sub-pages, workbook link |
+| `/local-content/workbook`                            | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Workbook dashboard: status, completion metrics, score summary |
+| `/local-content/workbook/[workbookId]`               | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Workbook detail with 3 tabs (lines/missing/requests) + gating. Scoring UI card showing contributions analysis + section breakdown |
+| `/local-content/pilot-readiness`                     | LocalContentOS | Dashboard          | Protected        | Production-hardened (L6) | 11-dimension operational readiness assessment with GREEN/AMBER/RED status per metric |
+| `/local-content/review-center`                       | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | AI review center with batch approve/reject, inline audit events (last 10), bilingual PDF export |
+| `/local-content/quality-dashboard`                   | LocalContentOS | Dashboard          | Protected        | Production-hardened (L6) | AI Quality Score composite, confidence distribution (4 buckets), acceptance rate time-series (4-week) |
+| `/local-content/projects/[projectId]/suppliers`      | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Supplier/vendor records                              |
+| `/local-content/projects/[projectId]/spend`          | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Spend/procurement records                            |
+| `/local-content/projects/[projectId]/classification` | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Local content classification workflow                |
+| `/local-content/projects/[projectId]/evidence`       | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Evidence upload + protected file download            |
+| `/local-content/projects/[projectId]/findings`       | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Gap/risk findings                                    |
+| `/local-content/projects/[projectId]/review`         | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Review workflow                                      |
+| `/local-content/projects/[projectId]/approval`       | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Approval workflow                                    |
+| `/local-content/projects/[projectId]/reports`        | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Export/reports generation                            |
+| `/local-content/projects/[projectId]/audit-trail`    | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | Audit log viewer                                     |
+| `/local-content/settings/integrations`               | LocalContentOS | Governed workspace | Protected        | Production-hardened (L6) | ERP integration admin: SAP/Oracle/CSV importers      |
 
-**LocalContentOS route limitations:**
+**LocalContentOS notes:**
 
-- L5 Pilot-ready — not L6 production-hardened
-- Scoring engine (LcScore): 4 metrics - revenue 35%, supplier_spend 35%, workforce 20%, assets 10%
+- Scoring engine (LcScore): 4 metrics - revenue 35%, supplier_spend 35%, workforce 20%, assets 10%; tier calculation
 - Formula engine active: GP-01 (REV-03 - COS-03), WRK-03 (WRK-01 / WRK-02 x 100), SPN-03 (SPN-01 + SPN-02)
 - Tab-level gating enforced: population, recalculation, edits, exports are gated per tab
 - Score persistence: lcScore + lcScoreComputedAt saved to DB; export includes score data
+- Multi-reviewer approval routing with state machine (awaiting_reviews→ready_for_approval→approved/rejected)
+- Arabic PDF font fidelity: Noto Naskh Arabic embedded via shared font registry
 - 265+ passing LocalContent tests (275 total suite)
-- Quality dashboard at /local-content/quality-dashboard with 10 integration tests
-- See `docs/reports/localcontentos-v0.1-documentation-truth-sync-2026-05-23.md`
+- AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient
 ### Office AI Assistant — Shared Application
 
 | Route                 | Product/System      | Route Type         | Public/Protected | Implementation Status   | Notes                          |
@@ -211,18 +213,18 @@ These pages serve as detail references for specialized operating systems. They a
 | Route                        | Product/System | Route Type         | Public/Protected | Implementation Status | Notes               |
 | ---------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------- |
 | `/intelligence`              | Intelligence Core | Platform workspace | Protected     | Usable v0.1 (L4)      | Core engines dashboard, ABAC readiness, outbox stats, audit feed |
-| `/intelligence/sectors`      | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector intelligence |
-| `/intelligence/sectors/[id]` | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5)  | Sector detail       |
+| `/intelligence/sectors`      | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6)  | Sector intelligence |
+| `/intelligence/sectors/[id]` | DecisionOS     | Governed workspace | Protected        | Production-hardened (L6) | Sector detail       |
 
-### Knowledge Foundation Versioning (Phase 27)
+### Knowledge Foundation Versioning — Production-hardened (L6)
 
 | Route                                   | Product/System | Route Type         | Public/Protected | Implementation Status | Notes               |
 | --------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------- |
-| `/knowledge-foundation`                 | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Version promotion pipeline, promotion analytics dashboard |
-| `/knowledge-foundation/[id]`           | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Version detail, governance lifecycle, rollback UI, PDF/JSON export buttons |
-| `/knowledge-foundation/new`            | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Create new version form |
-| `/knowledge-foundation/diff`           | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Compare two versions with visual diff |
-| `/knowledge-foundation/history`         | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Audit event log table |
+| `/knowledge-foundation`                 | Knowledge Foundation Versioning | Governed workspace | Protected        | Production-hardened (L6) | Version promotion pipeline, promotion analytics dashboard |
+| `/knowledge-foundation/[id]`           | Knowledge Foundation Versioning | Governed workspace | Protected        | Production-hardened (L6) | Version detail, governance lifecycle, rollback UI, PDF/JSON export buttons |
+| `/knowledge-foundation/new`            | Knowledge Foundation Versioning | Governed workspace | Protected        | Production-hardened (L6) | Create new version form |
+| `/knowledge-foundation/diff`           | Knowledge Foundation Versioning | Governed workspace | Protected        | Production-hardened (L6) | Compare two versions with visual diff |
+| `/knowledge-foundation/history`         | Knowledge Foundation Versioning | Governed workspace | Protected        | Production-hardened (L6) | Audit event log table |
 
 ### Platform Operator APIs (Intelligence Core / Tier 3)
 
@@ -238,42 +240,43 @@ These pages serve as detail references for specialized operating systems. They a
 | `/monitoring` | Platform | Operator workspace | Protected (ADMIN) | Usable v0.1 (L4) | Enterprise health panel + outbox actions |
 | `/operator` | Platform | Operator workspace | Protected (ADMIN) | Usable v0.1 (L4) | Operator dashboard + enterprise health |
 
-### SalesOS — Governed Commercial Intelligence Workspace (30 routes)
+### SalesOS — Production-hardened Commercial Intelligence Workspace (32 routes, L6)
 
 | Route                               | Product/System | Route Type             | Public/Protected | Implementation Status | Notes                                       |
 | ----------------------------------- | -------------- | ---------------------- | ---------------- | --------------------- | ------------------------------------------- |
-| `/sales`                               | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Dashboard, server-action-backed                  |
-| `/sales/accounts`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Account list                                     |
-| `/sales/accounts/new`                  | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Create account                                   |
-| `/sales/accounts/[id]`                 | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Account detail                                   |
-| `/sales/accounts/[id]/brief`           | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Account brief export preview                     |
-| `/sales/accounts/[id]/brief/export`    | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Account brief export                             |
-| `/sales/activities`                    | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Activity stream                                  |
-| `/sales/approval`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Approval queue                                   |
-| `/sales/audit-trail`                   | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Audit log viewer                                 |
-| `/sales/command-center`                | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Command center                                   |
-| `/sales/deals`                         | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Deal list                                        |
-| `/sales/deals/new`                     | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Create deal                                      |
-| `/sales/deals/[id]`                    | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Deal detail                                      |
-| `/sales/deals/[id]/pilot`              | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Deal pilot handoff                               |
-| `/sales/deals/[id]/pilot/export`       | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Pilot export                                     |
-| `/sales/icp`                           | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | ICP scoring & analysis                           |
-| `/sales/intelligence`                  | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Sales intelligence hub (S7-01)                   |
-| `/sales/forecast`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | S7-02 pipeline forecast (deterministic)          |
-| `/sales/funnel`                        | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | S7-06 conversion funnel analytics              |
-| `/sales/pipeline-depth`                | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | S7-07 pipeline depth analytics                 |
-| `/sales/opportunities`                 | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Opportunity list                                 |
-| `/sales/opportunities/new`             | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Create opportunity                               |
-| `/sales/opportunities/[id]`            | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Opportunity detail                               |
-| `/sales/outreach`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Governed outreach drafts (no auto-send)          |
-| `/sales/pilot-handoff/[dealId]`        | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Pilot handoff page                               |
-| `/sales/pipeline`                      | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Pipeline view                                    |
-| `/sales/reports`                       | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Reports                                          |
-| `/sales/revenue`                       | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Revenue tracking                                 |
-| `/sales/review`                        | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Review queue                                     |
-| `/sales/signals`                       | SalesOS        | Governed workspace | Protected        | Pilot-ready (L5)        | Signal feed                                      |
+| `/sales`                               | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Dashboard, server-action-backed             |
+| `/sales/accounts`                      | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Account list                                |
+| `/sales/accounts/new`                  | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Create account                              |
+| `/sales/accounts/[id]`                 | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Account detail                              |
+| `/sales/accounts/[id]/brief`           | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Account brief export preview                |
+| `/sales/accounts/[id]/brief/export`    | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Account brief export                        |
+| `/sales/activities`                    | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Activity stream                             |
+| `/sales/approval`                      | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Approval queue                              |
+| `/sales/audit-trail`                   | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Audit log viewer                            |
+| `/sales/command-center`                | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Command center                              |
+| `/sales/deals`                         | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Deal list                                   |
+| `/sales/deals/new`                     | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Create deal                                 |
+| `/sales/deals/[id]`                    | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Deal detail                                 |
+| `/sales/deals/[id]/pilot`              | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Deal pilot handoff                          |
+| `/sales/deals/[id]/pilot/export`       | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Pilot export                                |
+| `/sales/icp`                           | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | ICP scoring & analysis                      |
+| `/sales/intelligence`                  | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Sales intelligence hub with 12 sub-engines  |
+| `/sales/forecast`                      | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Pipeline forecast with stage weights       |
+| `/sales/funnel`                        | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Conversion funnel analytics                |
+| `/sales/pipeline-depth`                | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Pipeline depth analytics                   |
+| `/sales/opportunities`                 | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Opportunity list                            |
+| `/sales/opportunities/new`             | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Create opportunity                          |
+| `/sales/opportunities/[id]`            | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Opportunity detail                          |
+| `/sales/outreach`                      | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Governed outreach drafts (no auto-send)     |
+| `/sales/pilot-handoff/[dealId]`        | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Pilot handoff page                          |
+| `/sales/pipeline`                      | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Pipeline view                               |
+| `/sales/reports`                       | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Reports                                     |
+| `/sales/revenue`                       | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Revenue tracking                            |
+| `/sales/review`                        | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Review queue                                |
+| `/sales/signals`                       | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | Signal feed                                 |
+| `/sales/settings/crm`                  | SalesOS        | Governed workspace | Protected        | Production-hardened (L6) | CRM sync admin (HubSpot/Salesforce)         |
 
-**SalesOS maturity notes (2026-06-19):** Upgraded to L5 Pilot-ready — sidebar entry in both sidebars, Prisma seed wired in main prisma/seed.ts, prototype warnings replaced with L5 pilot status. Prisma-backed P0 Core models (13). All ~80 components compile. Test suite: 2,462 tests pass, 249 suites. Dashboard uses in-memory store as fallback (Prisma-backed client available as sales-dashboard-client.tsx). Not L6 — no automated CRM sync or email/calendar integration.
+**SalesOS maturity notes:** L6 Production-hardened (2026-07-03). Full error/loading/not-found boundaries on all 32 route segments. All 8 L6 gaps closed. 45 test files PASS. Prisma-backed P0 Core models (13). ~80 components. Sidebar entry in both sidebars. Seed data wired in main `prisma/seed.ts`.
 
 ### Organizations — Pilot-Ready Surface
 
@@ -308,46 +311,46 @@ These pages serve as detail references for specialized operating systems. They a
 | `/workflowos/records`                               | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Org workflow records   |
 | `/workflowos/records/[id]`                          | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Record from template   |
 
-### LocalContactOS — Governed Workspace (v0.1 slice)
+### LocalContactOS — Production-hardened Governed Workspace (L6)
 
 | Route                              | Product/System | Route Type         | Public/Protected | Implementation Status | Notes              |
 | ---------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------ |
-| `/contacts`                        | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Contact registry with search + sensitivity filter |
-| `/contacts/dashboard`              | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | KPIs, charts, recent activity |
-| `/contacts/new`                    | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Create contact     |
-| `/contacts/[id]`                   | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Detail: info, relations, interactions, evidence, reviews, export, risk flags |
-| `/contacts/[id]/edit`              | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Edit contact form (pre-populated) |
-| `/contacts/[id]/relations/new`     | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Add relation       |
-| `/contacts/[id]/interactions/new`  | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5)      | Log interaction    |
+| `/contacts`                        | LocalContactOS | Governed workspace | Protected        | Production-hardened (L6) | Contact registry with search + sensitivity filter |
+| `/contacts/dashboard`              | LocalContactOS | Governed workspace | Protected        | Production-hardened (L6) | KPIs, charts, recent activity |
+| `/contacts/new`                    | LocalContactOS | Governed workspace | Protected        | Production-hardened (L6) | Create contact     |
+| `/contacts/[id]`                   | LocalContactOS | Governed workspace | Protected        | Production-hardened (L6) | Detail: info, relations, interactions, evidence, reviews, export, risk flags |
+| `/contacts/[id]/edit`              | LocalContactOS | Governed workspace | Protected        | Production-hardened (L6) | Edit contact form (pre-populated) |
+| `/contacts/[id]/relations/new`     | LocalContactOS | Governed workspace | Protected        | Production-hardened (L6) | Add relation       |
+| `/contacts/[id]/interactions/new`  | LocalContactOS | Governed workspace | Protected        | Production-hardened (L6) | Log interaction    |
 
-### Institutional Memory — Cross-Product Knowledge Graph (L4)
+### Institutional Memory — Production-hardened Knowledge Graph (L6)
 
 | Route                         | Product/System      | Route Type         | Public/Protected | Implementation Status | Notes                                        |
 | ----------------------------- | ------------------- | ------------------ | ---------------- | --------------------- | -------------------------------------------- |
-| `/institutional-memory`              | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5)      | Cross-product knowledge graph dashboard      |
-| `/institutional-memory/events`       | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5)      | Memory event list with delete & JSON export |
-| `/institutional-memory/collections`  | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5)      | Saved collections of memory event links      |
-| `/institutional-memory/graph`        | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5)      | Interactive knowledge graph visualization    |
+| `/institutional-memory`              | Institutional Memory| Governed workspace | Protected        | Production-hardened (L6) | Cross-product knowledge graph dashboard      |
+| `/institutional-memory/events`       | Institutional Memory| Governed workspace | Protected        | Production-hardened (L6) | Memory event list with delete & JSON export |
+| `/institutional-memory/collections`  | Institutional Memory| Governed workspace | Protected        | Production-hardened (L6) | Saved collections of memory event links      |
+| `/institutional-memory/graph`        | Institutional Memory| Governed workspace | Protected        | Production-hardened (L6) | Interactive knowledge graph visualization (D3.js) |
 
-### RiskOS — Governed Risk Workspace (L4)
+### RiskOS — Production-hardened Risk Workspace (L6)
 
 | Route                              | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                                        |
 | ---------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | -------------------------------------------- |
-| `/risk`                            | RiskOS         | Governed workspace | Protected        | Usable v0.1 (L4)      | Dashboard with 4 KPI cards, risk distribution, recent assessments + model list toggle |
-| `/risk/[id]`                       | RiskOS         | Governed workspace | Protected        | Usable v0.1 (L4)      | Risk model detail (existing route)           |
-| `/risk/assessments/[id]`           | RiskOS         | Governed workspace | Protected        | Pilot-ready (L5)      | Assessment detail: score bars, category scores, procedure step tracking, audit trail, JSON export |
+| `/risk`                            | RiskOS         | Governed workspace | Protected        | Production-hardened (L6) | Dashboard with 4 KPI cards, risk distribution, recent assessments + model list toggle |
+| `/risk/[id]`                       | RiskOS         | Governed workspace | Protected        | Production-hardened (L6) | Risk model detail                            |
+| `/risk/assessments/[id]`           | RiskOS         | Governed workspace | Protected        | Production-hardened (L6) | Assessment detail: score bars, category scores, procedure step tracking, audit trail, JSON export |
 
-### ContentStudio — Content Workspace (L4)
+### ContentStudio — Production-hardened Content Workspace (L6)
 
 | Route                                     | Product/System | Route Type            | Public/Protected | Implementation Status | Notes                                                            |
 | ----------------------------------------- | -------------- | --------------------- | ---------------- | --------------------- | ---------------------------------------------------------------- |
-| \/content-studio\                       | ContentStudio  | Dashboard             | Protected        | Usable v0.1 (L4)      | Dashboard with workspace cards, KPI stats (workspaces, content, published), workspace creation dialog. AR-first RTL UI. |
-| \/content-studio/[workspaceId]\          | ContentStudio  | Governed workspace    | Protected        | Usable v0.1 (L4)      | Workspace detail with status-filtered tabs (ALL/DRAFT/IN_REVIEW/APPROVED/PUBLISHED/ARCHIVED), per-workspace stats. |
-| \/content-studio/[workspaceId]/create\   | ContentStudio  | Governed workspace    | Protected        | Usable v0.1 (L4)      | Content creation form with optional template pre-fill.           |
-| \/content-studio/[workspaceId]/[contentId]\ | ContentStudio  | Governed workspace | Protected        | Usable v0.1 (L4)      | Content detail: title, body, metadata, version history, lifecycle actions (submit for review, approve, reject, publish, archive). |
-| \/content-studio/templates\              | ContentStudio  | Governed workspace    | Protected        | Usable v0.1 (L4)      | Template list + inline create form with variable interpolation (\{{variable}}\). |
+| \/content-studio\                       | ContentStudio  | Dashboard             | Protected        | Production-hardened (L6) | Dashboard with workspace cards, KPI stats (workspaces, content, published), workspace creation dialog. AR-first RTL UI. |
+| \/content-studio/[workspaceId]\          | ContentStudio  | Governed workspace    | Protected        | Production-hardened (L6) | Workspace detail with status-filtered tabs (ALL/DRAFT/IN_REVIEW/APPROVED/PUBLISHED/ARCHIVED), per-workspace stats. |
+| \/content-studio/[workspaceId]/create\   | ContentStudio  | Governed workspace    | Protected        | Production-hardened (L6) | Content creation form with optional template pre-fill.           |
+| \/content-studio/[workspaceId]/[contentId]\ | ContentStudio  | Governed workspace | Protected        | Production-hardened (L6) | Content detail: title, body, metadata, version history, lifecycle actions, evidence section, bilingual PDF export. |
+| \/content-studio/templates\              | ContentStudio  | Governed workspace    | Protected        | Production-hardened (L6) | Template list + inline create form with variable interpolation.  |
 
-**ContentStudio maturity notes:** L4 Usable v0.1 — real Prisma models (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), server actions, audit trail via writePlatformAuditLog, content lifecycle with 5 states, bilingual AR-first UI. Seed data added: 3 workspaces, 7 content items, version history, 2 templates. Sidebar entry added "استوديو المحتوى" with FileText icon. PDF export with bilingual Arabic/English rendering via pdfkit, markdown-aware formatting, audit trail. Missing: dedicated test coverage. Not classified in official product taxonomy — listed here for transparency.
+**ContentStudio notes:** L6 Production-hardened (2026-07-03). Full error/loading/not-found boundaries on all 5 routes. Standalone Operational Content Workspace (NOT a subsystem of LocalContentOS). 5 Prisma models (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate, ContentEvidence). Content lifecycle: DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED. PDF export with bilingual Arabic/English (Noto Naskh Arabic), markdown-aware formatting, audit trail. ~125 tests across 3 files — all PASS. Seed data: 3 workspaces, 7 content items, 12 versions, 2 templates, 4 evidence records.
 ### Sunbul — Redirect Alias to WorkflowOS
 
 | Route                                           | Product/System | Route Type        | Public/Protected | Implementation Status | Notes                                                                  |
@@ -433,29 +436,19 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 2. `/auditos/*` = guided demo (public, mock-backed, read-only). Always label as `Demo` in UI and docs.
    `/auditos/*` is intentionally public because it is a sanitized, mock-only, read-only guided demo. It must not use customer data, uploads, mutations, exports/downloads, tenant state, or operational audit workflows. If any of these are introduced, the route must move behind authentication/gating before release.
 3. `/assistant/*` = governed shared application on AQLIYA Core. Do not market it as a standalone product unless explicitly reclassified.
-4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). L5 Pilot-ready at 100% (7/7 GREEN). See limitations in route table above.
+4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). **L6 Production-hardened** — all 9 LC gaps closed, full error/loading/not-found boundaries on 27 route segments, 265+ tests. Arabic PDF font fidelity (Noto Naskh Arabic embedded). Scoring engine, tender matching, multi-reviewer approval routing, ERP integration. AI quality: 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient.
 5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). L5 Pilot-ready — template workflows, SLA monitoring, gated export, 31 action tests, seed data.
 6. `/sunbul/*` = redirect alias family over WorkflowOS implementation. Every route is a `permanentRedirect(302)` wrapper.
-7. `/organizations/*` and `/settings` must be labeled prototype/internal preview until they have real persistence and workflow backing. SalesOS is now L5 Pilot-ready — 30 routes with real Prisma models, server actions, RBAC, audit trail, evidence links, seed data, and sidebar navigation. In-memory dashboard remains as fallback.
+7. `/organizations/*` and `/settings` must be labeled prototype/internal preview until they have real persistence and workflow backing. SalesOS is now **L6 Production-hardened** — 32 routes with full error/loading/not-found boundaries, real Prisma models (13), server actions, RBAC, audit trail, evidence links, seed data, sidebar navigation. Intelligence hub with 12 sub-engines, forecasting engine, CRM sync (HubSpot/Salesforce). 45 test files PASS.
 8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`) must remain permissioned.
 9. Do not create `/simulation` top-level routes until that system has a real workspace implementation.
 10. Product marketing pages belong under `/products/*`.
 11. Company and marketing pages must not imply future products are already implemented.
-12. `/decisions/*` = DecisionOS pilot-ready governed workspace (L5). Authenticated, DB-backed, evidence upload, bilingual PDF export, 42 action tests, seed data.
+12. `/decisions/*` = DecisionOS production-hardened governed workspace (L6). Authenticated, DB-backed, evidence upload, bilingual PDF export, signal automation, sector intelligence, cross-decision pattern analysis, outcome correlation analytics. 42+ action tests, seed data. Full error/loading/not-found boundaries on all 22 route segments.
 13. `/published/recommendation/*` is protected in current code reality because the backing action requires an authenticated user from the same organization.
 14. `/executive-brief` is the canonical executive brief route. `/executive-briefing` is preserved only as a redirect alias.
-
-15. `/risk/*` = RiskOS governed workspace (L5 Pilot-ready). Authenticated, dashboard with 4 KPI cards + risk distribution, seed data with 1 model / 1 assessment / 2 procedures. Assessment detail page with DRAFT→REVIEWED→APPROVED workflow, procedure step tracking with interactive checkboxes, audit trail panel, JSON export. Uses AuditOS risk models (AuditRiskModel) — no separate RiskOS product model. Do not market as standalone product.
-
+15. `/risk/*` = RiskOS governed workspace (L6 Production-hardened). Authenticated, dashboard with 4 KPI cards + risk distribution, seed data with 1 model / 1 assessment / 2 procedures. Assessment detail page with DRAFT→REVIEWED→APPROVED workflow, procedure step tracking with interactive checkboxes, audit trail panel, JSON export. Full error/loading/not-found boundaries on all 4 risk routes.
 16. **Download Security Standard** — Every file download API route must implement all three layers: (a) authentication at entry, (b) tenant-safe access check returning 404 on any failure (never 403 for "exists but not yours"), and (c) successful download audit trail via `writePlatformAuditLog` with `status: "success"`, `targetType`, `targetId`, `targetLabel`, `actorId`, `actorType`, `sourceSystem`. Response must use `Cache-Control: private, no-store`. Currently enforced on: `/api/audit/evidence/*/download`, `/api/office-ai/download`, `/api/workflowos/documents/*/download`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`.
-17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.
-
-18. `/content-studio/*` = ContentStudio prototype content workspace (L3). Authenticated, Prisma-backed (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), Arabic-first RTL UI, content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning, template variable interpolation, audit trail. Missing: seed data, sidebar entry, PDF/export, test coverage. Not classified in official taxonomy — listed here for transparency. Not L4 usable v0.1 — prototype maturity only.
-
-19. `/knowledge-foundation/*` = governed Knowledge Foundation Versioning workspace (L5 Pilot-ready). Authenticated, DB-backed, promotion pipeline for institutional knowledge: version lifecycle (DRAFT→APPROVED→RELEASED→ACTIVE→DEPRECATED), immutable release packages with SHA-256, structured diff engine, ADMIN-only rollback with reason, 7 audit event types to PlatformAuditLog, bilingual PDF/JSON export with audit trail. Clears the approval → promotion loop for AI-generated institutional knowledge. Sidebar link "أساس المعرفة" with Brain icon.
-
-17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.
-
-18. `/content-studio/*` = ContentStudio prototype content workspace (L3). Authenticated, Prisma-backed (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), Arabic-first RTL UI, content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning, template variable interpolation, audit trail. Missing: seed data, sidebar entry, PDF/export, test coverage. Not classified in official taxonomy — listed here for transparency. Not L4 usable v0.1 — prototype maturity only.
-
-17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.
+17. `/institutional-memory/*` = governed knowledge graph workspace (L6 Production-hardened). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail.
+18. `/content-studio/*` = ContentStudio production-hardened content workspace (L6). Authenticated, 5 Prisma models, content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning with restore, template variable interpolation, evidence linking, bilingual PDF export with Noto Naskh Arabic, audit trail via writePlatformAuditLog. ~125 tests. Full error/loading/not-found boundaries on all 5 routes.
+19. `/knowledge-foundation/*` = governed Knowledge Foundation Versioning workspace (L6 Production-hardened). Authenticated, DB-backed, promotion pipeline for institutional knowledge: version lifecycle (DRAFT→APPROVED→RELEASED→ACTIVE→DEPRECATED), immutable release packages with SHA-256, structured diff engine, ADMIN-only rollback with reason, 7 audit event types to PlatformAuditLog, bilingual PDF/JSON export with audit trail. 87 tests PASS. Full error boundaries on all routes.

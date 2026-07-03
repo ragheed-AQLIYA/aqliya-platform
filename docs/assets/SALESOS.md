@@ -1,6 +1,6 @@
 # SalesOS
 
-**Status:** L5 Pilot-ready  
+**Status:** L6 Production-hardened  
 **Owner:** Sales Team  
 **Last Updated:** 2026-06-30
 

@@ -1,6 +1,6 @@
 # ContentStudio
 
-**Status:** L4 Usable v0.1  
+**Status:** L6 Production-hardened  
 **Owner:** Platform Team  
 **Last Updated:** 2026-06-30
 

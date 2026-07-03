@@ -1,6 +1,6 @@
 # RiskOS
 
-**Status:** L5 Pilot-ready (AuditOS-adjacent)  
+**Status:** L6 Production-hardened (AuditOS-adjacent)  
 **Owner:** Audit Team  
 **Last Updated:** 2026-06-30
 

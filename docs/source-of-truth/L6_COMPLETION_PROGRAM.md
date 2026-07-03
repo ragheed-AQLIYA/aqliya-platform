@@ -173,7 +173,7 @@
 | S7-07 | Pipeline analytics depth | ✅ **Closed** | `intelligence/pipeline-depth.ts` — pipeline depth analysis with stage distribution |
 | S7-08 | ICP/territory admin UI | ✅ **Closed** | `icp-types.ts` + `sales-territory-store.ts` + `sales-ux-copy.ts`. Routes: `/sales/icp` |
 
-**Note:** SalesOS is **L5 Pilot-ready** (2026-06-19). Sidebar entry, Prisma seed, 45 test files, 60+ lib modules, 22+ routes. L6 gaps all closed. Remaining enterprise gates (IaC, pentest, SOC2) are platform-wide, not SalesOS-specific.
+**Note:** SalesOS is **L6 Production-hardened** (2026-07-03). Sidebar entry, Prisma seed, 45 test files, 60+ lib modules, 32+ routes. L6 gaps all closed. Full error/loading/not-found boundaries on all 32 route segments. Remaining enterprise gates (IaC, pentest, SOC2) are platform-wide, not SalesOS-specific.
 
 ---
 

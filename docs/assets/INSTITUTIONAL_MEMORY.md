@@ -1,6 +1,6 @@
 # Institutional Memory
 
-**Status:** L5 Pilot-ready  
+**Status:** L6 Production-hardened  
 **Owner:** Platform Team  
 **Last Updated:** 2026-06-30
 

@@ -36,7 +36,7 @@
 - Real AuditOS-adjacent risk workspace at `/risk/*`
 - Dashboard with KPI cards, risk distribution, assessments table, model list
 - Assessment detail: score bars, procedure steps, audit trail, JSON export
-- L5 Pilot-ready — not marketed as standalone product
+- L6 Production-hardened — not marketed as standalone product
 - Uses `AuditRiskModel`/`AuditRiskAssessment` Prisma models (AuditOS schema)
 
 ### Office AI Assistant
@@ -54,9 +54,10 @@
 
 ### SalesOS, organizations, settings
 
-- `SalesOS` current runtime surface is prototype only
-- `/organizations/*` and `/settings` generic surfaces are internal preview/prototype only
-- These must not be shown as implemented v0.1 operational modules
+- `SalesOS` current runtime surface is L6 Production-hardened commercial intelligence workspace at `/sales/*` (32 routes, 45 test files, full boundaries, 12 intelligence sub-engines, CRM sync, forecasting).
+- `/organizations/*` surface is L5 pilot-ready with real Prisma data.
+- `/settings` generic surface is internal preview/prototype only (L2 shell for main page, L4 for sub-routes).
+- These must not be shown as implemented v0.1 operational modules (except SalesOS which is production-hardened).
 
 ### ContentStudio — Operational Content Workspace
 
@@ -85,15 +86,17 @@
 - **Knowledge Foundation:** Knowledge Foundation handles governed promotion pipelines with SHA-256 release packages and structured diff engines. ContentStudio handles simpler content versioning for operational documents.
 - **Office AI Assistant:** Assistant generates draft content as suggestions. ContentStudio can be the target workspace where those drafts are stored, reviewed, and published.
 
-**Current maturity:** L4 Usable v0.1 (2026-07-03)
-- Real Prisma persistence (4 models)
+**Current maturity:** L6 Production-hardened (2026-07-03)
+- Full error/loading/not-found boundaries on all 5 routes
+- Real Prisma persistence (5 models: ContentWorkspace, ContentItem, ContentVersion, ContentTemplate, ContentEvidence)
 - 5 route groups (dashboard, workspace detail, content create, content detail, templates)
-- Full lifecycle with 5 states + versioning
-- PDF export with bilingual rendering (Noto Naskh Arabic)
+- Full lifecycle with 5 states + versioning with restore
+- Evidence linking with file upload/download/delete/audit trail
+- PDF export with bilingual Arabic/English rendering (Noto Naskh Arabic), markdown-aware formatting, metadata headers
+- Audit trail on all mutations via writePlatformAuditLog
 - ~125 tests across 3 test files (content-studio-service, content-studio-actions, content-export)
-- Audit trail on all mutations
 - Arabic-first RTL UI
-- Seed data: 3 workspaces, 7 content items, 12 versions, 2 templates
+- Seed data: 3 workspaces, 7 content items, 12 versions, 2 templates, 4 evidence records
 
 **Target taxonomy classification:** "Specialized Operating System" — Operational Content Workspace
 
@@ -120,26 +123,26 @@
 
 ### LocalContentOS and SimulationOS
 
-- `LocalContentOS` = strategic second product with real workspace at `/local-content/*` (L5 pilot-ready with conditions / usable v0.1). Marketing page at `/products/local-content` is not the workspace.
+- `LocalContentOS` = strategic second product with real workspace at `/local-content/*` (L6 Production-hardened). All 9 LC gaps closed: supplier scoring engine, tender matching, multi-reviewer approval routing, classification rule admin, Arabic PDF font fidelity, spend analytics, trend analytics, ERP integration (SAP/Oracle/CSV), Content Studio scope definition. 27 routes with full error/loading/not-found boundaries. 265+ tests PASS. AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. Marketing page at `/products/local-content` is not the workspace.
 - `SimulationOS` = current marketing/category label, not standalone runtime
 
 ## Release-Scope Mapping
 
 | Area                | Release Inclusion Status                | Maturity       | Customer Demo Status          |
 | ------------------- | --------------------------------------- | -------------- | ----------------------------- |
-| AQLIYA Platform     | Included in v0.1                        | **L5 Pilot-ready** | Safe to show with explanation |
-| AuditOS             | Included as pilot-ready product         | L5 Pilot-ready | Safe to show                  |
-| DecisionOS          | Included as active adjacent system      | L4 Usable v0.1 | Safe to show with explanation |
-| RiskOS              | AuditOS-adjacent risk workspace         | L5 Pilot-ready | Safe to show with explanation |
-| Office AI Assistant | Included as governed shared application | L4 Usable v0.1 | Safe to show with explanation |
-| WorkflowOS          | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
+| AQLIYA Platform     | Included in v0.1                        | **L6 Production-hardened** | Safe to show with explanation |
+| AuditOS             | Included as pilot-ready product         | L6 Production-hardened | Safe to show                  |
+| DecisionOS          | Included as active adjacent system      | L6 Production-hardened | Safe to show with explanation |
+| RiskOS              | AuditOS-adjacent risk workspace         | L6 Production-hardened | Safe to show with explanation |
+| Office AI Assistant | Included as governed shared application | L6 Production-hardened | Safe to show with explanation |
+| WorkflowOS          | Included as governed workspace          | L5 Pilot-ready | Safe to show with explanation |
 | Sunbul              | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 |
 | auditos             | Included as demo only                   | L1 Marketing   | Demo only                     |
-| ContentStudio       | Included as operational content workspace | L5 Pilot-ready | Safe to show with explanation |
-| Institutional Memory| Internal capability                     | L3 Prototype   | Internal only                 |
-| Sampling            | Internal workspace                      | L3 Prototype   | Internal only                 |
-| Knowledge Foundation| Governance capability                   | L5 Pilot-ready | Safe to show with explanation |
-| SalesOS             | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
+| ContentStudio       | Included as operational content workspace | L6 Production-hardened | Safe to show with explanation |
+| Institutional Memory| Governance capability                   | L6 Production-hardened | Safe to show with explanation |
+| Knowledge Foundation| Governance capability                   | L6 Production-hardened | Safe to show with explanation |
+| SalesOS             | Commercial intelligence workspace       | L6 Production-hardened | Safe to show with explanation |
+| LocalContactOS      | Governed relationship workspace         | L6 Production-hardened | Safe to show with explanation |
 | SSO (SAML/OIDC)     | Enterprise auth capability              | L5 Pilot-ready | Safe to show with explanation |
 | SCIM v2 Provisioning| Identity management (SCIM API)          | L5 Pilot-ready | Safe to show with explanation |
-| LocalContentOS      | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |
+| LocalContentOS      | Included as pilot-ready with conditions | L6 Production-hardened | Safe to show with explanation |

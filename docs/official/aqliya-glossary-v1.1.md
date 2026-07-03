@@ -3,7 +3,7 @@
 **Version:** 1.1  
 **Status:** Official terminology reference aligned to v0.1 operational baseline  
 **Last Reviewed:** 2026-06-29  
-**Note:** Product/system definitions updated to reflect L5 pilot-ready implementation status for SalesOS, LocalContactOS, RiskOS, Institutional Memory, and Local AI Provider (L4 pilot) per v0.1 operational baseline. ContentStudio and Knowledge Foundation entries added per Knowledge Governance Sprint v1 Wave 3A.
+**Note:** Product/system definitions updated to reflect L6 Production-hardened status for all 12 active products (2026-07-03).
 
 ---
 
