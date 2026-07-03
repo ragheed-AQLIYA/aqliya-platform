@@ -8,6 +8,7 @@ const mockUser = {
   email: "test@aqliya.com",
   role: "ADMIN",
   organizationId: "test-org-id",
+  platformOrganizationId: "test-org-id",
 };
 
 async function getCurrentUser() {

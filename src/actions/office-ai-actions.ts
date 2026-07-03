@@ -87,6 +87,19 @@ export async function updateOfficeAiTaskStatusAction(
   status: string,
 ): Promise<void> {
   const user = await requireUserContext("VIEWER");
+
+  const task = await prisma.officeAiTask.findUnique({
+    where: { id: taskId },
+    select: { platformOrganizationId: true },
+  });
+  if (!task) throw new Error("OfficeAiTask not found");
+  if (
+    user.platformOrganizationId &&
+    task.platformOrganizationId !== user.platformOrganizationId
+  ) {
+    throw new Error("Access denied");
+  }
+
   const result = await updateOfficeAiTaskStatus(taskId, status, {
     id: user.id,
     name: user.name,
@@ -308,6 +321,19 @@ export async function updateOfficeAiTaskAction(
   formData: FormData,
 ): Promise<void> {
   const user = await requireUserContext("VIEWER");
+
+  const task = await prisma.officeAiTask.findUnique({
+    where: { id: taskId },
+    select: { platformOrganizationId: true },
+  });
+  if (!task) throw new Error("OfficeAiTask not found");
+  if (
+    user.platformOrganizationId &&
+    task.platformOrganizationId !== user.platformOrganizationId
+  ) {
+    throw new Error("Access denied");
+  }
+
   const { updateOfficeAiTaskDetails } =
     await import("@/lib/office-ai/office-ai-task-service");
 
