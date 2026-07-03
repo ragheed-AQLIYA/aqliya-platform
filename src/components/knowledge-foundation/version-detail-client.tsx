@@ -14,6 +14,7 @@ import {
   deprecateFoundationVersion,
   rollbackFoundationVersion,
   generateFoundationRelease,
+  exportKnowledgeFoundationVersionAction,
 } from "@/actions/knowledge-foundation/actions";
 
 export type VersionDetailStatus = "DRAFT" | "APPROVED" | "RELEASED" | "ACTIVE" | "DEPRECATED";
@@ -80,6 +81,7 @@ export function VersionDetailClient({
   const [rollbackId, setRollbackId] = useState("");
   const [rollbackReason, setRollbackReason] = useState("");
   const [showRollback, setShowRollback] = useState(false);
+  const [exportLoading, setExportLoading] = useState<string | null>(null);
 
   const isAdmin = userRole === "ADMIN";
   const isOperator = userRole === "OPERATOR" || isAdmin;
@@ -204,6 +206,72 @@ export function VersionDetailClient({
             {loading === "إيقاف" ? "جاري..." : "إيقاف الإصدار"}
           </button>
         )}
+      </div>
+
+      {/* Export actions */}
+      <div className="flex flex-wrap gap-3 border-t pt-4">
+        <button
+          onClick={async () => {
+            setExportLoading("pdf");
+            try {
+              const result = await exportKnowledgeFoundationVersionAction(
+                version.id,
+                "pdf",
+              );
+              const byteChars = atob(result.content);
+              const byteArr = new Uint8Array(byteChars.length);
+              for (let i = 0; i < byteChars.length; i++) {
+                byteArr[i] = byteChars.charCodeAt(i);
+              }
+              const blob = new Blob([byteArr], { type: result.mimeType });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = result.filename;
+              a.click();
+              URL.revokeObjectURL(url);
+            } catch {
+              setActionError("فشل تصدير PDF");
+            } finally {
+              setExportLoading(null);
+            }
+          }}
+          disabled={exportLoading !== null}
+          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
+        >
+          {exportLoading === "pdf" ? "جاري..." : "📄 تصدير PDF"}
+        </button>
+        <button
+          onClick={async () => {
+            setExportLoading("json");
+            try {
+              const result = await exportKnowledgeFoundationVersionAction(
+                version.id,
+                "json",
+              );
+              const byteChars = atob(result.content);
+              const byteArr = new Uint8Array(byteChars.length);
+              for (let i = 0; i < byteChars.length; i++) {
+                byteArr[i] = byteChars.charCodeAt(i);
+              }
+              const blob = new Blob([byteArr], { type: result.mimeType });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = result.filename;
+              a.click();
+              URL.revokeObjectURL(url);
+            } catch {
+              setActionError("فشل تصدير JSON");
+            } finally {
+              setExportLoading(null);
+            }
+          }}
+          disabled={exportLoading !== null}
+          className="rounded-lg bg-slate-600 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+        >
+          {exportLoading === "json" ? "جاري..." : "📋 تصدير JSON"}
+        </button>
       </div>
 
       {/* Rollback section (ADMIN only, when not already deprecated) */}

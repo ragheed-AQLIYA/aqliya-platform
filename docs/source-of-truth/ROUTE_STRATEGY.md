@@ -218,11 +218,11 @@ These pages serve as detail references for specialized operating systems. They a
 
 | Route                                   | Product/System | Route Type         | Public/Protected | Implementation Status | Notes               |
 | --------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------- |
-| `/knowledge-foundation`                 | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Version promotion pipeline, promotion analytics dashboard |
-| `/knowledge-foundation/[id]`           | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Version detail, governance lifecycle, rollback UI |
-| `/knowledge-foundation/new`            | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Create new version form |
-| `/knowledge-foundation/diff`           | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Compare two versions with visual diff |
-| `/knowledge-foundation/history`         | Knowledge Foundation Versioning | Governed workspace | Protected        | Usable v0.1 (L4)      | Audit event log table |
+| `/knowledge-foundation`                 | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Version promotion pipeline, promotion analytics dashboard |
+| `/knowledge-foundation/[id]`           | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Version detail, governance lifecycle, rollback UI, PDF/JSON export buttons |
+| `/knowledge-foundation/new`            | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Create new version form |
+| `/knowledge-foundation/diff`           | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Compare two versions with visual diff |
+| `/knowledge-foundation/history`         | Knowledge Foundation Versioning | Governed workspace | Protected        | L5 Pilot-ready         | Audit event log table |
 
 ### Platform Operator APIs (Intelligence Core / Tier 3)
 
@@ -452,7 +452,7 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 
 18. `/content-studio/*` = ContentStudio prototype content workspace (L3). Authenticated, Prisma-backed (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), Arabic-first RTL UI, content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning, template variable interpolation, audit trail. Missing: seed data, sidebar entry, PDF/export, test coverage. Not classified in official taxonomy — listed here for transparency. Not L4 usable v0.1 — prototype maturity only.
 
-19. `/knowledge-foundation/*` = governed Knowledge Foundation Versioning workspace (L4 usable v0.1). Authenticated, DB-backed, promotion pipeline for institutional knowledge: version lifecycle (DRAFT→APPROVED→RELEASED→ACTIVE→DEPRECATED), immutable release packages with SHA-256, structured diff engine, ADMIN-only rollback with reason, 7 audit event types to PlatformAuditLog. Clears the approval → promotion loop for AI-generated institutional knowledge. Sidebar link "أساس المعرفة" with Brain icon.
+19. `/knowledge-foundation/*` = governed Knowledge Foundation Versioning workspace (L5 Pilot-ready). Authenticated, DB-backed, promotion pipeline for institutional knowledge: version lifecycle (DRAFT→APPROVED→RELEASED→ACTIVE→DEPRECATED), immutable release packages with SHA-256, structured diff engine, ADMIN-only rollback with reason, 7 audit event types to PlatformAuditLog, bilingual PDF/JSON export with audit trail. Clears the approval → promotion loop for AI-generated institutional knowledge. Sidebar link "أساس المعرفة" with Brain icon.
 
 17. `/institutional-memory/*` = governed knowledge graph workspace (L5 Pilot-ready). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail via exportMemoryEventsAction. Audit logging for collection CRUD. Sidebar link "الذاكرة المؤسسية" with Network icon.
 

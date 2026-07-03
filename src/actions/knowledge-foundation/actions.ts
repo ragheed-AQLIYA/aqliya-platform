@@ -260,3 +260,72 @@ export async function generateFoundationDiff(input: {
   
   return generateDiff(input.fromVersionId, input.toVersionId, user.id);
 }
+
+// ─── Export Actions ───────────────────────────────────────────────
+
+export async function exportKnowledgeFoundationVersionAction(
+  versionId: string,
+  format: "pdf" | "json",
+) {
+  const user = await getCurrentUser();
+  const version = await getVersion(versionId);
+
+  if (!version) {
+    throw new Error("Version not found");
+  }
+
+  const {
+    buildKnowledgeFoundationPDF,
+    buildKnowledgeFoundationJSON,
+    recordExportAudit,
+  } = await import("@/lib/knowledge-foundation/kf-export");
+
+  const input = {
+    versionId: version.id,
+    versionNumber: version.versionNumber,
+    status: version.status,
+    notes: version.notes,
+    candidateCount: version.candidateCount,
+    artifactPath: version.artifactPath,
+    createdByName: version.createdByName,
+    approvedByName: version.approvedByName,
+    activatedAt: version.activatedAt?.toISOString?.() ?? null,
+    createdAt: version.createdAt,
+    rollbackVersionId: version.rollbackVersionId,
+    releases: (version.releases ?? []).map((r: { id: string; releaseNotes: string | null; createdAt: { toISOString: () => string }; createdBy: { name: string | null } | null }) => ({
+      id: r.id,
+      releaseNotes: r.releaseNotes,
+      createdAt: r.createdAt.toISOString(),
+      createdByName: r.createdBy?.name ?? null,
+    })),
+    diffsAsFrom: (version.diffsAsFrom ?? []).map((d: { toVersion: { versionNumber: string }; riskScore: number; breakingChange: boolean; summary: string | null; generatedAt: { toISOString?: () => string } | null }) => ({
+      toVersion: d.toVersion.versionNumber,
+      riskScore: d.riskScore,
+      breakingChange: d.breakingChange,
+      summary: d.summary,
+      generatedAt: d.generatedAt?.toISOString?.() ?? "",
+    })),
+    candidateBindings: [],
+  };
+
+  const result =
+    format === "pdf"
+      ? await buildKnowledgeFoundationPDF(input)
+      : await buildKnowledgeFoundationJSON(input);
+
+  // Record audit event (safe — never blocks)
+  await recordExportAudit({
+    versionId: version.id,
+    versionNumber: version.versionNumber,
+    format,
+    actorId: user.id,
+    actorName: user.name ?? undefined,
+  }).catch(() => {});
+
+  return {
+    format: result.format,
+    filename: result.filename,
+    mimeType: result.mimeType,
+    content: result.content.toString("base64"),
+  };
+}
