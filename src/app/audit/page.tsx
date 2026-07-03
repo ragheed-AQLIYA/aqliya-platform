@@ -24,6 +24,7 @@ import {
   getAuditUsers,
 } from "@/lib/audit/services";
 import { getAuditActor } from "@/lib/audit/actor-context";
+import { getCached } from "@/lib/platform/cache/memory-cache";
 import { prisma } from "@/lib/prisma";
 import {
   ShieldCheck,
@@ -34,25 +35,29 @@ import {
 } from "lucide-react";
 
 async function getEngagementOperatorSummaries(engagementIds: string[]) {
-  const summaries = await Promise.all(
-    engagementIds.map(async (id) => {
-      try {
-        const readiness = await getWorkflowReadinessAction(id);
-        return {
-          id,
-          nextAction: getNextWorkflowAction(
+  // Cache keyed on sorted IDs to batch page reloads (TTL: 15s)
+  const cacheKey = `dash-opsum-${engagementIds.slice(0, 20).sort().join(",")}`;
+  return getCached(cacheKey, 15_000, async () => {
+    const summaries = await Promise.all(
+      engagementIds.map(async (id) => {
+        try {
+          const readiness = await getWorkflowReadinessAction(id);
+          return {
             id,
-            readiness.context,
-            readiness.workflowStatus.blockingIssues,
-          ),
-          blockingIssues: readiness.workflowStatus.blockingIssues,
-        };
-      } catch {
-        return { id, nextAction: null, blockingIssues: [] as string[] };
-      }
-    }),
-  );
-  return new Map(summaries.map((s) => [s.id, s]));
+            nextAction: getNextWorkflowAction(
+              id,
+              readiness.context,
+              readiness.workflowStatus.blockingIssues,
+            ),
+            blockingIssues: readiness.workflowStatus.blockingIssues,
+          };
+        } catch {
+          return { id, nextAction: null, blockingIssues: [] as string[] };
+        }
+      }),
+    );
+    return new Map(summaries.map((s) => [s.id, s]));
+  });
 }
 
 type EngagementWithPlatformContext = Awaited<

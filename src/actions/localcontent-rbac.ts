@@ -2,14 +2,8 @@
 // Bridges the RB-02 Authorization Engine into LCOS server actions.
 // Each guard:
 //   1. Calls requireUserContext() to get authenticated user + org + role
-//   2. Calls AuthorizationEngine to evaluate the permission
+//   2. Calls AuthorizationEngine.authorize() to evaluate the permission
 //   3. Throws "Access denied" if the role lacks the required permission
-//
-// Pattern: action → AuthorizationEngine.evaluate() → ALLOW/DENY
-//
-// These guards sit ABOVE the tenant isolation guards (localcontent-guards.ts).
-// Tenant guards verify orgId; RBAC guards verify role permissions.
-// Both are required for production enforcement.
 
 import { requireUserContext } from "@/lib/auth";
 import {
@@ -24,20 +18,16 @@ import {
 // Singleton engine instance
 let _engine: AuthorizationEngine | null = null;
 
-function getEngine(): AuthorizationEngine {
+async function getEngine(): Promise<AuthorizationEngine> {
   if (!_engine) {
-    _engine = createStandardEngine();
+    const { engine } = await createStandardEngine();
+    _engine = engine;
   }
   return _engine;
 }
 
 /**
  * Require the current user to have a specific permission.
- * This is the primary RBAC guard for LCOS actions.
- *
- * @param permission The required Permission (from RB-02 registry)
- * @param resourceType The resource type being accessed
- * @param resourceId Optional specific resource ID for policy evaluation
  */
 export async function requirePermission(
   permission: Permission,
@@ -46,22 +36,15 @@ export async function requirePermission(
 ): Promise<void> {
   const user = await requireUserContext();
 
-  const engine = getEngine();
-  const result = await engine.evaluate({
-    user: {
-      id: user.id,
-      organizationId: user.organizationId,
-      roles: user.roles ?? [user.role as PlatformRole],
-    },
+  const engine = await getEngine();
+  const result = await engine.authorize({
+    userId: user.id,
+    organizationId: user.organizationId,
+    role: user.role,
+    resourceType,
+    resourceId: resourceId ?? undefined,
     action: `${resourceType}.${permissionToAction(permission)}`,
-    resource: {
-      type: resourceType,
-      id: resourceId ?? "unknown",
-      organizationId: user.organizationId,
-    },
-    context: {
-      timestamp: new Date(),
-    },
+    context: { timestamp: new Date().toISOString() },
   });
 
   if (result.decision === Decision.DENY || result.decision === Decision.READ_ONLY) {
@@ -71,7 +54,6 @@ export async function requirePermission(
 
 /**
  * Require the current user to have at least one of the specified permissions.
- * Used when an action can be performed by multiple role levels.
  */
 export async function requireAnyPermission(
   permissions: Permission[],
@@ -81,26 +63,19 @@ export async function requireAnyPermission(
   const user = await requireUserContext();
 
   for (const permission of permissions) {
-    const engine = getEngine();
-    const result = await engine.evaluate({
-      user: {
-        id: user.id,
-        organizationId: user.organizationId,
-        roles: user.roles ?? [user.role as PlatformRole],
-      },
+    const engine = await getEngine();
+    const result = await engine.authorize({
+      userId: user.id,
+      organizationId: user.organizationId,
+      role: user.role,
+      resourceType,
+      resourceId: resourceId ?? undefined,
       action: `${resourceType}.${permissionToAction(permission)}`,
-      resource: {
-        type: resourceType,
-        id: resourceId ?? "unknown",
-        organizationId: user.organizationId,
-      },
-      context: {
-        timestamp: new Date(),
-      },
+      context: { timestamp: new Date().toISOString() },
     });
 
     if (result.decision === Decision.ALLOW || result.decision === Decision.REQUIRE_APPROVAL) {
-      return; // at least one permission allows
+      return;
     }
   }
 
@@ -109,51 +84,43 @@ export async function requireAnyPermission(
 
 /**
  * Check if the current user has a specific role.
- * Used for ADMIN-only operations like project deletion.
+ * Compares as strings since UserRole (Prisma) and PlatformRole (engine) use different enums.
  */
 export async function requireRole(role: PlatformRole): Promise<void> {
   const user = await requireUserContext();
-  const userRoles: PlatformRole[] = user.roles ?? [user.role as PlatformRole];
-
-  if (!userRoles.includes(role)) {
-    throw new Error(`Access denied: ${role} role required`);
+  const targetRole = String(role);
+  const userRole = String(user.role);
+  if (userRole !== targetRole) {
+    throw new Error(`Access denied: ${targetRole} role required (user has ${userRole})`);
   }
 }
 
 /**
  * Require the current user to have at least the specified minimum role level.
- * Role hierarchy (from lowest to highest):
- *   INTEGRATION_ACCOUNT < READ_ONLY < EXTERNAL_AUDITOR < ANALYST < REVIEWER < BUSINESS_MANAGER < ORG_ADMIN
  */
 export async function requireMinRole(minRole: PlatformRole): Promise<void> {
   const user = await requireUserContext();
-  const userRoles: PlatformRole[] = user.roles ?? [user.role as PlatformRole];
 
-  const roleHierarchy: PlatformRole[] = [
-    PlatformRole.INTEGRATION_ACCOUNT,
-    PlatformRole.READ_ONLY,
-    PlatformRole.EXTERNAL_AUDITOR,
-    PlatformRole.ANALYST,
-    PlatformRole.REVIEWER,
-    PlatformRole.BUSINESS_MANAGER,
-    PlatformRole.ORG_ADMIN,
+  const roleHierarchy: string[] = [
+    String(PlatformRole.INTEGRATION_ACCOUNT),
+    String(PlatformRole.READ_ONLY),
+    String(PlatformRole.EXTERNAL_AUDITOR),
+    String(PlatformRole.ANALYST),
+    String(PlatformRole.REVIEWER),
+    String(PlatformRole.BUSINESS_MANAGER),
+    String(PlatformRole.ORG_ADMIN),
   ];
 
-  const minLevel = roleHierarchy.indexOf(minRole);
-  const maxUserLevel = Math.max(
-    ...userRoles.map((r) => roleHierarchy.indexOf(r)),
-  );
+  const minLevel = roleHierarchy.indexOf(String(minRole));
+  const userLevel = roleHierarchy.indexOf(String(user.role));
 
-  if (maxUserLevel < minLevel) {
+  if (userLevel < minLevel) {
     throw new Error(
-      `Access denied: minimum role ${minRole} required (current: ${userRoles.join(", ")})`,
+      `Access denied: minimum role ${String(minRole)} required (current: ${String(user.role)})`,
     );
   }
 }
 
-/**
- * Map a Permission to its primary action string for the Authorization Engine.
- */
 function permissionToAction(permission: Permission): string {
   const actionMap: Record<string, string> = {
     [Permission.PROJECT_MANAGEMENT]: "create",

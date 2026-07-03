@@ -1,15 +1,11 @@
 // ─── AuditOS Rate Limiter ───
-// In-memory rate limiter for audit server actions.
-// Production deployment should replace with Redis or database-backed limiter.
+// Uses the shared rate limiter provider from src/lib/platform/rate-limit/.
+// Production: set RATE_LIMITER=redis + REDIS_URL for distributed rate limiting.
+// Default: in-memory (safe for single-instance dev/staging).
 
+import "server-only";
 import type { AuditActor } from "./actor-context";
-
-interface RateLimitEntry {
-  count: number;
-  resetAt: number;
-}
-
-const store = new Map<string, RateLimitEntry>();
+import { getRateLimiterProvider } from "@/lib/platform/rate-limit";
 
 const WINDOW_MS = 60_000; // 1 minute
 
@@ -28,38 +24,31 @@ function key(actor: AuditActor, actionName: string): string {
   return `${actor.organizationId}:${actor.actorId}:${actionName}`;
 }
 
-export function enforceAuditRateLimit(
+/**
+ * Enforce a rate limit for the given actor + action.
+ * Throws if the limit is exceeded.
+ */
+export async function enforceAuditRateLimit(
   actor: AuditActor,
   actionName: string,
   category: RateLimitCategory = "default",
-): void {
-  const now = Date.now();
-  const k = key(actor, actionName);
-  const entry = store.get(k);
+): Promise<void> {
+  const provider = getRateLimiterProvider();
   const limit = LIMITS[category] ?? LIMITS.default;
+  const result = await provider.increment(key(actor, actionName), WINDOW_MS, limit);
 
-  if (!entry || now > entry.resetAt) {
-    store.set(k, { count: 1, resetAt: now + WINDOW_MS });
-    return;
-  }
-
-  if (entry.count >= limit) {
+  if (!result.allowed) {
     throw new Error("Rate limit exceeded. Please try again later.");
   }
-
-  entry.count++;
 }
 
-export function resetRateLimit(actor: AuditActor, actionName: string): void {
-  store.delete(key(actor, actionName));
-}
-
-// Periodic cleanup to prevent memory leaks
-if (typeof setInterval !== "undefined") {
-  setInterval(() => {
-    const now = Date.now();
-    for (const [k, v] of store) {
-      if (now > v.resetAt) store.delete(k);
-    }
-  }, 60_000);
+/**
+ * Reset the rate limit counter for an actor + action.
+ */
+export async function resetRateLimit(
+  actor: AuditActor,
+  actionName: string,
+): Promise<void> {
+  const provider = getRateLimiterProvider();
+  await provider.reset(key(actor, actionName));
 }

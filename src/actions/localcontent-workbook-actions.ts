@@ -15,7 +15,6 @@ import {
   Permission,
   ResourceType,
 } from "@/actions/localcontent-rbac";
-import { parseOrError } from "@/lib/local-content/schemas/common/parse-or-error";
 import {
   createWorkbookSchema,
   populateWorkbookSchema,

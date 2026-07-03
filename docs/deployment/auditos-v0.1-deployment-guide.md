@@ -1,6 +1,6 @@
 # AuditOS v0.1 — Deployment Guide
 
-**Date:** 2026-05-28  
+**Date:** 2026-07-02  
 **Target:** Controlled single-instance deployment (VPS, private server, internal VM)  
 **Not in scope:** Kubernetes, multi-region HA, enterprise cloud scale
 
@@ -19,12 +19,21 @@ This guide supports one operational environment for internal rehearsal or limite
 | Requirement | Minimum                                                               |
 | ----------- | --------------------------------------------------------------------- |
 | OS          | Linux (Ubuntu 22.04+ recommended) or Windows Server for dev rehearsal |
-| Node.js     | 20.x LTS                                                              |
+| Node.js     | 22.x LTS                                                              |
 | PostgreSQL  | 15+ (16 recommended)                                                  |
 | RAM         | 2 GB minimum; 4 GB recommended for build                              |
 | Disk        | 20 GB+ including uploads and backups                                  |
 | Network     | HTTPS reverse proxy for non-localhost access                          |
 | Tools       | `pg_dump` for backup scripts (optional but recommended)               |
+| Redis       | Optional — required only when `RATE_LIMITER=redis` (multi-instance)   |
+| ClamAV      | Optional — required only when `SCANNER_PROVIDER=clamav` (recommended) |
+
+### Optional service ports
+
+| Service | Default Port | Required When                          |
+| ------- | ------------ | -------------------------------------- |
+| Redis   | 6379         | `RATE_LIMITER=redis` for shared limits |
+| ClamAV  | 3310         | `SCANNER_PROVIDER=clamav` for scanning |
 
 ---
 
@@ -47,14 +56,26 @@ Developer machine or internal workstation — same steps, `NEXTAUTH_URL=http://l
 ## Startup Order
 
 1. **PostgreSQL** — running and reachable
-2. **Environment file** — `.env` with required variables
-3. **Database schema** — `npx prisma db push` or `migrate deploy`
-4. **Seed data** (rehearsal only) — platform seed + audit seed
-5. **Build** — `npm run build`
-6. **Storage directory** — ensure `LOCAL_STORAGE_DIR` exists and is writable
-7. **Application** — `npm start` or process manager
-8. **Health check** — `curl http://127.0.0.1:3000/api/health`
-9. **Audit health** — `npm run audit:health`
+2. **Redis** — required only if `RATE_LIMITER=redis`
+3. **ClamAV** — required only if `SCANNER_PROVIDER=clamav`
+4. **Environment file** — `.env` with required variables
+5. **Database schema** — `npx prisma db push` or `migrate deploy`
+6. **Seed data** (rehearsal only) — platform seed + audit seed
+7. **Build** — `npm run build`
+8. **Storage directory** — ensure `LOCAL_STORAGE_DIR` exists and is writable
+9. **Application** — `npm start` or process manager
+10. **Health check** — `curl http://127.0.0.1:3000/api/health`
+11. **Audit health** — `npm run audit:health`
+
+### Scheduled tasks (L6 production)
+
+After startup, configure the following scheduled tasks:
+
+| Task                        | Schedule    | Command                                                    |
+| --------------------------- | ----------- | ---------------------------------------------------------- |
+| Database backup             | Daily       | `npm run db:backup:scheduler`                              |
+| Audit event archival        | Weekly      | `node scripts/platform/audit-archival-cron.mjs`            |
+| Rate limiter verification   | After deploy| `node scripts/platform/verify-redis-rate-limiter.mjs`      |
 
 ---
 
@@ -183,6 +204,133 @@ Recommended manual schedule for rehearsal: daily DB dump + weekly storage direct
 
 ---
 
+## L6 Production Configuration
+
+### L6 Environment (beyond minimum)
+
+```env
+# === L6: Rate Limiting (Redis for multi-instance) ===
+RATE_LIMITER=redis
+REDIS_URL=redis://:<password>@redis-host:6379
+
+# === L6: File Scanning (ClamAV recommended) ===
+SCANNER_PROVIDER=clamav
+CLAMAV_HOST=127.0.0.1
+CLAMAV_PORT=3310
+
+# === L6: Object Storage (S3-compatible) ===
+STORAGE_PROVIDER=s3
+S3_BUCKET=aqliya-audit-prod
+S3_REGION=eu-west-1
+# S3_ENDPOINT=https://s3.custom-endpoint.com  # optional
+
+# === L6: Audit Event Archival ===
+AUDIT_RETENTION_DAYS=365
+AUDIT_ARCHIVE_DIR=/var/aqliya/audit-archives
+
+# === L6: Backup ===
+BACKUP_INTERVAL_MS=3600000
+BACKUP_MAX_FILES=30
+BACKUP_DIR=/var/aqliya/backups
+```
+
+### Redis deployment (for RATE_LIMITER=redis)
+
+```bash
+# Install Redis
+sudo apt-get install redis-server
+sudo systemctl enable redis-server && sudo systemctl start redis-server
+
+# Secure with password
+sudo redis-cli CONFIG SET requirepass "<strong-password>"
+```
+
+### ClamAV deployment (for SCANNER_PROVIDER=clamav)
+
+```bash
+# Install ClamAV
+sudo apt-get install clamav clamav-daemon
+
+# Update virus definitions
+sudo systemctl stop clamav-freshclam
+sudo freshclam
+sudo systemctl start clamav-freshclam
+
+# Start daemon
+sudo systemctl enable clamav-daemon && sudo systemctl start clamav-daemon
+
+# Verify
+node scripts/platform/verify-redis-rate-limiter.mjs
+```
+
+### Systemd timer units
+
+Create `/etc/systemd/system/aqliya-backup.service`:
+
+```ini
+[Unit]
+Description=AQLIYA database backup
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/npm run db:backup:scheduler
+WorkingDirectory=/opt/aqliya
+Environment=NODE_ENV=production
+```
+
+Create `/etc/systemd/system/aqliya-backup.timer`:
+
+```ini
+[Unit]
+Description=Run AQLIYA backup daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+Create `/etc/systemd/system/aqliya-archival.service`:
+
+```ini
+[Unit]
+Description=AQLIYA audit event archival
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/node /opt/aqliya/scripts/platform/audit-archival-cron.mjs
+WorkingDirectory=/opt/aqliya
+Environment=NODE_ENV=production
+```
+
+Create `/etc/systemd/system/aqliya-archival.timer`:
+
+```ini
+[Unit]
+Description=Run AQLIYA archival weekly
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+Enable and start:
+
+```bash
+sudo systemctl link /opt/aqliya/deploy/systemd/aqliya-backup.service
+sudo systemctl link /opt/aqliya/deploy/systemd/aqliya-archival.service
+sudo systemctl enable aqliya-backup.timer aqliya-archival.timer
+sudo systemctl start aqliya-backup.timer aqliya-archival.timer
+```
+
+---
+
 ## Docker (optional)
 
 Repository includes `docker-compose.yml` and `Dockerfile` aligned for controlled single-instance use (Track C.1):
@@ -247,13 +395,25 @@ Login at `/login` with seeded credentials (rehearsal only — change for any ext
 
 ## Known Limitations
 
-- **Single instance only** — no horizontal scaling guidance
+- **Single instance only** — no horizontal scaling guidance. `RATE_LIMITER=redis` is ready for multi-instance but requires operational Redis setup.
 - **No HA / failover** — Postgres and app are single points of failure
-- **No integrated virus scanning** — `SCANNER_PROVIDER` is a stub
+- **S3/Azure storage** — S3 implemented; Azure Blob is stubbed (not yet wired)
 - **No SSO/LDAP** — Credentials provider only
-- **S3/Azure storage** — not integrated
 - **Not certified production** — controlled rehearsal and limited pilot only
 - **Draft exports** downloadable before approval — intentional for internal review
+
+### L6 Resolved Limitations
+
+The following v0.1 limitations have been resolved in this L6 hardening:
+
+| Limitation                          | Resolution                                                                  |
+| ----------------------------------- | --------------------------------------------------------------------------- |
+| In-memory rate limiter only         | Provider pattern with Redis backend (set `RATE_LIMITER=redis` + `REDIS_URL`)|
+| `SCANNER_PROVIDER` unconfigured     | ClamAV client integrated; set `SCANNER_PROVIDER=clamav` to activate         |
+| No audit event archival             | Archival service + cron script; configurable retention via `AUDIT_RETENTION_DAYS` |
+| S3 storage not integrated           | Full S3 implementation with `@aws-sdk/client-s3`; set `STORAGE_PROVIDER=s3` |
+| Backup scheduling missing           | `db-backup-scheduler.ts` with single-run and timer modes                    |
+| Dashboard N+1 queries               | TTL caching via memory cache; 15s window on operator summaries              |
 
 ---
 

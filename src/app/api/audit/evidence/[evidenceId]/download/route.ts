@@ -53,7 +53,7 @@ export async function GET(
       );
     }
 
-    enforceAuditRateLimit(actor, "evidence.download", "download");
+    await enforceAuditRateLimit(actor, "evidence.download", "download");
 
     const evidenceRecord = await assertEvidenceDownloadAccess({
       productSlug: "audit",
