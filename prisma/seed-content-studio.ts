@@ -553,6 +553,57 @@ export async function seedContentStudio(
       },
     });
 
+    // ─── Seed Evidence for Content Items ───
+    await tx.contentEvidence.createMany({
+      data: [
+        {
+          contentId: c1.id,
+          organizationId: orgId,
+          filename: "aqliya-brochure-2026.pdf",
+          fileType: "pdf",
+          fileSize: 245760,
+          fileHash: "a1b2c3d4e5f6a7b8c9d0e1f2",
+          evidenceType: "reference",
+          description: "الكتيب التعريفي للمنصة",
+          uploadedById: adminId,
+        },
+        {
+          contentId: c1.id,
+          organizationId: orgId,
+          filename: "vision-document-v1.docx",
+          fileType: "docx",
+          fileSize: 102400,
+          fileHash: "f2e1d0c9b8a7f6e5d4c3b2a1",
+          evidenceType: "source",
+          description: "مستند رؤية عقلية الإصدار الأول",
+          uploadedById: adminId,
+        },
+        {
+          contentId: c3.id,
+          organizationId: orgId,
+          filename: "ict-market-study.xlsx",
+          fileType: "xlsx",
+          fileSize: 358400,
+          fileHash: "c3d4e5f6a7b8c9d0e1f2a3b4",
+          evidenceType: "reference",
+          description: "دراسة سوق تقنية المعلومات",
+          uploadedById: adminId,
+        },
+        {
+          contentId: c5.id,
+          organizationId: orgId,
+          filename: "csr-policy-2025.pdf",
+          fileType: "pdf",
+          fileSize: 187392,
+          fileHash: "e5f6a7b8c9d0e1f2a3b4c5d6",
+          evidenceType: "attachment",
+          description: "سياسة المسؤولية المجتمعية 2025",
+          uploadedById: adminId,
+        },
+      ],
+    });
+    console.log(`Created 4 evidence records across content items`);
+
     console.log(`Created 3 workspaces: ${ws1.name}, ${ws2.name}, ${ws3.name}`);
     console.log(`Created 7 content items across workspaces`);
     console.log(`Created 2 templates: ${t1.name}, ${t2.name}`);

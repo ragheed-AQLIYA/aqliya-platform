@@ -1,12 +1,13 @@
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock, FileText } from "lucide-react";
+import { ArrowRight, Clock, FileText, Pencil } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getContentAction, getVersionHistoryAction } from "../../actions";
 import { ContentLifecycleActions } from "./content-lifecycle-actions";
 import { ContentExportButton } from "./content-export-button";
+import { ContentEvidenceSection } from "./content-evidence-section";
 import type { ContentVersion } from "@/lib/platform/content-studio";
 
 export const dynamic = "force-dynamic";
@@ -81,6 +82,13 @@ export default async function ContentDetailPage({
                   status={content.status}
                   workspaceId={workspaceId}
                 />
+                <Link
+                  href={`/content-studio/${workspaceId}/${content.id}/edit`}
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 w-9 border border-input bg-background hover:bg-accent shrink-0"
+                  title="تعديل"
+                >
+                  <Pencil className="h-4 w-4" />
+                </Link>
                 <ContentExportButton contentId={content.id} />
               </div>
             </CardHeader>
@@ -147,6 +155,8 @@ export default async function ContentDetailPage({
               )}
             </CardContent>
           </Card>
+
+          <ContentEvidenceSection contentId={content.id} />
 
           <Card size="sm">
             <CardHeader>

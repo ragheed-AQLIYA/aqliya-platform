@@ -129,6 +129,7 @@ model PlatformOrganization {
   auditOrganizations AuditOrganization[] @relation("AuditOrgPlatformOrg")
   clientWorkspaces   ClientWorkspace[]
   sunbulClients      SunbulClient[]
+
   @@index([createdAt])
 }
 
@@ -247,7 +248,7 @@ model Project {
 // ==================== Platform Audit Log ====================
 
 model PlatformAuditLog {
-  id                     String   @id @default(cuid())
+  id                     String          @id @default(cuid())
   platformOrganizationId String?
   clientWorkspaceId      String?
   projectId              String?
@@ -261,8 +262,8 @@ model PlatformAuditLog {
   targetType             String?
   targetId               String?
   targetLabel            String?
-  severity               String   @default("info")
-  status                 String   @default("recorded")
+  severity               String          @default("info")
+  status                 String          @default("recorded")
   sourceSystem           String?
   sourceModel            String?
   sourceId               String?
@@ -276,7 +277,7 @@ model PlatformAuditLog {
   aiOutputReviewStatus   String?
   evidenceRefs           Json?
   metadata               Json?
-  createdAt              DateTime @default(now())
+  createdAt              DateTime        @default(now())
   hashChainEntry         HashChainEntry?
 
   @@index([platformOrganizationId, createdAt])
@@ -315,10 +316,10 @@ model AuditBridgeRule {
   id              String   @id @default(cuid())
   organizationId  String
   name            String
-  source          String          /// External source system identifier
+  source          String /// External source system identifier
   eventTypeFilter String   @default("*")
   fieldMappings   Json?
-  isActive        Boolean @default(true)
+  isActive        Boolean  @default(true)
   maxRetries      Int      @default(3)
   retryIntervalMs Int      @default(5000)
   createdById     String
@@ -335,7 +336,7 @@ model AuditBridgeRule {
 
 /// Persisted log entries from audit bridge operations.
 model BridgeLogEntry {
-  id             String    @id @default(cuid())
+  id             String          @id @default(cuid())
   ruleId         String
   rule           AuditBridgeRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
   organizationId String
@@ -343,10 +344,10 @@ model BridgeLogEntry {
   source         String
   eventType      String
   targetLogId    String?
-  status         String    @default("pending")    // pending | success | failed | retrying
+  status         String          @default("pending") // pending | success | failed | retrying
   errorMessage   String?
-  retryCount     Int       @default(0)
-  createdAt      DateTime  @default(now())
+  retryCount     Int             @default(0)
+  createdAt      DateTime        @default(now())
   lastRetryAt    DateTime?
 
   @@index([ruleId, createdAt])
@@ -438,19 +439,19 @@ model OfficeAiFile {
 
 /// Workflow templates for Office AI advanced operations.
 model OfficeAiWorkflowTemplate {
-  id              String   @id @default(cuid())
-  organizationId  String
-  name            String
-  description     String?
-  workflowType    String   @default("document_review")
-  steps           Json?          /// Array of WorkflowTemplateStep objects
-  promptTemplate  String   @db.Text @default("")
-  outputFormat    String   @default("markdown") /// markdown | html | json | text
-  parameters      Json?
-  isActive        Boolean  @default(true)
-  createdById     String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  description    String?
+  workflowType   String   @default("document_review")
+  steps          Json? /// Array of WorkflowTemplateStep objects
+  promptTemplate String   @default("") @db.Text
+  outputFormat   String   @default("markdown") /// markdown | html | json | text
+  parameters     Json?
+  isActive       Boolean  @default(true)
+  createdById    String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   schedules OfficeAiSchedule[]
 
@@ -462,23 +463,23 @@ model OfficeAiWorkflowTemplate {
 
 /// Scheduled jobs for Office AI advanced operations.
 model OfficeAiSchedule {
-  id              String    @id @default(cuid())
-  organizationId  String
-  templateId      String?
-  template        OfficeAiWorkflowTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
-  name            String
-  cronExpression  String?
-  inputs          Json?
-  taskConfig      Json?
-  recurrence      String?
-  status          String    @default("active")     /// active | paused | completed | failed
-  isActive        Boolean   @default(true)
-  lastRunAt       DateTime?
-  lastRunStatus   String?
-  nextRunAt       DateTime?
-  createdById     String
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id             String                    @id @default(cuid())
+  organizationId String
+  templateId     String?
+  template       OfficeAiWorkflowTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  name           String
+  cronExpression String?
+  inputs         Json?
+  taskConfig     Json?
+  recurrence     String?
+  status         String                    @default("active") /// active | paused | completed | failed
+  isActive       Boolean                   @default(true)
+  lastRunAt      DateTime?
+  lastRunStatus  String?
+  nextRunAt      DateTime?
+  createdById    String
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
 
   @@index([organizationId])
   @@index([templateId])
@@ -488,18 +489,18 @@ model OfficeAiSchedule {
 
 /// Role-specific AI configurations for Office AI assistants.
 model OfficeAiRoleConfig {
-  id                   String   @id @default(cuid())
-  organizationId       String
-  roleSlug             String
-  maxTasksPerDay       Int      @default(10)
-  allowedTaskTypes     Json     @default("[]")
-  requireApproval      Boolean  @default(true)
-  autoAssignThreshold  Float    @default(0.8)
-  responseStyle        String   @default("formal")
-  confidenceThreshold  Float    @default(0.7)
-  createdById          String
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id                  String   @id @default(cuid())
+  organizationId      String
+  roleSlug            String
+  maxTasksPerDay      Int      @default(10)
+  allowedTaskTypes    Json     @default("[]")
+  requireApproval     Boolean  @default(true)
+  autoAssignThreshold Float    @default(0.8)
+  responseStyle       String   @default("formal")
+  confidenceThreshold Float    @default(0.7)
+  createdById         String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@unique([organizationId, roleSlug])
   @@index([organizationId])
@@ -519,8 +520,8 @@ model Organization {
   reports          DecisionReport[]
   createdAt        DateTime                   @default(now())
   updatedAt        DateTime                   @updatedAt
-  createdById String?
-  createdBy   User?   @relation("OrganizationCreator", fields: [createdById], references: [id])
+  createdById      String?
+  createdBy        User?                      @relation("OrganizationCreator", fields: [createdById], references: [id])
 
   platformOrganizationId String?
   platformOrganization   PlatformOrganization? @relation("OrgPlatformOrg", fields: [platformOrganizationId], references: [id])
@@ -529,30 +530,30 @@ model Organization {
   erpConnections         ErpConnection[]
   tenantIntegrations     TenantIntegration[]
 
-  abacPolicies             AbacPolicy[]
-  decisionEscalationRules  DecisionEscalationRule[]
+  abacPolicies            AbacPolicy[]
+  decisionEscalationRules DecisionEscalationRule[]
 
-  aiCrossProductSessions   AiCrossProductSession[]
+  aiCrossProductSessions AiCrossProductSession[]
 
-  aiModelRegistries        AiModelRegistry[]
-  clientProspects          ClientProspect[]
-  qualitySystemEvaluations QualitySystemEvaluation[]
-  independenceRegisters    IndependenceRegister[]
-  knowledgePatterns        KnowledgePattern[]
-  industryBenchmarks       IndustryBenchmark[]
-  engagementProfiles       EngagementProfile[]
-  samplingPlans            SamplingPlan[]
-  auditRiskModels          AuditRiskModel[]
-  auditRiskAssessments     AuditRiskAssessment[]
-  auditRiskProcedures      AuditRiskProcedure[]
-  tbMappingPatterns        TBMappingPattern[]
-  tbMappingFeedback        TBMappingFeedback[]
-  tbClassificationHistory  TBClassificationHistory[]
-  institutionalMemoryEvents       InstitutionalMemoryEvent[]
-  institutionalMemoryCollections  InstitutionalMemoryCollection[]
-  orgHierarchyNodes               OrgHierarchyNode[]
-  orgSettings                     OrgSetting[]
-  orgLifecycleEvents              OrgLifecycleEvent[]
+  aiModelRegistries              AiModelRegistry[]
+  clientProspects                ClientProspect[]
+  qualitySystemEvaluations       QualitySystemEvaluation[]
+  independenceRegisters          IndependenceRegister[]
+  knowledgePatterns              KnowledgePattern[]
+  industryBenchmarks             IndustryBenchmark[]
+  engagementProfiles             EngagementProfile[]
+  samplingPlans                  SamplingPlan[]
+  auditRiskModels                AuditRiskModel[]
+  auditRiskAssessments           AuditRiskAssessment[]
+  auditRiskProcedures            AuditRiskProcedure[]
+  tbMappingPatterns              TBMappingPattern[]
+  tbMappingFeedback              TBMappingFeedback[]
+  tbClassificationHistory        TBClassificationHistory[]
+  institutionalMemoryEvents      InstitutionalMemoryEvent[]
+  institutionalMemoryCollections InstitutionalMemoryCollection[]
+  orgHierarchyNodes              OrgHierarchyNode[]
+  orgSettings                    OrgSetting[]
+  orgLifecycleEvents             OrgLifecycleEvent[]
 
   @@index([createdAt])
   @@index([platformOrganizationId])
@@ -562,23 +563,23 @@ model Organization {
 
 /// Hierarchy nodes for organization structure trees.
 model OrgHierarchyNode {
-  id              String   @id @default(cuid())
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  parentOrgId     String?
-  parent          OrgHierarchyNode?  @relation("OrgHierarchyTree", fields: [parentOrgId], references: [id])
-  children        OrgHierarchyNode[] @relation("OrgHierarchyTree")
-  nodeType        String?           /// department | team | division | branch | unit
-  name            String?
-  code            String?
-  headUserId      String?
-  metadata        Json?
-  createdById     String
-  level           Int      @default(0)
-  sortOrder       Int      @default(0)
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String             @id @default(cuid())
+  organizationId String
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  parentOrgId    String?
+  parent         OrgHierarchyNode?  @relation("OrgHierarchyTree", fields: [parentOrgId], references: [id])
+  children       OrgHierarchyNode[] @relation("OrgHierarchyTree")
+  nodeType       String? /// department | team | division | branch | unit
+  name           String?
+  code           String?
+  headUserId     String?
+  metadata       Json?
+  createdById    String
+  level          Int                @default(0)
+  sortOrder      Int                @default(0)
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
 
   @@index([organizationId, parentOrgId])
   @@index([organizationId, isActive])
@@ -587,19 +588,19 @@ model OrgHierarchyNode {
 
 /// Organization-level key-value settings.
 model OrgSetting {
-  id              String   @id @default(cuid())
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  key             String
-  value           String   @db.Text
-  description     String?
-  valueType       String   @default("string")   /// string | number | boolean | json
-  isEncrypted     Boolean  @default(false)
-  isActive        Boolean  @default(true)
-  createdById     String
-  updatedById     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  key            String
+  value          String       @db.Text
+  description    String?
+  valueType      String       @default("string") /// string | number | boolean | json
+  isEncrypted    Boolean      @default(false)
+  isActive       Boolean      @default(true)
+  createdById    String
+  updatedById    String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@unique([organizationId, key])
   @@index([organizationId, isActive])
@@ -608,14 +609,14 @@ model OrgSetting {
 
 /// Organization lifecycle events.
 model OrgLifecycleEvent {
-  id              String   @id @default(cuid())
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  eventType       String        /// created | onboarded | activated | suspended | reactivated | archived | merged | restructured
-  description     String?
-  metadata        Json?
-  actorId         String?
-  createdAt       DateTime @default(now())
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  eventType      String /// created | onboarded | activated | suspended | reactivated | archived | merged | restructured
+  description    String?
+  metadata       Json?
+  actorId        String?
+  createdAt      DateTime     @default(now())
 
   @@index([organizationId, createdAt])
   @@index([organizationId, eventType])
@@ -623,43 +624,43 @@ model OrgLifecycleEvent {
 }
 
 model User {
-  id                       String            @id @default(cuid())
-  email                    String            @unique
-  name                     String
-  emailVerified            DateTime?
-  passwordHash             String?
-  image                    String?
-  mfaEnabled               Boolean           @default(false)
-  mfaSecret                String?
-  mfaBackupCodes           String?           // JSON array of SHA-256 hashed backup codes
-  role                     UserRole          @default(OPERATOR)
-  organizationId           String
-  organization             Organization      @relation(fields: [organizationId], references: [id])
-  ownedDecisions           Decision[]        @relation("DecisionOwner")
-  reviewedDecisions        Decision[]        @relation("DecisionReviewer")
-  approvedDecisions        Decision[]        @relation("DecisionApprover")
-  approvals                Approval[]        @relation("ApprovalApprover")
-  reviewedOutcomes         DecisionOutcome[] @relation("OutcomeReviewer")
-  auditLogs                AuditLog[]
-  publishedRecommendations Recommendation[]  @relation("RecommendationPublisher")
-  accounts                 Account[]
-  sessions                 Session[]
-  scimEvents               ScimProvisioningEvent[]  @relation("ScimEventPerformer")
-  reviewedImportBatches    ErpImportBatch[]       @relation("BatchReviewer")
-  approvedImportBatches    ErpImportBatch[]       @relation("BatchApprover")
-  institutionalMemoryEventsCreated       InstitutionalMemoryEvent[]         @relation("IMEventCreator")
-  institutionalMemoryCollectionsCreated  InstitutionalMemoryCollection[]    @relation("IMCollectionCreator")
-  institutionalMemoryCollectionsUpdated  InstitutionalMemoryCollection[]    @relation("IMCollectionUpdater")
-  createdKnowledgeCandidates             KnowledgeCandidate[]              @relation("KnowledgeCandidateCreator")
-  kfVersionsCreated                       KnowledgeFoundationVersion[]     @relation("KFVersionCreator")
-  kfVersionsApproved                      KnowledgeFoundationVersion[]     @relation("KFVersionApprover")
-  kfReleasesCreated                       KnowledgeFoundationRelease[]     @relation("KFReleaseCreator")
-  kfReleasesApproved                      KnowledgeFoundationRelease[]     @relation("KFReleaseApprover")
-  kfCandidateBindings                     KnowledgeFoundationVersionCandidate[] @relation("KFCandidateBinder")
-  createdOrganizations   Organization[]   @relation("OrganizationCreator")
-  createdSunbulClients   SunbulClient[]   @relation("SunbulClientCreator")
-  createdAt                DateTime          @default(now())
-  updatedAt                DateTime          @updatedAt
+  id                                    String                                @id @default(cuid())
+  email                                 String                                @unique
+  name                                  String
+  emailVerified                         DateTime?
+  passwordHash                          String?
+  image                                 String?
+  mfaEnabled                            Boolean                               @default(false)
+  mfaSecret                             String?
+  mfaBackupCodes                        String? // JSON array of SHA-256 hashed backup codes
+  role                                  UserRole                              @default(OPERATOR)
+  organizationId                        String
+  organization                          Organization                          @relation(fields: [organizationId], references: [id])
+  ownedDecisions                        Decision[]                            @relation("DecisionOwner")
+  reviewedDecisions                     Decision[]                            @relation("DecisionReviewer")
+  approvedDecisions                     Decision[]                            @relation("DecisionApprover")
+  approvals                             Approval[]                            @relation("ApprovalApprover")
+  reviewedOutcomes                      DecisionOutcome[]                     @relation("OutcomeReviewer")
+  auditLogs                             AuditLog[]
+  publishedRecommendations              Recommendation[]                      @relation("RecommendationPublisher")
+  accounts                              Account[]
+  sessions                              Session[]
+  scimEvents                            ScimProvisioningEvent[]               @relation("ScimEventPerformer")
+  reviewedImportBatches                 ErpImportBatch[]                      @relation("BatchReviewer")
+  approvedImportBatches                 ErpImportBatch[]                      @relation("BatchApprover")
+  institutionalMemoryEventsCreated      InstitutionalMemoryEvent[]            @relation("IMEventCreator")
+  institutionalMemoryCollectionsCreated InstitutionalMemoryCollection[]       @relation("IMCollectionCreator")
+  institutionalMemoryCollectionsUpdated InstitutionalMemoryCollection[]       @relation("IMCollectionUpdater")
+  createdKnowledgeCandidates            KnowledgeCandidate[]                  @relation("KnowledgeCandidateCreator")
+  kfVersionsCreated                     KnowledgeFoundationVersion[]          @relation("KFVersionCreator")
+  kfVersionsApproved                    KnowledgeFoundationVersion[]          @relation("KFVersionApprover")
+  kfReleasesCreated                     KnowledgeFoundationRelease[]          @relation("KFReleaseCreator")
+  kfReleasesApproved                    KnowledgeFoundationRelease[]          @relation("KFReleaseApprover")
+  kfCandidateBindings                   KnowledgeFoundationVersionCandidate[] @relation("KFCandidateBinder")
+  createdOrganizations                  Organization[]                        @relation("OrganizationCreator")
+  createdSunbulClients                  SunbulClient[]                        @relation("SunbulClientCreator")
+  createdAt                             DateTime                              @default(now())
+  updatedAt                             DateTime                              @updatedAt
 
   @@index([organizationId])
   @@index([role])
@@ -1179,19 +1180,19 @@ model DecisionReport {
 // ==================== Decision Evidence ====================
 
 model DecisionEvidence {
-  id             String    @id @default(cuid())
+  id             String   @id @default(cuid())
   decisionId     String
-  decision       Decision  @relation(fields: [decisionId], references: [id], onDelete: Cascade)
+  decision       Decision @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   organizationId String
   filename       String
   fileType       String
-  fileSize       Int       @default(0)
+  fileSize       Int      @default(0)
   fileHash       String?
   storageKey     String?
   uploadedById   String?
   description    String?
   metadata       Json?
-  createdAt      DateTime  @default(now())
+  createdAt      DateTime @default(now())
 
   @@index([decisionId])
   @@index([organizationId])
@@ -1275,7 +1276,7 @@ model AuditEngagement {
   client                 AuditClient                  @relation(fields: [clientId], references: [id])
   fiscalPeriod           String
   engagementType         String                       @default("full_audit")
-  status                 String         @default("draft")
+  status                 String                       @default("draft")
   team                   Json?
   alerts                 Json?
   governanceRules        Json?
@@ -1336,15 +1337,15 @@ model AuditPresentationPolicy {
 // ==================== AuditOS 2.0 Reporting Graph (Phase 2) ====================
 
 model ReportingGraph {
-  id           String         @id @default(cuid())
-  engagementId String         @unique
-  engagement   AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
-  version      Int            @default(1)
+  id           String                   @id @default(cuid())
+  engagementId String                   @unique
+  engagement   AuditEngagement          @relation(fields: [engagementId], references: [id], onDelete: Cascade)
+  version      Int                      @default(1)
   nodes        ReportingGraphNode[]
   edges        ReportingGraphEdge[]
   snapshots    ReportingGraphSnapshot[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
 
   @@index([engagementId])
 }
@@ -1404,7 +1405,7 @@ model AuditTrialBalance {
   importTimestamp DateTime                @default(now())
   sourceFile      String
   fileHash        String?
-  trustState      String @default("pending")
+  trustState      String                  @default("pending")
   totalDebits     Float                   @default(0)
   totalCredits    Float                   @default(0)
   variance        Float                   @default(0)
@@ -1430,19 +1431,19 @@ model AuditTrialBalanceLine {
 }
 
 model AuditCanonicalAccount {
-  id                 String                @id @default(cuid())
-  code               String                @unique
-  name               String
-  category           String
-  subcategory        String?
-  statementType      String
-  reportingFramework String                @default("ifrs_for_smes")
-  version            String                @default("1.0")
-  displayOrder       Int                   @default(0)
-  mappings           AuditAccountMapping[]
+  id                  String                @id @default(cuid())
+  code                String                @unique
+  name                String
+  category            String
+  subcategory         String?
+  statementType       String
+  reportingFramework  String                @default("ifrs_for_smes")
+  version             String                @default("1.0")
+  displayOrder        Int                   @default(0)
+  mappings            AuditAccountMapping[]
   knowledgeCandidates KnowledgeCandidate[]
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @updatedAt
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
 
   @@index([reportingFramework])
 }
@@ -1460,7 +1461,7 @@ model AuditAccountMapping {
   canonicalAccount        AuditCanonicalAccount? @relation(fields: [canonicalAccountId], references: [id])
   confidence              Float?
   mappingType             String                 @default("ai_suggested")
-  status                  String @default("pending")
+  status                  String                 @default("pending")
   statementClassification String?
   mappedBy                String?
   mappedAt                DateTime?
@@ -1476,7 +1477,7 @@ model AuditFinancialStatement {
   engagementId  String
   statementType String
   title         String
-  status        String @default("draft")
+  status        String   @default("draft")
   lines         Json?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -1494,7 +1495,7 @@ model AuditDisclosureNote {
   linkedStatementLine String?
   missingInformation  Json?
   aiDrafted           Boolean  @default(false)
-  status              String @default("draft")
+  status              String   @default("draft")
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
@@ -1502,21 +1503,21 @@ model AuditDisclosureNote {
 }
 
 model AuditEvidence {
-  id           String              @id @default(cuid())
+  id           String                 @id @default(cuid())
   engagementId String
-  engagement   AuditEngagement     @relation(fields: [engagementId], references: [id])
+  engagement   AuditEngagement        @relation(fields: [engagementId], references: [id])
   filename     String
   fileType     String
-  fileSize     Int                 @default(0)
+  fileSize     Int                    @default(0)
   fileHash     String?
   storageKey   String?
-  uploadedById   String?
+  uploadedById String?
   uploadedAt   DateTime?
-  state        String   @default("missing")
+  state        String                 @default("missing")
   links        AuditEvidenceLink[]
   versions     AuditEvidenceVersion[]
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
 
   @@index([engagementId])
 }
@@ -1536,15 +1537,15 @@ model AuditEvidenceLink {
 }
 
 model AuditEvidenceVersion {
-  id           String        @id @default(cuid())
-  evidenceId   String
-  evidence     AuditEvidence @relation(fields: [evidenceId], references: [id])
-  versionNumber Int
-  changes      Json          // snapshot of the evidence fields at this version
+  id                String        @id @default(cuid())
+  evidenceId        String
+  evidence          AuditEvidence @relation(fields: [evidenceId], references: [id])
+  versionNumber     Int
+  changes           Json // snapshot of the evidence fields at this version
   changeDescription String?
-  createdById  String?
-  createdByName String?
-  createdAt    DateTime      @default(now())
+  createdById       String?
+  createdByName     String?
+  createdAt         DateTime      @default(now())
 
   @@unique([evidenceId, versionNumber])
   @@index([evidenceId, createdAt])
@@ -1561,7 +1562,7 @@ model AuditFinding {
   description        String
   rootCause          String?
   impact             String?
-  status             String     @default("draft")
+  status             String                @default("draft")
   relatedAccountIds  Json?
   relatedEvidenceIds Json?
   aiSuggested        Boolean               @default(false)
@@ -1587,7 +1588,7 @@ model AuditRecommendation {
   recommendedAction String
   impactAssessment  String?
   riskLevel         String          @default("medium")
-  status            String @default("suggested")
+  status            String          @default("suggested")
   aiContributed     Boolean         @default(false)
   aiSuggestionId    String?
   reviewerDecision  String?
@@ -1609,7 +1610,7 @@ model AuditReviewComment {
   comment        String
   requiredAction String          @default("none")
   resolution     String?
-  status         String @default("open")
+  status         String          @default("open")
   createdAt      DateTime        @default(now())
   resolvedAt     DateTime?
 
@@ -1636,7 +1637,7 @@ model AuditPublicationPackage {
   id           String          @id @default(cuid())
   engagementId String
   engagement   AuditEngagement @relation(fields: [engagementId], references: [id])
-  status       String @default("draft")
+  status       String          @default("draft")
   publishedAt  DateTime?
   publishedBy  String?
   lockedAt     DateTime?
@@ -1676,7 +1677,7 @@ model AuditAiOutput {
   outputContent    String
   confidence       Float?
   modelVersion     String?
-  status           String @default("suggested")
+  status           String          @default("suggested")
   acceptedBy       String?
   acceptedAt       DateTime?
   rejectedBy       String?
@@ -1698,7 +1699,7 @@ model PilotFeedback {
   source       String
   category     String
   severity     String          @default("medium")
-  status       String @default("open")
+  status       String          @default("open")
   decision     String?
   owner        String?
   nextAction   String?
@@ -1733,7 +1734,7 @@ model PilotSignoff {
   engagementId  String
   engagement    AuditEngagement @relation(fields: [engagementId], references: [id])
   checklistItem String
-  status        String @default("pending")
+  status        String          @default("pending")
   signedBy      String?
   signedAt      DateTime?
   notes         String?
@@ -1749,7 +1750,7 @@ model AuditValidationRun {
   engagementId   String
   engagement     AuditEngagement        @relation(fields: [engagementId], references: [id])
   validationType String
-  status     String                 @default("completed") // completed | failed | running
+  status         String                 @default("completed") // completed | failed | running
   trustState     String                 @default("conditional")
   summary        String?
   issueCount     Int                    @default(0)
@@ -1775,7 +1776,7 @@ model AuditValidationIssue {
   engagement      AuditEngagement              @relation(fields: [engagementId], references: [id])
   checkType       String
   severity        String
-  status          String    @default("open")
+  status          String                       @default("open")
   title           String
   description     String
   message         String
@@ -1801,7 +1802,7 @@ model AuditValidationDisposition {
   engagement   AuditEngagement      @relation(fields: [engagementId], references: [id])
   action       String
   rationale    String?
-  disposedById   String
+  disposedById String
   disposedAt   DateTime             @default(now())
 
   @@index([issueId])
@@ -1861,10 +1862,10 @@ model SunbulClient {
   platformOrganizationId String?
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
-  createdById String?
-  createdBy   User?   @relation("SunbulClientCreator", fields: [createdById], references: [id])
+  createdById            String?
+  createdBy              User?    @relation("SunbulClientCreator", fields: [createdById], references: [id])
 
-  platformOrganization PlatformOrganization? @relation(fields: [platformOrganizationId], references: [id])
+  platformOrganization PlatformOrganization?  @relation(fields: [platformOrganizationId], references: [id])
   memberships          SunbulUserMembership[]
   records              SunbulRecord[]
   documents            SunbulDocument[]
@@ -2219,6 +2220,7 @@ model LocalContentAuditEvent {
   @@index([entityType, entityId])
   @@index([createdAt])
 }
+
 // ─── LocalContentOS Content Studio (governed workflow — separate from compliance LocalContent*) ───
 
 model ContentStudioProject {
@@ -2439,10 +2441,10 @@ model SalesAccount {
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 
-  deals          SalesDeal[]
-  evidenceLinks  SalesEvidenceLink[]
-  interactions   SalesInteraction[]
-  contacts       SalesContact[]
+  deals         SalesDeal[]
+  evidenceLinks SalesEvidenceLink[]
+  interactions  SalesInteraction[]
+  contacts      SalesContact[]
 
   @@index([organizationId, createdAt])
   @@index([platformOrganizationId, createdAt])
@@ -2456,7 +2458,7 @@ model SalesDeal {
   organizationId         String
   platformOrganizationId String?
   accountId              String
-  account                SalesAccount          @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  account                SalesAccount        @relation(fields: [accountId], references: [id], onDelete: Restrict)
   stageId                String?
   stage                  SalesPipelineStage? @relation(fields: [stageId], references: [id], onDelete: SetNull)
   name                   String?
@@ -2572,25 +2574,25 @@ model SalesContact {
 }
 
 model SalesProposal {
-  id                     String   @id @default(cuid())
+  id                     String          @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
   dealId                 String
-  deal                   SalesDeal @relation(fields: [dealId], references: [id], onDelete: Cascade)
-  version                Int      @default(1)
-  status                 String   @default("draft")
+  deal                   SalesDeal       @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  version                Int             @default(1)
+  status                 String          @default("draft")
   title                  String?
-  draft                  String   @default("")
-  pilotCriteria          String   @default("")
+  draft                  String          @default("")
+  pilotCriteria          String          @default("")
   evidenceRefs           Json?
-  exportReady            Boolean  @default(false)
+  exportReady            Boolean         @default(false)
   metadata               Json?
   createdById            String?
   updatedById            String?
   submittedAt            DateTime?
   decidedAt              DateTime?
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
   reviews                SalesReview[]
   approvals              SalesApproval[]
 
@@ -2600,24 +2602,24 @@ model SalesProposal {
 }
 
 model SalesReview {
-  id                     String   @id @default(cuid())
+  id                     String          @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
   reviewType             String
   targetType             String
   targetId               String
   dealId                 String?
-  deal                   SalesDeal? @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  deal                   SalesDeal?      @relation(fields: [dealId], references: [id], onDelete: SetNull)
   proposalId             String?
-  proposal               SalesProposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
-  status                 String   @default("pending")
+  proposal               SalesProposal?  @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+  status                 String          @default("pending")
   reason                 String
   stageSlug              String?
   reviewerId             String
   reviewerName           String?
   metadata               Json?
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
   approvals              SalesApproval[]
 
   @@index([organizationId, createdAt])
@@ -2628,23 +2630,23 @@ model SalesReview {
 }
 
 model SalesApproval {
-  id                     String   @id @default(cuid())
+  id                     String         @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
   reviewId               String
-  review                 SalesReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  review                 SalesReview    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   proposalId             String?
   proposal               SalesProposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
   dealId                 String?
-  deal                   SalesDeal? @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  deal                   SalesDeal?     @relation(fields: [dealId], references: [id], onDelete: SetNull)
   kind                   String
-  status                 String   @default("approved")
+  status                 String         @default("approved")
   approverId             String
   approverName           String?
   note                   String?
   expiresAt              DateTime?
   metadata               Json?
-  createdAt              DateTime @default(now())
+  createdAt              DateTime       @default(now())
 
   @@index([organizationId, createdAt])
   @@index([reviewId])
@@ -2680,7 +2682,7 @@ model SalesAuditEvent {
 // Similarity search requires pgvector; without it, use application-level filtering.
 
 model DocumentChunk {
-  id             String                      @id @default(cuid())
+  id             String                       @id @default(cuid())
   organizationId String
   documentId     String
   chunkIndex     Int
@@ -2688,9 +2690,9 @@ model DocumentChunk {
   tokenCount     Int?
   metadata       Json?
   embedding      Unsupported("vector(1536)")?
-  embeddingJson  Json?                       @map("embedding_json")
+  embeddingJson  Json?                        @map("embedding_json")
   createdBy      String?
-  createdAt      DateTime                    @default(now())
+  createdAt      DateTime                     @default(now())
 
   @@index([organizationId, documentId])
   @@index([organizationId, chunkIndex])
@@ -2721,18 +2723,18 @@ model AgentMemory {
 // ─── WorkflowOS ─────────────────────────────────────────────────────────
 
 model WorkflowTemplate {
-  id                     String        @id @default(cuid())
+  id                     String   @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
   name                   String
   description            String?
-  category               String        @default("general") // general | approval | review | inspection | custom
-  status                 String        @default("active")
-  steps                  Json          @default("[]") // Array of workflow step definitions
+  category               String   @default("general") // general | approval | review | inspection | custom
+  status                 String   @default("active")
+  steps                  Json     @default("[]") // Array of workflow step definitions
   metadata               Json?
   createdById            String?
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
   records WorkflowRecord[]
 
@@ -2763,16 +2765,16 @@ model WorkflowRecord {
   updatedAt              DateTime         @updatedAt
 
   // Export approval fields (L5)
-  exportStatus           String           @default("none") // none | requested | approved | rejected
-  exportRequestedAt      DateTime?
-  exportRequestedById    String?
-  exportApprovedAt       DateTime?
-  exportApprovedById     String?
-  exportRejectedReason   String?
+  exportStatus         String    @default("none") // none | requested | approved | rejected
+  exportRequestedAt    DateTime?
+  exportRequestedById  String?
+  exportApprovedAt     DateTime?
+  exportApprovedById   String?
+  exportRejectedReason String?
 
   // Escalation fields (L5)
-  escalatedAt            DateTime?
-  escalatedToId          String?
+  escalatedAt   DateTime?
+  escalatedToId String?
 
   @@index([organizationId, status, createdAt])
   @@index([organizationId, templateId, createdAt])
@@ -2784,7 +2786,7 @@ model WorkflowRecord {
 // ─── LocalContactOS ─────────────────────────────────────────────────────
 
 model LocalContact {
-  id                     String             @id @default(cuid())
+  id                     String   @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
   name                   String
@@ -2792,23 +2794,23 @@ model LocalContact {
   phone                  String?
   position               String?
   department             String?
-  organizationName       String?            // External org this contact belongs to
-  sensitivityLevel       String             @default("normal") // normal | sensitive | confidential
-  exportStatus           String             @default("none") // none | requested | approved | rejected | exported
+  organizationName       String? // External org this contact belongs to
+  sensitivityLevel       String   @default("normal") // normal | sensitive | confidential
+  exportStatus           String   @default("none") // none | requested | approved | rejected | exported
   notes                  String?
-  tags                   Json               @default("[]")
-  isActive               Boolean            @default(true)
+  tags                   Json     @default("[]")
+  isActive               Boolean  @default(true)
   metadata               Json?
   createdById            String?
-  createdAt              DateTime           @default(now())
-  updatedAt              DateTime           @updatedAt
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
-  outgoingRelations  LocalContactRelation[] @relation("ContactOutgoing")
-  incomingRelations  LocalContactRelation[] @relation("ContactIncoming")
-  interactions       LocalContactInteraction[]
-  evidence           ContactEvidence[]
-  reviews            ContactReview[]
-  exportRequests     ContactExportRequest[]
+  outgoingRelations LocalContactRelation[]    @relation("ContactOutgoing")
+  incomingRelations LocalContactRelation[]    @relation("ContactIncoming")
+  interactions      LocalContactInteraction[]
+  evidence          ContactEvidence[]
+  reviews           ContactReview[]
+  exportRequests    ContactExportRequest[]
 
   @@index([organizationId, name, createdAt])
   @@index([organizationId, sensitivityLevel])
@@ -2826,7 +2828,7 @@ model LocalContactRelation {
   sourceContact          LocalContact @relation("ContactOutgoing", fields: [sourceContactId], references: [id], onDelete: Cascade)
   targetContactId        String
   targetContact          LocalContact @relation("ContactIncoming", fields: [targetContactId], references: [id], onDelete: Cascade)
-  relationType           String       // colleague | manager | subordinate | partner | client | vendor | board_member | investor | other
+  relationType           String // colleague | manager | subordinate | partner | client | vendor | board_member | investor | other
   description            String?
   strength               Int          @default(5) // 1-10
   isActive               Boolean      @default(true)
@@ -2846,11 +2848,11 @@ model LocalContactInteraction {
   platformOrganizationId String?
   contactId              String
   contact                LocalContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  interactionType        String       // meeting | call | email | message | note | other
+  interactionType        String // meeting | call | email | message | note | other
   subject                String?
   summary                String?
   occurredAt             DateTime
-  duration               Int?         // minutes
+  duration               Int? // minutes
   metadata               Json?
   createdById            String?
   createdAt              DateTime     @default(now())
@@ -2870,7 +2872,7 @@ model WorkflowAuditEvent {
   recordId               String
   actorId                String
   actorName              String?
-  action                 String   // created | advanced | completed | rejected | cancelled | assigned | updated
+  action                 String // created | advanced | completed | rejected | cancelled | assigned | updated
   fromStatus             String?
   toStatus               String?
   comment                String?
@@ -2926,23 +2928,23 @@ model ContactEvidence {
 }
 
 model ContactReview {
-  id                     String           @id @default(cuid())
+  id                     String       @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
   contactId              String
-  contact                LocalContact     @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  reviewType             String           @default("sensitivity") // sensitivity | accuracy | completeness | custom
-  status                 String           @default("pending") // pending | approved | changes_requested | rejected
+  contact                LocalContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  reviewType             String       @default("sensitivity") // sensitivity | accuracy | completeness | custom
+  status                 String       @default("pending") // pending | approved | changes_requested | rejected
   reviewerId             String
   reviewerName           String?
   reason                 String?
-  findings               Json?            @default("[]")
+  findings               Json?        @default("[]")
   reviewerNotes          String?
   reviewDueDate          DateTime?
   completedAt            DateTime?
   metadata               Json?
-  createdAt              DateTime         @default(now())
-  updatedAt              DateTime         @updatedAt
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
 
   approvals ContactApproval[]
 
@@ -2952,17 +2954,17 @@ model ContactReview {
 }
 
 model ContactApproval {
-  id                     String         @id @default(cuid())
+  id                     String        @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
   reviewId               String
-  review                 ContactReview   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  review                 ContactReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   approverId             String
   approverName           String?
-  status                 String         @default("approved") // approved | rejected
+  status                 String        @default("approved") // approved | rejected
   note                   String?
   metadata               Json?
-  createdAt              DateTime       @default(now())
+  createdAt              DateTime      @default(now())
 
   @@index([organizationId, reviewId])
   @@index([approverId])
@@ -2971,12 +2973,12 @@ model ContactApproval {
 // ─── LocalContactOS L5: Export + Compliance ──────────────────────────────
 
 model ContactExportRequest {
-  id                     String        @id @default(cuid())
+  id                     String       @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
   contactId              String
-  contact                LocalContact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  status                 String        @default("pending") // pending | approved | rejected
+  contact                LocalContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  status                 String       @default("pending") // pending | approved | rejected
   requestedById          String
   requestedByName        String?
   reason                 String?
@@ -2984,18 +2986,17 @@ model ContactExportRequest {
   reviewedByName         String?
   reviewNote             String?
   reviewedAt             DateTime?
-  requiresLegalReview    Boolean       @default(false)
-  legalReviewStatus      String?       // not_required | pending | cleared | blocked
+  requiresLegalReview    Boolean      @default(false)
+  legalReviewStatus      String? // not_required | pending | cleared | blocked
   exportedAt             DateTime?
   metadata               Json?
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
 
   @@index([organizationId, contactId, createdAt])
   @@index([organizationId, status, createdAt])
   @@index([organizationId, requiresLegalReview])
 }
-
 
 // ─── Institutional Memory — Cross-Product Links ────────────────────
 
@@ -3003,25 +3004,25 @@ model ContactExportRequest {
 /// This is the core of Institutional Memory — it bridges DecisionOS, SalesOS, AuditOS,
 /// WorkflowOS, LocalContactOS, and any other product without circular dependencies.
 model InstitutionalMemoryEvent {
-  id              String   @id @default(cuid())
-  organizationId  String
-  sourceProduct   String   /// e.g. "sales", "decisions", "audit", "workflow", "contacts"
-  sourceEntityId  String
-  sourceEntityType String  /// e.g. "Account", "Decision", "AuditEngagement"
-  targetProduct   String
-  targetEntityId  String
+  id               String  @id @default(cuid())
+  organizationId   String
+  sourceProduct    String /// e.g. "sales", "decisions", "audit", "workflow", "contacts"
+  sourceEntityId   String
+  sourceEntityType String /// e.g. "Account", "Decision", "AuditEngagement"
+  targetProduct    String
+  targetEntityId   String
   targetEntityType String
-  eventType       String   /// e.g. "linked", "referenced", "generated_by", "approved_by", "related_to"
-  description     String   @default("")
-  nodeId          String?  /// Optional link to IntelligenceGraphNode
-  action          String   @default("") /// Action performed (e.g. "created", "linked", "archived")
-  performedBy     String?  /// Who performed the action (plain string name/reference)
-  metadata        Json     @default("{}")
-  confidence      Float    @default(1.0)
+  eventType        String /// e.g. "linked", "referenced", "generated_by", "approved_by", "related_to"
+  description      String  @default("")
+  nodeId           String? /// Optional link to IntelligenceGraphNode
+  action           String  @default("") /// Action performed (e.g. "created", "linked", "archived")
+  performedBy      String? /// Who performed the action (plain string name/reference)
+  metadata         Json    @default("{}")
+  confidence       Float   @default(1.0)
 
-  createdById     String
-  createdBy       User     @relation("IMEventCreator", fields: [createdById], references: [id])
-  organization    Organization @relation(fields: [organizationId], references: [id])
+  createdById  String
+  createdBy    User         @relation("IMEventCreator", fields: [createdById], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -3035,21 +3036,21 @@ model InstitutionalMemoryEvent {
 
 /// A saved collection/folder of InstitutionalMemoryEvent links for a specific purpose.
 model InstitutionalMemoryCollection {
-  id              String   @id @default(cuid())
-  organizationId  String
-  name            String
-  description     String   @default("")
-  icon            String?  /// Icon identifier for the collection
-  color           String?  /// Display color hex code
-  isActive        Boolean  @default(true)
-  filterCriteria  Json     @default("{}")  /// Saved query filters for dynamic collection
+  id             String  @id @default(cuid())
+  organizationId String
+  name           String
+  description    String  @default("")
+  icon           String? /// Icon identifier for the collection
+  color          String? /// Display color hex code
+  isActive       Boolean @default(true)
+  filterCriteria Json    @default("{}") /// Saved query filters for dynamic collection
 
-  createdById     String?
-  createdBy       User?    @relation("IMCollectionCreator", fields: [createdById], references: [id])
-  updatedById     String?
-  updatedBy       User?    @relation("IMCollectionUpdater", fields: [updatedById], references: [id])
+  createdById String?
+  createdBy   User?   @relation("IMCollectionCreator", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   User?   @relation("IMCollectionUpdater", fields: [updatedById], references: [id])
 
-  organization    Organization @relation(fields: [organizationId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -3058,19 +3059,20 @@ model InstitutionalMemoryCollection {
   @@index([organizationId, createdById])
   @@map("institutional_memory_collections")
 }
+
 // ==================== Intelligence Core — Institutional Memory (IC-01/AGENT-5) ====================
 
 model IntelligenceGraphNode {
-  id             String   @id @default(cuid())
+  id             String                       @id @default(cuid())
   organizationId String
   name           String
-  type           String   // entity | concept | insight | document | topic
+  type           String // entity | concept | insight | document | topic
   metadata       Json?
   embedding      Unsupported("vector(1536)")?
-  embeddingJson  Json?    @map("embedding_json")
+  embeddingJson  Json?                        @map("embedding_json")
   createdById    String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime                     @default(now())
+  updatedAt      DateTime                     @updatedAt
 
   outgoingEdges IntelligenceGraphEdge[] @relation("IntelligenceGraphNode_outgoing")
   incomingEdges IntelligenceGraphEdge[] @relation("IntelligenceGraphNode_incoming")
@@ -3086,7 +3088,7 @@ model IntelligenceGraphEdge {
   source         IntelligenceGraphNode @relation("IntelligenceGraphNode_outgoing", fields: [sourceId], references: [id], onDelete: Cascade)
   targetId       String
   target         IntelligenceGraphNode @relation("IntelligenceGraphNode_incoming", fields: [targetId], references: [id], onDelete: Cascade)
-  relationType   String                // related_to | derives_from | evidence_for | contradicts | supports | references
+  relationType   String // related_to | derives_from | evidence_for | contradicts | supports | references
   weight         Float                 @default(1.0)
   metadata       Json?
   createdById    String?
@@ -3104,9 +3106,9 @@ model CoreEvidence {
   id                     String   @id @default(cuid())
   organizationId         String
   platformOrganizationId String?
-  productSlug            String   // audit | local_content | contact | workflow | sales
+  productSlug            String // audit | local_content | contact | workflow | sales
   productEvidenceId      String
-  resourceType           String   // AuditEngagement | LocalContentProject | ...
+  resourceType           String // AuditEngagement | LocalContentProject | ...
   resourceId             String
   filename               String
   fileType               String
@@ -3122,8 +3124,8 @@ model CoreEvidence {
   updatedAt              DateTime @updatedAt
 
   links             EvidenceLink[]
-  relationsAsSource EvidenceRelation[] @relation("EvidenceRelation_source")
-  relationsAsTarget EvidenceRelation[] @relation("EvidenceRelation_target")
+  relationsAsSource EvidenceRelation[]  @relation("EvidenceRelation_source")
+  relationsAsTarget EvidenceRelation[]  @relation("EvidenceRelation_target")
   lifecycleEvents   EvidenceLifecycle[]
 
   @@unique([productSlug, productEvidenceId])
@@ -3157,7 +3159,7 @@ model EvidenceRelation {
   sourceEvidence   CoreEvidence @relation("EvidenceRelation_source", fields: [sourceEvidenceId], references: [id], onDelete: Cascade)
   targetEvidenceId String
   targetEvidence   CoreEvidence @relation("EvidenceRelation_target", fields: [targetEvidenceId], references: [id], onDelete: Cascade)
-  relationType     String       // derives_from | supersedes | duplicates | related_to | lineage
+  relationType     String // derives_from | supersedes | duplicates | related_to | lineage
   metadata         Json?
   createdById      String?
   createdAt        DateTime     @default(now())
@@ -3185,10 +3187,10 @@ model IntelligenceQuery {
   id             String   @id @default(cuid())
   organizationId String
   query          String
-  results        Json?    // array of {chunkId, documentId, similarity, contentPreview}
+  results        Json? // array of {chunkId, documentId, similarity, contentPreview}
   resultCount    Int?     @default(0)
   userId         String?
-  metadata       Json?    // includes provider, model, latency
+  metadata       Json? // includes provider, model, latency
   createdAt      DateTime @default(now())
 
   @@index([organizationId, createdAt])
@@ -3196,16 +3198,16 @@ model IntelligenceQuery {
 }
 
 model IngestionBatch {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   organizationId String
-  status         String   @default("pending") // pending | processing | completed | failed | partial
-  source         String?  // manual_upload | api | webhook | integration
-  totalDocuments Int      @default(0)
-  processedCount Int      @default(0)
-  failedCount    Int      @default(0)
+  status         String    @default("pending") // pending | processing | completed | failed | partial
+  source         String? // manual_upload | api | webhook | integration
+  totalDocuments Int       @default(0)
+  processedCount Int       @default(0)
+  failedCount    Int       @default(0)
   metadata       Json?
   createdById    String?
-  createdAt      DateTime @default(now())
+  createdAt      DateTime  @default(now())
   completedAt    DateTime?
   errorMessage   String?
 
@@ -3215,20 +3217,20 @@ model IngestionBatch {
 }
 
 model IngestionDocument {
-  id             String          @id @default(cuid())
+  id             String         @id @default(cuid())
   organizationId String
   batchId        String
-  batch          IngestionBatch  @relation(fields: [batchId], references: [id], onDelete: Cascade)
-  documentId     String          // reference to external document/system ID
+  batch          IngestionBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  documentId     String // reference to external document/system ID
   title          String?
-  sourceType     String?         // pdf | csv | text | api | email | etc
-  status         String          @default("pending") // pending | processing | chunked | embedded | completed | failed
-  contentHash    String?         // for deduplication
-  totalChunks    Int             @default(0)
-  tokenCount     Int?            @default(0)
+  sourceType     String? // pdf | csv | text | api | email | etc
+  status         String         @default("pending") // pending | processing | chunked | embedded | completed | failed
+  contentHash    String? // for deduplication
+  totalChunks    Int            @default(0)
+  tokenCount     Int?           @default(0)
   metadata       Json?
   createdById    String?
-  createdAt      DateTime        @default(now())
+  createdAt      DateTime       @default(now())
   completedAt    DateTime?
   errorMessage   String?
 
@@ -3241,8 +3243,8 @@ model IngestionDocument {
 model Account {
   id                String  @id @default(cuid())
   userId            String
-  type              String  // oauth | saml | oidc
-  provider          String  // google | github | azure-ad | okta | saml | custom-oidc
+  type              String // oauth | saml | oidc
+  provider          String // google | github | azure-ad | okta | saml | custom-oidc
   providerAccountId String
   refresh_token     String?
   access_token      String?
@@ -3279,27 +3281,27 @@ model VerificationToken {
 // ==================== SSO Provider Config (L0-05) ====================
 
 model SsoProvider {
-  id                    String   @id @default(cuid())
-  organizationId        String
-  providerType          String   // oidc | saml | google | github | azure-ad | okta
-  label                 String   // display name e.g. "Company Okta"
-  issuerUrl             String?  // OIDC issuer URL
-  authorizationUrl      String?  // OIDC auth endpoint
-  tokenUrl              String?  // OIDC token endpoint
-  userInfoUrl           String?  // OIDC userinfo endpoint
-  jwksUri               String?  // OIDC JWKS URI
-  clientId              String?  // encrypted at rest via PlatformSecret
-  clientSecret          String?  // encrypted at rest via PlatformSecret
-  samlEntryPoint        String?  // SAML IdP SSO URL
-  samlIssuer            String?  // SAML entity ID
-  samlCert              String?  // SAML x509 cert
-  attributeMapping      Json?    // {email, name, role} field mapping
-  domains               Json?    // allowed email domains ["@company.com"]
-  enabled               Boolean  @default(true)
-  metadata              Json?
-  createdById           String?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id               String   @id @default(cuid())
+  organizationId   String
+  providerType     String // oidc | saml | google | github | azure-ad | okta
+  label            String // display name e.g. "Company Okta"
+  issuerUrl        String? // OIDC issuer URL
+  authorizationUrl String? // OIDC auth endpoint
+  tokenUrl         String? // OIDC token endpoint
+  userInfoUrl      String? // OIDC userinfo endpoint
+  jwksUri          String? // OIDC JWKS URI
+  clientId         String? // encrypted at rest via PlatformSecret
+  clientSecret     String? // encrypted at rest via PlatformSecret
+  samlEntryPoint   String? // SAML IdP SSO URL
+  samlIssuer       String? // SAML entity ID
+  samlCert         String? // SAML x509 cert
+  attributeMapping Json? // {email, name, role} field mapping
+  domains          Json? // allowed email domains ["@company.com"]
+  enabled          Boolean  @default(true)
+  metadata         Json?
+  createdById      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id])
 
@@ -3310,21 +3312,21 @@ model SsoProvider {
 // ==================== SCIM Provisioning (L0-06) ====================
 
 model ScimProvisioningEvent {
-  id              String   @id @default(cuid())
-  organizationId  String
-  direction       String   // inbound | outbound
-  resourceType    String   // User | Group
-  operation       String   // POST | PUT | PATCH | DELETE
-  externalId      String?  // SCIM external ID
-  localId         String?  // local User/Group ID
-  requestBody     Json?
-  responseStatus  Int?
-  responseBody    Json?
-  success         Boolean  @default(true)
-  errorMessage    String?
-  performedById   String?
-  createdBy       User?    @relation("ScimEventPerformer", fields: [performedById], references: [id])
-  createdAt       DateTime @default(now())
+  id             String   @id @default(cuid())
+  organizationId String
+  direction      String // inbound | outbound
+  resourceType   String // User | Group
+  operation      String // POST | PUT | PATCH | DELETE
+  externalId     String? // SCIM external ID
+  localId        String? // local User/Group ID
+  requestBody    Json?
+  responseStatus Int?
+  responseBody   Json?
+  success        Boolean  @default(true)
+  errorMessage   String?
+  performedById  String?
+  createdBy      User?    @relation("ScimEventPerformer", fields: [performedById], references: [id])
+  createdAt      DateTime @default(now())
 
   @@index([organizationId, createdAt])
   @@index([organizationId, resourceType, operation])
@@ -3333,7 +3335,7 @@ model ScimProvisioningEvent {
 // ==================== CRM Integration (S7-03) — schema only; not in L0-05 migration ====================
 
 model CrmConnection {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   organizationId  String
   provider        String
   label           String
@@ -3342,18 +3344,18 @@ model CrmConnection {
   refreshToken    String?
   tokenExpiresAt  DateTime?
   apiKey          String?
-  apiVersion      String?  @default("v1")
-  syncEnabled     Boolean  @default(false)
-  syncIntervalMin Int?     @default(60)
+  apiVersion      String?   @default("v1")
+  syncEnabled     Boolean   @default(false)
+  syncIntervalMin Int?      @default(60)
   lastSyncAt      DateTime?
   lastSyncStatus  String?
   lastSyncError   String?
   fieldMapping    Json?
-  conflictPolicy  String?  @default("crm_wins")
+  conflictPolicy  String?   @default("crm_wins")
   metadata        Json?
   createdById     String?
-  updatedAt       DateTime @updatedAt
-  createdAt       DateTime @default(now())
+  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime  @default(now())
 
   organization Organization @relation(fields: [organizationId], references: [id])
   syncLogs     CrmSyncLog[]
@@ -3363,20 +3365,20 @@ model CrmConnection {
 }
 
 model CrmSyncLog {
-  id             String   @id @default(cuid())
+  id             String        @id @default(cuid())
   connectionId   String
   connection     CrmConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   organizationId String
   resourceType   String
   direction      String
   status         String
-  totalRecords   Int      @default(0)
-  createdRecords Int      @default(0)
-  updatedRecords Int      @default(0)
-  failedRecords  Int      @default(0)
-  skippedRecords Int      @default(0)
+  totalRecords   Int           @default(0)
+  createdRecords Int           @default(0)
+  updatedRecords Int           @default(0)
+  failedRecords  Int           @default(0)
+  skippedRecords Int           @default(0)
   errorDetails   Json?
-  createdAt      DateTime @default(now())
+  createdAt      DateTime      @default(now())
   completedAt    DateTime?
 
   @@index([connectionId, createdAt])
@@ -3386,80 +3388,80 @@ model CrmSyncLog {
 // ==================== ERP Integration (LC-08) — schema only; not in L0-05 migration ====================
 
 model ErpConnection {
-  id                String   @id @default(cuid())
-  organizationId    String
-  provider          String
-  label             String
-  connectionType    String   @default("api")
-  apiEndpoint       String?
-  apiKey            String?
-  apiSecret         String?
-  sftpHost          String?
-  sftpPort          Int?
-  sftpUsername      String?
-  sftpKey           String?
-  syncEnabled       Boolean  @default(false)
-  syncIntervalMin   Int?     @default(1440)
-  lastSyncAt        DateTime?
-  lastSyncStatus    String?
-  fieldMapping      Json?
-  sourceSystem      String?
-  defaultCurrency   String?  @default("SAR")
-  metadata          Json?
-  createdById       String?
-  updatedAt         DateTime @updatedAt
-  createdAt         DateTime @default(now())
+  id              String    @id @default(cuid())
+  organizationId  String
+  provider        String
+  label           String
+  connectionType  String    @default("api")
+  apiEndpoint     String?
+  apiKey          String?
+  apiSecret       String?
+  sftpHost        String?
+  sftpPort        Int?
+  sftpUsername    String?
+  sftpKey         String?
+  syncEnabled     Boolean   @default(false)
+  syncIntervalMin Int?      @default(1440)
+  lastSyncAt      DateTime?
+  lastSyncStatus  String?
+  fieldMapping    Json?
+  sourceSystem    String?
+  defaultCurrency String?   @default("SAR")
+  metadata        Json?
+  createdById     String?
+  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime  @default(now())
 
-  organization Organization    @relation(fields: [organizationId], references: [id])
-  syncLogs     ErpSyncLog[]
+  organization  Organization     @relation(fields: [organizationId], references: [id])
+  syncLogs      ErpSyncLog[]
   importBatches ErpImportBatch[]
 
   @@index([organizationId, provider])
 }
 
 model ErpSyncLog {
-  id             String   @id @default(cuid())
-  connectionId   String
-  connection     ErpConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
-  organizationId String
-  direction      String   @default("import")
-  status         String
-  totalRecords   Int      @default(0)
-  importedRecords Int     @default(0)
-  failedRecords  Int      @default(0)
-  skippedRecords Int      @default(0)
-  sourceFile     String?
-  fileHash       String?
-  errorDetails   Json?
-  createdAt      DateTime @default(now())
-  completedAt    DateTime?
+  id              String        @id @default(cuid())
+  connectionId    String
+  connection      ErpConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  organizationId  String
+  direction       String        @default("import")
+  status          String
+  totalRecords    Int           @default(0)
+  importedRecords Int           @default(0)
+  failedRecords   Int           @default(0)
+  skippedRecords  Int           @default(0)
+  sourceFile      String?
+  fileHash        String?
+  errorDetails    Json?
+  createdAt       DateTime      @default(now())
+  completedAt     DateTime?
 
   @@index([connectionId, createdAt])
   @@index([organizationId, status, createdAt])
 }
 
 model ErpImportBatch {
-  id             String   @id @default(cuid())
+  id             String        @id @default(cuid())
   connectionId   String
   connection     ErpConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   organizationId String
   status         String
   sourceType     String
-  totalLines     Int      @default(0)
-  validLines     Int      @default(0)
-  errorLines     Int      @default(0)
+  totalLines     Int           @default(0)
+  validLines     Int           @default(0)
+  errorLines     Int           @default(0)
   fileHash       String?
   originalFile   String?
   reviewNotes    String?
   reviewedById   String?
-  reviewedBy     User?    @relation("BatchReviewer", fields: [reviewedById], references: [id])
+  reviewedBy     User?         @relation("BatchReviewer", fields: [reviewedById], references: [id])
   reviewedAt     DateTime?
   approvedById   String?
-  approvedBy     User?    @relation("BatchApprover", fields: [approvedById], references: [id])
+  approvedBy     User?         @relation("BatchApprover", fields: [approvedById], references: [id])
   approvedAt     DateTime?
   metadata       Json?
   createdById    String?
-  createdAt      DateTime @default(now())
+  createdAt      DateTime      @default(now())
 
   @@index([connectionId, status, createdAt])
   @@index([organizationId, status])
@@ -3468,9 +3470,9 @@ model ErpImportBatch {
 // ==================== RBAC — Roles & Permissions ====================
 
 model Permission {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   name        String
-  slug        String   @unique
+  slug        String  @unique
   group       String
   description String?
 
@@ -3483,10 +3485,10 @@ model Permission {
 }
 
 model Role {
-  id          String   @id @default(cuid())
-  slug        String   @unique
+  id          String  @id @default(cuid())
+  slug        String  @unique
   name        String
-  type        String   @default("SYSTEM")
+  type        String  @default("SYSTEM")
   description String?
 
   permissions RolePermission[]
@@ -3514,16 +3516,16 @@ model RolePermission {
 }
 
 model UserRoleAssignment {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   userId         String
   roleId         String
   organizationId String
   grantedById    String?
   reason         String?
-  isActive       Boolean  @default(true)
+  isActive       Boolean   @default(true)
   revokedAt      DateTime?
   revokedById    String?
-  role           Role     @relation(fields: [roleId], references: [id])
+  role           Role      @relation(fields: [roleId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -3536,18 +3538,18 @@ model UserRoleAssignment {
 // ==================== Separation of Duties ====================
 
 model SeparationOfDutyRule {
-  id             String   @id @default(cuid())
+  id             String        @id @default(cuid())
   organizationId String
   description    String?
   roleAId        String
   roleBId        String
   conflictLevel  ConflictLevel @default(HARD)
-  isActive       Boolean  @default(true)
+  isActive       Boolean       @default(true)
   createdById    String?
 
   // Relations
-  roleA     Role         @relation("SoDRuleRoleA", fields: [roleAId], references: [id])
-  roleB     Role         @relation("SoDRuleRoleB", fields: [roleBId], references: [id])
+  roleA     Role          @relation("SoDRuleRoleA", fields: [roleAId], references: [id])
+  roleB     Role          @relation("SoDRuleRoleB", fields: [roleBId], references: [id])
   conflicts SoDConflict[]
 
   createdAt DateTime @default(now())
@@ -3560,14 +3562,14 @@ model SeparationOfDutyRule {
 }
 
 model SoDConflict {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   ruleId         String
   userId         String
   organizationId String
   roleAId        String?
   roleBId        String?
   description    String?
-  detectedAt     DateTime @default(now())
+  detectedAt     DateTime  @default(now())
   resolvedAt     DateTime?
   resolution     String?
   resolvedById   String?
@@ -3586,26 +3588,26 @@ model SoDConflict {
 // ==================== Vault / Secrets Management ====================
 
 model VaultEntry {
-  id                String   @id @default(cuid())
-  key               String
-  displayName       String?
-  encryptedValue    String
-  keyIdentifier     String
-  description       String?
-  category          String   @default("general")
-  environment       String?
-  status            String   @default("ACTIVE")
-  version           Int      @default(1)
-  lastRotatedAt     DateTime?
-  lastAccessedAt    DateTime?
-  accessCount       Int      @default(0)
-  rotationPeriodDays Int     @default(90)
-  expiresAt         DateTime?
-  metadata          Json?
-  previousVersionId String?
-  createdById       String?
-  organizationId    String?
-  deletedAt         DateTime?
+  id                 String    @id @default(cuid())
+  key                String
+  displayName        String?
+  encryptedValue     String
+  keyIdentifier      String
+  description        String?
+  category           String    @default("general")
+  environment        String?
+  status             String    @default("ACTIVE")
+  version            Int       @default(1)
+  lastRotatedAt      DateTime?
+  lastAccessedAt     DateTime?
+  accessCount        Int       @default(0)
+  rotationPeriodDays Int       @default(90)
+  expiresAt          DateTime?
+  metadata           Json?
+  previousVersionId  String?
+  createdById        String?
+  organizationId     String?
+  deletedAt          DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -3618,11 +3620,11 @@ model VaultEntry {
 // ==================== Encryption Key Management ====================
 
 model EncryptionKey {
-  id          String   @id @default(cuid())
-  keyId       String   @unique
+  id          String    @id @default(cuid())
+  keyId       String    @unique
   algorithm   String
   keyHash     String
-  status      String   @default("active")
+  status      String    @default("active")
   description String?
   createdBy   String?
   retiredAt   DateTime?
@@ -3636,8 +3638,8 @@ model EncryptionKey {
 // ==================== Download Ticket Gate ====================
 
 model DownloadTicket {
-  id              String   @id @default(cuid())
-  token           String   @unique @default(cuid())
+  id              String    @id @default(cuid())
+  token           String    @unique @default(cuid())
   resourceType    String
   resourceId      String
   fileName        String
@@ -3666,12 +3668,12 @@ model DownloadTicket {
 // ==================== Audit Hash Chain ====================
 
 model HashChainEntry {
-  id            String   @id @default(cuid())
-  auditLogId    String   @unique
+  id            String    @id @default(cuid())
+  auditLogId    String    @unique
   previousHash  String?
   chainHash     String
   nonce         Int
-  createdAt     DateTime @default(now())
+  createdAt     DateTime  @default(now())
   chainVerified DateTime?
   verifiedAt    DateTime?
 
@@ -3683,21 +3685,21 @@ model HashChainEntry {
 // ==================== Tenant Integration Registry ====================
 
 model TenantIntegration {
-  id               String   @id @default(cuid())
-  organizationId   String
-  type             IntegrationType
-  provider         String
-  displayName      String?
-  status           IntegrationStatus @default(ACTIVE)
-  priority         Int      @default(0)
-  vaultSecretId    String?
-  configMetadata   Json?
+  id                String            @id @default(cuid())
+  organizationId    String
+  type              IntegrationType
+  provider          String
+  displayName       String?
+  status            IntegrationStatus @default(ACTIVE)
+  priority          Int               @default(0)
+  vaultSecretId     String?
+  configMetadata    Json?
   lastHealthCheckAt DateTime?
-  lastSuccessAt    DateTime?
-  lastFailureAt    DateTime?
-  failureReason    String?
-  failureCount     Int      @default(0)
-  createdById      String?
+  lastSuccessAt     DateTime?
+  lastFailureAt     DateTime?
+  failureReason     String?
+  failureCount      Int               @default(0)
+  createdById       String?
 
   organization Organization @relation(fields: [organizationId], references: [id])
 
@@ -3719,32 +3721,38 @@ enum TBMappingPatternStatus {
 }
 
 model TBMappingPattern {
-  id                   String                   @id @default(cuid())
+  id                   String                 @id @default(cuid())
   organizationId       String
   clientAccountCode    String
   clientAccountName    String?
-  /** Normalised account name for secondary lookup (Phase 3C). */
+  /**
+   * Normalised account name for secondary lookup (Phase 3C).
+   */
   nameFingerprint      String?
   erpMap1Label         String?
   erpMap2Label         String?
   canonicalAccountId   String
-  hitCount             Int                      @default(1)
+  hitCount             Int                    @default(1)
   lastConfidence       Float?
-  lastUsedAt           DateTime                 @default(now())
+  lastUsedAt           DateTime               @default(now())
   lastConfirmedById    String?
   lastConfirmedAt      DateTime?
   lastEngagementId     String?
-  /** Phase 3D — unique reviewer IDs who confirmed this pattern. */
-  confirmedReviewerIds Json                     @default("[]")
-  /** Phase 3D — governance lifecycle status. */
-  status               TBMappingPatternStatus   @default(CONFIRMED)
+  /**
+   * Phase 3D — unique reviewer IDs who confirmed this pattern.
+   */
+  confirmedReviewerIds Json                   @default("[]")
+  /**
+   * Phase 3D — governance lifecycle status.
+   */
+  status               TBMappingPatternStatus @default(CONFIRMED)
   auditClientId        String?
   erpChartKey          String?
-  memoryVersion        Int                      @default(1)
+  memoryVersion        Int                    @default(1)
   deprecatedAt         DateTime?
   deprecatedReason     String?
-  createdAt            DateTime                 @default(now())
-  updatedAt            DateTime                 @updatedAt
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id])
 
@@ -3776,20 +3784,22 @@ model TBMappingFeedback {
 }
 
 model TBClassificationHistory {
-  id             String   @id @default(cuid())
-  organizationId String
-  engagementId   String?
-  accountCode    String
-  accountName    String?
-  resultCategory String
-  canonicalCode  String?
-  confidence     Float
-  source         String
-  providerId     String?
-  mappingHints   Json?
-  /** Phase 4 — explainable classification snapshot (Trust + Evidence). */
+  id                   String   @id @default(cuid())
+  organizationId       String
+  engagementId         String?
+  accountCode          String
+  accountName          String?
+  resultCategory       String
+  canonicalCode        String?
+  confidence           Float
+  source               String
+  providerId           String?
+  mappingHints         Json?
+  /**
+   * Phase 4 — explainable classification snapshot (Trust + Evidence).
+   */
   classificationDetail Json?
-  createdAt      DateTime @default(now())
+  createdAt            DateTime @default(now())
 
   organization Organization @relation(fields: [organizationId], references: [id])
 
@@ -3827,11 +3837,11 @@ model KnowledgeCandidate {
   createdAt          DateTime                 @default(now())
   updatedAt          DateTime                 @updatedAt
 
-  createdBy          User?                        @relation("KnowledgeCandidateCreator", fields: [createdById], references: [id])
-  canonicalAccount   AuditCanonicalAccount        @relation(fields: [canonicalAccountId], references: [id])
-  evidence           KnowledgeCandidateEvidence[]
-  promotionHistory   KnowledgePromotionHistory[]
-  versionBindings    KnowledgeFoundationVersionCandidate[]
+  createdBy        User?                                 @relation("KnowledgeCandidateCreator", fields: [createdById], references: [id])
+  canonicalAccount AuditCanonicalAccount                 @relation(fields: [canonicalAccountId], references: [id])
+  evidence         KnowledgeCandidateEvidence[]
+  promotionHistory KnowledgePromotionHistory[]
+  versionBindings  KnowledgeFoundationVersionCandidate[]
 
   @@index([status])
   @@index([canonicalCode])
@@ -3896,7 +3906,7 @@ enum AbacOperator {
 }
 
 model AbacPolicy {
-  id             String   @id @default(cuid())
+  id             String     @id @default(cuid())
   organizationId String?
   name           String
   description    String?
@@ -3906,25 +3916,25 @@ model AbacPolicy {
   isActive       Boolean    @default(true)
   createdBy      String?
   updatedBy      String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
-  organization Organization?       @relation(fields: [organizationId], references: [id])
-  conditions  AbacPolicyCondition[]
-  assignments AbacPolicyAssignment[]
+  organization Organization?          @relation(fields: [organizationId], references: [id])
+  conditions   AbacPolicyCondition[]
+  assignments  AbacPolicyAssignment[]
 
   @@index([organizationId, resourceType])
   @@index([isActive])
 }
 
 model AbacPolicyCondition {
-  id        String   @id @default(cuid())
+  id        String       @id @default(cuid())
   policyId  String
   attribute String
   operator  AbacOperator
   value     String
   createdBy String?
-  createdAt DateTime @default(now())
+  createdAt DateTime     @default(now())
 
   policy AbacPolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
 
@@ -3947,15 +3957,15 @@ model AbacPolicyAssignment {
 // ==================== Decision Governance ====================
 
 model DecisionEscalationRule {
-  id                  String   @id @default(cuid())
-  organizationId      String
-  name                String   @default("Escalation Rule")
-  description         String?
-  triggerType         String   @default("time")
-  triggerConfig       Json     @default("{}")
-  escalationLevel     Int      @default(1)
-  targetRole          String?
-  targetUserId        String?
+  id                 String   @id @default(cuid())
+  organizationId     String
+  name               String   @default("Escalation Rule")
+  description        String?
+  triggerType        String   @default("time")
+  triggerConfig      Json     @default("{}")
+  escalationLevel    Int      @default(1)
+  targetRole         String?
+  targetUserId       String?
   decisionTemplateId String?
   escalateAfterHours Int      @default(0)
   targetRoleSlug     String
@@ -4012,27 +4022,27 @@ model AiActionRegistry {
 }
 
 model AiCrossProductSession {
-  id              String    @id @default(cuid())
-  organizationId  String?
-  organization    Organization? @relation(fields: [organizationId], references: [id])
-  userId          String
-  productContext  String
-  sourceAction    String
-  sourceRecordId  String?
+  id               String        @id @default(cuid())
+  organizationId   String?
+  organization     Organization? @relation(fields: [organizationId], references: [id])
+  userId           String
+  productContext   String
+  sourceAction     String
+  sourceRecordId   String?
   sourceRecordType String?
-  relatedProducts String?
-  requestText     String
-  responseText    String?
-  modelUsed       String    @default("deterministic")
-  tokensUsed      Int?
-  confidenceScore Float?
-  requiresReview  Boolean   @default(true)
-  status          String    @default("PENDING_REVIEW")
-  metadata        String?
-  reviewedAt      DateTime?
-  reviewNotes     String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  relatedProducts  String?
+  requestText      String
+  responseText     String?
+  modelUsed        String        @default("deterministic")
+  tokensUsed       Int?
+  confidenceScore  Float?
+  requiresReview   Boolean       @default(true)
+  status           String        @default("PENDING_REVIEW")
+  metadata         String?
+  reviewedAt       DateTime?
+  reviewNotes      String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   @@index([organizationId, createdAt])
   @@index([organizationId, status])
@@ -4059,52 +4069,52 @@ model AiContextBridge {
 // ==================== AI Model Governance ====================
 
 model AiModelRegistry {
-  id                String    @id @default(cuid())
-  organizationId    String?
-  name              String
-  provider          String
-  version           String
-  modelType         String
-  description       String?
-  useCase           String?
-  riskLevel         String    @default("low")
-  requiresReview    Boolean   @default(false)
-  requiresApproval  Boolean   @default(false)
-  documentationUrl  String?
-  ownerId           String?
-  status            String    @default("pending")
-  reviewNotes       String?
-  updatedBy         String?
-  reviewedById      String?
-  reviewedAt        DateTime?
-  approvedById      String?
-  approvedAt        DateTime?
-  approvalNotes     String?
-  createdBy         String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  id               String    @id @default(cuid())
+  organizationId   String?
+  name             String
+  provider         String
+  version          String
+  modelType        String
+  description      String?
+  useCase          String?
+  riskLevel        String    @default("low")
+  requiresReview   Boolean   @default(false)
+  requiresApproval Boolean   @default(false)
+  documentationUrl String?
+  ownerId          String?
+  status           String    @default("pending")
+  reviewNotes      String?
+  updatedBy        String?
+  reviewedById     String?
+  reviewedAt       DateTime?
+  approvedById     String?
+  approvedAt       DateTime?
+  approvalNotes    String?
+  createdBy        String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
-  organization      Organization?               @relation(fields: [organizationId], references: [id])
-  deployments AiModelDeployment[]
-  reviews     AiModelGovernanceReview[]
+  organization Organization?             @relation(fields: [organizationId], references: [id])
+  deployments  AiModelDeployment[]
+  reviews      AiModelGovernanceReview[]
 
   @@index([organizationId, status])
   @@index([organizationId, provider])
 }
 
 model AiModelDeployment {
-  id              String    @id @default(cuid())
-  modelId         String
-  environment     String
-  endpointUrl     String?
-  config          String?
-  deployedById    String?
-  deployedAt      DateTime  @default(now())
-  createdBy       String?
-  isActive        Boolean   @default(true)
+  id               String    @id @default(cuid())
+  modelId          String
+  environment      String
+  endpointUrl      String?
+  config           String?
+  deployedById     String?
+  deployedAt       DateTime  @default(now())
+  createdBy        String?
+  isActive         Boolean   @default(true)
   decommissionedAt DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   model AiModelRegistry @relation(fields: [modelId], references: [id], onDelete: Cascade)
 
@@ -4113,18 +4123,18 @@ model AiModelDeployment {
 }
 
 model AiModelGovernanceReview {
-  id           String    @id @default(cuid())
+  id           String   @id @default(cuid())
   modelId      String
   reviewType   String
   reviewerId   String?
   reviewerName String?
-  status       String    @default("pending")
+  status       String   @default("pending")
   findings     String?
   notes        String?
-  reviewedAt   DateTime  @default(now())
+  reviewedAt   DateTime @default(now())
   createdBy    String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   model AiModelRegistry @relation(fields: [modelId], references: [id], onDelete: Cascade)
 
@@ -4135,29 +4145,29 @@ model AiModelGovernanceReview {
 // ==================== Client Acceptance & Continuance ====================
 
 model ClientProspect {
-  id                  String    @id @default(cuid())
-  organizationId      String
-  source              String?
-  companyName         String
-  registrationNumber  String?
-  jurisdiction        String?
-  industry            String?
-  contactName         String?
-  contactEmail        String?
-  contactPhone        String?
-  estimatedFee        Float?
+  id                   String   @id @default(cuid())
+  organizationId       String
+  source               String?
+  companyName          String
+  registrationNumber   String?
+  jurisdiction         String?
+  industry             String?
+  contactName          String?
+  contactEmail         String?
+  contactPhone         String?
+  estimatedFee         Float?
   estimatedFeeCurrency String?
-  referredBy          String?
-  referralNotes       String?
-  status              String    @default("new")
-  createdById         String?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  referredBy           String?
+  referralNotes        String?
+  status               String   @default("new")
+  createdById          String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-  organization       Organization           @relation(fields: [organizationId], references: [id])
-  kycPackage         KycPackage?
-  riskAssessment     ClientRiskAssessment?
-  decisions          AcceptanceDecision[]
+  organization   Organization          @relation(fields: [organizationId], references: [id])
+  kycPackage     KycPackage?
+  riskAssessment ClientRiskAssessment?
+  decisions      AcceptanceDecision[]
 
   @@index([organizationId, status])
   @@index([organizationId, companyName])
@@ -4181,11 +4191,11 @@ model KycPackage {
 }
 
 model ClientRiskAssessment {
-  id                  String   @id @default(cuid())
-  prospectId          String   @unique
+  id                  String    @id @default(cuid())
+  prospectId          String    @unique
   clientId            String?
   assessmentType      String
-  status              String   @default("draft")
+  status              String    @default("draft")
   overallRiskScore    Int?
   overallRiskLevel    String
   entityRiskScore     Int?
@@ -4205,8 +4215,8 @@ model ClientRiskAssessment {
   assessedAt          DateTime?
   reviewedById        String?
   reviewedAt          DateTime?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   clientProspect ClientProspect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
 
@@ -4215,19 +4225,19 @@ model ClientRiskAssessment {
 }
 
 model AcceptanceDecision {
-  id             String    @id @default(cuid())
-  prospectId     String
-  clientId       String?
-  decisionType   String
-  decision       String
-  rationale      String?
-  conditions     Json?
-  effectiveDate  DateTime?
-  expiryDate     DateTime?
-  approvedById   String?
-  approvedAt     DateTime?
-  createdById    String?
-  createdAt      DateTime  @default(now())
+  id            String    @id @default(cuid())
+  prospectId    String
+  clientId      String?
+  decisionType  String
+  decision      String
+  rationale     String?
+  conditions    Json?
+  effectiveDate DateTime?
+  expiryDate    DateTime?
+  approvedById  String?
+  approvedAt    DateTime?
+  createdById   String?
+  createdAt     DateTime  @default(now())
 
   clientProspect ClientProspect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
 
@@ -4235,22 +4245,22 @@ model AcceptanceDecision {
 }
 
 model ContinuanceReview {
-  id                 String   @id @default(cuid())
+  id                 String    @id @default(cuid())
   organizationId     String
   clientId           String
   reviewYear         Int
   engagementHistory  Json?
   feeHistory         Json?
   clientChanges      Json?
-  status             String   @default("pending")
+  status             String    @default("pending")
   decision           String?
   rationale          String?
   riskReassessmentId String?
   approvedById       String?
   approvedAt         DateTime?
   createdById        String?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
   @@index([clientId])
   @@index([organizationId, status])
@@ -4260,20 +4270,20 @@ model ContinuanceReview {
 // ==================== ISQM1 Quality Management ====================
 
 model QualitySystemEvaluation {
-  id                 String   @id @default(cuid())
-  organizationId     String
-  year               Int
+  id                  String    @id @default(cuid())
+  organizationId      String
+  year                Int
   systemEffectiveness String?
-  overallConclusion  String?
-  summaryOfFindings  String?
-  keyStrengths       String?
-  keyWeaknesses      String?
-  nextEvaluationDate DateTime?
-  status             String   @default("draft")
-  approvedById       String?
-  approvedAt         DateTime?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  overallConclusion   String?
+  summaryOfFindings   String?
+  keyStrengths        String?
+  keyWeaknesses       String?
+  nextEvaluationDate  DateTime?
+  status              String    @default("draft")
+  approvedById        String?
+  approvedAt          DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id])
 
@@ -4282,7 +4292,7 @@ model QualitySystemEvaluation {
 }
 
 model QualityObjective {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   organizationId String
   objectiveType  String
   category       String?
@@ -4291,35 +4301,35 @@ model QualityObjective {
   targetState    String?
   effectiveDate  DateTime?
   reviewDate     DateTime?
-  status         String   @default("pending")
+  status         String    @default("pending")
   createdById    String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  risks        QualityRisk[]
+  risks QualityRisk[]
 
   @@index([organizationId])
   @@index([status])
 }
 
 model QualityRisk {
-  id                   String   @id @default(cuid())
-  organizationId       String
-  objectiveId          String
-  riskDescription      String
-  riskCategory         String?
-  inherentRisk         String?
-  residualRisk         String?
+  id                     String    @id @default(cuid())
+  organizationId         String
+  objectiveId            String
+  riskDescription        String
+  riskCategory           String?
+  inherentRisk           String?
+  residualRisk           String?
   residualRiskAssessment String?
-  status               String   @default("open")
-  lastAssessmentDate   DateTime?
-  nextAssessmentDate   DateTime?
-  createdById          String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  status                 String    @default("open")
+  lastAssessmentDate     DateTime?
+  nextAssessmentDate     DateTime?
+  createdById            String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
 
-  objective    QualityObjective @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
-  responses    QualityResponse[]
+  objective QualityObjective  @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+  responses QualityResponse[]
 
   @@index([organizationId])
   @@index([objectiveId])
@@ -4327,20 +4337,20 @@ model QualityRisk {
 }
 
 model QualityResponse {
-  id                    String   @id @default(cuid())
-  organizationId        String
-  riskId                String
-  responseType          String
-  responseDescription   String?
-  responsiblePersonId   String?
-  createdById           String?
-  implementationStatus  String   @default("pending")
+  id                      String    @id @default(cuid())
+  organizationId          String
+  riskId                  String
+  responseType            String
+  responseDescription     String?
+  responsiblePersonId     String?
+  createdById             String?
+  implementationStatus    String    @default("pending")
   effectivenessEvaluation String?
-  evaluationDate        DateTime?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  evaluationDate          DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
-  risk         QualityRisk @relation(fields: [riskId], references: [id], onDelete: Cascade)
+  risk QualityRisk @relation(fields: [riskId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([riskId])
@@ -4362,7 +4372,7 @@ model QualityFinding {
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 
-  remediation       QualityRemediation?
+  remediation        QualityRemediation?
   monitoringActivity QualityMonitoringActivity? @relation(fields: [monitoringActivityId], references: [id])
 
   @@index([organizationId])
@@ -4385,7 +4395,7 @@ model QualityRemediation {
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
-  finding      QualityFinding @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  finding QualityFinding @relation(fields: [findingId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([findingId])
@@ -4406,7 +4416,7 @@ model QualityMonitoringActivity {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  findings     QualityFinding[]
+  findings QualityFinding[]
 
   @@index([organizationId])
   @@index([activityType, status])
@@ -4415,46 +4425,46 @@ model QualityMonitoringActivity {
 // ==================== Independence ====================
 
 model IndependenceRegister {
-  id                    String    @id @default(cuid())
-  organizationId        String
-  entityId              String
-  entityType            String?
-  entityName            String
-  entityRole            String?
-  status                String    @default("active")
-  joinDate              DateTime?
-  leaveDate             DateTime?
-  createdById           String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  organizationId String
+  entityId       String
+  entityType     String?
+  entityName     String
+  entityRole     String?
+  status         String    @default("active")
+  joinDate       DateTime?
+  leaveDate      DateTime?
+  createdById    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  organization          Organization                @relation(fields: [organizationId], references: [id])
-  threats               IndependenceThreat[]
-  financialInterests    FinancialInterest[]
+  organization            Organization                     @relation(fields: [organizationId], references: [id])
+  threats                 IndependenceThreat[]
+  financialInterests      FinancialInterest[]
   employmentRelationships EmploymentRelationship[]
-  annualConfirmations   AnnualIndependenceConfirmation[]
+  annualConfirmations     AnnualIndependenceConfirmation[]
 
   @@unique([organizationId, entityId])
   @@index([organizationId, status])
 }
 
 model IndependenceThreat {
-  id              String   @id @default(cuid())
-  registerId      String
-  clientId        String?
-  engagementId    String?
-  threatCategory  String
+  id                String    @id @default(cuid())
+  registerId        String
+  clientId          String?
+  engagementId      String?
+  threatCategory    String
   threatDescription String?
-  threatLevel     String   @default("medium")
-  status          String   @default("open")
-  identifiedAt    DateTime @default(now())
-  identifiedById  String?
-  assessedById    String?
-  assessedAt      DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  threatLevel       String    @default("medium")
+  status            String    @default("open")
+  identifiedAt      DateTime  @default(now())
+  identifiedById    String?
+  assessedById      String?
+  assessedAt        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  register   IndependenceRegister   @relation(fields: [registerId], references: [id], onDelete: Cascade)
+  register   IndependenceRegister    @relation(fields: [registerId], references: [id], onDelete: Cascade)
   safeguards IndependenceSafeguard[]
 
   @@index([registerId])
@@ -4462,16 +4472,16 @@ model IndependenceThreat {
 }
 
 model IndependenceSafeguard {
-  id                   String   @id @default(cuid())
+  id                   String    @id @default(cuid())
   threatId             String
   safeguardType        String
   safeguardDescription String?
-  status               String   @default("pending")
+  status               String    @default("pending")
   implementedAt        DateTime?
   effectivenessReview  String?
   createdById          String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   threat IndependenceThreat @relation(fields: [threatId], references: [id], onDelete: Cascade)
 
@@ -4479,18 +4489,18 @@ model IndependenceSafeguard {
 }
 
 model EmploymentRelationship {
-  id                    String   @id @default(cuid())
-  registerId            String
-  relatedEntityName     String
-  relatedEntityType     String?
-  relationshipType      String
+  id                      String    @id @default(cuid())
+  registerId              String
+  relatedEntityName       String
+  relatedEntityType       String?
+  relationshipType        String
   relationshipDescription String?
-  startDate             DateTime?
-  endDate               DateTime?
-  selfDisclosed         Boolean  @default(false)
-  createdById           String?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  startDate               DateTime?
+  endDate                 DateTime?
+  selfDisclosed           Boolean   @default(false)
+  createdById             String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   register IndependenceRegister @relation(fields: [registerId], references: [id], onDelete: Cascade)
 
@@ -4498,19 +4508,19 @@ model EmploymentRelationship {
 }
 
 model FinancialInterest {
-  id             String    @id @default(cuid())
-  registerId     String
-  interestType   String
-  issuerName     String
-  issuerTicker   String?
-  amount         Float?
-  currency       String?
-  dateAcquired   DateTime?
-  selfDisclosed  Boolean   @default(false)
-  dateDisposed   DateTime?
-  createdById    String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  registerId    String
+  interestType  String
+  issuerName    String
+  issuerTicker  String?
+  amount        Float?
+  currency      String?
+  dateAcquired  DateTime?
+  selfDisclosed Boolean   @default(false)
+  dateDisposed  DateTime?
+  createdById   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   register IndependenceRegister @relation(fields: [registerId], references: [id], onDelete: Cascade)
 
@@ -4518,27 +4528,27 @@ model FinancialInterest {
 }
 
 model AnnualIndependenceConfirmation {
-  id               String    @id @default(cuid())
-  organizationId   String
-  registerId       String
-  year             Int
-  status           String    @default("pending")
-  confirmedAt      DateTime?
-  interestsDeclared Json?
+  id                    String    @id @default(cuid())
+  organizationId        String
+  registerId            String
+  year                  Int
+  status                String    @default("pending")
+  confirmedAt           DateTime?
+  interestsDeclared     Json?
   relationshipsDeclared Json?
-  signedById       String?
-  reviewedById     String?
-  reviewedAt       DateTime?
-  reviewedNotes    String?
-  createdById      String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  signedById            String?
+  reviewedById          String?
+  reviewedAt            DateTime?
+  reviewedNotes         String?
+  createdById           String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   register IndependenceRegister @relation(fields: [registerId], references: [id], onDelete: Cascade)
 
+  @@unique([registerId, year])
   @@index([organizationId, year])
   @@index([registerId])
-  @@unique([registerId, year])
 }
 
 // ==================== Knowledge Engine ====================
@@ -4565,19 +4575,19 @@ model KnowledgePattern {
 }
 
 model KnowledgeRecommendation {
-  id                String   @id @default(cuid())
-  engagementId      String
-  patternId         String
+  id                 String    @id @default(cuid())
+  engagementId       String
+  patternId          String
   recommendationType String
-  content           String
-  context           String?
-  relevanceScore    Float    @default(0)
-  confidenceScore   Float    @default(0)
-  status            String   @default("active")
-  acceptedById      String?
-  acceptedAt        DateTime?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  content            String
+  context            String?
+  relevanceScore     Float     @default(0)
+  confidenceScore    Float     @default(0)
+  status             String    @default("active")
+  acceptedById       String?
+  acceptedAt         DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
   knowledgePattern KnowledgePattern @relation(fields: [patternId], references: [id], onDelete: Cascade)
 
@@ -4586,19 +4596,19 @@ model KnowledgeRecommendation {
 }
 
 model IndustryBenchmark {
-  id               String   @id @default(cuid())
-  organizationId   String
-  industry         String
-  benchmarkType    String
-  metricName       String
-  metricValue      Float?
-  unit             String?
-  sampleSize       Int?
-  source           String?
+  id                 String   @id @default(cuid())
+  organizationId     String
+  industry           String
+  benchmarkType      String
+  metricName         String
+  metricValue        Float?
+  unit               String?
+  sampleSize         Int?
+  source             String?
   confidenceInterval Float?
-  confidenceLevel  Float?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  confidenceLevel    Float?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id])
 
@@ -4649,41 +4659,41 @@ model MaterialityBenchmark {
 }
 
 model PlanningMateriality {
-  id              String   @id @default(cuid())
-  engagementId    String
-  benchmarkId     String?
-  percentage      Float
-  percentageRule  String?
-  computedAmount  Float
-  currency        String   @default("SAR")
-  rationale       String?
-  version         Int      @default(1)
-  status          String   @default("draft")
-  approvedById    String?
-  approvedAt      DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String    @id @default(cuid())
+  engagementId   String
+  benchmarkId    String?
+  percentage     Float
+  percentageRule String?
+  computedAmount Float
+  currency       String    @default("SAR")
+  rationale      String?
+  version        Int       @default(1)
+  status         String    @default("draft")
+  approvedById   String?
+  approvedAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  benchmark               MaterialityBenchmark?    @relation(fields: [benchmarkId], references: [id])
-  performanceMateriality  PerformanceMateriality?
-  trivialThreshold        TrivialThreshold?
-  componentMaterialities  ComponentMateriality[]
+  benchmark              MaterialityBenchmark?   @relation(fields: [benchmarkId], references: [id])
+  performanceMateriality PerformanceMateriality?
+  trivialThreshold       TrivialThreshold?
+  componentMaterialities ComponentMateriality[]
 
   @@index([engagementId])
   @@index([engagementId, version])
 }
 
 model PerformanceMateriality {
-  id                    String   @id @default(cuid())
-  planningMaterialityId String   @unique
+  id                    String    @id @default(cuid())
+  planningMaterialityId String    @unique
   engagementId          String
   percentage            Float
   computedAmount        Float
-  currency              String   @default("SAR")
+  currency              String    @default("SAR")
   approvedById          String?
   approvedAt            DateTime?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   planningMateriality PlanningMateriality @relation(fields: [planningMaterialityId], references: [id], onDelete: Cascade)
 
@@ -4691,16 +4701,16 @@ model PerformanceMateriality {
 }
 
 model TrivialThreshold {
-  id                    String   @id @default(cuid())
-  planningMaterialityId String   @unique
+  id                    String    @id @default(cuid())
+  planningMaterialityId String    @unique
   engagementId          String
   percentage            Float
   computedAmount        Float
-  currency              String   @default("SAR")
+  currency              String    @default("SAR")
   reviewedById          String?
   reviewedAt            DateTime?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   planningMateriality PlanningMateriality @relation(fields: [planningMaterialityId], references: [id], onDelete: Cascade)
 
@@ -4709,7 +4719,7 @@ model TrivialThreshold {
 }
 
 model MaterialityOverride {
-  id                  String   @id @default(cuid())
+  id                  String    @id @default(cuid())
   organizationId      String
   engagementId        String
   materialityType     String
@@ -4721,8 +4731,8 @@ model MaterialityOverride {
   approvedById        String?
   approvedAt          DateTime?
   createdById         String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   @@index([engagementId])
   @@index([organizationId])
@@ -4757,7 +4767,7 @@ model ReviewNote {
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
-  slaConfig    ReviewNoteSLA?
+  slaConfig   ReviewNoteSLA?
   escalations ReviewNoteEscalation[]
 
   @@index([engagementId])
@@ -4768,18 +4778,18 @@ model ReviewNote {
 /// L6.6 — Review Note SLA Configuration
 /// إعدادات_مستوى_الخدمة_للملاحظات — تكوين مهلة الرد والتصعيد لكل ملاحظة
 model ReviewNoteSLA {
-  id                    String    @id @default(cuid())
-  reviewNoteId          String    @unique
-  reviewNote            ReviewNote @relation(fields: [reviewNoteId], references: [id], onDelete: Cascade)
-  slaTargetHours        Int
-  slaWarningThreshold   Float     @default(0.8) // % of SLA before warning
-  slaEscalationThreshold Float    @default(1.0) // % of SLA before escalation
-  slaBreached           Boolean   @default(false)
-  slaBreachedAt         DateTime?
-  escalatedToId         String?
-  escalatedAt           DateTime?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  id                     String     @id @default(cuid())
+  reviewNoteId           String     @unique
+  reviewNote             ReviewNote @relation(fields: [reviewNoteId], references: [id], onDelete: Cascade)
+  slaTargetHours         Int
+  slaWarningThreshold    Float      @default(0.8) // % of SLA before warning
+  slaEscalationThreshold Float      @default(1.0) // % of SLA before escalation
+  slaBreached            Boolean    @default(false)
+  slaBreachedAt          DateTime?
+  escalatedToId          String?
+  escalatedAt            DateTime?
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
 
   @@index([reviewNoteId])
 }
@@ -4804,25 +4814,25 @@ model ReviewNoteEscalation {
 // ==================== Sampling ====================
 
 model SamplingPlan {
-  id                String    @id @default(cuid())
+  id                String   @id @default(cuid())
   organizationId    String
   engagementId      String?
   title             String
   method            String
   populationSize    Int
   sampleSize        Int?
-  confidenceLevel   Float     @default(95)
+  confidenceLevel   Float    @default(95)
   materialityPct    Float
   strataField       String?
   strataSizes       Json?
   judgmentalItemIds Json
   parameters        Json?
-  status            String    @default("draft")
+  status            String   @default("draft")
   createdById       String
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  organization Organization  @relation(fields: [organizationId], references: [id])
+  organization Organization     @relation(fields: [organizationId], references: [id])
   results      SamplingResult[]
 
   @@index([organizationId, engagementId])
@@ -4830,22 +4840,22 @@ model SamplingPlan {
 }
 
 model SamplingResult {
-  id              String    @id @default(cuid())
-  planId          String
-  organizationId  String
-  sampleIndices   Json
-  sampleSize      Int
-  sampleErrors    Int
+  id               String   @id @default(cuid())
+  planId           String
+  organizationId   String
+  sampleIndices    Json
+  sampleSize       Int
+  sampleErrors     Int
   totalErrorAmount Float?
-  projectedError  Float?
-  lowerBound      Float?
-  upperBound      Float?
-  confidenceLevel Float
-  methodology     String
-  notes           String?
-  executedById    String
-  executedAt      DateTime  @default(now())
-  createdAt       DateTime  @default(now())
+  projectedError   Float?
+  lowerBound       Float?
+  upperBound       Float?
+  confidenceLevel  Float
+  methodology      String
+  notes            String?
+  executedById     String
+  executedAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
 
   samplingPlan SamplingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
 
@@ -4877,23 +4887,23 @@ model SamplingReview {
 }
 
 model SamplingEvidence {
-  id                  String    @id @default(cuid())
+  id                  String   @id @default(cuid())
   organizationId      String
   planId              String
   resultId            String?
   itemIndex           Int
   itemReference       String?
   itemDescription     String?
-  evidenceType        String    @default("document")
+  evidenceType        String   @default("document")
   evidenceRef         String?
   evidenceDescription String?
   conclusion          String
   errorAmount         Float?
   errorDescription    String?
   testedById          String
-  testedAt            DateTime  @default(now())
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  testedAt            DateTime @default(now())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@index([planId, itemIndex])
   @@index([planId])
@@ -4919,19 +4929,19 @@ model WorkingPaperIndex {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  leadSchedule           LeadSchedule?
-  analyticalReviewPaper  AnalyticalReviewPaper?
-  controlTestingPaper    ControlTestingPaper?
+  leadSchedule            LeadSchedule?
+  analyticalReviewPaper   AnalyticalReviewPaper?
+  controlTestingPaper     ControlTestingPaper?
   substantiveTestingPaper SubstantiveTestingPaper?
-  completionPaper        CompletionPaper?
+  completionPaper         CompletionPaper?
 
   @@index([engagementId])
   @@index([engagementId, indexType])
 }
 
 model LeadSchedule {
-  id                  String    @id @default(cuid())
-  workingPaperIndexId String    @unique
+  id                  String   @id @default(cuid())
+  workingPaperIndexId String   @unique
   engagementId        String
   accountCode         String
   accountName         String
@@ -4942,10 +4952,10 @@ model LeadSchedule {
   assertionCoverage   Json?
   notes               String?
   createdById         String?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
-  workingPaperIndex WorkingPaperIndex @relation(fields: [workingPaperIndexId], references: [id], onDelete: Cascade)
+  workingPaperIndex WorkingPaperIndex  @relation(fields: [workingPaperIndexId], references: [id], onDelete: Cascade)
   lines             LeadScheduleLine[]
 
   @@index([engagementId])
@@ -4953,22 +4963,22 @@ model LeadSchedule {
 }
 
 model LeadScheduleLine {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   leadScheduleId String
   leadSchedule   LeadSchedule @relation(fields: [leadScheduleId], references: [id], onDelete: Cascade)
   lineNumber     Int
   description    String
-  amount         Float    @default(0)
+  amount         Float        @default(0)
   reference      String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@index([leadScheduleId])
 }
 
 model AnalyticalReviewPaper {
-  id                      String    @id @default(cuid())
-  workingPaperIndexId     String    @unique
+  id                      String   @id @default(cuid())
+  workingPaperIndexId     String   @unique
   engagementId            String
   procedureDescription    String
   expectation             Float?
@@ -4976,11 +4986,11 @@ model AnalyticalReviewPaper {
   actualResult            Float?
   variance                Float?
   variancePercentage      Float?
-  investigationRequired   Boolean   @default(false)
+  investigationRequired   Boolean  @default(false)
   investigationConclusion String?
   createdById             String?
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   workingPaperIndex WorkingPaperIndex @relation(fields: [workingPaperIndexId], references: [id], onDelete: Cascade)
 
@@ -4989,20 +4999,20 @@ model AnalyticalReviewPaper {
 }
 
 model ControlTestingPaper {
-  id                              String    @id @default(cuid())
-  workingPaperIndexId             String    @unique
-  engagementId                    String
-  controlDescription              String
-  controlObjective                String?
-  controlType                     String
-  controlFrequency                String?
-  sampleSize                      Int?
-  deviations                      Int?
-  deviationRate                   Float?
+  id                               String   @id @default(cuid())
+  workingPaperIndexId              String   @unique
+  engagementId                     String
+  controlDescription               String
+  controlObjective                 String?
+  controlType                      String
+  controlFrequency                 String?
+  sampleSize                       Int?
+  deviations                       Int?
+  deviationRate                    Float?
   operatingEffectivenessConclusion String?
-  createdById                     String?
-  createdAt                       DateTime  @default(now())
-  updatedAt                       DateTime  @updatedAt
+  createdById                      String?
+  createdAt                        DateTime @default(now())
+  updatedAt                        DateTime @updatedAt
 
   workingPaperIndex WorkingPaperIndex @relation(fields: [workingPaperIndexId], references: [id], onDelete: Cascade)
 
@@ -5011,16 +5021,16 @@ model ControlTestingPaper {
 }
 
 model SubstantiveTestingPaper {
-  id                  String    @id @default(cuid())
-  workingPaperIndexId String    @unique
-  engagementId        String
+  id                   String   @id @default(cuid())
+  workingPaperIndexId  String   @unique
+  engagementId         String
   procedureDescription String
-  assertionTested     String?
-  populationReference String?
-  sampleReference     String?
-  createdById         String?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  assertionTested      String?
+  populationReference  String?
+  sampleReference      String?
+  createdById          String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   workingPaperIndex WorkingPaperIndex @relation(fields: [workingPaperIndexId], references: [id], onDelete: Cascade)
 
@@ -5050,19 +5060,19 @@ model CompletionPaper {
 // ==================== Audit Risk ====================
 
 model AuditRiskModel {
-  id             String    @id @default(cuid())
+  id             String   @id @default(cuid())
   organizationId String
   name           String
   description    String?
   categories     Json?
   thresholds     Json?
-  version        Int       @default(1)
-  isActive       Boolean   @default(true)
+  version        Int      @default(1)
+  isActive       Boolean  @default(true)
   createdById    String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  organization Organization        @relation(fields: [organizationId], references: [id])
+  organization Organization          @relation(fields: [organizationId], references: [id])
   assessments  AuditRiskAssessment[]
 
   @@index([organizationId, isActive])
@@ -5090,8 +5100,8 @@ model AuditRiskAssessment {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  riskModel    AuditRiskModel      @relation(fields: [modelId], references: [id])
-  organization Organization        @relation(fields: [organizationId], references: [id])
+  riskModel    AuditRiskModel       @relation(fields: [modelId], references: [id])
+  organization Organization         @relation(fields: [organizationId], references: [id])
   procedures   AuditRiskProcedure[]
 
   @@index([modelId])
@@ -5110,8 +5120,8 @@ model AuditRiskProcedure {
   evidenceRequired Boolean  @default(false)
   status           String   @default("draft")
   createdById      String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   riskAssessment AuditRiskAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
   organization   Organization        @relation(fields: [organizationId], references: [id])
@@ -5125,51 +5135,51 @@ model AuditRiskProcedure {
 // Not: Recommendation, Simulation, Benchmarking, ERP expansion
 
 model LcWorkbook {
-  id              String   @id @default(cuid())
-  projectId       String
-  project         LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  title           String
-  reportingPeriod String
-  status          String   @default("draft") // draft, populated, partial, complete, exported
-  totalLines      Int      @default(0)
-  autoFilledLines Int      @default(0)
-  missingLines    Int      @default(0)
-  completionPct   Float    @default(0)
-  exportedAt      DateTime?
-  lcScore         Float?          // NEW
-  lcScoreComputedAt DateTime?     // NEW
-  createdById     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                String              @id @default(cuid())
+  projectId         String
+  project           LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title             String
+  reportingPeriod   String
+  status            String              @default("draft") // draft, populated, partial, complete, exported
+  totalLines        Int                 @default(0)
+  autoFilledLines   Int                 @default(0)
+  missingLines      Int                 @default(0)
+  completionPct     Float               @default(0)
+  exportedAt        DateTime?
+  lcScore           Float? // NEW
+  lcScoreComputedAt DateTime? // NEW
+  createdById       String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 
-  lines          LcWorkbookLine[]
-  dataRequests   LcDataRequest[]
+  lines        LcWorkbookLine[]
+  dataRequests LcDataRequest[]
 
   @@index([projectId, status])
   @@index([projectId, createdAt])
 }
 
 model LcWorkbookLine {
-  id              String   @id @default(cuid())
-  workbookId      String
-  workbook        LcWorkbook @relation(fields: [workbookId], references: [id], onDelete: Cascade)
-  section         String   // revenue, cost_of_sales, gross_profit, supplier_spend, workforce, assets
-  code            String   // e.g. "REV-01", "COS-01"
-  name            String   // Human-readable line name
-  autoFillable    Boolean  @default(false)
-  autoFilled      Boolean  @default(false)
-  autoFillValue   Float?
-  autoFillSource  String?  // Source reference (TB account code)
-  manualValue     Float?
-  source          String   @default("tb") // tb, manual, formula
-  confidence      String   @default("high") // high, medium, low
-  evidenceRequired Boolean @default(false)
-  evidenceTypes   String?  // JSON array
-  notes           String?
-  displayOrder    Int      @default(0)
-  metadata        Json?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id               String     @id @default(cuid())
+  workbookId       String
+  workbook         LcWorkbook @relation(fields: [workbookId], references: [id], onDelete: Cascade)
+  section          String // revenue, cost_of_sales, gross_profit, supplier_spend, workforce, assets
+  code             String // e.g. "REV-01", "COS-01"
+  name             String // Human-readable line name
+  autoFillable     Boolean    @default(false)
+  autoFilled       Boolean    @default(false)
+  autoFillValue    Float?
+  autoFillSource   String? // Source reference (TB account code)
+  manualValue      Float?
+  source           String     @default("tb") // tb, manual, formula
+  confidence       String     @default("high") // high, medium, low
+  evidenceRequired Boolean    @default(false)
+  evidenceTypes    String? // JSON array
+  notes            String?
+  displayOrder     Int        @default(0)
+  metadata         Json?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 
   missingItems LcDataRequestItem[]
 
@@ -5180,17 +5190,17 @@ model LcWorkbookLine {
 }
 
 model LcDataRequest {
-  id              String   @id @default(cuid())
-  workbookId      String
-  workbook        LcWorkbook @relation(fields: [workbookId], references: [id], onDelete: Cascade)
-  title           String
-  description     String?
-  status          String   @default("draft") // draft, sent, partially_received, received, closed
-  sentAt          DateTime?
-  respondedAt     DateTime?
-  createdById     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String     @id @default(cuid())
+  workbookId  String
+  workbook    LcWorkbook @relation(fields: [workbookId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  status      String     @default("draft") // draft, sent, partially_received, received, closed
+  sentAt      DateTime?
+  respondedAt DateTime?
+  createdById String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   items LcDataRequestItem[]
 
@@ -5199,24 +5209,24 @@ model LcDataRequest {
 }
 
 model LcDataRequestItem {
-  id               String   @id @default(cuid())
+  id               String          @id @default(cuid())
   requestId        String
-  request          LcDataRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  request          LcDataRequest   @relation(fields: [requestId], references: [id], onDelete: Cascade)
   lineId           String?
   line             LcWorkbookLine? @relation(fields: [lineId], references: [id], onDelete: SetNull)
-  fieldName        String   // e.g. "manualValue", "notes", "evidence_file"
-  category         String   // financial_data, evidence, classification, narrative
+  fieldName        String // e.g. "manualValue", "notes", "evidence_file"
+  category         String // financial_data, evidence, classification, narrative
   subcategory      String?
-  label            String   // Human-readable label
+  label            String // Human-readable label
   description      String?
-  evidenceRequired Boolean  @default(false)
-  evidenceTypes    String?  // JSON array
-  status           String   @default("open") // open, fulfilled, waived
+  evidenceRequired Boolean         @default(false)
+  evidenceTypes    String? // JSON array
+  status           String          @default("open") // open, fulfilled, waived
   responseValue    String?
   responseFile     String?
   createdById      String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 
   @@index([requestId, category])
   @@index([requestId, status])
@@ -5228,31 +5238,31 @@ model LcDataRequestItem {
 /// Stores AI-suggested pattern changes for workbook population patterns
 /// P0 — Pattern Learning Assistant
 model LcPatternSuggestion {
-  id                  String   @id @default(cuid())
-  organizationId      String
-  workbookLineCode    String   // e.g. "COS-03", "AST-01"
-  currentPattern      String   // The existing pattern being improved
-  suggestedPattern    String   // The AI-recommended replacement
-  reasoning           String?  // Why the change is suggested
-  falsePositiveAccounts Json?  // JSON array of account codes that triggered this
-  unmatchedAccounts   Json?    // JSON array of accounts that should have matched
-  confidence          Float    @default(0) // 0-100
-  status              String   @default("pending") // pending, approved, rejected
-  reviewedById        String?
-  reviewedAt          DateTime?
-  reviewNotes         String?
-  source              String   @default("ai") // ai, manual
-  createdById         String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                    String    @id @default(cuid())
+  organizationId        String
+  workbookLineCode      String // e.g. "COS-03", "AST-01"
+  currentPattern        String // The existing pattern being improved
+  suggestedPattern      String // The AI-recommended replacement
+  reasoning             String? // Why the change is suggested
+  falsePositiveAccounts Json? // JSON array of account codes that triggered this
+  unmatchedAccounts     Json? // JSON array of accounts that should have matched
+  confidence            Float     @default(0) // 0-100
+  status                String    @default("pending") // pending, approved, rejected
+  reviewedById          String?
+  reviewedAt            DateTime?
+  reviewNotes           String?
+  source                String    @default("ai") // ai, manual
+  createdById           String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   /// Learning Loop metrics
-  acceptanceScore    Float?   // 0-1: how often this type of suggestion is accepted
-  successScore       Float?   // 0-1: how often accepted suggestions lead to correct matches
-  falsePositiveRate  Float?   // 0-1: FP rate of applied pattern
-  decayScore         Float    @default(1.0) // 0-1: recency-weight, decays over time
-  appliedAt          DateTime? // when the suggestion was actually applied
-  healthScore        Float?   // 0-100: composite pattern health
+  acceptanceScore   Float? // 0-1: how often this type of suggestion is accepted
+  successScore      Float? // 0-1: how often accepted suggestions lead to correct matches
+  falsePositiveRate Float? // 0-1: FP rate of applied pattern
+  decayScore        Float     @default(1.0) // 0-1: recency-weight, decays over time
+  appliedAt         DateTime? // when the suggestion was actually applied
+  healthScore       Float? // 0-100: composite pattern health
 
   @@index([organizationId, status])
   @@index([organizationId, workbookLineCode])
@@ -5262,26 +5272,26 @@ model LcPatternSuggestion {
 /// Stores per-match confidence, risk level, and evidence for workbook line matches
 /// P0 — Account Explanation Engine + False Positive Reviewer
 model LcMatchReview {
-  id              String   @id @default(cuid())
-  organizationId  String
-  workbookLineId  String?
-  workbookLineCode String  // e.g. "REV-01"
-  accountCode     String   // TB account code
-  accountName     String   // TB account name
-  patternUsed     String?  // The pattern that caused the match
-  matchType       String   // code_range, pattern, formula, manual
-  confidence      Float    @default(0) // 0-100
-  riskLevel       String   @default("low") // low, medium, high
-  riskReason      String?  // Why this risk level was assigned
-  evidence        Json?    // Reasons for match (code range, pattern text, etc.)
-  isFalsePositive Boolean  @default(false)
-  status          String   @default("pending") // pending, confirmed, rejected
-  reviewedById    String?
-  reviewedAt      DateTime?
-  reviewNotes     String?
-  createdById     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id               String    @id @default(cuid())
+  organizationId   String
+  workbookLineId   String?
+  workbookLineCode String // e.g. "REV-01"
+  accountCode      String // TB account code
+  accountName      String // TB account name
+  patternUsed      String? // The pattern that caused the match
+  matchType        String // code_range, pattern, formula, manual
+  confidence       Float     @default(0) // 0-100
+  riskLevel        String    @default("low") // low, medium, high
+  riskReason       String? // Why this risk level was assigned
+  evidence         Json? // Reasons for match (code range, pattern text, etc.)
+  isFalsePositive  Boolean   @default(false)
+  status           String    @default("pending") // pending, confirmed, rejected
+  reviewedById     String?
+  reviewedAt       DateTime?
+  reviewNotes      String?
+  createdById      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   @@index([organizationId, riskLevel])
   @@index([organizationId, status])
@@ -5292,19 +5302,19 @@ model LcMatchReview {
 /// Stores per-industry pattern intelligence for reducing false positives
 /// P1 — Industry Memory
 model LcIndustryPatternMemory {
-  id                String   @id @default(cuid())
-  industry          String   // construction, manufacturing, services, trading, industrial
-  workbookLineCode  String   // e.g. "AST-01"
-  pattern           String   // The pattern text
-  totalMatches      Int      @default(0)
-  correctMatches    Int      @default(0)
-  falsePositives    Int      @default(0)
-  effectivenessPct  Float    @default(0) // correct / total * 100
-  notes             String?
-  metadata          Json?
-  createdById       String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id               String   @id @default(cuid())
+  industry         String // construction, manufacturing, services, trading, industrial
+  workbookLineCode String // e.g. "AST-01"
+  pattern          String // The pattern text
+  totalMatches     Int      @default(0)
+  correctMatches   Int      @default(0)
+  falsePositives   Int      @default(0)
+  effectivenessPct Float    @default(0) // correct / total * 100
+  notes            String?
+  metadata         Json?
+  createdById      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@unique([industry, workbookLineCode, pattern])
   @@index([industry])
@@ -5314,48 +5324,47 @@ model LcIndustryPatternMemory {
 /// Stores per-organization match history for decision reuse
 /// P1 — Organization Memory
 model LcOrganizationMatchMemory {
-  id                String   @id @default(cuid())
-  organizationId    String
-  workbookLineCode  String
-  accountCode       String
-  accountName       String
-  previousResult    String   // matched, rejected, overridden
-  currentPattern    String?
-  manualOverride    Boolean  @default(false)
-  overrideReason    String?
-  classification    Json?    // Arbitrary classification data
-  createdById       String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id               String   @id @default(cuid())
+  organizationId   String
+  workbookLineCode String
+  accountCode      String
+  accountName      String
+  previousResult   String // matched, rejected, overridden
+  currentPattern   String?
+  manualOverride   Boolean  @default(false)
+  overrideReason   String?
+  classification   Json? // Arbitrary classification data
+  createdById      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@unique([organizationId, workbookLineCode, accountCode])
   @@index([organizationId])
   @@index([organizationId, workbookLineCode])
 }
 
-
 // ── LocalContentOS AI Advisor V3 — AI Audit Events ──
 
 /// Captures every AI action for traceability
 /// Phase 6 — Full AI auditability
 model LcAiAuditEvent {
-  id              String   @id @default(cuid())
-  organizationId  String
-  projectId       String?
-  workbookId      String?
-  action          String   // AI_REVIEW_RUN, PATTERN_SUGGESTED, RECOMMENDATION_GENERATED, SIMULATION_RUN, etc.
-  actorId         String?
-  providerId      String?  // local, deterministic, openai, anthropic, cloud
-  modelVersion    String?  // qwen3:8b, gpt-4, etc.
-  promptVersion   String?  // prompt template version used
-  confidence      Float?   // confidence of the AI output
-  status          String   // success, partial, failed
-  inputSummary    Json?    // Summary of what was sent
-  outputSummary   Json?    // Summary of what was returned
-  warningCount    Int      @default(0)
-  durationMs      Int      @default(0)
-  metadata        Json?
-  createdAt       DateTime @default(now())
+  id             String   @id @default(cuid())
+  organizationId String
+  projectId      String?
+  workbookId     String?
+  action         String // AI_REVIEW_RUN, PATTERN_SUGGESTED, RECOMMENDATION_GENERATED, SIMULATION_RUN, etc.
+  actorId        String?
+  providerId     String? // local, deterministic, openai, anthropic, cloud
+  modelVersion   String? // qwen3:8b, gpt-4, etc.
+  promptVersion  String? // prompt template version used
+  confidence     Float? // confidence of the AI output
+  status         String // success, partial, failed
+  inputSummary   Json? // Summary of what was sent
+  outputSummary  Json? // Summary of what was returned
+  warningCount   Int      @default(0)
+  durationMs     Int      @default(0)
+  metadata       Json?
+  createdAt      DateTime @default(now())
 
   @@index([organizationId, action])
   @@index([organizationId, workbookId])
@@ -5366,28 +5375,28 @@ model LcAiAuditEvent {
 /// Phase 2 — Recommendation Engine
 /// V3.5 — Enhanced with grounding fields (source, rationale, groundingConfidence)
 model LcRecommendation {
-  id                   String   @id @default(cuid())
-  organizationId       String
-  workbookId           String
-  category             String   // supplier_optimization, workforce_localization, asset_localization, missing_data_resolution, evidence_improvement
-  title                String   // Short human-readable title
-  description          String   // Detailed recommendation
-  impactScore          Float    // 0-100: estimated impact on local content score
-  priority             String   // critical, high, medium, low
-  estimatedValue       Float?   // Estimated score improvement if implemented
-  effort               String?  // low, medium, high
-  evidenceRefs         Json?    // References to supporting evidence
-  status               String   @default("pending") // pending, accepted, rejected, implemented
+  id                  String    @id @default(cuid())
+  organizationId      String
+  workbookId          String
+  category            String // supplier_optimization, workforce_localization, asset_localization, missing_data_resolution, evidence_improvement
+  title               String // Short human-readable title
+  description         String // Detailed recommendation
+  impactScore         Float // 0-100: estimated impact on local content score
+  priority            String // critical, high, medium, low
+  estimatedValue      Float? // Estimated score improvement if implemented
+  effort              String? // low, medium, high
+  evidenceRefs        Json? // References to supporting evidence
+  status              String    @default("pending") // pending, accepted, rejected, implemented
   // V3.5 Grounding fields
-  source               String?  // industry_memory, organization_history, baseline_study, workbook_analysis, pattern_history, knowledge
-  rationale            String?  // Why this recommendation exists — grounded explanation
-  groundingConfidence  Float?   // 0-1: confidence in the evidence backing
-  reviewedById         String?
-  reviewedAt           DateTime?
-  reviewNotes          String?
-  createdById          String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  source              String? // industry_memory, organization_history, baseline_study, workbook_analysis, pattern_history, knowledge
+  rationale           String? // Why this recommendation exists — grounded explanation
+  groundingConfidence Float? // 0-1: confidence in the evidence backing
+  reviewedById        String?
+  reviewedAt          DateTime?
+  reviewNotes         String?
+  createdById         String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   @@index([organizationId, workbookId, category])
   @@index([organizationId, workbookId, priority])
@@ -5399,23 +5408,23 @@ model LcRecommendation {
 /// Phase 3 — Simulation Engine
 /// V3.5 — Enhanced with drivers explainability field
 model LcSimulationResult {
-  id              String   @id @default(cuid())
-  organizationId  String
-  workbookId      String
-  scenarioType    String   // supplier, workforce, asset, mixed
-  scenarioLabel   String   // Human-readable label for the scenario
-  parameters      Json     // Scenario parameters (which lines to modify)
-  currentScore    Float?   // Current LC score before simulation
-  projectedScore  Float?   // Projected LC score after scenario
-  delta           Float?   // projectedScore - currentScore
-  confidence      Float?   // Confidence in the projection
-  assumptions     Json?    // Assumptions made during simulation
+  id             String    @id @default(cuid())
+  organizationId String
+  workbookId     String
+  scenarioType   String // supplier, workforce, asset, mixed
+  scenarioLabel  String // Human-readable label for the scenario
+  parameters     Json // Scenario parameters (which lines to modify)
+  currentScore   Float? // Current LC score before simulation
+  projectedScore Float? // Projected LC score after scenario
+  delta          Float? // projectedScore - currentScore
+  confidence     Float? // Confidence in the projection
+  assumptions    Json? // Assumptions made during simulation
   // V3.5 Explainability — decomposition of delta into contributing factors
-  drivers         Json?    // [{ factor: "Supplier Localization", impact: 4.2, contributionPct: 50.6 }, ...]
-  reviewedById    String?
-  reviewedAt      DateTime?
-  createdById     String?
-  createdAt       DateTime @default(now())
+  drivers        Json? // [{ factor: "Supplier Localization", impact: 4.2, contributionPct: 50.6 }, ...]
+  reviewedById   String?
+  reviewedAt     DateTime?
+  createdById    String?
+  createdAt      DateTime  @default(now())
 
   @@index([organizationId, workbookId, scenarioType])
   @@index([organizationId, workbookId, createdAt])
@@ -5424,20 +5433,20 @@ model LcSimulationResult {
 /// Tracks each AI review run on a workbook
 /// Phase 1 — Auto AI Review Pipeline
 model LcAiReviewRun {
-  id                    String   @id @default(cuid())
-  organizationId        String
-  workbookId            String
-  status                String   @default("in_progress") // in_progress, completed, failed
-  explanationsGenerated Int      @default(0)
-  patternSuggestions    Int      @default(0)
-  falsePositives        Int      @default(0)
-  confidenceCalibrated  Boolean  @default(false)
-  recommendationsGenerated Int  @default(0)
-  errorMessage          String?
-  startedAt             DateTime @default(now())
-  completedAt           DateTime?
-  createdById           String?
-  createdAt             DateTime @default(now())
+  id                       String    @id @default(cuid())
+  organizationId           String
+  workbookId               String
+  status                   String    @default("in_progress") // in_progress, completed, failed
+  explanationsGenerated    Int       @default(0)
+  patternSuggestions       Int       @default(0)
+  falsePositives           Int       @default(0)
+  confidenceCalibrated     Boolean   @default(false)
+  recommendationsGenerated Int       @default(0)
+  errorMessage             String?
+  startedAt                DateTime  @default(now())
+  completedAt              DateTime?
+  createdById              String?
+  createdAt                DateTime  @default(now())
 
   @@index([organizationId, workbookId])
   @@index([organizationId, workbookId, status])
@@ -5447,25 +5456,25 @@ model LcAiReviewRun {
 /// Stores pattern health snapshots for the learning loop
 /// Phase 4 — Learning Loop
 model LcPatternHealthRecord {
-  id                String   @id @default(cuid())
+  id                String    @id @default(cuid())
   organizationId    String
   workbookLineCode  String
   pattern           String
-  healthScore       Float    // 0-100
-  acceptanceRate    Float?   // 0-1
-  successRate       Float?   // 0-1
-  falsePositiveRate Float?   // 0-1
-  decayScore        Float    @default(1.0)
-  totalSuggestions  Int      @default(0)
-  totalAccepted     Int      @default(0)
-  totalSuccessful   Int      @default(0)
+  healthScore       Float // 0-100
+  acceptanceRate    Float? // 0-1
+  successRate       Float? // 0-1
+  falsePositiveRate Float? // 0-1
+  decayScore        Float     @default(1.0)
+  totalSuggestions  Int       @default(0)
+  totalAccepted     Int       @default(0)
+  totalSuccessful   Int       @default(0)
   lastSuggestedAt   DateTime?
   lastAppliedAt     DateTime?
-  status            String   @default("active") // active, decaying, obsolete, high_performing
+  status            String    @default("active") // active, decaying, obsolete, high_performing
   notes             String?
   metadata          Json?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@index([organizationId, workbookLineCode])
   @@index([organizationId, healthScore])
@@ -5477,19 +5486,19 @@ model LcPatternHealthRecord {
 /// Phase 4 — Recommendation Feedback Loop (V3.5)
 /// Records whether the predicted impact was realized
 model LcRecommendationOutcome {
-  id                  String   @id @default(cuid())
-  organizationId      String
-  recommendationId    String
-  workbookId          String
-  scoreBefore         Float?   // LC score before implementation
-  scoreAfter          Float?   // LC score after implementation
-  realizedDelta       Float?   // Actual score change
-  expectedDelta       Float?   // What was predicted
-  accuracyScore       Float?   // 0-1: how accurate the prediction was (1 = perfect)
-  timeToImplement     Int?     // Days from accepted to implemented
-  notes               String?
-  createdById         String?
-  createdAt           DateTime @default(now())
+  id               String   @id @default(cuid())
+  organizationId   String
+  recommendationId String
+  workbookId       String
+  scoreBefore      Float? // LC score before implementation
+  scoreAfter       Float? // LC score after implementation
+  realizedDelta    Float? // Actual score change
+  expectedDelta    Float? // What was predicted
+  accuracyScore    Float? // 0-1: how accurate the prediction was (1 = perfect)
+  timeToImplement  Int? // Days from accepted to implemented
+  notes            String?
+  createdById      String?
+  createdAt        DateTime @default(now())
 
   @@index([organizationId, recommendationId])
   @@index([organizationId, workbookId])
@@ -5517,26 +5526,27 @@ model ContentWorkspace {
 }
 
 model ContentItem {
-  id             String          @id @default(cuid())
+  id             String            @id @default(cuid())
   workspaceId    String
   organizationId String
   title          String
-  body           String          @db.Text
+  body           String            @db.Text
   summary        String?
-  locale         String          @default("ar")
+  locale         String            @default("ar")
   tags           String[]
-  status         String          @default("DRAFT")
-  contentType    String          @default("article")
-  version        Int             @default(1)
+  status         String            @default("DRAFT")
+  contentType    String            @default("article")
+  version        Int               @default(1)
   templateId     String?
   createdById    String
   reviewedById   String?
   approvedById   String?
   publishedAt    DateTime?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  workspace      ContentWorkspace @relation(fields: [workspaceId], references: [id])
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  workspace      ContentWorkspace  @relation(fields: [workspaceId], references: [id])
   versions       ContentVersion[]
+  evidence       ContentEvidence[]
 
   @@index([organizationId])
   @@index([workspaceId, status])
@@ -5563,21 +5573,42 @@ model ContentVersion {
 }
 
 model ContentTemplate {
-  id                  String   @id @default(cuid())
-  organizationId      String
-  name                String
-  description         String?
-  category            String?
-  bodyTemplate        String   @db.Text
-  metadataTemplate    Json?
-  defaultReviewRoles  String[]
-  isActive            Boolean  @default(true)
-  createdById         String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  organizationId     String
+  name               String
+  description        String?
+  category           String?
+  bodyTemplate       String   @db.Text
+  metadataTemplate   Json?
+  defaultReviewRoles String[]
+  isActive           Boolean  @default(true)
+  createdById        String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([organizationId])
   @@index([organizationId, isActive])
+}
+
+// ─── ContentStudio Evidence ───────────────────────────────────
+model ContentEvidence {
+  id             String      @id @default(cuid())
+  contentId      String
+  content        ContentItem @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  organizationId String
+  filename       String
+  fileType       String
+  fileSize       Int         @default(0)
+  fileHash       String?
+  storageKey     String?
+  uploadedById   String?
+  description    String?
+  evidenceType   String      @default("attachment") // attachment | reference | source
+  createdAt      DateTime    @default(now())
+
+  @@index([contentId])
+  @@index([organizationId])
+  @@index([createdAt])
 }
 
 // ==================== Knowledge Foundation Versioning (Phase 9) ====================
@@ -5591,26 +5622,26 @@ enum KnowledgeFoundationVersionStatus {
 }
 
 model KnowledgeFoundationVersion {
-  id                String                              @id @default(cuid())
-  versionNumber     String                              // e.g., "1.0.0"
-  status            KnowledgeFoundationVersionStatus     @default(DRAFT)
+  id                String                           @id @default(cuid())
+  versionNumber     String // e.g., "1.0.0"
+  status            KnowledgeFoundationVersionStatus @default(DRAFT)
   notes             String?
   artifactPath      String?
-  candidateCount    Int                                 @default(0)
+  candidateCount    Int                              @default(0)
   rollbackVersionId String?
   createdById       String
   approvedById      String?
   activatedAt       DateTime?
-  createdAt         DateTime                            @default(now())
-  updatedAt         DateTime                            @updatedAt
+  createdAt         DateTime                         @default(now())
+  updatedAt         DateTime                         @updatedAt
 
-  createdBy         User                                @relation("KFVersionCreator", fields: [createdById], references: [id])
-  approvedBy        User?                               @relation("KFVersionApprover", fields: [approvedById], references: [id])
-  rollbackVersion   KnowledgeFoundationVersion?         @relation("KFRollbackChain", fields: [rollbackVersionId], references: [id])
-  rolledFrom        KnowledgeFoundationVersion[]        @relation("KFRollbackChain")
+  createdBy         User                                  @relation("KFVersionCreator", fields: [createdById], references: [id])
+  approvedBy        User?                                 @relation("KFVersionApprover", fields: [approvedById], references: [id])
+  rollbackVersion   KnowledgeFoundationVersion?           @relation("KFRollbackChain", fields: [rollbackVersionId], references: [id])
+  rolledFrom        KnowledgeFoundationVersion[]          @relation("KFRollbackChain")
   releases          KnowledgeFoundationRelease[]
-  diffsAsFrom       KnowledgeFoundationDiff[]           @relation("KFDiffFrom")
-  diffsAsTo         KnowledgeFoundationDiff[]            @relation("KFDiffTo")
+  diffsAsFrom       KnowledgeFoundationDiff[]             @relation("KFDiffFrom")
+  diffsAsTo         KnowledgeFoundationDiff[]             @relation("KFDiffTo")
   candidateBindings KnowledgeFoundationVersionCandidate[]
 
   @@index([status])
@@ -5626,26 +5657,26 @@ enum KnowledgeFoundationReleaseArtifactStatus {
 }
 
 model KnowledgeFoundationRelease {
-  id               String   @id @default(cuid())
-  versionId        String
-  version          KnowledgeFoundationVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
-  releaseNotes     String?
-  changeSummary    Json?
-  manifestPath     String?
-  manifestSha256   String?
-  provenanceSnapshot Json?
-  artifactStatus   KnowledgeFoundationReleaseArtifactStatus @default(PENDING)
+  id                  String                                   @id @default(cuid())
+  versionId           String
+  version             KnowledgeFoundationVersion               @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  releaseNotes        String?
+  changeSummary       Json?
+  manifestPath        String?
+  manifestSha256      String?
+  provenanceSnapshot  Json?
+  artifactStatus      KnowledgeFoundationReleaseArtifactStatus @default(PENDING)
   previousReleaseId   String?
   previousReleaseHash String?
-  previousRelease     KnowledgeFoundationRelease?  @relation("KFReleaseChain", fields: [previousReleaseId], references: [id], onDelete: SetNull)
-  nextReleases        KnowledgeFoundationRelease[] @relation("KFReleaseChain")
-  createdById      String
-  approvedById     String?
-  approvedAt       DateTime?
-  createdAt        DateTime @default(now())
+  previousRelease     KnowledgeFoundationRelease?              @relation("KFReleaseChain", fields: [previousReleaseId], references: [id], onDelete: SetNull)
+  nextReleases        KnowledgeFoundationRelease[]             @relation("KFReleaseChain")
+  createdById         String
+  approvedById        String?
+  approvedAt          DateTime?
+  createdAt           DateTime                                 @default(now())
 
-  createdBy        User     @relation("KFReleaseCreator", fields: [createdById], references: [id])
-  approvedBy       User?    @relation("KFReleaseApprover", fields: [approvedById], references: [id])
+  createdBy  User  @relation("KFReleaseCreator", fields: [createdById], references: [id])
+  approvedBy User? @relation("KFReleaseApprover", fields: [approvedById], references: [id])
 
   @@index([versionId])
   @@index([createdById])
@@ -5654,22 +5685,22 @@ model KnowledgeFoundationRelease {
 }
 
 model KnowledgeFoundationDiff {
-  id              String   @id @default(cuid())
-  fromVersionId   String
-  toVersionId     String
-  addedRules      Json     @default("[]")
-  modifiedRules   Json     @default("[]")
-  removedRules    Json     @default("[]")
-  riskScore       Float    @default(0.0)
-  breakingChange  Boolean  @default(false)
-  summary         String?
-  generatedAt     DateTime @default(now())
+  id             String   @id @default(cuid())
+  fromVersionId  String
+  toVersionId    String
+  addedRules     Json     @default("[]")
+  modifiedRules  Json     @default("[]")
+  removedRules   Json     @default("[]")
+  riskScore      Float    @default(0.0)
+  breakingChange Boolean  @default(false)
+  summary        String?
+  generatedAt    DateTime @default(now())
 
-  fromVersion     KnowledgeFoundationVersion @relation("KFDiffFrom", fields: [fromVersionId], references: [id])
-  toVersion       KnowledgeFoundationVersion @relation("KFDiffTo", fields: [toVersionId], references: [id])
+  fromVersion KnowledgeFoundationVersion @relation("KFDiffFrom", fields: [fromVersionId], references: [id])
+  toVersion   KnowledgeFoundationVersion @relation("KFDiffTo", fields: [toVersionId], references: [id])
 
-  @@index([fromVersionId, toVersionId])
   @@unique([fromVersionId, toVersionId])
+  @@index([fromVersionId, toVersionId])
 }
 
 model KnowledgeFoundationVersionCandidate {
@@ -5695,23 +5726,23 @@ model KnowledgeFoundationVersionCandidate {
 
 /// L6.3 — Component Materiality (Group Audits)
 model ComponentMateriality {
-  id                      String            @id @default(cuid())
-  groupEngagementId       String
-  componentEntityName     String
-  componentType           String
-  planningMaterialityId   String
-  planningMateriality     PlanningMateriality @relation(fields: [planningMaterialityId], references: [id], onDelete: Cascade)
-  planningMaterialityAmount Float
+  id                           String              @id @default(cuid())
+  groupEngagementId            String
+  componentEntityName          String
+  componentType                String
+  planningMaterialityId        String
+  planningMateriality          PlanningMateriality @relation(fields: [planningMaterialityId], references: [id], onDelete: Cascade)
+  planningMaterialityAmount    Float
   performanceMaterialityAmount Float?
-  trivialThresholdAmount  Float?
-  allocationBasis         String?
-  consolidationNote       String?
-  reviewedById            String?
-  reviewedAt              DateTime?
-  createdById             String?
+  trivialThresholdAmount       Float?
+  allocationBasis              String?
+  consolidationNote            String?
+  reviewedById                 String?
+  reviewedAt                   DateTime?
+  createdById                  String?
 
-  createdAt               DateTime          @default(now())
-  updatedAt               DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([groupEngagementId])
   @@index([planningMaterialityId])

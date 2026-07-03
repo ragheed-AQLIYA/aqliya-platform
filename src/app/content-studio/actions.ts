@@ -251,6 +251,26 @@ export async function archiveContentAction(contentId: string) {
   });
 }
 
+export async function deleteContentAction(contentId: string) {
+  return safe(async () => {
+    const user = await requireUserContext("OPERATOR");
+    const content = await csGetContent(contentId);
+    if (!content) throw new ContentStudioError("Content item not found");
+    await csArchiveContent(contentId, user.id); // soft-delete via archive
+    await writePlatformAuditLog({
+      productKey: "platform",
+      sourceSystem: "content_studio",
+      action: "content_studio.content_deleted",
+      platformOrganizationId: user.organizationId,
+      actorId: user.id,
+      targetType: "contentItem",
+      targetId: content.id,
+      targetLabel: content.title,
+    });
+    revalidateAll();
+  });
+}
+
 // ─── Template Actions ───
 
 export async function createTemplateAction(data: CreateTemplateData) {

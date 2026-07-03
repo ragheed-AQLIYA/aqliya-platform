@@ -135,7 +135,7 @@
 | WorkflowOS          | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
 | Sunbul              | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 |
 | auditos             | Included as demo only                   | L1 Marketing   | Demo only                     |
-| ContentStudio       | Included as operational content workspace | L4 Usable v0.1 | Internal only                 |
+| ContentStudio       | Included as operational content workspace | L5 Pilot-ready | Safe to show with explanation |
 | Institutional Memory| Internal capability                     | L3 Prototype   | Internal only                 |
 | Sampling            | Internal workspace                      | L3 Prototype   | Internal only                 |
 | Knowledge Foundation| Governance capability                   | L4 Usable v0.1 | Safe to show with explanation |
