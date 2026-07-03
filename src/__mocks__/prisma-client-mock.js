@@ -24,6 +24,7 @@ const MODEL_NAMES = [
   'salesAccount', 'salesContact', 'salesDeal', 'salesAuditEvent',
   'salesPipeline', 'salesPipelineStage', 'salesInteraction',
   'salesEvidenceLink', 'salesSignal',
+  'ssoProvider', 'scimProvisioningEvent',
 ]
 
 const AuditAction = {
@@ -436,6 +437,14 @@ function makeModel(model) {
       if (!record) throw new Error(`${model} not found`)
       applyMutation(record, data)
       return projectRecord(model, record, select, include)
+    },
+    delete: async ({ where }) => {
+      const record = getOne(model, where)
+      if (!record) throw new Error(`${model} not found`)
+      const store = getStore(model)
+      const idx = store.indexOf(record)
+      if (idx >= 0) store.splice(idx, 1)
+      return clone(record)
     },
     upsert: async ({ where, create, update }) => {
       const existing = getOne(model, where)

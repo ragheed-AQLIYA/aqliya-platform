@@ -140,4 +140,6 @@
 | Sampling            | Internal workspace                      | L3 Prototype   | Internal only                 |
 | Knowledge Foundation| Governance capability                   | L4 Usable v0.1 | Safe to show with explanation |
 | SalesOS             | Prototype / internal preview            | L3 Prototype   | Do not show as implemented    |
+| SSO (SAML/OIDC)     | Enterprise auth capability              | L5 Pilot-ready | Safe to show with explanation |
+| SCIM v2 Provisioning| Identity management (SCIM API)          | L5 Pilot-ready | Safe to show with explanation |
 | LocalContentOS      | Included as pilot-ready with conditions | L5 Pilot-ready | Safe to show with explanation |

@@ -17,6 +17,7 @@ import { seedOrganizations } from "./seed-organizations";
 import { seedContentStudio } from "./seed-content-studio";
 import { seedDefaultAbacPolicies } from "./seed-abac-policies";
 import { seedKnowledgeMining } from "./seed-knowledge-mining";
+import { seedSsoProviders } from "./seed-sso";
 
 // Load .env file explicitly
 config({ path: resolve(__dirname, "../.env") });
@@ -1733,6 +1734,10 @@ async function main() {
   // ─── Knowledge Foundation Mining Seed (Phase 8) ───
   await seedKnowledgeMining(prisma, platformOrg.id);
   console.log("Knowledge Mining seed complete");
+
+  // ─── SSO/SCIM Provider Seed ───
+  await seedSsoProviders(prisma, platformOrg.id);
+  console.log("SSO providers seeded (Google Workspace, GitHub, Azure AD, SAML)");
 
   // Guarantee demo login passwords (safe after partial seeds / audit re-seeds)
   const demoPasswords: Array<{ email: string; password: string }> = [
