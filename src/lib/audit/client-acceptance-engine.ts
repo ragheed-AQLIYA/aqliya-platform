@@ -185,8 +185,11 @@ class ClientAcceptanceEngineImpl {
     });
 
     const kycData = {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ownershipStructure: (data.ownershipStructure ?? undefined) as any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       financialHealth: (data.financialHealth ?? undefined) as any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       litigationHistory: (data.litigationHistory ?? undefined) as any,
     };
 
@@ -244,7 +247,9 @@ class ClientAcceptanceEngineImpl {
         assessmentType: input.assessmentType,
         overallRiskLevel: overallLevel,
         overallRiskScore: overallScore,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         riskFactors: input.riskFactors as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         mitigatingFactors: (input.mitigatingFactors ?? undefined) as any,
         assessedById: actor.actorId,
         assessedAt: new Date(),
@@ -321,6 +326,7 @@ class ClientAcceptanceEngineImpl {
         decisionType: input.decisionType,
         decision: input.decision,
         rationale: input.rationale,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         conditions: (input.conditions ?? undefined) as any,
         effectiveDate: input.effectiveDate,
         expiryDate: input.expiryDate,
@@ -375,8 +381,11 @@ class ClientAcceptanceEngineImpl {
         organizationId: data.organizationId,
         clientId: data.clientId,
         reviewYear: data.reviewYear,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         engagementHistory: (data.engagementHistory ?? undefined) as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         feeHistory: (data.feeHistory ?? undefined) as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         clientChanges: (data.clientChanges ?? undefined) as any,
         status: "pending",
         createdById: actor.actorId,

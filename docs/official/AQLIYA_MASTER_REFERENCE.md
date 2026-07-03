@@ -93,11 +93,15 @@ AQLIYA Platform Company
 ├── Custom / Client-Specific Workspaces
 │   ├── WorkflowOS
 │   └── Sunbul (legacy redirect alias to WorkflowOS)
-├── Internal Prototype Surfaces (code reality — undocumented in earlier taxonomy)
-│   └── ContentStudio (content workspace — L3 prototype)
+├── Operational Content Workspace
+│   └── ContentStudio (Operational Content Workspace — L4 Usable v0.1, see AQLIYA_SYSTEM_TAXONOMY.md for scope definition)
+├── Governance & Risk Workspaces
+│   ├── RiskOS (L5 pilot-ready workspace at /risk/* — not standalone product)
+│   └── Knowledge Foundation (L4 governance capability)
+├── Internal Workspaces
+│   ├── LocalContactOS (L4 governed contact workspace)
+│   └── Institutional Memory (L3–L4 partial)
 ├── Future Systems (not yet implemented)
-│   ├── LocalContactOS
-│   ├── RiskOS (L5 workspace at /risk/* exists — not standalone product)
 │   ├── ComplianceOS
 │   ├── LegalOS
 │   └── GovOS
@@ -156,7 +160,7 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | `/sunbul/*`                | Sunbul legacy redirect alias to WorkflowOS | Active — redirect alias     |
 | `/contacts/*`              | LocalContactOS governed contact workspace  | Active — L4                 |
 | `/workflowos/*`            | WorkflowOS governed workspace              | Active — L4                 |
-| /content-studio/*       | ContentStudio prototype workspace       | Active - L3 prototype       |
+| `/content-studio/*`       | ContentStudio operational content workspace | Active — L4 Usable v0.1 |
 | `/sales`                   | SalesOS workspace (internal preview)       | Active — L4 prototype       |
 | `/organizations/*`         | Generic organizations prototype            | Active — L3 prototype       |
 | `/settings/*`              | Platform diagnostics + prototype settings  | Active — L2/L4              |
@@ -179,6 +183,7 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - **Office AI Assistant** — Task creation, document-aware responses, file content extraction, review workflow, action logs, permission checks, audit events
 - **Sunbul** — Legacy redirect alias to WorkflowOS
 - **WorkflowOS** — Canonical governed workspace, multi-client records management, governed workflow, evidence management, audit trail, dashboard with real metrics, review queue, PDF export
+- **ContentStudio** — Operational Content Workspace at `/content-studio/*`. Content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning with restore, template system with variable interpolation, PDF export with bilingual Arabic/English, audit trail, sidebar entry, seed data (3 workspaces, 7 items, 12 versions, 2 templates), ~125 tests. See AQLIYA_SYSTEM_TAXONOMY.md for full scope definition.
 - **Platform Infrastructure** — Auth, RBAC, audit logs, storage provider, export engine, health monitoring
 - **Custom Product Inquiry** — Funnel with form submission API
 
@@ -214,12 +219,12 @@ All surfaces with active routes, server actions, database models, seed data, tes
 
 ---
 
-## 11. What Is Prototype / Internal Preview (L3–L4)
+## 11. What Is Internal Workspace (L3–L4)
 
-- **SalesOS** — L4 usable v0.1 internal preview at `/sales/*`. Real persistence and governance patterns; not L5 pilot-ready and not production CRM.
 - **Organizations surface** — Mock/internal preview only.
 - **Generic settings** — Local-state-only preview.
-- **ContentStudio** — L3 prototype content workspace at `/content-studio/*`. Real Prisma models (ContentWorkspace, ContentItem, ContentVersion, ContentTemplate), server actions, Arabic-first RTL UI, content lifecycle with 5 states, versioning, template variable interpolation, audit trail. Missing: seed data, sidebar entry, PDF/export, test coverage.
+
+**Note:** ContentStudio has moved out of internal preview — see §8 (ContentStudio entry).
 
 ---
 

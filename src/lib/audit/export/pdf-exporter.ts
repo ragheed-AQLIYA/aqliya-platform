@@ -7,6 +7,10 @@ import {
   normalizeArabicNumber,
   ARABIC_LABELS,
 } from "../arabic-pdf-support";
+import {
+  registerArabicFonts,
+  fontNameForLocale,
+} from "@/lib/pdf/fonts/arabic-font-utils";
 
 const COMPANY_NAME = "AQLIYA";
 const PRODUCT_NAME = "AuditOS";
@@ -29,19 +33,21 @@ function isArabicLocale(input: ExportInput): boolean {
 function drawHeader(doc: PDFKit.PDFDocument, input: ExportInput): void {
   const m = input.metadata;
   const isAr = isArabicLocale(input);
-  const align = isAr ? "right" as const : "left" as const;
   const locale = isAr ? "ar" as const : "en" as const;
+  const align = isAr ? "right" as const : "left" as const;
+  const fRegular = () => fontNameForLocale(locale);
+  const fBold = () => fontNameForLocale(locale, "bold");
 
   doc
     .fontSize(14)
-    .font("Helvetica-Bold")
+    .font(fBold())
     .text(`${COMPANY_NAME} ${PRODUCT_NAME}`, { align });
   doc
     .fontSize(8)
-    .font("Helvetica")
+    .font(fRegular())
     .text(locale === "ar" ? "القوائم المالية — تصدير" : "Financial Statements — Draft Export", { align });
   doc.moveDown(0.3);
-  doc.fontSize(9).font("Helvetica");
+  doc.fontSize(9).font(fRegular());
   doc.text(
     `${lbl("client", locale)}: ${m.clientName}  |  ${lbl("period", locale)}: ${m.fiscalPeriod}  |  ${lbl("standard", locale)}: ${m.reportingFramework}  |  ${lbl("currency", locale)}: ${m.currency}`,
   );
@@ -51,16 +57,16 @@ function drawHeader(doc: PDFKit.PDFDocument, input: ExportInput): void {
   doc.moveDown(0.5);
 
   if (m.labels.draftWarning) {
-    doc.fontSize(8).fillColor("#cc5500").font("Helvetica-Oblique");
+    doc.fontSize(8).fillColor("#cc5500").font(fRegular());
     doc.text(isAr ? "مسودة — ليست نهائية حتى الاعتماد" : m.labels.draftWarning, { align: "center" });
-    doc.fillColor("#000000").font("Helvetica");
+    doc.fillColor("#000000").font(fRegular());
     doc.moveDown(0.3);
   }
 
   if (m.labels.approvalInfo) {
-    doc.fontSize(8).fillColor("#2b7a2b").font("Helvetica-Oblique");
+    doc.fontSize(8).fillColor("#2b7a2b").font(fRegular());
     doc.text(m.labels.approvalInfo, { align: "center" });
-    doc.fillColor("#000000").font("Helvetica");
+    doc.fillColor("#000000").font(fRegular());
     doc.moveDown(0.3);
   }
 
@@ -74,7 +80,10 @@ function drawStatementTable(
   locale: "ar" | "en" = "en",
 ): void {
   const align = locale === "ar" ? "right" as const : "left" as const;
-  doc.fontSize(11).font("Helvetica-Bold").text(title, { align });
+  const fRegular = () => fontNameForLocale(locale);
+  const fBold = () => fontNameForLocale(locale, "bold");
+
+  doc.fontSize(11).font(fBold()).text(title, { align });
   doc.moveDown(0.2);
 
   const pageWidth = 540;
@@ -90,7 +99,7 @@ function drawStatementTable(
     const amount = line.amount;
 
     doc.fontSize(line.isTotal ? 9 : 8);
-    doc.font(line.isTotal ? "Helvetica-Bold" : "Helvetica");
+    doc.font(line.isTotal ? fBold() : fRegular());
 
     if (line.isTotal) {
       doc.moveDown(0.1);
@@ -134,28 +143,30 @@ function drawStatementTable(
 function drawNotesSummary(doc: PDFKit.PDFDocument, input: ExportInput): void {
   if (input.notes.length === 0) return;
   const isAr = isArabicLocale(input);
-  const align = isAr ? "right" as const : "left" as const;
   const locale = isAr ? "ar" as const : "en" as const;
+  const align = isAr ? "right" as const : "left" as const;
+  const fRegular = () => fontNameForLocale(locale);
+  const fBold = () => fontNameForLocale(locale, "bold");
 
   doc.addPage();
   doc
     .fontSize(14)
-    .font("Helvetica-Bold")
+    .font(fBold())
     .text(lbl("notesToFinancialStatements", locale) + (isAr ? " (Notes)" : ""), { align });
   doc.moveDown(0.5);
 
   for (const note of input.notes) {
     doc
       .fontSize(9)
-      .font("Helvetica-Bold")
+      .font(fBold())
       .text(`${note.noteNumber}. ${note.title}`, { align });
-    doc.fontSize(8).font("Helvetica");
+    doc.fontSize(8).font(fRegular());
     const cleanContent = note.content.replace(/<[^>]*>/g, "").substring(0, 600);
     doc.text(cleanContent, { indent: 10, align });
     if (note.missingInformation.length > 0) {
-      doc.fontSize(7).fillColor("#cc5500").font("Helvetica-Oblique");
+      doc.fontSize(7).fillColor("#cc5500").font(fRegular());
       doc.text(isAr ? `معلومات ناقصة: ${note.missingInformation.join(", ")}` : `Missing information: ${note.missingInformation.join(", ")}`, { align });
-      doc.fillColor("#000000").font("Helvetica");
+      doc.fillColor("#000000").font(fRegular());
     }
     doc.moveDown(0.3);
   }
@@ -168,6 +179,8 @@ export const pdfExporter: Exporter = {
     const isAr = isArabicLocale(input);
     const locale = isAr ? "ar" as const : "en" as const;
     const align = isAr ? "right" as const : "left" as const;
+    const fRegular = () => fontNameForLocale(locale);
+    const fBold = () => fontNameForLocale(locale, "bold");
 
     const doc = new PDFDocument({
       size: "A4",
@@ -179,6 +192,9 @@ export const pdfExporter: Exporter = {
         Creator: `${COMPANY_NAME} ${PRODUCT_NAME}`,
       },
     });
+
+    // Register Arabic fonts for proper glyph rendering in Arabic-locale exports
+    registerArabicFonts(doc);
 
     const chunks: Buffer[] = [];
     doc.on("data", (chunk: Buffer) => chunks.push(chunk));
@@ -198,10 +214,10 @@ export const pdfExporter: Exporter = {
     // Draw audit file sections if present
     if (input.auditTrail && input.auditTrail.length > 0) {
       doc.addPage();
-      doc.fontSize(12).font("Helvetica-Bold").text(locale === "ar" ? "سجل التدقيق" : "Audit Trail", { align });
+      doc.fontSize(12).font(fBold()).text(locale === "ar" ? "سجل التدقيق" : "Audit Trail", { align });
       doc.moveDown(0.3);
       for (const event of input.auditTrail.slice(0, 50)) {
-        doc.fontSize(7).font("Helvetica");
+        doc.fontSize(7).font(fRegular());
         doc.text(
           `${new Date(event.timestamp).toLocaleString(isAr ? "ar-SA" : "en-US")} | ${event.actorName} | ${event.eventType} | ${event.description.substring(0, 100)}`,
           { align },
@@ -216,7 +232,7 @@ export const pdfExporter: Exporter = {
       for (let i = range.start; i < range.start + range.count; i++) {
         doc.switchToPage(i);
         const bottom = doc.page.margins?.bottom ?? 40;
-        doc.fontSize(7).fillColor("#888888").font("Helvetica");
+        doc.fontSize(7).fillColor("#888888").font(fRegular());
         doc.text(
           `${COMPANY_NAME} ${PRODUCT_NAME} — ${lbl("draft", locale)} — ${lbl("page", locale)} ${i}`,
           50,

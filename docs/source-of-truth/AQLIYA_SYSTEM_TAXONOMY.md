@@ -58,13 +58,44 @@
 - `/organizations/*` and `/settings` generic surfaces are internal preview/prototype only
 - These must not be shown as implemented v0.1 operational modules
 
-### ContentStudio
+### ContentStudio — Operational Content Workspace
 
-- Real content workspace prototype at `/content-studio/*`
-- Prisma models: ContentWorkspace, ContentItem, ContentVersion, ContentTemplate
-- Content lifecycle: DRAFT → IN_REVIEW → APPROVED → PUBLISHED → ARCHIVED
-- L3 Prototype / internal preview — undocumented in official taxonomy
-- ContentStudio is a front-end content platform, not a governed product
+**Identity:** ContentStudio is AQLIYA's **Operational Content Workspace** — a governed platform for creating, reviewing, approving, publishing, and versioning institutional content. It is a **standalone governed workspace**, not a subsystem of any other product.
+
+**Scope:**
+- Content lifecycle management: DRAFT → IN_REVIEW → APPROVED → PUBLISHED → ARCHIVED
+- Versioning with full history and restore capability
+- Template system with variable interpolation (e.g., `{{projectName}}`)
+- PDF export with bilingual Arabic/English rendering
+- Audit trail via `writePlatformAuditLog` for all mutations
+- Role-based access via authenticated routes + server-side guards
+- Multiple workspaces per organization for content domain separation
+
+**Prisma models:** ContentWorkspace, ContentItem, ContentVersion, ContentTemplate
+
+**What ContentStudio is NOT:**
+- NOT a CMS (no web publishing, no public rendering, no SEO/metadata for web)
+- NOT a Document Management System (no folder hierarchy, no complex metadata taxonomy, no file storage)
+- NOT a subsystem of LocalContentOS (LocalContentOS = supplier/local content scoring & intelligence; ContentStudio = general content workspace)
+- NOT a marketing tool (no analytics, no A/B testing, no campaign management)
+- NOT a documentation platform (no wiki-style linking, no cross-reference engine)
+
+**Boundaries with adjacent products:**
+- **LocalContentOS:** LocalContentOS handles supplier scoring, local content percentage calculation, tender matching, ERP integration, and spend analytics. ContentStudio handles general content creation/review/publishing. The unified review abstraction layer (`src/lib/platform/reviews/`) supports both independently.
+- **Knowledge Foundation:** Knowledge Foundation handles governed promotion pipelines with SHA-256 release packages and structured diff engines. ContentStudio handles simpler content versioning for operational documents.
+- **Office AI Assistant:** Assistant generates draft content as suggestions. ContentStudio can be the target workspace where those drafts are stored, reviewed, and published.
+
+**Current maturity:** L4 Usable v0.1 (2026-07-03)
+- Real Prisma persistence (4 models)
+- 5 route groups (dashboard, workspace detail, content create, content detail, templates)
+- Full lifecycle with 5 states + versioning
+- PDF export with bilingual rendering (Noto Naskh Arabic)
+- ~125 tests across 3 test files (content-studio-service, content-studio-actions, content-export)
+- Audit trail on all mutations
+- Arabic-first RTL UI
+- Seed data: 3 workspaces, 7 content items, 12 versions, 2 templates
+
+**Target taxonomy classification:** "Specialized Operating System" — Operational Content Workspace
 
 ### Institutional Memory
 
@@ -104,7 +135,7 @@
 | WorkflowOS          | Included as governed workspace          | L4 Usable v0.1 | Safe to show with explanation |
 | Sunbul              | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 |
 | auditos             | Included as demo only                   | L1 Marketing   | Demo only                     |
-| ContentStudio       | Prototype / internal preview            | L3 Prototype   | Internal only                 |
+| ContentStudio       | Included as operational content workspace | L4 Usable v0.1 | Internal only                 |
 | Institutional Memory| Internal capability                     | L3 Prototype   | Internal only                 |
 | Sampling            | Internal workspace                      | L3 Prototype   | Internal only                 |
 | Knowledge Foundation| Governance capability                   | L4 Usable v0.1 | Safe to show with explanation |

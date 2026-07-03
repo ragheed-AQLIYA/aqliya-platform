@@ -1,5 +1,9 @@
 import "server-only";
 import PDFDocument from "pdfkit";
+import {
+  registerArabicFonts,
+  ARABIC_FONT_NAMES,
+} from "@/lib/pdf/fonts/arabic-font-utils";
 
 export interface ContentStudioExportInput {
   contentId: string;
@@ -42,6 +46,12 @@ export async function buildContentStudioPDF(
     },
   });
 
+  // Register Arabic fonts for bilingual PDF export
+  registerArabicFonts(doc);
+
+  const fRegular = (): string => ARABIC_FONT_NAMES.regular;
+  const fBold = (): string => ARABIC_FONT_NAMES.bold;
+
   const chunks: Buffer[] = [];
   doc.on("data", (chunk: Buffer) => chunks.push(chunk));
   const endPromise = new Promise<void>((resolve) =>
@@ -57,17 +67,17 @@ export async function buildContentStudioPDF(
   };
 
   // ─── Header ───
-  doc.fontSize(16).font("Helvetica-Bold").text("ContentStudio", {
+  doc.fontSize(16).font(fBold()).text("ContentStudio", {
     align: "center",
   });
   doc
     .fontSize(12)
-    .font("Helvetica")
+    .font(fRegular())
     .text("تقرير المحتوى — Content Report", { align: "center" });
   doc.moveDown(0.5);
 
   // ─── Meta section ───
-  doc.fontSize(8).font("Helvetica");
+  doc.fontSize(8).font(fRegular());
   doc.text(`تم التصدير: ${input.exportedAt.toISOString()}`);
   doc.text(`المساحة: ${input.workspaceName}`);
   doc.text(`الإصدار: v${input.version}`);
@@ -78,14 +88,14 @@ export async function buildContentStudioPDF(
   doc.moveDown(0.5);
 
   // ─── Title ───
-  doc.fontSize(14).font("Helvetica-Bold").text(input.title);
+  doc.fontSize(14).font(fBold()).text(input.title);
   doc.moveDown(0.3);
 
   // ─── Summary ───
   if (input.summary) {
     doc
       .fontSize(10)
-      .font("Helvetica-Oblique")
+      .font(fRegular())
       .fillColor("#555555")
       .text(input.summary);
     doc.fillColor("#000000");
@@ -94,30 +104,30 @@ export async function buildContentStudioPDF(
 
   // ─── Tags ───
   if (input.tags.length > 0) {
-    doc.fontSize(8).font("Helvetica").fillColor("#666666");
+    doc.fontSize(8).font(fRegular()).fillColor("#666666");
     doc.text(`الوسوم: ${input.tags.join(" • ")}`);
     doc.fillColor("#000000");
     doc.moveDown(0.3);
   }
 
   // ─── Body ───
-  doc.fontSize(10).font("Helvetica");
+  doc.fontSize(10).font(fRegular());
   // Split body by lines and render each
   const lines = input.body.split("\n");
   for (const line of lines) {
     // Simple markdown heading detection
     if (line.startsWith("# ")) {
-      doc.fontSize(13).font("Helvetica-Bold").text(line.replace(/^# /, ""));
+      doc.fontSize(13).font(fBold()).text(line.replace(/^# /, ""));
     } else if (line.startsWith("## ")) {
-      doc.fontSize(11).font("Helvetica-Bold").text(line.replace(/^## /, ""));
+      doc.fontSize(11).font(fBold()).text(line.replace(/^## /, ""));
     } else if (line.startsWith("### ")) {
-      doc.fontSize(10).font("Helvetica-Bold").text(line.replace(/^### /, ""));
+      doc.fontSize(10).font(fBold()).text(line.replace(/^### /, ""));
     } else if (line.startsWith("- ")) {
-      doc.fontSize(9).font("Helvetica").text(`  •  ${line.slice(2)}`);
+      doc.fontSize(9).font(fRegular()).text(`  •  ${line.slice(2)}`);
     } else if (line.trim() === "") {
       doc.moveDown(0.2);
     } else {
-      doc.fontSize(9).font("Helvetica").text(line);
+      doc.fontSize(9).font(fRegular()).text(line);
     }
   }
   doc.moveDown(0.5);
@@ -125,7 +135,7 @@ export async function buildContentStudioPDF(
   // ─── Metadata footer ───
   doc
     .fontSize(8)
-    .font("Helvetica")
+    .font(fRegular())
     .fillColor("#888888");
   doc.text(`تاريخ الإنشاء: ${input.createdAt.toISOString().split("T")[0]}`);
   doc.text(`آخر تحديث: ${input.updatedAt.toISOString().split("T")[0]}`);
@@ -150,7 +160,7 @@ export async function buildContentStudioPDF(
   doc
     .fontSize(7)
     .fillColor("#aaaaaa")
-    .font("Helvetica")
+    .font(fRegular())
     .text(
       "هذا التقرير مولّد بواسطة ContentStudio تحت AQLIYA. الذكاء يساعد — الإنسان يقرر — الدليل يحكم.",
     );
@@ -163,7 +173,7 @@ export async function buildContentStudioPDF(
   if (range && range.count > 0) {
     for (let i = range.start; i < range.start + range.count; i++) {
       doc.switchToPage(i);
-      doc.fontSize(7).fillColor("#888888").font("Helvetica");
+      doc.fontSize(7).fillColor("#888888").font(fRegular());
       doc.text(
         `AQLIYA ContentStudio — Page ${i + 1}`,
         50,

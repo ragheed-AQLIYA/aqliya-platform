@@ -96,6 +96,7 @@ class ReviewNotesEngineImpl {
   async addEvidence(actor: AuditActor, noteId: string, _engagementId: string, evidenceRef: Record<string, unknown>) {
     const note = await prisma.reviewNote.update({
       where: { id: noteId },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: { evidenceRef: evidenceRef as any, status: "evidenced" },
     });
     await this.audit(actor, "review_note.evidenced", noteId, _engagementId, {});

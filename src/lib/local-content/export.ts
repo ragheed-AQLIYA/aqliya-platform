@@ -3,8 +3,7 @@ import * as XLSX from "xlsx";
 import type { ScoringResult } from "./types";
 import {
   formatPdfArabicNumber,
-  getLocalContentPdfLocale,
-  pdfTextOptions,
+  setupLocalContentPdfFonts,
 } from "./pdf-arabic";
 
 export interface LocalContentExportInput {
@@ -46,20 +45,19 @@ export async function buildAssessmentSummaryPDF(
     doc.on("end", () => resolve()),
   );
 
-  const locale = getLocalContentPdfLocale();
-  const textOpts = pdfTextOptions(locale);
+  const { fRegular, fBold, locale, textOpts } = setupLocalContentPdfFonts(doc);
 
   doc
     .fontSize(16)
-    .font("Helvetica-Bold")
+    .font(fBold())
     .text("LocalContentOS — تقرير المحتوى المحلي", textOpts);
   doc
     .fontSize(12)
-    .font("Helvetica")
+    .font(fRegular())
     .text("تقرير تقييم المحتوى المحلي", textOpts);
   doc.moveDown(0.8);
 
-  doc.fontSize(9).font("Helvetica");
+  doc.fontSize(9).font(fRegular());
   doc.text(`المشروع: ${input.projectName}`, textOpts);
   doc.text(`فترة التقرير: ${input.reportingPeriod}`, textOpts);
   doc.text(`تاريخ التوليد: ${input.generatedAt}`, textOpts);
@@ -68,9 +66,9 @@ export async function buildAssessmentSummaryPDF(
   doc.text(`حالة الاعتماد: ${input.approvalStatus || "قيد الانتظار"}`, textOpts);
   doc.moveDown(0.6);
 
-  doc.fontSize(11).font("Helvetica-Bold").text("ملخص النتيجة", textOpts);
+  doc.fontSize(11).font(fBold()).text("ملخص النتيجة", textOpts);
   doc.moveDown(0.2);
-  doc.fontSize(9).font("Helvetica");
+  doc.fontSize(9).font(fRegular());
   doc.text(
     `إجمالي الإنفاق: ${formatPdfArabicNumber(input.score.totalSpend)} ر.س`,
     textOpts,
@@ -89,9 +87,9 @@ export async function buildAssessmentSummaryPDF(
   );
   doc.moveDown(0.6);
 
-  doc.fontSize(11).font("Helvetica-Bold").text("الموردون", textOpts);
+  doc.fontSize(11).font(fBold()).text("الموردون", textOpts);
   doc.moveDown(0.2);
-  doc.fontSize(9).font("Helvetica");
+  doc.fontSize(9).font(fRegular());
   doc.text(`الإجمالي: ${input.score.supplierCounts.total}`, textOpts);
   doc.text(`محلي: ${input.score.supplierCounts.local}`, textOpts);
   doc.text(`غير محلي: ${input.score.supplierCounts.nonLocal}`, textOpts);
@@ -99,9 +97,9 @@ export async function buildAssessmentSummaryPDF(
   doc.text(`غير مصنّف: ${input.score.supplierCounts.unclassified}`, textOpts);
   doc.moveDown(0.6);
 
-  doc.fontSize(11).font("Helvetica-Bold").text("الأدلة", textOpts);
+  doc.fontSize(11).font(fBold()).text("الأدلة", textOpts);
   doc.moveDown(0.2);
-  doc.fontSize(9).font("Helvetica");
+  doc.fontSize(9).font(fRegular());
   doc.text(`الإجمالي: ${input.score.evidenceStats.total}`, textOpts);
   doc.text(`موثّق: ${input.score.evidenceStats.verified}`, textOpts);
   doc.text(
@@ -110,9 +108,9 @@ export async function buildAssessmentSummaryPDF(
   );
   doc.moveDown(0.6);
 
-  doc.fontSize(11).font("Helvetica-Bold").text("الملاحظات", textOpts);
+  doc.fontSize(11).font(fBold()).text("الملاحظات", textOpts);
   doc.moveDown(0.2);
-  doc.fontSize(9).font("Helvetica");
+  doc.fontSize(9).font(fRegular());
   doc.text(`الإجمالي: ${input.score.findingStats.total}`, textOpts);
   for (const [severity, count] of Object.entries(
     input.score.findingStats.bySeverity,
@@ -125,7 +123,7 @@ export async function buildAssessmentSummaryPDF(
   if (range && range.count > 0) {
     for (let i = range.start; i < range.start + range.count; i++) {
       doc.switchToPage(i);
-      doc.fontSize(7).fillColor("#888888").font("Helvetica");
+      doc.fontSize(7).fillColor("#888888").font(fRegular());
       doc.text(
         `AQLIYA LocalContentOS — Page ${i + 1}`,
         50,

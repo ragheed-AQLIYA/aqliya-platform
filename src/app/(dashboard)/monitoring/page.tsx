@@ -7,40 +7,60 @@ import { TbFirmMemoryKpisPanel } from "@/components/monitoring/tb-firm-memory-kp
 
 export const dynamic = "force-dynamic";
 
+const CARD_STYLES = [
+  "text-module-audit",
+  "text-module-decision",
+  "text-module-sales",
+  "text-status-success",
+  "text-orange-600",
+  "text-purple-600",
+  "text-cyan-600",
+  "text-pink-600",
+  "text-emerald-600",
+  "text-indigo-600",
+  "text-amber-600",
+  "text-rose-600",
+] as const;
+
 async function MetricsCards() {
-  const [engagementCount, decisionCount, clientCount, evidenceCount] =
-    await Promise.all([
-      prisma.auditEngagement.count(),
-      prisma.decision.count(),
-      prisma.auditClient.count(),
-      prisma.auditEvidence.count(),
-    ]);
+  const counts = await Promise.all([
+    prisma.auditEngagement.count(),
+    prisma.decision.count(),
+    prisma.auditClient.count(),
+    prisma.auditEvidence.count(),
+    prisma.localContentProject.count().catch(() => 0),
+    prisma.localContact.count().catch(() => 0),
+    prisma.salesAccount.count().catch(() => 0),
+    prisma.contentWorkspace.count().catch(() => 0),
+    prisma.risk.count().catch(() => 0),
+    prisma.institutionalMemoryEvent.count().catch(() => 0),
+    prisma.knowledgeFoundationVersion.count().catch(() => 0),
+    prisma.auditEvent.count(),
+  ]);
+
+  const metrics = [
+    { label: "مهام التدقيق", value: counts[0], color: CARD_STYLES[0] },
+    { label: "القرارات", value: counts[1], color: CARD_STYLES[1] },
+    { label: "العملاء", value: counts[2], color: CARD_STYLES[2] },
+    { label: "ملفات الأدلة", value: counts[3], color: CARD_STYLES[3] },
+    { label: "مشاريع المحتوى المحلي", value: counts[4], color: CARD_STYLES[4] },
+    { label: "جهات الاتصال", value: counts[5], color: CARD_STYLES[5] },
+    { label: "حسابات المبيعات", value: counts[6], color: CARD_STYLES[6] },
+    { label: "مساحات المحتوى", value: counts[7], color: CARD_STYLES[7] },
+    { label: "المخاطر", value: counts[8], color: CARD_STYLES[8] },
+    { label: "أحداث الذاكرة المؤسسية", value: counts[9], color: CARD_STYLES[9] },
+    { label: "إصدارات أساس المعرفة", value: counts[10], color: CARD_STYLES[10] },
+    { label: "أحداث التدقيق", value: counts[11], color: CARD_STYLES[11] },
+  ];
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      {[
-        {
-          label: "مهام التدقيق",
-          value: engagementCount,
-          color: "text-module-audit",
-        },
-        {
-          label: "القرارات",
-          value: decisionCount,
-          color: "text-module-decision",
-        },
-        { label: "العملاء", value: clientCount, color: "text-module-sales" },
-        {
-          label: "ملفات الأدلة",
-          value: evidenceCount,
-          color: "text-status-success",
-        },
-      ].map(({ label, value, color }) => (
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+      {metrics.map(({ label, value, color }) => (
         <div
           key={label}
           className="rounded-xl border bg-card p-4 text-center shadow-sm"
         >
-          <p className={`text-3xl font-black ${color}`}>{value}</p>
+          <p className={`text-3xl font-black ${color}`}>{value.toLocaleString("ar-SA")}</p>
           <p className="mt-1 text-xs text-muted-foreground">{label}</p>
         </div>
       ))}

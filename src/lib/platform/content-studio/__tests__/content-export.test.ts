@@ -7,6 +7,7 @@ const mockDoc = {
   fillColor: jest.fn().mockReturnThis(),
   text: jest.fn().mockReturnThis(),
   moveDown: jest.fn().mockReturnThis(),
+  registerFont: jest.fn().mockReturnThis(),
   on: jest.fn((event: string, cb: () => void) => {
     // Immediately emit 'end' so the promise resolves
     if (event === 'end') {
