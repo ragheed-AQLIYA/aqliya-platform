@@ -161,4 +161,31 @@ describe("audit archival service", () => {
       mockedPrisma.auditEvent.deleteMany.mock.calls[1]?.[0]?.where?.id?.in,
     ).toHaveLength(1);
   });
+
+  it("clamps retention to minimum 1 day when zero or negative is passed", async () => {
+    mockedPrisma.auditEvent.count.mockResolvedValue(99);
+
+    const result = await countEventsToArchive(0);
+
+    expect(result).toBe(99);
+    expect(mockedPrisma.auditEvent.count).toHaveBeenCalledWith({
+      where: {
+        timestamp: {
+          lt: new Date("2026-07-02T00:00:00.000Z"), // today - 1 day
+        },
+      },
+    });
+  });
+
+  it("writes the archive file inside AUDIT_ARCHIVE_DIR", async () => {
+    mockedPrisma.auditEvent.findMany.mockResolvedValue([
+      buildEvent("event-edge", "2025-01-01T00:00:00.000Z"),
+    ]);
+    mockedPrisma.auditEvent.deleteMany.mockResolvedValue({ count: 1 });
+
+    const report = await archiveOldEvents(365);
+
+    expect(path.dirname(report.archiveFile)).toBe(archiveDir);
+    expect(report.archiveFile).toMatch(/audit-events-.*\.ndjson$/);
+  });
 });

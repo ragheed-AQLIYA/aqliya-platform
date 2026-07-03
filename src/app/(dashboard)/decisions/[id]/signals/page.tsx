@@ -81,9 +81,9 @@ export default function SignalsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Monitoring Signals</h1>
+      <h1 className="text-2xl font-bold">إشارات المراقبة</h1>
       <p className="text-sm text-muted-foreground">
-        System-generated signals that require monitoring. Signals are automatically generated and cannot be manually created.
+        إشارات منشأة آليًا تتطلب مراقبة. يتم إنشاء الإشارات تلقائيًا ولا يمكن إنشاؤها يدويًا.
       </p>
       <RunSignalAutomationButton decisionId={decisionId} />
 

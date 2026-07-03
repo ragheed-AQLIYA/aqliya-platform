@@ -101,9 +101,9 @@ export default function AlertsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Risk Alerts</h1>
+      <h1 className="text-2xl font-bold">تنبيهات المخاطر</h1>
       <p className="text-sm text-muted-foreground">
-        Alerts require human review and are never auto-resolved. Each alert links to a triggering signal.
+        التنبيهات تتطلب مراجعة بشرية ولا تُحل تلقائيًا. كل تنبيه يرتبط بإشارة مراقبة.
       </p>
 
       {alerts.length === 0 ? (

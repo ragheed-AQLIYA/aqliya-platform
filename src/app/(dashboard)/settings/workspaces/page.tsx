@@ -102,7 +102,7 @@ export default async function WorkspacesPage() {
     <main className="p-8 max-w-4xl mx-auto" dir="rtl">
       <div className="flex items-center gap-3 mb-6">
         <Layers className="h-6 w-6 text-primary" />
-        <h1 className="text-2xl font-bold">ClientWorkspaces &amp; Projects</h1>
+        <h1 className="text-2xl font-bold">مساحات العمل والمشاريع</h1>
       </div>
 
       <p className="text-sm text-muted-foreground mb-8">

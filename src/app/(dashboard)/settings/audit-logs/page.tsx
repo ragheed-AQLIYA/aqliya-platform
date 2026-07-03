@@ -139,7 +139,7 @@ export default async function AuditLogsPage({
     <main className="p-8 max-w-5xl mx-auto" dir="rtl">
       <div className="flex items-center gap-3 mb-6">
         <ScrollText className="h-6 w-6 text-primary" />
-        <h1 className="text-2xl font-bold">Unified Platform Audit Log</h1>
+        <h1 className="text-2xl font-bold">سجل تدقيق المنصة الموحد</h1>
       </div>
 
       <p className="text-sm text-muted-foreground mb-8">

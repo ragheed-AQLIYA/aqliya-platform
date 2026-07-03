@@ -10,9 +10,9 @@ export default function EngagementNotFound() {
           <FileX className="h-6 w-6 text-muted-foreground" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold text-muted-foreground">Engagement Not Found</h2>
+          <h2 className="text-lg font-semibold text-muted-foreground">التكليف غير موجود</h2>
           <p className="text-sm text-muted-foreground max-w-md">
-            This engagement does not exist or has been removed. It may have been archived or deleted by your team.
+            هذا التكليف غير موجود أو تم إزالته. قد يكون تم أرشفته أو حذفه من قبل فريقك.
           </p>
         </div>
         <Link

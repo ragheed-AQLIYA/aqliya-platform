@@ -137,11 +137,11 @@ export default function DecisionSectorPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Sector Assignment</h1>
+      <h1 className="text-2xl font-bold">تعيين القطاع</h1>
 
       <Card>
         <CardHeader>
-          <CardTitle>Current Sector</CardTitle>
+          <CardTitle>القطاع الحالي</CardTitle>
         </CardHeader>
         <CardContent>
           {currentSector ? (

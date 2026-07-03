@@ -28,7 +28,7 @@ export default function DashboardError({
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8">
         <div className="max-w-lg text-left">
-          <h1 className="text-2xl font-bold text-destructive mb-4">Error</h1>
+          <h1 className="text-2xl font-bold text-destructive mb-4">خطأ</h1>
           <pre className="rounded bg-muted p-4 text-sm overflow-auto">
             {error?.message}
             {"\n\n"}
@@ -73,8 +73,8 @@ export default function DashboardError({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8">
-      <h1 className="text-2xl font-bold text-destructive">Something went wrong</h1>
-      <Button onClick={reset}>Try again</Button>
+      <h1 className="text-2xl font-bold text-destructive">حدث خطأ غير متوقع</h1>
+      <Button onClick={reset}>إعادة المحاولة</Button>
     </main>
   )
 }

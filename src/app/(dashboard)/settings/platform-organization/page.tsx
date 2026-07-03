@@ -88,13 +88,12 @@ export default async function PlatformOrganizationPage() {
     <main className="p-8 max-w-3xl mx-auto" dir="rtl">
       <div className="flex items-center gap-3 mb-6">
         <Shield className="h-6 w-6 text-primary" />
-        <h1 className="text-2xl font-bold">Platform Organization Linkage</h1>
+        <h1 className="text-2xl font-bold">ربط المؤسسة بالمنصة</h1>
       </div>
 
       <p className="text-sm text-muted-foreground mb-8">
-        This page is for platform linkage verification only. It shows how the
-        current user session maps to PlatformOrganization and its linked legacy
-        records.
+        هذه الصفحة للتحقق من ربط المنصة فقط. تعرض كيفية ارتباط الجلسة الحالية
+        بـ PlatformOrganization والسجلات القديمة المرتبطة.
       </p>
 
       {/* Guard Report */}
@@ -196,7 +195,7 @@ export default async function PlatformOrganizationPage() {
             </div>
             <div className="sm:col-span-2">
               <dt className="text-muted-foreground mb-0.5">
-                Platform Organization ID
+                معرف المؤسسة في المنصة
                 {user.platformOrganizationId ? (
                   <CheckCircle2 className="inline h-3.5 w-3.5 text-green-600 mr-1.5" />
                 ) : (

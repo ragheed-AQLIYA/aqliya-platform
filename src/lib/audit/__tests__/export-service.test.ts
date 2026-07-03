@@ -286,4 +286,20 @@ describe("audit export-service", () => {
     );
     expect(result.notes[0]?.title).toBe("Accounting policies");
   });
+
+  it("exportAuditFile propagates sub-service errors (no catch clause)", async () => {
+    mockedSvc.getEvidence.mockRejectedValue(new Error("evidence unavailable"));
+
+    await expect(exportAuditFile("eng-1")).rejects.toThrow(
+      "evidence unavailable",
+    );
+  });
+
+  it("exportBilingual with locale=en returns English titles unchanged", async () => {
+    const result = await exportBilingual("eng-1", "en");
+
+    expect(result.locale).toBe("en");
+    expect(result.statements[0]?.title).toBe("Statement of Financial Position");
+    expect(result.notes[0]?.title).toBe("Accounting policies");
+  });
 });
