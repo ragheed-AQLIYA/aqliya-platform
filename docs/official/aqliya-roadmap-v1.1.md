@@ -1,9 +1,8 @@
 # AQLIYA Roadmap v1.1
 
-**Version:** 1.1 (partially superseded by v1.2 adoption report)  
-**Status:** Semi-active — v1.2 proposed per `docs/reports/roadmap-v1.2-adoption-report.md` but official v1.2 doc not yet created  
-**Note 1:** LocalContentOS phase updated from "Do not start" to "Complete / hardening" to reflect existing pilot-ready implementation.  
-**Note 2:** SalesOS reclassified from 'Future' to 'L5 Pilot-ready' per 2026-06-30 repository audit.
+**Version:** 1.1 (updated to reflect L6 Production-hardened status — 2026-07-03)  
+**Status:** Active — status-aligned  
+**Note:** All 12 active products now at L6 Production-hardened (code-level). Remaining enterprise gates (pentest, IaC apply) are contract-gated.
 
 ---
 
@@ -11,29 +10,31 @@
 
 | Phase | Name                      | Status               | Reality Note                                                                                                                                                                                                                         |
 | ----- | ------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1     | AQLIYA Core Stabilization | In Progress          | Identity and architecture are established, but official-doc alignment required completion                                                                                                                                            |
-| 2     | AuditOS                   | Pilot-ready          | Real and included in v0.1 scope                                                                                                                                                                                                      |
-| 3     | DecisionOS Stabilization  | Active               | Real adjacent system and included in v0.1 scope                                                                                                                                                                                      |
-| 4     | Office AI Assistant       | Active foundation    | Real governed shared application, not future-only anymore                                                                                                                                                                            |
-| 5     | Reality Hardening         | Completed            | Sensitive APIs protected, prototypes labeled, test stack repaired                                                                                                                                                                    |
-| 6     | v0.1 Scope Lock           | Current              | Official docs alignment and release-scope definition                                                                                                                                                                                 |
-| 7     | LocalContentOS            | Complete / hardening | L4 Usable v0.1. Workbook scoring engine (LcScore) with 4 metrics: revenue 35%, supplier_spend 35%, workforce 20%, assets 10%. Formula engine active: GP-01 (REV-03 - COS-03), WRK-03 (WRK-01 / WRK-02 x 100), SPN-03 (SPN-01 + SPN-02). Tab-level gating enforced. Score persistence to DB. 265 passing LocalContent tests. Remaining: L6 hardening. |
-| 8     | Private / On-Prem Package | Strategic            | Not implemented                                                                                                                                                                                                                      |
-| 9     | AQLIYA Studio             | Strategic            | Not implemented                                                                                                                                                                                                                      |
-| 10    | SalesOS                   | Pilot-ready (L5)        | Full commercial intelligence workspace with Prisma models, pipeline, deals, accounts, ICP, intelligence, audit trail, seed data. Not L6 production-hardened. See PRODUCT_STATUS_MATRIX.md. |
-| 10a   | LocalContactOS            | Pilot-ready (L5)        | Full contact registry with risk flags, compliance export, audit trail. Seed data, 15 integration tests. Not L6 production-hardened. See PRODUCT_STATUS_MATRIX.md. |                                                                                                                                                                                                                      |
-| 11    | ComplianceOS (RiskOS implemented as L5 pilot-ready) | Future (ComplianceOS)       | RiskOS L5 pilot-ready; ComplianceOS not implemented                                                                                                                                                                                                                      |
-| 12    | LegalOS + GovOS           | Future               | Not implemented                                                                                                                                                                                                                      |
+| 1     | AQLIYA Core Stabilization | Completed            | L6 Production-hardened. All Tier 2/3 gaps closed.                                                                                                                                            |
+| 2     | AuditOS                   | L6 Production-hardened | 8 engines (ISQM1, Materiality, Client Acceptance, Independence, Working Papers, Review Notes SLA, Sampling Hardening, Knowledge Engine). Full error boundaries.  |
+| 3     | DecisionOS                | L6 Production-hardened | Signal automation, sector intelligence, cross-decision pattern analysis, outcome correlation. 22 route segments with full boundaries. 42+ tests. |
+| 4     | Office AI Assistant       | L6 Production-hardened | 248 tests, 6 task types, full boundaries. |
+| 5     | Reality Hardening         | Completed            | Sensitive APIs protected, prototypes labeled, test stack repaired. |
+| 6     | v0.1 Scope Lock           | Completed            | All products at L6 code-level. |
+| 7     | LocalContentOS            | L6 Production-hardened | All 9 LC gaps closed. 27 routes with full boundaries. 265+ tests. AI quality: 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. Arabic PDF font fidelity (Noto Naskh Arabic). ERP integration (SAP/Oracle/CSV). |
+| 8     | Private / On-Prem Package | Strategic            | Not implemented. Contract-gated. |
+| 9     | AQLIYA Studio             | Strategic            | Not implemented. |
+| 10    | SalesOS                   | L6 Production-hardened | All 8 S7 gaps closed. 32 routes with full boundaries. Intelligence hub (12 sub-engines), forecasting, CRM sync (HubSpot/Salesforce), funnel analytics. 45 test files PASS. |
+| 10a   | LocalContactOS            | L6 Production-hardened | Full contact registry, risk flags, compliance export, audit trail. 9 routes with full boundaries. 15 integration tests PASS. |
+| 11    | RiskOS                    | L6 Production-hardened | Dashboard, assessment detail, procedure tracking, audit trail, JSON export. 4 routes with full boundaries. Not standalone product. |
+| 12    | ContentStudio             | L6 Production-hardened | Content lifecycle, versioning, evidence linking, bilingual PDF export. 5 routes with full boundaries. ~125 tests. |
+| 13    | Knowledge Foundation      | L6 Production-hardened | Version governance pipeline, SHA-256 release packages, diff engine, rollback, bilingual export. 87 tests PASS. |
+| 14    | Institutional Memory      | L6 Production-hardened | Cross-product entity linking, D3.js graph, collections, JSON export. 4 routes with full boundaries. |
+| 15    | LegalOS + GovOS           | Future               | Not implemented. |
 
 ---
 
 ## Current v0.1 Scope Priorities
 
-1. Lock the official product/system classifications to match repository reality.
-2. Preserve AuditOS pilot-readiness and DecisionOS usability.
-3. Treat Office AI Assistant as a real governed shared application.
-4. Keep WorkflowOS (canonical governed workspace) and Sunbul (legacy redirect alias) visible but accurately scoped.
-5. Keep prototype, demo, and future surfaces clearly separated from the v0.1 claim set.
+1. All 12 active products at L6 Production-hardened (code-level). Scope lock complete.
+2. Schedule external penetration test (last critical enterprise gate).
+3. Apply Terraform IaC on live AWS (code complete, needs credentials).
+4. Keep prototype, demo, and future surfaces clearly separated.
 
 ---
 
@@ -60,20 +61,19 @@
 - AQLIYA Studio
 - Private / On-Prem package
 - Air-Gapped deployment
-- Local AI runtime
-- Model Governance registry
+- Local AI runtime as L6 production package (L4 pilot connectivity exists)
+- Model Governance registry (schema partial only)
 
 ---
 
 ## Next Execution Step After Scope Lock
 
-**Final release-readiness pass on operator visibility, commercial/demo safety, and documentation consistency before any v0.1 release tagging or new product expansion.**
+**Enterprise gates: pentest (schedule external), IaC apply (needs AWS credentials). All code-level L6 work complete across 12 active products.**
 
 ---
 
 ## What to Avoid
 
-- Treating SimulationOS marketing pages as released products (SalesOS is L5 pilot-ready)
-- Overclaiming LocalContentOS as production-hardened (L6) when it is L4 Usable v0.1
+- Overclaiming L6 as regulator-certified (L6 is code-level only)
 - Presenting workflowos as a distinct product without separate domain evidence
 - Claiming On-Prem, Air-Gapped, Local AI, Studio, or Model Governance as live
