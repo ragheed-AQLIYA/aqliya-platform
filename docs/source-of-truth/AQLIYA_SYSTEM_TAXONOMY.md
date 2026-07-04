@@ -135,7 +135,7 @@
 | DecisionOS          | Included as active adjacent system      | L6 Production-hardened | Safe to show with explanation |
 | RiskOS              | AuditOS-adjacent risk workspace         | L6 Production-hardened | Safe to show with explanation |
 | Office AI Assistant | Included as governed shared application | L6 Production-hardened | Safe to show with explanation |
-| WorkflowOS          | Included as governed workspace          | L5 Pilot-ready | Safe to show with explanation |
+| WorkflowOS          | Included as governed workspace          | L6 Production-hardened | Safe to show with explanation |
 | Sunbul              | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 |
 | auditos             | Included as demo only                   | L1 Marketing   | Demo only                     |
 | ContentStudio       | Included as operational content workspace | L6 Production-hardened | Safe to show with explanation |
@@ -143,6 +143,6 @@
 | Knowledge Foundation| Governance capability                   | L6 Production-hardened | Safe to show with explanation |
 | SalesOS             | Commercial intelligence workspace       | L6 Production-hardened | Safe to show with explanation |
 | LocalContactOS      | Governed relationship workspace         | L6 Production-hardened | Safe to show with explanation |
-| SSO (SAML/OIDC)     | Enterprise auth capability              | L5 Pilot-ready | Safe to show with explanation |
-| SCIM v2 Provisioning| Identity management (SCIM API)          | L5 Pilot-ready | Safe to show with explanation |
+| SSO (SAML/OIDC)     | Enterprise auth capability              | L6 Production-hardened | Safe to show with explanation |
+| SCIM v2 Provisioning| Identity management (SCIM API)          | L6 Production-hardened | Safe to show with explanation |
 | LocalContentOS      | Included as pilot-ready with conditions | L6 Production-hardened | Safe to show with explanation |

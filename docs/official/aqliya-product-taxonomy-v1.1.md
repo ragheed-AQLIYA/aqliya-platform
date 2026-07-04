@@ -111,8 +111,8 @@ AQLIYA Platform Company
 | **Sunbul**              | Custom / Client-Specific Workspace | Legacy alias / redirect to WorkflowOS   | N/A                            | Internal only                 |
 | **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing                   | Demo only                     |
 | **SimulationOS**        | Marketing capability label         | Do not claim as live                    | L1 Marketing                   | Do not show as implemented    |
-| **SSO (SAML/OIDC)**     | Enterprise auth capability         | Included in v0.1                        | L5 Pilot-ready                 | Safe to show with explanation |
-| **SCIM v2 Provisioning**| Identity management                | Included in v0.1                        | L5 Pilot-ready                 | Safe to show with explanation |
+| **SSO (SAML/OIDC)**     | Enterprise auth capability         | Included in v0.1                        | L6 Production-hardened         | Safe to show with explanation |
+| **SCIM v2 Provisioning**| Identity management                | Included in v0.1                        | L6 Production-hardened         | Safe to show with explanation |
 | **ComplianceOS**        | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
 | **LegalOS**             | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
 | **GovOS**               | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |

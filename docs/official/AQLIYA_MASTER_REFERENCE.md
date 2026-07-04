@@ -139,7 +139,7 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | **ContentStudio**       | Operational Content Workspace       | **L6**                             | Production-hardened content workspace at `/content-studio/*` (5 routes). Full lifecycle: DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED. 5 Prisma models, versioning with restore, template variables, evidence linking, bilingual PDF export (Noto Naskh Arabic), audit trail. ~125 tests. Full error/loading/not-found boundaries. Seed data. |
 | **Institutional Memory**| Cross-product knowledge graph       | **L6**                             | Production-hardened workspace at `/institutional-memory/*`. Cross-product entity linking via InstitutionalMemoryEvent model. Collections via InstitutionalMemoryCollection. D3.js force-directed graph via IntelligenceGraphNode/Edge. JSON export with audit trail. Full error/loading/not-found boundaries on all 4 routes. |
 | **Knowledge Foundation**| Governance versioning capability     | **L6**                             | Production-hardened workspace at `/knowledge-foundation/*`. Version lifecycle: DRAFT→APPROVED→RELEASED→ACTIVE→DEPRECATED. Immutable release packages with SHA-256, structured diff engine with risk scoring, ADMIN-only rollback. 7 audit event types. Bilingual PDF/JSON export. 87 tests PASS. Full boundaries on all routes. |
-| **WorkflowOS**          | Governed custom/client workspace    | **L5 Pilot-ready**                 | Canonical governed workspace at `/workflowos/*`. Template workflows, SLA monitoring with escalation, gated PDF export, 31 action tests, seed data. |
+| **WorkflowOS**          | Governed custom/client workspace    | **L6**                             | Production-hardened workspace at `/workflowos/*` (8 routes). Full error/loading/not-found boundaries on all segments. Template workflows, SLA monitoring with escalation (on_track→approaching→overdue→breached), gated PDF export workflow, escalation, 31 action tests, seed data. Monitoring metric (workflowRecords) tracked in enterprise health dashboard. |
 | **Sunbul**              | Legacy redirect alias to WorkflowOS | **N/A**                            | Routes at `/sunbul/*` are `permanentRedirect(302)` to matching `/workflowos/*` routes. No standalone components or data. |
 | **SimulationOS**        | Marketing label                     | **L1**                             | Page at `/products/simulation`. Not a standalone system. |
 | **ComplianceOS**        | Not implemented                     | **L0**                             | Future product. |
@@ -167,7 +167,7 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | `/knowledge-foundation/*`  | Knowledge Foundation versioning            | Active — L6                 |
 | `/content-studio/*`        | ContentStudio operational content workspace| Active — L6                 |
 | `/sunbul/*`                | Sunbul legacy redirect alias to WorkflowOS | Active — redirect alias     |
-| `/workflowos/*`            | WorkflowOS governed workspace              | Active — L5                 |
+| `/workflowos/*`            | WorkflowOS governed workspace              | Active — L6                 |
 | `/organizations/*`         | Generic organizations prototype            | Active — L5 prototype       |
 | `/settings/*`              | Platform diagnostics + prototype settings  | Active — L2/L4              |
 | `/monitoring`              | Platform monitoring                        | Active — L4                 |
@@ -207,7 +207,7 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - Kubernetes deployment as supported package
 - Production SIEM integration (settings stub only)
 - LDAP/Active Directory direct integration (OAuth/OIDC/SAML at L5 with operator setup)
-- Model Governance operational UI (schema exists; not L6)
+- Model Governance operational UI at `/settings/models` (L4 Usable v0.1 — full model lifecycle: register → review → approve → deploy → deprecate. AiModelRegistry, AiModelDeployment, AiModelGovernanceReview models in Prisma. 16 service-layer tests.)
 - AQLIYA Studio builder
 - **ComplianceOS, LegalOS, GovOS** as standalone products
 - Fully autonomous AI decisions (AI is assistive only)
@@ -247,6 +247,11 @@ All 12 active products reached L6 Production-hardened status on 2026-07-03:
 
 Remaining enterprise gates: IaC (Terraform apply — code complete), pentest — contract-gated.
 
+**Also at L6 Production-hardened:**
+- **SSO (SAML/OIDC)** — Self-service key configuration via /settings/sso. ClientSecret AES-256-GCM encrypted. 65 tests.
+- **SCIM v2 Provisioning** — User/Group provisioning with API key auth and audit trail.
+- **Office AI Assistant** — Full boundaries on all assistant routes. 248 tests. 6 task types. Mock provider available for demo/testing.
+
 ---
 
 ## 11. What Is Internal Workspace (L3–L5)
@@ -270,7 +275,7 @@ Remaining enterprise gates: IaC (Terraform apply — code complete), pentest —
 - **AQLIYA Studio**
 - **Private / On-Prem package**
 - **Air-Gapped deployment package**
-- **Model Governance** as L6 operational product (schema partial only)
+- **Model Governance** as L6 operational product with full deployment automation (L4 operational UI exists at `/settings/models` — register→review→approve→deploy→deprecate lifecycle)
 
 **Note:** Local AI runtime, Institutional Memory, and RiskOS submodule are **partially implemented** — see §8–§9 and `AQLIYA_CURRENT_STATE.md`. Do not list them here as L0.
 

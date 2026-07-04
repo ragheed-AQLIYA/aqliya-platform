@@ -296,6 +296,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/settings/audit-logs`            | Platform       | Settings/admin | Protected        | Active (L4)           | Real audit log viewer             |
 | `/settings/skills/evaluate`       | Platform       | Settings/admin | Protected        | Active (L4)           | Skills evaluation dashboard       |
 | `/settings/ai-governance`         | Platform       | Settings/admin | Protected        | Active (L4)           | Centralized AI governance dashboard: AI audit events across products, stats, model/provider tracking |
+| `/settings/models`                | Platform       | Settings/admin | Protected        | Active (L4)           | Model Governance: AI model registry with lifecycle (register→review→approve→deploy→deprecate). ADMIN only. |
 | `/monitoring`                     | Platform       | Settings/admin | Protected        | Active (L4)           | Real aggregate counts             |
 
 ### WorkflowOS — Production-hardened Governed Workspace (L6)
