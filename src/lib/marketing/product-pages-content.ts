@@ -177,27 +177,27 @@ export const tier1ProductCards: ProductIndexCard[] = [
     title: "LocalContentOS",
     subtitle: "محتوى محلي وامتثال",
     statusLabel: "متاح باتفاق النطاق",
-    problem: "موردون، إنفاق، مؤشرات، وتقارير تنظيمية في مسار واحد.",
+    problem: "موردون، إنفاق، وامتثال للجهات الرقابية.",
     href: "/products/local-content",
+    muted: false,
   },
-];
-
-export const roadmapProductCards: ProductIndexCard[] = [
   {
     id: "office-ai",
     title: "Office AI Assistant",
     subtitle: "مساعد مؤسسي مشترك",
     statusLabel: "خدمة مشتركة",
-    problem: "مساعد مؤسسي عبر حلول المنصة.",
+    problem: "مساعد مؤسسي عبر حلول المنصة — تلخيص، تحرير، تحليل.",
     href: "/products/office-ai",
-    muted: true,
   },
+];
+
+export const roadmapProductCards: ProductIndexCard[] = [
   {
     id: "sales",
     title: "SalesOS",
     subtitle: "ذاكرة تجارية",
     statusLabel: "قريباً على خارطة المنصة",
-    problem: "تأهيل، pipeline، وذاكرة مبيعات — نموذج أولي.",
+    problem: "تأهيل، pipeline، وذاكرة مبيعات — في خارطة المنصة.",
     href: "/products/sales",
     muted: true,
   },

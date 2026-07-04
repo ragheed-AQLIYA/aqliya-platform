@@ -19,7 +19,7 @@ export const publicOsStatus: Record<
   decisionOS: { label: "متكامل في المنصة", tone: "primary" },
   localContentOS: { label: "متاح باتفاق النطاق", tone: "amber" },
   officeAI: { label: "خدمة مشتركة", tone: "primary" },
-  salesOS: { label: "متاح ضمن المنصة", tone: "primary" },
+  salesOS: { label: "قريباً على خارطة المنصة", tone: "amber" },
   simulationOS: { label: "قريباً على خارطة المنصة", tone: "muted" },
 };
 
@@ -56,7 +56,7 @@ export const publicOsStatusEn: Record<
     capabilityNote: "Institutional assistant across platform solutions",
   },
   salesOS: {
-    label: "Available on platform",
+    label: "Coming on platform roadmap",
     capabilityNote: "Commercial memory and opportunity tracking",
   },
   simulationOS: {

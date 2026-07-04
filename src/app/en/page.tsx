@@ -28,6 +28,18 @@ const systems = [
     status: publicOsStatusEn.localContentOS.label,
     href: "/en/products/local-content",
   },
+  {
+    title: "Office AI Assistant",
+    note: publicOsStatusEn.officeAI.capabilityNote,
+    status: publicOsStatusEn.officeAI.label,
+    href: "/en/products/office-ai",
+  },
+  {
+    title: "SalesOS",
+    note: publicOsStatusEn.salesOS.capabilityNote,
+    status: publicOsStatusEn.salesOS.label,
+    href: "/en/products/sales",
+  },
 ];
 
 export default function EnglishHomePage() {

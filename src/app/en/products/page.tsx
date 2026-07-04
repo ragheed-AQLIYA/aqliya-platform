@@ -31,6 +31,27 @@ const systems = [
     status: publicOsStatusEn.localContentOS,
     href: "/en/products/local-content",
   },
+  {
+    id: "office-ai",
+    title: "Office AI Assistant",
+    subtitle: "Shared institutional assistant",
+    status: publicOsStatusEn.officeAI,
+    href: "/en/products/office-ai",
+  },
+  {
+    id: "sales",
+    title: "SalesOS",
+    subtitle: "Commercial intelligence",
+    status: publicOsStatusEn.salesOS,
+    href: "/en/products/sales",
+  },
+  {
+    id: "simulation",
+    title: "SimulationOS",
+    subtitle: "Scenario simulation",
+    status: publicOsStatusEn.simulationOS,
+    href: "/en/products/simulation",
+  },
 ];
 
 export default function EnglishProductsPage() {

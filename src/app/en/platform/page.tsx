@@ -76,7 +76,7 @@ const operatingSystems = [
       "Alternatives, risks, evidence, recommendation, and approval — one path.",
     statusLabel: publicOsStatusEn.decisionOS.label,
     capabilityNote: publicOsStatusEn.decisionOS.capabilityNote,
-    href: "/products/decision",
+    href: "/en/products/decision",
   },
   {
     useCase: "Local content programs",
@@ -85,7 +85,7 @@ const operatingSystems = [
       "Suppliers, spend, contracts, compliance, and reports — for the Saudi market.",
     statusLabel: publicOsStatusEn.localContentOS.label,
     capabilityNote: publicOsStatusEn.localContentOS.capabilityNote,
-    href: "/products/local-content",
+    href: "/en/products/local-content",
   },
 ];
 
