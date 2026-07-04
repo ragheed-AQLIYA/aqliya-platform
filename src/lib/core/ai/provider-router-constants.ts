@@ -6,5 +6,6 @@ export const PROVIDER_FALLBACK_CHAIN: AIProviderId[] = [
   "anthropic",
   "local",
   "cloud",
+  "mock",
   "deterministic",
 ]

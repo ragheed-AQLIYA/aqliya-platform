@@ -91,7 +91,7 @@ export function getCircuitBreakerSnapshot(): Array<{
   state: CircuitState
   consecutiveFailures: number
 }> {
-  const ids: AIProviderId[] = ["openai", "anthropic", "local", "cloud", "deterministic"]
+  const ids: AIProviderId[] = ["openai", "anthropic", "local", "cloud", "mock", "deterministic"]
   return ids.map((providerId) => {
     const record = getRecord(providerId)
     return {

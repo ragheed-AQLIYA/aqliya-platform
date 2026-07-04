@@ -6,6 +6,7 @@
 import type { AIProvider, AIRequest, AIResponse, AIProviderId, AIProviderStatus } from "@/lib/core/ai/types"
 import type { GovernanceTaskType, GovernanceContext } from "@/lib/governance/runtime-types"
 import { deterministicProvider } from "@/lib/core/ai/providers/deterministic-provider"
+import { mockProvider } from "@/lib/core/ai/providers/mock-provider"
 import { CloudAIProvider } from "@/lib/core/ai/providers/cloud-provider"
 import { LocalAIProvider } from "@/lib/core/ai/providers/local-provider"
 import { OpenAIProvider } from "@/lib/core/ai/providers/openai-provider"
@@ -78,7 +79,7 @@ export class AIOrchestrator {
 
   constructor(config: OrchestratorConfig = {}) {
     const envProvider = (process.env.AI_PROVIDER as AIProviderId | undefined)
-    const validProviders: AIProviderId[] = ['openai', 'anthropic', 'cloud', 'deterministic']
+    const validProviders: AIProviderId[] = ['openai', 'anthropic', 'cloud', 'deterministic', 'mock']
     const envDefault = envProvider && validProviders.includes(envProvider) ? envProvider : 'deterministic'
 
     this.defaultProviderId = config.defaultProvider ?? envDefault
@@ -86,6 +87,7 @@ export class AIOrchestrator {
 
     this.providers = new Map()
     this.providers.set('deterministic', deterministicProvider)
+    this.providers.set('mock', mockProvider)
     this.providers.set('cloud', new CloudAIProvider(config.cloudConfig))
     this.providers.set('local', new LocalAIProvider(config.localConfig))
     this.providers.set('openai', new OpenAIProvider(config.openaiConfig))

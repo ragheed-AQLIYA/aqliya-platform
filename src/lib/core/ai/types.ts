@@ -56,7 +56,7 @@ export interface RAGContext {
 
 // ─── Provider Identity ───
 
-export type AIProviderId = 'deterministic' | 'cloud' | 'local' | 'openai' | 'anthropic'
+export type AIProviderId = 'deterministic' | 'cloud' | 'local' | 'openai' | 'anthropic' | 'mock'
 
 // ─── Provider Status ───
 
