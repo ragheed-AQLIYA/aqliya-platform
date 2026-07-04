@@ -72,5 +72,5 @@ pm run demo:smoke → passes
 - CSP headers configured in 
 ext.config.mjs
 - Rate limiting via RATE_LIMITER env
-- SSO operator setup required (not L6 automated)
+- SSO operator setup required (not L6 automated; L5 pilot-ready with operator keys)
 - No production On-Prem package yet

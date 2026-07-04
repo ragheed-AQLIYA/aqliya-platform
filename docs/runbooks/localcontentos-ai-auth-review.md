@@ -1,7 +1,7 @@
-﻿# LocalContentOS — AI Provider Authentication & Security Review
+# LocalContentOS — AI Provider Authentication & Security Review
 
 > **Product:** LocalContentOS under AQLIYA  
-> **Level:** L5 Pilot-ready  
+> **Level:** L6 Production-hardened  
 > **Status:** Active | Version 1.0 | 2026-07-01  
 > **Classification:** Security — Internal Only  
 > **Review Type:** AI Provider Key Audit & Auth Boundary Verification  

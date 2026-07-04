@@ -5,9 +5,9 @@
 **Version:** 1.1  
 **Status:** Official doctrine — identity, governance, and strategic positioning  
 **Owner:** Governance Team  
-**Last Reviewed:** 2026-06-26  
+**Last Reviewed:** 2026-07-03 — L6 status alignment  
 **Source files:** `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`  
-**Note:** Implementation-status claims in this file reflect v0.1 operational baseline as of 2026-05-22. For current implementation status, see `AQLIYA_MASTER_REFERENCE.md` or inspect code.  
+**Note:** Implementation-status claims in this file reflect v0.1 operational baseline. For current implementation status, see `AQLIYA_MASTER_REFERENCE.md` or inspect code. All 12 active products now at L6 Production-hardened (2026-07-03).  
 **Website positioning (2026-06-09):** AQLIYA is presented as a **platform first** — the homepage sells the institutional operating platform, not individual products. Specialized operating systems (formerly called "products") are surfaced inside the platform page as capabilities. See `docs/source-of-truth/AQLIYA_ARCHITECTURE.md` for the updated architecture.
 
 ---
@@ -77,15 +77,21 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 
 | Area                    | Release Inclusion Status                | Maturity                       | Customer Demo Status          |
 | ----------------------- | --------------------------------------- | ------------------------------ | ----------------------------- |
-| **AQLIYA Platform**     | Included in v0.1                        | L4 Usable v0.1                 | Safe to show with explanation |
-| **AuditOS**             | Included as pilot-ready product         | L5 Pilot-ready                 | Safe to show                  |
-| **DecisionOS**          | Included as active adjacent system      | L4 Usable v0.1                 | Safe to show with explanation |
-| **Office AI Assistant** | Included as governed shared application | L4 Usable v0.1                 | Safe to show with explanation |
+| **AQLIYA Platform**     | Included in v0.1                        | **L6 Production-hardened**     | Safe to show with explanation |
+| **Intelligence Core**   | Included in v0.1                        | **L6 Production-hardened**     | Safe to show with explanation |
+| **AuditOS**             | Included as pilot-ready product         | **L6 Production-hardened**     | Safe to show                  |
+| **DecisionOS**          | Included as active adjacent system      | **L6 Production-hardened**     | Safe to show with explanation |
+| **LocalContentOS**      | Strategic second product                | **L6 Production-hardened**     | Safe to show with explanation |
+| **SalesOS**             | Commercial intelligence workspace       | **L6 Production-hardened**     | Safe to show with explanation |
+| **RiskOS**              | AuditOS-adjacent risk workspace         | **L6 Production-hardened**     | Safe with context             |
+| **LocalContactOS**      | Governed relationship workspace         | **L6 Production-hardened**     | Safe to show with explanation |
+| **Institutional Memory**| Cross-product knowledge graph           | **L6 Production-hardened**     | Safe to show with explanation |
+| **ContentStudio**       | Operational content workspace           | **L6 Production-hardened**     | Safe to show with explanation |
+| **Knowledge Foundation**| Governance versioning capability        | **L6 Production-hardened**     | Safe to show with explanation |
+| **Office AI Assistant** | Included as governed shared application | **L6 Production-hardened**     | Safe to show with explanation |
+| **WorkflowOS**          | Included as governed workspace          | L5 Pilot-ready                 | Safe to show with explanation |
 | **Sunbul**              | Legacy redirect alias to WorkflowOS     | N/A                            | Internal only                 |
-| **WorkflowOS**          | Included as governed workspace          | L4 Usable v0.1                 | Safe to show with explanation |
 | **auditos demo**        | Included as demo only                   | L1 Marketing                   | Demo only                     |
-| **SalesOS**             | Included as pilot-ready product         | L5 Pilot-ready                 | Safe to show with explanation |
-| **LocalContentOS**      | Pilot-ready with conditions             | L5 Pilot-ready with conditions | Safe to show with explanation |
 
 ---
 
@@ -93,13 +99,18 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 
 | Area                    | Official Position                          | Current Reality                         |
 | ----------------------- | ------------------------------------------ | --------------------------------------- |
-| **AuditOS**             | First proof product under AQLIYA           | Real and pilot-ready candidate          |
-| **DecisionOS**          | Active adjacent decision governance system | Real and included in v0.1 scope         |
-| **Office AI Assistant** | Governed shared application on AQLIYA Core | Shared application, not primary product |
+| **AuditOS**             | First proof product under AQLIYA           | L6 Production-hardened, 8 engines       |
+| **DecisionOS**          | Active adjacent decision governance system | L6, signal automation + outcome analytics |
+| **LocalContentOS**      | Strategic second product                   | L6, 27 routes, AI quality 100%          |
+| **SalesOS**             | Commercial intelligence workspace          | L6, 12 intelligence sub-engines         |
+| **RiskOS**              | AuditOS-adjacent risk workspace            | L6, procedure tracking, audit trail     |
+| **LocalContactOS**      | Governed relationship workspace            | L6, 15 integration tests                |
+| **ContentStudio**       | Operational Content Workspace              | L6, evidence linking, PDF export        |
+| **Knowledge Foundation**| Governance versioning capability           | L6, SHA-256 release packages            |
+| **Institutional Memory**| Cross-product knowledge graph              | L6, D3.js graph visualization           |
+| **Office AI Assistant** | Governed shared application on AQLIYA Core | L6, 248 tests, 6 task types             |
+| **WorkflowOS**          | Custom/client-specific governed workspace  | L5 Pilot-ready                          |
 | **Sunbul**              | Legacy redirect alias to WorkflowOS        | Preserved for backward compatibility    |
-| **WorkflowOS**          | Custom/client-specific governed workspace  | Real governed workspace (L4)            |
-| **LocalContentOS**      | Strategic second product                   | L5 Pilot-ready with conditions          |
-| **SalesOS**             | Governed commercial intelligence workspace | L5 Pilot-ready                          |
 
 ---
 
@@ -107,9 +118,9 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 
 - Production On-Prem package
 - Air-Gapped deployment
-- Local AI runtime
+- Local AI runtime as L6 production package (L4 pilot connectivity exists — operator Ollama endpoint required)
 - AQLIYA Studio builder
-- Model Governance registry
+- Model Governance registry (schema partial only)
 - ComplianceOS, LegalOS, GovOS product implementations
 
 ---

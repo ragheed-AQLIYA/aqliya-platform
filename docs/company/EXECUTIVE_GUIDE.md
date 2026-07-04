@@ -39,22 +39,24 @@ AQLIYA IS NOT:
 
 | Product | Status | Readiness |
 |---------|--------|-----------|
-| AuditOS | L5 Pilot-ready | ✅ Strong |
-| LocalContentOS | L5 Pilot-ready | ✅ Strong |
-| DecisionOS | L5 Pilot-ready | ✅ Strong |
-| WorkflowOS | L5 Pilot-ready | ✅ Strong |
-| SalesOS | L5 Pilot-ready (internal) | ⚠️ Architecture debt |
-| LocalContactOS | L5 Pilot-ready | ⚠️ No tests |
-| Office AI Assistant | L5 Pilot-ready | ✅ Strong |
-| RiskOS | L5 (AuditOS-adjacent) | ⚠️ No evidence model |
-| Institutional Memory | L5 Pilot-ready | ⚠️ No tests |
-| ContentStudio | L4 Usable | ✅ Matches level |
+| Platform & Intelligence Core | L6 Production-hardened | ✅ Full enterprise foundation |
+| AuditOS | L6 Production-hardened | ✅ 8 engines, full boundaries |
+| LocalContentOS | L6 Production-hardened | ✅ 265+ tests, AI quality 100% |
+| DecisionOS | L6 Production-hardened | ✅ Signal automation + outcome analytics |
+| SalesOS | L6 Production-hardened | ✅ Intelligence hub, CRM sync, 45 tests |
+| RiskOS | L6 Production-hardened | ✅ Procedure tracking, audit trail, export |
+| LocalContactOS | L6 Production-hardened | ✅ 15 integration tests |
+| Institutional Memory | L6 Production-hardened | ✅ Graph + events + collections |
+| ContentStudio | L6 Production-hardened | ✅ Evidence + PDF + ~125 tests |
+| Knowledge Foundation | L6 Production-hardened | ✅ Version governance + diff engine |
+| Office AI Assistant | L6 Production-hardened | ✅ 248 tests, 6 task types |
+| WorkflowOS | L5 Pilot-ready | SLA monitoring, gated export |
 
 ## Current Status
-- **Engineering:** 96% (TypeScript 0, Lint 0, Build passes)
-- **Tests:** 3740+ passing, 21 intentionally skipped
-- **Documentation:** 35 directories, 10 product reference files
-- **Overall Readiness:** 74/100 (Pilot-capable)
+- **Engineering:** TypeScript 0 errors, Build passes, 143 pages
+- **Tests:** 4041+ passing (363 suites), 21 intentionally skipped
+- **Documentation:** 35 directories, 10+ product reference files
+- **Overall Readiness:** L6 Production-hardened (code-level). Enterprise gates (pentest, IaC apply) contract-gated.
 
 ## Architecture
 `

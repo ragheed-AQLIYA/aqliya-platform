@@ -1,7 +1,7 @@
-﻿# LocalContentOS Deployment Runbook — دليل نشر المحتوى المحلي
+# LocalContentOS Deployment Runbook — دليل نشر المحتوى المحلي
 
 > **Product:** LocalContentOS under AQLIYA  
-> **Level:** L5 Pilot-ready  
+> **Level:** L6 Production-hardened  
 > **Status:** Active | Version 1.0 | 2026-07-01  
 > **Routes:** /local-content/*  
 > **Stack:** Next.js 16, TypeScript 5, PostgreSQL 16, Prisma 7, Tailwind CSS 4  

@@ -1,7 +1,7 @@
-﻿# LocalContentOS Disaster Recovery Plan — خطة التعافي من الكوارث
+# LocalContentOS Disaster Recovery Plan — خطة التعافي من الكوارث
 
 > **Product:** LocalContentOS under AQLIYA  
-> **Level:** L5 Pilot-ready  
+> **Level:** L6 Production-hardened  
 > **Status:** Active | Version 1.0 | 2026-07-01  
 > **Applies to:** Production / Pilot deployments  
 > **Language:** Bilingual (Arabic/English)

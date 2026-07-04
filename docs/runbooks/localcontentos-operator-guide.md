@@ -1,7 +1,7 @@
-﻿# LocalContentOS Operator Guide — دليل تشغيل المحتوى المحلي
+# LocalContentOS Operator Guide — دليل تشغيل المحتوى المحلي
 
 > **Product:** LocalContentOS under AQLIYA  
-> **Level:** L5 Pilot-ready  
+> **Level:** L6 Production-hardened  
 > **Status:** Active | Version 1.0 | 2026-06-30  
 > **Routes:** /local-content/*
 
