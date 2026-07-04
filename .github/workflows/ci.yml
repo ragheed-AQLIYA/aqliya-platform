@@ -85,6 +85,12 @@ jobs:
       - name: Unit + integration tests
         run: npm test
 
+      - name: Backup data integrity check
+        continue-on-error: true
+        run: npm run backup:verify
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/aqliya_ci
+
       - name: Lint
         run: npm run lint
 

@@ -307,7 +307,7 @@ export function ModelGovernanceClient({
         <CardContent>
           {models.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">
-              لا توجد نماذج مسجلة بعد. سجّل أول نموذج بالضغط على "تسجيل نموذج جديد".
+              {`لا توجد نماذج مسجلة بعد. سجّل أول نموذج بالضغط على "تسجيل نموذج جديد".`}
             </p>
           ) : (
             <div className="overflow-x-auto">

@@ -26,9 +26,14 @@ async function requireOrgAccess(orgId, _requiredRole) {
   return mockUser;
 }
 
+function isExpectedAccessDeniedError(_error) {
+  return false;
+}
+
 module.exports = {
   getCurrentUser,
   requireUserContext,
   requireOrgAccess,
+  isExpectedAccessDeniedError,
   mockUser,
 };

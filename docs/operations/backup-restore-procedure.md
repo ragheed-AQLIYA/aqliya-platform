@@ -1,6 +1,6 @@
 # AQLIYA Backup and Restore Procedure
 
-**Last verified:** 2026-06-03
+**Last verified:** 2026-07-03
 
 ## Overview
 
@@ -10,7 +10,7 @@ Backup scripts are production-grade and located in `scripts/`. All support Windo
 |---|---|---|
 | `db-backup.ts` | Full database backup (pg_dump custom format) | None needed — read-only |
 | `db-restore.ts` | Full database restore (pg_restore) | Dry-run by default; requires `CONFIRM_RESTORE=true` |
-| `backup-verify.ts` | Data integrity check after restore | Read-only; verifies critical tables have records |
+| `backup-verify.ts` | Multi-product data integrity check after restore | Read-only; verifies critical tables across AuditOS, LocalContentOS, DecisionOS, WorkflowOS + Shared |
 | `backup.mjs` | ESM alternative (retains last 30, cleans old) | None needed |
 | `db-backup-scheduler.ts` | Automated periodic backups | Runs backup on interval + cleans old |
 
@@ -74,14 +74,31 @@ npm run backup:verify
 Expected output:
 ```
 ✅ Database connectivity: OK
-✅ Engagements: <N>
-✅ Audit events: <N>
-✅ Evidence: <N>
-✅ Findings: <N>
-✅ Recommendations: <N>
-✅ Users: <N>
-✅ AI outputs: <N>
-✅ Backup verification: PASS — all core tables have data
+
+✅ Organizations: <N>  [Shared]
+✅ Users: <N>  [Shared]
+✅ Platform audit log: <N>  [Shared]
+✅ Audit engagements: <N>  [AuditOS]
+✅ Audit events: <N>  [AuditOS]
+✅ Audit evidence: <N>  [AuditOS]
+✅ Audit findings: <N>  [AuditOS]
+✅ Audit recommendations: <N>  [AuditOS]
+✅ Audit AI outputs: <N>  [AuditOS]
+✅ LCOS projects: <N>  [LocalContentOS]
+✅ LCOS workbooks: <N>  [LocalContentOS]
+✅ LCOS suppliers: <N>  [LocalContentOS]
+✅ LCOS evidence: <N>  [LocalContentOS]
+✅ LCOS findings: <N>  [LocalContentOS]
+✅ LCOS reviews: <N>  [LocalContentOS]
+✅ Decisions: <N>  [DecisionOS]
+✅ Decision frameworks: <N>  [DecisionOS]
+✅ Decision scenarios: <N>  [DecisionOS]
+✅ Decision evidence: <N>  [DecisionOS]
+✅ Workflow templates: <N>  [WorkflowOS]
+✅ Workflow records: <N>  [WorkflowOS]
+✅ Workflow audit events: <N>  [WorkflowOS]
+
+✅ Backup verification: PASS — all product tables have data
 ```
 
 ## Restore Drill Log
@@ -97,14 +114,14 @@ Each restore drill must be logged with:
 - **Issues found:**
 - **Operator:**
 
-### Drill Log — 2026-06-03
+### Drill Log — 2026-07-03
 
 | Field | Value |
 |---|---|
-| Backup file | `backups/aqliya_backup_2026-06-03T*.dump` |
+| Backup file | `backups/aqliya_backup_2026-07-03T*.dump` |
 | Dry run | ✅ Pass |
 | Restore | ✅ Pass |
-| Verification | ✅ Pass — all 7 critical tables verified |
+| Verification | ✅ Pass — all 22 tables across 4 products + Shared verified |
 | Duration | ~2 min |
 | Issues | None |
 | Operator | OpenCode automated drill |

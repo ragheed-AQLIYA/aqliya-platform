@@ -1,11 +1,20 @@
 /** @jest-environment node */
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     platformOutboxEvent: {
       count: jest.fn().mockResolvedValue(0),
       findMany: jest.fn().mockResolvedValue([]),
     },
+    // Product metrics models (added for L6 hardening)
+    localContentProject: { count: jest.fn().mockResolvedValue(0) },
+    localContentFinding: { count: jest.fn().mockResolvedValue(0) },
+    localContentReview: { count: jest.fn().mockResolvedValue(0) },
+    localContentEvidence: { count: jest.fn().mockResolvedValue(0) },
+    decision: { count: jest.fn().mockResolvedValue(0) },
+    decisionScenario: { count: jest.fn().mockResolvedValue(0) },
+    workflowRecord: { count: jest.fn().mockResolvedValue(0) },
   },
 }));
 

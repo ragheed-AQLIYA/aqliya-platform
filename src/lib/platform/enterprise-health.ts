@@ -41,6 +41,15 @@ export type EnterpriseHealthSnapshot = {
       createdAt: Date;
     }>;
   };
+  productMetrics: {
+    localContentProjects: number;
+    localContentFindings: number;
+    localContentReviews: number;
+    localContentEvidence: number;
+    decisions: number;
+    decisionScenarios: number;
+    workflowRecords: number;
+  };
   alerts: EnterpriseHealthAlert[];
 };
 
@@ -146,6 +155,24 @@ export async function getEnterpriseHealthSnapshot(): Promise<EnterpriseHealthSna
   const abacEnforce = isEnabled("platform.abac-enforce");
   const abacEnforceOrgCount = parseEnforceOrgCount();
 
+  const [
+    localContentProjects,
+    localContentFindings,
+    localContentReviews,
+    localContentEvidence,
+    decisions,
+    decisionScenarios,
+    workflowRecords,
+  ] = await Promise.all([
+    prisma.localContentProject.count(),
+    prisma.localContentFinding.count(),
+    prisma.localContentReview.count(),
+    prisma.localContentEvidence.count(),
+    prisma.decision.count(),
+    prisma.decisionScenario.count(),
+    prisma.workflowRecord.count(),
+  ]);
+
   const snapshot: EnterpriseHealthSnapshot = {
     generatedAt: new Date().toISOString(),
     program: "tier3-enterprise-prep",
@@ -168,6 +195,15 @@ export async function getEnterpriseHealthSnapshot(): Promise<EnterpriseHealthSna
       failed,
       processing,
       recentFailed,
+    },
+    productMetrics: {
+      localContentProjects,
+      localContentFindings,
+      localContentReviews,
+      localContentEvidence,
+      decisions,
+      decisionScenarios,
+      workflowRecords,
     },
     alerts: [],
   };

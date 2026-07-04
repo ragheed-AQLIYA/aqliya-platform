@@ -26,6 +26,40 @@ export async function EnterpriseHealthPanel() {
         />
       </div>
 
+      <div>
+        <h3 className="mb-2 text-sm font-medium">مقاييس المنتجات</h3>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Metric
+            label="مشاريع المحتوى المحلي"
+            value={snapshot.productMetrics.localContentProjects}
+          />
+          <Metric
+            label="نتائج LCOS"
+            value={snapshot.productMetrics.localContentFindings}
+          />
+          <Metric
+            label="مراجعات LCOS"
+            value={snapshot.productMetrics.localContentReviews}
+          />
+          <Metric
+            label="أدلة LCOS"
+            value={snapshot.productMetrics.localContentEvidence}
+          />
+          <Metric
+            label="قرارات DecisionOS"
+            value={snapshot.productMetrics.decisions}
+          />
+          <Metric
+            label="سيناريوهات DecisionOS"
+            value={snapshot.productMetrics.decisionScenarios}
+          />
+          <Metric
+            label="سجلات WorkflowOS"
+            value={snapshot.productMetrics.workflowRecords}
+          />
+        </div>
+      </div>
+
       <ul className="space-y-2">
         {snapshot.alerts.map((alert) => (
           <li

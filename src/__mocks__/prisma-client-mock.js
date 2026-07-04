@@ -25,6 +25,11 @@ const MODEL_NAMES = [
   'salesPipeline', 'salesPipelineStage', 'salesInteraction',
   'salesEvidenceLink', 'salesSignal',
   'ssoProvider', 'scimProvisioningEvent',
+  // LocalContentOS models
+  'localContentProject', 'localContentSupplier', 'localContentSpendRecord',
+  'localContentClassification', 'localContentEvidence', 'localContentFinding',
+  'localContentReview', 'localContentApproval', 'localContentReport',
+  'localContentAuditEvent',
 ]
 
 const AuditAction = {
