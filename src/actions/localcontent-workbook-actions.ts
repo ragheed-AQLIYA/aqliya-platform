@@ -64,7 +64,9 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
     return { ok: true, data };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[Workbook Action]", message);
+    if (process.env.NODE_ENV !== "test") {
+      console.error("[Workbook Action]", message);
+    }
     return { ok: false, error: message };
   }
 }

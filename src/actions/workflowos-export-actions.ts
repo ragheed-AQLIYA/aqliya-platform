@@ -91,7 +91,9 @@ export async function requestWorkflowExport(recordId: string) {
     return { success: true, data: updated };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
+      if (process.env.NODE_ENV !== "test") {
       console.error("Error requesting Workflow export:", error);
+      }
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -135,7 +137,9 @@ export async function approveWorkflowExport(recordId: string) {
     return { success: true, data: updated };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
+      if (process.env.NODE_ENV !== "test") {
       console.error("Error approving Workflow export:", error);
+      }
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -186,7 +190,9 @@ export async function rejectWorkflowExport(
     return { success: true, data: updated };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
+      if (process.env.NODE_ENV !== "test") {
       console.error("Error rejecting Workflow export:", error);
+      }
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -273,7 +279,9 @@ export async function downloadWorkflowExport(recordId: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
+      if (process.env.NODE_ENV !== "test") {
       console.error("Error downloading Workflow export:", error);
+      }
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -297,7 +305,9 @@ export async function getWorkflowExportStatus(recordId: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
+      if (process.env.NODE_ENV !== "test") {
       console.error("Error getting Workflow export status:", error);
+      }
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -324,7 +334,9 @@ export async function getCurrentUserPendingExportCount() {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
+      if (process.env.NODE_ENV !== "test") {
       console.error("Error getting pending export count:", error);
+      }
     return { success: false, error: "فشل الحصول على إحصائيات التصدير" };
   }
 }
@@ -354,7 +366,9 @@ export async function getPendingExportRequests(organizationId: string) {
     return { success: true, data: records };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
+      if (process.env.NODE_ENV !== "test") {
       console.error("Error getting pending export requests:", error);
+      }
     return { success: false, error: "Failed to get pending export requests" };
   }
 }
