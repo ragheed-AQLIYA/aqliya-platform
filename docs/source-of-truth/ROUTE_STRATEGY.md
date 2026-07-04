@@ -298,18 +298,18 @@ These pages serve as detail references for specialized operating systems. They a
 | `/settings/ai-governance`         | Platform       | Settings/admin | Protected        | Active (L4)           | Centralized AI governance dashboard: AI audit events across products, stats, model/provider tracking |
 | `/monitoring`                     | Platform       | Settings/admin | Protected        | Active (L4)           | Real aggregate counts             |
 
-### WorkflowOS — Governed Workspace
+### WorkflowOS — Production-hardened Governed Workspace (L6)
 
 | Route                                               | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                  |
 | --------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------- |
-| `/workflowos`                                       | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Dashboard with real metrics via WorkflowDashboard + getWorkflowDashboardStats |
-| `/workflowos/admin`                                 | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      |                        |
-| `/workflowos/clients/[clientId]/records/[recordId]` | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Record detail          |
-| `/workflowos/templates`                             | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Template list          |
-| `/workflowos/templates/new`                         | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Create template        |
-| `/workflowos/templates/[id]`                        | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Template detail        |
-| `/workflowos/records`                               | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Org workflow records   |
-| `/workflowos/records/[id]`                          | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5)      | Record from template   |
+| `/workflowos`                                       | WorkflowOS     | Governed workspace | Protected        | Production-hardened (L6) | Dashboard with real metrics via WorkflowDashboard + getWorkflowDashboardStats |
+| `/workflowos/admin`                                 | WorkflowOS     | Governed workspace | Protected        | Production-hardened (L6) | Admin panel (ADMIN role only) |
+| `/workflowos/clients/[clientId]/records/[recordId]` | WorkflowOS     | Governed workspace | Protected        | Production-hardened (L6) | Record detail          |
+| `/workflowos/templates`                             | WorkflowOS     | Governed workspace | Protected        | Production-hardened (L6) | Template list          |
+| `/workflowos/templates/new`                         | WorkflowOS     | Governed workspace | Protected        | Production-hardened (L6) | Create template (drag-and-drop) |
+| `/workflowos/templates/[id]`                        | WorkflowOS     | Governed workspace | Protected        | Production-hardened (L6) | Template detail        |
+| `/workflowos/records`                               | WorkflowOS     | Governed workspace | Protected        | Production-hardened (L6) | Org workflow records   |
+| `/workflowos/records/[id]`                          | WorkflowOS     | Governed workspace | Protected        | Production-hardened (L6) | Record from template   |
 
 ### LocalContactOS — Production-hardened Governed Workspace (L6)
 
@@ -437,7 +437,7 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
    `/auditos/*` is intentionally public because it is a sanitized, mock-only, read-only guided demo. It must not use customer data, uploads, mutations, exports/downloads, tenant state, or operational audit workflows. If any of these are introduced, the route must move behind authentication/gating before release.
 3. `/assistant/*` = governed shared application on AQLIYA Core. Do not market it as a standalone product unless explicitly reclassified.
 4. `/local-content/*` = governed workspace (authenticated, server-action-backed, auditable). **L6 Production-hardened** — all 9 LC gaps closed, full error/loading/not-found boundaries on 27 route segments, 265+ tests. Arabic PDF font fidelity (Noto Naskh Arabic embedded). Scoring engine, tender matching, multi-reviewer approval routing, ERP integration. AI quality: 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient.
-5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). L5 Pilot-ready — template workflows, SLA monitoring, gated export, 31 action tests, seed data.
+5. `/workflowos/*` = governed workspace (authenticated, DB-backed, auditable). **L6 Production-hardened** — full error/loading/not-found boundaries on all route segments, template workflows, SLA monitoring (on_track→approaching→overdue→breached), gated export workflow, escalation, 31 action tests, seed data. Monitoring metric tracked in enterprise health dashboard.
 6. `/sunbul/*` = redirect alias family over WorkflowOS implementation. Every route is a `permanentRedirect(302)` wrapper.
 7. `/organizations/*` and `/settings` must be labeled prototype/internal preview until they have real persistence and workflow backing. SalesOS is now **L6 Production-hardened** — 32 routes with full error/loading/not-found boundaries, real Prisma models (13), server actions, RBAC, audit trail, evidence links, seed data, sidebar navigation. Intelligence hub with 12 sub-engines, forecasting engine, CRM sync (HubSpot/Salesforce). 45 test files PASS.
 8. `/api/*` sensitive endpoints (`/api/audit/evidence/*`, `/api/office-ai/download`, `/api/metrics`, `/api/decisions/*/evidence/*/download`, `/api/local-content/*/evidence/*/download`) must remain permissioned.

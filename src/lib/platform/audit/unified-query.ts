@@ -103,7 +103,7 @@ function normaliseSunbul(row: Record<string, unknown>): UnifiedAuditEntry {
     actorName: null,
     targetType: "Sunbul" as string,
     targetId: (row.recordId as string) ?? null,
-    organizationId: (row.clientId ?? row.organizationId as string) ?? null,
+    organizationId: (row.clientId as string | null) ?? (row.organizationId as string | null) ?? null,
     severity: "info",
     status: null,
     metadata: safeMetadata(row.metadata ?? row.details),

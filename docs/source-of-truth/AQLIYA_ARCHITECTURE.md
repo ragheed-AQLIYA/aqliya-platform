@@ -38,13 +38,13 @@ AQLIYA Platform Company
 │   └── Institutional Memory    (cross-product knowledge graph — L6 production-hardened)
 │
 ├── Custom / Client-Specific Workspaces
-│   └── WorkflowOS              (/workflowos) — governed custom workflow (L5 pilot-ready)
+│   └── WorkflowOS              (/workflowos) — governed custom workflow (L6 production-hardened)
 │
 ├── Workspaces (execution environments)
 │   ├── AuditOS Workspace       (/audit)
 │   ├── DecisionOS Workspace    (/decisions, /intelligence/sectors)
 │   ├── Office AI Workspace     (/assistant)
-│   ├── WorkflowOS Workspace    (/workflowos) — L5 pilot-ready
+│   ├── WorkflowOS Workspace    (/workflowos) — L6 production-hardened
 │   ├── Institutional Memory   (/institutional-memory) — L6 knowledge graph
 │   ├── Sunbul Workspace        (/sunbul) — legacy redirect → /workflowos
 ├── Governance (cross-cutting)
@@ -157,7 +157,7 @@ Response headers: `Cache-Control: private, no-store`, `X-Content-Type-Options: n
 
 - AQLIYA is positioned as an **institutional operating platform**, not a product company. The homepage presents the platform first; operating systems are surfaced inside `/platform#capabilities`.
 - `Office AI Assistant` is implemented in code today as a governed shared application.
-- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L5 Pilot-ready). Template workflows, SLA monitoring, gated export, 31 action tests, seed data. Not full L6.
+- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L6 Production-hardened). Template workflows, SLA monitoring, gated export, full error/loading/not-found boundaries, 31 action tests, seed data, monitoring dashboard metric.
 - `Sunbul` is a legacy redirect alias: `/sunbul/*` routes → `permanentRedirect(302)` to `/workflowos/*`.
 - `/organizations` is a protected surface — not yet v0.1 workspace complete.
 - `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 27 routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, pilot readiness dashboard, quality dashboard, review center, and ERP integration (SAP/Oracle/CSV). **L6 Production-hardened** — Full error/loading/not-found boundaries on all routes. All 9 L6 gaps closed. AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. 265+ tests PASS.

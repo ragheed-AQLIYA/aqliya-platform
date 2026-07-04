@@ -72,7 +72,7 @@ export async function runGovernedOfficeAI(
 
   const result = await runGovernedProductAI({
     productKey: "office_ai_assistant",
-    useCase: taskTypeToUseCase(input.taskType),
+    useCase: taskTypeToUseCase(input.taskType) as unknown as Parameters<typeof runGovernedProductAI>[0]["useCase"],
     organizationId: input.organizationId,
     userId: input.userId,
     userRole: input.userRole,

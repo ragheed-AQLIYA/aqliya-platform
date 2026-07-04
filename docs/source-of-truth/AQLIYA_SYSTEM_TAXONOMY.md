@@ -47,7 +47,7 @@
 
 ### WorkflowOS and Sunbul
 
-- `WorkflowOS` = canonical governed workspace at `/workflowos/*` (L4 Usable v0.1)
+- `WorkflowOS` = canonical governed workspace at `/workflowos/*` (L6 Production-hardened)
 - `Sunbul` = legacy redirect alias only; `/sunbul/*` routes are `permanentRedirect(302)` to matching `/workflowos/*` routes
 - Prisma models retain `Sunbul*` prefixes for schema compatibility; product identity is WorkflowOS
 - Neither should be hidden, and WorkflowOS should not be promoted into a general AQLIYA product claim without further product decisions
