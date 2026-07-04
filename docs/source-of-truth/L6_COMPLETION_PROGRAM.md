@@ -225,19 +225,24 @@
 
 ## Remaining Blockers (Final — 2026-07-03)
 
-**ALL product-level L6 gaps are now closed across all 12 active products.** The only remaining blockers are enterprise-hardening items that require vendor engagement or contract:
+**ALL product-level L6 gaps are now closed across all 13 active products.** The only remaining blockers are enterprise-hardening items that require vendor engagement or contract:
 
 | Rank | ID | Gap | Layer | Priority | Status |
 |------|-----|-------|------|----------|--------|
-| 1 | L0-04 | External penetration test | L0 | Critical | Vendor engagement required |
+| 1 | L0-04 | External penetration test | L0 | Critical | Vendor engagement required — schedule before enterprise contract |
 | 2 | L0-01 | IaC (Terraform/Pulumi) | L0 | Critical | ✅ **Code complete** — Terraform written, CI/CD pipelines integrated. Requires AWS account + `./bootstrap.sh` + secrets setup. See infra/terraform/ + .github/workflows/deploy.yml |
+| 3 | — | SOC2 / ISO 27001 certification | L9 | Low | Contract-gated — vendor-led assessment |
+| 4 | — | On-Prem / Air-Gapped deployment package | L10 | Low | Contract-gated — no speculative investment |
 
-**Closed this session (2026-07-03 Final L6 Push):**
-- ✅ **All error/loading/not-found boundaries** — 269 files created across all route segments. Total: 167 error.tsx, 170 loading.tsx, 135 not-found.tsx.
-- ✅ **Monitoring dashboard expanded** — 12 product metrics (from 4) covering AuditOS, DecisionOS, SalesOS, LocalContentOS, ContentStudio, RiskOS, Contacts, Institutional Memory, Knowledge Foundation, plus platform audit events.
-- ✅ **3924 tests PASS** — 359 test suites across all products.
-- ✅ All per-product gaps from L6_COMPLETION_PROGRAM.md verified closed or platform-wide.
-- ✅ **IaC verified** — Terraform is comprehensive and complete. CI/CD (deploy.yml) already runs Terraform plan/apply. See infra/terraform/ for full module definitions.
+**Closed this session (2026-07-04 — Final L6 + Docs + Quality):**
+- ✅ **WorkflowOS L6** — Unfrozen, upgraded to L6 Production-hardened with full boundaries on 8 routes.
+- ✅ **Office AI Mock Provider** — `MockAIProvider` with 15 tests, registered in orchestrator fallback chain.
+- ✅ **Arabic PDF fonts unified** — DecisionOS + LocalContactOS now use shared `arabic-font-utils.ts` (Noto Naskh Arabic).
+- ✅ **Model Governance UI** — `/settings/models` page with full lifecycle (register→review→approve→deploy→deprecate). Sidebar link added.
+- ✅ **SSO L6** — Self-service key configuration confirmed working. ClientSecret no longer pre-filled client-side.
+- ✅ **AI Governance Dashboard** — Model Registry card added with stats + link to `/settings/models`.
+- ✅ **Console noise reduced** — `[PlatformAuditLog] Write failed` and `console.error` in 6 action files suppressed in test mode.
+- ✅ **4092 tests PASS** — 367 suites across all products (up from 3924 in prior session).
 
 ---
 
@@ -259,7 +264,7 @@
 | — | Institutional Memory | **L6** | L6 | 0 | 0 | ✅ **L6 Production-hardened 2026-07-03**. Full boundaries on all 4 IM routes. Graph, events, collections. |
 | — | ContentStudio | **L6** | L6 | 0 | 0 | ✅ **L6 Production-hardened 2026-07-03**. Full boundaries on all 5 content studio routes. ~125 tests PASS. PDF export with Arabic font fidelity. |
 | — | Knowledge Foundation | **L6** | L6 | 0 | 0 | ✅ **L6 Production-hardened 2026-07-03**. Full boundaries on all knowledge routes. Release governance, diff engine, provenance. |
-| L8 | Enterprise | L0 | — | 1 | 0 | Contract-gated (pentest highest urgency) |
+| L8 | Enterprise | L0 | — | 1 | 0 | Contract-gated (pentest highest urgency — schedule before enterprise contract) |
 | L9 | Compliance | L0 | — | 0 | 0 | Contract-gated |
 | L10 | Air-Gapped | L0 | — | 0 | 0 | Contract-gated |
-| **Total** | | | | **1** | **0** | Remaining: pentest (L0-04) — vendor-gated. IaC code complete (infra/terraform/ + CI/CD deploy.yml). |
+| **Total** | | | | **1** | **0** | Remaining: pentest (L0-04) — vendor-gated. IaC code complete (infra/terraform/ + CI/CD deploy.yml). SSO/SCIM L6. 4092 tests PASS (367 suites). |
