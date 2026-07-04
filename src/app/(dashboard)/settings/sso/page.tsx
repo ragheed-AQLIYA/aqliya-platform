@@ -169,7 +169,7 @@ export default function SsoSettingsPage() {
       providerType: provider.providerType,
       label: provider.label,
       clientId: provider.clientId || "",
-      clientSecret: provider.clientSecret || "",
+      clientSecret: "", // Security: never pre-fill the secret client-side
       issuerUrl: provider.issuerUrl || "",
       authorizationUrl: provider.authorizationUrl || "",
       tokenUrl: provider.tokenUrl || "",
@@ -622,8 +622,13 @@ export default function SsoSettingsPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, clientSecret: e.target.value })
                 }
-                placeholder="..."
+                placeholder={editingId ? "اترك فارغاً إذا لم يتغير" : "أدخل المفتاح السري"}
               />
+              {editingId && (
+                <p className="text-xs text-muted-foreground">
+                  اترك الحقل فارغاً للحفاظ على المفتاح السري الحالي
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">

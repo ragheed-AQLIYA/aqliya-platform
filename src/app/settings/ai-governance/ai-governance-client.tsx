@@ -30,6 +30,15 @@ import Link from "next/link";
 interface Props {
   stats: AiGovernanceStats | null;
   error: string | null;
+  modelStats?: {
+    total: number;
+    byStatus: Record<string, number>;
+    byRiskLevel: Record<string, number>;
+    byProvider: Record<string, number>;
+    pendingReview: number;
+    pendingApproval: number;
+    activeDeployments: number;
+  } | null;
 }
 
 function StatCard({
@@ -83,7 +92,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export function AiGovernanceClient({ stats, error }: Props) {
+export function AiGovernanceClient({ stats, error, modelStats: modelStatsProp }: Props) {
   const formatDate = (iso: string) => {
     try {
       return new Date(iso).toLocaleString("ar-SA");
@@ -231,6 +240,59 @@ export function AiGovernanceClient({ stats, error }: Props) {
                     </span>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Model Registry */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <GitBranch className="h-4 w-4 text-indigo-600" />
+                  سجل النماذج / Model Registry
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {!modelStatsProp ? (
+                  <p className="text-sm text-muted-foreground">جاري تحميل بيانات سجل النماذج...</p>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">إجمالي النماذج المسجلة</span>
+                      <span className="font-medium">{modelStatsProp.total}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">نشر نشط</span>
+                      <span className="font-medium">{modelStatsProp.activeDeployments}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">قيد المراجعة</span>
+                      <span className="font-medium">{modelStatsProp.pendingReview}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">معتمد</span>
+                      <span className="font-medium">{modelStatsProp.byStatus["APPROVED"] ?? 0}</span>
+                    </div>
+                    {modelStatsProp.byProvider && Object.keys(modelStatsProp.byProvider).length > 0 && (
+                      <div className="pt-1">
+                        <p className="text-xs text-muted-foreground mb-1">المزودون:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {Object.entries(modelStatsProp.byProvider).map(([p, c]) => (
+                            <Badge key={p} variant="outline" className="text-xs">
+                              {p}: {c}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    <div className="pt-2">
+                      <Link href="/settings/models">
+                        <Button variant="outline" size="sm">
+                          ← إدارة سجل النماذج
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 

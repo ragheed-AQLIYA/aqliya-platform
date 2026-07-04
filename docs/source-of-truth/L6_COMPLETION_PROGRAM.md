@@ -183,7 +183,7 @@
 
 | # | Gap | Category | Priority | Effort |
 |---|-----|----------|----------|--------|
-| E8-01 | SAML/OIDC SSO | Security | **High** | L |
+| E8-01 | SAML/OIDC SSO | Security | **Medium** | ✅ **L6 Production-hardened 2026-07-03**. Self-service key configuration via /settings/sso UI. ClientSecret AES-256-GCM encrypted at rest. 65 tests. No operator SSH required for provider setup. |
 | E8-02 | SCIM provisioning | Security | **Medium** | L |
 | E8-03 | DR/HA architecture | Operations | **High** | L |
 | E8-04 | SIEM audit log export | Operations | **Medium** | M |
