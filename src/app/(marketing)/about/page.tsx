@@ -2,6 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { BOOKING_EMAIL } from "@/lib/marketing/booking";
+import {
+  publicOsStatus,
+  canonicalOsKeys,
+} from "@/lib/marketing/public-status";
 import { WorkflowChain } from "@/components/enterprise";
 
 export const metadata: Metadata = {
@@ -26,15 +30,18 @@ const coreItems = [
   "التقارير",
 ];
 
-const operatingSystems = [
-  { name: "AuditOS", desc: "نظام التدقيق والذكاء المالي — مسار مراجعة من المصدر إلى الاعتماد" },
-  { name: "LocalContentOS", desc: "نظام المحتوى المحلي — موردون، إنفاق، امتثال، وتقارير" },
-];
-
-const roadmapSystems = [
-  { name: "SalesOS", desc: "نظام الذاكرة التجارية — تأهيل، فرص، ومتابعة مؤسسية" },
-  { name: "DecisionOS", desc: "نظام حوكمة القرارات — مذكرات قرار محكومة — متاح حالياً" },
-];
+const canonicalSystems = canonicalOsKeys.map((key) => ({
+  key,
+  name: key === "auditOS" ? "AuditOS" : key === "localContentOS" ? "LocalContentOS" : key === "decisionOS" ? "DecisionOS" : "SalesOS",
+  desc: key === "auditOS"
+    ? "نظام التدقيق والذكاء المالي — مسار مراجعة من المصدر إلى الاعتماد"
+    : key === "localContentOS"
+    ? "نظام المحتوى المحلي — موردون، إنفاق، امتثال، وتقارير"
+    : key === "decisionOS"
+    ? "نظام حوكمة القرارات — بدائل، معايير، مخاطر، واعتماد"
+    : "نظام الذاكرة التجارية — تأهيل، فرص، ومتابعة مؤسسية",
+  status: publicOsStatus[key].label,
+}));
 
 const whatAqliyaIsNot = [
   "منصة متكاملة، لا منتج واحد — تشغّل خطوط أنظمة متعددة فوق نواة حوكمة واحدة",
@@ -243,35 +250,16 @@ export default function AboutPage() {
             قرار، مبيعات، محاكاة، أو مسار خاص.             الفكرة ليست تنويع الأنظمة، بل
             توحيد طريقة بناء الأنظمة المؤسسية المحكومة.
           </p>
-          <div className="mt-8 space-y-6">
-            <div>
-              <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-600">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-                أنظمة التشغيل
-              </p>
-              <div className="grid gap-3 sm:grid-cols-3">
-                {operatingSystems.map((item) => (
-                  <div key={item.name} className="glass-card-light rounded-2xl p-5">
-                    <p className="text-sm font-black text-foreground">{item.name}</p>
-                    <p className="mt-1.5 text-xs leading-6 text-muted-foreground">{item.desc}</p>
-                  </div>
-                ))}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {canonicalSystems.map((item) => (
+              <div key={item.name} className="glass-card-light rounded-2xl p-5">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                  {item.status}
+                </p>
+                <p className="mt-2 text-sm font-black text-foreground">{item.name}</p>
+                <p className="mt-1 text-xs leading-6 text-muted-foreground">{item.desc}</p>
               </div>
-            </div>
-            <div>
-              <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
-                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
-                متاح وقادم
-              </p>
-              <div className="grid gap-3 sm:grid-cols-3">
-                {roadmapSystems.map((item) => (
-                  <div key={item.name} className="rounded-2xl border border-border/40 bg-muted/10 p-5">
-                    <p className="text-sm font-black text-foreground/60">{item.name}</p>
-                    <p className="mt-1.5 text-xs leading-6 text-muted-foreground/60">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

@@ -67,3 +67,16 @@ export const publicOsStatusEn: Record<
 
 export const publicEngagementGateEn =
   "Intro call first, then a trial on your data, then your decision";
+
+/**
+ * Canonical ordered list of operating systems displayed on Home & About.
+ * Keeps focus on the strategic core: AuditOS + LocalContentOS as primary
+ * deployable systems, DecisionOS as integrated, SalesOS as roadmap.
+ * Office AI Assistant and SimulationOS exist on the products index only.
+ */
+export const canonicalOsKeys: PublicOsKey[] = [
+  "auditOS",
+  "localContentOS",
+  "decisionOS",
+  "salesOS",
+] as const;

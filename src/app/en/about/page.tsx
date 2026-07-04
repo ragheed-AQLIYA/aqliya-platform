@@ -2,6 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { BOOKING_EMAIL } from "@/lib/marketing/booking";
+import {
+  publicOsStatusEn,
+  canonicalOsKeys,
+} from "@/lib/marketing/public-status";
 import { WorkflowChain } from "@/components/enterprise";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 
@@ -27,27 +31,18 @@ const coreItems = [
   "Reporting",
 ];
 
-const operatingSystems = [
-  {
-    name: "AuditOS",
-    desc: "Audit and financial intelligence — engagement path from source to approval",
-  },
-  {
-    name: "LocalContentOS",
-    desc: "Local content — suppliers, spend, compliance, and reports",
-  },
-];
-
-const roadmapSystems = [
-  {
-    name: "SalesOS",
-    desc: "Commercial memory — qualification, opportunities, institutional follow-up",
-  },
-  {
-    name: "DecisionOS",
-    desc: "Decision governance — governed decision memos — available now",
-  },
-];
+const canonicalSystems = canonicalOsKeys.map((key) => ({
+  key,
+  name: key === "auditOS" ? "AuditOS" : key === "localContentOS" ? "LocalContentOS" : key === "decisionOS" ? "DecisionOS" : "SalesOS",
+  desc: key === "auditOS"
+    ? "Audit and financial intelligence — engagement path from source to approval"
+    : key === "localContentOS"
+    ? "Local content — suppliers, spend, compliance, and reports"
+    : key === "decisionOS"
+    ? "Decision governance — context, alternatives, risks, and approvals"
+    : "Commercial memory — qualification, opportunities, institutional follow-up",
+  status: publicOsStatusEn[key].label,
+}));
 
 const whatAqliyaIs = [
   "A platform, not a single product — multiple operating lines on one governance core",
@@ -242,49 +237,16 @@ export default function EnglishAboutPage() {
             The goal is not to multiply products, but to unify how governed
             institutional systems are built.
           </p>
-          <div className="mt-8 space-y-6">
-            <div>
-              <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-600">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-                Operating systems
-              </p>
-              <div className="grid gap-3 sm:grid-cols-3">
-                {operatingSystems.map((item) => (
-                  <div
-                    key={item.name}
-                    className="glass-card-light rounded-2xl p-5"
-                  >
-                    <p className="text-sm font-black text-foreground">
-                      {item.name}
-                    </p>
-                    <p className="mt-1.5 text-xs leading-6 text-muted-foreground">
-                      {item.desc}
-                    </p>
-                  </div>
-                ))}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {canonicalSystems.map((item) => (
+              <div key={item.name} className="glass-card-light rounded-2xl p-5">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                  {item.status}
+                </p>
+                <p className="mt-2 text-sm font-black text-foreground">{item.name}</p>
+                <p className="mt-1 text-xs leading-6 text-muted-foreground">{item.desc}</p>
               </div>
-            </div>
-            <div>
-              <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
-                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
-                Available & Upcoming
-              </p>
-              <div className="grid gap-3 sm:grid-cols-3">
-                {roadmapSystems.map((item) => (
-                  <div
-                    key={item.name}
-                    className="rounded-2xl border border-border/40 bg-muted/10 p-5"
-                  >
-                    <p className="text-sm font-black text-foreground/60">
-                      {item.name}
-                    </p>
-                    <p className="mt-1.5 text-xs leading-6 text-muted-foreground/60">
-                      {item.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
