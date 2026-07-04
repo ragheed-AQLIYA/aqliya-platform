@@ -21,6 +21,11 @@ export type ProductPageContent = {
     title: string;
     steps: Array<{ title: string; detail: string }>;
   };
+  governanceItems?: Array<{
+    title: string;
+    detail: string;
+    icon?: "evidence" | "approval" | "permissions" | "audit";
+  }>;
 };
 
 export const auditProductContent: ProductPageContent = {
@@ -69,6 +74,12 @@ export const auditProductContent: ProductPageContent = {
       { title: "جودة ونشر", detail: "ISQM1، حزمة ارتباط، أرشفة" },
     ],
   },
+  governanceItems: [
+    { icon: "evidence", title: "ربط كل بند بمصدره", detail: "كل رقم في قائمة الدخل أو الميزانية مرتبط بمصدره في ميزان المراجعة — فاتورة، عقد، أو قيد. لا إدعاء بلا دليل." },
+    { icon: "approval", title: "اعتماد الشريك قبل كل خروج", detail: "خمسة شروط في بوابة الاعتماد قبل التصدير: مراجعة الشريك، استكمال أدلة، موافقة الجودة، خلو من الأخطاء، وتوقيع إلكتروني." },
+    { icon: "permissions", title: "فريق الارتباط فقط", detail: "المستخدمون ضمن فريق الارتباط فقط يرون ملف المراجعة. لا وصول خارجي، لا صلاحيات متجاوزة." },
+    { icon: "audit", title: "سجل تدقيق ISA 230", detail: "كل حدث — إنشاء، تعديل، مراجعة، اعتماد — يُسجَّل مع التوقيت والهوية. السجل غير قابل للتعديل وجاهز لمراجعة الجودة." },
+  ],
 };
 
 export const decisionProductContent: ProductPageContent = {
@@ -106,6 +117,12 @@ export const decisionProductContent: ProductPageContent = {
   demoLabel: "ديمو تفاعلي",
   primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
   secondaryCta: { label: "مواد الإثبات", href: "/proof" },
+  governanceItems: [
+    { icon: "evidence", title: "كل قرار مرتبط ببياناته", detail: "البدائل، المعايير، تقييم المخاطر — كلها مرتبطة بمصادرها (تقارير، دراسات، أرقام). لا قرار بلا أساس." },
+    { icon: "approval", title: "اعتماد هرمي حسب السياسة", detail: "القرار يمر بموافقة المدير، ثم اللجنة، ثم مجلس الإدارة حسب مبلغ القرار وتأثيره. كل مستوى يُسجِّل موافقته أو طلب التعديل." },
+    { icon: "permissions", title: "صلاحيات حسب الدور", detail: "من يقترح، من يراجع، من يعتمد — مسارات واضحة ومقيدة مسبقاً. لا يستطيع المقترح اعتماد قراره بنفسه." },
+    { icon: "audit", title: "تجميد القرار بعد الاعتماد", detail: "بمجرد اعتماد القرار، يُجمَد النص ولا يمكن تعديله. أي تغيير لاحق يمر بقرار جديد مرتبط بالأصل." },
+  ],
 };
 
 export const localContentProductContent: ProductPageContent = {
@@ -143,6 +160,12 @@ export const localContentProductContent: ProductPageContent = {
   demoLabel: "نماذج مخرجات",
   primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
   secondaryCta: { label: "مواد الإثبات", href: "/proof" },
+  governanceItems: [
+    { icon: "evidence", title: "إقرارات الموردين كأدلة", detail: "نسبة المحتوى المحلي لكل مورد مدعومة بإقراراته وفواتيره. لا رقم بدون مستند." },
+    { icon: "approval", title: "اعتماد التصنيف والتقارير", detail: "تصنيف الموردين وتقارير المحتوى المحلي تمر بمراجعة واعتماد قبل الإرسال للجهات الرقابية." },
+    { icon: "permissions", title: "بيانات الموردين محمية", detail: "الوصول إلى بيانات الموردين والإنفاق مقيّد حسب دور المستخدم داخل المنشأة. لا اطلاع بدون صلاحية." },
+    { icon: "audit", title: "سجل تدقيق تنظيمي", detail: "كل تغيير في تصنيف مورد، أو إنفاق، أو تقرير — مسجل بالكامل وجاهز لمراجعة الجهات الرقابية." },
+  ],
 };
 
 export type ProductIndexCard = {

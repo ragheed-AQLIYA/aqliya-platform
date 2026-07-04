@@ -3,6 +3,27 @@ import { BeforeAfterBlock, WorkflowChain } from "@/components/enterprise";
 import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/marketing-shell";
 import type { ProductPageContent } from "@/lib/marketing/product-pages-content";
 
+type GovernanceCard = {
+  title: string;
+  detail: string;
+};
+
+function defaultGovernance(locale: "ar" | "en"): GovernanceCard[] {
+  return locale === "ar"
+    ? [
+        { title: "سلسلة أدلة كاملة", detail: "كل مخرج في هذا النظام مرتبط بمصدره الأصلي — ملف، سجل، أو إدخال. لا مخرج بدون سلسلة أدلة يمكن تتبّعها." },
+        { title: "مراجعة واعتماد بشري", detail: "كل مخرج يمر بمراجعة بشرية قبل الاعتماد. لا قرار نهائي بدون توقيع المسؤول. كل اعتماد يُوثَّق في سجل التدقيق." },
+        { title: "صلاحيات حسب الدور", detail: "كل مستخدم يرى فقط ما يسمح به دوره داخل مؤسسته. لا وصول ضمني، لا صلاحيات متجاوزة." },
+        { title: "سجل تدقيق غير قابل للتعديل", detail: "كل حدث — إنشاء، تعديل، اعتماد، رفض — يُسجَّل مع هوية المستخدم والتوقيت. لا حذف، لا تعديل." },
+      ]
+    : [
+        { title: "Full evidence chain", detail: "Every output in this system is linked to its original source — file, record, or entry. No output without a traceable evidence chain." },
+        { title: "Human review & approval", detail: "Every output undergoes human review before approval. No final decision without the responsible person's sign-off. Every approval is logged in the audit trail." },
+        { title: "Role-based permissions", detail: "Each user only sees what their role permits within their organization. No implicit access, no exceeded permissions." },
+        { title: "Immutable audit trail", detail: "Every event — create, edit, approve, reject — is logged with user identity and timestamp. No deletion, no modification." },
+      ];
+}
+
 type ProductPageTemplateProps = {
   content: ProductPageContent;
   locale?: "ar" | "en";
@@ -113,46 +134,12 @@ export function ProductPageTemplate({
           {t.governance}
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-border/60 bg-background p-5">
-            <h4 className="mb-2 text-sm font-bold text-foreground">
-              {locale === "ar" ? "سلسلة أدلة كاملة" : "Full evidence chain"}
-            </h4>
-            <p className="text-sm leading-6 text-muted-foreground">
-              {locale === "ar"
-                ? "كل مخرج في هذا النظام مرتبط بمصدره الأصلي — ملف، سجل، أو إدخال. لا مخرج بدون سلسلة أدلة يمكن تتبّعها."
-                : "Every output in this system is linked to its original source — file, record, or entry. No output without a traceable evidence chain."}
-            </p>
-          </div>
-          <div className="rounded-xl border border-border/60 bg-background p-5">
-            <h4 className="mb-2 text-sm font-bold text-foreground">
-              {locale === "ar" ? "مراجعة واعتماد بشري" : "Human review & approval"}
-            </h4>
-            <p className="text-sm leading-6 text-muted-foreground">
-              {locale === "ar"
-                ? "كل مخرج يمر بمراجعة بشرية قبل الاعتماد. لا قرار نهائي بدون توقيع المسؤول. كل اعتماد يُوثَّق في سجل التدقيق."
-                : "Every output undergoes human review before approval. No final decision without the responsible person's sign-off. Every approval is logged in the audit trail."}
-            </p>
-          </div>
-          <div className="rounded-xl border border-border/60 bg-background p-5">
-            <h4 className="mb-2 text-sm font-bold text-foreground">
-              {locale === "ar" ? "صلاحيات حسب الدور" : "Role-based permissions"}
-            </h4>
-            <p className="text-sm leading-6 text-muted-foreground">
-              {locale === "ar"
-                ? "كل مستخدم يرى فقط ما يسمح به دوره داخل مؤسسته. لا وصول ضمني، لا صلاحيات متجاوزة."
-                : "Each user only sees what their role permits within their organization. No implicit access, no exceeded permissions."}
-            </p>
-          </div>
-          <div className="rounded-xl border border-border/60 bg-background p-5">
-            <h4 className="mb-2 text-sm font-bold text-foreground">
-              {locale === "ar" ? "سجل تدقيق غير قابل للتعديل" : "Immutable audit trail"}
-            </h4>
-            <p className="text-sm leading-6 text-muted-foreground">
-              {locale === "ar"
-                ? "كل حدث — إنشاء، تعديل، اعتماد، رفض — يُسجَّل مع هوية المستخدم والتوقيت. لا حذف، لا تعديل."
-                : "Every event — create, edit, approve, reject — is logged with user identity and timestamp. No deletion, no modification."}
-            </p>
-          </div>
+          {(content.governanceItems ?? defaultGovernance(locale)).map((g) => (
+            <div key={g.title} className="rounded-xl border border-border/60 bg-background p-5">
+              <h4 className="mb-2 text-sm font-bold text-foreground">{g.title}</h4>
+              <p className="text-sm leading-6 text-muted-foreground">{g.detail}</p>
+            </div>
+          ))}
         </div>
       </section>
 

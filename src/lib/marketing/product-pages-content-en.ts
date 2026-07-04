@@ -37,8 +37,13 @@ export const auditProductContentEn: ProductPageContent = {
   demoLabel: "AuditOS demo",
   primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
   secondaryCta: { label: "Proof materials", href: "/en/proof" },
+  governanceItems: [
+    { icon: "evidence", title: "Every figure linked to its source", detail: "Every number in the financial statements is traced back to its origin in the trial balance — invoice, contract, or journal entry. No assertion without evidence." },
+    { icon: "approval", title: "Partner sign-off before any export", detail: "Five-condition approval gate before export: partner review, evidence completeness, quality sign-off, error-free check, and electronic signature." },
+    { icon: "permissions", title: "Engagement team only", detail: "Only users assigned to the engagement see its working papers. No implicit access, no permissions beyond the team." },
+    { icon: "audit", title: "ISA 230-compliant audit trail", detail: "Every event — create, edit, review, approve — is logged with timestamp and identity. The log is immutable and quality-review ready." },
+  ],
 };
-
 export const decisionProductContentEn: ProductPageContent = {
   metadata: {
     title: "DecisionOS — Governed Decision Operating System | AQLIYA",
@@ -74,6 +79,12 @@ export const decisionProductContentEn: ProductPageContent = {
   demoLabel: "Interactive demo",
   primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
   secondaryCta: { label: "Proof materials", href: "/en/proof" },
+  governanceItems: [
+    { icon: "evidence", title: "Every decision grounded in data", detail: "Options, criteria, risk assessments — all linked to their sources (reports, studies, figures). No decision without a foundation." },
+    { icon: "approval", title: "Multi-level approval by policy", detail: "Decisions flow through manager, committee, then board depending on value and impact. Each level records approval or requests revision." },
+    { icon: "permissions", title: "Role-gated proposal and approval", detail: "Who proposes, who reviews, who approves — pre-configured paths. The proposer cannot self-approve." },
+    { icon: "audit", title: "Decision frozen after approval", detail: "Once a decision is approved, the record is frozen. Any subsequent change requires a new decision linked to the original." },
+  ],
 };
 
 export const localContentProductContentEn: ProductPageContent = {
@@ -113,4 +124,10 @@ export const localContentProductContentEn: ProductPageContent = {
   demoLabel: "Sample outputs",
   primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
   secondaryCta: { label: "Proof materials", href: "/en/proof" },
+  governanceItems: [
+    { icon: "evidence", title: "Supplier declarations as evidence", detail: "Each supplier's local content percentage is backed by declarations and invoices. No figure without documentation." },
+    { icon: "approval", title: "Classification and report approval", detail: "Supplier classification and local content reports pass through review and approval before submission to regulatory bodies." },
+    { icon: "permissions", title: "Protected supplier data", detail: "Access to supplier and spend data is restricted by user role within the organization. No visibility without permission." },
+    { icon: "audit", title: "Regulatory-grade audit trail", detail: "Every change in supplier classification, spend allocation, or report content is fully logged and ready for regulatory review." },
+  ],
 };
