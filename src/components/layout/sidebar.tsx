@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, Settings, Shield, AlertTriangle, Network, TrendingUp, FileText, Brain, CheckSquare } from "lucide-react";
+import { LayoutDashboard, Users, Settings, Shield, AlertTriangle, Network, TrendingUp, FileText, Brain, CheckSquare, Cpu } from "lucide-react";
 
 const navigation = [
   { name: "حوكمة القرارات", href: "/decisions", icon: LayoutDashboard },
@@ -16,6 +16,7 @@ const navigation = [
   { name: "نظام المبيعات", href: "/sales", icon: TrendingUp },
   { name: "الذاكرة المؤسسية", href: "/institutional-memory", icon: Network },
   { name: "المنظمات", href: "/organizations", icon: Users },
+  { name: "حوكمة النماذج", href: "/settings/models", icon: Cpu },
   { name: "الإعدادات", href: "/settings", icon: Settings },
   { name: "إعدادات الدخول الموحد", href: "/settings/sso", icon: Shield },
 ];
