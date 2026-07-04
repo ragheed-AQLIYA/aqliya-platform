@@ -23,7 +23,7 @@ export default function SalesOSEnPage() {
             Pipeline, deals, accounts, intelligence, and governed outreach — coming on the platform roadmap.
           </p>
           <div className="mt-8 flex justify-center gap-4">
-            <Link href="/contact">
+            <Link href="/en/contact">
               <Button variant="secondary">Request early access</Button>
             </Link>
             <Link href="/en/products">

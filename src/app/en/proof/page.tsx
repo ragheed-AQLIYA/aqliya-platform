@@ -124,7 +124,7 @@ export default function EnglishProofCenterPage() {
             <Link href="/print/executive-brief-en" target="_blank" className="btn-outline h-10 px-5 text-sm">
               PDF for print
             </Link>
-            <Link href="/proof#executive-brief" className="btn-outline h-10 px-5 text-sm">
+            <Link href="/en/proof#executive-brief" className="btn-outline h-10 px-5 text-sm">
               Arabic brief
             </Link>
           </div>

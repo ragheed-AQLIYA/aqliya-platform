@@ -244,7 +244,7 @@ export default function EnglishPlatformPage() {
           Office AI Assistant is a shared capability across the platform — a
           governed institutional assistant within permissions and evidence.{" "}
           <Link
-            href="/products/office-ai"
+            href="/en/products/office-ai"
             className="text-primary underline underline-offset-4"
           >
             Details
@@ -253,7 +253,7 @@ export default function EnglishPlatformPage() {
         <p className="mt-4 text-center text-xs text-muted-foreground/70">
           SalesOS and SimulationOS are on the platform roadmap —{" "}
           <Link
-            href="/products#roadmap"
+            href="/en/products#roadmap"
             className="text-primary underline underline-offset-4"
           >
             explore upcoming lines

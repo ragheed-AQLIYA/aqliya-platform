@@ -52,7 +52,7 @@ export default function EnglishSoc2RoadmapPage() {
         ))}
 
         <div className="flex flex-wrap justify-center gap-4 pt-6">
-          <Link href="/procurement-pack" className="btn-outline px-6 py-3">
+          <Link href="/en/procurement-pack" className="btn-outline px-6 py-3">
             Procurement pack
           </Link>
           <ScheduleDiagnosticCta locale="en" variant="outline" />

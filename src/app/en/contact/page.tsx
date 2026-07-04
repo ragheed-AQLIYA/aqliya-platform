@@ -36,7 +36,7 @@ export default function EnglishContactPage() {
       <section className="mx-auto max-w-xl px-6 py-16 text-center">
         <p className="text-sm leading-7 text-muted-foreground">
           Full intake form:{" "}
-          <Link href="/contact" className="text-primary underline">
+          <Link href="/en/contact" className="text-primary underline">
             /contact
           </Link>
         </p>
