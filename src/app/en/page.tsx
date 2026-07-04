@@ -23,10 +23,39 @@ const systems = [
     href: "/en/products/local-content",
   },
   {
+    title: "DecisionOS",
+    note: "Documented decisions: context, alternatives, and approvals",
+    status: publicOsStatusEn.decisionOS.label,
+    href: "/en/products/decision",
+  },
+  {
     title: "SalesOS",
     note: publicOsStatusEn.salesOS.capabilityNote,
     status: publicOsStatusEn.salesOS.label,
     href: "/en/products/sales",
+  },
+];
+
+const platformLayersEn = [
+  {
+    num: "01",
+    title: "Governance",
+    desc: "Permissions, audit trail, approval gates — every event is logged",
+  },
+  {
+    num: "02",
+    title: "Knowledge Foundation",
+    desc: "Every output linked to its source — unbreakable evidence chain",
+  },
+  {
+    num: "03",
+    title: "Intelligence Operators",
+    desc: "AI assists and suggests — never decides or approves without humans",
+  },
+  {
+    num: "04",
+    title: "Operating Systems",
+    desc: "Each system inherits governance and intelligence — no rebuild",
   },
 ];
 
@@ -35,11 +64,13 @@ export default function EnglishHomePage() {
 
   return (
     <div className="flex flex-col">
+      {/* ─── Hero ────────────────────────────────── */}
       <section className="hero-gradient relative overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px]" />
         <div className="relative mx-auto max-w-7xl px-6 py-18 sm:py-24">
           <div className="mx-auto max-w-4xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-aqliya-cyan">
+              <span className="h-1.5 w-1.5 rounded-full bg-aqliya-cyan" />
               {c.hero.eyebrow}
             </span>
             <h1 className="mt-6 text-4xl font-black leading-[1.08] text-white sm:text-5xl">
@@ -71,6 +102,7 @@ export default function EnglishHomePage() {
         </div>
       </section>
 
+      {/* ─── Problem ──────────────────────────────── */}
       <section className="border-t bg-muted/10 py-14">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-3xl text-center">
@@ -106,33 +138,97 @@ export default function EnglishHomePage() {
         </div>
       </section>
 
-      <section className="border-t py-14">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-xl font-black sm:text-2xl">{c.systems.title}</h2>
-            <p className="mt-3 text-sm text-muted-foreground">{c.systems.subtitle}</p>
+      {/* ─── Why Platform ─────────────────────────── */}
+      <section className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-4xl">
+          <div className="text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-muted/30 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              Why platform not tool?
+            </span>
+            <h2 className="mt-6 text-xl font-black sm:text-2xl">
+              A tool solves one problem — a platform runs the institution
+            </h2>
           </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {systems.map((s) => (
-              <Link
-                key={s.title}
-                href={s.href}
-                className="rounded-xl border border-border/60 p-5 transition hover:border-primary/30"
-              >
-                <span className="text-[10px] font-semibold text-emerald-700">{s.status}</span>
-                <h3 className="mt-1 text-lg font-black">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.note}</p>
-              </Link>
-            ))}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-red-500/[0.03] p-5">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-red-600/80">Standalone AI tool</p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-500/50" />Outputs without review or approval path</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-500/50" />Each new domain needs a new tool from scratch</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-500/50" />Permissions and evidence managed outside — or not at all</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-background to-emerald-500/[0.04] p-5">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-emerald-600/80">AQLIYA Platform</p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />Every output passes through governance and evidence before approval</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />Every system inherits governance and intelligence from one platform</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />Permissions and evidence are part of the platform architecture — no separate management</li>
+              </ul>
+            </div>
           </div>
-          <p className="mt-6 text-center">
-            <Link href="/en/products" className="text-sm font-medium text-primary hover:underline">
-              {c.systems.ctaAll} →
-            </Link>
-          </p>
         </div>
       </section>
 
+      {/* ─── The 4 Layers ──────────────────────────── */}
+      <section className="border-t bg-muted/10 py-14">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-xl font-black sm:text-2xl">
+              Platform architecture — four stacked layers
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Each layer serves the one above. Every operating system inherits the three layers beneath without duplication.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-4">
+            {platformLayersEn.map((layer, i) => (
+              <div key={layer.num} className="rounded-xl border border-border/60 bg-background p-5 text-center">
+                <span className="text-[10px] font-bold text-primary">{layer.num}</span>
+                <h3 className="mt-1 text-sm font-black">{layer.title}</h3>
+                <p className="mt-2 text-xs leading-6 text-muted-foreground">{layer.desc}</p>
+                {i < platformLayersEn.length - 1 && (
+                  <div className="mt-3 text-[10px] text-muted-foreground/50" aria-hidden>↑</div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <Link href="/en/platform" className="text-sm font-medium text-primary hover:underline">
+              Explore the platform architecture →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Operating Systems ─────────────────────── */}
+      <section className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="text-xl font-black sm:text-2xl">{c.systems.title}</h2>
+          <p className="mt-3 text-sm text-muted-foreground">{c.systems.subtitle}</p>
+        </div>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {systems.map((s) => (
+            <Link
+              key={s.title}
+              href={s.href}
+              className="rounded-xl border border-border/60 p-5 transition hover:border-primary/30"
+            >
+              <span className="text-[10px] font-semibold text-emerald-700">{s.status}</span>
+              <h3 className="mt-1 text-lg font-black">{s.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{s.note}</p>
+            </Link>
+          ))}
+        </div>
+        <p className="mt-6 text-center">
+          <Link href="/en/products" className="text-sm font-medium text-primary hover:underline">
+            {c.systems.ctaAll} →
+          </Link>
+        </p>
+      </section>
+
+      {/* ─── Proof ──────────────────────────────────── */}
       <section className="border-t bg-muted/10 py-14">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-3xl text-center">
