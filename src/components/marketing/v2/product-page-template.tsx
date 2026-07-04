@@ -35,6 +35,7 @@ export function ProductPageTemplate({
   locale = "ar",
   backHref,
 }: ProductPageTemplateProps) {
+  // eslint-disable-next-line security/detect-object-injection -- safe: copy is const, locale is "ar"|"en"
   const t = copy[locale];
   const productsBack = backHref ?? (locale === "en" ? "/en/products" : "/products");
 

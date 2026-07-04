@@ -234,7 +234,7 @@ export default function PlatformPage() {
             <div className="absolute right-[15px] top-8 bottom-8 w-px bg-gradient-to-b from-primary/40 via-primary/20 to-border/40 hidden lg:block" />
 
             <div className="space-y-4">
-              {[...platformLayers].reverse().map((layer, i) => (
+              {[...platformLayers].reverse().map((layer, _i) => (
                 <div
                   key={layer.num}
                   className="relative rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6 transition-all hover:border-primary/20 hover:shadow-sm"

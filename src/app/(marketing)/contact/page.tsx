@@ -80,6 +80,7 @@ export default function ContactPage() {
         <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
           {contactProductsAr.map((product) => {
             const key = statusKey[product.name];
+            // eslint-disable-next-line security/detect-object-injection -- safe: guarded by truthy check above
             const status = key ? publicOsStatus[key] : null;
             return (
               <div

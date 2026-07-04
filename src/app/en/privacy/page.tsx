@@ -177,7 +177,7 @@ export default function PrivacyPage() {
             </h2>
             <p className="mt-3 text-sm leading-7 text-muted-foreground">
               Our technical team is ready to answer any institutional questions about how we handle
-              your organization's data — before or after signing.
+              your organization&apos;s data — before or after signing.
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
               <Link href="/en/contact" className="btn-primary px-6">

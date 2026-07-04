@@ -104,8 +104,8 @@ export const decisionProductContent: ProductPageContent = {
   ],
   demoHref: "/demo",
   demoLabel: "ديمو تفاعلي",
-  primaryCta: { label: "تواصل معنا", href: "/contact" },
-  secondaryCta: { label: "حالات الاستخدام", href: "/use-cases" },
+  primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
+  secondaryCta: { label: "مواد الإثبات", href: "/proof" },
 };
 
 export const localContentProductContent: ProductPageContent = {
@@ -141,8 +141,8 @@ export const localContentProductContent: ProductPageContent = {
   ],
   demoHref: "/proof#evidence-samples",
   demoLabel: "نماذج مخرجات",
-  primaryCta: { label: "تواصل معنا", href: "/contact" },
-  secondaryCta: { label: "قطاع الحكومة", href: "/industries#government" },
+  primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
+  secondaryCta: { label: "مواد الإثبات", href: "/proof" },
 };
 
 export type ProductIndexCard = {

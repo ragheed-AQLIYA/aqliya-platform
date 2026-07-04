@@ -121,7 +121,7 @@ export default function InsightsPage() {
             </h2>
             <p className="mt-4 text-base leading-8 text-white/58">
               Seven categories of real institutional challenges — the problem as it is, the
-              traditional state honestly, and AQLIYA's path with a clear caveat: humans always decide.
+              traditional state honestly, and AQLIYA&apos;s path with a clear caveat: humans always decide.
             </p>
           </div>
 

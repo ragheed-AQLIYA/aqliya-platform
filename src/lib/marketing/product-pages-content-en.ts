@@ -72,8 +72,8 @@ export const decisionProductContentEn: ProductPageContent = {
   ],
   demoHref: "/en/demo",
   demoLabel: "Interactive demo",
-  primaryCta: { label: "Talk to us", href: "/en/contact" },
-  secondaryCta: { label: "Use cases", href: "/en/use-cases" },
+  primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
+  secondaryCta: { label: "Proof materials", href: "/en/proof" },
 };
 
 export const localContentProductContentEn: ProductPageContent = {
@@ -111,6 +111,6 @@ export const localContentProductContentEn: ProductPageContent = {
   ],
   demoHref: "/en/proof#evidence-samples",
   demoLabel: "Sample outputs",
-  primaryCta: { label: "Talk to us", href: "/en/contact" },
-  secondaryCta: { label: "Government sector", href: "/en/industries#government" },
+  primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
+  secondaryCta: { label: "Proof materials", href: "/en/proof" },
 };
