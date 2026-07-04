@@ -589,6 +589,7 @@ export async function generateOfficeAiTaskOutput(
     organizationId: task.platformOrganizationId,
     userId: actor?.id,
     fileContext,
+    fileNames: files.map((f) => f.filename),
   }).catch(() => null);
 
   let content: string;
