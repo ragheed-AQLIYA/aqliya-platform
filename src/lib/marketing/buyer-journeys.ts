@@ -30,7 +30,7 @@ export const buyerJourneys: BuyerJourney[] = [
       { label: "مواد الإثبات", href: "/proof", time: "قراءة" },
       { label: "الديمو", href: "/demo", time: "تجربة" },
     ],
-    primaryCta: { label: "احجز مكالمة", href: "/contact" },
+    primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
     secondaryCta: { label: "خطوات العمل", href: "/start#process" },
   },
   {
@@ -56,7 +56,7 @@ export const buyerJourneys: BuyerJourney[] = [
       { label: "أمثلة عملية", href: "/use-cases", time: "قراءة" },
       { label: "مواد الإثبات", href: "/proof", time: "قراءة" },
     ],
-    primaryCta: { label: "احجز مكالمة", href: "/contact" },
+    primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
     secondaryCta: { label: "قطاع الحكومة", href: "/industries#government" },
   },
   {
@@ -82,7 +82,7 @@ export const buyerJourneys: BuyerJourney[] = [
       { label: "ديمو AuditOS", href: "/auditos", time: "تجربة" },
       { label: "معايير التجربة", href: "/proof#evaluation-framework", time: "قراءة" },
     ],
-    primaryCta: { label: "احجز مكالمة", href: "/contact" },
+    primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
     secondaryCta: { label: "قطاع المراجعة", href: "/industries#audit-firms" },
   },
   {
@@ -108,7 +108,7 @@ export const buyerJourneys: BuyerJourney[] = [
       { label: "الحوكمة", href: "/governance", time: "قراءة" },
       { label: "مواد الإثبات", href: "/proof", time: "قراءة" },
     ],
-    primaryCta: { label: "احجز مكالمة", href: "/contact" },
+    primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
     secondaryCta: { label: "قطاع الحكومة", href: "/industries#government" },
   },
 ];

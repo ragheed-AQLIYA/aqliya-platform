@@ -35,7 +35,7 @@ export const auditProductContentEn: ProductPageContent = {
   ],
   demoHref: "/auditos",
   demoLabel: "AuditOS demo",
-  primaryCta: { label: "Book a call", href: "/en/contact" },
+  primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
   secondaryCta: { label: "Proof materials", href: "/en/proof" },
 };
 

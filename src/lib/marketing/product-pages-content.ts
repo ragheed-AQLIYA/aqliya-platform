@@ -56,7 +56,7 @@ export const auditProductContent: ProductPageContent = {
   ],
   demoHref: "/auditos",
   demoLabel: "ديمو AuditOS",
-  primaryCta: { label: "احجز مكالمة", href: "/contact" },
+  primaryCta: { label: "احجز جلسة تشخيص", href: "/contact" },
   secondaryCta: { label: "مواد الإثبات", href: "/proof" },
   technicalDetails: {
     title: "المحطات التقنية (١٢ محطة)",

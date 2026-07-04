@@ -67,58 +67,68 @@ const operatingSystems = [
     href: "/products/audit",
   },
   {
-    useCase: "توثيق القرارات المؤسسية",
-    system: "DecisionOS",
-    description: "بدائل، مخاطر، أدلة، توصية، واعتماد — في مسار واحد.",
-    statusLabel: publicOsStatus.decisionOS.label,
-    href: "/products/decision",
-  },
-  {
     useCase: "برامج المحتوى المحلي",
     system: "LocalContentOS",
     description: "موردون، إنفاق، عقود، امتثال، وتقارير — للسوق السعودي.",
     statusLabel: publicOsStatus.localContentOS.label,
     href: "/products/local-content",
   },
+  {
+    useCase: "الذاكرة التجارية المؤسسية",
+    system: "SalesOS",
+    description: "تأهيل، فرص، ومتابعة — في خارطة المنصة.",
+    statusLabel: publicOsStatus.salesOS.label,
+    href: "/products/sales",
+  },
 ];
 
-const platformComponents = [
+const platformLayers = [
   {
-    title: "AQLIYA Intelligence Core",
-    ar: "القلب الذكي للمنصة",
-    body: "نواة الذكاء الاصطناعي المشتركة التي تُنسّق طلبات الذكاء عبر جميع الأنظمة. كل استدعاء مُقيّد بحدود صلاحية وسياق، وكل مخرج يمر عبر مراجعة قبل الاستخدام. لا استدعاء بدون تتبع ولا مخرجات بدون تدقيق.",
-    boundary: "الذكاء يقترح ويساعد — لا يقرر ولا يعتمد",
+    num: "01",
+    title: "طبقة الحوكمة",
+    en: "Governance Layer",
+    contains: "الصلاحيات، سجل التدقيق، بوابات الاعتماد، عزل المؤسسات",
+    body: "تُطبّق قواعد الحوكمة على كل عملية: من يملك الصلاحية، ما هي بوابات الموافقة، وكيف تُدار حالات الاستثناء. نموذج صلاحيات متعدد الطبقات على مستوى المؤسسة والمشروع والإجراء الفردي. كل حدث يُسجَّل في سجل غير قابل للتعديل أو الحذف.",
+    boundary: "لا صلاحية ضمنية—كل وصول مُحدَّد صراحةً",
+    for: "لمن تحتاج المؤسسة صلاحية الوصول؟ من يراجع قبل الاعتماد؟",
   },
   {
-    title: "Workflow Engine",
-    ar: "محرك سير العمل",
-    body: "يدير حالات العمل ومراحله من المسودة إلى الاعتماد النهائي. يدعم التوازي والانتقالات الشرطية وبوابات الموافقة. لا يُمكن تجاوز أي مرحلة إلزامية، وكل انتقال يُسجّل في سجل التدقيق.",
-    boundary: "لا تجاوز لبوابات الاعتماد الإلزامية",
-  },
-  {
-    title: "Governance Layer",
-    ar: "طبقة الحوكمة",
-    body: "تُطبّق قواعد الحوكمة على كل عملية: من يملك الصلاحية، ما هي بوابات الموافقة، وكيف تُدار حالات الاستثناء. نموذج صلاحيات متعدد الطبقات على مستوى المؤسسة والمشروع والإجراء الفردي.",
-    boundary: "مبدأ الحد الأدنى من الصلاحيات في كل سياق",
-  },
-  {
-    title: "Integration Layer",
-    ar: "طبقة التكاملات",
-    body: "تربط المنصة مع الأنظمة الخارجية — ERP، أنظمة الموارد البشرية، قواعد البيانات الداخلية، ومنصات التخزين. كل تكامل يمر عبر فتحات موحَّدة مع تسجيل لكل طلب واستجابة وتدقيق للبيانات المنقولة.",
-    boundary: "كل تكامل مُسجَّل ومراقَب — لا نقل بيانات بدون تتبع",
-  },
-  {
-    title: "Evidence Graph",
-    ar: "شبكة الأدلة المؤسسية",
+    num: "02",
+    title: "قاعدة المعرفة",
+    en: "Knowledge Foundation",
+    contains: "شبكة الأدلة، نماذج البيانات، الذاكرة المؤسسية",
     body: "يُنشئ ويُحافظ على شجرة أدلة مترابطة: كل مخرج — تقرير، قرار، ملاحظة — مرتبط بسلسلة أدلة تصل إلى المصادر الأصلية: الملفات، السجلات، البيانات، أو التعليقات. لا مخرج بدون سلسلة أدلة مكتملة.",
     boundary: "لا مخرج بدون سلسلة أدلة مكتملة",
+    for: "على أي أساس صدر هذا المخرج؟ ما مصدر كل رقم؟",
   },
   {
-    title: "Audit Trail",
-    ar: "سجل التدقيق المركزي",
-    body: "كل حدث وتغيير وقرار يُسجَّل في سجل غير قابل للتعديل أو الحذف: الهوية، الوقت، السياق، والقيمة السابقة والجديدة لكل كيان. يضمن المساءلة الكاملة ويمكّن المراجعين من تتبع أي إجراء.",
-    boundary: "غير قابل للحذف — بما في ذلك من قِبل المسؤولين",
+    num: "03",
+    title: "مشغّلات الذكاء",
+    en: "Intelligence Operators",
+    contains: "تنسيق الذكاء، محرك سير العمل، طبقة التكاملات",
+    body: "نواة الذكاء الاصطناعي المشتركة تُنسّق الطلبات عبر جميع الأنظمة — كل استدعاء مقيد بحدود صلاحية وسياق. محرك سير العمل يدير حالات العمل من المسودة إلى الاعتماد مع بوابات لا يمكن تجاوزها. طبقة التكاملات تربط المنصة مع الأنظمة الخارجية مع تسجيل لكل طلب واستجابة.",
+    boundary: "الذكاء يقترح ويساعد—لا يقرر ولا يعتمد",
+    for: "كيف يتحرك العمل من الإدخال إلى المخرجات؟ بأي ترتيب؟",
   },
+  {
+    num: "04",
+    title: "أنظمة التشغيل",
+    en: "Operating Systems",
+    contains: "AuditOS، LocalContentOS، SalesOS، وقدرات مشتركة",
+    body: "كل نظام تشغيل يرث تلقائياً الطبقات الثلاث تحته — الحوكمة، قاعدة المعرفة، والمشغّلات — دون إعادة بناء. الفرق بين نظام وآخر هو المجال التطبيقي ومسارات العمل، وليس البنية الأساسية.",
+    boundary: "كل نظام يرث المنصة—لا إعادة اختراع",
+    for: "كيف يُطبَّق هذا في مجالي: تدقيق، محتوى محلي، أو مبيعات؟",
+  },
+];
+
+const governedWorkflow = [
+  { step: "طلب إجراء", detail: "مستخدم داخل صلاحياته يبدأ طلباً", layer: "Governance" },
+  { step: "التحقق من الصلاحية", detail: "المنصة تتأكد من هوية المستخدم ودوره وصلاحيته", layer: "Governance" },
+  { step: "جلب السياق", detail: "سحب البيانات والأدلة المرتبطة من قاعدة المعرفة", layer: "Knowledge" },
+  { step: "معالجة الذكاء", detail: "AI يُنتج مسودة ضمن حدود السياق — لا يتجاوزها", layer: "Operators" },
+  { step: "مراجعة بشرية", detail: "المستخدم أو المراجع يراجع ويعدّل قبل الاعتماد", layer: "Governance" },
+  { step: "اعتماد", detail: "اعتماد رسمي يُوثَّق في سجل التدقيق", layer: "Governance" },
+  { step: "تسجيل + أرشفة", detail: "كل خطوة تُسجَّل — لا تعديل بعد الاعتماد", layer: "Governance" },
 ];
 
 export default function PlatformPage() {
@@ -136,16 +146,16 @@ export default function PlatformPage() {
               </span>
             </div>
             <h1 className="text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              البنية الأساسية المشتركة التي تعتمد عليها
+              طبقة واحدة تربط الحوكمة والمعرفة والذكاء
               <span className="block text-white/72 mt-1">
-                جميع منتجات وتطبيقات عقلية
+                لتُنتج أنظمة تشغيل مؤسسية متخصصة
               </span>
             </h1>
             <p className="mt-6 max-w-3xl text-base leading-8 text-white/62 sm:text-lg">
-              AQLIYA Intelligence Core ليست مجرد منصة تقنية. هي بنية حوكمية
-              مشتركة تجعل كل منتج يُبنى عليها يرث تلقائياً منطق الذكاء المقيد،
-              سير العمل، الصلاحيات، الأدلة، وسجل التدقيق — بدون إعادة بناء من
-              الصفر.
+              AQLIYA ليست أداة ذكاء منفصلة ولا مجموعة منتجات. هي منصة حاكمة —
+              أربع طبقات (حوكمة، معرفة، مشغّلات، أنظمة) تجعل كل نظام يُبنى
+              عليها يرث تلقائياً الصلاحيات، الأدلة، سير العمل، وسجل التدقيق
+              — بدون إعادة بناء من الصفر.
             </p>
             <div className="mt-7 flex flex-wrap gap-4">
               <Link href="/contact" className="btn-primary h-12 px-8 text-base">
@@ -174,139 +184,196 @@ export default function PlatformPage() {
         </div>
       </section>
 
+      {/* ─── Why Platform ──────────────────────────────── */}
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
-        <SectionEyebrow
-          label="مكونات المنصة الأساسية"
-          title="ستة مكونات — كل منها يؤدي دوراً محدّداً"
-          description="كل مكوّن في المنصة مُصمَّم بحدود واضحة تمنع إساءة استخدام الصلاحيات والذكاء، وتضمن أن كل إجراء قابل للمراجعة والمساءلة."
-        />
-
-        <div className="mt-12 grid gap-4 lg:grid-cols-2">
-          {platformComponents.map((comp, i) => (
-            <div
-              key={comp.title}
-              className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/10 p-6 transition-all hover:border-primary/20 hover:shadow-sm"
-            >
-              <div className="flex items-start gap-4">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-[11px] font-black text-primary">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-baseline gap-2 mb-2">
-                    <h3 className="text-sm font-black text-foreground">
-                      {comp.ar}
-                    </h3>
-                    <span className="text-[11px] font-medium text-muted-foreground">
-                      {comp.title}
-                    </span>
-                  </div>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {comp.body}
-                  </p>
-                  <div className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-primary/15 bg-primary/[0.04] px-3 py-1.5">
-                    <span className="h-1 w-1 rounded-full bg-primary/60" />
-                    <span className="text-[11px] font-semibold text-primary/80">
-                      {comp.boundary}
-                    </span>
-                  </div>
-                </div>
-              </div>
+        <div className="mx-auto max-w-4xl">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-muted/30 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            لماذا منصة لا أداة؟
+          </span>
+          <h2 className="mt-6 text-3xl font-black text-foreground sm:text-4xl leading-[1.12]">
+            المؤسسة المنظَّمة تحتاج طبقة تشغيل — لا أداة تعزل الذكاء عن المسؤولية
+          </h2>
+          <p className="mt-5 text-base leading-8 text-muted-foreground">
+            الأداة تحل مشكلة واحدة. المنصة تُنظّم تشغيل المؤسسة بالكامل.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-red-500/[0.03] p-5">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-red-600/80">الأداة فقط</p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-500/50" />مخرجات ذكاء بدون مسار مراجعة مؤسسي</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-500/50" />كل نطاق يحتاج أداة جديدة من الصفر</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-500/50" />الصلاحيات والأدلة تُدار خارج النظام</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-500/50" />التوسع يعني أداة جديدة ≠ توسع مؤسسي</li>
+              </ul>
             </div>
-          ))}
+            <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-background to-emerald-500/[0.04] p-5">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-emerald-600/80">منصة عقلية</p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />كل مخرج يمر بحوكمة وأدلة قبل الاعتماد</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />كل نظام يرث الحوكمة والذكاء من منصة واحدة</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />صلاحيات وأدلة جزء من بنية المنصة — لا إدارة منفصلة</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />التوسع بإضافة نظام تشغيل جديد فوق نفس المنصة</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
+      {/* ─── The 4 Layers ──────────────────────────────── */}
       <section className="section-gradient-light border-t">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <SectionEyebrow
-            label="قدرة مشتركة"
-            title="Office AI Assistant — مساعد ذكي يعمل عبر المنصة"
-            description="Office AI Assistant ليس منتجاً مستقلاً. هو تطبيق ذكي مشترك يعمل فوق مكونات المنصة، متاح داخل كل نظام عند الحاجة إلى مساعدة ذكية ضمن سياق العمل."
+            label="الطبقات الأربع"
+            title="بنية المنصة من الحوكمة إلى أنظمة التشغيل"
+            description="أربع طبقات متراصة — كل طبقة تخدم التي تعلوها. كل نظام تشغيل يستفيد من الثلاث طبقات تحته دون تكرار."
           />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/10 p-6">
-              <h3 className="text-sm font-black text-foreground">
-                مهام ذكية ضمن سياق محكوم
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                تلخيص مستندات، اقتراح صياغات، تحليل بيانات، وإعداد مسودات —
-                كلها ضمن حدود صلاحية المستخدم ومرحلة سير العمل.
-              </p>
+
+          <div className="mt-12 relative">
+            {/* Vertical connector line */}
+            <div className="absolute right-[15px] top-8 bottom-8 w-px bg-gradient-to-b from-primary/40 via-primary/20 to-border/40 hidden lg:block" />
+
+            <div className="space-y-4">
+              {[...platformLayers].reverse().map((layer, i) => (
+                <div
+                  key={layer.num}
+                  className="relative rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6 transition-all hover:border-primary/20 hover:shadow-sm"
+                >
+                  <div className="flex items-start gap-5">
+                    <div className="hidden lg:flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-[11px] font-black text-primary">
+                      {layer.num}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-3">
+                        <h3 className="text-base font-black text-foreground">
+                          {layer.title}
+                        </h3>
+                        <span className="text-[11px] font-medium text-muted-foreground">
+                          {layer.en}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground/50">
+                          — {layer.contains}
+                        </span>
+                      </div>
+                      <p className="text-sm leading-6 text-muted-foreground">
+                        {layer.body}
+                      </p>
+                      <div className="mt-3 flex flex-wrap items-center gap-3">
+                        <div className="inline-flex items-center gap-1.5 rounded-lg border border-primary/15 bg-primary/[0.04] px-3 py-1.5">
+                          <span className="h-1 w-1 rounded-full bg-primary/60" />
+                          <span className="text-[11px] font-semibold text-primary/80">
+                            {layer.boundary}
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-muted-foreground/60 italic">
+                          {layer.for}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/10 p-6">
-              <h3 className="text-sm font-black text-foreground">
-                مخرجات قابلة للمراجعة
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                أي مخرج من المساعد يُعرض كمسودة مقترحة. المستخدم يراجع ويعدّل
-                قبل الاعتماد. كل خطوة مسجلة في سجل التدقيق.
-              </p>
-            </div>
-          </div>
-          <div className="mt-6 text-center">
-            <Link
-              href="/products/office-ai"
-              className="text-sm font-medium text-primary underline underline-offset-4 hover:text-primary/80"
-            >
-              اقرأ المزيد عن Office AI Assistant →
-            </Link>
           </div>
         </div>
       </section>
 
-      <section
-        id="capabilities"
-        className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20 scroll-mt-20"
-      >
+      {/* ─── Governed Workflow ─────────────────────────── */}
+      <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <SectionEyebrow
-          label="أنظمة التشغيل المتخصصة"
-          title="المنصة تُطبَّق عبر مسارات تشغيلية — لا منتجات منفصلة"
-          description="كل نظام تشغيل يرث تلقائياً الحوكمة، الأدلة، سير العمل، والصلاحيات من نفس المنصة — دون إعادة بناء."
+          label="التدفق المحكوم"
+          title="كيف يتدفّق العمل عبر طبقات المنصة في إجراء واحد"
+          description="من لحظة بدء الطلب إلى التسجيل النهائي — كل خطوة تمر عبر طبقة محددة وبوابة صلاحية واضحة."
         />
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {operatingSystems.map((sys) => (
-            <Link
-              key={sys.system}
-              href={sys.href}
-              className="group rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
-            >
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <h3 className="text-base font-black text-foreground group-hover:text-primary">
-                  {sys.useCase}
-                </h3>
-                <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-[9px] font-bold text-primary">
-                  {sys.statusLabel}
-                </span>
+        <div className="mt-10 relative">
+          <div className="absolute right-[7px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary/30 via-primary/15 to-border/30 hidden sm:block" />
+          <div className="space-y-3">
+            {governedWorkflow.map((wf, i) => (
+              <div key={wf.step} className="relative flex items-start gap-4 rounded-xl border border-border/50 bg-background p-4">
+                <div className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-primary/15">
+                  <span className="text-[9px] font-black text-primary">{i + 1}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    <span className="text-sm font-bold text-foreground">{wf.step}</span>
+                    <span className={`text-[9px] font-semibold uppercase tracking-wider ${
+                      wf.layer === "Governance" ? "text-primary/70" : "text-aqliya-cyan/70"
+                    }`}>
+                      {wf.layer}
+                    </span>
+                  </div>
+                  <p className="mt-0.5 text-xs leading-5 text-muted-foreground">{wf.detail}</p>
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground">{sys.description}</p>
-              <p className="mt-3 text-[10px] font-medium text-muted-foreground/60">
-                نظام التشغيل: {sys.system}
-              </p>
-            </Link>
-          ))}
+            ))}
+          </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          Office AI Assistant قدرة مشتركة عبر المنصة — مساعد مؤسسي محكوم ضمن
-          الصلاحيات والأدلة.{" "}
-          <Link
-            href="/products/office-ai"
-            className="text-primary underline underline-offset-4"
-          >
-            التفاصيل
-          </Link>
-        </p>
-        <p className="mt-4 text-center text-xs text-muted-foreground/70">
-          SalesOS و SimulationOS في خارطة المنصة —{" "}
-          <Link
-            href="/products#roadmap"
-            className="text-primary underline underline-offset-4"
-          >
-            استكشف الخطوط القادمة
-          </Link>
-          .
-        </p>
+        <div className="mt-8 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-5 text-center">
+          <p className="text-sm text-amber-700/90">
+            <span className="font-bold">النتيجة:</span> كل مخرج — تقرير، قرار، ملاحظة — له سجل كامل يمكن تتبعه
+            من المصدر إلى الاعتماد. لا خطوة بدون توقيت، ولا مخرج بدون مصدر.
+          </p>
+        </div>
+      </section>
+
+      {/* ─── Systems on the Platform ───────────────────── */}
+      <section
+        id="capabilities"
+        className="section-gradient-light border-t scroll-mt-20"
+      >
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <SectionEyebrow
+            label="الأنظمة كتجسيد للمنصة"
+            title="المنصة تُطبَّق عبر أنظمة تشغيل — لا منتجات منفصلة"
+            description="كل نظام تشغيل هو تجسيد للطبقات الأربع في مجال مؤسسي محدّد. الفرق هو التطبيق، وليس البنية."
+          />
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            {operatingSystems.map((sys) => (
+              <Link
+                key={sys.system}
+                href={sys.href}
+                className="group rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
+              >
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <h3 className="text-base font-black text-foreground group-hover:text-primary">
+                    {sys.useCase}
+                  </h3>
+                  <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-[9px] font-bold text-primary">
+                    {sys.statusLabel}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">{sys.description}</p>
+                <p className="mt-3 text-[10px] font-medium text-muted-foreground/60">
+                  نظام التشغيل: {sys.system}
+                </p>
+              </Link>
+            ))}
+          </div>
+
+          <p className="mt-6 text-center text-xs text-muted-foreground">
+            Office AI Assistant قدرة مشتركة عبر المنصة — مساعد مؤسسي محكوم ضمن
+            الصلاحيات والأدلة.{" "}
+            <Link
+              href="/products/office-ai"
+              className="text-primary underline underline-offset-4"
+            >
+              التفاصيل
+            </Link>
+          </p>
+          <p className="mt-4 text-center text-xs text-muted-foreground/70">
+            SalesOS في خارطة المنصة —{" "}
+            <Link
+              href="/products/sales"
+              className="text-primary underline underline-offset-4"
+            >
+              استكشف الخط القادم
+            </Link>
+            .
+          </p>
+        </div>
       </section>
 
       <section className="section-gradient-light border-t">
@@ -387,7 +454,7 @@ export default function PlatformPage() {
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-4">
               <Link href="/contact" className="btn-primary h-11 px-8">
-                احجز مكالمة
+                احجز جلسة تشخيص
               </Link>
               <Link href="/proof" className="btn-secondary h-11 px-8">
                 مركز الإثبات

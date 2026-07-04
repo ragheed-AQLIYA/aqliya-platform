@@ -4,20 +4,20 @@
 
 export const homeCopyEn = {
   metadata: {
-    title: "AQLIYA | Audit, decisions, and compliance in one path",
+    title: "AQLIYA | Private Governed Institutional Intelligence Platform",
     description:
-      "AQLIYA helps your institution connect review, decisions, and compliance with clear files. Try the demo or book an intro call.",
+      "AQLIYA is a Private Governed Institutional Intelligence Platform — running your teams inside governed procedures with evidence, review, approval, and permissions. Try the demo or book a diagnostic session.",
   },
   hero: {
-    eyebrow: "AQLIYA",
-    title: "From trial balance to a file ready for sign-off — without Excel and email chaos",
+    eyebrow: "Private Governed Institutional Intelligence Platform",
+    title: "Governed institutional intelligence — defensible under every review",
     subtitle:
-      "One platform for audit, decisions, and local content. AI suggests, your team reviews and approves — with a log for every step.",
+      "AI assists. Humans decide. Evidence governs. An institutional operating layer that runs your teams inside real procedures — with evidence, review, approval, permissions, and decision tracking.",
   },
   ctas: {
-    start: "Where to start",
-    demo: "Watch the demo",
-    contact: "Book a call",
+    start: "Book a Diagnostic Session",
+    demo: "Request a walkthrough",
+    contact: "Book a Diagnostic Session",
   },
   problem: {
     title: "The gap is not the tool — it is what gets lost between tools",
@@ -33,8 +33,8 @@ export const homeCopyEn = {
     pathCta: "Real-world examples",
   },
   systems: {
-    title: "Three solutions — one platform",
-    subtitle: "Audit, decisions, and local content with shared permissions and audit log.",
+    title: "Operating systems — one platform",
+    subtitle: "Audit and local content — same governance and audit trail across every path.",
     ctaAll: "See all solutions",
   },
   proof: {
@@ -57,8 +57,8 @@ export const homeCopyEn = {
   ],
   conversion: {
     title: "We start by understanding your context",
-    body: "Free intro call — we explain the platform and suggest a sensible next step. No sales pitch.",
-    primaryLabel: "Book a call",
+    body: "Free diagnostic session — we assess your governance and intelligence posture and suggest a sensible next step. No sales pitch.",
+    primaryLabel: "Book a Diagnostic Session",
     secondaryLabel: "Review proof",
   },
 } as const;

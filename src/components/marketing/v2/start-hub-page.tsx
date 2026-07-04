@@ -179,7 +179,7 @@ export function StartHubPage({
             href={copy.contactHref}
             className="mt-6 inline-block text-sm font-medium text-primary hover:underline"
           >
-            {locale === "ar" ? "احجز مكالمة ←" : "Book a call →"}
+            {locale === "ar" ? "احجز جلسة تشخيص ←" : "Book a Diagnostic Session →"}
           </Link>
         </div>
       </section>
@@ -237,7 +237,7 @@ export function StartHubPage({
         title={locale === "en" ? "We start by understanding your context" : undefined}
         body={locale === "en" ? "Free intro call — we explain the platform and suggest a sensible next step." : undefined}
         primaryHref={copy.contactHref}
-        primaryLabel={locale === "en" ? "Book a call" : undefined}
+        primaryLabel={locale === "en" ? "Book a Diagnostic Session" : undefined}
         secondaryHref={proofHref}
         secondaryLabel={copy.proof}
       />

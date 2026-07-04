@@ -15,14 +15,18 @@ const copy = {
     beforeAfter: "قبل وبعد",
     flow: "المسار التشغيلي",
     highlights: "أبرز القدرات",
-    proof: "الإثبات",
+    governance: "الحوكمة في السياق",
+    outcomes: "ماذا يتغير",
+    proof: "الإثبات والتجربة",
   },
   en: {
     back: "← Back to operating systems",
     beforeAfter: "Before & after",
     flow: "Operating flow",
     highlights: "Key capabilities",
-    proof: "Proof",
+    governance: "Governance in context",
+    outcomes: "What changes",
+    proof: "Evidence & demo",
   },
 } as const;
 
@@ -57,15 +61,23 @@ export function ProductPageTemplate({
         }
       />
 
+      {/* ─── Problem → Solution ──────────────── */}
       <section className="mx-auto w-full max-w-7xl px-6 py-14">
         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          {t.beforeAfter}
+          {locale === "ar" ? "المشكلة ← الحل" : "Problem → Solution"}
         </p>
-        <div className="mt-6">
-          <BeforeAfterBlock before={content.before} after={content.after} />
+        <div className="mt-1 mb-6">
+          <p className="text-sm leading-7 text-muted-foreground">
+            {content.problemLine}
+          </p>
+          <p className="mt-1 text-sm leading-7 text-primary">
+            {content.outcomeLine}
+          </p>
         </div>
+        <BeforeAfterBlock before={content.before} after={content.after} />
       </section>
 
+      {/* ─── Workflow ─────────────────────────── */}
       <section className="border-t bg-muted/10">
         <div className="mx-auto max-w-7xl px-6 py-14">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
@@ -77,6 +89,7 @@ export function ProductPageTemplate({
         </div>
       </section>
 
+      {/* ─── Highlights / Capabilities ─────────── */}
       <section className="mx-auto max-w-7xl px-6 py-14">
         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
           {t.highlights}
@@ -91,7 +104,83 @@ export function ProductPageTemplate({
             </div>
           ))}
         </div>
-        <div className="mt-8 flex flex-wrap gap-3">
+      </section>
+
+      {/* ─── Governance in Context ─────────────── */}
+      <section className="mx-auto max-w-7xl border-t px-6 py-14">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          {t.governance}
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <div className="rounded-xl border border-border/60 bg-background p-5">
+            <h4 className="mb-2 text-sm font-bold text-foreground">
+              {locale === "ar" ? "سلسلة أدلة كاملة" : "Full evidence chain"}
+            </h4>
+            <p className="text-sm leading-6 text-muted-foreground">
+              {locale === "ar"
+                ? "كل مخرج في هذا النظام مرتبط بمصدره الأصلي — ملف، سجل، أو إدخال. لا مخرج بدون سلسلة أدلة يمكن تتبّعها."
+                : "Every output in this system is linked to its original source — file, record, or entry. No output without a traceable evidence chain."}
+            </p>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-background p-5">
+            <h4 className="mb-2 text-sm font-bold text-foreground">
+              {locale === "ar" ? "مراجعة واعتماد بشري" : "Human review & approval"}
+            </h4>
+            <p className="text-sm leading-6 text-muted-foreground">
+              {locale === "ar"
+                ? "كل مخرج يمر بمراجعة بشرية قبل الاعتماد. لا قرار نهائي بدون توقيع المسؤول. كل اعتماد يُوثَّق في سجل التدقيق."
+                : "Every output undergoes human review before approval. No final decision without the responsible person's sign-off. Every approval is logged in the audit trail."}
+            </p>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-background p-5">
+            <h4 className="mb-2 text-sm font-bold text-foreground">
+              {locale === "ar" ? "صلاحيات حسب الدور" : "Role-based permissions"}
+            </h4>
+            <p className="text-sm leading-6 text-muted-foreground">
+              {locale === "ar"
+                ? "كل مستخدم يرى فقط ما يسمح به دوره داخل مؤسسته. لا وصول ضمني، لا صلاحيات متجاوزة."
+                : "Each user only sees what their role permits within their organization. No implicit access, no exceeded permissions."}
+            </p>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-background p-5">
+            <h4 className="mb-2 text-sm font-bold text-foreground">
+              {locale === "ar" ? "سجل تدقيق غير قابل للتعديل" : "Immutable audit trail"}
+            </h4>
+            <p className="text-sm leading-6 text-muted-foreground">
+              {locale === "ar"
+                ? "كل حدث — إنشاء، تعديل، اعتماد، رفض — يُسجَّل مع هوية المستخدم والتوقيت. لا حذف، لا تعديل."
+                : "Every event — create, edit, approve, reject — is logged with user identity and timestamp. No deletion, no modification."}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Outcomes ──────────────────────────── */}
+      <section className="section-gradient-light border-t">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            {t.outcomes}
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {content.after.slice(0, 4).map((item) => (
+              <div
+                key={item}
+                className="flex items-start gap-3 rounded-xl border border-emerald-500/15 bg-emerald-500/[0.03] px-4 py-4"
+              >
+                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500/60" />
+                <span className="text-sm leading-6 text-foreground">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Evidence / Proof ────────────────────── */}
+      <section className="mx-auto max-w-7xl border-t px-6 py-14">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          {t.proof}
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
           {content.demoHref && (
             <Link href={content.demoHref} className="btn-primary h-11 px-6 text-sm">
               {content.demoLabel ?? t.proof}
@@ -139,7 +228,7 @@ export function ProductPageTemplate({
             : undefined
         }
         primaryHref={locale === "en" ? "/en/contact" : "/contact"}
-        primaryLabel={locale === "en" ? "Book a call" : undefined}
+        primaryLabel={locale === "en" ? "Book a Diagnostic Session" : undefined}
         secondaryHref={locale === "en" ? "/en/proof" : "/proof"}
         secondaryLabel={locale === "en" ? "Proof materials" : undefined}
       />

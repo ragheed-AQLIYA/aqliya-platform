@@ -225,7 +225,7 @@ export default function EnglishProofCenterPage() {
         title="We start by understanding your context"
         body="Free intro call — we explain the platform and suggest a sensible next step. No sales pitch."
         primaryHref="/en/contact"
-        primaryLabel="Book a call"
+        primaryLabel="Book a Diagnostic Session"
         secondaryHref="/en/proof"
         secondaryLabel="Proof materials"
       />

@@ -15,7 +15,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
       { label: "Proof materials", href: "/en/proof", time: "Read" },
       { label: "Demo", href: "/en/demo", time: "Try it" },
     ],
-    primaryCta: { label: "Book a call", href: "/en/contact" },
+    primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
     secondaryCta: { label: "How we work", href: "/en/start#process" },
   },
   {
@@ -41,7 +41,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
       { label: "Use cases", href: "/en/use-cases", time: "Read" },
       { label: "Proof materials", href: "/en/proof", time: "Read" },
     ],
-    primaryCta: { label: "Book a call", href: "/en/contact" },
+    primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
     secondaryCta: { label: "Government sector", href: "/en/industries#government" },
   },
   {
@@ -67,7 +67,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
       { label: "AuditOS demo", href: "/auditos", time: "Try it" },
       { label: "Trial criteria", href: "/en/proof#evaluation-framework", time: "Read" },
     ],
-    primaryCta: { label: "Book a call", href: "/en/contact" },
+    primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
     secondaryCta: { label: "Audit sector", href: "/en/industries#audit-firms" },
   },
   {
@@ -93,7 +93,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
       { label: "Governance", href: "/en/governance", time: "Read" },
       { label: "Proof materials", href: "/en/proof", time: "Read" },
     ],
-    primaryCta: { label: "Book a call", href: "/en/contact" },
+    primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
     secondaryCta: { label: "Government sector", href: "/en/industries#government" },
   },
 ];

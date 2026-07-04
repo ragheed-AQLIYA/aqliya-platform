@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const footerColumns = [
+const footerColumnsAr = [
   {
     title: "المنصة",
     links: [
@@ -45,22 +45,82 @@ const footerColumns = [
   },
 ];
 
-const legalLinks = [
+const footerColumnsEn = [
+  {
+    title: "Platform",
+    links: [
+      { label: "How it works", href: "/en/platform" },
+      { label: "Operating Systems", href: "/en/products" },
+      { label: "Where to start", href: "/en/start" },
+      { label: "Use cases", href: "/en/use-cases" },
+      { label: "Governance", href: "/en/governance" },
+      { label: "Deployment", href: "/en/deployment" },
+      { label: "Security", href: "/en/security" },
+    ],
+  },
+  {
+    title: "Industries",
+    links: [
+      { label: "Audit firms", href: "/en/industries#audit-firms" },
+      { label: "Government entities", href: "/en/industries#government" },
+      { label: "Enterprise", href: "/en/industries#enterprise" },
+      { label: "Professional services", href: "/en/industries#professional-services" },
+    ],
+  },
+  {
+    title: "Proof",
+    links: [
+      { label: "Proof center", href: "/en/proof" },
+      { label: "Interactive demo", href: "/en/demo" },
+      { label: "Executive brief", href: "/en/proof#executive-brief" },
+      { label: "Evaluation framework", href: "/en/proof#evaluation-framework" },
+      { label: "Evidence samples", href: "/en/proof#evidence-samples" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About AQLIYA", href: "/en/about" },
+      { label: "Engagement models", href: "/en/start#engagement" },
+      { label: "Where to start", href: "/en/start" },
+      { label: "Insights", href: "/en/insights" },
+      { label: "Contact", href: "/en/contact" },
+    ],
+  },
+];
+
+const legalLinksAr = [
   { label: "سياسة الخصوصية", href: "/privacy" },
   { label: "شروط الخدمة", href: "/terms" },
 ];
 
+const legalLinksEn = [
+  { label: "Privacy Policy", href: "/en/privacy" },
+  { label: "Terms of Service", href: "/en/terms" },
+];
+
 /** Product pages remain reachable but not promoted in primary nav. */
-const productLinks = [
+const productLinksAr = [
   { label: "AuditOS", href: "/products/audit" },
   { label: "DecisionOS", href: "/products/decision" },
   { label: "LocalContentOS", href: "/products/local-content" },
 ];
 
+const productLinksEn = [
+  { label: "AuditOS", href: "/en/products/audit" },
+  { label: "DecisionOS", href: "/en/products/decision" },
+  { label: "LocalContentOS", href: "/en/products/local-content" },
+];
+
 export function SiteFooter({ locale = "ar" }: { locale?: "ar" | "en" } = {}) {
-  const homeHref = locale === "en" ? "/en" : "/";
+  const isEn = locale === "en";
+  const homeHref = isEn ? "/en" : "/";
+  const footerColumns = isEn ? footerColumnsEn : footerColumnsAr;
+  const legalLinks = isEn ? legalLinksEn : legalLinksAr;
+  const productLinks = isEn ? productLinksEn : productLinksAr;
+
   return (
-    <footer className="border-t bg-gradient-to-b from-muted/30 to-background">
+    <footer className="border-t bg-gradient-to-b from-muted/30 to-background" dir={isEn ? "ltr" : undefined}>
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <div className="space-y-5">
@@ -75,16 +135,19 @@ export function SiteFooter({ locale = "ar" }: { locale?: "ar" | "en" } = {}) {
             </Link>
 
             <p className="text-sm leading-7 text-muted-foreground">
-              منصة تشغيل مؤسسية للقرارات والعمليات والأدلة. تربط البيانات
-              والإجراءات والاعتمادات في مسار واحد قابل للمراجعة.
+              {isEn
+                ? "An institutional operating platform for decisions, processes, and evidence. It connects data, actions, and approvals in a single auditable path."
+                : "منصة تشغيل مؤسسية للقرارات والعمليات والأدلة. تربط البيانات والإجراءات والاعتمادات في مسار واحد قابل للمراجعة."}
             </p>
 
             <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-4">
               <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-primary/70">
-                المبدأ المؤسسي
+                {isEn ? "Institutional Principle" : "المبدأ المؤسسي"}
               </p>
               <p className="mt-2 text-sm font-medium leading-7 text-foreground">
-                الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
+                {isEn
+                  ? "AI assists. Humans decide. Evidence governs."
+                  : "الذكاء يساعد. الإنسان يقرر. الدليل يحكم."}
               </p>
             </div>
           </div>
@@ -112,7 +175,7 @@ export function SiteFooter({ locale = "ar" }: { locale?: "ar" | "en" } = {}) {
 
         <div className="mt-10 border-t border-border/40 pt-6">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/50 mb-3">
-            أنظمة التشغيل المتخصصة
+            {isEn ? "Operating Systems" : "أنظمة التشغيل المتخصصة"}
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {productLinks.map((link) => (
@@ -131,7 +194,7 @@ export function SiteFooter({ locale = "ar" }: { locale?: "ar" | "en" } = {}) {
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-xs text-muted-foreground/55">
               &copy; {new Date().getFullYear()} AQLIYA.{" "}
-              {locale === "en" ? "All rights reserved." : "جميع الحقوق محفوظة."}
+              {isEn ? "All rights reserved." : "جميع الحقوق محفوظة."}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
               {legalLinks.map((link) => (

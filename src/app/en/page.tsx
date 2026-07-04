@@ -17,22 +17,10 @@ const systems = [
     href: "/en/products/audit",
   },
   {
-    title: "DecisionOS",
-    note: publicOsStatusEn.decisionOS.capabilityNote,
-    status: publicOsStatusEn.decisionOS.label,
-    href: "/en/products/decision",
-  },
-  {
     title: "LocalContentOS",
     note: publicOsStatusEn.localContentOS.capabilityNote,
     status: publicOsStatusEn.localContentOS.label,
     href: "/en/products/local-content",
-  },
-  {
-    title: "Office AI Assistant",
-    note: publicOsStatusEn.officeAI.capabilityNote,
-    status: publicOsStatusEn.officeAI.label,
-    href: "/en/products/office-ai",
   },
   {
     title: "SalesOS",
@@ -61,14 +49,11 @@ export default function EnglishHomePage() {
               {c.hero.subtitle}
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href="/en/start" className="btn-primary h-12 px-8 text-base font-bold">
-                {c.ctas.start}
-              </Link>
-              <Link href="/en/demo" className="btn-outline border-white/15 text-white/70 h-12 px-8 hover:bg-white/5">
-                {c.ctas.demo}
-              </Link>
-              <Link href="/en/contact" className="btn-outline border-white/15 text-white/70 h-12 px-8 hover:bg-white/5">
+              <Link href="/en/contact" className="btn-primary h-12 px-8 text-base font-bold">
                 {c.ctas.contact}
+              </Link>
+              <Link href="/en/platform" className="btn-outline border-white/15 text-white/70 h-12 px-8 hover:bg-white/5">
+                {c.ctas.demo}
               </Link>
             </div>
             <div className="mt-6 flex flex-wrap justify-center gap-2">

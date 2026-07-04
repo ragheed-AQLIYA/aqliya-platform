@@ -90,7 +90,7 @@ export function ConversionBand({
   title = "نفهم وضعكم أولاً",
   body = "مكالمة تعريفية مجانية — نشرح المنصة ونقترح الخطوة المناسبة. بدون عرض مبيعات.",
   primaryHref = "/contact",
-  primaryLabel = "احجز مكالمة",
+  primaryLabel = "احجز جلسة تشخيص",
   secondaryHref = "/proof",
   secondaryLabel = "مواد الإثبات",
 }: ConversionBandProps) {

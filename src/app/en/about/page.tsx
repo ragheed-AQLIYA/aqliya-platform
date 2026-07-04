@@ -33,10 +33,6 @@ const operatingSystems = [
     desc: "Audit and financial intelligence — engagement path from source to approval",
   },
   {
-    name: "DecisionOS",
-    desc: "Decision governance — governed decision memos",
-  },
-  {
     name: "LocalContentOS",
     desc: "Local content — suppliers, spend, compliance, and reports",
   },
@@ -48,12 +44,8 @@ const roadmapSystems = [
     desc: "Commercial memory — qualification, opportunities, institutional follow-up",
   },
   {
-    name: "SimulationOS",
-    desc: "Scenario simulation — test impact before decisions",
-  },
-  {
-    name: "Custom Systems",
-    desc: "Institutional custom systems — activated by scope",
+    name: "DecisionOS",
+    desc: "Decision governance — governed decision memos — available now",
   },
 ];
 
@@ -275,7 +267,7 @@ export default function EnglishAboutPage() {
             <div>
               <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
                 <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
-                Platform roadmap
+                Available & Upcoming
               </p>
               <div className="grid gap-3 sm:grid-cols-3">
                 {roadmapSystems.map((item) => (

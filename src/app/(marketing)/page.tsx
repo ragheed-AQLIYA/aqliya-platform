@@ -17,12 +17,6 @@ const systems = [
     href: "/products/audit",
   },
   {
-    title: "DecisionOS",
-    note: publicCapabilityNote.decisionOS,
-    status: publicOsStatus.decisionOS.label,
-    href: "/products/decision",
-  },
-  {
     title: "LocalContentOS",
     note: publicCapabilityNote.localContentOS,
     status: publicOsStatus.localContentOS.label,
@@ -33,12 +27,6 @@ const systems = [
     note: publicCapabilityNote.salesOS,
     status: publicOsStatus.salesOS.label,
     href: "/products/sales",
-  },
-  {
-    title: "Office AI Assistant",
-    note: publicCapabilityNote.officeAI,
-    status: publicOsStatus.officeAI.label,
-    href: "/products/office-ai",
   },
 ];
 
@@ -62,20 +50,17 @@ export default function HomePage() {
               {c.hero.subtitle}
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href="/start" className="btn-primary h-12 px-8 text-base font-bold">
-                {c.ctas.start}
+              <Link
+                href="/contact"
+                className="btn-primary h-12 px-8 text-base font-bold"
+              >
+                {c.ctas.contact}
               </Link>
               <Link
-                href="/demo"
+                href="/platform"
                 className="btn-outline border-white/15 text-white/70 h-12 px-8 text-base hover:bg-white/5"
               >
                 {c.ctas.demo}
-              </Link>
-              <Link
-                href="/contact"
-                className="btn-outline border-white/15 text-white/70 h-12 px-8 text-base hover:bg-white/5"
-              >
-                {c.ctas.contact}
               </Link>
             </div>
             <div className="mt-6 flex flex-wrap justify-center gap-2">

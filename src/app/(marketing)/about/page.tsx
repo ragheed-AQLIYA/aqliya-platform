@@ -28,14 +28,12 @@ const coreItems = [
 
 const operatingSystems = [
   { name: "AuditOS", desc: "نظام التدقيق والذكاء المالي — مسار مراجعة من المصدر إلى الاعتماد" },
-  { name: "DecisionOS", desc: "نظام حوكمة القرارات — مذكرات قرار محكومة" },
   { name: "LocalContentOS", desc: "نظام المحتوى المحلي — موردون، إنفاق، امتثال، وتقارير" },
 ];
 
 const roadmapSystems = [
   { name: "SalesOS", desc: "نظام الذاكرة التجارية — تأهيل، فرص، ومتابعة مؤسسية" },
-  { name: "SimulationOS", desc: "نظام محاكاة السيناريوهات — اختبار الأثر قبل القرار" },
-  { name: "Custom Systems", desc: "أنظمة مؤسسية مخصصة — يُفعَّل حسب نطاق المؤسسة" },
+  { name: "DecisionOS", desc: "نظام حوكمة القرارات — مذكرات قرار محكومة — متاح حالياً" },
 ];
 
 const whatAqliyaIsNot = [
@@ -263,7 +261,7 @@ export default function AboutPage() {
             <div>
               <p className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
                 <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
-                خارطة المنصة
+                متاح وقادم
               </p>
               <div className="grid gap-3 sm:grid-cols-3">
                 {roadmapSystems.map((item) => (
@@ -423,9 +421,9 @@ export default function AboutPage() {
             خط النظام المناسب أو من جلسة تصميم نظام مؤسسي محكوم فوق عقلية.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href="/contact" className="btn-primary h-12 px-8 text-base">
-              احجز مكالمة
-            </Link>
+              <Link href="/contact" className="btn-primary h-12 px-8 text-base">
+                احجز جلسة تشخيص
+              </Link>
             <Link href="/platform#capabilities" className="btn-outline h-12 px-8 text-base">
               أنظمة التشغيل
             </Link>

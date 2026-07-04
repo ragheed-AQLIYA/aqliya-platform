@@ -17,16 +17,16 @@ import { Menu, X } from "lucide-react";
 const navItemsAr = [
   { label: "المنصة", href: "/platform" },
   { label: "أنظمة التشغيل", href: "/products" },
-  { label: "من أين تبدأ", href: "/start" },
-  { label: "الإثبات", href: "/proof" },
+  { label: "الحوكمة", href: "/governance" },
+  { label: "لماذا AQLIYA", href: "/proof" },
   { label: "عن عقلية", href: "/about" },
 ];
 
 const navItemsEn = [
   { label: "Platform", href: "/en/platform" },
   { label: "Systems", href: "/en/products" },
-  { label: "Get Started", href: "/en/start" },
-  { label: "Proof", href: "/en/proof" },
+  { label: "Governance", href: "/en/governance" },
+  { label: "Why AQLIYA", href: "/en/proof" },
   { label: "About", href: "/en/about" },
 ];
 
@@ -136,7 +136,7 @@ export function SiteHeader({ locale: localeProp }: SiteHeaderProps = {}) {
             href={contactHref}
             className="mr-1 inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/15 transition-all duration-200 hover:bg-primary/90 hover:shadow-md hover:shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            {locale === "en" ? "Book a call" : "احجز مكالمة"}
+            {locale === "en" ? "Book a Diagnostic Session" : "احجز جلسة تشخيص"}
           </Link>
         </nav>
 
@@ -205,7 +205,7 @@ export function SiteHeader({ locale: localeProp }: SiteHeaderProps = {}) {
               onClick={() => setOpen(false)}
               className="btn-primary mt-2 h-11 text-sm"
             >
-              {locale === "en" ? "Book a call" : "احجز مكالمة"}
+              {locale === "en" ? "Book a Diagnostic Session" : "احجز جلسة تشخيص"}
             </Link>
           </nav>
         </div>
