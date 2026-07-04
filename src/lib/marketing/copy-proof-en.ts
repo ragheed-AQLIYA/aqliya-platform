@@ -31,6 +31,11 @@ export const proofPageCopyEn = {
       subtitle: "Six questions we answer together during a trial on your data.",
       engagementLink: "Ways to work together and free trial",
     },
+    pilot: {
+      title: "Pilot Framework",
+      subtitle: "Diagnostic call → limited trial on your data → decide together whether to expand.",
+      cta: "Request a diagnostic session",
+    },
     evidence: {
       title: "Sample outputs",
       subtitle: "Examples of platform output — for review, not final sign-off.",
@@ -47,10 +52,16 @@ export const proofPageCopyEn = {
       title: "Useful links",
     },
   },
+  pilotPhases: [
+    { phase: "Diagnostic", duration: "30-60 min call", detail: "We understand your context, needs, and available data. We define the trial scope and the right operating system together." },
+    { phase: "Trial", duration: "2-4 weeks", detail: "We prepare a trial environment on your data, run a complete workflow, and evaluate results with your team using the criteria above." },
+    { phase: "Decision", duration: "1-2 week review", detail: "We present results and recommendations. Expand with clear terms, adjust scope, or close honestly — no commitment." },
+  ],
   anchorNav: [
     { id: "demo", label: "Demo" },
     { id: "executive-brief", label: "Leadership summary" },
     { id: "evaluation-framework", label: "Trial criteria" },
+    { id: "pilot", label: "Pilot framework" },
     { id: "evidence-samples", label: "Sample outputs" },
     { id: "outcomes", label: "Outcomes" },
     { id: "procurement", label: "Procurement" },

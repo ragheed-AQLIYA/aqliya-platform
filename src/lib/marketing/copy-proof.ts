@@ -37,6 +37,11 @@ export const proofPageCopyAr = {
       subtitle: "أمثلة على ما يخرج من المنصة — للمراجعة لا للاعتماد النهائي.",
       sampleBadge: "بيانات تجريبية",
     },
+    pilot: {
+      title: "إطار التجربة (Pilot Framework)",
+      subtitle: "نبدأ بمكالمة تشخيص، ثم تجربة محدودة على بياناتكم، ثم نقرر معاً ما إذا كان التوسع مناسباً.",
+      cta: "اطلب جلسة تشخيص",
+    },
     outcomes: {
       title: "نتائج العملاء",
       statusLabel: "الوضع الحالي",
@@ -48,10 +53,16 @@ export const proofPageCopyAr = {
       title: "روابط مفيدة",
     },
   },
+  pilotPhases: [
+    { phase: "التشخيص", duration: "مكالمة ٣٠–٦٠ دقيقة", detail: "نفهم سياقكم، حاجاتكم، والبيانات المتاحة. نحدد معاً نطاق التجربة ونظام التشغيل الأنسب." },
+    { phase: "التجربة", duration: "٢–٤ أسابيع", detail: "نجهّز بيئة تجريبية على بياناتكم، نمرّ بمسار عمل كامل، ونقيّم النتائج مع فريقكم وفق المعايير أعلاه." },
+    { phase: "قرار التوسع", duration: "١–٢ أسبوع مراجعة", detail: "نعرض النتائج والتوصيات. إما نوسّع التشغيل باتفاق واضح، أو نعدّل النطاق، أو نغلق الملف بصدق — بدون التزام." },
+  ],
   anchorNav: [
     { id: "demo", label: "الديمو" },
     { id: "executive-brief", label: "ملخص القيادة" },
     { id: "evaluation-framework", label: "معايير التجربة" },
+    { id: "pilot", label: "إطار التجربة" },
     { id: "evidence-samples", label: "نماذج مخرجات" },
     { id: "outcomes", label: "نتائج" },
     { id: "procurement", label: "مشتريات" },

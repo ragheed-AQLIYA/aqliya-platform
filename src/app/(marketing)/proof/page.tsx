@@ -165,6 +165,36 @@ export default function ProofCenterPage() {
         </div>
       </section>
 
+      {/* ─── Pilot Framework ─────────────────────────── */}
+      <section id="pilot" className="scroll-mt-28 border-t">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <h2 className="text-2xl font-black">{c.sections.pilot.title}</h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{c.sections.pilot.subtitle}</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {c.pilotPhases.map((p, i) => (
+              <div key={p.phase} className="relative rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/10 p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-[11px] font-black text-primary">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{p.duration}</span>
+                </div>
+                <h3 className="text-base font-black text-foreground">{p.phase}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{p.detail}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/contact" className="btn-primary h-10 px-6 text-sm">
+              {c.sections.pilot.cta}
+            </Link>
+            <Link href="/start#engagement" className="btn-outline h-10 px-6 text-sm">
+              {c.sections.evaluation.engagementLink} ←
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section id="evidence-samples" className="scroll-mt-28 border-t bg-muted/10">
         <div className="mx-auto max-w-7xl px-6 py-14">
           <h2 className="text-2xl font-black">{c.sections.evidence.title}</h2>
