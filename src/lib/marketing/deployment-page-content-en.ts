@@ -7,7 +7,7 @@ export const deploymentModelsEn: DeploymentModel[] = [
     status: "Available now",
     statusTone: "available",
     summary:
-      "Production environment for most institutions — AQLIYA operates infrastructure and continuity; you control data and permissions.",
+      "Production environment for most institutions  AQLIYA operates infrastructure and continuity; you control data and permissions.",
     highlights: [
       "Saudi/GCC data residency by default",
       "Tenant isolation at DB and app layer",
@@ -21,13 +21,13 @@ export const deploymentModelsEn: DeploymentModel[] = [
     status: "Planned",
     statusTone: "planned",
     summary:
-      "Full platform in your cloud account — network and data control with joint engineering support.",
+      "Full platform in your cloud account  network and data control with joint engineering support.",
     highlights: [
       "AWS / Azure / GCP in your account",
       "IAM and enterprise security tool integration",
       "Updates on your approval cycle",
     ],
-    note: "Requires joint feasibility assessment — not an instant activation package.",
+    note: "Requires joint feasibility assessment  not an instant activation package.",
   },
   {
     id: "airgapped",
@@ -35,12 +35,12 @@ export const deploymentModelsEn: DeploymentModel[] = [
     status: "Strategic",
     statusTone: "strategic",
     summary:
-      "Fully offline operation for the most sensitive environments — deep co-design, not a ready product today.",
+      "Fully offline operation for the most sensitive environments  deep co-design, not a ready product today.",
     highlights: [
-      "No external connectivity — secure media updates",
+      "No external connectivity  secure media updates",
       "Local models without cloud dependency",
       "Internal identity integration",
     ],
-    note: "On-Prem / Air-Gapped is strategic — contact for design scope, not a readiness claim.",
+    note: "On-Prem / Air-Gapped is strategic  contact for design scope, not a readiness claim.",
   },
 ];

@@ -20,7 +20,7 @@ const sectors = [
     ],
     systems: ["AuditOS", "Office AI Assistant"],
     platformValue:
-      "منهجية مراجعة مدمجة في سير العمل — ليست في ملفات متفرقة أو ذاكرة الأفراد.",
+      "منهجية مراجعة مدمجة في سير العمل  ليست في ملفات متفرقة أو ذاكرة الأفراد.",
     useCases: [
       "إدارة ارتباطات المراجعة",
       "ميزان المراجعة والقوائم المالية",
@@ -77,7 +77,7 @@ const sectors = [
     challenge:
       "جودة المخرجات تعتمد على أفراد، المعرفة غير موثقة، وصعوبة إثبات المنهجية أمام العملاء.",
     outcomes: [
-      "منهجية مدمجة في سير العمل — ليست في رؤوس الأفراد",
+      "منهجية مدمجة في سير العمل  ليست في رؤوس الأفراد",
       "كل مخرج قابل للمراجعة والتسليم للعميل",
       "ذاكرة تجارية وتشغيلية محكومة",
     ],
@@ -104,7 +104,7 @@ const sectors = [
     ],
     systems: ["LocalContentOS"],
     platformValue:
-      "امتثال ومحتوى محلي كمسار تشغيلي — لا كتقارير لحظية من جداول متفرقة.",
+      "امتثال ومحتوى محلي كمسار تشغيلي  لا كتقارير لحظية من جداول متفرقة.",
     useCases: [
       "تصنيف الموردين والإنفاق",
       "فجوات الامتثال والمؤشرات",
@@ -125,7 +125,7 @@ export default function IndustriesPage() {
               القطاعات التي نخدمها
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/60">
-              منصة تشغيل واحدة — مسارات مختلفة حسب طبيعة عمل مؤسستك. لا حلول
+              منصة تشغيل واحدة  مسارات مختلفة حسب طبيعة عمل مؤسستك. لا حلول
               عامة، بل أنظمة تشغيل تُفعَّل فوق نفس بنية الحوكمة والأدلة.
             </p>
           </div>
@@ -231,7 +231,7 @@ export default function IndustriesPage() {
       <section className="section-gradient-dark border-t border-white/5">
         <div className="mx-auto max-w-7xl px-6 py-16 text-center">
           <p className="text-sm text-white/55">
-            كل قطاع يعمل فوق نفس المنصة —{" "}
+            كل قطاع يعمل فوق نفس المنصة {" "}
             <Link href="/platform" className="text-aqliya-cyan underline underline-offset-4">
               اكتشف كيف تعمل عقلية
             </Link>

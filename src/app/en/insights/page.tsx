@@ -5,7 +5,7 @@ import { institutionalUseCasesEn } from "@/lib/marketing/institutional-use-cases
 export const metadata: Metadata = {
   title: "Insights & Articles | AQLIYA",
   description:
-    "Analysis and articles about governed institutional intelligence — from the perspective of governance, accountability, and real operational impact.",
+    "Analysis and articles about governed institutional intelligence  from the perspective of governance, accountability, and real operational impact.",
 };
 
 const articles = [
@@ -13,7 +13,7 @@ const articles = [
     slug: "ai-institutional-failures",
     category: "Analysis",
     categoryColor: "text-red-400",
-    title: "Five Cases of Institutional AI Failure — And What They Share in Common",
+    title: "Five Cases of Institutional AI Failure  And What They Share in Common",
     excerpt:
       "These institutions did not fail because the AI was poor. They failed because there was no governance structure surrounding its use. The shared story across five cases from different sectors.",
     readTime: "8 min read",
@@ -23,9 +23,9 @@ const articles = [
     slug: "assistant-vs-governed-intelligence",
     category: "Concept",
     categoryColor: "text-violet-400",
-    title: "Smart Assistant vs. Governed Institutional Intelligence — A Fundamental, Not Technical, Difference",
+    title: "Smart Assistant vs. Governed Institutional Intelligence  A Fundamental, Not Technical, Difference",
     excerpt:
-      "Most institutions think they are building institutional intelligence while actually running a smart assistant. The difference is not model size or output accuracy — it is the structure of accountability and evidence.",
+      "Most institutions think they are building institutional intelligence while actually running a smart assistant. The difference is not model size or output accuracy  it is the structure of accountability and evidence.",
     readTime: "6 min read",
     date: "May 2025",
   },
@@ -33,7 +33,7 @@ const articles = [
     slug: "governance-over-intelligence",
     category: "Perspective",
     categoryColor: "text-emerald-400",
-    title: "Why Governance Matters More Than Intelligence — The Equation Most AI Teams Overlook",
+    title: "Why Governance Matters More Than Intelligence  The Equation Most AI Teams Overlook",
     excerpt:
       "The question is not 'How accurate is our model?' but 'Can we answer this question: who approved this action and why?' Intelligence without governance is a liability, not an asset.",
     readTime: "7 min read",
@@ -58,7 +58,7 @@ export default function InsightsPage() {
             </h1>
             <p className="mt-5 text-base leading-8 text-white/62">
               Articles that examine institutional AI from the angle of governance,
-              accountability, and real impact — not from a promotional perspective.
+              accountability, and real impact  not from a promotional perspective.
             </p>
           </div>
         </div>
@@ -102,7 +102,7 @@ export default function InsightsPage() {
               Editorial Note
             </p>
             <p className="mt-2 text-sm leading-7 text-white/40">
-              AQLIYA articles are written from a practice perspective — not from a marketing perspective.
+              AQLIYA articles are written from a practice perspective  not from a marketing perspective.
               If you find a claim that does not hold up to scrutiny, we welcome direct contact.
             </p>
           </div>
@@ -120,7 +120,7 @@ export default function InsightsPage() {
               Where Does AQLIYA Intelligence Make a Real Difference?
             </h2>
             <p className="mt-4 text-base leading-8 text-white/58">
-              Seven categories of real institutional challenges — the problem as it is, the
+              Seven categories of real institutional challenges  the problem as it is, the
               traditional state honestly, and AQLIYA&apos;s path with a clear caveat: humans always decide.
             </p>
           </div>
@@ -183,7 +183,7 @@ export default function InsightsPage() {
             </p>
             <p className="mt-2 text-sm text-white/45">
               AQLIYA does not make final decisions. Every institutionally impactful action requires explicit
-              human approval — this is an engineering constraint, not a configurable option.
+              human approval  this is an engineering constraint, not a configurable option.
             </p>
           </div>
         </div>

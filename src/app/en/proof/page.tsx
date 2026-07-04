@@ -253,7 +253,7 @@ export default function EnglishProofCenterPage() {
 
       <ConversionBand
         title="We start by understanding your context"
-        body="Free intro call — we explain the platform and suggest a sensible next step. No sales pitch."
+        body="Free intro call  we explain the platform and suggest a sensible next step. No sales pitch."
         primaryHref="/en/contact"
         primaryLabel="Book a Diagnostic Session"
         secondaryHref="/en/proof"

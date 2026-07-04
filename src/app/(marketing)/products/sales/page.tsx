@@ -10,9 +10,9 @@ import {
 import { publicOsStatus } from "@/lib/marketing/public-status";
 
 export const metadata: Metadata = {
-  title: "SalesOS — نظام تشغيل تطوير الأعمال والمبيعات | AQLIYA",
+  title: "SalesOS  نظام تشغيل تطوير الأعمال والمبيعات | AQLIYA",
   description:
-    "SalesOS نظام تشغيل تطوير الأعمال والمبيعات ضمن عقلية — يحل تحديات تشغيلية محددة داخل المؤسسة مثل إدارة الحسابات والفرص والاجتماعات والعروض والعقود والذاكرة البيعية مع حوكمة وأدلة وسجل تدقيقي كامل.",
+    "SalesOS نظام تشغيل تطوير الأعمال والمبيعات ضمن عقلية  يحل تحديات تشغيلية محددة داخل المؤسسة مثل إدارة الحسابات والفرص والاجتماعات والعروض والعقود والذاكرة البيعية مع حوكمة وأدلة وسجل تدقيقي كامل.",
 };
 
 const outputs = [
@@ -46,10 +46,10 @@ export default function SalesProductPage() {
               {publicOsStatus.salesOS.label}
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              نظام الذاكرة التجارية — في خارطة المنصة
+              نظام الذاكرة التجارية  في خارطة المنصة
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
-              SalesOS يوسّع عقلية إلى تطوير الأعمال والمبيعات المؤسسية — حسابات،
+              SalesOS يوسّع عقلية إلى تطوير الأعمال والمبيعات المؤسسية  حسابات،
               فرص، متابعة، وذاكرة تجارية محكومة. ناقش نطاق التفعيل مع الفريق.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -178,7 +178,7 @@ export default function SalesProductPage() {
           <p className="mt-4 text-base leading-8 text-muted-foreground">
             <strong className="text-foreground">بعد:</strong> كل حساب له سجل
             كامل بالفرص والاجتماعات والعروض والعقود. الفرص مصنّفة حسب
-            المرحلة والأولوية. الذاكرة البيعية مؤسسية — لا تضيع المعرفة
+            المرحلة والأولوية. الذاكرة البيعية مؤسسية  لا تضيع المعرفة
             بتغير الفريق. وكل قرار موثق مع دليل وسجل تدقيقي.
           </p>
         </div>
@@ -188,7 +188,7 @@ export default function SalesProductPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <EnterpriseCTA
           title="مهتم بمسار الذاكرة التجارية المحكومة؟"
-          description="SalesOS في خارطة المنصة — ناقش نطاق التفعيل أو استكشف AuditOS وDecisionOS لحاجتك التشغيلية الفورية."
+          description="SalesOS في خارطة المنصة  ناقش نطاق التفعيل أو استكشف AuditOS وDecisionOS لحاجتك التشغيلية الفورية."
           primaryLabel="احجز جلسة تشخيص"
           primaryHref="/contact"
           secondaryLabel="مركز الإثبات"

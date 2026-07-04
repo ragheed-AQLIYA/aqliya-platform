@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "SalesOS — Commercial Intelligence | AQLIYA",
+  title: "SalesOS  Commercial Intelligence | AQLIYA",
   description: "Pipeline management, deal tracking, account intelligence, and governed outreach for commercial teams.",
 };
 
@@ -20,7 +20,7 @@ export default function SalesOSEnPage() {
           <h1 className="mt-6 text-4xl font-black text-white sm:text-5xl">SalesOS</h1>
           <p className="mt-4 text-lg text-white/70">{s.capabilityNote}</p>
           <p className="mt-6 text-white/60">
-            Pipeline, deals, accounts, intelligence, and governed outreach — coming on the platform roadmap.
+            Pipeline, deals, accounts, intelligence, and governed outreach  coming on the platform roadmap.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Link href="/en/contact">

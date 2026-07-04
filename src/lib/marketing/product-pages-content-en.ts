@@ -2,17 +2,17 @@ import type { ProductPageContent } from "./product-pages-content";
 
 export const auditProductContentEn: ProductPageContent = {
   metadata: {
-    title: "AuditOS — Governed Audit Operating System | AQLIYA",
+    title: "AuditOS  Governed Audit Operating System | AQLIYA",
     description:
-      "Governed audit path from client acceptance to engagement pack — evidence, human review, immutable audit trail.",
+      "Governed audit path from client acceptance to engagement pack  evidence, human review, immutable audit trail.",
   },
   eyebrow: "AuditOS",
   productName: "Audit & compliance operating system",
   statusLabel: "Available to deploy",
   problemLine:
-    "Spreadsheets and email — audit work that is hard to defend to partners or regulators.",
+    "Spreadsheets and email  audit work that is hard to defend to partners or regulators.",
   outcomeLine:
-    "One path from source to approval — every figure linked to evidence, every decision logged.",
+    "One path from source to approval  every figure linked to evidence, every decision logged.",
   before: [
     "Client acceptance in scattered files",
     "Manual TB mapping without standards link",
@@ -38,23 +38,23 @@ export const auditProductContentEn: ProductPageContent = {
   primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
   secondaryCta: { label: "Proof materials", href: "/en/proof" },
   governanceItems: [
-    { icon: "evidence", title: "Every figure linked to its source", detail: "Every number in the financial statements is traced back to its origin in the trial balance — invoice, contract, or journal entry. No assertion without evidence." },
+    { icon: "evidence", title: "Every figure linked to its source", detail: "Every number in the financial statements is traced back to its origin in the trial balance  invoice, contract, or journal entry. No assertion without evidence." },
     { icon: "approval", title: "Partner sign-off before any export", detail: "Five-condition approval gate before export: partner review, evidence completeness, quality sign-off, error-free check, and electronic signature." },
     { icon: "permissions", title: "Engagement team only", detail: "Only users assigned to the engagement see its working papers. No implicit access, no permissions beyond the team." },
-    { icon: "audit", title: "ISA 230-compliant audit trail", detail: "Every event — create, edit, review, approve — is logged with timestamp and identity. The log is immutable and quality-review ready." },
+    { icon: "audit", title: "ISA 230-compliant audit trail", detail: "Every event  create, edit, review, approve  is logged with timestamp and identity. The log is immutable and quality-review ready." },
   ],
 };
 export const decisionProductContentEn: ProductPageContent = {
   metadata: {
-    title: "DecisionOS — Governed Decision Operating System | AQLIYA",
+    title: "DecisionOS  Governed Decision Operating System | AQLIYA",
     description:
-      "Governed decision path — alternatives, criteria, risks, AI recommendation, human approval.",
+      "Governed decision path  alternatives, criteria, risks, AI recommendation, human approval.",
   },
   eyebrow: "DecisionOS",
   productName: "Institutional decision operating system",
   statusLabel: "Integrated into platform",
-  problemLine: "Decisions in meetings and files — no shared criteria or approval trail.",
-  outcomeLine: "Documented decision memo — reviewable and auditable at any time.",
+  problemLine: "Decisions in meetings and files  no shared criteria or approval trail.",
+  outcomeLine: "Documented decision memo  reviewable and auditable at any time.",
   before: [
     "Decisions driven by discussion only",
     "Undocumented rationale",
@@ -80,26 +80,26 @@ export const decisionProductContentEn: ProductPageContent = {
   primaryCta: { label: "Book a Diagnostic Session", href: "/en/contact" },
   secondaryCta: { label: "Proof materials", href: "/en/proof" },
   governanceItems: [
-    { icon: "evidence", title: "Every decision grounded in data", detail: "Options, criteria, risk assessments — all linked to their sources (reports, studies, figures). No decision without a foundation." },
+    { icon: "evidence", title: "Every decision grounded in data", detail: "Options, criteria, risk assessments  all linked to their sources (reports, studies, figures). No decision without a foundation." },
     { icon: "approval", title: "Multi-level approval by policy", detail: "Decisions flow through manager, committee, then board depending on value and impact. Each level records approval or requests revision." },
-    { icon: "permissions", title: "Role-gated proposal and approval", detail: "Who proposes, who reviews, who approves — pre-configured paths. The proposer cannot self-approve." },
+    { icon: "permissions", title: "Role-gated proposal and approval", detail: "Who proposes, who reviews, who approves  pre-configured paths. The proposer cannot self-approve." },
     { icon: "audit", title: "Decision frozen after approval", detail: "Once a decision is approved, the record is frozen. Any subsequent change requires a new decision linked to the original." },
   ],
 };
 
 export const localContentProductContentEn: ProductPageContent = {
   metadata: {
-    title: "LocalContentOS — Local Content & Compliance | AQLIYA",
+    title: "LocalContentOS  Local Content & Compliance | AQLIYA",
     description:
-      "Suppliers, spend, classification, compliance gaps, and regulatory reports — one governed path for Saudi market.",
+      "Suppliers, spend, classification, compliance gaps, and regulatory reports  one governed path for Saudi market.",
   },
   eyebrow: "LocalContentOS",
   productName: "Local content & supply chain operating system",
   statusLabel: "Available by agreed scope",
   problemLine:
-    "Fragmented supplier and spend data — delayed local content reports that are hard to defend.",
+    "Fragmented supplier and spend data  delayed local content reports that are hard to defend.",
   outcomeLine:
-    "Compliance and local content as an operational path — not ad-hoc spreadsheet reports.",
+    "Compliance and local content as an operational path  not ad-hoc spreadsheet reports.",
   before: [
     "Unclassified suppliers",
     "Manual spend analysis",
@@ -148,7 +148,7 @@ export const roadmapProductCardsEn: ProductIndexCardEn[] = [
     title: "SalesOS",
     subtitle: "Commercial intelligence",
     statusLabel: "Coming on platform roadmap",
-    problem: "Qualification, pipeline, and sales memory — on the platform roadmap.",
+    problem: "Qualification, pipeline, and sales memory  on the platform roadmap.",
     href: "/en/products/sales",
     muted: true,
   },
@@ -157,7 +157,7 @@ export const roadmapProductCardsEn: ProductIndexCardEn[] = [
     title: "Office AI Assistant",
     subtitle: "Shared institutional assistant",
     statusLabel: "Shared service",
-    problem: "Institutional assistant across platform solutions — summarization, editing, analysis.",
+    problem: "Institutional assistant across platform solutions  summarization, editing, analysis.",
     href: "/en/products/office-ai",
     muted: true,
   },

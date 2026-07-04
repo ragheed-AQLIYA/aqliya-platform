@@ -22,7 +22,7 @@ export default function EnglishProcurementPackPage() {
             Evaluation pack for buyers
           </h1>
           <p className="mt-6 text-lg leading-8 text-white/60">
-            Everything procurement, security, and IT need to evaluate AQLIYA —
+            Everything procurement, security, and IT need to evaluate AQLIYA 
             with honest readiness and boundary statements.
           </p>
           <p className="mt-4 text-sm text-white/45">

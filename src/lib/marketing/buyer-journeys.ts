@@ -1,5 +1,5 @@
 /**
- * Buyer journey paths — plain language (R6)
+ * Buyer journey paths  plain language (R6)
  * @see docs/marketing/VOICE_GUIDE.md
  */
 
@@ -37,7 +37,7 @@ export const buyerJourneys: BuyerJourney[] = [
     id: "cfo",
     label: "المدير المالي",
     subtitle: "مالية · مراجعة داخلية",
-    hook: "من ميزان المراجعة إلى ملف جاهز — وكل رقم يفتح مصدره.",
+    hook: "من ميزان المراجعة إلى ملف جاهز  وكل رقم يفتح مصدره.",
     steps: [
       { label: "حل AuditOS", href: "/products/audit", time: "قراءة" },
       { label: "نماذج مخرجات", href: "/proof#evidence-samples", time: "قراءة" },
@@ -50,7 +50,7 @@ export const buyerJourneys: BuyerJourney[] = [
     id: "contracting",
     label: "مقاولات ومحتوى محلي",
     subtitle: "مقاولات · مشتريات · امتثال",
-    hook: "موردون وإنفاق ومحتوى محلي — في مكان واحد بدل جداول متفرقة.",
+    hook: "موردون وإنفاق ومحتوى محلي  في مكان واحد بدل جداول متفرقة.",
     steps: [
       { label: "حل المحتوى المحلي", href: "/products/local-content", time: "قراءة" },
       { label: "أمثلة عملية", href: "/use-cases", time: "قراءة" },
@@ -63,7 +63,7 @@ export const buyerJourneys: BuyerJourney[] = [
     id: "cio",
     label: "مدير التقنية",
     subtitle: "تقنية · أمن معلومات",
-    hook: "نشر سحابي جاهز. خيارات خاصة أو معزولة — نناقشها بصراحة إذا احتجتموها.",
+    hook: "نشر سحابي جاهز. خيارات خاصة أو معزولة  نناقشها بصراحة إذا احتجتموها.",
     steps: [
       { label: "الأمن", href: "/security", time: "قراءة" },
       { label: "خيارات النشر", href: "/deployment", time: "قراءة" },
@@ -76,7 +76,7 @@ export const buyerJourneys: BuyerJourney[] = [
     id: "audit",
     label: "شريك التدقيق",
     subtitle: "مكاتب مراجعة · ارتباط",
-    hook: "ملف ارتباط كامل — لا يُعدَّل بعد توقيع الشريك.",
+    hook: "ملف ارتباط كامل  لا يُعدَّل بعد توقيع الشريك.",
     steps: [
       { label: "حل AuditOS", href: "/products/audit", time: "قراءة" },
       { label: "ديمو AuditOS", href: "/auditos", time: "تجربة" },
@@ -89,7 +89,7 @@ export const buyerJourneys: BuyerJourney[] = [
     id: "procurement",
     label: "المشتريات",
     subtitle: "تقييم مورد · لجنة ترسية",
-    hook: "PDF جاهز: أمن، نطاق عمل، ومعايير — للجنة الترسية.",
+    hook: "PDF جاهز: أمن، نطاق عمل، ومعايير  للجنة الترسية.",
     steps: [
       { label: "ملف المشتريات", href: "/procurement-pack", time: "قراءة" },
       { label: "طرق التعاون", href: "/start#engagement", time: "قراءة" },

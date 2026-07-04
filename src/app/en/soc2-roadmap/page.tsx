@@ -9,7 +9,7 @@ import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnosti
 export const metadata: Metadata = {
   title: "SOC2 Roadmap | AQLIYA",
   description:
-    "Target SOC2 Type I roadmap with honest status — not a certification claim.",
+    "Target SOC2 Type I roadmap with honest status  not a certification claim.",
 };
 
 const statusLabel: Record<string, string> = {
@@ -24,7 +24,7 @@ export default function EnglishSoc2RoadmapPage() {
       <section className="hero-gradient py-20">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h1 className="text-4xl font-black text-white sm:text-5xl">
-            SOC2 Roadmap — Targets, not certificates
+            SOC2 Roadmap  Targets, not certificates
           </h1>
           <p className="mt-6 text-lg text-slate-300">{soc2HonestDisclaimerEn}</p>
         </div>

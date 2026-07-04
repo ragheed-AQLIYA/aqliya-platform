@@ -1,18 +1,18 @@
 /**
- * Plain customer-facing copy (Vision layer) — EN mirror, R6
+ * Plain customer-facing copy (Vision layer)  EN mirror, R6
  */
 
 export const homeCopyEn = {
   metadata: {
     title: "AQLIYA | Private Governed Institutional Intelligence Platform",
     description:
-      "AQLIYA is a Private Governed Institutional Intelligence Platform — running your teams inside governed procedures with evidence, review, approval, and permissions. Try the demo or book a diagnostic session.",
+      "AQLIYA is a Private Governed Institutional Intelligence Platform  running your teams inside governed procedures with evidence, review, approval, and permissions. Try the demo or book a diagnostic session.",
   },
   hero: {
     eyebrow: "Private Governed Institutional Intelligence Platform",
-    title: "Governed institutional intelligence — defensible under every review",
+    title: "Governed institutional intelligence  defensible under every review",
     subtitle:
-      "AI assists. Humans decide. Evidence governs. An institutional operating layer that runs your teams inside real procedures — with evidence, review, approval, permissions, and decision tracking.",
+      "AI assists. Humans decide. Evidence governs. An institutional operating layer that runs your teams inside real procedures  with evidence, review, approval, permissions, and decision tracking.",
   },
   ctas: {
     start: "Book a Diagnostic Session",
@@ -20,7 +20,7 @@ export const homeCopyEn = {
     contact: "Book a Diagnostic Session",
   },
   problem: {
-    title: "The gap is not the tool — it is what gets lost between tools",
+    title: "The gap is not the tool  it is what gets lost between tools",
     subtitle:
       "Decisions made in meetings but not documented, figures with no source, knowledge that leaves with people.",
     tools: [
@@ -33,17 +33,17 @@ export const homeCopyEn = {
     pathCta: "Real-world examples",
   },
   systems: {
-    title: "Operating systems — one platform",
-    subtitle: "Audit and local content — same governance and audit trail across every path.",
+    title: "Operating systems  one platform",
+    subtitle: "Audit and local content  same governance and audit trail across every path.",
     ctaAll: "See all solutions",
   },
   proof: {
     title: "Try before you commit",
     subtitle: "Interactive demo, leadership summary, and procurement-ready files.",
     items: [
-      { title: "Demo", body: "Full audit path on sample data — no login.", href: "/en/demo" },
+      { title: "Demo", body: "Full audit path on sample data  no login.", href: "/en/demo" },
       { title: "Leadership summary", body: "One page on the platform and how we work together.", href: "/en/proof#executive-brief" },
-      { title: "Procurement pack", body: "Security, scope, and SOW template — PDF for your committee.", href: "/en/procurement-pack" },
+      { title: "Procurement pack", body: "Security, scope, and SOW template  PDF for your committee.", href: "/en/procurement-pack" },
     ],
     ctaFull: "All proof materials",
   },
@@ -57,7 +57,7 @@ export const homeCopyEn = {
   ],
   conversion: {
     title: "We start by understanding your context",
-    body: "Free diagnostic session — we assess your governance and intelligence posture and suggest a sensible next step. No sales pitch.",
+    body: "Free diagnostic session  we assess your governance and intelligence posture and suggest a sensible next step. No sales pitch.",
     primaryLabel: "Book a Diagnostic Session",
     secondaryLabel: "Review proof",
   },
@@ -67,22 +67,22 @@ export const startCopyEn = {
   metadata: {
     title: "Get Started | AQLIYA",
     description:
-      "Pick your role — we point you to the right reading, demo, or procurement files.",
+      "Pick your role  we point you to the right reading, demo, or procurement files.",
   },
   hero: {
     eyebrow: "Start here",
     title: "Where do you start with AQLIYA?",
     subtitle:
-      "Choose your role below. We suggest a short reading path — then contact us when you are ready.",
+      "Choose your role below. We suggest a short reading path  then contact us when you are ready.",
   },
   chooseRole: "Choose your role",
-  chooseRoleHint: "Three suggested reads — then a call when it makes sense.",
+  chooseRoleHint: "Three suggested reads  then a call when it makes sense.",
   engagementTitle: "How we work together",
-  engagementHint: "From a free call to a trial on your data — no long contract before you see results.",
+  engagementHint: "From a free call to a trial on your data  no long contract before you see results.",
   pricingTitle: "Rough cost range (planning only)",
   pricingHint: "Not a formal quote. Trial on your data is free when scope is agreed.",
   processTitle: "Steps",
-  processHint: "Same path for every client — kept simple.",
+  processHint: "Same path for every client  kept simple.",
   proof: "Proof materials",
   useCases: "Use cases",
 } as const;

@@ -18,12 +18,12 @@ export const securityPillarsAr: SecurityPillar[] = [
   {
     id: "rbac",
     title: "التحكم بالوصول (RBAC)",
-    body: "صلاحيات حسب الدور والمؤسسة — لا وصول جانبي بين الأقسام أو المستأجرين.",
+    body: "صلاحيات حسب الدور والمؤسسة  لا وصول جانبي بين الأقسام أو المستأجرين.",
   },
   {
     id: "audit",
     title: "سجل تدقيقي ثابت",
-    body: "كل طلب وقرار وتصدير مُسجَّل بهوية المستخدم — غير قابل للحذف أو التعديل.",
+    body: "كل طلب وقرار وتصدير مُسجَّل بهوية المستخدم  غير قابل للحذف أو التعديل.",
   },
   {
     id: "evidence",
@@ -38,7 +38,7 @@ export const securityPillarsAr: SecurityPillar[] = [
   {
     id: "human",
     title: "موافقة بشرية",
-    body: "الذكاء يساعد — الإنسان يقرر. التصدير والإجراءات الحرجة تتطلب اعتماداً صريحاً.",
+    body: "الذكاء يساعد  الإنسان يقرر. التصدير والإجراءات الحرجة تتطلب اعتماداً صريحاً.",
   },
   {
     id: "data",
@@ -52,8 +52,8 @@ export const securityControlsAr: SecurityControlRow[] = [
   { area: "العزل", control: "organizationId على كل مسار محكوم · RBAC في middleware" },
   { area: "التدقيق", control: "AuditEvent لكل تغيير حالة · تصدير للامتثال" },
   { area: "الملفات", control: "فحص uploads · صلاحيات تنزيل · checksum عند التوفر" },
-  { area: "SOC2 / ISO", control: "خارطة طريق — لا ادعاء شهادة قبل اكتمالها" },
-  { area: "الإقامة", control: "سحابة سعودية/خليجية افتراضياً — راجع /deployment" },
+  { area: "SOC2 / ISO", control: "خارطة طريق  لا ادعاء شهادة قبل اكتمالها" },
+  { area: "الإقامة", control: "سحابة سعودية/خليجية افتراضياً  راجع /deployment" },
 ];
 
 export const aiGovernanceRulesAr = [

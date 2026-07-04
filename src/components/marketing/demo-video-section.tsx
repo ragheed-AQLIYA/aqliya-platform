@@ -14,15 +14,15 @@ export function DemoVideoSection({ locale = "ar" }: Props) {
       ? {
           eyebrow: "Executive demo (3 min)",
           title: "Prefer to watch before clicking through?",
-          body: "Short guided overview for leadership — full interactive demo remains the primary proof path.",
-          fallback: "Video coming soon — use the interactive demo below.",
+          body: "Short guided overview for leadership  full interactive demo remains the primary proof path.",
+          fallback: "Video coming soon  use the interactive demo below.",
           interactive: "Interactive demo",
         }
       : {
           eyebrow: "ديمو تنفيذي (٣ دقائق)",
           title: "تفضّل المشاهدة قبل التجربة التفاعلية؟",
-          body: "ملخص قصير للقيادة — الديمو التفاعلي يبقى مسار الإثبات الأساسي.",
-          fallback: "الفيديو قريباً — استخدم الديمو التفاعلي أدناه.",
+          body: "ملخص قصير للقيادة  الديمو التفاعلي يبقى مسار الإثبات الأساسي.",
+          fallback: "الفيديو قريباً  استخدم الديمو التفاعلي أدناه.",
           interactive: "الديمو التفاعلي",
         };
 

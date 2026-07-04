@@ -9,7 +9,7 @@ import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnosti
 export const metadata: Metadata = {
   title: "خارطة SOC2 | AQLIYA",
   description:
-    "خارطة طريق SOC2 Type I بمواعيد مستهدفة — بدون ادعاء شهادة. شفافية للمشتريات والأمن.",
+    "خارطة طريق SOC2 Type I بمواعيد مستهدفة  بدون ادعاء شهادة. شفافية للمشتريات والأمن.",
 };
 
 const statusLabel: Record<string, string> = {
@@ -33,7 +33,7 @@ export default function Soc2RoadmapPage() {
             Trust Roadmap
           </p>
           <h1 className="mt-4 text-4xl font-black text-white sm:text-5xl">
-            خارطة SOC2 — أهداف، لا شهادات
+            خارطة SOC2  أهداف، لا شهادات
           </h1>
           <p className="mt-6 text-lg leading-8 text-slate-300">
             {soc2HonestDisclaimerAr}
@@ -73,9 +73,9 @@ export default function Soc2RoadmapPage() {
         <div className="mt-12 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6">
           <h2 className="text-base font-bold text-amber-200">ما هو متاح اليوم</h2>
           <ul className="mt-3 space-y-2 text-sm text-slate-300">
-            <li>• RBAC، سجل تدقيق، evidence graph، عزل المستأجرين — مُنفَّذ في المنصة</li>
+            <li>• RBAC، سجل تدقيق، evidence graph، عزل المستأجرين  مُنفَّذ في المنصة</li>
             <li>• ملخص أمن PDF + جلسة تقنية مفتوحة</li>
-            <li>• حزمة مشتريات كاملة —{" "}
+            <li>• حزمة مشتريات كاملة {" "}
               <Link href="/procurement-pack" className="text-cyan-400 underline">
                 /procurement-pack
               </Link>

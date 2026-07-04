@@ -7,7 +7,7 @@ import { publicOsStatus } from "@/lib/marketing/public-status";
 export const metadata: Metadata = {
   title: "المنصة | AQLIYA Intelligence Core",
   description:
-    "البنية الأساسية المشتركة التي تعتمد عليها جميع أنظمة عقلية — حوكمة، سير عمل، أدلة، وسجل تدقيق في نواة واحدة.",
+    "البنية الأساسية المشتركة التي تعتمد عليها جميع أنظمة عقلية  حوكمة، سير عمل، أدلة، وسجل تدقيق في نواة واحدة.",
 };
 
 const deploymentModels = [
@@ -33,7 +33,7 @@ const deploymentModels = [
     status: "planned",
     statusLabel: "نشر خاص",
     description:
-      "نشر داخل بنية تحتية المؤسسة مع قاعدة بيانات محلية وتحكم كامل في البيانات — للمؤسسات ذات متطلبات السيادة والأمن العالية.",
+      "نشر داخل بنية تحتية المؤسسة مع قاعدة بيانات محلية وتحكم كامل في البيانات  للمؤسسات ذات متطلبات السيادة والأمن العالية.",
     points: [
       "بيانات تبقى داخل بنية المؤسسة",
       "تحكم كامل في قواعد البيانات والتخزين",
@@ -48,7 +48,7 @@ const deploymentModels = [
     status: "strategic",
     statusLabel: "استراتيجي",
     description:
-      "نشر كامل داخل بيئة معزولة بدون اتصال بالإنترنت مع معالجة محلية كاملة. مخصص للمؤسسات ذات المتطلبات الأمنية القصوى — يتطلب تعاوناً هندسياً مسبقاً.",
+      "نشر كامل داخل بيئة معزولة بدون اتصال بالإنترنت مع معالجة محلية كاملة. مخصص للمؤسسات ذات المتطلبات الأمنية القصوى  يتطلب تعاوناً هندسياً مسبقاً.",
     points: [
       "معالجة كاملة داخل الشبكة الداخلية",
       "لا اتصال بأي خدمة خارجية",
@@ -62,21 +62,21 @@ const operatingSystems = [
   {
     useCase: "إدارة ارتباطات المراجعة",
     system: "AuditOS",
-    description: "من قبول العميل إلى التقرير — دورة مراجعة كاملة محكومة.",
+    description: "من قبول العميل إلى التقرير  دورة مراجعة كاملة محكومة.",
     statusLabel: publicOsStatus.auditOS.label,
     href: "/products/audit",
   },
   {
     useCase: "برامج المحتوى المحلي",
     system: "LocalContentOS",
-    description: "موردون، إنفاق، عقود، امتثال، وتقارير — للسوق السعودي.",
+    description: "موردون، إنفاق، عقود، امتثال، وتقارير  للسوق السعودي.",
     statusLabel: publicOsStatus.localContentOS.label,
     href: "/products/local-content",
   },
   {
     useCase: "الذاكرة التجارية المؤسسية",
     system: "SalesOS",
-    description: "تأهيل، فرص، ومتابعة — في خارطة المنصة.",
+    description: "تأهيل، فرص، ومتابعة  في خارطة المنصة.",
     statusLabel: publicOsStatus.salesOS.label,
     href: "/products/sales",
   },
@@ -89,7 +89,7 @@ const platformLayers = [
     en: "Governance Layer",
     contains: "الصلاحيات، سجل التدقيق، بوابات الاعتماد، عزل المؤسسات",
     body: "تُطبّق قواعد الحوكمة على كل عملية: من يملك الصلاحية، ما هي بوابات الموافقة، وكيف تُدار حالات الاستثناء. نموذج صلاحيات متعدد الطبقات على مستوى المؤسسة والمشروع والإجراء الفردي. كل حدث يُسجَّل في سجل غير قابل للتعديل أو الحذف.",
-    boundary: "لا صلاحية ضمنية—كل وصول مُحدَّد صراحةً",
+    boundary: "لا صلاحية ضمنيةكل وصول مُحدَّد صراحةً",
     for: "لمن تحتاج المؤسسة صلاحية الوصول؟ من يراجع قبل الاعتماد؟",
   },
   {
@@ -97,7 +97,7 @@ const platformLayers = [
     title: "قاعدة المعرفة",
     en: "Knowledge Foundation",
     contains: "شبكة الأدلة، نماذج البيانات، الذاكرة المؤسسية",
-    body: "يُنشئ ويُحافظ على شجرة أدلة مترابطة: كل مخرج — تقرير، قرار، ملاحظة — مرتبط بسلسلة أدلة تصل إلى المصادر الأصلية: الملفات، السجلات، البيانات، أو التعليقات. لا مخرج بدون سلسلة أدلة مكتملة.",
+    body: "يُنشئ ويُحافظ على شجرة أدلة مترابطة: كل مخرج  تقرير، قرار، ملاحظة  مرتبط بسلسلة أدلة تصل إلى المصادر الأصلية: الملفات، السجلات، البيانات، أو التعليقات. لا مخرج بدون سلسلة أدلة مكتملة.",
     boundary: "لا مخرج بدون سلسلة أدلة مكتملة",
     for: "على أي أساس صدر هذا المخرج؟ ما مصدر كل رقم؟",
   },
@@ -106,8 +106,8 @@ const platformLayers = [
     title: "مشغّلات الذكاء",
     en: "Intelligence Operators",
     contains: "تنسيق الذكاء، محرك سير العمل، طبقة التكاملات",
-    body: "نواة الذكاء الاصطناعي المشتركة تُنسّق الطلبات عبر جميع الأنظمة — كل استدعاء مقيد بحدود صلاحية وسياق. محرك سير العمل يدير حالات العمل من المسودة إلى الاعتماد مع بوابات لا يمكن تجاوزها. طبقة التكاملات تربط المنصة مع الأنظمة الخارجية مع تسجيل لكل طلب واستجابة.",
-    boundary: "الذكاء يقترح ويساعد—لا يقرر ولا يعتمد",
+    body: "نواة الذكاء الاصطناعي المشتركة تُنسّق الطلبات عبر جميع الأنظمة  كل استدعاء مقيد بحدود صلاحية وسياق. محرك سير العمل يدير حالات العمل من المسودة إلى الاعتماد مع بوابات لا يمكن تجاوزها. طبقة التكاملات تربط المنصة مع الأنظمة الخارجية مع تسجيل لكل طلب واستجابة.",
+    boundary: "الذكاء يقترح ويساعدلا يقرر ولا يعتمد",
     for: "كيف يتحرك العمل من الإدخال إلى المخرجات؟ بأي ترتيب؟",
   },
   {
@@ -115,8 +115,8 @@ const platformLayers = [
     title: "أنظمة التشغيل",
     en: "Operating Systems",
     contains: "AuditOS، LocalContentOS، SalesOS، وقدرات مشتركة",
-    body: "كل نظام تشغيل يرث تلقائياً الطبقات الثلاث تحته — الحوكمة، قاعدة المعرفة، والمشغّلات — دون إعادة بناء. الفرق بين نظام وآخر هو المجال التطبيقي ومسارات العمل، وليس البنية الأساسية.",
-    boundary: "كل نظام يرث المنصة—لا إعادة اختراع",
+    body: "كل نظام تشغيل يرث تلقائياً الطبقات الثلاث تحته  الحوكمة، قاعدة المعرفة، والمشغّلات  دون إعادة بناء. الفرق بين نظام وآخر هو المجال التطبيقي ومسارات العمل، وليس البنية الأساسية.",
+    boundary: "كل نظام يرث المنصةلا إعادة اختراع",
     for: "كيف يُطبَّق هذا في مجالي: تدقيق، محتوى محلي، أو مبيعات؟",
   },
 ];
@@ -125,10 +125,10 @@ const governedWorkflow = [
   { step: "طلب إجراء", detail: "مستخدم داخل صلاحياته يبدأ طلباً", layer: "Governance" },
   { step: "التحقق من الصلاحية", detail: "المنصة تتأكد من هوية المستخدم ودوره وصلاحيته", layer: "Governance" },
   { step: "جلب السياق", detail: "سحب البيانات والأدلة المرتبطة من قاعدة المعرفة", layer: "Knowledge" },
-  { step: "معالجة الذكاء", detail: "AI يُنتج مسودة ضمن حدود السياق — لا يتجاوزها", layer: "Operators" },
+  { step: "معالجة الذكاء", detail: "AI يُنتج مسودة ضمن حدود السياق  لا يتجاوزها", layer: "Operators" },
   { step: "مراجعة بشرية", detail: "المستخدم أو المراجع يراجع ويعدّل قبل الاعتماد", layer: "Governance" },
   { step: "اعتماد", detail: "اعتماد رسمي يُوثَّق في سجل التدقيق", layer: "Governance" },
-  { step: "تسجيل + أرشفة", detail: "كل خطوة تُسجَّل — لا تعديل بعد الاعتماد", layer: "Governance" },
+  { step: "تسجيل + أرشفة", detail: "كل خطوة تُسجَّل  لا تعديل بعد الاعتماد", layer: "Governance" },
 ];
 
 export default function PlatformPage() {
@@ -152,10 +152,10 @@ export default function PlatformPage() {
               </span>
             </h1>
             <p className="mt-6 max-w-3xl text-base leading-8 text-white/62 sm:text-lg">
-              AQLIYA ليست أداة ذكاء منفصلة ولا مجموعة منتجات. هي منصة حاكمة —
+              AQLIYA ليست أداة ذكاء منفصلة ولا مجموعة منتجات. هي منصة حاكمة 
               أربع طبقات (حوكمة، معرفة، مشغّلات، أنظمة) تجعل كل نظام يُبنى
               عليها يرث تلقائياً الصلاحيات، الأدلة، سير العمل، وسجل التدقيق
-              — بدون إعادة بناء من الصفر.
+               بدون إعادة بناء من الصفر.
             </p>
             <div className="mt-7 flex flex-wrap gap-4">
               <Link href="/contact" className="btn-primary h-12 px-8 text-base">
@@ -174,7 +174,7 @@ export default function PlatformPage() {
           <SectionEyebrow
             label="الخريطة المعمارية"
             title="بنية المنصة من الأساس إلى أنظمة التشغيل"
-            description="AQLIYA Intelligence Core يُشكّل الطبقة الوسطى بين البنية التحتية وأنظمة التشغيل المؤسسية — كل نظام يستفيد من نفس المكونات المشتركة دون تكرار."
+            description="AQLIYA Intelligence Core يُشكّل الطبقة الوسطى بين البنية التحتية وأنظمة التشغيل المؤسسية  كل نظام يستفيد من نفس المكونات المشتركة دون تكرار."
           />
           <div className="mt-12">
             <div className="gradient-border rounded-[24px] bg-white/[0.01] p-4 shadow-sm">
@@ -192,7 +192,7 @@ export default function PlatformPage() {
             لماذا منصة لا أداة؟
           </span>
           <h2 className="mt-6 text-3xl font-black text-foreground sm:text-4xl leading-[1.12]">
-            المؤسسة المنظَّمة تحتاج طبقة تشغيل — لا أداة تعزل الذكاء عن المسؤولية
+            المؤسسة المنظَّمة تحتاج طبقة تشغيل  لا أداة تعزل الذكاء عن المسؤولية
           </h2>
           <p className="mt-5 text-base leading-8 text-muted-foreground">
             الأداة تحل مشكلة واحدة. المنصة تُنظّم تشغيل المؤسسة بالكامل.
@@ -212,7 +212,7 @@ export default function PlatformPage() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />كل مخرج يمر بحوكمة وأدلة قبل الاعتماد</li>
                 <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />كل نظام يرث الحوكمة والذكاء من منصة واحدة</li>
-                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />صلاحيات وأدلة جزء من بنية المنصة — لا إدارة منفصلة</li>
+                <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />صلاحيات وأدلة جزء من بنية المنصة  لا إدارة منفصلة</li>
                 <li className="flex items-start gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500/50" />التوسع بإضافة نظام تشغيل جديد فوق نفس المنصة</li>
               </ul>
             </div>
@@ -226,7 +226,7 @@ export default function PlatformPage() {
           <SectionEyebrow
             label="الطبقات الأربع"
             title="بنية المنصة من الحوكمة إلى أنظمة التشغيل"
-            description="أربع طبقات متراصة — كل طبقة تخدم التي تعلوها. كل نظام تشغيل يستفيد من الثلاث طبقات تحته دون تكرار."
+            description="أربع طبقات متراصة  كل طبقة تخدم التي تعلوها. كل نظام تشغيل يستفيد من الثلاث طبقات تحته دون تكرار."
           />
 
           <div className="mt-12 relative">
@@ -252,7 +252,7 @@ export default function PlatformPage() {
                           {layer.en}
                         </span>
                         <span className="text-[10px] text-muted-foreground/50">
-                          — {layer.contains}
+                           {layer.contains}
                         </span>
                       </div>
                       <p className="text-sm leading-6 text-muted-foreground">
@@ -283,7 +283,7 @@ export default function PlatformPage() {
         <SectionEyebrow
           label="التدفق المحكوم"
           title="كيف يتدفّق العمل عبر طبقات المنصة في إجراء واحد"
-          description="من لحظة بدء الطلب إلى التسجيل النهائي — كل خطوة تمر عبر طبقة محددة وبوابة صلاحية واضحة."
+          description="من لحظة بدء الطلب إلى التسجيل النهائي  كل خطوة تمر عبر طبقة محددة وبوابة صلاحية واضحة."
         />
 
         <div className="mt-10 relative">
@@ -312,7 +312,7 @@ export default function PlatformPage() {
 
         <div className="mt-8 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-5 text-center">
           <p className="text-sm text-amber-700/90">
-            <span className="font-bold">النتيجة:</span> كل مخرج — تقرير، قرار، ملاحظة — له سجل كامل يمكن تتبعه
+            <span className="font-bold">النتيجة:</span> كل مخرج  تقرير، قرار، ملاحظة  له سجل كامل يمكن تتبعه
             من المصدر إلى الاعتماد. لا خطوة بدون توقيت، ولا مخرج بدون مصدر.
           </p>
         </div>
@@ -326,7 +326,7 @@ export default function PlatformPage() {
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <SectionEyebrow
             label="الأنظمة كتجسيد للمنصة"
-            title="المنصة تُطبَّق عبر أنظمة تشغيل — لا منتجات منفصلة"
+            title="المنصة تُطبَّق عبر أنظمة تشغيل  لا منتجات منفصلة"
             description="كل نظام تشغيل هو تجسيد للطبقات الأربع في مجال مؤسسي محدّد. الفرق هو التطبيق، وليس البنية."
           />
 
@@ -354,7 +354,7 @@ export default function PlatformPage() {
           </div>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">
-            Office AI Assistant قدرة مشتركة عبر المنصة — مساعد مؤسسي محكوم ضمن
+            Office AI Assistant قدرة مشتركة عبر المنصة  مساعد مؤسسي محكوم ضمن
             الصلاحيات والأدلة.{" "}
             <Link
               href="/products/office-ai"
@@ -364,7 +364,7 @@ export default function PlatformPage() {
             </Link>
           </p>
           <p className="mt-4 text-center text-xs text-muted-foreground/70">
-            SalesOS في خارطة المنصة —{" "}
+            SalesOS في خارطة المنصة {" "}
             <Link
               href="/products/sales"
               className="text-primary underline underline-offset-4"
@@ -381,7 +381,7 @@ export default function PlatformPage() {
           <SectionEyebrow
             label="نماذج النشر"
             title="نموذج النشر يُحدد من يتحكم في البيانات والبنية"
-            description="كل نموذج نشر يُحافظ على نفس مكونات المنصة — الفرق هو موقع التشغيل ودرجة السيادة على البيانات."
+            description="كل نموذج نشر يُحافظ على نفس مكونات المنصة  الفرق هو موقع التشغيل ودرجة السيادة على البيانات."
           />
 
           <div className="mt-10 grid gap-6 lg:grid-cols-3">

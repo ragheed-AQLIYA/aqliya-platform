@@ -10,11 +10,11 @@ export const institutionalUseCasesEn: InstitutionalUseCase[] = [
     title: "Internal Audit & Compliance",
     icon: "◈",
     problem:
-      "Audit teams spend 60–70% of their time manually collecting information from scattered documents across multiple systems — instead of actual analysis.",
+      "Audit teams spend 60–70% of their time manually collecting information from scattered documents across multiple systems  instead of actual analysis.",
     traditionalState:
       "An auditor reads hundreds of pages manually, annotates them, creates summaries in Excel, then repeats the process in the next cycle.",
     aqliyaApproach:
-      "AuditOS processes hundreds of financial and operational documents, generates a risk map linked to specific evidence, and alerts the auditor on deviations — with a full audit trail for every result.",
+      "AuditOS processes hundreds of financial and operational documents, generates a risk map linked to specific evidence, and alerts the auditor on deviations  with a full audit trail for every result.",
     outcome:
       "Data collection cycle reduced from weeks to hours, while keeping human auditors as the final decision-makers.",
     systemLink: "/en/products/audit",
@@ -29,13 +29,13 @@ export const institutionalUseCasesEn: InstitutionalUseCase[] = [
     title: "Decision Governance",
     icon: "◉",
     problem:
-      "Important decisions are made in meetings without documenting their context — who approved, what were the alternatives, why this path was chosen. Six months later, no one remembers.",
+      "Important decisions are made in meetings without documenting their context  who approved, what were the alternatives, why this path was chosen. Six months later, no one remembers.",
     traditionalState:
       "Generic meeting minutes, decisions scattered across emails, and no way to review the decision logic when needed.",
     aqliyaApproach:
-      "DecisionOS creates a structured decision record: context, options considered, supporting evidence, approvers, and outcomes — with search and cross-linking between related decisions.",
+      "DecisionOS creates a structured decision record: context, options considered, supporting evidence, approvers, and outcomes  with search and cross-linking between related decisions.",
     outcome:
-      "An institution capable of presenting documented justification for any decision to the board or regulator — in clicks, not hours of searching.",
+      "An institution capable of presenting documented justification for any decision to the board or regulator  in clicks, not hours of searching.",
     systemLink: "/en/products/decision",
     systemLabel: "Explore DecisionOS",
   },
@@ -71,9 +71,9 @@ export const institutionalUseCasesEn: InstitutionalUseCase[] = [
     traditionalState:
       "Outdated procedure documents, abandoned file shares, and tacit knowledge distributed across individuals.",
     aqliyaApproach:
-      "A custom system built on the Intelligence Core creates a living institutional knowledge base: policies, historical decisions, lessons learned, and best practices — searchable and cross-linked.",
+      "A custom system built on the Intelligence Core creates a living institutional knowledge base: policies, historical decisions, lessons learned, and best practices  searchable and cross-linked.",
     outcome:
-      "Organizational knowledge becomes a productive asset, not individual memory — a new hire is productive in weeks, not months.",
+      "Organizational knowledge becomes a productive asset, not individual memory  a new hire is productive in weeks, not months.",
     systemLink: "/en/custom-product",
     systemLabel: "Design Custom System",
   },
@@ -86,7 +86,7 @@ export const institutionalUseCasesEn: InstitutionalUseCase[] = [
     title: "Contract Monitoring & Obligation Management",
     icon: "◐",
     problem:
-      "Organizations managing dozens or hundreds of contracts struggle to track obligations, due dates, and renewal terms — discovering violations after the fact.",
+      "Organizations managing dozens or hundreds of contracts struggle to track obligations, due dates, and renewal terms  discovering violations after the fact.",
     traditionalState:
       "A contract list in spreadsheets, manual calendar reminders, and annual reviews that miss many critical details.",
     aqliyaApproach:
@@ -105,11 +105,11 @@ export const institutionalUseCasesEn: InstitutionalUseCase[] = [
     title: "Regulatory Readiness & Oversight",
     icon: "◑",
     problem:
-      "Sudden regulatory inspection or disclosure requests disrupt organizations without systematic documentation practices — file preparation takes weeks.",
+      "Sudden regulatory inspection or disclosure requests disrupt organizations without systematic documentation practices  file preparation takes weeks.",
     traditionalState:
       "Intensive file preparation before every regulatory visit, delayed documentation, and inconsistent narratives.",
     aqliyaApproach:
-      "Continuous, real-time documentation of every decision and action, with an Evidence Chain structure that enables extracting a complete compliance file at any time — not just when needed.",
+      "Continuous, real-time documentation of every decision and action, with an Evidence Chain structure that enables extracting a complete compliance file at any time  not just when needed.",
     outcome:
       "Inspections become routine, not crises. The file is always ready, reliable, and linked to original evidence.",
     systemLink: "/en/governance",
@@ -124,7 +124,7 @@ export const institutionalUseCasesEn: InstitutionalUseCase[] = [
     title: "Procurement Intelligence & Award Decision Support",
     icon: "◒",
     problem:
-      "Tender evaluation committees drown in hundreds of pages of technical and financial offers — evaluation takes weeks and critical details are missed.",
+      "Tender evaluation committees drown in hundreds of pages of technical and financial offers  evaluation takes weeks and critical details are missed.",
     traditionalState:
       "Manual reading, personal notes, and comparisons in spreadsheets built by each committee member in their own way.",
     aqliyaApproach:

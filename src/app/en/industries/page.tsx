@@ -21,7 +21,7 @@ const sectors = [
     ],
     systems: ["AuditOS", "Office AI Assistant"],
     platformValue:
-      "Audit methodology embedded in workflow — not in scattered files or individual memory.",
+      "Audit methodology embedded in workflow  not in scattered files or individual memory.",
     useCases: [
       "Audit engagement management",
       "Trial balance and financial statements",
@@ -78,7 +78,7 @@ const sectors = [
     challenge:
       "Output quality depends on individuals, knowledge is undocumented, and methodology is hard to prove to clients.",
     outcomes: [
-      "Methodology embedded in workflow — not in individuals' heads",
+      "Methodology embedded in workflow  not in individuals' heads",
       "Every output reviewable and deliverable to clients",
       "Governed commercial and operational memory",
     ],
@@ -105,7 +105,7 @@ const sectors = [
     ],
     systems: ["LocalContentOS"],
     platformValue:
-      "Compliance and local content as an operational path — not ad-hoc reports from scattered spreadsheets.",
+      "Compliance and local content as an operational path  not ad-hoc reports from scattered spreadsheets.",
     useCases: [
       "Supplier and spend classification",
       "Compliance gaps and indicators",
@@ -126,7 +126,7 @@ export default function EnglishIndustriesPage() {
               Industries we serve
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/60">
-              One operating platform — different paths by institutional context.
+              One operating platform  different paths by institutional context.
               Not generic solutions, but operating systems activated on the same
               governance and evidence foundation.
             </p>
@@ -234,7 +234,7 @@ export default function EnglishIndustriesPage() {
       <section className="section-gradient-dark border-t border-white/5">
         <div className="mx-auto max-w-7xl px-6 py-16 text-center">
           <p className="text-sm text-white/55">
-            Every sector runs on the same platform —{" "}
+            Every sector runs on the same platform {" "}
             <Link
               href="/en/platform"
               className="text-aqliya-cyan underline underline-offset-4"

@@ -1,4 +1,4 @@
-/** Optional 3-min executive demo — set NEXT_PUBLIC_DEMO_VIDEO_URL (YouTube/Vimeo). */
+/** Optional 3-min executive demo  set NEXT_PUBLIC_DEMO_VIDEO_URL (YouTube/Vimeo). */
 export function getDemoVideoUrl(): string | null {
   const url = process.env.NEXT_PUBLIC_DEMO_VIDEO_URL?.trim();
   return url || null;

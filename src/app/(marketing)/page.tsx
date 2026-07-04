@@ -19,15 +19,15 @@ export const metadata: Metadata = {
 const systems = [
   { title: "AuditOS", note: publicCapabilityNote.auditOS, status: publicOsStatus.auditOS.label, href: "/products/audit" },
   { title: "LocalContentOS", note: publicCapabilityNote.localContentOS, status: publicOsStatus.localContentOS.label, href: "/products/local-content" },
-  { title: "DecisionOS", note: "بدائل، معايير، مخاطر، وتوصية — كل قرار موثّق.", status: publicOsStatus.decisionOS.label, href: "/products/decision" },
+  { title: "DecisionOS", note: "بدائل، معايير، مخاطر، وتوصية  كل قرار موثّق.", status: publicOsStatus.decisionOS.label, href: "/products/decision" },
   { title: "SalesOS", note: publicCapabilityNote.salesOS, status: publicOsStatus.salesOS.label, href: "/products/sales" },
 ];
 
 const platformLayers = [
-  { num: "01", title: "الحوكمة", desc: "الصلاحيات، سجل التدقيق، بوابات الاعتماد — كل حدث مُوثَّق" },
-  { num: "02", title: "قاعدة المعرفة", desc: "كل مخرج مرتبط بمصدره — شبكة أدلة غير قابلة للكسر" },
-  { num: "03", title: "مشغّلات الذكاء", desc: "AI يُساعد ويقترح — لا يقرّر ولا يعتمد بدون الإنسان" },
-  { num: "04", title: "أنظمة التشغيل", desc: "كل نظام يرث الحوكمة والذكاء — لا إعادة بناء من الصفر" },
+  { num: "01", title: "الحوكمة", desc: "الصلاحيات، سجل التدقيق، بوابات الاعتماد  كل حدث مُوثَّق" },
+  { num: "02", title: "قاعدة المعرفة", desc: "كل مخرج مرتبط بمصدره  شبكة أدلة غير قابلة للكسر" },
+  { num: "03", title: "مشغّلات الذكاء", desc: "AI يُساعد ويقترح  لا يقرّر ولا يعتمد بدون الإنسان" },
+  { num: "04", title: "أنظمة التشغيل", desc: "كل نظام يرث الحوكمة والذكاء  لا إعادة بناء من الصفر" },
 ];
 
 export default function HomePage() {
@@ -51,7 +51,7 @@ export default function HomePage() {
 
       <ComparisonSection
         eyebrow="لماذا منصة لا أداة؟"
-        heading="الأداة تحل مشكلة — المنصة تُنظّم المؤسسة"
+        heading="الأداة تحل مشكلة  المنصة تُنظّم المؤسسة"
         sides={[
           {
             title: "أداة ذكاء منفصلة",
@@ -68,14 +68,14 @@ export default function HomePage() {
             items: [
               "كل مخرج يمر بحوكمة وأدلة قبل الاعتماد",
               "كل نظام يرث الحوكمة والذكاء من منصة واحدة",
-              "صلاحيات وأدلة جزء من بنية المنصة — لا إدارة منفصلة",
+              "صلاحيات وأدلة جزء من بنية المنصة  لا إدارة منفصلة",
             ],
           },
         ]}
       />
 
       <PlatformLayersSection
-        heading="بنية المنصة — أربع طبقات متراصة"
+        heading="بنية المنصة  أربع طبقات متراصة"
         subtitle="كل طبقة تخدم التي تعلوها. كل نظام تشغيل يستفيد من الثلاث طبقات تحته دون تكرار."
         layers={platformLayers}
         ctaLabel="تعمّق في بنية المنصة ←"

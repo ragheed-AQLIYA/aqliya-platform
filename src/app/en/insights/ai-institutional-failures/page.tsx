@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Five Institutional AI Failures — And What They Share | AQLIYA",
+  title: "Five Institutional AI Failures  And What They Share | AQLIYA",
   description:
     "These institutions didn't fail because the AI was poor. They failed because there was no governance structure in place. The common thread across five cases from different sectors.",
 };
@@ -29,7 +29,7 @@ export default function Article1() {
               <span className="text-[10px] text-white/30">8 min read</span>
             </div>
             <h1 className="mt-4 text-3xl font-black leading-[1.1] tracking-tight text-white sm:text-4xl">
-              Five Institutional AI Failures — And What They Share
+              Five Institutional AI Failures  And What They Share
             </h1>
           </div>
         </div>
@@ -41,23 +41,23 @@ export default function Article1() {
           <div className="prose prose-invert prose-lg max-w-none">
 
             <p className="lead text-lg text-white/75 leading-8">
-              At every AI conference, you hear the success stories. High-accuracy models, time savings, impressive automation. But the private conversations — with technical, legal, and compliance teams — tell a very different story.
+              At every AI conference, you hear the success stories. High-accuracy models, time savings, impressive automation. But the private conversations  with technical, legal, and compliance teams  tell a very different story.
             </p>
 
             <p className="text-white/65 leading-8">
-              The common thread across the five cases we&apos;ll examine isn&apos;t the model type or data quality. It&apos;s the absence of a clear governance structure around AI — who approves, what gets logged, and what happens when things go wrong.
+              The common thread across the five cases we&apos;ll examine isn&apos;t the model type or data quality. It&apos;s the absence of a clear governance structure around AI  who approves, what gets logged, and what happens when things go wrong.
             </p>
 
             <h2 className="mt-10 text-2xl font-black text-white">
               1. Financial Company: Credit Recommendation Without an Audit Trail
             </h2>
             <p className="text-white/65 leading-8">
-              A mid-sized finance company used a model to classify credit applications. The model was accurate by test metrics. The problem emerged when a customer challenged a rejection — no one could provide a documented rationale. The model &ldquo;decided,&rdquo; but no one knew why. The regulatory fine exceeded the cost of building a proper documentation system from scratch.
+              A mid-sized finance company used a model to classify credit applications. The model was accurate by test metrics. The problem emerged when a customer challenged a rejection  no one could provide a documented rationale. The model &ldquo;decided,&rdquo; but no one knew why. The regulatory fine exceeded the cost of building a proper documentation system from scratch.
             </p>
             <div className="my-5 rounded-xl border border-red-500/20 bg-red-500/5 p-5">
               <p className="text-sm font-semibold text-red-400">Lesson</p>
               <p className="mt-1 text-sm text-white/60">
-                Any decision with a direct impact on an external party needs a justification record that withstands review. The model doesn&apos;t provide this by nature — governance does.
+                Any decision with a direct impact on an external party needs a justification record that withstands review. The model doesn&apos;t provide this by nature  governance does.
               </p>
             </div>
 
@@ -78,12 +78,12 @@ export default function Article1() {
               3. Real Estate Company: A &ldquo;Smart&rdquo; Knowledge Base That Produced Expired Legal Advice
             </h2>
             <p className="text-white/65 leading-8">
-              A company built an intelligent search system over legal and regulatory documents. The system was effective — until regulations changed and the knowledge base wasn&apos;t updated. For months, the system confidently answered team questions based on superseded legislation. There was no mechanism to track document &ldquo;validity.&rdquo;
+              A company built an intelligent search system over legal and regulatory documents. The system was effective  until regulations changed and the knowledge base wasn&apos;t updated. For months, the system confidently answered team questions based on superseded legislation. There was no mechanism to track document &ldquo;validity.&rdquo;
             </p>
             <div className="my-5 rounded-xl border border-red-500/20 bg-red-500/5 p-5">
               <p className="text-sm font-semibold text-red-400">Lesson</p>
               <p className="mt-1 text-sm text-white/60">
-                Linking outputs to source documents with expiry dates isn&apos;t a bonus feature — it&apos;s a requirement for any knowledge system in regulated environments.
+                Linking outputs to source documents with expiry dates isn&apos;t a bonus feature  it&apos;s a requirement for any knowledge system in regulated environments.
               </p>
             </div>
 
@@ -91,7 +91,7 @@ export default function Article1() {
               4. Hospital: Alert System Silenced Due to &ldquo;Noise&rdquo;
             </h2>
             <p className="text-white/65 leading-8">
-              An anomaly detection system produced many false positives early on. The medical team gradually began ignoring alerts. When the system produced a real alert months later, it didn&apos;t receive the required response in time. The problem wasn&apos;t the model — it was the absence of a clear protocol for handling alerts.
+              An anomaly detection system produced many false positives early on. The medical team gradually began ignoring alerts. When the system produced a real alert months later, it didn&apos;t receive the required response in time. The problem wasn&apos;t the model  it was the absence of a clear protocol for handling alerts.
             </p>
             <div className="my-5 rounded-xl border border-red-500/20 bg-red-500/5 p-5">
               <p className="text-sm font-semibold text-red-400">Lesson</p>
@@ -104,7 +104,7 @@ export default function Article1() {
               5. Logistics Company: Automated Procurement Decisions Without a Cap
             </h2>
             <p className="text-white/65 leading-8">
-              A procurement automation system issued purchase orders automatically based on inventory signals. During a market fluctuation, the system issued unexpectedly large orders — correct within its internal logic, but outside any human approval framework. The resulting financial commitments took a full quarter to resolve.
+              A procurement automation system issued purchase orders automatically based on inventory signals. During a market fluctuation, the system issued unexpectedly large orders  correct within its internal logic, but outside any human approval framework. The resulting financial commitments took a full quarter to resolve.
             </p>
             <div className="my-5 rounded-xl border border-red-500/20 bg-red-500/5 p-5">
               <p className="text-sm font-semibold text-red-400">Lesson</p>
@@ -120,7 +120,7 @@ export default function Article1() {
               In each of the five cases, the AI was working. The problem was the absence of a clear answer to one question: What happens when it makes a mistake?
             </p>
             <p className="text-white/65 leading-8">
-              Governance doesn&apos;t mean crippling AI or stripping its efficiency. It means building a clear framework around when it acts, when it&apos;s reviewed, and how it&apos;s documented — so that when errors occur, they are contained, addressable, and learnable.
+              Governance doesn&apos;t mean crippling AI or stripping its efficiency. It means building a clear framework around when it acts, when it&apos;s reviewed, and how it&apos;s documented  so that when errors occur, they are contained, addressable, and learnable.
             </p>
             <p className="text-white/65 leading-8">
               AI without governance isn&apos;t just dangerous. It&apos;s institutionally unsustainable.

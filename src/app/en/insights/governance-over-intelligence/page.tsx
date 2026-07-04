@@ -28,7 +28,7 @@ export default function Article3() {
               <span className="text-[10px] text-white/30">7 min read</span>
             </div>
             <h1 className="mt-4 text-3xl font-black leading-[1.1] tracking-tight text-white sm:text-4xl">
-              Why Governance Matters More Than Intelligence — The Equation Most AI Teams Miss
+              Why Governance Matters More Than Intelligence  The Equation Most AI Teams Miss
             </h1>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function Article3() {
               A 95% accurate model in a test environment + a production environment without governance = high institutional risk. An 85% accurate model + a strict governance framework = an institutionally trustworthy system.
             </p>
             <p className="text-white/65 leading-8">
-              Governance doesn&apos;t compensate for a weak model — but it makes a strong model safely investable. Without it, that same strength becomes a source of risk.
+              Governance doesn&apos;t compensate for a weak model  but it makes a strong model safely investable. Without it, that same strength becomes a source of risk.
             </p>
 
             <h2 className="mt-10 text-2xl font-black text-white">
@@ -61,7 +61,7 @@ export default function Article3() {
             <div className="my-6 space-y-4">
               <div className="rounded-xl border border-aqliya-cyan/20 bg-aqliya-cyan/5 p-5">
                 <p className="font-bold text-white">
-                  &ldquo;Show me the last critical decision the system made — with the full justification record.&rdquo;
+                  &ldquo;Show me the last critical decision the system made  with the full justification record.&rdquo;
                 </p>
                 <p className="mt-2 text-sm text-white/55">
                   If no one can answer in two minutes, there is no governance.
@@ -69,7 +69,7 @@ export default function Article3() {
               </div>
               <div className="rounded-xl border border-aqliya-cyan/20 bg-aqliya-cyan/5 p-5">
                 <p className="font-bold text-white">
-                  &ldquo;What happens if the system makes a mistake in a critical context — who knows, how is it detected, and what is the correction path?&rdquo;
+                  &ldquo;What happens if the system makes a mistake in a critical context  who knows, how is it detected, and what is the correction path?&rdquo;
                 </p>
                 <p className="mt-2 text-sm text-white/55">
                   If the answer isn&apos;t documented, there is no real governance architecture.
@@ -78,16 +78,16 @@ export default function Article3() {
             </div>
 
             <h2 className="mt-10 text-2xl font-black text-white">
-              Governance Isn&apos;t a Barrier to Intelligence — It&apos;s What Makes It Institutional
+              Governance Isn&apos;t a Barrier to Intelligence  It&apos;s What Makes It Institutional
             </h2>
             <p className="text-white/65 leading-8">
-              Many technical teams see governance as a constraint — extra procedures that slow productivity. This view is fundamentally wrong.
+              Many technical teams see governance as a constraint  extra procedures that slow productivity. This view is fundamentally wrong.
             </p>
             <p className="text-white/65 leading-8">
-              Governance is what gives the system its institutional legitimacy. Without it, AI remains a &ldquo;technical experiment&rdquo; — no matter how accurate — never trusted enough to delegate consequential decisions to it.
+              Governance is what gives the system its institutional legitimacy. Without it, AI remains a &ldquo;technical experiment&rdquo;  no matter how accurate  never trusted enough to delegate consequential decisions to it.
             </p>
             <p className="text-white/65 leading-8">
-              The goal isn&apos;t restricted AI. The goal is AI that can be defended — before the board, the regulator, the client, and the court.
+              The goal isn&apos;t restricted AI. The goal is AI that can be defended  before the board, the regulator, the client, and the court.
             </p>
 
             <h2 className="mt-10 text-2xl font-black text-white">

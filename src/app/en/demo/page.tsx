@@ -10,14 +10,14 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  "Upload trial balance — balance check in seconds",
-  "Account mapping — AI suggests, you approve",
-  "Financial statements — every number linked to source",
-  "Evidence manifest — gaps surfaced before sign-off",
-  "Findings workflow — create → assign → review → close",
-  "Live audit trail — 18+ event types, immutable log",
-  "Release gates — export blocked until conditions met",
-  "Engagement pack — deliverable bundle with audit record",
+  "Upload trial balance  balance check in seconds",
+  "Account mapping  AI suggests, you approve",
+  "Financial statements  every number linked to source",
+  "Evidence manifest  gaps surfaced before sign-off",
+  "Findings workflow  create → assign → review → close",
+  "Live audit trail  18+ event types, immutable log",
+  "Release gates  export blocked until conditions met",
+  "Engagement pack  deliverable bundle with audit record",
 ];
 
 export default function EnglishDemoPage() {
@@ -26,7 +26,7 @@ export default function EnglishDemoPage() {
       <section className="hero-gradient py-20">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h1 className="text-4xl font-black text-white sm:text-5xl">
-            See the workflow — don&apos;t just read about it
+            See the workflow  don&apos;t just read about it
           </h1>
           <p className="mt-6 text-lg text-slate-300">
             Sanitized data only. No account required. ~10 minutes end-to-end.
@@ -53,7 +53,7 @@ export default function EnglishDemoPage() {
           ))}
         </ul>
         <p className="mt-8 text-sm text-slate-400">
-          AI assists. Humans decide. Evidence governs — enforced at every step.
+          AI assists. Humans decide. Evidence governs  enforced at every step.
         </p>
       </section>
     </div>

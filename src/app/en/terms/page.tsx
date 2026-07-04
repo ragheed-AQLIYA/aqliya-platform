@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Terms of Service | AQLIYA",
   description:
-    "Institutional terms of service for the AQLIYA platform — covering mandatory AI limitations, human approval requirements, and institutional use responsibilities.",
+    "Institutional terms of service for the AQLIYA platform  covering mandatory AI limitations, human approval requirements, and institutional use responsibilities.",
 };
 
 const termsSections = [
@@ -22,18 +22,18 @@ const termsSections = [
   },
   {
     id: "ai-limitations",
-    title: "AI Limitations — Mandatory",
+    title: "AI Limitations  Mandatory",
     highlight: true,
     items: [
       {
-        label: "AI is a Decision Support Tool — Not a Decision Maker",
+        label: "AI is a Decision Support Tool  Not a Decision Maker",
         detail:
           "All AI outputs within AQLIYA are recommendations and supporting analyses. The final decision on any institutional matter rests with an authorized human within your organization. The platform is architecturally designed to enforce this principle.",
       },
       {
         label: "No Automatic Approval for Any Critical Action",
         detail:
-          "Any action with institutional impact — exporting a report, closing a case, issuing an official recommendation — requires explicit human approval within the platform. This requirement cannot be disabled through normal settings.",
+          "Any action with institutional impact  exporting a report, closing a case, issuing an official recommendation  requires explicit human approval within the platform. This requirement cannot be disabled through normal settings.",
       },
       {
         label: "No Full Reliance on AI Outputs",
@@ -43,7 +43,7 @@ const termsSections = [
       {
         label: "AI Accuracy Limitations",
         detail:
-          "AI models make errors. AQLIYA links every output to its sources to enable verification, but we do not guarantee 100% accuracy in any analysis. Human review is mandatory — not optional.",
+          "AI models make errors. AQLIYA links every output to its sources to enable verification, but we do not guarantee 100% accuracy in any analysis. Human review is mandatory  not optional.",
       },
     ],
   },
@@ -118,11 +118,11 @@ export default function TermsPage() {
             </h1>
             <p className="mt-5 text-base leading-8 text-white/62">
               No vague legal language to hide weaknesses. Our terms are written
-              to be understood by both your legal and technical teams — with
+              to be understood by both your legal and technical teams  with
               explicit AI limitations that protect your organization.
             </p>
             <p className="mt-4 text-xs text-white/35">
-              Last updated: May 2025 — These terms are exclusively for
+              Last updated: May 2025  These terms are exclusively for
               institutional use
             </p>
           </div>
@@ -136,12 +136,12 @@ export default function TermsPage() {
             <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-rose-400" />
             <div>
               <p className="font-bold text-white">
-                AI Limitations — A Non-Negotiable Principle
+                AI Limitations  A Non-Negotiable Principle
               </p>
               <p className="mt-1 text-sm text-white/60">
-                AI within AQLIYA is a decision support tool — not a decision
+                AI within AQLIYA is a decision support tool  not a decision
                 maker. The final decision always rests with an authorized human
-                in your organization. This is not a settings option — it is an
+                in your organization. This is not a settings option  it is an
                 architectural constraint.
               </p>
             </div>

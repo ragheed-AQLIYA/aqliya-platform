@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Office AI Assistant — Shared Institutional Assistant | AQLIYA",
+  title: "Office AI Assistant  Shared Institutional Assistant | AQLIYA",
   description: "A governed shared assistant for document tasks, report drafting, and meeting notes across the AQLIYA platform.",
 };
 
@@ -20,7 +20,7 @@ export default function OfficeAIEnPage() {
           <h1 className="mt-6 text-4xl font-black text-white sm:text-5xl">Office AI Assistant</h1>
           <p className="mt-4 text-lg text-white/70">{s.capabilityNote}</p>
           <p className="mt-6 text-white/60">
-            Draft reports, summarize documents, analyze spreadsheets, outline presentations, capture meeting notes — with governance and human review.
+            Draft reports, summarize documents, analyze spreadsheets, outline presentations, capture meeting notes  with governance and human review.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Link href="/en/products">

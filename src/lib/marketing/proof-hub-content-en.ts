@@ -1,5 +1,5 @@
 /**
- * @deprecated Import from copy-proof-en.ts — kept for backward compatibility (R6)
+ * @deprecated Import from copy-proof-en.ts  kept for backward compatibility (R6)
  */
 export {
   executiveBriefLayersEn,

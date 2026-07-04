@@ -10,7 +10,7 @@ import {
 export const metadata: Metadata = {
   title: "أنظمة التشغيل | AQLIYA",
   description:
-    "أنظمة تشغيل مؤسسية — AuditOS، DecisionOS، LocalContentOS — على نواة حوكمة واحدة.",
+    "أنظمة تشغيل مؤسسية  AuditOS، DecisionOS، LocalContentOS  على نواة حوكمة واحدة.",
 };
 
 function ProductCard({
@@ -58,7 +58,7 @@ export default function ProductsPage() {
       <MarketingPageShell
         eyebrow="Operating Systems"
         title="أنظمة تشغيل مؤسسية على نواة واحدة"
-        subtitle="كل نظام يعالج مساراً محدداً — تدقيق، قرار، محتوى محلي — داخل نفس الحوكمة والأدلة والاعتماد البشري."
+        subtitle="كل نظام يعالج مساراً محدداً  تدقيق، قرار، محتوى محلي  داخل نفس الحوكمة والأدلة والاعتماد البشري."
         actions={
           <Link href="/start" className="btn-primary h-11 px-8 text-sm">
             من أين تبدأ؟
@@ -83,7 +83,7 @@ export default function ProductsPage() {
             خطوط خارطة المنصة
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
-            قدرات مشتركة أو نماذج أولية — تُناقش ضمن نطاق التفعيل المؤسسي.
+            قدرات مشتركة أو نماذج أولية  تُناقش ضمن نطاق التفعيل المؤسسي.
           </p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {roadmapProductCards.map((card) => (

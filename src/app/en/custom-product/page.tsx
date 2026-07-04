@@ -41,7 +41,7 @@ export default function EnCustomProductPage() {
             </h1>
             <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-white/62 sm:text-lg">
               This page is for institutions that don&apos;t just need another
-              tool — they need a governed operational path built around their
+              tool  they need a governed operational path built around their
               actual reality: data, roles, permissions, review, and outputs.
             </p>
           </div>
@@ -110,7 +110,7 @@ export default function EnCustomProductPage() {
                   line or a custom design.
                 </p>
                 <p>
-                  3. We follow up with a clear starting point — not a generic
+                  3. We follow up with a clear starting point  not a generic
                   reply.
                 </p>
               </div>

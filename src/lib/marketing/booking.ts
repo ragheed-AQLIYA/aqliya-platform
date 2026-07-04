@@ -1,4 +1,4 @@
-/** Diagnostic booking — set NEXT_PUBLIC_BOOKING_URL for Cal.com / Calendly. */
+/** Diagnostic booking  set NEXT_PUBLIC_BOOKING_URL for Cal.com / Calendly. */
 export const BOOKING_EMAIL = "ragheed@aqliya.com";
 
 export function getBookingUrl(locale: "ar" | "en" = "ar"): string {

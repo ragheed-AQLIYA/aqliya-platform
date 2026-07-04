@@ -6,9 +6,9 @@ import {
 } from "@/components/enterprise";
 
 export const metadata: Metadata = {
-  title: "Office AI Assistant — مساعد مؤسسي ذكي | AQLIYA",
+  title: "Office AI Assistant  مساعد مؤسسي ذكي | AQLIYA",
   description:
-    "Office AI Assistant هو المساعد المؤسسي الذكي المشترك عبر جميع أنظمة عقلية — يقدّم مهام ذكية ضمن بيئة محكومة مع مراجعة بشرية وأدلة وسجل تدقيقي كامل.",
+    "Office AI Assistant هو المساعد المؤسسي الذكي المشترك عبر جميع أنظمة عقلية  يقدّم مهام ذكية ضمن بيئة محكومة مع مراجعة بشرية وأدلة وسجل تدقيقي كامل.",
 };
 
 export default function OfficeAIProductPage() {
@@ -30,15 +30,15 @@ export default function OfficeAIProductPage() {
             </span>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/78">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              قدرة مشتركة — متكاملة في المنصة
+              قدرة مشتركة  متكاملة في المنصة
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              مساعد مؤسسي ذكي — ليس منتجاً مستقلاً، بل قدرة مشتركة فوق منصة عقلية
+              مساعد مؤسسي ذكي  ليس منتجاً مستقلاً، بل قدرة مشتركة فوق منصة عقلية
             </h1>
             <p className="mt-5 text-lg leading-8 text-white/62">
               Office AI Assistant هو تطبيق ذكي مشترك يعمل فوق AQLIYA Intelligence
-              Core، متاح داخل جميع أنظمة عقلية. يقدّم مهام مساعدة ذكية — تلخيص،
-              اقتراح، تحليل — ضمن بيئة محكومة بالصلاحيات وسجل التدقيق والمراجعة
+              Core، متاح داخل جميع أنظمة عقلية. يقدّم مهام مساعدة ذكية  تلخيص،
+              اقتراح، تحليل  ضمن بيئة محكومة بالصلاحيات وسجل التدقيق والمراجعة
               البشرية.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -55,9 +55,9 @@ export default function OfficeAIProductPage() {
 
       <section className="mx-auto max-w-7xl px-6">
         <SectionEyebrow
-          label="قدرة مشتركة — ليست منتجاً مستقلاً"
+          label="قدرة مشتركة  ليست منتجاً مستقلاً"
           title="مساعد واحد يعمل عبر جميع أنظمة عقلية"
-          description="Office AI Assistant ليس تطبيقاً منفصلاً بذاته. هو قدرة ذكية مشتركة مدمجة في كل نظام — كل قرار أو مستند أو سير عمل يمكنه الاستعانة بالمساعد ضمن نفس بيئة الحوكمة."
+          description="Office AI Assistant ليس تطبيقاً منفصلاً بذاته. هو قدرة ذكية مشتركة مدمجة في كل نظام  كل قرار أو مستند أو سير عمل يمكنه الاستعانة بالمساعد ضمن نفس بيئة الحوكمة."
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
           <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
@@ -66,7 +66,7 @@ export default function OfficeAIProductPage() {
             </h3>
             <p className="mt-3 text-sm leading-6 text-white/62">
               تلخيص مستندات، اقتراح صياغات، تحليل بيانات، إعداد مسودات تقارير،
-              وتصنيف محتوى — كل مهمة ضمن سياق مسموح وبصلاحية محددة.
+              وتصنيف محتوى  كل مهمة ضمن سياق مسموح وبصلاحية محددة.
             </p>
           </div>
           <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
@@ -74,8 +74,8 @@ export default function OfficeAIProductPage() {
               مستجيب للسياق
             </h3>
             <p className="mt-3 text-sm leading-6 text-white/62">
-              المساعد يعرف السياق الذي يعمل فيه — أي نظام، أي صلاحية، أي مرحلة من
-              سير العمل — ويقدّم مخرجاته ضمن حدود ذلك السياق.
+              المساعد يعرف السياق الذي يعمل فيه  أي نظام، أي صلاحية، أي مرحلة من
+              سير العمل  ويقدّم مخرجاته ضمن حدود ذلك السياق.
             </p>
           </div>
           <div className="rounded-[16px] border border-white/10 bg-white/5 p-6">
@@ -129,7 +129,7 @@ export default function OfficeAIProductPage() {
               إفصاح الذكاء
             </h3>
             <p className="mt-3 text-sm leading-6 text-white/62">
-              كل مخرج يُوسَم بأنه &quot;مساعد — مقترح&quot; وليس حقيقة نهائية أو قرار
+              كل مخرج يُوسَم بأنه &quot;مساعد  مقترح&quot; وليس حقيقة نهائية أو قرار
               معتمد.
             </p>
           </div>
@@ -140,7 +140,7 @@ export default function OfficeAIProductPage() {
         <SectionEyebrow
           label="أين يتوفر"
           title="متاح داخل كل نظام من أنظمة عقلية"
-          description="Office AI Assistant ليس تطبيقاً منفصلاً بل قدرة مدمجة — يظهر داخل كل نظام عند الحاجة إلى مساعدة ذكية ضمن سياق العمل."
+          description="Office AI Assistant ليس تطبيقاً منفصلاً بل قدرة مدمجة  يظهر داخل كل نظام عند الحاجة إلى مساعدة ذكية ضمن سياق العمل."
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/10 p-6">

@@ -1,5 +1,5 @@
 /**
- * English buyer journeys — plain language (R6)
+ * English buyer journeys  plain language (R6)
  */
 
 import type { BuyerJourney, BuyerJourneyStep } from "./buyer-journeys";
@@ -22,7 +22,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     id: "cfo",
     label: "Chief Financial Officer",
     subtitle: "Finance · Internal audit",
-    hook: "From trial balance to a ready file — every figure opens its source.",
+    hook: "From trial balance to a ready file  every figure opens its source.",
     steps: [
       { label: "AuditOS", href: "/en/products/audit", time: "Read" },
       { label: "Sample outputs", href: "/en/proof#evidence-samples", time: "Read" },
@@ -48,7 +48,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     id: "cio",
     label: "Technology leadership",
     subtitle: "IT · Information security",
-    hook: "Managed cloud is ready today. Private or air-gapped — we discuss honestly if you need it.",
+    hook: "Managed cloud is ready today. Private or air-gapped  we discuss honestly if you need it.",
     steps: [
       { label: "Security", href: "/en/security", time: "Read" },
       { label: "Deployment options", href: "/en/deployment", time: "Read" },
@@ -61,7 +61,7 @@ export const buyerJourneysEn: BuyerJourney[] = [
     id: "audit",
     label: "Audit partner",
     subtitle: "Audit firms · Engagements",
-    hook: "A complete engagement file — unchanged after partner sign-off.",
+    hook: "A complete engagement file  unchanged after partner sign-off.",
     steps: [
       { label: "AuditOS", href: "/en/products/audit", time: "Read" },
       { label: "AuditOS demo", href: "/auditos", time: "Try it" },

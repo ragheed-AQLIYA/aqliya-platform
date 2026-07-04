@@ -10,7 +10,7 @@ import {
 export const metadata: Metadata = {
   title: "الأمن المؤسسي | AQLIYA",
   description:
-    "RBAC، سجل تدقيقي، تتبع الأدلة، عزل المستأجرين، وموافقة بشرية — حوكمة مدمجة في البنية.",
+    "RBAC، سجل تدقيقي، تتبع الأدلة، عزل المستأجرين، وموافقة بشرية  حوكمة مدمجة في البنية.",
 };
 
 export default function SecurityPage() {

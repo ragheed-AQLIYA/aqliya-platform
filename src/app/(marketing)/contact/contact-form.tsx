@@ -10,7 +10,7 @@ const productOptions = [
   "LocalContentOS",
   "DecisionOS",
   "Office AI Assistant",
-  "غير متأكد — أحتاج توجيهًا",
+  "غير متأكد  أحتاج توجيهًا",
 ];
 
 const dataOptions = [
@@ -18,7 +18,7 @@ const dataOptions = [
   "بيانات محتوى محلي (موردين، عقود)",
   "بيانات قرارات مؤسسية",
   "بيانات معرفة داخلية ووثائق",
-  "غير محدد — سأناقشه مع الفريق",
+  "غير محدد  سأناقشه مع الفريق",
 ];
 
 type Props = {
@@ -71,10 +71,10 @@ export function ContactForm({ locale = "ar" }: Props) {
           email: form.email,
           organization: form.organization,
           role: form.role,
-          productInterest: form.product || "غير متأكد — أحتاج توجيهًا",
+          productInterest: form.product || "غير متأكد  أحتاج توجيهًا",
           interest: form.interest,
           useCase: form.message,
-          dataType: form.dataType || "غير محدد — سأناقشه مع الفريق",
+          dataType: form.dataType || "غير محدد  سأناقشه مع الفريق",
           currentWorkflow: form.currentWorkflow,
           goal: form.goal || copy.form.defaultGoal,
         }),
@@ -214,7 +214,7 @@ export function ContactForm({ locale = "ar" }: Props) {
 
               <div>
                 <label htmlFor="message" className="mb-1 block text-sm font-medium text-white">
-                  {isAr ? "رسالة مختصرة — ما الذي تريد تقييمه؟" : "Short message — what do you want to evaluate?"}
+                  {isAr ? "رسالة مختصرة  ما الذي تريد تقييمه؟" : "Short message  what do you want to evaluate?"}
                 </label>
                 <textarea
                   id="message"
@@ -225,8 +225,8 @@ export function ContactForm({ locale = "ar" }: Props) {
                   className="w-full rounded-lg border border-white/10 bg-white/[0.06] px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-aqliya-cyan/50"
                   placeholder={
                     isAr
-                      ? "مثال: مكتب مراجعة — تدقيق IFRS على ارتباط واحد..."
-                      : "Example: audit firm — IFRS review on one engagement..."
+                      ? "مثال: مكتب مراجعة  تدقيق IFRS على ارتباط واحد..."
+                      : "Example: audit firm  IFRS review on one engagement..."
                   }
                 />
               </div>
@@ -270,7 +270,7 @@ export function ContactForm({ locale = "ar" }: Props) {
                       className="w-full rounded-lg border border-white/10 bg-white/[0.06] px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-aqliya-cyan/50"
                     >
                       <option value="" className="bg-gray-900">
-                        {isAr ? "غير متأكد — أحتاج توجيهًا" : "Not sure — need guidance"}
+                        {isAr ? "غير متأكد  أحتاج توجيهًا" : "Not sure  need guidance"}
                       </option>
                       {productOptions.map((opt) => (
                         <option key={opt} value={opt} className="bg-gray-900">

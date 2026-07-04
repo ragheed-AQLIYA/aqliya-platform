@@ -16,7 +16,7 @@ const useCases = [
     problem:
       "Audit teams spend 60–70% of time gathering information from scattered documents.",
     outcome:
-      "Data collection cycles shrink from weeks to hours — human reviewer remains final decision owner.",
+      "Data collection cycles shrink from weeks to hours  human reviewer remains final decision owner.",
     href: "/en/products/audit",
   },
   {
@@ -26,7 +26,7 @@ const useCases = [
     problem:
       "Critical decisions happen in meetings with no documented context or alternatives.",
     outcome:
-      "Documented justification for any decision before board or regulator — in clicks, not hours of search.",
+      "Documented justification for any decision before board or regulator  in clicks, not hours of search.",
     href: "/en/products/decision",
   },
   {
@@ -60,7 +60,7 @@ export default function EnglishUseCasesPage() {
             Where does AQLIYA make a real difference?
           </h1>
           <p className="mt-6 text-lg text-white/60">
-            Not a feature list — operational paths on one platform. Problem,
+            Not a feature list  operational paths on one platform. Problem,
             traditional state, and governed AQLIYA path.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">

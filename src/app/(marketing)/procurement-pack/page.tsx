@@ -22,7 +22,7 @@ export default function ProcurementPackPage() {
             حزمة التقييم للمشتريات
           </h1>
           <p className="mt-6 text-lg leading-8 text-white/60">
-            كل ما يحتاجه فريق المشتريات، الأمن، والتقنية لتقييم عقلية — في
+            كل ما يحتاجه فريق المشتريات، الأمن، والتقنية لتقييم عقلية  في
             مكان واحد، بصدق كامل حول الجاهزية والحدود.
           </p>
           <p className="mt-4 text-sm text-white/45">

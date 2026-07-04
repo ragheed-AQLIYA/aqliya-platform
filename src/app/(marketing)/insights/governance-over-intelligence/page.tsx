@@ -29,7 +29,7 @@ export default function Article3() {
               <span className="text-[10px] text-white/30">7 دقائق قراءة</span>
             </div>
             <h1 className="mt-4 text-3xl font-black leading-[1.1] tracking-tight text-white sm:text-4xl">
-              لماذا الحوكمة أهم من الذكاء — المعادلة التي تُغفلها معظم فرق الذكاء الاصطناعي
+              لماذا الحوكمة أهم من الذكاء  المعادلة التي تُغفلها معظم فرق الذكاء الاصطناعي
             </h1>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function Article3() {
               للاعتماد عليه مؤسسياً.
             </p>
             <p className="text-white/65 leading-8">
-              الحوكمة لا تعوّض ضعف النموذج — لكنها تجعل قوة النموذج قابلة
+              الحوكمة لا تعوّض ضعف النموذج  لكنها تجعل قوة النموذج قابلة
               للاستثمار بأمان. بدونها، القوة نفسها تصبح مصدر خطر.
             </p>
 
@@ -67,7 +67,7 @@ export default function Article3() {
             <div className="my-6 space-y-4">
               <div className="rounded-xl border border-aqliya-cyan/20 bg-aqliya-cyan/5 p-5">
                 <p className="font-bold text-white">
-                  &ldquo;اعرض لي آخر قرار حرج اتخذه النظام — مع سجل التبرير الكامل.&rdquo;
+                  &ldquo;اعرض لي آخر قرار حرج اتخذه النظام  مع سجل التبرير الكامل.&rdquo;
                 </p>
                 <p className="mt-2 text-sm text-white/55">
                   إذا لم يستطع أحد الإجابة بدقيقتين، لا توجد حوكمة.
@@ -75,7 +75,7 @@ export default function Article3() {
               </div>
               <div className="rounded-xl border border-aqliya-cyan/20 bg-aqliya-cyan/5 p-5">
                 <p className="font-bold text-white">
-                  &ldquo;ماذا يحدث إذا أخطأ النظام في سياق حرج — من يعرف، كيف يُكتشف، وما مسار التصحيح؟&rdquo;
+                  &ldquo;ماذا يحدث إذا أخطأ النظام في سياق حرج  من يعرف، كيف يُكتشف، وما مسار التصحيح؟&rdquo;
                 </p>
                 <p className="mt-2 text-sm text-white/55">
                   إذا لم تكن الإجابة موثقة، لا توجد بنية حوكمة حقيقية.
@@ -84,20 +84,20 @@ export default function Article3() {
             </div>
 
             <h2 className="mt-10 text-2xl font-black text-white">
-              الحوكمة ليست عائقاً أمام الذكاء — هي ما يجعله مؤسسياً
+              الحوكمة ليست عائقاً أمام الذكاء  هي ما يجعله مؤسسياً
             </h2>
             <p className="text-white/65 leading-8">
-              كثير من الفرق التقنية ترى الحوكمة على أنها قيد — إجراءات إضافية
+              كثير من الفرق التقنية ترى الحوكمة على أنها قيد  إجراءات إضافية
               تُبطئ الإنتاجية. هذه النظرة خاطئة جذرياً.
             </p>
             <p className="text-white/65 leading-8">
               الحوكمة هي ما يمنح النظام شرعيته المؤسسية. بدونها، الذكاء
-              الاصطناعي يظل &ldquo;تجربة تقنية&rdquo; — مهما كانت دقته — ولا يُثق به
+              الاصطناعي يظل &ldquo;تجربة تقنية&rdquo;  مهما كانت دقته  ولا يُثق به
               بما يكفي لتفويض قرارات ذات أثر حقيقي إليه.
             </p>
             <p className="text-white/65 leading-8">
               الهدف ليس ذكاء اصطناعي مقيّد. الهدف ذكاء اصطناعي يمكن الدفاع
-              عنه — أمام مجلس الإدارة، الجهة التنظيمية، العميل، والمحكمة.
+              عنه  أمام مجلس الإدارة، الجهة التنظيمية، العميل، والمحكمة.
             </p>
 
             <h2 className="mt-10 text-2xl font-black text-white">

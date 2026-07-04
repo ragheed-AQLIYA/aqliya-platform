@@ -5,7 +5,7 @@ import { deploymentModelsAr } from "@/lib/marketing/deployment-page-content";
 export const metadata: Metadata = {
   title: "بيئات النشر | AQLIYA",
   description:
-    "سحابة مُدارة (متاح)، خوادم خاصة (قيد التخطيط)، بيئة معزولة (استراتيجي) — إقامة بيانات في المملكة.",
+    "سحابة مُدارة (متاح)، خوادم خاصة (قيد التخطيط)، بيئة معزولة (استراتيجي)  إقامة بيانات في المملكة.",
 };
 
 export default function DeploymentPage() {

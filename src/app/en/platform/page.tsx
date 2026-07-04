@@ -11,7 +11,7 @@ import {
 export const metadata: Metadata = {
   title: "Platform | AQLIYA Intelligence Core",
   description:
-    "Shared governance core for institutional operating systems — intelligence coordination, workflow, evidence, RBAC, and audit trail in one foundation.",
+    "Shared governance core for institutional operating systems  intelligence coordination, workflow, evidence, RBAC, and audit trail in one foundation.",
 };
 
 const deploymentModels = [
@@ -35,7 +35,7 @@ const deploymentModels = [
     status: "planned",
     statusLabel: "Private deployment",
     description:
-      "Deploy inside your infrastructure with local data control — for institutions with sovereignty and security requirements.",
+      "Deploy inside your infrastructure with local data control  for institutions with sovereignty and security requirements.",
     points: [
       "Data stays inside your environment",
       "Full control over databases and storage",
@@ -49,7 +49,7 @@ const deploymentModels = [
     status: "strategic",
     statusLabel: "Strategic",
     description:
-      "Fully isolated deployment with no internet connectivity and local processing — for maximum-security environments.",
+      "Fully isolated deployment with no internet connectivity and local processing  for maximum-security environments.",
     points: [
       "Processing entirely inside the internal network",
       "No connection to external services",
@@ -64,7 +64,7 @@ const operatingSystems = [
     useCase: "Audit engagement management",
     system: "AuditOS",
     description:
-      "From client acceptance to report — a complete governed audit path.",
+      "From client acceptance to report  a complete governed audit path.",
     statusLabel: publicOsStatusEn.auditOS.label,
     capabilityNote: publicOsStatusEn.auditOS.capabilityNote,
     href: "/en/products/audit",
@@ -73,7 +73,7 @@ const operatingSystems = [
     useCase: "Institutional decision documentation",
     system: "DecisionOS",
     description:
-      "Alternatives, risks, evidence, recommendation, and approval — one path.",
+      "Alternatives, risks, evidence, recommendation, and approval  one path.",
     statusLabel: publicOsStatusEn.decisionOS.label,
     capabilityNote: publicOsStatusEn.decisionOS.capabilityNote,
     href: "/en/products/decision",
@@ -82,7 +82,7 @@ const operatingSystems = [
     useCase: "Local content programs",
     system: "LocalContentOS",
     description:
-      "Suppliers, spend, contracts, compliance, and reports — for the Saudi market.",
+      "Suppliers, spend, contracts, compliance, and reports  for the Saudi market.",
     statusLabel: publicOsStatusEn.localContentOS.label,
     capabilityNote: publicOsStatusEn.localContentOS.capabilityNote,
     href: "/en/products/local-content",
@@ -93,7 +93,7 @@ const platformComponents = [
   {
     title: "AQLIYA Intelligence Core",
     body: "Shared AI coordination layer across all operating systems. Every call is bounded by permission and context; every output passes human review before use. No call without traceability, no output without audit.",
-    boundary: "AI suggests and assists — it does not decide or approve",
+    boundary: "AI suggests and assists  it does not decide or approve",
   },
   {
     title: "Workflow Engine",
@@ -112,13 +112,13 @@ const platformComponents = [
   },
   {
     title: "Evidence Graph",
-    body: "Builds and maintains linked evidence chains: every output — report, decision, note — traces back to original sources: files, records, data, or comments. No output without a complete evidence chain.",
+    body: "Builds and maintains linked evidence chains: every output  report, decision, note  traces back to original sources: files, records, data, or comments. No output without a complete evidence chain.",
     boundary: "No output without a complete evidence chain",
   },
   {
     title: "Audit Trail",
     body: "Every event, change, and decision is recorded in an immutable log: identity, time, context, and before/after values. Full accountability and traceability for reviewers.",
-    boundary: "Non-deletable — including by administrators",
+    boundary: "Non-deletable  including by administrators",
   },
 ];
 
@@ -139,7 +139,7 @@ export default function EnglishPlatformPage() {
             <p className="mt-6 max-w-3xl text-base leading-8 text-white/62 sm:text-lg">
               AQLIYA Intelligence Core is not just technical infrastructure. It is
               a governed foundation so every operating system inherits bounded
-              intelligence, workflow, permissions, evidence, and audit trail —
+              intelligence, workflow, permissions, evidence, and audit trail 
               without rebuilding from scratch.
             </p>
             <div className="mt-7 flex flex-wrap gap-4">
@@ -160,7 +160,7 @@ export default function EnglishPlatformPage() {
           <SectionEyebrow
             label="Architecture map"
             title="From foundation to operating systems"
-            description="AQLIYA Intelligence Core sits between infrastructure and institutional operating systems — every system reuses the same shared components."
+            description="AQLIYA Intelligence Core sits between infrastructure and institutional operating systems  every system reuses the same shared components."
           />
           <div className="mt-12">
             <div className="gradient-border rounded-[24px] bg-white/[0.01] p-4 shadow-sm">
@@ -173,7 +173,7 @@ export default function EnglishPlatformPage() {
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <SectionEyebrow
           label="Core components"
-          title="Six components — each with a defined role"
+          title="Six components  each with a defined role"
           description="Every platform component has clear boundaries that prevent misuse of permissions and AI, and ensure every action is reviewable and accountable."
         />
         <div className="mt-12 grid gap-4 lg:grid-cols-2">
@@ -212,7 +212,7 @@ export default function EnglishPlatformPage() {
       >
         <SectionEyebrow
           label="Operating systems"
-          title="The platform is applied through operational paths — not separate products"
+          title="The platform is applied through operational paths  not separate products"
           description="Every operating system inherits governance, evidence, workflow, and permissions from the same core."
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
@@ -241,7 +241,7 @@ export default function EnglishPlatformPage() {
           ))}
         </div>
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          Office AI Assistant is a shared capability across the platform — a
+          Office AI Assistant is a shared capability across the platform  a
           governed institutional assistant within permissions and evidence.{" "}
           <Link
             href="/en/products/office-ai"
@@ -251,7 +251,7 @@ export default function EnglishPlatformPage() {
           </Link>
         </p>
         <p className="mt-4 text-center text-xs text-muted-foreground/70">
-          SalesOS and SimulationOS are on the platform roadmap —{" "}
+          SalesOS and SimulationOS are on the platform roadmap {" "}
           <Link
             href="/en/products#roadmap"
             className="text-primary underline underline-offset-4"
@@ -267,7 +267,7 @@ export default function EnglishPlatformPage() {
           <SectionEyebrow
             label="Deployment models"
             title="Deployment defines who controls data and infrastructure"
-            description="Every deployment model keeps the same platform components — the difference is where it runs and how much data sovereignty you retain."
+            description="Every deployment model keeps the same platform components  the difference is where it runs and how much data sovereignty you retain."
           />
           <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {deploymentModels.map((model) => (

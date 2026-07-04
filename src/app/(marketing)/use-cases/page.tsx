@@ -6,7 +6,7 @@ import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/ma
 export const metadata: Metadata = {
   title: "حالات الاستخدام المؤسسية | AQLIYA",
   description:
-    "أربعة مسارات تشغيلية رئيسية: التدقيق، القرارات، المحتوى المحلي، والجاهزية التنظيمية — المشكلة، الوضع التقليدي، ومسار عقلية.",
+    "أربعة مسارات تشغيلية رئيسية: التدقيق، القرارات، المحتوى المحلي، والجاهزية التنظيمية  المشكلة، الوضع التقليدي، ومسار عقلية.",
 };
 
 export default function UseCasesPage() {
@@ -15,7 +15,7 @@ export default function UseCasesPage() {
       <MarketingPageShell
         eyebrow="حالات الاستخدام"
         title="أين يُحدث عقلية فارقاً فعلياً؟"
-        subtitle="أربعة مسارات Tier-1 — ليست قائمة ميزات. كل حالة: مشكلة، وضع تقليدي، ومسار محكوم بأدلة."
+        subtitle="أربعة مسارات Tier-1  ليست قائمة ميزات. كل حالة: مشكلة، وضع تقليدي، ومسار محكوم بأدلة."
         actions={
           <>
             <Link href="/start" className="btn-primary h-11 px-6">

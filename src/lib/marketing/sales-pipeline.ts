@@ -1,4 +1,4 @@
-/** RevOps pipeline stages — aligned with Enterprise Launch Plan. */
+/** RevOps pipeline stages  aligned with Enterprise Launch Plan. */
 export const salesPipelineStages = [
   {
     stage: "Lead",

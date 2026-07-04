@@ -12,13 +12,13 @@ import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnosti
 export const metadata: Metadata = {
   title: "About AQLIYA",
   description:
-    "AQLIYA exists because institutions need intelligence they can trust and hold accountable — not just faster outputs. A governed institutional operating platform.",
+    "AQLIYA exists because institutions need intelligence they can trust and hold accountable  not just faster outputs. A governed institutional operating platform.",
 };
 
 const whyAqliyaExists = [
-  "The problem is not only a lack of AI tools — it is outputs without evidence and paths without accountability.",
+  "The problem is not only a lack of AI tools  it is outputs without evidence and paths without accountability.",
   "Institutions need intelligence that works inside governance, not outside it.",
-  "The real risk is not slow automation — it is decisions that cannot be traced, reviewed, or explained after the fact.",
+  "The real risk is not slow automation  it is decisions that cannot be traced, reviewed, or explained after the fact.",
 ];
 
 const coreItems = [
@@ -35,26 +35,26 @@ const canonicalSystems = canonicalOsKeys.map((key) => ({
   key,
   name: key === "auditOS" ? "AuditOS" : key === "localContentOS" ? "LocalContentOS" : key === "decisionOS" ? "DecisionOS" : "SalesOS",
   desc: key === "auditOS"
-    ? "Audit and financial intelligence — engagement path from source to approval"
+    ? "Audit and financial intelligence  engagement path from source to approval"
     : key === "localContentOS"
-    ? "Local content — suppliers, spend, compliance, and reports"
+    ? "Local content  suppliers, spend, compliance, and reports"
     : key === "decisionOS"
-    ? "Decision governance — context, alternatives, risks, and approvals"
-    : "Commercial memory — qualification, opportunities, institutional follow-up",
+    ? "Decision governance  context, alternatives, risks, and approvals"
+    : "Commercial memory  qualification, opportunities, institutional follow-up",
   status: publicOsStatusEn[key].label,
 }));
 
 const whatAqliyaIs = [
-  "A platform, not a single product — multiple operating lines on one governance core",
-  "Private and governed — runs on your data, inside your environment, under your rules",
-  "Humans own final decisions — AI assists, it does not decide",
-  "Traceable and reviewable — every step documented and linked to evidence and permissions",
-  "Built to scale — activated by institutional scope, from one line to a full path",
-  "Cloud + Private — deployment models for sovereignty and security requirements",
+  "A platform, not a single product  multiple operating lines on one governance core",
+  "Private and governed  runs on your data, inside your environment, under your rules",
+  "Humans own final decisions  AI assists, it does not decide",
+  "Traceable and reviewable  every step documented and linked to evidence and permissions",
+  "Built to scale  activated by institutional scope, from one line to a full path",
+  "Cloud + Private  deployment models for sovereignty and security requirements",
 ];
 
 const operatingBeliefs = [
-  "We do not start from a screen — we start from institutional reality: who decides, who reviews, and what must remain explainable.",
+  "We do not start from a screen  we start from institutional reality: who decides, who reviews, and what must remain explainable.",
   "We do not sell intelligence detached from responsibility. Every output in AQLIYA must reach review and approval.",
   "We do not build a fully separate system for every scope; we build reusable operational capability on one core.",
 ];
@@ -77,7 +77,7 @@ const phases = [
   {
     num: "03",
     title: "Design workflow",
-    desc: "Turn current procedures into a clear path linking input, processing, review, and approval — instead of memory and manual tracking.",
+    desc: "Turn current procedures into a clear path linking input, processing, review, and approval  instead of memory and manual tracking.",
     output: "Governed workflow map",
     participants: "AQLIYA team + stakeholders",
   },
@@ -131,7 +131,7 @@ export default function EnglishAboutPage() {
             </span>
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
               AQLIYA exists because institutions need more than faster
-              intelligence — they need intelligence they can trust
+              intelligence  they need intelligence they can trust
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-white/68 sm:text-lg">
               Institutional decisions are not enough when they are merely correct.
@@ -168,7 +168,7 @@ export default function EnglishAboutPage() {
           </div>
           <p className="mt-8 text-base leading-8 text-muted-foreground">
             AQLIYA is an institutional operating layer: it connects intelligence
-            to data, workflow, evidence, and human review — so the question after
+            to data, workflow, evidence, and human review  so the question after
             an output is not &ldquo;who said this?&rdquo; but &ldquo;what led us
             here, who approved it, and on what basis?&rdquo;
           </p>
@@ -229,7 +229,7 @@ export default function EnglishAboutPage() {
       <section className="mx-auto max-w-7xl border-t px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="text-3xl font-black text-foreground">
-            Operating lines are real operational domains — not marketing sections
+            Operating lines are real operational domains  not marketing sections
           </h2>
           <p className="mt-4 text-base leading-8 text-muted-foreground">
             Each line under AQLIYA addresses a recurring institutional pattern:
@@ -258,7 +258,7 @@ export default function EnglishAboutPage() {
               What makes AQLIYA different
             </h2>
             <p className="mt-4 text-base leading-8 text-white/58">
-              The difference is not using AI itself — it is how AI enters the
+              The difference is not using AI itself  it is how AI enters the
               institution: as a governed assistant, not as a replacement for
               human judgment or governance paths.
             </p>
@@ -338,7 +338,7 @@ export default function EnglishAboutPage() {
             The people behind AQLIYA
           </h2>
           <p className="mt-4 text-base leading-8 text-muted-foreground">
-            AQLIYA is not built with code alone — it is built by people who
+            AQLIYA is not built with code alone  it is built by people who
             believe institutional decisions deserve to be documented and preserved.
           </p>
         </div>
@@ -351,7 +351,7 @@ export default function EnglishAboutPage() {
               Ragheed Al-Hakeem
             </h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Founder — building AQLIYA as an institutional operating platform
+              Founder  building AQLIYA as an institutional operating platform
               that unites intelligence, governance, and evidence in one path.
             </p>
             <a
@@ -382,7 +382,7 @@ export default function EnglishAboutPage() {
             One Core. Multiple Systems.
           </p>
           <h2 className="mt-4 text-3xl font-black text-foreground">
-            Start from your institutional scope — not a random tool
+            Start from your institutional scope  not a random tool
           </h2>
           <p className="mt-4 text-base leading-8 text-muted-foreground">
             If you have an operational problem that needs clarity, traceability,

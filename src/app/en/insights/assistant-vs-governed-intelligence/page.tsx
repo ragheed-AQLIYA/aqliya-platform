@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Smart Assistant vs Governed Institutional Intelligence | AQLIYA",
   description:
-    "The difference between a smart assistant and governed institutional intelligence isn't model size — it's the structure of accountability and evidence.",
+    "The difference between a smart assistant and governed institutional intelligence isn't model size  it's the structure of accountability and evidence.",
 };
 
 export default function Article2() {
@@ -28,7 +28,7 @@ export default function Article2() {
               <span className="text-[10px] text-white/30">6 min read</span>
             </div>
             <h1 className="mt-4 text-3xl font-black leading-[1.1] tracking-tight text-white sm:text-4xl">
-              Smart Assistant vs Governed Institutional Intelligence — A Fundamental, Not Technical, Difference
+              Smart Assistant vs Governed Institutional Intelligence  A Fundamental, Not Technical, Difference
             </h1>
           </div>
         </div>
@@ -39,17 +39,17 @@ export default function Article2() {
           <div className="prose prose-invert prose-lg max-w-none">
 
             <p className="lead text-lg text-white/75 leading-8">
-              &ldquo;We use AI across all our departments.&rdquo; This sentence describes two radically different things — and many institutions don&apos;t know the difference until it costs them.
+              &ldquo;We use AI across all our departments.&rdquo; This sentence describes two radically different things  and many institutions don&apos;t know the difference until it costs them.
             </p>
 
             <h2 className="mt-10 text-2xl font-black text-white">
               The Smart Assistant: A Productivity Tool
             </h2>
             <p className="text-white/65 leading-8">
-              A smart assistant — whether a language model in a chat interface, a summarization tool, or a content generator — is a tool that enhances individual productivity. It answers questions, summarizes documents, drafts text.
+              A smart assistant  whether a language model in a chat interface, a summarization tool, or a content generator  is a tool that enhances individual productivity. It answers questions, summarizes documents, drafts text.
             </p>
             <p className="text-white/65 leading-8">
-              There is no record of who used it for what purpose. No link between its outputs and specific sources. No protocol for when to act on its outputs and when to review. It&apos;s a personal tool in the employee&apos;s hands — not an institutional system.
+              There is no record of who used it for what purpose. No link between its outputs and specific sources. No protocol for when to act on its outputs and when to review. It&apos;s a personal tool in the employee&apos;s hands  not an institutional system.
             </p>
 
             <h2 className="mt-10 text-2xl font-black text-white">
@@ -113,10 +113,10 @@ export default function Article2() {
               Why Does the Difference Matter?
             </h2>
             <p className="text-white/65 leading-8">
-              When a compliance officer asks: &ldquo;Can you prove this report is accurate?&rdquo; — the smart assistant doesn&apos;t help. Governed intelligence responds with a complete evidence chain.
+              When a compliance officer asks: &ldquo;Can you prove this report is accurate?&rdquo;  the smart assistant doesn&apos;t help. Governed intelligence responds with a complete evidence chain.
             </p>
             <p className="text-white/65 leading-8">
-              When a regulator asks: &ldquo;Who approved this decision, when, and on what basis?&rdquo; — the smart assistant has no answer. Governed intelligence produces the report in minutes.
+              When a regulator asks: &ldquo;Who approved this decision, when, and on what basis?&rdquo;  the smart assistant has no answer. Governed intelligence produces the report in minutes.
             </p>
             <p className="text-white/65 leading-8">
               The difference isn&apos;t technical. It&apos;s institutional. And it&apos;s the difference between a tool and an architecture.

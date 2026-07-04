@@ -9,7 +9,7 @@ import {
 export const metadata: Metadata = {
   title: "Operating Systems | AQLIYA",
   description:
-    "Governed operating systems on AQLIYA Intelligence Core — AuditOS, LocalContentOS, and DecisionOS.",
+    "Governed operating systems on AQLIYA Intelligence Core  AuditOS, LocalContentOS, and DecisionOS.",
 };
 
 const tier1ProductCardsEn = [
@@ -18,7 +18,7 @@ const tier1ProductCardsEn = [
     title: "AuditOS",
     subtitle: "Audit and financial intelligence",
     statusLabel: "Available to deploy",
-    problem: "From trial balance to sign-off-ready file — a complete evidence path.",
+    problem: "From trial balance to sign-off-ready file  a complete evidence path.",
     href: "/en/products/audit",
   },
   {
@@ -26,7 +26,7 @@ const tier1ProductCardsEn = [
     title: "LocalContentOS",
     subtitle: "Local content and compliance",
     statusLabel: "Available by agreed scope",
-    problem: "Suppliers, spend, and regulatory reports — no more fragmented spreadsheets.",
+    problem: "Suppliers, spend, and regulatory reports  no more fragmented spreadsheets.",
     href: "/en/products/local-content",
   },
   {
@@ -34,7 +34,7 @@ const tier1ProductCardsEn = [
     title: "DecisionOS",
     subtitle: "Decision governance",
     statusLabel: "Integrated into platform",
-    problem: "Alternatives, criteria, risk, and approval — no scattered memos.",
+    problem: "Alternatives, criteria, risk, and approval  no scattered memos.",
     href: "/en/products/decision",
   },
 ];
@@ -87,7 +87,7 @@ export default function EnglishProductsPage() {
             Operating systems on one core
           </h1>
           <p className="mt-6 text-lg leading-8 text-white/60">
-            Audit, local content, and decisions — shared governance, evidence
+            Audit, local content, and decisions  shared governance, evidence
             chains, and human approval gates.
           </p>
         </div>
@@ -110,7 +110,7 @@ export default function EnglishProductsPage() {
             Platform roadmap & shared services
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Shared capabilities and early-stage systems — discussed within your activation scope.
+            Shared capabilities and early-stage systems  discussed within your activation scope.
           </p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {roadmapProductCardsEn.map((card) => (

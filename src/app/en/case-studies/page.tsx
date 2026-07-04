@@ -12,20 +12,20 @@ const scenarios = [
   {
     id: "audit-firm-pilot",
     label: "Case Study: Regional Audit Firm",
-    badge: "Simulated Scenario — Mock Data",
+    badge: "Simulated Scenario  Mock Data",
     badgeColor: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
     context:
       "A regional audit firm managing 3–5 concurrent engagements. The team works on Excel and shared folders. Reviews happen over email and WhatsApp.",
     before: [
-      "Trial balance processed manually in Excel — hours per engagement",
+      "Trial balance processed manually in Excel  hours per engagement",
       "Account mapping relies on individual experience, not documented methodology",
       "Findings scattered across email, paper, and WhatsApp",
       "No unified record of who approved what and when",
       "Financial statements compiled manually with every rework cycle",
     ],
     after: [
-      "Trial balance uploaded and verified in two minutes — imbalances detected automatically",
-      "Account mapping suggestions built on IFRS standards — auditor reviews and adjusts",
+      "Trial balance uploaded and verified in two minutes  imbalances detected automatically",
+      "Account mapping suggestions built on IFRS standards  auditor reviews and adjusts",
       "Finding workflow within the platform: create → assign → review → partner approval",
       "Complete audit trail: every action logged with user, timestamp, and reason",
       "Financial statement drafts and notes auto-generated for human review",
@@ -34,13 +34,13 @@ const scenarios = [
       "18+ event types recorded in the Audit Trail",
       "Approval gate: 5 conditions must be satisfied before publishing",
       "Every financial statement line item linked to its source evidence",
-      "Full approval sequence preserved — who approved, when, and why",
+      "Full approval sequence preserved  who approved, when, and why",
     ],
     workflow: [
       {
         step: "1",
         label: "Upload Trial Balance",
-        detail: "CSV/XLSX — instant imbalance verification",
+        detail: "CSV/XLSX  instant imbalance verification",
       },
       {
         step: "2",
@@ -69,13 +69,13 @@ const scenarios = [
   },
   {
     id: "gov-entity-pilot",
-    label: "Case Study: Government Entity — Internal Audit",
-    badge: "Simulated Scenario — Mock Data",
+    label: "Case Study: Government Entity  Internal Audit",
+    badge: "Simulated Scenario  Mock Data",
     badgeColor: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
     context:
       "An internal audit unit within a government entity. Audits cover multi-department engagements. Key requirement: verifiable documentation and a clear approval chain.",
     before: [
-      "Audit procedures documented in Word files — difficult to review and verify",
+      "Audit procedures documented in Word files  difficult to review and verify",
       "Supporting evidence scattered in shared folders with no systematic organization",
       "Audit decisions insufficiently documented for external verification",
       "Recreating findings from cycle to cycle relies on team memory",
@@ -83,14 +83,14 @@ const scenarios = [
     ],
     after: [
       "Every audit procedure recorded with user, role, and timestamp",
-      "Evidence linked directly to audit line items — full traceability",
-      "Complete separation between performer and approver roles — no authority bypass",
+      "Evidence linked directly to audit line items  full traceability",
+      "Complete separation between performer and approver roles  no authority bypass",
       "Full engagement package exportable for external auditors",
-      "Non-editable audit trail — every action preserved",
+      "Non-editable audit trail  every action preserved",
     ],
     evidence: [
       "RBAC: role-level and engagement-level permissions",
-      "Audit Trail: non-deletable log — 18+ event types",
+      "Audit Trail: non-deletable log  18+ event types",
       "Evidence Graph: evidence linked to specific line items",
       "Human Gates: cannot publish without meeting approval conditions",
     ],
@@ -136,12 +136,12 @@ const trustPoints = [
   {
     icon: "⊡",
     title: "Results Depend on Context",
-    body: "Every institution is different. We focus on methodology and evidence — not generic numerical promises.",
+    body: "Every institution is different. We focus on methodology and evidence  not generic numerical promises.",
   },
   {
     icon: "⊞",
     title: "Evidence First",
-    body: "Every claim is linked to a platform capability — you can verify it in the demo or the evidence package.",
+    body: "Every claim is linked to a platform capability  you can verify it in the demo or the evidence package.",
   },
 ];
 
@@ -158,7 +158,7 @@ export default function CaseStudiesPage() {
             What Working with AuditOS Looks Like
           </h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Documented scenarios showing the audit workflow transformation — from scattered manual
+            Documented scenarios showing the audit workflow transformation  from scattered manual
             processes to a unified, traceable, and approval-ready methodology.
           </p>
           <p className="mt-4 text-sm text-amber-400/80">
@@ -175,7 +175,7 @@ export default function CaseStudiesPage() {
               Institutional Reference
             </p>
             <h2 className="mt-3 text-xl font-bold text-white">
-              Saudi Contracting Scenario — Local Content Compliance
+              Saudi Contracting Scenario  Local Content Compliance
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-300">
               A major contracting company subject to the Local Content Program. Data is distributed
@@ -198,7 +198,7 @@ export default function CaseStudiesPage() {
               <div>
                 <p className="font-semibold text-white">The Result</p>
                 <p className="mt-1 text-slate-400">
-                  Continuous compliance visibility and regulator-ready reports — every figure linked to its source.
+                  Continuous compliance visibility and regulator-ready reports  every figure linked to its source.
                 </p>
               </div>
             </div>
@@ -256,7 +256,7 @@ export default function CaseStudiesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 border-b border-white/5">
                 <div className="p-8 border-b md:border-b-0 md:border-l border-white/5">
                   <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                    Before — Current State
+                    Before  Current State
                   </h3>
                   <ul className="space-y-3">
                     {s.before.map((item, i) => (
@@ -272,7 +272,7 @@ export default function CaseStudiesPage() {
                 </div>
                 <div className="p-8">
                   <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                    After — With AuditOS
+                    After  With AuditOS
                   </h3>
                   <ul className="space-y-3">
                     {s.after.map((item, i) => (
@@ -318,7 +318,7 @@ export default function CaseStudiesPage() {
               {/* Evidence Chain */}
               <div className="p-8 border-b border-white/5">
                 <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                  Evidence Chain — What the System Logs
+                  Evidence Chain  What the System Logs
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {s.evidence.map((e, i) => (
@@ -352,8 +352,8 @@ export default function CaseStudiesPage() {
             See the Full Workflow
           </h2>
           <p className="text-slate-300 mb-8 leading-relaxed">
-            In the interactive demo, you will walk through every step — from trial balance upload
-            to publishing the engagement package — on real simulated data.
+            In the interactive demo, you will walk through every step  from trial balance upload
+            to publishing the engagement package  on real simulated data.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link

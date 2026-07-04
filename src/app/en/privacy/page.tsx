@@ -4,14 +4,14 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy Policy | AQLIYA",
   description:
-    "Institutional privacy policy for the AQLIYA platform — covering data ownership, data residency, AI processing, and enterprise customer rights.",
+    "Institutional privacy policy for the AQLIYA platform  covering data ownership, data residency, AI processing, and enterprise customer rights.",
 };
 
 const sections = [
   {
     id: "overview",
     title: "Overview",
-    content: "AQLIYA is an institutional intelligence platform built for organizations that handle sensitive data and high-stakes decisions. This policy describes how we collect, store, process, and protect data — with full transparency and without overstated claims.",
+    content: "AQLIYA is an institutional intelligence platform built for organizations that handle sensitive data and high-stakes decisions. This policy describes how we collect, store, process, and protect data  with full transparency and without overstated claims.",
   },
   {
     id: "data-we-collect",
@@ -25,7 +25,7 @@ const sections = [
       {
         label: "Account and User Data",
         detail:
-          "User names, institutional email addresses, job roles, and session records — to enable RBAC and identity verification.",
+          "User names, institutional email addresses, job roles, and session records  to enable RBAC and identity verification.",
       },
       {
         label: "Audit and Activity Logs",
@@ -35,7 +35,7 @@ const sections = [
       {
         label: "Diagnostic Usage Data",
         detail:
-          "Anonymized data about platform performance and technical errors — to improve service stability. Contains no business content or personal data.",
+          "Anonymized data about platform performance and technical errors  to improve service stability. Contains no business content or personal data.",
       },
     ],
   },
@@ -46,7 +46,7 @@ const sections = [
       {
         label: "No Training on Your Data",
         detail:
-          "Your organization's data is never used in any form to train AI models — whether our internal models or third-party models.",
+          "Your organization's data is never used in any form to train AI models  whether our internal models or third-party models.",
       },
       {
         label: "No Cross-Tenant Sharing",
@@ -68,7 +68,7 @@ const sections = [
   {
     id: "ai-processing",
     title: "AI Processing",
-    content: "When your data is sent to an AI model (whether internal or external), it is processed instantly and in real time. Model providers do not retain this data for training purposes under active enterprise service contracts. We treat AI models as real-time analytical tools — not as permanent data repositories.",
+    content: "When your data is sent to an AI model (whether internal or external), it is processed instantly and in real time. Model providers do not retain this data for training purposes under active enterprise service contracts. We treat AI models as real-time analytical tools  not as permanent data repositories.",
   },
   {
     id: "data-residency",
@@ -134,7 +134,7 @@ export default function PrivacyPage() {
               for organizations that handle sensitive data and need clear answers.
             </p>
             <p className="mt-4 text-xs text-white/35">
-              Last updated: May 2025 — This policy applies to the AQLIYA platform and all its systems
+              Last updated: May 2025  This policy applies to the AQLIYA platform and all its systems
             </p>
           </div>
         </div>
@@ -177,7 +177,7 @@ export default function PrivacyPage() {
             </h2>
             <p className="mt-3 text-sm leading-7 text-muted-foreground">
               Our technical team is ready to answer any institutional questions about how we handle
-              your organization&apos;s data — before or after signing.
+              your organization&apos;s data  before or after signing.
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
               <Link href="/en/contact" className="btn-primary px-6">

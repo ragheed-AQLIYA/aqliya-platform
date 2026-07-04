@@ -1,5 +1,5 @@
 /**
- * Start hub — engagement + process (R6 plain language)
+ * Start hub  engagement + process (R6 plain language)
  */
 
 export type EngagementModelCard = {
@@ -59,7 +59,7 @@ export const engagementModelsAr: EngagementModelCard[] = [
     tagline: "نفهم وضعكم قبل أي التزام",
     duration: "حوالي ساعة",
     cost: "مجانية",
-    description: "نسمع عن احتياجكم ونوضح إذا عقلية مناسبة — بدون عرض مبيعات.",
+    description: "نسمع عن احتياجكم ونوضح إذا عقلية مناسبة  بدون عرض مبيعات.",
   },
   {
     id: "pilot",
@@ -67,7 +67,7 @@ export const engagementModelsAr: EngagementModelCard[] = [
     tagline: "تشوفون النتيجة قبل العقد",
     duration: "٢–٤ أسابيع",
     cost: "مجانية",
-    description: "مسار واحد محدود على ملفاتكم — معايير واضحة وتقرير في النهاية.",
+    description: "مسار واحد محدود على ملفاتكم  معايير واضحة وتقرير في النهاية.",
     featured: true,
   },
   {
@@ -84,7 +84,7 @@ export const engagementModelsAr: EngagementModelCard[] = [
     tagline: "عندما تريدون البيانات عندكم",
     duration: "٤–٨ أسابيع",
     cost: "حسب النطاق",
-    description: "دراسة مشتركة للنشر الخاص أو المعزول — ليس طلباً جاهزاً من الرف.",
+    description: "دراسة مشتركة للنشر الخاص أو المعزول  ليس طلباً جاهزاً من الرف.",
   },
   {
     id: "custom",
@@ -92,7 +92,7 @@ export const engagementModelsAr: EngagementModelCard[] = [
     tagline: "لاحتياج لا يغطيه الحل الجاهز",
     duration: "حسب المتطلبات",
     cost: "حسب المتطلبات",
-    description: "نصمم مساراً لسياقكم — بنفس الصلاحيات والسجل.",
+    description: "نصمم مساراً لسياقكم  بنفس الصلاحيات والسجل.",
   },
 ];
 
@@ -100,7 +100,7 @@ export const processPhasesAr: ProcessPhase[] = [
   {
     num: "١",
     title: "مكالمة",
-    desc: "نفهم المؤسسة والاحتياج — ونقترح الخطوة التالية.",
+    desc: "نفهم المؤسسة والاحتياج  ونقترح الخطوة التالية.",
   },
   {
     num: "٢",
@@ -110,7 +110,7 @@ export const processPhasesAr: ProcessPhase[] = [
   {
     num: "٣",
     title: "قراركم",
-    desc: "نكمل · نعدّل النطاق · أو نتوقف — حسب النتائج.",
+    desc: "نكمل · نعدّل النطاق · أو نتوقف  حسب النتائج.",
   },
   {
     num: "٤",
@@ -120,7 +120,7 @@ export const processPhasesAr: ProcessPhase[] = [
 ];
 
 export const processPrinciplesAr = [
-  "الذكاء يقترح — فريقكم يعتمد",
+  "الذكاء يقترح  فريقكم يعتمد",
   "كل مخرج مربوط بملف أو سجل",
-  "نبدأ من واقعكم — لا من قالب عام",
+  "نبدأ من واقعكم  لا من قالب عام",
 ];

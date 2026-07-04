@@ -122,7 +122,7 @@ export function ProblemSection({ data, arrow }: ProblemSectionProps) {
             {data.tools.map((t) => (
               <li key={t.name} className="text-sm">
                 <span className="font-semibold text-foreground">{t.name}</span>
-                <span className="text-muted-foreground"> — {t.line}</span>
+                <span className="text-muted-foreground">  {t.line}</span>
               </li>
             ))}
           </ul>

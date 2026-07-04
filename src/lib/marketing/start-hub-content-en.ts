@@ -18,7 +18,7 @@ export const engagementModelsEn: EngagementModelCard[] = [
     tagline: "Understand your context first",
     duration: "About one hour",
     cost: "Free",
-    description: "We listen to your need and explain if AQLIYA fits — no sales pitch.",
+    description: "We listen to your need and explain if AQLIYA fits  no sales pitch.",
   },
   {
     id: "pilot",
@@ -26,7 +26,7 @@ export const engagementModelsEn: EngagementModelCard[] = [
     tagline: "See results before the contract",
     duration: "2–4 weeks",
     cost: "Free",
-    description: "One limited path on your files — clear criteria and a report at the end.",
+    description: "One limited path on your files  clear criteria and a report at the end.",
     featured: true,
   },
   {
@@ -43,7 +43,7 @@ export const engagementModelsEn: EngagementModelCard[] = [
     tagline: "When data must stay with you",
     duration: "4–8 weeks",
     cost: "By scope",
-    description: "Joint study for private or air-gapped deployment — not an off-the-shelf order.",
+    description: "Joint study for private or air-gapped deployment  not an off-the-shelf order.",
   },
   {
     id: "custom",
@@ -51,19 +51,19 @@ export const engagementModelsEn: EngagementModelCard[] = [
     tagline: "When standard products are not enough",
     duration: "Requirements-driven",
     cost: "Custom",
-    description: "A path designed for your context — same permissions and log.",
+    description: "A path designed for your context  same permissions and log.",
   },
 ];
 
 export const processPhasesEn: ProcessPhase[] = [
   { num: "1", title: "Call", desc: "We understand the institution and suggest a next step." },
   { num: "2", title: "Trial", desc: "We work on your data within agreed scope." },
-  { num: "3", title: "Your decision", desc: "Proceed, adjust scope, or stop — based on results." },
+  { num: "3", title: "Your decision", desc: "Proceed, adjust scope, or stop  based on results." },
   { num: "4", title: "Rollout", desc: "Expand use while permissions and log stay in place." },
 ];
 
 export const processPrinciplesEn = [
-  "AI suggests — your team approves",
+  "AI suggests  your team approves",
   "Every output links to a file or log",
-  "We start from your reality — not a generic template",
+  "We start from your reality  not a generic template",
 ];

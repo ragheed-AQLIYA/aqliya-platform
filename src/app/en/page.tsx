@@ -24,10 +24,10 @@ const systems = [
 ];
 
 const platformLayers = [
-  { num: "01", title: "Governance", desc: "Permissions, audit trail, approval gates — every event is logged" },
-  { num: "02", title: "Knowledge Foundation", desc: "Every output linked to its source — unbreakable evidence chain" },
-  { num: "03", title: "Intelligence Operators", desc: "AI assists and suggests — never decides or approves without humans" },
-  { num: "04", title: "Operating Systems", desc: "Each system inherits governance and intelligence — no rebuild" },
+  { num: "01", title: "Governance", desc: "Permissions, audit trail, approval gates  every event is logged" },
+  { num: "02", title: "Knowledge Foundation", desc: "Every output linked to its source  unbreakable evidence chain" },
+  { num: "03", title: "Intelligence Operators", desc: "AI assists and suggests  never decides or approves without humans" },
+  { num: "04", title: "Operating Systems", desc: "Each system inherits governance and intelligence  no rebuild" },
 ];
 
 export default function EnglishHomePage() {
@@ -51,7 +51,7 @@ export default function EnglishHomePage() {
 
       <ComparisonSection
         eyebrow="Why platform not tool?"
-        heading="A tool solves one problem — a platform runs the institution"
+        heading="A tool solves one problem  a platform runs the institution"
         sides={[
           {
             title: "Standalone AI tool",
@@ -59,7 +59,7 @@ export default function EnglishHomePage() {
             items: [
               "Outputs without review or approval path",
               "Each new domain needs a new tool from scratch",
-              "Permissions and evidence managed outside — or not at all",
+              "Permissions and evidence managed outside  or not at all",
             ],
           },
           {
@@ -68,14 +68,14 @@ export default function EnglishHomePage() {
             items: [
               "Every output passes through governance and evidence before approval",
               "Every system inherits governance and intelligence from one platform",
-              "Permissions and evidence are part of the platform architecture — no separate management",
+              "Permissions and evidence are part of the platform architecture  no separate management",
             ],
           },
         ]}
       />
 
       <PlatformLayersSection
-        heading="Platform architecture — four stacked layers"
+        heading="Platform architecture  four stacked layers"
         subtitle="Each layer serves the one above. Every operating system inherits the three layers beneath without duplication."
         layers={platformLayers}
         ctaLabel="Explore the platform architecture →"

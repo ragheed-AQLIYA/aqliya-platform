@@ -31,11 +31,11 @@ export function Sidebar() {
           <Link
             href="/"
             className="flex items-center gap-3"
-            aria-label="AQLIYA — عقلية"
+            aria-label="AQLIYA  عقلية"
           >
             <Image
               src="/brand/aqliya-logo-approved.png"
-              alt="AQLIYA — عقلية"
+              alt="AQLIYA  عقلية"
               width={116}
               height={34}
               priority

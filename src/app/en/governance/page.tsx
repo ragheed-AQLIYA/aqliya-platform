@@ -6,14 +6,14 @@ import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnosti
 export const metadata: Metadata = {
   title: "Governance | AQLIYA",
   description:
-    "Complete evidence chains, multi-level RBAC, immutable audit trail, and strict AI governance — built into the platform foundation.",
+    "Complete evidence chains, multi-level RBAC, immutable audit trail, and strict AI governance  built into the platform foundation.",
 };
 
 const evidenceLevels = [
   {
     step: "01",
     title: "Source data",
-    desc: "Every input is logged with identity, time, and source — uploaded file, manual entry, or external call.",
+    desc: "Every input is logged with identity, time, and source  uploaded file, manual entry, or external call.",
   },
   {
     step: "02",
@@ -28,17 +28,17 @@ const evidenceLevels = [
   {
     step: "04",
     title: "Human review",
-    desc: "Every output passes explicit human review — who reviewed, what they reviewed, and what action they took.",
+    desc: "Every output passes explicit human review  who reviewed, what they reviewed, and what action they took.",
   },
   {
     step: "05",
     title: "Formal approval",
-    desc: "Approval requires the right authority. Time, identity, state, and comments are logged — no implicit approval.",
+    desc: "Approval requires the right authority. Time, identity, state, and comments are logged  no implicit approval.",
   },
   {
     step: "06",
     title: "Final output & export",
-    desc: "Every export or release includes approval status, approver, and timestamp — linked to the full chain.",
+    desc: "Every export or release includes approval status, approver, and timestamp  linked to the full chain.",
   },
 ];
 
@@ -55,7 +55,7 @@ const rbacLevels = [
   },
   {
     level: "Role",
-    desc: "Predefined roles: reader, reviewer, approver, admin — no implicit permissions.",
+    desc: "Predefined roles: reader, reviewer, approver, admin  no implicit permissions.",
     critical: false,
   },
   {
@@ -83,7 +83,7 @@ const auditTrailProps = [
   },
   {
     prop: "Mutability",
-    value: "Immutable — including by administrators",
+    value: "Immutable  including by administrators",
   },
   {
     prop: "Retention",
@@ -102,9 +102,9 @@ const auditTrailProps = [
 
 const aiRules = [
   {
-    rule: "AI suggests — humans decide",
+    rule: "AI suggests  humans decide",
     detail:
-      "Every AI output is a draft or suggestion — mandatory human review before any approval.",
+      "Every AI output is a draft or suggestion  mandatory human review before any approval.",
   },
   {
     rule: "Every call is logged",
@@ -144,13 +144,13 @@ export default function EnglishGovernancePage() {
               Institutional governance &amp; security
             </span>
             <h1 className="text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl">
-              Governance is not an add-on —
+              Governance is not an add-on 
               <span className="mt-1 block text-white/72">
                 it is the foundation
               </span>
             </h1>
             <p className="mt-6 max-w-3xl text-base leading-8 text-white/62 sm:text-lg">
-              In AQLIYA, governance is implemented at platform level — not
+              In AQLIYA, governance is implemented at platform level  not
               bolted on later or enabled optionally. Every system built on
               AQLIYA Intelligence Core inherits evidence chains, permissions, and
               audit trail automatically.
@@ -171,7 +171,7 @@ export default function EnglishGovernancePage() {
         <SectionEyebrow
           label="Evidence chain"
           title="Every output has a complete traceable history"
-          description="From data entry to final export — every step documented and linked. No gaps in the chain."
+          description="From data entry to final export  every step documented and linked. No gaps in the chain."
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {evidenceLevels.map((level) => (
@@ -213,7 +213,7 @@ export default function EnglishGovernancePage() {
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <SectionEyebrow
             label="AI governance"
-            title="AI assists — it does not replace or bypass governance"
+            title="AI assists  it does not replace or bypass governance"
             description="In AQLIYA, AI is not a black box. Every use is governed by published rules that prevent autonomous action and keep humans at the center of decisions."
           />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -299,7 +299,7 @@ export default function EnglishGovernancePage() {
             Note for institutions
           </p>
           <p className="text-sm leading-6 text-amber-700/80">
-            AQLIYA&apos;s audit trail is designed as institutional evidence —
+            AQLIYA&apos;s audit trail is designed as institutional evidence 
             usable in external reviews, investigations, or disputes. That is why
             it cannot be deleted or modified, even by platform administrators.
           </p>
@@ -353,7 +353,7 @@ export default function EnglishGovernancePage() {
           </h2>
           <p className="mt-4 text-base leading-7 text-muted-foreground">
             PDF security summary covering RBAC, audit trail, data isolation,
-            encryption, and deployment models — ready for initial technical
+            encryption, and deployment models  ready for initial technical
             review.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
