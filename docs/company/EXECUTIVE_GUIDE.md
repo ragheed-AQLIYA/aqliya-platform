@@ -1,4 +1,4 @@
-﻿# AQLIYA Executive Guide
+# AQLIYA Executive Guide
 
 **適用對象:** CEO, Board, Investors  
 **Status:** Active | Version 1.0 | 2026-06-30
@@ -50,7 +50,7 @@ AQLIYA IS NOT:
 | ContentStudio | L6 Production-hardened | ✅ Evidence + PDF + ~125 tests |
 | Knowledge Foundation | L6 Production-hardened | ✅ Version governance + diff engine |
 | Office AI Assistant | L6 Production-hardened | ✅ 248 tests, 6 task types |
-| WorkflowOS | L5 Pilot-ready | SLA monitoring, gated export |
+| WorkflowOS | L6 Production-hardened | Full boundaries, SLA monitoring, gated export |
 
 ## Current Status
 - **Engineering:** TypeScript 0 errors, Build passes, 143 pages

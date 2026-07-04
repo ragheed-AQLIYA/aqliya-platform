@@ -192,7 +192,7 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - **Knowledge Foundation** — Version promotion pipeline, release packages with SHA-256, diff engine, rollback, bilingual PDF/JSON export. Full error boundaries. 87 tests PASS.
 - **ContentStudio** — Operational Content Workspace (5 routes). Content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning with restore, template system with variable interpolation, evidence linking, PDF export with bilingual Arabic/English, audit trail, ~125 tests. Full error boundaries.
 - **Office AI Assistant** — Task creation, document-aware responses, file content extraction, review workflow, action logs, permission checks, audit events. 6 task types. 248 tests PASS.
-- **WorkflowOS** — Canonical governed workspace, multi-client records management, governed workflow, evidence management, audit trail, dashboard, review queue, PDF export. L5 Pilot-ready.
+- **WorkflowOS** — L6 Production-hardened workspace at `/workflowos/*`. Full error/loading/not-found boundaries on all 8 route segments. Template workflows, SLA monitoring with escalation, gated PDF export, 31 action tests, seed data. Monitoring metric (workflowRecords) in enterprise health dashboard.
 - **Sunbul** — Legacy redirect alias to WorkflowOS.
 - **Platform Infrastructure** — Auth, RBAC, audit logs, storage provider (S3/local), rate limiter (memory/Redis), export engine, health monitoring, enterprise health, operator panel.
 - **Custom Product Inquiry** — Funnel with form submission API.
@@ -258,7 +258,7 @@ Remaining enterprise gates: IaC (Terraform apply — code complete), pentest —
 
 - **Organizations surface** — L5 pilot-ready with real Prisma data (org cards, workspace dashboard, CRUD with audit trail, seed data). Admin-role middleware protection. Not L6 production-hardened.
 - **Generic settings /settings main page** — L2 shell (local-state-only preview). Sub-routes (/settings/workspaces, /settings/platform-organization, /settings/audit-logs) are L4 real admin surfaces backed by Prisma.
-- **WorkflowOS** — L5 Pilot-ready (not L6). Template workflows, SLA monitoring, gated PDF export, 31 action tests.
+- **WorkflowOS** — L6 Production-hardened. Full error/loading/not-found boundaries on all 8 route segments. Template workflows, SLA monitoring with escalation, gated PDF export, 31 action tests, seed data. Monitoring metric (workflowRecords) tracked.
 
 ---
 

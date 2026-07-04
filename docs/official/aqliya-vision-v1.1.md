@@ -89,7 +89,7 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 | **ContentStudio**       | Operational content workspace           | **L6 Production-hardened**     | Safe to show with explanation |
 | **Knowledge Foundation**| Governance versioning capability        | **L6 Production-hardened**     | Safe to show with explanation |
 | **Office AI Assistant** | Included as governed shared application | **L6 Production-hardened**     | Safe to show with explanation |
-| **WorkflowOS**          | Included as governed workspace          | L5 Pilot-ready                 | Safe to show with explanation |
+| **WorkflowOS**          | Included as governed workspace          | L6 Production-hardened                 | Safe to show with explanation |
 | **Sunbul**              | Legacy redirect alias to WorkflowOS     | N/A                            | Internal only                 |
 | **auditos demo**        | Included as demo only                   | L1 Marketing                   | Demo only                     |
 
@@ -109,7 +109,7 @@ AQLIYA.com is positioned as an **institutional operating platform**, not a produ
 | **Knowledge Foundation**| Governance versioning capability           | L6, SHA-256 release packages            |
 | **Institutional Memory**| Cross-product knowledge graph              | L6, D3.js graph visualization           |
 | **Office AI Assistant** | Governed shared application on AQLIYA Core | L6, 248 tests, 6 task types             |
-| **WorkflowOS**          | Custom/client-specific governed workspace  | L5 Pilot-ready                          |
+| **WorkflowOS**          | Custom/client-specific governed workspace  | L6 Production-hardened                          |
 | **Sunbul**              | Legacy redirect alias to WorkflowOS        | Preserved for backward compatibility    |
 
 ---

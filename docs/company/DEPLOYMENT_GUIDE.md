@@ -1,4 +1,4 @@
-﻿# AQLIYA Deployment Guide
+# AQLIYA Deployment Guide
 
 **適用對象:** DevOps, Client IT  
 **Status:** Active | Version 1.0 | 2026-06-30
@@ -72,5 +72,5 @@ pm run demo:smoke → passes
 - CSP headers configured in 
 ext.config.mjs
 - Rate limiting via RATE_LIMITER env
-- SSO operator setup required (not L6 automated; L5 pilot-ready with operator keys)
+- SSO operator setup: self-service via /settings/sso UI (L6 Production-hardened)
 - No production On-Prem package yet

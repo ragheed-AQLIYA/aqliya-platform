@@ -1,6 +1,6 @@
 # Office AI Assistant
 
-**Status:** L5 Pilot-ready  
+**Status:** L6 Production-hardened  
 **Owner:** AI Team  
 **Last Updated:** 2026-06-30
 

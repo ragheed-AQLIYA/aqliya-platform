@@ -38,7 +38,7 @@ AQLIYA Platform Company
 │   ├── SalesOS                 (commercial intelligence — L6)
 │   └── SimulationOS            (capability label only)
 ├── Custom / Client-Specific Workspaces
-│   ├── WorkflowOS (canonical governed workspace — L5 Pilot-ready)
+│   ├── WorkflowOS (canonical governed workspace — L6 Production-hardened)
 │   └── Sunbul (legacy redirect alias to WorkflowOS)
 ├── Operational Content Workspace
 │   └── ContentStudio (content workspace — L6 Production-hardened)
@@ -107,7 +107,7 @@ AQLIYA Platform Company
 | **Knowledge Foundation**| Governance capability              | Included in v0.1                        | L6 Production-hardened         | Safe to show with explanation |
 | **ContentStudio**       | Operational Content Workspace      | Included as pilot-ready product         | L6 Production-hardened         | Safe to show with explanation |
 | **Office AI Assistant** | Shared Application                 | Included as governed shared application | L6 Production-hardened         | Safe to show with explanation |
-| **WorkflowOS**          | Custom / Client-Specific Workspace | Included as governed workspace          | L5 Pilot-ready                 | Safe to show with explanation |
+| **WorkflowOS**          | Custom / Client-Specific Workspace | Included as governed workspace          | L6 Production-hardened                 | Safe to show with explanation |
 | **Sunbul**              | Custom / Client-Specific Workspace | Legacy alias / redirect to WorkflowOS   | N/A                            | Internal only                 |
 | **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing                   | Demo only                     |
 | **SimulationOS**        | Marketing capability label         | Do not claim as live                    | L1 Marketing                   | Do not show as implemented    |
