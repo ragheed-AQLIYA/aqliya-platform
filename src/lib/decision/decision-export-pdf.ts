@@ -1,5 +1,9 @@
 import "server-only";
 import PDFDocument from "pdfkit";
+import {
+  registerArabicFonts,
+  fontNameForLocale,
+} from "@/lib/pdf/fonts/arabic-font-utils";
 
 export interface DecisionExportInput {
   decisionId: string;
@@ -64,6 +68,7 @@ export async function buildDecisionReportPDF(
       Creator: "AQLIYA DecisionOS",
     },
   });
+  registerArabicFonts(doc);
 
   const chunks: Buffer[] = [];
   doc.on("data", (chunk: Buffer) => chunks.push(chunk));
@@ -77,24 +82,24 @@ export async function buildDecisionReportPDF(
     v != null ? `${v}%` : "N/A";
   const val = (v: string | null | undefined): string => v ?? "N/A";
   const bold = (text: string) =>
-    doc.font("Helvetica-Bold").fontSize(9).text(text);
+    doc.font(fontNameForLocale("bilingual", "bold")).fontSize(9).text(text);
   const normal = (text: string) =>
-    doc.font("Helvetica").fontSize(9).text(text);
+    doc.font(fontNameForLocale("bilingual")).fontSize(9).text(text);
   const section = (title: string) => {
     doc.moveDown(0.5);
-    doc.fontSize(12).font("Helvetica-Bold").text(title);
+    doc.fontSize(12).font(fontNameForLocale("bilingual", "bold")).text(title);
     doc.moveDown(0.2);
   };
 
-  doc.fontSize(16).font("Helvetica-Bold").text("DecisionOS", {
+  doc.fontSize(16).font(fontNameForLocale("bilingual", "bold")).text("DecisionOS", {
     align: "center",
   });
-  doc.fontSize(12).font("Helvetica").text("Decision Report", {
+  doc.fontSize(12).font(fontNameForLocale("bilingual")).text("نسخة تقرير القرار / Decision Report", {
     align: "center",
   });
   doc.moveDown(0.5);
 
-  doc.fontSize(8).font("Helvetica");
+  doc.fontSize(8).font(fontNameForLocale("bilingual"));
   doc.text(`Exported: ${input.exportedAt.toISOString()}`);
   doc.text(`Status: ${input.status}`);
   doc.moveDown(0.5);
@@ -147,7 +152,7 @@ export async function buildDecisionReportPDF(
       "Overall",
     ];
 
-    doc.font("Helvetica-Bold").fontSize(7);
+    doc.font(fontNameForLocale("bilingual", "bold")).fontSize(7);
     for (let i = 0; i < headers.length; i++) {
       doc.text(headers[i], colX[i], tableTop, {
         width: colW,
@@ -156,7 +161,7 @@ export async function buildDecisionReportPDF(
     }
     doc.moveDown(0.3);
 
-    doc.font("Helvetica").fontSize(7);
+    doc.font(fontNameForLocale("bilingual")).fontSize(7);
     for (const s of input.scenarios) {
       const y = doc.y;
       const row = [
@@ -202,7 +207,7 @@ export async function buildDecisionReportPDF(
   if (range && range.count > 0) {
     for (let i = range.start; i < range.start + range.count; i++) {
       doc.switchToPage(i);
-      doc.fontSize(7).fillColor("#888888").font("Helvetica");
+      doc.fontSize(7).fillColor("#888888").font(fontNameForLocale("bilingual"));
       doc.text(
         `AQLIYA DecisionOS — Page ${i + 1}`,
         50,

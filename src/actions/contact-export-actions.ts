@@ -121,23 +121,10 @@ export async function requestContactExport(contactId: string, reason?: string) {
 
 // ─── PDF Font Helpers ─────────────────────────────────────
 
-const REGULAR_FONT_PATHS = [
-  "C:/Windows/Fonts/arial.ttf",
-  "/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf",
-  "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-  "/Library/Fonts/Arial Unicode.ttf",
-];
-
-const BOLD_FONT_PATHS = [
-  "C:/Windows/Fonts/arialbd.ttf",
-  "/usr/share/fonts/truetype/noto/NotoSansArabic-Bold.ttf",
-  "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-  "/Library/Fonts/Arial Bold.ttf",
-];
-
-function firstExistingPath(paths: string[]): string | null {
-  return paths.find((p) => existsSync(p)) ?? null;
-}
+import {
+  registerArabicFonts,
+  fontNameForLocale,
+} from "@/lib/pdf/fonts/arabic-font-utils";
 
 // ─── PDF Export Action ────────────────────────────────────
 
@@ -189,18 +176,10 @@ export async function exportContactAsPdf(contactId: string) {
     doc.on("data", (chunk: Buffer) => chunks.push(chunk));
     const endPromise = new Promise<void>((resolve) => doc.on("end", () => resolve()));
 
-    const regularPath = firstExistingPath(REGULAR_FONT_PATHS);
-    const boldPath = firstExistingPath(BOLD_FONT_PATHS);
+    registerArabicFonts(doc);
 
-    if (regularPath) {
-      doc.registerFont("ContactPdfRegular", regularPath);
-    }
-    if (boldPath) {
-      doc.registerFont("ContactPdfBold", boldPath);
-    }
-
-    const rFont = regularPath ? "ContactPdfRegular" : "Helvetica";
-    const bFont = boldPath ? "ContactPdfBold" : "Helvetica-Bold";
+    const rFont = fontNameForLocale("ar");
+    const bFont = fontNameForLocale("ar", "bold");
     const textOpts = { align: "right" as const, features: ["rtla"] as ("rtla" | "ltra")[] };
 
     doc.fontSize(18).font(bFont).text("LocalContactOS — تصدير جهة اتصال", textOpts);
