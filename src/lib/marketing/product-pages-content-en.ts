@@ -131,3 +131,34 @@ export const localContentProductContentEn: ProductPageContent = {
     { icon: "audit", title: "Regulatory-grade audit trail", detail: "Every change in supplier classification, spend allocation, or report content is fully logged and ready for regulatory review." },
   ],
 };
+
+export type ProductIndexCardEn = {
+  id: string;
+  title: string;
+  subtitle: string;
+  statusLabel: string;
+  problem: string;
+  href: string;
+  muted?: boolean;
+};
+
+export const roadmapProductCardsEn: ProductIndexCardEn[] = [
+  {
+    id: "sales",
+    title: "SalesOS",
+    subtitle: "Commercial intelligence",
+    statusLabel: "Coming on platform roadmap",
+    problem: "Qualification, pipeline, and sales memory — on the platform roadmap.",
+    href: "/en/products/sales",
+    muted: true,
+  },
+  {
+    id: "office-ai",
+    title: "Office AI Assistant",
+    subtitle: "Shared institutional assistant",
+    statusLabel: "Shared service",
+    problem: "Institutional assistant across platform solutions — summarization, editing, analysis.",
+    href: "/en/products/office-ai",
+    muted: true,
+  },
+];

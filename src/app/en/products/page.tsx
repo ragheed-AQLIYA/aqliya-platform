@@ -1,58 +1,82 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { publicOsStatusEn } from "@/lib/marketing/public-status";
-import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { cn } from "@/lib/utils";
+import { ConversionBand } from "@/components/marketing/v2/marketing-shell";
+import {
+  roadmapProductCardsEn,
+} from "@/lib/marketing/product-pages-content-en";
 
 export const metadata: Metadata = {
   title: "Operating Systems | AQLIYA",
   description:
-    "Governed operating systems on AQLIYA Intelligence Core — AuditOS, DecisionOS, and LocalContentOS.",
+    "Governed operating systems on AQLIYA Intelligence Core — AuditOS, LocalContentOS, and DecisionOS.",
 };
 
-const systems = [
+const tier1ProductCardsEn = [
   {
     id: "audit",
     title: "AuditOS",
     subtitle: "Audit and financial intelligence",
-    status: publicOsStatusEn.auditOS,
+    statusLabel: "Available to deploy",
+    problem: "From trial balance to sign-off-ready file — a complete evidence path.",
     href: "/en/products/audit",
-  },
-  {
-    id: "decision",
-    title: "DecisionOS",
-    subtitle: "Decision governance",
-    status: publicOsStatusEn.decisionOS,
-    href: "/en/products/decision",
   },
   {
     id: "local-content",
     title: "LocalContentOS",
     subtitle: "Local content and compliance",
-    status: publicOsStatusEn.localContentOS,
+    statusLabel: "Available by agreed scope",
+    problem: "Suppliers, spend, and regulatory reports — no more fragmented spreadsheets.",
     href: "/en/products/local-content",
   },
   {
-    id: "office-ai",
-    title: "Office AI Assistant",
-    subtitle: "Shared institutional assistant",
-    status: publicOsStatusEn.officeAI,
-    href: "/en/products/office-ai",
-  },
-  {
-    id: "sales",
-    title: "SalesOS",
-    subtitle: "Commercial intelligence",
-    status: publicOsStatusEn.salesOS,
-    href: "/en/products/sales",
-  },
-  {
-    id: "simulation",
-    title: "SimulationOS",
-    subtitle: "Scenario simulation",
-    status: publicOsStatusEn.simulationOS,
-    href: "/en/products/simulation",
+    id: "decision",
+    title: "DecisionOS",
+    subtitle: "Decision governance",
+    statusLabel: "Integrated into platform",
+    problem: "Alternatives, criteria, risk, and approval — no scattered memos.",
+    href: "/en/products/decision",
   },
 ];
+
+function ProductCard({
+  card,
+}: {
+  card: (typeof tier1ProductCardsEn)[number];
+}) {
+  return (
+    <Link
+      href={card.href}
+      className={cn(
+        "group flex flex-col rounded-2xl border p-6 transition-colors hover:border-primary/30",
+        "muted" in card && card.muted
+          ? "border-border/50 bg-muted/20 opacity-80"
+          : "border-border/70 bg-background",
+      )}
+    >
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <h2 className="text-xl font-black text-foreground group-hover:text-primary">
+            {card.title}
+          </h2>
+          <p className="mt-0.5 text-sm text-muted-foreground">{card.subtitle}</p>
+        </div>
+        <span
+          className={cn(
+            "rounded-full border px-2.5 py-0.5 text-[10px] font-semibold",
+            "muted" in card && card.muted
+              ? "border-amber-500/25 text-amber-700"
+              : "border-emerald-500/25 text-emerald-700",
+          )}
+        >
+          {card.statusLabel}
+        </span>
+      </div>
+      <p className="mt-4 flex-1 text-sm leading-7 text-muted-foreground">{card.problem}</p>
+      <span className="mt-5 text-sm font-semibold text-primary">Explore →</span>
+    </Link>
+  );
+}
 
 export default function EnglishProductsPage() {
   return (
@@ -63,45 +87,61 @@ export default function EnglishProductsPage() {
             Operating systems on one core
           </h1>
           <p className="mt-6 text-lg leading-8 text-white/60">
-            Audit, decisions, and local content — shared governance, evidence
+            Audit, local content, and decisions — shared governance, evidence
             chains, and human approval gates.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl space-y-5 px-6 py-16">
-        {systems.map((sys) => (
-          <article
-            key={sys.id}
-            className="rounded-2xl border border-border/60 p-6 sm:p-8"
-          >
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
-                  {sys.status.label}
-                </p>
-                <h2 className="mt-1 text-2xl font-black">{sys.title}</h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {sys.subtitle}
-                </p>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                  {sys.status.capabilityNote}
-                </p>
-              </div>
-              <Link href={sys.href} className="btn-primary h-10 px-6 text-sm">
-                Explore {sys.title}
-              </Link>
-            </div>
-          </article>
-        ))}
-
-        <div className="flex flex-wrap justify-center gap-4 pt-8">
-          <ScheduleDiagnosticCta locale="en" />
-          <Link href="/en/start" className="btn-outline h-11 px-6">
-            Get started by role
-          </Link>
+      <section className="mx-auto w-full max-w-7xl px-6 py-14">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-600">
+          Core operating systems
+        </p>
+        <div className="mt-6 grid gap-5 md:grid-cols-3">
+          {tier1ProductCardsEn.map((card) => (
+            <ProductCard key={card.id} card={card} />
+          ))}
         </div>
       </section>
+
+      <section className="border-t bg-muted/10">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700/80">
+            Platform roadmap & shared services
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Shared capabilities and early-stage systems — discussed within your activation scope.
+          </p>
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            {roadmapProductCardsEn.map((card) => (
+              <ProductCard key={card.id} card={card} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border/60 px-5 py-4">
+            <p className="text-sm text-muted-foreground">
+              Every system runs on Evidence Chain · RBAC · Audit Trail · Human Approval
+            </p>
+            <div className="flex gap-3">
+              <Link href="/en/governance" className="btn-outline h-9 px-4 text-xs">
+                Governance
+              </Link>
+              <Link href="/en/platform" className="btn-outline h-9 px-4 text-xs">
+                Intelligence Core
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ConversionBand
+        secondaryHref="/en/start"
+        secondaryLabel="Where to start"
+      />
     </div>
   );
 }

@@ -188,14 +188,6 @@ export const tier1ProductCards: ProductIndexCard[] = [
     href: "/products/audit",
   },
   {
-    id: "decision",
-    title: "DecisionOS",
-    subtitle: "حوكمة القرارات",
-    statusLabel: "متكامل في المنصة",
-    problem: "بدائل، معايير، مخاطر، واعتماد — لا مذكرات متفرقة.",
-    href: "/products/decision",
-  },
-  {
     id: "local-content",
     title: "LocalContentOS",
     subtitle: "محتوى محلي وامتثال",
@@ -205,12 +197,12 @@ export const tier1ProductCards: ProductIndexCard[] = [
     muted: false,
   },
   {
-    id: "office-ai",
-    title: "Office AI Assistant",
-    subtitle: "مساعد مؤسسي مشترك",
-    statusLabel: "خدمة مشتركة",
-    problem: "مساعد مؤسسي عبر حلول المنصة — تلخيص، تحرير، تحليل.",
-    href: "/products/office-ai",
+    id: "decision",
+    title: "DecisionOS",
+    subtitle: "حوكمة القرارات",
+    statusLabel: "متكامل في المنصة",
+    problem: "بدائل، معايير، مخاطر، واعتماد — لا مذكرات متفرقة.",
+    href: "/products/decision",
   },
 ];
 
@@ -222,6 +214,15 @@ export const roadmapProductCards: ProductIndexCard[] = [
     statusLabel: "قريباً على خارطة المنصة",
     problem: "تأهيل، pipeline، وذاكرة مبيعات — في خارطة المنصة.",
     href: "/products/sales",
+    muted: true,
+  },
+  {
+    id: "office-ai",
+    title: "Office AI Assistant",
+    subtitle: "مساعد مؤسسي مشترك",
+    statusLabel: "خدمة مشتركة",
+    problem: "مساعد مؤسسي عبر حلول المنصة — تلخيص، تحرير، تحليل.",
+    href: "/products/office-ai",
     muted: true,
   },
 ];
