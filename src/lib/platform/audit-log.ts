@@ -175,7 +175,9 @@ export async function writePlatformAuditLog(
     if (options?.strict) {
       throw err;
     }
-    console.warn(`[PlatformAuditLog] Write failed: ${message}`);
+    if (process.env.NODE_ENV !== "test") {
+      console.warn(`[PlatformAuditLog] Write failed: ${message}`);
+    }
     return { ok: false, error: message };
   }
 }

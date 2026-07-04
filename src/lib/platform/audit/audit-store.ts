@@ -73,7 +73,9 @@ export async function appendToAuditChain(
     return entry
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error"
-    console.warn(`[AuditChain] Append failed: ${message}`)
+    if (process.env.NODE_ENV !== "test") {
+      console.warn(`[AuditChain] Append failed: ${message}`)
+    }
     return null
   }
 }
@@ -337,7 +339,9 @@ export async function searchAuditLogs(
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error"
-    console.warn(`[AuditSearch] Query failed: ${message}`)
+    if (process.env.NODE_ENV !== "test") {
+      console.warn(`[AuditSearch] Query failed: ${message}`)
+    }
     return { entries: [], total: 0, hasMore: false }
   }
 }
