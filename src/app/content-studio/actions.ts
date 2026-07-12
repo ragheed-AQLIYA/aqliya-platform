@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole, isExpectedAccessDeniedError } from "@/lib/auth";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import {
   ContentStudioError,
@@ -66,7 +66,10 @@ export async function createWorkspaceAction(
   data: CreateWorkspaceData,
 ): Promise<ActionResult<{ id: string; name: string }>> {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const ws = await csCreateWorkspace(user.organizationId, data, user.id);
     await writePlatformAuditLog({
       productKey: "platform",
@@ -85,7 +88,10 @@ export async function createWorkspaceAction(
 
 export async function listWorkspacesAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     const workspaces = await csListWorkspaces(user.organizationId);
     return workspaces;
   });
@@ -93,7 +99,10 @@ export async function listWorkspacesAction() {
 
 export async function getWorkspaceAction(id: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     const ws = await csGetWorkspace(id);
     if (!ws) throw new ContentStudioError("Content workspace not found");
     if (ws.organizationId !== user.organizationId) {
@@ -108,7 +117,10 @@ export async function updateWorkspaceAction(
   data: UpdateWorkspaceData,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const existing = await csGetWorkspace(id);
     if (!existing) throw new ContentStudioError("Content workspace not found");
     if (existing.organizationId !== user.organizationId) {
@@ -127,7 +139,10 @@ export async function createContentAction(
   data: CreateContentData,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const ws = await csGetWorkspace(workspaceId);
     if (!ws) throw new ContentStudioError("Content workspace not found");
     if (ws.organizationId !== user.organizationId) {
@@ -155,7 +170,10 @@ export async function listContentAction(
   status?: ContentStatusValue,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     const ws = await csGetWorkspace(workspaceId);
     if (!ws) throw new ContentStudioError("Content workspace not found");
     if (ws.organizationId !== user.organizationId) {
@@ -167,7 +185,10 @@ export async function listContentAction(
 
 export async function getContentAction(id: string) {
   return safe(async () => {
-    const _user = await requireUserContext("VIEWER");
+    const _user = await getCurrentUser();
+if (!hasRequiredRole(_user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     const content = await csGetContent(id);
     if (!content) throw new ContentStudioError("Content item not found");
     return content;
@@ -179,7 +200,10 @@ export async function updateContentAction(
   data: UpdateContentData,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const content = await csGetContent(id);
     if (!content) throw new ContentStudioError("Content item not found");
     const updated = await csUpdateContent(id, data, user.id);
@@ -202,7 +226,10 @@ export async function updateContentAction(
 
 export async function submitForReviewAction(contentId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const result = await csSubmitForReview(contentId, user.id);
     revalidateAll();
     return result;
@@ -214,7 +241,10 @@ export async function approveContentAction(
   notes?: string,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const result = await csApproveContent(contentId, user.id, notes);
     revalidateAll();
     return result;
@@ -226,7 +256,10 @@ export async function rejectContentAction(
   reason: string,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const result = await csRejectContent(contentId, user.id, reason);
     revalidateAll();
     return result;
@@ -235,7 +268,10 @@ export async function rejectContentAction(
 
 export async function publishContentAction(contentId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const result = await csPublishContent(contentId, user.id);
     revalidateAll();
     return result;
@@ -244,7 +280,10 @@ export async function publishContentAction(contentId: string) {
 
 export async function archiveContentAction(contentId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const result = await csArchiveContent(contentId, user.id);
     revalidateAll();
     return result;
@@ -253,7 +292,10 @@ export async function archiveContentAction(contentId: string) {
 
 export async function deleteContentAction(contentId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const content = await csGetContent(contentId);
     if (!content) throw new ContentStudioError("Content item not found");
     await csArchiveContent(contentId, user.id); // soft-delete via archive
@@ -275,7 +317,10 @@ export async function deleteContentAction(contentId: string) {
 
 export async function createTemplateAction(data: CreateTemplateData) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const template = await csCreateTemplate(user.organizationId, data, user.id);
     revalidateAll();
     revalidatePath("/content-studio/templates");
@@ -285,14 +330,20 @@ export async function createTemplateAction(data: CreateTemplateData) {
 
 export async function listTemplatesAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     return csListTemplates(user.organizationId);
   });
 }
 
 export async function getTemplateAction(id: string) {
   return safe(async () => {
-    const _user = await requireUserContext("VIEWER");
+    const _user = await getCurrentUser();
+if (!hasRequiredRole(_user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     const template = await csGetTemplate(id);
     if (!template) throw new ContentStudioError("Template not found");
     return template;
@@ -303,28 +354,40 @@ export async function getTemplateAction(id: string) {
 
 export async function getWorkspaceStatsAction(workspaceId: string) {
   return safe(async () => {
-    const _user = await requireUserContext("VIEWER");
+    const _user = await getCurrentUser();
+if (!hasRequiredRole(_user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     return csGetWorkspaceStats(workspaceId);
   });
 }
 
 export async function getVersionHistoryAction(contentId: string) {
   return safe(async () => {
-    const _user = await requireUserContext("VIEWER");
+    const _user = await getCurrentUser();
+if (!hasRequiredRole(_user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     return csGetVersionHistory(contentId);
   });
 }
 
 export async function getVersionAction(versionId: string) {
   return safe(async () => {
-    const _user = await requireUserContext("VIEWER");
+    const _user = await getCurrentUser();
+if (!hasRequiredRole(_user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     return csGetVersion(versionId);
   });
 }
 
 export async function restoreVersionAction(versionId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "OPERATOR")) {
+  throw new Error("Access denied: OPERATOR role required");
+}
     const result = await csRestoreVersion(versionId, user.id);
     revalidateAll();
     return result;
@@ -335,7 +398,10 @@ export async function restoreVersionAction(versionId: string) {
 
 export async function exportContentAction(contentId: string) {
   try {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
     const content = await csGetContent(contentId);
     if (!content) return { success: false, error: "Content not found" };
     if (content.organizationId !== user.organizationId) {

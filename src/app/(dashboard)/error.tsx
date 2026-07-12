@@ -48,9 +48,9 @@ export default function DashboardError({
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
               <ShieldBan className="h-6 w-6 text-muted-foreground" />
             </div>
-            <CardTitle>Access Denied</CardTitle>
+            <CardTitle>تم رفض الوصول</CardTitle>
             <CardDescription>
-              You don't have permission to access this page.
+              ليس لديك الصلاحية للوصول إلى هذه الصفحة.
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center space-y-4">
@@ -59,10 +59,10 @@ export default function DashboardError({
             </p>
             <div className="flex gap-2 justify-center">
               <Link href="/">
-                <Button>Go Home</Button>
+                <Button>الرئيسية</Button>
               </Link>
               <Button variant="outline" onClick={reset}>
-                Try Again
+                إعادة المحاولة
               </Button>
             </div>
           </CardContent>

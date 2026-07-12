@@ -93,7 +93,9 @@ export default async function EngagementDetailPage({
         />
       </div>
 
-      <EngagementHeader engagement={engagement} status={workflowStatus} />
+      <div data-tour="trial-balance">
+        <EngagementHeader engagement={engagement} status={workflowStatus} />
+      </div>
 
       <WorkflowProgress
         engagementId={engagementId}
@@ -128,65 +130,71 @@ export default async function EngagementDetailPage({
       ) : null}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card className="rounded-[24px] border-border/70 shadow-sm">
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-bold">سجل النشاط</h2>
-          </div>
-          <CardContent className="pt-4">
-            <RecentActivity events={recentEvents} />
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-[24px] border-border/70 shadow-sm">
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-bold">ملخص التتبع</h2>
-          </div>
-          <CardContent className="pt-4">
-            <div className="space-y-3">
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-900 dark:bg-emerald-950">
-                <h3 className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                  التتبع الأمامي
-                </h3>
-                <div className="mt-2 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-300">
-                  <span>
-                    ميزان المراجعة ← التصنيف ← الأدلة ← النتائج ← التوصيات
-                  </span>
-                </div>
-              </div>
-              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-900 dark:bg-amber-950">
-                <h3 className="text-xs font-medium text-amber-700 dark:text-amber-400">
-                  التتبع العكسي
-                </h3>
-                <div className="mt-2 flex items-center gap-2 text-xs text-amber-600 dark:text-amber-300">
-                  <span>النشر ← الاعتماد ← المراجعة ← القوائم</span>
-                </div>
-              </div>
-              <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950">
-                <h3 className="text-xs font-medium text-blue-700 dark:text-blue-400">
-                  الروابط الناقصة
-                </h3>
-                <ul className="mt-2 space-y-1 text-xs text-blue-600 dark:text-blue-300">
-                  {missingEvidence.length === 0 ? (
-                    <li className="flex items-center gap-1">
-                      <Circle className="h-2 w-2" />
-                      لا توجد عناصر دليل مفقودة مسجلة
-                    </li>
-                  ) : (
-                    missingEvidence.slice(0, 3).map((item) => (
-                      <li key={item.id} className="flex items-center gap-1">
-                        <Circle className="h-2 w-2" />
-                        {item.filename}
-                      </li>
-                    ))
-                  )}
-                </ul>
-              </div>
+        <div data-tour="evidence">
+          <Card className="rounded-[24px] border-border/70 shadow-sm">
+            <div className="border-b px-4 py-3">
+              <h2 className="text-sm font-bold">سجل النشاط</h2>
             </div>
-          </CardContent>
-        </Card>
+            <CardContent className="pt-4">
+              <RecentActivity events={recentEvents} />
+            </CardContent>
+          </Card>
+        </div>
+
+        <div data-tour="findings">
+          <Card className="rounded-[24px] border-border/70 shadow-sm">
+            <div className="border-b px-4 py-3">
+              <h2 className="text-sm font-bold">ملخص التتبع</h2>
+            </div>
+            <CardContent className="pt-4">
+              <div className="space-y-3">
+                <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-900 dark:bg-emerald-950">
+                  <h3 className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                    التتبع الأمامي
+                  </h3>
+                  <div className="mt-2 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-300">
+                    <span>
+                      ميزان المراجعة ← التصنيف ← الأدلة ← النتائج ← التوصيات
+                    </span>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-900 dark:bg-amber-950">
+                  <h3 className="text-xs font-medium text-amber-700 dark:text-amber-400">
+                    التتبع العكسي
+                  </h3>
+                  <div className="mt-2 flex items-center gap-2 text-xs text-amber-600 dark:text-amber-300">
+                    <span>النشر ← الاعتماد ← المراجعة ← القوائم</span>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950">
+                  <h3 className="text-xs font-medium text-blue-700 dark:text-blue-400">
+                    الروابط الناقصة
+                  </h3>
+                  <ul className="mt-2 space-y-1 text-xs text-blue-600 dark:text-blue-300">
+                    {missingEvidence.length === 0 ? (
+                      <li className="flex items-center gap-1">
+                        <Circle className="h-2 w-2" />
+                        لا توجد عناصر دليل مفقودة مسجلة
+                      </li>
+                    ) : (
+                      missingEvidence.slice(0, 3).map((item) => (
+                        <li key={item.id} className="flex items-center gap-1">
+                          <Circle className="h-2 w-2" />
+                          {item.filename}
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      <AIOutputsPanel engagementId={engagementId} initialOutputs={aiOutputs} />
+      <div data-tour="export">
+        <AIOutputsPanel engagementId={engagementId} initialOutputs={aiOutputs} />
+      </div>
     </div>
   );
 }

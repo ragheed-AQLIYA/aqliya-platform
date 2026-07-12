@@ -2,7 +2,7 @@
 // Single operational readiness page: 11 dimensions, GREEN/AMBER/RED status.
 
 import { unstable_noStore as noStore } from "next/cache";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { getPilotReadiness } from "@/lib/local-content/pilot-readiness";
 import { PilotReadinessClient } from "./pilot-readiness-client";
 
@@ -12,7 +12,7 @@ export default async function PilotReadinessPage() {
   noStore();
 
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const report = await getPilotReadiness(user.organizationId);
 
     return <PilotReadinessClient report={report} />;

@@ -7,6 +7,34 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+
+export async function getLcAuditEvents(organizationId: string) {
+  const user = await getCurrentUser();
+  if (user.organizationId !== organizationId) {
+    throw new Error("Access denied");
+  }
+
+  const [auditEventCount, recentAuditEvents] = await Promise.all([
+    prisma.lcAiAuditEvent.count({ where: { organizationId } }),
+    prisma.lcAiAuditEvent.findMany({
+      where: { organizationId },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+    }),
+  ]);
+
+  return {
+    auditEventCount,
+    recentAuditEvents: recentAuditEvents.map((e) => ({
+      id: e.id,
+      action: e.action,
+      status: e.status,
+      confidence: e.confidence ?? undefined,
+      durationMs: e.durationMs,
+      createdAt: e.createdAt.toISOString(),
+    })),
+  };
+}
 import {
   reviewPatternSuggestion,
   reviewFalsePositive,

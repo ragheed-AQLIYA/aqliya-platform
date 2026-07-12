@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { evaluateWithGate, getGateThreshold, registerGateThreshold } from "@/lib/core/ai/eval-gate"
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 
 export const dynamic = "force-dynamic"
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireUserContext("OPERATOR")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "OPERATOR")) {
+      throw new Error("Access denied: OPERATOR role required");
+    }
     const body = await request.json()
     const { suiteId, taskType, actualOutput } = body
 
@@ -26,7 +29,10 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    await requireUserContext("ADMIN")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const { searchParams } = new URL(request.url)
     const suiteId = searchParams.get("suiteId")
     if (suiteId) {
@@ -42,7 +48,10 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    await requireUserContext("ADMIN")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const body = await request.json()
     const { suiteId, threshold } = body
     if (!suiteId || threshold === undefined) {

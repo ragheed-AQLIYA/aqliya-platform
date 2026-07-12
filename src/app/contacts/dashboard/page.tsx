@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { getDashboardMetrics } from "@/lib/localcontactos/dashboard-cache";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,7 +43,7 @@ function exportStatusBadge(status: string) {
 }
 
 export default async function ContactsDashboardPage() {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
 
   const orgId = user.organizationId;
 

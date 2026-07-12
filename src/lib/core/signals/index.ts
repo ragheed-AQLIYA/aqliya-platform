@@ -36,4 +36,4 @@ export {
   collectSalesApprovalSignals,
   collectSalesReviewSignals,
   collectSalesTaskSignals,
-} from "./producers/sales-signal-producer";
+} from "@/lib/sales/signals/core-signal-producer";

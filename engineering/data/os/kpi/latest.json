@@ -1,0 +1,89 @@
+{
+  "at": "2026-07-11T11:27:35.615Z",
+  "kpis": [
+    {
+      "id": "code_health",
+      "label": "Code Health",
+      "value": 32,
+      "delta": 0,
+      "sparkline": "▁▄███"
+    },
+    {
+      "id": "technical_debt",
+      "label": "Technical Debt (health)",
+      "value": 58,
+      "delta": 0,
+      "sparkline": "▁████"
+    },
+    {
+      "id": "mttr_hours",
+      "label": "Mean Time to Fix (hours)",
+      "value": null,
+      "delta": null,
+      "sparkline": "—"
+    },
+    {
+      "id": "reopened_findings",
+      "label": "Reopened Findings",
+      "value": 0,
+      "delta": null,
+      "sparkline": "—"
+    },
+    {
+      "id": "authorization_adoption",
+      "label": "Authorization Adoption (%)",
+      "value": 52,
+      "delta": null,
+      "sparkline": "—"
+    },
+    {
+      "id": "dead_code_open",
+      "label": "Dead Code Open Signals",
+      "value": 82,
+      "delta": null,
+      "sparkline": "—"
+    },
+    {
+      "id": "documentation_coverage",
+      "label": "Documentation Score",
+      "value": 95,
+      "delta": null,
+      "sparkline": "▁"
+    },
+    {
+      "id": "test_stability",
+      "label": "Test Intelligence Score",
+      "value": 95,
+      "delta": null,
+      "sparkline": "▁"
+    },
+    {
+      "id": "security_trend",
+      "label": "Security Score",
+      "value": 65,
+      "delta": 0,
+      "sparkline": "▁████"
+    },
+    {
+      "id": "platform_health",
+      "label": "Platform Health",
+      "value": 74,
+      "delta": 0,
+      "sparkline": "▁▇███"
+    },
+    {
+      "id": "open_findings",
+      "label": "Open Findings",
+      "value": 786,
+      "delta": null,
+      "sparkline": "—"
+    },
+    {
+      "id": "resolved_findings",
+      "label": "Resolved Findings (lifetime)",
+      "value": 0,
+      "delta": null,
+      "sparkline": "—"
+    }
+  ]
+}

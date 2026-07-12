@@ -2,7 +2,8 @@
 
 import { prisma } from "@/lib/prisma"
 import { ScenarioType } from "@prisma/client"
-import { isExpectedAccessDeniedError, requireDecisionAccess } from "@/lib/auth"
+import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth"
+import { enforce } from "@/lib/authorization/action-guard"
 import { runGenericSimulation, canRunSimulation, type SimulationInput, buildScoringData, deriveScores } from "@/lib/simulation/simulation-engine"
 import { generateRecommendation } from "@/lib/recommendation/tender-recommendation"
 import { runSimulation, type TenderInput } from "@/lib/simulation/tender-simulation"
@@ -10,7 +11,15 @@ import { generateGenericRecommendation, canGenerateRecommendation, type Recommen
 
 export async function runSimulationAndRecommendation(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -282,7 +291,15 @@ export async function runSimulationAndRecommendation(decisionId: string) {
 
 export async function getSimulationResults(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
       include: {

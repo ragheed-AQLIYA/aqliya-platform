@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Phase 8 — Knowledge Mining Candidates API.
  * GET: List candidates (with filters)
  * POST: Run mining pipeline
@@ -17,6 +17,7 @@ import { auth } from "@/lib/auth-next";
 import { listCandidates } from "@/lib/tb-intelligence/knowledge-mining";
 import type { KnowledgeCandidateStatus } from "@/lib/tb-intelligence/knowledge-mining/types";
 import { runFullMiningPipeline } from "@/lib/tb-intelligence/knowledge-mining/candidate-rule-generator";
+import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 
 const CANDIDATE_STATUSES: KnowledgeCandidateStatus[] = [
   "CANDIDATE",
@@ -73,11 +74,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json(result);
   } catch (error) {
-    const status = error instanceof Error && error.message.startsWith("Access denied") ? 403 : 500;
-    return NextResponse.json(
-      { error: String(error), candidates: [], total: 0 },
-      { status },
-    );
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }
 
@@ -95,7 +93,7 @@ export async function POST() {
     });
     return NextResponse.json(result);
   } catch (error) {
-    const status = error instanceof Error && error.message.startsWith("Access denied") ? 403 : 500;
-    return NextResponse.json({ error: String(error) }, { status });
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }

@@ -1,10 +1,11 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole, isExpectedAccessDeniedError } from "@/lib/auth";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { createHash } from "crypto";
+import { validateFileContent } from "@/lib/security/file-validation";
 
 const ALLOWED_FILE_TYPES = [
   "pdf",
@@ -69,7 +70,10 @@ async function requireContentAccess(
   contentId: string,
   role: "VIEWER" | "OPERATOR" = "VIEWER",
 ) {
-  const user = await requireUserContext(role);
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, role)) {
+    throw new Error(`Access denied: ${role} role required`);
+  }
   const content = await prisma.contentItem.findUnique({
     where: { id: contentId },
     select: { organizationId: true },
@@ -126,6 +130,15 @@ export async function uploadContentEvidenceAction(params: {
       return {
         ok: false,
         error: `الملف كبير جداً: ${(content.length / 1024 / 1024).toFixed(1)}MB. الحد الأقصى: ${MAX_FILE_SIZE_BYTES / 1024 / 1024}MB`,
+      };
+    }
+
+    // Validate file content matches its claimed extension (magic bytes check)
+    const contentValidation = validateFileContent(content, normalizedFileType);
+    if (!contentValidation.valid) {
+      return {
+        ok: false,
+        error: contentValidation.error || "نوع الملف لا يتطابق مع امتداده",
       };
     }
 

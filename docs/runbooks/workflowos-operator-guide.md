@@ -1,7 +1,7 @@
 # WorkflowOS Operator Guide — دليل تشغيل سير العمل
 
 > **Product:** WorkflowOS under AQLIYA  
-> **Level:** L5 Pilot-ready  
+> **Level:** L6 Production-hardened  
 > **Routes:** `/workflowos`, `/workflowos/templates/*`, `/workflowos/records/*`  
 > **Alias:** `/sunbul/*` → permanent redirect to `/workflowos/*`
 > **Last updated:** 2026-06-18

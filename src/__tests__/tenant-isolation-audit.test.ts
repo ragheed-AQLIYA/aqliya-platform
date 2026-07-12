@@ -80,14 +80,14 @@ describe("Tenant Isolation Audit", () => {
   })
 
   describe("tenant action gates", () => {
-    it("tenant-actions.ts imports requireUserContext with ADMIN role", () => {
+    it("tenant-actions.ts imports getCurrentUser for auth gating", () => {
       const actions = readFileSync(
         join(__dirname, "../actions/tenant-actions.ts"),
         "utf-8",
       )
-      const adminGates = actions.match(/requireUserContext\("ADMIN"\)/g)
-      expect(adminGates).not.toBeNull()
-      expect(adminGates!.length).toBeGreaterThanOrEqual(4)
+      const authGates = actions.match(/await getCurrentUser\(\)/g)
+      expect(authGates).not.toBeNull()
+      expect(authGates!.length).toBeGreaterThanOrEqual(4)
     })
 
     it("tenant-actions.ts scopes platform org access to actor tenant", () => {

@@ -24,8 +24,16 @@ jest.mock("@/lib/prisma", () => ({
 }));
 
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: jest.fn(),
-  isExpectedAccessDeniedError: jest.fn().mockReturnValue(false),
+  getCurrentUser: jest.fn(),
+  isExpectedAccessDeniedError: jest.fn(
+    (error: Error) =>
+      error?.message?.startsWith("Access denied:") ||
+      error?.message === "Unauthenticated",
+  ),
+}));
+
+jest.mock("@/lib/authorization", () => ({
+  enforce: jest.fn(),
 }));
 
 jest.mock("next/cache", () => ({
@@ -34,7 +42,8 @@ jest.mock("next/cache", () => ({
 
 import { describe, expect, it, beforeEach } from "@jest/globals";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import {
   startWorkflowFromTemplate,
   workflow_listOrgRecords,
@@ -66,7 +75,14 @@ describe("WorkflowOS Expansion", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (requireUserContext as jest.Mock).mockResolvedValue(mockUser);
+    (getCurrentUser as jest.Mock).mockResolvedValue(mockUser);
+    (enforce as jest.Mock).mockImplementation(
+      async (user: { organizationId: string }, resource: { id?: string }, _action: string) => {
+        if (resource.id && resource.id !== user.organizationId) {
+          throw new Error("Access denied: cross-tenant");
+        }
+      },
+    );
   });
 
   describe("startWorkflowFromTemplate", () => {
@@ -122,7 +138,7 @@ describe("WorkflowOS Expansion", () => {
       const result = await startWorkflowFromTemplate("template-1", "Test Record");
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe("لا تملك صلاحية الوصول لهذا النموذج");
+      expect(result.error).toBe("لا تملك صلاحية تنفيذ هذا الإجراء");
     });
   });
 
@@ -247,7 +263,7 @@ describe("WorkflowOS Expansion", () => {
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe("Access denied");
+      expect(result.error).toBe("Failed to upload evidence");
     });
   });
 
@@ -297,7 +313,7 @@ describe("WorkflowOS Expansion", () => {
       const result = await getWorkflowDashboardStats("org-2");
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe("Access denied");
+      expect(result.error).toBe("Failed to get dashboard stats");
     });
   });
 });

@@ -1,0 +1,68 @@
+{
+  "at": "2026-07-11T11:27:34.655Z",
+  "stats": {
+    "nodes": 3330,
+    "edges": 3521,
+    "products": 12,
+    "actions": 92,
+    "tests": 373,
+    "testsCoveringAuth": 6,
+    "enforceUsages": 234,
+    "enforceFiles": 35,
+    "enforceProducts": 7
+  },
+  "symbols": [
+    {
+      "id": "symbol:enforce",
+      "type": "symbol",
+      "name": "enforce",
+      "definedIn": "src/lib/authorization/action-guard.ts",
+      "usageCount": 234,
+      "fileCount": 35,
+      "products": [
+        "Platform",
+        "DecisionOS",
+        "Core",
+        "WorkflowOS",
+        "SalesOS",
+        "LocalContentOS",
+        "AuditOS"
+      ]
+    },
+    {
+      "id": "symbol:authorize",
+      "type": "symbol",
+      "name": "authorize",
+      "definedIn": "src/lib/authorization/authorize.ts",
+      "usageCount": 87,
+      "fileCount": 11,
+      "products": [
+        "Platform",
+        "Core",
+        "LocalContentOS"
+      ]
+    },
+    {
+      "id": "symbol:prisma",
+      "type": "symbol",
+      "name": "prisma",
+      "definedIn": "src/lib/prisma.ts",
+      "usageCount": 4295,
+      "fileCount": 364,
+      "products": [
+        "Platform",
+        "DecisionOS",
+        "WorkflowOS",
+        "LocalContentOS",
+        "OfficeAI",
+        "Core",
+        "SalesOS",
+        "AuditOS",
+        "LocalContactOS",
+        "InstitutionalMemory",
+        "RiskOS",
+        "ContentStudio"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "startedAt": "2026-07-11T02:07:29.687Z",
+  "finishedAt": "2026-07-11T02:08:07.573Z",
+  "auditId": "audit-2026-07-11T02-08-06-851Z",
+  "agents": [
+    {
+      "name": "code-health",
+      "score": 32,
+      "summary": {
+        "total": 290,
+        "critical": 0,
+        "high": 116,
+        "medium": 49,
+        "low": 120,
+        "info": 5
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\code-health.md",
+      "ms": 34817
+    },
+    {
+      "name": "security",
+      "score": 65,
+      "summary": {
+        "total": 64,
+        "critical": 0,
+        "high": 27,
+        "medium": 36,
+        "low": 0,
+        "info": 1
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\security.md",
+      "ms": 308
+    },
+    {
+      "name": "performance",
+      "score": 57,
+      "summary": {
+        "total": 135,
+        "critical": 0,
+        "high": 32,
+        "medium": 72,
+        "low": 30,
+        "info": 1
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\performance.md",
+      "ms": 397
+    },
+    {
+      "name": "test-intelligence",
+      "score": 95,
+      "summary": {
+        "total": 13,
+        "critical": 0,
+        "high": 0,
+        "medium": 7,
+        "low": 5,
+        "info": 1
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\testing.md",
+      "ms": 167
+    },
+    {
+      "name": "documentation",
+      "score": 95,
+      "summary": {
+        "total": 12,
+        "critical": 0,
+        "high": 0,
+        "medium": 11,
+        "low": 1,
+        "info": 0
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\documentation.md",
+      "ms": 189
+    },
+    {
+      "name": "ux-quality",
+      "score": 97,
+      "summary": {
+        "total": 161,
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 66,
+        "info": 95
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\ui-quality.md",
+      "ms": 160
+    },
+    {
+      "name": "dependency",
+      "score": 93,
+      "summary": {
+        "total": 37,
+        "critical": 0,
+        "high": 1,
+        "medium": 0,
+        "low": 35,
+        "info": 1
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\dependencies.md",
+      "ms": 517
+    },
+    {
+      "name": "technical-debt",
+      "score": 58,
+      "summary": {
+        "total": 106,
+        "critical": 0,
+        "high": 40,
+        "medium": 0,
+        "low": 65,
+        "info": 1
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\technical-debt.md",
+      "ms": 347
+    },
+    {
+      "name": "architecture-drift",
+      "score": 73,
+      "summary": {
+        "total": 5,
+        "critical": 3,
+        "high": 1,
+        "medium": 1,
+        "low": 0,
+        "info": 0
+      },
+      "path": "C:\\Users\\PC\\Documents\\Aqliya\\engineering\\reports\\architecture-drift.md",
+      "ms": 254
+    }
+  ],
+  "intelligence": [
+    {
+      "name": "engineering-intelligence",
+      "score": 85,
+      "findings": 1
+    },
+    {
+      "name": "trend-analysis",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "name": "regression-detector",
+      "score": 100,
+      "findings": 1
+    },
+    {
+      "name": "recommendation-ranking",
+      "score": 84,
+      "findings": 10
+    },
+    {
+      "name": "engineering-cost",
+      "score": 85,
+      "findings": 26
+    },
+    {
+      "name": "predictive-risk",
+      "score": 96,
+      "findings": 7
+    }
+  ],
+  "gates": {
+    "results": [
+      {
+        "gate": "security",
+        "status": "WARNING",
+        "score": 65,
+        "previous": 65,
+        "delta": 0,
+        "arrow": "=",
+        "reason": "score 65 vs pass≥80 warn≥60 · Δ +0 (+0% vs previous)",
+        "thresholds": {
+          "pass": 80,
+          "warn": 60
+        }
+      },
+      {
+        "gate": "performance",
+        "status": "WARNING",
+        "score": 57,
+        "previous": 57,
+        "delta": 0,
+        "arrow": "=",
+        "reason": "score 57 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)",
+        "thresholds": {
+          "pass": 75,
+          "warn": 55
+        }
+      },
+      {
+        "gate": "complexity",
+        "status": "FAIL",
+        "score": 32,
+        "previous": 32,
+        "delta": 0,
+        "arrow": "=",
+        "reason": "score 32 vs pass≥70 warn≥50 · Δ +0 (+0% vs previous) · still below threshold despite =",
+        "thresholds": {
+          "pass": 70,
+          "warn": 50
+        }
+      },
+      {
+        "gate": "coverage",
+        "status": "PASS",
+        "score": 95,
+        "previous": 95,
+        "delta": 0,
+        "arrow": "=",
+        "reason": "score 95 vs pass≥60 warn≥40 · Δ +0 (+0% vs previous)",
+        "thresholds": {
+          "pass": 60,
+          "warn": 40
+        }
+      },
+      {
+        "gate": "documentation",
+        "status": "PASS",
+        "score": 95,
+        "previous": 95,
+        "delta": 0,
+        "arrow": "=",
+        "reason": "score 95 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)",
+        "thresholds": {
+          "pass": 75,
+          "warn": 55
+        }
+      },
+      {
+        "gate": "deadCode",
+        "status": "FAIL",
+        "score": 32,
+        "previous": 32,
+        "delta": 0,
+        "arrow": "=",
+        "reason": "score 32 vs pass≥70 warn≥50 · Δ +0 (+0% vs previous) · still below threshold despite =",
+        "thresholds": {
+          "pass": 70,
+          "warn": 50
+        }
+      },
+      {
+        "gate": "dependencyHealth",
+        "status": "PASS",
+        "score": 93,
+        "previous": 93,
+        "delta": 0,
+        "arrow": "=",
+        "reason": "score 93 vs pass≥80 warn≥60 · Δ +0 (+0% vs previous)",
+        "thresholds": {
+          "pass": 80,
+          "warn": 60
+        }
+      },
+      {
+        "gate": "architectureDrift",
+        "status": "WARNING",
+        "score": 73,
+        "previous": 73,
+        "delta": 0,
+        "arrow": "=",
+        "reason": "score 73 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)",
+        "thresholds": {
+          "pass": 75,
+          "warn": 55
+        }
+      }
+    ],
+    "passes": 3,
+    "warns": 3,
+    "fails": 2
+  }
+}

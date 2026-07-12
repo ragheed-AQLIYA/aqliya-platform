@@ -1,4 +1,4 @@
-# Phase 29 — Tabletop Exit Gate Guide
+﻿# Phase 29 — Tabletop Exit Gate Guide
 
 **Date:** 2026-06-21  
 **Status:** IN PROGRESS — awaiting Tabletop execution  
@@ -38,7 +38,7 @@ Operational Readiness:           NOT YET VERIFIED
 
 | Step | Document | Owner |
 | ---- | -------- | ----- |
-| Readiness | [TABLETOP_READINESS_CHECKLIST.md](../operations/knowledge-foundation/TABLETOP_READINESS_CHECKLIST.md) | Governance Lead |
+| Readiness | [TABLETOP_READINESS_CHECKLIST.md](../../operations/knowledge-foundation/TABLETOP_READINESS_CHECKLIST.md) | Governance Lead |
 | Master record | [TABLETOP_EXECUTION_RECORD.md](../operations/knowledge-foundation/TABLETOP_EXECUTION_RECORD.md) | Facilitator |
 | Smoke | [TABLETOP_SMOKE_VALIDATION.md](../operations/knowledge-foundation/TABLETOP_SMOKE_VALIDATION.md) | Platform Ops |
 | Exercise | [TABLETOP_GOVERNANCE_EXERCISE.md](../operations/knowledge-foundation/TABLETOP_GOVERNANCE_EXERCISE.md) | Facilitator |

@@ -11,12 +11,18 @@ jest.mock("next/cache", () => ({
 const mockGetCurrentUser = jest.fn();
 
 jest.mock("@/lib/auth", () => ({
-  getCurrentUser: mockGetCurrentUser,
-  requireUserContext: mockGetCurrentUser,
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
+  hasRequiredRole: jest.fn().mockReturnValue(true),
   isExpectedAccessDeniedError: jest.fn((error) =>
     error instanceof Error &&
     (error.message.startsWith("Access denied:") || error.message === "Unauthenticated")
   ),
+}));
+
+const mockEnforce = jest.fn();
+
+jest.mock("@/lib/authorization", () => ({
+  enforce: mockEnforce,
 }));
 
 jest.mock("@/lib/platform/audit-log", () => ({
@@ -186,6 +192,13 @@ const mockEvidence = {
 beforeEach(() => {
   jest.clearAllMocks();
   mockGetCurrentUser.mockResolvedValue(mockUser);
+  mockEnforce.mockImplementation(
+    async (user: { organizationId: string }, resource: { id?: string }, _action: string) => {
+      if (resource.id && resource.id !== user.organizationId) {
+        throw new Error("Access denied: cross-tenant");
+      }
+    },
+  );
 });
 describe("createTemplate", () => {
   it("creates a template with valid steps", async () => {

@@ -11,6 +11,7 @@ import {
 } from "@/lib/auth/scim-types";
 import { getUser, updateUser, patchUser, deleteUser } from "@/lib/auth/scim-service";
 import { authenticateScimRequest, getScimHeaders } from "../../auth";
+import { sanitizeError } from "@/lib/platform/api-error";
 
 export async function GET(
   _request: Request,
@@ -35,7 +36,7 @@ export async function GET(
       headers: getScimHeaders(),
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
+    const { message } = sanitizeError(error);
     return NextResponse.json(
       buildScimError(500, message),
       { status: 500, headers: getScimHeaders() },
@@ -75,7 +76,7 @@ export async function PUT(
       headers: getScimHeaders(),
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
+    const { message } = sanitizeError(error);
     return NextResponse.json(
       buildScimError(500, message),
       { status: 500, headers: getScimHeaders() },
@@ -118,7 +119,7 @@ export async function PATCH(
       headers: getScimHeaders(),
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
+    const { message } = sanitizeError(error);
     return NextResponse.json(
       buildScimError(500, message),
       { status: 500, headers: getScimHeaders() },
@@ -150,7 +151,7 @@ export async function DELETE(
       headers: getScimHeaders(),
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
+    const { message } = sanitizeError(error);
     return NextResponse.json(
       buildScimError(500, message),
       { status: 500, headers: getScimHeaders() },

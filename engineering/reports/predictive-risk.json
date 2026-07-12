@@ -1,0 +1,284 @@
+{
+  "agent": "predictive-risk",
+  "title": "Predictive Risk Report",
+  "generatedAt": "2026-07-11T02:08:07.119Z",
+  "score": 96,
+  "summary": {
+    "total": 7,
+    "critical": 0,
+    "high": 0,
+    "medium": 7,
+    "low": 0,
+    "info": 0
+  },
+  "findings": [
+    {
+      "id": "F-0862",
+      "agent": "predictive-risk",
+      "severity": "medium",
+      "title": "Platform: predictive risk medium (score 40)",
+      "evidence": "LOC 94913 ≥ 3000; 39 hot files",
+      "files": [],
+      "category": "predictive-risk",
+      "suggestion": "Likely needs structural refactor within 1–2 months",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0863",
+      "agent": "predictive-risk",
+      "severity": "medium",
+      "title": "Core: predictive risk medium (score 40)",
+      "evidence": "LOC 25264 ≥ 3000; 8 hot files",
+      "files": [],
+      "category": "predictive-risk",
+      "suggestion": "Likely needs structural refactor within 1–2 months",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0864",
+      "agent": "predictive-risk",
+      "severity": "medium",
+      "title": "AuditOS: predictive risk medium (score 40)",
+      "evidence": "LOC 56260 ≥ 3000; 30 hot files",
+      "files": [],
+      "category": "predictive-risk",
+      "suggestion": "Likely needs structural refactor within 1–2 months",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0865",
+      "agent": "predictive-risk",
+      "severity": "medium",
+      "title": "SalesOS: predictive risk medium (score 40)",
+      "evidence": "LOC 59516 ≥ 3000; 27 hot files",
+      "files": [],
+      "category": "predictive-risk",
+      "suggestion": "Likely needs structural refactor within 1–2 months",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0866",
+      "agent": "predictive-risk",
+      "severity": "medium",
+      "title": "DecisionOS: predictive risk medium (score 40)",
+      "evidence": "LOC 21638 ≥ 3000; 9 hot files",
+      "files": [],
+      "category": "predictive-risk",
+      "suggestion": "Likely needs structural refactor within 1–2 months",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0867",
+      "agent": "predictive-risk",
+      "severity": "medium",
+      "title": "LocalContentOS: predictive risk medium (score 40)",
+      "evidence": "LOC 37157 ≥ 3000; 21 hot files",
+      "files": [],
+      "category": "predictive-risk",
+      "suggestion": "Likely needs structural refactor within 1–2 months",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0868",
+      "agent": "predictive-risk",
+      "severity": "medium",
+      "title": "OfficeAI: predictive risk medium (score 40)",
+      "evidence": "LOC 7531 ≥ 3000; 7 hot files",
+      "files": [],
+      "category": "predictive-risk",
+      "suggestion": "Likely needs structural refactor within 1–2 months",
+      "scoreImpact": 3
+    }
+  ],
+  "meta": {
+    "predictions": [
+      {
+        "product": "Platform",
+        "loc": 94913,
+        "files": 831,
+        "avgComplexity": 5.2,
+        "avgImports": 2.5,
+        "hotFiles": 39,
+        "riskScore": 40,
+        "level": "medium",
+        "horizon": "1–2 months",
+        "reasons": [
+          "LOC 94913 ≥ 3000",
+          "39 hot files"
+        ],
+        "forecast": "Likely needs structural refactor within 1–2 months"
+      },
+      {
+        "product": "Core",
+        "loc": 25264,
+        "files": 220,
+        "avgComplexity": 7.6,
+        "avgImports": 2.3,
+        "hotFiles": 8,
+        "riskScore": 40,
+        "level": "medium",
+        "horizon": "1–2 months",
+        "reasons": [
+          "LOC 25264 ≥ 3000",
+          "8 hot files"
+        ],
+        "forecast": "Likely needs structural refactor within 1–2 months"
+      },
+      {
+        "product": "AuditOS",
+        "loc": 56260,
+        "files": 328,
+        "avgComplexity": 7.1,
+        "avgImports": 3.7,
+        "hotFiles": 30,
+        "riskScore": 40,
+        "level": "medium",
+        "horizon": "1–2 months",
+        "reasons": [
+          "LOC 56260 ≥ 3000",
+          "30 hot files"
+        ],
+        "forecast": "Likely needs structural refactor within 1–2 months"
+      },
+      {
+        "product": "SalesOS",
+        "loc": 59516,
+        "files": 446,
+        "avgComplexity": 5.5,
+        "avgImports": 3.3,
+        "hotFiles": 27,
+        "riskScore": 40,
+        "level": "medium",
+        "horizon": "1–2 months",
+        "reasons": [
+          "LOC 59516 ≥ 3000",
+          "27 hot files"
+        ],
+        "forecast": "Likely needs structural refactor within 1–2 months"
+      },
+      {
+        "product": "DecisionOS",
+        "loc": 21638,
+        "files": 166,
+        "avgComplexity": 6.7,
+        "avgImports": 3.2,
+        "hotFiles": 9,
+        "riskScore": 40,
+        "level": "medium",
+        "horizon": "1–2 months",
+        "reasons": [
+          "LOC 21638 ≥ 3000",
+          "9 hot files"
+        ],
+        "forecast": "Likely needs structural refactor within 1–2 months"
+      },
+      {
+        "product": "LocalContentOS",
+        "loc": 37157,
+        "files": 265,
+        "avgComplexity": 5.9,
+        "avgImports": 3.2,
+        "hotFiles": 21,
+        "riskScore": 40,
+        "level": "medium",
+        "horizon": "1–2 months",
+        "reasons": [
+          "LOC 37157 ≥ 3000",
+          "21 hot files"
+        ],
+        "forecast": "Likely needs structural refactor within 1–2 months"
+      },
+      {
+        "product": "OfficeAI",
+        "loc": 7531,
+        "files": 49,
+        "avgComplexity": 6.6,
+        "avgImports": 3.5,
+        "hotFiles": 7,
+        "riskScore": 40,
+        "level": "medium",
+        "horizon": "1–2 months",
+        "reasons": [
+          "LOC 7531 ≥ 3000",
+          "7 hot files"
+        ],
+        "forecast": "Likely needs structural refactor within 1–2 months"
+      },
+      {
+        "product": "WorkflowOS",
+        "loc": 9506,
+        "files": 62,
+        "avgComplexity": 7.4,
+        "avgImports": 4.3,
+        "hotFiles": 4,
+        "riskScore": 25,
+        "level": "low",
+        "horizon": "monitor",
+        "reasons": [
+          "LOC 9506 ≥ 3000"
+        ],
+        "forecast": "Stable — continue normal delivery"
+      },
+      {
+        "product": "InstitutionalMemory",
+        "loc": 3151,
+        "files": 21,
+        "avgComplexity": 5.9,
+        "avgImports": 2.8,
+        "hotFiles": 3,
+        "riskScore": 25,
+        "level": "low",
+        "horizon": "monitor",
+        "reasons": [
+          "LOC 3151 ≥ 3000"
+        ],
+        "forecast": "Stable — continue normal delivery"
+      },
+      {
+        "product": "ContentStudio",
+        "loc": 3872,
+        "files": 33,
+        "avgComplexity": 3.7,
+        "avgImports": 4.2,
+        "hotFiles": 2,
+        "riskScore": 25,
+        "level": "low",
+        "horizon": "monitor",
+        "reasons": [
+          "LOC 3872 ≥ 3000"
+        ],
+        "forecast": "Stable — continue normal delivery"
+      },
+      {
+        "product": "LocalContactOS",
+        "loc": 3616,
+        "files": 36,
+        "avgComplexity": 1.1,
+        "avgImports": 3.9,
+        "hotFiles": 1,
+        "riskScore": 25,
+        "level": "low",
+        "horizon": "monitor",
+        "reasons": [
+          "LOC 3616 ≥ 3000"
+        ],
+        "forecast": "Stable — continue normal delivery"
+      },
+      {
+        "product": "RiskOS",
+        "loc": 1868,
+        "files": 18,
+        "avgComplexity": 3.2,
+        "avgImports": 4.1,
+        "hotFiles": 1,
+        "riskScore": 12,
+        "level": "low",
+        "horizon": "monitor",
+        "reasons": [
+          "LOC 1868 growing"
+        ],
+        "forecast": "Stable — continue normal delivery"
+      }
+    ]
+  }
+}

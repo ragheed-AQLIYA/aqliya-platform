@@ -1,7 +1,9 @@
-import "server-only";
+﻿import "server-only";
+
+import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS } from "@/lib/platform/cache-strategy";
 
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 
 export type GovernanceItem = {
   id: string;
@@ -40,7 +42,12 @@ function isOverdue(item: { deadline: Date | null; priority: string }): boolean {
 }
 
 export async function getGovernanceDashboardAction(): Promise<GovernanceDashboard> {
-  await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "VIEWER")) {
+    throw new Error("Access denied: VIEWER role required");
+  }
+  const cacheKey = `dashboard:governance:${user.organizationId}:items`;
+  return await getCachedOrFetch(cacheKey, async () => {
   const now = new Date();
 
   const [decisions, workflowRecords, localContentReviews, salesReviews, riskAssessments, auditFindings] =
@@ -205,4 +212,5 @@ export async function getGovernanceDashboardAction(): Promise<GovernanceDashboar
   const averageAge = items.length > 0 ? Math.round(totalAgeDays / items.length) : 0;
 
   return { items, stats: { totalPending, criticalCount, byProduct, averageAge } };
+  }, DASHBOARD_CACHE_TTL_MS);
 }

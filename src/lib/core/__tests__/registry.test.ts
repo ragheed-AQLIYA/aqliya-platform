@@ -1,7 +1,6 @@
 /** @jest-environment node */
 
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: jest.fn(),
   getCurrentUser: jest.fn(),
   normalizePrincipalRole: (role: string) => role.toLowerCase(),
 }));

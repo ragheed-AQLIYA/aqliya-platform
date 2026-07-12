@@ -9,7 +9,7 @@ set -euo pipefail
 #   ./bootstrap.sh [region]
 #   Default region: me-south-1
 
-REGION="${1:-me-south-1}"
+REGION="${1:-eu-north-1}"
 BUCKET="aqliya-terraform-state"
 TABLE="aqliya-terraform-locks"
 

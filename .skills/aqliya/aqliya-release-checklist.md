@@ -1,6 +1,9 @@
 ---
 name: aqliya-release-checklist
-description: Pre-release checklist for AQLIYA. Route verification, security check, docs check, light validation commands, and final report format.
+description: Release verification — route check, security, data integrity, docs sync, Go/No-Go decision
+version: 2.0
+date: 2026-07-12
+status: active
 ---
 
 # AQLIYA Release Checklist

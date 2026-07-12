@@ -10,8 +10,8 @@ jest.mock("next/cache", () => ({
 
 const mockGetCurrentUser = jest.fn();
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: mockGetCurrentUser,
-  getCurrentUser: mockGetCurrentUser,
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
+  hasRequiredRole: jest.fn().mockReturnValue(true),
   isExpectedAccessDeniedError: jest.fn().mockReturnValue(false),
 }));
 

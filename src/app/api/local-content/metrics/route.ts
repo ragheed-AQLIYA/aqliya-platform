@@ -1,20 +1,21 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    await requireUserContext();
+    const user = await getCurrentUser();
+    const orgId = user.organizationId;
 
-    const projectCount = await prisma.localContentProject.count();
-    const workbookCount = await prisma.lcWorkbook.count();
-    const supplierCount = await prisma.localContentSupplier.count();
-    const spendCount = await prisma.localContentSpendRecord.count();
-    const evidenceCount = await prisma.localContentEvidence.count();
-    const findingCount = await prisma.localContentFinding.count();
-    const reviewCount = await prisma.localContentReview.count();
+    const projectCount = await prisma.localContentProject.count({ where: { organizationId: orgId } });
+    const workbookCount = await prisma.lcWorkbook.count({ where: { project: { organizationId: orgId } } });
+    const supplierCount = await prisma.localContentSupplier.count({ where: { project: { organizationId: orgId } } });
+    const spendCount = await prisma.localContentSpendRecord.count({ where: { project: { organizationId: orgId } } });
+    const evidenceCount = await prisma.localContentEvidence.count({ where: { project: { organizationId: orgId } } });
+    const findingCount = await prisma.localContentFinding.count({ where: { project: { organizationId: orgId } } });
+    const reviewCount = await prisma.localContentReview.count({ where: { project: { organizationId: orgId } } });
 
     const lines = [
       "# HELP lcos_projects_total Total number of LCOS projects",

@@ -1,8 +1,8 @@
-# Phase 8.1 — Canonical COA Expansion
+﻿# Phase 8.1 — Canonical COA Expansion
 
 **Status:** Implemented (2026-06-13)  
 **Engagement pilot:** `eng-gulf-2025`  
-**Related analysis:** [`docs/audits/TB_CLOSING_ADJUSTMENT_ANALYSIS.md`](../../audits/TB_CLOSING_ADJUSTMENT_ANALYSIS.md)
+**Related analysis:** `docs/audits/TB_CLOSING_ADJUSTMENT_ANALYSIS.md` *(file was deleted from main repo 2026-07-01; may exist in git history f075922 or archived worktrees)*
 
 ## Objective
 

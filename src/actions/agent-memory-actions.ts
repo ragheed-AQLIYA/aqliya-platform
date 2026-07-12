@@ -1,6 +1,6 @@
 "use server";
 
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import {
   setAgentMemory,
   getAgentMemory,
@@ -18,7 +18,8 @@ export async function storeAgentMemoryAction(
   ttl?: Date,
   tags?: string[],
 ) {
-  const user = await requireUserContext("OPERATOR");
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "OPERATOR")) { throw new Error("Access denied: OPERATOR role required"); }
 
   await setAgentMemory(user.organizationId, {
     agentId,
@@ -34,7 +35,8 @@ export async function storeAgentMemoryAction(
 }
 
 export async function recallAgentMemoryAction(agentId: string, memoryKey: string) {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "VIEWER")) { throw new Error("Access denied: VIEWER role required"); }
 
   const value = await getAgentMemory(user.organizationId, agentId, memoryKey);
   return { success: true, data: value };
@@ -46,7 +48,8 @@ export async function queryAgentMemoryAction(
   memoryKeyPrefix?: string,
   tags?: string[],
 ) {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "VIEWER")) { throw new Error("Access denied: VIEWER role required"); }
 
   const results = await svcQueryAgentMemory(user.organizationId, {
     agentId,
@@ -59,14 +62,16 @@ export async function queryAgentMemoryAction(
 }
 
 export async function forgetAgentMemoryAction(agentId: string, memoryKey: string) {
-  const user = await requireUserContext("OPERATOR");
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "OPERATOR")) { throw new Error("Access denied: OPERATOR role required"); }
 
   await svcDeleteAgentMemory(user.organizationId, agentId, memoryKey);
   return { success: true };
 }
 
 export async function getAgentMemoryStatsAction(agentId?: string) {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "VIEWER")) { throw new Error("Access denied: VIEWER role required"); }
 
   const where: { organizationId: string; agentId?: string } = {
     organizationId: user.organizationId,
@@ -88,7 +93,8 @@ export async function getAgentMemoryStatsAction(agentId?: string) {
 }
 
 export async function cleanExpiredMemoryAction() {
-  await requireUserContext("ADMIN");
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "ADMIN")) { throw new Error("Access denied: ADMIN role required"); }
 
   const count = await cleanExpiredMemory();
   return { success: true, data: { cleaned: count } };

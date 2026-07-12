@@ -4,13 +4,15 @@ import Link from "next/link";
 import { getAuditActor } from "@/lib/audit/actor-context";
 import { getOrganizationPortfolioAnalytics } from "@/lib/audit/portfolio-analytics-service";
 import { PortfolioAnalyticsPanel } from "@/components/audit/portfolio/portfolio-analytics-panel";
+import { EmptyState } from "@/components/ui/empty-state";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BarChart3 } from "lucide-react";
 
 export default async function AuditPortfolioPage() {
   const actor = await getAuditActor();
   const snapshot = await getOrganizationPortfolioAnalytics(actor.organizationId);
+  const isEmpty = snapshot.totals.engagements === 0;
 
   return (
     <div className="space-y-6 p-6" dir="rtl">
@@ -29,7 +31,23 @@ export default async function AuditPortfolioPage() {
           لوحة AuditOS
         </Link>
       </div>
-      <PortfolioAnalyticsPanel snapshot={snapshot} />
+      {isEmpty ? (
+        <EmptyState
+          icon={<BarChart3 className="h-12 w-12" />}
+          title="محفظة التدقيق فارغة"
+          description="لا توجد تكليفات تدقيق بعد. ابدأ بإنشاء مهمة تدقيق من لوحة AuditOS."
+          action={
+            <Link
+              href="/audit"
+              className={cn(buttonVariants({ variant: "default", size: "sm" }))}
+            >
+              العودة للوحة
+            </Link>
+          }
+        />
+      ) : (
+        <PortfolioAnalyticsPanel snapshot={snapshot} />
+      )}
     </div>
   );
 }

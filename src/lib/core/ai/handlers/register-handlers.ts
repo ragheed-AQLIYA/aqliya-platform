@@ -8,7 +8,7 @@ import { evidenceSuggestionsHandler } from "./evidence-suggestions-handler"
 import { findingDraftsHandler } from "./finding-drafts-handler"
 import { recommendationDraftsHandler } from "./recommendation-drafts-handler"
 import { draftNotesHandler } from "./draft-notes-handler"
-import { disclosureEnrichmentHandler } from "./disclosure-enrichment-handler"
+import { disclosureEnrichmentHandler } from "@/lib/audit/handlers/disclosure-enrichment-handler"
 import { commercialClaimAssistHandler } from "./commercial-claim-assist-handler"
 import { pilotDecisionAssistHandler } from "./pilot-decision-assist-handler"
 

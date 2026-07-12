@@ -1,8 +1,8 @@
-# Release Decision — AuditOS Factory Program
+﻿# Release Decision — AuditOS Factory Program
 
 **This file moved.** The authoritative release decision is:
 
-→ **[docs/review/RELEASE_DECISION.md](../review/RELEASE_DECISION.md)** (current status, post-merge)
+→ **docs/review/RELEASE_DECISION.md *(directory `docs/review/` was deleted 2026-07-01; file may exist in git history or archived worktrees)*** (current status, post-merge)
 
 Historical council copy (2026-06-15 pre-merge conditions):
 

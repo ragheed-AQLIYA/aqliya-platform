@@ -12,26 +12,32 @@ import {
 import { isExpectedAccessDeniedError } from "@/lib/auth";
 import {
   getCurrentUser,
-  requireUserContext,
-  requireDecisionAccess,
 } from "@/lib/auth";
 import { enforce } from "@/lib/authorization";
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit";
+import { getCachedOrFetch, invalidateDashboardCaches, DASHBOARD_CACHE_TTL_MS } from "@/lib/platform/cache-strategy";
 
 // --- Decision List ---
-export async function getDecisions() {
+export async function getDecisions({ take = 20, skip = 0 }: { take?: number; skip?: number } = {}) {
   try {
     const user = await getCurrentUser();
-    const decisions = await prisma.decision.findMany({
-      where: { organizationId: user.organizationId },
-      include: {
-        organization: true,
-        owner: true,
-        tenderProfile: true,
-      },
-      orderBy: { createdAt: "desc" },
-    });
-    return { success: true, data: decisions };
+    const [decisions, total] = await Promise.all([
+      prisma.decision.findMany({
+        where: { organizationId: user.organizationId },
+        include: {
+          organization: true,
+          owner: true,
+          tenderProfile: true,
+        },
+        orderBy: { createdAt: "desc" },
+        take,
+        skip,
+      }),
+      prisma.decision.count({
+        where: { organizationId: user.organizationId },
+      }),
+    ]);
+    return { success: true, data: decisions, total };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
       console.error("Error fetching decisions:", error);
@@ -43,7 +49,7 @@ export async function getDecisions() {
 // --- Decision by ID ---
 export async function getDecisionById(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER");
+    const user = await getCurrentUser();
     const decision = await prisma.decision.findUnique({
       where: { id },
       include: {
@@ -77,6 +83,8 @@ export async function getDecisionById(id: string) {
     if (!decision) {
       return { success: false, error: "Decision not found" };
     }
+
+    await enforce(user, { type: "decision", id, tenantId: decision.organizationId }, "read");
 
     return { success: true, data: decision };
   } catch (error) {
@@ -119,7 +127,8 @@ export async function createDecision(data: {
   risks?: string;
 }) {
   try {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "decision", id: "new", tenantId: user.organizationId }, "create");
 
     if (!data.title || data.title.trim().length === 0) {
       return { success: false, error: "Decision title is required" };
@@ -155,6 +164,8 @@ export async function createDecision(data: {
       user.organizationId,
     );
 
+    await invalidateDashboardCaches(user.organizationId);
+
     return { success: true, data: decision };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
@@ -167,7 +178,15 @@ export async function createDecision(data: {
 // --- Update Decision Status ---
 export async function updateDecisionStatus(id: string, status: string) {
   try {
-    await requireDecisionAccess(id, "OPERATOR");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id, tenantId: decisionLookup.organizationId }, "update");
 
     // Evidence review gate: require all evidence reviewed before approval
     if (status === "APPROVED" || status === "IMPLEMENTED") {
@@ -193,6 +212,7 @@ export async function updateDecisionStatus(id: string, status: string) {
       where: { id },
       data: { status: status as DecisionStatus },
     });
+    await invalidateDashboardCaches(user.organizationId);
     return { success: true, data: decision };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
@@ -205,7 +225,7 @@ export async function updateDecisionStatus(id: string, status: string) {
 // --- Decision Framework ---
 export async function getDecisionFramework(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER");
+    const user = await getCurrentUser();
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
@@ -215,9 +235,11 @@ export async function getDecisionFramework(id: string) {
         alternatives: true,
         risks: true,
         framework: true,
+        organizationId: true,
       },
     });
     if (!decision) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decision.organizationId }, "read");
     const intake = evaluateIntake({
       title: decision.title,
       objectives: decision.objectives,
@@ -256,7 +278,15 @@ export async function updateDecisionFramework(
   },
 ) {
   try {
-    await requireDecisionAccess(id, "OPERATOR");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id, tenantId: decisionLookup.organizationId }, "update");
     await prisma.decision.update({
       where: { id },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -275,7 +305,7 @@ export async function updateDecisionFramework(
 // --- Decision Intake ---
 export async function getDecisionIntake(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER");
+    const user = await getCurrentUser();
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
@@ -286,9 +316,11 @@ export async function getDecisionIntake(id: string) {
         assumptions: true,
         alternatives: true,
         risks: true,
+        organizationId: true,
       },
     });
     if (!decision) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decision.organizationId }, "read");
     const intake = evaluateIntake({
       title: decision.title,
       objectives: decision.objectives,
@@ -315,7 +347,15 @@ export async function updateDecisionIntake(
   },
 ) {
   try {
-    await requireDecisionAccess(id, "OPERATOR");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id, tenantId: decisionLookup.organizationId }, "update");
     await prisma.decision.update({
       where: { id },
       data: {
@@ -370,7 +410,7 @@ export async function updateDecisionIntake(
 // --- Decision Scenarios ---
 export async function getDecisionScenarios(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER");
+    const user = await getCurrentUser();
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
@@ -382,9 +422,11 @@ export async function getDecisionScenarios(id: string) {
         framework: true,
         decisionScenarios: true,
         scenarios: { include: { simulation: true } },
+        organizationId: true,
       },
     });
     if (!decision) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decision.organizationId }, "read");
 
     const intake = evaluateIntake({
       title: decision.title,
@@ -437,41 +479,36 @@ export async function updateDecisionScenarios(
   },
 ) {
   try {
-    await requireDecisionAccess(id, "OPERATOR");
+    const user = await getCurrentUser();
     const decision = await prisma.decision.findUnique({
       where: { id },
-      select: { decisionScenarios: { select: { id: true } } },
+      select: { decisionScenarios: { select: { id: true } }, organizationId: true },
     });
+    if (!decision) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decision.organizationId }, "update");
     const existingIds = new Set(
-      decision?.decisionScenarios.map((s) => s.id) || [],
+      decision.decisionScenarios.map((s) => s.id) || [],
     );
-    for (const scenario of _input.scenarios) {
+    const operations = _input.scenarios.map((scenario) => {
+      const baseData = {
+        name: scenario.name,
+        description: scenario.description,
+        assumptions: scenario.assumptions,
+        expectedOutcome: scenario.expectedOutcome,
+        affectedStakeholders: scenario.affectedStakeholders,
+        requiredConditions: scenario.requiredConditions,
+      };
       if (scenario.id && existingIds.has(scenario.id)) {
-        await prisma.decisionScenario.update({
+        return prisma.decisionScenario.update({
           where: { id: scenario.id },
-          data: {
-            name: scenario.name,
-            description: scenario.description,
-            assumptions: scenario.assumptions,
-            expectedOutcome: scenario.expectedOutcome,
-            affectedStakeholders: scenario.affectedStakeholders,
-            requiredConditions: scenario.requiredConditions,
-          },
-        });
-      } else {
-        await prisma.decisionScenario.create({
-          data: {
-            decisionId: id,
-            name: scenario.name,
-            description: scenario.description,
-            assumptions: scenario.assumptions,
-            expectedOutcome: scenario.expectedOutcome,
-            affectedStakeholders: scenario.affectedStakeholders,
-            requiredConditions: scenario.requiredConditions,
-          },
+          data: baseData,
         });
       }
-    }
+      return prisma.decisionScenario.create({
+        data: { decisionId: id, ...baseData },
+      });
+    });
+    await prisma.$transaction(operations);
     const updatedScenarios = await prisma.decisionScenario.findMany({
       where: { decisionId: id },
     });
@@ -491,7 +528,7 @@ export async function updateDecisionScenarios(
 // --- Decision Risk Analysis ---
 export async function getDecisionRiskAnalysis(id: string) {
   try {
-    await requireDecisionAccess(id, "VIEWER");
+    const user = await getCurrentUser();
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
@@ -504,9 +541,11 @@ export async function getDecisionRiskAnalysis(id: string) {
         decisionScenarios: { select: { id: true, name: true } },
         riskAnalyses: true,
         scenarios: { include: { simulation: true } },
+        organizationId: true,
       },
     });
     if (!decision) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decision.organizationId }, "read");
 
     const intake = evaluateIntake({
       title: decision.title,
@@ -575,44 +614,45 @@ export async function updateDecisionRiskAnalysis(
   },
 ) {
   try {
-    await requireDecisionAccess(id, "OPERATOR");
-    for (const analysis of _input.analyses) {
-      const existing = await prisma.decisionRiskAnalysis.findFirst({
-        where: { decisionId: id, scenarioId: analysis.scenarioId },
-      });
-      if (existing) {
-        await prisma.decisionRiskAnalysis.update({
-          where: { id: existing.id },
-          data: {
-            risks: analysis.risks,
-            tradeoffs: analysis.tradeoffs,
-            sacrifices: analysis.sacrifices,
-            opportunityCosts: analysis.opportunityCosts,
-            stakeholderRisks: analysis.stakeholderRisks,
-            operationalRisks: analysis.operationalRisks,
-            strategicRisks: analysis.strategicRisks,
-            knowledgeRisks: analysis.knowledgeRisks,
-            uncertaintyLevel: analysis.uncertaintyLevel,
-          },
-        });
-      } else {
-        await prisma.decisionRiskAnalysis.create({
-          data: {
-            decisionId: id,
-            scenarioId: analysis.scenarioId,
-            risks: analysis.risks,
-            tradeoffs: analysis.tradeoffs,
-            sacrifices: analysis.sacrifices,
-            opportunityCosts: analysis.opportunityCosts,
-            stakeholderRisks: analysis.stakeholderRisks,
-            operationalRisks: analysis.operationalRisks,
-            strategicRisks: analysis.strategicRisks,
-            knowledgeRisks: analysis.knowledgeRisks,
-            uncertaintyLevel: analysis.uncertaintyLevel,
-          },
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decisionLookup.organizationId }, "update");
+    // Batch-read existing analyses to avoid N+1
+    const scenarioIds = _input.analyses.map((a) => a.scenarioId);
+    const existingAnalyses = await prisma.decisionRiskAnalysis.findMany({
+      where: { decisionId: id, scenarioId: { in: scenarioIds } },
+      select: { id: true, scenarioId: true },
+    });
+    const existingMap = new Map(existingAnalyses.map((a) => [a.scenarioId, a.id]));
+
+    const operations = _input.analyses.map((analysis) => {
+      const analysisData = {
+        risks: analysis.risks,
+        tradeoffs: analysis.tradeoffs,
+        sacrifices: analysis.sacrifices,
+        opportunityCosts: analysis.opportunityCosts,
+        stakeholderRisks: analysis.stakeholderRisks,
+        operationalRisks: analysis.operationalRisks,
+        strategicRisks: analysis.strategicRisks,
+        knowledgeRisks: analysis.knowledgeRisks,
+        uncertaintyLevel: analysis.uncertaintyLevel,
+      };
+      const existingId = existingMap.get(analysis.scenarioId);
+      if (existingId) {
+        return prisma.decisionRiskAnalysis.update({
+          where: { id: existingId },
+          data: analysisData,
         });
       }
-    }
+      return prisma.decisionRiskAnalysis.create({
+        data: { decisionId: id, scenarioId: analysis.scenarioId, ...analysisData },
+      });
+    });
+    await prisma.$transaction(operations);
     const updatedAnalyses = await prisma.decisionRiskAnalysis.findMany({
       where: { decisionId: id },
       include: { scenario: true },
@@ -636,23 +676,25 @@ export async function updateDecisionRiskAnalysis(
 // --- Decision Recommendation ---
 export async function getDecisionRecommendation(id: string) {
   try {
-    const { user } = await requireDecisionAccess(id, "VIEWER");
-
-    // If viewer, only show published
-    if (user.role === "VIEWER") {
-      return await getPublishedRecommendationViewAction(id);
-    }
-
+    const user = await getCurrentUser();
     const decision = await prisma.decision.findUnique({
       where: { id },
       select: {
         id: true,
         type: true,
         recommendation: true,
+        organizationId: true,
       },
     });
+    if (!decision) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decision.organizationId }, "read");
 
-    if (!decision?.recommendation) {
+    // If viewer, only show published
+    if (user.role === "VIEWER") {
+      return await getPublishedRecommendationViewAction(id);
+    }
+
+    if (!decision.recommendation) {
       return { success: false, error: "Recommendation not found" };
     }
 
@@ -687,7 +729,13 @@ export async function updateDecisionRecommendation(
   },
 ) {
   try {
-    await requireDecisionAccess(id, "OPERATOR");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decisionLookup.organizationId }, "update");
     const recommendation = await prisma.recommendation.upsert({
       where: { decisionId: id },
       create: {
@@ -739,7 +787,13 @@ function validateRecommendationGate(decisionId: string) {
 }
 
 export async function checkRecommendationGate(decisionId: string) {
-  await requireDecisionAccess(decisionId, "OPERATOR");
+  const user = await getCurrentUser();
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  });
+  if (!decisionLookup) return { allowed: false, missing: ["decision_not_found"] };
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
   return await validateRecommendationGate(decisionId);
 }
 
@@ -749,8 +803,13 @@ export async function publishRecommendationAction(
   forcePublishCurrent?: boolean,
 ) {
   try {
-    const access = await requireDecisionAccess(decisionId, "ADMIN");
-    const user = access.user;
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "admin");
     const existing = await prisma.recommendation.findUnique({
       where: { decisionId },
     });
@@ -785,7 +844,7 @@ export async function publishRecommendationAction(
             snapshotAction: latestApproval.snapshotAction,
             currentAction: existing.recommendedAction,
           }),
-          access.organizationId,
+          decisionLookup.organizationId,
         );
 
         return {
@@ -813,7 +872,7 @@ export async function publishRecommendationAction(
             publishedCurrentInstead: true,
             currentAction: existing.recommendedAction,
           }),
-          access.organizationId,
+          decisionLookup.organizationId,
         );
 
         const recommendation = await prisma.recommendation.update({
@@ -838,7 +897,7 @@ export async function publishRecommendationAction(
             version: recommendation.publishedVersion,
             fromSnapshot: false,
           }),
-          access.organizationId,
+          decisionLookup.organizationId,
         );
 
         return {
@@ -871,7 +930,7 @@ export async function publishRecommendationAction(
           approvalId: latestApproval.id,
           fromSnapshot: true,
         }),
-        access.organizationId,
+        decisionLookup.organizationId,
       );
 
       return {
@@ -903,7 +962,7 @@ export async function publishRecommendationAction(
         version: recommendation.publishedVersion,
         fromSnapshot: false,
       }),
-      access.organizationId,
+      decisionLookup.organizationId,
     );
 
     return {
@@ -921,8 +980,13 @@ export async function publishRecommendationAction(
 
 export async function unpublishRecommendationAction(decisionId: string) {
   try {
-    const access = await requireDecisionAccess(decisionId, "ADMIN");
-    const user = access.user;
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "admin");
     const recommendation = await prisma.recommendation.update({
       where: { decisionId },
       data: {
@@ -939,7 +1003,7 @@ export async function unpublishRecommendationAction(decisionId: string) {
       "Recommendation",
       undefined,
       undefined,
-      access.organizationId,
+      decisionLookup.organizationId,
     );
 
     return { success: true, data: recommendation };
@@ -1089,10 +1153,12 @@ export async function getPublishedRecommendationViewAction(decisionId: string) {
 }
 
 // --- Dashboard Metrics ---
-export async function getDashboardMetrics() {
+export async function getDashboardMetrics({ take = 1000 }: { take?: number } = {}) {
   try {
     const user = await getCurrentUser();
+    const cacheKey = `dashboard:decision:${user.organizationId}:metrics`;
 
+    return await getCachedOrFetch(cacheKey, async () => {
     const decisions = await prisma.decision.findMany({
       where: { organizationId: user.organizationId },
       include: {
@@ -1110,6 +1176,7 @@ export async function getDashboardMetrics() {
         outcome: true,
       },
       orderBy: { createdAt: "desc" },
+      take,
     });
 
     const totalDecisions = decisions.length;
@@ -1356,6 +1423,7 @@ export async function getDashboardMetrics() {
         crossDecisionPatterns,
       },
     };
+    }, DASHBOARD_CACHE_TTL_MS);
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
       console.error("Error fetching dashboard metrics:", error);
@@ -1367,7 +1435,13 @@ export async function getDashboardMetrics() {
 // --- Workflow Readiness ---
 export async function getWorkflowReadiness(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -1479,11 +1553,14 @@ export async function getWorkflowReadiness(decisionId: string) {
 // --- Export Decision Report (PDF) ---
 export async function exportDecisionReport(decisionId: string) {
   try {
-    const { user, organizationId } = await requireDecisionAccess(
-      decisionId,
-      "OPERATOR",
-    );
-    await enforce(user, { type: "decision", id: decisionId, tenantId: organizationId }, "export");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "export");
     const decision = (await prisma.decision.findUnique({
       where: { id: decisionId },
       include: {
@@ -1545,10 +1622,6 @@ export async function exportDecisionReport(decisionId: string) {
 
     if (!decision) {
       return { success: false, error: "Decision not found" };
-    }
-
-    if (decision.organizationId !== organizationId) {
-      return { success: false, error: "Access denied" };
     }
 
     const { buildDecisionReportPDF } = await import("@/lib/decision/decision-export-pdf");

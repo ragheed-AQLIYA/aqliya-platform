@@ -1,0 +1,54 @@
+{
+  "at": "2026-07-11T11:27:35.799Z",
+  "overall": 59,
+  "validations": [
+    {
+      "adrId": "PLATFORM-ENFORCE",
+      "title": "Authorization uses enforce()/authorize()",
+      "rule": "enforce()/authorize() on mutating actions",
+      "compliance": 52,
+      "total": 27,
+      "ok": 14,
+      "violations": [
+        "src/actions/contact-export-actions.ts",
+        "src/actions/contact-review-actions.ts",
+        "src/actions/content-evidence-actions.ts",
+        "src/actions/decision-templates.ts",
+        "src/actions/ingestion-actions.ts",
+        "src/actions/institutional-memory-actions.ts",
+        "src/actions/localcontent-audit-admin-actions.ts",
+        "src/actions/localcontent-review-actions.ts",
+        "src/actions/localcontent-workbook-actions.ts",
+        "src/actions/mfa.ts",
+        "src/actions/office-ai-actions.ts",
+        "src/actions/registration-actions.ts",
+        "src/actions/tenant-actions.ts"
+      ]
+    },
+    {
+      "adrId": "PLATFORM-CLIENT-PRISMA",
+      "title": "Client/server boundary",
+      "rule": "No Prisma in Client Components",
+      "compliance": 55,
+      "total": 3,
+      "ok": 0,
+      "violations": [
+        "src/app/local-content/settings/integrations/page.tsx",
+        "src/app/(dashboard)/decisions/[id]/tender/page.tsx",
+        "src/app/(dashboard)/decisions/[id]/outcome/page.tsx"
+      ]
+    },
+    {
+      "adrId": "ADR-DEPLOY-001-CLOUDFRONT-WAF-ATTACHMENT",
+      "title": "ADR-DEPLOY-001: CloudFront WAF Attachment via `web_acl_id`",
+      "rule": "ADR-DEPLOY-001 CloudFront WAF via web_acl_id",
+      "compliance": 70,
+      "total": 1,
+      "ok": 0,
+      "violations": [
+        "Both web_acl_id and aws_wafv2_web_acl_association present — review"
+      ],
+      "detail": "web_acl_id present"
+    }
+  ]
+}

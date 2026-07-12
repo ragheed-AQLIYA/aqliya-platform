@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser, requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import {
   suggestPatternImprovements,
   explainAccountMatches,
@@ -259,7 +259,7 @@ export async function getIndustryBenchmarksAction(
   industry?: string,
 ): Promise<ActionResult<unknown>> {
   return safe(async () => {
-    await requireUserContext();
+    await getCurrentUser();
     await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const result = await getIndustryPatternBenchmarks(industry);
     if (!result.success) {

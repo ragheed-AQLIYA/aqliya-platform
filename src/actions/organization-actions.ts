@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import {
@@ -22,7 +23,8 @@ function resolvePlatformOrgId(user: {
 // ─── List ───
 
 export async function listOrganizationsAction() {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+  await enforce(user, { type: "organization" }, "read");
 
   const orgs = await listOrganizations(resolvePlatformOrgId(user));
 
@@ -32,7 +34,8 @@ export async function listOrganizationsAction() {
 // ─── Get Detail ───
 
 export async function getOrganizationAction(orgId: string) {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+  await enforce(user, { type: "organization", id: orgId }, "read");
 
   const detail = await getOrganizationDetail(
     orgId,
@@ -49,7 +52,8 @@ export async function getOrganizationAction(orgId: string) {
 // ─── Create ───
 
 export async function createOrganizationAction(data: { name: string }) {
-  const user = await requireUserContext("ADMIN");
+  const user = await getCurrentUser();
+  await enforce(user, { type: "organization" }, "admin");
 
   if (!data.name || data.name.trim().length < 2) {
     return { ok: false, error: "اسم المؤسسة يجب أن يكون حرفين على الأقل" };
@@ -82,7 +86,8 @@ export async function updateOrganizationAction(
   orgId: string,
   data: { name?: string },
 ) {
-  const user = await requireUserContext("ADMIN");
+  const user = await getCurrentUser();
+  await enforce(user, { type: "organization", id: orgId }, "admin");
 
   if (data.name !== undefined && data.name.trim().length < 2) {
     return { ok: false, error: "اسم المؤسسة يجب أن يكون حرفين على الأقل" };
@@ -128,7 +133,8 @@ export async function updateOrganizationAction(
 // ─── Delete ───
 
 export async function deleteOrganizationAction(orgId: string) {
-  const user = await requireUserContext("ADMIN");
+  const user = await getCurrentUser();
+  await enforce(user, { type: "organization", id: orgId }, "admin");
 
   const org = await prisma.organization.findUnique({
     where: { id: orgId },

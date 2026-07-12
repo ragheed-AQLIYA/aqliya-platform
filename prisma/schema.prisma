@@ -111,6 +111,61 @@ enum ConflictLevel {
   SOFT
 }
 
+// ==================== Audit Engagement Enums ====================
+
+enum EngagementType {
+  full_audit
+  review
+  compilation
+  other
+}
+
+// ==================== Local Content Enums ====================
+
+enum ClassificationConfidence {
+  high
+  medium
+  low
+  unverified
+}
+
+enum ClassificationReviewStatus {
+  draft
+  reviewed
+  confirmed
+  disputed
+}
+
+enum ClassificationBasis {
+  certificate
+  self_declaration
+  contract_term
+  analyst_estimate
+}
+
+enum HealthRecordSource {
+  pattern_mining
+  manual
+  import
+}
+
+enum WorkbookLineSource {
+  tb
+  manual
+  formula
+}
+
+enum WorkbookLineConfidence {
+  high
+  medium
+  low
+}
+
+enum FindingSource {
+  ai
+  manual
+}
+
 // ==================== Platform Organization (Bridge) ====================
 
 model PlatformOrganization {
@@ -554,6 +609,7 @@ model Organization {
   orgHierarchyNodes              OrgHierarchyNode[]
   orgSettings                    OrgSetting[]
   orgLifecycleEvents             OrgLifecycleEvent[]
+  notifications                  Notification[]
 
   @@index([createdAt])
   @@index([platformOrganizationId])
@@ -659,11 +715,34 @@ model User {
   kfCandidateBindings                   KnowledgeFoundationVersionCandidate[] @relation("KFCandidateBinder")
   createdOrganizations                  Organization[]                        @relation("OrganizationCreator")
   createdSunbulClients                  SunbulClient[]                        @relation("SunbulClientCreator")
+  notifications                         Notification[]
+  preferences                           Json?                                 @map("preferences") // User preferences (language, theme, notifications, timezone)
   createdAt                             DateTime                              @default(now())
   updatedAt                             DateTime                              @updatedAt
 
   @@index([organizationId])
   @@index([role])
+}
+
+model Notification {
+  // @map: الإشعارات
+  id             String    @id @default(cuid())
+  organizationId String
+  userId         String
+  type           String    // task_assigned, review_needed, approved, rejected, comment, system
+  title          String
+  body           String?
+  link           String?   // URL to navigate to when clicked
+  read           Boolean   @default(false)
+  metadata       Json?
+  createdAt      DateTime  @default(now())
+  readAt         DateTime?
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([organizationId, createdAt])
 }
 
 model Decision {
@@ -720,7 +799,7 @@ model Decision {
 model DecisionFramework {
   id              String   @id @default(cuid())
   decisionId      String   @unique
-  decision        Decision @relation(fields: [decisionId], references: [id])
+  decision        Decision @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   context         String
   purpose         String
   options         String
@@ -736,7 +815,7 @@ model DecisionFramework {
 model DecisionScenario {
   id                   String                @id @default(cuid())
   decisionId           String
-  decision             Decision              @relation(fields: [decisionId], references: [id])
+  decision             Decision              @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   riskAnalysis         DecisionRiskAnalysis?
   name                 String
   description          String
@@ -753,7 +832,7 @@ model DecisionScenario {
 model DecisionRiskAnalysis {
   id               String           @id @default(cuid())
   decisionId       String
-  decision         Decision         @relation(fields: [decisionId], references: [id])
+  decision         Decision         @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   scenarioId       String           @unique
   scenario         DecisionScenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
   risks            String
@@ -774,7 +853,7 @@ model DecisionRiskAnalysis {
 model Objective {
   id          String   @id @default(cuid())
   decisionId  String
-  decision    Decision @relation(fields: [decisionId], references: [id])
+  decision    Decision @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -785,7 +864,7 @@ model Objective {
 model Constraint {
   id          String   @id @default(cuid())
   decisionId  String
-  decision    Decision @relation(fields: [decisionId], references: [id])
+  decision    Decision @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -796,7 +875,7 @@ model Constraint {
 model Assumption {
   id          String   @id @default(cuid())
   decisionId  String
-  decision    Decision @relation(fields: [decisionId], references: [id])
+  decision    Decision @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -807,7 +886,7 @@ model Assumption {
 model Alternative {
   id          String   @id @default(cuid())
   decisionId  String
-  decision    Decision @relation(fields: [decisionId], references: [id])
+  decision    Decision @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -818,7 +897,7 @@ model Alternative {
 model Risk {
   id          String    @id @default(cuid())
   decisionId  String
-  decision    Decision  @relation(fields: [decisionId], references: [id])
+  decision    Decision  @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   description String
   level       RiskLevel
   createdAt   DateTime  @default(now())
@@ -830,7 +909,7 @@ model Risk {
 model TenderProfile {
   id                        String    @id @default(cuid())
   decisionId                String    @unique
-  decision                  Decision  @relation(fields: [decisionId], references: [id])
+  decision                  Decision  @relation(fields: [decisionId], references: [id], onDelete: Cascade)
   clientName                String
   estimatedContractValue    Float
   estimatedCost             Float
@@ -899,6 +978,7 @@ model DecisionMonitoringSignal {
   alerts         DecisionRiskAlert[]
 
   @@index([organizationId])
+  @@index([decisionId])
 }
 
 model DecisionRiskAlert {
@@ -924,6 +1004,7 @@ model DecisionRiskAlert {
   updatedAt          DateTime                 @updatedAt
 
   @@index([organizationId])
+  @@index([decisionId])
 }
 
 enum SignalSeverity {
@@ -1033,7 +1114,7 @@ model DecisionOutcome {
 model AuditLog {
   id             String       @id @default(cuid())
   decisionId     String
-  decision       Decision     @relation(fields: [decisionId], references: [id])
+  decision       Decision     @relation(fields: [decisionId], references: [id], onDelete: Restrict)
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
   userId         String
@@ -1045,6 +1126,8 @@ model AuditLog {
   createdAt      DateTime     @default(now())
 
   @@index([organizationId])
+  @@index([decisionId])
+  @@index([userId, createdAt])
 }
 
 // ==================== A-3 Intelligence Layer ====================
@@ -1275,7 +1358,7 @@ model AuditEngagement {
   clientId               String
   client                 AuditClient                  @relation(fields: [clientId], references: [id])
   fiscalPeriod           String
-  engagementType         String                       @default("full_audit")
+  engagementType         EngagementType             @default(full_audit)
   status                 String                       @default("draft")
   team                   Json?
   alerts                 Json?
@@ -1401,7 +1484,7 @@ model ReportingGraphSnapshot {
 model AuditTrialBalance {
   id              String                  @id @default(cuid())
   engagementId    String
-  engagement      AuditEngagement         @relation(fields: [engagementId], references: [id])
+  engagement      AuditEngagement         @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   importTimestamp DateTime                @default(now())
   sourceFile      String
   fileHash        String?
@@ -1418,7 +1501,7 @@ model AuditTrialBalance {
 model AuditTrialBalanceLine {
   id             String            @id @default(cuid())
   trialBalanceId String
-  trialBalance   AuditTrialBalance @relation(fields: [trialBalanceId], references: [id])
+  trialBalance   AuditTrialBalance @relation(fields: [trialBalanceId], references: [id], onDelete: Cascade)
   accountCode    String
   accountName    String
   debitAmount    Float             @default(0)
@@ -1451,7 +1534,7 @@ model AuditCanonicalAccount {
 model AuditAccountMapping {
   id                      String                 @id @default(cuid())
   engagementId            String
-  engagement              AuditEngagement        @relation(fields: [engagementId], references: [id])
+  engagement              AuditEngagement        @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   sourceAccountId         String
   sourceAccountCode       String
   sourceAccountName       String
@@ -1505,7 +1588,7 @@ model AuditDisclosureNote {
 model AuditEvidence {
   id           String                 @id @default(cuid())
   engagementId String
-  engagement   AuditEngagement        @relation(fields: [engagementId], references: [id])
+  engagement   AuditEngagement        @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   filename     String
   fileType     String
   fileSize     Int                    @default(0)
@@ -1525,7 +1608,7 @@ model AuditEvidence {
 model AuditEvidenceLink {
   id         String        @id @default(cuid())
   evidenceId String
-  evidence   AuditEvidence @relation(fields: [evidenceId], references: [id])
+  evidence   AuditEvidence @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
   targetType String
   targetId   String
   linkType   String        @default("supports")
@@ -1539,7 +1622,7 @@ model AuditEvidenceLink {
 model AuditEvidenceVersion {
   id                String        @id @default(cuid())
   evidenceId        String
-  evidence          AuditEvidence @relation(fields: [evidenceId], references: [id])
+  evidence          AuditEvidence @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
   versionNumber     Int
   changes           Json // snapshot of the evidence fields at this version
   changeDescription String?
@@ -1554,7 +1637,7 @@ model AuditEvidenceVersion {
 model AuditFinding {
   id                 String                @id @default(cuid())
   engagementId       String
-  engagement         AuditEngagement       @relation(fields: [engagementId], references: [id])
+  engagement         AuditEngagement       @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   title              String
   findingType        String                @default("observation")
   severity           String                @default("medium")
@@ -1580,9 +1663,9 @@ model AuditFinding {
 model AuditRecommendation {
   id                String          @id @default(cuid())
   engagementId      String
-  engagement        AuditEngagement @relation(fields: [engagementId], references: [id])
+  engagement        AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   findingId         String
-  finding           AuditFinding    @relation(fields: [findingId], references: [id])
+  finding           AuditFinding    @relation(fields: [findingId], references: [id], onDelete: Cascade)
   title             String
   description       String
   recommendedAction String
@@ -1602,7 +1685,7 @@ model AuditRecommendation {
 model AuditReviewComment {
   id             String          @id @default(cuid())
   engagementId   String
-  engagement     AuditEngagement @relation(fields: [engagementId], references: [id])
+  engagement     AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   targetType     String
   targetId       String
   reviewerId     String
@@ -1620,7 +1703,7 @@ model AuditReviewComment {
 model AuditApprovalRecord {
   id           String          @id @default(cuid())
   engagementId String
-  engagement   AuditEngagement @relation(fields: [engagementId], references: [id])
+  engagement   AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   approverId   String
   approverName String
   approverRole String
@@ -1636,7 +1719,7 @@ model AuditApprovalRecord {
 model AuditPublicationPackage {
   id           String          @id @default(cuid())
   engagementId String
-  engagement   AuditEngagement @relation(fields: [engagementId], references: [id])
+  engagement   AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   status       String          @default("draft")
   publishedAt  DateTime?
   publishedBy  String?
@@ -1650,7 +1733,7 @@ model AuditPublicationPackage {
 model AuditEvent {
   id            String          @id @default(cuid())
   engagementId  String
-  engagement    AuditEngagement @relation(fields: [engagementId], references: [id])
+  engagement    AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   eventType     String
   actorId       String
   actorName     String
@@ -1671,7 +1754,7 @@ model AuditEvent {
 model AuditAiOutput {
   id               String          @id @default(cuid())
   engagementId     String
-  engagement       AuditEngagement @relation(fields: [engagementId], references: [id])
+  engagement       AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   suggestionType   String
   inputContext     String?
   outputContent    String
@@ -1693,7 +1776,7 @@ model AuditAiOutput {
 model PilotFeedback {
   id           String          @id @default(cuid())
   engagementId String
-  engagement   AuditEngagement @relation(fields: [engagementId], references: [id])
+  engagement   AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   title        String
   description  String
   source       String
@@ -1732,7 +1815,7 @@ model ProductionBlocker {
 model PilotSignoff {
   id            String          @id @default(cuid())
   engagementId  String
-  engagement    AuditEngagement @relation(fields: [engagementId], references: [id])
+  engagement    AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   checklistItem String
   status        String          @default("pending")
   signedBy      String?
@@ -1748,7 +1831,7 @@ model PilotSignoff {
 model AuditValidationRun {
   id             String                 @id @default(cuid())
   engagementId   String
-  engagement     AuditEngagement        @relation(fields: [engagementId], references: [id])
+  engagement     AuditEngagement        @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   validationType String
   status         String                 @default("completed") // completed | failed | running
   trustState     String                 @default("conditional")
@@ -1773,7 +1856,7 @@ model AuditValidationIssue {
   validationRunId String
   validationRun   AuditValidationRun           @relation(fields: [validationRunId], references: [id])
   engagementId    String
-  engagement      AuditEngagement              @relation(fields: [engagementId], references: [id])
+  engagement      AuditEngagement              @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   checkType       String
   severity        String
   status          String                       @default("open")
@@ -1799,7 +1882,7 @@ model AuditValidationDisposition {
   issueId      String
   issue        AuditValidationIssue @relation(fields: [issueId], references: [id])
   engagementId String
-  engagement   AuditEngagement      @relation(fields: [engagementId], references: [id])
+  engagement   AuditEngagement      @relation(fields: [engagementId], references: [id], onDelete: Cascade)
   action       String
   rationale    String?
   disposedById String
@@ -2071,10 +2154,10 @@ model LocalContentClassification {
   spendRecord         LocalContentSpendRecord? @relation(fields: [spendRecordId], references: [id], onDelete: SetNull)
   classifiedBy        String?
   localPercentage     Float
-  classificationBasis String // certificate, self_declaration, contract_term, analyst_estimate
-  confidence          String                   @default("unverified") // high, medium, low, unverified
+  classificationBasis ClassificationBasis // certificate, self_declaration, contract_term, analyst_estimate
+  confidence          ClassificationConfidence @default(unverified) // high, medium, low, unverified
   notes               String?
-  reviewStatus        String                   @default("draft") // draft, reviewed, confirmed, disputed
+  reviewStatus        ClassificationReviewStatus @default(draft) // draft, reviewed, confirmed, disputed
   metadata            Json?
   createdAt           DateTime                 @default(now())
   updatedAt           DateTime                 @updatedAt
@@ -3829,7 +3912,7 @@ model KnowledgeCandidate {
   organizationCount  Int                      @default(1)
   confidence         Float                    @default(0.0)
   status             KnowledgeCandidateStatus @default(CANDIDATE)
-  source             String                   @default("pattern_mining")
+  source             HealthRecordSource       @default(pattern_mining)
   createdById        String?
   reviewerId         String?
   reviewedAt         DateTime?
@@ -5171,8 +5254,8 @@ model LcWorkbookLine {
   autoFillValue    Float?
   autoFillSource   String? // Source reference (TB account code)
   manualValue      Float?
-  source           String     @default("tb") // tb, manual, formula
-  confidence       String     @default("high") // high, medium, low
+  source           WorkbookLineSource     @default(tb) // tb, manual, formula
+  confidence       WorkbookLineConfidence @default(high) // high, medium, low
   evidenceRequired Boolean    @default(false)
   evidenceTypes    String? // JSON array
   notes            String?
@@ -5251,7 +5334,7 @@ model LcPatternSuggestion {
   reviewedById          String?
   reviewedAt            DateTime?
   reviewNotes           String?
-  source                String    @default("ai") // ai, manual
+  source                FindingSource @default(ai) // ai, manual
   createdById           String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt

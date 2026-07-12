@@ -1,6 +1,6 @@
 "use server"
 
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 import { IngestionPipeline, chunkText } from "@/lib/core/ai/ingestion/ingestion-pipeline"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import { prisma } from "@/lib/prisma"
@@ -12,7 +12,8 @@ export async function ingestDocumentAction(
   content: string,
   metadata?: Record<string, unknown>,
 ) {
-  const user = await requireUserContext("OPERATOR")
+  const user = await getCurrentUser()
+  if (!hasRequiredRole(user, "OPERATOR")) { throw new Error("Access denied: OPERATOR role required") }
 
   const result = await pipeline.processDocument(
     documentId,
@@ -29,7 +30,8 @@ export async function batchIngestAction(
   documents: Array<{ documentId: string; content: string; metadata?: Record<string, unknown> }>,
   source?: string,
 ) {
-  const user = await requireUserContext("OPERATOR")
+  const user = await getCurrentUser()
+  if (!hasRequiredRole(user, "OPERATOR")) { throw new Error("Access denied: OPERATOR role required") }
 
   const result = await pipeline.batchProcess(documents, user.organizationId, user.id, source)
 
@@ -37,7 +39,8 @@ export async function batchIngestAction(
 }
 
 export async function getIngestionStatusAction(batchId: string) {
-  const user = await requireUserContext("VIEWER")
+  const user = await getCurrentUser()
+  if (!hasRequiredRole(user, "VIEWER")) { throw new Error("Access denied: VIEWER role required") }
 
   const status = await pipeline.getStatus(batchId)
 
@@ -52,7 +55,8 @@ export async function getIngestionStatusAction(batchId: string) {
 }
 
 export async function listIngestedDocumentsAction(engagementId?: string) {
-  const user = await requireUserContext("VIEWER")
+  const user = await getCurrentUser()
+  if (!hasRequiredRole(user, "VIEWER")) { throw new Error("Access denied: VIEWER role required") }
 
   const where: Record<string, unknown> = { organizationId: user.organizationId }
   if (engagementId) {
@@ -78,7 +82,8 @@ export async function listIngestedDocumentsAction(engagementId?: string) {
 }
 
 export async function deleteIngestedDocumentAction(documentId: string) {
-  const user = await requireUserContext("OPERATOR")
+  const user = await getCurrentUser()
+  if (!hasRequiredRole(user, "OPERATOR")) { throw new Error("Access denied: OPERATOR role required") }
 
   const result = await prisma.documentChunk.deleteMany({
     where: { documentId, organizationId: user.organizationId },

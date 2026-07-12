@@ -1,0 +1,13 @@
+Redis HA Apply Evidence
+Date: 2026-07-09_031944
+========================
+Resource: aws_elasticache_replication_group (aqliya-prod-redis-rg)
+Nodes: 2 (primary + replica)
+  - Primary: aqliya-prod-redis-rg-001 (eu-north-1c)
+  - Replica: aqliya-prod-redis-rg-002 (eu-north-1a)
+Automatic Failover: enabling
+Multi-AZ: enabled
+Primary Endpoint: aqliya-prod-redis-rg.j5oziv.ng.0001.eun1.cache.amazonaws.com:6379
+Reader Endpoint: aqliya-prod-redis-rg-ro.j5oziv.ng.0001.eun1.cache.amazonaws.com:6379
+Bug fixed: environment == "production" → "prod" in modules/compute/main.tf
+========================

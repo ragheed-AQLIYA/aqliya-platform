@@ -4,10 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Search, Bell, Command, ChevronDown } from "lucide-react";
+import { Command, ChevronDown, Menu } from "lucide-react";
 import { useState } from "react";
 import { PlatformCommandPalette } from "./command-palette";
-import { useSSENotifications } from "@/lib/hooks/use-sse-notifications";
+import { NotificationBell } from "@/components/notifications/notification-bell";
+import { GlobalSearch } from "@/components/search/global-search";
 
 function getWorkspaceInfo(pathname: string | null) {
   if (!pathname)
@@ -121,30 +122,11 @@ function getPageTitle(pathname: string | null) {
   return map[last] ?? last.replace(/-/g, " ");
 }
 
-// ─── Notification badge ─────────────────────────────────────────────────────
-
-function NotificationBadge() {
-  const { counts, connected } = useSSENotifications();
-  const total = counts.critical + counts.warning;
-
-  if (total === 0) {
-    return (
-      <span
-        className={`absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ${
-          connected ? "bg-emerald-500" : "bg-gray-400"
-        }`}
-      />
-    );
-  }
-
-  return (
-    <span className="absolute -top-1.5 -right-1.5 flex min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 py-0.5 text-[9px] font-bold text-white leading-none">
-      {total > 9 ? "9+" : total}
-    </span>
-  );
-}
-
-export function PlatformHeader() {
+export function PlatformHeader({
+  onToggleSidebar,
+}: {
+  onToggleSidebar?: () => void;
+}) {
   const pathname = usePathname();
   const [commandOpen, setCommandOpen] = useState(false);
   const workspace = getWorkspaceInfo(pathname);
@@ -154,8 +136,17 @@ export function PlatformHeader() {
     <>
       <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-14 items-center justify-between px-4">
-          {/* Left: Mobile logo + Breadcrumbs */}
+          {/* Left: hamburger + Mobile logo + Breadcrumbs */}
           <div className="flex items-center gap-3">
+            {/* Hamburger menu — mobile only */}
+            <button
+              onClick={onToggleSidebar}
+              className="md:hidden rounded-md p-2 text-muted-foreground hover:bg-muted transition-colors"
+              aria-label="فتح القائمة"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+
             <Link
               href="/"
               className="flex items-center gap-2 md:hidden"
@@ -188,43 +179,43 @@ export function PlatformHeader() {
             </div>
           </div>
 
-          {/* Right: Search, Notifications, User */}
+          {/* Right: Notifications, User */}
           <div className="flex items-center gap-2">
-            {/* Command Palette Trigger */}
+            {/* Global Search (hidden on mobile) */}
+            <div className="hidden md:block">
+              <GlobalSearch />
+            </div>
+
+            {/* Mobile search / Command palette trigger */}
             <button
               onClick={() => setCommandOpen(true)}
-              className="hidden sm:flex items-center gap-2 rounded-md border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted transition-colors"
-              aria-label="Open command palette"
+              className="md:hidden rounded-md p-2 text-muted-foreground hover:bg-muted transition-colors"
+              aria-label="بحث"
             >
-              <Command className="h-3.5 w-3.5" />
-              <Search className="h-3.5 w-3.5" />
-              <span className="text-xs">ابحث في مساحة العمل...</span>
-              <kbd className="ml-2 rounded bg-background px-1.5 py-0.5 text-[10px] font-mono border">
-                ⌘K
-              </kbd>
+              <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
             </button>
 
-            {/* Mobile search button */}
+            {/* Command palette shortcut */}
             <button
               onClick={() => setCommandOpen(true)}
-              className="sm:hidden rounded-md p-2 text-muted-foreground hover:bg-muted transition-colors"
-              aria-label="Open command palette"
+              className="hidden sm:flex items-center rounded-md p-2 text-muted-foreground hover:bg-muted transition-colors"
+              aria-label="لوحة الأوامر"
+              title="فتح لوحة الأوامر"
             >
-              <Search className="h-4 w-4" />
+              <Command className="h-4 w-4" />
             </button>
 
             {/* Notifications */}
-            <Link
-              href="/notifications"
-              className="relative rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-              aria-label="Notifications"
-            >
-              <Bell className="h-4 w-4" />
-              <NotificationBadge />
-            </Link>
+            <NotificationBell />
 
             {/* User Menu */}
-            <button className="flex items-center gap-2 rounded-md p-1.5 hover:bg-muted transition-colors">
+            <button
+              className="flex items-center gap-2 rounded-md p-1.5 hover:bg-muted transition-colors"
+              aria-label="القائمة الشخصية"
+            >
               <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center">
                 <span className="text-xs font-semibold text-primary">A</span>
               </div>

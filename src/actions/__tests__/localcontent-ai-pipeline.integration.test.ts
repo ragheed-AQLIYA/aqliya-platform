@@ -20,25 +20,18 @@ jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
 }));
 
+const mockGetCurrentUser = jest.fn().mockResolvedValue({
+  id: "user-1",
+  email: "admin@test.com",
+  name: "Admin",
+  role: "ADMIN",
+  organizationId: "org-1",
+  platformOrganizationId: "plat-1",
+  organization: { id: "org-1", name: "Test Org" },
+});
+
 jest.mock("@/lib/auth", () => ({
-  getCurrentUser: jest.fn().mockResolvedValue({
-    id: "user-1",
-    email: "admin@test.com",
-    name: "Admin",
-    role: "ADMIN",
-    organizationId: "org-1",
-    platformOrganizationId: "plat-1",
-    organization: { id: "org-1", name: "Test Org" },
-  }),
-  requireUserContext: jest.fn().mockResolvedValue({
-    id: "user-1",
-    email: "admin@test.com",
-    name: "Admin",
-    role: "ADMIN",
-    organizationId: "org-1",
-    platformOrganizationId: "plat-1",
-    organization: { id: "org-1", name: "Test Org" },
-  }),
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
   hasRequiredRole: (
     user: { role: string },
     requiredRole: string,

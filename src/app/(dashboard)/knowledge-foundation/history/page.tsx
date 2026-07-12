@@ -6,8 +6,7 @@ import "server-only";
 
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { listVersions } from "@/actions/knowledge-foundation/actions";
+import { listVersions, listPlatformAuditLogs } from "@/actions/knowledge-foundation/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -20,13 +19,7 @@ export default async function HistoryPage() {
   }
 
   const [auditLogs, versions] = await Promise.all([
-    prisma.platformAuditLog.findMany({
-      where: {
-        productKey: "knowledge-foundation",
-      },
-      orderBy: { createdAt: "desc" },
-      take: 100,
-    }),
+    listPlatformAuditLogs("knowledge-foundation", 100),
     listVersions(),
   ]);
 

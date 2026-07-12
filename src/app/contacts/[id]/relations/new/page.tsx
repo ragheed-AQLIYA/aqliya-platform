@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
-import { requireUserContext } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { createContactRelation } from "@/actions/contact-actions";
+import { getCurrentUser } from "@/lib/auth";
+import { listContacts, createContactRelation } from "@/actions/contact-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,18 +25,11 @@ const RELATION_TYPES = [
 ];
 
 export default async function NewRelationPage({ params }: PageProps) {
-  await requireUserContext("OPERATOR");
+  const user = await getCurrentUser();
   const { id } = await params;
 
-  const contacts = await prisma.localContact.findMany({
-    where: {
-      organizationId: (await requireUserContext("OPERATOR")).organizationId,
-      isActive: true,
-      id: { not: id },
-    },
-    orderBy: { name: "asc" },
-    select: { id: true, name: true, organizationName: true, position: true },
-  });
+  const result = await listContacts(user.organizationId);
+  const contacts = result.ok ? result.data.filter((c) => c.id !== id) : [];
 
   return (
     <div dir="rtl" className="min-h-screen bg-background">

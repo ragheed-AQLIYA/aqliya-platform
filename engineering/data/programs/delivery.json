@@ -1,0 +1,500 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-11T11:36:48.404Z",
+  "items": {
+    "1f9d967e11e8": {
+      "id": "1f9d967e11e8",
+      "title": "Possible secret material (generic-secret)",
+      "product": "LocalContentOS",
+      "severity": "high",
+      "roi": 3.4,
+      "program": "B",
+      "wave": "Wave-9",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-9 by Delivery Planner"
+        }
+      ]
+    },
+    "9ee3952e3faf": {
+      "id": "9ee3952e3faf",
+      "title": "Client module references server-only concerns",
+      "product": "LocalContentOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-9",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-9 by Delivery Planner"
+        }
+      ]
+    },
+    "6cd50722bfc6": {
+      "id": "6cd50722bfc6",
+      "title": "Large module / God Object signal: localcontent-actions.ts",
+      "product": "LocalContentOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-9",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-9 by Delivery Planner"
+        }
+      ]
+    },
+    "2c4f7402de67": {
+      "id": "2c4f7402de67",
+      "title": "Large module / God Object signal: page.tsx",
+      "product": "LocalContentOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-9",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-9 by Delivery Planner"
+        }
+      ]
+    },
+    "6b43acafccab": {
+      "id": "6b43acafccab",
+      "title": "Large module / God Object signal: ai-advisor.ts",
+      "product": "LocalContentOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-9",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-9 by Delivery Planner"
+        }
+      ]
+    },
+    "4fc44e3901db": {
+      "id": "4fc44e3901db",
+      "title": "Long function WorkbookDetailClient (708 lines)",
+      "product": "LocalContentOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-9",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-9 by Delivery Planner"
+        }
+      ]
+    },
+    "095ed5a39ce6": {
+      "id": "095ed5a39ce6",
+      "title": "Long function ReviewCenter (561 lines)",
+      "product": "LocalContentOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-9",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-9 by Delivery Planner"
+        }
+      ]
+    },
+    "e390e9d05c78": {
+      "id": "e390e9d05c78",
+      "title": "Long function QualityDashboardClient (519 lines)",
+      "product": "LocalContentOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-9",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-9 by Delivery Planner"
+        }
+      ]
+    },
+    "da1ed81c9c3b": {
+      "id": "da1ed81c9c3b",
+      "title": "Possible secret material (generic-secret)",
+      "product": "SalesOS",
+      "severity": "high",
+      "roi": 3.4,
+      "program": "B",
+      "wave": "Wave-10",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-10 by Delivery Planner"
+        }
+      ]
+    },
+    "e21451a4a460": {
+      "id": "e21451a4a460",
+      "title": "Client module references server-only concerns",
+      "product": "SalesOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-10",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-10 by Delivery Planner"
+        }
+      ]
+    },
+    "9273676d5f88": {
+      "id": "9273676d5f88",
+      "title": "Client module references server-only concerns",
+      "product": "SalesOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-10",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-10 by Delivery Planner"
+        }
+      ]
+    },
+    "7a825d4f1596": {
+      "id": "7a825d4f1596",
+      "title": "Large module / God Object signal: seed-data.ts",
+      "product": "SalesOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-10",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-10 by Delivery Planner"
+        }
+      ]
+    },
+    "15c5a1ab4466": {
+      "id": "15c5a1ab4466",
+      "title": "Large module / God Object signal: store.ts",
+      "product": "SalesOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-10",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-10 by Delivery Planner"
+        }
+      ]
+    },
+    "3018c98f24b8": {
+      "id": "3018c98f24b8",
+      "title": "Large module / God Object signal: page.tsx",
+      "product": "SalesOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-10",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-10 by Delivery Planner"
+        }
+      ]
+    },
+    "fa47676674ee": {
+      "id": "fa47676674ee",
+      "title": "Long function buildSalesSeedData (1651 lines)",
+      "product": "SalesOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-10",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-10 by Delivery Planner"
+        }
+      ]
+    },
+    "83b46b41e82e": {
+      "id": "83b46b41e82e",
+      "title": "Long function buildKnowledgeGraphFromSnapshot (430 lines)",
+      "product": "SalesOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-10",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-10 by Delivery Planner"
+        }
+      ]
+    },
+    "4d9ae7e6467f": {
+      "id": "4d9ae7e6467f",
+      "title": "API route may lack auth check",
+      "product": "WorkflowOS",
+      "severity": "high",
+      "roi": 3.4,
+      "program": "B",
+      "wave": "Wave-11",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-11 by Delivery Planner"
+        }
+      ]
+    },
+    "e9840101eae7": {
+      "id": "e9840101eae7",
+      "title": "API route may lack auth check",
+      "product": "WorkflowOS",
+      "severity": "high",
+      "roi": 3.4,
+      "program": "B",
+      "wave": "Wave-11",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-11 by Delivery Planner"
+        }
+      ]
+    },
+    "852f7f174ea2": {
+      "id": "852f7f174ea2",
+      "title": "Long function WorkflowAdminDashboard (293 lines)",
+      "product": "WorkflowOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-11",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-11 by Delivery Planner"
+        }
+      ]
+    },
+    "8dbed2bf3a18": {
+      "id": "8dbed2bf3a18",
+      "title": "Elevated complexity in workflowos-actions.ts",
+      "product": "WorkflowOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-11",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-11 by Delivery Planner"
+        }
+      ]
+    },
+    "da2a0e0a12a7": {
+      "id": "da2a0e0a12a7",
+      "title": "Low maintainability index (0)",
+      "product": "WorkflowOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-11",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-11 by Delivery Planner"
+        }
+      ]
+    },
+    "a8c27b594725": {
+      "id": "a8c27b594725",
+      "title": "Download/export route may lack tenant scope",
+      "product": "WorkflowOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-11",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-11 by Delivery Planner"
+        }
+      ]
+    },
+    "cec164a407be": {
+      "id": "cec164a407be",
+      "title": "Download/export route may lack tenant scope",
+      "product": "WorkflowOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-11",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-11 by Delivery Planner"
+        }
+      ]
+    },
+    "dfaeac6f1a57": {
+      "id": "dfaeac6f1a57",
+      "title": "Debt hotspot (priority 106): workflowos-actions.ts",
+      "product": "WorkflowOS",
+      "severity": "high",
+      "roi": 2,
+      "program": "B",
+      "wave": "Wave-11",
+      "state": "selected",
+      "effortDays": 1.25,
+      "history": [
+        {
+          "at": "2026-07-11T11:36:48.404Z",
+          "state": "selected",
+          "note": "Selected into Wave-11 by Delivery Planner"
+        }
+      ]
+    }
+  },
+  "waves": {
+    "Wave-9": {
+      "id": "Wave-9",
+      "program": "B",
+      "product": "LocalContentOS",
+      "roi": 2.2,
+      "risk": "Medium",
+      "effortDays": 10,
+      "rationale": "Focus LocalContentOS (completion gap 48%). Pack score prioritizes ROI × need / effort. Program B.",
+      "items": [
+        "1f9d967e11e8",
+        "9ee3952e3faf",
+        "6cd50722bfc6",
+        "2c4f7402de67",
+        "6b43acafccab",
+        "4fc44e3901db",
+        "095ed5a39ce6",
+        "e390e9d05c78"
+      ],
+      "updatedAt": "2026-07-11T11:36:48.404Z"
+    },
+    "Wave-10": {
+      "id": "Wave-10",
+      "program": "B",
+      "product": "SalesOS",
+      "roi": 2.2,
+      "risk": "Medium",
+      "effortDays": 10,
+      "rationale": "Focus SalesOS (completion gap 46%). Pack score prioritizes ROI × need / effort. Program B.",
+      "items": [
+        "da1ed81c9c3b",
+        "e21451a4a460",
+        "9273676d5f88",
+        "7a825d4f1596",
+        "15c5a1ab4466",
+        "3018c98f24b8",
+        "fa47676674ee",
+        "83b46b41e82e"
+      ],
+      "updatedAt": "2026-07-11T11:36:48.404Z"
+    },
+    "Wave-11": {
+      "id": "Wave-11",
+      "program": "B",
+      "product": "WorkflowOS",
+      "roi": 2.4,
+      "risk": "Medium",
+      "effortDays": 10,
+      "rationale": "Focus WorkflowOS (completion gap 44%). Pack score prioritizes ROI × need / effort. Program B.",
+      "items": [
+        "4d9ae7e6467f",
+        "e9840101eae7",
+        "852f7f174ea2",
+        "8dbed2bf3a18",
+        "da2a0e0a12a7",
+        "a8c27b594725",
+        "cec164a407be",
+        "dfaeac6f1a57"
+      ],
+      "updatedAt": "2026-07-11T11:36:48.404Z"
+    }
+  }
+}

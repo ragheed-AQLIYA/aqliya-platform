@@ -56,7 +56,7 @@ export class CloudAIProvider implements AIProvider {
       this.providerName,
     );
 
-    return completionToAiResponse(completion, "cloud", 0.78);
+    return completionToAiResponse(completion, "cloud");
   }
 
   getStatus(): AIProviderStatus {

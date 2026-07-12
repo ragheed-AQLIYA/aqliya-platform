@@ -1,6 +1,9 @@
 ---
 name: aqliya-security-gate
-description: Security inspection gate for AQLIYA. Checks auth, proxy, API routes, download routes, tenant isolation, RBAC, audit trail, and forbidden changes before any mutation.
+description: Security inspection gate — auth, RBAC, tenant isolation, API/download routes, demo safety, audit trail, and forbidden changes
+version: 2.0
+date: 2026-07-12
+status: active
 ---
 
 # AQLIYA Security Gate
@@ -115,17 +118,25 @@ After any change to auth/proxy/middleware:
 
 ---
 
-## 5. Demo Route Safety (see also: aqliya-demo-safety)
+## 5. Demo Route Safety (`/auditos`)
 
-The `/auditos` demo route must:
+The public demo route must:
+- **No auth required** — excluded from middleware matcher
+- **No real customer data** — mock/sample/seed data only
+- **No mutations** — read-only surface, no POST/PUT/DELETE
+- **No uploads** — no file upload endpoints exposed
+- **No downloads** — no download routes accessible (or client-side only)
+- **No real API keys** — no provider credentials leaked
+- **No database writes** — read-only Prisma queries against seed data
 
-- Never access real customer data
-- Use mock/sample data only
-- Not require authentication
-- Not expose upload or download functionality
-- Not expose real API keys or database credentials
-
-Any change touching `/auditos` must pass the demo safety gate first.
+### Demo Safety Checklist
+Before modifying `/auditos`:
+- [ ] Uses mock data, not production tables
+- [ ] No `use server` mutations in demo pages
+- [ ] No file system access
+- [ ] No real organization IDs
+- [ ] Demo route excluded from middleware auth matcher
+- [ ] No download/export endpoints accessible
 
 ---
 

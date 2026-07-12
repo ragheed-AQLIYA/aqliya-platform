@@ -1,4 +1,4 @@
-// ─── LocalContentOS — Simulation Engine ───
+﻿// ─── LocalContentOS — Simulation Engine ───
 // Phase 3: Answers "what if" questions for local content score.
 // V3.5: Enhanced with driver explainability — every result now explains
 // what changed, why the score changed, and the biggest contributors.
@@ -171,7 +171,7 @@ export async function runSimulation(
       autoFillValue: param.newValue,
       manualValue: null,
       autoFilled: true,
-      source: "simulation",
+      source: "simulation" as any,
     };
   });
 

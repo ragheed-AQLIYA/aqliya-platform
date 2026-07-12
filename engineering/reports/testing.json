@@ -1,0 +1,192 @@
+{
+  "agent": "testing",
+  "title": "Test Intelligence Report",
+  "generatedAt": "2026-07-11T02:08:05.379Z",
+  "score": 95,
+  "summary": {
+    "total": 13,
+    "critical": 0,
+    "high": 0,
+    "medium": 7,
+    "low": 5,
+    "info": 1
+  },
+  "findings": [
+    {
+      "id": "F-0490",
+      "agent": "test-intelligence",
+      "severity": "medium",
+      "title": "Skip/retry/flaky marker in src/__tests__/rehearsal-check.ts",
+      "evidence": "skip/retries/flaky keyword present",
+      "files": [
+        "src/__tests__/rehearsal-check.ts"
+      ],
+      "category": "flaky-tests",
+      "suggestion": "Quarantine intentionally or fix root flake; avoid silent skips.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0491",
+      "agent": "test-intelligence",
+      "severity": "medium",
+      "title": "Skip/retry/flaky marker in src/__tests__/setup.ts",
+      "evidence": "skip/retries/flaky keyword present",
+      "files": [
+        "src/__tests__/setup.ts"
+      ],
+      "category": "flaky-tests",
+      "suggestion": "Quarantine intentionally or fix root flake; avoid silent skips.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0492",
+      "agent": "test-intelligence",
+      "severity": "medium",
+      "title": "Skip/retry/flaky marker in src/__tests__/uat-run.ts",
+      "evidence": "skip/retries/flaky keyword present",
+      "files": [
+        "src/__tests__/uat-run.ts"
+      ],
+      "category": "flaky-tests",
+      "suggestion": "Quarantine intentionally or fix root flake; avoid silent skips.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0493",
+      "agent": "test-intelligence",
+      "severity": "medium",
+      "title": "Skip/retry/flaky marker in src/__tests__/i18n/no-english-strings.test.ts",
+      "evidence": "skip/retries/flaky keyword present",
+      "files": [
+        "src/__tests__/i18n/no-english-strings.test.ts"
+      ],
+      "category": "flaky-tests",
+      "suggestion": "Quarantine intentionally or fix root flake; avoid silent skips.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0494",
+      "agent": "test-intelligence",
+      "severity": "medium",
+      "title": "Skip/retry/flaky marker in src/lib/sales/vnext/__tests__/cross-product-signals.test.ts",
+      "evidence": "skip/retries/flaky keyword present",
+      "files": [
+        "src/lib/sales/vnext/__tests__/cross-product-signals.test.ts"
+      ],
+      "category": "flaky-tests",
+      "suggestion": "Quarantine intentionally or fix root flake; avoid silent skips.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0495",
+      "agent": "test-intelligence",
+      "severity": "medium",
+      "title": "Skip/retry/flaky marker in src/lib/sales/v02/cross-product-signals/__tests__/aggregator.test.ts",
+      "evidence": "skip/retries/flaky keyword present",
+      "files": [
+        "src/lib/sales/v02/cross-product-signals/__tests__/aggregator.test.ts"
+      ],
+      "category": "flaky-tests",
+      "suggestion": "Quarantine intentionally or fix root flake; avoid silent skips.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0496",
+      "agent": "test-intelligence",
+      "severity": "medium",
+      "title": "Skip/retry/flaky marker in src/lib/local-content/content/__tests__/content-studio-prisma-repository.test.ts",
+      "evidence": "skip/retries/flaky keyword present",
+      "files": [
+        "src/lib/local-content/content/__tests__/content-studio-prisma-repository.test.ts"
+      ],
+      "category": "flaky-tests",
+      "suggestion": "Quarantine intentionally or fix root flake; avoid silent skips.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0497",
+      "agent": "test-intelligence",
+      "severity": "info",
+      "title": "No coverage/coverage-summary.json present",
+      "evidence": "Coverage not measured in this run (low-load: suite not executed)",
+      "files": [],
+      "category": "coverage",
+      "suggestion": "When approved, run jest with coverage and re-audit.",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0498",
+      "agent": "test-intelligence",
+      "severity": "low",
+      "title": "Large lib module without obvious tests: pdf-export.ts",
+      "evidence": "≥150 LOC, no matching test filename",
+      "files": [
+        "src/lib/workflowos/export/pdf-export.ts"
+      ],
+      "category": "regression-risk",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0499",
+      "agent": "test-intelligence",
+      "severity": "low",
+      "title": "Large lib module without obvious tests: decision-scoring.ts",
+      "evidence": "≥150 LOC, no matching test filename",
+      "files": [
+        "src/lib/simulation/decision-scoring.ts"
+      ],
+      "category": "regression-risk",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0500",
+      "agent": "test-intelligence",
+      "severity": "low",
+      "title": "Large lib module without obvious tests: simulation-engine.ts",
+      "evidence": "≥150 LOC, no matching test filename",
+      "files": [
+        "src/lib/simulation/simulation-engine.ts"
+      ],
+      "category": "regression-risk",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0501",
+      "agent": "test-intelligence",
+      "severity": "low",
+      "title": "Large lib module without obvious tests: tender-simulation.ts",
+      "evidence": "≥150 LOC, no matching test filename",
+      "files": [
+        "src/lib/simulation/tender-simulation.ts"
+      ],
+      "category": "regression-risk",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0502",
+      "agent": "test-intelligence",
+      "severity": "low",
+      "title": "Large lib module without obvious tests: queries.ts",
+      "evidence": "≥150 LOC, no matching test filename",
+      "files": [
+        "src/lib/sales/v02/knowledge-graph/queries.ts"
+      ],
+      "category": "regression-risk",
+      "suggestion": "",
+      "scoreImpact": 1
+    }
+  ],
+  "meta": {
+    "sourceFiles": 2465,
+    "tests": 386,
+    "coveragePct": null,
+    "missingActionTests": 0,
+    "missingApiTests": 0,
+    "flaky": 7,
+    "ratio": 0.1565922920892495
+  }
+}

@@ -1,12 +1,17 @@
-variable "project_name"             { type = string }
-variable "environment"               { type = string }
-variable "domain_name"               { type = string }
-variable "log_retention_days"        { type = number }
-variable "db_backup_retention_days"  { type = number }
-variable "ecs_cluster_name"          { type = string }
-variable "ecs_service_name"          { type = string }
-variable "rds_arn"                   { type = string }
-variable "alb_arn_suffix"            { type = string }
+﻿variable "project_name" { type = string }
+variable "environment" { type = string }
+variable "domain_name" { type = string }
+variable "log_retention_days" { type = number }
+variable "db_backup_retention_days" { type = number }
+variable "ecs_cluster_name" { type = string }
+variable "ecs_service_name" { type = string }
+variable "rds_arn" { type = string }
+variable "alb_arn_suffix" { type = string }
+variable "redis_replication_group_id" {
+  type        = string
+  default     = ""
+  description = "ElastiCache Redis replication group ID for alarm dimensions. If empty, Redis alarm dimensions use only ClusterName."
+}
 
 resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = "${var.project_name}-${var.environment}-dashboard"
@@ -72,9 +77,9 @@ resource "aws_cloudwatch_dashboard" "main" {
         type = "metric"
         properties = {
           metrics = [
-            [{ expression: "m1 / m2", label: "Error Rate", id: "expr1", stat: "Average" }],
-            ["AWS/ApplicationELB", "HTTPCode_Target_5XX", { id: "m1", stat: "Sum", visible: false }],
-            ["AWS/ApplicationELB", "RequestCount",         { id: "m2", stat: "Sum", visible: false }],
+            [{ expression : "m1 / m2", label : "Error Rate", id : "expr1", stat : "Average" }],
+            ["AWS/ApplicationELB", "HTTPCode_Target_5XX", { id : "m1", stat : "Sum", visible : false }],
+            ["AWS/ApplicationELB", "RequestCount", { id : "m2", stat : "Sum", visible : false }],
           ]
           period = 300
           stat   = "Average"
@@ -110,6 +115,28 @@ resource "aws_cloudwatch_metric_alarm" "ecs_cpu_high" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "ecs_memory_high" {
+  alarm_name          = "${var.project_name}-${var.environment}-ecs-memory-high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 3
+  metric_name         = "MemoryUtilization"
+  namespace           = "AWS/ECS"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 85
+  alarm_description   = "ECS Memory utilization above 85% for 15 minutes"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+
+  dimensions = {
+    ClusterName = var.ecs_cluster_name
+    ServiceName = var.ecs_service_name
+  }
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ecs-memory-high"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "rds_cpu_high" {
   alarm_name          = "${var.project_name}-${var.environment}-rds-cpu-high"
   comparison_operator = "GreaterThanThreshold"
@@ -123,7 +150,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu_high" {
   alarm_actions       = [aws_sns_topic.alarms.arn]
 
   dimensions = {
-    DBInstanceIdentifier = var.project_name
+    DBInstanceIdentifier = "${var.project_name}-${var.environment}-db"
   }
 
   tags = {
@@ -144,11 +171,32 @@ resource "aws_cloudwatch_metric_alarm" "rds_free_storage" {
   alarm_actions       = [aws_sns_topic.alarms.arn]
 
   dimensions = {
-    DBInstanceIdentifier = var.project_name
+    DBInstanceIdentifier = "${var.project_name}-${var.environment}-db"
   }
 
   tags = {
     Name = "${var.project_name}-${var.environment}-rds-free-storage"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "rds_connections_high" {
+  alarm_name          = "${var.project_name}-${var.environment}-rds-connections-high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "DatabaseConnections"
+  namespace           = "AWS/RDS"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 80
+  alarm_description   = "RDS connection count above 80 (pool exhaustion risk)"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+
+  dimensions = {
+    DBInstanceIdentifier = "${var.project_name}-${var.environment}-db"
+  }
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-rds-connections-high"
   }
 }
 
@@ -194,6 +242,33 @@ resource "aws_cloudwatch_metric_alarm" "alb_high_latency" {
   }
 }
 
+
+resource "aws_cloudwatch_metric_alarm" "redis_memory_high" {
+  alarm_name          = "${var.project_name}-${var.environment}-redis-memory-high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 3
+  metric_name         = "DatabaseMemoryUsagePercentage"
+  namespace           = "AWS/ElastiCache"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 80
+  alarm_description   = "Redis memory utilization is above 80% for 15 minutes"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+
+  dimensions = merge(
+    {
+      CacheClusterId = "${var.project_name}-${var.environment}-redis"
+    },
+    var.redis_replication_group_id != "" ? {
+      ReplicationGroupId = var.redis_replication_group_id
+    } : {}
+  )
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-redis-memory-high"
+  }
+}
+
 resource "aws_sns_topic" "alarms" {
   name = "${var.project_name}-${var.environment}-alarms"
 
@@ -229,7 +304,8 @@ resource "aws_kms_key" "backup" {
 }
 
 resource "aws_backup_plan" "main" {
-  name = "${var.project_name}-${var.environment}-backup-plan"
+  count = var.db_backup_retention_days > 0 ? 1 : 0
+  name  = "${var.project_name}-${var.environment}-backup-plan"
 
   rule {
     rule_name         = "daily-backup"
@@ -251,7 +327,7 @@ resource "aws_backup_plan" "main" {
   rule {
     rule_name         = "weekly-backup"
     target_vault_name = aws_backup_vault.main.name
-    schedule          = "cron(0 3 * * SUN ? *)"
+    schedule          = "cron(0 3 ? * 1 *)"
     start_window      = 60
     completion_window = 120
 
@@ -288,8 +364,9 @@ resource "aws_backup_plan" "main" {
 }
 
 resource "aws_backup_selection" "rds" {
+  count        = var.db_backup_retention_days > 0 ? 1 : 0
   name         = "${var.project_name}-${var.environment}-backup-rds"
-  plan_id      = aws_backup_plan.main.id
+  plan_id      = aws_backup_plan.main[0].id
   iam_role_arn = aws_iam_role.backup.arn
 
   resources = [var.rds_arn]
@@ -321,6 +398,6 @@ resource "aws_iam_role_policy_attachment" "backup" {
   role       = aws_iam_role.backup.name
 }
 
-output "dashboard_name"   { value = aws_cloudwatch_dashboard.main.dashboard_name }
+output "dashboard_name" { value = aws_cloudwatch_dashboard.main.dashboard_name }
 output "backup_vault_name" { value = aws_backup_vault.main.name }
-output "sns_topic_arn"    { value = aws_sns_topic.alarms.arn }
+output "sns_topic_arn" { value = aws_sns_topic.alarms.arn }

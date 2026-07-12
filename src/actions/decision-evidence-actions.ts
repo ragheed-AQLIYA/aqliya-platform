@@ -1,10 +1,12 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { requireDecisionAccess } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { createHash } from "crypto";
+import { validateFileContent } from "@/lib/security/file-validation";
 
 const ALLOWED_FILE_TYPES = [
   "pdf",
@@ -44,7 +46,15 @@ function mimeTypeForFileType(fileType: string): string {
 
 export async function getDecisionEvidenceAction(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
     const evidence = await prisma.decisionEvidence.findMany({
       where: { decisionId },
       orderBy: { createdAt: "desc" },
@@ -63,7 +73,15 @@ export async function uploadDecisionEvidenceAction(params: {
   description?: string;
 }) {
   try {
-    const { user } = await requireDecisionAccess(params.decisionId, "OPERATOR");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: params.decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: params.decisionId, tenantId: decisionLookup.organizationId }, "update");
 
     const normalizedFileType = params.fileType.toLowerCase();
 
@@ -79,6 +97,15 @@ export async function uploadDecisionEvidenceAction(params: {
       return {
         success: false,
         error: `الملف كبير جداً: ${(content.length / 1024 / 1024).toFixed(1)}MB. الحد الأقصى: ${MAX_FILE_SIZE_BYTES / 1024 / 1024}MB`,
+      };
+    }
+
+    // Validate file content matches its claimed extension (magic bytes check)
+    const contentValidation = validateFileContent(content, normalizedFileType);
+    if (!contentValidation.valid) {
+      return {
+        success: false,
+        error: contentValidation.error || "نوع الملف لا يتطابق مع امتداده",
       };
     }
 
@@ -176,10 +203,15 @@ export async function deleteDecisionEvidenceAction(evidenceId: string) {
       return { success: false, error: "المستند غير موجود" };
     }
 
-    const { user } = await requireDecisionAccess(
-      evidence.decisionId,
-      "OPERATOR",
-    );
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: evidence.decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: evidence.decisionId, tenantId: decisionLookup.organizationId }, "update");
 
     await prisma.decisionEvidence.delete({
       where: { id: evidenceId },
@@ -241,10 +273,15 @@ export async function reviewDecisionEvidenceAction(
       return { success: false, error: "المستند غير موجود" };
     }
 
-    const { user } = await requireDecisionAccess(
-      evidence.decisionId,
-      "OPERATOR",
-    );
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: evidence.decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: evidence.decisionId, tenantId: decisionLookup.organizationId }, "update");
 
     const meta = (evidence.metadata as Record<string, unknown>) ?? {};
     const now = new Date().toISOString();
@@ -301,7 +338,15 @@ export async function getUnreviewedEvidenceCount(decisionId: string): Promise<{
   error?: string;
 }> {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
 
     const allEvidence = await prisma.decisionEvidence.findMany({
       where: { decisionId },

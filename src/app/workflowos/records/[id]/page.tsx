@@ -1,8 +1,9 @@
-import { requireUserContext } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth";
 import {
   workflow_getRecordById,
   updateWorkflowRecordStatus,
+  getWorkflowEvidenceAction,
+  getWorkflowAuditEventsAction,
 } from "@/actions/workflowos-actions";
 import { getSlaInfoForRecord } from "@/actions/workflowos-sla-actions";
 import {
@@ -54,7 +55,7 @@ export default async function WorkflowRecordDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await requireUserContext();
+  await getCurrentUser();
 
   const result = await workflow_getRecordById(id);
   if (!result.success || !result.data) {
@@ -136,15 +137,8 @@ export default async function WorkflowRecordDetailPage({
 
   const slaResult = await getSlaInfoForRecord(id);
 
-  const evidence = await prisma.workflowEvidence.findMany({
-    where: { organizationId: record.organizationId, recordId: id },
-    orderBy: { createdAt: "desc" },
-  });
-
-  const auditEvents = await prisma.workflowAuditEvent.findMany({
-    where: { organizationId: record.organizationId, recordId: id },
-    orderBy: { createdAt: "desc" },
-  });
+  const evidence = await getWorkflowEvidenceAction(id, record.organizationId);
+  const auditEvents = await getWorkflowAuditEventsAction(id, record.organizationId);
 
   return (
     <div dir="rtl" className="max-w-3xl mx-auto">

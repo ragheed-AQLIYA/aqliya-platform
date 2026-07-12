@@ -1,4 +1,4 @@
----
+﻿---
 title: "LocalContentOS Production Readiness — Program Charter"
 status: active
 program: "LocalContentOS Production Readiness"
@@ -14,7 +14,7 @@ supersedes: none
 **Program:** LocalContentOS Production Readiness  
 **Status:** ▶️ ACTIVE — Phase 0  
 **Start Date:** 2026-06-27  
-**Predecessor:** [Repository Quality](../../PROGRAM_CLOSURE.md) (CLOSED)  
+**Predecessor:** [Repository Quality](../../archive/root-docs/PROGRAM_CLOSURE.md) (CLOSED)  
 **Product level:** L5 Pilot-ready (current) → L6 Production-hardened (target)
 
 ---
@@ -162,7 +162,7 @@ Opinion without evidence is rejected. Documentation without code proof is reject
 
 | Program | Relationship |
 |---------|--------------|
-| [Repository Quality](../../PROGRAM_CLOSURE.md) | **Predecessor.** Closed with 0 errors, 418 classified warnings. This program inherits that clean baseline. |
+| [Repository Quality](../../archive/root-docs/PROGRAM_CLOSURE.md) | **Predecessor.** Closed with 0 errors, 418 classified warnings. This program inherits that clean baseline. |
 | Documentation Remediation | **Predecessor.** Closed. Documentation hierarchy and authority established. |
 | Closure Integrity | **Predecessor.** Closed. PRODUCTION_READINESS_MATRIX uses same evidence-based methodology. |
 | AuditOS Production Readiness | **Future sibling.** Will follow same methodology after LocalContentOS completes. |

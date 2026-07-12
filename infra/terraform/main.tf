@@ -2,19 +2,28 @@
 # Root composition that assembles all modules for the target environment.
 # Apply with: terraform apply -var-file=environments/<env>/terraform.tfvars
 
+# ─── Pre-flight validation ───
+
+check "container_image_placeholder" {
+  assert {
+    condition     = !can(regex("<ACCOUNT_ID>|123456789012", var.container_image))
+    error_message = "CRITICAL: container_image contains placeholder. Run 'aws sts get-caller-identity' and update environments/<env>/terraform.tfvars before deploy."
+  }
+}
+
 # ─── Networking ───
 
 module "networking" {
   source = "./modules/networking"
 
-  project_name        = var.project_name
-  environment         = var.environment
-  vpc_cidr            = var.vpc_cidr
-  availability_zones  = var.availability_zones
+  project_name          = var.project_name
+  environment           = var.environment
+  vpc_cidr              = var.vpc_cidr
+  availability_zones    = var.availability_zones
   private_subnet_cidrs  = var.private_subnet_cidrs
   public_subnet_cidrs   = var.public_subnet_cidrs
   database_subnet_cidrs = var.database_subnet_cidrs
-  container_port     = var.container_port
+  container_port        = var.container_port
 }
 
 # ─── Database ───
@@ -35,7 +44,11 @@ module "database" {
   db_engine_version         = var.db_engine_version
   db_parameter_group_family = var.db_parameter_group_family
   enable_cross_region_dr    = var.enable_cross_region_dr
-  dr_region                = var.dr_region
+  dr_region                 = var.dr_region
+
+  providers = {
+    aws.dr = aws.dr
+  }
 }
 
 # ─── Compute (ECS Fargate + ALB + Redis) ───
@@ -43,25 +56,26 @@ module "database" {
 module "compute" {
   source = "./modules/compute"
 
-  project_name         = var.project_name
-  environment          = var.environment
-  private_subnet_ids   = module.networking.private_subnet_ids
-  ecs_security_group_id = module.networking.ecs_security_group_id
-  alb_security_group_id = module.networking.alb_security_group_id
-  public_subnet_ids    = module.networking.public_subnet_ids
-  ecs_task_cpu         = var.ecs_task_cpu
-  ecs_task_memory      = var.ecs_task_memory
-  ecs_desired_count    = var.ecs_desired_count
-  ecs_max_count        = var.ecs_max_count
-  ecs_min_count        = var.ecs_min_count
-  container_port       = var.container_port
-  container_image      = var.container_image
-  domain_name          = var.domain_name
-  log_retention_days   = var.log_retention_days
-  redis_node_type      = var.redis_node_type
-  redis_num_cache_nodes = var.redis_num_cache_nodes
+  project_name            = var.project_name
+  environment             = var.environment
+  private_subnet_ids      = module.networking.private_subnet_ids
+  ecs_security_group_id   = module.networking.ecs_security_group_id
+  alb_security_group_id   = module.networking.alb_security_group_id
+  public_subnet_ids       = module.networking.public_subnet_ids
+  ecs_task_cpu            = var.ecs_task_cpu
+  ecs_task_memory         = var.ecs_task_memory
+  ecs_desired_count       = var.ecs_desired_count
+  ecs_max_count           = var.ecs_max_count
+  ecs_min_count           = var.ecs_min_count
+  container_port          = var.container_port
+  container_image         = var.container_image
+  domain_ready            = var.domain_ready
+  domain_name             = var.domain_name
+  log_retention_days      = var.log_retention_days
+  redis_node_type         = var.redis_node_type
+  redis_num_cache_nodes   = var.redis_num_cache_nodes
   redis_security_group_id = module.networking.redis_security_group_id
-  vpc_id               = module.networking.vpc_id
+  vpc_id                  = module.networking.vpc_id
 }
 
 # ─── Storage (S3 + CloudFront) ───
@@ -69,12 +83,17 @@ module "compute" {
 module "storage" {
   source = "./modules/storage"
 
-  project_name    = var.project_name
-  environment     = var.environment
-  domain_name     = var.domain_name
+  project_name          = var.project_name
+  environment           = var.environment
+  domain_ready          = var.domain_ready
+  domain_name           = var.domain_name
   s3_upload_bucket_name = var.s3_upload_bucket_name
   s3_static_bucket_name = var.s3_static_bucket_name
-  alb_dns_name    = module.compute.alb_dns_name
+  alb_dns_name          = module.compute.alb_dns_name
+
+  providers = {
+    aws.us_east_1 = aws.us_east_1
+  }
 }
 
 # ─── Monitoring (CloudWatch + Alarms + Backup) ───
@@ -82,13 +101,13 @@ module "storage" {
 module "monitoring" {
   source = "./modules/monitoring"
 
-  project_name            = var.project_name
-  environment             = var.environment
-  domain_name             = var.domain_name
-  log_retention_days      = var.log_retention_days
+  project_name             = var.project_name
+  environment              = var.environment
+  domain_name              = var.domain_name
+  log_retention_days       = var.log_retention_days
   db_backup_retention_days = var.db_backup_retention_days
-  ecs_cluster_name        = module.compute.ecs_cluster_name
-  ecs_service_name        = module.compute.ecs_service_name
-  rds_arn                 = module.database.rds_arn
-  alb_arn_suffix          = module.compute.alb_arn_suffix
+  ecs_cluster_name         = module.compute.ecs_cluster_name
+  ecs_service_name         = module.compute.ecs_service_name
+  rds_arn                  = module.database.rds_arn
+  alb_arn_suffix           = module.compute.alb_arn_suffix
 }

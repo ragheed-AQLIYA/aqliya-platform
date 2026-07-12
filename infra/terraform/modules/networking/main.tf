@@ -1,11 +1,11 @@
 variable "project_name" { type = string }
-variable "environment"   { type = string }
-variable "vpc_cidr"      { type = string }
-variable "availability_zones"         { type = list(string) }
-variable "private_subnet_cidrs"       { type = list(string) }
-variable "public_subnet_cidrs"        { type = list(string) }
-variable "database_subnet_cidrs"      { type = list(string) }
-variable "container_port"            { type = number }
+variable "environment" { type = string }
+variable "vpc_cidr" { type = string }
+variable "availability_zones" { type = list(string) }
+variable "private_subnet_cidrs" { type = list(string) }
+variable "public_subnet_cidrs" { type = list(string) }
+variable "database_subnet_cidrs" { type = list(string) }
+variable "container_port" { type = number }
 
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
@@ -33,9 +33,9 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                                          = "${var.project_name}-${var.environment}-public-${count.index + 1}"
-    "kubernetes.io/role/elb"                      = "1"
-    "kubernetes.io/cluster/${var.project_name}"   = "shared"
+    Name                                        = "${var.project_name}-${var.environment}-public-${count.index + 1}"
+    "kubernetes.io/role/elb"                    = "1"
+    "kubernetes.io/cluster/${var.project_name}" = "shared"
   }
 }
 
@@ -46,9 +46,9 @@ resource "aws_subnet" "private" {
   availability_zone = var.availability_zones[count.index]
 
   tags = {
-    Name                                          = "${var.project_name}-${var.environment}-private-${count.index + 1}"
-    "kubernetes.io/role/internal-elb"             = "1"
-    "kubernetes.io/cluster/${var.project_name}"   = "shared"
+    Name                                        = "${var.project_name}-${var.environment}-private-${count.index + 1}"
+    "kubernetes.io/role/internal-elb"           = "1"
+    "kubernetes.io/cluster/${var.project_name}" = "shared"
   }
 }
 
@@ -238,12 +238,12 @@ resource "aws_security_group" "redis" {
   }
 }
 
-output "vpc_id"             { value = aws_vpc.main.id }
-output "public_subnet_ids"  { value = aws_subnet.public[*].id }
+output "vpc_id" { value = aws_vpc.main.id }
+output "public_subnet_ids" { value = aws_subnet.public[*].id }
 output "private_subnet_ids" { value = aws_subnet.private[*].id }
 output "database_subnet_ids" { value = aws_subnet.database[*].id }
 output "db_subnet_group_name" { value = aws_db_subnet_group.main.name }
-output "alb_security_group_id"  { value = aws_security_group.alb.id }
-output "ecs_security_group_id"  { value = aws_security_group.ecs_tasks.id }
-output "rds_security_group_id"  { value = aws_security_group.rds.id }
+output "alb_security_group_id" { value = aws_security_group.alb.id }
+output "ecs_security_group_id" { value = aws_security_group.ecs_tasks.id }
+output "rds_security_group_id" { value = aws_security_group.rds.id }
 output "redis_security_group_id" { value = aws_security_group.redis.id }

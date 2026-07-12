@@ -11,7 +11,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readdirSync, existsSync } from "fs"
 import { join } from "path"
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 import { loadManifest } from "@/lib/skill-runtime/runtime"
 import {
   evaluateSkill,
@@ -23,6 +23,7 @@ import type {
   EvaluationResult,
   BatchEvaluationResult,
 } from "@/lib/skill-runtime/evaluator-types"
+import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error"
 
 // ─── Constants ───
 
@@ -106,7 +107,10 @@ function skillsAuthErrorResponse(error: unknown): NextResponse | null {
 }
 
 async function requireSkillsEvaluateAccess(): Promise<void> {
-  await requireUserContext("ADMIN")
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "ADMIN")) {
+    throw new Error("Access denied: ADMIN role required");
+  }
 }
 
 // ─── GET — List evaluatable skills ───
@@ -217,7 +221,7 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error"
-    return NextResponse.json({ error: message }, { status: 500 })
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }

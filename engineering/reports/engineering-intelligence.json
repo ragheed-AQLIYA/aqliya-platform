@@ -1,0 +1,33 @@
+{
+  "agent": "engineering-intelligence",
+  "title": "Engineering Intelligence Report",
+  "generatedAt": "2026-07-11T02:08:06.876Z",
+  "score": 85,
+  "summary": {
+    "total": 1,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 1
+  },
+  "findings": [
+    {
+      "id": "F-0824",
+      "agent": "engineering-intelligence",
+      "severity": "info",
+      "title": "Finding memory inventory",
+      "evidence": "tracked=786; open=786; resolved=0; reopened=0; chronic=0; newSincePrev=0; fixedSincePrev=0",
+      "files": [],
+      "category": "memory-stats",
+      "suggestion": "",
+      "scoreImpact": 0
+    }
+  ],
+  "meta": {
+    "newCount": 0,
+    "fixedCount": 0,
+    "chronic": 0,
+    "reopened": 0
+  }
+}

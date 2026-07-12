@@ -184,3 +184,9 @@ variable "redis_num_cache_nodes" {
   type        = number
   default     = 1
 }
+
+variable "domain_ready" {
+  description = "Set true when DNS delegation + ACM validation complete (enables HTTPS + CloudFront)"
+  type        = bool
+  default     = false
+}

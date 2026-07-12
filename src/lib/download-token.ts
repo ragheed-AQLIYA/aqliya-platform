@@ -112,7 +112,18 @@ export async function verifyDownloadToken(
   );
   const expectedSigEncoded = base64url(expectedSig);
 
-  if (sigEncoded !== expectedSigEncoded) {
+  // Constant-time comparison to prevent timing oracle attacks
+  const sigBytes = base64urlDecode(sigEncoded);
+  const expectedBytes = base64urlDecode(expectedSigEncoded);
+  if (sigBytes.length !== expectedBytes.length) {
+    throw new Error("Invalid token signature");
+  }
+  // Byte-by-byte XOR comparison — always examines every byte regardless of match position
+  let diff = 0;
+  for (let i = 0; i < sigBytes.length; i++) {
+    diff |= sigBytes[i] ^ expectedBytes[i];
+  }
+  if (diff !== 0) {
     throw new Error("Invalid token signature");
   }
 

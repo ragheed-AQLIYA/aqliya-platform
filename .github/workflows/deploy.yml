@@ -1,222 +1,84 @@
-name: Deploy to AWS
+name: AQLIYA Deploy
 
+# ── Deploy Gate ─────────────────────────────────────────────
+# Deploy now runs only after CI completes successfully on main.
+# Manual workflow_dispatch bypasses the gate for emergency deploys.
+# ────────────────────────────────────────────────────────────
 on:
-  push:
-    branches: [main, staging]
-    paths-ignore:
-      - "docs/**"
-      - "**.md"
-      - ".github/**"
-      - "!.github/workflows/deploy.yml"
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       environment:
-        description: "Target branch environment (main=production, staging=staging)"
-        required: false
-        default: "main"
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
         type: choice
         options:
-          - main
+          - production
           - staging
 
 env:
-  NODE_VERSION: "22"
-  AWS_REGION: me-south-1
-  ECR_REPOSITORY: aqliya/${{ github.ref_name == 'main' && 'production' || 'staging' }}/app
+  AWS_REGION: ${{ vars.AWS_REGION || 'eu-north-1' }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY || 'aqliya/prod/app' }}
+  ECS_CLUSTER: ${{ vars.ECS_CLUSTER || 'aqliya-prod-cluster' }}
+  ECS_SERVICE: ${{ vars.ECS_SERVICE || 'aqliya-prod-service' }}
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  test:
-    name: Test
+  deploy:
+    name: Build & Deploy
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: postgresql://ci:ci@localhost:5432/aqliya_ci
-      AUTH_SECRET: ci-auth-secret-minimum-32-characters
-      NODE_ENV: development
+    # Gate: automated runs require CI success; manual dispatch always allowed
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - run: npm ci --ignore-scripts
-
-      - run: npx prisma generate
-
-      - run: npx tsc --noEmit
-
-  terraform:
-    name: Terraform
-    needs: [test]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: infra/terraform
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.9
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Init
-        run: |
-          terraform init \
-            -backend-config=environments/${{ github.ref_name == 'main' && 'production' || 'staging' }}/backend.tf
-
-      - name: Terraform Validate
-        run: terraform validate
-
-      - name: Terraform Plan
-        run: |
-          terraform plan \
-            -var-file=environments/${{ github.ref_name == 'main' && 'production' || 'staging' }}/terraform.tfvars \
-            -out=tfplan
-
-      - name: Upload Terraform Plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan-${{ github.sha }}
-          path: infra/terraform/tfplan
-
-  build-and-push:
-    name: Build & Push Docker Image
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to Amazon ECR
+      - name: Login to ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+        uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push Docker image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+      - name: Build & tag image
         run: |
-          IMAGE="$ECR_REGISTRY/$ECR_REPOSITORY"
-          docker build \
-            --build-arg NODE_ENV=production \
-            -t "$IMAGE:$IMAGE_TAG" \
-            -t "$IMAGE:latest" \
-            .
-          docker push "$IMAGE:$IMAGE_TAG"
-          docker push "$IMAGE:latest"
+          docker build -t $ECR_REPOSITORY:${{ github.sha }} .
+          docker tag $ECR_REPOSITORY:${{ github.sha }} $ECR_REPOSITORY:latest
 
-      - name: Update ECS service with new image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-          CLUSTER: aqliya-${{ github.ref_name == 'main' && 'production' || 'staging' }}-cluster
-          SERVICE: aqliya-${{ github.ref_name == 'main' && 'production' || 'staging' }}-service
+      - name: Push to ECR
+        run: |
+          docker push $ECR_REPOSITORY:${{ github.sha }}
+          docker push $ECR_REPOSITORY:latest
+
+      - name: Deploy to ECS
         run: |
           aws ecs update-service \
-            --cluster $CLUSTER \
-            --service $SERVICE \
-            --force-new-deployment \
-            --region $AWS_REGION
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
+            --force-new-deployment
 
-  migrate:
-    name: Database Migrations
-    needs: [test]
-    runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - run: npm ci --ignore-scripts
-
-      - name: Run Prisma Migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - name: Wait for service stable
         run: |
-          npx prisma generate
-          npx prisma migrate deploy
-          npx prisma migrate status
+          aws ecs wait services-stable \
+            --cluster $ECS_CLUSTER \
+            --services $ECS_SERVICE
 
-  deploy:
-    name: Apply Terraform
-    needs: [terraform, build-and-push, migrate]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: infra/terraform
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.9
-
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: tfplan-${{ github.sha }}
-          path: infra/terraform
-
-      - name: Terraform Init
-        run: |
-          terraform init \
-            -backend-config=environments/${{ github.ref_name == 'main' && 'production' || 'staging' }}/backend.tf
-
-      - name: Terraform Apply
-        run: terraform apply tfplan
-
-  post-deploy:
-    name: Post-Deploy Verification
-    needs: [deploy]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - run: npm ci --ignore-scripts
-
-      - name: Wait for Deployment
-        run: sleep 60
-
-      - name: Audit log integrity check
+      - name: Smoke test
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          BASE_URL: ${{ vars.DEPLOY_BASE_URL || 'https://app.aqliya.com' }}
         run: |
-          # Verify audit log hash chain integrity (dry-run, read-only)
-          npx tsx scripts/platform/verify-platform-audit-log-write.ts || echo "Audit:dry completed (non-blocking)"
-          npx tsx scripts/platform/verify-platform-audit-logs.ts || echo "Audit:verify completed (non-blocking)"
-
-      - name: Comprehensive Smoke Test
-        env:
-          BASE_URL: ${{ github.ref_name == 'main' && 'https://aqliya.com' || 'https://staging.aqliya.com' }}
-          SCIM_API_KEY: ${{ secrets.SCIM_API_KEY || '' }}
-          AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
-          GIT_SHA: ${{ github.sha }}
-          NODE_ENV: production
-        run: node scripts/platform/post-deploy-smoke.mjs --base-url "$BASE_URL"
+          sleep 10
+          curl -sf "${{ env.BASE_URL }}/api/health" | jq '.status' | grep ok
+          curl -sf "${{ env.BASE_URL }}/" > /dev/null
+          curl -sf "${{ env.BASE_URL }}/login" > /dev/null

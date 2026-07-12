@@ -1,7 +1,6 @@
 // @ts-nocheck
 jest.mock("@/lib/auth", () => ({
   getCurrentUser: jest.fn(),
-  requireUserContext: jest.fn(),
   isExpectedAccessDeniedError: jest.fn(),
 }));
 

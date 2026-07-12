@@ -26,7 +26,9 @@ export const cacheAdapter: CacheAdapter = {
     if (await resolveBackend()) {
       try {
         const client = getRedisClient()
-        const raw = await client.get(key)
+        const prefix = process.env.CACHE_PREFIX || "aqliya:cache:"
+        const namespacedKey = `${prefix}${key}`
+        const raw = await client.get(namespacedKey)
         if (raw === null) return null
         return JSON.parse(raw) as T
       } catch {
@@ -47,11 +49,13 @@ export const cacheAdapter: CacheAdapter = {
     if (await resolveBackend()) {
       try {
         const client = getRedisClient()
+        const prefix = process.env.CACHE_PREFIX || "aqliya:cache:"
+        const namespacedKey = `${prefix}${key}`
         const serialized = JSON.stringify(value)
         if (ttlMs !== undefined) {
-          await client.set(key, serialized, "PX", ttlMs)
+          await client.set(namespacedKey, serialized, "PX", ttlMs)
         } else {
-          await client.set(key, serialized)
+          await client.set(namespacedKey, serialized)
         }
         return
       } catch {
@@ -69,7 +73,9 @@ export const cacheAdapter: CacheAdapter = {
     if (await resolveBackend()) {
       try {
         const client = getRedisClient()
-        await client.del(key)
+        const prefix = process.env.CACHE_PREFIX || "aqliya:cache:"
+        const namespacedKey = `${prefix}${key}`
+        await client.del(namespacedKey)
       } catch {
         useRedis = false
       }
@@ -81,7 +87,18 @@ export const cacheAdapter: CacheAdapter = {
     if (await resolveBackend()) {
       try {
         const client = getRedisClient()
-        await client.flushdb()
+        // SCAN + DEL pattern: only delete keys with our cache prefix,
+        // never call flushdb() which would destroy ALL Redis data
+        // (rate limiter keys, session data, queue data, etc.)
+        const prefix = process.env.CACHE_PREFIX || "aqliya:cache:"
+        let cursor = "0"
+        do {
+          const [nextCursor, keys] = await client.scan(cursor, "MATCH", `${prefix}*`, "COUNT", 100)
+          cursor = nextCursor
+          if (keys.length > 0) {
+            await client.del(...keys)
+          }
+        } while (cursor !== "0")
       } catch {
         useRedis = false
       }

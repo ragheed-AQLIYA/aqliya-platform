@@ -49,23 +49,56 @@ Minimum bar for general availability.
 
 ## Current Status
 
-**Current gate: Pilot-ready candidate**
+**Current gate: Production Launch Preparation**
+
+**Dev:** Pilot-ready (operational) — `https://dev.aqliya.com`  
+**Production:** ✅ **LIVE** (2026-07-09) — `https://app.aqliya.com`  
+**Gate:** Launch Completed — Post-Launch Stabilization active
 
 **Authoritative operational snapshot:** `docs/source-of-truth/AQLIYA_CURRENT_STATE.md`  
 **Truth reconciliation audit:** `docs/audits/truth-reconciliation-2026-06-18/FINAL_TRUTH_RECONCILIATION.md`  
-**Validation evidence:** `docs/reports/README.md` (latest: `2026-06-18-final-*.txt`)
+**Validation evidence:** `docs/reports/README.md` (latest: `2026-06-18-final-*.txt`)  
+**Deployment baseline:** `docs/deployment/DEV_BASELINE.md`  
+**Operational governance:** `docs/deployment/OBSERVABILITY_BASELINE.md`, `SECRETS_AND_ROTATION_RUNBOOK.md`, `BACKUP_RESTORE_DRILL.md`, `ACCESS_CONTROL_MATRIX.md`, `RELEASE_ROLLBACK_POLICY.md`
 
-The repository meets the Internal Reviewable, Demo-ready with governance, and Pilot-ready candidate bars.
+### Dev Environment (`dev.aqliya.com`)
 
-Pilot-ready blockers:
-- Jest integration tests require PostgreSQL (Docker Compose setup exists — `docker-compose.test.yml`)
-- ESLint: **0 errors**, ~240 warnings (2026-06-18-final-lint.txt); warnings documented
-- Backup not automated on live AWS (manual scripts exist)
-- Production malware scanner not integrated (fail-closed blocks uploads)
-- No external penetration test executed
-- Live AWS ECS/RDS restore drill **not verified** in this cycle
+| Capability | Status | Evidence |
+|-----------|--------|----------|
+| Public HTTPS URL | ✅ Live | `https://dev.aqliya.com` |
+| TLS / ACM | ✅ Working | CloudFront + ACM certs |
+| WAF + CloudFront | ✅ Working | Via `web_acl_id` (see ADR-DEPLOY-001) |
+| Security headers (CSP, HSTS, XFO, etc.) | ✅ Applied | CloudFront response headers policy |
+| Cache behavior segmentation | ✅ Applied | `/api/*` uncached, `/_next/*` 1y TTL |
+| RDS automated backups | ✅ 1 day | Pending maintenance window |
+| AWS Backup plan | ✅ Daily/weekly/monthly | Cron fixed for AWS Backup format |
+| ClamAV malware scanner | ✅ Integrated | Sidecar with cpu=128, memory=256 |
+| Observability (dashboards + alarms) | ✅ Configured | CloudWatch + SNS |
+| Secrets management | ✅ Documented | Rotation runbook exists |
+| Backup & restore drill | ✅ Documented | Procedure + checklist |
+| Access control matrix | ✅ Documented | IAM roles + permissions |
+| Release & rollback policy | ✅ Documented | Versioning + gates |
+| Smoke tests | ✅ Baseline saved | `docs/deployments/dev-baseline-2026-07-08.txt` |
 
-Pilot hardening documentation exists:
-- `docs/SECURITY_REVIEW.md` — Internal security review
-- `docs/PILOT_RUNBOOK.md` — Pilot operations guide
-- `docs/operations/backup-schedule.md` — Backup scheduling guidance
+### Pilot-ready blockers (updated)
+
+| Blocker | Status | Note |
+|---------|--------|------|
+| Jest integration tests (PostgreSQL) | ⬜ Open | `docker-compose.test.yml` exists |
+| ESLint warnings (~240) | ⬜ Documented | Warnings not errors |
+| External penetration test | ⬜ Not executed | Required for Commercial Ready |
+| RDS restore drill on live | ✅ Documented | Procedure in `BACKUP_RESTORE_DRILL.md` |
+| Production CI/CD pipeline | ⬜ Planned | GitHub Actions (future) |
+
+### Operational governance documents
+
+- `docs/deployment/DEV_BASELINE.md` — Full dev environment baseline
+- `docs/deployment/OBSERVABILITY_BASELINE.md` — CloudWatch, alarms, logs, Sentry
+- `docs/deployment/SECRETS_AND_ROTATION_RUNBOOK.md` — Secrets inventory, rotation, incident response
+- `docs/deployment/BACKUP_RESTORE_DRILL.md` — RDS restore, Terraform state restore, drill checklist
+- `docs/deployment/ACCESS_CONTROL_MATRIX.md` — IAM roles, permissions, separation of duties
+- `docs/deployment/RELEASE_ROLLBACK_POLICY.md` — Release process, rollback procedures, gates
+- `docs/deployment/POST_DEPLOY_SMOKE_TESTS.md` — 10-point smoke test suite
+- `docs/deployment/PROD_DEPLOYMENT_CHECKLIST.md` — Production launch checklist
+- `docs/deployment/INCIDENT_ROLLBACK_RUNBOOK.md` — 6 incident scenarios with fixes
+- `docs/adr/ADR-DEPLOY-001-CLOUDFRONT-WAF-ATTACHMENT.md` — WAF attachment decision

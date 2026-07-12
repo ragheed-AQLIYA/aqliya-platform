@@ -9,12 +9,11 @@
  * All authorization paths converge here.
  */
 
-import type { UserRole } from "@prisma/client";
-
 import type { RequiredRole } from "@/lib/auth";
 import { hasRequiredRole } from "@/lib/auth";
 
 import type {
+  AccessAction,
   AuthorizeOptions,
   AuthorizationResult,
   Permission,
@@ -46,10 +45,9 @@ export async function authorize(options: AuthorizeOptions): Promise<Authorizatio
       tenantId: resource.tenantId,
     });
     if (!tenantOk.allowed) {
-      return {
-        allowed: false,
-        reason: tenantOk.reason ?? "Tenant access denied",
-      };
+      const reason = tenantOk.reason ?? "Tenant access denied";
+      logDeny(user, resource, action, reason);
+      return { allowed: false, reason };
     }
   }
 
@@ -61,22 +59,17 @@ export async function authorize(options: AuthorizeOptions): Promise<Authorizatio
   const rolePerms = ROLE_PERMISSIONS[principalRole];
 
   if (!rolePerms?.includes(requiredPerm)) {
-    return {
-      allowed: false,
-      reason: `Insufficient permissions: '${principalRole}' role cannot perform '${action}' on '${resource.type}'`,
-      principal,
-    };
+    const reason = `Insufficient permissions: '${principalRole}' role cannot perform '${action}' on '${resource.type}'`;
+    logDeny(user, resource, action, reason);
+    return { allowed: false, reason, principal };
   }
 
   // 3. Overridden required role check (used for fine-grained actions)
   if (context?.requiredRole) {
-    const _userRoleUpper = user.role.toUpperCase() as UserRole;
     if (!hasRequiredRole(user, context.requiredRole as RequiredRole)) {
-      return {
-        allowed: false,
-        reason: `Requires '${context.requiredRole}' role for '${action}'`,
-        principal,
-      };
+      const reason = `Requires '${context.requiredRole}' role for '${action}'`;
+      logDeny(user, resource, action, reason);
+      return { allowed: false, reason, principal };
     }
   }
 
@@ -89,11 +82,9 @@ export async function authorize(options: AuthorizeOptions): Promise<Authorizatio
       attributes: context.attributes,
     });
     if (!abacResult.allowed) {
-      return {
-        allowed: false,
-        reason: abacResult.reason ?? "ABAC policy denied access",
-        principal,
-      };
+      const reason = abacResult.reason ?? "ABAC policy denied access";
+      logDeny(user, resource, action, reason);
+      return { allowed: false, reason, principal };
     }
   }
 
@@ -124,6 +115,36 @@ export function hasSufficientRoleLevel(
   const requiredLevel = ROLE_HIERARCHY[normalizeRole(requiredRole)];
   if (userLevel === undefined || requiredLevel === undefined) return false;
   return userLevel >= requiredLevel;
+}
+
+/**
+ * Fire-and-forget deny logging.
+ * Every DENY decision writes to PlatformAuditLog.
+ * Logging failures must never affect authorization — errors are silently caught.
+ */
+async function logDeny(
+  user: { id: string; email: string; organizationId?: string },
+  resource: { type: string; id?: string },
+  action: string,
+  reason: string,
+): Promise<void> {
+  try {
+    const { writePlatformAuditLog } = await import("@/lib/platform/audit-log");
+    await writePlatformAuditLog({
+      productKey: "platform",
+      action: "authorization.deny",
+      actorId: user.id,
+      actorType: "user",
+      actorEmail: user.email,
+      targetType: resource.type,
+      targetId: resource.id,
+      severity: "warning",
+      status: "recorded",
+      metadata: { action, reason, resourceType: resource.type },
+    });
+  } catch {
+    // Silently ignored — logging never affects authorization
+  }
 }
 
 // ─── Internal Helpers ───

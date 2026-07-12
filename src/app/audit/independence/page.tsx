@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { IndependenceDashboard } from "@/components/audit/independence/independence-dashboard";
+import { LoadingState } from "@/components/ui/loading-state";
 
 export default function IndependencePage() {
   return (
@@ -9,7 +11,9 @@ export default function IndependencePage() {
           إدارة سجل الاستقلالية، المصالح المالية، علاقات العمل، التهديدات، والتأكيد السنوي
         </p>
       </div>
-      <IndependenceDashboard auditOrganizationId="" />
+      <Suspense fallback={<LoadingState message="جاري تحميل نظام الاستقلالية..." />}>
+        <IndependenceDashboard auditOrganizationId="" />
+      </Suspense>
     </div>
   );
 }

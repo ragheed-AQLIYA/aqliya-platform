@@ -1,0 +1,96 @@
+{
+  "agent": "regression-detector",
+  "title": "Regression Detector Report",
+  "generatedAt": "2026-07-11T02:08:06.882Z",
+  "score": 100,
+  "summary": {
+    "total": 1,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 1
+  },
+  "findings": [
+    {
+      "id": "F-0825",
+      "agent": "regression-detector",
+      "severity": "info",
+      "title": "Finding delta: +0 new · −0 resolved",
+      "evidence": "before=0 after=0",
+      "files": [],
+      "category": "finding-delta",
+      "suggestion": "",
+      "scoreImpact": 0
+    }
+  ],
+  "meta": {
+    "before": "legacy-2026-07-11T01-55-01-114Z",
+    "after": "legacy-2026-07-11T02-08-06-850Z",
+    "rows": [
+      {
+        "label": "Overall",
+        "before": 74,
+        "after": 74,
+        "delta": 0,
+        "arrow": "="
+      },
+      {
+        "label": "Security",
+        "before": 65,
+        "after": 65,
+        "delta": 0,
+        "arrow": "="
+      },
+      {
+        "label": "Performance",
+        "before": 57,
+        "after": 57,
+        "delta": 0,
+        "arrow": "="
+      },
+      {
+        "label": "Code Health",
+        "before": 32,
+        "after": 32,
+        "delta": 0,
+        "arrow": "="
+      },
+      {
+        "label": "Architecture Drift",
+        "before": 73,
+        "after": 73,
+        "delta": 0,
+        "arrow": "="
+      },
+      {
+        "label": "Documentation",
+        "before": null,
+        "after": null,
+        "delta": null,
+        "arrow": "="
+      },
+      {
+        "label": "Tests",
+        "before": null,
+        "after": null,
+        "delta": null,
+        "arrow": "="
+      },
+      {
+        "label": "Technical Debt",
+        "before": 58,
+        "after": 58,
+        "delta": 0,
+        "arrow": "="
+      },
+      {
+        "label": "Dependencies",
+        "before": null,
+        "after": null,
+        "delta": null,
+        "arrow": "="
+      }
+    ]
+  }
+}

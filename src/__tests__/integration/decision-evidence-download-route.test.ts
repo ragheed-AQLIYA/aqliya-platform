@@ -1,14 +1,22 @@
-﻿import { describe, it, expect, jest, beforeEach } from "@jest/globals";
+import { describe, it, expect, jest, beforeEach } from "@jest/globals";
 import type { NextRequest } from "next/server";
 
 // ── Module-level mocks ──
 
 jest.mock("@/lib/auth", () => ({
-  requireDecisionAccess: jest.fn(),
+  getCurrentUser: jest.fn(),
 }));
 
 jest.mock("@/lib/authorization", () => ({
   enforce: jest.fn(),
+}));
+
+jest.mock("@/lib/prisma", () => ({
+  prisma: {
+    decision: {
+      findUnique: jest.fn(),
+    },
+  },
 }));
 
 jest.mock("@/lib/core/evidence", () => ({
@@ -26,8 +34,9 @@ jest.mock("@/lib/platform/audit-logger", () => ({
 
 // ── Imports (picks up mocked modules) ──
 
-import { requireDecisionAccess } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { enforce } from "@/lib/authorization";
+import { prisma } from "@/lib/prisma";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { auditLogger } from "@/lib/platform/audit-logger";
@@ -51,6 +60,14 @@ function makeUser(overrides: Record<string, unknown> = {}) {
     organizationId: "org-1",
     platformOrganizationId: "plat-1",
     organization: { id: "org-1", name: "Test Org" },
+    ...overrides,
+  };
+}
+
+function makeDecision(overrides: Record<string, unknown> = {}) {
+  return {
+    id: "dec-1",
+    organizationId: "org-1",
     ...overrides,
   };
 }
@@ -82,12 +99,13 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
   beforeEach(() => {
     jest.clearAllMocks();
     mock(enforce).mockResolvedValue(undefined);
+    mock(prisma.decision.findUnique).mockResolvedValue(makeDecision());
   });
 
   // ── 1. Authentication ──
 
   it("returns 401 when unauthenticated", async () => {
-    mock(requireDecisionAccess).mockRejectedValue(new Error("Unauthenticated"));
+    mock(getCurrentUser).mockRejectedValue(new Error("Unauthenticated"));
 
     const { GET } = await import("@/app/api/decisions/[decisionId]/evidence/[evidenceId]/download/route");
     const req = new Request("http://localhost/api/decisions/dec-1/evidence/ev-1/download") as unknown as NextRequest;
@@ -103,7 +121,8 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
   // ── 2. Decision not found ──
 
   it("returns 404 when decision not found", async () => {
-    mock(requireDecisionAccess).mockRejectedValue(new Error("Decision not found"));
+    mock(getCurrentUser).mockResolvedValue(makeUser());
+    mock(prisma.decision.findUnique).mockResolvedValue(null);
 
     const { GET } = await import("@/app/api/decisions/[decisionId]/evidence/[evidenceId]/download/route");
     const req = new Request("http://localhost/api/decisions/dec-1/evidence/ev-1/download") as unknown as NextRequest;
@@ -119,7 +138,8 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
   // ── 3. Access denied ──
 
   it("returns 403 when access denied", async () => {
-    mock(requireDecisionAccess).mockRejectedValue(new Error("Access denied: user lacks permission"));
+    mock(getCurrentUser).mockResolvedValue(makeUser());
+    mock(enforce).mockRejectedValue(new Error("Access denied: user lacks permission"));
 
     const { GET } = await import("@/app/api/decisions/[decisionId]/evidence/[evidenceId]/download/route");
     const req = new Request("http://localhost/api/decisions/dec-1/evidence/ev-1/download") as unknown as NextRequest;
@@ -129,16 +149,13 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
 
     expect(response.status).toBe(403);
     const body = await response.json();
-    expect(body).toEqual({ error: "Access denied: user lacks permission" });
+    expect(body).toEqual({ error: "Access denied" })
   });
 
   // ── 4. Evidence not found (null from Prisma) ──
 
   it("returns 404 when evidence not found", async () => {
-    mock(requireDecisionAccess).mockResolvedValue({
-      user: makeUser(),
-      organizationId: "org-1",
-    });
+    mock(getCurrentUser).mockResolvedValue(makeUser());
     mock(assertEvidenceDownloadAccess).mockRejectedValue(
       new Error("Evidence not found"),
     );
@@ -157,10 +174,7 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
   // ── 5. Evidence with mismatched decisionId ──
 
   it("returns 404 when evidence decisionId does not match", async () => {
-    mock(requireDecisionAccess).mockResolvedValue({
-      user: makeUser(),
-      organizationId: "org-1",
-    });
+    mock(getCurrentUser).mockResolvedValue(makeUser());
     mock(assertEvidenceDownloadAccess).mockRejectedValue(
       new Error("Evidence not found"),
     );
@@ -179,10 +193,7 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
   // ── 6. Evidence with null storageKey ──
 
   it("returns 404 when evidence has no storage key", async () => {
-    mock(requireDecisionAccess).mockResolvedValue({
-      user: makeUser(),
-      organizationId: "org-1",
-    });
+    mock(getCurrentUser).mockResolvedValue(makeUser());
     mock(assertEvidenceDownloadAccess).mockRejectedValue(
       new Error("Evidence not found or no file stored"),
     );
@@ -201,10 +212,7 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
   // ── 7. Stored file not found ──
 
   it("returns 404 when stored file not found", async () => {
-    mock(requireDecisionAccess).mockResolvedValue({
-      user: makeUser(),
-      organizationId: "org-1",
-    });
+    mock(getCurrentUser).mockResolvedValue(makeUser());
     mock(assertEvidenceDownloadAccess).mockResolvedValue({
       id: "ev-1",
       filename: "report.pdf",
@@ -231,10 +239,7 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
 
   it("returns 200 with file content and security headers", async () => {
     const user = makeUser();
-    mock(requireDecisionAccess).mockResolvedValue({
-      user,
-      organizationId: "org-1",
-    });
+    mock(getCurrentUser).mockResolvedValue(user);
     const evidence = makeEvidence({ filename: "audit-report.pdf" });
     mock(assertEvidenceDownloadAccess).mockResolvedValue({
       id: evidence.id,
@@ -269,10 +274,7 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
 
   it("creates audit event on successful download", async () => {
     const user = makeUser({ id: "user-audit", name: "Auditable User", role: "ADMIN" });
-    mock(requireDecisionAccess).mockResolvedValue({
-      user,
-      organizationId: "org-1",
-    });
+    mock(getCurrentUser).mockResolvedValue(user);
     mock(assertEvidenceDownloadAccess).mockResolvedValue({
       id: "ev-1",
       filename: "report.pdf",
@@ -308,10 +310,7 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
   // ── 10. Server error on storage failure ──
 
   it("returns 500 when storage retrieval throws", async () => {
-    mock(requireDecisionAccess).mockResolvedValue({
-      user: makeUser(),
-      organizationId: "org-1",
-    });
+    mock(getCurrentUser).mockResolvedValue(makeUser());
     mock(assertEvidenceDownloadAccess).mockResolvedValue({
       id: "ev-1",
       filename: "report.pdf",
@@ -331,6 +330,8 @@ describe("GET /api/decisions/[decisionId]/evidence/[evidenceId]/download", () =>
 
     expect(response.status).toBe(500);
     const body = await response.json();
-    expect(body).toEqual({ error: "Failed to serve file" });
+    expect(body.error.message).toBe("Service temporarily unavailable");
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe("SERVICE_UNAVAILABLE");
   });
 });

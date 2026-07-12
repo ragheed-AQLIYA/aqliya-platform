@@ -2,8 +2,9 @@ import { NextResponse } from "next/server"
 import { getHealthRuntime } from "@/lib/integration/health-runtime"
 import { getCircuitSnapshot } from "@/lib/integration/failover-engine"
 import { getAllCounters } from "@/lib/integration/metrics"
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error"
 
 /**
  * GET /api/integration/health
@@ -18,7 +19,10 @@ import { prisma } from "@/lib/prisma"
  */
 export async function GET() {
   try {
-      await requireUserContext("VIEWER");
+      const user = await getCurrentUser();
+      if (!hasRequiredRole(user, "VIEWER")) {
+        throw new Error("Access denied: VIEWER role required");
+      }
     // Run a health tick to get current state
     const snapshot = await getHealthRuntime().tick()
 
@@ -60,13 +64,14 @@ export async function GET() {
       generatedAt: new Date().toISOString(),
     })
   } catch (error) {
+    const { message, code } = sanitizeError(error);
     return NextResponse.json(
       {
         status: "error",
-        error: error instanceof Error ? error.message : "Integration health check failed",
+        error: message,
         generatedAt: new Date().toISOString(),
       },
-      { status: 500 },
+      { status: httpStatusFromCode(code) },
     )
   }
 }

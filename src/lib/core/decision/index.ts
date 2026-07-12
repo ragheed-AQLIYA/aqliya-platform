@@ -57,9 +57,5 @@ export {
 } from "./evaluators";
 
 // ─── Adapters ───
-export {
-  getDecisionOSCompletionState,
-  getDecisionOSNextStep,
-  getDecisionOSProgressSummary,
-  createDecisionOSEngineConfig,
-} from "./adapters/decisionos-adapter";
+// DecisionOS-specific adapters moved to @/lib/decision/adapters/ per ADR-003
+// Import from @/lib/decision/adapters/core-engine-adapter for product-specific engine config

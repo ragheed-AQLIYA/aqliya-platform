@@ -30,10 +30,15 @@ function isExpectedAccessDeniedError(_error) {
   return false;
 }
 
+function hasRequiredRole(_user, _role) {
+  return true;
+}
+
 module.exports = {
   getCurrentUser,
   requireUserContext,
   requireOrgAccess,
   isExpectedAccessDeniedError,
+  hasRequiredRole,
   mockUser,
 };

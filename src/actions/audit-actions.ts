@@ -74,6 +74,7 @@ import {
 import { getGovernanceContext } from "@/lib/governance/retrieval-router";
 import { getStorageProvider, buildStorageKey } from "@/lib/audit/storage";
 import { createHash } from "crypto";
+import { validateFileContent } from "@/lib/security/file-validation";
 import { prisma } from "@/lib/prisma";
 import { notifyOnEvent } from "@/lib/platform/notification/integration";
 
@@ -131,9 +132,9 @@ export async function createEngagementAction(params: {
     : null;
 
   if (engagementId && params.teamMemberIds.length > 0) {
-    for (const memberId of params.teamMemberIds) {
-      try {
-        await notifyOnEvent("on_create", params.organizationId, engagementId, {
+    await Promise.allSettled(
+      params.teamMemberIds.map((memberId) =>
+        notifyOnEvent("on_create", params.organizationId, engagementId, {
           productKey: "audit",
           templateKey: "audit_review_assigned",
           recipientId: memberId,
@@ -142,11 +143,9 @@ export async function createEngagementAction(params: {
             clientName: params.clientName,
             assignedAt: new Date().toISOString(),
           },
-        });
-      } catch {
-        // Notification must not block the primary action
-      }
-    }
+        })
+      )
+    );
   }
 
   return result;
@@ -543,6 +542,12 @@ export async function uploadEvidenceFileAction(params: {
 
   // Compute file hash
   const fileHash = createHash("sha256").update(content).digest("hex");
+
+  // Validate file content matches its claimed extension (magic bytes check)
+  const auditMagicValidation = validateFileContent(content, params.fileType);
+  if (!auditMagicValidation.valid) {
+    throw new Error(auditMagicValidation.error || "File content does not match its claimed extension");
+  }
 
   // File scanning
   const scanResult = await scanEvidenceFile({

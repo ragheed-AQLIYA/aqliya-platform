@@ -423,3 +423,21 @@ export async function confirmMappingAction(engagementId: string, mappingId: stri
 export async function runValidationAction(engagementId: string) {
   return _runValidation(engagementId)
 }
+
+export async function getProjectsBatch(projectIds: string[]) {
+  const actor = await getAuditActor()
+  if (projectIds.length === 0) return []
+  return prisma.project.findMany({
+    where: { id: { in: projectIds } },
+    select: { id: true, name: true, projectType: true },
+  })
+}
+
+export async function getWorkspacesBatch(workspaceIds: string[]) {
+  const actor = await getAuditActor()
+  if (workspaceIds.length === 0) return []
+  return prisma.clientWorkspace.findMany({
+    where: { id: { in: workspaceIds } },
+    select: { id: true, name: true, slug: true },
+  })
+}

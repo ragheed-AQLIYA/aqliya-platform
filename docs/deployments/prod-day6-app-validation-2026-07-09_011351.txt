@@ -1,0 +1,37 @@
+========================================
+AQLIYA PRODUCTION — DAY 6 APP VALIDATION
+Date: 2026-07-09 01:13:51
+Environment: prod
+ALB URL: http://aqliya-prod-alb-1090266351.eu-north-1.elb.amazonaws.com
+========================================
+
+=== Section A — Infra Facts ===
+ALB:        http://aqliya-prod-alb-1090266351.eu-north-1.elb.amazonaws.com
+ECS:        aqliya-prod-cluster / aqliya-prod-service (rev 1)
+RDS:        aqliya-prod-db.cds80cqswjgf.eu-north-1.rds.amazonaws.com (postgres 16.14, available)
+Redis:      aqliya-prod-redis.j5oziv.0001.eun1.cache.amazonaws.com (redis 7.1, available)
+S3 Static:  aqliya-prod-static
+S3 Uploads: aqliya-prod-uploads
+VPC:        vpc-060a49d210f05d9d1
+
+=== Section B — Secrets ===
+database-url: ✅ Populated (sslmode=no-verify)
+redis-url:    ✅ Populated
+All 13 prod secrets: ✅
+
+=== Section C — App Validation Results ===
+GET /api/health → 200 ✅ {"status":"ok","database":true,"auth_secret":true}
+GET /          → 200 ✅
+GET /login     → 200 ✅
+GET /robots.txt → 200 ✅
+
+=== Section D — ECS Stability ===
+Running:   1
+Desired:   1
+Pending:   0
+TG Health: 1 healthy, 1 draining (old task)
+
+=== Conclusion ===
+Day 6 Status: ✅ GREEN
+Day 7 Readiness: AWAITING ACM ISSUED (pending DNS propagation)
+========================================

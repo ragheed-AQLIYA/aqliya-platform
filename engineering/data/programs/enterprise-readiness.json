@@ -1,0 +1,66 @@
+{
+  "at": "2026-07-11T11:37:02.391Z",
+  "enterpriseReadiness": 76,
+  "dimensions": [
+    {
+      "id": "security",
+      "label": "Security",
+      "score": 65
+    },
+    {
+      "id": "compliance",
+      "label": "Compliance",
+      "score": 82
+    },
+    {
+      "id": "scalability",
+      "label": "Scalability",
+      "score": 68
+    },
+    {
+      "id": "operations",
+      "label": "Operations",
+      "score": 98
+    },
+    {
+      "id": "documentation",
+      "label": "Documentation",
+      "score": 95
+    },
+    {
+      "id": "support",
+      "label": "Support",
+      "score": 70
+    },
+    {
+      "id": "monitoring",
+      "label": "Monitoring",
+      "score": 75
+    },
+    {
+      "id": "recovery",
+      "label": "Recovery",
+      "score": 100
+    },
+    {
+      "id": "authorization",
+      "label": "Authorization",
+      "score": 52
+    },
+    {
+      "id": "architecture",
+      "label": "Architecture (ADR)",
+      "score": 59
+    },
+    {
+      "id": "quality_gates",
+      "label": "Quality / Tests",
+      "score": 95
+    },
+    {
+      "id": "release",
+      "label": "Release Ready (avg products)",
+      "score": 67
+    }
+  ]
+}

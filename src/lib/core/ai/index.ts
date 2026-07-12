@@ -38,7 +38,30 @@ export {
   type BudgetStatus,
 } from "./cost-governance";
 
-export { AIEvalGate, runEvalGate, type EvalGateResult } from "./eval-gate";
+export {
+  AIEvalGate,
+  runEvalGate,
+  checkConfidenceThreshold,
+  suggestThresholdForModel,
+  evalGate,
+  type EvalGateResult,
+  type EvalGateInput,
+  type EvalGateResultContent,
+  type ConfidenceGateInput,
+  type ConfidenceGateResult,
+} from "./eval-gate";
+
+export {
+  calculateConfidence,
+  confidenceLabel,
+  type ConfidenceInput,
+  type ConfidenceScore,
+} from "./confidence-scorer";
+
+export {
+  generateAiQualityReport,
+  type AiOutputReport,
+} from "./quality-report";
 
 export {
   BudgetQuotaExceededError,

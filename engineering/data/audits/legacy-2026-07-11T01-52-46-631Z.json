@@ -1,0 +1,18 @@
+{
+  "auditId": "legacy-2026-07-11T01-52-46-631Z",
+  "startedAt": "2026-07-11T01:52:46.631Z",
+  "finishedAt": "2026-07-11T01:52:46.631Z",
+  "scores": {
+    "overallRepositoryHealth": 33,
+    "securityScore": 0,
+    "performanceScore": 0,
+    "codeHealthScore": 0,
+    "architectureHealth": 44,
+    "technicalDebtScore": 25
+  },
+  "gates": null,
+  "agents": [],
+  "findingCount": 0,
+  "fingerprints": [],
+  "legacy": true
+}

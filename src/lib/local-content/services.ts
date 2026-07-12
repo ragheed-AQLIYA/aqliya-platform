@@ -1,4 +1,4 @@
-// LocalContentOS domain services
+﻿// LocalContentOS domain services
 // Stateless service functions for all CRUD operations.
 // Audit events are emitted for every mutation.
 // Tenant scoping is enforced via project-level organizationId checks.
@@ -336,8 +336,8 @@ export async function createClassification(
       spendRecordId: input.spendRecordId ?? null,
       classifiedBy: input.classifiedBy ?? actor?.id ?? null,
       localPercentage: input.localPercentage,
-      classificationBasis: input.classificationBasis,
-      confidence: input.confidence ?? "unverified",
+      classificationBasis: input.classificationBasis as any,
+      confidence: input.confidence as any ?? "unverified",
       notes: input.notes ?? null,
     },
   });

@@ -1,0 +1,265 @@
+{
+  "at": "2026-07-11T11:27:35.605Z",
+  "stages": [
+    "Vision",
+    "PRD",
+    "Domain",
+    "API",
+    "UX",
+    "Tests",
+    "Security",
+    "Performance",
+    "Pilot",
+    "Production"
+  ],
+  "products": [
+    {
+      "product": "AuditOS",
+      "maturity": "L6 Production-hardened",
+      "level": 6,
+      "fileCount": 380,
+      "highFindings": 54,
+      "stages": {
+        "Vision": true,
+        "PRD": true,
+        "Domain": true,
+        "API": true,
+        "UX": true,
+        "Tests": true,
+        "Security": "warn",
+        "Performance": "warn",
+        "Pilot": true,
+        "Production": true
+      },
+      "stageIcons": {
+        "Vision": "✅",
+        "PRD": "✅",
+        "Domain": "✅",
+        "API": "✅",
+        "UX": "✅",
+        "Tests": "✅",
+        "Security": "⚠️",
+        "Performance": "⚠️",
+        "Pilot": "✅",
+        "Production": "✅"
+      }
+    },
+    {
+      "product": "DecisionOS",
+      "maturity": "**L6 Production-hardened**",
+      "level": 6,
+      "fileCount": 2370,
+      "highFindings": 19,
+      "stages": {
+        "Vision": true,
+        "PRD": true,
+        "Domain": true,
+        "API": true,
+        "UX": true,
+        "Tests": true,
+        "Security": "warn",
+        "Performance": "warn",
+        "Pilot": true,
+        "Production": true
+      },
+      "stageIcons": {
+        "Vision": "✅",
+        "PRD": "✅",
+        "Domain": "✅",
+        "API": "✅",
+        "UX": "✅",
+        "Tests": "✅",
+        "Security": "⚠️",
+        "Performance": "⚠️",
+        "Pilot": "✅",
+        "Production": "✅"
+      }
+    },
+    {
+      "product": "LocalContentOS",
+      "maturity": "**L6 Production-hardened**",
+      "level": 6,
+      "fileCount": 295,
+      "highFindings": 33,
+      "stages": {
+        "Vision": true,
+        "PRD": true,
+        "Domain": true,
+        "API": true,
+        "UX": true,
+        "Tests": true,
+        "Security": "warn",
+        "Performance": "warn",
+        "Pilot": true,
+        "Production": true
+      },
+      "stageIcons": {
+        "Vision": "✅",
+        "PRD": "✅",
+        "Domain": "✅",
+        "API": "✅",
+        "UX": "✅",
+        "Tests": "✅",
+        "Security": "⚠️",
+        "Performance": "⚠️",
+        "Pilot": "✅",
+        "Production": "✅"
+      }
+    },
+    {
+      "product": "SalesOS",
+      "maturity": "**L6 Production-hardened**",
+      "level": 6,
+      "fileCount": 527,
+      "highFindings": 21,
+      "stages": {
+        "Vision": true,
+        "PRD": true,
+        "Domain": true,
+        "API": true,
+        "UX": true,
+        "Tests": true,
+        "Security": "warn",
+        "Performance": "warn",
+        "Pilot": true,
+        "Production": true
+      },
+      "stageIcons": {
+        "Vision": "✅",
+        "PRD": "✅",
+        "Domain": "✅",
+        "API": "✅",
+        "UX": "✅",
+        "Tests": "✅",
+        "Security": "⚠️",
+        "Performance": "⚠️",
+        "Pilot": "✅",
+        "Production": "✅"
+      }
+    },
+    {
+      "product": "WorkflowOS",
+      "maturity": "L6 Production-hardened",
+      "level": 6,
+      "fileCount": 154,
+      "highFindings": 8,
+      "stages": {
+        "Vision": true,
+        "PRD": true,
+        "Domain": true,
+        "API": true,
+        "UX": true,
+        "Tests": true,
+        "Security": "warn",
+        "Performance": "warn",
+        "Pilot": true,
+        "Production": true
+      },
+      "stageIcons": {
+        "Vision": "✅",
+        "PRD": "✅",
+        "Domain": "✅",
+        "API": "✅",
+        "UX": "✅",
+        "Tests": "✅",
+        "Security": "⚠️",
+        "Performance": "⚠️",
+        "Pilot": "✅",
+        "Production": "✅"
+      }
+    },
+    {
+      "product": "RiskOS",
+      "maturity": "**L6 Production-hardened**",
+      "level": 6,
+      "fileCount": 18,
+      "highFindings": 0,
+      "stages": {
+        "Vision": true,
+        "PRD": true,
+        "Domain": true,
+        "API": true,
+        "UX": true,
+        "Tests": true,
+        "Security": "warn",
+        "Performance": "warn",
+        "Pilot": true,
+        "Production": true
+      },
+      "stageIcons": {
+        "Vision": "✅",
+        "PRD": "✅",
+        "Domain": "✅",
+        "API": "✅",
+        "UX": "✅",
+        "Tests": "✅",
+        "Security": "⚠️",
+        "Performance": "⚠️",
+        "Pilot": "✅",
+        "Production": "✅"
+      }
+    },
+    {
+      "product": "LocalContactOS",
+      "maturity": "**L6 Production-hardened**",
+      "level": 6,
+      "fileCount": 38,
+      "highFindings": 1,
+      "stages": {
+        "Vision": true,
+        "PRD": true,
+        "Domain": true,
+        "API": true,
+        "UX": true,
+        "Tests": true,
+        "Security": "warn",
+        "Performance": "warn",
+        "Pilot": true,
+        "Production": true
+      },
+      "stageIcons": {
+        "Vision": "✅",
+        "PRD": "✅",
+        "Domain": "✅",
+        "API": "✅",
+        "UX": "✅",
+        "Tests": "✅",
+        "Security": "⚠️",
+        "Performance": "⚠️",
+        "Pilot": "✅",
+        "Production": "✅"
+      }
+    },
+    {
+      "product": "ContentStudio",
+      "maturity": "**L6 Production-hardened**",
+      "level": 6,
+      "fileCount": 36,
+      "highFindings": 3,
+      "stages": {
+        "Vision": true,
+        "PRD": true,
+        "Domain": true,
+        "API": true,
+        "UX": true,
+        "Tests": true,
+        "Security": "warn",
+        "Performance": "warn",
+        "Pilot": true,
+        "Production": true
+      },
+      "stageIcons": {
+        "Vision": "✅",
+        "PRD": "✅",
+        "Domain": "✅",
+        "API": "✅",
+        "UX": "✅",
+        "Tests": "✅",
+        "Security": "⚠️",
+        "Performance": "⚠️",
+        "Pilot": "✅",
+        "Production": "✅"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1284 @@
+{
+  "at": "2026-07-11T02:08:06.905Z",
+  "totalDays": 161,
+  "costs": [
+    {
+      "fingerprint": "c0bdd5a1f9cc",
+      "title": "Large module / God Object signal: index.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "loc": 3657,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "3a572419ea29",
+      "title": "Large module / God Object signal: mock-data.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/audit/mock-data.ts"
+      ],
+      "loc": 2456,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "d2c5fbdd0a40",
+      "title": "Large module / God Object signal: services.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/audit/services.ts"
+      ],
+      "loc": 1931,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "5af76bd64ffb",
+      "title": "Large module / God Object signal: audit-actions.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/actions/audit-actions.ts"
+      ],
+      "loc": 1775,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "bc412283b638",
+      "title": "Large module / God Object signal: decisions.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/actions/decisions.ts"
+      ],
+      "loc": 1696,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "DecisionOS"
+    },
+    {
+      "fingerprint": "7a825d4f1596",
+      "title": "Large module / God Object signal: seed-data.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "loc": 1695,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "fa47676674ee",
+      "title": "Long function buildSalesSeedData (1651 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "loc": 1695,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "eb73700fb601",
+      "title": "Long function runValidation (308 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "loc": 3657,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "0e8c35a4b5e7",
+      "title": "Long function getDashboardMetrics (274 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/actions/decisions.ts"
+      ],
+      "loc": 1696,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "DecisionOS"
+    },
+    {
+      "fingerprint": "f10fa46fe6e8",
+      "title": "Elevated complexity in index.ts",
+      "category": "complexity",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "loc": 3657,
+      "fixCostDays": 3.25,
+      "fixCostLabel": "3.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "6cd50722bfc6",
+      "title": "Large module / God Object signal: localcontent-actions.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/actions/localcontent-actions.ts"
+      ],
+      "loc": 1449,
+      "fixCostDays": 3,
+      "fixCostLabel": "3 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "9ee3952e3faf",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "loc": 1237,
+      "fixCostDays": 2.75,
+      "fixCostLabel": "2.75 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "f644111e0277",
+      "title": "Large module / God Object signal: page.tsx",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
+      ],
+      "loc": 1304,
+      "fixCostDays": 2.75,
+      "fixCostLabel": "2.75 days",
+      "risk": "Low",
+      "product": "DecisionOS"
+    },
+    {
+      "fingerprint": "2c4f7402de67",
+      "title": "Large module / God Object signal: page.tsx",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "loc": 1237,
+      "fixCostDays": 2.75,
+      "fixCostLabel": "2.75 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "93b9c1c5b73f",
+      "title": "Large module / God Object signal: evidence-page.tsx",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/evidence/evidence-page.tsx"
+      ],
+      "loc": 1216,
+      "fixCostDays": 2.75,
+      "fixCostLabel": "2.75 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "c1b08d604302",
+      "title": "Long function ConnectionDetailPanel (330 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "loc": 1237,
+      "fixCostDays": 2.75,
+      "fixCostLabel": "2.75 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "15c5a1ab4466",
+      "title": "Large module / God Object signal: store.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/sales/store.ts"
+      ],
+      "loc": 1162,
+      "fixCostDays": 2.5,
+      "fixCostLabel": "2.5 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "6b43acafccab",
+      "title": "Large module / God Object signal: ai-advisor.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "loc": 1162,
+      "fixCostDays": 2.5,
+      "fixCostLabel": "2.5 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "564570cd68d8",
+      "title": "Large module / God Object signal: demo-data.ts",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/auditos/demo-data.ts"
+      ],
+      "loc": 1153,
+      "fixCostDays": 2.5,
+      "fixCostLabel": "2.5 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "e90d1aef424c",
+      "title": "Large module / God Object signal: findings-page.tsx",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/findings/findings-page.tsx"
+      ],
+      "loc": 1148,
+      "fixCostDays": 2.5,
+      "fixCostLabel": "2.5 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "3018c98f24b8",
+      "title": "Large module / God Object signal: page.tsx",
+      "category": "god-object",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/sales/settings/crm/page.tsx"
+      ],
+      "loc": 1138,
+      "fixCostDays": 2.5,
+      "fixCostLabel": "2.5 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "b5d78b02bc48",
+      "title": "Elevated complexity in ai-advisor.ts",
+      "category": "complexity",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "loc": 1162,
+      "fixCostDays": 2.5,
+      "fixCostLabel": "2.5 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "16ccb0427639",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/trial-balance/trial-balance-upload.tsx"
+      ],
+      "loc": 825,
+      "fixCostDays": 2.25,
+      "fixCostLabel": "2.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "e62d954f4a7d",
+      "title": "Long function buildStatementLinesFromMappings (718 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/audit/db/statement-builder.ts"
+      ],
+      "loc": 839,
+      "fixCostDays": 2.25,
+      "fixCostLabel": "2.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "4fc44e3901db",
+      "title": "Long function WorkbookDetailClient (708 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/workbook/[workbookId]/workbook-detail-client.tsx"
+      ],
+      "loc": 797,
+      "fixCostDays": 2.25,
+      "fixCostLabel": "2.25 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "3e4fb78a4fce",
+      "title": "Long function TrialBalanceUpload (434 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/trial-balance/trial-balance-upload.tsx"
+      ],
+      "loc": 825,
+      "fixCostDays": 2.25,
+      "fixCostLabel": "2.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "009e27e9b8cc",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/pilot/pilot-page.tsx"
+      ],
+      "loc": 774,
+      "fixCostDays": 2,
+      "fixCostLabel": "2 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "5f0e21a9731e",
+      "title": "Long function ClientAcceptanceDashboard (662 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/acceptance/client-acceptance-dashboard.tsx"
+      ],
+      "loc": 740,
+      "fixCostDays": 2,
+      "fixCostLabel": "2 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "736187d83e90",
+      "title": "Long function PilotPageContent (654 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/pilot/pilot-page.tsx"
+      ],
+      "loc": 774,
+      "fixCostDays": 2,
+      "fixCostLabel": "2 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "d595ec218d75",
+      "title": "Long function main (645 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/__tests__/uat-run.ts"
+      ],
+      "loc": 697,
+      "fixCostDays": 2,
+      "fixCostLabel": "2 days",
+      "risk": "Low",
+      "product": "Platform"
+    },
+    {
+      "fingerprint": "9b52dca9708a",
+      "title": "Long function ReviewNotesBoard (598 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/review-notes/review-notes-board.tsx"
+      ],
+      "loc": 655,
+      "fixCostDays": 2,
+      "fixCostLabel": "2 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "095ed5a39ce6",
+      "title": "Long function ReviewCenter (561 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/review-center/review-center-client.tsx"
+      ],
+      "loc": 629,
+      "fixCostDays": 2,
+      "fixCostLabel": "2 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "e390e9d05c78",
+      "title": "Long function QualityDashboardClient (519 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/quality-dashboard/quality-dashboard-client.tsx"
+      ],
+      "loc": 629,
+      "fixCostDays": 2,
+      "fixCostLabel": "2 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "0055b2ffc9bf",
+      "title": "Long function CustomProductForm (419 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/forms/custom-product-form.tsx"
+      ],
+      "loc": 763,
+      "fixCostDays": 2,
+      "fixCostLabel": "2 days",
+      "risk": "Low",
+      "product": "Platform"
+    },
+    {
+      "fingerprint": "5b96ea754f79",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/(dashboard)/decisions/[id]/outcome/page.tsx"
+      ],
+      "loc": 459,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "DecisionOS"
+    },
+    {
+      "fingerprint": "450dfb8380cd",
+      "title": "Large module / God Object signal: services.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/lib/local-content/services.ts"
+      ],
+      "loc": 961,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "c81160534de1",
+      "title": "Large module / God Object signal: sales-actions.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/actions/sales-actions.ts"
+      ],
+      "loc": 917,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "050c36bb6e4e",
+      "title": "Large module / God Object signal: prisma-repository.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/lib/sales/prisma-repository.ts"
+      ],
+      "loc": 897,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "b12886eb933f",
+      "title": "Large module / God Object signal: workflowos-actions.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/actions/workflowos-actions.ts"
+      ],
+      "loc": 824,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "WorkflowOS"
+    },
+    {
+      "fingerprint": "ff7eddd5ae0d",
+      "title": "Large module / God Object signal: primitives.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/lib/local-content/schemas/common/primitives.ts"
+      ],
+      "loc": 83,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "6b5b1e64fba8",
+      "title": "Long function IndependenceDashboard (491 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/independence/independence-dashboard.tsx"
+      ],
+      "loc": 547,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "6198225e52b5",
+      "title": "Long function MaterialityEnginePage (489 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/materiality/materiality-engine-page.tsx"
+      ],
+      "loc": 563,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "19e8e3e2868f",
+      "title": "Long function QualityDashboard (459 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/quality/quality-dashboard.tsx"
+      ],
+      "loc": 499,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "83b46b41e82e",
+      "title": "Long function buildKnowledgeGraphFromSnapshot (430 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/sales/v02/knowledge-graph/builder.ts"
+      ],
+      "loc": 536,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "3b334d0ca858",
+      "title": "Long function DecisionDashboard (399 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/decisions/decision-dashboard.tsx"
+      ],
+      "loc": 482,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "DecisionOS"
+    },
+    {
+      "fingerprint": "183a406b3152",
+      "title": "Long function ExecutiveCommercialDashboard (380 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/sales/executive-commercial-dashboard.tsx"
+      ],
+      "loc": 453,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "4eabb0b2f05d",
+      "title": "Long function AiGovernanceClient (374 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/settings/ai-governance/ai-governance-client.tsx"
+      ],
+      "loc": 469,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "Core"
+    },
+    {
+      "fingerprint": "9948280a7f71",
+      "title": "Long function OverviewTab (372 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/engagement/overview-tab.tsx"
+      ],
+      "loc": 443,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "d2eace2defdd",
+      "title": "Long function AiInsightsPanel (369 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/workbook/[workbookId]/ai-insights-panel.tsx"
+      ],
+      "loc": 451,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "a5fee2a88f3d",
+      "title": "Long function WorkbookAiAdvisorClient (367 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/projects/[projectId]/workbook/[workbookId]/ai-advisor/workbook-ai-advisor-client.tsx"
+      ],
+      "loc": 560,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "5ce967b04336",
+      "title": "Long function buildKnowledgeGraphFromSnapshot (359 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/sales/v02/knowledge-graph/build.ts"
+      ],
+      "loc": 507,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "14849b3cd099",
+      "title": "Long function runLocalContentPipeline (358 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/local-content/pipeline-orchestrator.ts"
+      ],
+      "loc": 505,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "69c0f90777d4",
+      "title": "Long function ModelGovernanceClient (346 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/settings/models/model-governance-client.tsx"
+      ],
+      "loc": 406,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "Core"
+    },
+    {
+      "fingerprint": "b62890162014",
+      "title": "Long function CandidateDetailClient (325 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/knowledge-review/candidate-detail.tsx"
+      ],
+      "loc": 408,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "Platform"
+    },
+    {
+      "fingerprint": "a0714d0b9868",
+      "title": "Long function VersionDetailClient (313 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/knowledge-foundation/version-detail-client.tsx"
+      ],
+      "loc": 381,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "Platform"
+    },
+    {
+      "fingerprint": "7e7bd653dcf0",
+      "title": "Long function getDecisionExportData (296 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/actions/decision-export.ts"
+      ],
+      "loc": 389,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "DecisionOS"
+    },
+    {
+      "fingerprint": "1689fac688fd",
+      "title": "Long function CommandCenterView (294 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/sales/command-center-view.tsx"
+      ],
+      "loc": 383,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "852f7f174ea2",
+      "title": "Long function WorkflowAdminDashboard (293 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/workflowos/workflow-admin-dashboard.tsx"
+      ],
+      "loc": 419,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "WorkflowOS"
+    },
+    {
+      "fingerprint": "0a8a007e4dce",
+      "title": "Long function buildKnowledgeFoundationPDF (271 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/knowledge-foundation/kf-export.ts"
+      ],
+      "loc": 407,
+      "fixCostDays": 1.75,
+      "fixCostLabel": "1.75 days",
+      "risk": "Low",
+      "product": "Platform"
+    },
+    {
+      "fingerprint": "e21451a4a460",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/sales/deal-conversion-memo-panel.tsx"
+      ],
+      "loc": 280,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "9273676d5f88",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/sales/sales-dashboard-client.tsx"
+      ],
+      "loc": 326,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "b22035b67a93",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/(dashboard)/decisions/[id]/tender/page.tsx"
+      ],
+      "loc": 265,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "DecisionOS"
+    },
+    {
+      "fingerprint": "1dc31fe73bca",
+      "title": "Large module / God Object signal: content-studio-service.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/lib/platform/content-studio/content-studio-service.ts"
+      ],
+      "loc": 763,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "ContentStudio"
+    },
+    {
+      "fingerprint": "d7f1e38d6adb",
+      "title": "Large module / God Object signal: income-statement-presentation.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/lib/audit/db/income-statement-presentation.ts"
+      ],
+      "loc": 670,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "a3cf2bd89320",
+      "title": "Large module / God Object signal: evidence-adapter.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/products/sales/core-adapters/evidence-adapter.ts"
+      ],
+      "loc": 581,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "34853fb3349e",
+      "title": "Long function TbImportDialog (341 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/local-content/workbook/[workbookId]/tb-import-dialog.tsx"
+      ],
+      "loc": 371,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "LocalContentOS"
+    },
+    {
+      "fingerprint": "8b522d747e50",
+      "title": "Long function ContactForm (309 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/(marketing)/contact/contact-form.tsx"
+      ],
+      "loc": 337,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "Platform"
+    },
+    {
+      "fingerprint": "7602f370b8f7",
+      "title": "Long function ContentEvidenceSection (297 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/app/content-studio/[workspaceId]/[contentId]/content-evidence-section.tsx"
+      ],
+      "loc": 357,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "ContentStudio"
+    },
+    {
+      "fingerprint": "16c6f23e3662",
+      "title": "Long function ExportApprovalDialog (289 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/contacts/export-approval-dialog.tsx"
+      ],
+      "loc": 324,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "LocalContactOS"
+    },
+    {
+      "fingerprint": "58ad17391796",
+      "title": "Long function runSimulationAndRecommendation (279 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/actions/simulation.ts"
+      ],
+      "loc": 371,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "Platform"
+    },
+    {
+      "fingerprint": "43c0ca98aea5",
+      "title": "Long function evaluateIfrsRule (278 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/lib/audit/rules/ifrs-rule-checks.ts"
+      ],
+      "loc": 355,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "ad691b76f7fe",
+      "title": "Long function AccountIntelligenceProfile (272 lines)",
+      "category": "long-function",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/sales/account-intelligence-profile.tsx"
+      ],
+      "loc": 314,
+      "fixCostDays": 1.5,
+      "fixCostLabel": "1.5 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "888bc52ca7d5",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/governance/GovernanceContextPanel.tsx"
+      ],
+      "loc": 140,
+      "fixCostDays": 1.25,
+      "fixCostLabel": "1.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "74779b1746f4",
+      "title": "Client module references server-only concerns",
+      "category": "solid-srp",
+      "severity": "high",
+      "impact": "High",
+      "files": 1,
+      "fileList": [
+        "src/components/audit/engagement/engagement-tabs.tsx"
+      ],
+      "loc": 169,
+      "fixCostDays": 1.25,
+      "fixCostLabel": "1.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "305e68458ba3",
+      "title": "Large module / God Object signal: types.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/lib/sales/types.ts"
+      ],
+      "loc": 573,
+      "fixCostDays": 1.25,
+      "fixCostLabel": "1.25 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "7905899c4b2f",
+      "title": "Large module / God Object signal: index.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/types/audit/index.ts"
+      ],
+      "loc": 473,
+      "fixCostDays": 1.25,
+      "fixCostLabel": "1.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "455b42ffd377",
+      "title": "Large module / God Object signal: audit-read-actions.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/actions/audit-read-actions.ts"
+      ],
+      "loc": 426,
+      "fixCostDays": 1.25,
+      "fixCostLabel": "1.25 days",
+      "risk": "Low",
+      "product": "AuditOS"
+    },
+    {
+      "fingerprint": "65abbc954cac",
+      "title": "Large module / God Object signal: index.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/lib/sales/v02/knowledge-graph/index.ts"
+      ],
+      "loc": 379,
+      "fixCostDays": 1,
+      "fixCostLabel": "1 days",
+      "risk": "Low",
+      "product": "SalesOS"
+    },
+    {
+      "fingerprint": "b89e3ec3f194",
+      "title": "Large module / God Object signal: types.ts",
+      "category": "god-object",
+      "severity": "medium",
+      "impact": "Medium",
+      "files": 1,
+      "fileList": [
+        "src/lib/integration/types.ts"
+      ],
+      "loc": 378,
+      "fixCostDays": 1,
+      "fixCostLabel": "1 days",
+      "risk": "Low",
+      "product": "Platform"
+    },
+    {
+      "fingerprint": "4c964220f9a7",
+      "title": "Additional long functions truncated (228 more)",
+      "category": "long-function",
+      "severity": "info",
+      "impact": "Low",
+      "files": 0,
+      "fileList": [],
+      "loc": 0,
+      "fixCostDays": 0.25,
+      "fixCostLabel": "0.25 day",
+      "risk": "Low",
+      "product": "Platform"
+    }
+  ]
+}

@@ -9,22 +9,10 @@ import {
 // Mock auth module
 jest.mock("@/lib/auth", () => ({
   getCurrentUser: jest.fn(),
-  requireUserContext: jest.fn(),
-  requireOrgAccess: jest.fn(),
-  requireDecisionAccess: jest
-    .fn()
-    .mockImplementation(async (decisionId, role) => {
-      const decision = await prisma.decision.findUnique({
-        where: { id: decisionId },
-        select: { organizationId: true },
-      });
-      const user = await getCurrentUser();
-      return {
-        user,
-        organizationId: decision?.organizationId || user.organizationId,
-      };
-    }),
-  isExpectedAccessDeniedError: () => false,
+  isExpectedAccessDeniedError: jest.fn((error) =>
+    error instanceof Error &&
+    (error.message.startsWith("Access denied:") || error.message === "Unauthenticated")
+  ),
 }));
 
 const { getCurrentUser } = require("@/lib/auth");
@@ -164,11 +152,11 @@ describe("Recommendation Publication", () => {
     const org = await prisma.organization.create({
       data: { name: "Test Org" },
     });
-    const operator = await prisma.user.create({
+    const admin = await prisma.user.create({
       data: {
-        email: "op@test.local",
-        name: "Operator",
-        role: "OPERATOR",
+        email: "admin@test.local",
+        name: "Admin",
+        role: "ADMIN",
         organizationId: org.id,
       },
     });
@@ -177,7 +165,7 @@ describe("Recommendation Publication", () => {
       data: {
         title: "To Publish",
         type: "TENDER",
-        ownerId: operator.id,
+        ownerId: admin.id,
         organizationId: org.id,
         status: "APPROVED",
       },
@@ -196,8 +184,8 @@ describe("Recommendation Publication", () => {
       },
     });
     (getCurrentUser as jest.Mock).mockResolvedValue({
-      id: operator.id,
-      role: "OPERATOR",
+      id: admin.id,
+      role: "ADMIN",
       organizationId: org.id,
     });
 
@@ -213,11 +201,11 @@ describe("Recommendation Publication", () => {
     const org = await prisma.organization.create({
       data: { name: "Test Org" },
     });
-    const operator = await prisma.user.create({
+    const admin = await prisma.user.create({
       data: {
-        email: "op@test.local",
-        name: "Operator",
-        role: "OPERATOR",
+        email: "admin@test.local",
+        name: "Admin",
+        role: "ADMIN",
         organizationId: org.id,
       },
     });
@@ -226,7 +214,7 @@ describe("Recommendation Publication", () => {
       data: {
         title: "To Unpublish",
         type: "TENDER",
-        ownerId: operator.id,
+        ownerId: admin.id,
         organizationId: org.id,
         status: "APPROVED",
       },
@@ -248,8 +236,8 @@ describe("Recommendation Publication", () => {
       },
     });
     (getCurrentUser as jest.Mock).mockResolvedValue({
-      id: operator.id,
-      role: "OPERATOR",
+      id: admin.id,
+      role: "ADMIN",
       organizationId: org.id,
     });
 

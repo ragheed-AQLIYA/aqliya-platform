@@ -1,17 +1,27 @@
-variable "project_name"          { type = string }
-variable "environment"            { type = string }
-variable "db_subnet_group_name"   { type = string }
-variable "rds_security_group_id"  { type = string }
-variable "db_instance_class"      { type = string }
-variable "db_allocated_storage"   { type = number }
+terraform {
+  required_providers {
+    aws = {
+      source                = "hashicorp/aws"
+      version               = "~> 5.80"
+      configuration_aliases = [aws.dr]
+    }
+  }
+}
+
+variable "project_name" { type = string }
+variable "environment" { type = string }
+variable "db_subnet_group_name" { type = string }
+variable "rds_security_group_id" { type = string }
+variable "db_instance_class" { type = string }
+variable "db_allocated_storage" { type = number }
 variable "db_max_allocated_storage" { type = number }
-variable "db_multi_az"            { type = bool }
+variable "db_multi_az" { type = bool }
 variable "db_deletion_protection" { type = bool }
 variable "db_backup_retention_days" { type = number }
-variable "db_engine_version"       { type = string }
+variable "db_engine_version" { type = string }
 variable "db_parameter_group_family" { type = string }
 variable "enable_cross_region_dr" { type = bool }
-variable "dr_region"              { type = string }
+variable "dr_region" { type = string }
 
 resource "aws_db_parameter_group" "postgres" {
   name        = "${var.project_name}-${var.environment}-pg16"
@@ -52,15 +62,15 @@ resource "aws_db_instance" "primary" {
   db_subnet_group_name   = var.db_subnet_group_name
   vpc_security_group_ids = [var.rds_security_group_id]
 
-  multi_az               = var.db_multi_az
-  deletion_protection    = var.db_deletion_protection
+  multi_az                = var.db_multi_az
+  deletion_protection     = var.db_deletion_protection
   backup_retention_period = var.db_backup_retention_days
-  backup_window          = "03:00-04:00"
-  maintenance_window     = "sun:05:00-sun:06:00"
+  backup_window           = "03:00-04:00"
+  maintenance_window      = "sun:05:00-sun:06:00"
 
   parameter_group_name = aws_db_parameter_group.postgres.name
 
-  skip_final_snapshot     = var.environment == "production" ? false : true
+  skip_final_snapshot       = var.environment == "production" ? false : true
   final_snapshot_identifier = var.environment == "production" ? "${var.project_name}-${var.environment}-db-final-${formatdate("YYYY-MM-DD-hhmm", timestamp())}" : null
 
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
@@ -101,8 +111,8 @@ resource "aws_db_instance" "read_replica" {
   backup_retention_period = var.db_backup_retention_days
   backup_window           = "04:00-05:00"
 
-  skip_final_snapshot     = true
-  parameter_group_name    = aws_db_parameter_group.postgres.name
+  skip_final_snapshot  = true
+  parameter_group_name = aws_db_parameter_group.postgres.name
 
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
@@ -111,13 +121,24 @@ resource "aws_db_instance" "read_replica" {
   }
 }
 
+resource "aws_db_snapshot" "dr_source" {
+  count = var.enable_cross_region_dr && var.environment == "production" ? 1 : 0
+
+  db_instance_identifier = aws_db_instance.primary.identifier
+  db_snapshot_identifier = "${var.project_name}-${var.environment}-dr-source-snapshot"
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-dr-source-snapshot"
+  }
+}
+
 resource "aws_db_snapshot_copy" "cross_region_dr" {
   count = var.enable_cross_region_dr && var.environment == "production" ? 1 : 0
 
   provider = aws.dr
 
-  source_db_snapshot_identifier = aws_db_instance.primary.latest_snapshot
-  target_snapshot_identifier    = "${var.project_name}-${var.environment}-dr-${formatdate("YYYY-MM-DD-hhmm", timestamp())}"
+  source_db_snapshot_identifier = one(aws_db_snapshot.dr_source[*].db_snapshot_arn)
+  target_db_snapshot_identifier = "${var.project_name}-${var.environment}-dr-target-snapshot"
   destination_region            = var.dr_region
 
   tags = {

@@ -2741,7 +2741,7 @@ export async function createEngagement(data: {
       organizationId: data.organizationId,
       clientId: data.clientId,
       fiscalPeriod: data.fiscalPeriod,
-      engagementType: data.engagementType,
+      engagementType: data.engagementType as any,
       status: data.status ?? "setup",
       team: (data.team ?? []) as any,
       presentationProfile: profile,

@@ -1,22 +1,23 @@
-variable "project_name"         { type = string }
-variable "environment"           { type = string }
-variable "private_subnet_ids"    { type = list(string) }
+﻿variable "project_name" { type = string }
+variable "environment" { type = string }
+variable "private_subnet_ids" { type = list(string) }
 variable "ecs_security_group_id" { type = string }
 variable "alb_security_group_id" { type = string }
-variable "public_subnet_ids"     { type = list(string) }
-variable "ecs_task_cpu"          { type = number }
-variable "ecs_task_memory"       { type = number }
-variable "ecs_desired_count"     { type = number }
-variable "ecs_max_count"         { type = number }
-variable "ecs_min_count"         { type = number }
-variable "container_port"        { type = number }
-variable "container_image"       { type = string }
-variable "domain_name"           { type = string }
-variable "log_retention_days"    { type = number }
-variable "redis_node_type"       { type = string }
+variable "public_subnet_ids" { type = list(string) }
+variable "ecs_task_cpu" { type = number }
+variable "ecs_task_memory" { type = number }
+variable "ecs_desired_count" { type = number }
+variable "ecs_max_count" { type = number }
+variable "ecs_min_count" { type = number }
+variable "container_port" { type = number }
+variable "container_image" { type = string }
+variable "domain_name" { type = string }
+variable "domain_ready" { type = bool }
+variable "log_retention_days" { type = number }
+variable "redis_node_type" { type = string }
 variable "redis_num_cache_nodes" { type = number }
 variable "redis_security_group_id" { type = string }
-variable "vpc_id"                { type = string }
+variable "vpc_id" { type = string }
 
 resource "aws_ecs_cluster" "main" {
   name = "${var.project_name}-${var.environment}-cluster"
@@ -39,7 +40,7 @@ resource "aws_ecs_cluster_capacity_providers" "main" {
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE"
     weight            = 1
-    base             = 1
+    base              = 1
   }
 }
 
@@ -103,7 +104,12 @@ data "aws_iam_policy_document" "ecs_task_execution" {
 
   statement {
     actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["arn:aws:secretsmanager:*:*:*"]
+    resources = ["arn:aws:secretsmanager:*:*:secret:*"]
+  }
+
+  statement {
+    actions   = ["ssm:GetParameters"]
+    resources = ["*"]
   }
 
   statement {
@@ -171,7 +177,8 @@ resource "aws_ecs_task_definition" "app" {
         }
       ]
       environment = [
-        { name = "NODE_ENV", value = var.environment },
+        { name = "NODE_ENV", value = "production" },
+        { name = "APP_ENV", value = var.environment },
         { name = "NEXT_PUBLIC_DEPLOY_ENV", value = var.environment },
         { name = "DOMAIN_NAME", value = var.domain_name },
         { name = "RATE_LIMITER", value = "redis" },
@@ -182,29 +189,17 @@ resource "aws_ecs_task_definition" "app" {
         { name = "FF_AI_REAL_PROVIDERS", value = var.environment == "production" ? "false" : "true" },
         { name = "FF_QUEUE_ENABLED", value = "true" },
         { name = "FF_TENANT_LIFECYCLE", value = var.environment == "production" ? "true" : "false" },
+        { name = "S3_REGION", value = data.aws_region.current.name },
+        { name = "S3_ENDPOINT", value = "https://s3.${data.aws_region.current.name}.amazonaws.com" },
       ]
       secrets = [
-        { name = "DATABASE_URL", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/database-url" },
-        { name = "REDIS_URL", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/redis-url" },
-        { name = "AUTH_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/auth-secret" },
-        { name = "NEXTAUTH_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/auth-secret" },
-        { name = "STORAGE_PROVIDER", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/storage-config" },
-        { name = "S3_UPLOAD_BUCKET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/storage-config" },
-        { name = "SCIM_API_KEY", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/scim-api-key" },
-        { name = "SSO_DEFAULT_ORG_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/sso-config" },
-        { name = "AUTH_GOOGLE_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/google-oauth" },
-        { name = "AUTH_GOOGLE_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/google-oauth" },
-        { name = "AUTH_GITHUB_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/github-oauth" },
-        { name = "AUTH_GITHUB_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/github-oauth" },
-        { name = "AUTH_AZURE_AD_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/azure-ad-oauth" },
-        { name = "AUTH_AZURE_AD_TENANT_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/azure-ad-oauth" },
-        { name = "AUTH_AZURE_AD_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/azure-ad-oauth" },
-        { name = "AUTH_OKTA_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/okta-oauth" },
-        { name = "AUTH_OKTA_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/okta-oauth" },
-        { name = "AUTH_OKTA_ISSUER", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/okta-oauth" },
-        { name = "AUTH_OIDC_ISSUER", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/oidc-config" },
-        { name = "AUTH_OIDC_CLIENT_ID", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/oidc-config" },
-        { name = "AUTH_OIDC_CLIENT_SECRET", valueFrom = "arn:aws:secretsmanager:me-south-1:*:secret:${var.project_name}/${var.environment}/oidc-config" },
+        { name = "DATABASE_URL", valueFrom = data.aws_secretsmanager_secret.app["database-url"].arn },
+        { name = "REDIS_URL", valueFrom = data.aws_secretsmanager_secret.app["redis-url"].arn },
+        { name = "AUTH_SECRET", valueFrom = data.aws_secretsmanager_secret.app["auth-secret"].arn },
+        { name = "NEXTAUTH_SECRET", valueFrom = data.aws_secretsmanager_secret.app["auth-secret"].arn },
+        # Individual secrets (ECS passes raw value; JSON blobs would break plain env var reads)
+        { name = "STORAGE_PROVIDER", valueFrom = data.aws_secretsmanager_secret.app["storage-provider"].arn },
+        { name = "S3_BUCKET", valueFrom = data.aws_secretsmanager_secret.app["s3-bucket"].arn },
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -221,17 +216,14 @@ resource "aws_ecs_task_definition" "app" {
         retries     = 3
         startPeriod = 60
       }
-      dependsOn = [
-        {
-          containerName = "clamav"
-          condition     = "HEALTHY"
-        }
-      ]
+      dependsOn = []
     },
     {
       name      = "clamav"
-      image     = "clamav/clamav:latest"
+      image     = "clamav/clamav:1.3"
       essential = true
+      cpu       = 128
+      memory    = 256
       portMappings = [
         {
           containerPort = 3310
@@ -239,13 +231,6 @@ resource "aws_ecs_task_definition" "app" {
           protocol      = "tcp"
         }
       ]
-      healthCheck = {
-        command     = ["CMD-SHELL", "clamdcheck.sh || exit 1"]
-        interval    = 30
-        timeout     = 10
-        retries     = 5
-        startPeriod = 120
-      }
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -254,11 +239,33 @@ resource "aws_ecs_task_definition" "app" {
           "awslogs-stream-prefix" = "clamav"
         }
       }
-    }
+      healthCheck = {
+        command     = ["CMD-SHELL", "clamdcheck.sh || exit 1"]
+        interval    = 30
+        timeout     = 10
+        retries     = 3
+        startPeriod = 120
+      }
+    },
   ])
 }
 
 data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
+locals {
+  secret_names = toset([
+    "database-url", "redis-url", "auth-secret", "storage-provider",
+    "s3-bucket", "scim-api-key", "sso-config", "google-oauth",
+    "github-oauth", "azure-ad-oauth", "okta-oauth", "oidc-config",
+  ])
+  has_cert = try(data.aws_acm_certificate.main.arn, null) != null
+}
+
+data "aws_secretsmanager_secret" "app" {
+  for_each = local.secret_names
+  name     = "${var.project_name}/${var.environment}/${each.key}"
+}
 
 resource "aws_lb" "main" {
   name               = "${var.project_name}-${var.environment}-alb"
@@ -298,7 +305,9 @@ resource "aws_lb_target_group" "app" {
   }
 }
 
+# HTTPS listener — enabled when domain is ready (DNS + ACM validated)
 resource "aws_lb_listener" "https" {
+  count             = var.domain_ready ? 1 : 0
   load_balancer_arn = aws_lb.main.arn
   port              = 443
   protocol          = "HTTPS"
@@ -311,7 +320,9 @@ resource "aws_lb_listener" "https" {
   }
 }
 
-resource "aws_lb_listener" "http" {
+# HTTP listener — prod mode: redirect to HTTPS
+resource "aws_lb_listener" "http_redirect" {
+  count             = var.environment == "production" ? 1 : 0
   load_balancer_arn = aws_lb.main.arn
   port              = 80
   protocol          = "HTTP"
@@ -326,9 +337,22 @@ resource "aws_lb_listener" "http" {
   }
 }
 
+# HTTP listener — dev mode: forward directly to target group (no HTTPS)
+resource "aws_lb_listener" "http_forward" {
+  count             = var.environment != "production" ? 1 : 0
+  load_balancer_arn = aws_lb.main.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
+}
+
 data "aws_acm_certificate" "main" {
-  domain   = "*.${var.domain_name}"
-  statuses = ["ISSUED"]
+  domain   = var.domain_name
+  statuses = ["ISSUED", "PENDING_VALIDATION"]
 }
 
 resource "aws_ecs_service" "app" {
@@ -372,6 +396,7 @@ resource "aws_appautoscaling_target" "ecs" {
 
 resource "aws_appautoscaling_policy" "cpu" {
   name               = "${var.project_name}-${var.environment}-cpu-autoscaling"
+  policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.ecs.resource_id
   scalable_dimension = aws_appautoscaling_target.ecs.scalable_dimension
   service_namespace  = aws_appautoscaling_target.ecs.service_namespace
@@ -388,6 +413,7 @@ resource "aws_appautoscaling_policy" "cpu" {
 
 resource "aws_appautoscaling_policy" "memory" {
   name               = "${var.project_name}-${var.environment}-memory-autoscaling"
+  policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.ecs.resource_id
   scalable_dimension = aws_appautoscaling_target.ecs.scalable_dimension
   service_namespace  = aws_appautoscaling_target.ecs.service_namespace
@@ -411,18 +437,27 @@ resource "aws_elasticache_subnet_group" "redis" {
   }
 }
 
-resource "aws_elasticache_cluster" "redis" {
-  cluster_id           = "${var.project_name}-${var.environment}-redis"
+resource "aws_elasticache_replication_group" "redis" {
+  replication_group_id = "${var.project_name}-${var.environment}-redis-rg"
+  description          = "AQLIYA ${var.environment} Redis"
   engine               = "redis"
+  engine_version       = "7.1"
   node_type            = var.redis_node_type
-  num_cache_nodes      = var.redis_num_cache_nodes
   parameter_group_name = "default.redis7"
   port                 = 6379
   subnet_group_name    = aws_elasticache_subnet_group.redis.name
   security_group_ids   = [var.redis_security_group_id]
 
-  apply_immediately          = var.environment != "production"
-  automatic_failover_enabled = var.environment == "production"
+  # Production environment detection: both "production" and "prod" env keys are valid.
+  num_cache_clusters            = var.redis_num_cache_nodes
+  automatic_failover_enabled    = var.environment == "production" || var.environment == "prod"
+  multi_az_enabled              = var.environment == "production" || var.environment == "prod"
+
+  # Security hardening (2026-07-12): enable encryption in transit and at rest
+  transit_encryption_enabled = true
+  at_rest_encryption_enabled = true
+
+  apply_immediately = var.environment != "production" && var.environment != "prod"
 
   tags = {
     Name = "${var.project_name}-${var.environment}-redis"
@@ -459,10 +494,10 @@ resource "aws_route53_record" "wildcard" {
   }
 }
 
-output "alb_dns_name"       { value = aws_lb.main.dns_name }
-output "alb_arn"            { value = aws_lb.main.arn }
-output "alb_arn_suffix"     { value = aws_lb.main.arn_suffix }
-output "ecs_cluster_name"   { value = aws_ecs_cluster.main.name }
-output "ecs_service_name"   { value = aws_ecs_service.app.name }
+output "alb_dns_name" { value = aws_lb.main.dns_name }
+output "alb_arn" { value = aws_lb.main.arn }
+output "alb_arn_suffix" { value = aws_lb.main.arn_suffix }
+output "ecs_cluster_name" { value = aws_ecs_cluster.main.name }
+output "ecs_service_name" { value = aws_ecs_service.app.name }
 output "ecr_repository_url" { value = aws_ecr_repository.app.repository_url }
-output "redis_endpoint"     { value = aws_elasticache_cluster.redis.cache_nodes[0].address }
+output "redis_endpoint" { value = aws_elasticache_replication_group.redis.primary_endpoint_address }

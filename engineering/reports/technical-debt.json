@@ -1,0 +1,1901 @@
+{
+  "agent": "technical-debt",
+  "title": "Technical Debt Report",
+  "generatedAt": "2026-07-11T02:08:06.592Z",
+  "score": 58,
+  "summary": {
+    "total": 106,
+    "critical": 0,
+    "high": 40,
+    "medium": 0,
+    "low": 65,
+    "info": 1
+  },
+  "findings": [
+    {
+      "id": "F-0713",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: sso-service.test.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/__tests__/unit/sso-service.test.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0714",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: critical-paths.test.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/__tests__/integration/critical-paths.test.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0715",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: audit-adapter.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/products/sales/core-adapters/audit-adapter.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0716",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: auth.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/auth.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0717",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: firm-memory.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/tb-intelligence/firm-memory.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0718",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: outreach.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/sales/outreach.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0719",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: seed-data.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0720",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: types.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/sales/types.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0721",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: commercial-memory.test.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/sales/__tests__/commercial-memory.test.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0722",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: intelligence-hub-tabs.test.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/sales/__tests__/intelligence-hub-tabs.test.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0723",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: salesos-v01-lib.test.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/sales/__tests__/salesos-v01-lib.test.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0724",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: commercial-memory.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/sales/vnext/commercial-memory.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0725",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: platform-organization-context.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/platform/platform-organization-context.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0726",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: sales-intel.test.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/platform/sales-intelligence/__tests__/sales-intel.test.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0727",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: product-registry.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/platform/registry/product-registry.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0728",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: institutional-memory-service.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/platform/institutional-memory/institutional-memory-service.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0729",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: platform-org-guard.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/platform/guards/platform-org-guard.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0730",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: unified-query.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/platform/audit/unified-query.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0731",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: proof-hub-content-en.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/marketing/proof-hub-content-en.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0732",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: proof-hub-content.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/marketing/proof-hub-content.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0733",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: connector-factory.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/local-content/erp/connector-factory.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0734",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: connector-factory.test.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/local-content/erp/__tests__/connector-factory.test.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0735",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: release-generator.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/knowledge-foundation/release-generator.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0736",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: types.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/knowledge-foundation/types.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0737",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: resolver.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/integration/resolver.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0738",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: secret-resolver.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/integration/secret-resolver.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0739",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: base-rule.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/governance-engine/rules/base-rule.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0740",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: decision-audit.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/decision/decision-audit.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0741",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: decision-export-formats.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/decision/decision-export-formats.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0742",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: index.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/core/index.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0743",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: types.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/core/policy/access/types.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0744",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: embedding-service.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/core/knowledge/rag/embedding-service.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0745",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: rag-retriever.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/core/knowledge/rag/rag-retriever.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0746",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: model-registry.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/core/ai/model-registry.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0747",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: sso-service.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/auth/sso-service.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0748",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: services.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/audit/services.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0749",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: engagement-presentation-config.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/audit/presentation/engagement-presentation-config.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0750",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: income-statement-presentation.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/lib/audit/db/income-statement-presentation.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0751",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: sw-unregister.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/components/platform/sw-unregister.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0752",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: custom-product-form.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/components/forms/custom-product-form.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0753",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: archived-engagements-panel.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/components/audit/archived/archived-engagements-panel.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0754",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/sunbul/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0755",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/sunbul/clients/[clientId]/records/[recordId]/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0756",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/sunbul/admin/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0757",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/published/recommendation/[decisionId]/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0758",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/organizations/sunbul/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0759",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: error.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/audit/archived/error.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0760",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: loading.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/audit/archived/loading.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0761",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/audit/archived/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0762",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: route.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/api/knowledge-mining/review/route.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0763",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: route.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/api/knowledge-mining/promote/route.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0764",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: route.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/api/knowledge-mining/kpis/route.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0765",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: route.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/api/knowledge-mining/candidates/route.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0766",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: route.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/api/knowledge-mining/candidates/[id]/route.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0767",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: route.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/api/knowledge-mining/batch-promote/route.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0768",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: route.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/api/knowledge-mining/aggregate/route.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0769",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/(dashboard)/settings/workspaces/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0770",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/(dashboard)/settings/platform-organization/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0771",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: page.tsx",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0772",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: approval.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/actions/approval.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0773",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: audit-actions.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/actions/audit-actions.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0774",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: decision-export.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/actions/decision-export.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0775",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: decisions.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0776",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: localcontent-actions.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/actions/localcontent-actions.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0777",
+      "agent": "technical-debt",
+      "severity": "low",
+      "title": "Legacy/deprecated signal: sales-actions.ts",
+      "evidence": "Path or comment indicates legacy",
+      "files": [
+        "src/actions/sales-actions.ts"
+      ],
+      "category": "legacy",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0778",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 238): index.ts",
+      "evidence": "LOC=3657, MI=0, complexity=214, TODO=0, suppressions=1, any=10",
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0779",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 160): decisions.ts",
+      "evidence": "LOC=1696, MI=0, complexity=120, TODO=0, suppressions=2, any=2",
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0780",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 143): ai-advisor.ts",
+      "evidence": "LOC=1162, MI=0, complexity=139, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0781",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 143): services.ts",
+      "evidence": "LOC=1931, MI=0, complexity=109, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/audit/services.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0782",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 137): client-acceptance-engine.ts",
+      "evidence": "LOC=466, MI=15, complexity=11, TODO=0, suppressions=9, any=9",
+      "files": [
+        "src/lib/audit/client-acceptance-engine.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0783",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 131): prisma-client-mock.js",
+      "evidence": "LOC=501, MI=0, complexity=126, TODO=0, suppressions=1, any=0",
+      "files": [
+        "src/__mocks__/prisma-client-mock.js"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0784",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 126): page.tsx",
+      "evidence": "LOC=477, MI=15, complexity=5, TODO=0, suppressions=8, any=8",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/page.tsx"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0785",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 119): runtime.ts",
+      "evidence": "LOC=857, MI=0, complexity=104, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/skill-runtime/runtime.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0786",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 119): page.tsx",
+      "evidence": "LOC=1304, MI=0, complexity=86, TODO=0, suppressions=0, any=2",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0787",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 118): trial-balance-upload.tsx",
+      "evidence": "LOC=825, MI=0, complexity=86, TODO=0, suppressions=1, any=0",
+      "files": [
+        "src/components/audit/trial-balance/trial-balance-upload.tsx"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0788",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 117): skill-registry.integration.test.ts",
+      "evidence": "LOC=498, MI=0, complexity=114, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/skill-runtime/__tests__/skill-registry.integration.test.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0789",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 114): audit-actions.ts",
+      "evidence": "LOC=1775, MI=0, complexity=56, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/actions/audit-actions.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0790",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 113): evaluator.ts",
+      "evidence": "LOC=720, MI=0, complexity=97, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/skill-runtime/evaluator.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0791",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 110): population.ts",
+      "evidence": "LOC=768, MI=0, complexity=90, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/local-content/workbook/population.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0792",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 109): org-adv-service.ts",
+      "evidence": "LOC=504, MI=8, complexity=49, TODO=0, suppressions=3, any=8",
+      "files": [
+        "src/lib/platform/org-advanced/org-adv-service.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0793",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 109): mock-data.ts",
+      "evidence": "LOC=2456, MI=0, complexity=20, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/audit/mock-data.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0794",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 106): audit-bridge-service.ts",
+      "evidence": "LOC=748, MI=1, complexity=67, TODO=0, suppressions=1, any=1",
+      "files": [
+        "src/lib/platform/audit-bridge/audit-bridge-service.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0795",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 106): localcontent-actions.ts",
+      "evidence": "LOC=1449, MI=0, complexity=54, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/actions/localcontent-actions.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0796",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 106): workflowos-actions.ts",
+      "evidence": "LOC=824, MI=0, complexity=80, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/actions/workflowos-actions.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0797",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 104): no-english-strings.test.ts",
+      "evidence": "LOC=496, MI=9, complexity=50, TODO=1, suppressions=2, any=0",
+      "files": [
+        "src/__tests__/i18n/no-english-strings.test.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0798",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 103): approval.ts",
+      "evidence": "LOC=850, MI=0, complexity=72, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/actions/approval.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0799",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 98): sales-intel-service.ts",
+      "evidence": "LOC=731, MI=1, complexity=67, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/platform/sales-intelligence/sales-intel-service.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0800",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 97): prisma-repository.ts",
+      "evidence": "LOC=897, MI=2, complexity=42, TODO=0, suppressions=1, any=33",
+      "files": [
+        "src/lib/sales/prisma-repository.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0801",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 96): store.ts",
+      "evidence": "LOC=1162, MI=0, complexity=46, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/sales/store.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0802",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 95): dossier-generator.ts",
+      "evidence": "LOC=667, MI=3, complexity=64, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/governance-engine/generators/dossier-generator.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0803",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 95): income-statement-presentation.ts",
+      "evidence": "LOC=670, MI=3, complexity=63, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/audit/db/income-statement-presentation.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0804",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 95): statement-builder.ts",
+      "evidence": "LOC=839, MI=1, complexity=57, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/audit/db/statement-builder.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0805",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 94): content-studio.test.ts",
+      "evidence": "LOC=937, MI=0, complexity=51, TODO=0, suppressions=0, any=35",
+      "files": [
+        "src/lib/platform/content-studio/__tests__/content-studio.test.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0806",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 94): evidence-page.tsx",
+      "evidence": "LOC=1216, MI=0, complexity=39, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/components/audit/evidence/evidence-page.tsx"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0807",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 93): page.tsx",
+      "evidence": "LOC=1138, MI=0, complexity=41, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/app/sales/settings/crm/page.tsx"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0808",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 92): graph-readiness-pipeline.ts",
+      "evidence": "LOC=648, MI=8, complexity=27, TODO=0, suppressions=2, any=2",
+      "files": [
+        "src/lib/governance-engine/graph/pipeline/graph-readiness-pipeline.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0809",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 91): secret-resolver.ts",
+      "evidence": "LOC=687, MI=4, complexity=55, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/integration/secret-resolver.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0810",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 91): institutional-memory-service.ts",
+      "evidence": "LOC=853, MI=2, complexity=48, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/core/memory/institutional-memory-service.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0811",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 91): findings-page.tsx",
+      "evidence": "LOC=1148, MI=0, complexity=37, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/components/audit/findings/findings-page.tsx"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0812",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 91): page.tsx",
+      "evidence": "LOC=438, MI=15, complexity=16, TODO=0, suppressions=3, any=0",
+      "files": [
+        "src/app/login/page.tsx"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0813",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 90): prisma-repository.ts",
+      "evidence": "LOC=912, MI=2, complexity=43, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/local-content/content/prisma-repository.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0814",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 89): recommendation-engine.ts",
+      "evidence": "LOC=326, MI=12, complexity=64, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/recommendation/recommendation-engine.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0815",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 89): page.tsx",
+      "evidence": "LOC=1237, MI=0, complexity=28, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0816",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 88): seed-data.ts",
+      "evidence": "LOC=1695, MI=0, complexity=8, TODO=0, suppressions=0, any=0",
+      "files": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0817",
+      "agent": "technical-debt",
+      "severity": "high",
+      "title": "Debt hotspot (priority 88): audit-risk-engine.ts",
+      "evidence": "LOC=656, MI=5, complexity=50, TODO=0, suppressions=0, any=5",
+      "files": [
+        "src/lib/platform/audit-risk/audit-risk-engine.ts"
+      ],
+      "category": "risk-hotspot",
+      "suggestion": "Candidate for OpenCode-owned refactor — see engineering/refactors/.",
+      "scoreImpact": 5
+    },
+    {
+      "id": "F-0818",
+      "agent": "technical-debt",
+      "severity": "info",
+      "title": "Repository debt inventory",
+      "evidence": "TODO/FIXME=31, suppressions=85, any-casts=393, legacy signals=65, hotspots=1736",
+      "files": [],
+      "category": "debt-summary",
+      "suggestion": "",
+      "scoreImpact": 0
+    }
+  ],
+  "meta": {
+    "debtIndex": 100,
+    "totalTodos": 31,
+    "tsIgnore": 85,
+    "anyCasts": 393,
+    "legacyPaths": 65,
+    "hotspots": [
+      {
+        "file": "src/lib/audit/db/index.ts",
+        "loc": 3657,
+        "mi": 0,
+        "complexity": 214,
+        "todos": 0,
+        "ignores": 1,
+        "anys": 10,
+        "priority": 238
+      },
+      {
+        "file": "src/actions/decisions.ts",
+        "loc": 1696,
+        "mi": 0,
+        "complexity": 120,
+        "todos": 0,
+        "ignores": 2,
+        "anys": 2,
+        "priority": 160
+      },
+      {
+        "file": "src/lib/local-content/workbook/ai-advisor.ts",
+        "loc": 1162,
+        "mi": 0,
+        "complexity": 139,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 143
+      },
+      {
+        "file": "src/lib/audit/services.ts",
+        "loc": 1931,
+        "mi": 0,
+        "complexity": 109,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 143
+      },
+      {
+        "file": "src/lib/audit/client-acceptance-engine.ts",
+        "loc": 466,
+        "mi": 15,
+        "complexity": 11,
+        "todos": 0,
+        "ignores": 9,
+        "anys": 9,
+        "priority": 137
+      },
+      {
+        "file": "src/__mocks__/prisma-client-mock.js",
+        "loc": 501,
+        "mi": 0,
+        "complexity": 126,
+        "todos": 0,
+        "ignores": 1,
+        "anys": 0,
+        "priority": 131
+      },
+      {
+        "file": "src/app/(dashboard)/decisions/[id]/page.tsx",
+        "loc": 477,
+        "mi": 15,
+        "complexity": 5,
+        "todos": 0,
+        "ignores": 8,
+        "anys": 8,
+        "priority": 126
+      },
+      {
+        "file": "src/lib/skill-runtime/runtime.ts",
+        "loc": 857,
+        "mi": 0,
+        "complexity": 104,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 119
+      },
+      {
+        "file": "src/app/(dashboard)/decisions/[id]/governance/page.tsx",
+        "loc": 1304,
+        "mi": 0,
+        "complexity": 86,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 2,
+        "priority": 119
+      },
+      {
+        "file": "src/components/audit/trial-balance/trial-balance-upload.tsx",
+        "loc": 825,
+        "mi": 0,
+        "complexity": 86,
+        "todos": 0,
+        "ignores": 1,
+        "anys": 0,
+        "priority": 118
+      },
+      {
+        "file": "src/lib/skill-runtime/__tests__/skill-registry.integration.test.ts",
+        "loc": 498,
+        "mi": 0,
+        "complexity": 114,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 117
+      },
+      {
+        "file": "src/actions/audit-actions.ts",
+        "loc": 1775,
+        "mi": 0,
+        "complexity": 56,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 114
+      },
+      {
+        "file": "src/lib/skill-runtime/evaluator.ts",
+        "loc": 720,
+        "mi": 0,
+        "complexity": 97,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 113
+      },
+      {
+        "file": "src/lib/local-content/workbook/population.ts",
+        "loc": 768,
+        "mi": 0,
+        "complexity": 90,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 110
+      },
+      {
+        "file": "src/lib/platform/org-advanced/org-adv-service.ts",
+        "loc": 504,
+        "mi": 8,
+        "complexity": 49,
+        "todos": 0,
+        "ignores": 3,
+        "anys": 8,
+        "priority": 109
+      },
+      {
+        "file": "src/lib/audit/mock-data.ts",
+        "loc": 2456,
+        "mi": 0,
+        "complexity": 20,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 109
+      },
+      {
+        "file": "src/lib/platform/audit-bridge/audit-bridge-service.ts",
+        "loc": 748,
+        "mi": 1,
+        "complexity": 67,
+        "todos": 0,
+        "ignores": 1,
+        "anys": 1,
+        "priority": 106
+      },
+      {
+        "file": "src/actions/localcontent-actions.ts",
+        "loc": 1449,
+        "mi": 0,
+        "complexity": 54,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 106
+      },
+      {
+        "file": "src/actions/workflowos-actions.ts",
+        "loc": 824,
+        "mi": 0,
+        "complexity": 80,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 106
+      },
+      {
+        "file": "src/__tests__/i18n/no-english-strings.test.ts",
+        "loc": 496,
+        "mi": 9,
+        "complexity": 50,
+        "todos": 1,
+        "ignores": 2,
+        "anys": 0,
+        "priority": 104
+      },
+      {
+        "file": "src/actions/approval.ts",
+        "loc": 850,
+        "mi": 0,
+        "complexity": 72,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 103
+      },
+      {
+        "file": "src/lib/platform/sales-intelligence/sales-intel-service.ts",
+        "loc": 731,
+        "mi": 1,
+        "complexity": 67,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 98
+      },
+      {
+        "file": "src/lib/sales/prisma-repository.ts",
+        "loc": 897,
+        "mi": 2,
+        "complexity": 42,
+        "todos": 0,
+        "ignores": 1,
+        "anys": 33,
+        "priority": 97
+      },
+      {
+        "file": "src/lib/sales/store.ts",
+        "loc": 1162,
+        "mi": 0,
+        "complexity": 46,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 96
+      },
+      {
+        "file": "src/lib/governance-engine/generators/dossier-generator.ts",
+        "loc": 667,
+        "mi": 3,
+        "complexity": 64,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 95
+      },
+      {
+        "file": "src/lib/audit/db/income-statement-presentation.ts",
+        "loc": 670,
+        "mi": 3,
+        "complexity": 63,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 95
+      },
+      {
+        "file": "src/lib/audit/db/statement-builder.ts",
+        "loc": 839,
+        "mi": 1,
+        "complexity": 57,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 95
+      },
+      {
+        "file": "src/lib/platform/content-studio/__tests__/content-studio.test.ts",
+        "loc": 937,
+        "mi": 0,
+        "complexity": 51,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 35,
+        "priority": 94
+      },
+      {
+        "file": "src/components/audit/evidence/evidence-page.tsx",
+        "loc": 1216,
+        "mi": 0,
+        "complexity": 39,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 94
+      },
+      {
+        "file": "src/app/sales/settings/crm/page.tsx",
+        "loc": 1138,
+        "mi": 0,
+        "complexity": 41,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 93
+      },
+      {
+        "file": "src/lib/governance-engine/graph/pipeline/graph-readiness-pipeline.ts",
+        "loc": 648,
+        "mi": 8,
+        "complexity": 27,
+        "todos": 0,
+        "ignores": 2,
+        "anys": 2,
+        "priority": 92
+      },
+      {
+        "file": "src/lib/integration/secret-resolver.ts",
+        "loc": 687,
+        "mi": 4,
+        "complexity": 55,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 91
+      },
+      {
+        "file": "src/lib/core/memory/institutional-memory-service.ts",
+        "loc": 853,
+        "mi": 2,
+        "complexity": 48,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 91
+      },
+      {
+        "file": "src/components/audit/findings/findings-page.tsx",
+        "loc": 1148,
+        "mi": 0,
+        "complexity": 37,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 91
+      },
+      {
+        "file": "src/app/login/page.tsx",
+        "loc": 438,
+        "mi": 15,
+        "complexity": 16,
+        "todos": 0,
+        "ignores": 3,
+        "anys": 0,
+        "priority": 91
+      },
+      {
+        "file": "src/lib/local-content/content/prisma-repository.ts",
+        "loc": 912,
+        "mi": 2,
+        "complexity": 43,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 90
+      },
+      {
+        "file": "src/lib/recommendation/recommendation-engine.ts",
+        "loc": 326,
+        "mi": 12,
+        "complexity": 64,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 89
+      },
+      {
+        "file": "src/app/local-content/settings/integrations/page.tsx",
+        "loc": 1237,
+        "mi": 0,
+        "complexity": 28,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 89
+      },
+      {
+        "file": "src/lib/sales/seed-data.ts",
+        "loc": 1695,
+        "mi": 0,
+        "complexity": 8,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 88
+      },
+      {
+        "file": "src/lib/platform/audit-risk/audit-risk-engine.ts",
+        "loc": 656,
+        "mi": 5,
+        "complexity": 50,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 5,
+        "priority": 88
+      },
+      {
+        "file": "src/lib/platform/audit-bridge/__tests__/audit-bridge.test.ts",
+        "loc": 789,
+        "mi": 3,
+        "complexity": 45,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 26,
+        "priority": 88
+      },
+      {
+        "file": "src/lib/sales/v02/knowledge-graph/builder.ts",
+        "loc": 536,
+        "mi": 7,
+        "complexity": 52,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 87
+      },
+      {
+        "file": "src/lib/sales/services/executive-commercial-dashboard-service.ts",
+        "loc": 685,
+        "mi": 5,
+        "complexity": 46,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 87
+      },
+      {
+        "file": "src/lib/platform/abac/__tests__/abac.test.ts",
+        "loc": 776,
+        "mi": 4,
+        "complexity": 43,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 87
+      },
+      {
+        "file": "src/lib/office-ai/office-ai-task-service.ts",
+        "loc": 694,
+        "mi": 5,
+        "complexity": 46,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 87
+      },
+      {
+        "file": "src/lib/local-content/services.ts",
+        "loc": 961,
+        "mi": 2,
+        "complexity": 36,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 87
+      },
+      {
+        "file": "src/lib/sales/v02/knowledge-graph/build.ts",
+        "loc": 507,
+        "mi": 8,
+        "complexity": 51,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 86
+      },
+      {
+        "file": "src/lib/platform/cross-product-ai/cross-product-ai-service.ts",
+        "loc": 620,
+        "mi": 6,
+        "complexity": 47,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 8,
+        "priority": 86
+      },
+      {
+        "file": "src/lib/platform/org-advanced/__tests__/org-adv.test.ts",
+        "loc": 919,
+        "mi": 3,
+        "complexity": 34,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 0,
+        "priority": 85
+      },
+      {
+        "file": "src/lib/platform/office-ai-adv/__tests__/office-ai-adv.test.ts",
+        "loc": 693,
+        "mi": 5,
+        "complexity": 43,
+        "todos": 0,
+        "ignores": 0,
+        "anys": 15,
+        "priority": 85
+      }
+    ]
+  }
+}

@@ -1,12 +1,6 @@
-import { config } from "dotenv";
-import { resolve } from "path";
 import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
 
-config({ path: resolve(__dirname, "../.env") });
-
-const adapter = new PrismaPg(process.env.DATABASE_URL!);
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient();
 
 function now() {
   return new Date();

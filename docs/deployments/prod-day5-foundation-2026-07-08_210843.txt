@@ -1,0 +1,38 @@
+========================================
+AQLIYA PRODUCTION — DAY 5 FOUNDATION
+Date: 2026-07-08 21:08:43
+Environment: prod
+Domain: app.aqliya.com
+========================================
+
+APPLY STATUS: SUCCESS (APPLY_EXIT=0)
+
+--- RESOURCES ---
+VPC ID:       vpc-060a49d210f05d9d1
+ALB DNS:      aqliya-prod-alb-1090266351.eu-north-1.elb.amazonaws.com
+ECS Cluster:  aqliya-prod-cluster
+ECS Service:  aqliya-prod-service
+ECR URL:      308621094029.dkr.ecr.eu-north-1.amazonaws.com/aqliya/prod/app
+RDS Endpoint:  (sensitive)
+Redis Endpoint: (sensitive)
+S3 Static:    aqliya-prod-static
+S3 Uploads:   aqliya-prod-uploads
+Dashboard:    aqliya-prod-dashboard
+Backup Vault: aqliya-prod-backup-vault
+
+--- PRODUCTION CONFIG ---
+Domain:       app.aqliya.com
+Domain Ready: false (HTTPS/CloudFront disabled until Day 7)
+RDS:          db.t4g.micro, 20GB, Multi-AZ=false (temp: free-tier)
+Redis:        cache.t4g.small, 1 node (temp: free-tier)
+ECS:          1024 CPU, 2048 MB, desired=2, min=2, max=10
+Backup:       0 days (temp: free-tier)
+DR:           disabled (temp: free-tier)
+
+--- LIMITATIONS (free-tier) ---
+1. RDS: db.t4g.micro → target: db.t4g.medium after account upgrade
+2. Redis: single-node → target: replication_group
+3. Multi-AZ: disabled → target: true
+4. Backup retention: 0 → target: 30 days
+5. Cross-region DR: disabled → target: eu-central-1
+========================================

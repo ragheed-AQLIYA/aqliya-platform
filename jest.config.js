@@ -51,4 +51,20 @@ module.exports = {
       }
     }],
   },
-}
+
+  // ─── Coverage ──────────────────────────────────────────────
+  collectCoverageFrom: [
+    "src/**/*.{ts,tsx}",
+    "!src/**/__tests__/**",
+    "!src/**/__mocks__/**",
+    "!src/**/*.d.ts",
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 50,
+      functions: 50,
+      lines: 60,
+      statements: 60,
+    },
+  },
+};

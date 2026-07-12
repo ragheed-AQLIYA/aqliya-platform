@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import {
+  getTaskDetail,
+  getWorkspaceNameById,
+  getProjectNameById,
+} from "@/actions/office-ai-workspace-actions";
 import {
   submitOfficeAiTaskForReviewAction,
   approveOfficeAiTaskAction,
@@ -66,33 +70,17 @@ export default async function TaskDetailPage({
   const { taskId } = await params;
   const user = await getCurrentUser();
 
-  const task = await prisma.officeAiTask.findUnique({
-    where: { id: taskId },
-    include: { outputs: { orderBy: { createdAt: "desc" } }, sourceFiles: true },
-  });
+  const task = await getTaskDetail(taskId);
 
   if (!task) notFound();
-  if (
-    user.platformOrganizationId &&
-    task.platformOrganizationId !== user.platformOrganizationId
-  )
-    notFound();
 
   let workspaceName: string | null = null;
   let projectName: string | null = null;
   if (task.clientWorkspaceId) {
-    const ws = await prisma.clientWorkspace.findUnique({
-      where: { id: task.clientWorkspaceId },
-      select: { name: true },
-    });
-    workspaceName = ws?.name ?? null;
+    workspaceName = await getWorkspaceNameById(task.clientWorkspaceId);
   }
   if (task.projectId) {
-    const proj = await prisma.project.findUnique({
-      where: { id: task.projectId },
-      select: { name: true },
-    });
-    projectName = proj?.name ?? null;
+    projectName = await getProjectNameById(task.projectId);
   }
 
   const currentStepIndex = STATUS_STEPS.indexOf(task.status);

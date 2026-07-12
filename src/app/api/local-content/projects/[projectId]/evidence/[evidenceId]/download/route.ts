@@ -5,6 +5,7 @@ import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export async function GET(
   _request: NextRequest,
@@ -67,25 +68,12 @@ export async function GET(
       sizeBytes: file.sizeBytes,
     });
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === "Unauthenticated") {
-        return NextResponse.json(
-          { error: "Authentication required" },
-          { status: 401 },
-        );
-      }
-      if (error.message.startsWith("Access denied")) {
-        return NextResponse.json({ error: error.message }, { status: 403 });
-      }
-      if (error.message === "Project not found") {
-        return NextResponse.json({ error: error.message }, { status: 404 });
-      }
+    const { message, code } = sanitizeError(error);
+    const status = httpStatusFromCode(code);
+    if (status === 500) {
+      console.error("[LocalContentEvidenceDownload] Error:", error);
+      return NextResponse.json({ error: "Failed to serve file" }, { status: 500 });
     }
-
-    console.error("[LocalContentEvidenceDownload] Error:", error);
-    return NextResponse.json(
-      { error: "Failed to serve file" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: message }, { status });
   }
 }

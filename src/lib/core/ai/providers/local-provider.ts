@@ -1,7 +1,12 @@
-// LocalAIProvider — Ollama REST /api/chat (ADR-001 Cycle 2)
+﻿// LocalAIProvider — Ollama REST /api/chat (ADR-001 Cycle 2)
+// Timeout policy: All fetch() calls use AbortSignal.timeout(30_000) for execution,
+// 3_000 for availability checks.
 
 import type { AIProvider, AIRequest, AIResponse, AIProviderStatus } from "@/lib/core/ai/types";
 import { aiRequestToCompletion, completionToAiResponse } from "./llm-http-client";
+
+const LOCAL_EXECUTION_TIMEOUT_MS = 30_000; // 30 seconds for LLM execution
+const LOCAL_AVAILABILITY_TIMEOUT_MS = 3_000; // 3 seconds for health checks
 
 export class LocalAIProvider implements AIProvider {
   readonly providerId = "local" as const;
@@ -26,7 +31,7 @@ export class LocalAIProvider implements AIProvider {
     if (!this.isConfigured) return false;
     try {
       const res = await fetch(`${this.baseUrl.replace(/\/$/, "")}/api/tags`, {
-        signal: AbortSignal.timeout(3000),
+        signal: AbortSignal.timeout(LOCAL_AVAILABILITY_TIMEOUT_MS),
       });
       return res.ok;
     } catch {
@@ -49,16 +54,27 @@ export class LocalAIProvider implements AIProvider {
         ]
       : completionReq.messages;
 
-    const res = await fetch(`${this.baseUrl.replace(/\/$/, "")}/api/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: request.modelConfig?.modelId ?? this.defaultModel,
-        messages,
-        stream: false,
-        options: { temperature: completionReq.temperature ?? 0.2 },
-      }),
-    });
+    const url = `${this.baseUrl.replace(/\/$/, "")}/api/chat`;
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: request.modelConfig?.modelId ?? this.defaultModel,
+          messages,
+          stream: false,
+          options: { temperature: completionReq.temperature ?? 0.2 },
+        }),
+        signal: AbortSignal.timeout(LOCAL_EXECUTION_TIMEOUT_MS),
+      });
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        console.error(`[ollama] Request timed out after ${LOCAL_EXECUTION_TIMEOUT_MS}ms to ${url}`);
+        throw new Error(`Ollama API request timed out after ${LOCAL_EXECUTION_TIMEOUT_MS / 1000}s. Please try again or check local model availability.`);
+      }
+      throw err;
+    }
 
     if (!res.ok) {
       const errText = await res.text().catch(() => res.statusText);
@@ -82,7 +98,6 @@ export class LocalAIProvider implements AIProvider {
         },
       },
       "local",
-      0.72,
     );
   }
 

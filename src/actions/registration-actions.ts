@@ -179,8 +179,8 @@ export interface InviteTeamMemberResult {
 export async function inviteTeamMemberAction(
   input: InviteTeamMemberInput,
 ): Promise<InviteTeamMemberResult> {
-  const { requireUserContext } = await import("@/lib/auth")
-  const user = await requireUserContext("ADMIN")
+  const { getCurrentUser } = await import("@/lib/auth")
+  const user = await getCurrentUser()
 
   const { email, role } = input
 
@@ -386,8 +386,8 @@ export interface TeamMember {
 }
 
 export async function listTeamMembersAction(): Promise<TeamMember[]> {
-  const { requireUserContext } = await import("@/lib/auth")
-  const user = await requireUserContext()
+  const { getCurrentUser } = await import("@/lib/auth")
+  const user = await getCurrentUser()
 
   const members = await prisma.user.findMany({
     where: { organizationId: user.organizationId },
@@ -416,8 +416,8 @@ export interface PendingInvitation {
 }
 
 export async function listPendingInvitationsAction(): Promise<PendingInvitation[]> {
-  const { requireUserContext } = await import("@/lib/auth")
-  const user = await requireUserContext("ADMIN")
+  const { getCurrentUser } = await import("@/lib/auth")
+  const user = await getCurrentUser()
 
   const invites = await prisma.invitation.findMany({
     where: {

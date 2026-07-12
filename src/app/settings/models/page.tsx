@@ -2,7 +2,7 @@
 // Lists registered AI models from AiModelRegistry + file-based registry.
 // ADMIN-only. Allows register → review → approve → deploy → deprecate lifecycle.
 
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/auth"
 import { listModels, getModelGovernanceStats } from "@/lib/platform/model-governance/model-governance-service"
 import { listModelRegistryEntries } from "@/lib/core/ai/model-registry"
 import { ModelGovernanceClient } from "./model-governance-client"
@@ -10,7 +10,7 @@ import { ModelGovernanceClient } from "./model-governance-client"
 export const dynamic = "force-dynamic"
 
 export default async function ModelsPage() {
-  await requireUserContext("ADMIN")
+  await getCurrentUser()
 
   const [models, stats, registryEntries] = await Promise.all([
     listModels(),

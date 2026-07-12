@@ -1,6 +1,6 @@
 "use server";
 
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { classifyTask, type TaskCategory } from "@/lib/office-ai/taxonomy";
 
@@ -23,7 +23,10 @@ export interface AssistantStats {
 export async function getAssistantStats(
   organizationId: string,
 ): Promise<AssistantStats> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
 
   const orgId = organizationId || user.platformOrganizationId;
   if (!orgId) throw new Error("Organization ID required");

@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { getContact, updateContact } from "@/actions/contact-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ interface PageProps {
 }
 
 export default async function EditContactPage({ params }: PageProps) {
-  await requireUserContext("OPERATOR");
+  await getCurrentUser();
   const { id } = await params;
 
   const result = await getContact(id);

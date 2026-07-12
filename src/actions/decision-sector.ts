@@ -3,13 +3,18 @@
 import { getSectors, getSectorById, createSector, updateSector, assignSectorToDecision, getDecisionSector } from "@/lib/decision/sector"
 import { getBenchmarksBySector, createBenchmark } from "@/lib/decision/sector-benchmark"
 import { revalidatePath } from "next/cache"
-import { requireDecisionAccess, requireUserContext } from "@/lib/auth"
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
+import { enforce } from "@/lib/authorization/action-guard"
+import { prisma } from "@/lib/prisma"
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit"
 
 // Sector actions
 export async function getSectorsAction() {
   try {
-    await requireUserContext("OPERATOR")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "OPERATOR")) {
+      throw new Error("Access denied: OPERATOR role required");
+    }
     const sectors = await getSectors()
     return { data: sectors }
   } catch {
@@ -19,7 +24,10 @@ export async function getSectorsAction() {
 
 export async function getSectorAction(sectorId: string) {
   try {
-    await requireUserContext("OPERATOR")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "OPERATOR")) {
+      throw new Error("Access denied: OPERATOR role required");
+    }
     const sector = await getSectorById(sectorId)
     return { data: sector }
   } catch {
@@ -28,7 +36,10 @@ export async function getSectorAction(sectorId: string) {
 }
 
 export async function createSectorAction(formData: FormData) {
-  await requireUserContext("OPERATOR")
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "OPERATOR")) {
+    throw new Error("Access denied: OPERATOR role required");
+  }
   
   const name = formData.get("name") as string
   const description = formData.get("description") as string
@@ -44,7 +55,10 @@ export async function createSectorAction(formData: FormData) {
 }
 
 export async function updateSectorAction(sectorId: string, formData: FormData) {
-  await requireUserContext("ADMIN")
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "ADMIN")) {
+    throw new Error("Access denied: ADMIN role required");
+  }
   
   const name = formData.get("name") as string
   const description = formData.get("description") as string
@@ -65,7 +79,15 @@ export async function assignSectorToDecisionAction(
   decisionId: string,
   sectorId: string
 ) {
-  const { user } = await requireDecisionAccess(decisionId, "OPERATOR")
+  const user = await getCurrentUser()
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  })
+  if (!decisionLookup) {
+    return { error: "Decision not found" }
+  }
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update")
   
   try {
     const before = await getDecisionSector(decisionId)
@@ -78,7 +100,7 @@ export async function assignSectorToDecisionAction(
       "Decision",
       toAuditJson(before),
       toAuditJson(after),
-      user.organizationId
+      decisionLookup.organizationId
     )
     revalidatePath(`/decisions/${decisionId}/sector`)
     return { success: true }
@@ -89,7 +111,15 @@ export async function assignSectorToDecisionAction(
 
 export async function getDecisionSectorAction(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser()
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    })
+    if (!decisionLookup) {
+      return { error: "Decision not found" }
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update")
     const result = await getDecisionSector(decisionId)
     return { data: result }
   } catch {
@@ -100,7 +130,10 @@ export async function getDecisionSectorAction(decisionId: string) {
 // Benchmark actions
 export async function getSectorBenchmarksAction(sectorId: string) {
   try {
-    await requireUserContext("OPERATOR")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "OPERATOR")) {
+      throw new Error("Access denied: OPERATOR role required");
+    }
     const benchmarks = await getBenchmarksBySector(sectorId)
     return { data: benchmarks }
   } catch {
@@ -109,7 +142,10 @@ export async function getSectorBenchmarksAction(sectorId: string) {
 }
 
 export async function createBenchmarkAction(formData: FormData) {
-  await requireUserContext("OPERATOR")
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "OPERATOR")) {
+    throw new Error("Access denied: OPERATOR role required");
+  }
   
   const sectorId = formData.get("sectorId") as string
   const metricName = formData.get("metricName") as string

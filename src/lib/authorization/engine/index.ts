@@ -56,27 +56,3 @@ export {
 } from './policies';
 
 export type { AuthorizationPolicy } from './policies';
-
-// Re-export migration utilities
-export {
-  ShadowAdapter,
-  ShadowLogger,
-  shadowLogger,
-  generateParityReport,
-  formatParityReport,
-  generateEvidencePackage,
-  detectDrift,
-  buildReplayDataset,
-  replayDataset,
-} from './migration';
-
-export type {
-  ShadowRecord,
-  ShadowComparison,
-  ParityStats,
-  ParityReport,
-  EvidencePackage,
-  DriftResult,
-  ReplayDataset,
-  ReplaySummary,
-} from './migration';

@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { KnowledgeDashboard } from "@/components/audit/knowledge/knowledge-dashboard";
+import { LoadingState } from "@/components/ui/loading-state";
 
 export default function KnowledgePage() {
   return (
@@ -9,7 +11,9 @@ export default function KnowledgePage() {
           تحليل أنماط المهام السابقة، التوصيات الذكية، والمعايير القطاعية
         </p>
       </div>
-      <KnowledgeDashboard auditOrganizationId="" />
+      <Suspense fallback={<LoadingState message="جاري تحميل المعرفة التدقيقية..." />}>
+        <KnowledgeDashboard auditOrganizationId="" />
+      </Suspense>
     </div>
   );
 }

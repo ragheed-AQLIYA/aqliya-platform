@@ -4,7 +4,11 @@ import type { NextRequest } from "next/server";
 // ── Module-level mocks ──
 
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: jest.fn(),
+  getCurrentUser: jest.fn(),
+}));
+
+jest.mock("@/lib/authorization", () => ({
+  enforce: jest.fn(),
 }));
 
 jest.mock("@/lib/prisma", () => ({
@@ -18,7 +22,8 @@ jest.mock("@/lib/prisma", () => ({
 
 // ── Imports (picks up mocked modules) ──
 
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { prisma } from "@/lib/prisma";
 
 // ── Type helpers ──
@@ -104,12 +109,13 @@ function makeAuditEvent(overrides: Record<string, unknown> = {}) {
 describe("GET /api/workflowos/records/[recordId]/download", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mock(enforce).mockResolvedValue(undefined);
   });
 
   // ── 1. Authentication ──
 
   it("returns 401 when unauthenticated", async () => {
-    mock(requireUserContext).mockRejectedValue(new Error("Unauthenticated"));
+    mock(getCurrentUser).mockRejectedValue(new Error("Unauthenticated"));
 
     const { GET } = await import("@/app/api/workflowos/records/[recordId]/download/route");
     const req = new Request("http://localhost/api/workflowos/records/rec-1/download") as unknown as NextRequest;
@@ -125,7 +131,7 @@ describe("GET /api/workflowos/records/[recordId]/download", () => {
   // ── 2. Record not found ──
 
   it("returns 404 when record not found", async () => {
-    mock(requireUserContext).mockResolvedValue(makeUser());
+    mock(getCurrentUser).mockResolvedValue(makeUser());
     mock(prisma.workflowRecord.findUnique).mockResolvedValue(null);
 
     const { GET } = await import("@/app/api/workflowos/records/[recordId]/download/route");
@@ -142,7 +148,7 @@ describe("GET /api/workflowos/records/[recordId]/download", () => {
   // ── 3. Organization access denied ──
 
   it("returns 403 when record belongs to a different organization", async () => {
-    mock(requireUserContext).mockResolvedValue(makeUser({ organizationId: "org-2" }));
+    mock(getCurrentUser).mockResolvedValue(makeUser({ organizationId: "org-2" }));
     mock(prisma.workflowRecord.findUnique).mockResolvedValue(makeRecord({ organizationId: "org-1" }));
 
     const { GET } = await import("@/app/api/workflowos/records/[recordId]/download/route");
@@ -159,7 +165,7 @@ describe("GET /api/workflowos/records/[recordId]/download", () => {
   // ── 4. Export not approved ──
 
   it("returns 403 when export status is not approved", async () => {
-    mock(requireUserContext).mockResolvedValue(makeUser());
+    mock(getCurrentUser).mockResolvedValue(makeUser());
     mock(prisma.workflowRecord.findUnique).mockResolvedValue(
       makeRecord({ exportStatus: "requested" }),
     );
@@ -179,7 +185,7 @@ describe("GET /api/workflowos/records/[recordId]/download", () => {
 
   it("returns 200 with JSON export file", async () => {
     const user = makeUser({ id: "user-success", name: "Success User" });
-    mock(requireUserContext).mockResolvedValue(user);
+    mock(getCurrentUser).mockResolvedValue(user);
     const record = makeRecord({
       title: "Inspection #42",
       description: "Site inspection report",
@@ -252,7 +258,7 @@ describe("GET /api/workflowos/records/[recordId]/download", () => {
 
   it("creates audit event on successful download", async () => {
     const user = makeUser({ id: "user-audit", name: "Export User" });
-    mock(requireUserContext).mockResolvedValue(user);
+    mock(getCurrentUser).mockResolvedValue(user);
     mock(prisma.workflowRecord.findUnique).mockResolvedValue(makeRecord());
     mock(prisma.workflowEvidence.findMany).mockResolvedValue([]);
     mock(prisma.workflowAuditEvent.findMany).mockResolvedValue([]);
@@ -280,7 +286,7 @@ describe("GET /api/workflowos/records/[recordId]/download", () => {
   // ── 7. Server error on unexpected failure ──
 
   it("returns 500 on unexpected error", async () => {
-    mock(requireUserContext).mockRejectedValue(new Error("Database connection lost"));
+    mock(getCurrentUser).mockRejectedValue(new Error("Database connection lost"));
 
     const { GET } = await import("@/app/api/workflowos/records/[recordId]/download/route");
     const req = new Request("http://localhost/api/workflowos/records/rec-1/download") as unknown as NextRequest;

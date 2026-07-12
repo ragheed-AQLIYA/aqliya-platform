@@ -1,0 +1,337 @@
+{
+  "at": "2026-07-11T11:36:48.410Z",
+  "currentHealth": 74,
+  "topN": 15,
+  "projectedLift": 16.5,
+  "projectedHealth": 90.5,
+  "totalEffort": 16.3,
+  "avgConfidence": 72,
+  "selected": [
+    {
+      "fingerprint": "da1ed81c9c3b",
+      "title": "Possible secret material (generic-secret)",
+      "agent": "security",
+      "category": "A02",
+      "severity": "high",
+      "files": [
+        "src/lib/sales/vnext/learning-loop.ts"
+      ],
+      "product": "SalesOS",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "1f9d967e11e8",
+      "title": "Possible secret material (generic-secret)",
+      "agent": "security",
+      "category": "A02",
+      "severity": "high",
+      "files": [
+        "src/lib/local-content/erp/connector-factory.ts"
+      ],
+      "product": "LocalContentOS",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "c80eb58f437f",
+      "title": "Possible secret material (generic-secret)",
+      "agent": "security",
+      "category": "A02",
+      "severity": "high",
+      "files": [
+        "src/app/settings/retention/page.tsx"
+      ],
+      "product": "Platform",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "4d9ae7e6467f",
+      "title": "API route may lack auth check",
+      "agent": "security",
+      "category": "A01",
+      "severity": "high",
+      "files": [
+        "src/app/api/workflowos/escalation-check/route.ts"
+      ],
+      "product": "WorkflowOS",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "e9840101eae7",
+      "title": "API route may lack auth check",
+      "agent": "security",
+      "category": "A01",
+      "severity": "high",
+      "files": [
+        "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
+      ],
+      "product": "WorkflowOS",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "04e6963e9b32",
+      "title": "API route may lack auth check",
+      "agent": "security",
+      "category": "A01",
+      "severity": "high",
+      "files": [
+        "src/app/api/scim/v2/Users/route.ts"
+      ],
+      "product": "Platform",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "98dce0e7a33c",
+      "title": "API route may lack auth check",
+      "agent": "security",
+      "category": "A01",
+      "severity": "high",
+      "files": [
+        "src/app/api/scim/v2/Users/[id]/route.ts"
+      ],
+      "product": "Platform",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "88307898a617",
+      "title": "API route may lack auth check",
+      "agent": "security",
+      "category": "A01",
+      "severity": "high",
+      "files": [
+        "src/app/api/scim/v2/Groups/route.ts"
+      ],
+      "product": "Platform",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "fc258a1eda54",
+      "title": "API route may lack auth check",
+      "agent": "security",
+      "category": "A01",
+      "severity": "high",
+      "files": [
+        "src/app/api/scim/v2/Groups/[id]/route.ts"
+      ],
+      "product": "Platform",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "e2c27d3df5a9",
+      "title": "API route may lack auth check",
+      "agent": "security",
+      "category": "A01",
+      "severity": "high",
+      "files": [
+        "src/app/api/platform/retention/route.ts"
+      ],
+      "product": "Platform",
+      "occurrences": 1,
+      "impact": 9,
+      "difficulty": 2,
+      "risk": 2,
+      "confidence": 75,
+      "roi": 3.4,
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "lift": 2.1,
+      "effortDays": 1
+    },
+    {
+      "fingerprint": "9ee3952e3faf",
+      "title": "Client module references server-only concerns",
+      "severity": "high",
+      "product": "LocalContentOS",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "roi": 2,
+      "impact": 8,
+      "difficulty": 3,
+      "risk": 3,
+      "confidence": 65,
+      "source": "lifecycle",
+      "effortDays": 1.25,
+      "programHint": "B",
+      "packScore": 1.5392,
+      "need": 48,
+      "lift": 0.9
+    },
+    {
+      "fingerprint": "6cd50722bfc6",
+      "title": "Large module / God Object signal: localcontent-actions.ts",
+      "severity": "high",
+      "product": "LocalContentOS",
+      "files": [
+        "src/actions/localcontent-actions.ts"
+      ],
+      "roi": 2,
+      "impact": 8,
+      "difficulty": 3,
+      "risk": 3,
+      "confidence": 65,
+      "source": "lifecycle",
+      "effortDays": 1.25,
+      "programHint": "B",
+      "packScore": 1.5392,
+      "need": 48,
+      "lift": 0.9
+    },
+    {
+      "fingerprint": "2c4f7402de67",
+      "title": "Large module / God Object signal: page.tsx",
+      "severity": "high",
+      "product": "LocalContentOS",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "roi": 2,
+      "impact": 8,
+      "difficulty": 3,
+      "risk": 3,
+      "confidence": 65,
+      "source": "lifecycle",
+      "effortDays": 1.25,
+      "programHint": "B",
+      "packScore": 1.5392,
+      "need": 48,
+      "lift": 0.9
+    },
+    {
+      "fingerprint": "6b43acafccab",
+      "title": "Large module / God Object signal: ai-advisor.ts",
+      "severity": "high",
+      "product": "LocalContentOS",
+      "files": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "roi": 2,
+      "impact": 8,
+      "difficulty": 3,
+      "risk": 3,
+      "confidence": 65,
+      "source": "lifecycle",
+      "effortDays": 1.25,
+      "programHint": "B",
+      "packScore": 1.5392,
+      "need": 48,
+      "lift": 0.9
+    },
+    {
+      "fingerprint": "4fc44e3901db",
+      "title": "Long function WorkbookDetailClient (708 lines)",
+      "severity": "high",
+      "product": "LocalContentOS",
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/workbook-detail-client.tsx"
+      ],
+      "roi": 2,
+      "impact": 8,
+      "difficulty": 3,
+      "risk": 3,
+      "confidence": 65,
+      "source": "lifecycle",
+      "effortDays": 1.25,
+      "programHint": "B",
+      "packScore": 1.5392,
+      "need": 48,
+      "lift": 0.9
+    }
+  ],
+  "scenarios": [
+    {
+      "n": 5,
+      "lift": 8.8,
+      "health": 82.8,
+      "effort": 5
+    },
+    {
+      "n": 10,
+      "lift": 14.6,
+      "health": 88.6,
+      "effort": 10
+    },
+    {
+      "n": 15,
+      "lift": 16.3,
+      "health": 90.3,
+      "effort": 16.3
+    },
+    {
+      "n": 20,
+      "lift": 16.3,
+      "health": 90.3,
+      "effort": 16.3
+    }
+  ]
+}

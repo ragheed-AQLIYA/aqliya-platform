@@ -3,8 +3,8 @@
 import { prisma } from "@/lib/prisma";
 import {
   isExpectedAccessDeniedError,
-  requireUserContext,
   getCurrentUser,
+  hasRequiredRole,
 } from "@/lib/auth";
 import {
   getTemplate,
@@ -72,7 +72,10 @@ export async function createDecisionFromTemplate(data: {
   alternatives?: string[];
 }) {
   try {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "OPERATOR")) {
+      throw new Error("Access denied: OPERATOR role required");
+    }
 
     const template = getTemplate(data.templateId);
     if (!template) {

@@ -1,0 +1,178 @@
+{
+  "agent": "documentation",
+  "title": "Documentation Report",
+  "generatedAt": "2026-07-11T02:08:05.568Z",
+  "score": 95,
+  "summary": {
+    "total": 12,
+    "critical": 0,
+    "high": 0,
+    "medium": 11,
+    "low": 1,
+    "info": 0
+  },
+  "findings": [
+    {
+      "id": "F-0503",
+      "agent": "documentation",
+      "severity": "low",
+      "title": "Only 1 ADR(s) present",
+      "evidence": "docs/adr/ADR-DEPLOY-001-CLOUDFRONT-WAF-ATTACHMENT.md",
+      "files": [
+        "docs/adr/ADR-DEPLOY-001-CLOUDFRONT-WAF-ATTACHMENT.md"
+      ],
+      "category": "missing-adr",
+      "suggestion": "Expand ADRs for auth, tenancy, deployment, and product boundaries.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0504",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Documentation tree missing: docs/products",
+      "evidence": "Directory not found",
+      "files": [
+        "docs/products"
+      ],
+      "category": "missing-readme",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0505",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Documentation tree missing: docs/systems",
+      "evidence": "Directory not found",
+      "files": [
+        "docs/systems"
+      ],
+      "category": "missing-readme",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0506",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/DOCUMENTATION_GOVERNANCE.md",
+      "evidence": "[Knowledge Governance Charter v1](governance/aqliya-knowledge-governance-charter-v1.md) → missing docs/governance/aqliya-knowledge-governance-charter-v1.md",
+      "files": [
+        "docs/DOCUMENTATION_GOVERNANCE.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0507",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/programs/localcontentos-production-readiness/PROGRAM_CHARTER.md",
+      "evidence": "[Repository Quality](../../PROGRAM_CLOSURE.md) → missing docs/PROGRAM_CLOSURE.md",
+      "files": [
+        "docs/programs/localcontentos-production-readiness/PROGRAM_CHARTER.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0508",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/programs/localcontentos-production-readiness/PROGRAM_CHARTER.md",
+      "evidence": "[Repository Quality](../../PROGRAM_CLOSURE.md) → missing docs/PROGRAM_CLOSURE.md",
+      "files": [
+        "docs/programs/localcontentos-production-readiness/PROGRAM_CHARTER.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0509",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/pilot/PILOT-PACK-INDEX.md",
+      "evidence": "[`docs/products/auditos-commercial-master-index.md`](../products/auditos-commercial-master-index.md) → missing docs/products/auditos-commercial-master-index.md",
+      "files": [
+        "docs/pilot/PILOT-PACK-INDEX.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0510",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/pilot/PILOT-PACK-INDEX.md",
+      "evidence": "[`docs/products/localcontentos-v0.1/pilot-onboarding-pack/`](../products/localcontentos-v0.1/pilot-onboarding-pack/) → missing docs/products/localcontentos-v0.1/pilot-onboarding-pack",
+      "files": [
+        "docs/pilot/PILOT-PACK-INDEX.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0511",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/pilot/PILOT-PACK-INDEX.md",
+      "evidence": "[`docs/products/localcontentos-pilot-runbook/`](../products/localcontentos-pilot-runbook/) → missing docs/products/localcontentos-pilot-runbook",
+      "files": [
+        "docs/pilot/PILOT-PACK-INDEX.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0512",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/pilot/PILOT-PACK-INDEX.md",
+      "evidence": "[`docs/products/localcontentos-sales-pack/`](../products/localcontentos-sales-pack/) → missing docs/products/localcontentos-sales-pack",
+      "files": [
+        "docs/pilot/PILOT-PACK-INDEX.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0513",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/pilot/PILOT-PACK-INDEX.md",
+      "evidence": "[`docs/reports/project-organization/09-final-closure.md`](../reports/project-organization/09-final-closure.md) → missing docs/reports/project-organization/09-final-closure.md",
+      "files": [
+        "docs/pilot/PILOT-PACK-INDEX.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0514",
+      "agent": "documentation",
+      "severity": "medium",
+      "title": "Broken link in docs/evidence/validation/cycle-6/CERTIFICATION_BLOCKERS.md",
+      "evidence": "[cycle-6-close.md](../../operations/parallel-execution-cycle-2026-06-06-cycle-6-close.md) → missing docs/evidence/operations/parallel-execution-cycle-2026-06-06-cycle-6-close.md",
+      "files": [
+        "docs/evidence/validation/cycle-6/CERTIFICATION_BLOCKERS.md"
+      ],
+      "category": "broken-link",
+      "suggestion": "",
+      "scoreImpact": 3
+    }
+  ],
+  "meta": {
+    "docsMd": 2298,
+    "adrs": 1,
+    "broken": 9,
+    "outdated": 0
+  }
+}

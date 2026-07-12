@@ -37,14 +37,16 @@ jest.mock("@/lib/prisma", () => ({
   },
 }));
 
+const mockGetCurrentUser = jest.fn();
+
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: jest.fn(),
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
+  hasRequiredRole: jest.fn().mockReturnValue(true),
   isExpectedAccessDeniedError: jest.fn(() => false),
 }));
 
 import { describe, expect, it, beforeEach, jest } from "@jest/globals";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
 
 const MOCK_USER = {
   id: "user-1",
@@ -118,7 +120,7 @@ const MOCK_REVIEWER = {
 describe("LocalContactOS L5 — Export Approval Gate", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (requireUserContext as jest.Mock).mockResolvedValue(MOCK_USER);
+    mockGetCurrentUser.mockResolvedValue(MOCK_USER);
   });
 
   describe("requestContactExport", () => {
@@ -333,7 +335,7 @@ describe("LocalContactOS L5 — Export Approval Gate", () => {
 describe("LocalContactOS L5 — Reviewer Workflow", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (requireUserContext as jest.Mock).mockResolvedValue(MOCK_USER);
+    mockGetCurrentUser.mockResolvedValue(MOCK_USER);
   });
 
   describe("assignReviewer", () => {
@@ -418,7 +420,7 @@ describe("LocalContactOS L5 — Reviewer Workflow", () => {
 describe("LocalContactOS L5 — Compliance Service", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (requireUserContext as jest.Mock).mockResolvedValue(MOCK_USER);
+    mockGetCurrentUser.mockResolvedValue(MOCK_USER);
   });
 
   describe("checkExportRestrictions", () => {

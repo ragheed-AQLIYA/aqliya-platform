@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/auth";
 import { getStorageProvider } from "@/lib/audit/storage";
-import { getAuditActor } from "@/lib/audit/actor-context";
 import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
 import { verifyDownloadToken } from "@/lib/download-token";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
-import { enforce, mapAuditRoleToUserRole } from "@/lib/authorization";
+import { enforce } from "@/lib/authorization";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export async function GET(
   request: NextRequest,
@@ -37,20 +38,18 @@ export async function GET(
         organizationId: payload.org,
       };
     } else {
-      actor = await getAuditActor();
-      const auditUser = {
-        id: actor.actorId,
-        email: "",
-        name: actor.actorName,
-        role: mapAuditRoleToUserRole(actor.actorRole),
-        organizationId: actor.organizationId,
-        organization: { id: actor.organizationId, name: "" },
-      };
+      const user = await getCurrentUser();
       await enforce(
-        auditUser,
-        { type: "evidence", id: evidenceId, tenantId: actor.organizationId },
-        "read",
+        user,
+        { type: "evidence", id: evidenceId, tenantId: user.organizationId },
+        "export",
       );
+      actor = {
+        actorId: user.id,
+        actorName: user.name ?? user.email,
+        actorRole: user.role,
+        organizationId: user.organizationId,
+      };
     }
 
     await enforceAuditRateLimit(actor, "evidence.download", "download");
@@ -103,25 +102,12 @@ export async function GET(
       },
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthenticated") {
-      return NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 },
-      );
+    const { message, code } = sanitizeError(error);
+    const status = httpStatusFromCode(code);
+    if (status === 500) {
+      console.error("[EvidenceDownload] Error serving file:", error);
+      return NextResponse.json({ error: "Failed to serve file" }, { status: 500 });
     }
-    if (error instanceof Error && error.message.includes("Access denied")) {
-      return NextResponse.json({ error: error.message }, { status: 403 });
-    }
-    if (
-      error instanceof Error &&
-      error.message.includes("Evidence not found")
-    ) {
-      return NextResponse.json({ error: error.message }, { status: 404 });
-    }
-    console.error("[EvidenceDownload] Error serving file:", error);
-    return NextResponse.json(
-      { error: "Failed to serve file" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: message }, { status });
   }
 }

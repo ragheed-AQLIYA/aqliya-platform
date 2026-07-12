@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Phase 8 — Batch Knowledge Promotion API.
  * POST: Promote all approved candidates to a combined artifact
  *
@@ -14,6 +14,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth-next";
 import { batchPromoteCandidates } from "@/lib/tb-intelligence/knowledge-mining/promotion-service";
+import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 
 function requireRole(user: Record<string, unknown>, minRole: "ADMIN" | "OPERATOR" | "VIEWER"): void {
   const role = user.role as string | undefined;
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result);
   } catch (error) {
-    const status = error instanceof Error && error.message.startsWith("Access denied") ? 403 : 500;
-    return NextResponse.json({ error: String(error) }, { status });
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }

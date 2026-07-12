@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { AuditEngine } from "@/lib/core/audit";
 import { retryFailedOutboxEvents } from "@/lib/core/events/outbox-service";
+import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export const dynamic = "force-dynamic";
 
 /** ADMIN — reset failed outbox rows to pending for operator replay. */
 export async function POST(request: Request) {
   try {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     let ids: string[] | undefined;
     try {
       const body = (await request.json()) as { ids?: string[] };
@@ -34,8 +38,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Outbox retry failed";
-    return NextResponse.json({ ok: false, error: message }, { status: 403 });
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }

@@ -22,6 +22,7 @@ export interface WorkspaceTaskItem {
     createdAt: Date;
   }>;
   sourceFiles: Array<{ id: string; filename: string; fileType: string }>;
+  _count?: { outputs: number; sourceFiles: number };
 }
 
 export interface TaskDetail extends WorkspaceTaskItem {
@@ -44,6 +45,7 @@ export interface TaskDetail extends WorkspaceTaskItem {
     reviewedById: string | null;
     reviewedAt: Date | null;
     rejectionReason: string | null;
+    metadata: Record<string, unknown> | null;
     createdAt: Date;
     updatedAt: Date;
   }>;
@@ -56,6 +58,10 @@ export interface TaskDetail extends WorkspaceTaskItem {
     uploadedById: string | null;
     extractedContent: string | null;
     extractionStatus: string | null;
+    extractedAt: Date | null;
+    extractionMeta: Record<string, unknown> | null;
+    storageKey: string | null;
+    fileHash: string | null;
     createdAt: Date;
   }>;
 }
@@ -112,6 +118,96 @@ export async function listOfficeAiWorkspaceTasks(): Promise<{
     tasks: tasks as unknown as WorkspaceTaskItem[],
     totalCount,
   };
+}
+
+export async function getUserTaskList(userId: string, filters?: {
+  status?: string;
+  search?: string;
+  workspaceId?: string;
+  projectId?: string;
+  taskType?: string;
+}) {
+  const user = await getCurrentUser();
+  const platformOrgId = user.platformOrganizationId;
+  if (!platformOrgId) return { workspaces: [], projects: [], tasks: [], taskCounts: [], recentActivity: [] };
+
+  const [workspaces, projects] = await Promise.all([
+    prisma.clientWorkspace.findMany({
+      where: { platformOrganizationId: platformOrgId, status: "active" },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.project.findMany({
+      where: { status: "active" },
+      select: { id: true, name: true, workspaceId: true },
+      orderBy: { name: "asc" },
+      take: 50,
+    }),
+  ]);
+
+  const where: Record<string, unknown> = { createdById: userId };
+  if (filters?.status) where.status = filters.status;
+  if (filters?.search) {
+    where.OR = [
+      { title: { contains: filters.search, mode: "insensitive" } },
+      { instructions: { contains: filters.search, mode: "insensitive" } },
+    ];
+  }
+  if (filters?.workspaceId) where.clientWorkspaceId = filters.workspaceId;
+  if (filters?.projectId) where.projectId = filters.projectId;
+  if (filters?.taskType) where.taskType = filters.taskType;
+
+  const tasks = await prisma.officeAiTask.findMany({
+    where: where as never,
+    orderBy: { createdAt: "desc" },
+    take: 20,
+    include: {
+      _count: { select: { outputs: true, sourceFiles: true } },
+    },
+  });
+
+  const counts = await prisma.officeAiTask.groupBy({
+    by: ["status"],
+    where: { createdById: userId },
+    _count: true,
+  });
+
+  const recentActivity = await prisma.officeAiTask.findMany({
+    where: { createdById: userId },
+    orderBy: { updatedAt: "desc" },
+    take: 5,
+    select: {
+      id: true,
+      title: true,
+      taskType: true,
+      status: true,
+      createdAt: true,
+    },
+  });
+
+  return {
+    workspaces,
+    projects,
+    tasks: tasks as unknown as WorkspaceTaskItem[],
+    taskCounts: counts.map((c) => ({ status: c.status, _count: c._count })),
+    recentActivity,
+  };
+}
+
+export async function getWorkspaceNameById(workspaceId: string) {
+  const ws = await prisma.clientWorkspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
+  return ws?.name ?? null;
+}
+
+export async function getProjectNameById(projectId: string) {
+  const proj = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: { name: true },
+  });
+  return proj?.name ?? null;
 }
 
 export async function getTaskDetail(taskId: string): Promise<TaskDetail | null> {

@@ -1,0 +1,2115 @@
+{
+  "agent": "ui-quality",
+  "title": "UX Quality Report",
+  "generatedAt": "2026-07-11T02:08:05.728Z",
+  "score": 97,
+  "summary": {
+    "total": 161,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 66,
+    "info": 95
+  },
+  "findings": [
+    {
+      "id": "F-0515",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[9px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/workflowos/workflow-add-document-form.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0516",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/workflowos/workflow-client-list.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0517",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/workflowos/workflow-membership-manager.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0518",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/components/visuals/audit-trace-visual.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0519",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[9px], text-[10px], text-[8px], text-[9px]",
+      "files": [
+        "src/components/visuals/audit-trace-visual.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0520",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/components/visuals/custom-workflow-builder-visual.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0521",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[9px], text-[10px], text-[9px]",
+      "files": [
+        "src/components/visuals/custom-workflow-builder-visual.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0522",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/components/visuals/decision-matrix-visual.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0523",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/visuals/decision-matrix-visual.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0524",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/components/visuals/local-content-map-visual.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0525",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[9px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/visuals/local-content-map-visual.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0526",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/components/visuals/operating-system-map-visual.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0527",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[9px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/visuals/operating-system-map-visual.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0528",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/components/visuals/proof-chain-visual.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0529",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/components/visuals/sales-pipeline-visual.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0530",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[9px], text-[10px]",
+      "files": [
+        "src/components/visuals/sales-pipeline-visual.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0531",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/visuals/simulation-scenario-visual.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0532",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[11px], text-[11px], text-[10px], text-[11px], text-[11px]",
+      "files": [
+        "src/components/sales/commercial-recommendations-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0533",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/sales/cross-product-signal-strip.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0534",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/sales/executive-commercial-dashboard.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0535",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/sales/institutional-learning-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0536",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[10px], text-[11px]",
+      "files": [
+        "src/components/sales/knowledge-graph-explorer.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0537",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/sales/market-intelligence-view.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0538",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/sales/proof-asset-file-upload-scaffold.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0539",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[10px], text-[11px]",
+      "files": [
+        "src/components/sales/proof-network-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0540",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[11px], text-[11px], text-[11px], text-[11px]",
+      "files": [
+        "src/components/sales/strategic-recommendations-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0541",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[9px], text-[9px], text-[11px], text-[9px], text-[10px]",
+      "files": [
+        "src/components/platform/platform-sidebar.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0542",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/organization/organization-workspace.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0543",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/office-ai/output-actions.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0544",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/marketing/home-sections.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0545",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/marketing/v2/product-page-template.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0546",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[11px]",
+      "files": [
+        "src/components/marketing/v2/start-hub-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0547",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/local-content/evidence-file-upload-form.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0548",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Possible icon-only control without accessible name",
+      "evidence": "button/icon pattern without aria-label/sr-only in file",
+      "files": [
+        "src/components/local-content/local-content-delete-button.tsx"
+      ],
+      "category": "accessibility",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0549",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/local-content/verification-checklist-view.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0550",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[9px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/layout/site-footer.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0551",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/enterprise/aqliya-operating-map.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0552",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[9px]",
+      "files": [
+        "src/components/enterprise/brand-architecture-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0553",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[9px], text-[9px]",
+      "files": [
+        "src/components/enterprise/command-center-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0554",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/enterprise/product-proof-card.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0555",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/enterprise/solution-block.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0556",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/decisions/decision-dashboard.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0557",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/validation/validation-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0558",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/shared/traceability-drawer.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0559",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/review/review-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0560",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/recommendations/recommendations-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0561",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[9px], text-[9px], text-[9px], text-[11px]",
+      "files": [
+        "src/components/audit/pilot/pilot-demo-flow.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0562",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/pilot/pilot-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0563",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/notes/disclosure-auto-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0564",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[11px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/notes/notes-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0565",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/governance/ProvenanceSummary.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0566",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/findings/findings-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0567",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/factory-map/factory-mind-map.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0568",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/evidence/evidence-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0569",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/engagement/platform-context-card.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0570",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/audit-trail/audit-trail-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0571",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/approval/reviewer-signoff-chain-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0572",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/ai/ai-outputs-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0573",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Possible icon-only control without accessible name",
+      "evidence": "button/icon pattern without aria-label/sr-only in file",
+      "files": [
+        "src/components/audit/ai/ai-suggestion-panel.tsx"
+      ],
+      "category": "accessibility",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0574",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/ai/ai-suggestion-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0575",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/components/audit/admin/admin-users-page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0576",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/workflowos/templates/new/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0577",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/workflowos/records/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0578",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Possible icon-only control without accessible name",
+      "evidence": "button/icon pattern without aria-label/sr-only in file",
+      "files": [
+        "src/app/workflowos/records/[id]/page.tsx"
+      ],
+      "category": "accessibility",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0579",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/signup/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0580",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/settings/retention/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0581",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/settings/organization/advanced/events/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0582",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/settings/models/model-governance-client.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0583",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/settings/audit-bridge/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0584",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/settings/audit-bridge/logs/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0585",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/sales/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0586",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/sales/signals/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0587",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/sales/deals/[id]/pilot/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0588",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[9px], text-[10px]",
+      "files": [
+        "src/app/sales/audit-trail/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0589",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/sales/activities/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0590",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/risk/[id]/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0591",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/risk/assessments/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0592",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/published/recommendation/[decisionId]/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0593",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/office-ai/advanced/role-config/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0594",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/login/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0595",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/login/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0596",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/ai-insights-panel.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0597",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/ai-insights-panel.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0598",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/tb-import-dialog.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0599",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/workbook-detail-client.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0600",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Possible icon-only control without accessible name",
+      "evidence": "button/icon pattern without aria-label/sr-only in file",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "category": "accessibility",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0601",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0602",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/app/local-content/quality-dashboard/quality-dashboard-client.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0603",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[9px]",
+      "files": [
+        "src/app/local-content/quality-dashboard/quality-dashboard-client.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0604",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/local-content/projects/[projectId]/suppliers/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0605",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/local-content/projects/[projectId]/spend/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0606",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/local-content/projects/[projectId]/reports/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0607",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/local-content/projects/[projectId]/findings/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0608",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/local-content/projects/[projectId]/findings/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0609",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[9px], text-[10px], text-[11px]",
+      "files": [
+        "src/app/local-content/projects/[projectId]/evidence/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0610",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/local-content/projects/[projectId]/evidence/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0611",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/local-content/projects/[projectId]/classification/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0612",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[9px], text-[10px]",
+      "files": [
+        "src/app/local-content/projects/[projectId]/audit-trail/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0613",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/local-content/projects/[projectId]/audit-trail/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0614",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/invite/[token]/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0615",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Heavy inline style usage",
+      "evidence": "≥5 style={{...}} occurrences",
+      "files": [
+        "src/app/institutional-memory/graph/page.tsx"
+      ],
+      "category": "design-system",
+      "suggestion": "Prefer Tailwind tokens / shared UI primitives (shadcn).",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0616",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/institutional-memory/graph/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0617",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/institutional-memory/events/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0618",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/en/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0619",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/en/proof/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0620",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/en/products/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0621",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[11px], text-[9px], text-[10px]",
+      "files": [
+        "src/app/en/platform/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0622",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[9px]",
+      "files": [
+        "src/app/en/insights/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0623",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/en/insights/governance-over-intelligence/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0624",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/en/insights/assistant-vs-governed-intelligence/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0625",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/en/insights/ai-institutional-failures/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0626",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/en/industries/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0627",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[11px], text-[10px]",
+      "files": [
+        "src/app/en/governance/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0628",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/en/about/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0629",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/content-studio/workspace-create-dialog.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0630",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/content-studio/[workspaceId]/[contentId]/content-evidence-section.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0631",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/content-studio/[workspaceId]/[contentId]/content-lifecycle-actions.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0632",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/content-studio/[workspaceId]/[contentId]/edit/content-edit-form.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0633",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/content-studio/[workspaceId]/create/content-create-form.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0634",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Possible icon-only control without accessible name",
+      "evidence": "button/icon pattern without aria-label/sr-only in file",
+      "files": [
+        "src/app/contacts/[id]/page.tsx"
+      ],
+      "category": "accessibility",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0635",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/contacts/[id]/relations/new/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0636",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/contacts/[id]/interactions/new/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0637",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/auditos/demo-sidebar.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0638",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/auditos/traceability/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0639",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(marketing)/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0640",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[9px], text-[9px], text-[9px]",
+      "files": [
+        "src/app/(marketing)/use-cases/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0641",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(marketing)/proof/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0642",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(marketing)/products/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0643",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[11px]",
+      "files": [
+        "src/app/(marketing)/platform/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0644",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[9px]",
+      "files": [
+        "src/app/(marketing)/insights/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0645",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(marketing)/insights/governance-over-intelligence/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0646",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(marketing)/insights/assistant-vs-governed-intelligence/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0647",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(marketing)/insights/ai-institutional-failures/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0648",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(marketing)/industries/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0649",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[11px], text-[11px], text-[11px]",
+      "files": [
+        "src/app/(marketing)/governance/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0650",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(marketing)/about/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0651",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/settings/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0652",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/settings/sso/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0653",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/settings/mfa/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0654",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[11px], text-[11px], text-[10px]",
+      "files": [
+        "src/app/(dashboard)/settings/audit-logs/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0655",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[10px], text-[10px], text-[11px]",
+      "files": [
+        "src/app/(dashboard)/overview/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0656",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/organizations/create-button.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0657",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(dashboard)/notifications/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0658",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/notifications/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0659",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/knowledge-review/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0660",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/knowledge-foundation/history/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0661",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[11px], text-[10px]",
+      "files": [
+        "src/app/(dashboard)/intelligence/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0662",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/intelligence/sectors/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0663",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/intelligence/sectors/[id]/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0664",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[11px], text-[11px]",
+      "files": [
+        "src/app/(dashboard)/governance-hub/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0665",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(dashboard)/decisions/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0666",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/what-to-do/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0667",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/tender/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0668",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/signals/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0669",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/sector/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0670",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/report/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0671",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/alerts/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0672",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Large page without responsive breakpoint classes",
+      "evidence": "No sm:/md:/lg: utilities detected",
+      "files": [
+        "src/app/(dashboard)/decisions/gov/escalation-rules/page.tsx"
+      ],
+      "category": "responsive",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0673",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[9px], text-[9px], text-[11px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(dashboard)/assistant/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0674",
+      "agent": "ux-quality",
+      "severity": "low",
+      "title": "Possible icon-only control without accessible name",
+      "evidence": "button/icon pattern without aria-label/sr-only in file",
+      "files": [
+        "src/app/(dashboard)/assistant/[taskId]/page.tsx"
+      ],
+      "category": "accessibility",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0675",
+      "agent": "ux-quality",
+      "severity": "info",
+      "title": "Many arbitrary px Tailwind values",
+      "evidence": "text-[10px], text-[10px], text-[10px], text-[10px], text-[10px]",
+      "files": [
+        "src/app/(dashboard)/assistant/[taskId]/page.tsx"
+      ],
+      "category": "spacing-typography",
+      "suggestion": "",
+      "scoreImpact": 0
+    }
+  ],
+  "meta": {
+    "files": 1157,
+    "missingAlt": 0,
+    "darkModeHits": 178,
+    "hasDirRtl": true
+  }
+}

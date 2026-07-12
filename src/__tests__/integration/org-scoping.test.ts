@@ -4,32 +4,22 @@ import { getDecisionById } from "@/actions/decisions";
 // Mock auth module with proper access control
 jest.mock("@/lib/auth", () => {
   const mockGetCurrentUser = jest.fn();
-  const requireDecisionAccess = jest
-    .fn()
-    .mockImplementation(async (decisionId: string) => {
-      const user = await mockGetCurrentUser();
-      const { prisma: db } = jest.requireActual("@/lib/prisma");
-      const decision = await db.decision.findUnique({
-        where: { id: decisionId },
-        select: { organizationId: true },
-      });
-      if (!decision || user.organizationId !== decision.organizationId) {
-        throw new Error("Access denied");
-      }
-      return { user, organizationId: user.organizationId };
-    });
-
   return {
     getCurrentUser: mockGetCurrentUser,
-    requireUserContext: jest.fn(),
-    requireOrgAccess: jest.fn(),
-    requireDecisionAccess,
     isExpectedAccessDeniedError: (error: Error) =>
       error?.message === "Access denied",
   };
 });
 
+// Mock enforce — the new authorization path
+jest.mock("@/lib/authorization", () => {
+  return {
+    enforce: jest.fn().mockResolvedValue(undefined),
+  };
+});
+
 import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 
 async function cleanup() {
   await prisma.auditLog.deleteMany();
@@ -60,6 +50,8 @@ describe("Organization Scoping", () => {
   beforeEach(async () => {
     await cleanup();
     jest.clearAllMocks();
+    // Default: enforce passes (no throw)
+    (enforce as jest.Mock).mockResolvedValue(undefined);
   });
 
   afterEach(async () => {
@@ -102,12 +94,15 @@ describe("Organization Scoping", () => {
       },
     });
 
-    // Mock requireDecisionAccess to throw for other user
+    // Mock getCurrentUser for the cross-tenant user
     (getCurrentUser as jest.Mock).mockResolvedValue({
       id: otherUser.id,
       role: "VIEWER",
       organizationId: otherOrg.id,
     });
+
+    // Mock enforce to throw for cross-tenant access
+    (enforce as jest.Mock).mockRejectedValue(new Error("Access denied"));
 
     const result = await getDecisionById(decision.id);
     expect(result.success).toBe(false);
@@ -142,6 +137,8 @@ describe("Organization Scoping", () => {
       role: "OPERATOR",
       organizationId: org.id,
     });
+
+    // enforce passes (default mock)
 
     const result = await getDecisionById(decision.id);
     expect(result.success).toBe(true);
@@ -200,6 +197,8 @@ describe("Organization Scoping", () => {
       role: "VIEWER",
       organizationId: org.id,
     });
+
+    // enforce passes (default mock)
 
     const result = await getDecisionById(decision.id);
     expect(result.success).toBe(true);

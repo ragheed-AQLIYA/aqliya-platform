@@ -1,6 +1,9 @@
 ---
 name: aqliya-product-completion
-description: Product completion discipline for AQLIYA. Enforces end-to-end flows, CRUD, dashboards, evidence, exports, review/approval, audit logs, and QA before calling a product done.
+description: Product completion enforcement — v0.1 Definition of Done, completion levels, workflow gates
+version: 2.0
+date: 2026-07-12
+status: active
 ---
 
 # AQLIYA Product Completion Skill

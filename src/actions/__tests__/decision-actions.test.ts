@@ -42,16 +42,19 @@ jest.mock("@/lib/decision", () => ({
 }));
 
 const mockGetCurrentUser = jest.fn();
-const mockRequireDecisionAccess = jest.fn();
+const mockEnforce = jest.fn();
 
 jest.mock("@/lib/auth", () => ({
-  getCurrentUser: mockGetCurrentUser,
-  requireUserContext: mockGetCurrentUser,
-  requireDecisionAccess: mockRequireDecisionAccess,
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
+  hasRequiredRole: jest.fn().mockReturnValue(true),
   isExpectedAccessDeniedError: jest.fn((error) =>
     error instanceof Error &&
     (error.message.startsWith("Access denied:") || error.message === "Unauthenticated")
   ),
+}));
+
+jest.mock("@/lib/authorization", () => ({
+  enforce: mockEnforce,
 }));
 
 jest.mock("@/lib/decision/decision-audit", () => ({
@@ -278,7 +281,9 @@ const base64Content = Buffer.from("mock file content").toString("base64");
 beforeEach(() => {
   jest.clearAllMocks();
   mockGetCurrentUser.mockResolvedValue(mockUser);
-  mockRequireDecisionAccess.mockResolvedValue({ user: mockUser, organizationId: "org-1" });
+  mockEnforce.mockResolvedValue(undefined);
+  // Default: decision lookup returns the mock decision (for functions that now do explicit findUnique)
+  mockDecisionFindUnique.mockResolvedValue(mockDecision);
 });
 
 describe("createDecision", () => {
@@ -408,7 +413,8 @@ describe("getDecisionById", () => {
       expect(result.data.id).toBe("decision-1");
       expect(result.data.title).toBe("قرار استثماري استراتيجي");
     }
-    expect(mockRequireDecisionAccess).toHaveBeenCalledWith("decision-1", "VIEWER");
+    expect(mockGetCurrentUser).toHaveBeenCalled();
+    expect(mockEnforce).toHaveBeenCalledWith(mockUser, { type: "decision", id: "decision-1", tenantId: "org-1" }, "read");
   });
 
   it("returns error for non-existent decision", async () => {
@@ -423,7 +429,7 @@ describe("getDecisionById", () => {
   });
 
   it("handles unauthorized access", async () => {
-    mockRequireDecisionAccess.mockRejectedValue(new Error("Access denied: VIEWER role required"));
+    mockEnforce.mockRejectedValue(new Error("Access denied: VIEWER role required"));
 
     const result = await getDecisionById("decision-1");
 
@@ -450,7 +456,7 @@ describe("updateDecisionStatus", () => {
   });
 
   it("handles unauthorized status update", async () => {
-    mockRequireDecisionAccess.mockRejectedValue(new Error("Access denied: OPERATOR role required"));
+    mockEnforce.mockRejectedValue(new Error("Access denied: OPERATOR role required"));
 
     const result = await updateDecisionStatus("decision-1", "APPROVED");
 
@@ -486,6 +492,7 @@ describe("getDecisionFramework", () => {
       expect(result.data.intake).toBeDefined();
       expect(result.data.frameworkState).toBeDefined();
     }
+    expect(mockEnforce).toHaveBeenCalledWith(mockUser, { type: "decision", id: "decision-1", tenantId: "org-1" }, "read");
   });
 
   it("returns error when decision not found", async () => {
@@ -692,6 +699,8 @@ describe("exportDecisionReport", () => {
       expect(result.mimeType).toBe("application/pdf");
       expect(result.filename).toBe("decision-report.pdf");
     }
+    expect(mockEnforce).toHaveBeenCalledWith(mockUser, { type: "decision", id: "decision-1", tenantId: "org-1" }, "update");
+    expect(mockEnforce).toHaveBeenCalledWith(mockUser, { type: "decision", id: "decision-1", tenantId: "org-1" }, "export");
     expect(logAudit).toHaveBeenCalled();
   });
 
@@ -711,6 +720,7 @@ describe("exportDecisionReport", () => {
       ...mockDecision,
       organizationId: "org-other",
     });
+    mockEnforce.mockRejectedValue(new Error("Access denied: tenant mismatch"));
 
     const result = await exportDecisionReport("decision-1");
 

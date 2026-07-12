@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { ClientAcceptanceDashboard } from "@/components/audit/acceptance/client-acceptance-dashboard";
+import { LoadingState } from "@/components/ui/loading-state";
 
 export default function AcceptancePage() {
   return (
@@ -9,7 +11,9 @@ export default function AcceptancePage() {
           إدارة العملاء المحتملين، فحص العناية الواجبة، تقييم المخاطر، وقرارات القبول
         </p>
       </div>
-      <ClientAcceptanceDashboard auditOrganizationId="" />
+      <Suspense fallback={<LoadingState message="جاري تحميل نظام القبول..." />}>
+        <ClientAcceptanceDashboard auditOrganizationId="" />
+      </Suspense>
     </div>
   );
 }

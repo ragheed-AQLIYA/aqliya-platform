@@ -1,0 +1,91 @@
+﻿name: Deploy Staging
+
+on:
+  push:
+    branches: [develop, staging]
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ${{ vars.STAGING_AWS_REGION || 'eu-north-1' }}
+  ECR_REPOSITORY: ${{ vars.STAGING_ECR_REPOSITORY || 'aqliya/staging/app' }}
+  ECS_CLUSTER: ${{ vars.STAGING_ECS_CLUSTER || 'aqliya-staging-cluster' }}
+  ECS_SERVICE: ${{ vars.STAGING_ECS_SERVICE || 'aqliya-staging-service' }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test-and-deploy:
+    name: Test & Deploy to Staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint -- --quiet || true
+
+      - name: Run tests
+        run: npm test -- --passWithNoTests
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.STAGING_AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+        if: github.ref == 'refs/heads/staging'
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        if: github.ref == 'refs/heads/staging'
+
+      - name: Build & tag image
+        run: |
+          docker build -t $ECR_REPOSITORY:${{ github.sha }} .
+          docker tag $ECR_REPOSITORY:${{ github.sha }} $ECR_REPOSITORY:latest
+        if: github.ref == 'refs/heads/staging'
+
+      - name: Push to ECR
+        run: |
+          docker push $ECR_REPOSITORY:${{ github.sha }}
+          docker push $ECR_REPOSITORY:latest
+        if: github.ref == 'refs/heads/staging'
+
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
+            --force-new-deployment
+        if: github.ref == 'refs/heads/staging'
+
+      - name: Wait for service stable
+        run: |
+          aws ecs wait services-stable \
+            --cluster $ECS_CLUSTER \
+            --services $ECS_SERVICE
+        if: github.ref == 'refs/heads/staging'
+
+      - name: Smoke test
+        env:
+          BASE_URL: ${{ vars.STAGING_BASE_URL || 'https://staging.aqliya.com' }}
+        run: |
+          sleep 10
+          curl -sf "${{ env.BASE_URL }}/api/health" | jq '.status' | grep ok
+          curl -sf "${{ env.BASE_URL }}/" > /dev/null

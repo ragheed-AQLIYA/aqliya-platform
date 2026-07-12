@@ -1,0 +1,36 @@
+- generic [active] [ref=f2e1]:
+  - link "تخطي إلى المحتوى الرئيسي" [ref=f2e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=f2e3]:
+    - generic [ref=f2e4]:
+      - generic [ref=f2e5]:
+        - generic [ref=f2e6]: إنشاء منشأة مؤسسية جديدة
+        - generic [ref=f2e7]: أنشئ مساحة العمل المؤسسية المحكومة الخاصة بمنشأتك.
+      - generic [ref=f2e8]:
+        - generic [ref=f2e9]:
+          - generic [ref=f2e10]:
+            - generic [ref=f2e11]: اسم المنشأة
+            - textbox "اسم المنشأة" [ref=f2e12]:
+              - /placeholder: "مثال: شركة التقنية المتطورة"
+          - generic [ref=f2e13]:
+            - generic [ref=f2e14]: اسم المدير
+            - textbox "اسم المدير" [ref=f2e15]:
+              - /placeholder: الاسم الكامل
+          - generic [ref=f2e16]:
+            - generic [ref=f2e17]: البريد الإلكتروني
+            - textbox "البريد الإلكتروني" [ref=f2e18]:
+              - /placeholder: admin@example.com
+          - generic [ref=f2e19]:
+            - generic [ref=f2e20]: كلمة المرور
+            - textbox "كلمة المرور" [ref=f2e21]:
+              - /placeholder: 8 أحرف على الأقل
+          - generic [ref=f2e22]:
+            - generic [ref=f2e23]: تأكيد كلمة المرور
+            - textbox "تأكيد كلمة المرور" [ref=f2e24]:
+              - /placeholder: أعد إدخال كلمة المرور
+          - button "إنشاء المنشأة" [ref=f2e25]
+        - paragraph [ref=f2e26]:
+          - text: لديك حساب بالفعل؟
+          - link "تسجيل الدخول" [ref=f2e27] [cursor=pointer]:
+            - /url: /login
+  - alert [ref=f2e28]

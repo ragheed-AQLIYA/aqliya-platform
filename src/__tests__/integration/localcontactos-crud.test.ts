@@ -6,7 +6,6 @@ jest.mock("next/cache", () => ({ revalidatePath: jest.fn() }));
 
 const mockGetCurrentUser = jest.fn();
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: mockGetCurrentUser,
   getCurrentUser: mockGetCurrentUser,
   isExpectedAccessDeniedError: jest.fn().mockReturnValue(false),
 }));

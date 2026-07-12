@@ -1,10 +1,11 @@
 "use server";
 
 import crypto from "crypto";
+import { validateFileContent } from "@/lib/security/file-validation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { isScanRejected, scanEvidenceFile } from "@/lib/audit/file-scanner";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { notifyOnEvent } from "@/lib/platform/notification/integration";
@@ -89,28 +90,24 @@ import {
   ResourceType,
   PlatformRole,
 } from "@/actions/localcontent-rbac";
+import { type ActionResult, safe as _safe, ok, fail } from "@/lib/platform/action-result";
+import type { ErrorCode } from "@/lib/platform/action-result";
 
-// ─── Result types ───
+// ─── Domain error mapper ───
 
-type ActionResult<T> =
-  | { ok: true; data: T }
-  | { ok: false; error: string; code?: string };
-
-async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
-  try {
-    const data = await fn();
-    return { ok: true, data };
-  } catch (error) {
-    if (error instanceof ProjectAccessError) {
-      return { ok: false, error: error.message, code: error.code };
-    }
-    if (isExpectedAccessDeniedError(error)) {
-      return { ok: false, error: "Access denied", code: "FORBIDDEN" };
-    }
-    const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[LocalContentOS Action]", message);
-    return { ok: false, error: message };
+function mapLocalContentError(error: unknown): { code: ErrorCode; message: string } | null {
+  if (error instanceof ProjectAccessError) {
+    return { code: (error.code as ErrorCode) ?? "FORBIDDEN", message: error.message };
   }
+  if (isExpectedAccessDeniedError(error)) {
+    return { code: "FORBIDDEN", message: "Access denied" };
+  }
+  return null;
+}
+
+/** File-local safe wrapper with LocalContentOS error mapping */
+async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
+  return _safe(fn, { mapError: mapLocalContentError, defaultCode: "INTERNAL_ERROR" });
 }
 
 // ─── Platform audit helper ───
@@ -165,7 +162,7 @@ export async function listLocalContentProjectsAction(): Promise<
   ActionResult<Awaited<ReturnType<typeof listProjectsByOrganization>>>
 > {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     await requirePermission(Permission.PROJECT_MANAGEMENT, ResourceType.PROJECT);
     return listProjectsByOrganization(user.organizationId);
   });
@@ -175,7 +172,7 @@ export async function getLocalContentSpendAnalyticsAction(): Promise<
   ActionResult<Awaited<ReturnType<typeof getOrganizationSpendAnalytics>>>
 > {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
     return getOrganizationSpendAnalytics(user.organizationId);
   });
@@ -185,7 +182,7 @@ export async function getLocalContentClassificationRulesAction(): Promise<
   ActionResult<Awaited<ReturnType<typeof getOrganizationClassificationRules>>>
 > {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     await requirePermission(Permission.CLASSIFICATION_MANAGEMENT, ResourceType.CLASSIFICATION_RULE);
     return getOrganizationClassificationRules(user.organizationId);
   });
@@ -197,7 +194,7 @@ export async function getLocalContentTenderMatchAction(
   ActionResult<Awaited<ReturnType<typeof getProjectTenderMatchReport>>>
 > {
   return safe(async () => {
-    const _user = await requireUserContext("VIEWER");
+    const _user = await getCurrentUser();
     await assertProjectAccess(projectId, "view");
     await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
     return getProjectTenderMatchReport(projectId);
@@ -304,7 +301,7 @@ export async function createLocalContentProjectAction(
   const { name, reportingPeriod, scopeDescription } = parsed.data;
 
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     await requireRole(PlatformRole.ORG_ADMIN);
 
     const project = await createProject({
@@ -937,6 +934,13 @@ export async function uploadLocalContentEvidenceFileAction(
       fileHash = crypto.createHash("sha256").update(buffer).digest("hex");
       sizeBytes = buffer.length;
       mimeType = file.type || "application/octet-stream";
+
+      // Validate file content matches its claimed extension (magic bytes check)
+      const lcosExtension = resolvedFilename.split(".").pop()?.toLowerCase() || "pdf";
+      const lcosMagicValidation = validateFileContent(buffer, lcosExtension);
+      if (!lcosMagicValidation.valid) {
+        throw new Error(lcosMagicValidation.error || "File content does not match its claimed extension");
+      }
 
       // SC-02: file scanning — infrastructure exists, now wired for LCOS
       const scanResult = await scanEvidenceFile({

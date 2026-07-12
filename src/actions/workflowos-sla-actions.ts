@@ -1,13 +1,12 @@
 "use server";
 
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 
 export async function checkSlaStatus(organizationId: string) {
   try {
-    const user = await requireUserContext();
-    if (user.organizationId !== organizationId) {
-      return { success: false, error: "لا تملك صلاحية الوصول" };
-    }
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
 
     const { getThroughputMetrics, getSLACompliance, getStepBreakdown, getDailyThroughput } =
       await import("@/lib/workflowos/analytics-service");

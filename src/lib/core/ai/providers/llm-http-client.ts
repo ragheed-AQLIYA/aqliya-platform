@@ -1,5 +1,8 @@
-/**
+﻿/**
  * Shared HTTP completion helpers for cloud LLM providers (OpenAI-compatible + Anthropic).
+ * 
+ * Timeout policy: All fetch() calls use AbortSignal.timeout(30_000) (30 seconds).
+ * Timeouts are caught and surfaced as user-friendly errors — never crash the process.
  */
 
 import type {
@@ -9,6 +12,8 @@ import type {
   AIResponse,
   AIProviderId,
 } from "@/lib/core/ai/types";
+
+const LLM_HTTP_TIMEOUT_MS = 30_000; // 30 seconds — shared across all LLM provider HTTP calls
 
 export async function openAiCompatibleComplete(
   apiKey: string,
@@ -22,19 +27,29 @@ export async function openAiCompatibleComplete(
     ? [{ role: "system" as const, content: request.systemPrompt }, ...request.messages]
     : request.messages;
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      messages,
-      temperature: request.temperature ?? 0.2,
-      max_tokens: request.maxTokens ?? 2048,
-    }),
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: request.temperature ?? 0.2,
+        max_tokens: request.maxTokens ?? 2048,
+      }),
+      signal: AbortSignal.timeout(LLM_HTTP_TIMEOUT_MS),
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      console.error(`[${providerLabel}] Request timed out after ${LLM_HTTP_TIMEOUT_MS}ms to ${url}`);
+      throw new Error(`${providerLabel} API request timed out after ${LLM_HTTP_TIMEOUT_MS / 1000}s. Please try again or contact support.`);
+    }
+    throw err;
+  }
 
   if (!res.ok) {
     const errText = await res.text().catch(() => res.statusText);
@@ -68,21 +83,32 @@ export async function anthropicComplete(
   request: AICompletionRequest,
 ): Promise<AICompletionResponse> {
   const url = `${baseUrl.replace(/\/$/, "")}/v1/messages`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      max_tokens: request.maxTokens ?? 2048,
-      system: request.systemPrompt,
-      messages: request.messages.filter((m) => m.role !== "system"),
-      temperature: request.temperature ?? 0.2,
-    }),
-  });
+
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: request.maxTokens ?? 2048,
+        system: request.systemPrompt,
+        messages: request.messages.filter((m) => m.role !== "system"),
+        temperature: request.temperature ?? 0.2,
+      }),
+      signal: AbortSignal.timeout(LLM_HTTP_TIMEOUT_MS),
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      console.error(`[anthropic] Request timed out after ${LLM_HTTP_TIMEOUT_MS}ms to ${url}`);
+      throw new Error(`Anthropic API request timed out after ${LLM_HTTP_TIMEOUT_MS / 1000}s. Please try again or contact support.`);
+    }
+    throw err;
+  }
 
   if (!res.ok) {
     const errText = await res.text().catch(() => res.statusText);
@@ -125,14 +151,25 @@ export function aiRequestToCompletion(request: AIRequest): AICompletionRequest {
   };
 }
 
+/**
+ * Basic heuristic confidence based on output content length.
+ * Full confidence scoring requires the governed metadata layer
+ * (sourceCount, hasAllRequiredFields, responseTimeMs, etc.) via calculateConfidence().
+ */
+function heuristicConfidence(content: string): number {
+  if (!content || content.length === 0) return 0.25
+  if (content.length < 50) return 0.50
+  if (content.length < 100) return 0.70
+  return 0.85
+}
+
 export function completionToAiResponse(
   completion: AICompletionResponse,
   providerId: AIProviderId,
-  confidence = 0.75,
 ): AIResponse {
   return {
     output: completion.content,
-    confidence,
+    confidence: heuristicConfidence(completion.content),
     providerId,
     modelVersion: `${completion.provider}/${completion.model}`,
     tokenUsage: {

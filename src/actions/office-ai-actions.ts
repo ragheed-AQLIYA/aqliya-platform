@@ -1,9 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { createHash } from "crypto";
+import { validateFileContent } from "@/lib/security/file-validation";
 import { getStorageProvider } from "@/lib/platform/storage";
 import {
   createOfficeAiTask,
@@ -49,7 +50,10 @@ function formatFileError(msg: string): never {
 export async function createOfficeAiTaskAction(
   formData: FormData,
 ): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
 
   const platformOrganizationId = user.platformOrganizationId;
   if (!platformOrganizationId) {
@@ -86,7 +90,10 @@ export async function updateOfficeAiTaskStatusAction(
   taskId: string,
   status: string,
 ): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
 
   const task = await prisma.officeAiTask.findUnique({
     where: { id: taskId },
@@ -128,7 +135,10 @@ export async function rejectOfficeAiTaskAction(taskId: string): Promise<void> {
 export async function generateOfficeAiOutputAction(
   taskId: string,
 ): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
 
   const task = await prisma.officeAiTask.findUnique({
     where: { id: taskId },
@@ -162,7 +172,10 @@ export async function addOfficeAiFileAction(
   taskId: string,
   formData: FormData,
 ): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
 
   const task = await prisma.officeAiTask.findUnique({
     where: { id: taskId },
@@ -244,6 +257,14 @@ export async function addOfficeAiFileAction(
       const buffer = Buffer.from(await fileField!.arrayBuffer());
       fileHash = createHash("sha256").update(buffer).digest("hex");
       finalSize = buffer.length;
+
+      // Validate file content matches its claimed extension (magic bytes check)
+      const oaiExtension = filename.split(".").pop()?.toLowerCase() || "";
+      const oaiMagicValidation = validateFileContent(buffer, oaiExtension);
+      if (!oaiMagicValidation.valid) {
+        formatFileError(oaiMagicValidation.error || "File content does not match its claimed extension");
+      }
+
       storageKey = `office-ai/${taskId}/${Date.now()}-${filename.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
       const provider = getStorageProvider();
       await provider.store(storageKey, {
@@ -277,7 +298,10 @@ export async function addOfficeAiFileAction(
 }
 
 export async function removeOfficeAiFileAction(fileId: string): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
 
   const file = await prisma.officeAiFile.findUnique({
     where: { id: fileId },
@@ -320,7 +344,10 @@ export async function updateOfficeAiTaskAction(
   taskId: string,
   formData: FormData,
 ): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
 
   const task = await prisma.officeAiTask.findUnique({
     where: { id: taskId },
@@ -365,7 +392,10 @@ export async function updateOfficeAiOutputAction(
   outputId: string,
   formData: FormData,
 ): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
   const { updateOfficeAiOutputContent } =
     await import("@/lib/office-ai/office-ai-task-service");
 
@@ -398,7 +428,10 @@ export async function updateOfficeAiOutputAction(
 }
 
 export async function archiveOfficeAiTaskAction(taskId: string): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
   const { archiveOfficeAiTask } =
     await import("@/lib/office-ai/office-ai-task-service");
 
@@ -426,7 +459,10 @@ export async function archiveOfficeAiTaskAction(taskId: string): Promise<void> {
 }
 
 export async function reExtractFileAction(fileId: string): Promise<void> {
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+if (!hasRequiredRole(user, "VIEWER")) {
+  throw new Error("Access denied: VIEWER role required");
+}
   const { reExtractFileContent } =
     await import("@/lib/office-ai/file-extraction-service");
 

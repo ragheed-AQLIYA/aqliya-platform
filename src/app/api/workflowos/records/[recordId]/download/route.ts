@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { buildExportMetadata } from "@/lib/platform/production-export";
 import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
@@ -11,7 +12,8 @@ export async function GET(
 ) {
   try {
     const { recordId } = await params;
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
+    await enforce(user, { type: "record", id: recordId, tenantId: user.organizationId }, "export");
 
     const record = await prisma.workflowRecord.findUnique({
       where: { id: recordId },

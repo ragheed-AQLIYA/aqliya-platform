@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import * as erp from "@/lib/local-content/erp/services";
 
 
@@ -24,7 +24,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
 }
 
 async function _getUserOrg() {
-  const user = await requireUserContext("OPERATOR");
+  const user = await getCurrentUser();
   return {
     id: user.id,
     name: user.name,
@@ -39,7 +39,7 @@ export async function listErpConnectionsAction(): Promise<
   ActionResult<Awaited<ReturnType<typeof erp.listErpConnections>>>
 > {
   return safe(async () => {
-    const { organizationId } = await requireUserContext("VIEWER");
+    const { organizationId } = await getCurrentUser();
     return erp.listErpConnections(organizationId);
   });
 }
@@ -48,7 +48,7 @@ export async function getErpConnectionAction(
   connectionId: string,
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.getErpConnection>>>> {
   return safe(async () => {
-    const { organizationId } = await requireUserContext("VIEWER");
+    const { organizationId } = await getCurrentUser();
     return erp.getErpConnection(connectionId, organizationId);
   });
 }
@@ -72,7 +72,7 @@ export async function createErpConnectionAction(
   },
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.createErpConnection>>>> {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     const conn = await erp.createErpConnection({
       organizationId: user.organizationId,
       ...data,
@@ -103,7 +103,7 @@ export async function updateErpConnectionAction(
   },
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.updateErpConnection>>>> {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     const conn = await erp.updateErpConnection(connectionId, user.organizationId, {
       ...data,
       actorId: user.id,
@@ -118,7 +118,7 @@ export async function deleteErpConnectionAction(
   connectionId: string,
 ): Promise<ActionResult<void>> {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     await erp.deleteErpConnection(connectionId, user.organizationId, {
       id: user.id,
       name: user.name,
@@ -131,7 +131,7 @@ export async function testErpConnectionAction(
   connectionId: string,
 ): Promise<ActionResult<{ success: boolean; message: string }>> {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const result = await erp.testErpConnection(connectionId, user.organizationId, {
       id: user.id,
       name: user.name,
@@ -145,7 +145,7 @@ export async function toggleSyncAction(
   enabled: boolean,
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.toggleSync>>>> {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     const result = await erp.toggleSync(connectionId, user.organizationId, enabled, {
       id: user.id,
       name: user.name,
@@ -159,7 +159,7 @@ export async function triggerImportAction(
   connectionId: string,
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.triggerImport>>>> {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const result = await erp.triggerImport(connectionId, user.organizationId, {
       id: user.id,
       name: user.name,
@@ -178,7 +178,7 @@ export async function listImportBatchesAction(
   ActionResult<Awaited<ReturnType<typeof erp.listImportBatches>>>
 > {
   return safe(async () => {
-    const { organizationId } = await requireUserContext("VIEWER");
+    const { organizationId } = await getCurrentUser();
     return erp.listImportBatches(connectionId, organizationId, status);
   });
 }
@@ -187,7 +187,7 @@ export async function getImportBatchAction(
   batchId: string,
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.getImportBatch>>>> {
   return safe(async () => {
-    const { organizationId } = await requireUserContext("VIEWER");
+    const { organizationId } = await getCurrentUser();
     return erp.getImportBatch(batchId, organizationId);
   });
 }
@@ -196,7 +196,7 @@ export async function approveImportBatchAction(
   batchId: string,
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.approveImportBatch>>>> {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     const result = await erp.approveImportBatch(batchId, user.organizationId, {
       id: user.id,
       name: user.name,
@@ -211,7 +211,7 @@ export async function rejectImportBatchAction(
   reason?: string,
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.rejectImportBatch>>>> {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     const result = await erp.rejectImportBatch(batchId, user.organizationId, {
       id: user.id,
       name: user.name,
@@ -228,7 +228,7 @@ export async function listSyncLogsAction(
   limit = 20,
 ): Promise<ActionResult<Awaited<ReturnType<typeof erp.listSyncLogs>>>> {
   return safe(async () => {
-    const { organizationId } = await requireUserContext("VIEWER");
+    const { organizationId } = await getCurrentUser();
     return erp.listSyncLogs(connectionId, organizationId, limit);
   });
 }

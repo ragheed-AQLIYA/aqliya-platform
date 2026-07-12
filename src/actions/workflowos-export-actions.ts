@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { revalidatePath } from "next/cache";
 import {
   notifyExportRequested,
@@ -18,13 +19,12 @@ function mapAuthError(error: unknown): string {
 }
 
 async function assertRecordAccess(recordId: string) {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const record = await prisma.workflowRecord.findUnique({
     where: { id: recordId },
   });
   if (!record) throw new Error("السجل غير موجود");
-  if (record.organizationId !== user.organizationId)
-    throw new Error("Access denied: record belongs to a different organization");
+  await enforce(user, { type: "organization", id: record.organizationId, tenantId: record.organizationId }, "update");
   return { user, record };
 }
 
@@ -314,7 +314,8 @@ export async function getWorkflowExportStatus(recordId: string) {
 
 export async function getCurrentUserPendingExportCount() {
   try {
-    const user = await import("@/lib/auth").then((m) => m.requireUserContext());
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: user.organizationId, tenantId: user.organizationId }, "update");
     const count = await prisma.workflowRecord.count({
       where: {
         organizationId: user.organizationId,
@@ -343,9 +344,8 @@ export async function getCurrentUserPendingExportCount() {
 
 export async function getPendingExportRequests(organizationId: string) {
   try {
-    const user = await requireUserContext();
-    if (user.organizationId !== organizationId)
-      return { success: false, error: "Access denied" };
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
 
     const records = await prisma.workflowRecord.findMany({
       where: {

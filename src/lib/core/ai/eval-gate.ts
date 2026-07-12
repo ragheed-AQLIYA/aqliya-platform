@@ -2,6 +2,7 @@ import "server-only"
 import { runSuite, reportRequiresAttention } from "@/lib/core/ai/eval/eval-runner"
 import { getSuiteById } from "@/lib/core/ai/eval/suites"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
+import { calculateConfidence, type ConfidenceInput, type ConfidenceScore } from "@/lib/core/ai/confidence-scorer"
 
 export interface EvalGateResult {
   passed: boolean
@@ -118,3 +119,90 @@ export async function runEvalGate(
 export const AIEvalGate = {
   evaluate: runEvalGate,
 };
+
+// ── Content-based eval gate (complements suite-based evaluateWithGate) ──
+
+export interface EvalGateInput {
+  content: string
+  minLength?: number
+  requiredKeywords?: string[]
+  forbiddenPatterns?: RegExp[]
+  requiredFields?: string[]
+}
+
+export interface EvalGateResultContent {
+  passed: boolean
+  reasons: string[]
+  warnings: string[]
+}
+
+export async function evalGate(input: EvalGateInput): Promise<EvalGateResultContent> {
+  const reasons: string[] = []
+  const warnings: string[] = []
+
+  if (input.minLength && input.content.length < input.minLength) {
+    reasons.push(`Content too short (${input.content.length} < ${input.minLength})`)
+  }
+
+  if (input.requiredKeywords) {
+    const missingKeywords = input.requiredKeywords.filter(
+      (kw) => !input.content.toLowerCase().includes(kw.toLowerCase()),
+    )
+    if (missingKeywords.length > 0) {
+      warnings.push(`Missing keywords: ${missingKeywords.join(", ")}`)
+    }
+  }
+
+  if (input.forbiddenPatterns) {
+    for (const pattern of input.forbiddenPatterns) {
+      if (pattern.test(input.content)) {
+        warnings.push(`Contains forbidden pattern: ${pattern}`)
+      }
+    }
+  }
+
+  if (input.requiredFields) {
+    for (const field of input.requiredFields) {
+      const fieldPattern = new RegExp(`["']?${field}["']?\\s*[:]`, "i")
+      if (!fieldPattern.test(input.content)) {
+        warnings.push(`Missing required field: ${field}`)
+      }
+    }
+  }
+
+  return {
+    passed: reasons.length === 0,
+    reasons,
+    warnings,
+  }
+}
+
+// ── Confidence threshold checking ──
+
+export interface ConfidenceGateInput extends ConfidenceInput {
+  minConfidence?: number
+}
+
+export interface ConfidenceGateResult {
+  passed: boolean
+  confidence: ConfidenceScore
+  minThreshold: number
+}
+
+export function checkConfidenceThreshold(input: ConfidenceGateInput): ConfidenceGateResult {
+  const confidence = calculateConfidence(input)
+  const minThreshold = input.minConfidence ?? 0.5
+
+  return {
+    passed: confidence.score >= minThreshold,
+    confidence,
+    minThreshold,
+  }
+}
+
+export function suggestThresholdForModel(modelProvider: string | undefined): number {
+  if (modelProvider?.includes("claude-4") || modelProvider?.includes("claude-opus")) return 0.6
+  if (modelProvider?.includes("claude-sonnet") || modelProvider?.includes("gpt-4")) return 0.55
+  if (modelProvider?.includes("gemini")) return 0.5
+  return 0.45
+}

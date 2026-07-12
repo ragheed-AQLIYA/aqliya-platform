@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getAIGovernanceMetrics } from "@/lib/core/ai/governance-metrics"
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 
 export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {
   try {
-    await requireUserContext("ADMIN")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const { searchParams } = new URL(request.url)
     const days = parseInt(searchParams.get("days") ?? "30", 10)
     const metrics = await getAIGovernanceMetrics(days)

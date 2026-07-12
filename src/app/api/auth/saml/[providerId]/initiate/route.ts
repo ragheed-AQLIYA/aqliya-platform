@@ -30,7 +30,22 @@ export async function GET(
   });
 
   if (!provider) {
-    return NextResponse.json({ error: "SAML provider not found" }, { status: 404 });
+    // Return uniform redirect for both missing providers and invalid configs
+    // to prevent ID enumeration (information disclosure).
+    console.warn(
+      `[SAML] Provider not found or disabled: ${providerId}`,
+    );
+    await writePlatformAuditLog({
+      productKey: "platform",
+      action: "sso.saml.initiate.not_found",
+      targetType: "SsoProvider",
+      targetId: providerId,
+      severity: "warning",
+      metadata: { reason: "Provider not found or disabled" },
+    });
+    return NextResponse.redirect(
+      new URL(`/login?error=saml`, req.nextUrl.origin),
+    );
   }
 
   const samlProvider = {
@@ -75,7 +90,7 @@ export async function GET(
 
     return NextResponse.redirect(
       new URL(
-        `/login?error=SamlConfigError`,
+        `/login?error=saml`,
         req.nextUrl.origin,
       ),
     );

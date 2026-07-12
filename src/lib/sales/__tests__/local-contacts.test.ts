@@ -55,12 +55,13 @@ import {
   exportContactProfile,
 } from "@/actions/contact-actions";
 
+const mockGetCurrentUser = jest.fn();
+
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: jest.fn(),
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
+  hasRequiredRole: jest.fn().mockReturnValue(true),
   isExpectedAccessDeniedError: jest.fn(() => false),
 }));
-
-import { requireUserContext } from "@/lib/auth";
 
 const MOCK_USER = {
   id: "user-1",
@@ -127,7 +128,7 @@ const BASE_INTERACTION = {
 describe("LocalContactOS actions", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (requireUserContext as jest.Mock).mockResolvedValue(MOCK_USER);
+    mockGetCurrentUser.mockResolvedValue(MOCK_USER);
   });
 
   describe("createContact", () => {

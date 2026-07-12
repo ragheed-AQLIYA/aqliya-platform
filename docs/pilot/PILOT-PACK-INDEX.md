@@ -1,4 +1,4 @@
-# Pilot Pack Navigation Index
+﻿# Pilot Pack Navigation Index
 
 **Date:** 2026-06-01  
 **Purpose:** Canonical map of AuditOS and LocalContentOS pilot pack trees. Resolves Category C3 duplicate-tree confusion without deleting content.
@@ -13,7 +13,7 @@
 | [`docs/pilot/execution-pack/`](./execution-pack/) | **Primary operational execution pack** | After customer agrees — TB intake, demo walkthrough, QA checklists, feedback, post-pilot review |
 | [`docs/pilot/`](../pilot/) (root files) | **Governance and readiness** | Scope, go/no-go, risk disclosure, controlled execution, session reports |
 | [`docs/archive/commercial-legacy/pilot-pack/`](../archive/commercial-legacy/pilot-pack/) | **Archived legacy commercial pack** | Historical reference only — do not use for live pilots |
-| [`docs/products/auditos-commercial-master-index.md`](../products/auditos-commercial-master-index.md) | **AuditOS commercial navigation hub** | Start here for full AuditOS commercial doc map |
+| [`docs/products/README.md`](../products/README.md) | **Product documentation index** — start here for product documentation map |
 
 ### Overlap guidance (AuditOS)
 
@@ -27,9 +27,9 @@
 
 | Tree | Role |
 |------|------|
-| [`docs/products/localcontentos-v0.1/pilot-onboarding-pack/`](../products/localcontentos-v0.1/pilot-onboarding-pack/) | **Primary LocalContentOS pilot pack** — scope, demo script, safe claims, closeout |
-| [`docs/products/localcontentos-pilot-runbook/`](../products/localcontentos-pilot-runbook/) | Operating runbook (analyst-led procedures) |
-| [`docs/products/localcontentos-sales-pack/`](../products/localcontentos-sales-pack/) | **Superseded** pre-software sales framing — use pilot-onboarding-pack for live demos |
+| [`docs/runbooks/localcontentos-operator-guide.md`](../runbooks/localcontentos-operator-guide.md) | **LocalContentOS operator guide** — routes, workflows, config, troubleshooting |
+| [`docs/runbooks/localcontentos-deployment-runbook.md`](../runbooks/localcontentos-deployment-runbook.md) | Operating runbook — deployment and operational procedures |
+| [`docs/products/README.md`](../products/README.md) | **LocalContentOS** — see product documentation index for current docs (sales pack was superseded) |
 
 LocalContentOS packs are **not** duplicates of AuditOS commercial-pack; they cover a different product workspace at `/local-content/*`.
 

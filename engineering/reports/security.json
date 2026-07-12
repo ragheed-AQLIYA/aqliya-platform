@@ -1,0 +1,862 @@
+{
+  "agent": "security",
+  "title": "Security Report",
+  "generatedAt": "2026-07-11T02:08:04.815Z",
+  "score": 65,
+  "summary": {
+    "total": 64,
+    "critical": 0,
+    "high": 27,
+    "medium": 36,
+    "low": 0,
+    "info": 1
+  },
+  "findings": [
+    {
+      "id": "F-0291",
+      "agent": "security",
+      "severity": "info",
+      "title": "CSRF handling not obvious in middleware",
+      "evidence": "Rely on NextAuth/framework CSRF; verify login + mutation paths",
+      "files": [],
+      "category": "A01",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0292",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Cookie security flags not obvious in auth module",
+      "evidence": "httpOnly/sameSite/secure not clearly referenced in src/lib/auth.ts",
+      "files": [
+        "src/lib/auth.ts"
+      ],
+      "category": "A07",
+      "suggestion": "",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0293",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: child-process",
+      "evidence": "Matched child-process",
+      "files": [
+        "src/__tests__/unit/db-backup-scheduler.test.ts"
+      ],
+      "category": "A04",
+      "suggestion": "Sanitize / avoid; prefer safe framework APIs.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0294",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: child-process",
+      "evidence": "Matched child-process",
+      "files": [
+        "src/__tests__/i18n/no-english-strings.test.ts"
+      ],
+      "category": "A04",
+      "suggestion": "Sanitize / avoid; prefer safe framework APIs.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0295",
+      "agent": "security",
+      "severity": "high",
+      "title": "Possible secret material (generic-secret)",
+      "evidence": "Pattern generic-secret matched",
+      "files": [
+        "src/lib/sales/vnext/learning-loop.ts"
+      ],
+      "category": "A02",
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0296",
+      "agent": "security",
+      "severity": "high",
+      "title": "Dangerous API usage: eval",
+      "evidence": "Matched eval",
+      "files": [
+        "src/lib/platform/rate-limiter/redis-rate-limiter.ts"
+      ],
+      "category": "A04",
+      "suggestion": "Sanitize / avoid; prefer safe framework APIs.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0297",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: raw-sql",
+      "evidence": "Matched raw-sql",
+      "files": [
+        "src/lib/platform/monitoring/system-monitor.ts"
+      ],
+      "category": "A03",
+      "suggestion": "Prefer parameterized Prisma queries; audit any RawUnsafe.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0298",
+      "agent": "security",
+      "severity": "high",
+      "title": "Possible secret material (generic-secret)",
+      "evidence": "Pattern generic-secret matched",
+      "files": [
+        "src/lib/local-content/erp/connector-factory.ts"
+      ],
+      "category": "A02",
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0299",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: child-process",
+      "evidence": "Matched child-process",
+      "files": [
+        "src/lib/governance-engine/shared/regex.ts"
+      ],
+      "category": "A04",
+      "suggestion": "Sanitize / avoid; prefer safe framework APIs.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0300",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: child-process",
+      "evidence": "Matched child-process",
+      "files": [
+        "src/lib/governance-engine/registry/claim-registry.ts"
+      ],
+      "category": "A04",
+      "suggestion": "Sanitize / avoid; prefer safe framework APIs.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0301",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: child-process",
+      "evidence": "Matched child-process",
+      "files": [
+        "src/lib/governance-engine/registry/loader.ts"
+      ],
+      "category": "A04",
+      "suggestion": "Sanitize / avoid; prefer safe framework APIs.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0302",
+      "agent": "security",
+      "severity": "high",
+      "title": "Possible secret material (generic-secret)",
+      "evidence": "Pattern generic-secret matched",
+      "files": [
+        "src/lib/auth/sso-providers.ts"
+      ],
+      "category": "A02",
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0303",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: dangerouslySetInnerHTML",
+      "evidence": "Matched dangerouslySetInnerHTML",
+      "files": [
+        "src/app/layout.tsx"
+      ],
+      "category": "A03",
+      "suggestion": "Sanitize / avoid; prefer safe framework APIs.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0304",
+      "agent": "security",
+      "severity": "high",
+      "title": "Possible secret material (generic-secret)",
+      "evidence": "Pattern generic-secret matched",
+      "files": [
+        "src/app/settings/retention/page.tsx"
+      ],
+      "category": "A02",
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0305",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/workflowos/escalation-check/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0306",
+      "agent": "security",
+      "severity": "high",
+      "title": "Download/export route may lack tenant scope",
+      "evidence": "organizationId not referenced",
+      "files": [
+        "src/app/api/workflowos/documents/[documentId]/download/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0307",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0308",
+      "agent": "security",
+      "severity": "high",
+      "title": "Download/export route may lack tenant scope",
+      "evidence": "organizationId not referenced",
+      "files": [
+        "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0309",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/scim/v2/Users/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0310",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/scim/v2/Users/[id]/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0311",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/scim/v2/Groups/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0312",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/scim/v2/Groups/[id]/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0313",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/platform/retention/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0314",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Possible SSRF: fetch with dynamic input",
+      "evidence": "fetch(variable) near request/input usage",
+      "files": [
+        "src/app/api/pilot-review/route.ts"
+      ],
+      "category": "A10",
+      "suggestion": "Allowlist hosts; block link-local/metadata IPs.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0315",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/pilot-review/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0316",
+      "agent": "security",
+      "severity": "high",
+      "title": "Download/export route may lack tenant scope",
+      "evidence": "organizationId not referenced",
+      "files": [
+        "src/app/api/office-ai/download/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0317",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/notifications/stream/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0318",
+      "agent": "security",
+      "severity": "high",
+      "title": "Download/export route may lack tenant scope",
+      "evidence": "organizationId not referenced",
+      "files": [
+        "src/app/api/local-content/projects/[projectId]/reports/[reportId]/download/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0319",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/local-content/projects/[projectId]/evidence/[evidenceId]/download/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0320",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/local-content/projects/[projectId]/audit/export/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0321",
+      "agent": "security",
+      "severity": "high",
+      "title": "Download/export route may lack tenant scope",
+      "evidence": "organizationId not referenced",
+      "files": [
+        "src/app/api/local-content/projects/[projectId]/audit/export/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0322",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: raw-sql",
+      "evidence": "Matched raw-sql",
+      "files": [
+        "src/app/api/health/route.ts"
+      ],
+      "category": "A03",
+      "suggestion": "Prefer parameterized Prisma queries; audit any RawUnsafe.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0323",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Dangerous API usage: raw-sql",
+      "evidence": "Matched raw-sql",
+      "files": [
+        "src/app/api/health/ready/route.ts"
+      ],
+      "category": "A03",
+      "suggestion": "Prefer parameterized Prisma queries; audit any RawUnsafe.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0324",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/custom-product-submit/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0325",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/auth/[...nextauth]/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0326",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/auth/saml/[providerId]/metadata/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0327",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/auth/saml/[providerId]/initiate/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0328",
+      "agent": "security",
+      "severity": "high",
+      "title": "API route may lack auth check",
+      "evidence": "No authorize/session guard keywords detected",
+      "files": [
+        "src/app/api/audit/engagements/[engagementId]/exports/[format]/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0329",
+      "agent": "security",
+      "severity": "high",
+      "title": "Download/export route may lack tenant scope",
+      "evidence": "organizationId not referenced",
+      "files": [
+        "src/app/api/audit/engagements/[engagementId]/exports/[format]/route.ts"
+      ],
+      "category": "A01",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0330",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/ai-settings-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0331",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/approval.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0332",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/contact-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0333",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/contact-export-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0334",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/contact-review-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0335",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/content-evidence-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0336",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/decision-evidence-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0337",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/decision-outcomes.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0338",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/decision-signals-alerts.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0339",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/decision-templates.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0340",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0341",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/ingestion-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0342",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/institutional-memory-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0343",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/localcontent-audit-admin-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0344",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/localcontent-review-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0345",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/localcontent-workbook-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0346",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/mfa.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0347",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/office-ai-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0348",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/registration-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0349",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/simulation.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0350",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/tenant-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0351",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/tender.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0352",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/workflowos-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0353",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/workflowos-export-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0354",
+      "agent": "security",
+      "severity": "medium",
+      "title": "Mutating server action may lack explicit authorize guard",
+      "evidence": "Prisma write without authorize/guard keyword detected",
+      "files": [
+        "src/actions/workflowos-template-actions.ts"
+      ],
+      "category": "A01",
+      "suggestion": "Use shared action-guard / authorize() pattern.",
+      "scoreImpact": 3
+    }
+  ],
+  "meta": {
+    "owasp": {
+      "A01": "Broken Access Control",
+      "A02": "Cryptographic Failures",
+      "A03": "Injection",
+      "A04": "Insecure Design",
+      "A05": "Security Misconfiguration",
+      "A06": "Vulnerable Components",
+      "A07": "Identification and Authentication Failures",
+      "A08": "Software and Data Integrity Failures",
+      "A09": "Security Logging Failures",
+      "A10": "Server-Side Request Forgery (SSRF)"
+    },
+    "apiRoutes": 64,
+    "actions": 92
+  }
+}

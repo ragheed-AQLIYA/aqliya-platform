@@ -1,0 +1,429 @@
+{
+  "at": "2026-07-11T11:27:35.609Z",
+  "cards": [
+    {
+      "product": "AuditOS",
+      "ready": 67,
+      "releaseReady": false,
+      "checks": [
+        {
+          "name": "Tests",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Security",
+          "ok": false,
+          "detail": "platform security 65"
+        },
+        {
+          "name": "Docs",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Authorization",
+          "ok": false,
+          "detail": "enforce adoption rule"
+        },
+        {
+          "name": "Architecture",
+          "ok": true,
+          "detail": "compliance 82%"
+        },
+        {
+          "name": "Performance",
+          "ok": false,
+          "detail": "score 57 — warn if below"
+        },
+        {
+          "name": "Pilot",
+          "ok": true,
+          "detail": "maturity L6 Production-hardened"
+        },
+        {
+          "name": "Production gate",
+          "ok": true,
+          "detail": "L6 required"
+        },
+        {
+          "name": "Known Bugs backlog",
+          "ok": true,
+          "detail": "0 top-10 items on product"
+        }
+      ],
+      "maturity": "L6 Production-hardened"
+    },
+    {
+      "product": "DecisionOS",
+      "ready": 67,
+      "releaseReady": false,
+      "checks": [
+        {
+          "name": "Tests",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Security",
+          "ok": false,
+          "detail": "platform security 65"
+        },
+        {
+          "name": "Docs",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Authorization",
+          "ok": false,
+          "detail": "enforce adoption rule"
+        },
+        {
+          "name": "Architecture",
+          "ok": true,
+          "detail": "compliance 82%"
+        },
+        {
+          "name": "Performance",
+          "ok": false,
+          "detail": "score 57 — warn if below"
+        },
+        {
+          "name": "Pilot",
+          "ok": true,
+          "detail": "maturity **L6 Production-hardened**"
+        },
+        {
+          "name": "Production gate",
+          "ok": true,
+          "detail": "L6 required"
+        },
+        {
+          "name": "Known Bugs backlog",
+          "ok": true,
+          "detail": "0 top-10 items on product"
+        }
+      ],
+      "maturity": "**L6 Production-hardened**"
+    },
+    {
+      "product": "LocalContentOS",
+      "ready": 67,
+      "releaseReady": false,
+      "checks": [
+        {
+          "name": "Tests",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Security",
+          "ok": false,
+          "detail": "platform security 65"
+        },
+        {
+          "name": "Docs",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Authorization",
+          "ok": false,
+          "detail": "enforce adoption rule"
+        },
+        {
+          "name": "Architecture",
+          "ok": true,
+          "detail": "compliance 82%"
+        },
+        {
+          "name": "Performance",
+          "ok": false,
+          "detail": "score 57 — warn if below"
+        },
+        {
+          "name": "Pilot",
+          "ok": true,
+          "detail": "maturity **L6 Production-hardened**"
+        },
+        {
+          "name": "Production gate",
+          "ok": true,
+          "detail": "L6 required"
+        },
+        {
+          "name": "Known Bugs backlog",
+          "ok": true,
+          "detail": "1 top-10 items on product"
+        }
+      ],
+      "maturity": "**L6 Production-hardened**"
+    },
+    {
+      "product": "SalesOS",
+      "ready": 67,
+      "releaseReady": false,
+      "checks": [
+        {
+          "name": "Tests",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Security",
+          "ok": false,
+          "detail": "platform security 65"
+        },
+        {
+          "name": "Docs",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Authorization",
+          "ok": false,
+          "detail": "enforce adoption rule"
+        },
+        {
+          "name": "Architecture",
+          "ok": true,
+          "detail": "compliance 82%"
+        },
+        {
+          "name": "Performance",
+          "ok": false,
+          "detail": "score 57 — warn if below"
+        },
+        {
+          "name": "Pilot",
+          "ok": true,
+          "detail": "maturity **L6 Production-hardened**"
+        },
+        {
+          "name": "Production gate",
+          "ok": true,
+          "detail": "L6 required"
+        },
+        {
+          "name": "Known Bugs backlog",
+          "ok": true,
+          "detail": "1 top-10 items on product"
+        }
+      ],
+      "maturity": "**L6 Production-hardened**"
+    },
+    {
+      "product": "WorkflowOS",
+      "ready": 67,
+      "releaseReady": false,
+      "checks": [
+        {
+          "name": "Tests",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Security",
+          "ok": false,
+          "detail": "platform security 65"
+        },
+        {
+          "name": "Docs",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Authorization",
+          "ok": false,
+          "detail": "enforce adoption rule"
+        },
+        {
+          "name": "Architecture",
+          "ok": true,
+          "detail": "compliance 82%"
+        },
+        {
+          "name": "Performance",
+          "ok": false,
+          "detail": "score 57 — warn if below"
+        },
+        {
+          "name": "Pilot",
+          "ok": true,
+          "detail": "maturity L6 Production-hardened"
+        },
+        {
+          "name": "Production gate",
+          "ok": true,
+          "detail": "L6 required"
+        },
+        {
+          "name": "Known Bugs backlog",
+          "ok": true,
+          "detail": "2 top-10 items on product"
+        }
+      ],
+      "maturity": "L6 Production-hardened"
+    },
+    {
+      "product": "RiskOS",
+      "ready": 67,
+      "releaseReady": false,
+      "checks": [
+        {
+          "name": "Tests",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Security",
+          "ok": false,
+          "detail": "platform security 65"
+        },
+        {
+          "name": "Docs",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Authorization",
+          "ok": false,
+          "detail": "enforce adoption rule"
+        },
+        {
+          "name": "Architecture",
+          "ok": true,
+          "detail": "compliance 82%"
+        },
+        {
+          "name": "Performance",
+          "ok": false,
+          "detail": "score 57 — warn if below"
+        },
+        {
+          "name": "Pilot",
+          "ok": true,
+          "detail": "maturity **L6 Production-hardened**"
+        },
+        {
+          "name": "Production gate",
+          "ok": true,
+          "detail": "L6 required"
+        },
+        {
+          "name": "Known Bugs backlog",
+          "ok": true,
+          "detail": "0 top-10 items on product"
+        }
+      ],
+      "maturity": "**L6 Production-hardened**"
+    },
+    {
+      "product": "LocalContactOS",
+      "ready": 67,
+      "releaseReady": false,
+      "checks": [
+        {
+          "name": "Tests",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Security",
+          "ok": false,
+          "detail": "platform security 65"
+        },
+        {
+          "name": "Docs",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Authorization",
+          "ok": false,
+          "detail": "enforce adoption rule"
+        },
+        {
+          "name": "Architecture",
+          "ok": true,
+          "detail": "compliance 82%"
+        },
+        {
+          "name": "Performance",
+          "ok": false,
+          "detail": "score 57 — warn if below"
+        },
+        {
+          "name": "Pilot",
+          "ok": true,
+          "detail": "maturity **L6 Production-hardened**"
+        },
+        {
+          "name": "Production gate",
+          "ok": true,
+          "detail": "L6 required"
+        },
+        {
+          "name": "Known Bugs backlog",
+          "ok": true,
+          "detail": "0 top-10 items on product"
+        }
+      ],
+      "maturity": "**L6 Production-hardened**"
+    },
+    {
+      "product": "ContentStudio",
+      "ready": 67,
+      "releaseReady": false,
+      "checks": [
+        {
+          "name": "Tests",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Security",
+          "ok": false,
+          "detail": "platform security 65"
+        },
+        {
+          "name": "Docs",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "Authorization",
+          "ok": false,
+          "detail": "enforce adoption rule"
+        },
+        {
+          "name": "Architecture",
+          "ok": true,
+          "detail": "compliance 82%"
+        },
+        {
+          "name": "Performance",
+          "ok": false,
+          "detail": "score 57 — warn if below"
+        },
+        {
+          "name": "Pilot",
+          "ok": true,
+          "detail": "maturity **L6 Production-hardened**"
+        },
+        {
+          "name": "Production gate",
+          "ok": true,
+          "detail": "L6 required"
+        },
+        {
+          "name": "Known Bugs backlog",
+          "ok": true,
+          "detail": "0 top-10 items on product"
+        }
+      ],
+      "maturity": "**L6 Production-hardened**"
+    }
+  ]
+}

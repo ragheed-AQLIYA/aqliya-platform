@@ -1,4 +1,4 @@
-# AQLIYA Documentation Authority
+﻿# AQLIYA Documentation Authority
 
 **Status:** Active — Highest documentation conflict-resolution authority  
 **Version:** 1.1  
@@ -26,14 +26,14 @@ All other documentation files, READMEs, AGENTS.md, official docs, source-of-trut
 | **0** | `docs/DOCUMENTATION_AUTHORITY.md`                  | Conflict-resolution authority | Defines the hierarchy and rules                               |
 | **1** | `docs/official/AQLIYA_MASTER_REFERENCE.md`         | Current master reference      | Summarizes current official project reality                   |
 | **2** | `docs/official/*.md` (active doctrine)             | Official doctrine docs        | Identity, governance, trust principles, strategic positioning |
-| **2** | `docs/governance/aqliya-knowledge-governance-charter-v1.md` | Knowledge governance rules | Defines document types, authority rules, conflict resolution, and lifecycle metadata for all documentation |
+| **2** | `docs/archive/governance/aqliya-knowledge-governance-charter-v1.md` | Knowledge governance rules (archived 2026-07-01; `docs/governance/` was removed) | Defines document types, authority rules, conflict resolution, and lifecycle metadata for all documentation |
 | **3** | `README.md`                                        | Project entry point           | Entry-level orientation, not highest authority                |
 | **3** | `AGENTS.md`                                        | Agent operating contract      | Execution instructions for AI agents                          |
 | **3** | `docs/README.md`                                   | Documentation index           | Navigation aid                                                |
 | **4** | `docs/source-of-truth/*`                           | Supporting references         | Architecture, taxonomy, route strategy, product status        |
-| **5** | `docs/products/*`, `docs/systems/*`, `docs/pilot/*` | Product / system / pilot docs | Product-specific detail and operations                        |
-| **6** | `docs/reports/*`                                   | Reports and evidence          | Implementation status evidence, not doctrine                  |
-| **7** | `docs/theoretical-reference/*`                     | Background theory             | Intellectual foundation, background only                      |
+| **5** | `docs/products/README.md` (restored 2026-07-12), `docs/pilot/*` | Product / pilot docs | Product-specific detail and operations. `docs/systems/` removed 2026-07-01 — see `docs/assets/auditos/`, `docs/runbooks/`, `docs/architecture/` |
+| **6** | `docs/evidence/reports/*`, `docs/reports/*` | Reports and evidence | Implementation status evidence, not doctrine. `docs/reports/` empty — primary reports at `docs/evidence/reports/` |
+| **7** | `docs/archive/theoretical-reference/*` | Background theory (archived 2026-07-01) | Intellectual foundation, background only. Active `docs/theoretical-reference/` was removed; material archived. |
 | **8** | `docs/archive/*`                                   | Historical docs               | Historical reference only                                     |
 
 ---
@@ -46,9 +46,9 @@ All other documentation files, READMEs, AGENTS.md, official docs, source-of-trut
 | `README.md`                    | Entry-level project orientation                                                                             | Product status, detailed architecture, conflict resolution    |
 | `AGENTS.md`                    | Agent execution contract, coding rules                                                                      | Product taxonomy, implementation status                       |
 | `docs/source-of-truth/*`       | Architecture model, system taxonomy, route strategy, product status matrix, readiness gates                 | Doctrine, identity, governance principles                     |
-| `docs/products/*`               | Product-specific detail, commercial specs                                                                   | Taxonomy classification, architecture decisions               |
-| `docs/reports/*`               | Evidence of implementation progress, validation results                                                     | Doctrine, taxonomy, product status definitions                |
-| `docs/theoretical-reference/*` | Intellectual foundation, domain theory                                                                      | Implementation status, product claims, route decisions        |
+| `docs/products/README.md`     | Product documentation index (restored 2026-07-12 after cleanup removed directory) | Taxonomy classification, architecture decisions |
+| `docs/evidence/reports/*`     | Evidence of implementation progress, validation results | Doctrine, taxonomy, product status definitions |
+| `docs/archive/theoretical-reference/*` | Intellectual foundation, domain theory (archived 2026-07-01) | Implementation status, product claims, route decisions |
 | `docs/archive/*`               | Historical record                                                                                           | Current policy, status, or doctrine                           |
 
 ---
@@ -119,9 +119,9 @@ When documents conflict, resolve using this priority (highest first):
 | 3 | L2 | `docs/official/*.md` (active doctrine) | Official doctrine docs |
 | 4 | L3 | `README.md`, `AGENTS.md`, `docs/README.md` | Agent contract / entry points |
 | 5 | L4 | `docs/source-of-truth/*` | Supporting references |
-| 6 | L5 | `docs/products/*`, `docs/systems/*` | Product / system details |
-| 7 | L6 | `docs/reports/*` | Reports and evidence |
-| 8 | L7 | `docs/theoretical-reference/*` | Background theory |
+| 6 | L5 | `docs/products/README.md`, `docs/pilot/*` | Product details. `docs/systems/` removed 2026-07-01. |
+| 7 | L6 | `docs/evidence/reports/*` | Reports and evidence. `docs/reports/` exists but is empty; active reports at `docs/evidence/reports/`. |
+| 8 | L7 | `docs/archive/theoretical-reference/*` | Background theory (archived 2026-07-01) |
 | 9 | L8 | `docs/archive/*` | Historical only |
 
 **Rule:** For reading order, always follow `docs/AI_ENTRYPOINT.md`. For conflict resolution, follow the hierarchy above.
@@ -260,3 +260,4 @@ Do not bypass this file by creating new "highest authority" documents.
 | 2026-05-22 | 1.0 | Initial creation | OpenCode |
 | 2026-06-26 | 1.1 | §6 redefined from "Agent Loading Order" to "Conflict Resolution Priority" — canonical reading order moved to AI_ENTRYPOINT.md. Added Owner, Last Reviewed, Change Log. | OpenCode |
 | 2026-06-29 | 1.2 | §12a added — Glossary Precision Rule. Bans ambiguous terms (Strategic Future, Planned, Coming Soon). Requires explicit Four Dimensions values. | OpenCode |
+| 2026-07-12 | 1.3 | §2, §3, §6 — Updated hierarchy to reflect directory cleanup (2026-07-01): docs/products/ restored with index README; docs/systems/, docs/governance/, docs/theoretical-reference/ noted as removed/archived; docs/evidence/reports/ noted as primary reports location. Fixed 18 cross-document broken links and 5 docs/products/-referencing links. | OpenCode (docs-agent) |

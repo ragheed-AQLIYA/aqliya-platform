@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import {
   requireProjectAccess,
   requireWorkbookAccess,
@@ -133,7 +133,7 @@ export async function listProjectWorkbooksAction(projectId: string) {
 
 export async function listOrganizationWorkbooksAction() {
   return safe(async () => {
-    const { organizationId } = await requireUserContext();
+    const { organizationId } = await getCurrentUser();
     await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
     return listOrganizationWorkbooks(organizationId);
   });
@@ -173,7 +173,7 @@ export async function deleteWorkbookAction(workbookId: string) {
 
 export async function getWorkbookDashboardAction() {
   return safe(async () => {
-    const { organizationId } = await requireUserContext();
+    const { organizationId } = await getCurrentUser();
     await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
     return getWorkbookDashboardSummary(organizationId);
   });
@@ -253,6 +253,25 @@ export async function markWorkbookExportedAction(workbookId: string) {
   const result = await safe(() => markWorkbookExported(workbookId, organizationId));
   revalidatePath("/local-content/workbook", "layout");
   return result;
+}
+
+export async function getWorkbookProjectOrgId(workbookId: string) {
+  await requireWorkbookAccess(workbookId);
+  const { prisma } = await import("@/lib/prisma");
+
+  const workbook = await prisma.lcWorkbook.findUnique({
+    where: { id: workbookId },
+    select: { projectId: true },
+  });
+
+  if (!workbook) return "";
+
+  const project = await prisma.localContentProject.findUnique({
+    where: { id: workbook.projectId },
+    select: { organizationId: true },
+  });
+
+  return project?.organizationId ?? "";
 }
 
 // ─── Scoring ───

@@ -15,6 +15,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth-next";
 import { getCandidate, deleteCandidate } from "@/lib/tb-intelligence/knowledge-mining";
+import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 
 function requireRole(user: Record<string, unknown>, minRole: "ADMIN" | "OPERATOR" | "VIEWER"): void {
   const role = user.role as string | undefined;
@@ -42,8 +43,8 @@ export async function GET(
     }
     return NextResponse.json(result);
   } catch (error) {
-    const status = error instanceof Error && error.message.startsWith("Access denied") ? 403 : 500;
-    return NextResponse.json({ error: String(error) }, { status });
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }
 
@@ -65,7 +66,7 @@ export async function DELETE(
     }
     return NextResponse.json({ success: true });
   } catch (error) {
-    const status = error instanceof Error && error.message.startsWith("Access denied") ? 403 : 500;
-    return NextResponse.json({ error: String(error) }, { status });
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }

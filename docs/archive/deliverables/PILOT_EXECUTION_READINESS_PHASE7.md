@@ -1,10 +1,10 @@
-# Pilot Execution Readiness — Phase 7
+﻿# Pilot Execution Readiness — Phase 7
 
 **Classification:** Board-level pilot execution assessment  
 **Date:** 2026-06-21  
 **Baseline:** Intelligence Core consolidation, Decision Engine extraction, Evidence Platform 5B/5B.1–5B.3, Enterprise Readiness 8.3/10  
 **Method:** Operational validation + code/docs inspection + local execution evidence  
-**Companion:** [`docs/operations/PILOT_OPERATIONAL_HANDBOOK.md`](../operations/PILOT_OPERATIONAL_HANDBOOK.md)
+**Companion:** [`docs/operations/PILOT_OPERATIONAL_HANDBOOK.md`](../../operations/PILOT_OPERATIONAL_HANDBOOK.md)
 
 ---
 
@@ -182,7 +182,7 @@ Monitoring: `GET /api/platform/evidence/health` (ADMIN) + `EvidenceHealthPanel` 
 
 ## Workstream D — Pilot Operations
 
-Deliverable: **[PILOT_OPERATIONAL_HANDBOOK.md](../operations/PILOT_OPERATIONAL_HANDBOOK.md)**
+Deliverable: **[PILOT_OPERATIONAL_HANDBOOK.md](../../operations/PILOT_OPERATIONAL_HANDBOOK.md)**
 
 Contains:
 

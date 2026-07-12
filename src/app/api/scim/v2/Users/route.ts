@@ -11,6 +11,7 @@ import {
 } from "@/lib/auth/scim-types";
 import { listUsers, createUser } from "@/lib/auth/scim-service";
 import { authenticateScimRequest, getScimHeaders } from "../auth";
+import { sanitizeError } from "@/lib/platform/api-error";
 
 export async function GET(request: Request) {
   const auth = authenticateScimRequest(request);
@@ -37,7 +38,7 @@ export async function GET(request: Request) {
       headers: getScimHeaders(),
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
+    const { message } = sanitizeError(error);
     return NextResponse.json(
       buildScimError(500, message),
       { status: 500, headers: getScimHeaders() },
@@ -72,7 +73,7 @@ export async function POST(request: Request) {
       },
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
+    const { message } = sanitizeError(error);
     return NextResponse.json(
       buildScimError(500, message),
       { status: 500, headers: getScimHeaders() },

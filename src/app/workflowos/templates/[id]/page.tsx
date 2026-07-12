@@ -1,4 +1,4 @@
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { getWorkflowTemplate, startWorkflowFromTemplate } from "@/actions/workflowos-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +13,7 @@ export default async function WorkflowTemplateDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await requireUserContext();
+  await getCurrentUser();
 
   const result = await getWorkflowTemplate(id);
   if (!result.success || !result.data) {
@@ -25,7 +25,7 @@ export default async function WorkflowTemplateDetailPage({
 
   async function handleStart() {
     "use server";
-    const _user = await requireUserContext();
+    const _user = await getCurrentUser();
     const recordResult = await startWorkflowFromTemplate(
       id,
       `سجل: ${template.name} - ${new Date().toLocaleDateString("ar-SA")}`,

@@ -1,21 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { getAllPolicies, setPolicyOverride, resetPolicyOverride } from "@/lib/core/policy/retention/policies";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export async function GET() {
   try {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const policies = getAllPolicies(user.platformOrganizationId);
     return NextResponse.json({ policies });
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } catch (err) {
+    const { message, code } = sanitizeError(err);
+    return NextResponse.json({ error: message }, { status: httpStatusFromCode(code) });
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const body = (await request.json()) as {
       modelName: string;
       retentionDays: number;
@@ -50,16 +58,17 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ policy: entry });
   } catch (err) {
-    if (err instanceof Error && (err.message === "Unauthenticated" || err.message.startsWith("Access denied"))) {
-      return NextResponse.json({ error: err.message }, { status: 403 });
-    }
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    const { message, code } = sanitizeError(err);
+    return NextResponse.json({ error: message }, { status: httpStatusFromCode(code) });
   }
 }
 
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const { searchParams } = new URL(request.url);
     const modelName = searchParams.get("modelName");
     if (!modelName) {
@@ -79,9 +88,7 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ reset });
   } catch (err) {
-    if (err instanceof Error && (err.message === "Unauthenticated" || err.message.startsWith("Access denied"))) {
-      return NextResponse.json({ error: err.message }, { status: 403 });
-    }
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    const { message, code } = sanitizeError(err);
+    return NextResponse.json({ error: message }, { status: httpStatusFromCode(code) });
   }
 }

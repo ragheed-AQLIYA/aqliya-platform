@@ -10,13 +10,18 @@ jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
 }));
 
-// Mock auth to avoid loading the full NextAuth chain (not needed for tested actions)
+const mockGetCurrentUser = jest.fn().mockResolvedValue({
+  id: "user-1",
+  organizationId: "org-1",
+  role: "admin",
+  name: "Test User",
+  email: "test@test.com",
+  platformOrganizationId: "org-1",
+});
+
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: jest.fn().mockResolvedValue({
-    userId: "user-1",
-    organizationId: "org-1",
-    role: "admin",
-  }),
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
+  hasRequiredRole: jest.fn().mockReturnValue(true),
 }));
 
 // Mock guards to simplify action-level tests (each returns orgId)

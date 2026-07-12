@@ -1,4 +1,4 @@
-# PHASE 29 P2 — Enterprise Operations (Pilot + Monitoring + Tabletop Prep)
+﻿# PHASE 29 P2 — Enterprise Operations (Pilot + Monitoring + Tabletop Prep)
 
 **Date:** 2026-06-21  
 **Status:** COMPLETE  
@@ -99,7 +99,7 @@ Tabletop executed                  ⏸ Deferred (exit gate)
 
 ## Recommended Next Steps
 
-1. Complete [Tabletop Readiness Checklist](../operations/knowledge-foundation/TABLETOP_READINESS_CHECKLIST.md) with named roles
+1. Complete [Tabletop Readiness Checklist](../../operations/knowledge-foundation/TABLETOP_READINESS_CHECKLIST.md) with named roles
 2. Schedule staging prep (accounts, candidates, prior ACTIVE version)
 3. Execute [Tabletop Governance Exercise](../operations/knowledge-foundation/TABLETOP_GOVERNANCE_EXERCISE.md) as **final exit gate**
 4. Record Tabletop PASS in deliverable report → pilot operational acceptance

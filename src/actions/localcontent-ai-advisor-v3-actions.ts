@@ -4,7 +4,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import {
   requireOrganizationAccess,
   requireWorkbookAccess,
@@ -62,7 +62,7 @@ function fail<T = unknown>(error: string): ActionResult<T> {
 
 export async function checkAiHealthAction(): Promise<ActionResult> {
   try {
-    const _user = await requireUserContext();
+    const _user = await getCurrentUser();
     await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const report = await checkAiHealth();
     return ok(report);
@@ -73,7 +73,7 @@ export async function checkAiHealthAction(): Promise<ActionResult> {
 
 export async function isAiHealthyAction(): Promise<ActionResult<boolean>> {
   try {
-    await requireUserContext();
+    await getCurrentUser();
     await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
     const healthy = await isAiHealthy();
     return ok(healthy);
@@ -92,7 +92,7 @@ export async function runWorkbookAiReviewAction(
   tbLines: TbLine[],
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
@@ -116,7 +116,7 @@ export async function getWorkbookReviewStatusAction(
   workbookId: string,
 ): Promise<ActionResult> {
   try {
-    const _user = await requireUserContext();
+    const _user = await getCurrentUser();
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
@@ -137,7 +137,7 @@ export async function generateRecommendationsAction(
   workbookId: string,
 ): Promise<ActionResult> {
   try {
-    const _user = await requireUserContext();
+    const _user = await getCurrentUser();
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
@@ -173,7 +173,7 @@ export async function reviewRecommendationAction(
   reviewNotes: string,
 ): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
 
     await requirePermission(Permission.AI_REVIEW, ResourceType.RECOMMENDATION);
     await reviewRecommendation(user.organizationId, recommendationId, decision, reviewNotes, user.id);
@@ -200,7 +200,7 @@ export async function runSimulationAction(
   const { scenarioType: validatedScenario, params: validatedParams } = parsed.data;
 
   try {
-    const _user = await requireUserContext();
+    const _user = await getCurrentUser();
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 
@@ -308,7 +308,7 @@ export async function getWorkbookAiDashboardDataAction(
   workbookId: string,
 ): Promise<ActionResult> {
   try {
-    const _user = await requireUserContext();
+    const _user = await getCurrentUser();
     await requireOrganizationAccess(organizationId);
     await requireWorkbookAccess(workbookId);
 

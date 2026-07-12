@@ -1,4 +1,4 @@
-// ─── LocalContentOS Workbook — Population Engine ───
+﻿// ─── LocalContentOS Workbook — Population Engine ───
 // Maps TB accounts into workbook structure, populates auto-fillable fields.
 // Phase 1: Basic TB→workbook mapping (no advanced ML/AI).
 
@@ -149,6 +149,57 @@ export interface LineValueMap {
  * Supported operators: +, -, *, / and parentheses.
  * Example: "REV-03 - COS-03"
  */
+// ─── Safe arithmetic expression evaluator ───
+// Only handles: numbers, +, -, *, /, (, ), ., whitespace.
+// Returns the computed value or null if evaluation fails.
+// Replaces new Function() for security — no code injection possible.
+
+function safeEvaluateExpression(expr: string): number | null {
+  const s = expr.replace(/\s+/g, "");
+  if (s.length === 0) return null;
+  let pos = 0;
+  function peek(): string { return pos < s.length ? s[pos] : ""; }
+  function consume(): string { return s[pos++]; }
+  function parseNumber(): number | null {
+    const start = pos;
+    if (peek() === "-" || peek() === "+") consume();
+    if (pos >= s.length || !/[\d.]/.test(peek())) { pos = start; return null; }
+    let hasDot = false;
+    while (pos < s.length) {
+      const ch = peek();
+      if (ch >= "0" && ch <= "9") consume();
+      else if (ch === "." && !hasDot) { hasDot = true; consume(); }
+      else break;
+    }
+    const v = Number(s.slice(start, pos));
+    return isNaN(v) ? null : v;
+  }
+  function parseFactor(): number | null {
+    if (peek() === "(") { consume(); const v = parseExpression(); if (v === null) return null; if (peek() !== ")") return null; consume(); return v; }
+    if (peek() === "-") { consume(); if (peek() === "(") { consume(); const v = parseExpression(); if (v === null) return null; if (peek() !== ")") return null; consume(); return -v; } const n = parseNumber(); return n !== null ? -n : null; }
+    if (peek() === "+") consume();
+    return parseNumber();
+  }
+  function parseTerm(): number | null {
+    let left = parseFactor(); if (left === null) return null;
+    while (peek() === "*" || peek() === "/") {
+      const op = consume(); const right = parseFactor(); if (right === null) return null;
+      if (op === "*") left = left * right; else { if (right === 0) return null; left = left / right; }
+    }
+    return left;
+  }
+  function parseExpression(): number | null {
+    let left = parseTerm(); if (left === null) return null;
+    while (peek() === "+" || peek() === "-") {
+      const op = consume(); const right = parseTerm(); if (right === null) return null;
+      if (op === "+") left = left + right; else left = left - right;
+    }
+    return left;
+  }
+  const result = parseExpression();
+  if (result === null || pos !== s.length) return null;
+  return isFinite(result) ? result : null;
+}
 export function evaluateFormula(
   formula: string,
   lineValues: LineValueMap,
@@ -176,10 +227,10 @@ export function evaluateFormula(
       return null;
     }
 
-    // Evaluate the expression
-    // Using Function constructor is safe here because we've validated the input
-    const result = new Function(`return (${expression});`)();
-    return typeof result === 'number' && !isNaN(result) ? Math.abs(result) : null;
+    // Evaluate the expression using a safe arithmetic evaluator
+    // Replaces new Function() to prevent code injection risks
+    const result = safeEvaluateExpression(expression);
+    return result !== null ? Math.abs(result) : null;
   } catch {
     return null;
   }
@@ -284,8 +335,8 @@ export async function populateWorkbookFromProject(
       let autoFillValue: number | null = null;
       let autoFillSource: string | null = null;
       let autoFilled = false;
-      let source: string = "tb";
-      let confidence: string = "high";
+      let source: "tb" | "formula" | "manual" = "tb";
+      let confidence: "high" | "medium" | "low" = "high";
 
       const computedValue = tbValues[tmpl.code];
 
@@ -293,8 +344,8 @@ export async function populateWorkbookFromProject(
         autoFillValue = computedValue;
         autoFilled = true;
         autoFilledCount++;
-        source = tmpl.formula ? "formula" : "tb";
-        confidence = tmpl.formula ? "high" : "medium";
+        source = (tmpl.formula ? "formula" : "tb") as "formula" | "tb";
+        confidence = (tmpl.formula ? "high" : "medium") as "high" | "medium";
         autoFillSource = tmpl.formula ? `formula:${tmpl.formula}` : `tb:${tmpl.code}`;
       }
 
@@ -449,8 +500,8 @@ export async function populateWorkbookFromTb(
     let autoFillValue: number | null = null;
     let autoFillSource: string | null = null;
     let autoFilled = false;
-    let source: string = "tb";
-    let confidence: string = "high";
+    let source: "tb" | "formula" | "manual" = "tb";
+    let confidence: "high" | "medium" | "low" = "high";
 
     const computedValue = tbValues[tmpl.code];
 
@@ -458,8 +509,8 @@ export async function populateWorkbookFromTb(
       autoFillValue = computedValue;
       autoFilled = true;
       autoFilledCount++;
-      source = tmpl.formula ? "formula" : "tb";
-      confidence = tmpl.formula ? "high" : "medium";
+      source = (tmpl.formula ? "formula" : "tb") as "formula" | "tb";
+      confidence = (tmpl.formula ? "high" : "medium") as "high" | "medium";
       autoFillSource = tmpl.formula ? `formula:${tmpl.formula}` : `tb:${tmpl.code}`;
     }
 

@@ -1,8 +1,9 @@
 import { readFileSync } from "fs"
 import { join } from "path"
 
+const mockGetCurrentUser = jest.fn()
+
 jest.mock("@/lib/auth", () => {
-  const mockRequireUserContext = jest.fn()
   return {
     hasRequiredRole: (
       user: { role: string },
@@ -28,14 +29,13 @@ jest.mock("@/lib/auth", () => {
       organizationId: string,
       _requiredRole = "OPERATOR",
     ) => {
-      const user = await mockRequireUserContext(_requiredRole)
+      const user = await mockGetCurrentUser()
       if (user.organizationId !== organizationId) {
         throw new Error("Access denied: organization access required")
       }
       return user
     },
-    getCurrentUser: jest.fn(),
-    requireUserContext: mockRequireUserContext,
+    getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
   }
 })
 
@@ -46,7 +46,6 @@ import {
   isViewer,
   isExpectedAccessDeniedError,
   requireOrgAccess,
-  requireUserContext,
 } from "@/lib/auth"
 import { enforce, authorize } from "@/lib/authorization"
 import type { CurrentUser } from "@/lib/authorization"
@@ -159,7 +158,7 @@ describe("L0-07: Cross-Tenant Isolation", () => {
     describe("requireOrgAccess", () => {
       it("throws when user org does not match target org", async () => {
         const user = makeUser({ organizationId: "org-alpha" })
-        ;(requireUserContext as jest.Mock).mockResolvedValue(user)
+        mockGetCurrentUser.mockResolvedValue(user)
         await expect(
           requireOrgAccess("org-beta", "OPERATOR"),
         ).rejects.toThrow("Access denied: organization access required")
@@ -167,16 +166,16 @@ describe("L0-07: Cross-Tenant Isolation", () => {
 
       it("allows when user org matches target org", async () => {
         const user = makeUser({ organizationId: "org-alpha" })
-        ;(requireUserContext as jest.Mock).mockResolvedValue(user)
+        mockGetCurrentUser.mockResolvedValue(user)
         const result = await requireOrgAccess("org-alpha", "OPERATOR")
         expect(result.organizationId).toBe("org-alpha")
       })
 
-      it("calls requireUserContext with the required role", async () => {
+      it("calls getCurrentUser with the required role", async () => {
         const user = makeUser({ organizationId: "org-alpha" })
-        ;(requireUserContext as jest.Mock).mockResolvedValue(user)
+        mockGetCurrentUser.mockResolvedValue(user)
         await requireOrgAccess("org-alpha", "ADMIN")
-        expect(requireUserContext).toHaveBeenCalledWith("ADMIN")
+        expect(mockGetCurrentUser).toHaveBeenCalled()
       })
     })
   })

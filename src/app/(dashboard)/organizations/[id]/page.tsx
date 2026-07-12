@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { getOrganizationAction } from "@/actions/organization-actions";
 import { OrganizationWorkspace } from "@/components/organization/organization-workspace";
 import Link from "next/link";
 import { ArrowRight, Settings } from "lucide-react";
@@ -16,80 +16,27 @@ export default async function OrganizationDetailPage({ params }: PageProps) {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  const org = await prisma.organization.findFirst({
-    where: {
-      id,
-      ...(user.organizationId
-        ? { platformOrganizationId: user.organizationId }
-        : {}),
-    },
-    include: {
-      _count: {
-        select: { users: true, decisions: true },
-      },
-      users: {
-        select: { role: true },
-      },
-    },
-  });
-
-  if (!org) {
+  let orgDetail;
+  try {
+    const result = await getOrganizationAction(id);
+    if (!result.ok) notFound();
+    orgDetail = result.data;
+  } catch {
     notFound();
   }
 
-  // Count users by role
-  const roleCounts: Record<string, number> = {
-    ADMIN: 0,
-    OPERATOR: 0,
-    VIEWER: 0,
-  };
-  for (const u of org.users) {
-    const key = u.role as string;
-    roleCounts[key] = (roleCounts[key] || 0) + 1;
-  }
-
-  // Sunbul / WorkflowOS counts
-  const platformOrgId = org.platformOrganizationId;
-  let sunbulClientCount = 0;
-  let sunbulRecordCount = 0;
-  let sunbulMembershipCount = 0;
-
-  if (platformOrgId) {
-    sunbulClientCount = await prisma.sunbulClient.count({
-      where: { platformOrganizationId: platformOrgId },
-    });
-    sunbulRecordCount = await prisma.workflowRecord.count({
-      where: {
-        template: { platformOrganizationId: platformOrgId },
-      },
-    });
-    sunbulMembershipCount = await prisma.workflowTemplate.count({
-      where: { platformOrganizationId: platformOrgId },
-    });
-  }
-
-  const sunbulStatus =
-    sunbulRecordCount > 0
-      ? "نشط"
-      : sunbulClientCount > 0
-        ? "جاهز"
-        : "غير مفعل";
+  if (!orgDetail) notFound();
 
   const orgData = {
-    orgId: org.id,
-    name: org.name,
-    nameAr: org.name,
-    platformOrgId: org.platformOrganizationId || undefined,
-    userCounts: {
-      admin: roleCounts["ADMIN"] || 0,
-      operator: roleCounts["OPERATOR"] || 0,
-      viewer: roleCounts["VIEWER"] || 0,
-      total: org._count.users,
-    },
-    sunbulClientCount,
-    sunbulMembershipCount,
-    sunbulRecordCount,
-    sunbulStatus,
+    orgId: orgDetail.id,
+    name: orgDetail.name,
+    nameAr: orgDetail.name,
+    platformOrgId: orgDetail.platformOrganizationId || undefined,
+    userCounts: orgDetail.userCounts,
+    sunbulClientCount: orgDetail.sunbulClientCount,
+    sunbulMembershipCount: orgDetail.sunbulMembershipCount,
+    sunbulRecordCount: orgDetail.sunbulRecordCount,
+    sunbulStatus: orgDetail.sunbulStatus,
   };
 
   return (
@@ -103,7 +50,7 @@ export default async function OrganizationDetailPage({ params }: PageProps) {
           المؤسسات
         </Link>
         <span>/</span>
-        <span className="text-foreground font-medium">{org.name}</span>
+        <span className="text-foreground font-medium">{orgDetail.name}</span>
       </div>
 
       {/* Organization Workspace */}

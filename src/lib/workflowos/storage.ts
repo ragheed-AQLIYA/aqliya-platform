@@ -1,4 +1,5 @@
 import "server-only";
+import { validateFileContent } from "@/lib/security/file-validation";
 
 import { prisma } from "@/lib/prisma";
 import { getStorageProvider } from "@/lib/platform/storage";
@@ -76,6 +77,13 @@ export async function uploadWorkflowDocument(input: UploadDocumentInput) {
     );
   }
 
+
+  // Validate file content matches its claimed extension (magic bytes check)
+  const workflowExt = getExtension(input.fileName).replace('.', '');
+  const wfMagicValidation = validateFileContent(input.content, workflowExt);
+  if (!wfMagicValidation.valid) {
+    throw new Error(wfMagicValidation.error || 'File content does not match its claimed extension');
+  }
   const doc = await prisma.sunbulDocument.create({
     data: {
       clientId: input.clientId,

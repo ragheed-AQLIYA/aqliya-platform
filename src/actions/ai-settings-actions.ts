@@ -1,6 +1,7 @@
 "use server";
 
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { getAIObservability } from "@/lib/core/ai/observability";
@@ -30,7 +31,8 @@ const DEFAULT_HYBRID_POLICY: Record<string, "local" | "cloud"> = {
 };
 
 export async function getAiSettingsAction(): Promise<AiSettingsSnapshot> {
-  const user = await requireUserContext("ADMIN");
+  const user = await getCurrentUser();
+  await enforce(user, { type: "settings" }, "admin");
 
   const integration = await prisma.tenantIntegration.findFirst({
     where: {
@@ -70,7 +72,8 @@ export async function saveAiSettingsAction(input: {
   localModel?: string;
   hybridPolicy?: Record<string, "local" | "cloud">;
 }): Promise<{ ok: boolean }> {
-  const user = await requireUserContext("ADMIN");
+  const user = await getCurrentUser();
+  await enforce(user, { type: "settings" }, "admin");
 
   const configMetadata = {
     executionMode: input.executionMode,
@@ -115,6 +118,7 @@ export async function saveAiSettingsAction(input: {
 }
 
 export async function getAiObservabilityAction() {
-  await requireUserContext("OPERATOR");
+  const user = await getCurrentUser();
+  await enforce(user, { type: "settings" }, "read");
   return getAIObservability(30);
 }

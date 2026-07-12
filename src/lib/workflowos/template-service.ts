@@ -2,7 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import type { Prisma } from "@prisma/client";
 
 export interface TemplateExportData {
@@ -21,7 +21,7 @@ export async function shareTemplate(
   templateId: string,
   targetOrganizationId: string,
 ): Promise<{ success: boolean; error?: string }> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const template = await prisma.workflowTemplate.findUnique({
     where: { id: templateId },
     select: {
@@ -70,7 +70,7 @@ export async function shareTemplate(
 export async function exportTemplate(
   templateId: string,
 ): Promise<{ success: boolean; data?: TemplateExportData; error?: string }> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const template = await prisma.workflowTemplate.findUnique({
     where: { id: templateId },
     select: {
@@ -116,7 +116,7 @@ export async function importTemplate(
   data: TemplateExportData,
   organizationId: string,
 ): Promise<{ success: boolean; error?: string }> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   if (user.organizationId !== organizationId) {
     return { success: false, error: "لا تملك صلاحية الاستيراد لهذه المنظمة" };
   }
@@ -155,7 +155,7 @@ export async function importTemplate(
 export async function listAvailableTemplates(
   organizationId: string,
 ): Promise<{ success: boolean; data?: unknown[]; error?: string }> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   if (user.organizationId !== organizationId) {
     return { success: false, error: "لا تملك صلاحية الوصول" };
   }

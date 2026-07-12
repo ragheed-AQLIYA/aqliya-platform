@@ -1,0 +1,56 @@
+{
+  "at": "2026-07-11T11:36:48.386Z",
+  "items": [
+    {
+      "name": "Authorization",
+      "status": "🔴",
+      "note": "enforce adoption 52%"
+    },
+    {
+      "name": "Feature Flags",
+      "status": "⬜",
+      "note": "Track in OpenCode backlog"
+    },
+    {
+      "name": "Platform Settings",
+      "status": "⬜",
+      "note": "Track in OpenCode backlog"
+    },
+    {
+      "name": "Organizations",
+      "status": "🟡",
+      "note": "Workspace real; deepen org admin UX"
+    },
+    {
+      "name": "Audit Trail",
+      "status": "🟡",
+      "note": "Platform audit log present — close product gaps via compliance"
+    },
+    {
+      "name": "Notification Infrastructure",
+      "status": "⬜",
+      "note": "Track in OpenCode backlog"
+    },
+    {
+      "name": "Background Jobs",
+      "status": "⬜",
+      "note": "Track in OpenCode backlog"
+    },
+    {
+      "name": "Download Center",
+      "status": "⬜",
+      "note": "Track in OpenCode backlog"
+    },
+    {
+      "name": "AI Gateway",
+      "status": "⬜",
+      "note": "Track in OpenCode backlog"
+    },
+    {
+      "name": "Observability",
+      "status": "🟡",
+      "note": "Engineering portal + ops baselines exist; deepen prod SLOs"
+    }
+  ],
+  "authAdoption": 52
+}

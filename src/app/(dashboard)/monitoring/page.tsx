@@ -1,9 +1,13 @@
 import { Suspense } from "react";
-import { prisma } from "@/lib/prisma";
+import { getMonitoringMetrics } from "@/actions/dashboard-read-actions";
 import { AiObservabilityCards } from "@/components/monitoring/ai-observability-cards";
 import { EnterpriseHealthPanel } from "@/components/monitoring/enterprise-health-panel";
 import { EvidenceHealthPanel } from "@/components/monitoring/evidence-health-panel";
 import { TbFirmMemoryKpisPanel } from "@/components/monitoring/tb-firm-memory-kpis-panel";
+import { LiveHealthCardsWrapper } from "@/components/monitoring/live-health-cards-wrapper";
+import { LiveMetricCards } from "@/components/monitoring/live-metric-cards";
+import { SystemUptime } from "@/components/monitoring/system-uptime";
+import { MonitoringAutoRefresh } from "@/components/monitoring/monitoring-auto-refresh";
 
 export const dynamic = "force-dynamic";
 
@@ -23,21 +27,7 @@ const CARD_STYLES = [
 ] as const;
 
 async function MetricsCards() {
-  const counts = await Promise.all([
-    prisma.auditEngagement.count(),
-    prisma.decision.count(),
-    prisma.auditClient.count(),
-    prisma.auditEvidence.count(),
-    prisma.localContentProject.count().catch(() => 0),
-    prisma.localContact.count().catch(() => 0),
-    prisma.salesAccount.count().catch(() => 0),
-    prisma.contentWorkspace.count().catch(() => 0),
-    prisma.risk.count().catch(() => 0),
-    prisma.institutionalMemoryEvent.count().catch(() => 0),
-    prisma.knowledgeFoundationVersion.count().catch(() => 0),
-    prisma.auditEvent.count(),
-  ]);
-
+  const counts = await getMonitoringMetrics();
   const metrics = [
     { label: "مهام التدقيق", value: counts[0], color: CARD_STYLES[0] },
     { label: "القرارات", value: counts[1], color: CARD_STYLES[1] },
@@ -70,7 +60,8 @@ async function MetricsCards() {
 
 export default function MonitoringPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-8 p-6">
+    <MonitoringAutoRefresh>
+      <div className="mx-auto max-w-5xl space-y-8 p-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">مراقبة الأداء</h1>
         <p className="text-sm text-muted-foreground">
@@ -122,6 +113,29 @@ export default function MonitoringPage() {
       >
         <EvidenceHealthPanel />
       </Suspense>
+      <Suspense
+        fallback={
+          <div className="text-center text-muted-foreground py-8">
+            جار تحميل حالة التكاملات…
+          </div>
+        }
+      >
+        <LiveHealthCardsWrapper />
+      </Suspense>
+
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold">حالة الخدمات</h2>
+            <p className="text-sm text-muted-foreground">
+              مؤشرات حية لخدمات المنصة الأساسية
+            </p>
+          </div>
+          <SystemUptime />
+        </div>
+        <LiveMetricCards />
+      </section>
     </div>
+    </MonitoringAutoRefresh>
   );
 }

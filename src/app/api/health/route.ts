@@ -52,7 +52,7 @@ async function livenessChecks(): Promise<{
   } catch (error) {
     checks.database = {
       ok: false,
-      detail: error instanceof Error ? error.message : "connection failed",
+      detail: "connection failed",
       latencyMs: Date.now() - dbStart,
     }
     failed.push("database")

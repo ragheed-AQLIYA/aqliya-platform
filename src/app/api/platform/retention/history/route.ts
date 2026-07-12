@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { getHistory } from "@/lib/core/policy/retention/history-store";
 
 export async function GET() {
   try {
-    await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     return NextResponse.json({ history: getHistory() });
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

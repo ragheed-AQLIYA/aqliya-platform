@@ -1,11 +1,11 @@
 // ─── LocalContentOS RBAC Guards ───
 // Bridges the RB-02 Authorization Engine into LCOS server actions.
 // Each guard:
-//   1. Calls requireUserContext() to get authenticated user + org + role
+//   1. Calls getCurrentUser() to get authenticated user + org + role
 //   2. Calls AuthorizationEngine.authorize() to evaluate the permission
 //   3. Throws "Access denied" if the role lacks the required permission
 
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import {
   AuthorizationEngine,
   Permission,
@@ -34,7 +34,7 @@ export async function requirePermission(
   resourceType: ResourceType,
   resourceId?: string,
 ): Promise<void> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
 
   const engine = await getEngine();
   const result = await engine.authorize({
@@ -60,7 +60,7 @@ export async function requireAnyPermission(
   resourceType: ResourceType,
   resourceId?: string,
 ): Promise<void> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
 
   for (const permission of permissions) {
     const engine = await getEngine();
@@ -87,7 +87,7 @@ export async function requireAnyPermission(
  * Compares as strings since UserRole (Prisma) and PlatformRole (engine) use different enums.
  */
 export async function requireRole(role: PlatformRole): Promise<void> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const targetRole = String(role);
   const userRole = String(user.role);
   if (userRole !== targetRole) {
@@ -99,7 +99,7 @@ export async function requireRole(role: PlatformRole): Promise<void> {
  * Require the current user to have at least the specified minimum role level.
  */
 export async function requireMinRole(minRole: PlatformRole): Promise<void> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
 
   const roleHierarchy: string[] = [
     String(PlatformRole.INTEGRATION_ACCOUNT),

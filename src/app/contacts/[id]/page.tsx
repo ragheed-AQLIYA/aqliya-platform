@@ -1,6 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound, redirect } from "next/navigation";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getContact } from "@/actions/contact-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -72,7 +72,7 @@ function interactionTypeLabel(type: string) {
 
 export default async function ContactDetailPage({ params }: PageProps) {
   noStore();
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
   const { id } = await params;
 
   const result = await getContact(id);
@@ -461,7 +461,7 @@ async function ComplianceSidebarSection({
   userId: string;
 }) {
   const { getExportComplianceSummary } = await import("@/lib/localcontactos/compliance-service");
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
   const summary = await getExportComplianceSummary(contactId, user);
 
   return <CompliancePanel summary={summary} />;

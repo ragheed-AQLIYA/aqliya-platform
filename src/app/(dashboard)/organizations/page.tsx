@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { listOrganizationsAction } from "@/actions/organization-actions";
 import Link from "next/link";
 import { Building2, Users, FileSpreadsheet, ArrowLeft } from "lucide-react";
 import { CreateOrganizationButton } from "./create-button";
@@ -10,17 +10,17 @@ export default async function OrganizationsPage() {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  const orgs = await prisma.organization.findMany({
-    where: user.organizationId
-      ? { platformOrganizationId: user.organizationId }
-      : {},
-    include: {
-      _count: {
-        select: { users: true, decisions: true },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  let orgs: Awaited<ReturnType<typeof listOrganizationsAction>>["data"] = [];
+  try {
+    const result = await listOrganizationsAction();
+    orgs = result.data;
+  } catch {
+    return (
+      <div className="p-8 max-w-6xl mx-auto" dir="rtl">
+        <p className="text-destructive">لا تملك صلاحية الوصول إلى المؤسسات</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 max-w-6xl mx-auto" dir="rtl">
@@ -73,11 +73,11 @@ export default async function OrganizationsPage() {
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5" />
-                  {org._count.users}
+                  {org.userCount}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <FileSpreadsheet className="h-3.5 w-3.5" />
-                  {org._count.decisions} قرارات
+                  {org.decisionCount} قرارات
                 </span>
               </div>
 

@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { revalidatePath } from "next/cache";
 import crypto from "node:crypto";
@@ -35,7 +36,8 @@ export async function createTemplate(data: {
   status?: string;
 }) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: user.organizationId, tenantId: user.organizationId }, "update");
     if (!data.name || data.name.trim().length === 0) {
       return { success: false, error: "اسم القالب مطلوب" };
     }
@@ -83,12 +85,10 @@ export async function updateTemplate(
   },
 ) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const existing = await prisma.workflowTemplate.findUnique({ where: { id } });
     if (!existing) return { success: false, error: "النموذج غير موجود" };
-    if (existing.organizationId !== user.organizationId) {
-      return { success: false, error: "لا تملك صلاحية تعديل هذا النموذج" };
-    }
+    await enforce(user, { type: "organization", id: existing.organizationId, tenantId: existing.organizationId }, "update");
     if (existing.status !== "draft") {
       return { success: false, error: "يمكن تعديل النماذج في حالة المسودة فقط" };
     }
@@ -125,12 +125,10 @@ export async function updateTemplate(
 
 export async function publishTemplate(id: string) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const existing = await prisma.workflowTemplate.findUnique({ where: { id } });
     if (!existing) return { success: false, error: "النموذج غير موجود" };
-    if (existing.organizationId !== user.organizationId) {
-      return { success: false, error: "لا تملك صلاحية نشر هذا النموذج" };
-    }
+    await enforce(user, { type: "organization", id: existing.organizationId, tenantId: existing.organizationId }, "update");
     if (existing.status !== "draft") {
       return { success: false, error: "يمكن نشر النماذج في حالة المسودة فقط" };
     }
@@ -161,12 +159,10 @@ export async function publishTemplate(id: string) {
 
 export async function archiveTemplate(id: string) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const existing = await prisma.workflowTemplate.findUnique({ where: { id } });
     if (!existing) return { success: false, error: "النموذج غير موجود" };
-    if (existing.organizationId !== user.organizationId) {
-      return { success: false, error: "لا تملك صلاحية أرشفة هذا النموذج" };
-    }
+    await enforce(user, { type: "organization", id: existing.organizationId, tenantId: existing.organizationId }, "update");
     const template = await prisma.workflowTemplate.update({
       where: { id },
       data: { status: "archived" },
@@ -190,7 +186,8 @@ export async function archiveTemplate(id: string) {
 
 export async function listTemplates(status?: string) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: user.organizationId, tenantId: user.organizationId }, "update");
     const where: Record<string, unknown> = { organizationId: user.organizationId };
     if (status && status !== "all") where.status = status;
     const templates = await prisma.workflowTemplate.findMany({
@@ -242,10 +239,8 @@ export async function registerWebhookAction(
   },
 ) {
   try {
-    const user = await requireUserContext();
-    if (user.organizationId !== organizationId) {
-      return { success: false, error: "لا تملك صلاحية" };
-    }
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
     const { getWebhookConfigs, saveWebhookConfigs } = await import("@/lib/workflowos/webhook-service");
     const configs = await getWebhookConfigs(organizationId);
     const newConfig = {
@@ -277,10 +272,8 @@ export async function registerWebhookAction(
 
 export async function testWebhookAction(organizationId: string, webhookId: string) {
   try {
-    const user = await requireUserContext();
-    if (user.organizationId !== organizationId) {
-      return { success: false, error: "لا تملك صلاحية" };
-    }
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
     const { getWebhookConfigs, sendWebhook } = await import("@/lib/workflowos/webhook-service");
     const configs = await getWebhookConfigs(organizationId);
     const config = configs.find((c) => c.id === webhookId);
@@ -311,10 +304,8 @@ export async function listWebhooksAction(organizationId: string) {
 
 export async function deleteWebhookAction(organizationId: string, webhookId: string) {
   try {
-    const user = await requireUserContext();
-    if (user.organizationId !== organizationId) {
-      return { success: false, error: "لا تملك صلاحية" };
-    }
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
     const { getWebhookConfigs, saveWebhookConfigs } = await import("@/lib/workflowos/webhook-service");
     const configs = await getWebhookConfigs(organizationId);
     const filtered = configs.filter((c) => c.id !== webhookId);

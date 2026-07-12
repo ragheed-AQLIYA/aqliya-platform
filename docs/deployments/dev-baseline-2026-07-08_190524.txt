@@ -1,0 +1,39 @@
+========================================
+AQLIYA DEV — BASELINE SMOKE EVIDENCE
+Date: 2026-07-08 19:05:25
+Environment: dev
+Domain: dev.aqliya.com
+========================================
+
+1) HTTPS + Domain
+Status: 200
+
+HTTP/1.1 200 OK
+Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 
+'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; 
+connect-src 'self' https://*.sentry.io; worker-src 'none'; manifest-src 'self';
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+
+
+
+
+2) Health Payload
+{"status":"ok","version":"0.1.0","build":{"commit":"development","timestamp":"2026-07-08T16:04:55.269Z","environment":"production"},"checks":{"database":{"ok":true,"latencyMs":2},"auth_secret":{"ok":true}},"uptime":31,"responseTimeMs":3,"note":"Enterprise health endpoint — liveness check"}
+
+3) Login Page
+Status: 200
+
+4) Main Page
+Status: 200
+
+5) ALB Direct (HTTP)
+Status: 200
+
+========================================
+Architecture notes:
+- CloudFront WAF attachment via web_acl_id (NOT aws_wafv2_web_acl_association)
+- APP_ENV=dev, NODE_ENV=production (separate runtime vs deployment env)
+- domain_ready=true in dev tfvars
+========================================

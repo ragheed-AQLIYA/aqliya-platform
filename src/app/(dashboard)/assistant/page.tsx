@@ -1,6 +1,6 @@
 import type { OfficeAiTask } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { getUserTaskList } from "@/actions/office-ai-workspace-actions";
 import { createOfficeAiTaskAction } from "@/actions/office-ai-actions";
 import {
   Card,
@@ -128,7 +128,6 @@ export default async function AssistantPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const user = await getCurrentUser();
-  const platformOrgId = user.platformOrganizationId;
 
   const activeStatus = searchParams?.status || "";
   const searchQuery = searchParams?.search || "";
@@ -136,77 +135,15 @@ export default async function AssistantPage(props: {
   const projectFilter = searchParams?.projectId || "";
   const taskTypeFilter = searchParams?.taskType || "";
 
-  let workspaces: { id: string; name: string }[] = [];
-  let projects: { id: string; name: string; workspaceId: string }[] = [];
-  let recentTasks: (OfficeAiTask & {
-    _count?: { outputs: number; sourceFiles: number };
-  })[] = [];
-  let taskCounts: { status: string; _count: number }[] = [];
-  let recentActivity: {
-    id: string;
-    title: string | null;
-    taskType: string;
-    status: string;
-    createdAt: Date;
-  }[] = [];
+  const data = await getUserTaskList(user.id, {
+    status: activeStatus || undefined,
+    search: searchQuery || undefined,
+    workspaceId: workspaceFilter || undefined,
+    projectId: projectFilter || undefined,
+    taskType: taskTypeFilter || undefined,
+  });
 
-  if (platformOrgId) {
-    workspaces = await prisma.clientWorkspace.findMany({
-      where: { platformOrganizationId: platformOrgId, status: "active" },
-      select: { id: true, name: true },
-      orderBy: { name: "asc" },
-    });
-    projects = await prisma.project.findMany({
-      where: { status: "active" },
-      select: { id: true, name: true, workspaceId: true },
-      orderBy: { name: "asc" },
-      take: 50,
-    });
-
-    // Build filter
-    const where: Record<string, unknown> = { createdById: user.id };
-    if (activeStatus) where.status = activeStatus;
-    if (searchQuery) {
-      where.OR = [
-        { title: { contains: searchQuery, mode: "insensitive" } },
-        { instructions: { contains: searchQuery, mode: "insensitive" } },
-      ];
-    }
-    if (workspaceFilter) where.clientWorkspaceId = workspaceFilter;
-    if (projectFilter) where.projectId = projectFilter;
-    if (taskTypeFilter) where.taskType = taskTypeFilter;
-
-    recentTasks = await prisma.officeAiTask.findMany({
-      where: where as never,
-      orderBy: { createdAt: "desc" },
-      take: 20,
-      include: {
-        _count: { select: { outputs: true, sourceFiles: true } },
-      },
-    });
-
-    // Status counts
-    const counts = await prisma.officeAiTask.groupBy({
-      by: ["status"],
-      where: { createdById: user.id },
-      _count: true,
-    });
-    taskCounts = counts.map((c) => ({ status: c.status, _count: c._count }));
-
-    // Recent activity (last 5 updated tasks)
-    recentActivity = await prisma.officeAiTask.findMany({
-      where: { createdById: user.id },
-      orderBy: { updatedAt: "desc" },
-      take: 5,
-      select: {
-        id: true,
-        title: true,
-        taskType: true,
-        status: true,
-        createdAt: true,
-      },
-    });
-  }
+  const { workspaces, projects, tasks: recentTasks, taskCounts, recentActivity } = data;
 
   const totalTasks = taskCounts.reduce((sum, c) => sum + c._count, 0);
   const getCount = (status: string) =>

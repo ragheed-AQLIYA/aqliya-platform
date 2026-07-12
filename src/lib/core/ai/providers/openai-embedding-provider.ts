@@ -1,4 +1,4 @@
-import "server-only"
+﻿import "server-only"
 import type {
   EmbeddingProvider,
   EmbeddingProviderId,
@@ -7,6 +7,7 @@ import type {
 } from "@/lib/core/ai/types"
 
 const DEFAULT_MODEL = "text-embedding-3-small"
+const EMBEDDING_HTTP_TIMEOUT_MS = 30_000;
 
 export class OpenAIEmbeddingProvider implements EmbeddingProvider {
   readonly providerId: EmbeddingProviderId = "openai"
@@ -23,14 +24,25 @@ export class OpenAIEmbeddingProvider implements EmbeddingProvider {
 
     const model = request.model ?? DEFAULT_MODEL
     const input = request.input
-    const res = await fetch("https://api.openai.com/v1/embeddings", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ model, input }),
-    })
+
+    let res: Response;
+    try {
+      res = await fetch("https://api.openai.com/v1/embeddings", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ model, input }),
+        signal: AbortSignal.timeout(EMBEDDING_HTTP_TIMEOUT_MS),
+      })
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        console.error(`[openai-embeddings] Request timed out after ${EMBEDDING_HTTP_TIMEOUT_MS}ms`);
+        throw new Error(`OpenAI embeddings request timed out after ${EMBEDDING_HTTP_TIMEOUT_MS / 1000}s. Please try again.`);
+      }
+      throw err;
+    }
 
     if (!res.ok) {
       const body = await res.text()

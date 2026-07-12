@@ -1,0 +1,14 @@
+{
+  "at": "2026-07-11T11:27:35.812Z",
+  "overall": 74,
+  "overallDelta": 0,
+  "pilotReady": 8,
+  "productionReady": 8,
+  "compliance": 82,
+  "adr": 59,
+  "authAdoption": 52,
+  "lifeCounts": {
+    "prioritized": 10,
+    "finding": 210
+  }
+}

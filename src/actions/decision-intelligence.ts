@@ -9,11 +9,20 @@ import {
   mergeDecisionInsightWithAI,
   runGovernedDecisionAI,
 } from "@/lib/decision/decision-ai-bridge"
-import { isExpectedAccessDeniedError, requireDecisionAccess } from "@/lib/auth"
+import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth"
+import { enforce } from "@/lib/authorization/action-guard"
 
 export async function getDecisionForIntelligence(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
     const gate = await validateIntelligenceGate(decisionId)
     if (!gate.allowed) {
       return { success: false, error: "Intelligence access blocked", missing: gate.missing }
@@ -53,7 +62,15 @@ export async function getDecisionForIntelligence(decisionId: string) {
 
 export async function generateStrategicInsightAction(decisionId: string) {
   try {
-    const access = await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
     const gate = await validateIntelligenceGate(decisionId)
     if (!gate.allowed) {
       return { success: false, error: "Intelligence access blocked", missing: gate.missing }
@@ -85,8 +102,8 @@ export async function generateStrategicInsightAction(decisionId: string) {
     const base = generateStrategicInsight(decision)
     const ai = await runGovernedDecisionAI({
       decisionId,
-      userId: access.user.id,
-      userRole: access.user.role,
+      userId: user.id,
+      userRole: user.role,
       focus: "insight",
     }).catch(() => null)
     const insight = mergeDecisionInsightWithAI(base, ai)
@@ -101,7 +118,15 @@ export async function generateStrategicInsightAction(decisionId: string) {
 
 export async function generateWhatToDoNowAction(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
     const gate = await validateIntelligenceGate(decisionId)
     if (!gate.allowed) {
       return { success: false, error: "Intelligence access blocked", missing: gate.missing }
@@ -142,7 +167,15 @@ export async function generateWhatToDoNowAction(decisionId: string) {
 
 export async function generateExecutiveOverviewAction(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
     const gate = await validateIntelligenceGate(decisionId)
     if (!gate.allowed) {
       return { success: false, error: "Intelligence access blocked", missing: gate.missing }

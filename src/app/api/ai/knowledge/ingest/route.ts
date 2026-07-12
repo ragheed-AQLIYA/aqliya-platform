@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 import { handleAiApiError } from "@/lib/core/ai/api-errors"
 import {
   ingestKnowledgeDocument,
@@ -11,7 +11,10 @@ export const maxDuration = 120
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireUserContext("OPERATOR")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "OPERATOR")) {
+      throw new Error("Access denied: OPERATOR role required");
+    }
     const body = await request.json()
 
     const organizationId = resolveKnowledgeOrganizationId(

@@ -1,21 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { addHold, listHolds } from "@/lib/core/policy/retention/holds";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export async function GET() {
   try {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const holds = await listHolds(user.platformOrganizationId);
     return NextResponse.json({ holds });
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } catch (err) {
+    const { message, code } = sanitizeError(err);
+    return NextResponse.json({ error: message }, { status: httpStatusFromCode(code) });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const body = (await request.json()) as {
       recordType: string;
       recordId: string;
@@ -47,9 +55,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ hold });
   } catch (err) {
-    if (err instanceof Error && (err.message === "Unauthenticated" || err.message.startsWith("Access denied"))) {
-      return NextResponse.json({ error: err.message }, { status: 403 });
-    }
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    const { message, code } = sanitizeError(err);
+    return NextResponse.json({ error: message }, { status: httpStatusFromCode(code) });
   }
 }

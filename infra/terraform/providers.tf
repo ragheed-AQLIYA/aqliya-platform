@@ -2,14 +2,14 @@
 
 locals {
   common_tags = {
-    Environment        = var.environment
-    Product            = "AQLIYA"
-    ManagedBy          = "terraform"
+    Environment          = var.environment
+    Product              = "AQLIYA"
+    ManagedBy            = "terraform"
     "AQLIYA:application" = "aqliya-platform"
   }
 }
 
-# ─── Default provider (primary region: me-south-1 Riyadh) ───
+# ─── Default provider (primary region: eu-north-1 Stockholm) ───
 
 provider "aws" {
   region = var.aws_region

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AQLIYA Engineering Intelligence</title>
+  <style>
+    :root { --bg:#0b1220; --card:#152033; --text:#e8eef8; --muted:#8fa3bf; --accent:#4c9ffe; --pass:#3dd68c; --warn:#f5a524; --fail:#f31260; --up:#3dd68c; --down:#f31260; }
+    body { margin:0; font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif; background:radial-gradient(1200px 600px at 10% -10%, #1a2b45, var(--bg)); color:var(--text); }
+    main { max-width:1120px; margin:0 auto; padding:2rem 1.25rem 4rem; }
+    h1 { font-size:1.85rem; margin:0 0 .35rem; letter-spacing:-.02em; }
+    .sub { color:var(--muted); margin-bottom:1.5rem; }
+    .hero { background:linear-gradient(135deg,#1b2d48,#132033); border:1px solid #243552; border-radius:16px; padding:1.25rem 1.4rem; margin-bottom:1.25rem; }
+    .spark { font-size:1.6rem; letter-spacing:.08em; font-family:ui-monospace, Consolas, monospace; }
+    .delta-up { color:var(--up); } .delta-down { color:var(--down); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.85rem; }
+    .card { background:var(--card); border:1px solid #243552; border-radius:12px; padding:.9rem 1rem; }
+    .card .label { color:var(--muted); font-size:.75rem; text-transform:uppercase; letter-spacing:.04em; }
+    .card .value { font-size:1.6rem; font-weight:700; margin-top:.3rem; }
+    table { width:100%; border-collapse:collapse; margin-top:.75rem; font-size:.92rem; }
+    th, td { text-align:left; padding:.5rem .4rem; border-bottom:1px solid #243552; }
+    .PASS { color:var(--pass); } .WARNING { color:var(--warn); } .FAIL { color:var(--fail); }
+    a { color:var(--accent); }
+    ul { padding-left:1.1rem; } li { margin:.35rem 0; color:#d5deeb; }
+    h2 { margin-top:1.75rem; font-size:1.15rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>AQLIYA Engineering Intelligence</h1>
+    <p class="sub">2026-07-11T02:08:23.186Z · Audit → History → Trend → Recommendation</p>
+    <div class="hero">
+      <div class="label" style="color:var(--muted);font-size:.8rem;">Repository Health</div>
+      <div class="spark">▁▇███</div>
+      <div style="font-size:2rem;font-weight:700;margin-top:.35rem;">74
+        <span class="delta-up" style="font-size:1rem;margin-inline-start:.5rem;">
+          ↗ +0
+        </span>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="label">Overall Repository Health</div><div class="value">74</div></div>
+<div class="card"><div class="label">Security Score</div><div class="value">65</div></div>
+<div class="card"><div class="label">Performance Score</div><div class="value">57</div></div>
+<div class="card"><div class="label">Code Quality</div><div class="value">32</div></div>
+<div class="card"><div class="label">Architecture Drift</div><div class="value">73</div></div>
+<div class="card"><div class="label">Documentation</div><div class="value">95</div></div>
+<div class="card"><div class="label">Tests</div><div class="value">95</div></div>
+<div class="card"><div class="label">Technical Debt</div><div class="value">58</div></div>
+<div class="card"><div class="label">Developer Experience</div><div class="value">73</div></div>
+<div class="card"><div class="label">Engineering Maturity</div><div class="value">80</div></div>
+    </div>
+    <h2>Smart Quality Gates</h2>
+    <table>
+      <thead><tr><th>Gate</th><th>Status</th><th>Score</th><th>Δ</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>security</td><td class="WARNING">WARNING</td><td>65</td><td>+0</td><td>score 65 vs pass≥80 warn≥60 · Δ +0 (+0% vs previous)</td></tr>
+<tr><td>performance</td><td class="WARNING">WARNING</td><td>57</td><td>+0</td><td>score 57 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)</td></tr>
+<tr><td>complexity</td><td class="FAIL">FAIL</td><td>32</td><td>+0</td><td>score 32 vs pass≥70 warn≥50 · Δ +0 (+0% vs previous) · still below threshold despite =</td></tr>
+<tr><td>coverage</td><td class="PASS">PASS</td><td>95</td><td>+0</td><td>score 95 vs pass≥60 warn≥40 · Δ +0 (+0% vs previous)</td></tr>
+<tr><td>documentation</td><td class="PASS">PASS</td><td>95</td><td>+0</td><td>score 95 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)</td></tr>
+<tr><td>deadCode</td><td class="FAIL">FAIL</td><td>32</td><td>+0</td><td>score 32 vs pass≥70 warn≥50 · Δ +0 (+0% vs previous) · still below threshold despite =</td></tr>
+<tr><td>dependencyHealth</td><td class="PASS">PASS</td><td>93</td><td>+0</td><td>score 93 vs pass≥80 warn≥60 · Δ +0 (+0% vs previous)</td></tr>
+<tr><td>architectureDrift</td><td class="WARNING">WARNING</td><td>73</td><td>+0</td><td>score 73 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)</td></tr>
+      </tbody>
+    </table>
+    <h2>Top Risks</h2>
+    <ul><li><strong>[high]</strong> Client module references server-only concerns (×1)</li><li><strong>[high]</strong> Client module references server-only concerns (×1)</li><li><strong>[high]</strong> Client module references server-only concerns (×1)</li><li><strong>[high]</strong> Client module references server-only concerns (×1)</li><li><strong>[high]</strong> Client module references server-only concerns (×1)</li><li><strong>[high]</strong> Client module references server-only concerns (×1)</li><li><strong>[high]</strong> Client module references server-only concerns (×1)</li><li><strong>[high]</strong> Client module references server-only concerns (×1)</li></ul>
+    <h2>Products</h2>
+    <p>Strongest: <strong>RiskOS</strong> · Attention: <strong>DecisionOS</strong></p>
+    <p style="margin-top:2rem;color:var(--muted)">Markdown: <a href="./DASHBOARD.md">DASHBOARD.md</a> · <a href="./EXECUTIVE.md">EXECUTIVE.md</a> · <a href="./PRODUCT_SCORECARD.md">PRODUCT_SCORECARD.md</a></p>
+  </main>
+</body>
+</html>

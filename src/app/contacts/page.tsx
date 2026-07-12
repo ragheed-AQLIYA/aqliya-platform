@@ -1,6 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
-import { requireUserContext } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth";
+import { listContacts } from "@/actions/contact-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -26,33 +26,25 @@ interface PageProps {
 
 export default async function ContactsPage({ searchParams }: PageProps) {
   noStore();
-  const user = await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
   const params = await searchParams;
 
-  const where: Record<string, unknown> = {
-    organizationId: user.organizationId,
-    isActive: true,
-  };
-
-  if (params.sensitivity) {
-    where.sensitivityLevel = params.sensitivity;
-  }
-
-  if (params.search) {
-    where.OR = [
-      { name: { contains: params.search } },
-      { email: { contains: params.search } },
-      { organizationName: { contains: params.search } },
-      { position: { contains: params.search } },
-    ];
-  }
-
-  const contacts = await prisma.localContact.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
+  const result = await listContacts(user.organizationId, {
+    sensitivityLevel: params.sensitivity,
+    search: params.search,
   });
 
-  const parsed = contacts.map((c) => ({
+  if (!result.ok) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-background">
+        <div className="max-w-6xl mx-auto p-6">
+          <p className="text-destructive">{result.error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const parsed = result.data.map((c) => ({
     ...c,
     tags: typeof c.tags === "string" ? JSON.parse(c.tags) : c.tags,
   }));

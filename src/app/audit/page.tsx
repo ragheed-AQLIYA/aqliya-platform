@@ -16,7 +16,7 @@ import { WorkspaceStatus } from "@/components/workspace/workspace-status";
 import { EngagementFormWrapper } from "@/components/audit/dashboard/engagement-form-wrapper";
 import { EngagementListItem } from "@/components/audit/dashboard/engagement-list-item";
 import { RecentActivity } from "@/components/audit/dashboard/recent-activity";
-import { getWorkflowReadinessAction } from "@/actions/audit-read-actions";
+import { getWorkflowReadinessAction, getProjectsBatch, getWorkspacesBatch } from "@/actions/audit-read-actions";
 import { getNextWorkflowAction } from "@/lib/audit/workflow-next-action";
 import {
   getDashboardSummary,
@@ -25,13 +25,15 @@ import {
 } from "@/lib/audit/services";
 import { getAuditActor } from "@/lib/audit/actor-context";
 import { getCached } from "@/lib/platform/cache/memory-cache";
-import { prisma } from "@/lib/prisma";
+import { AuditTour } from "@/components/onboarding/audit-tour";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   ShieldCheck,
   FileText,
   AlertCircle,
   CheckCircle2,
   Clock,
+  Briefcase,
 } from "lucide-react";
 
 async function getEngagementOperatorSummaries(engagementIds: string[]) {
@@ -128,10 +130,7 @@ export default async function AuditDashboardPage() {
     .filter((projectId): projectId is string => Boolean(projectId));
   const projects =
     engagementProjectIds.length > 0
-      ? await prisma.project.findMany({
-          where: { id: { in: engagementProjectIds } },
-          select: { id: true, name: true, projectType: true },
-        })
+      ? await getProjectsBatch(engagementProjectIds)
       : [];
   const projectMap = new Map(projects.map((p) => [p.id, p]));
 
@@ -145,10 +144,7 @@ export default async function AuditDashboardPage() {
   ];
   const workspaces =
     clientWorkspaceIds.length > 0
-      ? await prisma.clientWorkspace.findMany({
-          where: { id: { in: clientWorkspaceIds } },
-          select: { id: true, name: true, slug: true },
-        })
+      ? await getWorkspacesBatch(clientWorkspaceIds)
       : [];
   const workspaceMap = new Map(workspaces.map((w) => [w.id, w]));
 
@@ -251,7 +247,8 @@ export default async function AuditDashboardPage() {
       </div>
 
       {/* Intelligence Summary */}
-      <IntelligenceSummaryPanel
+      <div data-tour="findings">
+        <IntelligenceSummaryPanel
         title="ذكاء التدقيق"
         module="audit"
         signals={[
@@ -274,38 +271,47 @@ export default async function AuditDashboardPage() {
           },
         ]}
       />
+      </div>
 
       {/* AI Insight */}
-      {summary.openFindings > 0 && (
-        <AIInsightCard confidence={insightConfidence}>
-          {summary.openFindings} نتيجة مفتوحة مكتشفة عبر{" "}
-          {summary.activeEngagements} مهمة نشطة.
-          {summary.missingEvidence > 0 &&
-            ` ${summary.missingEvidence} عنصر دليل ما زال مفقوداً. يُوصى بجمع الأدلة قبل المراجعة.`}
-        </AIInsightCard>
-      )}
+      <div data-tour="evidence">
+        {summary.openFindings > 0 && (
+          <AIInsightCard confidence={insightConfidence}>
+            {summary.openFindings} نتيجة مفتوحة مكتشفة عبر{" "}
+            {summary.activeEngagements} مهمة نشطة.
+            {summary.missingEvidence > 0 &&
+              ` ${summary.missingEvidence} عنصر دليل ما زال مفقوداً. يُوصى بجمع الأدلة قبل المراجعة.`}
+          </AIInsightCard>
+        )}
+      </div>
 
       {/* Engagements */}
-      <SectionHeader
-        eyebrow="المهام"
-        title="المهام النشطة"
-        description="كل مهمة تعرض الخطوة التالية المطلوبة — بدون مقاييس وهمية"
-      />
+      <div data-tour="engagements">
+        <SectionHeader
+          eyebrow="المهام"
+          title="المهام النشطة"
+          description="كل مهمة تعرض الخطوة التالية المطلوبة — بدون مقاييس وهمية"
+        />
 
-      <EnterpriseCard>
-        {engagements.length === 0 ? (
-          <EnterpriseCardContent className="py-12">
-            <div className="text-center">
-              <ShieldCheck className="mx-auto h-12 w-12 text-muted-foreground/40 mb-4" />
-              <h3 className="text-base font-semibold text-foreground">
-                لا توجد مهام بعد
-              </h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                أنشئ مهمة التدقيق الأولى للبدء.
-              </p>
-            </div>
-          </EnterpriseCardContent>
-        ) : (
+        <EnterpriseCard>
+          {engagements.length === 0 ? (
+            <EnterpriseCardContent>
+              <EmptyState
+                icon={<Briefcase className="h-12 w-12" />}
+                title="لا توجد مهام تدقيق بعد"
+                description="أنشئ مهمة التدقيق الأولى للبدء في إدارة عمليات التدقيق."
+                action={
+                  <EngagementFormWrapper
+                    users={
+                      summary.engagements.length > 0
+                        ? await getAuditUsers(actor.organizationId)
+                        : []
+                    }
+                  />
+                }
+              />
+            </EnterpriseCardContent>
+          ) : (
           <div className="divide-y">
             {engagements.map((eng) => {
               const summary = operatorSummaries.get(eng.id);
@@ -333,20 +339,25 @@ export default async function AuditDashboardPage() {
             })}
           </div>
         )}
-      </EnterpriseCard>
+        </EnterpriseCard>
+      </div>
 
       {/* Recent Activity */}
-      <SectionHeader
-        eyebrow="النشاط"
-        title="آخر النشاطات"
-        description="أحدث الإجراءات عبر جميع المهام"
-      />
+      <div data-tour="export">
+        <SectionHeader
+          eyebrow="النشاط"
+          title="آخر النشاطات"
+          description="أحدث الإجراءات عبر جميع المهام"
+        />
 
-      <EnterpriseCard>
-        <EnterpriseCardContent>
-          <RecentActivity events={summary.recentActivity} />
-        </EnterpriseCardContent>
-      </EnterpriseCard>
+        <EnterpriseCard>
+          <EnterpriseCardContent>
+            <RecentActivity events={summary.recentActivity} />
+          </EnterpriseCardContent>
+        </EnterpriseCard>
+      </div>
+
+      <AuditTour />
     </div>
   );
 }

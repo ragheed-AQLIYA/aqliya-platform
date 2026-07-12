@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -62,7 +62,7 @@ export async function assignReviewer(
   dueDate?: string,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, platformOrganizationId: true },
@@ -111,7 +111,7 @@ export async function assignReviewer(
 
 export async function completeReview(reviewId: string, notes?: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const review = await prisma.contactReview.findUnique({
       where: { id: reviewId },
       select: { id: true, organizationId: true, contactId: true, reviewerId: true, status: true },
@@ -149,7 +149,7 @@ export async function completeReview(reviewId: string, notes?: string) {
 
 export async function getReviewStatus(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     const reviews = await prisma.contactReview.findMany({
       where: { organizationId: user.organizationId, contactId },
       include: { approvals: true },
@@ -179,7 +179,7 @@ export async function getReviewStatus(contactId: string) {
 
 export async function listReviewers(organizationId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     if (user.organizationId !== organizationId) {
       throw new Error("Access denied");
     }

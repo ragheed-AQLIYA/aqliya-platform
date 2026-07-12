@@ -75,8 +75,9 @@ export default async function DecisionsPage() {
   ]);
 
   const decisions =
-    decisionsResult.success && decisionsResult.data ? decisionsResult.data : [];
-  const metrics = metricsResult.success ? metricsResult.data : null;
+    decisionsResult.success && "data" in decisionsResult ? (decisionsResult as { data: unknown[] }).data : [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- cache wrapper type inference limitation
+  const metrics = metricsResult.success && "data" in metricsResult ? (metricsResult as any).data : null;
   const evidenceRatio =
     metrics && metrics.totalDecisions > 0
       ? metrics.governanceMetrics.evidenceBackedCount / metrics.totalDecisions

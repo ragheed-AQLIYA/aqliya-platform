@@ -1,7 +1,7 @@
 // ─── LocalContentOS Tenant Isolation Guards ───
 // Extracted shared guard pattern for verifying entity access belongs to the
 // current user's organization. Each guard:
-//   1. Calls requireUserContext() to get the authenticated user + org
+//   1. Calls getCurrentUser() to get the authenticated user + org
 //   2. Verifies the target entity belongs to that org via Prisma chain
 //   3. Throws "Access denied" if not found or not owned
 //
@@ -12,14 +12,14 @@
 // wrapper pattern (errors are caught and returned as { ok: false }).
 
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 /**
  * Verify that a project belongs to the current user's organization.
  * Used by actions accepting a projectId from the client.
  */
 export async function requireProjectAccess(projectId: string): Promise<string> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const project = await prisma.localContentProject.findFirst({
     where: { id: projectId, organizationId: user.organizationId },
     select: { id: true },
@@ -34,7 +34,7 @@ export async function requireProjectAccess(projectId: string): Promise<string> {
  * Used by actions accepting a workbookId from the client.
  */
 export async function requireWorkbookAccess(workbookId: string): Promise<string> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const workbook = await prisma.lcWorkbook.findFirst({
     where: {
       id: workbookId,
@@ -52,7 +52,7 @@ export async function requireWorkbookAccess(workbookId: string): Promise<string>
  * Used by actions accepting a lineId from the client.
  */
 export async function requireWorkbookLineAccess(lineId: string): Promise<string> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const line = await prisma.lcWorkbookLine.findFirst({
     where: {
       id: lineId,
@@ -70,7 +70,7 @@ export async function requireWorkbookLineAccess(lineId: string): Promise<string>
  * Used by actions accepting a requestId from the client.
  */
 export async function requireDataRequestAccess(requestId: string): Promise<string> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const request = await prisma.lcDataRequest.findFirst({
     where: {
       id: requestId,
@@ -89,7 +89,7 @@ export async function requireDataRequestAccess(requestId: string): Promise<strin
  * Used by actions accepting an itemId from the client.
  */
 export async function requireDataRequestItemAccess(itemId: string): Promise<string> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const item = await prisma.lcDataRequestItem.findFirst({
     where: {
       id: itemId,
@@ -110,7 +110,7 @@ export async function requireDataRequestItemAccess(itemId: string): Promise<stri
  * cross-tenant data access through parameter manipulation.
  */
 export async function requireOrganizationAccess(organizationId: string): Promise<string> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   if (organizationId !== user.organizationId) {
     throw new Error("Access denied: organization mismatch");
   }
@@ -123,7 +123,7 @@ export async function requireOrganizationAccess(organizationId: string): Promise
  * Used by reviewSuggestionAction and batchReviewAction (type=suggestion).
  */
 export async function requirePatternSuggestionAccess(suggestionId: string): Promise<string> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const suggestion = await prisma.lcPatternSuggestion.findFirst({
     where: { id: suggestionId, organizationId: user.organizationId },
     select: { id: true },
@@ -138,7 +138,7 @@ export async function requirePatternSuggestionAccess(suggestionId: string): Prom
  * Used by reviewExplanationAction and batchReviewAction (type=explanation/false_positive).
  */
 export async function requireMatchReviewAccess(matchReviewId: string): Promise<string> {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const review = await prisma.lcMatchReview.findFirst({
     where: { id: matchReviewId, organizationId: user.organizationId },
     select: { id: true },

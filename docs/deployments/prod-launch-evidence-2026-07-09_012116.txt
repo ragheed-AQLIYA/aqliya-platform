@@ -1,0 +1,34 @@
+===========================================================
+AQLIYA PRODUCTION — LAUNCH EVIDENCE
+Date: 2026-07-09 01:21:16
+Environment: prod
+Domain: https://app.aqliya.com
+CloudFront: d24gqdc5iosl4w.cloudfront.net
+===========================================================
+
+=== SMOKE TESTS ===
+https://app.aqliya.com/api/health → 200 ✅
+https://app.aqliya.com/          → 200 ✅
+https://app.aqliya.com/login     → 200 ✅
+HTTP→HTTPS redirect → 200 ✅
+Health payload: {"status":"ok","database":true,"auth_secret":true}
+
+=== SECURITY HEADERS ===
+CSP: ✅ default-src 'self'; script-src 'self' 'unsafe-inline'
+X-Frame-Options: ✅ SAMEORIGIN
+X-Content-Type-Options: ✅ nosniff
+Referrer-Policy: ✅ strict-origin-when-cross-origin
+
+=== ACM STATUS ===
+eu-north-1 (ALB): ISSUED ✅
+us-east-1 (CloudFront): ISSUED ✅
+
+=== ARCHITECTURE ===
+User → DNS (Route53) → CloudFront → WAF → ALB → ECS Fargate → RDS/Redis
+
+=== KNOWN RISKS ===
+1. Redis: single-node (aws_elasticache_cluster) — upgrade to replication_group post-launch
+2. RDS: db.t4g.micro (free-tier) — upgrade to db.t4g.medium post-account-upgrade
+3. Multi-AZ: disabled — enable post-account-upgrade
+4. Backup retention: 0 days — set to 30 post-account-upgrade
+===========================================================

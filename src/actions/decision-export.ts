@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { isExpectedAccessDeniedError, requireDecisionAccess } from "@/lib/auth";
+import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization/action-guard";
 import {
   buildRecommendationDiff,
   getDiffSummary,
@@ -94,7 +95,15 @@ export async function getDecisionExportData(
   requestedFormat: "json" | "markdown" = "json",
 ): Promise<{ success: boolean; data?: ExportData; error?: string }> {
   try {
-    const user = await requireDecisionAccess(decisionId, "VIEWER");
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
 
     const [decision, evidenceCount] = await Promise.all([
       prisma.decision.findUnique({
@@ -323,7 +332,7 @@ export async function getDecisionExportData(
       })),
       exportMetadata: {
         exportedAt: new Date(),
-        exportedBy: user.user.name,
+        exportedBy: user.name,
         requestedFormat,
         snapshotSource,
         evidenceCount,
@@ -336,12 +345,12 @@ export async function getDecisionExportData(
         productKey: Product.DECISION_OS,
         sourceSystem: "decision_export",
         organization: {
-          platformOrganizationId: user.user.platformOrganizationId,
+          platformOrganizationId: user.platformOrganizationId,
         },
         actor: {
-          id: user.user.id,
+          id: user.id,
           type: "user",
-          name: user.user.name || user.user.email,
+          name: user.name || user.email,
         },
       });
       await alog.record(

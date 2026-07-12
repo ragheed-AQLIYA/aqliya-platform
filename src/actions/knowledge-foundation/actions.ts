@@ -45,6 +45,18 @@ function revalidateFoundationPaths(versionId?: string) {
 
 // ─── Read Actions (VIEWER minimum) ────────────────────────────────
 
+export async function listPlatformAuditLogs(productKey: string, take = 100) {
+  const { prisma } = await import("@/lib/prisma");
+  await getCurrentUser();
+  return prisma.platformAuditLog.findMany({
+    where: {
+      productKey,
+    },
+    orderBy: { createdAt: "desc" },
+    take,
+  });
+}
+
 export async function listVersions() {
   await getCurrentUser();
   return getVersions();

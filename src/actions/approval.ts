@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import {
   isExpectedAccessDeniedError,
-  requireDecisionAccess,
   getCurrentUser,
 } from "@/lib/auth";
+import { enforce } from "@/lib/authorization/action-guard";
 import {
   buildRecommendationDiff,
   getDiffSummary,
@@ -82,7 +82,7 @@ function buildSnapshotData(
 
 export async function submitForReview(decisionId: string) {
   try {
-    const { user } = await requireDecisionAccess(decisionId, "OPERATOR");
+    const user = await getCurrentUser();
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -92,6 +92,8 @@ export async function submitForReview(decisionId: string) {
     if (!decision) {
       return { success: false, error: "Decision not found" };
     }
+
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decision.organizationId }, "update");
 
     if (decision.status !== "DRAFT") {
       return {
@@ -147,7 +149,7 @@ export async function approveDecision(
   overrideReason?: string,
 ) {
   try {
-    const { user } = await requireDecisionAccess(decisionId, "ADMIN");
+    const user = await getCurrentUser();
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -157,6 +159,8 @@ export async function approveDecision(
     if (!decision) {
       return { success: false, error: "Decision not found" };
     }
+
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decision.organizationId }, "admin");
 
     if (decision.status !== "IN_REVIEW") {
       return {
@@ -240,7 +244,7 @@ export async function approveWithConditions(
   overrideReason?: string,
 ) {
   try {
-    const { user } = await requireDecisionAccess(decisionId, "ADMIN");
+    const user = await getCurrentUser();
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -250,6 +254,8 @@ export async function approveWithConditions(
     if (!decision) {
       return { success: false, error: "Decision not found" };
     }
+
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decision.organizationId }, "admin");
 
     if (decision.status !== "IN_REVIEW") {
       return {
@@ -335,7 +341,7 @@ export async function approveWithConditions(
 
 export async function rejectDecision(decisionId: string, reason: string) {
   try {
-    const { user } = await requireDecisionAccess(decisionId, "ADMIN");
+    const user = await getCurrentUser();
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -345,6 +351,8 @@ export async function rejectDecision(decisionId: string, reason: string) {
     if (!decision) {
       return { success: false, error: "Decision not found" };
     }
+
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decision.organizationId }, "admin");
 
     if (decision.status !== "IN_REVIEW") {
       return {
@@ -411,7 +419,7 @@ export async function rejectDecision(decisionId: string, reason: string) {
 
 export async function requestRevision(decisionId: string, reason: string) {
   try {
-    const { user } = await requireDecisionAccess(decisionId, "ADMIN");
+    const user = await getCurrentUser();
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -421,6 +429,8 @@ export async function requestRevision(decisionId: string, reason: string) {
     if (!decision) {
       return { success: false, error: "Decision not found" };
     }
+
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decision.organizationId }, "admin");
 
     if (decision.status !== "IN_REVIEW") {
       return {
@@ -461,7 +471,16 @@ export async function requestRevision(decisionId: string, reason: string) {
 
 export async function getApprovalStatus(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER");
+    const user = await getCurrentUser();
+
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
 
     const [decision, evidenceStats] = await Promise.all([
       prisma.decision.findUnique({
@@ -611,7 +630,16 @@ export async function getApprovalStatus(decisionId: string) {
 
 export async function getRecommendationDiff(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER");
+    const user = await getCurrentUser();
+
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -704,7 +732,7 @@ export async function getRecommendationDiff(decisionId: string) {
 
 export async function requestReReview(decisionId: string, reason: string) {
   try {
-    const { user } = await requireDecisionAccess(decisionId, "ADMIN");
+    const user = await getCurrentUser();
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },
@@ -714,6 +742,8 @@ export async function requestReReview(decisionId: string, reason: string) {
     if (!decision) {
       return { success: false, error: "Decision not found" };
     }
+
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decision.organizationId }, "admin");
 
     if (decision.status !== "APPROVED" && decision.status !== "IN_REVIEW") {
       return {
@@ -755,7 +785,16 @@ export async function requestReReview(decisionId: string, reason: string) {
 
 export async function getDecisionTimeline(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "VIEWER");
+    const user = await getCurrentUser();
+
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
 
     const decision = await prisma.decision.findUnique({
       where: { id: decisionId },

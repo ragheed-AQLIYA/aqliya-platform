@@ -1,4 +1,4 @@
-import "server-only"
+﻿import "server-only"
 import { getRagEmbeddingProvider } from "@/lib/core/knowledge/rag/embedding-provider"
 import type { EmbeddingProvider as RagEmbeddingProvider } from "@/lib/core/ai/types"
 
@@ -13,6 +13,8 @@ export type EmbeddingProviderType = "openai" | "local" | "mock"
 
 const MOCK_DIMENSIONS = 1536
 const MOCK_SEED = 42
+const LOCAL_AVAILABILITY_TIMEOUT_MS = 3_000;
+const LOCAL_EMBEDDING_TIMEOUT_MS = 30_000;
 
 function deterministicMockEmbedding(text: string, dims: number): number[] {
   let hash = MOCK_SEED
@@ -89,11 +91,22 @@ export class LocalEmbeddingProvider implements EmbeddingProvider {
   }
 
   async embedBatch(texts: string[]): Promise<number[][]> {
-    const res = await fetch(`${this.baseUrl.replace(/\/$/, "")}/api/embeddings`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: this.model, input: texts }),
-    });
+    const url = `${this.baseUrl.replace(/\/$/, "")}/api/embeddings`;
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: this.model, input: texts }),
+        signal: AbortSignal.timeout(LOCAL_EMBEDDING_TIMEOUT_MS),
+      });
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        console.error(`[ollama-embeddings] Request timed out after ${LOCAL_EMBEDDING_TIMEOUT_MS}ms to ${url}`);
+        throw new Error(`Ollama embeddings request timed out after ${LOCAL_EMBEDDING_TIMEOUT_MS / 1000}s. Please try again.`);
+      }
+      throw err;
+    }
     if (!res.ok) {
       throw new Error(`Ollama embeddings error ${res.status}`);
     }
@@ -104,7 +117,7 @@ export class LocalEmbeddingProvider implements EmbeddingProvider {
   async isAvailable(): Promise<boolean> {
     try {
       const res = await fetch(`${this.baseUrl.replace(/\/$/, "")}/api/tags`, {
-        signal: AbortSignal.timeout(3000),
+        signal: AbortSignal.timeout(LOCAL_AVAILABILITY_TIMEOUT_MS),
       });
       return res.ok;
     } catch {

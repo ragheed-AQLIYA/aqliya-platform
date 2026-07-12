@@ -417,7 +417,13 @@ const localContentNav = [
   },
 ];
 
-export function PlatformSidebar() {
+export function PlatformSidebar({
+  mobileOpen = false,
+  onCloseMobile,
+}: {
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
+}) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [moduleOpen, setModuleOpen] = useState(false);
@@ -428,12 +434,24 @@ export function PlatformSidebar() {
   const navItems = getModuleNav(activeModule);
 
   return (
-    <aside
-      className={cn(
-        "flex h-full shrink-0 flex-col border-l bg-sidebar transition-all duration-200",
-        collapsed ? "w-16" : "w-64",
+    <>
+      {/* Mobile overlay backdrop */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={onCloseMobile}
+          aria-hidden="true"
+        />
       )}
-    >
+
+      <aside
+        className={cn(
+          "flex h-full shrink-0 flex-col border-l bg-sidebar transition-transform duration-300",
+          collapsed ? "w-16" : "w-64",
+          "fixed right-0 top-0 z-50 h-full md:relative md:z-auto",
+          mobileOpen ? "translate-x-0" : "translate-x-full md:translate-x-0",
+        )}
+      >
       {/* Brand Header */}
       <div className="flex h-14 shrink-0 items-center border-b px-3">
         <Link
@@ -460,14 +478,35 @@ export function PlatformSidebar() {
             </div>
           )}
         </Link>
-        {!collapsed && (
+        {collapsed ? (
           <button
-            onClick={() => setCollapsed(true)}
-            className="mr-auto p-1 rounded-md hover:bg-muted text-muted-foreground transition-colors"
-            aria-label="Collapse sidebar"
+            onClick={() => setCollapsed(false)}
+            className="mx-auto p-1 rounded-md hover:bg-muted text-muted-foreground transition-colors"
+            aria-label="توسيع القائمة"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
+        ) : (
+          <div className="mr-auto flex items-center gap-1">
+            <button
+              onClick={() => setCollapsed(true)}
+              className="p-1 rounded-md hover:bg-muted text-muted-foreground transition-colors"
+              aria-label="طي القائمة"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            {/* Mobile close button */}
+            <button
+              onClick={onCloseMobile}
+              className="md:hidden p-1 rounded-md hover:bg-muted text-muted-foreground transition-colors"
+              aria-label="إغلاق القائمة"
+            >
+              <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
         )}
       </div>
 
@@ -481,6 +520,7 @@ export function PlatformSidebar() {
               currentModule.bgActive,
               currentModule.color,
             )}
+            aria-label={`تبديل النظام — ${currentModule.nameAr}`}
           >
             <currentModule.icon className="h-4 w-4 shrink-0" />
             <span className="truncate">{currentModule.nameAr}</span>
@@ -523,6 +563,7 @@ export function PlatformSidebar() {
           <Link
             href="/organizations/sunbul"
             className="flex items-center gap-2 rounded-md bg-muted/40 px-3 py-2 hover:bg-muted transition-colors"
+            aria-label="شركة سنبل — المؤسسة الحالية"
           >
             <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">
               S
@@ -548,6 +589,7 @@ export function PlatformSidebar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={() => onCloseMobile?.()}
               className={cn(
                 "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring",
                 collapsed && "justify-center px-2",
@@ -556,6 +598,7 @@ export function PlatformSidebar() {
                   : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
               title={collapsed ? item.name : undefined}
+              aria-label={"nameAr" in item && item.nameAr ? item.nameAr : item.name}
             >
               <item.icon className="h-4 w-4 shrink-0" />
               {!collapsed && (
@@ -581,6 +624,7 @@ export function PlatformSidebar() {
           </div>
         </div>
       )}
-    </aside>
+      </aside>
+    </>
   );
 }

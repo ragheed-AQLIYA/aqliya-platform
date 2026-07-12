@@ -1,10 +1,10 @@
-# Truth Reconciliation Audit — Final Report
+﻿# Truth Reconciliation Audit — Final Report
 
 **Date:** 2026-06-18  
 **Status:** Complete (local scope)  
 **Overall score:** **70/100** — Pilot-capable, not enterprise-ready
 
-**Operational truth:** [`AQLIYA_CURRENT_STATE.md`](../../source-of-truth/AQLIYA_CURRENT_STATE.md)  
+**Operational truth:** [`AQLIYA_CURRENT_STATE.md`](../../../source-of-truth/AQLIYA_CURRENT_STATE.md)  
 **Evidence registry:** [`docs/reports/README.md`](../../reports/README.md)
 
 ---

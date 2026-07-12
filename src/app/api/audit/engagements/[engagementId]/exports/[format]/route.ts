@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { exportEngagementAction } from "@/actions/audit-export-actions";
+import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export async function GET(
   _request: NextRequest,
@@ -38,8 +39,9 @@ export async function GET(
       );
     }
     if (message.startsWith("Access denied")) {
-      return NextResponse.json({ error: message }, { status: 403 });
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
-    return NextResponse.json({ error: message }, { status: 400 });
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }

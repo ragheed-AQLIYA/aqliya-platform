@@ -1,0 +1,356 @@
+{
+  "agent": "engineering-cost",
+  "title": "Engineering Cost Report",
+  "generatedAt": "2026-07-11T02:08:06.906Z",
+  "score": 85,
+  "summary": {
+    "total": 26,
+    "critical": 0,
+    "high": 25,
+    "medium": 0,
+    "low": 0,
+    "info": 1
+  },
+  "findings": [
+    {
+      "id": "F-0836",
+      "agent": "engineering-cost",
+      "severity": "info",
+      "title": "Estimated remediation backlog: ~161 engineer-days",
+      "evidence": "80 costed items (sampled)",
+      "files": [],
+      "category": "cost-summary",
+      "suggestion": "",
+      "scoreImpact": 0
+    },
+    {
+      "id": "F-0837",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: index.ts",
+      "evidence": "Impact=High; Files=1; LOC≈3657; Fix Cost=3.25 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0838",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: mock-data.ts",
+      "evidence": "Impact=High; Files=1; LOC≈2456; Fix Cost=3.25 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/lib/audit/mock-data.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0839",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: services.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1931; Fix Cost=3.25 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/lib/audit/services.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0840",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: audit-actions.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1775; Fix Cost=3.25 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/actions/audit-actions.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0841",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: decisions.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1696; Fix Cost=3.25 days; Risk=Low; Product=DecisionOS",
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0842",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: seed-data.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1695; Fix Cost=3.25 days; Risk=Low; Product=SalesOS",
+      "files": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0843",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Long function buildSalesSeedData (1651 lines)",
+      "evidence": "Impact=High; Files=1; LOC≈1695; Fix Cost=3.25 days; Risk=Low; Product=SalesOS",
+      "files": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0844",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Long function runValidation (308 lines)",
+      "evidence": "Impact=High; Files=1; LOC≈3657; Fix Cost=3.25 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0845",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Long function getDashboardMetrics (274 lines)",
+      "evidence": "Impact=High; Files=1; LOC≈1696; Fix Cost=3.25 days; Risk=Low; Product=DecisionOS",
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0846",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Elevated complexity in index.ts",
+      "evidence": "Impact=High; Files=1; LOC≈3657; Fix Cost=3.25 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0847",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: localcontent-actions.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1449; Fix Cost=3 days; Risk=Low; Product=LocalContentOS",
+      "files": [
+        "src/actions/localcontent-actions.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0848",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Client module references server-only concerns",
+      "evidence": "Impact=High; Files=1; LOC≈1237; Fix Cost=2.75 days; Risk=Low; Product=LocalContentOS",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0849",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: page.tsx",
+      "evidence": "Impact=High; Files=1; LOC≈1304; Fix Cost=2.75 days; Risk=Low; Product=DecisionOS",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0850",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: page.tsx",
+      "evidence": "Impact=High; Files=1; LOC≈1237; Fix Cost=2.75 days; Risk=Low; Product=LocalContentOS",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0851",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: evidence-page.tsx",
+      "evidence": "Impact=High; Files=1; LOC≈1216; Fix Cost=2.75 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/components/audit/evidence/evidence-page.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0852",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Long function ConnectionDetailPanel (330 lines)",
+      "evidence": "Impact=High; Files=1; LOC≈1237; Fix Cost=2.75 days; Risk=Low; Product=LocalContentOS",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0853",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: store.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1162; Fix Cost=2.5 days; Risk=Low; Product=SalesOS",
+      "files": [
+        "src/lib/sales/store.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0854",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: ai-advisor.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1162; Fix Cost=2.5 days; Risk=Low; Product=LocalContentOS",
+      "files": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0855",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: demo-data.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1153; Fix Cost=2.5 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/app/auditos/demo-data.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0856",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: findings-page.tsx",
+      "evidence": "Impact=High; Files=1; LOC≈1148; Fix Cost=2.5 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/components/audit/findings/findings-page.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0857",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Large module / God Object signal: page.tsx",
+      "evidence": "Impact=High; Files=1; LOC≈1138; Fix Cost=2.5 days; Risk=Low; Product=SalesOS",
+      "files": [
+        "src/app/sales/settings/crm/page.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0858",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Elevated complexity in ai-advisor.ts",
+      "evidence": "Impact=High; Files=1; LOC≈1162; Fix Cost=2.5 days; Risk=Low; Product=LocalContentOS",
+      "files": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0859",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Client module references server-only concerns",
+      "evidence": "Impact=High; Files=1; LOC≈825; Fix Cost=2.25 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/components/audit/trial-balance/trial-balance-upload.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0860",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Long function buildStatementLinesFromMappings (718 lines)",
+      "evidence": "Impact=High; Files=1; LOC≈839; Fix Cost=2.25 days; Risk=Low; Product=AuditOS",
+      "files": [
+        "src/lib/audit/db/statement-builder.ts"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0861",
+      "agent": "engineering-cost",
+      "severity": "high",
+      "title": "Long function WorkbookDetailClient (708 lines)",
+      "evidence": "Impact=High; Files=1; LOC≈797; Fix Cost=2.25 days; Risk=Low; Product=LocalContentOS",
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/workbook-detail-client.tsx"
+      ],
+      "category": "fix-cost",
+      "suggestion": "",
+      "scoreImpact": 8
+    }
+  ],
+  "meta": {
+    "totalDays": 161,
+    "items": 80
+  }
+}

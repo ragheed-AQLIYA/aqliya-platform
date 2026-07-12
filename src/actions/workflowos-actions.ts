@@ -29,7 +29,8 @@ import {
 } from "@/lib/workflowos/storage";
 import { listWorkflowAuditEvents, recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
 import { getUserWorkflowRole } from "@/lib/workflowos/tenant-guard";
-import { isExpectedAccessDeniedError, requireUserContext } from "@/lib/auth";
+import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -475,7 +476,8 @@ export async function createWorkflowTemplate(data: {
   steps: unknown[];
 }) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: user.organizationId, tenantId: user.organizationId }, "update");
     const template = await prisma.workflowTemplate.create({
       data: {
         organizationId: user.organizationId,
@@ -498,10 +500,8 @@ export async function createWorkflowTemplate(data: {
 
 export async function listWorkflowTemplates(organizationId: string) {
   try {
-    const user = await requireUserContext();
-    if (user.organizationId !== organizationId) {
-      return { success: false, error: "لا تملك صلاحية الوصول لهذه المنظمة" };
-    }
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
     const templates = await prisma.workflowTemplate.findMany({
       where: { organizationId, status: "active" },
       include: { _count: { select: { records: true } } },
@@ -517,7 +517,7 @@ export async function listWorkflowTemplates(organizationId: string) {
 
 export async function getWorkflowTemplate(id: string) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const template = await prisma.workflowTemplate.findUnique({
       where: { id },
       include: { _count: { select: { records: true } } },
@@ -525,9 +525,7 @@ export async function getWorkflowTemplate(id: string) {
     if (!template) {
       return { success: false, error: "النموذج غير موجود" };
     }
-    if (template.organizationId !== user.organizationId) {
-      return { success: false, error: "لا تملك صلاحية الوصول لهذا النموذج" };
-    }
+    await enforce(user, { type: "organization", id: template.organizationId, tenantId: template.organizationId }, "update");
     return { success: true, data: template };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
@@ -542,16 +540,14 @@ export async function startWorkflowFromTemplate(
   assignedToId?: string,
 ) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const template = await prisma.workflowTemplate.findUnique({
       where: { id: templateId },
     });
     if (!template) {
       return { success: false, error: "النموذج غير موجود" };
     }
-    if (template.organizationId !== user.organizationId) {
-      return { success: false, error: "لا تملك صلاحية الوصول لهذا النموذج" };
-    }
+    await enforce(user, { type: "organization", id: template.organizationId, tenantId: template.organizationId }, "update");
     const record = await prisma.workflowRecord.create({
       data: {
         organizationId: user.organizationId,
@@ -581,10 +577,8 @@ export async function workflow_listOrgRecords(
   searchQuery?: string,
 ) {
   try {
-    const user = await requireUserContext();
-    if (user.organizationId !== organizationId) {
-      return { success: false, error: "لا تملك صلاحية الوصول لهذه المنظمة" };
-    }
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
     const where: Record<string, unknown> = { organizationId };
     if (status) where.status = status;
     if (searchQuery?.trim()) {
@@ -609,16 +603,14 @@ export async function updateWorkflowRecordStatus(
   stepResult?: Record<string, unknown>,
 ) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const record = await prisma.workflowRecord.findUnique({
       where: { id },
     });
     if (!record) {
       return { success: false, error: "السجل غير موجود" };
     }
-    if (record.organizationId !== user.organizationId) {
-      return { success: false, error: "لا تملك صلاحية الوصول لهذا السجل" };
-    }
+    await enforce(user, { type: "organization", id: record.organizationId, tenantId: record.organizationId }, "update");
     const existingResults =
       typeof record.stepResults === "object" && record.stepResults !== null
         ? (record.stepResults as Record<string, unknown>)
@@ -654,7 +646,7 @@ export async function updateWorkflowRecordStatus(
 
 export async function workflow_getRecordById(id: string) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const record = await prisma.workflowRecord.findUnique({
       where: { id },
       include: { template: { select: { name: true, steps: true } } },
@@ -662,9 +654,7 @@ export async function workflow_getRecordById(id: string) {
     if (!record) {
       return { success: false, error: "السجل غير موجود" };
     }
-    if (record.organizationId !== user.organizationId) {
-      return { success: false, error: "لا تملك صلاحية الوصول لهذا السجل" };
-    }
+    await enforce(user, { type: "organization", id: record.organizationId, tenantId: record.organizationId }, "update");
     return { success: true, data: record };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
@@ -716,14 +706,13 @@ export async function uploadWorkflowEvidence(params: {
   stepIndex?: number;
 }) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     const record = await prisma.workflowRecord.findUnique({
       where: { id: params.recordId },
       select: { organizationId: true },
     });
     if (!record) return { success: false, error: "Record not found" };
-    if (record.organizationId !== user.organizationId)
-      return { success: false, error: "Access denied" };
+    await enforce(user, { type: "organization", id: record.organizationId, tenantId: record.organizationId }, "update");
 
     const evidence = await prisma.workflowEvidence.create({
       data: {
@@ -749,7 +738,8 @@ export async function uploadWorkflowEvidence(params: {
 
 export async function listWorkflowEvidence(recordId: string) {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: user.organizationId, tenantId: user.organizationId }, "update");
     const evidence = await prisma.workflowEvidence.findMany({
       where: { organizationId: user.organizationId, recordId },
       orderBy: { createdAt: "desc" },
@@ -765,9 +755,8 @@ export async function listWorkflowEvidence(recordId: string) {
 
 export async function getWorkflowDashboardStats(organizationId: string) {
   try {
-    const user = await requireUserContext();
-    if (user.organizationId !== organizationId)
-      return { success: false, error: "Access denied" };
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
 
     const [
       totalTemplates,
@@ -831,4 +820,20 @@ export async function getWorkflowDashboardStats(organizationId: string) {
     console.error("Error getting dashboard stats:", error);
     return { success: false, error: "Failed to get dashboard stats" };
   }
+}
+
+export async function getWorkflowEvidenceAction(recordId: string, organizationId: string) {
+  await getCurrentUser();
+  return prisma.workflowEvidence.findMany({
+    where: { organizationId, recordId },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function getWorkflowAuditEventsAction(recordId: string, organizationId: string) {
+  await getCurrentUser();
+  return prisma.workflowAuditEvent.findMany({
+    where: { organizationId, recordId },
+    orderBy: { createdAt: "desc" },
+  });
 }

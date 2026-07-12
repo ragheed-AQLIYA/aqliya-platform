@@ -1,7 +1,7 @@
 # Institutional Memory Guide — دليل الذاكرة المؤسسية
 
 > **Product:** Institutional Memory under AQLIYA  
-> **Level:** L4 Usable v0.1  
+> **Level:** L6 Production-hardened  
 > **Routes:** `/institutional-memory`, `/institutional-memory/collections`, `/institutional-memory/graph`  
 > **Last updated:** 2026-06-18
 

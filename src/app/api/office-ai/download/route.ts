@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 // ─── Per-user in-memory rate limiter for downloads ───
@@ -64,7 +64,10 @@ function getAllowedDownloadFormat(
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "VIEWER")) {
+      throw new Error("Access denied: VIEWER role required");
+    }
     checkDownloadRateLimit(user.id);
 
     const outputId = request.nextUrl.searchParams.get("outputId");

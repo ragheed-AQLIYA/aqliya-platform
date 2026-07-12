@@ -1,0 +1,98 @@
+{
+  "agent": "trend-analysis",
+  "title": "Trend Analysis Report",
+  "generatedAt": "2026-07-11T02:08:06.879Z",
+  "score": 100,
+  "summary": {
+    "total": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 0
+  },
+  "findings": [],
+  "meta": {
+    "seriesLength": 5,
+    "trends": [
+      {
+        "key": "overallRepositoryHealth",
+        "label": "Overall",
+        "previous": 74,
+        "current": 74,
+        "delta": 0,
+        "arrow": "=",
+        "sparkline": "▁▇███"
+      },
+      {
+        "key": "securityScore",
+        "label": "Security",
+        "previous": 65,
+        "current": 65,
+        "delta": 0,
+        "arrow": "=",
+        "sparkline": "▁████"
+      },
+      {
+        "key": "performanceScore",
+        "label": "Performance",
+        "previous": 57,
+        "current": 57,
+        "delta": 0,
+        "arrow": "=",
+        "sparkline": "▁████"
+      },
+      {
+        "key": "codeHealthScore",
+        "label": "Code Health",
+        "previous": 32,
+        "current": 32,
+        "delta": 0,
+        "arrow": "=",
+        "sparkline": "▁▄███"
+      },
+      {
+        "key": "architectureHealth",
+        "label": "Architecture",
+        "previous": 73,
+        "current": 73,
+        "delta": 0,
+        "arrow": "=",
+        "sparkline": "▁████"
+      },
+      {
+        "key": "documentationScore",
+        "label": "Documentation",
+        "current": 95,
+        "delta": null,
+        "arrow": "=",
+        "sparkline": "▁"
+      },
+      {
+        "key": "testScore",
+        "label": "Tests",
+        "current": 95,
+        "delta": null,
+        "arrow": "=",
+        "sparkline": "▁"
+      },
+      {
+        "key": "technicalDebtScore",
+        "label": "Tech Debt",
+        "previous": 58,
+        "current": 58,
+        "delta": 0,
+        "arrow": "=",
+        "sparkline": "▁████"
+      },
+      {
+        "key": "dependencyScore",
+        "label": "Dependencies",
+        "current": 93,
+        "delta": null,
+        "arrow": "=",
+        "sparkline": "▁"
+      }
+    ]
+  }
+}

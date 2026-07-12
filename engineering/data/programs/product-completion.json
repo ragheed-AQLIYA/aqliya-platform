@@ -1,0 +1,77 @@
+{
+  "at": "2026-07-11T11:36:48.391Z",
+  "products": [
+    {
+      "product": "RiskOS",
+      "pct": 89,
+      "bar": "█████████░",
+      "maturity": "**L6 Production-hardened**",
+      "openHigh": 0,
+      "releaseReady": 67,
+      "scorecard": 94
+    },
+    {
+      "product": "LocalContactOS",
+      "pct": 85,
+      "bar": "█████████░",
+      "maturity": "**L6 Production-hardened**",
+      "openHigh": 1,
+      "releaseReady": 67,
+      "scorecard": 89
+    },
+    {
+      "product": "ContentStudio",
+      "pct": 77,
+      "bar": "████████░░",
+      "maturity": "**L6 Production-hardened**",
+      "openHigh": 3,
+      "releaseReady": 67,
+      "scorecard": 80
+    },
+    {
+      "product": "WorkflowOS",
+      "pct": 56,
+      "bar": "██████░░░░",
+      "maturity": "L6 Production-hardened",
+      "openHigh": 8,
+      "releaseReady": 67,
+      "scorecard": 50
+    },
+    {
+      "product": "SalesOS",
+      "pct": 54,
+      "bar": "█████░░░░░",
+      "maturity": "**L6 Production-hardened**",
+      "openHigh": 21,
+      "releaseReady": 67,
+      "scorecard": 42
+    },
+    {
+      "product": "AuditOS",
+      "pct": 52,
+      "bar": "█████░░░░░",
+      "maturity": "L6 Production-hardened",
+      "openHigh": 54,
+      "releaseReady": 67,
+      "scorecard": 34
+    },
+    {
+      "product": "LocalContentOS",
+      "pct": 52,
+      "bar": "█████░░░░░",
+      "maturity": "**L6 Production-hardened**",
+      "openHigh": 33,
+      "releaseReady": 67,
+      "scorecard": 32
+    },
+    {
+      "product": "DecisionOS",
+      "pct": 51,
+      "bar": "█████░░░░░",
+      "maturity": "**L6 Production-hardened**",
+      "openHigh": 19,
+      "releaseReady": 67,
+      "scorecard": 27
+    }
+  ]
+}

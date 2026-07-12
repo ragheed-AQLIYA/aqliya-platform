@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { isExpectedAccessDeniedError, requireUserContext } from "@/lib/auth";
+import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import {
   assertSalesAccountAccess,
@@ -42,26 +43,21 @@ import {
   linkOpportunityEvidence,
   submitOpportunityForReview,
 } from "@/lib/sales/service";
+import { type ActionResult, safe as _safe, ok, fail } from "@/lib/platform/action-result";
+import type { ErrorCode } from "@/lib/platform/action-result";
 
-type ActionResult<T> =
-  | { ok: true; data: T }
-  | { ok: false; error: string; code?: string };
+function mapSalesError(error: unknown): { code: ErrorCode; message: string } | null {
+  if (error instanceof SalesAccessError) {
+    return { code: (error.code as ErrorCode) ?? "FORBIDDEN", message: error.message };
+  }
+  if (isExpectedAccessDeniedError(error)) {
+    return { code: "FORBIDDEN", message: "Access denied" };
+  }
+  return null;
+}
 
 async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
-  try {
-    const data = await fn();
-    return { ok: true, data };
-  } catch (error) {
-    if (error instanceof SalesAccessError) {
-      return { ok: false, error: error.message, code: error.code };
-    }
-    if (isExpectedAccessDeniedError(error)) {
-      return { ok: false, error: "Access denied", code: "FORBIDDEN" };
-    }
-    const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[SalesOS Action]", message);
-    return { ok: false, error: message };
-  }
+  return _safe(fn, { mapError: mapSalesError, defaultCode: "INTERNAL_ERROR" });
 }
 
 function scopeFromCtx(ctx: Awaited<ReturnType<typeof requireSalesOrgAccess>>): SalesOrgScope {
@@ -148,8 +144,8 @@ export async function getSalesDealAction(dealId: string) {
 
 export async function createSalesDealAction(input: CreateSalesDealInput) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
     const ctx = await requireSalesPermission("salesos:create");
+    const user = ctx.user;
     const deal = await createSalesDeal(ctx.organizationId, input, {
       id: user.id,
       name: user.name,
@@ -172,8 +168,8 @@ export async function updateSalesDealAction(
   input: UpdateSalesDealInput,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
     const ctx = await requireSalesPermission("salesos:update");
+    const user = ctx.user;
     await assertSalesDealAccess(dealId);
     const deal = await updateSalesDeal(dealId, ctx.organizationId, input, {
       id: user.id,
@@ -214,7 +210,6 @@ export async function getSalesAccountAction(accountId: string) {
 
 export async function createSalesAccountAction(formData: FormData) {
   return safe(async () => {
-    const _user = await requireUserContext("OPERATOR");
     const ctx = await requireSalesPermission("salesos:create");
     const name = String(formData.get("name") ?? "").trim();
     const industry = String(formData.get("industry") ?? "").trim() || null;
@@ -829,16 +824,16 @@ export async function snoozeSalesNbaActionAction(
 
 export async function submitOpportunityReviewAction(opportunityId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
-    await requireSalesPermission("salesos:update");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "update");
     return submitOpportunityForReview(user, opportunityId);
   });
 }
 
 export async function approveOpportunityAction(opportunityId: string) {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
-    await requireSalesPermission("salesos:update");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "admin");
     return approveOpportunity(user, opportunityId);
   });
 }
@@ -849,8 +844,8 @@ export async function linkEvidenceAction(
   label: string,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
-    await requireSalesPermission("salesos:update");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "update");
     return linkOpportunityEvidence(user, opportunityId, typeId, label);
   });
 }

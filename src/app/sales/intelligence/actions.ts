@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import {
   listDealHealth,
@@ -45,7 +46,8 @@ function revalidateIntel() {
 
 export async function getPipelineAnalyticsAction(pipelineId?: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "read");
     const result = await getPipelineAnalytics(
       user.organizationId,
       pipelineId,
@@ -56,21 +58,24 @@ export async function getPipelineAnalyticsAction(pipelineId?: string) {
 
 export async function getDealHealthListAction(pipelineId?: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "read");
     return listDealHealth(user.organizationId, pipelineId);
   });
 }
 
 export async function getWinRateAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "read");
     return getWinRateAnalysis(user.organizationId);
   });
 }
 
 export async function getVelocityAction(pipelineId?: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "read");
     return getVelocityMetrics(user.organizationId, pipelineId);
   });
 }
@@ -87,7 +92,8 @@ export async function createForecastAction(data: {
   notes?: string;
 }) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "create");
     const input: CreateForecastInput = {
       name: data.name,
       period: data.period,
@@ -116,21 +122,24 @@ export async function createForecastAction(data: {
 
 export async function listForecastsAction(period?: ForecastPeriod) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "read");
     return siListForecasts(user.organizationId, period);
   });
 }
 
 export async function getForecastAction(forecastId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "read");
     return siGetForecast(forecastId);
   });
 }
 
 export async function calculateForecastAction(forecastId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "sales" }, "update");
     const result = await siCalculateForecast(forecastId);
     await writePlatformAuditLog({
       productKey: "salesos",

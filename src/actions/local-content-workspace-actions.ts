@@ -2,10 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import type { CurrentUser } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
-import { assertLocalContentPermission } from "@/lib/local-content/content/permissions";
+import { assertLocalContentPermission } from "@/lib/content-studio/permissions";
 import {
   createContentCampaign,
   createContentItem,
@@ -22,21 +22,21 @@ import {
   listContentSources,
   submitContentItemForReview,
   updateCampaignStatus,
-} from "@/lib/local-content/content/services";
+} from "@/lib/content-studio/services";
 import {
   submitContentApproval,
   submitContentReview,
   listReviewQueue,
   listApprovalQueue,
-} from "@/lib/local-content/content/review";
+} from "@/lib/content-studio/review";
 import {
   buildOutputPackagePayload,
   createOutputPackage,
   markOutputExported,
   listOutputPackages,
-} from "@/lib/local-content/content/outputs";
-import { verifySource } from "@/lib/local-content/content/evidence";
-import type { ContentFormat } from "@/lib/local-content/content/types";
+} from "@/lib/content-studio/outputs";
+import { verifySource } from "@/lib/content-studio/evidence";
+import type { ContentFormat } from "@/lib/content-studio/types";
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -56,7 +56,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
   }
 }
 
-function orgId(user: Awaited<ReturnType<typeof requireUserContext>>): string {
+function orgId(user: Awaited<ReturnType<typeof getCurrentUser>>): string {
   return user.organizationId;
 }
 
@@ -114,7 +114,7 @@ function revalidateWorkspace() {
 
 export async function getContentStudioSummaryAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     return getCommandCenterSummary(orgId(user));
   });
@@ -122,7 +122,7 @@ export async function getContentStudioSummaryAction() {
 
 export async function listContentStudioProjectsAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     return listContentProjects(orgId(user));
   });
@@ -130,7 +130,7 @@ export async function listContentStudioProjectsAction() {
 
 export async function createContentStudioProjectAction(formData: FormData) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:create");
     const title = String(formData.get("title") ?? "").trim();
     if (!title) throw new Error("Title is required");
@@ -158,7 +158,7 @@ export async function createContentStudioProjectAction(formData: FormData) {
 
 export async function listContentStudioCampaignsAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     return listContentCampaigns(orgId(user));
   });
@@ -166,7 +166,7 @@ export async function listContentStudioCampaignsAction() {
 
 export async function getContentStudioCampaignAction(campaignId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     const oid = orgId(user);
     const campaign = await getContentCampaign(campaignId, oid);
@@ -182,7 +182,7 @@ export async function getContentStudioCampaignAction(campaignId: string) {
 
 export async function createContentStudioCampaignAction(formData: FormData) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:create");
     const contentProjectId = String(formData.get("contentProjectId") ?? "").trim();
     const name = String(formData.get("name") ?? "").trim();
@@ -216,7 +216,7 @@ export async function createContentStudioCampaignAction(formData: FormData) {
 
 export async function createContentStudioSourceAction(formData: FormData) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:create");
     const title = String(formData.get("title") ?? "").trim();
     if (!title) throw new Error("Title is required");
@@ -247,7 +247,7 @@ export async function createContentStudioSourceAction(formData: FormData) {
 
 export async function verifyContentStudioSourceAction(sourceId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:review");
     const source = await verifySource(requireMutationId(sourceId, "sourceId"), orgId(user), {
       id: user.id,
@@ -267,7 +267,7 @@ export async function verifyContentStudioSourceAction(sourceId: string) {
 
 export async function createContentStudioItemAction(formData: FormData) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:create");
     const campaignId = String(formData.get("campaignId") ?? "").trim();
     const title = String(formData.get("title") ?? "").trim();
@@ -297,7 +297,7 @@ export async function draftAssistContentItemAction(
   instructions?: string,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:update");
     const result = await executeGovernedAI(requireMutationId(contentItemId, "contentItemId"), {
       organizationId: orgId(user),
@@ -326,7 +326,7 @@ export async function draftAssistContentItemAction(
 
 export async function submitContentStudioReviewAction(contentItemId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:review");
     const item = await submitContentItemForReview(
       requireMutationId(contentItemId, "contentItemId"),
@@ -349,7 +349,7 @@ export async function submitContentStudioReviewAction(contentItemId: string) {
 
 export async function completeContentStudioReviewAction(formData: FormData) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:review");
     const record = await submitContentReview({
       contentItemId: requireMutationId(
@@ -403,7 +403,7 @@ export async function approveContentStudioItemAction(
   notes?: string,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:approve");
     const { approval, item } = await submitContentApproval({
       contentItemId: requireMutationId(contentItemId, "contentItemId"),
@@ -444,7 +444,7 @@ export async function approveContentStudioItemFormAction(formData: FormData) {
 
 export async function listContentStudioReviewQueueAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     return listReviewQueue(orgId(user));
   });
@@ -452,7 +452,7 @@ export async function listContentStudioReviewQueueAction() {
 
 export async function listContentStudioApprovalQueueAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     return listApprovalQueue(orgId(user));
   });
@@ -460,7 +460,7 @@ export async function listContentStudioApprovalQueueAction() {
 
 export async function createContentStudioOutputAction(formData: FormData) {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:export");
     const campaignId = String(formData.get("campaignId") ?? "").trim();
     if (!campaignId) throw new Error("Campaign required");
@@ -486,7 +486,7 @@ export async function createContentStudioOutputAction(formData: FormData) {
 
 export async function listContentStudioOutputsAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     return listOutputPackages(orgId(user));
   });
@@ -494,7 +494,7 @@ export async function listContentStudioOutputsAction() {
 
 export async function buildContentStudioOutputPayloadAction(packageId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     return buildOutputPackagePayload(requireMutationId(packageId, "packageId"), orgId(user));
   });
@@ -502,7 +502,7 @@ export async function buildContentStudioOutputPayloadAction(packageId: string) {
 
 export async function exportContentStudioOutputAction(packageId: string) {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:export");
     const oid = orgId(user);
     const pkgId = requireMutationId(packageId, "packageId");
@@ -537,7 +537,7 @@ export async function exportContentStudioOutputFormAction(formData: FormData) {
 
 export async function activateContentStudioCampaignAction(campaignId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:update");
     const campaign = await updateCampaignStatus(
       requireMutationId(campaignId, "campaignId"),
@@ -558,7 +558,7 @@ export async function activateContentStudioCampaignAction(campaignId: string) {
 
 export async function listContentStudioItemsAction() {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
     return listContentItems(orgId(user));
   });

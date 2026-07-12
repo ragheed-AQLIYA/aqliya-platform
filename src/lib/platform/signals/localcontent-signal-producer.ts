@@ -1,4 +1,3 @@
-// @ts-nocheck
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
@@ -212,8 +211,15 @@ export async function collectLocalContentEvidenceSignals(
     }),
   ]);
 
+  type EvidenceItem = {
+    id: string;
+    filename: string;
+    projectId: string;
+    updatedAt?: Date;
+    createdAt?: Date;
+  };
   const mapEvidence = (
-    items: typeof missing,
+    items: EvidenceItem[],
     action: string,
     severity: "critical" | "warning" | "info",
     labelAr: string,
@@ -227,7 +233,7 @@ export async function collectLocalContentEvidenceSignals(
       action,
       resourceType: "LocalContentEvidence",
       resourceId: e.id,
-      timestamp: ("updatedAt" in e ? e.updatedAt : e.createdAt).toISOString(),
+      timestamp: (e.updatedAt ?? e.createdAt ?? new Date()).toISOString(),
       summaryAr: `${labelAr}: ${e.filename}`,
       summaryEn: `${labelEn}: ${e.filename}`,
       metadata: { projectId: e.projectId },
@@ -286,7 +292,11 @@ export async function collectLocalContentMetricSignals(
     ]);
 
   return {
-    projects,
+    productSlug: "local_content",
+    organizationId,
+    signals: [],
+    generatedAt: new Date().toISOString(),
+    engagements: projects,
     pendingReviews,
     pendingApprovals,
     evidenceAlerts,

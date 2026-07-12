@@ -1,0 +1,92 @@
+{
+  "agent": "architecture-drift",
+  "title": "Architecture Drift Report",
+  "generatedAt": "2026-07-11T02:08:06.847Z",
+  "score": 73,
+  "summary": {
+    "total": 5,
+    "critical": 3,
+    "high": 1,
+    "medium": 1,
+    "low": 0,
+    "info": 0
+  },
+  "findings": [
+    {
+      "id": "F-0819",
+      "agent": "architecture-drift",
+      "severity": "critical",
+      "title": "Client module imports Prisma",
+      "evidence": "import '@prisma/client'",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "category": "layer-violation",
+      "suggestion": "",
+      "scoreImpact": 15
+    },
+    {
+      "id": "F-0820",
+      "agent": "architecture-drift",
+      "severity": "high",
+      "title": "Client module imports server-only boundary",
+      "evidence": "import '@/lib/auth/sso-service' in use client module",
+      "files": [
+        "src/app/(dashboard)/settings/sso/page.tsx"
+      ],
+      "category": "layer-violation",
+      "suggestion": "Route through Server Actions; keep Prisma/auth server-side.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0821",
+      "agent": "architecture-drift",
+      "severity": "critical",
+      "title": "Client module imports Prisma",
+      "evidence": "import '@prisma/client'",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/tender/page.tsx"
+      ],
+      "category": "layer-violation",
+      "suggestion": "",
+      "scoreImpact": 15
+    },
+    {
+      "id": "F-0822",
+      "agent": "architecture-drift",
+      "severity": "critical",
+      "title": "Client module imports Prisma",
+      "evidence": "import '@prisma/client'",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/outcome/page.tsx"
+      ],
+      "category": "layer-violation",
+      "suggestion": "",
+      "scoreImpact": 15
+    },
+    {
+      "id": "F-0823",
+      "agent": "architecture-drift",
+      "severity": "medium",
+      "title": "Cross-product import: sales → workflowos",
+      "evidence": "src/lib/sales/__tests__/workflowos-expansion.test.ts imports @/actions/workflowos-actions",
+      "files": [
+        "src/lib/sales/__tests__/workflowos-expansion.test.ts"
+      ],
+      "category": "domain-boundary",
+      "suggestion": "Prefer Core shared APIs over deep product-to-product imports.",
+      "scoreImpact": 3
+    }
+  ],
+  "meta": {
+    "filesScanned": 2848,
+    "adrsChecked": 1,
+    "products": [
+      "audit",
+      "local-content",
+      "sales",
+      "decision",
+      "workflowos"
+    ]
+  }
+}

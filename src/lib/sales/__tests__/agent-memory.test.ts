@@ -12,7 +12,7 @@ jest.mock("@/lib/prisma", () => ({
 }));
 
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: jest.fn(),
+  getCurrentUser: jest.fn(),
   isExpectedAccessDeniedError: jest.fn(() => false),
 }));
 

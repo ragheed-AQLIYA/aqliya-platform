@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 import { handleAiApiError } from "@/lib/core/ai/api-errors"
 import {
   getKnowledgeDocumentMetadata,
@@ -10,7 +10,10 @@ export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await requireUserContext("VIEWER")
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "VIEWER")) {
+      throw new Error("Access denied: VIEWER role required");
+    }
     const { searchParams } = new URL(request.url)
     const documentId = searchParams.get("documentId")
 

@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-07-11T02:08:23.186Z",
+  "scores": {
+    "codeHealthScore": 32,
+    "securityScore": 65,
+    "performanceScore": 57,
+    "documentationScore": 95,
+    "testScore": 95,
+    "dependencyScore": 93,
+    "technicalDebtScore": 58,
+    "architectureHealth": 73,
+    "uiQualityScore": 97,
+    "maintainability": 58,
+    "developerExperience": 73,
+    "repositoryMaturity": 74,
+    "engineeringMaturity": 80,
+    "overallRepositoryHealth": 74
+  },
+  "gates": [
+    {
+      "gate": "security",
+      "status": "WARNING",
+      "score": 65,
+      "previous": 65,
+      "delta": 0,
+      "arrow": "=",
+      "reason": "score 65 vs pass≥80 warn≥60 · Δ +0 (+0% vs previous)",
+      "thresholds": {
+        "pass": 80,
+        "warn": 60
+      }
+    },
+    {
+      "gate": "performance",
+      "status": "WARNING",
+      "score": 57,
+      "previous": 57,
+      "delta": 0,
+      "arrow": "=",
+      "reason": "score 57 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)",
+      "thresholds": {
+        "pass": 75,
+        "warn": 55
+      }
+    },
+    {
+      "gate": "complexity",
+      "status": "FAIL",
+      "score": 32,
+      "previous": 32,
+      "delta": 0,
+      "arrow": "=",
+      "reason": "score 32 vs pass≥70 warn≥50 · Δ +0 (+0% vs previous) · still below threshold despite =",
+      "thresholds": {
+        "pass": 70,
+        "warn": 50
+      }
+    },
+    {
+      "gate": "coverage",
+      "status": "PASS",
+      "score": 95,
+      "previous": 95,
+      "delta": 0,
+      "arrow": "=",
+      "reason": "score 95 vs pass≥60 warn≥40 · Δ +0 (+0% vs previous)",
+      "thresholds": {
+        "pass": 60,
+        "warn": 40
+      }
+    },
+    {
+      "gate": "documentation",
+      "status": "PASS",
+      "score": 95,
+      "previous": 95,
+      "delta": 0,
+      "arrow": "=",
+      "reason": "score 95 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)",
+      "thresholds": {
+        "pass": 75,
+        "warn": 55
+      }
+    },
+    {
+      "gate": "deadCode",
+      "status": "FAIL",
+      "score": 32,
+      "previous": 32,
+      "delta": 0,
+      "arrow": "=",
+      "reason": "score 32 vs pass≥70 warn≥50 · Δ +0 (+0% vs previous) · still below threshold despite =",
+      "thresholds": {
+        "pass": 70,
+        "warn": 50
+      }
+    },
+    {
+      "gate": "dependencyHealth",
+      "status": "PASS",
+      "score": 93,
+      "previous": 93,
+      "delta": 0,
+      "arrow": "=",
+      "reason": "score 93 vs pass≥80 warn≥60 · Δ +0 (+0% vs previous)",
+      "thresholds": {
+        "pass": 80,
+        "warn": 60
+      }
+    },
+    {
+      "gate": "architectureDrift",
+      "status": "WARNING",
+      "score": 73,
+      "previous": 73,
+      "delta": 0,
+      "arrow": "=",
+      "reason": "score 73 vs pass≥75 warn≥55 · Δ +0 (+0% vs previous)",
+      "thresholds": {
+        "pass": 75,
+        "warn": 55
+      }
+    }
+  ],
+  "delta": 0,
+  "sparkline": "▁▇███",
+  "memoryStats": {
+    "totalTracked": 786,
+    "open": 786,
+    "resolved": 0,
+    "reopened": 0,
+    "chronic": 0
+  }
+}

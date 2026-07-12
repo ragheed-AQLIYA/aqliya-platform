@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isOutboxEnabled } from "@/lib/core/events/outbox-service";
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export const dynamic = "force-dynamic";
 
 /** ADMIN — outbox queue status (Tier 3 Event Bus ops visibility). */
 export async function GET() {
   try {
-    await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
 
     if (!isOutboxEnabled()) {
       return NextResponse.json({
@@ -48,8 +52,7 @@ export async function GET() {
       recentFailed,
     });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Failed to load outbox status";
-    return NextResponse.json({ ok: false, error: message }, { status: 403 });
+    const { message, code } = sanitizeError(error);
+    return NextResponse.json({ ok: false, error: message }, { status: httpStatusFromCode(code) });
   }
 }

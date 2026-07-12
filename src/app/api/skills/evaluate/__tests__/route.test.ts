@@ -1,9 +1,11 @@
 import { describe, expect, it, jest } from "@jest/globals";
 
-const requireUserContext = jest.fn();
+const getCurrentUser = jest.fn();
+const hasRequiredRole = jest.fn();
 
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: (...args: unknown[]) => requireUserContext(...args),
+  getCurrentUser: (...args: unknown[]) => getCurrentUser(...args),
+  hasRequiredRole: (...args: unknown[]) => hasRequiredRole(...args),
 }));
 
 jest.mock("@/lib/skill-runtime/runtime", () => ({
@@ -12,11 +14,12 @@ jest.mock("@/lib/skill-runtime/runtime", () => ({
 
 describe("GET /api/skills/evaluate", () => {
   beforeEach(() => {
-    requireUserContext.mockReset();
+    getCurrentUser.mockReset();
+    hasRequiredRole.mockReset();
   });
 
   it("returns 401 when unauthenticated", async () => {
-    requireUserContext.mockRejectedValue(new Error("Unauthenticated"));
+    getCurrentUser.mockRejectedValue(new Error("Unauthenticated"));
 
     const { GET } = await import("../route");
     const res = await GET();
@@ -24,9 +27,8 @@ describe("GET /api/skills/evaluate", () => {
   });
 
   it("returns 403 when caller is not ADMIN", async () => {
-    requireUserContext.mockRejectedValue(
-      new Error("Access denied: ADMIN role required"),
-    );
+    getCurrentUser.mockResolvedValue({ role: "VIEWER" });
+    hasRequiredRole.mockReturnValue(false);
 
     const { GET } = await import("../route");
     const res = await GET();

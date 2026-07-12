@@ -12,6 +12,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth-next";
 import { getKnowledgeMiningKPIs } from "@/lib/tb-intelligence/knowledge-mining/kpis";
+import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 
 function requireRole(user: Record<string, unknown>, minRole: "ADMIN" | "OPERATOR" | "VIEWER"): void {
   const role = user.role as string | undefined;
@@ -32,7 +33,7 @@ export async function GET() {
     const kpis = await getKnowledgeMiningKPIs();
     return NextResponse.json(kpis);
   } catch (error) {
-    const status = error instanceof Error && error.message.startsWith("Access denied") ? 403 : 500;
-    return NextResponse.json({ error: String(error) }, { status });
+    const { code } = sanitizeError(error);
+    return NextResponse.json(sanitizeErrorResponse(error), { status: httpStatusFromCode(code) });
   }
 }

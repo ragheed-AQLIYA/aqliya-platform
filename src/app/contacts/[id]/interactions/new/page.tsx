@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { logContactInteraction } from "@/actions/contact-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ const INTERACTION_TYPES = [
 ];
 
 export default async function NewInteractionPage({ params }: PageProps) {
-  await requireUserContext("OPERATOR");
+  await getCurrentUser();
   const { id } = await params;
 
   return (

@@ -9,7 +9,7 @@ export {
   getDecisionOSCompletionState as getDecisionCompletionState,
   getDecisionOSNextStep as getNextDecisionStep,
   getDecisionOSProgressSummary as getDecisionProgressSummary,
-} from "@/lib/core/decision/adapters/decisionos-adapter";
+} from "@/lib/decision/adapters/core-engine-adapter";
 
 export type {
   DecisionStageState,

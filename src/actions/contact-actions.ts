@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import { enforce } from "@/lib/authorization";
 
 type ActionResult<T> =
@@ -46,7 +46,7 @@ export async function listContacts(
   options?: ListContactsOptions,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     if (user.organizationId !== organizationId) {
       throw new Error("Access denied: organization access required");
     }
@@ -83,7 +83,7 @@ export async function listContacts(
 
 export async function createContact(data: CreateContactData) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
 
     const tagsArray = data.tags
       ? data.tags.split(",").map((t) => t.trim()).filter(Boolean)
@@ -113,7 +113,7 @@ export async function createContact(data: CreateContactData) {
 
 export async function getContact(id: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
 
     const contact = await prisma.localContact.findFirst({
       where: { id, organizationId: user.organizationId },
@@ -145,7 +145,7 @@ export async function getContact(id: string) {
 
 export async function updateContact(id: string, data: Partial<CreateContactData>) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
 
     const existing = await prisma.localContact.findFirst({
       where: { id, organizationId: user.organizationId },
@@ -183,7 +183,7 @@ export async function updateContact(id: string, data: Partial<CreateContactData>
 
 export async function deleteContact(id: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
 
     const existing = await prisma.localContact.findFirst({
       where: { id, organizationId: user.organizationId },
@@ -209,7 +209,7 @@ export async function createContactRelation(
   description?: string,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
 
     const source = await prisma.localContact.findFirst({
       where: { id: sourceId, organizationId: user.organizationId },
@@ -242,7 +242,7 @@ export async function createContactRelation(
 
 export async function listContactRelations(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
 
     const relations = await prisma.localContactRelation.findMany({
       where: {
@@ -271,7 +271,7 @@ export async function logContactInteraction(
   occurredAt: string,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
 
     const contact = await prisma.localContact.findFirst({
       where: { id: contactId, organizationId: user.organizationId },
@@ -301,7 +301,7 @@ export async function logContactInteraction(
 
 export async function listContactInteractions(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
 
     const interactions = await prisma.localContactInteraction.findMany({
       where: {
@@ -328,7 +328,7 @@ export async function uploadContactEvidence(params: {
   evidenceType?: string;
 }) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: params.contactId },
       select: { organizationId: true },
@@ -359,7 +359,7 @@ export async function uploadContactEvidence(params: {
 
 export async function listContactEvidence(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     return prisma.contactEvidence.findMany({
       where: { organizationId: user.organizationId, contactId },
       orderBy: { createdAt: "desc" },
@@ -378,7 +378,7 @@ export async function createContactReview(params: {
   findings?: string;
 }) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: params.contactId },
       select: { organizationId: true },
@@ -407,7 +407,7 @@ export async function createContactReview(params: {
 
 export async function listContactReviews(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     return prisma.contactReview.findMany({
       where: { organizationId: user.organizationId, contactId },
       include: { approvals: true },
@@ -418,7 +418,7 @@ export async function listContactReviews(contactId: string) {
 
 export async function approveContactReview(reviewId: string, note?: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const review = await prisma.contactReview.findUnique({
       where: { id: reviewId },
       select: { organizationId: true, id: true, contactId: true },
@@ -451,7 +451,7 @@ export async function approveContactReview(reviewId: string, note?: string) {
 
 export async function rejectContactReview(reviewId: string, note?: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const review = await prisma.contactReview.findUnique({
       where: { id: reviewId },
       select: { organizationId: true, id: true, contactId: true },
@@ -532,7 +532,7 @@ async function logContactAuditEvent(params: {
 
 export async function getContactRiskFlags(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, metadata: true },
@@ -550,7 +550,7 @@ export async function addContactRiskFlag(
   flag: Omit<RiskFlag, "id" | "createdAt" | "createdBy">,
 ) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, metadata: true },
@@ -598,7 +598,7 @@ export async function addContactRiskFlag(
 
 export async function resolveContactRiskFlag(contactId: string, flagId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, metadata: true },
@@ -653,7 +653,7 @@ export interface AuditTrailEntry {
 
 export async function getContactAuditTrail(contactId: string) {
   return safe(async () => {
-    const _user = await requireUserContext("VIEWER");
+    const _user = await getCurrentUser();
 
     const entries = await prisma.platformAuditLog.findMany({
       where: {
@@ -680,7 +680,7 @@ export async function getContactAuditTrail(contactId: string) {
 
 export async function exportContactProfile(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: {

@@ -1,0 +1,655 @@
+{
+  "generatedAt": "2026-07-11T02:08:07.154Z",
+  "suggestions": [
+    {
+      "id": "REF-001",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/components/sales/deal-conversion-memo-panel.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-002",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/components/audit/trial-balance/trial-balance-upload.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-003",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/components/audit/pilot/pilot-page.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-004",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/components/audit/governance/GovernanceContextPanel.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-005",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/components/audit/engagement/engagement-tabs.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-006",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/app/sales/sales-dashboard-client.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-007",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-008",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/tender/page.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-009",
+      "title": "Client module references server-only concerns",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/outcome/page.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-010",
+      "title": "Large module / God Object signal: index.ts",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-011",
+      "title": "Large module / God Object signal: mock-data.ts",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/lib/audit/mock-data.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-012",
+      "title": "Large module / God Object signal: services.ts",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/lib/audit/services.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-013",
+      "title": "Large module / God Object signal: audit-actions.ts",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/actions/audit-actions.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-014",
+      "title": "Large module / God Object signal: decisions.ts",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-015",
+      "title": "Large module / God Object signal: seed-data.ts",
+      "agent": "code-health",
+      "severity": "high",
+      "files": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-016",
+      "title": "Cookie security flags not obvious in auth module",
+      "agent": "security",
+      "severity": "medium",
+      "files": [
+        "src/lib/auth.ts"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-017",
+      "title": "Dangerous API usage: child-process",
+      "agent": "security",
+      "severity": "medium",
+      "files": [
+        "src/__tests__/unit/db-backup-scheduler.test.ts"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-018",
+      "title": "Dangerous API usage: child-process",
+      "agent": "security",
+      "severity": "medium",
+      "files": [
+        "src/__tests__/i18n/no-english-strings.test.ts"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-019",
+      "title": "Possible secret material (generic-secret)",
+      "agent": "security",
+      "severity": "high",
+      "files": [
+        "src/lib/sales/vnext/learning-loop.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-020",
+      "title": "Dangerous API usage: eval",
+      "agent": "security",
+      "severity": "high",
+      "files": [
+        "src/lib/platform/rate-limiter/redis-rate-limiter.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-021",
+      "title": "Dangerous API usage: raw-sql",
+      "agent": "security",
+      "severity": "medium",
+      "files": [
+        "src/lib/platform/monitoring/system-monitor.ts"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-022",
+      "title": "Possible secret material (generic-secret)",
+      "agent": "security",
+      "severity": "high",
+      "files": [
+        "src/lib/local-content/erp/connector-factory.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-023",
+      "title": "Dangerous API usage: child-process",
+      "agent": "security",
+      "severity": "medium",
+      "files": [
+        "src/lib/governance-engine/shared/regex.ts"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-024",
+      "title": "Dangerous API usage: child-process",
+      "agent": "security",
+      "severity": "medium",
+      "files": [
+        "src/lib/governance-engine/registry/claim-registry.ts"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-025",
+      "title": "Dangerous API usage: child-process",
+      "agent": "security",
+      "severity": "medium",
+      "files": [
+        "src/lib/governance-engine/registry/loader.ts"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-026",
+      "title": "Possible secret material (generic-secret)",
+      "agent": "security",
+      "severity": "high",
+      "files": [
+        "src/lib/auth/sso-providers.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-027",
+      "title": "Dangerous API usage: dangerouslySetInnerHTML",
+      "agent": "security",
+      "severity": "medium",
+      "files": [
+        "src/app/layout.tsx"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-028",
+      "title": "Possible secret material (generic-secret)",
+      "agent": "security",
+      "severity": "high",
+      "files": [
+        "src/app/settings/retention/page.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-029",
+      "title": "API route may lack auth check",
+      "agent": "security",
+      "severity": "high",
+      "files": [
+        "src/app/api/workflowos/escalation-check/route.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-030",
+      "title": "Download/export route may lack tenant scope",
+      "agent": "security",
+      "severity": "high",
+      "files": [
+        "src/app/api/workflowos/documents/[documentId]/download/route.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-031",
+      "title": "Model KnowledgeCandidateEvidence has organizationId without obvious index",
+      "agent": "performance",
+      "severity": "medium",
+      "files": [
+        "prisma/schema.prisma"
+      ],
+      "complexity": "S"
+    },
+    {
+      "id": "REF-032",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "prisma/seed-abac-policies.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-033",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "prisma/seed-audit.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-034",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "prisma/seed-local-content.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-035",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "prisma/seed-localcontent.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-036",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "prisma/seed-organizations.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-037",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "prisma/seed-sso.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-038",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "prisma/seed.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-039",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "src/lib/tb-intelligence/knowledge-mining/kpis.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-040",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "src/lib/platform/office-ai-adv/office-ai-adv-service.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-041",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "src/lib/platform/download/__tests__/download.test.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-042",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "src/lib/platform/decision-gov/decision-gov-service.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-043",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "src/lib/platform/cross-product-ai/cross-product-ai-service.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-044",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "src/lib/platform/audit-risk/audit-risk-engine.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-045",
+      "title": "Possible Prisma N+1 query pattern",
+      "agent": "performance",
+      "severity": "high",
+      "files": [
+        "src/lib/platform/access/rbac-service.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-046",
+      "title": "Debt hotspot (priority 238): index.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-047",
+      "title": "Debt hotspot (priority 160): decisions.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-048",
+      "title": "Debt hotspot (priority 143): ai-advisor.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-049",
+      "title": "Debt hotspot (priority 143): services.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/audit/services.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-050",
+      "title": "Debt hotspot (priority 137): client-acceptance-engine.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/audit/client-acceptance-engine.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-051",
+      "title": "Debt hotspot (priority 131): prisma-client-mock.js",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/__mocks__/prisma-client-mock.js"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-052",
+      "title": "Debt hotspot (priority 126): page.tsx",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/page.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-053",
+      "title": "Debt hotspot (priority 119): runtime.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/skill-runtime/runtime.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-054",
+      "title": "Debt hotspot (priority 119): page.tsx",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-055",
+      "title": "Debt hotspot (priority 118): trial-balance-upload.tsx",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/components/audit/trial-balance/trial-balance-upload.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-056",
+      "title": "Debt hotspot (priority 117): skill-registry.integration.test.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/skill-runtime/__tests__/skill-registry.integration.test.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-057",
+      "title": "Debt hotspot (priority 114): audit-actions.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/actions/audit-actions.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-058",
+      "title": "Debt hotspot (priority 113): evaluator.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/skill-runtime/evaluator.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-059",
+      "title": "Debt hotspot (priority 110): population.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/local-content/workbook/population.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-060",
+      "title": "Debt hotspot (priority 109): org-adv-service.ts",
+      "agent": "technical-debt",
+      "severity": "high",
+      "files": [
+        "src/lib/platform/org-advanced/org-adv-service.ts"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-061",
+      "title": "Client module imports Prisma",
+      "agent": "architecture-drift",
+      "severity": "critical",
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "complexity": "L"
+    },
+    {
+      "id": "REF-062",
+      "title": "Client module imports server-only boundary",
+      "agent": "architecture-drift",
+      "severity": "high",
+      "files": [
+        "src/app/(dashboard)/settings/sso/page.tsx"
+      ],
+      "complexity": "M"
+    },
+    {
+      "id": "REF-063",
+      "title": "Client module imports Prisma",
+      "agent": "architecture-drift",
+      "severity": "critical",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/tender/page.tsx"
+      ],
+      "complexity": "L"
+    },
+    {
+      "id": "REF-064",
+      "title": "Client module imports Prisma",
+      "agent": "architecture-drift",
+      "severity": "critical",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/outcome/page.tsx"
+      ],
+      "complexity": "L"
+    },
+    {
+      "id": "REF-065",
+      "title": "Cross-product import: sales → workflowos",
+      "agent": "architecture-drift",
+      "severity": "medium",
+      "files": [
+        "src/lib/sales/__tests__/workflowos-expansion.test.ts"
+      ],
+      "complexity": "S"
+    }
+  ]
+}

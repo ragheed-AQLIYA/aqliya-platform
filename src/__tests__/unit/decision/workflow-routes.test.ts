@@ -48,7 +48,7 @@ describe("DecisionOS workflow routes (Phase 2-C entry)", () => {
       ),
       "utf8",
     );
-    expect(content).toMatch(/requireDecisionAccess|getCurrentUser/);
+    expect(content).toMatch(/getCurrentUser/);
     expect(content).toMatch(/auditLogger|logAudit/);
   });
 });

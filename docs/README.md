@@ -1,4 +1,4 @@
-# AQLIYA Documentation
+﻿# AQLIYA Documentation
 
 ## Documentation Authority
 
@@ -15,9 +15,9 @@ See `DOCUMENTATION_AUTHORITY.md` for the definitive documentation hierarchy, con
 | `../AGENTS.md`                        | Agent operating contract                             | Level 3           | Active — entry      |
 | `README.md` (this file)               | Documentation index                                  | Level 3           | Active — navigation |
 | `source-of-truth/*`                   | Architecture, taxonomy, routes, product status       | Level 4           | Active — supporting |
-| `products/*`                          | Product definitions and commercial chain             | Level 5           | Active — supporting |
-| `product/README.md`                   | Redirect stub → `products/` (2026-06-17 cleanup)     | Level 5           | Navigation only     |
-| `systems/*`                           | System and operator documentation                    | Level 5           | Active — supporting |
+| `products/README.md`               | Product documentation index (restored 2026-07-12)     | Level 5           | Active — supporting |
+| `product/`                        | Redirect stub → `products/` (stub removed 2026-07-01) | Level 5           | Removed — see `products/` |
+| `systems/`                         | System docs (directory removed 2026-07-01 — see `assets/auditos/`, `runbooks/`) | Level 5 | Removed — see products index |
 | `pilot/*`                             | Pilot execution and readiness                        | Level 5           | Active — supporting |
 | `reports/*`                           | Validation reports and implementation evidence       | Level 6           | Evidence only       |
 | `reports/project-organization/`       | Documentation governance and repo organization audits  | Level 6           | Evidence only       |
@@ -113,14 +113,14 @@ These README files provide navigation and recommended reading order for each doc
 
 | Directory          | README                                                                               |
 | ------------------ | ------------------------------------------------------------------------------------ |
-| `products/`        | Product specs under `docs/products/` — see subfolder READMEs where present           |
-| `product/`         | Redirect stub → `products/`                                                          |
+| `products/`        | Product documentation index — see `products/README.md` for full product map |
+| `product/`         | Removed — directory deleted 2026-07-01. Use `products/README.md` |
 | `recovery/`        | Redirect stub → `archive/2026-06/recovery/`                                          |
 | `commercial/`      | `commercial/README.md` — Commercial and go-to-market materials (demo storyline)      |
 | `commercial-pack/` | `commercial-pack/README.md` — Primary AuditOS pilot commercial pack (Arabic-first) |
 | `releases/`        | Release scope, known limitations, release notes                                      |
 | `reports/project-organization/` | Repo documentation governance audits (latest: `PROJECT-ORGANIZATION-AUDIT.md`) |
-| `systems/`         | `systems/README.md` — System and operator documentation                              |
+| `systems/`         | Removed — directory deleted 2026-07-01. See `assets/auditos/`, `runbooks/`, `architecture/` |
 | `pilot/`           | `pilot/README.md` — Pilot execution, readiness, operational docs; pack index: `pilot/PILOT-PACK-INDEX.md` |
 | `reports/`         | `reports/README.md` — Stabilization, audit, documentation, QA reports                |
 

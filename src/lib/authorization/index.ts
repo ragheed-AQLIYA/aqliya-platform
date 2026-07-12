@@ -5,9 +5,12 @@
  *
  * Usage:
  * ```ts
- * import { authorize } from "@/lib/authorization";
- * import { enforce } from "@/lib/authorization/action-guard";
+ * import { authorize, enforce } from "@/lib/authorization";
  * ```
+ *
+ * Deprecation notice:
+ * - Use `getCurrentUser()` + `enforce()` from @/lib/auth
+ * - Use `enforce()` with tenant tenantId for organization-scoped access
  */
 
 // Core authorization entry point
@@ -44,15 +47,4 @@ export {
 } from "./permission-resolver";
 
 // Action guard
-export { enforce, isAllowed, assertAuthorized, guardRoleLevel } from "./action-guard";
-
-// Product guards
-export {
-  guardEngagementAccess,
-  guardProjectAccess,
-  guardDealAccess,
-  guardAccountAccess,
-  guardRecordAccess,
-  guardOrganizationAccess,
-  guardWorkspaceAccess,
-} from "./product-guards";
+export { enforce, isAllowed } from "./action-guard";

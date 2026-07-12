@@ -23,7 +23,7 @@ const moduleColors: Record<string, string> = {
 
 export function KPICard({
   label,
-  labelAr: _labelAr,
+  labelAr,
   value,
   change,
   changeType = "neutral",
@@ -43,6 +43,8 @@ export function KPICard({
         moduleColors[module],
         className
       )}
+      role="region"
+      aria-label={labelAr || label}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-2">

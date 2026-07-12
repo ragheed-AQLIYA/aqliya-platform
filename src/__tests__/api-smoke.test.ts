@@ -47,6 +47,21 @@ jest.mock("@/lib/audit/actor-context", () => ({
   getAuditActor: jest.fn().mockRejectedValue(new Error("Unauthenticated")),
 }));
 
+jest.mock("@/lib/core/evidence", () => ({
+  assertEvidenceDownloadAccess: jest.fn(),
+}));
+
+// Do NOT mock @/lib/authorization — the facade tests need the real authorize().
+// Only enforce() and mapAuditRoleToUserRole() are stubbed (unused in these tests).
+jest.mock("@/lib/authorization", () => {
+  const actual = jest.requireActual("@/lib/authorization");
+  return {
+    ...actual,
+    enforce: jest.fn(),
+    mapAuditRoleToUserRole: jest.fn(),
+  };
+});
+
 jest.mock("@/lib/audit/storage", () => ({
   getStorageProvider: jest.fn(() => ({
     retrieve: jest.fn(),
@@ -74,7 +89,7 @@ jest.mock("@/lib/platform/logger", () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }));
 
-// Provide hasRequiredRole so the authorization facade can resolve at runtime
+// Provide hasRequiredRole and getCurrentUser so the authorization facade can resolve at runtime
 jest.mock("@/lib/auth", () => ({
   hasRequiredRole: (
     user: { role: string },
@@ -85,6 +100,7 @@ jest.mock("@/lib/auth", () => ({
       return ["OPERATOR", "ADMIN"].includes(user.role);
     return ["VIEWER", "OPERATOR", "ADMIN"].includes(user.role);
   },
+  getCurrentUser: jest.fn().mockRejectedValue(new Error("Unauthenticated")),
 }));
 
 // ─── Imports (after mocks) ───
@@ -207,7 +223,7 @@ describe("GET /api/audit/evidence/[evidenceId]/download — auth guard", () => {
     jest.clearAllMocks();
   });
 
-  it("returns 401 when not authenticated (no token param, getAuditActor throws)", async () => {
+  it("returns 401 when not authenticated (no token param, getCurrentUser throws)", async () => {
     const { GET } = await import(
       "@/app/api/audit/evidence/[evidenceId]/download/route"
     );

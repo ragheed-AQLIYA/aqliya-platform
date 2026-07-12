@@ -70,48 +70,4 @@ export async function isAllowed(
   return result.allowed;
 }
 
-/**
- * Assert authorization, returning the principal on success.
- * Throws on failure with the denial reason.
- */
-export async function assertAuthorized(
-  user: CurrentUser,
-  resource: AuthorizeOptions["resource"],
-  action: AccessAction,
-  context?: AuthorizeOptions["context"],
-): ReturnType<typeof authorize> {
-  const result = await authorize({
-    user,
-    resource,
-    action,
-    context,
-  });
 
-  if (!result.allowed) {
-    throw new Error(result.reason ?? "Authorization denied");
-  }
-
-  return result;
-}
-
-/**
- * Middleware-style guard for product contexts.
- * Checks role level without DB access — for backward compatibility.
- */
-export function guardRoleLevel(
-  userRole: string,
-  minimumRole: "viewer" | "operator" | "manager" | "admin",
-): boolean {
-  const hierarchy: Record<string, number> = {
-    viewer: 0,
-    operator: 1,
-    manager: 2,
-    admin: 3,
-  };
-
-  const userLevel = hierarchy[userRole.toLowerCase()];
-  const requiredLevel = hierarchy[minimumRole];
-
-  if (userLevel === undefined || requiredLevel === undefined) return false;
-  return userLevel >= requiredLevel;
-}

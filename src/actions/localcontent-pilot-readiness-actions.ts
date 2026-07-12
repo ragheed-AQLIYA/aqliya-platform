@@ -3,7 +3,7 @@
 
 "use server";
 
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { getPilotReadiness } from "@/lib/local-content/pilot-readiness";
 
 interface ActionResult<T = unknown> {
@@ -14,7 +14,7 @@ interface ActionResult<T = unknown> {
 
 export async function getPilotReadinessAction(): Promise<ActionResult> {
   try {
-    const user = await requireUserContext();
+    const user = await getCurrentUser();
     if (!user.organizationId) {
       return { ok: false, error: "No organization context" };
     }

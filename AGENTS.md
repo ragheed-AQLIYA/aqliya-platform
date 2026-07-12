@@ -1439,33 +1439,38 @@ OpenCode must auto-select and load the appropriate skill from `.skills/aqliya/` 
 
 ### Skill Map
 
-| Skill File                     | Auto-Load When Task Involves                                              |
-| ------------------------------ | ------------------------------------------------------------------------- |
-| `aqliya-low-load-dev.md`       | Heavy commands, permission gates, RAM issues, build failures              |
-| `aqliya-security-gate.md`      | Auth, security, middleware, API routes, downloads, RBAC, tenant isolation |
-| `aqliya-docs-authority.md`     | Documentation updates, conflicts, status matrix, authority hierarchy      |
-| `aqliya-demo-safety.md`        | `/auditos` demo route, public access, mock data, no-auth pages            |
-| `aqliya-product-completion.md` | Product completion, v0.1 gates, DoD enforcement, filling gaps             |
-| `aqliya-release-checklist.md`  | Release, deployment, pre-flight verification, Go/No-Go                    |
-| `aqliya-opencode-agent.md`     | Agent behavior, task classification, starting a task, reporting           |
+| Skill File                          | Auto-Load When Task Involves                                              |
+| ----------------------------------- | ------------------------------------------------------------------------- |
+| `aqliya-execution-protocol.md`      | Task classification, command discipline, pre-flight checks, reporting (default skill) |
+| `aqliya-security-gate.md`           | Auth, security, middleware, API routes, downloads, RBAC, tenant isolation, demo safety |
+| `aqliya-docs-authority.md`          | Documentation updates, conflicts, status matrix, authority hierarchy      |
+| `aqliya-product-completion.md`      | Product completion, v0.1 gates, DoD enforcement, filling gaps             |
+| `aqliya-release-checklist.md`       | Release, deployment, pre-flight verification, Go/No-Go                    |
+| `aqliya-ai-feature-gate.md`         | AI features, prompts, providers, confidence scoring, evidence grounding   |
+| `aqliya-data-discipline.md`         | Prisma schema, migrations, seeds, query patterns, data integrity          |
+| `aqliya-export-gate.md`             | Exports, file downloads, evidence packages, PDF/XLSX generation           |
+| `aqliya-parallel-director.md`       | Multi-agent coordination, file ownership, dependency rules, cycle execution |
 
 ### Selection Algorithm
 
 1. Parse task description for keywords matching skill descriptions
 2. If multiple skills match, load all that apply (load order: most specific first)
-3. If no skill matches, load `aqliya-opencode-agent.md` as default
+3. If no skill matches, load `aqliya-execution-protocol.md` as default
 4. Always load `aqliya-security-gate.md` if the task touches routes, auth, or data
 5. Apply skill rules as constraints during execution
 6. Reference loaded skills in the final report
 
 ### Skill Format
 
-Every skill at `.skills/aqliya/*.md` follows this frontmatter format (derived from mimiclaw/nanobot skill system):
+Every skill at `.skills/aqliya/*.md` follows this frontmatter format:
 
 ```yaml
 ---
 name: <skill-name>
 description: <one-line description for auto-matching>
+version: <semver>
+date: <YYYY-MM-DD>
+status: active | deprecated | draft
 ---
 ```
 

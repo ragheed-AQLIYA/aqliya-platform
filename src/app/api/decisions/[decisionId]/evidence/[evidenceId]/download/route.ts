@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireDecisionAccess } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { enforce } from "@/lib/authorization";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
+import { prisma } from "@/lib/prisma";
+import { sanitizeErrorResponse } from "@/lib/platform/api-error";
 
 export async function GET(
   _request: NextRequest,
@@ -13,16 +15,25 @@ export async function GET(
   const { decisionId, evidenceId } = await params;
 
   try {
-    const { user, organizationId } = await requireDecisionAccess(
-      decisionId,
-      "VIEWER",
-    );
-    await enforce(user, { type: "decision", id: decisionId, tenantId: organizationId }, "read");
+    const user = await getCurrentUser();
+    await enforce(user, { type: "evidence", id: evidenceId, tenantId: user.organizationId }, "export");
+
+    // Verify decision exists and belongs to user's org
+    const decision = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decision) {
+      return NextResponse.json({ error: "Decision not found" }, { status: 404 });
+    }
+    if (decision.organizationId !== user.organizationId) {
+      return NextResponse.json({ error: "Decision not found" }, { status: 404 });
+    }
 
     const evidenceRecord = await assertEvidenceDownloadAccess({
       productSlug: "decision",
       evidenceId,
-      organizationId,
+      organizationId: user.organizationId,
       resourceId: decisionId,
     });
 
@@ -80,7 +91,7 @@ export async function GET(
       );
     }
     if (message.includes("Access denied")) {
-      return NextResponse.json({ error: message }, { status: 403 });
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
     if (
       message.includes("Evidence not found") ||
@@ -89,9 +100,6 @@ export async function GET(
       return NextResponse.json({ error: "Evidence not found" }, { status: 404 });
     }
     console.error("[DecisionEvidenceDownload] Error:", message);
-    return NextResponse.json(
-      { error: "Failed to serve file" },
-      { status: 500 },
-    );
+    return NextResponse.json(sanitizeErrorResponse(error), { status: 500 });
   }
 }

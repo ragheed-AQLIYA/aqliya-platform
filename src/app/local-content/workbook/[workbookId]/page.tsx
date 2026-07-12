@@ -1,10 +1,10 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import {
   getWorkbookAction,
   detectMissingDataAction,
   getDataRequestsAction,
+  getWorkbookProjectOrgId,
 } from "@/actions/localcontent-workbook-actions";
 import { WorkbookDetailClient } from "./workbook-detail-client";
 
@@ -18,10 +18,11 @@ export default async function WorkbookDetailPage({
   noStore();
   const { workbookId } = await params;
 
-  const [wbRes, missingRes, requestsRes] = await Promise.all([
+  const [wbRes, missingRes, requestsRes, organizationId] = await Promise.all([
     getWorkbookAction(workbookId),
     detectMissingDataAction(workbookId),
     getDataRequestsAction(workbookId),
+    getWorkbookProjectOrgId(workbookId),
   ]);
 
   if (!wbRes.ok) {
@@ -37,13 +38,6 @@ export default async function WorkbookDetailPage({
   }
 
   const workbook = wbRes.data;
-
-  // Fetch organizationId from project (needed for AI features)
-  const project = await prisma.localContentProject.findUnique({
-    where: { id: workbook.projectId },
-    select: { organizationId: true },
-  });
-  const organizationId = project?.organizationId ?? "";
 
   const missingData = missingRes.ok ? missingRes.data : null;
   const dataRequests = requestsRes.ok ? requestsRes.data : [];

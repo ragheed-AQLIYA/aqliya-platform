@@ -1,4 +1,4 @@
-name: Promote to Production
+﻿name: Promote to Production
 
 on:
   workflow_dispatch:
@@ -13,9 +13,9 @@ permissions:
   contents: read
   deployments: write
 
-env:
+# Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
   AWS_REGION: me-south-1
-  ECR_REPOSITORY: aqliya/production/app
+  ECR_REPOSITORY: aqliya/prod/app  # aligned with deploy.yml prod convention (2026-07-12)
 
 jobs:
   validate-staging:
@@ -62,7 +62,7 @@ jobs:
 
       - name: Determine Image Tag
         id: image
-        env:
+        # Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           TAG="${{ inputs.commit_sha || github.sha }}"
@@ -71,7 +71,7 @@ jobs:
           echo "Promoting image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${TAG}"
 
       - name: Verify Image Exists
-        env:
+        # Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           aws ecr describe-images \
@@ -83,13 +83,13 @@ jobs:
           }
 
       - name: Update Production ECS Service
-        env:
+        # Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
           IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.image.outputs.tag }}
         run: |
           echo "Deploying ${IMAGE_URI} to production ECS (force new deployment)."
           aws ecs update-service \
-            --cluster aqliya-production-cluster \
-            --service aqliya-production-service \
+            --cluster aqliya-prod-cluster \
+            --service aqliya-prod-service \
             --force-new-deployment \
             --region $AWS_REGION
 
@@ -114,7 +114,7 @@ jobs:
 
       - name: Run Smoke Test
         run: node scripts/platform/post-deploy-smoke.mjs --base-url https://aqliya.com
-        env:
+        # Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
           AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
 
   rollback:
@@ -134,8 +134,8 @@ jobs:
       - name: Rollback ECS to previous task definition revision
         run: |
           echo "Smoke test failed. Rolling back production ECS to previous stable task definition..."
-          CLUSTER="aqliya-production-cluster"
-          SERVICE="aqliya-production-service"
+          CLUSTER="aqliya-prod-cluster"
+          SERVICE="aqliya-prod-service"
 
           # Get the current (just-deployed) task definition ARN
           CURRENT_TASK_DEF=$(aws ecs describe-services \

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import {
   setAgentMemory,
   getAgentMemory,
@@ -11,7 +11,10 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "VIEWER")) {
+      throw new Error("Access denied: VIEWER role required");
+    }
 
     const { searchParams } = new URL(request.url);
     const agentId = searchParams.get("agentId") ?? undefined;
@@ -66,7 +69,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "OPERATOR")) {
+      throw new Error("Access denied: OPERATOR role required");
+    }
 
     const body = await request.json();
     const { agentId, memoryKey, memoryValue, agentType, ttl, tags } = body;
@@ -116,7 +122,10 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "OPERATOR")) {
+      throw new Error("Access denied: OPERATOR role required");
+    }
 
     const { searchParams } = new URL(request.url);
     const agentId = searchParams.get("agentId");

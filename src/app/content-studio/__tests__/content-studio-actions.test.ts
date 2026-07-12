@@ -7,9 +7,11 @@ jest.mock('next/cache', () => ({
   revalidatePath: (...args: unknown[]) => mockRevalidatePath(...args),
 }))
 
-const mockRequireUserContext = jest.fn()
+const mockGetCurrentUser = jest.fn()
+const mockHasRequiredRole = jest.fn()
 jest.mock('@/lib/auth', () => ({
-  requireUserContext: (...args: unknown[]) => mockRequireUserContext(...args),
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
+  hasRequiredRole: (...args: unknown[]) => mockHasRequiredRole(...args),
   isExpectedAccessDeniedError: jest.fn((error: unknown) =>
     error instanceof Error &&
     (error.message.startsWith('Access denied:') || error.message === 'Unauthenticated'),
@@ -107,7 +109,8 @@ const DEFAULT_USER = {
 }
 
 function mockUser(overrides: Record<string, unknown> = {}) {
-  mockRequireUserContext.mockResolvedValue({ ...DEFAULT_USER, ...overrides })
+  mockGetCurrentUser.mockResolvedValue({ ...DEFAULT_USER, ...overrides })
+  mockHasRequiredRole.mockReturnValue(true)
 }
 
 function resetAll() {
@@ -137,7 +140,7 @@ describe('createWorkspaceAction', () => {
   })
 
   it('returns error when user lacks permission', async () => {
-    mockRequireUserContext.mockRejectedValue(new Error('Access denied: insufficient role'))
+    mockHasRequiredRole.mockReturnValue(false)
 
     const result = await createWorkspaceAction({ name: 'Test WS' })
 
@@ -454,7 +457,7 @@ describe('exportContentAction', () => {
   })
 
   it('returns error when user lacks permissions', async () => {
-    mockRequireUserContext.mockRejectedValue(new Error('Access denied: insufficient role'))
+    mockHasRequiredRole.mockReturnValue(false)
 
     const result = await exportContentAction(contentId)
 

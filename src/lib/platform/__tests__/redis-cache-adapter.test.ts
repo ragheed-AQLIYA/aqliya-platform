@@ -6,6 +6,7 @@ const mockRedisClient = {
   set: jest.fn(),
   del: jest.fn(),
   flushdb: jest.fn(),
+  scan: jest.fn().mockResolvedValue(["0", []]),
   connect: jest.fn().mockResolvedValue(undefined),
   on: jest.fn(),
   quit: jest.fn().mockResolvedValue(undefined),
@@ -47,21 +48,21 @@ describe("CacheAdapter (Redis mode)", () => {
   it("set with TTL passes PX to Redis", async () => {
     const { cacheAdapter } = await import("../redis-cache-adapter")
     await cacheAdapter.set("ttl-key", "value", 5000)
-    expect(mockRedisClient.set).toHaveBeenCalledWith("ttl-key", expect.any(String), "PX", 5000)
+    expect(mockRedisClient.set).toHaveBeenCalledWith("aqliya:cache:ttl-key", expect.any(String), "PX", 5000)
   })
 
   it("del removes key", async () => {
     mockRedisClient.del.mockResolvedValue(1)
     const { cacheAdapter } = await import("../redis-cache-adapter")
     await cacheAdapter.del("some-key")
-    expect(mockRedisClient.del).toHaveBeenCalledWith("some-key")
+    expect(mockRedisClient.del).toHaveBeenCalledWith("aqliya:cache:some-key")
   })
 
-  it("clear flushes Redis db", async () => {
-    mockRedisClient.flushdb.mockResolvedValue("OK")
+  it("clear uses SCAN+DEL pattern", async () => {
     const { cacheAdapter } = await import("../redis-cache-adapter")
     await cacheAdapter.clear()
-    expect(mockRedisClient.flushdb).toHaveBeenCalled()
+    expect(mockRedisClient.scan).toHaveBeenCalled()
+    expect(mockRedisClient.flushdb).not.toHaveBeenCalled()
   })
 })
 

@@ -2,7 +2,7 @@
 
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 // ─── Types ───
@@ -96,7 +96,10 @@ function isAuthRedirectError(error: unknown): boolean {
 }
 
 async function getUserCtx() {
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
+  if (!hasRequiredRole(user, "OPERATOR")) {
+    throw new Error("Access denied: OPERATOR role required");
+  }
   return {
     organizationId: user.platformOrganizationId ?? user.organizationId,
     userId: user.id,

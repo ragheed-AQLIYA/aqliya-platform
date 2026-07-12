@@ -1,12 +1,12 @@
-# ADR-028: Knowledge Foundation Bridge — Mining to Institutional Releases
+﻿# ADR-028: Knowledge Foundation Bridge — Mining to Institutional Releases
 
 **Status:** Accepted  
 **Date:** 2026-06-21  
 **Program:** Phase 28 — Knowledge Mining → Knowledge Foundation Integration  
 **Supersedes:** None  
 **Related audits:**
-- [`docs/audits/PHASE_28_ARCHITECTURE_AUDIT.md`](../../audits/PHASE_28_ARCHITECTURE_AUDIT.md)
-- [`docs/audits/PHASE_28_TENANT_POLICY_DECISION.md`](../../audits/PHASE_28_TENANT_POLICY_DECISION.md)  
+- [`docs/evidence/audits/PHASE_28_ARCHITECTURE_AUDIT.md`](../../evidence/audits/PHASE_28_ARCHITECTURE_AUDIT.md)
+- [`docs/evidence/audits/PHASE_28_TENANT_POLICY_DECISION.md`](../../evidence/audits/PHASE_28_TENANT_POLICY_DECISION.md)  
 **Related ADRs:** [`ADR-001-AI-RUNTIME-STRATEGY.md`](../ADR-001-AI-RUNTIME-STRATEGY.md) (Firm Memory tier; TB classification order)
 
 Trust principle: **AI assists. Humans decide. Evidence governs.**
@@ -281,7 +281,7 @@ Disconnected audit chains are **not acceptable** for production institutional re
 
 ## 7. Future Work
 
-Implementation is phased per [`PHASE_28_ARCHITECTURE_AUDIT.md`](../../audits/PHASE_28_ARCHITECTURE_AUDIT.md). This ADR does not authorize implementation by itself; it freezes the decision for those phases.
+Implementation is phased per [`PHASE_28_ARCHITECTURE_AUDIT.md`](../../evidence/audits/PHASE_28_ARCHITECTURE_AUDIT.md). This ADR does not authorize implementation by itself; it freezes the decision for those phases.
 
 ### Phase 28.1 — Schema and binding core
 

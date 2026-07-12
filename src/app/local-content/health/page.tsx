@@ -1,10 +1,7 @@
-import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getLcHealthChecks } from "@/actions/lc-health-actions";
 
 export default async function LcosHealthPage() {
-  await requireUserContext();
-
-  const checks = await getHealthChecks();
+  const checks = await getLcHealthChecks();
 
   return (
     <div className="space-y-6 p-6" dir="rtl">
@@ -24,19 +21,4 @@ export default async function LcosHealthPage() {
       </div>
     </div>
   );
-}
-
-async function getHealthChecks() {
-  try {
-    const projectCount = await prisma.localContentProject.count();
-    const workbookCount = await prisma.lcWorkbook.count();
-
-    return [
-      { name: "db", label: "قاعدة البيانات / Database", status: "healthy", message: `${projectCount} مشروع, ${workbookCount} كشاف` },
-      { name: "projects", label: "المشاريع / Projects", status: projectCount > 0 ? "healthy" : "degraded", message: `${projectCount} مشروع` },
-      { name: "workbooks", label: "الكشوف / Workbooks", status: workbookCount > 0 ? "healthy" : "degraded", message: `${workbookCount} كشاف` },
-    ];
-  } catch {
-    return [{ name: "db", label: "قاعدة البيانات / Database", status: "unhealthy", message: "تعذر الاتصال / Connection failed" }];
-  }
 }

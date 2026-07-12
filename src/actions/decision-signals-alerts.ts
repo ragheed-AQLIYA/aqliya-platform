@@ -10,7 +10,8 @@ import {
 import { buildMonitoringSignalsFromRisks } from "@/lib/decision/signal-automation";
 import { validateIntelligenceGate } from "@/lib/decision/intelligence-gate";
 import { revalidatePath } from "next/cache";
-import { requireDecisionAccess } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization/action-guard";
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit";
 import { prisma } from "@/lib/prisma";
 
@@ -19,7 +20,15 @@ export async function acknowledgeSignalAction(
   decisionId: string,
   signalId: string
 ) {
-  const { user } = await requireDecisionAccess(decisionId, "OPERATOR")
+  const user = await getCurrentUser();
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  });
+  if (!decisionLookup) {
+    return { error: "Decision not found" };
+  }
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
   
   const gate = await validateIntelligenceGate(decisionId);
   if (!gate.allowed) {
@@ -39,7 +48,7 @@ export async function acknowledgeSignalAction(
       "DecisionMonitoringSignal",
       toAuditJson(before),
       toAuditJson(updated),
-      user.organizationId
+      decisionLookup.organizationId
     )
     revalidatePath(`/decisions/${decisionId}/signals`);
     return { success: true };
@@ -53,7 +62,15 @@ export async function acknowledgeAlertAction(
   decisionId: string,
   alertId: string
 ) {
-  const { user } = await requireDecisionAccess(decisionId, "OPERATOR")
+  const user = await getCurrentUser();
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  });
+  if (!decisionLookup) {
+    return { error: "Decision not found" };
+  }
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
   
   const gate = await validateIntelligenceGate(decisionId);
   if (!gate.allowed) {
@@ -73,7 +90,7 @@ export async function acknowledgeAlertAction(
       "DecisionRiskAlert",
       toAuditJson(before),
       toAuditJson(updated),
-      user.organizationId
+      decisionLookup.organizationId
     )
     revalidatePath(`/decisions/${decisionId}/alerts`);
     return { success: true };
@@ -88,7 +105,15 @@ export async function resolveAlertAction(
   alertId: string,
   resolution: string
 ) {
-  const { user } = await requireDecisionAccess(decisionId, "ADMIN")
+  const user = await getCurrentUser();
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  });
+  if (!decisionLookup) {
+    return { error: "Decision not found" };
+  }
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "admin");
   
   const gate = await validateIntelligenceGate(decisionId);
   if (!gate.allowed) {
@@ -108,7 +133,7 @@ export async function resolveAlertAction(
       "DecisionRiskAlert",
       toAuditJson(before),
       toAuditJson(updated),
-      user.organizationId
+      decisionLookup.organizationId
     )
     revalidatePath(`/decisions/${decisionId}/alerts`);
     return { success: true };
@@ -119,7 +144,15 @@ export async function resolveAlertAction(
 
 /** D3-02 — generate system monitoring signals from HIGH/MEDIUM risks (APPROVED only) */
 export async function runMonitoringSignalAutomationAction(decisionId: string) {
-  const { user } = await requireDecisionAccess(decisionId, "OPERATOR");
+  const user = await getCurrentUser();
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  });
+  if (!decisionLookup) {
+    return { error: "Decision not found" };
+  }
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
 
   const gate = await validateIntelligenceGate(decisionId);
   if (!gate.allowed) {
@@ -128,7 +161,7 @@ export async function runMonitoringSignalAutomationAction(decisionId: string) {
 
   try {
     const decision = await prisma.decision.findFirst({
-      where: { id: decisionId, organizationId: user.organizationId },
+      where: { id: decisionId, organizationId: decisionLookup.organizationId },
       include: {
         risks: { select: { id: true, description: true, level: true } },
         signals: { select: { referenceId: true, source: true } },
@@ -175,7 +208,7 @@ export async function runMonitoringSignalAutomationAction(decisionId: string) {
       "DecisionMonitoringSignal",
       "DecisionMonitoringSignal",
       toAuditJson({ created: drafts.length, automation: "D3-02" }),
-      user.organizationId,
+      decisionLookup.organizationId,
     );
 
     revalidatePath(`/decisions/${decisionId}/signals`);
@@ -187,7 +220,15 @@ export async function runMonitoringSignalAutomationAction(decisionId: string) {
 
 // View signals - requires operator (or admin)
 export async function getSignalsAction(decisionId: string) {
-  await requireDecisionAccess(decisionId, "OPERATOR")
+  const user = await getCurrentUser();
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  });
+  if (!decisionLookup) {
+    return { error: "Decision not found" };
+  }
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
   
   const gate = await validateIntelligenceGate(decisionId);
   if (!gate.allowed) {
@@ -204,7 +245,15 @@ export async function getSignalsAction(decisionId: string) {
 
 // View alerts - requires operator (or admin)
 export async function getAlertsAction(decisionId: string) {
-  await requireDecisionAccess(decisionId, "OPERATOR")
+  const user = await getCurrentUser();
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  });
+  if (!decisionLookup) {
+    return { error: "Decision not found" };
+  }
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
   
   const gate = await validateIntelligenceGate(decisionId);
   if (!gate.allowed) {

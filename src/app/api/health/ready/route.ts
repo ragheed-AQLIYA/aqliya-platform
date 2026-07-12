@@ -56,7 +56,7 @@ async function readinessChecks(): Promise<{
   } catch (error) {
     checks.database = {
       ok: false,
-      detail: error instanceof Error ? error.message : "connection failed",
+      detail: "connection failed",
       latencyMs: Date.now() - dbStart,
     }
     failed.push("database")
@@ -80,7 +80,7 @@ async function readinessChecks(): Promise<{
     checks.storage = {
       ok: hasS3Config,
       detail: hasS3Config
-        ? `configured (bucket: ${s3Bucket})`
+        ? "configured"
         : "S3_BUCKET or S3_ENDPOINT not configured",
     }
     if (!hasS3Config) failed.push("storage")
@@ -102,7 +102,7 @@ async function readinessChecks(): Promise<{
   } catch (error) {
     checks.pgvector = {
       ok: false,
-      detail: error instanceof Error ? error.message : "pgvector check failed",
+      detail: "pgvector check failed",
     }
     failed.push("pgvector")
   }
@@ -121,7 +121,7 @@ async function readinessChecks(): Promise<{
     } catch (error) {
       checks.redis = {
         ok: false,
-        detail: error instanceof Error ? error.message : "redis check failed",
+        detail: "redis check failed",
         latencyMs: Date.now() - redisStart,
       }
       failed.push("redis")

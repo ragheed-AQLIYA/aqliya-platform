@@ -35,7 +35,7 @@ The overall link health is **good for a corpus of this size** — only 7 issues 
 #### Broken Link 1: ../BASELINE_REPORT.md
 
 - **Source:** docs/programs/repository-quality/PROGRAM_CHARTER.md (line 95)
-- **Context:** "Phase 0 baseline was collected 2026-06-27 and documented in [BASELINE_REPORT.md](../BASELINE_REPORT.md)."
+- **Context:** "Phase 0 baseline was collected 2026-06-27 and documented in [BASELINE_REPORT.md](../../programs/repository-health/BASELINE_REPORT.md)."
 - **Problem:** ../BASELINE_REPORT.md resolves to docs/programs/BASELINE_REPORT.md, which does not exist.
 - **Actual location:** docs/programs/repository-quality/BASELINE_REPORT.md (same directory as PROGRAM_CHARTER.md)
 - **Correct link:** ./BASELINE_REPORT.md or simply BASELINE_REPORT.md

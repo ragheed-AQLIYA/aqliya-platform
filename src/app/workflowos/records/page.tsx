@@ -1,4 +1,4 @@
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { workflow_listOrgRecords } from "@/actions/workflowos-actions";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,7 +31,7 @@ export default async function WorkflowRecordsPage({
   searchParams: Promise<{ status?: string; q?: string }>;
 }) {
   const { status, q } = await searchParams;
-  const user = await requireUserContext();
+  const user = await getCurrentUser();
   const result = await workflow_listOrgRecords(user.organizationId, status, q);
 
   const records = result.success && result.data ? result.data : [];

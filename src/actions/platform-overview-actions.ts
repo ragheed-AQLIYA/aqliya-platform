@@ -1,7 +1,9 @@
-import "server-only";
+﻿import "server-only";
+
+import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS } from "@/lib/platform/cache-strategy";
 
 import { prisma } from "@/lib/prisma";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
@@ -38,7 +40,9 @@ export type PlatformNotification = {
 // <70 → critical
 
 export async function getPlatformHealthAction(): Promise<PlatformHealth> {
-  await requireUserContext("VIEWER");
+  const user = await getCurrentUser();
+  const cacheKey = `dashboard:platform:${user.organizationId}:health`;
+  return await getCachedOrFetch(cacheKey, async () => {
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
@@ -142,6 +146,7 @@ export async function getPlatformHealthAction(): Promise<PlatformHealth> {
     auditEventsToday: auditLogsToday + platformAuditLogsToday,
     status,
   };
+  }, DASHBOARD_CACHE_TTL_MS);
 }
 
 // ─── Platform Notifications ────────────────────────────────────────────────
@@ -150,7 +155,7 @@ export async function getPlatformNotificationsAction(): Promise<{
   notifications: PlatformNotification[];
   counts: { critical: number; warning: number; info: number };
 }> {
-  await requireUserContext("VIEWER");
+  await getCurrentUser();
   const now = new Date();
   const staleThreshold = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());

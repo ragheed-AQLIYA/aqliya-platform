@@ -1,0 +1,450 @@
+{
+  "agent": "dependencies",
+  "title": "Dependency Report",
+  "generatedAt": "2026-07-11T02:08:06.245Z",
+  "score": 93,
+  "summary": {
+    "total": 37,
+    "critical": 0,
+    "high": 1,
+    "medium": 0,
+    "low": 35,
+    "info": 1
+  },
+  "findings": [
+    {
+      "id": "F-0676",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: @auth/prisma-adapter",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0677",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: @embedpdf/fonts-arabic",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0678",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: @radix-ui/react-slot",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0679",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: playwright",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0680",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: tw-animate-css",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0681",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: @tailwindcss/postcss",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0682",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: eslint-config-next",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0683",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: eslint-plugin-security",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0684",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: license-checker",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0685",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Possibly unused package: shadcn",
+      "evidence": "No import/require/script reference detected in scanned corpus",
+      "files": [
+        "package.json"
+      ],
+      "category": "unused-packages",
+      "suggestion": "Confirm before removal — may be used by config or transitive tooling.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0686",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: @jridgewell/trace-mapping",
+      "evidence": "0.3.9, 0.3.31",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0687",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: mime-db",
+      "evidence": "1.52.0, 1.54.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0688",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: mime-types",
+      "evidence": "2.1.35, 3.0.2",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0689",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: qs",
+      "evidence": "6.14.2, 6.15.1",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0690",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: tldts",
+      "evidence": "6.1.86, 7.0.30",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0691",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: tldts-core",
+      "evidence": "6.1.86, 7.0.30",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0692",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: tough-cookie",
+      "evidence": "5.1.2, 6.0.1",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0693",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: debug",
+      "evidence": "3.2.7, 4.4.3",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0694",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: commander",
+      "evidence": "11.1.0, 14.0.3, 6.2.1, 2.20.3, 7.2.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0695",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: execa",
+      "evidence": "5.1.1, 4.1.0, 9.6.1",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0696",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: get-stream",
+      "evidence": "6.0.1, 5.2.0, 9.0.1",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0697",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: human-signals",
+      "evidence": "2.1.0, 1.1.1, 8.0.1",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0698",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: is-stream",
+      "evidence": "2.0.1, 4.0.1",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0699",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: isexe",
+      "evidence": "3.1.5, 2.0.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0700",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: npm-run-path",
+      "evidence": "4.0.1, 6.0.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0701",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: onetime",
+      "evidence": "5.1.2, 7.0.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0702",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: picomatch",
+      "evidence": "4.0.4, 2.3.2",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0703",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: signal-exit",
+      "evidence": "3.0.7, 4.1.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0704",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: strip-final-newline",
+      "evidence": "2.0.0, 4.0.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0705",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: which",
+      "evidence": "4.0.0, 2.0.2",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0706",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: eslint-visitor-keys",
+      "evidence": "3.4.3, 5.0.1, 4.2.1",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0707",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: @opentelemetry/api-logs",
+      "evidence": "0.212.0, 0.214.0, 0.207.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0708",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: @opentelemetry/instrumentation",
+      "evidence": "0.212.0, 0.214.0, 0.207.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0709",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: balanced-match",
+      "evidence": "4.0.4, 1.0.2",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0710",
+      "agent": "dependency",
+      "severity": "low",
+      "title": "Multiple versions installed: brace-expansion",
+      "evidence": "5.0.6, 5.0.5, 1.1.14, 2.1.0",
+      "files": [],
+      "category": "duplicate-packages",
+      "suggestion": "Deduplicate via overrides/resolutions when safe.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0711",
+      "agent": "dependency",
+      "severity": "high",
+      "title": "Restrictive license: node_modules/jszip",
+      "evidence": "(MIT OR GPL-3.0-or-later)",
+      "files": [],
+      "category": "license",
+      "suggestion": "Legal review before distribution; prefer MIT/Apache-2.0.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0712",
+      "agent": "dependency",
+      "severity": "info",
+      "title": "No cached npm-audit.json — advisories not scored this run",
+      "evidence": "Place npm audit --json output at engineering/reports/npm-audit.json when approved",
+      "files": [],
+      "category": "security-advisories",
+      "suggestion": "",
+      "scoreImpact": 0
+    }
+  ],
+  "meta": {
+    "direct": 49,
+    "dev": 25,
+    "unused": 10,
+    "dupVersions": 109,
+    "licenseRisks": 1
+  }
+}

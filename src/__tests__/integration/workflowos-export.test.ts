@@ -2,16 +2,21 @@
 
 // ─── Mocks (hoisted before imports) ───
 
-const mockRequireUserContext = jest.fn();
+const mockGetCurrentUser = jest.fn();
 
 jest.mock("@/lib/auth", () => ({
-  requireUserContext: mockRequireUserContext,
-  getCurrentUser: mockRequireUserContext,
+  getCurrentUser: mockGetCurrentUser,
   isExpectedAccessDeniedError: jest.fn(
     (error: Error) =>
       error?.message?.startsWith("Access denied:") ||
       error?.message === "Unauthenticated",
   ),
+}));
+
+const mockEnforce = jest.fn();
+
+jest.mock("@/lib/authorization", () => ({
+  enforce: mockEnforce,
 }));
 
 jest.mock("@/lib/prisma", () => ({
@@ -132,13 +137,20 @@ function makeAuditEvent(overrides: Record<string, unknown> = {}) {
 describe("WorkflowOS Export Flow", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockEnforce.mockImplementation(
+      async (user: { organizationId: string }, resource: { id?: string }, _action: string) => {
+        if (resource.id && resource.id !== user.organizationId) {
+          throw new Error("Access denied: cross-tenant");
+        }
+      },
+    );
   });
 
   // ─── 1. Request Export ───
 
   describe("requestWorkflowExport", () => {
     it("requires authentication", async () => {
-      mockRequireUserContext.mockRejectedValue(new Error("Unauthenticated"));
+      mockGetCurrentUser.mockRejectedValue(new Error("Unauthenticated"));
 
       const result = await requestWorkflowExport("record-1");
 
@@ -147,7 +159,7 @@ describe("WorkflowOS Export Flow", () => {
 
     it("requests export successfully for a completed record", async () => {
       const record = makeWorkflowRecord();
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowRecord.update).mockResolvedValue({
         ...record,
@@ -171,7 +183,7 @@ describe("WorkflowOS Export Flow", () => {
 
     it("rejects export for non-completed record", async () => {
       const record = makeWorkflowRecord({ status: "in_progress" });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
 
       const result = await requestWorkflowExport("record-1");
@@ -184,7 +196,7 @@ describe("WorkflowOS Export Flow", () => {
 
     it("rejects duplicate export request", async () => {
       const record = makeWorkflowRecord({ exportStatus: "requested" });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
 
       const result = await requestWorkflowExport("record-1");
@@ -200,7 +212,7 @@ describe("WorkflowOS Export Flow", () => {
 
   describe("approveWorkflowExport", () => {
     it("requires authentication", async () => {
-      mockRequireUserContext.mockRejectedValue(new Error("Unauthenticated"));
+      mockGetCurrentUser.mockRejectedValue(new Error("Unauthenticated"));
 
       const result = await approveWorkflowExport("record-1");
 
@@ -218,7 +230,7 @@ describe("WorkflowOS Export Flow", () => {
         exportApprovedAt: new Date("2026-06-16"),
         exportApprovedById: "user-1",
       };
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowRecord.update).mockResolvedValue(updatedRecord);
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
@@ -239,7 +251,7 @@ describe("WorkflowOS Export Flow", () => {
 
     it("rejects approval when no pending request exists", async () => {
       const record = makeWorkflowRecord({ exportStatus: "none" });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
 
       const result = await approveWorkflowExport("record-1");
@@ -253,7 +265,7 @@ describe("WorkflowOS Export Flow", () => {
 
   describe("rejectWorkflowExport", () => {
     it("requires authentication", async () => {
-      mockRequireUserContext.mockRejectedValue(new Error("Unauthenticated"));
+      mockGetCurrentUser.mockRejectedValue(new Error("Unauthenticated"));
 
       const result = await rejectWorkflowExport("record-1", "Missing documents");
 
@@ -272,7 +284,7 @@ describe("WorkflowOS Export Flow", () => {
         exportApprovedAt: new Date("2026-06-16"),
         exportApprovedById: "user-1",
       };
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowRecord.update).mockResolvedValue(updatedRecord);
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
@@ -304,7 +316,7 @@ describe("WorkflowOS Export Flow", () => {
 
     it("requires a reason for rejection", async () => {
       const record = makeWorkflowRecord({ exportStatus: "requested" });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
 
       const result = await rejectWorkflowExport("record-1", "");
@@ -320,7 +332,7 @@ describe("WorkflowOS Export Flow", () => {
 
   describe("downloadWorkflowExport", () => {
     it("requires authentication", async () => {
-      mockRequireUserContext.mockRejectedValue(new Error("Unauthenticated"));
+      mockGetCurrentUser.mockRejectedValue(new Error("Unauthenticated"));
 
       const result = await downloadWorkflowExport("record-1");
 
@@ -329,7 +341,7 @@ describe("WorkflowOS Export Flow", () => {
 
     it("downloads an approved export with correct content", async () => {
       const record = makeWorkflowRecord({ exportStatus: "approved" });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowEvidence.findMany).mockResolvedValue([
         {
@@ -382,7 +394,7 @@ describe("WorkflowOS Export Flow", () => {
 
     it("rejects download when export not approved", async () => {
       const record = makeWorkflowRecord({ exportStatus: "requested" });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
 
       const result = await downloadWorkflowExport("record-1");
@@ -399,7 +411,7 @@ describe("WorkflowOS Export Flow", () => {
   describe("tenant isolation", () => {
     it("prevents user from another org from requesting export", async () => {
       const record = makeWorkflowRecord({ organizationId: "org-other" });
-      mockRequireUserContext.mockResolvedValue(
+      mockGetCurrentUser.mockResolvedValue(
         makeUser({ organizationId: "org-1" }),
       );
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
@@ -415,7 +427,7 @@ describe("WorkflowOS Export Flow", () => {
         organizationId: "org-other",
         exportStatus: "requested",
       });
-      mockRequireUserContext.mockResolvedValue(
+      mockGetCurrentUser.mockResolvedValue(
         makeUser({ organizationId: "org-1" }),
       );
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
@@ -430,7 +442,7 @@ describe("WorkflowOS Export Flow", () => {
         organizationId: "org-other",
         exportStatus: "approved",
       });
-      mockRequireUserContext.mockResolvedValue(
+      mockGetCurrentUser.mockResolvedValue(
         makeUser({ organizationId: "org-1" }),
       );
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
@@ -446,7 +458,7 @@ describe("WorkflowOS Export Flow", () => {
   describe("audit trail", () => {
     it("creates audit event on export request", async () => {
       const record = makeWorkflowRecord({ exportRequestedById: null });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowRecord.update).mockResolvedValue({
         ...record,
@@ -478,7 +490,7 @@ describe("WorkflowOS Export Flow", () => {
         exportStatus: "requested",
         exportRequestedById: "user-1",
       });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowRecord.update).mockResolvedValue({
         ...record,
@@ -505,7 +517,7 @@ describe("WorkflowOS Export Flow", () => {
         exportStatus: "requested",
         exportRequestedById: "user-1",
       });
-      mockRequireUserContext.mockResolvedValue(makeUser());
+      mockGetCurrentUser.mockResolvedValue(makeUser());
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowRecord.update).mockResolvedValue({
         ...record,

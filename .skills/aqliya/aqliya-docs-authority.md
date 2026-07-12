@@ -1,6 +1,9 @@
 ---
 name: aqliya-docs-authority
-description: Documentation source-of-truth hierarchy for AQLIYA. Determines which document has highest authority in case of conflict, and when docs must be updated.
+description: Documentation hierarchy, conflict resolution, and status matrix updates for AQLIYA
+version: 2.0
+date: 2026-07-12
+status: active
 ---
 
 # AQLIYA Documentation Authority

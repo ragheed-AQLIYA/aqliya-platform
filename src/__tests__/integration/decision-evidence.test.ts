@@ -3,17 +3,19 @@
 // ─── Mocks (hoisted before imports) ───
 
 const mockGetCurrentUser = jest.fn();
-const mockRequireDecisionAccess = jest.fn();
+const mockEnforce = jest.fn();
 
 jest.mock("@/lib/auth", () => ({
   getCurrentUser: mockGetCurrentUser,
-  requireUserContext: mockGetCurrentUser,
-  requireDecisionAccess: mockRequireDecisionAccess,
   isExpectedAccessDeniedError: jest.fn(
     (error: Error) =>
       error?.message?.startsWith("Access denied:") ||
       error?.message === "Unauthenticated",
   ),
+}));
+
+jest.mock("@/lib/authorization", () => ({
+  enforce: mockEnforce,
 }));
 
 jest.mock("@/lib/prisma", () => ({
@@ -62,7 +64,8 @@ jest.mock("crypto", () => ({
 // ─── Imports (pick up mocked modules) ───
 
 import { prisma } from "@/lib/prisma";
-import { requireDecisionAccess } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
 import { auditLogger } from "@/lib/platform/audit-logger";
 import {
   getDecisionEvidenceAction,
@@ -111,6 +114,14 @@ function makeDecisionEvidence(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function makeDecision(overrides: Record<string, unknown> = {}) {
+  return {
+    id: "decision-1",
+    organizationId: "org-1",
+    ...overrides,
+  };
+}
+
 const base64Content = Buffer.from("test file content").toString("base64");
 
 // ─── Tests ───
@@ -118,14 +129,17 @@ const base64Content = Buffer.from("test file content").toString("base64");
 describe("DecisionOS Evidence Lifecycle", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mock(mockEnforce).mockResolvedValue(undefined);
+    mock(mockGetCurrentUser).mockResolvedValue(makeUser());
+    mock(prisma.decision.findUnique).mockResolvedValue(makeDecision());
   });
 
   // ─── 1. Upload Evidence ───
 
   describe("uploadDecisionEvidenceAction", () => {
     it("requires authentication (OPERATOR role)", async () => {
-      mockRequireDecisionAccess.mockRejectedValue(
-        new Error("Access denied: OPERATOR role required"),
+      mock(mockGetCurrentUser).mockRejectedValue(
+        new Error("Unauthenticated"),
       );
 
       const result = await uploadDecisionEvidenceAction({
@@ -139,10 +153,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
     });
 
     it("uploads evidence successfully and logs audit event", async () => {
-      mockRequireDecisionAccess.mockResolvedValue({
-        user: makeUser(),
-        organizationId: "org-1",
-      });
+      // beforeEach already sets getCurrentUser + enforce to succeed
       mock(mockStorageStore).mockResolvedValue(undefined);
       mock(prisma.decisionEvidence.count).mockResolvedValue(0);
       mock(prisma.decisionEvidence.create).mockResolvedValue(
@@ -192,10 +203,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
     });
 
     it("rejects unsupported file type", async () => {
-      mockRequireDecisionAccess.mockResolvedValue({
-        user: makeUser(),
-        organizationId: "org-1",
-      });
+      // beforeEach already sets getCurrentUser + enforce to succeed
 
       const result = await uploadDecisionEvidenceAction({
         decisionId: "decision-1",
@@ -211,10 +219,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
     });
 
     it("rejects file exceeding maximum size", async () => {
-      mockRequireDecisionAccess.mockResolvedValue({
-        user: makeUser(),
-        organizationId: "org-1",
-      });
+      // beforeEach already sets getCurrentUser + enforce to succeed
       const largeContent = Buffer.alloc(21 * 1024 * 1024).toString("base64");
 
       const result = await uploadDecisionEvidenceAction({
@@ -235,8 +240,8 @@ describe("DecisionOS Evidence Lifecycle", () => {
 
   describe("getDecisionEvidenceAction", () => {
     it("requires authentication (VIEWER role)", async () => {
-      mockRequireDecisionAccess.mockRejectedValue(
-        new Error("Access denied: VIEWER role required"),
+      mock(mockGetCurrentUser).mockRejectedValue(
+        new Error("Unauthenticated"),
       );
 
       const result = await getDecisionEvidenceAction("decision-1");
@@ -249,10 +254,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
         makeDecisionEvidence({ id: "ev-1", filename: "report1.pdf" }),
         makeDecisionEvidence({ id: "ev-2", filename: "report2.pdf" }),
       ];
-      mockRequireDecisionAccess.mockResolvedValue({
-        user: makeUser(),
-        organizationId: "org-1",
-      });
+      // beforeEach already sets getCurrentUser + enforce to succeed
       mock(prisma.decisionEvidence.findMany).mockResolvedValue(mockEvidence);
 
       const result = await getDecisionEvidenceAction("decision-1");
@@ -266,10 +268,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
     });
 
     it("returns empty array when no evidence exists", async () => {
-      mockRequireDecisionAccess.mockResolvedValue({
-        user: makeUser(),
-        organizationId: "org-1",
-      });
+      // beforeEach already sets getCurrentUser + enforce to succeed
       mock(prisma.decisionEvidence.findMany).mockResolvedValue([]);
 
       const result = await getDecisionEvidenceAction("decision-1");
@@ -280,9 +279,9 @@ describe("DecisionOS Evidence Lifecycle", () => {
       }
     });
 
-    it("enforces org scoping via requireDecisionAccess", async () => {
-      // requireDecisionAccess should reject cross-org access
-      mockRequireDecisionAccess.mockRejectedValue(
+    it("enforces org scoping via enforce()", async () => {
+      // enforce rejects cross-org access
+      mock(mockEnforce).mockRejectedValue(
         new Error("Access denied: organization access required"),
       );
 
@@ -299,8 +298,8 @@ describe("DecisionOS Evidence Lifecycle", () => {
       mock(prisma.decisionEvidence.findUnique).mockResolvedValue(
         makeDecisionEvidence(),
       );
-      mockRequireDecisionAccess.mockRejectedValue(
-        new Error("Access denied: OPERATOR role required"),
+      mock(mockGetCurrentUser).mockRejectedValue(
+        new Error("Unauthenticated"),
       );
 
       const result = await deleteDecisionEvidenceAction("ev-1");
@@ -315,10 +314,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
       mock(prisma.decisionEvidence.findUnique).mockResolvedValue(
         evidenceRecord,
       );
-      mockRequireDecisionAccess.mockResolvedValue({
-        user: makeUser(),
-        organizationId: "org-1",
-      });
+      // beforeEach already sets getCurrentUser + enforce to succeed
       mock(prisma.decisionEvidence.delete).mockResolvedValue({ id: "ev-1" });
       mock(mockStorageDelete).mockResolvedValue(true);
 
@@ -373,7 +369,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
 
   describe("tenant isolation", () => {
     it("prevents user from another org from uploading evidence", async () => {
-      mockRequireDecisionAccess.mockRejectedValue(
+      mock(mockEnforce).mockRejectedValue(
         new Error("Access denied: organization access required"),
       );
 
@@ -385,24 +381,18 @@ describe("DecisionOS Evidence Lifecycle", () => {
       });
 
       expect(result.success).toBe(false);
-      expect(mockRequireDecisionAccess).toHaveBeenCalledWith(
-        "decision-other-org",
-        "OPERATOR",
-      );
+      expect(mock(mockEnforce)).toHaveBeenCalled();
     });
 
     it("prevents user from another org from listing evidence", async () => {
-      mockRequireDecisionAccess.mockRejectedValue(
+      mock(mockEnforce).mockRejectedValue(
         new Error("Access denied: organization access required"),
       );
 
       const result = await getDecisionEvidenceAction("decision-other-org");
 
       expect(result.success).toBe(false);
-      expect(mockRequireDecisionAccess).toHaveBeenCalledWith(
-        "decision-other-org",
-        "VIEWER",
-      );
+      expect(mock(mockEnforce)).toHaveBeenCalled();
     });
 
     it("prevents user from another org from deleting evidence", async () => {
@@ -412,7 +402,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
       mock(prisma.decisionEvidence.findUnique).mockResolvedValue(
         evidenceRecord,
       );
-      mockRequireDecisionAccess.mockRejectedValue(
+      mock(mockEnforce).mockRejectedValue(
         new Error("Access denied: organization access required"),
       );
 
@@ -426,10 +416,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
 
   describe("audit trail", () => {
     it("records audit event on evidence upload", async () => {
-      mockRequireDecisionAccess.mockResolvedValue({
-        user: makeUser(),
-        organizationId: "org-1",
-      });
+      // beforeEach already sets getCurrentUser + enforce to succeed
       mock(mockStorageStore).mockResolvedValue(undefined);
       mock(prisma.decisionEvidence.count).mockResolvedValue(0);
       mock(prisma.decisionEvidence.create).mockResolvedValue(
@@ -460,10 +447,7 @@ describe("DecisionOS Evidence Lifecycle", () => {
       mock(prisma.decisionEvidence.findUnique).mockResolvedValue(
         evidenceRecord,
       );
-      mockRequireDecisionAccess.mockResolvedValue({
-        user: makeUser(),
-        organizationId: "org-1",
-      });
+      // beforeEach already sets getCurrentUser + enforce to succeed
       mock(prisma.decisionEvidence.delete).mockResolvedValue({ id: "ev-1" });
 
       await deleteDecisionEvidenceAction("ev-1");

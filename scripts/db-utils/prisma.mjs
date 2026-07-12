@@ -10,7 +10,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-const DATABASE_URL = process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/aqliya?schema=public";
+const DATABASE_URL = process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/aqliya?schema=public&connection_limit=20&pool_timeout=10";
 const adapter = new PrismaPg(DATABASE_URL);
 const prisma = new PrismaClient({ adapter });
 

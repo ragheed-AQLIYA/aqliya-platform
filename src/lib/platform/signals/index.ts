@@ -29,4 +29,4 @@ export {
   collectSalesApprovalSignals,
   collectSalesReviewSignals,
   collectSalesTaskSignals,
-} from "@/lib/core/signals/producers/sales-signal-producer";
+} from "@/lib/sales/signals/core-signal-producer";

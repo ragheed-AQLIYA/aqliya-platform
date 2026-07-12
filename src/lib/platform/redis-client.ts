@@ -12,9 +12,11 @@ export function getRedisClient(): Redis {
   if (globalForRedis.redisClient) return globalForRedis.redisClient
 
   const url = getRedisUrl()
+  const useTls = url.startsWith("rediss://")
   const client = new Redis(url, {
     maxRetriesPerRequest: null,
     enableReadyCheck: true,
+    tls: useTls ? {} : undefined,
     retryStrategy(times) {
       if (times > 10) return null
       return Math.min(times * 100, 3000)
@@ -25,6 +27,16 @@ export function getRedisClient(): Redis {
   client.on("error", (err) => {
     console.error("[redis] connection error:", err.message)
   })
+  // Periodic reconnection probe for production resilience
+  const RECONNECT_INTERVAL = 60000; // 60 seconds
+  if (typeof setInterval !== "undefined") {
+    // Only in Node.js runtime
+    setInterval(() => {
+      if (client.status === "end") {
+        client.connect().catch(() => { /* logged by error handler */ })
+      }
+    }, RECONNECT_INTERVAL).unref() // Don't keep process alive
+  }
 
   globalForRedis.redisClient = client
   return client

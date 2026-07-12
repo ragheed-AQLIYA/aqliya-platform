@@ -1,0 +1,497 @@
+{
+  "at": "2026-07-11T11:36:48.406Z",
+  "waves": [
+    {
+      "id": "Wave-9",
+      "product": "LocalContentOS",
+      "program": "B",
+      "findings": [
+        {
+          "fingerprint": "1f9d967e11e8",
+          "title": "Possible secret material (generic-secret)",
+          "severity": "high",
+          "product": "LocalContentOS",
+          "files": [
+            "src/lib/local-content/erp/connector-factory.ts"
+          ],
+          "roi": 3.4,
+          "impact": 9,
+          "difficulty": 2,
+          "risk": 2,
+          "confidence": 75,
+          "source": "top10",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 3.0192,
+          "need": 48
+        },
+        {
+          "fingerprint": "9ee3952e3faf",
+          "title": "Client module references server-only concerns",
+          "severity": "high",
+          "product": "LocalContentOS",
+          "files": [
+            "src/app/local-content/settings/integrations/page.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5392,
+          "need": 48
+        },
+        {
+          "fingerprint": "6cd50722bfc6",
+          "title": "Large module / God Object signal: localcontent-actions.ts",
+          "severity": "high",
+          "product": "LocalContentOS",
+          "files": [
+            "src/actions/localcontent-actions.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5392,
+          "need": 48
+        },
+        {
+          "fingerprint": "2c4f7402de67",
+          "title": "Large module / God Object signal: page.tsx",
+          "severity": "high",
+          "product": "LocalContentOS",
+          "files": [
+            "src/app/local-content/settings/integrations/page.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5392,
+          "need": 48
+        },
+        {
+          "fingerprint": "6b43acafccab",
+          "title": "Large module / God Object signal: ai-advisor.ts",
+          "severity": "high",
+          "product": "LocalContentOS",
+          "files": [
+            "src/lib/local-content/workbook/ai-advisor.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5392,
+          "need": 48
+        },
+        {
+          "fingerprint": "4fc44e3901db",
+          "title": "Long function WorkbookDetailClient (708 lines)",
+          "severity": "high",
+          "product": "LocalContentOS",
+          "files": [
+            "src/app/local-content/workbook/[workbookId]/workbook-detail-client.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5392,
+          "need": 48
+        },
+        {
+          "fingerprint": "095ed5a39ce6",
+          "title": "Long function ReviewCenter (561 lines)",
+          "severity": "high",
+          "product": "LocalContentOS",
+          "files": [
+            "src/app/local-content/review-center/review-center-client.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5392,
+          "need": 48
+        },
+        {
+          "fingerprint": "e390e9d05c78",
+          "title": "Long function QualityDashboardClient (519 lines)",
+          "severity": "high",
+          "product": "LocalContentOS",
+          "files": [
+            "src/app/local-content/quality-dashboard/quality-dashboard-client.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5392,
+          "need": 48
+        }
+      ],
+      "findingCount": 8,
+      "roi": 2.2,
+      "risk": "Medium",
+      "effortDays": 10,
+      "rationale": "Focus LocalContentOS (completion gap 48%). Pack score prioritizes ROI × need / effort. Program B."
+    },
+    {
+      "id": "Wave-10",
+      "product": "SalesOS",
+      "program": "B",
+      "findings": [
+        {
+          "fingerprint": "da1ed81c9c3b",
+          "title": "Possible secret material (generic-secret)",
+          "severity": "high",
+          "product": "SalesOS",
+          "files": [
+            "src/lib/sales/vnext/learning-loop.ts"
+          ],
+          "roi": 3.4,
+          "impact": 9,
+          "difficulty": 2,
+          "risk": 2,
+          "confidence": 75,
+          "source": "top10",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 2.9783999999999997,
+          "need": 46
+        },
+        {
+          "fingerprint": "e21451a4a460",
+          "title": "Client module references server-only concerns",
+          "severity": "high",
+          "product": "SalesOS",
+          "files": [
+            "src/components/sales/deal-conversion-memo-panel.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5184,
+          "need": 46
+        },
+        {
+          "fingerprint": "9273676d5f88",
+          "title": "Client module references server-only concerns",
+          "severity": "high",
+          "product": "SalesOS",
+          "files": [
+            "src/app/sales/sales-dashboard-client.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5184,
+          "need": 46
+        },
+        {
+          "fingerprint": "7a825d4f1596",
+          "title": "Large module / God Object signal: seed-data.ts",
+          "severity": "high",
+          "product": "SalesOS",
+          "files": [
+            "src/lib/sales/seed-data.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5184,
+          "need": 46
+        },
+        {
+          "fingerprint": "15c5a1ab4466",
+          "title": "Large module / God Object signal: store.ts",
+          "severity": "high",
+          "product": "SalesOS",
+          "files": [
+            "src/lib/sales/store.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5184,
+          "need": 46
+        },
+        {
+          "fingerprint": "3018c98f24b8",
+          "title": "Large module / God Object signal: page.tsx",
+          "severity": "high",
+          "product": "SalesOS",
+          "files": [
+            "src/app/sales/settings/crm/page.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5184,
+          "need": 46
+        },
+        {
+          "fingerprint": "fa47676674ee",
+          "title": "Long function buildSalesSeedData (1651 lines)",
+          "severity": "high",
+          "product": "SalesOS",
+          "files": [
+            "src/lib/sales/seed-data.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5184,
+          "need": 46
+        },
+        {
+          "fingerprint": "83b46b41e82e",
+          "title": "Long function buildKnowledgeGraphFromSnapshot (430 lines)",
+          "severity": "high",
+          "product": "SalesOS",
+          "files": [
+            "src/lib/sales/v02/knowledge-graph/builder.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.5184,
+          "need": 46
+        }
+      ],
+      "findingCount": 8,
+      "roi": 2.2,
+      "risk": "Medium",
+      "effortDays": 10,
+      "rationale": "Focus SalesOS (completion gap 46%). Pack score prioritizes ROI × need / effort. Program B."
+    },
+    {
+      "id": "Wave-11",
+      "product": "WorkflowOS",
+      "program": "B",
+      "findings": [
+        {
+          "fingerprint": "4d9ae7e6467f",
+          "title": "API route may lack auth check",
+          "severity": "high",
+          "product": "WorkflowOS",
+          "files": [
+            "src/app/api/workflowos/escalation-check/route.ts"
+          ],
+          "roi": 3.4,
+          "impact": 9,
+          "difficulty": 2,
+          "risk": 2,
+          "confidence": 75,
+          "source": "top10",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 2.9375999999999998,
+          "need": 44
+        },
+        {
+          "fingerprint": "e9840101eae7",
+          "title": "API route may lack auth check",
+          "severity": "high",
+          "product": "WorkflowOS",
+          "files": [
+            "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
+          ],
+          "roi": 3.4,
+          "impact": 9,
+          "difficulty": 2,
+          "risk": 2,
+          "confidence": 75,
+          "source": "top10",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 2.9375999999999998,
+          "need": 44
+        },
+        {
+          "fingerprint": "852f7f174ea2",
+          "title": "Long function WorkflowAdminDashboard (293 lines)",
+          "severity": "high",
+          "product": "WorkflowOS",
+          "files": [
+            "src/components/workflowos/workflow-admin-dashboard.tsx"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.4975999999999998,
+          "need": 44
+        },
+        {
+          "fingerprint": "8dbed2bf3a18",
+          "title": "Elevated complexity in workflowos-actions.ts",
+          "severity": "high",
+          "product": "WorkflowOS",
+          "files": [
+            "src/actions/workflowos-actions.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.4975999999999998,
+          "need": 44
+        },
+        {
+          "fingerprint": "da2a0e0a12a7",
+          "title": "Low maintainability index (0)",
+          "severity": "high",
+          "product": "WorkflowOS",
+          "files": [
+            "src/actions/workflowos-actions.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.4975999999999998,
+          "need": 44
+        },
+        {
+          "fingerprint": "a8c27b594725",
+          "title": "Download/export route may lack tenant scope",
+          "severity": "high",
+          "product": "WorkflowOS",
+          "files": [
+            "src/app/api/workflowos/documents/[documentId]/download/route.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.4975999999999998,
+          "need": 44
+        },
+        {
+          "fingerprint": "cec164a407be",
+          "title": "Download/export route may lack tenant scope",
+          "severity": "high",
+          "product": "WorkflowOS",
+          "files": [
+            "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.4975999999999998,
+          "need": 44
+        },
+        {
+          "fingerprint": "dfaeac6f1a57",
+          "title": "Debt hotspot (priority 106): workflowos-actions.ts",
+          "severity": "high",
+          "product": "WorkflowOS",
+          "files": [
+            "src/actions/workflowos-actions.ts"
+          ],
+          "roi": 2,
+          "impact": 8,
+          "difficulty": 3,
+          "risk": 3,
+          "confidence": 65,
+          "source": "lifecycle",
+          "effortDays": 1.25,
+          "programHint": "B",
+          "packScore": 1.4975999999999998,
+          "need": 44
+        }
+      ],
+      "findingCount": 8,
+      "roi": 2.4,
+      "risk": "Medium",
+      "effortDays": 10,
+      "rationale": "Focus WorkflowOS (completion gap 44%). Pack score prioritizes ROI × need / effort. Program B."
+    }
+  ]
+}

@@ -45,7 +45,7 @@ export class AnthropicProvider implements AIProvider {
       aiRequestToCompletion(request),
     );
 
-    return completionToAiResponse(completion, "anthropic", 0.8);
+    return completionToAiResponse(completion, "anthropic");
   }
 
   getStatus(): AIProviderStatus {

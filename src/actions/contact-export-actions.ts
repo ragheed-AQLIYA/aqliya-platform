@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { requireUserContext, isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import { checkExportRestrictions } from "@/lib/localcontactos/compliance-service";
 import PDFDocument from "pdfkit";
 import { existsSync } from "node:fs";
@@ -61,7 +61,7 @@ async function logAuditEvent(params: {
 
 export async function requestContactExport(contactId: string, reason?: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: {
@@ -130,7 +130,7 @@ import {
 
 export async function exportContactAsPdf(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
 
     const contact = await prisma.localContact.findFirst({
       where: { id: contactId, organizationId: user.organizationId },
@@ -342,7 +342,7 @@ function drawPdfDivider(doc: PDFKit.PDFDocument, x: number) {
 
 export async function approveContactExport(contactId: string, note?: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, platformOrganizationId: true },
@@ -397,7 +397,7 @@ export async function approveContactExport(contactId: string, note?: string) {
 
 export async function rejectContactExport(contactId: string, reason: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, platformOrganizationId: true },
@@ -453,7 +453,7 @@ export async function rejectContactExport(contactId: string, reason: string) {
 
 export async function recordExportDownload(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, platformOrganizationId: true, exportStatus: true },
@@ -493,7 +493,7 @@ export async function recordExportDownload(contactId: string) {
 
 export async function getExportStatus(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, exportStatus: true, sensitivityLevel: true },
@@ -517,7 +517,7 @@ export async function getExportStatus(contactId: string) {
 
 export async function getExportRequests(contactId: string) {
   return safe(async () => {
-    const user = await requireUserContext("VIEWER");
+    const user = await getCurrentUser();
     const requests = await prisma.contactExportRequest.findMany({
       where: { organizationId: user.organizationId, contactId },
       orderBy: { createdAt: "desc" },
@@ -528,7 +528,7 @@ export async function getExportRequests(contactId: string) {
 
 export async function clearLegalReview(contactId: string, cleared: boolean, note?: string) {
   return safe(async () => {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, platformOrganizationId: true },
@@ -571,7 +571,7 @@ export async function clearLegalReview(contactId: string, cleared: boolean, note
 
 export async function updateContactSensitivityLevel(contactId: string, sensitivityLevel: string) {
   return safe(async () => {
-    const user = await requireUserContext("OPERATOR");
+    const user = await getCurrentUser();
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, platformOrganizationId: true, sensitivityLevel: true },

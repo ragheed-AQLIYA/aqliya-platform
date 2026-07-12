@@ -3,7 +3,7 @@
 
 "use server"
 
-import { requireUserContext } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/auth"
 import {
   registerModel,
   listModels,
@@ -23,7 +23,7 @@ export type ActionResult = { ok: boolean; data?: unknown; error?: string }
 
 export async function registerModelAction(input: RegisterModelInput): Promise<ActionResult> {
   try {
-    const user = await requireUserContext("ADMIN")
+    const user = await getCurrentUser()
     const model = await registerModel({ ...input, createdBy: user.id })
     return { ok: true, data: model }
   } catch (e) {
@@ -33,7 +33,7 @@ export async function registerModelAction(input: RegisterModelInput): Promise<Ac
 
 export async function listModelsAction(): Promise<ActionResult> {
   try {
-    await requireUserContext("ADMIN")
+    await getCurrentUser()
     const models = await listModels()
     const stats = await getModelGovernanceStats()
     return { ok: true, data: { models, stats } }
@@ -44,7 +44,7 @@ export async function listModelsAction(): Promise<ActionResult> {
 
 export async function getModelAction(id: string): Promise<ActionResult> {
   try {
-    await requireUserContext("ADMIN")
+    await getCurrentUser()
     const model = await getModel(id)
     return { ok: true, data: model }
   } catch (e) {
@@ -54,7 +54,7 @@ export async function getModelAction(id: string): Promise<ActionResult> {
 
 export async function submitModelForReviewAction(id: string): Promise<ActionResult> {
   try {
-    const user = await requireUserContext("ADMIN")
+    const user = await getCurrentUser()
     const model = await submitForReview(id, user.id)
     return { ok: true, data: model }
   } catch (e) {
@@ -64,7 +64,7 @@ export async function submitModelForReviewAction(id: string): Promise<ActionResu
 
 export async function reviewModelAction(id: string, input: ReviewInput): Promise<ActionResult> {
   try {
-    await requireUserContext("ADMIN")
+    await getCurrentUser()
     const model = await reviewModel(id, input)
     return { ok: true, data: model }
   } catch (e) {
@@ -74,7 +74,7 @@ export async function reviewModelAction(id: string, input: ReviewInput): Promise
 
 export async function approveModelAction(id: string, notes?: string): Promise<ActionResult> {
   try {
-    const user = await requireUserContext("ADMIN")
+    const user = await getCurrentUser()
     const model = await approveModel(id, { approvedById: user.id, approvalNotes: notes })
     return { ok: true, data: model }
   } catch (e) {
@@ -84,7 +84,7 @@ export async function approveModelAction(id: string, notes?: string): Promise<Ac
 
 export async function rejectModelAction(id: string, reason: string): Promise<ActionResult> {
   try {
-    const user = await requireUserContext("ADMIN")
+    const user = await getCurrentUser()
     const model = await rejectModel(id, { rejectedById: user.id, rejectionReason: reason })
     return { ok: true, data: model }
   } catch (e) {
@@ -94,7 +94,7 @@ export async function rejectModelAction(id: string, reason: string): Promise<Act
 
 export async function deployModelAction(id: string, input: DeployInput): Promise<ActionResult> {
   try {
-    await requireUserContext("ADMIN")
+    await getCurrentUser()
     const deployment = await deployModel(id, input)
     return { ok: true, data: deployment }
   } catch (e) {
@@ -104,7 +104,7 @@ export async function deployModelAction(id: string, input: DeployInput): Promise
 
 export async function deprecateModelAction(id: string): Promise<ActionResult> {
   try {
-    const user = await requireUserContext("ADMIN")
+    const user = await getCurrentUser()
     const model = await deprecateModel(id, user.id)
     return { ok: true, data: model }
   } catch (e) {
@@ -114,7 +114,7 @@ export async function deprecateModelAction(id: string): Promise<ActionResult> {
 
 export async function getFileBasedRegistryAction(): Promise<ActionResult> {
   try {
-    await requireUserContext("ADMIN")
+    await getCurrentUser()
     const entries = listModelRegistryEntries()
     return { ok: true, data: entries }
   } catch (e) {

@@ -1,0 +1,330 @@
+{
+  "agent": "recommendation-ranking",
+  "title": "Recommendation Ranking Report",
+  "generatedAt": "2026-07-11T02:08:06.890Z",
+  "score": 84,
+  "summary": {
+    "total": 10,
+    "critical": 0,
+    "high": 10,
+    "medium": 0,
+    "low": 0,
+    "info": 0
+  },
+  "findings": [
+    {
+      "id": "F-0826",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#1 ROI 3.4 — Possible secret material (generic-secret)",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=SalesOS occurrences=1",
+      "files": [
+        "src/lib/sales/vnext/learning-loop.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0827",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#2 ROI 3.4 — Possible secret material (generic-secret)",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=LocalContentOS occurrences=1",
+      "files": [
+        "src/lib/local-content/erp/connector-factory.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0828",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#3 ROI 3.4 — Possible secret material (generic-secret)",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=Platform occurrences=1",
+      "files": [
+        "src/app/settings/retention/page.tsx"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Move to env/Secrets Manager; rotate if real.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0829",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#4 ROI 3.4 — API route may lack auth check",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=WorkflowOS occurrences=1",
+      "files": [
+        "src/app/api/workflowos/escalation-check/route.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0830",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#5 ROI 3.4 — API route may lack auth check",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=WorkflowOS occurrences=1",
+      "files": [
+        "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0831",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#6 ROI 3.4 — API route may lack auth check",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=Platform occurrences=1",
+      "files": [
+        "src/app/api/scim/v2/Users/route.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0832",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#7 ROI 3.4 — API route may lack auth check",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=Platform occurrences=1",
+      "files": [
+        "src/app/api/scim/v2/Users/[id]/route.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0833",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#8 ROI 3.4 — API route may lack auth check",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=Platform occurrences=1",
+      "files": [
+        "src/app/api/scim/v2/Groups/route.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0834",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#9 ROI 3.4 — API route may lack auth check",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=Platform occurrences=1",
+      "files": [
+        "src/app/api/scim/v2/Groups/[id]/route.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0835",
+      "agent": "recommendation-ranking",
+      "severity": "high",
+      "title": "#10 ROI 3.4 — API route may lack auth check",
+      "evidence": "impact=9/10 difficulty=2/5 risk=2/5 confidence=75% product=Platform occurrences=1",
+      "files": [
+        "src/app/api/platform/retention/route.ts"
+      ],
+      "category": "ranked-recommendation",
+      "suggestion": "Add server-side auth + tenant checks; return 401/404 safely.",
+      "scoreImpact": 8
+    }
+  ],
+  "meta": {
+    "top10": [
+      {
+        "fingerprint": "da1ed81c9c3b",
+        "title": "Possible secret material (generic-secret)",
+        "agent": "security",
+        "category": "A02",
+        "severity": "high",
+        "files": [
+          "src/lib/sales/vnext/learning-loop.ts"
+        ],
+        "product": "SalesOS",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Move to env/Secrets Manager; rotate if real."
+      },
+      {
+        "fingerprint": "1f9d967e11e8",
+        "title": "Possible secret material (generic-secret)",
+        "agent": "security",
+        "category": "A02",
+        "severity": "high",
+        "files": [
+          "src/lib/local-content/erp/connector-factory.ts"
+        ],
+        "product": "LocalContentOS",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Move to env/Secrets Manager; rotate if real."
+      },
+      {
+        "fingerprint": "c80eb58f437f",
+        "title": "Possible secret material (generic-secret)",
+        "agent": "security",
+        "category": "A02",
+        "severity": "high",
+        "files": [
+          "src/app/settings/retention/page.tsx"
+        ],
+        "product": "Platform",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Move to env/Secrets Manager; rotate if real."
+      },
+      {
+        "fingerprint": "4d9ae7e6467f",
+        "title": "API route may lack auth check",
+        "agent": "security",
+        "category": "A01",
+        "severity": "high",
+        "files": [
+          "src/app/api/workflowos/escalation-check/route.ts"
+        ],
+        "product": "WorkflowOS",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Add server-side auth + tenant checks; return 401/404 safely."
+      },
+      {
+        "fingerprint": "e9840101eae7",
+        "title": "API route may lack auth check",
+        "agent": "security",
+        "category": "A01",
+        "severity": "high",
+        "files": [
+          "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
+        ],
+        "product": "WorkflowOS",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Add server-side auth + tenant checks; return 401/404 safely."
+      },
+      {
+        "fingerprint": "04e6963e9b32",
+        "title": "API route may lack auth check",
+        "agent": "security",
+        "category": "A01",
+        "severity": "high",
+        "files": [
+          "src/app/api/scim/v2/Users/route.ts"
+        ],
+        "product": "Platform",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Add server-side auth + tenant checks; return 401/404 safely."
+      },
+      {
+        "fingerprint": "98dce0e7a33c",
+        "title": "API route may lack auth check",
+        "agent": "security",
+        "category": "A01",
+        "severity": "high",
+        "files": [
+          "src/app/api/scim/v2/Users/[id]/route.ts"
+        ],
+        "product": "Platform",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Add server-side auth + tenant checks; return 401/404 safely."
+      },
+      {
+        "fingerprint": "88307898a617",
+        "title": "API route may lack auth check",
+        "agent": "security",
+        "category": "A01",
+        "severity": "high",
+        "files": [
+          "src/app/api/scim/v2/Groups/route.ts"
+        ],
+        "product": "Platform",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Add server-side auth + tenant checks; return 401/404 safely."
+      },
+      {
+        "fingerprint": "fc258a1eda54",
+        "title": "API route may lack auth check",
+        "agent": "security",
+        "category": "A01",
+        "severity": "high",
+        "files": [
+          "src/app/api/scim/v2/Groups/[id]/route.ts"
+        ],
+        "product": "Platform",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Add server-side auth + tenant checks; return 401/404 safely."
+      },
+      {
+        "fingerprint": "e2c27d3df5a9",
+        "title": "API route may lack auth check",
+        "agent": "security",
+        "category": "A01",
+        "severity": "high",
+        "files": [
+          "src/app/api/platform/retention/route.ts"
+        ],
+        "product": "Platform",
+        "occurrences": 1,
+        "impact": 9,
+        "difficulty": 2,
+        "risk": 2,
+        "confidence": 75,
+        "roi": 3.4,
+        "suggestion": "Add server-side auth + tenant checks; return 401/404 safely."
+      }
+    ]
+  }
+}

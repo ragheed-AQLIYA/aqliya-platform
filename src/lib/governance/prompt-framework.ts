@@ -93,9 +93,27 @@ function buildHumanApprovalLayer(context: GovernanceContext): string {
   ]);
 }
 
+/**
+ * Sanitizes a prompt value to prevent injection attacks.
+ * - Truncates values exceeding 2000 characters
+ * - Escapes markdown code fences and section delimiters that could
+ *   be used to inject system instructions
+ * - Replaces null bytes
+ */
+function sanitizePromptValue(value: unknown): string {
+  if (value === null || value === undefined) return '(none)';
+  let str = typeof value === 'string' ? value : JSON.stringify(value);
+  if (str.length > 2000) str = str.slice(0, 2000) + '...(truncated)';
+  str = str
+    .replace(/\x00/g, '')
+    .replace(/```/g, '\\`\\`\\`')
+    .replace(/=== /g, '\\=\\=\\= ');
+  return str;
+}
+
 function buildTaskSpecificLayer(taskType: GovernanceTaskType, input: Record<string, unknown>): string {
   const params = Object.entries(input)
-    .map(([key, value]) => `  - ${key}: ${value}`)
+    .map(([key, value]) => `  - ${key}: ${sanitizePromptValue(value)}`)
     .join('\n');
   return assembleSection('TASK SPECIFIC', [
     `Task: ${taskType}`,
@@ -195,11 +213,11 @@ export function buildAccountClassificationPrompt(
   ];
 
   const payload = {
-    accountName: input.accountName,
-    accountCode: input.accountCode,
+    accountName: sanitizePromptValue(input.accountName),
+    accountCode: sanitizePromptValue(input.accountCode),
     accountBalance: input.accountBalance,
     candidateAccounts: input.candidateAccounts,
-    chartOfAccountsContext: input.chartOfAccountsContext,
+    chartOfAccountsContext: sanitizePromptValue(input.chartOfAccountsContext),
   };
 
   const taskBody = assembleSection('ACCOUNT CLASSIFICATION TASK', [

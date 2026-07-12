@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth-next";
 import { getAiSettingsAction } from "@/actions/ai-settings-actions";
 import { aiOrchestrator } from "@/lib/core/ai/orchestrator";
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+import { listPromptTemplates } from "@/lib/ai/prompt-templates";
 
 export async function GET() {
   const session = await auth();
@@ -16,10 +18,16 @@ export async function GET() {
     return NextResponse.json({
       settings,
       providers,
+      quality: {
+        enabled: true,
+        confidenceScorer: true,
+        evalGate: true,
+        templates: listPromptTemplates().map(t => ({ id: t.id, name: t.name })),
+      },
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed";
-    return NextResponse.json({ error: message }, { status: 403 });
+    const { message, code } = sanitizeError(error);
+    return NextResponse.json({ error: message }, { status: httpStatusFromCode(code) });
   }
 }

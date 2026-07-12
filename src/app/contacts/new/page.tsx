@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { createContact } from "@/actions/contact-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { ArrowRight, UserPlus } from "lucide-react";
 import Link from "next/link";
 
 export default async function NewContactPage() {
-  await requireUserContext("OPERATOR");
+  await getCurrentUser();
 
   return (
     <div dir="rtl" className="min-h-screen bg-background">

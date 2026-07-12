@@ -1,14 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserContext } from "@/lib/auth";
+import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { removeHold } from "@/lib/core/policy/retention/holds";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const user = await requireUserContext("ADMIN");
+    const user = await getCurrentUser();
+    if (!hasRequiredRole(user, "ADMIN")) {
+      throw new Error("Access denied: ADMIN role required");
+    }
     const { id } = await params;
 
     const removed = await removeHold(id);
@@ -27,9 +31,7 @@ export async function DELETE(
 
     return NextResponse.json({ removed });
   } catch (err) {
-    if (err instanceof Error && (err.message === "Unauthenticated" || err.message.startsWith("Access denied"))) {
-      return NextResponse.json({ error: err.message }, { status: 403 });
-    }
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    const { message, code } = sanitizeError(err);
+    return NextResponse.json({ error: message }, { status: httpStatusFromCode(code) });
   }
 }

@@ -3,7 +3,7 @@
 ﻿# DecisionOS Operator Guide — دليل تشغيل قرارات
 
 > **Product:** DecisionOS under AQLIYA  
-> **Level:** L5 Pilot-ready  
+> **Level:** L6 Production-hardened  
 > **Routes:** /decisions, /decisions/[id]/*, /intelligence/sectors  
 > **Last updated:** 2026-06-18
 

@@ -2,12 +2,21 @@
 
 import { prisma } from "@/lib/prisma"
 import { RiskLevel } from "@prisma/client"
-import { isExpectedAccessDeniedError, requireDecisionAccess } from "@/lib/auth"
+import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth"
+import { enforce } from "@/lib/authorization/action-guard"
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit"
 
 export async function getTenderProfile(decisionId: string) {
   try {
-    await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
     const tender = await prisma.tenderProfile.findUnique({
       where: { decisionId },
     })
@@ -36,7 +45,15 @@ export async function createOrUpdateTenderProfile(
   }
 ) {
   try {
-    const { user } = await requireDecisionAccess(decisionId, "OPERATOR")
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) {
+      return { success: false, error: "Decision not found" };
+    }
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
     // Check if tender profile exists
     const existing = await prisma.tenderProfile.findUnique({
       where: { decisionId },
@@ -67,7 +84,7 @@ export async function createOrUpdateTenderProfile(
         'TenderProfile',
         toAuditJson(existing),
         toAuditJson(updated),
-        user.organizationId
+        decisionLookup.organizationId
       )
 
       return { success: true, data: updated }
@@ -96,7 +113,7 @@ export async function createOrUpdateTenderProfile(
         'TenderProfile',
         undefined,
         toAuditJson(created),
-        user.organizationId
+        decisionLookup.organizationId
       )
 
       return { success: true, data: created }
