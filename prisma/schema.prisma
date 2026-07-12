@@ -794,6 +794,8 @@ model Decision {
   @@index([ownerId])
   @@index([createdAt])
   @@index([type])
+  @@index([organizationId, status])
+  @@index([organizationId, priority])
 }
 
 model DecisionFramework {
@@ -1088,6 +1090,7 @@ model Approval {
   @@index([decisionId])
   @@index([approverId])
   @@index([status])
+  @@index([decisionId, status])
 }
 
 model DecisionOutcome {
@@ -1399,6 +1402,7 @@ model AuditEngagement {
   @@index([status])
   @@index([createdAt])
   @@index([projectId])
+  @@index([organizationId, status])
 }
 
 model AuditPresentationPolicy {
@@ -1658,6 +1662,7 @@ model AuditFinding {
   @@index([engagementId])
   @@index([severity])
   @@index([status])
+  @@index([engagementId, status])
 }
 
 model AuditRecommendation {
@@ -1999,6 +2004,7 @@ model SunbulRecord {
   @@index([status])
   @@index([createdById])
   @@index([createdAt])
+  @@index([clientId, status])
 }
 
 model SunbulDocument {
@@ -2091,6 +2097,7 @@ model LocalContentProject {
   @@index([projectId, createdAt])
   @@index([status])
   @@index([createdAt])
+  @@index([organizationId, status])
 }
 
 model LocalContentSupplier {

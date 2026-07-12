@@ -33,6 +33,9 @@ function getDecisionEvidenceStrength(ratio: number) {
 
 export const dynamic = "force-dynamic";
 
+const DEFAULT_TAKE = 20;
+const LOAD_MORE_INCREMENT = 40;
+
 type DecisionListItem = {
   id: string;
   title: string;
@@ -68,14 +71,24 @@ function getStatusBadgeStatus(status: string): string {
   return map[status] ?? "draft";
 }
 
-export default async function DecisionsPage() {
+export default async function DecisionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const sp = await searchParams;
+  const takeParam = typeof sp.take === "string" ? parseInt(sp.take, 10) : DEFAULT_TAKE;
+  const displayCount = Number.isFinite(takeParam) && takeParam > 0 ? takeParam : DEFAULT_TAKE;
+
   const [decisionsResult, metricsResult] = await Promise.all([
-    getDecisions(),
+    getDecisions({ take: displayCount }),
     getDashboardMetrics(),
   ]);
 
   const decisions =
     decisionsResult.success && "data" in decisionsResult ? (decisionsResult as { data: unknown[] }).data : [];
+  const totalCount = decisionsResult.success && "total" in decisionsResult ? (decisionsResult as { total: number }).total : 0;
+  const hasMore = decisions.length < totalCount;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- cache wrapper type inference limitation
   const metrics = metricsResult.success && "data" in metricsResult ? (metricsResult as any).data : null;
   const evidenceRatio =
@@ -233,59 +246,72 @@ export default async function DecisionsPage() {
           </EnterpriseCardContent>
         </EnterpriseCard>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {(decisions as DecisionListItem[]).map((decision) => (
-            <Link key={decision.id} href={`/decisions/${decision.id}`}>
-              <EnterpriseCard module="decision" hover className="h-full">
-                <EnterpriseCardHeader>
-                  <div className="flex items-start justify-between gap-2">
-                    <EnterpriseCardTitle className="truncate">
-                      {decision.title}
-                    </EnterpriseCardTitle>
-                    <StatusBadge
-                      status={getStatusBadgeStatus(decision.status)}
-                      size="sm"
-                    />
-                  </div>
-                </EnterpriseCardHeader>
-                <EnterpriseCardContent>
-                  <div className="flex flex-wrap gap-1.5 mb-2">
-                    <Badge variant="outline" className="text-[10px]">
-                      {decision.type}
-                    </Badge>
-                    {decision.priority && (
-                      <Badge
-                        variant={getPriorityVariant(decision.priority)}
-                        className="text-[10px]"
-                      >
-                        {decision.priority}
+        <div className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {(decisions as DecisionListItem[]).map((decision) => (
+              <Link key={decision.id} href={`/decisions/${decision.id}`}>
+                <EnterpriseCard module="decision" hover className="h-full">
+                  <EnterpriseCardHeader>
+                    <div className="flex items-start justify-between gap-2">
+                      <EnterpriseCardTitle className="truncate">
+                        {decision.title}
+                      </EnterpriseCardTitle>
+                      <StatusBadge
+                        status={getStatusBadgeStatus(decision.status)}
+                        size="sm"
+                      />
+                    </div>
+                  </EnterpriseCardHeader>
+                  <EnterpriseCardContent>
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      <Badge variant="outline" className="text-[10px]">
+                        {decision.type}
                       </Badge>
+                      {decision.priority && (
+                        <Badge
+                          variant={getPriorityVariant(decision.priority)}
+                          className="text-[10px]"
+                        >
+                          {decision.priority}
+                        </Badge>
+                      )}
+                    </div>
+                    {decision.description && (
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {decision.description}
+                      </p>
                     )}
-                  </div>
-                  {decision.description && (
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {decision.description}
-                    </p>
-                  )}
-                  <div className="text-xs text-muted-foreground mt-2">
-                    المالك: {decision.owner?.name || "غير معيّن"}
-                  </div>
-                </EnterpriseCardContent>
-                <EnterpriseCardFooter className="flex items-center justify-between">
-                  <Badge
-                    variant={getIntakeVariant(decision.intake?.status)}
-                    className="text-[10px]"
-                  >
-                    {decision.intake?.status?.replace("_", " ") ||
-                      "استلام معلّق"}
-                  </Badge>
-                  <span className="text-[10px] text-muted-foreground">
-                    عرض التفاصيل ←
-                  </span>
-                </EnterpriseCardFooter>
-              </EnterpriseCard>
-            </Link>
-          ))}
+                    <div className="text-xs text-muted-foreground mt-2">
+                      المالك: {decision.owner?.name || "غير معيّن"}
+                    </div>
+                  </EnterpriseCardContent>
+                  <EnterpriseCardFooter className="flex items-center justify-between">
+                    <Badge
+                      variant={getIntakeVariant(decision.intake?.status)}
+                      className="text-[10px]"
+                    >
+                      {decision.intake?.status?.replace("_", " ") ||
+                        "استلام معلّق"}
+                    </Badge>
+                    <span className="text-[10px] text-muted-foreground">
+                      عرض التفاصيل ←
+                    </span>
+                  </EnterpriseCardFooter>
+                </EnterpriseCard>
+              </Link>
+            ))}
+          </div>
+          {hasMore && (
+            <div className="flex justify-center pt-4">
+              <Link
+                href={`/decisions?take=${displayCount + LOAD_MORE_INCREMENT}`}
+              >
+                <Button variant="outline" size="lg">
+                  تحميل المزيد ({decisions.length} من {totalCount})
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       )}
 

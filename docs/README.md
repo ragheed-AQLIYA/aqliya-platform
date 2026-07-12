@@ -1,10 +1,17 @@
 ﻿# AQLIYA Documentation
+# توثيق عقلية
 
-## Documentation Authority
+> **منصة عقلية** — منصة ذكاء مؤسسي خاص ومحكوم. التوثيق ثنائي اللغة (عربي/إنجليزي).
+> **AQLIYA Platform** — Private Governed Institutional Intelligence Platform. Bilingual documentation (Arabic/English).
+
+---
+
+## Documentation Authority — سلطة التوثيق
 
 See `DOCUMENTATION_AUTHORITY.md` for the definitive documentation hierarchy, conflict resolution rules, and folder-level authority assignments.
+راجع `DOCUMENTATION_AUTHORITY.md` لمعرفة التسلسل الهرمي للتوثيق وقواعد حل التعارضات.
 
-## Documentation Authority Map
+## Documentation Authority Map — خريطة سلطة التوثيق
 
 | Folder / File                         | Purpose                                              | Authority Level   | Status              |
 | ------------------------------------- | ---------------------------------------------------- | ----------------- | ------------------- |
@@ -30,7 +37,7 @@ See `DOCUMENTATION_AUTHORITY.md` for the definitive documentation hierarchy, con
 | `theoretical-reference/*`             | Intellectual foundation and domain theory            | Level 7           | Background only     |
 | `archive/*`                           | Historical and superseded documents                  | Level 8           | Historical only     |
 
-## Official Doctrine (Level 2)
+## Official Doctrine (Level 2) — العقيدة الرسمية (المستوى ٢)
 
 | Document                                       | Description                                            |
 | ---------------------------------------------- | ------------------------------------------------------ |
@@ -44,7 +51,7 @@ See `DOCUMENTATION_AUTHORITY.md` for the definitive documentation hierarchy, con
 | `official/aqliya-roadmap-v1.1.md`              | Execution phases and strategic direction               |
 | `official/aqliya-agent-context-v1.1.md`        | Full agent brief for human and AI developers           |
 
-## Supporting References (Level 4)
+## Supporting References (Level 4) — المراجع الداعمة (المستوى ٤)
 
 | Directory / File                            | Description                                                               |
 | ------------------------------------------- | ------------------------------------------------------------------------- |
@@ -55,7 +62,7 @@ See `DOCUMENTATION_AUTHORITY.md` for the definitive documentation hierarchy, con
 | `source-of-truth/ROUTE_STRATEGY.md`         | Route purpose and workspace/demo separation                               |
 | `source-of-truth/READINESS_GATES.md`        | Pilot and commercial readiness criteria                                   |
 
-## Systems Documentation (Level 5)
+## Systems Documentation (Level 5) — توثيق الأنظمة (المستوى ٥)
 
 | Directory                   | Description                                         |
 | --------------------------- | --------------------------------------------------- |
@@ -65,7 +72,7 @@ See `DOCUMENTATION_AUTHORITY.md` for the definitive documentation hierarchy, con
 | `systems/salesos/`          | SalesOS documentation                               |
 | `systems/simulationos/`     | SimulationOS documentation                          |
 
-## Reports and Evidence (Level 6)
+## Reports and Evidence (Level 6) — التقارير والأدلة (المستوى ٦)
 
 Reports provide evidence of implementation progress and validation results. They do not define doctrine or product taxonomy.
 
@@ -75,7 +82,7 @@ Reports provide evidence of implementation progress and validation results. They
 
 - `reports/aqliya-controlled-pilot-release-lock-2026-05-25.md` — Phases 0–5 completion, product status, validation evidence, commercial claim boundaries, and recommended next work. Tag: `controlled-pilot-lock-2026-05-25`.
 
-## Public Claim Alignment Authority
+## Public Claim Alignment Authority — سلطة مواءمة الادعاءات العامة
 
 Current Reference for Public Facing Claims:
 
@@ -95,7 +102,7 @@ Authority applies to:
 - Security and compliance statements
 - Demo and trial claim accuracy
 
-## Theoretical Reference (Level 7 — Background Only)
+## Theoretical Reference (Level 7 — Background Only) — المرجع النظري (المستوى ٧ — للخلفية فقط)
 
 Full 21-part theoretical foundation: foundational doctrine, enterprise decision intelligence, market theory, financial intelligence, audit intelligence, audit firm operating theory, workflow intelligence, governance & trust, data trust, human-AI model, organizational memory, deployment & sovereignty, product philosophy, commercialization, responsible intelligence, system design principles, terminology, anti-patterns, strategic narratives, reference models, and documentation maintenance system.
 
@@ -103,11 +110,12 @@ Theoretical docs provide intellectual foundation but do not govern implementatio
 
 → `theoretical-reference/` for the full index.
 
-## Language Support
+## Language Support — الدعم اللغوي
 
 AQLIYA is Arabic-first (RTL), bilingual. Supports Arabic and English financial data processing.
+عقلية عربي أولاً (من اليمين لليسار)، ثنائية اللغة. تدعم معالجة البيانات المالية بالعربية والإنجليزية.
 
-## Navigation Indexes
+## Navigation Indexes — فهارس التنقل
 
 These README files provide navigation and recommended reading order for each documentation area. They do not override official docs or change product statuses.
 
@@ -124,7 +132,7 @@ These README files provide navigation and recommended reading order for each doc
 | `pilot/`           | `pilot/README.md` — Pilot execution, readiness, operational docs; pack index: `pilot/PILOT-PACK-INDEX.md` |
 | `reports/`         | `reports/README.md` — Stabilization, audit, documentation, QA reports                |
 
-## Archive (Level 8 — Historical Only)
+## Archive (Level 8 — Historical Only) — الأرشيف (المستوى ٨ — تاريخي فقط)
 
 | Directory                    | Description                                                                                         |
 | ---------------------------- | --------------------------------------------------------------------------------------------------- |
@@ -136,6 +144,8 @@ These README files provide navigation and recommended reading order for each doc
 
 > **Important:** Archived files are **not authoritative**. They are retained for historical reference only. See `DOCUMENTATION_AUTHORITY.md` for the current hierarchy.
 
-## Important Disclaimer
+## Important Disclaimer — إخلاء مسؤولية هام
 
 Outputs generated by AQLIYA products are draft preparation materials and require review and approval by qualified professionals before official use. AI assists, humans decide, evidence governs.
+
+> المخرجات التي تنتجها منتجات عقلية هي مواد تحضيرية مسودة وتتطلب مراجعة واعتماد من متخصصين مؤهلين قبل الاستخدام الرسمي. الذكاء الاصطناعي يساعد، الإنسان يقرر، الدليل يحكم.

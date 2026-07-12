@@ -1,6 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import { prisma } from "@/lib/prisma";
+import {
+  getPlatformAuditLogStats,
+  getPlatformAuditLogEntries,
+} from "@/actions/audit-log-read-actions";
 import {
   Card,
   CardContent,
@@ -77,40 +80,20 @@ export default async function AuditLogsPage({
 
   // ─── Queries ───
 
-  const total = await prisma.platformAuditLog.count();
-  const testRows = await prisma.platformAuditLog.count({
-    where: {
-      action: {
-        in: ["verify.platform_audit_log_write", "platform.dual_write_test"],
-      },
-    },
-  });
-  const auditOsRows = await prisma.platformAuditLog.count({
-    where: { productKey: "audit_os" },
-  });
-  const missingPlatformOrg = await prisma.platformAuditLog.count({
-    where: { platformOrganizationId: null },
-  });
-  const missingWorkspace = await prisma.platformAuditLog.count({
-    where: { clientWorkspaceId: null },
-  });
-  const missingProject = await prisma.platformAuditLog.count({
-    where: { projectId: null },
-  });
-  const products = await prisma.platformAuditLog.groupBy({
-    by: ["productKey"],
-    _count: true,
-  });
+  const {
+    total,
+    testRows,
+    auditOsRows,
+    missingPlatformOrg,
+    missingWorkspace,
+    missingProject,
+    products,
+  } = await getPlatformAuditLogStats();
 
-  const recentLogs = await prisma.platformAuditLog.findMany({
-    where: where as never,
-    orderBy: { createdAt: "desc" },
-    take: limit,
-  });
-
-  const filteredCount = await prisma.platformAuditLog.count({
-    where: where as never,
-  });
+  const { recentLogs, filteredCount } = await getPlatformAuditLogEntries(
+    where,
+    limit,
+  );
 
   // ─── Active filters ───
 

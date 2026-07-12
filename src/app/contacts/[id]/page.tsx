@@ -1,8 +1,12 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { getContact } from "@/actions/contact-actions";
+import {
+  getContactEvidence,
+  getContactReviewsAndReviewers,
+  getContactExportData,
+} from "@/actions/contact-detail-read-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -291,10 +295,7 @@ async function EvidenceSection({
   contactId: string;
   orgId: string;
 }) {
-  const evidence = await prisma.contactEvidence.findMany({
-    where: { organizationId: orgId, contactId },
-    orderBy: { createdAt: "desc" },
-  });
+  const evidence = await getContactEvidence(contactId, orgId);
 
   return (
     <Card>
@@ -392,20 +393,11 @@ async function ReviewsSection({
   userId: string;
   userRole: string;
 }) {
-  const [reviews, availableReviewers] = await Promise.all([
-    prisma.contactReview.findMany({
-      where: { organizationId: orgId, contactId },
-      include: { approvals: true },
-      orderBy: { createdAt: "desc" },
-    }),
-    userRole === "ADMIN" || userRole === "OPERATOR"
-      ? prisma.user.findMany({
-          where: { organizationId: orgId, role: { in: ["ADMIN", "OPERATOR"] } },
-          select: { id: true, name: true, email: true, role: true },
-          orderBy: { name: "asc" },
-        })
-      : [],
-  ]);
+  const { reviews, availableReviewers } = await getContactReviewsAndReviewers(
+    contactId,
+    orgId,
+    userRole,
+  );
 
   const serializedReviews = reviews.map((r) => ({
     ...r,
@@ -480,16 +472,8 @@ async function ExportApprovalSidebarSection({
   userId: string;
   userRole: string;
 }) {
-  const contact = await prisma.localContact.findUnique({
-    where: { id: contactId },
-    select: { sensitivityLevel: true, exportStatus: true },
-  });
+  const { contact, exportRequests } = await getContactExportData(contactId, orgId);
   if (!contact) return null;
-
-  const exportRequests = await prisma.contactExportRequest.findMany({
-    where: { organizationId: orgId, contactId },
-    orderBy: { createdAt: "desc" },
-  });
 
   const serializedRequests = exportRequests.map((r) => ({
     ...r,

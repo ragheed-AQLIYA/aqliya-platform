@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import { getPlatformOrganizationByLegacyOrganizationId } from "@/lib/platform/platform-organization-context";
 import { getPlatformOrgGuardReport } from "@/lib/platform/guards/platform-org-guard";
-import { prisma } from "@/lib/prisma";
+import { getLinkedLegacyOrgs } from "@/actions/platform-org-read-actions";
 import {
   Card,
   CardContent,
@@ -66,17 +66,11 @@ export default async function PlatformOrganizationPage() {
   let legacyAuditOrgs: { id: string; name: string; slug: string }[] = [];
 
   if (platformOrg) {
-    const decisionOrgs = await prisma.organization.findMany({
-      where: { platformOrganizationId: platformOrg.platformOrganizationId },
-      select: { id: true, name: true },
-    });
-    legacyDecisionOrg = decisionOrgs[0] ?? null;
-
-    const auditOrgs = await prisma.auditOrganization.findMany({
-      where: { platformOrganizationId: platformOrg.platformOrganizationId },
-      select: { id: true, name: true, slug: true },
-    });
-    legacyAuditOrgs = auditOrgs;
+    const result = await getLinkedLegacyOrgs(
+      platformOrg.platformOrganizationId,
+    );
+    legacyDecisionOrg = result.legacyDecisionOrg;
+    legacyAuditOrgs = result.legacyAuditOrgs;
   }
 
   // Session vs resolved check

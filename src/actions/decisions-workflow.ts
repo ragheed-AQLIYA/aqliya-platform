@@ -1,0 +1,758 @@
+﻿"use server";
+
+import { prisma } from "@/lib/prisma";
+import {
+  evaluateIntake,
+  evaluateFramework,
+  evaluateScenarios,
+  evaluateRisks,
+} from "@/lib/decision";
+
+import { isExpectedAccessDeniedError } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/authorization";
+import { logAudit } from "@/lib/decision/decision-audit";
+
+// --- Decision Recommendation ---
+export async function getDecisionRecommendation(id: string) {
+  try {
+    const user = await getCurrentUser();
+    const decision = await prisma.decision.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        type: true,
+        recommendation: true,
+        organizationId: true,
+      },
+    });
+    if (!decision) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decision.organizationId }, "read");
+
+    // If viewer, only show published
+    if (user.role === "VIEWER") {
+      return await getPublishedRecommendationViewAction(id);
+    }
+
+    if (!decision.recommendation) {
+      return { success: false, error: "Recommendation not found" };
+    }
+
+    return {
+      success: true,
+      data: {
+        id: decision.id,
+        recommendation: decision.recommendation,
+        decisionType: decision.type,
+        currentUserRole: user.role,
+      },
+    };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error fetching recommendation:", error);
+    }
+    return { success: false, error: "Failed to fetch recommendation" };
+  }
+}
+
+export async function updateDecisionRecommendation(
+  id: string,
+  data: {
+    recommendedAction: string;
+    rationale: string;
+    expectedNextState: string;
+    scopeExclusions: string;
+    assumptionsUsed: string;
+    risksAccepted: string;
+    risksRejected: string;
+    humanReviewRequired: boolean;
+  },
+) {
+  try {
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id, tenantId: decisionLookup.organizationId }, "update");
+    const recommendation = await prisma.recommendation.upsert({
+      where: { decisionId: id },
+      create: {
+        decisionId: id,
+        recommendedAction: data.recommendedAction,
+        rationale: data.rationale,
+        expectedNextState: data.expectedNextState,
+        scopeExclusions: data.scopeExclusions,
+        assumptionsUsed: data.assumptionsUsed,
+        risksAccepted: data.risksAccepted,
+        risksRejected: data.risksRejected,
+        humanReviewRequired: data.humanReviewRequired ?? true,
+      },
+      update: {
+        recommendedAction: data.recommendedAction,
+        rationale: data.rationale,
+        expectedNextState: data.expectedNextState,
+        scopeExclusions: data.scopeExclusions,
+        assumptionsUsed: data.assumptionsUsed,
+        risksAccepted: data.risksAccepted,
+        risksRejected: data.risksRejected,
+        humanReviewRequired: data.humanReviewRequired ?? true,
+      },
+    });
+    return { success: true, data: recommendation };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error updating recommendation:", error);
+    }
+    return { success: false, error: "Failed to update recommendation" };
+  }
+}
+
+// --- Check Recommendation Gate ---
+function validateRecommendationGate(decisionId: string) {
+  // These should fetch data from DB and evaluate
+  const intake = evaluateIntake({ title: "" });
+  const framework = evaluateFramework(null);
+  const scenarios = evaluateScenarios([]);
+  const risks = evaluateRisks([], []);
+
+  const missing: string[] = [];
+  if (intake.status !== "accepted") missing.push("intake_not_accepted");
+  if (!framework.isComplete) missing.push("framework_incomplete");
+  if (!scenarios.isComplete) missing.push("scenarios_incomplete");
+  if (!risks.isComplete) missing.push("risks_incomplete");
+
+  return { allowed: missing.length === 0, missing };
+}
+
+export async function checkRecommendationGate(decisionId: string) {
+  const user = await getCurrentUser();
+  const decisionLookup = await prisma.decision.findUnique({
+    where: { id: decisionId },
+    select: { organizationId: true },
+  });
+  if (!decisionLookup) return { allowed: false, missing: ["decision_not_found"] };
+  await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
+  return await validateRecommendationGate(decisionId);
+}
+
+// --- Publish / Unpublish ---
+export async function publishRecommendationAction(
+  decisionId: string,
+  forcePublishCurrent?: boolean,
+) {
+  try {
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "admin");
+    const existing = await prisma.recommendation.findUnique({
+      where: { decisionId },
+    });
+
+    if (!existing) {
+      return { success: false, error: "Recommendation not found" };
+    }
+
+    const latestApproval = await prisma.approval.findFirst({
+      where: { decisionId, status: "APPROVED" },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const hasImmutableSnapshot = !!(
+      latestApproval?.snapshotAction && latestApproval?.snapshotRationale
+    );
+
+    if (hasImmutableSnapshot && latestApproval) {
+      const snapshotDiffers =
+        latestApproval.snapshotAction !== existing.recommendedAction ||
+        latestApproval.snapshotRationale !== existing.rationale;
+
+      if (snapshotDiffers && !forcePublishCurrent) {
+        await logAudit(
+          user.id,
+          decisionId,
+          "STALE_PUBLISH_BLOCKED",
+          "Recommendation",
+          JSON.stringify({ currentVersion: existing.publishedVersion }),
+          JSON.stringify({
+            reason: "Current recommendation differs from approved snapshot",
+            snapshotAction: latestApproval.snapshotAction,
+            currentAction: existing.recommendedAction,
+          }),
+          decisionLookup.organizationId,
+        );
+
+        return {
+          success: false,
+          error:
+            "Current recommendation differs from approved snapshot. Publish the approved version or provide forcePublishCurrent override.",
+          requiresOverride: true,
+          snapshotInfo: {
+            approvedAction: latestApproval.snapshotAction,
+            currentAction: existing.recommendedAction,
+            approvedAt: latestApproval.snapshotCreatedAt,
+            approver: latestApproval.approverId,
+          },
+        };
+      }
+
+      if (snapshotDiffers && forcePublishCurrent) {
+        await logAudit(
+          user.id,
+          decisionId,
+          "STALE_PUBLISH_OVERRIDE",
+          "Recommendation",
+          JSON.stringify({ snapshotAction: latestApproval.snapshotAction }),
+          JSON.stringify({
+            publishedCurrentInstead: true,
+            currentAction: existing.recommendedAction,
+          }),
+          decisionLookup.organizationId,
+        );
+
+        const recommendation = await prisma.recommendation.update({
+          where: { decisionId },
+          data: {
+            isClientVisible: true,
+            publishedAt: new Date(),
+            publishedById: user.id,
+            publishedVersion: { increment: 1 },
+            publishedFromSnapshot: false,
+            publishedApprovalId: null,
+          },
+        });
+
+        await logAudit(
+          user.id,
+          decisionId,
+          "CURRENT_PUBLISHED_WITHOUT_APPROVAL",
+          "Recommendation",
+          undefined,
+          JSON.stringify({
+            version: recommendation.publishedVersion,
+            fromSnapshot: false,
+          }),
+          decisionLookup.organizationId,
+        );
+
+        return {
+          success: true,
+          data: recommendation,
+          publishedFromSnapshot: false,
+        };
+      }
+
+      const recommendation = await prisma.recommendation.update({
+        where: { decisionId },
+        data: {
+          isClientVisible: true,
+          publishedAt: new Date(),
+          publishedById: user.id,
+          publishedVersion: { increment: 1 },
+          publishedFromSnapshot: true,
+          publishedApprovalId: latestApproval.id,
+        },
+      });
+
+      await logAudit(
+        user.id,
+        decisionId,
+        "SNAPSHOT_PUBLISHED",
+        "Recommendation",
+        undefined,
+        JSON.stringify({
+          version: recommendation.publishedVersion,
+          approvalId: latestApproval.id,
+          fromSnapshot: true,
+        }),
+        decisionLookup.organizationId,
+      );
+
+      return {
+        success: true,
+        data: recommendation,
+        publishedFromSnapshot: true,
+      };
+    }
+
+    const recommendation = await prisma.recommendation.update({
+      where: { decisionId },
+      data: {
+        isClientVisible: true,
+        publishedAt: new Date(),
+        publishedById: user.id,
+        publishedVersion: { increment: 1 },
+        publishedFromSnapshot: false,
+        publishedApprovalId: null,
+      },
+    });
+
+    await logAudit(
+      user.id,
+      decisionId,
+      "CURRENT_PUBLISHED_WITHOUT_APPROVAL",
+      "Recommendation",
+      undefined,
+      JSON.stringify({
+        version: recommendation.publishedVersion,
+        fromSnapshot: false,
+      }),
+      decisionLookup.organizationId,
+    );
+
+    return {
+      success: true,
+      data: recommendation,
+      publishedFromSnapshot: false,
+    };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error publishing recommendation:", error);
+    }
+    return { success: false, error: "Failed to publish recommendation" };
+  }
+}
+
+export async function unpublishRecommendationAction(decisionId: string) {
+  try {
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "admin");
+    const recommendation = await prisma.recommendation.update({
+      where: { decisionId },
+      data: {
+        isClientVisible: false,
+        publishedFromSnapshot: false,
+        publishedApprovalId: null,
+      },
+    });
+
+    await logAudit(
+      user.id,
+      decisionId,
+      "OUTPUT_UNPUBLISHED",
+      "Recommendation",
+      undefined,
+      undefined,
+      decisionLookup.organizationId,
+    );
+
+    return { success: true, data: recommendation };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error unpublishing recommendation:", error);
+    }
+    return { success: false, error: "Failed to unpublish recommendation" };
+  }
+}
+
+// --- Published Recommendation View (Read-only, org-scoped) ---
+export async function getPublishedRecommendationViewAction(decisionId: string) {
+  try {
+    const user = await getCurrentUser();
+    const decision = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: {
+        id: true,
+        title: true,
+        type: true,
+        organizationId: true,
+        recommendation: {
+          select: {
+            recommendedAction: true,
+            rationale: true,
+            expectedNextState: true,
+            scopeExclusions: true,
+            assumptionsUsed: true,
+            risksAccepted: true,
+            risksRejected: true,
+            isClientVisible: true,
+            publishedAt: true,
+            publishedVersion: true,
+            publishedFromSnapshot: true,
+            publishedApprovalId: true,
+          },
+        },
+      },
+    });
+
+    if (!decision) {
+      return { success: false, error: "Recommendation not available" };
+    }
+
+    if (decision.organizationId !== user.organizationId) {
+      return { success: false, error: "Recommendation not available" };
+    }
+
+    if (!decision.recommendation?.isClientVisible) {
+      return { success: false, error: "Recommendation not available" };
+    }
+
+    let contentSource:
+      | "approved_snapshot"
+      | "current_recommendation"
+      | "legacy" = "current_recommendation";
+    let snapshotMetadata = null;
+
+    if (
+      decision.recommendation.publishedFromSnapshot &&
+      decision.recommendation.publishedApprovalId
+    ) {
+      const approval = await prisma.approval.findUnique({
+        where: { id: decision.recommendation.publishedApprovalId },
+        select: {
+          snapshotAction: true,
+          snapshotRationale: true,
+          snapshotExpectedNextState: true,
+          snapshotScopeExclusions: true,
+          snapshotAssumptionsUsed: true,
+          snapshotRisksAccepted: true,
+          snapshotRisksRejected: true,
+          snapshotConditions: true,
+          snapshotConfidence: true,
+          snapshotScore: true,
+          snapshotCreatedAt: true,
+          approver: { select: { name: true } },
+        },
+      });
+
+      if (approval?.snapshotAction && approval.snapshotRationale) {
+        contentSource = "approved_snapshot";
+        snapshotMetadata = {
+          approvedAt: approval.snapshotCreatedAt,
+          approver: approval.approver?.name,
+          conditions: approval.snapshotConditions,
+          confidence: approval.snapshotConfidence,
+          score: approval.snapshotScore,
+        };
+      }
+    } else if (
+      decision.recommendation.publishedAt &&
+      !decision.recommendation.publishedFromSnapshot
+    ) {
+      const latestApproval = await prisma.approval.findFirst({
+        where: { decisionId, status: "APPROVED" },
+        orderBy: { createdAt: "desc" },
+        select: {
+          snapshotAction: true,
+          snapshotRationale: true,
+          snapshotCreatedAt: true,
+          approver: { select: { name: true } },
+        },
+      });
+
+      if (latestApproval?.snapshotAction && latestApproval.snapshotRationale) {
+        const matchesSnapshot =
+          latestApproval.snapshotAction ===
+            decision.recommendation.recommendedAction &&
+          latestApproval.snapshotRationale ===
+            decision.recommendation.rationale;
+
+        if (matchesSnapshot) {
+          contentSource = "approved_snapshot";
+          snapshotMetadata = {
+            approvedAt: latestApproval.snapshotCreatedAt,
+            approver: latestApproval.approver?.name,
+          };
+        }
+      } else if (latestApproval) {
+        contentSource = "legacy";
+      }
+    }
+
+    return {
+      success: true,
+      data: {
+        id: decision.id,
+        title: decision.title,
+        recommendation: decision.recommendation,
+        decisionType: decision.type,
+        currentUserRole: user.role,
+        contentSource,
+        snapshotMetadata,
+      },
+    };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error fetching published recommendation:", error);
+    }
+    return {
+      success: false,
+      error: "Failed to fetch published recommendation",
+    };
+  }
+}
+
+// --- Workflow Readiness ---
+export async function getWorkflowReadiness(decisionId: string) {
+  try {
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
+
+    const decision = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      include: {
+        objectives: true,
+        constraints: true,
+        assumptions: true,
+        alternatives: true,
+        risks: true,
+        framework: true,
+        decisionScenarios: {
+          include: {
+            riskAnalysis: true,
+          },
+        },
+        scenarios: { include: { simulation: true } },
+        recommendation: true,
+      },
+    });
+
+    if (!decision) {
+      return { success: false, error: "Decision not found" };
+    }
+
+    const intakeAccepted = true;
+    const frameworkComplete = !!(
+      decision.framework &&
+      decision.framework.context &&
+      decision.framework.purpose &&
+      decision.framework.options &&
+      decision.framework.criteria &&
+      decision.framework.values
+    );
+
+    const scenariosComplete =
+      decision.decisionScenarios.length >= 3 &&
+      decision.decisionScenarios.every((s) => s.name && s.description);
+
+    const risksComplete =
+      decision.decisionScenarios.length > 0 &&
+      decision.decisionScenarios.every((s) => s.riskAnalysis);
+
+    const hasSimulationResults = decision.scenarios.some((s) => s.simulation);
+    const simulationReady = hasSimulationResults;
+
+    const recommendationReady =
+      !!decision.recommendation &&
+      decision.recommendation.recommendedAction &&
+      decision.recommendation.rationale;
+
+    const { deriveScores, buildScoringData } =
+      await import("@/lib/simulation/simulation-engine");
+    const scoringData = buildScoringData({
+      objectives: decision.objectives,
+      constraints: decision.constraints,
+      assumptions: decision.assumptions,
+      alternatives: decision.alternatives,
+      risks: decision.risks,
+      framework: decision.framework
+        ? {
+            context: decision.framework.context,
+            purpose: decision.framework.purpose,
+            options: decision.framework.options,
+            criteria: decision.framework.criteria,
+            values: decision.framework.values,
+            informationGaps: decision.framework.informationGaps,
+            certainty: decision.framework.certainty,
+            assumptions: decision.framework.assumptions,
+          }
+        : null,
+      decisionScenarios: decision.decisionScenarios.map((s) => ({
+        name: s.name,
+        description: s.description,
+      })),
+      priority: decision.priority,
+      targetDate: decision.targetDate,
+    });
+
+    const derived = deriveScores(scoringData);
+
+    return {
+      success: true,
+      data: {
+        decisionType: decision.type,
+        intakeAccepted,
+        frameworkComplete,
+        scenariosComplete,
+        risksComplete,
+        simulationReady,
+        recommendationReady,
+        dataQuality: derived.dataQuality,
+        missingInputs: derived.missingInputs,
+        derivedScores: {
+          strategicFitScore: derived.strategicFitScore,
+          feasibilityScore: derived.feasibilityScore,
+          riskScore: derived.riskScore,
+          confidenceScore: derived.confidenceScore,
+        },
+      },
+    };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error fetching workflow readiness:", error);
+    }
+    return { success: false, error: "Failed to fetch workflow readiness" };
+  }
+}
+
+// --- Export Decision Report (PDF) ---
+export async function exportDecisionReport(decisionId: string) {
+  try {
+    const user = await getCurrentUser();
+    const decisionLookup = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decisionLookup) return { success: false, error: "Decision not found" };
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "update");
+    await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "export");
+    const decision = (await prisma.decision.findUnique({
+      where: { id: decisionId },
+      include: {
+        owner: true,
+        organization: true,
+        tenderProfile: true,
+        scenarios: {
+          include: { simulation: true },
+        },
+        recommendation: true,
+        auditLogs: {
+          include: { user: true },
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    })) as unknown as {
+      id: string;
+      title: string;
+      status: string;
+      organizationId: string;
+      owner: { name: string | null } | null;
+      organization: { name: string | null } | null;
+      createdAt: Date;
+      tenderProfile: {
+        clientName: string;
+        estimatedContractValue: number;
+        estimatedCost: number;
+        durationMonths: number;
+        marginEstimate: number;
+        riskLevel: string;
+        requiredCapacity: number;
+        internalAvailableCapacity: number;
+        strategicFitScore: number;
+      } | null;
+      recommendation: {
+        type: string;
+        confidenceScore: number | null;
+        reasoning: string | null;
+        conditions: string | null;
+        riskNotes: string | null;
+      } | null;
+      scenarios: {
+        type: string;
+        simulation: {
+          feasibilityScore: number;
+          financialScore: number;
+          capacityScore: number;
+          riskScore: number;
+          strategicFitScore: number;
+          overallDecisionScore: number;
+        } | null;
+      }[];
+      auditLogs: {
+        action: string;
+        user: { name: string | null } | null;
+        createdAt: Date;
+      }[];
+    };
+
+    if (!decision) {
+      return { success: false, error: "Decision not found" };
+    }
+
+    const { buildDecisionReportPDF } = await import("@/lib/decision/decision-export-pdf");
+
+    const pdfResult = await buildDecisionReportPDF({
+      decisionId,
+      title: decision.title,
+      status: decision.status,
+      ownerName: decision.owner?.name ?? null,
+      organizationName: decision.organization?.name ?? null,
+      createdAt: decision.createdAt,
+      recommendation: decision.recommendation
+        ? {
+            type: decision.recommendation.type,
+            confidenceScore: decision.recommendation.confidenceScore,
+            reasoning: decision.recommendation.reasoning,
+            conditions: decision.recommendation.conditions,
+            riskNotes: decision.recommendation.riskNotes,
+          }
+        : null,
+      tenderProfile: decision.tenderProfile
+        ? {
+            clientName: decision.tenderProfile.clientName,
+            estimatedContractValue: decision.tenderProfile.estimatedContractValue,
+            estimatedCost: decision.tenderProfile.estimatedCost,
+            durationMonths: decision.tenderProfile.durationMonths,
+            marginEstimate: decision.tenderProfile.marginEstimate,
+            riskLevel: String(decision.tenderProfile.riskLevel),
+            requiredCapacity: String(decision.tenderProfile.requiredCapacity),
+            internalAvailableCapacity: String(decision.tenderProfile.internalAvailableCapacity),
+            strategicFitScore: decision.tenderProfile.strategicFitScore,
+          }
+        : null,
+      scenarios: decision.scenarios.map((s) => ({
+        type: s.type,
+        feasibilityScore: s.simulation?.feasibilityScore ?? null,
+        financialScore: s.simulation?.financialScore ?? null,
+        capacityScore: s.simulation?.capacityScore ?? null,
+        riskScore: s.simulation?.riskScore ?? null,
+        strategicFitScore: s.simulation?.strategicFitScore ?? null,
+        overallDecisionScore: s.simulation?.overallDecisionScore ?? null,
+      })),
+      auditLogs: decision.auditLogs.map((log) => ({
+        action: log.action,
+        userName: log.user?.name ?? null,
+        createdAt: log.createdAt,
+      })),
+      exportedAt: new Date(),
+      exportedById: user.id,
+    });
+
+    await logAudit(
+      user.id,
+      decisionId,
+      "OUTPUT_PUBLISHED",
+      "DecisionReport",
+      undefined,
+      JSON.stringify({ format: "pdf", exportedAt: new Date().toISOString() }),
+      user.organizationId,
+    );
+
+    return {
+      success: true,
+      content: pdfResult.content.toString("base64"),
+      mimeType: pdfResult.mimeType,
+      filename: pdfResult.filename,
+    };
+  } catch (error) {
+    if (!isExpectedAccessDeniedError(error)) {
+      console.error("Error exporting decision report:", error);
+    }
+    return { success: false, error: "Failed to export decision report" };
+  }
+}

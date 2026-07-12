@@ -1,6 +1,9 @@
 import { getCurrentUser } from "@/lib/auth";
 import { getPlatformOrganizationByLegacyOrganizationId } from "@/lib/platform/platform-organization-context";
-import { prisma } from "@/lib/prisma";
+import {
+  getWorkspaceStats,
+  getWorkspacesWithLinks,
+} from "@/actions/workspace-read-actions";
 import {
   Card,
   CardContent,
@@ -59,44 +62,21 @@ export default async function WorkspacesPage() {
   // ─── Fetch workspaces and linked data ───
 
   const workspaces = platformOrgId
-    ? await prisma.clientWorkspace.findMany({
-        where: { platformOrganizationId: platformOrgId },
-        include: {
-          _count: { select: { projects: true, auditClients: true } },
-          auditClients: {
-            select: { id: true, name: true },
-          },
-          projects: {
-            include: {
-              _count: { select: { auditEngagements: true } },
-              auditEngagements: {
-                select: { id: true, fiscalPeriod: true },
-                take: 5,
-              },
-            },
-          },
-        },
-        orderBy: { name: "asc" },
-      })
+    ? await getWorkspacesWithLinks(platformOrgId)
     : [];
 
-  // ─── Stats ───
+  // ─── Stats + Orphan checks ───
 
-  const auditClientsTotal = await prisma.auditClient.count();
-  const auditClientsLinked = await prisma.auditClient.count({
-    where: { clientWorkspaceId: { not: null } },
-  });
-  const engagementsTotal = await prisma.auditEngagement.count();
-  const engagementsLinked = await prisma.auditEngagement.count({
-    where: { projectId: { not: null } },
-  });
-  const projectsTotal = await prisma.project.count();
-  const workspaceTotal = await prisma.clientWorkspace.count();
-
-  // ─── Orphan checks ───
-
-  const auditClientsUnlinked = auditClientsTotal - auditClientsLinked;
-  const engagementsUnlinked = engagementsTotal - engagementsLinked;
+  const {
+    auditClientsTotal,
+    auditClientsLinked,
+    engagementsTotal,
+    engagementsLinked,
+    projectsTotal,
+    workspaceTotal,
+    auditClientsUnlinked,
+    engagementsUnlinked,
+  } = await getWorkspaceStats();
 
   return (
     <main className="p-8 max-w-4xl mx-auto" dir="rtl">
