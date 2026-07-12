@@ -415,9 +415,9 @@ export async function deactivateAction(id: string): Promise<void> {
 
 // ─── Context Bridging ───
 
-async function resolveSourceRecord(sourceProduct: string, sourceRecordId: string): Promise<Record<string, any> | null> {
+async function resolveSourceRecord(sourceProduct: string, sourceRecordId: string): Promise<Record<string, unknown> | null> {
   const modelName = productModelName(sourceProduct)
-  const model = (prisma as any)[modelName]
+  const model = (prisma as unknown as Record<string, Record<string, unknown>>)[modelName]
   if (!model || typeof model.findUnique !== "function") return null
 
   try {
@@ -581,11 +581,11 @@ export async function getCrossProductStats(organizationId?: string): Promise<Cro
       by: ["productContext"],
       where: sessionWhere,
       _count: { productContext: true },
-    }) as any
+    }) as unknown as Array<{ productContext: string; _count: { productContext: number } }>
 
   const sessionsByProduct: Record<string, number> = {}
   for (const row of sessionsByProductRaw) {
-    sessionsByProduct[row.productContext] = (row._count as any).productContext ?? 0
+    sessionsByProduct[row.productContext] = row._count.productContext ?? 0
   }
 
   const sessionsByStatusRaw: Array<{ status: string; _count: { status: number } }> =
@@ -593,11 +593,11 @@ export async function getCrossProductStats(organizationId?: string): Promise<Cro
       by: ["status"],
       where: sessionWhere,
       _count: { status: true },
-    }) as any
+    }) as unknown as Array<{ status: string; _count: { status: number } }>
 
   const sessionsByStatus: Record<string, number> = {}
   for (const row of sessionsByStatusRaw) {
-    sessionsByStatus[row.status] = (row._count as any).status ?? 0
+    sessionsByStatus[row.status] = row._count.status ?? 0
   }
 
   const totalActions = await prisma.aiActionRegistry.count()

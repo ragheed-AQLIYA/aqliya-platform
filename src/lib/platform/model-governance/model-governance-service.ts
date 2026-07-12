@@ -2,6 +2,7 @@
 // Registry, review, approval, and deployment lifecycle for AI models.
 
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { auditLogger, Product } from "../audit-logger";
 
 // ─── Types ───
@@ -118,7 +119,7 @@ export async function listModels(organizationId?: string, status?: string) {
   if (status) where.status = status;
 
   return prisma.aiModelRegistry.findMany({
-    where: where as any,
+    where: where as Prisma.AiModelRegistryWhereInput,
     include: { deployments: { where: { isActive: true } } },
     orderBy: { createdAt: "desc" },
   });
@@ -128,7 +129,7 @@ export async function updateModel(id: string, data: Partial<RegisterModelInput &
   const existing = await prisma.aiModelRegistry.findUnique({ where: { id } });
   if (!existing) throw new Error(`Model ${id} not found`);
 
-  await prisma.aiModelRegistry.update({ where: { id }, data: data as any });
+  await prisma.aiModelRegistry.update({ where: { id }, data: data as Prisma.AiModelRegistryUpdateInput });
 
   await log("ai_model_registry", "model.updated", id, data.createdBy, {
     fields: Object.keys(data).join(","),
@@ -299,7 +300,7 @@ export async function getActiveDeployments(modelId?: string) {
   if (modelId) where.modelId = modelId;
 
   return prisma.aiModelDeployment.findMany({
-    where: where as any,
+    where: where as Prisma.AiModelDeploymentWhereInput,
     include: { model: { select: { id: true, name: true, provider: true, version: true } } },
     orderBy: { deployedAt: "desc" },
   });
@@ -312,7 +313,7 @@ export async function getModelGovernanceStats(organizationId?: string): Promise<
   if (organizationId) where.organizationId = organizationId;
 
   const allModels = await prisma.aiModelRegistry.findMany({
-    where: where as any,
+    where: where as Prisma.AiModelRegistryWhereInput,
   });
 
   const byStatus: Record<string, number> = {};

@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// Engine-internal Prisma JSON/where casts: `as any` bridges complex Prisma generic types.
 // ─── AuditOS L6.5 Working Papers Engine ───
 // محرك أوراق العمل — ملف التدقيق الموحد
 // ISA 230 compliant
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { AuditActor } from "./actor-context";
 import { assertEngagementAccess } from "./tenant-guard";
 
@@ -114,9 +113,9 @@ export class WorkingPapersEngine {
         accountName: input.accountName,
         priorYearBalance: input.priorYearBalance,
         currentYearBalance: input.currentYearBalance,
-        adjustments: (input.adjustments ?? []) as any,
+        adjustments: (input.adjustments ?? []) as unknown as Prisma.InputJsonValue,
         finalBalance: input.finalBalance,
-        assertionCoverage: input.assertionCoverage as any,
+        assertionCoverage: input.assertionCoverage as unknown as Prisma.InputJsonValue,
         notes: input.notes,
         createdById: actor.actorId,
       },
@@ -249,7 +248,7 @@ export class WorkingPapersEngine {
         engagementId: input.engagementId,
         workingPaperIndexId: input.workingPaperIndexId,
         checklistType: input.checklistType,
-        items: (input.items ?? []) as any,
+        items: (input.items ?? []) as unknown as Prisma.InputJsonValue,
         overallCompletionAssessment: input.overallAssessment,
         createdById: actor.actorId,
       },

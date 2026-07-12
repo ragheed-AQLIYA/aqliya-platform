@@ -308,6 +308,7 @@ export async function updateDecisionFramework(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: { framework: form as any },
     });
+    await invalidateDashboardCaches(decisionLookup.organizationId);
     const frameworkState = evaluateFramework(form);
     return { success: true, data: { framework: form, frameworkState } };
   } catch (error) {
@@ -414,6 +415,8 @@ export async function updateDecisionIntake(
           reasons: [],
           requiredNextSteps: [],
         };
+    await invalidateDashboardCaches(decisionLookup.organizationId);
+    await invalidateDashboardCaches(decisionLookup.organizationId);
     return { success: true, data: { ...result, intake } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
@@ -525,6 +528,7 @@ export async function updateDecisionScenarios(
       });
     });
     await prisma.$transaction(operations);
+    await invalidateDashboardCaches(decision.organizationId);
     const updatedScenarios = await prisma.decisionScenario.findMany({
       where: { decisionId: id },
     });
@@ -669,6 +673,7 @@ export async function updateDecisionRiskAnalysis(
       });
     });
     await prisma.$transaction(operations);
+    await invalidateDashboardCaches(decisionLookup.organizationId);
     const updatedAnalyses = await prisma.decisionRiskAnalysis.findMany({
       where: { decisionId: id },
       include: { scenario: true },

@@ -2,7 +2,7 @@
 
 import { getCurrentUser } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS } from '@/lib/platform/cache-strategy'
+import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS, invalidateCacheByPrefix } from '@/lib/platform/cache-strategy'
 import {
   createRiskModel,
   getRiskModel,
@@ -53,6 +53,7 @@ export async function createRiskModelAction(data: CreateRiskModelData): Promise<
   try {
     const user = await getCurrentUser()
     const model = await createRiskModel(user.organizationId, data, user.id)
+    await invalidateCacheByPrefix(`dashboard:risk:${user.organizationId}:stats`)
     return { ok: true, data: model }
   } catch (e) {
     return { ok: false, error: (e as Error).message }
@@ -114,6 +115,7 @@ export async function createAssessmentAction(
       resolvedEngagementId = engagements[0].id
     }
     const assessment = await assessRisk(modelId, resolvedEngagementId, data, user.id)
+    await invalidateCacheByPrefix(`dashboard:risk:${user.organizationId}:stats`)
     return { ok: true, data: assessment }
   } catch (e) {
     return { ok: false, error: (e as Error).message }
@@ -129,6 +131,7 @@ export async function updateProcedureAction(
     const hasAccess = await verifyOrgAccess('procedure', procedureId, user.organizationId)
     if (!hasAccess) return { ok: false, error: 'وصول مرفوض' }
     const updated = await updateProcedure(procedureId, data)
+    await invalidateCacheByPrefix(`dashboard:risk:${user.organizationId}:stats`)
     return { ok: true, data: updated }
   } catch (e) {
     return { ok: false, error: (e as Error).message }
@@ -213,6 +216,7 @@ export async function transitionAssessmentAction(
   try {
     const user = await getCurrentUser()
     const updated = await transitionAssessmentStatus(assessmentId, targetStatus, user.id)
+    await invalidateCacheByPrefix(`dashboard:risk:${user.organizationId}:stats`)
     return { ok: true, data: updated }
   } catch (e) {
     return { ok: false, error: (e as Error).message }

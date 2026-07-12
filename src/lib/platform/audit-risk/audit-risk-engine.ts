@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { RISK_STRINGS } from './risk-strings'
 
@@ -306,8 +307,8 @@ export async function createRiskModel(
       organizationId: orgId,
       name: data.name,
       description: data.description ?? null,
-      categories: data.categories as any,
-      thresholds: thresholds as any,
+      categories: data.categories as unknown as Prisma.InputJsonValue,
+      thresholds: thresholds as unknown as Prisma.InputJsonValue,
       version: 1,
       isActive: true,
       createdById: userId,
@@ -384,8 +385,8 @@ export async function assessRisk(
       residualLevel: residualResult?.overallLevel ?? null,
       riskResponse: data.riskResponse ?? null,
       responseNotes: data.responseNotes ?? null,
-      answers: data.answers as any,
-      categoryScores: inherentResult.categoryScores as any,
+      answers: data.answers as unknown as Prisma.InputJsonValue,
+      categoryScores: inherentResult.categoryScores as unknown as Prisma.InputJsonValue,
       status: 'DRAFT',
       assessedById: userId,
     },
@@ -407,7 +408,7 @@ export async function assessRisk(
         procedureCode: proc.procedureCode,
         description: proc.description,
         riskCategory: proc.riskCategory,
-        procedureSteps: proc.procedureSteps as any,
+        procedureSteps: proc.procedureSteps as unknown as Prisma.InputJsonValue,
         evidenceRequired: proc.evidenceRequired,
         status: proc.status,
         createdById: proc.createdById,

@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// Engine-internal Prisma JSON/where casts: `as any` bridges complex Prisma generic types.
 // ─── AuditOS L6.8 Audit Knowledge Engine ───
 // محرك المعرفة التدقيقية — تحويل تاريخ المهام إلى ذكاء مؤسسي
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 
 export class AuditKnowledgeEngine {
   // ==================== Patterns ====================
@@ -173,17 +172,27 @@ export class AuditKnowledgeEngine {
       create: {
         engagementId,
         organizationId: data.organizationId,
-        industryProfile: data.industryProfile as any,
-        entityCharacteristics: data.entityCharacteristics as any,
+        industryProfile: data.industryProfile as unknown as Prisma.InputJsonValue,
+        entityCharacteristics: data.entityCharacteristics as unknown as Prisma.InputJsonValue,
         riskProfileSummary: data.riskProfileSummary,
-        riskAreas: (data.riskAreas ?? []) as any,
-        findingsSummary: data.findingsSummary as any,
-        keyAdjustments: data.keyAdjustments as any,
+        riskAreas: (data.riskAreas ?? []) as unknown as Prisma.InputJsonValue,
+        findingsSummary: data.findingsSummary as unknown as Prisma.InputJsonValue,
+        keyAdjustments: data.keyAdjustments as unknown as Prisma.InputJsonValue,
         priorYearEngagementId: data.priorYearEngagementId,
-        knowledgeTags: (data.knowledgeTags ?? []) as any,
+        knowledgeTags: (data.knowledgeTags ?? []) as unknown as Prisma.InputJsonValue,
         isCompleted: data.isCompleted ?? false,
       },
-      update: data as any,
+      update: {
+        industryProfile: data.industryProfile as unknown as Prisma.InputJsonValue,
+        entityCharacteristics: data.entityCharacteristics as unknown as Prisma.InputJsonValue,
+        riskProfileSummary: data.riskProfileSummary,
+        riskAreas: (data.riskAreas ?? []) as unknown as Prisma.InputJsonValue,
+        findingsSummary: data.findingsSummary as unknown as Prisma.InputJsonValue,
+        keyAdjustments: data.keyAdjustments as unknown as Prisma.InputJsonValue,
+        priorYearEngagementId: data.priorYearEngagementId,
+        knowledgeTags: (data.knowledgeTags ?? []) as unknown as Prisma.InputJsonValue,
+        isCompleted: data.isCompleted ?? false,
+      },
     });
   }
 

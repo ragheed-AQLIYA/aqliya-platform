@@ -4,6 +4,7 @@
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { AuditActor } from "./actor-context";
 import { recordAuditEvent } from "./services";
 
@@ -185,12 +186,9 @@ class ClientAcceptanceEngineImpl {
     });
 
     const kycData = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ownershipStructure: (data.ownershipStructure ?? undefined) as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      financialHealth: (data.financialHealth ?? undefined) as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      litigationHistory: (data.litigationHistory ?? undefined) as any,
+      ownershipStructure: (data.ownershipStructure ?? undefined) as unknown as Prisma.InputJsonValue | undefined,
+      financialHealth: (data.financialHealth ?? undefined) as unknown as Prisma.InputJsonValue | undefined,
+      litigationHistory: (data.litigationHistory ?? undefined) as unknown as Prisma.InputJsonValue | undefined,
     };
 
     if (existing) {
@@ -247,10 +245,8 @@ class ClientAcceptanceEngineImpl {
         assessmentType: input.assessmentType,
         overallRiskLevel: overallLevel,
         overallRiskScore: overallScore,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        riskFactors: input.riskFactors as any,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        mitigatingFactors: (input.mitigatingFactors ?? undefined) as any,
+        riskFactors: input.riskFactors as unknown as Prisma.InputJsonValue,
+        mitigatingFactors: (input.mitigatingFactors ?? undefined) as unknown as Prisma.InputJsonValue,
         assessedById: actor.actorId,
         assessedAt: new Date(),
         status: "draft",
@@ -326,8 +322,7 @@ class ClientAcceptanceEngineImpl {
         decisionType: input.decisionType,
         decision: input.decision,
         rationale: input.rationale,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        conditions: (input.conditions ?? undefined) as any,
+        conditions: (input.conditions ?? undefined) as unknown as Prisma.InputJsonValue,
         effectiveDate: input.effectiveDate,
         expiryDate: input.expiryDate,
         approvedById: actor.actorId,
@@ -381,12 +376,9 @@ class ClientAcceptanceEngineImpl {
         organizationId: data.organizationId,
         clientId: data.clientId,
         reviewYear: data.reviewYear,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        engagementHistory: (data.engagementHistory ?? undefined) as any,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        feeHistory: (data.feeHistory ?? undefined) as any,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        clientChanges: (data.clientChanges ?? undefined) as any,
+        engagementHistory: (data.engagementHistory ?? undefined) as unknown as Prisma.InputJsonValue,
+        feeHistory: (data.feeHistory ?? undefined) as unknown as Prisma.InputJsonValue,
+        clientChanges: (data.clientChanges ?? undefined) as unknown as Prisma.InputJsonValue,
         status: "pending",
         createdById: actor.actorId,
       },

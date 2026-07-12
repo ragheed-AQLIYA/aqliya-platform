@@ -1,12 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// Action-to-engine interface: actions accept broad string types from form data;
-// engine methods use narrower literal/enum types. `as any` is the intentional bridge.
 "use server";
 
 // ─── AuditOS L6.7 ISQM1 Quality Engine Actions ───
 
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
 import { isqm1Engine } from "@/lib/audit/isqm1-engine";
+import type {
+  QualityObjectiveType,
+  QualityCategory,
+  QualityStatus,
+  ResponseStatus,
+  MonitorStatus,
+  FindingStatus,
+  RemediationStatus,
+} from "@/lib/audit/isqm1-engine";
 
 // ==================== Quality Objectives ====================
 
@@ -20,7 +26,11 @@ export async function createQualityObjectiveAction(data: {
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return isqm1Engine.createObjective(actor, data as any);
+  return isqm1Engine.createObjective(actor, {
+    ...data,
+    objectiveType: data.objectiveType as QualityObjectiveType,
+    category: data.category as QualityCategory,
+  });
 }
 
 export async function updateQualityObjectiveAction(
@@ -33,13 +43,16 @@ export async function updateQualityObjectiveAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return isqm1Engine.updateObjective(actor, id, data as any);
+  return isqm1Engine.updateObjective(actor, id, {
+    ...data,
+    status: data.status as QualityStatus | undefined,
+  });
 }
 
 export async function listQualityObjectivesAction(organizationId: string, category?: string) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "reviewer", "operator", "viewer"]);
-  return isqm1Engine.listObjectives(organizationId, category as any);
+  return isqm1Engine.listObjectives(organizationId, category as QualityCategory | undefined);
 }
 
 export async function getQualityObjectiveAction(id: string) {
@@ -102,7 +115,7 @@ export async function updateResponseStatusAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return isqm1Engine.updateResponseStatus(actor, id, status as any, evaluation);
+  return isqm1Engine.updateResponseStatus(actor, id, status as ResponseStatus, evaluation);
 }
 
 export async function listQualityResponsesAction(organizationId: string, riskId?: string) {
@@ -133,13 +146,13 @@ export async function updateMonitoringStatusAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return isqm1Engine.updateMonitoringStatus(actor, id, status as any, completedDate);
+  return isqm1Engine.updateMonitoringStatus(actor, id, status as MonitorStatus, completedDate);
 }
 
 export async function listMonitoringActivitiesAction(organizationId: string, status?: string) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "reviewer", "operator", "viewer"]);
-  return isqm1Engine.listMonitoringActivities(organizationId, status as any);
+  return isqm1Engine.listMonitoringActivities(organizationId, status as MonitorStatus | undefined);
 }
 
 // ==================== Quality Findings ====================
@@ -156,19 +169,23 @@ export async function createQualityFindingAction(data: {
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "reviewer"]);
-  return isqm1Engine.createFinding(actor, data as any);
+  return isqm1Engine.createFinding(actor, {
+    ...data,
+    findingType: data.findingType as Parameters<typeof isqm1Engine.createFinding>[1]["findingType"],
+    severity: data.severity as Parameters<typeof isqm1Engine.createFinding>[1]["severity"],
+  });
 }
 
 export async function updateFindingStatusAction(id: string, status: string) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return isqm1Engine.updateFindingStatus(actor, id, status as any);
+  return isqm1Engine.updateFindingStatus(actor, id, status as FindingStatus);
 }
 
 export async function listQualityFindingsAction(organizationId: string, status?: string) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "reviewer", "operator", "viewer"]);
-  return isqm1Engine.listFindings(organizationId, status as any);
+  return isqm1Engine.listFindings(organizationId, status as FindingStatus | undefined);
 }
 
 // ==================== Remediation ====================
@@ -193,13 +210,13 @@ export async function updateRemediationStatusAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return isqm1Engine.updateRemediationStatus(actor, id, status as any, effectivenessResult);
+  return isqm1Engine.updateRemediationStatus(actor, id, status as RemediationStatus, effectivenessResult);
 }
 
 export async function listRemediationsAction(organizationId: string, status?: string) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "reviewer", "operator", "viewer"]);
-  return isqm1Engine.listRemediations(organizationId, status as any);
+  return isqm1Engine.listRemediations(organizationId, status as RemediationStatus | undefined);
 }
 
 // ==================== System Evaluation ====================

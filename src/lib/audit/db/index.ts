@@ -1,5 +1,5 @@
-﻿/* eslint-disable @typescript-eslint/no-explicit-any */
-import { prisma } from "@/lib/prisma";
+﻿import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import {
   paginate,
   offsetFromPage,
@@ -41,6 +41,7 @@ import {
   buildStatementLinesFromMappings,
   type MappingWithCanonical,
 } from "./statement-builder";
+import type { PresentationProfile } from "@/lib/audit/presentation/presentation-profile";
 
 function toEngagementTeamMember(data: unknown): EngagementTeamMember[] {
   if (Array.isArray(data)) return data as EngagementTeamMember[];
@@ -2228,7 +2229,7 @@ export async function createAIOutput(data: {
       status: "suggested",
       sourceEntityType: data.sourceEntityType ?? null,
       sourceEntityId: data.sourceEntityId ?? null,
-      metadata: (data.metadata ?? undefined) as any,
+      metadata: (data.metadata ?? undefined) as unknown as Prisma.InputJsonValue,
     },
   });
   return toAiOutput(ai);
@@ -2271,7 +2272,7 @@ export async function updateAIOutputStatus(
     }
     const ai = await prisma.auditAiOutput.update({
       where: { id },
-      data: updateData as any,
+      data: updateData as Prisma.AuditAiOutputUpdateInput,
     });
     return toAiOutput(ai);
   } catch (error) {
@@ -2741,18 +2742,18 @@ export async function createEngagement(data: {
       organizationId: data.organizationId,
       clientId: data.clientId,
       fiscalPeriod: data.fiscalPeriod,
-      engagementType: data.engagementType as any,
+      engagementType: data.engagementType as Prisma.AuditEngagementCreateInput["engagementType"],
       status: data.status ?? "setup",
-      team: (data.team ?? []) as any,
+      team: (data.team ?? []) as unknown as Prisma.InputJsonValue,
       presentationProfile: profile,
       presentationProfileVersion:
         data.presentationProfileVersion ?? "generic-v1",
       presentationPolicyId:
-        data.presentationPolicyId ?? policyIdForProfile(profile as any),
+        data.presentationPolicyId ?? policyIdForProfile(profile as PresentationProfile),
     },
     include: { client: true },
   });
-  return toEngagement(engagement as any);
+  return toEngagement(engagement as unknown as Parameters<typeof toEngagement>[0]);
 }
 
 export async function updateEngagementPresentationProfile(
@@ -2773,7 +2774,7 @@ export async function updateEngagementPresentationProfile(
     include: { client: true, presentationPolicy: true },
   });
 
-  return toEngagement(engagement as any);
+  return toEngagement(engagement as unknown as Parameters<typeof toEngagement>[0]);
 }
 
 export async function saveTrialBalance(

@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// Action-to-engine interface: actions accept broad string types from form data;
-// engine methods use narrower literal/enum types. `as any` is the intentional bridge.
 "use server";
 
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
 import { clientAcceptanceEngine } from "@/lib/audit/client-acceptance-engine";
+import type { ProspectStatus } from "@/lib/audit/client-acceptance-engine";
 
 // ==================== Prospects ====================
 
@@ -24,7 +22,7 @@ export async function createProspectAction(data: {
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "operator"]);
-  return clientAcceptanceEngine.createProspect(actor, data as any);
+  return clientAcceptanceEngine.createProspect(actor, data);
 }
 
 export async function updateProspectAction(
@@ -39,7 +37,7 @@ export async function updateProspectAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "operator"]);
-  return clientAcceptanceEngine.updateProspect(id, data as any);
+  return clientAcceptanceEngine.updateProspect(id, data);
 }
 
 export async function getProspectAction(id: string) {
@@ -51,7 +49,7 @@ export async function getProspectAction(id: string) {
 export async function listProspectsAction(organizationId: string, status?: string) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "reviewer", "operator", "viewer"]);
-  return clientAcceptanceEngine.listProspects(organizationId, status as any);
+  return clientAcceptanceEngine.listProspects(organizationId, status as ProspectStatus | undefined);
 }
 
 // ==================== KYC ====================
@@ -86,7 +84,7 @@ export async function assessClientRiskAction(input: {
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return clientAcceptanceEngine.assessRisk(actor, input as any);
+  return clientAcceptanceEngine.assessRisk(actor, input);
 }
 
 export async function reviewRiskAssessmentAction(assessmentId: string) {
@@ -115,7 +113,7 @@ export async function makeAcceptanceDecisionAction(input: {
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner"]);
-  return clientAcceptanceEngine.makeDecision(actor, input as any);
+  return clientAcceptanceEngine.makeDecision(actor, input);
 }
 
 export async function getProspectDecisionsAction(prospectId: string) {
@@ -147,7 +145,7 @@ export async function completeContinuanceReviewAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner"]);
-  return clientAcceptanceEngine.completeContinuanceReview(actor, reviewId, decision as any, rationale, riskReassessmentId);
+  return clientAcceptanceEngine.completeContinuanceReview(actor, reviewId, decision, rationale, riskReassessmentId);
 }
 
 export async function listContinuanceReviewsAction(clientId: string) {

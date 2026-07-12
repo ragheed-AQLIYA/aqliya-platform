@@ -12,6 +12,7 @@ import {
   generateOfficeAiTaskOutput,
   addOfficeAiFile,
 } from "@/lib/office-ai/office-ai-task-service";
+import { invalidateCacheByPrefix } from "@/lib/platform/cache-strategy";
 
 // ─── File validation ───
 
@@ -84,6 +85,9 @@ if (!hasRequiredRole(user, "VIEWER")) {
   }
 
   revalidatePath("/assistant");
+  if (platformOrganizationId) {
+    await invalidateCacheByPrefix(`dashboard:assistant:${platformOrganizationId}:stats`);
+  }
 }
 
 export async function updateOfficeAiTaskStatusAction(
@@ -116,6 +120,9 @@ if (!hasRequiredRole(user, "VIEWER")) {
   }
   revalidatePath("/assistant");
   revalidatePath(`/assistant/${taskId}`);
+  if (task.platformOrganizationId) {
+    await invalidateCacheByPrefix(`dashboard:assistant:${task.platformOrganizationId}:stats`);
+  }
 }
 
 export async function submitOfficeAiTaskForReviewAction(
@@ -166,6 +173,9 @@ if (!hasRequiredRole(user, "VIEWER")) {
 
   revalidatePath("/assistant");
   revalidatePath(`/assistant/${taskId}`);
+  if (task.platformOrganizationId) {
+    await invalidateCacheByPrefix(`dashboard:assistant:${task.platformOrganizationId}:stats`);
+  }
 }
 
 export async function addOfficeAiFileAction(
@@ -295,6 +305,9 @@ if (!hasRequiredRole(user, "VIEWER")) {
 
   revalidatePath("/assistant");
   revalidatePath(`/assistant/${taskId}`);
+  if (user.platformOrganizationId) {
+    await invalidateCacheByPrefix(`dashboard:assistant:${user.platformOrganizationId}:stats`);
+  }
 }
 
 export async function removeOfficeAiFileAction(fileId: string): Promise<void> {
@@ -328,6 +341,9 @@ if (!hasRequiredRole(user, "VIEWER")) {
   await prisma.officeAiFile.delete({ where: { id: fileId } });
   revalidatePath("/assistant");
   revalidatePath(`/assistant/${file.taskId}`);
+  if (user.platformOrganizationId) {
+    await invalidateCacheByPrefix(`dashboard:assistant:${user.platformOrganizationId}:stats`);
+  }
 }
 
 // ─── Safe Action Results ───
@@ -386,6 +402,9 @@ if (!hasRequiredRole(user, "VIEWER")) {
 
   revalidatePath("/assistant");
   revalidatePath(`/assistant/${taskId}`);
+  if (user.platformOrganizationId) {
+    await invalidateCacheByPrefix(`dashboard:assistant:${user.platformOrganizationId}:stats`);
+  }
 }
 
 export async function updateOfficeAiOutputAction(
@@ -425,6 +444,9 @@ if (!hasRequiredRole(user, "VIEWER")) {
 
   revalidatePath("/assistant");
   revalidatePath(`/assistant/${output.taskId}`);
+  if (user.platformOrganizationId) {
+    await invalidateCacheByPrefix(`dashboard:assistant:${user.platformOrganizationId}:stats`);
+  }
 }
 
 export async function archiveOfficeAiTaskAction(taskId: string): Promise<void> {
@@ -456,6 +478,9 @@ if (!hasRequiredRole(user, "VIEWER")) {
 
   revalidatePath("/assistant");
   revalidatePath(`/assistant/${taskId}`);
+  if (user.platformOrganizationId) {
+    await invalidateCacheByPrefix(`dashboard:assistant:${user.platformOrganizationId}:stats`);
+  }
 }
 
 export async function reExtractFileAction(fileId: string): Promise<void> {

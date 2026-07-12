@@ -91,6 +91,7 @@ import {
   PlatformRole,
 } from "@/actions/localcontent-rbac";
 import { type ActionResult, safe as _safe, ok, fail } from "@/lib/platform/action-result";
+import { invalidateCacheByPrefix } from "@/lib/platform/cache-strategy";
 import type { ErrorCode } from "@/lib/platform/action-result";
 
 // ─── Domain error mapper ───
@@ -276,6 +277,7 @@ export async function updateLocalContentVerificationItemAction(
     });
 
     revalidateLocalContentPaths(projectId, ["verification"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return { itemId, scale };
   });
 }
@@ -327,6 +329,7 @@ export async function createLocalContentProjectAction(
     });
 
     revalidateLocalContentPaths(project.id);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return project;
   });
 }
@@ -409,6 +412,7 @@ export async function createLocalContentSupplierAction(
     });
 
     revalidateLocalContentPaths(projectId, ["suppliers", "classification"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return supplier;
   });
 }
@@ -467,6 +471,7 @@ export async function updateLocalContentSupplierAction(
     });
 
     revalidateLocalContentPaths(projectId, ["suppliers", "classification"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return supplier;
   });
 }
@@ -494,6 +499,7 @@ export async function deleteLocalContentSupplierAction(
       "classification",
       "spend",
     ]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
   });
 }
 
@@ -548,6 +554,7 @@ export async function createLocalContentSpendRecordAction(
     });
 
     revalidateLocalContentPaths(projectId, ["spend", "classification"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return record;
   });
 }
@@ -662,6 +669,7 @@ export async function importLocalContentSpendCsvAction(
       "suppliers",
       "classification",
     ]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return {
       created,
       rejected: result.rejectedRows.length + errors.length,
@@ -711,6 +719,7 @@ export async function classifyLocalContentSpendRecordAction(
     });
 
     revalidateLocalContentPaths(projectId, ["classification"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return classification;
   });
 }
@@ -734,6 +743,7 @@ export async function deleteLocalContentSpendRecordAction(
       targetId: recordId,
     });
     revalidateLocalContentPaths(projectId, ["spend", "classification"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
   });
 }
 
@@ -787,6 +797,7 @@ export async function createLocalContentEvidenceAction(
     });
 
     revalidateLocalContentPaths(projectId, ["evidence"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return evidence;
   });
 }
@@ -840,6 +851,7 @@ export async function updateLocalContentEvidenceStatusAction(
     }
 
     revalidateLocalContentPaths(projectId, ["evidence"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return { id: updated.id, status: updated.status };
   });
 }
@@ -880,6 +892,7 @@ export async function deleteLocalContentEvidenceAction(
       },
     });
     revalidateLocalContentPaths(projectId, ["evidence"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
   });
 }
 
@@ -1014,6 +1027,7 @@ export async function uploadLocalContentEvidenceFileAction(
     }
 
     revalidateLocalContentPaths(projectId, ["evidence"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return {
       id: evidence.id,
       filename: evidence.filename,
@@ -1078,6 +1092,7 @@ export async function createLocalContentFindingAction(
     });
 
     revalidateLocalContentPaths(projectId, ["findings"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return finding;
   });
 }
@@ -1144,6 +1159,7 @@ export async function updateLocalContentFindingAction(
       "approval",
       "audit-trail",
     ]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return finding;
   });
 }
@@ -1233,6 +1249,7 @@ export async function submitLocalContentReviewAction(
       "approval",
       "audit-trail",
     ]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return review;
   });
 }
@@ -1283,6 +1300,7 @@ export async function submitLocalContentApprovalAction(
       "review",
       "audit-trail",
     ]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return approval;
   });
 }
@@ -1415,6 +1433,7 @@ export async function generateLocalContentReportAction(
     });
 
     revalidateLocalContentPaths(projectId, ["reports"]);
+    await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return report;
   });
 }

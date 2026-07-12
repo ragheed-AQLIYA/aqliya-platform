@@ -45,6 +45,7 @@ import {
 } from "@/lib/sales/service";
 import { type ActionResult, safe as _safe, ok, fail } from "@/lib/platform/action-result";
 import type { ErrorCode } from "@/lib/platform/action-result";
+import { invalidateCacheByPrefix } from "@/lib/platform/cache-strategy";
 
 function mapSalesError(error: unknown): { code: ErrorCode; message: string } | null {
   if (error instanceof SalesAccessError) {
@@ -159,6 +160,7 @@ export async function createSalesDealAction(input: CreateSalesDealInput) {
       targetId: deal.id,
     });
     revalidateSales({ dealId: deal.id, accountId: deal.accountId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return deal;
   });
 }
@@ -177,6 +179,7 @@ export async function updateSalesDealAction(
       platformOrganizationId: ctx.platformOrganizationId,
     });
     revalidateSales({ dealId: deal.id, accountId: deal.accountId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return deal;
   });
 }
@@ -219,6 +222,7 @@ export async function createSalesAccountAction(formData: FormData) {
       actorFromCtx(ctx),
     );
     revalidateSales({ accountId: account.id });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return account;
   });
 }
@@ -243,6 +247,7 @@ export async function updateSalesAccountAction(
       actorFromCtx(ctx),
     );
     revalidateSales({ accountId: account.id });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return account;
   });
 }
@@ -299,6 +304,7 @@ export async function recordSalesReviewDecisionAction(
       stageSlug,
     });
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return record;
   });
 }
@@ -320,6 +326,7 @@ export async function updateDealNextActionAction(
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return result;
   });
 }
@@ -371,6 +378,7 @@ export async function createSalesSignalAction(formData: FormData) {
       actorFromCtx(ctx),
     );
     revalidateSales({ accountId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return signal;
   });
 }
@@ -398,6 +406,7 @@ export async function linkDealEvidenceAction(
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return link;
   });
 }
@@ -413,6 +422,7 @@ export async function unlinkDealEvidenceAction(dealId: string, linkId: string) {
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return { dealId, linkId };
   });
 }
@@ -447,6 +457,7 @@ export async function createSalesInteractionAction(formData: FormData) {
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId, accountId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return interaction;
   });
 }
@@ -474,6 +485,7 @@ export async function updateSalesInteractionAction(
       dealId: interaction.dealId ?? undefined,
       accountId: interaction.accountId,
     });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return interaction;
   });
 }
@@ -491,6 +503,7 @@ export async function deleteSalesInteractionAction(interactionId: string) {
       dealId: interaction.dealId ?? undefined,
       accountId: interaction.accountId,
     });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return interaction;
   });
 }
@@ -512,6 +525,7 @@ export async function upsertConversionMemoAction(
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return memo;
   });
 }
@@ -528,6 +542,7 @@ export async function submitConversionMemoAction(dealId: string, markDecided?: b
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return memo;
   });
 }
@@ -566,6 +581,7 @@ export async function createOutreachDraftAction(
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return draft;
   });
 }
@@ -581,6 +597,7 @@ export async function submitOutreachDraftAction(dealId: string, draftId: string)
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return draft;
   });
 }
@@ -602,6 +619,7 @@ export async function reviewOutreachDraftAction(
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return draft;
   });
 }
@@ -648,6 +666,7 @@ export async function recalculateDealRiskAction(dealId: string) {
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return result;
   });
 }
@@ -682,6 +701,7 @@ export async function generateAccountResearchAction(accountId: string) {
       accountId,
     );
     revalidateSales({ accountId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return result;
   });
 }
@@ -708,6 +728,7 @@ export async function markAccountResearchReviewedAction(
       accountId,
     );
     revalidateSales({ accountId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return account;
   });
 }
@@ -743,6 +764,7 @@ export async function approveFollowUpDraftAction(
       actorFromCtx(ctx),
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return draft;
   });
 }
@@ -764,6 +786,7 @@ export async function rejectFollowUpDraftAction(
       note,
     );
     revalidateSales({ dealId });
+    await invalidateCacheByPrefix(`dashboard:sales:${ctx.organizationId}:stats`);
     return draft;
   });
 }
