@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DecisionTabs } from "./decision-tabs";
 import { DecisionEvidence } from "./decision-evidence";
-import { DecisionSectorIntelligencePanel } from "./decision-sector-intelligence-panel";
 import { evaluateDecisionIntake } from "@/lib/decision/intake";
 import { evaluateDecisionFramework } from "@/lib/decision/framework";
 import { evaluateDecisionScenarios } from "@/lib/decision/scenarios";
@@ -145,13 +144,6 @@ export function DecisionDetailClient({
         activeTab={activeTab}
         onTabChange={onTabChange}
       />
-
-      <div className="mt-4">
-        <DecisionSectorIntelligencePanel
-          decisionId={decisionId}
-          organizationId={decision.organizationId as string}
-        />
-      </div>
 
       <div className="mt-4 mb-6">
         <div className="flex items-center justify-between text-sm mb-2">

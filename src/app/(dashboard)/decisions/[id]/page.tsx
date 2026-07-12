@@ -1,4 +1,5 @@
 import { DecisionDetailClient } from "@/components/decisions/decision-detail-client";
+import { DecisionSectorIntelligencePanel } from "@/components/decisions/decision-sector-intelligence-panel";
 import { getDecisionById } from "@/actions/decisions";
 import { evaluateDecisionIntake } from "@/lib/decision/intake";
 import { evaluateDecisionFramework } from "@/lib/decision/framework";
@@ -59,19 +60,25 @@ export default async function DecisionDetailPage({
   const typeConfig = getDecisionTypeConfig(decision.type);
 
   return (
-    <DecisionDetailClient
-      decision={decision as unknown as Record<string, unknown>}
-      decisionId={id}
-      initialData={{
-        intake,
-        framework: frameworkState,
-        scenarios: scenarioState,
-        riskAnalysis: riskAnalysisState,
-        recommendation: recommendationState,
-        completionState,
-        progressSummary,
-        typeConfig,
-      }}
-    />
+    <>
+      <DecisionDetailClient
+        decision={decision as unknown as Record<string, unknown>}
+        decisionId={id}
+        initialData={{
+          intake,
+          framework: frameworkState,
+          scenarios: scenarioState,
+          riskAnalysis: riskAnalysisState,
+          recommendation: recommendationState,
+          completionState,
+          progressSummary,
+          typeConfig,
+        }}
+      />
+      <DecisionSectorIntelligencePanel
+        decisionId={id}
+        organizationId={decision.organizationId}
+      />
+    </>
   );
 }
