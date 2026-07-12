@@ -1,107 +1,82 @@
-"use server"
+"use server";
 
-import { getAuditActor, requireRole } from "@/lib/audit/actor-context"
-import { assertEngagementAccess } from "@/lib/audit/tenant-guard"
-import { enforceAuditRateLimit } from "@/lib/audit/rate-limit"
-import { getEvidence as svcGetEvidence, getFindings as svcGetFindings, getRecommendations as svcGetRecommendations, getReviewComments as svcGetReviewComments, getAuditEvents as svcGetAuditEvents } from "@/lib/audit/services"
-import { getEngagement as svcGetEngagement, getFinancialStatements as svcGetFinancialStatements, getDisclosureNotes as svcGetDisclosureNotes, getApprovalRecords as svcGetApprovalRecords, recordAuditEvent as svcRecordAuditEvent } from "@/lib/audit/services"
-import { generateExport } from "@/lib/audit/export"
-import type { ExportFormat, ExportInput } from "@/lib/audit/export/types"
-import { isArabicText } from "@/lib/audit/arabic-pdf-support"
+import {
+  recordAuditEvent as svcRecordAuditEvent,
+} from "@/lib/audit/services";
+import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
+import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
+import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
+import { assertFactoryApprovalGatesPass } from "@/lib/audit/governance";
 
-const APPROVED_STATUSES = ["approved", "published"]
-
-export async function exportEngagementAction(engagementId: string, format: ExportFormat) {
-  const actor = await getAuditActor()
-  requireRole(actor, ["admin", "operator", "reviewer", "partner"])
-  await assertEngagementAccess(engagementId, actor)
-  await enforceAuditRateLimit(actor, "export_engagement", "export")
-
-  if (format !== 'pdf' && format !== 'xlsx') {
-    throw new Error(`Unsupported export format: ${format}. Use 'pdf' or 'xlsx'.`)
-  }
-
-  const [engagement, statements, notes, approvalRecords, evidence, findings, recommendations, reviewComments, auditEvents] = await Promise.all([
-    svcGetEngagement(actor.organizationId, engagementId),
-    svcGetFinancialStatements(engagementId),
-    svcGetDisclosureNotes(engagementId),
-    svcGetApprovalRecords(engagementId),
-    svcGetEvidence(engagementId),
-    svcGetFindings(engagementId),
-    svcGetRecommendations(engagementId),
-    svcGetReviewComments(engagementId),
-    svcGetAuditEvents(engagementId),
-  ])
-
-  if (!engagement) throw new Error('Engagement not found')
-  if (statements.length === 0) throw new Error('No financial statements to export. Complete account mapping first.')
-
-  const { assertFactoryApprovalGatesPass } = await import("@/lib/audit/governance")
-  await assertFactoryApprovalGatesPass(engagementId)
-
-  const isApproved = APPROVED_STATUSES.includes(engagement.status)
-  const lastApproval = approvalRecords.find(a => a.action === 'approved')
-
-  const clientName = engagement.client?.name ?? ''
-  const locale =
-    isArabicText(clientName) ||
-    notes.some((n) => isArabicText(n.title) || isArabicText(n.content))
-      ? ("bilingual" as const)
-      : ("en" as const)
-
-  const input: ExportInput = {
-    metadata: {
-      engagementId,
-      clientName,
-      locale,
-      fiscalPeriod: engagement.fiscalPeriod,
-      reportingFramework: engagement.client?.reportingFramework ?? 'IFRS for SMEs',
-      currency: engagement.client?.currencyCode ?? 'SAR',
-      status: engagement.status,
-      exportedAt: new Date().toISOString(),
-      labels: {
-        isDraft: !isApproved,
-        isApproved,
-        draftWarning: isApproved ? '' : 'DRAFT — Not final until approved. This document is a working draft and does not represent final audited financial statements.',
-        approvalInfo: isApproved && lastApproval
-          ? `Approved by ${lastApproval.approverName} at ${new Date(lastApproval.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`
-          : null,
-      },
-    },
-    statements,
-    notes,
-    evidence,
-    findings,
-    recommendations,
-    reviewComments,
-    approvalRecords,
-    auditTrail: auditEvents,
-  }
-
-  const result = await generateExport(input, format)
-
+export async function exportFinancialStatementsAction(engagementId: string) {
+  const actor = await getAuditActor();
+  requireRole(actor, ["admin", "operator", "reviewer", "partner"]);
+  await assertEngagementAccess(engagementId, actor);
+  await assertFactoryApprovalGatesPass(engagementId);
+  await enforceAuditRateLimit(actor, "export_financial_statements", "export");
+  const { exportFinancialStatements } =
+    await import("@/lib/audit/export-service");
+  const pkg = await exportFinancialStatements(engagementId);
   await svcRecordAuditEvent({
     engagementId,
-    eventType: 'financial_statement.exported',
+    eventType: "export.financial_statements_generated",
     actorId: actor.actorId,
     actorName: actor.actorName,
     actorRole: actor.actorRole,
-    targetType: 'engagement',
+    targetType: "engagement",
     targetId: engagementId,
-    newState: 'exported',
-    description: `${format.toUpperCase()} export generated: ${result.filename} (${(result.sizeBytes / 1024).toFixed(0)}KB)`,
-    aiRelated: false,
-    metadata: {
-      exportFormat: format,
-      filename: result.filename,
-      fileSizeBytes: result.sizeBytes,
-      statementCount: statements.length,
-      noteCount: notes.length,
-    },
-  })
+    newState: "exported",
+    description: `Financial statements exported (${pkg.statements.length} statements, ${pkg.notes.length} notes)`,
+    metadata: { exportType: "financial_statements", status: pkg.status },
+  });
+  return pkg;
+}
 
-  return {
-    ...result,
-    buffer: result.buffer.toString('base64'),
-  }
+export async function exportAuditFileAction(engagementId: string) {
+  const actor = await getAuditActor();
+  requireRole(actor, ["admin", "operator", "reviewer", "partner"]);
+  await assertEngagementAccess(engagementId, actor);
+  await assertFactoryApprovalGatesPass(engagementId);
+  await enforceAuditRateLimit(actor, "export_audit_file", "export");
+  const { exportAuditFile } = await import("@/lib/audit/export-service");
+  const pkg = await exportAuditFile(engagementId);
+  await svcRecordAuditEvent({
+    engagementId,
+    eventType: "export.audit_file_generated",
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: "engagement",
+    targetId: engagementId,
+    newState: "exported",
+    description: `Audit file exported (${pkg.auditFile?.evidenceChecklist.length ?? 0} evidence items, ${pkg.auditFile?.findings.length ?? 0} findings)`,
+    metadata: { exportType: "audit_file", status: pkg.status },
+  });
+  return pkg;
+}
+
+export async function exportBilingualAction(
+  engagementId: string,
+  locale: "en" | "ar" | "bilingual",
+) {
+  const actor = await getAuditActor();
+  requireRole(actor, ["admin", "operator", "reviewer", "partner"]);
+  await assertEngagementAccess(engagementId, actor);
+  await assertFactoryApprovalGatesPass(engagementId);
+  await enforceAuditRateLimit(actor, "export_bilingual", "export");
+  const { exportBilingual } = await import("@/lib/audit/export-service");
+  const pkg = await exportBilingual(engagementId, locale);
+  await svcRecordAuditEvent({
+    engagementId,
+    eventType: "export.financial_statements_generated",
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    actorRole: actor.actorRole,
+    targetType: "engagement",
+    targetId: engagementId,
+    newState: "exported",
+    description: `Bilingual export generated (${locale})`,
+    metadata: { exportType: "bilingual", locale },
+  });
+  return pkg;
 }

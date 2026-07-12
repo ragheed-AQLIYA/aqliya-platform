@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { exportEngagementAction } from "@/actions/audit-export-actions";
+import {
+  exportFinancialStatementsAction,
+  exportAuditFileAction,
+  exportBilingualAction,
+} from "@/actions/audit-export-actions";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export async function GET(
@@ -8,15 +12,24 @@ export async function GET(
 ) {
   const { engagementId, format } = await params;
 
-  if (format !== "pdf" && format !== "xlsx") {
+  if (format !== "pdf" && format !== "xlsx" && format !== "bilingual") {
     return NextResponse.json(
-      { error: `Unsupported format: ${format}. Use 'pdf' or 'xlsx'.` },
+      { error: `Unsupported format: ${format}. Use 'pdf', 'xlsx', or 'bilingual'.` },
       { status: 400 },
     );
   }
 
   try {
-    const result = await exportEngagementAction(engagementId, format);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let result: any;
+
+    if (format === "bilingual") {
+      result = await exportBilingualAction(engagementId, "bilingual");
+    } else if (format === "xlsx") {
+      result = await exportAuditFileAction(engagementId);
+    } else {
+      result = await exportFinancialStatementsAction(engagementId);
+    }
 
     const buffer = Buffer.from(result.buffer as string, "base64");
 
