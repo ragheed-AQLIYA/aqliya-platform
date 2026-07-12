@@ -64,8 +64,8 @@ describe("Admin Actions", () => {
       expect(mockPrisma.user.findMany).toHaveBeenCalledWith(
         expect.objectContaining({ where: { organizationId: "org-1" } }),
       )
-      expect(result).toHaveLength(1)
-      expect(result[0].id).toBe("u1")
+      expect(result.users).toHaveLength(1)
+      expect(result.users[0].id).toBe("u1")
     })
 
     it("throws when not authenticated (null user)", async () => {

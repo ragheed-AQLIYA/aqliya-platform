@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS } from "@/lib/platform/cache-strategy";
 import { redirect } from "next/navigation";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import type { CurrentUser } from "@/lib/auth";
@@ -116,7 +117,12 @@ export async function getContentStudioSummaryAction() {
   return safe(async () => {
     const user = await getCurrentUser();
     assertLocalContentPermission(user.role, "localcontentos:read");
-    return getCommandCenterSummary(orgId(user));
+    const cacheKey = `dashboard:localcontent:${orgId(user)}:stats`;
+    return getCachedOrFetch(
+      cacheKey,
+      async () => getCommandCenterSummary(orgId(user)),
+      DASHBOARD_CACHE_TTL_MS,
+    );
   });
 }
 

@@ -515,14 +515,22 @@ export async function getExportStatus(contactId: string) {
   });
 }
 
-export async function getExportRequests(contactId: string) {
+export async function getExportRequests(contactId: string, offset?: number) {
   return safe(async () => {
     const user = await getCurrentUser();
-    const requests = await prisma.contactExportRequest.findMany({
-      where: { organizationId: user.organizationId, contactId },
-      orderBy: { createdAt: "desc" },
-    });
-    return requests;
+    const where = { organizationId: user.organizationId, contactId };
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const [requests, totalCount] = await Promise.all([
+      prisma.contactExportRequest.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.contactExportRequest.count({ where }),
+    ]);
+    return { requests, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   });
 }
 

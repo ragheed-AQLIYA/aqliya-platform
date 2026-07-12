@@ -137,8 +137,10 @@ export default async function WorkflowRecordDetailPage({
 
   const slaResult = await getSlaInfoForRecord(id);
 
-  const evidence = await getWorkflowEvidenceAction(id, record.organizationId);
-  const auditEvents = await getWorkflowAuditEventsAction(id, record.organizationId);
+  const evidenceResult = await getWorkflowEvidenceAction(id, record.organizationId);
+  const evidence = evidenceResult.evidence;
+  const auditEventsResult = await getWorkflowAuditEventsAction(id, record.organizationId);
+  const auditEvents = auditEventsResult.events;
 
   return (
     <div dir="rtl" className="max-w-3xl mx-auto">

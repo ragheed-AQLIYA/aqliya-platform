@@ -12,7 +12,7 @@ export default async function AdminUsersPage() {
   const user = await getCurrentUser()
   if (!user || user.role !== "ADMIN") redirect("/access-denied")
 
-  const users = await listUsers(user.organizationId)
+  const { users } = await listUsers(user.organizationId)
 
   return (
     <main className="p-8 max-w-4xl mx-auto" dir="rtl">

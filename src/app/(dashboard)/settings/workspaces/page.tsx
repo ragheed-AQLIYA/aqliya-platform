@@ -61,9 +61,10 @@ export default async function WorkspacesPage() {
 
   // ─── Fetch workspaces and linked data ───
 
-  const workspaces = platformOrgId
+  const wsResult = platformOrgId
     ? await getWorkspacesWithLinks(platformOrgId)
-    : [];
+    : { workspaces: [], totalCount: 0, hasMore: false };
+  const workspaces = wsResult.workspaces;
 
   // ─── Stats + Orphan checks ───
 

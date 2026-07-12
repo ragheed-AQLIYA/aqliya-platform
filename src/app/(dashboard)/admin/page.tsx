@@ -307,7 +307,7 @@ async function UsersTab({
   user: { organizationId: string }
 }) {
   const { listUsers } = await import("@/actions/admin-actions")
-  const users = await listUsers(user.organizationId)
+  const { users } = await listUsers(user.organizationId)
 
   return (
     <div className="space-y-4">

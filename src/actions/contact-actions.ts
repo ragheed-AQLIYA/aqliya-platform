@@ -43,7 +43,7 @@ interface ListContactsOptions {
 
 export async function listContacts(
   organizationId: string,
-  options?: ListContactsOptions,
+  options?: ListContactsOptions & { offset?: number },
 ) {
   return safe(async () => {
     const user = await getCurrentUser();
@@ -69,15 +69,26 @@ export async function listContacts(
       ];
     }
 
-    const contacts = await prisma.localContact.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-    });
+    const PAGE_SIZE = 50;
+    const offset = options?.offset || 0;
+    const [contacts, totalCount] = await Promise.all([
+      prisma.localContact.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip: offset,
+      }),
+      prisma.localContact.count({ where }),
+    ]);
 
-    return contacts.map((c) => ({
-      ...c,
-      tags: typeof c.tags === "string" ? JSON.parse(c.tags) : c.tags,
-    }));
+    return {
+      contacts: contacts.map((c) => ({
+        ...c,
+        tags: typeof c.tags === "string" ? JSON.parse(c.tags) : c.tags,
+      })),
+      totalCount,
+      hasMore: offset + PAGE_SIZE < totalCount,
+    };
   });
 }
 
@@ -240,26 +251,35 @@ export async function createContactRelation(
   });
 }
 
-export async function listContactRelations(contactId: string) {
+export async function listContactRelations(contactId: string, offset?: number) {
   return safe(async () => {
     const user = await getCurrentUser();
 
-    const relations = await prisma.localContactRelation.findMany({
-      where: {
-        organizationId: user.organizationId,
-        isActive: true,
-        OR: [
-          { sourceContactId: contactId },
-          { targetContactId: contactId },
-        ],
-      },
-      include: {
-        sourceContact: true,
-        targetContact: true,
-      },
-    });
+    const where = {
+      organizationId: user.organizationId,
+      isActive: true,
+      OR: [
+        { sourceContactId: contactId },
+        { targetContactId: contactId },
+      ],
+    };
 
-    return relations;
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const [relations, totalCount] = await Promise.all([
+      prisma.localContactRelation.findMany({
+        where,
+        include: {
+          sourceContact: true,
+          targetContact: true,
+        },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.localContactRelation.count({ where }),
+    ]);
+
+    return { relations, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   });
 }
 
@@ -299,19 +319,28 @@ export async function logContactInteraction(
   });
 }
 
-export async function listContactInteractions(contactId: string) {
+export async function listContactInteractions(contactId: string, offset?: number) {
   return safe(async () => {
     const user = await getCurrentUser();
 
-    const interactions = await prisma.localContactInteraction.findMany({
-      where: {
-        organizationId: user.organizationId,
-        contactId,
-      },
-      orderBy: { occurredAt: "desc" },
-    });
+    const where = {
+      organizationId: user.organizationId,
+      contactId,
+    };
 
-    return interactions;
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const [interactions, totalCount] = await Promise.all([
+      prisma.localContactInteraction.findMany({
+        where,
+        orderBy: { occurredAt: "desc" },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.localContactInteraction.count({ where }),
+    ]);
+
+    return { interactions, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   });
 }
 
@@ -357,13 +386,22 @@ export async function uploadContactEvidence(params: {
   });
 }
 
-export async function listContactEvidence(contactId: string) {
+export async function listContactEvidence(contactId: string, offset?: number) {
   return safe(async () => {
     const user = await getCurrentUser();
-    return prisma.contactEvidence.findMany({
-      where: { organizationId: user.organizationId, contactId },
-      orderBy: { createdAt: "desc" },
-    });
+    const where = { organizationId: user.organizationId, contactId };
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const [evidence, totalCount] = await Promise.all([
+      prisma.contactEvidence.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.contactEvidence.count({ where }),
+    ]);
+    return { evidence, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   });
 }
 
@@ -405,14 +443,23 @@ export async function createContactReview(params: {
   });
 }
 
-export async function listContactReviews(contactId: string) {
+export async function listContactReviews(contactId: string, offset?: number) {
   return safe(async () => {
     const user = await getCurrentUser();
-    return prisma.contactReview.findMany({
-      where: { organizationId: user.organizationId, contactId },
-      include: { approvals: true },
-      orderBy: { createdAt: "desc" },
-    });
+    const where = { organizationId: user.organizationId, contactId };
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const [reviews, totalCount] = await Promise.all([
+      prisma.contactReview.findMany({
+        where,
+        include: { approvals: true },
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.contactReview.count({ where }),
+    ]);
+    return { reviews, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   });
 }
 

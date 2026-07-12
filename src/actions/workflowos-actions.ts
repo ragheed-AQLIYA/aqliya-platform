@@ -498,16 +498,22 @@ export async function createWorkflowTemplate(data: {
   }
 }
 
-export async function listWorkflowTemplates(organizationId: string) {
+export async function listWorkflowTemplates(organizationId: string, offset?: number) {
   try {
     const user = await getCurrentUser();
     await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
-    const templates = await prisma.workflowTemplate.findMany({
-      where: { organizationId, status: "active" },
-      include: { _count: { select: { records: true } } },
-      orderBy: { createdAt: "desc" },
-    });
-    return { success: true, data: templates };
+    const PAGE_SIZE = 50;
+    const [templates, totalCount] = await Promise.all([
+      prisma.workflowTemplate.findMany({
+        where: { organizationId, status: "active" },
+        include: { _count: { select: { records: true } } },
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip: offset || 0,
+      }),
+      prisma.workflowTemplate.count({ where: { organizationId, status: "active" } }),
+    ]);
+    return { success: true, data: templates, totalCount, hasMore: (offset || 0) + PAGE_SIZE < totalCount };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       console.error("Error listing Workflow templates:", error);
@@ -575,6 +581,7 @@ export async function workflow_listOrgRecords(
   organizationId: string,
   status?: string,
   searchQuery?: string,
+  offset?: number,
 ) {
   try {
     const user = await getCurrentUser();
@@ -584,12 +591,18 @@ export async function workflow_listOrgRecords(
     if (searchQuery?.trim()) {
       where.title = { contains: searchQuery.trim(), mode: "insensitive" };
     }
-    const records = await prisma.workflowRecord.findMany({
-      where,
-      include: { template: { select: { name: true } } },
-      orderBy: { createdAt: "desc" },
-    });
-    return { success: true, data: records };
+    const PAGE_SIZE = 50;
+    const [records, totalCount] = await Promise.all([
+      prisma.workflowRecord.findMany({
+        where,
+        include: { template: { select: { name: true } } },
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip: offset || 0,
+      }),
+      prisma.workflowRecord.count({ where }),
+    ]);
+    return { success: true, data: records, totalCount, hasMore: (offset || 0) + PAGE_SIZE < totalCount };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       console.error("Error listing Workflow records:", error);
@@ -736,15 +749,21 @@ export async function uploadWorkflowEvidence(params: {
   }
 }
 
-export async function listWorkflowEvidence(recordId: string) {
+export async function listWorkflowEvidence(recordId: string, offset?: number) {
   try {
     const user = await getCurrentUser();
     await enforce(user, { type: "organization", id: user.organizationId, tenantId: user.organizationId }, "update");
-    const evidence = await prisma.workflowEvidence.findMany({
-      where: { organizationId: user.organizationId, recordId },
-      orderBy: { createdAt: "desc" },
-    });
-    return { success: true, data: evidence };
+    const PAGE_SIZE = 50;
+    const [evidence, totalCount] = await Promise.all([
+      prisma.workflowEvidence.findMany({
+        where: { organizationId: user.organizationId, recordId },
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip: offset || 0,
+      }),
+      prisma.workflowEvidence.count({ where: { organizationId: user.organizationId, recordId } }),
+    ]);
+    return { success: true, data: evidence, totalCount, hasMore: (offset || 0) + PAGE_SIZE < totalCount };
   } catch (error) {
     console.error("Error listing workflow evidence:", error);
     return { success: false, error: "Failed to list evidence" };
@@ -822,18 +841,32 @@ export async function getWorkflowDashboardStats(organizationId: string) {
   }
 }
 
-export async function getWorkflowEvidenceAction(recordId: string, organizationId: string) {
+export async function getWorkflowEvidenceAction(recordId: string, organizationId: string, offset?: number) {
   await getCurrentUser();
-  return prisma.workflowEvidence.findMany({
-    where: { organizationId, recordId },
-    orderBy: { createdAt: "desc" },
-  });
+  const PAGE_SIZE = 50;
+  const [evidence, totalCount] = await Promise.all([
+    prisma.workflowEvidence.findMany({
+      where: { organizationId, recordId },
+      orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip: offset || 0,
+    }),
+    prisma.workflowEvidence.count({ where: { organizationId, recordId } }),
+  ]);
+  return { evidence, totalCount, hasMore: (offset || 0) + PAGE_SIZE < totalCount };
 }
 
-export async function getWorkflowAuditEventsAction(recordId: string, organizationId: string) {
+export async function getWorkflowAuditEventsAction(recordId: string, organizationId: string, offset?: number) {
   await getCurrentUser();
-  return prisma.workflowAuditEvent.findMany({
-    where: { organizationId, recordId },
-    orderBy: { createdAt: "desc" },
-  });
+  const PAGE_SIZE = 50;
+  const [events, totalCount] = await Promise.all([
+    prisma.workflowAuditEvent.findMany({
+      where: { organizationId, recordId },
+      orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip: offset || 0,
+    }),
+    prisma.workflowAuditEvent.count({ where: { organizationId, recordId } }),
+  ]);
+  return { events, totalCount, hasMore: (offset || 0) + PAGE_SIZE < totalCount };
 }

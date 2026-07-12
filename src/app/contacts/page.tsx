@@ -44,7 +44,7 @@ export default async function ContactsPage({ searchParams }: PageProps) {
     );
   }
 
-  const parsed = result.data.map((c) => ({
+  const parsed = result.data.contacts.map((c) => ({
     ...c,
     tags: typeof c.tags === "string" ? JSON.parse(c.tags) : c.tags,
   }));

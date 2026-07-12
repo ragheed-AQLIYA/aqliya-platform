@@ -29,7 +29,7 @@ export default async function NewRelationPage({ params }: PageProps) {
   const { id } = await params;
 
   const result = await listContacts(user.organizationId);
-  const contacts = result.ok ? result.data.filter((c) => c.id !== id) : [];
+  const contacts = result.ok ? result.data.contacts.filter((c) => c.id !== id) : [];
 
   return (
     <div dir="rtl" className="min-h-screen bg-background">

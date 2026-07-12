@@ -49,6 +49,7 @@ const mockWorkflowRecordCount = jest.fn();
 const mockWorkflowRecordGroupBy = jest.fn();
 const mockWorkflowEvidenceCreate = jest.fn();
 const mockWorkflowEvidenceFindMany = jest.fn();
+const mockWorkflowEvidenceCount = jest.fn();
 const mockWorkflowAuditEventCreate = jest.fn();
 const mockWorkflowAuditEventFindMany = jest.fn();
 const mockUserFindUnique = jest.fn();
@@ -72,6 +73,7 @@ jest.mock("@/lib/prisma", () => ({
     workflowEvidence: {
       create: mockWorkflowEvidenceCreate,
       findMany: mockWorkflowEvidenceFindMany,
+      count: mockWorkflowEvidenceCount,
     },
     workflowAuditEvent: {
       create: mockWorkflowAuditEventCreate,

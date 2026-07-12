@@ -1,7 +1,8 @@
-'use server'
+"use server"
 
 import { getCurrentUser } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS } from '@/lib/platform/cache-strategy'
 import {
   createRiskModel,
   getRiskModel,
@@ -58,9 +59,11 @@ export async function createRiskModelAction(data: CreateRiskModelData): Promise<
   }
 }
 
-export async function listAssessmentsAction(): Promise<ActionResult> {
+export async function listAssessmentsAction(offset?: number): Promise<ActionResult> {
   try {
     const user = await getCurrentUser()
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
     const engagements = await prisma.auditEngagement.findMany({
       where: { organizationId: user.organizationId },
       select: { id: true },
@@ -68,7 +71,10 @@ export async function listAssessmentsAction(): Promise<ActionResult> {
     const all = await Promise.all(
       engagements.map(e => getAssessmentsByEngagement(e.id))
     )
-    return { ok: true, data: all.flat() }
+    const flat = all.flat();
+    const totalCount = flat.length;
+    const paginated = flat.slice(skip, skip + PAGE_SIZE);
+    return { ok: true, data: { items: paginated, totalCount, hasMore: skip + PAGE_SIZE < totalCount } }
   } catch (e) {
     return { ok: false, error: (e as Error).message }
   }
@@ -144,50 +150,57 @@ export async function getRiskDashboardStatsAction(): Promise<ActionResult<Dashbo
   try {
     const user = await getCurrentUser();
     const orgId = user.organizationId;
-    const [models, engagements] = await Promise.all([
-      listRiskModels(orgId),
-      prisma.auditEngagement.findMany({ where: { organizationId: orgId }, select: { id: true } }),
-    ]);
-    const allAssessments = (await Promise.all(
-      engagements.map((e) => getAssessmentsByEngagement(e.id)),
-    )).flat();
+    const cacheKey = `dashboard:risk:${orgId}:stats`;
 
-    const pendingReview = allAssessments.filter((a) => a.status === "draft" || a.status === "reviewed").length;
-    const approved = allAssessments.filter((a) => a.status === "approved").length;
-    const highCritical = allAssessments.filter(
-      (a) => a.inherentLevel === "HIGH" || a.inherentLevel === "CRITICAL",
-    ).length;
-    const lowMedium = allAssessments.filter(
-      (a) => a.inherentLevel === "LOW" || a.inherentLevel === "MEDIUM",
-    ).length;
+    const data = await getCachedOrFetch(
+      cacheKey,
+      async () => {
+        const [models, engagements] = await Promise.all([
+          listRiskModels(orgId),
+          prisma.auditEngagement.findMany({ where: { organizationId: orgId }, select: { id: true } }),
+        ]);
+        const allAssessments = (await Promise.all(
+          engagements.map((e) => getAssessmentsByEngagement(e.id)),
+        )).flat();
 
-    const levelCounts: Record<string, number> = {};
-    for (const a of allAssessments) {
-      if (a.inherentLevel) levelCounts[a.inherentLevel] = (levelCounts[a.inherentLevel] ?? 0) + 1;
-    }
+        const pendingReview = allAssessments.filter((a) => a.status === "draft" || a.status === "reviewed").length;
+        const approved = allAssessments.filter((a) => a.status === "approved").length;
+        const highCritical = allAssessments.filter(
+          (a) => a.inherentLevel === "HIGH" || a.inherentLevel === "CRITICAL",
+        ).length;
+        const lowMedium = allAssessments.filter(
+          (a) => a.inherentLevel === "LOW" || a.inherentLevel === "MEDIUM",
+        ).length;
 
-    return {
-      ok: true,
-      data: {
-        totalModels: models.length,
-        totalAssessments: allAssessments.length,
-        pendingReview,
-        approved,
-        highCritical,
-        lowMedium,
-        assessmentsByLevel: Object.entries(levelCounts).map(([level, count]) => ({ level, count })),
-        recentAssessments: allAssessments
-          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-          .slice(0, 10)
-          .map((a) => ({
-            id: a.id,
-            title: a.title,
-            status: a.status,
-            inherentLevel: a.inherentLevel,
-            createdAt: a.createdAt,
-          })),
+        const levelCounts: Record<string, number> = {};
+        for (const a of allAssessments) {
+          if (a.inherentLevel) levelCounts[a.inherentLevel] = (levelCounts[a.inherentLevel] ?? 0) + 1;
+        }
+
+        return {
+          totalModels: models.length,
+          totalAssessments: allAssessments.length,
+          pendingReview,
+          approved,
+          highCritical,
+          lowMedium,
+          assessmentsByLevel: Object.entries(levelCounts).map(([level, count]) => ({ level, count })),
+          recentAssessments: allAssessments
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+            .slice(0, 10)
+            .map((a) => ({
+              id: a.id,
+              title: a.title,
+              status: a.status,
+              inherentLevel: a.inherentLevel,
+              createdAt: a.createdAt,
+            })),
+        };
       },
-    };
+      DASHBOARD_CACHE_TTL_MS,
+    );
+
+    return { ok: true, data };
   } catch (e) {
     return { ok: false, error: (e as Error).message };
   }
@@ -215,31 +228,39 @@ export type AuditTrailEntry = {
   createdAt: Date;
 };
 
-export async function getAssessmentAuditTrailAction(assessmentId: string): Promise<ActionResult<AuditTrailEntry[]>> {
+export async function getAssessmentAuditTrailAction(assessmentId: string, offset?: number): Promise<ActionResult<{ items: AuditTrailEntry[]; totalCount: number; hasMore: boolean }>> {
   try {
     const user = await getCurrentUser()
     const hasAccess = await verifyOrgAccess('assessment', assessmentId, user.organizationId)
     if (!hasAccess) return { ok: false, error: 'وصول مرفوض' }
-    const events = await prisma.platformAuditLog.findMany({
-      where: {
-        targetType: 'auditRiskAssessment',
-        targetId: assessmentId,
-      },
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        action: true,
-        actorId: true,
-        actorName: true,
-        metadata: true,
-        createdAt: true,
-      },
-    })
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const where = {
+      targetType: 'auditRiskAssessment',
+      targetId: assessmentId,
+    };
+    const [events, totalCount] = await Promise.all([
+      prisma.platformAuditLog.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          action: true,
+          actorId: true,
+          actorName: true,
+          metadata: true,
+          createdAt: true,
+        },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.platformAuditLog.count({ where }),
+    ])
     const mapped: AuditTrailEntry[] = events.map(e => ({
       ...e,
       metadata: e.metadata as Record<string, unknown> | null,
     }))
-    return { ok: true, data: mapped }
+    return { ok: true, data: { items: mapped, totalCount, hasMore: skip + PAGE_SIZE < totalCount } }
   } catch (e) {
     return { ok: false, error: (e as Error).message }
   }

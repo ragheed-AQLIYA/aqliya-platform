@@ -13,13 +13,21 @@ async function assertAdmin(_organizationId?: string) {
   return user
 }
 
-export async function listUsers(organizationId: string) {
+const PAGE_SIZE = 50;
+
+export async function listUsers(organizationId: string, offset?: number) {
   await assertAdmin(organizationId)
-  return prisma.user.findMany({
-    where: { organizationId },
-    select: { id: true, name: true, email: true, role: true, createdAt: true },
-    orderBy: { createdAt: "desc" },
-  })
+  const [users, totalCount] = await Promise.all([
+    prisma.user.findMany({
+      where: { organizationId },
+      select: { id: true, name: true, email: true, role: true, createdAt: true },
+      orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip: offset || 0,
+    }),
+    prisma.user.count({ where: { organizationId } }),
+  ])
+  return { users, totalCount, hasMore: (offset || 0) + PAGE_SIZE < totalCount }
 }
 
 export async function updateUserRole(

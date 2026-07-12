@@ -22,6 +22,7 @@ const mockLocalContactFindFirst = jest.fn();
 const mockLocalContactFindUnique = jest.fn();
 const mockLocalContactFindMany = jest.fn();
 const mockLocalContactUpdate = jest.fn();
+const mockLocalContactCount = jest.fn().mockResolvedValue(0);
 const mockLocalContactRelationCreate = jest.fn();
 const mockLocalContactInteractionCreate = jest.fn();
 const mockContactReviewCreate = jest.fn();
@@ -40,6 +41,7 @@ jest.mock("@/lib/prisma", () => ({
       findUnique: mockLocalContactFindUnique,
       findMany: mockLocalContactFindMany,
       update: mockLocalContactUpdate,
+      count: mockLocalContactCount,
     },
     localContactRelation: { create: mockLocalContactRelationCreate },
     localContactInteraction: { create: mockLocalContactInteractionCreate },

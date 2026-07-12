@@ -10,18 +10,22 @@ jest.mock("@/lib/prisma", () => ({
       findUnique: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      count: jest.fn().mockResolvedValue(0),
     },
     localContactRelation: {
       findMany: jest.fn(),
       create: jest.fn(),
+      count: jest.fn().mockResolvedValue(0),
     },
     localContactInteraction: {
       findMany: jest.fn(),
       create: jest.fn(),
+      count: jest.fn().mockResolvedValue(0),
     },
     contactEvidence: {
       findMany: jest.fn(),
       create: jest.fn(),
+      count: jest.fn().mockResolvedValue(0),
     },
     contactReview: {
       findUnique: jest.fn(),
@@ -161,8 +165,8 @@ describe("LocalContactOS actions", () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.data).toHaveLength(1);
-        expect(result.data[0].name).toBe("أحمد محمد");
+        expect(result.data.contacts).toHaveLength(1);
+        expect(result.data.contacts[0].name).toBe("أحمد محمد");
       }
       expect(prisma.localContact.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -297,7 +301,7 @@ describe("LocalContactOS actions", () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.data).toHaveLength(1);
+        expect(result.data.relations).toHaveLength(1);
       }
     });
   });
@@ -336,7 +340,7 @@ describe("LocalContactOS actions", () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.data).toHaveLength(1);
+        expect(result.data.interactions).toHaveLength(1);
       }
     });
   });
@@ -395,7 +399,7 @@ describe("LocalContactOS actions", () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.data).toHaveLength(1);
+        expect(result.data.evidence).toHaveLength(1);
       }
     });
   });

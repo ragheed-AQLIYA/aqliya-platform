@@ -1,7 +1,8 @@
-"use server";
+﻿"use server";
 
 import { isExpectedAccessDeniedError } from "@/lib/auth";
 import { getSalesDashboardStats } from "@/lib/sales/services";
+import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS } from "@/lib/platform/cache-strategy";
 import {
   requireSalesPermission,
   SalesAccessError,
@@ -31,11 +32,16 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
 export async function getSalesDashboardStatsAction() {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:read");
+    const cacheKey = `dashboard:sales:${ctx.organizationId}:stats`;
     try {
-      return await getSalesDashboardStats(ctx.organizationId);
+      return await getCachedOrFetch(
+        cacheKey,
+        async () => getSalesDashboardStats(ctx.organizationId),
+        DASHBOARD_CACHE_TTL_MS,
+      );
     } catch {
       throw new Error(
-        "SalesOS tables unavailable — apply migration salesos_p0_core and seed",
+        "SalesOS tables unavailable \u2014 apply migration salesos_p0_core and seed",
       );
     }
   });

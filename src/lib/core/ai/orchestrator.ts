@@ -19,6 +19,7 @@ import { selectProviderForTask } from "@/lib/core/ai/hybrid-router"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
 import { checkBudgetQuota } from "@/lib/core/ai/budget-manager"
 import { injectGovernedRagIntoRequest } from "@/lib/core/ai/orchestrator-rag-inject"
+import { sanitizeTaskInput } from "@/lib/security/prompt-sanitization"
 
 export type OrchestratorConfig = {
   defaultProvider?: AIProviderId
@@ -201,7 +202,8 @@ export class AIOrchestrator {
 
     const aiRequest: AIRequest = {
       taskType: request.taskType,
-      taskInput: request.taskInput,
+      // G1 SECURITY: Sanitize string values in taskInput to prevent prompt injection
+      taskInput: sanitizeTaskInput(request.taskInput),
       governanceContext,
       assembledPrompt: { layers: [], fullPrompt: '' },
       engagementId: request.engagementId,
@@ -303,7 +305,8 @@ export class AIOrchestrator {
 
     const aiRequest: AIRequest = {
       taskType: request.taskType,
-      taskInput: request.taskInput,
+      // G1 SECURITY: Sanitize string values in taskInput to prevent prompt injection
+      taskInput: sanitizeTaskInput(request.taskInput),
       governanceContext,
       assembledPrompt: { layers: [], fullPrompt: '' },
       engagementId: request.engagementId,

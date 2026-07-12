@@ -295,7 +295,8 @@ async function EvidenceSection({
   contactId: string;
   orgId: string;
 }) {
-  const evidence = await getContactEvidence(contactId, orgId);
+  const evidenceResult = await getContactEvidence(contactId, orgId);
+  const evidence = evidenceResult.evidence;
 
   return (
     <Card>

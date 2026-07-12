@@ -44,7 +44,7 @@ function mimeTypeForFileType(fileType: string): string {
   return MIME_TYPES[fileType.toLowerCase()] ?? "application/octet-stream";
 }
 
-export async function getDecisionEvidenceAction(decisionId: string) {
+export async function getDecisionEvidenceAction(decisionId: string, offset?: number) {
   try {
     const user = await getCurrentUser();
     const decisionLookup = await prisma.decision.findUnique({
@@ -55,11 +55,18 @@ export async function getDecisionEvidenceAction(decisionId: string) {
       return { success: false, error: "Decision not found" };
     }
     await enforce(user, { type: "decision", id: decisionId, tenantId: decisionLookup.organizationId }, "read");
-    const evidence = await prisma.decisionEvidence.findMany({
-      where: { decisionId },
-      orderBy: { createdAt: "desc" },
-    });
-    return { success: true, data: evidence };
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const [evidence, totalCount] = await Promise.all([
+      prisma.decisionEvidence.findMany({
+        where: { decisionId },
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.decisionEvidence.count({ where: { decisionId } }),
+    ]);
+    return { success: true, data: evidence, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   } catch {
     return { success: false, error: "Failed to fetch evidence" };
   }

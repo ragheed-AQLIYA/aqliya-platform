@@ -219,18 +219,28 @@ export async function deleteMemoryEvent(
   }
 }
 
-export async function getCollections(): Promise<{
+export async function getCollections(offset?: number): Promise<{
   success: boolean;
   data?: CollectionData[];
+  totalCount?: number;
+  hasMore?: boolean;
   error?: string;
 }> {
   try {
     const { organizationId: orgId } = await getUserCtx();
-    const collections = await prisma.institutionalMemoryCollection.findMany({
-      where: { organizationId: orgId },
-      include: { createdBy: { select: { id: true, name: true } } },
-      orderBy: { createdAt: "desc" },
-    });
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const where = { organizationId: orgId };
+    const [collections, totalCount] = await Promise.all([
+      prisma.institutionalMemoryCollection.findMany({
+        where,
+        include: { createdBy: { select: { id: true, name: true } } },
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.institutionalMemoryCollection.count({ where }),
+    ]);
     const data: CollectionData[] = await Promise.all(
       collections.map(async (c: CollectionWithCreator) => {
         const eventCount = await prisma.institutionalMemoryEvent.count({
@@ -247,7 +257,7 @@ export async function getCollections(): Promise<{
         };
       }),
     );
-    return { success: true, data };
+    return { success: true, data, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   } catch (error: unknown) {
     if (isAuthRedirectError(error)) throw error;
     return { success: false, error: "Failed to fetch collections" };

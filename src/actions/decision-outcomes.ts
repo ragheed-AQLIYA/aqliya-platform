@@ -246,27 +246,35 @@ export async function getOutcomeSummaryForDecision(decisionId: string) {
   }
 }
 
-export async function getOrganizationOutcomeMetrics() {
+export async function getOrganizationOutcomeMetrics(offset?: number) {
   try {
     const user = await getCurrentUser();
 
-    const outcomes = await prisma.decisionOutcome.findMany({
-      where: {
-        decision: {
-          organizationId: user.organizationId,
-        },
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const where = {
+      decision: {
+        organizationId: user.organizationId,
       },
-      include: {
-        decision: {
-          select: {
-            id: true,
-            title: true,
-            type: true,
-            status: true,
+    };
+    const [outcomes, totalCount] = await Promise.all([
+      prisma.decisionOutcome.findMany({
+        where,
+        include: {
+          decision: {
+            select: {
+              id: true,
+              title: true,
+              type: true,
+              status: true,
+            },
           },
         },
-      },
-    });
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.decisionOutcome.count({ where }),
+    ]);
 
     const totalOutcomes = outcomes.length;
     const byStatus = outcomes.reduce(

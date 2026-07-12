@@ -385,26 +385,38 @@ export interface TeamMember {
   createdAt: string
 }
 
-export async function listTeamMembersAction(): Promise<TeamMember[]> {
+export async function listTeamMembersAction(offset?: number): Promise<{ members: TeamMember[]; totalCount: number; hasMore: boolean }> {
   const { getCurrentUser } = await import("@/lib/auth")
   const user = await getCurrentUser()
 
-  const members = await prisma.user.findMany({
-    where: { organizationId: user.organizationId },
-    orderBy: { createdAt: "asc" },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      createdAt: true,
-    },
-  })
+  const PAGE_SIZE = 50;
+  const skip = offset || 0;
+  const where = { organizationId: user.organizationId };
+  const [members, totalCount] = await Promise.all([
+    prisma.user.findMany({
+      where,
+      orderBy: { createdAt: "asc" },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        createdAt: true,
+      },
+      take: PAGE_SIZE,
+      skip,
+    }),
+    prisma.user.count({ where }),
+  ])
 
-  return members.map((m) => ({
-    ...m,
-    createdAt: m.createdAt.toISOString(),
-  }))
+  return {
+    members: members.map((m) => ({
+      ...m,
+      createdAt: m.createdAt.toISOString(),
+    })),
+    totalCount,
+    hasMore: skip + PAGE_SIZE < totalCount,
+  }
 }
 
 export interface PendingInvitation {
@@ -415,29 +427,41 @@ export interface PendingInvitation {
   createdAt: string
 }
 
-export async function listPendingInvitationsAction(): Promise<PendingInvitation[]> {
+export async function listPendingInvitationsAction(offset?: number): Promise<{ invitations: PendingInvitation[]; totalCount: number; hasMore: boolean }> {
   const { getCurrentUser } = await import("@/lib/auth")
   const user = await getCurrentUser()
 
-  const invites = await prisma.invitation.findMany({
-    where: {
-      organizationId: user.organizationId,
-      acceptedAt: null,
-      expiresAt: { gt: new Date() },
-    },
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      email: true,
-      role: true,
-      expiresAt: true,
-      createdAt: true,
-    },
-  })
+  const PAGE_SIZE = 50;
+  const skip = offset || 0;
+  const where = {
+    organizationId: user.organizationId,
+    acceptedAt: null,
+    expiresAt: { gt: new Date() },
+  };
+  const [invites, totalCount] = await Promise.all([
+    prisma.invitation.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        expiresAt: true,
+        createdAt: true,
+      },
+      take: PAGE_SIZE,
+      skip,
+    }),
+    prisma.invitation.count({ where }),
+  ])
 
-  return invites.map((inv) => ({
-    ...inv,
-    expiresAt: inv.expiresAt.toISOString(),
-    createdAt: inv.createdAt.toISOString(),
-  }))
+  return {
+    invitations: invites.map((inv) => ({
+      ...inv,
+      expiresAt: inv.expiresAt.toISOString(),
+      createdAt: inv.createdAt.toISOString(),
+    })),
+    totalCount,
+    hasMore: skip + PAGE_SIZE < totalCount,
+  }
 }

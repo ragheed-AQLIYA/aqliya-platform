@@ -112,7 +112,7 @@ export default function AssessmentDetailPage() {
 
   const loadAuditTrail = useCallback(async () => {
     const res = await getAssessmentAuditTrailAction(assessmentId)
-    if (res.ok) setAuditTrail(res.data as AuditTrailEntry[])
+    if (res.ok) setAuditTrail(res.data.items as AuditTrailEntry[])
   }, [assessmentId])
 
   useEffect(() => { fetchData() }, [fetchData])

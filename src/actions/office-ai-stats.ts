@@ -3,6 +3,7 @@
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { classifyTask, type TaskCategory } from "@/lib/office-ai/taxonomy";
+import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS } from "@/lib/platform/cache-strategy";
 
 export interface AssistantStats {
   totalTasks: number;
@@ -31,47 +32,55 @@ if (!hasRequiredRole(user, "VIEWER")) {
   const orgId = organizationId || user.platformOrganizationId;
   if (!orgId) throw new Error("Organization ID required");
 
-  const [allTasks, totalOutputs, totalFiles] = await Promise.all([
-    prisma.officeAiTask.findMany({
-      where: { platformOrganizationId: orgId },
-      orderBy: { createdAt: "desc" },
-      take: 1000,
-      select: {
-        id: true,
-        taskType: true,
-        title: true,
-        status: true,
-        createdAt: true,
-      },
-    }),
-    prisma.officeAiOutput.count({
-      where: { task: { platformOrganizationId: orgId } },
-    }),
-    prisma.officeAiFile.count({
-      where: { task: { platformOrganizationId: orgId } },
-    }),
-  ]);
+  const cacheKey = `dashboard:assistant:${orgId}:stats`;
 
-  const totalTasks = allTasks.length;
+  return getCachedOrFetch(
+    cacheKey,
+    async () => {
+      const [allTasks, totalOutputs, totalFiles] = await Promise.all([
+        prisma.officeAiTask.findMany({
+          where: { platformOrganizationId: orgId },
+          orderBy: { createdAt: "desc" },
+          take: 1000,
+          select: {
+            id: true,
+            taskType: true,
+            title: true,
+            status: true,
+            createdAt: true,
+          },
+        }),
+        prisma.officeAiOutput.count({
+          where: { task: { platformOrganizationId: orgId } },
+        }),
+        prisma.officeAiFile.count({
+          where: { task: { platformOrganizationId: orgId } },
+        }),
+      ]);
 
-  const tasksByType: Record<string, number> = {};
-  const tasksByStatus: Record<string, number> = {};
+      const totalTasks = allTasks.length;
 
-  for (const t of allTasks) {
-    const cat = classifyTask(t.taskType);
-    tasksByType[cat] = (tasksByType[cat] || 0) + 1;
-    tasksByStatus[t.status] = (tasksByStatus[t.status] || 0) + 1;
-  }
+      const tasksByType: Record<string, number> = {};
+      const tasksByStatus: Record<string, number> = {};
 
-  const averageOutputsPerTask = totalTasks > 0 ? totalOutputs / totalTasks : 0;
+      for (const t of allTasks) {
+        const cat = classifyTask(t.taskType);
+        tasksByType[cat] = (tasksByType[cat] || 0) + 1;
+        tasksByStatus[t.status] = (tasksByStatus[t.status] || 0) + 1;
+      }
 
-  return {
-    totalTasks,
-    totalOutputs,
-    totalFiles,
-    tasksByType: tasksByType as Record<TaskCategory, number>,
-    tasksByStatus,
-    recentTasks: allTasks.slice(0, 10),
-    averageOutputsPerTask,
-  };
+      const averageOutputsPerTask = totalTasks > 0 ? totalOutputs / totalTasks : 0;
+
+      return {
+        totalTasks,
+        totalOutputs,
+        totalFiles,
+        tasksByType: tasksByType as Record<TaskCategory, number>,
+        tasksByStatus,
+        recentTasks: allTasks.slice(0, 10),
+        averageOutputsPerTask,
+      };
+    },
+    DASHBOARD_CACHE_TTL_MS,
+  );
 }

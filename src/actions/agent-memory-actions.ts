@@ -69,7 +69,7 @@ export async function forgetAgentMemoryAction(agentId: string, memoryKey: string
   return { success: true };
 }
 
-export async function getAgentMemoryStatsAction(agentId?: string) {
+export async function getAgentMemoryStatsAction(agentId?: string, offset?: number) {
   const user = await getCurrentUser();
   if (!hasRequiredRole(user, "VIEWER")) { throw new Error("Access denied: VIEWER role required"); }
 
@@ -78,7 +78,12 @@ export async function getAgentMemoryStatsAction(agentId?: string) {
   };
   if (agentId) where.agentId = agentId;
 
-  const allItems = await prisma.agentMemory.findMany({ where, select: { agentId: true, agentType: true } });
+  const PAGE_SIZE = 50;
+  const skip = offset || 0;
+  const [allItems, totalCount] = await Promise.all([
+    prisma.agentMemory.findMany({ where, select: { agentId: true, agentType: true }, take: PAGE_SIZE, skip }),
+    prisma.agentMemory.count({ where }),
+  ]);
   const groups: Record<string, number> = {};
   for (const item of allItems) {
     const key = (item.agentId as string) + "|" + (item.agentType as string);
@@ -89,7 +94,7 @@ export async function getAgentMemoryStatsAction(agentId?: string) {
     return { agentId: key.slice(0, sep), agentType: key.slice(sep + 1), count };
   });
 
-  return { success: true, data: stats };
+  return { success: true, data: stats, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
 }
 
 export async function cleanExpiredMemoryAction() {

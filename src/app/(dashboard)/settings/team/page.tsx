@@ -50,12 +50,12 @@ export default function TeamSettingsPage() {
       const { listTeamMembersAction, listPendingInvitationsAction } = await import(
         "@/actions/registration-actions"
       )
-      const [m, p] = await Promise.all([
+      const [mResult, pResult] = await Promise.all([
         listTeamMembersAction(),
         listPendingInvitationsAction(),
       ])
-      setMembers(m)
-      setPendingInvites(p)
+      setMembers(mResult.members)
+      setPendingInvites(pResult.invitations)
     } catch {
       setError("فشل تحميل بيانات الفريق")
     } finally {

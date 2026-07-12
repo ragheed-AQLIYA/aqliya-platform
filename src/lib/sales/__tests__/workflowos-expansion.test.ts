@@ -16,6 +16,7 @@ jest.mock("@/lib/prisma", () => ({
     workflowEvidence: {
       create: jest.fn(),
       findMany: jest.fn(),
+      count: jest.fn().mockResolvedValue(0),
     },
     workflowAuditEvent: {
       create: jest.fn(),
@@ -182,6 +183,8 @@ describe("WorkflowOS Expansion", () => {
         where: { organizationId: "org-1" },
         include: { template: { select: { name: true } } },
         orderBy: { createdAt: "desc" },
+        take: 50,
+        skip: 0,
       });
     });
 
@@ -194,6 +197,8 @@ describe("WorkflowOS Expansion", () => {
         where: { organizationId: "org-1", status: "completed" },
         include: { template: { select: { name: true } } },
         orderBy: { createdAt: "desc" },
+        take: 50,
+        skip: 0,
       });
     });
   });

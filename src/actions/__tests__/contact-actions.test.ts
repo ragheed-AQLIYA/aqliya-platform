@@ -141,8 +141,8 @@ describe("listContacts", () => {
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data).toHaveLength(1);
-      expect(result.data[0].name).toBe("سارة القحطاني");
+      expect(result.data.contacts).toHaveLength(1);
+      expect(result.data.contacts[0].name).toBe("سارة القحطاني");
     }
     expect(mockLocalContactFindMany).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -184,7 +184,7 @@ describe("listContacts", () => {
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data).toHaveLength(0);
+      expect(result.data.contacts).toHaveLength(0);
     }
   });
 
@@ -212,7 +212,7 @@ describe("listContacts — dashboard", () => {
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data).toHaveLength(3);
+      expect(result.data.contacts).toHaveLength(3);
     }
     expect(mockLocalContactFindMany).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -231,8 +231,8 @@ describe("listContacts — dashboard", () => {
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data).toHaveLength(1);
-      expect(result.data[0].sensitivityLevel).toBe("sensitive");
+      expect(result.data.contacts).toHaveLength(1);
+      expect(result.data.contacts[0].sensitivityLevel).toBe("sensitive");
     }
     expect(mockLocalContactFindMany).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -248,7 +248,7 @@ describe("listContacts — dashboard", () => {
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data).toHaveLength(0);
+      expect(result.data.contacts).toHaveLength(0);
     }
   });
 
@@ -269,7 +269,7 @@ describe("listContacts — dashboard", () => {
     result = await listContacts("org-1", { sensitivityLevel: "sensitive" });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data).toHaveLength(1);
+      expect(result.data.contacts).toHaveLength(1);
     }
     expect(mockLocalContactFindMany).toHaveBeenCalledWith(
       expect.objectContaining({

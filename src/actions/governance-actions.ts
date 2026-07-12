@@ -41,7 +41,7 @@ function isOverdue(item: { deadline: Date | null; priority: string }): boolean {
   return false;
 }
 
-export async function getGovernanceDashboardAction(): Promise<GovernanceDashboard> {
+export async function getGovernanceDashboardAction(offset?: number): Promise<GovernanceDashboard> {
   const user = await getCurrentUser();
   if (!hasRequiredRole(user, "VIEWER")) {
     throw new Error("Access denied: VIEWER role required");
@@ -49,6 +49,8 @@ export async function getGovernanceDashboardAction(): Promise<GovernanceDashboar
   const cacheKey = `dashboard:governance:${user.organizationId}:items`;
   return await getCachedOrFetch(cacheKey, async () => {
   const now = new Date();
+  const PAGE_SIZE = 50;
+  const skip = offset || 0;
 
   const [decisions, workflowRecords, localContentReviews, salesReviews, riskAssessments, auditFindings] =
     await Promise.all([
@@ -56,6 +58,8 @@ export async function getGovernanceDashboardAction(): Promise<GovernanceDashboar
         .findMany({
           where: { status: "IN_REVIEW" },
           select: { id: true, title: true, description: true, status: true, targetDate: true, owner: { select: { name: true } }, createdAt: true },
+          take: PAGE_SIZE,
+          skip,
         })
         .catch(() => []),
 
@@ -63,6 +67,8 @@ export async function getGovernanceDashboardAction(): Promise<GovernanceDashboar
         .findMany({
           where: { status: { in: ["in_progress", "pending_approval"] } },
           select: { id: true, title: true, description: true, status: true, dueDate: true, createdById: true, createdAt: true },
+          take: PAGE_SIZE,
+          skip,
         })
         .catch(() => []),
 
@@ -70,6 +76,8 @@ export async function getGovernanceDashboardAction(): Promise<GovernanceDashboar
         .findMany({
           where: { status: "pending" },
           select: { id: true, project: { select: { name: true } }, status: true, reviewerName: true, createdAt: true, projectId: true },
+          take: PAGE_SIZE,
+          skip,
         })
         .catch(() => []),
 
@@ -77,6 +85,8 @@ export async function getGovernanceDashboardAction(): Promise<GovernanceDashboar
         .findMany({
           where: { status: "pending" },
           select: { id: true, deal: { select: { title: true } }, status: true, reviewerName: true, createdAt: true, dealId: true },
+          take: PAGE_SIZE,
+          skip,
         })
         .catch(() => []),
 
@@ -84,6 +94,8 @@ export async function getGovernanceDashboardAction(): Promise<GovernanceDashboar
         .findMany({
           where: { status: { in: ["draft", "in_review"] } },
           select: { id: true, title: true, status: true, assessedById: true, createdAt: true, engagementId: true },
+          take: PAGE_SIZE,
+          skip,
         })
         .catch(() => []),
 
@@ -91,6 +103,8 @@ export async function getGovernanceDashboardAction(): Promise<GovernanceDashboar
         .findMany({
           where: { status: { in: ["draft", "under_review"] } },
           select: { id: true, title: true, description: true, status: true, severity: true, createdById: true, createdAt: true, engagementId: true },
+          take: PAGE_SIZE,
+          skip,
         })
         .catch(() => []),
     ]);

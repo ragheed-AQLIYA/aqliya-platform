@@ -147,16 +147,24 @@ export async function completeReview(reviewId: string, notes?: string) {
   });
 }
 
-export async function getReviewStatus(contactId: string) {
+export async function getReviewStatus(contactId: string, offset?: number) {
   return safe(async () => {
     const user = await getCurrentUser();
-    const reviews = await prisma.contactReview.findMany({
-      where: { organizationId: user.organizationId, contactId },
-      include: { approvals: true },
-      orderBy: { createdAt: "desc" },
-    });
+    const where = { organizationId: user.organizationId, contactId };
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const [reviews, totalCount] = await Promise.all([
+      prisma.contactReview.findMany({
+        where,
+        include: { approvals: true },
+        orderBy: { createdAt: "desc" },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.contactReview.count({ where }),
+    ]);
 
-    const allCount = reviews.length;
+    const allCount = totalCount;
     const pendingCount = reviews.filter((r) => r.status === "pending").length;
     const approvedCount = reviews.filter((r) => r.status === "approved").length;
     const rejectedCount = reviews.filter((r) => r.status === "rejected").length;
@@ -173,22 +181,30 @@ export async function getReviewStatus(contactId: string) {
       changesRequested: changesRequestedCount,
       overdue: overdueCount,
       reviews,
+      hasMore: skip + PAGE_SIZE < totalCount,
     };
   });
 }
 
-export async function listReviewers(organizationId: string) {
+export async function listReviewers(organizationId: string, offset?: number) {
   return safe(async () => {
     const user = await getCurrentUser();
     if (user.organizationId !== organizationId) {
       throw new Error("Access denied");
     }
 
-    const users = await prisma.user.findMany({
-      where: { organizationId, role: { in: ["ADMIN", "OPERATOR"] } },
-      select: { id: true, name: true, email: true, role: true },
-      orderBy: { name: "asc" },
-    });
-    return users;
+    const PAGE_SIZE = 50;
+    const skip = offset || 0;
+    const [users, totalCount] = await Promise.all([
+      prisma.user.findMany({
+        where: { organizationId, role: { in: ["ADMIN", "OPERATOR"] } },
+        select: { id: true, name: true, email: true, role: true },
+        orderBy: { name: "asc" },
+        take: PAGE_SIZE,
+        skip,
+      }),
+      prisma.user.count({ where: { organizationId, role: { in: ["ADMIN", "OPERATOR"] } } }),
+    ]);
+    return { users, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   });
 }
