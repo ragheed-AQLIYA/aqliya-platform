@@ -4,6 +4,18 @@
 
 // ─── Mocks (hoisted before imports) ───
 
+jest.mock("@/lib/security/file-validation", () => ({
+  validateFileContent: jest.fn().mockReturnValue({ valid: true }),
+}));
+
+jest.mock("@/lib/platform/cache-strategy", () => ({
+  getCachedOrFetch: jest.fn((_key: string, fn: () => unknown) => fn()),
+  invalidateDashboardCaches: jest.fn(),
+  warmDashboardCaches: jest.fn(),
+  DASHBOARD_CACHE_TTL_MS: 300000,
+  ENTITY_CACHE_TTL_MS: 60000,
+}));
+
 jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
 }));

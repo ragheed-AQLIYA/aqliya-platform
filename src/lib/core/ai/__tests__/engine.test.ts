@@ -39,8 +39,8 @@ import { runGovernedOfficeAI } from "@/lib/office-ai/office-ai-orchestrator-brid
 import { runGovernedProductAI } from "@/lib/platform/product-ai-bridge";
 
 describe("AIEngine (IC-P1-03)", () => {
-  it("reports core AI enabled when product or audit flags are on", () => {
-    expect(isCoreAIEnabled()).toBe(true);
+  it("reports core AI enabled when product or audit flags are on", async () => {
+    expect(await isCoreAIEnabled()).toBe(true);
   });
 
   it("routes product domain to runGovernedProductAI", async () => {
