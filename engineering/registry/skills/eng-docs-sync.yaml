@@ -1,0 +1,16 @@
+id: eng-docs-sync
+name: Engineering Documentation Sync
+version: 1.0.0
+status: active
+owner: Layer 7 — Product
+layer: 7
+inputs: [code changes, documentation files]
+outputs: [documentation drift report, sync recommendations]
+compatible_agents: [product-governance, chief-architect]
+dependencies: [aqliya-docs-authority]
+quality_score: 80
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Detects documentation drift — syncs code reality with docs, finds outdated claims and broken links.

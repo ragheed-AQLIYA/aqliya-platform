@@ -1,0 +1,16 @@
+id: eng-tenant-isolation
+name: Engineering Tenant Isolation Review
+version: 1.0.0
+status: active
+owner: Layer 4 — Security
+layer: 4
+inputs: [product queries, download routes]
+outputs: [tenant isolation report, leakage findings]
+compatible_agents: [security-agent, governance-engine]
+dependencies: [eng-security-audit, aqliya-security-gate]
+quality_score: 85
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Tenant isolation validation — organizationId scoping, cross-tenant leakage, download route safety.

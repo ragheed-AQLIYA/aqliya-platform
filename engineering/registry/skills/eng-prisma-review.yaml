@@ -1,0 +1,16 @@
+id: eng-prisma-review
+name: Engineering Prisma Review
+version: 1.0.0
+status: active
+owner: Layer 2 — Intelligence + Layer 5 — Performance
+layer: 2
+inputs: [Prisma schema, migration history]
+outputs: [schema review, model design recommendations, index recommendations]
+compatible_agents: [repository-intelligence, performance-agent]
+dependencies: [aqliya-data-discipline]
+quality_score: 85
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Reviews Prisma schema — model design, indexes, relations, migrations, tenant safety, performance.

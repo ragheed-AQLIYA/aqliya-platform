@@ -1,0 +1,16 @@
+id: eng-release-validation
+name: Engineering Release Validation
+version: 1.0.0
+status: active
+owner: Layer 1 — Executive + Layer 9 — DevOps
+layer: 1
+inputs: [release scope, changed files]
+outputs: [Go/No-Go decision, gate checklist]
+compatible_agents: [chief-architect, devops-agent, governance-engine]
+dependencies: [eng-governance-compliance, eng-security-audit, aqliya-release-checklist]
+quality_score: 90
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Pre-release validation gate — build, tests, governance, security, documentation.

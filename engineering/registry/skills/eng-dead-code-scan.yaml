@@ -1,0 +1,16 @@
+id: eng-dead-code-scan
+name: Engineering Dead Code Scan
+version: 1.0.0
+status: active
+owner: Layer 3 — Quality
+layer: 3
+inputs: [module or full repository]
+outputs: [dead code report, removal recommendations]
+compatible_agents: [code-quality, repository-intelligence]
+dependencies: [eng-code-review]
+quality_score: 75
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Dead code detection — unused exports, unreachable paths, orphaned files, stale feature flags.

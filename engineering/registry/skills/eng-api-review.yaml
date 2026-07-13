@@ -1,0 +1,16 @@
+id: eng-api-review
+name: Engineering API Review
+version: 1.0.0
+status: active
+owner: Layer 2 — Intelligence + Layer 4 — Security
+layer: 2
+inputs: [API route or server action]
+outputs: [API compliance report, security findings]
+compatible_agents: [repository-intelligence, security-agent]
+dependencies: [eng-security-audit, aqliya-security-gate]
+quality_score: 85
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Reviews API routes for auth, RBAC, tenant isolation, rate limiting, error handling, download security.

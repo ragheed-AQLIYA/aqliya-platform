@@ -1,0 +1,16 @@
+id: eng-coverage-analysis
+name: Engineering Coverage Analysis
+version: 1.0.0
+status: active
+owner: Layer 6 — Testing
+layer: 6
+inputs: [coverage report (jest --coverage)]
+outputs: [coverage gap report, prioritized files to test]
+compatible_agents: [testing-agent, code-quality]
+dependencies: [eng-test-strategy]
+quality_score: 75
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Test coverage gap identification — branches, functions, lines, statements below threshold per module.

@@ -1,0 +1,16 @@
+id: eng-ai-pipeline-review
+name: Engineering AI Pipeline Review
+version: 1.0.0
+status: active
+owner: Layer 8 — AI
+layer: 8
+inputs: [AI pipeline or prompt]
+outputs: [AI governance report, compliance status]
+compatible_agents: [ai-governance, security-agent]
+dependencies: [aqliya-ai-feature-gate]
+quality_score: 80
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: AI pipeline governance — prompt quality, provider routing, hallucination risk, cost, fallback, human review.

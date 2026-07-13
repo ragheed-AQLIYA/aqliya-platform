@@ -1,0 +1,16 @@
+id: eng-refactor-plan
+name: Engineering Refactoring Plan
+version: 1.0.0
+status: active
+owner: Layer 3 — Quality
+layer: 3
+inputs: [file/module with quality issues]
+outputs: [refactoring plan, split strategy, estimated effort, risk assessment]
+compatible_agents: [code-quality, chief-architect]
+dependencies: [eng-code-review]
+quality_score: 80
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Refactoring strategy — identifies God Objects, duplicate logic, misplaced concerns, proposes split plan.

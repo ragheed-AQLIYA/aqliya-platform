@@ -1,0 +1,17 @@
+id: eng-performance-review
+name: Engineering Performance Review
+version: 1.0.0
+status: active
+owner: Layer 5 — Performance
+layer: 5
+inputs: [module/product to profile, performance metrics]
+outputs: [performance report, bottlenecks, optimization recommendations]
+compatible_agents: [performance-agent, code-quality]
+dependencies: []
+quality_score: 75
+success_rate: 100
+times_used: 0
+last_used: null
+avg_execution_time_ms: null
+tests: false
+description: Detects performance bottlenecks — DB queries, React rendering, bundle size, caching, memory, CPU.

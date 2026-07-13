@@ -1,0 +1,16 @@
+id: eng-dependency-audit
+name: Engineering Dependency Audit
+version: 1.0.0
+status: active
+owner: Layer 4 — Security + Layer 9 — DevOps
+layer: 4
+inputs: [package.json, package-lock.json]
+outputs: [dependency health report, vulnerability recommendations]
+compatible_agents: [security-agent, devops-agent]
+dependencies: []
+quality_score: 80
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Dependency health audit — CVE scanning, license compliance, version currency, unused dependencies, supply chain.
