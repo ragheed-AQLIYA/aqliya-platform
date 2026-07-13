@@ -4,6 +4,7 @@
 // what works, what gets ignored, and what consistently succeeds.
 
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { createAiAuditEvent } from "@/lib/local-content/audit-events";
 
 // ─── Types ───
@@ -111,7 +112,7 @@ export async function getRecommendationHealth(
 
   const [allRecs, outcomes] = await Promise.all([
     prisma.lcRecommendation.findMany({
-      where: where as any,
+      where: where as Prisma.LcRecommendationWhereInput,
     }),
     prisma.lcRecommendationOutcome.findMany({
       where: { organizationId, ...(workbookId ? { workbookId } : {}) },

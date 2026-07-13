@@ -74,7 +74,7 @@ export default function RiskDashboardPage() {
   }
   function removeCategory(index: number) { setCategories(categories.filter((_, i) => i !== index)) }
   function updateCategory(index: number, field: keyof RiskCategory, value: string | number) {
-    const updated = [...categories]; (updated[index] as any)[field] = value; setCategories(updated)
+    const updated = [...categories]; updated[index] = { ...updated[index], [field]: value }; setCategories(updated)
   }
   function addQuestion(catIndex: number) {
     const updated = [...categories]
@@ -87,7 +87,7 @@ export default function RiskDashboardPage() {
     setCategories(updated)
   }
   function updateQuestion(catIndex: number, qIndex: number, field: string, value: string | number) {
-    const updated = [...categories]; (updated[catIndex].questions[qIndex] as any)[field] = value; setCategories(updated)
+    const updated = [...categories]; updated[catIndex].questions[qIndex] = { ...updated[catIndex].questions[qIndex], [field]: value }; setCategories(updated)
   }
   async function handleCreate() {
     if (!createName || categories.length === 0) return

@@ -20,7 +20,7 @@ export async function createReviewNoteAction(input: {
   requireRole(actor, ["admin", "operator", "reviewer", "partner", "manager"]);
   await assertEngagementAccess(input.engagementId, actor);
 
-  return reviewNotesEngine.create(actor, input as any);
+  return reviewNotesEngine.create(actor, input);
 }
 
 export async function assignReviewNoteAction(
@@ -129,7 +129,7 @@ export async function listReviewNotesAction(
   requireRole(actor, ["admin", "operator", "reviewer", "partner", "manager", "viewer"]);
   await assertEngagementAccess(engagementId, actor);
 
-  return reviewNotesEngine.list(engagementId, filters as any);
+  return reviewNotesEngine.list(engagementId, filters);
 }
 
 export async function getReviewNoteSLAMetricsAction(engagementId: string) {

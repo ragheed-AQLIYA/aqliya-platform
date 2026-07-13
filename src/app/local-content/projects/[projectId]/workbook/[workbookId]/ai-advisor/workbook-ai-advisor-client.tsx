@@ -237,7 +237,7 @@ export function WorkbookAiAdvisorClient({
       if ("error" in res && res.error) {
         setStatusMessage(`❌ ${res.error}`);
       } else if ("data" in res && res.data) {
-        setExplanations(res.data as any[]);
+        setExplanations(res.data as unknown[]);
         setStatusMessage("✅ تم إنشاء شروحات المطابقات / Explanations ready");
       }
     } catch (err) {

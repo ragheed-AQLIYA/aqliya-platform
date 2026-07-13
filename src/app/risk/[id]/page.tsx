@@ -65,7 +65,7 @@ export default function RiskModelDetailPage() {
     })
     if (res.ok) {
       setAssessOpen(false)
-      router.push(`/risk/assessments/${(res.data as any).id}`)
+      router.push(`/risk/assessments/${(res.data as { id: string }).id}`)
     } else {
       setError(res.error)
     }

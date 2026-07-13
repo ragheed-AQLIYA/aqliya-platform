@@ -8,7 +8,7 @@ import type { OutcomeCorrelationSnapshot } from "@/lib/decision/outcome-correlat
 import type { DecisionPortfolioSnapshot } from "@/lib/decision/decision-portfolio";
 import type { CrossDecisionPatternSnapshot } from "@/lib/decision/cross-decision-patterns";
 
-type DashboardMetrics = {
+export type DashboardMetrics = {
   totalDecisions: number;
   byStatus: Record<string, number>;
   byType: Record<string, number>;

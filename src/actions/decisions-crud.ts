@@ -305,8 +305,15 @@ export async function updateDecisionFramework(
     await enforce(user, { type: "decision", id, tenantId: decisionLookup.organizationId }, "update");
     await prisma.decision.update({
       where: { id },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: { framework: form as any },
+      data: {
+        framework: {
+          upsert: {
+            where: { decisionId: id },
+            create: { ...form },
+            update: form,
+          },
+        },
+      },
     });
     await invalidateDashboardCaches(decisionLookup.organizationId);
     const frameworkState = evaluateFramework(form);
@@ -377,20 +384,21 @@ export async function updateDecisionIntake(
       where: { id },
       data: {
         objectives: data.objectives
-          ? { set: { description: data.objectives } }
+          ? { deleteMany: {}, create: [{ description: data.objectives }] }
           : undefined,
         constraints: data.constraints
-          ? { set: { description: data.constraints } }
+          ? { deleteMany: {}, create: [{ description: data.constraints }] }
           : undefined,
         assumptions: data.assumptions
-          ? { set: { description: data.assumptions } }
+          ? { deleteMany: {}, create: [{ description: data.assumptions }] }
           : undefined,
         alternatives: data.alternatives
-          ? { set: { description: data.alternatives } }
+          ? { deleteMany: {}, create: [{ description: data.alternatives }] }
           : undefined,
-        risks: data.risks ? { set: { description: data.risks } } : undefined,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any,
+        risks: data.risks
+          ? { deleteMany: {}, create: [{ description: data.risks, level: "MEDIUM" }] }
+          : undefined,
+      },
     });
     const result = await prisma.decision.findUnique({
       where: { id },

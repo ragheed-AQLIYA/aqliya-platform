@@ -35,7 +35,7 @@ import {
   RefreshCw,
   ArrowLeft,
 } from "lucide-react"
-import type { OrgLifecycleEvent } from "@/lib/platform/org-advanced/org-adv-service"
+import type { OrgLifecycleEvent, LifecycleEventFilter } from "@/lib/platform/org-advanced/org-adv-service"
 import { getLifecycleEventsData } from "../actions"
 import { LIFECYCLE_EVENT_TYPES } from "@/lib/platform/org-advanced/constants"
 import Link from "next/link"
@@ -85,7 +85,7 @@ export default function OrgLifecycleEventsPage() {
         filter.toDate = end
       }
       const data = await getLifecycleEventsData(
-        Object.keys(filter).length > 0 ? (filter as any) : undefined,
+        Object.keys(filter).length > 0 ? (filter as LifecycleEventFilter) : undefined,
       )
       setEvents(data)
     } catch {

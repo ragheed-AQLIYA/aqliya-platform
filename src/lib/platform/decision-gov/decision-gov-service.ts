@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { GOV_STRINGS } from './gov-strings'
 
@@ -448,15 +449,13 @@ async function createGovEvent(data: {
     data: {
       decisionId: data.decisionId,
       action: data.action,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      fromStatus: data.fromStatus as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      toStatus: data.toStatus as any,
+      fromStatus: data.fromStatus,
+      toStatus: data.toStatus,
       userId: data.userId,
       reason: data.reason ?? null,
       reviewNotes: data.reviewNotes ?? null,
       escalationRuleId: data.escalationRuleId ?? null,
-      metadata: (data.metadata ?? undefined) as any,
+      metadata: (data.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
     },
   })
 

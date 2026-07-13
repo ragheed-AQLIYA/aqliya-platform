@@ -3,6 +3,7 @@
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { AuditActor } from "./actor-context";
 import { recordAuditEvent } from "./services";
 
@@ -96,8 +97,7 @@ class ReviewNotesEngineImpl {
   async addEvidence(actor: AuditActor, noteId: string, _engagementId: string, evidenceRef: Record<string, unknown>) {
     const note = await prisma.reviewNote.update({
       where: { id: noteId },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: { evidenceRef: evidenceRef as any, status: "evidenced" },
+      data: { evidenceRef: evidenceRef as unknown as Prisma.InputJsonValue, status: "evidenced" },
     });
     await this.audit(actor, "review_note.evidenced", noteId, _engagementId, {});
     return note;

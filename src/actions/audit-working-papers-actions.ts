@@ -2,7 +2,7 @@
 
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
 import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
-import { workingPapersEngine } from "@/lib/audit/working-papers-engine";
+import { workingPapersEngine, type IndexType } from "@/lib/audit/working-papers-engine";
 
 export async function createWorkingPaperAction(data: {
   engagementId: string;
@@ -14,14 +14,17 @@ export async function createWorkingPaperAction(data: {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "operator", "manager"]);
   await assertEngagementAccess(data.engagementId, actor);
-  return workingPapersEngine.createPaper(actor, data as any);
+  return workingPapersEngine.createPaper(actor, {
+    ...data,
+    indexType: data.indexType as IndexType,
+  });
 }
 
 export async function listWorkingPapersAction(engagementId: string, indexType?: string) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "operator", "reviewer", "manager", "partner", "viewer"]);
   await assertEngagementAccess(engagementId, actor);
-  return workingPapersEngine.listPapers(engagementId, indexType as any);
+  return workingPapersEngine.listPapers(engagementId, indexType as IndexType | undefined);
 }
 
 export async function getWorkingPaperAction(id: string) {

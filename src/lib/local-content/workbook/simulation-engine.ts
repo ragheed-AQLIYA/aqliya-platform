@@ -171,7 +171,7 @@ export async function runSimulation(
       autoFillValue: param.newValue,
       manualValue: null,
       autoFilled: true,
-      source: "simulation" as any,
+      source: "simulation" as unknown as LcWorkbookLine["source"],
     };
   });
 

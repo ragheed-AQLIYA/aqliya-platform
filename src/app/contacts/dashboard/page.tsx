@@ -59,8 +59,8 @@ export default async function ContactsDashboardPage() {
   } = await getDashboardMetrics(orgId);
 
 
-  const getCount = (items: { _count: number }[], key: string) => {
-    const found = items.find((i) => (i as any).sensitivityLevel === key || (i as any).exportStatus === key);
+  const getCount = (items: Array<{ _count: number; sensitivityLevel?: string; exportStatus?: string }>, key: string) => {
+    const found = items.find((i) => i.sensitivityLevel === key || i.exportStatus === key);
     return found?._count ?? 0;
   };
 

@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { ORG_STRINGS } from './org-strings'
 import { KNOWN_SETTINGS, LIFECYCLE_EVENT_TYPES } from './constants'
@@ -111,8 +112,8 @@ export async function createOrgNode(
       parentOrgId: parentOrgId ?? null,
       level,
       sortOrder: data.sortOrder ?? 0,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prisma Json field accepts object
-      metadata: (data.metadata ?? undefined) as any,
+      // Prisma Json field accepts object
+      metadata: (data.metadata ?? undefined) as unknown as Prisma.InputJsonValue | undefined,
       createdById: userId,
     },
   })
@@ -315,8 +316,8 @@ export async function recordLifecycleEvent(
       organizationId: orgId,
       eventType,
       description,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prisma Json field accepts object
-      metadata: (data ?? undefined) as any,
+      // Prisma Json field accepts object
+      metadata: (data ?? undefined) as unknown as Prisma.InputJsonValue | undefined,
       actorId: userId || null,
     },
   })

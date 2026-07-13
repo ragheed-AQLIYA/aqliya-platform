@@ -196,9 +196,8 @@ export default function TrialBalancePage() {
       l.accountCode.includes(search),
   );
   const sorted = [...filtered].sort((a, b) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const av = (a as any)[sortKey],
-      bv = (b as any)[sortKey];
+    const av = (a as unknown as Record<string, unknown>)[sortKey],
+      bv = (b as unknown as Record<string, unknown>)[sortKey];
     if (typeof av === "number" && typeof bv === "number")
       return sortAsc ? av - bv : bv - av;
     return sortAsc

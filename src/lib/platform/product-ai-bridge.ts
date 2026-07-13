@@ -65,7 +65,7 @@ export async function runGovernedProductAI(
     organizationId: input.organizationId,
     organization: { id: input.organizationId, name: "" },
   };
-  await enforce(user, { type: input.productKey as any, id: input.resourceId, tenantId: input.organizationId }, "create")
+  await enforce(user, { type: input.productKey, id: input.resourceId, tenantId: input.organizationId }, "create")
 
   const route = routeIntelligenceRequest({
     productId: input.productKey,

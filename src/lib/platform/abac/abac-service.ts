@@ -264,8 +264,8 @@ export async function evaluateAccess(
     orderBy: { priority: "asc" },
   });
 
-  const applicablePolicies = policies.filter((policy: Record<string, unknown>) => {
-    const assignments = (policy as any).assignments as { userId?: string; roleId?: string }[] | undefined;
+  const applicablePolicies = policies.filter((policy) => {
+    const assignments = policy.assignments as { userId?: string; roleId?: string }[];
     if (!assignments || assignments.length === 0) return true;
     return assignments.some((a) => {
       if (a.userId === context.userId) return true;
@@ -278,8 +278,7 @@ export async function evaluateAccess(
   let denyMatch: (typeof applicablePolicies)[0] | null = null;
 
   for (const policy of applicablePolicies) {
-    const p = policy as any;
-    const conditions = p.conditions as { attribute: string; operator: string; value: string }[] | undefined;
+    const conditions = policy.conditions as { attribute: string; operator: string; value: string }[];
     const conditionsMatch =
       !conditions || conditions.length === 0
         ? true
@@ -288,9 +287,9 @@ export async function evaluateAccess(
           );
 
     if (conditionsMatch) {
-      if (p.effect === "DENY") {
+      if (policy.effect === "DENY") {
         denyMatch = policy;
-      } else if (p.effect === "ALLOW" && !allowMatch) {
+      } else if (policy.effect === "ALLOW" && !allowMatch) {
         allowMatch = policy;
       }
     }

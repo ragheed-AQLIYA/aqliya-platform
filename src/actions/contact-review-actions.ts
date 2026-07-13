@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 
 type ActionResult<T> =
@@ -46,7 +47,7 @@ async function logAuditEvent(params: {
         targetId: params.contactId,
         targetLabel: null,
         severity: "info",
-        metadata: (params.metadata ?? {}) as any,
+        metadata: (params.metadata ?? {}) as Prisma.InputJsonValue,
       },
     });
   } catch (e) {

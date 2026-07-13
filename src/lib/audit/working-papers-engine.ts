@@ -8,7 +8,7 @@ import type { Prisma } from "@prisma/client";
 import type { AuditActor } from "./actor-context";
 import { assertEngagementAccess } from "./tenant-guard";
 
-type IndexType = "lead_schedule" | "analytical_review" | "control_testing" | "substantive_testing" | "completion";
+export type IndexType = "lead_schedule" | "analytical_review" | "control_testing" | "substantive_testing" | "completion";
 
 export class WorkingPapersEngine {
   // ==================== Paper Index ====================

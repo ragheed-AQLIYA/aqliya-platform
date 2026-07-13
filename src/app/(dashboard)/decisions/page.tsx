@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { getDecisions, getDashboardMetrics } from "@/actions/decisions";
 import { DecisionDashboard } from "@/components/decisions/decision-dashboard";
+import type { DashboardMetrics } from "@/components/decisions/decision-dashboard";
 import { KPICard } from "@/components/enterprise/kpi-card";
 import { SectionHeader } from "@/components/enterprise/section-header";
 import {
@@ -89,8 +90,7 @@ export default async function DecisionsPage({
     decisionsResult.success && "data" in decisionsResult ? (decisionsResult as { data: unknown[] }).data : [];
   const totalCount = decisionsResult.success && "total" in decisionsResult ? (decisionsResult as { total: number }).total : 0;
   const hasMore = decisions.length < totalCount;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- cache wrapper type inference limitation
-  const metrics = metricsResult.success && "data" in metricsResult ? (metricsResult as any).data : null;
+  const metrics: DashboardMetrics | null = metricsResult.success && "data" in metricsResult ? (metricsResult as { data: DashboardMetrics }).data : null;
   const evidenceRatio =
     metrics && metrics.totalDecisions > 0
       ? metrics.governanceMetrics.evidenceBackedCount / metrics.totalDecisions
@@ -169,7 +169,7 @@ export default async function DecisionsPage({
             label="متوسط الإنجاز"
             value={`${metrics.avgCompletion}%`}
             changeType={
-              metrics.avgCompletion > 70 ? "positive" : ("warning" as any)
+              metrics.avgCompletion > 70 ? "positive" : "neutral"
             }
             icon={Brain}
             module="decision"

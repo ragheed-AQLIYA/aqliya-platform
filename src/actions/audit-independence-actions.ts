@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// Action-to-engine interface: actions accept broad string types from form data;
-// engine methods use narrower literal/enum types. `as any` is the intentional bridge.
 "use server";
 
 import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
 import { independenceEngine } from "@/lib/audit/independence-engine";
+import type { ThreatCategory, ThreatLevel, ThreatStatus, SafeguardType, SafeguardStatus } from "@/lib/audit/independence-engine";
 
 // ==================== Register ====================
 
@@ -88,7 +86,11 @@ export async function identifyThreatAction(data: {
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager", "reviewer"]);
-  return independenceEngine.identifyThreat(actor, data as any);
+  return independenceEngine.identifyThreat(actor, {
+    ...data,
+    threatCategory: data.threatCategory as ThreatCategory,
+    threatLevel: data.threatLevel as ThreatLevel,
+  });
 }
 
 export async function assessThreatAction(
@@ -98,7 +100,7 @@ export async function assessThreatAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return independenceEngine.assessThreat(actor, id, threatLevel as any, status as any);
+  return independenceEngine.assessThreat(actor, id, threatLevel as ThreatLevel, status as ThreatStatus);
 }
 
 export async function listThreatsAction(organizationId: string, filters?: { status?: string; category?: string }) {
@@ -116,7 +118,10 @@ export async function proposeSafeguardAction(data: {
 }) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return independenceEngine.proposeSafeguard(actor, data as any);
+  return independenceEngine.proposeSafeguard(actor, {
+    ...data,
+    safeguardType: data.safeguardType as SafeguardType,
+  });
 }
 
 export async function updateSafeguardStatusAction(
@@ -126,7 +131,7 @@ export async function updateSafeguardStatusAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner", "manager"]);
-  return independenceEngine.updateSafeguardStatus(id, status as any, effectivenessReview);
+  return independenceEngine.updateSafeguardStatus(id, status as SafeguardStatus, effectivenessReview);
 }
 
 // ==================== Conflict Check ====================
@@ -162,7 +167,7 @@ export async function reviewConfirmationAction(
 ) {
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "partner"]);
-  return independenceEngine.reviewConfirmation(actor, id, reviewedNotes, status as any);
+  return independenceEngine.reviewConfirmation(actor, id, reviewedNotes, status as "completed" | "flagged");
 }
 
 export async function getConfirmationStatusAction(organizationId: string, year: number) {

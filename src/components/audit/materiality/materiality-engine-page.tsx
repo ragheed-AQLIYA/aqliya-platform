@@ -40,6 +40,7 @@ import {
   suggestBenchmarkValueAction,
   generateMaterialityWorkingPaperAction,
 } from "@/actions/audit-materiality-engine-actions";
+import type { BenchmarkType } from "@/lib/audit/materiality-engine";
 
 interface MaterialityEnginePageProps {
   engagementId: string;
@@ -161,7 +162,7 @@ export function MaterialityEnginePage({
     }
     // Try to suggest a benchmark value
     try {
-      const suggested = await suggestBenchmarkValueAction(engagementId, value as any);
+      const suggested = await suggestBenchmarkValueAction(engagementId, value as BenchmarkType);
       if (suggested !== null) {
         setBenchmarkValue(suggested.toString());
       }
@@ -176,7 +177,7 @@ export function MaterialityEnginePage({
       const method = methodologies.find((m) => m.benchmarkType === selectedMethodology);
       const result = await calculateMaterialityAction({
         engagementId,
-        benchmarkType: selectedMethodology as any,
+        benchmarkType: selectedMethodology as BenchmarkType,
         sourceType: "trial_balance",
         benchmarkValue: Number(benchmarkValue),
         currency,

@@ -4,6 +4,7 @@
 // Every AI call must receive this context to produce grounded results.
 
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 
 // ─── Types ───
 
@@ -154,7 +155,7 @@ async function fetchIndustryInsights(
   }
 
   const records = await prisma.lcIndustryPatternMemory.findMany({
-    where: industryWhere as any,
+    where: industryWhere as Prisma.LcIndustryPatternMemoryWhereInput,
     orderBy: { effectivenessPct: "desc" },
     take: 50,
   });
@@ -272,7 +273,7 @@ async function fetchWorkbookHistory(
   }
 
   const records = await prisma.lcWorkbook.findMany({
-    where: where as any,
+    where: where as Prisma.LcWorkbookWhereInput,
     orderBy: { createdAt: "desc" },
     take: 20,
     include: {
@@ -302,7 +303,7 @@ async function fetchBenchmarkInsights(
   }
 
   const records = await prisma.industryBenchmark.findMany({
-    where: where as any,
+    where: where as Prisma.IndustryBenchmarkWhereInput,
     orderBy: { createdAt: "desc" },
     take: 30,
   });

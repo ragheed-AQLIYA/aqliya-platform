@@ -248,15 +248,23 @@ export class GraphReadinessPipeline {
 
     const result = await execute();
 
-    this.events.emit({
-      type: result.status === StageOutcome.SUCCESS ? 'StageCompleted' : 'StageFailed',
-      runId,
-      stage,
-      durationMs: result.durationMs,
-      ...(result.status === StageOutcome.FAILED ? { error: result.error ?? '' } : {}),
-      status: result.status,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    if (result.status === StageOutcome.FAILED) {
+      this.events.emit({
+        type: 'StageFailed',
+        runId,
+        stage,
+        durationMs: result.durationMs,
+        error: result.error ?? '',
+      });
+    } else {
+      this.events.emit({
+        type: 'StageCompleted',
+        runId,
+        stage,
+        durationMs: result.durationMs,
+        status: result.status,
+      });
+    }
 
     return result;
   }
@@ -305,15 +313,23 @@ export class GraphReadinessPipeline {
 
     const result = await execute();
 
-    this.events.emit({
-      type: result.status === StageOutcome.SUCCESS ? 'StageCompleted' : 'StageFailed',
-      runId,
-      stage,
-      durationMs: result.durationMs,
-      ...(result.status === StageOutcome.FAILED ? { error: result.error ?? '' } : {}),
-      status: result.status,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    if (result.status === StageOutcome.FAILED) {
+      this.events.emit({
+        type: 'StageFailed',
+        runId,
+        stage,
+        durationMs: result.durationMs,
+        error: result.error ?? '',
+      });
+    } else {
+      this.events.emit({
+        type: 'StageCompleted',
+        runId,
+        stage,
+        durationMs: result.durationMs,
+        status: result.status,
+      });
+    }
 
     return result;
   }

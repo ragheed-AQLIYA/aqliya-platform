@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { SAMPLING_STRINGS } from './sampling-strings'
 
@@ -247,7 +248,7 @@ export async function createPlan(
       materialityPct: data.materialityPct,
       strataField: data.strataField ?? null,
       judgmentalItemIds: data.judgmentalItemIds ?? [],
-      parameters: (data.parameters ?? undefined) as any,
+      parameters: (data.parameters ?? undefined) as unknown as Prisma.InputJsonValue | undefined,
       status: 'DRAFT',
       createdById: userId,
     },

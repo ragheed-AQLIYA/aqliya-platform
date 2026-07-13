@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { ADV_STRINGS } from './adv-strings'
 
@@ -218,7 +219,7 @@ export async function createWorkflowTemplate(
       organizationId: orgId,
       name: data.name,
       description: data.description ?? null,
-      steps: data.steps as any,
+      steps: data.steps as unknown as Prisma.InputJsonValue,
       isActive: data.isActive ?? true,
       createdById: userId,
     },
@@ -325,7 +326,7 @@ export async function createSchedule(
       organizationId: orgId,
       name: data.name,
       templateId: data.templateId ?? null,
-      taskConfig: data.taskConfig as any,
+      taskConfig: data.taskConfig as unknown as Prisma.InputJsonValue,
       recurrence: data.recurrence,
       cronExpression: data.cronExpression ?? null,
       nextRunAt: new Date(data.nextRunAt),

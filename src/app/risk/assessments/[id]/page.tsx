@@ -101,7 +101,7 @@ export default function AssessmentDetailPage() {
       // Initialize step states from procedure step data
       const initial: Record<string, boolean[]> = {}
       for (const p of data.procedures) {
-        initial[p.id] = p.procedureSteps.map((s: ProcedureStep) => (s as any).completed ?? false)
+        initial[p.id] = p.procedureSteps.map((s: ProcedureStep) => s.completed ?? false)
       }
       setStepStates(initial)
     } else {
@@ -156,7 +156,7 @@ export default function AssessmentDetailPage() {
       ...s,
       completed: current[i] ?? false,
     }))
-    const res = await updateProcedureAction(procId, { procedureSteps: updatedSteps as any })
+    const res = await updateProcedureAction(procId, { procedureSteps: updatedSteps })
     if (res.ok) {
       setStepStates(prev => ({ ...prev, [procId]: current }))
     } else {

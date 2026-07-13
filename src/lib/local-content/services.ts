@@ -5,6 +5,7 @@
 
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
+import type { ClassificationBasis, ClassificationConfidence } from "@prisma/client";
 import { createLocalContentAuditEvent, AuditActions } from "./audit-events";
 import { assertLocalContentGovernanceTransition } from "@/lib/core/workflow/local-content-adapter";
 import type { ScoringResult } from "./types";
@@ -336,8 +337,8 @@ export async function createClassification(
       spendRecordId: input.spendRecordId ?? null,
       classifiedBy: input.classifiedBy ?? actor?.id ?? null,
       localPercentage: input.localPercentage,
-      classificationBasis: input.classificationBasis as any,
-      confidence: input.confidence as any ?? "unverified",
+      classificationBasis: input.classificationBasis as ClassificationBasis,
+      confidence: (input.confidence as ClassificationConfidence) ?? "unverified",
       notes: input.notes ?? null,
     },
   });

@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { BRIDGE_STRINGS } from './bridge-strings'
 
@@ -445,7 +446,7 @@ export async function createBridgeRule(
       source: data.source,
       eventTypeFilter,
       fieldMappings: data.fieldMappings
-        ? (data.fieldMappings as any)
+        ? (data.fieldMappings as Prisma.InputJsonValue)
         : undefined,
       isActive: true,
       maxRetries: data.maxRetries ?? 3,

@@ -146,7 +146,7 @@ export function ReviewNotesBoard({ engagementId }: ReviewNotesBoardProps) {
   async function handleReview(noteId: string) {
     setSubmitting(true);
     try {
-      await reviewReviewNoteAction(noteId, engagementId, reviewConclusion as any, reviewComment);
+      await reviewReviewNoteAction(noteId, engagementId, reviewConclusion as "satisfactory" | "needs_revision" | "re_open", reviewComment);
       setReviewingId(null);
       setReviewComment("");
       await loadNotes();
