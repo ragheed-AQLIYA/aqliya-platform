@@ -26,7 +26,7 @@ jobs:
       - name: Check Staging Health
         run: |
           echo "Checking staging.aqliya.com health..."
-          curl -sSf --max-time 30 "https://staging.aqliya.com/api/health" || {
+          curl -sSf --max-time 30 "https://staging.aqliya.com/api/platform/health" || {
             echo "Staging health check failed. Aborting promotion."
             exit 1
           }

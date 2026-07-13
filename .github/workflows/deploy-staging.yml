@@ -87,5 +87,5 @@ jobs:
           BASE_URL: ${{ vars.STAGING_BASE_URL || 'https://staging.aqliya.com' }}
         run: |
           sleep 10
-          curl -sf "${{ env.BASE_URL }}/api/health" | jq '.status' | grep ok
+          curl -sf "${{ env.BASE_URL }}/api/platform/health" | jq '.status' | grep ok
           curl -sf "${{ env.BASE_URL }}/" > /dev/null

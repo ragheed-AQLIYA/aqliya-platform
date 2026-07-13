@@ -79,6 +79,6 @@ jobs:
           BASE_URL: ${{ vars.DEPLOY_BASE_URL || 'https://app.aqliya.com' }}
         run: |
           sleep 10
-          curl -sf "${{ env.BASE_URL }}/api/health" | jq '.status' | grep ok
+          curl -sf "${{ env.BASE_URL }}/api/platform/health" | jq '.status' | grep ok
           curl -sf "${{ env.BASE_URL }}/" > /dev/null
           curl -sf "${{ env.BASE_URL }}/login" > /dev/null

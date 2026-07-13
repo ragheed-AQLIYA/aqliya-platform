@@ -37,6 +37,12 @@ const optionalVars = {
   ANALYZE: { description: "Enable bundle analysis" },
 }
 
+// Skip validation in CI (GitHub Actions, etc.) — env vars are provided at deploy time, not at npm ci
+if (process.env.CI === "true") {
+  console.log("\n=== AQLIYA Environment Validation === (skipped — CI detected)\n")
+  process.exit(0)
+}
+
 let hasErrors = false
 
 console.log("\n=== AQLIYA Environment Validation ===\n")
