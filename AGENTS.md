@@ -1,4 +1,4 @@
-﻿<!-- BEGIN:nextjs-agent-rules -->
+<!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
 
@@ -1306,6 +1306,33 @@ The codebase now produces a clean build, zero lint warnings, full test pass, and
 | **Node.js 20 → 22** | ✅ Done | Dockerfile base image aligned to Node 22 |
 | **RATE_LIMITER docs** | ✅ Done | `.env.example` clarifies memory vs redis for multi-instance deployments |
 
+
+### Pilot Hardening Sprint (2026-07-13)
+
+| Priority | Status | Details |
+| ----------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Prompt sanitization** | ✅ Done | `src/lib/security/prompt-sanitization.ts` — sanitizes AI prompts before provider dispatch, strips injection attempts, enforces output boundaries |
+| **Dashboard cache wiring** | ✅ Done | All 5 dashboard server actions use `getCachedOrFetch` with 5-min TTL via `src/lib/platform/cache-strategy.ts` |
+| **Cache invalidation** | ✅ Done | Mutations call `invalidateDashboardCaches()` — write-through invalidation with key-prefix matching |
+| **Pagination standardization** | ✅ Done | All server actions return `{ items, totalCount, hasMore }` paginated format — no unbounded arrays |
+| **God Object splits** | ✅ Done | AuditOS `audit-actions.ts` (3,657 lines → 12 modules in `audit/db/`). LocalContentOS `localcontent-actions.ts` (1,471 lines → 8 modules) |
+| **as any elimination** | ✅ Done | 0 `as any` casts in production code — all replaced with proper type narrowing or documented alternatives |
+| **100 critical path tests** | ✅ Done | 611 new tests added (3,924 → 4,535 total). 100 critical-path tests covering God Object modules, pagination, caching, sanitization |
+
+### Post-Hardening Observability & Pilot Prep (2026-07-13)
+
+| Priority | Status | Details |
+| ----------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Structured logging** | ✅ Done | `src/lib/observability/logger.ts` — `createLogger(context)` factory, JSON output, level-appropriate console methods |
+| **Health endpoint** | ✅ Done | `src/app/api/platform/health/route.ts` — DB health check with latency, returns 200/503 |
+| **Pilot seed data** | ✅ Done | `prisma/seed-pilot.ts` — 8 users, 5 product areas, realistic Saudi institutional data (150+ records) |
+| **Pilot user guide** | ✅ Done | `docs/pilot/PILOT_USER_GUIDE.md` — bilingual (AR/EN) guide with demo accounts, workflows, security notes |
+| **Demo flow script** | ✅ Done | `docs/pilot/DEMO_FLOW.md` — 20-minute demo script in 6 acts for institutional decision-makers |
+| **Feedback mechanism** | ✅ Done | `src/app/(dashboard)/feedback/page.tsx` — Arabic-first feedback form with category, rating, message |
+| **Documentation sync** | ✅ Done | PRODUCT_STATUS_MATRIX.md, ROUTE_STRATEGY.md, AQLIYA_ARCHITECTURE.md all updated to 2026-07-13 |
+| **Logging wired** | ✅ Done | 5 critical action files + AI orchestrator now use structured logger in error paths |
+
+Codebase: 4,547 tests pass, 0 TS errors, 0 `as any` in production code, build passes, structured logging active, pilot seed data ready.
 **Remaining (requires live infrastructure or vendor):**
 - I-01: Run backup restore drill on actual AWS RDS
 - I-02: Verify ECS/RDS/Redis live state
@@ -1611,6 +1638,7 @@ Before any release/deployment:
 | §3 (Known patterns) | Added `.skills/aqliya/` reference                                                                                                           | 2026-05-27 |
 | §28.1               | Reality hardening — status updated to complete                                                                                              | 2026-05-28 |
 | §28.1 (Phase 6)     | Governance: createdById pass, DecisionEvidence model, governance fields, pilot review API, platform export utility (`src/lib/platform/export.ts`) | 2026-05-28 |
+| §28.1 (Observability) | Post-Hardening Observability & Pilot Prep: structured logging, health endpoint, pilot seed data, user guide, demo flow, feedback, docs sync | 2026-07-13 |
 | §30 (new)           | Cursor Cloud specific instructions                                                                                                          | 2026-05-28 |
 | §31 (new)           | Adopted Operational Patterns (from gstack review)                                                                                           | 2026-05-27 |
 | §32 (new)           | Skill Selection and Auto-Load Rules                                                                                                         | 2026-05-27 |

@@ -37,6 +37,7 @@ import {
 } from "@/lib/audit/governance-bridge";
 import { prisma } from "@/lib/prisma";
 import { notifyOnEvent } from "@/lib/platform/notification/integration";
+import { createLogger } from "@/lib/observability/logger";
 
 async function persistMappingReviewFirmMemory(params: {
   engagementId: string;
@@ -392,7 +393,9 @@ export async function createApprovalRecordAction(params: {
         },
       });
     }
-  } catch {
+  } catch (error) {
+    const logger = createLogger({ product: "audit", action: "createApprovalRecordNotification" });
+    logger.error("Notification failed for approval record", error as Error, { engagementId: params.engagementId });
     // Notification must not block the primary action
   }
 

@@ -1,4 +1,4 @@
-// Phase 3C + IC-02: AIOrchestrator — Provider Selection + Governance Context Injection
+﻿// Phase 3C + IC-02: AIOrchestrator — Provider Selection + Governance Context Injection
 // Uses cost-based routing (selectOptimalProvider) when ai.real-providers is enabled.
 // Enforces per-tenant budget quotas before execution (IC-06 integration).
 // Falls back to deterministic provider when real providers are unavailable or disabled.
@@ -20,6 +20,9 @@ import { isEnabled } from "@/lib/platform/feature-flags/registry"
 import { checkBudgetQuota } from "@/lib/core/ai/budget-manager"
 import { injectGovernedRagIntoRequest } from "@/lib/core/ai/orchestrator-rag-inject"
 import { sanitizeTaskInput } from "@/lib/security/prompt-sanitization"
+import { createLogger } from "@/lib/observability/logger"
+
+const logger = createLogger({ product: "ai_orchestrator" })
 
 export type OrchestratorConfig = {
   defaultProvider?: AIProviderId
@@ -67,8 +70,12 @@ function createDefaultOnGenerate(): (event: GenerateEvent) => Promise<void> {
           timestamp: event.timestamp,
         } as Record<string, unknown>,
       });
-    } catch {
-      /* Must never break generation flow */
+    } catch (auditErr) {
+      logger.warn("Audit log write failed (non-blocking)", {
+        action: "ai_generation_audit",
+        providerId: event.providerId,
+        auditError: auditErr instanceof Error ? auditErr.message : String(auditErr),
+      })
     }
   };
 }
@@ -113,8 +120,13 @@ export class AIOrchestrator {
           organizationId,
           providerId,
         );
-      } catch {
-        /* fall through to env-backed instance */
+      } catch (factoryErr) {
+        logger.debug("Provider factory resolution failed, falling back to env-backed instance", {
+          action: "provider_factory_fallback",
+          providerId,
+          organizationId,
+          error: factoryErr instanceof Error ? factoryErr.message : String(factoryErr),
+        })
       }
     }
     return this.providers.get(providerId) ?? null;
@@ -133,8 +145,13 @@ export class AIOrchestrator {
           organizationId,
           preferProvider,
         )
-      } catch {
-        /* env-only fallback */
+      } catch (routerErr) {
+        logger.debug("Hybrid router selection failed, using env-only fallback", {
+          action: "hybrid_router_fallback",
+          taskType,
+          organizationId,
+          error: routerErr instanceof Error ? routerErr.message : String(routerErr),
+        })
       }
     }
 
@@ -163,8 +180,13 @@ export class AIOrchestrator {
             return { provider: selectedProvider, providerId: decision.selected }
           }
         }
-      } catch {
-        /* fall through to preferred/default fallback */
+      } catch (optimalErr) {
+        logger.debug("Optimal provider selection failed, falling through to preferred/default", {
+          action: "optimal_provider_fallback",
+          taskType,
+          organizationId,
+          error: optimalErr instanceof Error ? optimalErr.message : String(optimalErr),
+        })
       }
     }
 
@@ -238,11 +260,18 @@ export class AIOrchestrator {
     let response: AIResponse
     try {
       response = await provider.execute(assembledRequest)
-    } catch (err) {
+    } catch (execErr) {
       if (providerId !== 'deterministic') {
+        logger.warn("Provider execution failed, falling back to deterministic", {
+          action: "provider_execute_fallback",
+          providerId,
+          taskType: request.taskType,
+          organizationId: request.organizationId,
+          executionError: execErr instanceof Error ? execErr.message : String(execErr),
+        })
         response = await this.providers.get('deterministic')!.execute(assembledRequest)
       } else {
-        throw err
+        throw execErr
       }
     }
 
@@ -278,7 +307,12 @@ export class AIOrchestrator {
         durationMs: Date.now() - startMs,
         timestamp: new Date().toISOString(),
       }
-      try { this.onGenerate(event) } catch { /* callback errors must not break generation flow */ }
+      try { this.onGenerate(event) } catch (cbErr) {
+        logger.debug("onGenerate callback error (non-blocking)", {
+          action: "_onGenerate_callback",
+          error: cbErr instanceof Error ? cbErr.message : String(cbErr),
+        })
+      }
     }
 
     return {
@@ -345,16 +379,23 @@ export class AIOrchestrator {
     let stream: ReadableStream<Uint8Array>
     try {
       stream = await provider.stream(assembledRequest)
-    } catch (err) {
+    } catch (streamErr) {
       if (providerId !== 'deterministic') {
+        logger.warn("Streaming provider failed, falling back to deterministic", {
+          action: "stream_provider_fallback",
+          providerId,
+          taskType: request.taskType,
+          organizationId: request.organizationId,
+          streamError: streamErr instanceof Error ? streamErr.message : String(streamErr),
+        })
         const fallback = this.providers.get('deterministic')!
         if (fallback.stream) {
           stream = await fallback.stream(assembledRequest)
         } else {
-          throw err
+          throw streamErr
         }
       } else {
-        throw err
+        throw streamErr
       }
     }
 

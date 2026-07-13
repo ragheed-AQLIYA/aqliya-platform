@@ -1,44 +1,56 @@
-# AQLIYA Engineering Intelligence Platform
+# AQLIYA Engineering Operating System
 
-**Status:** Active  
-**Role:** Parallel engineering quality + learning organization  
-**Authority:** Findings and memory only — never product ownership  
+**Status:** Active — Engineering OS v1.0  
+**Role:** Self-improving engineering platform — governs, measures, and continuously evolves the repository  
+**Authority:** Intelligence and governance — implementation through OpenCode  
 
 > OpenCode = Implementation Authority  
-> Cursor Engineering = Quality & Intelligence  
-> Program Governance = Architecture direction  
+> Engineering OS = Quality, Intelligence, Governance, Skills  
+> Program Governance = Architecture direction, Priorities  
 
 ---
 
 ## Mission
 
-Not just **measure** — **learn**.
+Not just **measure** — **operate and improve**.
 
 ```
-Audit → History → Trend → Root Cause → Prediction → Recommendation
+Audit → Learn → Govern → Execute → Verify → Remember → Skill Extraction → Repeat
 ```
 
-Every audit is **appended** to the data lake. Findings are fingerprinted so the platform knows:
-
-- Is the repo improving?
-- Is the same issue recurring?
-- Did OpenCode fix it?
-- Did it come back?
-- What should we do next (Top 10 ROI)?
+**New (2026-07-13):** Upgraded from "Engineering Intelligence Platform" to "Engineering Operating System" with:
+- 12-layer architecture (see `engineering/os/ENGINEERING_OS_ARCHITECTURE.md`)
+- Skills Factory (`.skills/aqliya/eng-*.md`)
+- Active Governance Rules (`engineering/gates/ACTIVE_GOVERNANCE_RULES.md`)
+- Engineering Memory (`engineering/knowledge/`)
+- OpenCode Bridge (`engineering/os/BRIDGE_OPENCODE.md`)
 
 ---
 
-## Workspace
+## Workspace (AEOS v1.1)
 
 ```
 engineering/
-├── agents/                 # 9 quality + 6 intelligence agents
+├── kernel/                 # ★ AEOS KERNEL v1.1 (NEW)
+│   ├── KERNEL.md           #   Kernel constitution
+│   ├── index.mjs           #   Boot sequence
+│   ├── state-machine.mjs   #   Agent/Skill/Task/Cycle states
+│   ├── event-engine.mjs    #   Cross-engine communication bus
+│   ├── runtime-engine.mjs  #   Scheduler, queue, execution
+│   └── metrics-engine.mjs  #   22 metrics, health score, trends
+│
+├── registry/               # ★ Agent & Skill Registries (NEW)
+│   ├── agents/             #   11 agents in YAML
+│   └── skills/             #   4 skills with quality scoring
+│
+├── agents/                 # 9 quality + 6 intelligence agents (.mjs)
 ├── data/                   # APPEND-ONLY data lake
+│   ├── DATA_LAKE_SCHEMA.md #   Data lake schema (v1.1)
+│   ├── DIGITAL_TWIN_SCHEMA.md # Digital Twin schema (v1.1)
 │   ├── audits/
 │   ├── metrics/
-│   ├── findings/           # memory.json learns across runs
+│   ├── findings/           #   memory.json learns across runs
 │   ├── history/
-│   ├── timeline/
 │   ├── trends/
 │   ├── products/
 │   ├── regressions/
@@ -53,12 +65,22 @@ engineering/
 │   ├── COSTS.md
 │   ├── PREDICTIONS.md
 │   └── architecture-memory/
+├── os/                     # EngineeringOS modules
+│   ├── ENGINEERING_OS_ARCHITECTURE.md  # 12-layer design
+│   ├── BRIDGE_OPENCODE.md              # OpenCode ↔ Engineering bridge
+│   ├── KNOWLEDGE_GRAPH.md
+│   ├── COMPLIANCE.md
+│   └── ... (8 modules)
+├── knowledge/              # Engineering Memory
+│   ├── ADR_REGISTRY.md
+│   ├── PATTERN_LIBRARY.md
+│   └── DECISION_LOG.md
+├── gates/                  # Smart gates + Active Governance
+│   └── ACTIVE_GOVERNANCE_RULES.md
 ├── dashboard/              # Intelligence + Executive + Product scorecards
 ├── reports/                # Latest snapshot reports
 ├── refactors/
-├── knowledge/
-├── gates/                  # Smart gates (status + Δ reason)
-├── metrics/
+├── AEOS_ROADMAP.md         # v1.0 → v2.0 roadmap
 └── run.mjs
 ```
 

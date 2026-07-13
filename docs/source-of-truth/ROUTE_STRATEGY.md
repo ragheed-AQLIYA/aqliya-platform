@@ -7,8 +7,8 @@
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
 > **Owner:** Platform Architect  
-> **Last Reviewed:** 2026-07-03  
-> **Last updated:** 2026-07-03 — Full L6 status sync across all products
+> **Last Reviewed:** 2026-07-13  
+> **Last updated:** 2026-07-13 — Full L6 status sync across all products
 
 ---
 
@@ -453,3 +453,7 @@ Marketing pages, demo routes, auth pages, and static assets bypass the auth chec
 17. `/institutional-memory/*` = governed knowledge graph workspace (L6 Production-hardened). Authenticated, DB-backed, cross-product entity linking via InstitutionalMemoryEvent (10 seed events). Collections via InstitutionalMemoryCollection (2 seed collections). D3.js force-directed graph visualization via IntelligenceGraphNode/Edge (13 seed nodes, 10 seed edges). Export memory events as JSON with audit trail.
 18. `/content-studio/*` = ContentStudio production-hardened content workspace (L6). Authenticated, 5 Prisma models, content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning with restore, template variable interpolation, evidence linking, bilingual PDF export with Noto Naskh Arabic, audit trail via writePlatformAuditLog. ~125 tests. Full error/loading/not-found boundaries on all 5 routes.
 19. `/knowledge-foundation/*` = governed Knowledge Foundation Versioning workspace (L6 Production-hardened). Authenticated, DB-backed, promotion pipeline for institutional knowledge: version lifecycle (DRAFT→APPROVED→RELEASED→ACTIVE→DEPRECATED), immutable release packages with SHA-256, structured diff engine, ADMIN-only rollback with reason, 7 audit event types to PlatformAuditLog, bilingual PDF/JSON export with audit trail. 87 tests PASS. Full error boundaries on all routes.
+
+20. **Pagination standard (2026-07-13)**: All server actions across the platform now return paginated results in `{ items, totalCount, hasMore }` format. No server action returns unbounded arrays. This applies to all product dashboards, list views, and data-fetching actions.
+21. **Dashboard cache strategy (2026-07-13)**: All 5 primary dashboard server actions use `getCachedOrFetch` with a 5-minute TTL. Cached keys are scoped per user/org. Implemented via `src/lib/platform/cache-strategy.ts`.
+22. **Cache invalidation (2026-07-13)**: Mutations that affect dashboard data call `invalidateDashboardCaches()` to bust the 5-minute TTL cache. Ensures stale data is never served after write operations (create, update, delete, status change).

@@ -16,6 +16,7 @@ import {
 import { enforce } from "@/lib/authorization";
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit";
 import { invalidateDashboardCaches } from "@/lib/platform/cache-strategy";
+import { createLogger } from "@/lib/observability/logger";
 
 // --- Decision List ---
 export async function getDecisions({ take = 20, skip = 0 }: { take?: number; skip?: number } = {}) {
@@ -56,6 +57,8 @@ export async function getDecisions({ take = 20, skip = 0 }: { take?: number; ski
     return { success: true, data: decisions, total };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "getDecisions" });
+      logger.error("Error fetching decisions", error as Error);
       console.error("Error fetching decisions:", error);
     }
     return { success: false, error: "Failed to fetch decisions" };
@@ -105,6 +108,8 @@ export async function getDecisionById(id: string) {
     return { success: true, data: decision };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "getDecisionById" });
+      logger.error("Error fetching decision", error as Error, { decisionId: id });
       console.error("Error fetching decision:", error);
     }
     return { success: false, error: "Failed to fetch decision" };
@@ -185,6 +190,8 @@ export async function createDecision(data: {
     return { success: true, data: decision };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "createDecision" });
+      logger.error("Error creating decision", error as Error);
       console.error("Error creating decision:", error);
     }
     return { success: false, error: "Failed to create decision" };
@@ -232,6 +239,8 @@ export async function updateDecisionStatus(id: string, status: string) {
     return { success: true, data: decision };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "updateDecisionStatus" });
+      logger.error("Error updating decision status", error as Error, { decisionId: id, status });
       console.error("Error updating decision status:", error);
     }
     return { success: false, error: "Failed to update decision status" };
@@ -274,6 +283,8 @@ export async function getDecisionFramework(id: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "getDecisionFramework" });
+      logger.error("Error fetching framework", error as Error, { decisionId: id });
       console.error("Error fetching framework:", error);
     }
     return { success: false, error: "Failed to fetch framework" };
@@ -320,6 +331,8 @@ export async function updateDecisionFramework(
     return { success: true, data: { framework: form, frameworkState } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "updateDecisionFramework" });
+      logger.error("Error updating framework", error as Error, { decisionId: id });
       console.error("Error updating framework:", error);
     }
     return { success: false, error: "Failed to update framework" };
@@ -354,6 +367,8 @@ export async function getDecisionIntake(id: string) {
     return { success: true, data: { ...decision, intake } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "getDecisionIntake" });
+      logger.error("Error fetching intake", error as Error, { decisionId: id });
       console.error("Error fetching intake:", error);
     }
     return { success: false, error: "Failed to fetch intake" };
@@ -428,6 +443,8 @@ export async function updateDecisionIntake(
     return { success: true, data: { ...result, intake } };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "updateDecisionIntake" });
+      logger.error("Error updating intake", error as Error, { decisionId: id });
       console.error("Error updating intake:", error);
     }
     return { success: false, error: "Failed to update intake" };
@@ -485,6 +502,8 @@ export async function getDecisionScenarios(id: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "getDecisionScenarios" });
+      logger.error("Error fetching scenarios", error as Error, { decisionId: id });
       console.error("Error fetching scenarios:", error);
     }
     return { success: false, error: "Failed to fetch scenarios" };
@@ -547,6 +566,8 @@ export async function updateDecisionScenarios(
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "updateDecisionScenarios" });
+      logger.error("Error updating scenarios", error as Error, { decisionId: id });
       console.error("Error updating scenarios:", error);
     }
     return { success: false, error: "Failed to update scenarios" };
@@ -618,6 +639,8 @@ export async function getDecisionRiskAnalysis(id: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "getDecisionRiskAnalysis" });
+      logger.error("Error fetching risks", error as Error, { decisionId: id });
       console.error("Error fetching risks:", error);
     }
     return { success: false, error: "Failed to fetch risks" };
@@ -696,6 +719,8 @@ export async function updateDecisionRiskAnalysis(
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
+      const logger = createLogger({ product: "decisions", action: "updateDecisionRiskAnalysis" });
+      logger.error("Error updating risks", error as Error, { decisionId: id });
       console.error("Error updating risks:", error);
     }
     return { success: false, error: "Failed to update risks" };

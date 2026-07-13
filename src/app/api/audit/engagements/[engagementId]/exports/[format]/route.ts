@@ -5,6 +5,7 @@ import {
   exportBilingualAction,
 } from "@/actions/audit-export-actions";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
+import { createLogger } from "@/lib/observability/logger";
 
 export async function GET(
   _request: NextRequest,
@@ -44,7 +45,9 @@ export async function GET(
       },
     });
   } catch (error) {
+    const logger = createLogger({ product: "audit", action: "exportEngagement" });
     const message = error instanceof Error ? error.message : "Export failed";
+    logger.error("Export route failed", error as Error, { engagementId, format });
     if (message === "Unauthenticated") {
       return NextResponse.json(
         { error: "Authentication required" },

@@ -7,6 +7,7 @@ import {
   requireSalesPermission,
   SalesAccessError,
 } from "@/lib/sales/guards";
+import { createLogger } from "@/lib/observability/logger";
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -23,7 +24,9 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
     if (isExpectedAccessDeniedError(error)) {
       return { ok: false, error: "Access denied", code: "FORBIDDEN" };
     }
+    const logger = createLogger({ product: "salesos", action: "safe" });
     const message = error instanceof Error ? error.message : "Unknown error";
+    logger.error("SalesOS dashboard action failed", error as Error);
     console.error("[SalesOS Dashboard Action]", message);
     return { ok: false, error: message };
   }

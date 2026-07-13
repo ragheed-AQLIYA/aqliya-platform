@@ -29,6 +29,7 @@ import {
   logToPlatform,
   revalidateLocalContentPaths,
 } from "@/actions/localcontent-shared";
+import { createLogger } from "@/lib/observability/logger";
 
 // ─── Spend Actions ───
 
@@ -153,6 +154,8 @@ export async function importLocalContentSpendCsvAction(
         );
         created++;
       } catch (e) {
+        const logger = createLogger({ product: "localcontentos", action: "importLocalContentSpendCsv" });
+        logger.error("Row import failed", e instanceof Error ? e : undefined, { rowNumber: row.rowNumber, projectId });
         errors.push(
           `Row ${row.rowNumber}: ${e instanceof Error ? e.message : "unknown error"}`,
         );
@@ -187,7 +190,9 @@ export async function importLocalContentSpendCsvAction(
           },
         });
       }
-    } catch {
+    } catch (error) {
+      const logger = createLogger({ product: "localcontentos", action: "importLocalContentSpendCsvNotification" });
+      logger.error("Notification failed for spend import", error instanceof Error ? error : undefined, { projectId });
       // Notification must not block the primary action
     }
 
