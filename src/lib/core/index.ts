@@ -20,3 +20,5 @@ export * as Workflow from "./workflow";
 
 export type { CoreEngineKey } from "./registry-types";
 export { CORE_ENGINE_KEYS } from "./registry-types";
+
+export * as Kernel from "@/lib/kernel";

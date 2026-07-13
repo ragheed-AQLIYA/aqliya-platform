@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Kernel } from "@/lib/kernel";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,26 @@ export async function GET() {
       latencyMs: Date.now() - dbStart,
       error: e instanceof Error ? e.message : "Unknown database error",
     };
+  }
+
+  // Kernel health check (non-blocking — skip if not initialized)
+  const kernelStart = Date.now();
+  try {
+    const kernel = Kernel.getInstance();
+    if (kernel.isInitialized()) {
+      const kernelHealth = await kernel.healthCheck();
+      checks.kernel = {
+        status: kernelHealth.status === "healthy" ? "ok" : "error",
+        latencyMs: Date.now() - kernelStart,
+      };
+      for (const [pluginId, pluginStatus] of Object.entries(kernelHealth.services)) {
+        checks[`kernel.${pluginId}`] = {
+          status: pluginStatus === "healthy" ? "ok" : "error",
+        };
+      }
+    }
+  } catch {
+    // Kernel not available — non-blocking, skip
   }
 
   // Overall status: healthy only if ALL checks pass

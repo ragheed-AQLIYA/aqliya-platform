@@ -30,10 +30,3 @@ export {
   collectLocalContentReviewSignals,
   collectLocalContentTaskSignals,
 } from "./producers/localcontent-signal-producer";
-
-export {
-  collectSalesActivitySignals,
-  collectSalesApprovalSignals,
-  collectSalesReviewSignals,
-  collectSalesTaskSignals,
-} from "@/lib/sales/signals/core-signal-producer";

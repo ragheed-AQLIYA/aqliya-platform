@@ -159,3 +159,45 @@ export interface LLMProvider {
   complete(request: AICompletionRequest): Promise<AICompletionResponse>
   completeStream?(request: AICompletionRequest): Promise<ReadableStream<Uint8Array>>
 }
+
+// ─── Product AI Bridge Types (core-owned, products import from here) ───
+
+import type { AIAssistanceOutput } from "@/types/audit";
+import type { OfficeAiTaskType } from "@/lib/office-ai/office-ai-task-service";
+
+export interface RunGovernedAuditAIParams {
+  engagementId: string;
+  taskType: GovernanceTaskType;
+  userId?: string;
+  userRole?: string;
+  taskInput?: Record<string, unknown>;
+}
+
+export interface GovernedAuditAIResult {
+  outputs: AIAssistanceOutput[];
+  providerId: string;
+  warnings: string[];
+  reviewRequired: true;
+}
+
+export interface GovernedOfficeAIInput {
+  taskId: string;
+  title: string;
+  taskType: OfficeAiTaskType;
+  instructions?: string | null;
+  language?: string | null;
+  organizationId: string;
+  userId?: string;
+  userRole?: string;
+  fileContext?: string;
+  fileNames?: string[];
+}
+
+export interface GovernedOfficeAIResult {
+  content: string;
+  format: "markdown";
+  aiProvider: string;
+  aiModel: string;
+  aiPromptVersion: string;
+  warnings: string[];
+}

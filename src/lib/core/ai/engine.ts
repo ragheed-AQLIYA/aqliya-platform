@@ -58,11 +58,9 @@ async function getOfficeBridge(): Promise<OfficeBridge> {
 import type {
   GovernedAuditAIResult,
   RunGovernedAuditAIParams,
-} from "@/lib/audit/audit-ai-bridge";
-import type {
   GovernedOfficeAIInput,
   GovernedOfficeAIResult,
-} from "@/lib/office-ai/office-ai-orchestrator-bridge";
+} from "./types";
 
 export type CoreAIDomain = "product" | "audit" | "office";
 

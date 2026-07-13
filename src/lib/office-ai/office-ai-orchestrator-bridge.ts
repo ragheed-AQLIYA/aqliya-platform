@@ -8,28 +8,9 @@ import {
   getOfficeAiPromptVersion,
 } from "./prompts"
 import type { OfficeAiTaskType } from "./office-ai-task-service"
+import type { GovernedOfficeAIInput, GovernedOfficeAIResult } from "@/lib/core/ai/types"
 
-export interface GovernedOfficeAIInput {
-  taskId: string
-  title: string
-  taskType: OfficeAiTaskType
-  instructions?: string | null
-  language?: string | null
-  organizationId: string
-  userId?: string
-  userRole?: string
-  fileContext?: string
-  fileNames?: string[]
-}
-
-export interface GovernedOfficeAIResult {
-  content: string
-  format: "markdown"
-  aiProvider: string
-  aiModel: string
-  aiPromptVersion: string
-  warnings: string[]
-}
+export type { GovernedOfficeAIInput, GovernedOfficeAIResult } from "@/lib/core/ai/types";
 
 async function buildConversationSnippet(
   input: GovernedOfficeAIInput,

@@ -44,11 +44,14 @@ export const metadata: Metadata = {
   },
 };
 
+import { initializeKernel } from "@/lib/kernel/bootstrap";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await initializeKernel();
   let locale = "ar";
   let messages: Record<string, unknown> | undefined;
   try {

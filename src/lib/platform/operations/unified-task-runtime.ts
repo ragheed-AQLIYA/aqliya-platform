@@ -342,10 +342,12 @@ import {
   collectLocalContentApprovalSignals,
   collectLocalContentReviewSignals,
   collectLocalContentTaskSignals,
+} from "@/lib/core/signals";
+import {
   collectSalesApprovalSignals,
   collectSalesReviewSignals,
   collectSalesTaskSignals,
-} from "@/lib/core/signals";
+} from "@/lib/sales/signals/core-signal-producer";
 
 /** Collect and sync derived tasks from product signals (read-only derivation). */
 export async function collectProductTasks(

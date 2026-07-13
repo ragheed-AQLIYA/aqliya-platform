@@ -57,7 +57,6 @@ describe("Intelligence Core registry (IC-P1-01)", () => {
 
   it("re-exports signal collectors", () => {
     expect(typeof Signals.collectAuditTaskSignals).toBe("function");
-    expect(typeof Signals.collectSalesActivitySignals).toBe("function");
   });
 
   it("re-exports policy engine", () => {

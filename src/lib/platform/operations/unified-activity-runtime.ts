@@ -208,8 +208,8 @@ function runtimeSignalToActivity(signal: {
 import {
   collectAuditActivitySignals,
   collectLocalContentActivitySignals,
-  collectSalesActivitySignals,
 } from "@/lib/core/signals";
+import { collectSalesActivitySignals } from "@/lib/sales/signals/core-signal-producer";
 
 /** Collect cross-product activities from signal producers into one stream. */
 export async function collectProductActivities(

@@ -7,6 +7,7 @@ import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
 import type { GovernanceTaskType } from "@/lib/governance/runtime-types";
 import type { AIAssistanceOutput } from "@/types/audit";
+import type { RunGovernedAuditAIParams, GovernedAuditAIResult } from "@/lib/core/ai/types";
 
 export interface AuditAIContext {
   auditOrganizationId: string;
@@ -15,20 +16,7 @@ export interface AuditAIContext {
   engagementLabel: string;
 }
 
-export interface RunGovernedAuditAIParams {
-  engagementId: string;
-  taskType: GovernanceTaskType;
-  userId?: string;
-  userRole?: string;
-  taskInput?: Record<string, unknown>;
-}
-
-export interface GovernedAuditAIResult {
-  outputs: AIAssistanceOutput[];
-  providerId: string;
-  warnings: string[];
-  reviewRequired: true;
-}
+export type { RunGovernedAuditAIParams, GovernedAuditAIResult } from "@/lib/core/ai/types";
 
 export function isAuditAICoreEnabled(): boolean {
   return isEnabled("ai.rag") || isEnabled("ai.real-providers");
