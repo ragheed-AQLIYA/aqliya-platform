@@ -1,7 +1,5 @@
-# Local .terraform directories
-**/.terraform/*
-!.terraform/plugins
-!.terraform/providers
+# Local .terraform directories (never commit provider binaries — 685 MB+)
+.terraform/
 
 # .tfstate files
 *.tfstate
