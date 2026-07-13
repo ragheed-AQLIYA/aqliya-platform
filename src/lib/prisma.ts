@@ -7,10 +7,21 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
+// During Next.js build phase, DATABASE_URL is not available.
+// Detect build time so PrismaClient initialization doesn't crash CI.
+const isBuildPhase =
+  process.env.NEXT_PHASE === "phase-production-build" ||
+  process.env.npm_lifecycle_event === "build"
+
 function createPrismaClient() {
   const databaseUrl = process.env.DATABASE_URL
 
   if (!databaseUrl) {
+    if (isBuildPhase) {
+      // Build-time: return no-op client. Real client is initialized at runtime.
+      console.warn("[prisma] DATABASE_URL not set during build — returning no-op client")
+      return {} as PrismaClient
+    }
     throw new Error("DATABASE_URL is required to initialize PrismaClient")
   }
 
