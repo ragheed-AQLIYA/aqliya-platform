@@ -1,0 +1,12 @@
+id: solid-validator
+name: SOLID Validator
+layer: 3
+version: 1.0
+owner: Quality Division
+priority: low
+status: active
+skills: [eng-code-review]
+dependencies: [code-quality]
+permissions: [read, propose]
+description: Validates SOLID principles — Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion.
+metrics: { successRate: 75, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

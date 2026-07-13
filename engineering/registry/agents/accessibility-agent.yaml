@@ -1,0 +1,12 @@
+id: accessibility-agent
+name: Accessibility Agent
+layer: 7
+version: 1.0
+owner: Product Division
+priority: medium
+status: active
+skills: [eng-code-review]
+dependencies: [ux-agent]
+permissions: [read, propose]
+description: Validates WCAG compliance — ARIA labels, keyboard navigation, color contrast, screen reader support, focus management.
+metrics: { successRate: 75, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

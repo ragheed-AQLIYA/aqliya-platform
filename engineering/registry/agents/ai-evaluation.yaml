@@ -1,0 +1,12 @@
+id: ai-evaluation
+name: AI Evaluation Agent
+layer: 8
+version: 1.0
+owner: AI Division
+priority: high
+status: active
+skills: [eng-ai-pipeline-review]
+dependencies: [ai-governance, prompt-engineer]
+permissions: [read, propose]
+description: Evaluates AI output quality — accuracy, relevance, confidence scoring, hallucination detection, benchmark comparison.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

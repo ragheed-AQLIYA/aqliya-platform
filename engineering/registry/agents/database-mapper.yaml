@@ -1,0 +1,12 @@
+id: database-mapper
+name: Database Mapper
+layer: 2
+version: 1.0
+owner: Intelligence Division
+priority: high
+status: active
+skills: [eng-prisma-review]
+dependencies: [repository-intelligence]
+permissions: [read, propose, modify-docs]
+description: Maps all Prisma models, enums, relations, and migrations. Produces entity-relationship diagrams and migration history.
+metrics: { successRate: 90, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

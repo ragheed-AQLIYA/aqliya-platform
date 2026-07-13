@@ -18,13 +18,17 @@ export { default as stateMachine, AGENT_STATES, SKILL_STATES, TASK_STATES, CYCLE
 export { default as eventEngine, EVENTS } from "./event-engine.mjs";
 export { default as runtimeEngine } from "./runtime-engine.mjs";
 export { default as metricsEngine, METRICS } from "./metrics-engine.mjs";
+export { default as agentEngine } from "./agent-engine.mjs";
+export { default as skillEngine } from "./skill-engine.mjs";
+export { default as memoryEngine } from "./memory-engine.mjs";
+export { default as governanceEngine } from "./governance-engine.mjs";
+export { default as registryLoader } from "./registry-loader.mjs";
 
 export const KERNEL_VERSION = "1.1.0";
 export const KERNEL_STATUS = "active";
 
 /**
  * Boot the AEOS Kernel.
- * @returns {{ version: string, engines: string[], ready: boolean }}
  */
 export function boot() {
   console.log(`[AEOS Kernel] Booting v${KERNEL_VERSION}...`);
@@ -36,6 +40,11 @@ export function boot() {
       "event-engine",
       "runtime-engine",
       "metrics-engine",
+      "agent-engine",
+      "skill-engine",
+      "memory-engine",
+      "governance-engine (kernel)",
+      "registry-loader",
     ],
     ready: true,
   };
@@ -49,4 +58,9 @@ export default {
   eventEngine,
   runtimeEngine,
   metricsEngine,
+  agentEngine,
+  skillEngine,
+  memoryEngine,
+  governanceEngine,
+  registryLoader,
 };

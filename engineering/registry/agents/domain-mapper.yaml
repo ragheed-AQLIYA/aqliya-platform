@@ -1,0 +1,12 @@
+id: domain-mapper
+name: Domain Mapper
+layer: 2
+version: 1.0
+owner: Intelligence Division
+priority: medium
+status: active
+skills: [eng-architecture-review]
+dependencies: [repository-intelligence]
+permissions: [read, propose, modify-docs]
+description: Maps DDD bounded contexts across the repository. Identifies domain boundaries, aggregates, entities, and value objects.
+metrics: { successRate: 90, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

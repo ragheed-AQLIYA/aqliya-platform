@@ -1,0 +1,12 @@
+id: bundle-optimizer
+name: Bundle Optimizer
+layer: 5
+version: 1.0
+owner: Platform Division
+priority: low
+status: active
+skills: [eng-performance-review]
+dependencies: [performance-agent]
+permissions: [read, propose]
+description: Analyzes JavaScript bundle size — tree-shaking opportunities, code splitting, dynamic imports, large dependencies.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

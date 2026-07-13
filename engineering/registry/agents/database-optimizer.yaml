@@ -1,0 +1,12 @@
+id: database-optimizer
+name: Database Optimizer
+layer: 5
+version: 1.0
+owner: Platform Division
+priority: medium
+status: active
+skills: [eng-performance-review, eng-prisma-review]
+dependencies: [performance-agent, database-mapper]
+permissions: [read, propose, create-pr]
+description: Optimizes database queries — index recommendations, N+1 detection, query plan analysis, connection pooling.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

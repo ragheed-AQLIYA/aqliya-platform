@@ -1,0 +1,12 @@
+id: contract-test-agent
+name: Contract Test Agent
+layer: 6
+version: 1.0
+owner: Quality Division
+priority: medium
+status: active
+skills: [eng-test-strategy]
+dependencies: [testing-agent]
+permissions: [read, propose, create-tests]
+description: Validates API contracts between modules — ensures Server Actions match client expectations, route handlers follow schemas.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

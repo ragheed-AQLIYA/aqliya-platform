@@ -1,0 +1,12 @@
+id: prompt-engineer
+name: Prompt Engineer
+layer: 8
+version: 1.0
+owner: AI Division
+priority: high
+status: active
+skills: [eng-ai-pipeline-review, aqliya-ai-feature-gate]
+dependencies: [ai-governance]
+permissions: [read, propose, modify-docs]
+description: Designs and tests AI prompts — prompt registry, variable interpolation, quality evaluation, version control.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

@@ -1,0 +1,12 @@
+id: api-mapper
+name: API Mapper
+layer: 2
+version: 1.0
+owner: Intelligence Division
+priority: high
+status: active
+skills: [eng-api-review]
+dependencies: [repository-intelligence]
+permissions: [read, propose, modify-docs]
+description: Maps all API routes, server actions, and their relationships. Produces API inventory with auth status, parameters, and dependencies.
+metrics: { successRate: 90, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

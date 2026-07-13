@@ -1,0 +1,12 @@
+id: ddd-validator
+name: DDD Validator
+layer: 3
+version: 1.0
+owner: Quality Division
+priority: low
+status: active
+skills: [eng-architecture-review]
+dependencies: [domain-mapper, code-quality]
+permissions: [read, propose]
+description: Validates Domain-Driven Design alignment — bounded contexts, aggregates, domain events, ubiquitous language.
+metrics: { successRate: 75, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

@@ -1,0 +1,12 @@
+id: cicd-agent
+name: CI/CD Agent
+layer: 9
+version: 1.0
+owner: Infrastructure Division
+priority: high
+status: active
+skills: [eng-release-validation]
+dependencies: [devops-agent]
+permissions: [read, propose, block-release]
+description: Manages CI/CD pipelines — GitHub Actions, build verification, deployment gates, artifact management.
+metrics: { successRate: 90, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

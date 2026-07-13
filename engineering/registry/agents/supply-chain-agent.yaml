@@ -1,0 +1,12 @@
+id: supply-chain-agent
+name: Supply Chain Agent
+layer: 4
+version: 1.0
+owner: Security Division
+priority: high
+status: active
+skills: [eng-dependency-audit, eng-security-audit]
+dependencies: [security-agent]
+permissions: [read, block-release]
+description: Validates supply chain security — package provenance, maintainer trust, build pipeline integrity.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

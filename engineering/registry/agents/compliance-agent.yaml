@@ -1,0 +1,12 @@
+id: compliance-agent
+name: Compliance Agent
+layer: 4
+version: 1.0
+owner: Security Division
+priority: medium
+status: active
+skills: [eng-governance-compliance, eng-security-audit]
+dependencies: [governance-engine, security-agent]
+permissions: [read, block-release]
+description: Validates regulatory compliance — SOC2, ISO 27001 readiness, data residency, audit trail completeness.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

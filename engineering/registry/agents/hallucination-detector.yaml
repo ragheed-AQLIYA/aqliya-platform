@@ -1,0 +1,12 @@
+id: hallucination-detector
+name: Hallucination Detector
+layer: 8
+version: 1.0
+owner: AI Division
+priority: high
+status: active
+skills: [eng-ai-pipeline-review, aqliya-ai-feature-gate]
+dependencies: [ai-evaluation, ai-governance]
+permissions: [read, block-release]
+description: Detects AI hallucinations — factual inconsistencies, invented data, unsupported claims. Flags outputs for human review.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

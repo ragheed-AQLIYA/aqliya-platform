@@ -1,0 +1,12 @@
+id: coverage-agent
+name: Coverage Agent
+layer: 6
+version: 1.0
+owner: Quality Division
+priority: medium
+status: active
+skills: [eng-coverage-analysis, eng-test-strategy]
+dependencies: [testing-agent]
+permissions: [read, propose]
+description: Tracks test coverage trends — identifies declining coverage, flags critical paths below threshold, recommends tests.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

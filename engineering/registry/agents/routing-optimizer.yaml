@@ -1,0 +1,12 @@
+id: routing-optimizer
+name: AI Routing Optimizer
+layer: 8
+version: 1.0
+owner: AI Division
+priority: medium
+status: active
+skills: [eng-ai-pipeline-review]
+dependencies: [ai-governance, cost-optimizer]
+permissions: [read, propose]
+description: Optimizes AI provider routing — task-to-model matching, fallback chains, latency vs quality trade-offs.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

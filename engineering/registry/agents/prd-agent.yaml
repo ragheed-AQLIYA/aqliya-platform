@@ -1,0 +1,12 @@
+id: prd-agent
+name: PRD Agent
+layer: 7
+version: 1.0
+owner: Product Division
+priority: medium
+status: active
+skills: [eng-product-readiness, aqliya-product-completion]
+dependencies: [product-governance]
+permissions: [read, propose, modify-docs]
+description: Validates Product Requirements Documents against implementation reality. Ensures specs are traceable to code.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

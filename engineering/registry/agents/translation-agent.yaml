@@ -1,0 +1,12 @@
+id: translation-agent
+name: Translation Agent
+layer: 7
+version: 1.0
+owner: Product Division
+priority: medium
+status: active
+skills: [eng-docs-sync]
+dependencies: [product-governance]
+permissions: [read, propose, modify-docs]
+description: Validates Arabic/English bilingual consistency — UI labels, error messages, documentation, product copy.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

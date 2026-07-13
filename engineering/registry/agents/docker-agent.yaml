@@ -1,0 +1,12 @@
+id: docker-agent
+name: Docker Agent
+layer: 9
+version: 1.0
+owner: Infrastructure Division
+priority: medium
+status: active
+skills: []
+dependencies: [devops-agent]
+permissions: [read, propose]
+description: Manages Docker configurations — image optimization, multi-stage builds, security scanning, compose orchestration.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

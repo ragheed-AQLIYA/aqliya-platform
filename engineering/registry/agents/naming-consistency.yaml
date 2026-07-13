@@ -1,0 +1,12 @@
+id: naming-consistency
+name: Naming Consistency Agent
+layer: 3
+version: 1.0
+owner: Quality Division
+priority: low
+status: active
+skills: [eng-code-review]
+dependencies: [code-quality]
+permissions: [read, propose]
+description: Enforces naming conventions — variables, functions, files, routes. Detects inconsistent naming patterns.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

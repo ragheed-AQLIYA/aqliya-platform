@@ -1,0 +1,12 @@
+id: dead-code-agent
+name: Dead Code Agent
+layer: 3
+version: 1.0
+owner: Quality Division
+priority: low
+status: active
+skills: [eng-dead-code-scan]
+dependencies: [code-quality, repository-intelligence]
+permissions: [read, propose, create-pr]
+description: Detects unused exports, unreachable paths, orphaned files, and stale feature flags. Proposes safe removal.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

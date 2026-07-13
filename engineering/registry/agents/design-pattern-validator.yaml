@@ -1,0 +1,12 @@
+id: design-pattern-validator
+name: Design Pattern Validator
+layer: 3
+version: 1.0
+owner: Quality Division
+priority: low
+status: active
+skills: [eng-code-review, eng-architecture-review]
+dependencies: [code-quality]
+permissions: [read, propose]
+description: Validates that code follows approved design patterns from the Pattern Library. Flags anti-patterns.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

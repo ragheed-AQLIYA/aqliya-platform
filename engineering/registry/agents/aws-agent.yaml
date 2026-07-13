@@ -1,0 +1,12 @@
+id: aws-agent
+name: AWS Agent
+layer: 9
+version: 1.0
+owner: Infrastructure Division
+priority: high
+status: active
+skills: []
+dependencies: [devops-agent]
+permissions: [read, propose]
+description: Manages AWS infrastructure — ECS, RDS, ElastiCache, S3, CloudFront, WAF, ACM, IAM. Validates Terraform configurations.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

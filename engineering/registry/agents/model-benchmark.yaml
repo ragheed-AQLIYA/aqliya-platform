@@ -1,0 +1,12 @@
+id: model-benchmark
+name: Model Benchmark Agent
+layer: 8
+version: 1.0
+owner: AI Division
+priority: low
+status: active
+skills: [eng-ai-pipeline-review]
+dependencies: [ai-evaluation]
+permissions: [read, propose]
+description: Benchmarks AI models — quality, latency, cost across providers. Maintains model leaderboard with historical trends.
+metrics: { successRate: 75, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

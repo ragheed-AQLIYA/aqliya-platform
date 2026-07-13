@@ -1,0 +1,12 @@
+id: refactoring-agent
+name: Refactoring Agent
+layer: 3
+version: 1.0
+owner: Quality Division
+priority: medium
+status: active
+skills: [eng-refactor-plan, eng-code-review]
+dependencies: [code-quality]
+permissions: [read, propose, create-pr]
+description: Proposes refactoring plans for God Objects, duplicated logic, and misplaced concerns. Never auto-refactors — proposes plans for implementation.
+metrics: { successRate: 85, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

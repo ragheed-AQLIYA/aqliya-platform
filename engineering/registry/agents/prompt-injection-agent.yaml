@@ -1,0 +1,12 @@
+id: prompt-injection-agent
+name: Prompt Injection Agent
+layer: 4
+version: 1.0
+owner: Security Division
+priority: high
+status: active
+skills: [eng-security-audit, eng-ai-pipeline-review]
+dependencies: [security-agent, ai-governance]
+permissions: [read, block-release]
+description: Detects prompt injection vulnerabilities in AI pipelines. Validates prompt sanitization is active.
+metrics: { successRate: 90, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

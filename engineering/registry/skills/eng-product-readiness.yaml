@@ -1,0 +1,16 @@
+id: eng-product-readiness
+name: Engineering Product Readiness
+version: 1.0.0
+status: active
+owner: Layer 7 — Product + Layer 1 — Executive
+layer: 7
+inputs: [product to assess]
+outputs: [readiness score, gap analysis, completion roadmap]
+compatible_agents: [product-governance, chief-architect]
+dependencies: [aqliya-product-completion]
+quality_score: 85
+success_rate: 100
+times_used: 0
+last_used: null
+tests: false
+description: Product readiness assessment — validates v0.1/L5/L6 DoD, completion matrix, missing capabilities.

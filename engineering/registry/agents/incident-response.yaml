@@ -1,0 +1,12 @@
+id: incident-response
+name: Incident Response Agent
+layer: 9
+version: 1.0
+owner: Infrastructure Division
+priority: critical
+status: active
+skills: [eng-release-validation]
+dependencies: [devops-agent, cicd-agent]
+permissions: [read, block-release]
+description: Manages engineering incidents — detection, triage, rollback, root cause analysis, post-mortem documentation.
+metrics: { successRate: 90, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }

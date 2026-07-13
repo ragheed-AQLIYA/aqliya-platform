@@ -1,0 +1,12 @@
+id: cost-optimizer
+name: AI Cost Optimizer
+layer: 8
+version: 1.0
+owner: AI Division
+priority: medium
+status: active
+skills: [eng-ai-pipeline-review]
+dependencies: [ai-governance]
+permissions: [read, propose]
+description: Optimizes AI costs — provider selection, model tiering, caching strategies, budget enforcement per organization.
+metrics: { successRate: 80, tasksCompleted: 0, avgCompletionTimeMs: 0, lastActive: null }
