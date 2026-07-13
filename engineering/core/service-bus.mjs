@@ -25,7 +25,10 @@
  * @version 1.0.0
  */
 
-import { emit as emitEvent, on as onEvent, EVENTS } from "../../kernel/event-engine.mjs";
+import { emit as emitEvent, on as onEvent, EVENTS } from "../kernel/event-engine.mjs";
+
+const emit = emitEvent;
+const on = onEvent;
 
 // ═══════════════════════════════════════════════════════════
 // Command Bus

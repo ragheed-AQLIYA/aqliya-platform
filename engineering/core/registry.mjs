@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { emit, EVENTS } from "../../kernel/event-engine.mjs";
+import { emit, EVENTS } from "../kernel/event-engine.mjs";
 
 // ═══════════════════════════════════════════════════════════
 // Registry Store

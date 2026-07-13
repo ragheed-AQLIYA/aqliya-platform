@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-import { EVENTS, on, emit } from "../../kernel/event-engine.mjs";
+import { EVENTS, on, emit } from "../kernel/event-engine.mjs";
 
 // ═══════════════════════════════════════════════════════════
 // Plugin Registry (runtime)

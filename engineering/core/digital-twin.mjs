@@ -23,7 +23,7 @@
  * @version 1.0.0
  */
 
-import { emit } from "../../kernel/event-engine.mjs";
+import { emit } from "../kernel/event-engine.mjs";
 
 // ═══════════════════════════════════════════════════════════
 // Layer Definitions

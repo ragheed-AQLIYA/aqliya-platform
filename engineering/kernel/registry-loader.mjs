@@ -32,9 +32,33 @@ function parseSimpleYaml(content) {
   const lines = content.split("\n");
   let currentKey = null;
   let currentList = null;
+  let inMultiline = false;
+  let multilineKey = null;
+  let multilineValue = [];
 
   for (const line of lines) {
+    // Multiline continuation
+    if (inMultiline) {
+      if (line.trim() === "" || line.match(/^\S/)) {
+        // End of multiline
+        result[multilineKey] = multilineValue.join("\n").trim();
+        inMultiline = false;
+        multilineValue = [];
+      } else {
+        multilineValue.push(line.trim());
+        continue;
+      }
+    }
+
     if (line.trim() === "" || line.startsWith("#")) continue;
+
+    // Multiline start: "key: |"
+    const mlMatch = line.match(/^(\w[\w_]*):\s*\|\s*$/);
+    if (mlMatch) {
+      inMultiline = true;
+      multilineKey = mlMatch[1];
+      continue;
+    }
 
     // List item: "  - value"
     const listMatch = line.match(/^\s+-\s+(.+)$/);
@@ -48,9 +72,7 @@ function parseSimpleYaml(content) {
     if (kvMatch) {
       const key = kvMatch[1];
       const value = kvMatch[2].trim();
-
       if (value === "") {
-        // Start of a list or object
         currentList = key;
         result[key] = [];
       } else if (value === "null") {
@@ -65,6 +87,11 @@ function parseSimpleYaml(content) {
     }
   }
 
+  // Handle trailing multiline
+  if (inMultiline && multilineKey) {
+    result[multilineKey] = multilineValue.join("\n").trim();
+  }
+
   return result;
 }
 
@@ -74,7 +101,9 @@ function parseSimpleYaml(content) {
  * @returns {{ frontmatter: object, body: string }}
  */
 function parseFrontmatter(content) {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  // Handle both LF and CRLF
+  const normalized = content.replace(/\r\n/g, "\n");
+  const match = normalized.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
   if (!match) return { frontmatter: {}, body: content };
 
   const frontmatter = parseSimpleYaml(match[1]);

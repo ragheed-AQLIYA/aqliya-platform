@@ -37,7 +37,9 @@ import * as planner from "./planner.mjs";
 import * as ontology from "./ontology.mjs";
 import * as supervisor from "./supervisor.mjs";
 import * as aiLayer from "./ai-layer.mjs";
-import { boot as bootKernel } from "../kernel/index.mjs";
+import { boot as bootKernel, agentEngine, skillEngine, memoryEngine, governanceEngine as kernelGovernance, registryLoader } from "../kernel/index.mjs";
+import { existsSync } from "fs";
+import { join } from "path";
 
 // ═══════════════════════════════════════════════════════════
 // Platform Context (accessible to all modules)
@@ -81,6 +83,12 @@ container.register({ token: "ontology",         factory: () => ontology, lifetim
 container.register({ token: "planner",          factory: () => planner, lifetime: LIFETIME.SINGLETON });
 container.register({ token: "supervisor",       factory: () => supervisor, lifetime: LIFETIME.SINGLETON });
 container.register({ token: "ai",               factory: () => aiLayer, lifetime: LIFETIME.SINGLETON });
+// Kernel engines
+container.register({ token: "kernel.agent",     factory: () => agentEngine, lifetime: LIFETIME.SINGLETON });
+container.register({ token: "kernel.skill",     factory: () => skillEngine, lifetime: LIFETIME.SINGLETON });
+container.register({ token: "kernel.memory",    factory: () => memoryEngine, lifetime: LIFETIME.SINGLETON });
+container.register({ token: "kernel.governance",factory: () => kernelGovernance, lifetime: LIFETIME.SINGLETON });
+container.register({ token: "kernel.loader",    factory: () => registryLoader, lifetime: LIFETIME.SINGLETON });
 
 // ═══════════════════════════════════════════════════════════
 // Platform API — The Single Entry Point
@@ -302,6 +310,41 @@ export const AEOS = {
     governanceRules: () => aiLayer.getAiGovernanceRules(),
     checkCompliance: (c) => aiLayer.checkCompliance(c),
   },
+
+  // ─── Kernel ─────────────────────────────────────────
+  kernel: {
+    agent: {
+      register: (id, meta) => agentEngine.registerAgent(id, meta),
+      get: (id) => agentEngine.getAgent(id),
+      all: () => agentEngine.getAllAgents(),
+      countByState: () => agentEngine.countByState(),
+      count: () => agentEngine.agentCount(),
+    },
+    skill: {
+      register: (id, meta) => skillEngine.registerSkill(id, meta),
+      get: (id) => skillEngine.getSkill(id),
+      all: () => skillEngine.getAllSkills(),
+      recordUsage: (id, success, ms) => skillEngine.recordUsage(id, success, ms),
+      count: () => skillEngine.skillCount(),
+    },
+    memory: {
+      store: (e) => memoryEngine.store(e),
+      recall: (id, type) => memoryEngine.recall(id, type),
+      query: (q) => memoryEngine.query(q),
+      countByType: () => memoryEngine.countByType(),
+      total: () => memoryEngine.total(),
+    },
+    governance: {
+      registerEnforcer: (id, rule, sev, fn) => kernelGovernance.registerEnforcer(id, rule, sev, fn),
+      enforce: (ctx) => kernelGovernance.enforce(ctx),
+      list: () => kernelGovernance.listEnforcers(),
+    },
+    loader: {
+      loadAgents: (dir) => registryLoader.loadAgents(dir),
+      loadSkills: (dir) => registryLoader.loadSkills(dir),
+      bootstrapAll: (dir) => registryLoader.bootstrapAll(dir),
+    },
+  },
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -321,37 +364,73 @@ export const AEOS = {
 export async function bootstrap() {
   _context.startedAt = new Date().toISOString();
   _context.healthStatus = "booting";
+  _context.platformVersion = "2.0.0";
+  _context.platformName = "AQLIYA Autonomous Engineering Platform";
 
   // 1. Boot kernel
   const kernel = bootKernel();
-  console.log(`[AEOS] Kernel v${kernel.version} booted`);
+  console.log(`[AEOS] Kernel v${kernel.version} — ${kernel.engines.length} engines`);
 
   // 2. Bootstrap container (resolve all services)
   const instances = container.bootstrap();
-  console.log(`[AEOS] Container booted — ${instances.size} services`);
+  console.log(`[AEOS] Container — ${instances.size} services resolved`);
 
-  // 3. Emit platform started event
-  emit("platform.started", { version: _context.platformVersion, services: instances.size }, { source: "platform-api" });
+  // 3. Load registries from YAML files
+  const engineeringDir = join(process.cwd(), "engineering");
+  if (existsSync(engineeringDir)) {
+    const loaded = registryLoader.bootstrapAll(engineeringDir);
+    console.log(`[AEOS] Registries loaded — ${loaded.agents} agents, ${loaded.skills} skills`);
 
-  // 4. Register standard commands with real handlers
-  registerCommand("RunFullAuditCycle", async (cmd) => {
-    const wf = workflowEngine.AUDIT_WORKFLOW;
-    return workflowEngine.executeWorkflow(wf.id, async (stepId, step) => {
-      return { success: true, output: `Executed ${step.name}` };
-    });
-  });
+    // Register all loaded agents into the registry + kernel agent engine
+    for (const agent of loaded.agentList) {
+      try { registry.register(agent); } catch (e) { /* Already registered */ }
+      try { agentEngine.registerAgent(agent.id, agent.metadata); } catch (e) { /* Already registered */ }
+      supervisor.monitorAgent(agent.id);
+    }
 
-  registerCommand("GetHealthReport", async () => {
-    const health = governanceEngine.validateAll({ cycleId: "bootstrap" });
-    const layers = digitalTwin.getAllLayers();
-    const memCounts = memorySystem.countByType();
-    return { health, layers, memory: memCounts, timestamp: new Date().toISOString() };
-  });
+    // Register all loaded skills
+    for (const skill of loaded.skillList) {
+      try { registry.register(skill); } catch (e) { /* Already registered */ }
+      try { skillEngine.registerSkill(skill.id, skill.metadata); } catch (e) { /* Already registered */ }
+    }
+  }
+
+  // 4. Populate Knowledge Graph with all agents
+  const allAgents = agentEngine.getAllAgents();
+  for (const agent of allAgents) {
+    knowledgeGraph.addNode(`agent:${agent.id}`, "agent", agent.metadata?.name || agent.id, { layer: agent.metadata?.layer });
+  }
+
+  // 5. Wire Supervisor
+  console.log(`[AEOS] Supervisor monitoring ${supervisor.checkAgentHealth().length} agents`);
+
+  // 6. Run kernel governance
+  const kernelGovResult = kernelGovernance.enforce({ agentCount: agentEngine.agentCount() });
+  console.log(`[AEOS] Kernel governance — ${kernelGovResult.passed ? "PASSED" : "VIOLATIONS: " + kernelGovResult.violations.length}`);
+
+  // 7. Emit platform started
+  emit("platform.started", {
+    version: _context.platformVersion,
+    agents: agentEngine.agentCount(),
+    skills: skillEngine.skillCount(),
+    services: instances.size,
+  }, { source: "platform-api" });
+
+  // 8. Register command handlers (skip if already registered)
+  try { registerCommand("RunFullAuditCycle", async () => ({ status: "queued" })); } catch {}
+  try { registerCommand("GetHealthReport", async () => ({
+    agents: { total: agentEngine.agentCount(), byState: agentEngine.countByState() },
+    skills: { total: skillEngine.skillCount() },
+    governance: governanceEngine.validateAll({ cycleId: "bootstrap" }),
+    memory: memoryEngine.countByType(),
+    graph: knowledgeGraph.getStats(),
+  })); } catch {}
 
   _context.healthStatus = "healthy";
   _context.cycleCount = 0;
 
-  console.log(`[AEOS] Platform ready — ${AEOS.name} v${AEOS.version}`);
+  console.log(`[AEOS] ✅ ${_context.platformName} v${_context.platformVersion} ready`);
+  console.log(`[AEOS]    ${agentEngine.agentCount()} agents · ${skillEngine.skillCount()} skills · ${instances.size} services`);
 
   return AEOS;
 }
