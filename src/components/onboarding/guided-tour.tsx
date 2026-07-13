@@ -34,26 +34,26 @@ export function GuidedTour({ tourKey, steps, onComplete }: GuidedTourProps) {
     setIsVisible(true)
   }, [])
 
-  const nextStep = useCallback(() => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1)
-    } else {
-      completeTour()
-    }
-  }, [currentStep, steps.length])
-
-  const prevStep = useCallback(() => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1)
-    }
-  }, [currentStep])
-
   const completeTour = useCallback(() => {
     localStorage.setItem(`tour_${tourKey}`, "completed")
     setCurrentStep(-1)
     setIsVisible(false)
     onComplete?.()
   }, [tourKey, onComplete])
+
+  const nextStep = useCallback(() => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1)
+    } else {
+      completeTour()
+    }
+  }, [currentStep, steps.length, completeTour])
+
+  const prevStep = useCallback(() => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1)
+    }
+  }, [currentStep])
 
   const skipTour = useCallback(() => {
     completeTour()

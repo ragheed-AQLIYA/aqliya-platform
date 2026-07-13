@@ -34,9 +34,16 @@ export function NotificationBell() {
   }, [])
 
   useEffect(() => {
-    fetchData()
-    const interval = setInterval(fetchData, 30000)
-    return () => clearInterval(interval)
+    let cancelled = false
+    async function load() {
+      if (!cancelled) await fetchData()
+    }
+    load()
+    const interval = setInterval(load, 30000)
+    return () => {
+      cancelled = true
+      clearInterval(interval)
+    }
   }, [fetchData])
 
   async function handleClick(notification: Notification) {
