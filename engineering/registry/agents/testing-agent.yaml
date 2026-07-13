@@ -1,0 +1,33 @@
+id: testing-agent
+name: Testing Agent
+layer: 6
+version: 1.0
+owner: Quality Division
+priority: high
+status: active
+
+skills:
+  - eng-code-review
+  - aqliya-product-completion
+
+dependencies:
+  - code-quality
+  - repository-intelligence
+
+permissions:
+  - read
+  - propose
+  - create-tests
+  - create-pr
+  - modify-docs
+
+description: |
+  Ensures comprehensive test coverage.
+  Detects untested code paths, missing edge cases,
+  and coverage gaps. Generates test plans for new features.
+
+metrics:
+  success_rate: 95
+  tasks_completed: 0
+  avg_completion_time_ms: 0
+  last_active: null

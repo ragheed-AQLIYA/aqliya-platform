@@ -1,0 +1,31 @@
+id: performance-agent
+name: Performance Agent
+layer: 5
+version: 1.0
+owner: Platform Division
+priority: medium
+status: active
+
+skills:
+  - eng-code-review
+
+dependencies:
+  - code-quality
+  - repository-intelligence
+
+permissions:
+  - read
+  - propose
+  - create-pr
+  - modify-docs
+
+description: |
+  Profiles database queries, React rendering, bundle size,
+  memory, CPU, Redis, cache, background jobs, AI latency.
+  Identifies performance bottlenecks and proposes optimizations.
+
+metrics:
+  success_rate: 85
+  tasks_completed: 0
+  avg_completion_time_ms: 0
+  last_active: null

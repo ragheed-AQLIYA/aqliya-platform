@@ -1,0 +1,32 @@
+id: code-quality
+name: Code Quality Agent
+layer: 3
+version: 1.0
+owner: Quality Division
+priority: high
+status: active
+
+skills:
+  - eng-code-review
+  - eng-architecture-review
+  - eng-governance-compliance
+
+dependencies:
+  - repository-intelligence
+
+permissions:
+  - read
+  - propose
+  - create-pr
+  - modify-docs
+
+description: |
+  Reviews every file for complexity, duplication, patterns,
+  testability, readability, SOLID compliance, and anti-patterns.
+  Does NOT refactor — proposes refactoring plans for implementation.
+
+metrics:
+  success_rate: 95
+  tasks_completed: 0
+  avg_completion_time_ms: 0
+  last_active: 2026-07-13T00:00:00Z

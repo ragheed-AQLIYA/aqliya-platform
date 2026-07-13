@@ -1,0 +1,40 @@
+id: skills-factory
+name: Skills Factory Agent
+layer: 10
+version: 1.0
+owner: Platform Division
+priority: high
+status: active
+
+skills:
+  - eng-code-review
+  - eng-architecture-review
+
+dependencies:
+  - code-quality
+  - repository-intelligence
+
+permissions:
+  - read
+  - propose
+  - create-skill
+  - modify-docs
+
+description: |
+  Detects repeated engineering work and converts it into
+  reusable Skills. Every cycle should produce at least one
+  new Skill or improve an existing one.
+  
+  Pattern detection:
+  1. Repeated manual review → eng-code-review skill
+  2. Repeated architecture check → eng-architecture-review skill
+  3. Repeated security scan → eng-security-audit skill
+  4. Repeated governance gate → eng-governance-compliance skill
+
+metrics:
+  success_rate: 80
+  skills_created: 4
+  skills_active: 4
+  tasks_completed: 1
+  avg_completion_time_ms: 0
+  last_active: 2026-07-13T00:00:00Z

@@ -1,0 +1,32 @@
+id: devops-agent
+name: DevOps Agent
+layer: 9
+version: 1.0
+owner: Infrastructure Division
+priority: high
+status: active
+
+skills:
+  - aqliya-release-checklist
+  - eng-governance-compliance
+
+dependencies:
+  - security-agent
+  - governance-engine
+
+permissions:
+  - read
+  - propose
+  - block-release
+  - modify-docs
+
+description: |
+  Manages CI/CD, Docker, Terraform, monitoring, logging,
+  backups, recovery, deployment, observability.
+  Validates infrastructure readiness before releases.
+
+metrics:
+  success_rate: 90
+  tasks_completed: 0
+  avg_completion_time_ms: 0
+  last_active: null

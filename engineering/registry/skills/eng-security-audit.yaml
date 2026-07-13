@@ -1,0 +1,36 @@
+id: eng-security-audit
+name: Engineering Security Audit
+version: 1.0.0
+status: active
+owner: Layer 4 — Security
+layer: 4
+
+inputs:
+  - module, route, or product to audit
+  - security scan results
+outputs:
+  - security findings (OWASP-aligned severity)
+  - remediation steps
+  - security score
+
+compatible_agents:
+  - security-agent
+  - governance-engine
+  - chief-architect
+
+dependencies:
+  - engineering/agents/security.mjs
+  - aqliya-security-gate
+  - aqliya-ai-feature-gate
+
+quality_score: 90
+success_rate: 100
+times_used: 0
+last_used: null
+avg_execution_time_ms: null
+
+tests: false
+description: |
+  Validates security posture — auth, RBAC, tenant isolation, secrets,
+  dependencies, injection prevention, audit trail, AI security.
+  Loaded before new routes, auth changes, or dependency updates.

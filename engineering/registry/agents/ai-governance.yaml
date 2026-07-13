@@ -1,0 +1,34 @@
+id: ai-governance
+name: AI Governance Agent
+layer: 8
+version: 1.0
+owner: AI Division
+priority: high
+status: active
+
+skills:
+  - aqliya-ai-feature-gate
+  - eng-security-audit
+  - eng-governance-compliance
+
+dependencies:
+  - security-agent
+  - governance-engine
+
+permissions:
+  - read
+  - propose
+  - block-release
+  - modify-docs
+
+description: |
+  Governs AI pipelines — prompts, provider routing,
+  hallucination controls, cost, fallback, human review,
+  auditability, evaluation, guardrails, model governance.
+  Ensures AI NEVER makes autonomous decisions.
+
+metrics:
+  success_rate: 100
+  tasks_completed: 0
+  avg_completion_time_ms: 0
+  last_active: null

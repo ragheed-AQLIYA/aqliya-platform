@@ -1,0 +1,40 @@
+id: governance-engine
+name: Governance Engine Agent
+layer: 12
+version: 1.0
+owner: Governance Division
+priority: critical
+status: active
+
+skills:
+  - eng-governance-compliance
+  - eng-architecture-review
+  - eng-security-audit
+  - aqliya-security-gate
+
+dependencies:
+  - chief-architect
+  - security-agent
+
+permissions:
+  - read
+  - block-execution
+  - block-release
+  - enforce-rules
+  - modify-docs
+
+description: |
+  The final gate. Enforces ALL governance rules (GOV-01 through GOV-12)
+  before any change reaches production.
+  BLOCKs on critical violations. WARNS on moderate.
+  Validates that architecture rules, product boundaries, platform
+  constitution, coding standards, security policies, naming standards,
+  documentation authority, design system, ADRs, and release gates
+  are all respected.
+
+metrics:
+  success_rate: 100
+  violations_blocked: 0
+  tasks_completed: 1
+  avg_completion_time_ms: 0
+  last_active: 2026-07-13T00:00:00Z

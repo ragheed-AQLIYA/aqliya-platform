@@ -1,0 +1,35 @@
+id: security-agent
+name: Security Agent
+layer: 4
+version: 1.0
+owner: Security Division
+priority: critical
+status: active
+
+skills:
+  - eng-security-audit
+  - eng-governance-compliance
+  - aqliya-security-gate
+  - aqliya-export-gate
+
+dependencies:
+  - repository-intelligence
+  - code-quality
+
+permissions:
+  - read
+  - propose
+  - block-release
+  - modify-docs
+
+description: |
+  Continuous security posture validation.
+  Scans auth, RBAC, tenant isolation, secrets, dependencies,
+  OWASP, prompt injection, file upload, supply chain.
+  Can BLOCK releases on critical findings.
+
+metrics:
+  success_rate: 100
+  tasks_completed: 0
+  avg_completion_time_ms: 0
+  last_active: 2026-07-13T00:00:00Z

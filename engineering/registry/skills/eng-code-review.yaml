@@ -1,0 +1,34 @@
+id: eng-code-review
+name: Engineering Code Review
+version: 1.0.0
+status: active
+owner: Layer 3 — Code Quality
+layer: 3
+
+inputs:
+  - file paths to review
+  - code-health metrics
+outputs:
+  - review report (critical/high/medium/low)
+  - compliance score
+  - actionable recommendations
+
+compatible_agents:
+  - code-quality
+  - repository-intelligence
+  - chief-architect
+
+dependencies:
+  - engineering/agents/code-health.mjs
+
+quality_score: 85
+success_rate: 100
+times_used: 0
+last_used: null
+avg_execution_time_ms: null
+
+tests: false
+description: |
+  Comprehensive code review — complexity, duplication, patterns,
+  testability, readability, SOLID, server/client boundary violations.
+  Loaded before every PR merge and during architecture reviews.

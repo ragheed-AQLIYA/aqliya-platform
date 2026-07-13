@@ -1,0 +1,36 @@
+id: eng-governance-compliance
+name: Engineering Governance Compliance
+version: 1.0.0
+status: active
+owner: Layer 12 — Governance Engine
+layer: 12
+
+inputs:
+  - change scope (files, routes, schema changes)
+  - governance rules (GOV-01 through GOV-12)
+outputs:
+  - governance pass/fail
+  - specific rule violations
+  - remediation steps
+  - required approvals
+
+compatible_agents:
+  - governance-engine
+  - chief-architect
+  - security-agent
+
+dependencies:
+  - engineering/os/COMPLIANCE.md
+  - engineering/gates/ACTIVE_GOVERNANCE_RULES.md
+
+quality_score: 85
+success_rate: 100
+times_used: 1
+last_used: 2026-07-13T00:00:00Z
+avg_execution_time_ms: null
+
+tests: false
+description: |
+  The final governance gate. Validates all 12 rules before any change
+  reaches production. BLOCK on critical violations, WARN on moderate.
+  Loaded before every commit, merge, release, or schema change.

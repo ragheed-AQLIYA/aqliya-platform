@@ -1,0 +1,33 @@
+id: repository-intelligence
+name: Repository Intelligence Agent
+layer: 2
+version: 1.0
+owner: Intelligence Division
+priority: critical
+status: active
+
+skills:
+  - eng-architecture-review
+  - aqliya-data-discipline
+  - eng-code-review
+
+dependencies:
+  - chief-architect
+
+permissions:
+  - read
+  - propose
+  - modify-docs
+  - create-report
+
+description: |
+  Produces a complete Digital Twin of the repository.
+  Scans products, modules, routes, entities, APIs, events,
+  dependencies, tests, tables, migrations, agents, and skills.
+  Updates incrementally — never starts from scratch.
+
+metrics:
+  success_rate: 100
+  tasks_completed: 2
+  avg_completion_time_ms: 0
+  last_active: 2026-07-13T00:00:00Z

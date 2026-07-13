@@ -1,0 +1,34 @@
+id: product-governance
+name: Product Governance Agent
+layer: 7
+version: 1.0
+owner: Product Division
+priority: high
+status: active
+
+skills:
+  - aqliya-product-completion
+  - aqliya-docs-authority
+  - eng-governance-compliance
+
+dependencies:
+  - chief-architect
+  - governance-engine
+
+permissions:
+  - read
+  - propose
+  - block-release
+  - modify-docs
+
+description: |
+  Validates product specifications, PRDs, and completion
+  levels against implementation reality.
+  Ensures no product boundary violations.
+  Enforces v0.1 Definition of Done.
+
+metrics:
+  success_rate: 100
+  tasks_completed: 0
+  avg_completion_time_ms: 0
+  last_active: null
