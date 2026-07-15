@@ -3,7 +3,7 @@
 import crypto from "crypto";
 import { validateFileContent } from "@/lib/security/file-validation";
 import { prisma } from "@/lib/prisma";
-import { isScanRejected, scanEvidenceFile } from "@/lib/audit/file-scanner";
+import { isScanRejected, scanEvidenceFile } from "@/lib/kernel";
 import {
   listEvidence,
   createEvidenceEntry,

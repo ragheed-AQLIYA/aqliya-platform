@@ -6,17 +6,16 @@ import {
   createRecommendation as svcCreateRecommendation,
   updateRecommendationStatus as svcUpdateRecommendationStatus,
   recordAuditEvent as svcRecordAuditEvent,
-} from "@/lib/audit/services";
-import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
-import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
-import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
-import {
+  getAuditActor,
+  requireRole,
+  assertEngagementAccess,
+  enforceAuditRateLimit,
   evaluateFindingEscalation,
   getGovernanceAuditMetadata,
   buildProvenanceMetadata,
   mapFindingStatusToApprovalState,
   mapRecommendationStatusToApprovalState,
-} from "@/lib/audit/governance-bridge";
+} from "@/lib/kernel";
 import { getGovernanceContext } from "@/lib/governance/retrieval-router";
 
 export async function createFindingAction(params: {

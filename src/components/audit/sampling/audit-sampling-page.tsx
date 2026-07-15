@@ -1,4 +1,4 @@
-import { getTrialBalanceLines } from "@/lib/audit/services";
+import { getTrialBalanceLines } from "@/lib/kernel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertTriangle, Layers } from "lucide-react";
 import { AuditSamplingForm } from "./audit-sampling-form";

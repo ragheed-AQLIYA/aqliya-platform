@@ -1,11 +1,9 @@
 "use server"
 
 
-import { getAuditActor, requireRole } from "@/lib/audit/actor-context"
-
+import { getAuditActor, requireRole, recordAuditOsAuditEvent } from "@/lib/kernel"
 // Inline DB access via prisma to avoid circular dependencies
 import { prisma } from "@/lib/prisma"
-import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events"
 
 export interface AuditUserResult {
   id: string

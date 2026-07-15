@@ -13,10 +13,11 @@ import {
   acceptRecommendationDraft as svcAcceptRecommendationDraft,
   generateAnalyticalReview as svcGenerateAnalyticalReview,
   recordAuditEvent as svcRecordAuditEvent,
-} from "@/lib/audit/services";
-import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
-import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
-import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
+  getAuditActor,
+  requireRole,
+  assertEngagementAccess,
+  enforceAuditRateLimit,
+} from "@/lib/kernel";
 
 export async function createAIOutputAction(params: {
   engagementId: string;

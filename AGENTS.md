@@ -1346,9 +1346,12 @@ Codebase: 4,679 tests pass, 0 TS errors, 0 `as any` in production code, build pa
 
 | Priority | Status | Details |
 | ----------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
-| **Consumer migration** | ✅ Done | 691 files migrated across 8 phases (Feature Flags 33, Cache 21, Authorization 30, Auth 243, Knowledge 13, Governance 21, WorkflowOS 6, Prisma 324). 9 kernel bridges created. All consumers import from `@/lib/kernel`. 4,679 tests passing, 0 TS errors. |
+| **Consumer migration** | ✅ Done | 691 files migrated across 8 phases (Feature Flags 33, Cache 21, Authorization 30, Auth 243, Knowledge 13, Governance 21, WorkflowOS 6, Prisma 324). 9 kernel bridges created. All consumers import from `@/lib/kernel`. 4,658 tests passing, 0 TS errors. |
+| **Authorization migration** | ✅ Done | 30 authorization consumers migrated from `@/lib/authorization` to `@/lib/kernel`. 16 test mocks updated. Kernel barrel expanded with auth, feature-flags, cache, prisma re-exports. |
+| **AuditOS deep imports** | ✅ Done | 6 AuditOS deep import consumers migrated (pilot, AI, sampling, admin, findings, localcontent-evidence). Kernel audit bridge expanded with 30+ new re-exports from 12 deep submodules (actor-context, tenant-guard, services, rate-limit, governance-bridge, workflow-gating, workflow-next-action, engagement-archival, reporting-graph/types, presentation-policy-types, presentation-policy-service, presentation-profile-rebuild-types). |
+| **Kernel fixes** | ✅ Done | EventDomain type expanded (lc, sales, evidence, knowledge, decision, risk, compliance). Governance barrel: added buildAccountClassificationPrompt. Prompt registry: added getPromptVersion, getPromptMetadata, listPromptVersions. |
 
-Codebase: 4,679 tests pass, 0 TS errors, all consumers migrated to `@/lib/kernel`.
+Codebase: 4,658 tests pass, 0 TS errors, 697 files migrated to `@/lib/kernel`.
 
 ---
 

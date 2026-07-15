@@ -10,9 +10,10 @@ import {
   createOrUpdatePilotSignoff as svcCreateOrUpdatePilotSignoff,
   getPilotSignoffChecklist as svcGetPilotSignoffChecklist,
   recordAuditEvent as svcRecordAuditEvent,
-} from "@/lib/audit/services";
-import { getAuditActor, requireRole } from "@/lib/audit/actor-context";
-import { assertEngagementAccess } from "@/lib/audit/tenant-guard";
+  getAuditActor,
+  requireRole,
+  assertEngagementAccess,
+} from "@/lib/kernel";
 
 export async function createPilotFeedbackAction(params: {
   engagementId: string;
