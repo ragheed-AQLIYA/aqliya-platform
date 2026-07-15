@@ -36,6 +36,11 @@ import {
   logToPlatform,
   revalidateLocalContentPaths,
 } from "@/actions/localcontent-shared";
+import { publishDomainEvent } from "@/lib/kernel/publish";
+import {
+  publishLocalContentOSEvent,
+  LOCAL_CONTENT_OS_EVENTS,
+} from "@/lib/kernel/events/lcos-events";
 
 // ─── Evidence Actions ───
 
@@ -88,6 +93,23 @@ export async function createLocalContentEvidenceAction(
 
     revalidateLocalContentPaths(projectId, ["evidence"]);
     await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
+
+    try {
+      await publishDomainEvent(
+        publishLocalContentOSEvent(LOCAL_CONTENT_OS_EVENTS.EVIDENCE_UPLOADED, {
+          actorId: user.id,
+          resourceId: evidence.id,
+          resourceType: "LocalContentEvidence",
+          metadata: {
+            filename: evidence.filename,
+            evidenceType: evidence.evidenceType,
+          },
+        }),
+      );
+    } catch {
+      // Event publishing is fire-and-forget
+    }
+
     return evidence;
   });
 }
@@ -318,6 +340,23 @@ export async function uploadLocalContentEvidenceFileAction(
 
     revalidateLocalContentPaths(projectId, ["evidence"]);
     await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
+
+    try {
+      await publishDomainEvent(
+        publishLocalContentOSEvent(LOCAL_CONTENT_OS_EVENTS.EVIDENCE_UPLOADED, {
+          actorId: user.id,
+          resourceId: evidence.id,
+          resourceType: "LocalContentEvidence",
+          metadata: {
+            filename: resolvedFilename,
+            evidenceType: (formData.get("evidenceType") as string) || "other",
+          },
+        }),
+      );
+    } catch {
+      // Event publishing is fire-and-forget
+    }
+
     return {
       id: evidence.id,
       filename: evidence.filename,

@@ -21,6 +21,8 @@ export interface PromptRegistryEntry {
   requiresEvidence: boolean
   requiresHumanApproval: boolean
   outputBoundary: string
+  version: string
+  updatedAt: string
 }
 
 // Registry mapping GovernanceTaskType → prompt assembly + metadata
@@ -40,6 +42,8 @@ export const PROMPT_REGISTRY: Partial<Record<GovernanceTaskType, PromptRegistryE
     requiresEvidence: true,
     requiresHumanApproval: true,
     outputBoundary: 'draft_only',
+    version: '1.0.0',
+    updatedAt: '2026-07-14',
   },
 
   account_mapping: {
@@ -67,6 +71,8 @@ export const PROMPT_REGISTRY: Partial<Record<GovernanceTaskType, PromptRegistryE
     requiresEvidence: false,
     requiresHumanApproval: true,
     outputBoundary: 'draft_only',
+    version: '1.0.0',
+    updatedAt: '2026-07-14',
   },
 
   evidence_review: {
@@ -79,6 +85,8 @@ export const PROMPT_REGISTRY: Partial<Record<GovernanceTaskType, PromptRegistryE
     requiresEvidence: true,
     requiresHumanApproval: true,
     outputBoundary: 'draft_only',
+    version: '1.0.0',
+    updatedAt: '2026-07-14',
   },
 
   audit_findings: {
@@ -91,6 +99,8 @@ export const PROMPT_REGISTRY: Partial<Record<GovernanceTaskType, PromptRegistryE
     requiresEvidence: true,
     requiresHumanApproval: true,
     outputBoundary: 'draft_only',
+    version: '1.0.0',
+    updatedAt: '2026-07-14',
   },
 
   commercial_claim_review: {
@@ -103,6 +113,8 @@ export const PROMPT_REGISTRY: Partial<Record<GovernanceTaskType, PromptRegistryE
     requiresEvidence: true,
     requiresHumanApproval: true,
     outputBoundary: 'review_required',
+    version: '1.0.0',
+    updatedAt: '2026-07-14',
   },
 
   // trial_balance_upload, notes_generation, pilot_decision, approval_review
@@ -118,14 +130,14 @@ export function getPromptVersion(taskType: GovernanceTaskType): string | null {
   return PROMPT_REGISTRY[taskType] ? "1.0.0" : null
 }
 
-export function getPromptMetadata(taskType: GovernanceTaskType): { version: string; requiresEvidence: boolean; requiresHumanApproval: boolean; outputBoundary: string } | null {
+export function getPromptMetadata(taskType: GovernanceTaskType): { version: string; updatedAt: string; outputBoundary: string } | null {
   const entry = PROMPT_REGISTRY[taskType]
   if (!entry) return null
-  return { version: "1.0.0", requiresEvidence: entry.requiresEvidence, requiresHumanApproval: entry.requiresHumanApproval, outputBoundary: entry.outputBoundary }
+  return { version: entry.version, updatedAt: entry.updatedAt, outputBoundary: entry.outputBoundary }
 }
 
 export function listPromptVersions(): Array<{ taskType: string; version: string; updatedAt: string }> {
-  return Object.entries(PROMPT_REGISTRY).map(([taskType]) => ({ taskType, version: "1.0.0", updatedAt: new Date().toISOString() }))
+  return Object.entries(PROMPT_REGISTRY).map(([taskType, entry]) => ({ taskType, version: entry.version, updatedAt: entry.updatedAt }))
 }
 
 export function assemblePrompt(request: AIRequest): AIRequest {

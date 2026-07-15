@@ -40,6 +40,11 @@ import {
   logToPlatform,
   revalidateLocalContentPaths,
 } from "@/actions/localcontent-shared";
+import { publishDomainEvent } from "@/lib/kernel/publish";
+import {
+  publishLocalContentOSEvent,
+  LOCAL_CONTENT_OS_EVENTS,
+} from "@/lib/kernel/events/lcos-events";
 
 // ─── Project Actions ───
 
@@ -214,6 +219,24 @@ export async function createLocalContentProjectAction(
 
     revalidateLocalContentPaths(project.id);
     await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
+
+    try {
+      await publishDomainEvent(
+        publishLocalContentOSEvent(LOCAL_CONTENT_OS_EVENTS.PROJECT_CREATED, {
+          actorId: user.id,
+          organizationId: user.organizationId,
+          resourceId: project.id,
+          resourceType: "LocalContentProject",
+          metadata: {
+            projectName: project.name,
+            reportingPeriod: project.reportingPeriod,
+          },
+        }),
+      );
+    } catch {
+      // Event publishing is fire-and-forget
+    }
+
     return project;
   });
 }
@@ -242,6 +265,20 @@ export async function updateLocalContentProjectAction(
       "approval",
       "audit-trail",
     ]);
+
+    try {
+      await publishDomainEvent(
+        publishLocalContentOSEvent(LOCAL_CONTENT_OS_EVENTS.PROJECT_STATUS_CHANGED, {
+          actorId: user.id,
+          resourceId: projectId,
+          resourceType: "LocalContentProject",
+          metadata: { newStatus: status },
+        }),
+      );
+    } catch {
+      // Event publishing is fire-and-forget
+    }
+
     return project;
   });
 }

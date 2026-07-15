@@ -17,6 +17,8 @@ import {
   mapRecommendationStatusToApprovalState,
 } from "@/lib/kernel";
 import { getGovernanceContext } from "@/lib/governance/retrieval-router";
+import { publishDomainEvent } from "@/lib/kernel/publish";
+import { publishAuditOSEvent } from "@/lib/kernel/events/audit-events";
 
 export async function createFindingAction(params: {
   engagementId: string;
@@ -55,6 +57,20 @@ export async function createFindingAction(params: {
         governanceRequiresHumanResolution: escalation.requiresHumanResolution,
       },
     });
+  }
+  try {
+    await publishDomainEvent(publishAuditOSEvent("finding.created", {
+      actorId: actor.actorId,
+      organizationId: actor.organizationId,
+      resourceId: result.finding.id,
+      resourceType: "finding",
+      metadata: {
+        engagementId: params.engagementId,
+        findingId: result.finding.id,
+      },
+    }));
+  } catch {
+    // Event publishing is fire-and-forget
   }
   return result;
 }

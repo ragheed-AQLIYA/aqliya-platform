@@ -29,6 +29,11 @@ import {
   logToPlatform,
   revalidateLocalContentPaths,
 } from "@/actions/localcontent-shared";
+import { publishDomainEvent } from "@/lib/kernel/publish";
+import {
+  publishLocalContentOSEvent,
+  LOCAL_CONTENT_OS_EVENTS,
+} from "@/lib/kernel/events/lcos-events";
 import { createLogger } from "@/lib/observability/logger";
 
 // ─── Spend Actions ───
@@ -201,6 +206,23 @@ export async function importLocalContentSpendCsvAction(
       "suppliers",
       "classification",
     ]);
+
+    try {
+      await publishDomainEvent(
+        publishLocalContentOSEvent(LOCAL_CONTENT_OS_EVENTS.SPEND_IMPORTED, {
+          actorId: user.id,
+          resourceId: projectId,
+          resourceType: "LocalContentSpendRecord",
+          metadata: {
+            createdCount: created,
+            rejectedCount: result.rejectedRows.length + errors.length,
+          },
+        }),
+      );
+    } catch {
+      // Event publishing is fire-and-forget
+    }
+
     await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
     return {
       created,
@@ -252,6 +274,23 @@ export async function classifyLocalContentSpendRecordAction(
 
     revalidateLocalContentPaths(projectId, ["classification"]);
     await invalidateCacheByPrefix(`dashboard:localcontent:${user.organizationId}:stats`);
+
+    try {
+      await publishDomainEvent(
+        publishLocalContentOSEvent(LOCAL_CONTENT_OS_EVENTS.CLASSIFICATION_COMPLETED, {
+          actorId: user.id,
+          resourceId: classification.id,
+          resourceType: "LocalContentClassification",
+          metadata: {
+            localPercentage,
+            classificationBasis: classification.classificationBasis,
+          },
+        }),
+      );
+    } catch {
+      // Event publishing is fire-and-forget
+    }
+
     return classification;
   });
 }

@@ -21,6 +21,7 @@ const SERVICE_CONTRACTS = [
   "secrets",
   "encryption",
   "cache",
+  "toolRegistry",
 ] as const;
 
 type ServiceContract = (typeof SERVICE_CONTRACTS)[number];
@@ -154,11 +155,16 @@ export async function initializeKernel(): Promise<Kernel> {
   kernelInstance.registerService("encryption", new EncryptionServiceWrapper());
   kernelInstance.registerService("cache", new CacheLayerWrapper());
 
+  const { getToolRegistry } = await import("@/lib/core/ai/tool-registry/registry");
+  kernelInstance.registerService("toolRegistry", getToolRegistry());
+
   const { AuditOSPlugin } = await import("../../products/audit-os/audit-os-plugin");
   const { LocalContentOSPlugin } = await import("../../products/local-content-os/plugin");
+  const { SalesOSPlugin } = await import("../../products/sales-os/sales-os-plugin");
 
   kernelInstance.registerPlugin(new AuditOSPlugin());
   kernelInstance.registerPlugin(new LocalContentOSPlugin());
+  kernelInstance.registerPlugin(new SalesOSPlugin());
 
   await kernelInstance.initialize();
 

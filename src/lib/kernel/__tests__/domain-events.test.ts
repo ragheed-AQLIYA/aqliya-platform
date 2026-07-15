@@ -36,14 +36,15 @@ describe("AuditOS Domain Events", () => {
 });
 
 describe("LocalContentOS Domain Events", () => {
-  test("LOCAL_CONTENT_OS_EVENTS has all 6 events", () => {
-    expect(Object.keys(LOCAL_CONTENT_OS_EVENTS)).toHaveLength(6);
+  test("LOCAL_CONTENT_OS_EVENTS has all 7 events", () => {
+    expect(Object.keys(LOCAL_CONTENT_OS_EVENTS)).toHaveLength(7);
     expect(LOCAL_CONTENT_OS_EVENTS.PROJECT_CREATED).toBe("project.created");
     expect(LOCAL_CONTENT_OS_EVENTS.PROJECT_STATUS_CHANGED).toBe("project.status_changed");
     expect(LOCAL_CONTENT_OS_EVENTS.CLASSIFICATION_COMPLETED).toBe("classification.completed");
     expect(LOCAL_CONTENT_OS_EVENTS.SPEND_IMPORTED).toBe("spend.imported");
     expect(LOCAL_CONTENT_OS_EVENTS.REPORT_GENERATED).toBe("report.generated");
     expect(LOCAL_CONTENT_OS_EVENTS.FINDING_CREATED).toBe("finding.created");
+    expect(LOCAL_CONTENT_OS_EVENTS.EVIDENCE_UPLOADED).toBe("evidence.uploaded");
   });
 
   test("publishLocalContentOSEvent creates correct event shape", () => {

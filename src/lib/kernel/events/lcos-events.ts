@@ -23,6 +23,7 @@ export const LOCAL_CONTENT_OS_EVENTS = {
   SPEND_IMPORTED: "spend.imported",
   REPORT_GENERATED: "report.generated",
   FINDING_CREATED: "finding.created",
+  EVIDENCE_UPLOADED: "evidence.uploaded",
 } as const;
 
 export type LocalContentOSEventAction =

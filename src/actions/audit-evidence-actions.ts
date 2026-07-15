@@ -18,6 +18,8 @@ import { evaluateEvidenceEscalation } from "@/lib/audit/governance-bridge";
 import { getStorageProvider, buildStorageKey } from "@/lib/audit/storage";
 import { createHash } from "crypto";
 import { validateFileContent } from "@/lib/security/file-validation";
+import { publishDomainEvent } from "@/lib/kernel/publish";
+import { publishAuditOSEvent } from "@/lib/kernel/events/audit-events";
 
 const ALLOWED_FILE_TYPES = [
   "pdf",
@@ -275,6 +277,21 @@ export async function uploadEvidenceFileAction(params: {
       scanStatus: scanResult.status,
     },
   });
+
+  try {
+    await publishDomainEvent(publishAuditOSEvent("evidence.uploaded", {
+      actorId: actor.actorId,
+      organizationId: actor.organizationId,
+      resourceId: evidence.id,
+      resourceType: "evidence",
+      metadata: {
+        engagementId: params.engagementId,
+        evidenceId: evidence.id,
+      },
+    }));
+  } catch {
+    // Event publishing is fire-and-forget
+  }
 
   return {
     evidence,

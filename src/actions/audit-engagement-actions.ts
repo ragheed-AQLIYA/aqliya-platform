@@ -38,6 +38,8 @@ import {
 import { prisma } from "@/lib/prisma";
 import { notifyOnEvent } from "@/lib/platform/notification/integration";
 import { createLogger } from "@/lib/observability/logger";
+import { publishDomainEvent } from "@/lib/kernel/publish";
+import { publishAuditOSEvent } from "@/lib/kernel/events/audit-events";
 
 async function persistMappingReviewFirmMemory(params: {
   engagementId: string;
@@ -107,6 +109,21 @@ export async function createEngagementAction(params: {
         })
       )
     );
+  }
+
+  try {
+    await publishDomainEvent(publishAuditOSEvent("engagement.created", {
+      actorId: actor.actorId,
+      organizationId: params.organizationId,
+      resourceId: engagementId ?? undefined,
+      resourceType: "engagement",
+      metadata: {
+        engagementId: engagementId ?? undefined,
+        engagementName: params.clientName,
+      },
+    }));
+  } catch {
+    // Event publishing is fire-and-forget
   }
 
   return result;
