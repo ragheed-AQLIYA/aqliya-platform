@@ -1513,11 +1513,11 @@ FORBIDDEN:
 
 **Deliverable:** All product and platform code imports exclusively from `@/lib/kernel`. Legacy paths fully decommissioned. Kernel bridges provide backward-compatible surface area.
 
-### Sprint 8: Documentation Sync + Final Audit — **IN PROGRESS**
+### Sprint 8: Documentation Sync + Final Audit — **COMPLETED**
 
 **Goal:** Sync all documentation with kernel 2.0 reality. Final audit of architecture, routes, and commercial claims.
 
-**Status:** 🔄 IN PROGRESS
+**Status:** ✅ COMPLETED
 
 | Task | Status | Notes |
 |------|--------|-------|
@@ -1528,11 +1528,11 @@ FORBIDDEN:
 | Update ENTERPRISE_ARCHITECTURE_PROGRAM.md | ✅ Done | Sprint 7 marked complete |
 | Final audit: dependency violations check | ✅ Done | Zero violations confirmed |
 | Final audit: God Object scan | ✅ Done | All God Objects split |
-| Final audit: commercial claims vs code reality | 🔄 Pending | Awaiting final review |
-| Final audit: route security verification | 🔄 Pending | Awaiting final review |
-| Full validation: tsc, lint, test, build | ✅ Done | 4,679 tests pass, 0 TS errors |
+| Final audit: commercial claims vs code reality | ✅ Done | Fixed 4 overstated claims (Office AI 248→79, DecisionOS 42→110 total, WorkflowOS 31→44, Platform 4679→4658) |
+| Final audit: route security verification | ✅ Done | All workspace routes SECURE, demo routes PUBLIC_BY_DESIGN, 11 download routes verified |
+| Full validation: tsc, lint, test, build | ✅ Done | 4,658 tests pass, 0 TS errors |
 
-**Deliverable:** All documentation reflects kernel 2.0 architecture. Zero stale claims. Platform ready for pilot hardening.
+**Deliverable:** All documentation reflects kernel 2.0 architecture. Zero stale claims. Commercial claims verified against code reality. Platform ready for pilot hardening.
 
 ---
 
