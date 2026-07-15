@@ -6,7 +6,7 @@
 
 import "server-only";
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import {
   getSsoProviders,
   createProvider,

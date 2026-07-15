@@ -14,7 +14,7 @@ jest.mock("@/lib/auth", () => ({
   ),
 }));
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: mockEnforce,
 }));
 
@@ -65,7 +65,7 @@ jest.mock("crypto", () => ({
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { auditLogger } from "@/lib/platform/audit-logger";
 import {
   getDecisionEvidenceAction,

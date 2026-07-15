@@ -10,7 +10,7 @@ jest.mock("@/lib/auth", () => ({
   isExpectedAccessDeniedError: jest.fn().mockReturnValue(false),
 }));
 
-jest.mock("@/lib/authorization", () => ({ enforce: jest.fn().mockResolvedValue(undefined) }));
+jest.mock("@/lib/kernel", () => ({ enforce: jest.fn().mockResolvedValue(undefined) }));
 
 jest.mock("@/lib/localcontactos/compliance-service", () => ({
   checkExportRestrictions: jest.fn().mockResolvedValue({ restricted: false, reason: null }),

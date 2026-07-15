@@ -7,7 +7,7 @@ jest.mock("@/lib/auth", () => ({
   getCurrentUser: jest.fn(),
 }));
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn(),
 }));
 
@@ -35,7 +35,7 @@ jest.mock("@/lib/platform/audit-logger", () => ({
 // ── Imports (picks up mocked modules) ──
 
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { getStorageProvider } from "@/lib/platform/storage";

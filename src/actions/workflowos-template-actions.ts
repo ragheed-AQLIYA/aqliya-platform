@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { revalidatePath } from "next/cache";
 import crypto from "node:crypto";

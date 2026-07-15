@@ -52,15 +52,18 @@ jest.mock("@/lib/core/evidence", () => ({
 }));
 
 // Do NOT mock @/lib/authorization — the facade tests need the real authorize().
-// Only enforce() and mapAuditRoleToUserRole() are stubbed (unused in these tests).
 jest.mock("@/lib/authorization", () => {
   const actual = jest.requireActual("@/lib/authorization");
   return {
     ...actual,
-    enforce: jest.fn(),
     mapAuditRoleToUserRole: jest.fn(),
   };
 });
+
+jest.mock("@/lib/kernel", () => ({
+  enforce: jest.fn(),
+  isAllowed: jest.fn(),
+}));
 
 jest.mock("@/lib/audit/storage", () => ({
   getStorageProvider: jest.fn(() => ({

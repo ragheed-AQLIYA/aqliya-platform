@@ -65,7 +65,7 @@ jest.mock("@/lib/auth", () => ({
   ),
 }));
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: mockEnforce,
 }));
 

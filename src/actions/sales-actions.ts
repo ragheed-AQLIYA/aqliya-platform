@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import {
   assertSalesAccountAccess,

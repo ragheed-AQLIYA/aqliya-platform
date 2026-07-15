@@ -114,6 +114,20 @@ export function getPromptBuilder(taskType: GovernanceTaskType): PromptBuilder | 
   return PROMPT_REGISTRY[taskType]?.builder ?? null
 }
 
+export function getPromptVersion(taskType: GovernanceTaskType): string | null {
+  return PROMPT_REGISTRY[taskType] ? "1.0.0" : null
+}
+
+export function getPromptMetadata(taskType: GovernanceTaskType): { version: string; requiresEvidence: boolean; requiresHumanApproval: boolean; outputBoundary: string } | null {
+  const entry = PROMPT_REGISTRY[taskType]
+  if (!entry) return null
+  return { version: "1.0.0", requiresEvidence: entry.requiresEvidence, requiresHumanApproval: entry.requiresHumanApproval, outputBoundary: entry.outputBoundary }
+}
+
+export function listPromptVersions(): Array<{ taskType: string; version: string; updatedAt: string }> {
+  return Object.entries(PROMPT_REGISTRY).map(([taskType]) => ({ taskType, version: "1.0.0", updatedAt: new Date().toISOString() }))
+}
+
 export function assemblePrompt(request: AIRequest): AIRequest {
   const entry = PROMPT_REGISTRY[request.taskType]
   if (!entry) {

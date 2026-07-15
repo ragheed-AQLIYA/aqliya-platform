@@ -10,7 +10,7 @@ import {
   runGovernedDecisionAI,
 } from "@/lib/decision/decision-ai-bridge"
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth"
-import { enforce } from "@/lib/authorization/action-guard"
+import { enforce } from "@/lib/kernel"
 
 export async function getDecisionForIntelligence(decisionId: string) {
   try {

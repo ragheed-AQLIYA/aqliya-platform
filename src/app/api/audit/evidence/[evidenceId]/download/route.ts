@@ -4,7 +4,7 @@ import { getStorageProvider } from "@/lib/audit/storage";
 import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
 import { verifyDownloadToken } from "@/lib/download-token";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
 

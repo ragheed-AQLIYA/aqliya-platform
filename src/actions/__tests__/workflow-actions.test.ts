@@ -21,7 +21,7 @@ jest.mock("@/lib/auth", () => ({
 
 const mockEnforce = jest.fn();
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: mockEnforce,
 }));
 

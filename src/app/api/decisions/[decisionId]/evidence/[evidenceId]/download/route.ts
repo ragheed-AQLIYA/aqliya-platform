@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { getStorageProvider } from "@/lib/platform/storage";

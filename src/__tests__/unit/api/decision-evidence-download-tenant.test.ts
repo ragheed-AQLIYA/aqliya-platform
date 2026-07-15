@@ -17,7 +17,7 @@ jest.mock("@/lib/auth", () => ({
   getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
 }));
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn(),
 }));
 
@@ -38,7 +38,7 @@ jest.mock("@/lib/platform/audit-logger", () => ({
 
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { GET } from "@/app/api/decisions/[decisionId]/evidence/[evidenceId]/download/route";
 

@@ -24,3 +24,9 @@ export type { ProductPlugin, PluginDependencies } from "./plugin/product-plugin"
 export { ProductRegistry } from "./plugin/product-registry";
 
 export { Kernel, initializeKernel } from "./bootstrap";
+export { enforce, isAllowed } from "./authorization";
+export { getCurrentUser, hasRequiredRole, isExpectedAccessDeniedError, isAdmin, encrypt, decrypt } from "./auth";
+export type { CurrentUser, RequiredRole } from "./auth";
+export { isEnabled, requireEnabled, getFlag } from "./feature-flags";
+export { getCachedOrFetch, invalidateCacheByPrefix, invalidateDashboardCaches, warmDashboardCaches } from "./cache";
+export { prisma } from "./prisma";

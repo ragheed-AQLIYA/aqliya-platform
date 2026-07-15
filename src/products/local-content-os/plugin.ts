@@ -1,5 +1,6 @@
 import type { ProductPlugin, PluginDependencies } from "@/lib/kernel/plugin/product-plugin";
 import type { KernelHealth, ProductRoute, ProductSchema } from "@/lib/kernel/types";
+import type { DomainEvent, EventHandler } from "@/lib/kernel/contracts/event-bus";
 
 export class LocalContentOSPlugin implements ProductPlugin {
   readonly id = "local-content-os";
@@ -9,10 +10,40 @@ export class LocalContentOSPlugin implements ProductPlugin {
   readonly requiredCapabilities = ["identity", "tenant", "policy", "evidence", "events", "workflow", "cache", "ai"];
 
   dependencies: PluginDependencies = {};
+  private unsubscribers: Array<() => void> = [];
 
-  async initialize(): Promise<void> {}
+  async initialize(): Promise<void> {
+    const eventBus = this.dependencies.events;
+    if (!eventBus) return;
 
-  async shutdown(): Promise<void> {}
+    const handleAuditOSEvidence: EventHandler = async (event: DomainEvent) => {
+      if (event.productSlug === "local-content-os") return;
+      console.log(
+        `[LocalContentOS] AuditOS evidence event: ${event.action} — resource ${event.resourceId}`,
+      );
+    };
+
+    const handleAIOutput: EventHandler = async (event: DomainEvent) => {
+      console.log(
+        `[LocalContentOS] AI output generated: ${event.action} — resource ${event.resourceId}`,
+      );
+    };
+
+    eventBus.subscribe("evidence", "*", handleAuditOSEvidence);
+    eventBus.subscribe("ai", "*", handleAIOutput);
+
+    this.unsubscribers.push(
+      () => eventBus.unsubscribe("evidence", "*", handleAuditOSEvidence),
+      () => eventBus.unsubscribe("ai", "*", handleAIOutput),
+    );
+  }
+
+  async shutdown(): Promise<void> {
+    for (const unsub of this.unsubscribers) {
+      unsub();
+    }
+    this.unsubscribers = [];
+  }
 
   async healthCheck(): Promise<{ status: KernelHealth }> {
     return { status: "healthy" };

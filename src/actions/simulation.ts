@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { ScenarioType } from "@prisma/client"
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth"
-import { enforce } from "@/lib/authorization/action-guard"
+import { enforce } from "@/lib/kernel"
 import { runGenericSimulation, canRunSimulation, type SimulationInput, buildScoringData, deriveScores } from "@/lib/simulation/simulation-engine"
 import { generateRecommendation } from "@/lib/recommendation/tender-recommendation"
 import { runSimulation, type TenderInput } from "@/lib/simulation/tender-simulation"

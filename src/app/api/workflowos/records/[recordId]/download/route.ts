@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { buildExportMetadata } from "@/lib/platform/production-export";
 import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";

@@ -5,7 +5,7 @@ import {
   isExpectedAccessDeniedError,
   getCurrentUser,
 } from "@/lib/auth";
-import { enforce } from "@/lib/authorization/action-guard";
+import { enforce } from "@/lib/kernel";
 import type { OutcomeStatus, Prisma } from "@prisma/client";
 import { logAudit } from "@/lib/decision/decision-audit";
 

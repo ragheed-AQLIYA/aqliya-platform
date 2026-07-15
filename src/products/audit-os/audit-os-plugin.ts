@@ -1,5 +1,6 @@
 import type { ProductPlugin, PluginDependencies } from "@/lib/kernel/plugin/product-plugin";
 import type { KernelHealth, ProductRoute, ProductSchema } from "@/lib/kernel/types";
+import type { DomainEvent, EventHandler } from "@/lib/kernel/contracts/event-bus";
 
 export class AuditOSPlugin implements ProductPlugin {
   readonly id = "audit-os";
@@ -9,13 +10,39 @@ export class AuditOSPlugin implements ProductPlugin {
   readonly requiredCapabilities = ["identity", "tenant", "policy", "audit", "evidence", "events", "workflow", "cache"];
 
   dependencies: PluginDependencies = {};
+  private unsubscribers: Array<() => void> = [];
 
   async initialize(): Promise<void> {
-    // Register event handlers, load product config
+    const eventBus = this.dependencies.events;
+    if (!eventBus) return;
+
+    const handleCrossProductEvidence: EventHandler = async (event: DomainEvent) => {
+      if (event.productSlug === "audit-os") return;
+      console.log(
+        `[AuditOS] Cross-product evidence event: ${event.action} from ${event.productSlug} — resource ${event.resourceId}`,
+      );
+    };
+
+    const handleKnowledgePattern: EventHandler = async (event: DomainEvent) => {
+      console.log(
+        `[AuditOS] Knowledge pattern recorded: ${event.action} — resource ${event.resourceId}`,
+      );
+    };
+
+    eventBus.subscribe("evidence", "*", handleCrossProductEvidence);
+    eventBus.subscribe("knowledge", "*", handleKnowledgePattern);
+
+    this.unsubscribers.push(
+      () => eventBus.unsubscribe("evidence", "*", handleCrossProductEvidence),
+      () => eventBus.unsubscribe("knowledge", "*", handleKnowledgePattern),
+    );
   }
 
   async shutdown(): Promise<void> {
-    // Cleanup
+    for (const unsub of this.unsubscribers) {
+      unsub();
+    }
+    this.unsubscribers = [];
   }
 
   async healthCheck(): Promise<{ status: KernelHealth }> {

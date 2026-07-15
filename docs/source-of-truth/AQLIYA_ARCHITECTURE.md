@@ -8,6 +8,7 @@
 AQLIYA Platform Company
 │
 ├── AQLIYA Intelligence Core (shared platform layer)
+│   ├── Platform Kernel 2.0 (single import surface — @/lib/kernel)
 │   ├── AI Orchestration Engine
 │   ├── Security Engine (prompt sanitization)
 │   ├── Governance Engine
@@ -85,6 +86,7 @@ Deployment models: Cloud (active), Private/On-Prem (strategic), Air-Gapped (stra
 ## Layer Definitions
 
 - **Platform Company**: The brand and product entity. Must be presented as a platform first, not a collection of products.
+- **Platform Kernel 2.0**: The single import surface for all platform services (`@/lib/kernel`). All consumers import through kernel bridges; direct imports to internal modules are forbidden. Provides contracts, implementations, plugin system, event bus, and CQRS projections.
 - **AQLIYA Intelligence Core**: The shared platform layer. All operating systems built on it inherit governance, evidence graph, RBAC, and audit trail automatically.
 - **Specialized Operating System**: A capability or workflow path built on the Core. Referred to as "نظام تشغيل" / "مسار تشغيلي" in Arabic. Not marketed as standalone products.
 - **Shared Application**: A governed application built on Core that is real in code but not a standalone product category.
@@ -142,6 +144,62 @@ Deployment models: Cloud (active), Private/On-Prem (strategic), Air-Gapped (stra
 | `/login`                                 | Authentication                              | Internal               |
 | `/access-denied`                         | Access control                              | Internal               |
 
+## Platform Kernel 2.0
+
+**Status:** Active — Sprint 7 (Consumer Migration) complete.  
+**Import surface:** `@/lib/kernel`  
+**Import rule:** All consumers must import from `@/lib/kernel`, never directly from platform modules.
+
+The Platform Kernel is the single import surface for all platform services. It provides a stable abstraction layer between consumers (routes, actions, components) and the underlying platform modules. Direct imports to internal module paths are forbidden.
+
+### Kernel Bridges
+
+Each bridge wraps a platform service behind a stable contract:
+
+| Bridge             | Path                                      | Wraps                                   |
+| ------------------ | ----------------------------------------- | --------------------------------------- |
+| `auth.ts`          | `@/lib/kernel/auth`                       | NextAuth session, currentUser           |
+| `feature-flags.ts` | `@/lib/kernel/feature-flags`              | Feature flag evaluation                 |
+| `cache.ts`         | `@/lib/kernel/cache`                      | Platform caching (getCachedOrFetch)     |
+| `authorization.ts` | `@/lib/kernel/authorization`              | RBAC, tenant guard, permission checks   |
+| `audit.ts`         | `@/lib/kernel/audit`                      | Audit log writes, audit trail queries   |
+| `knowledge.ts`     | `@/lib/kernel/knowledge`                  | Institutional Memory, knowledge graph   |
+| `governance.ts`    | `@/lib/kernel/governance`                 | Review/approval workflows, governance   |
+| `workflowos.ts`    | `@/lib/kernel/workflowos`                 | Workflow engine, task lifecycle          |
+| `prisma.ts`        | `@/lib/kernel/prisma`                     | Database client (server-only boundary)  |
+
+### Kernel Contracts
+
+20+ TypeScript interfaces defined in `src/lib/kernel/contracts/` establish the public API surface for every bridge. These contracts are the type-level boundary between kernel consumers and implementations.
+
+### Kernel Implementations
+
+`src/lib/kernel/implementations/` contains the concrete wrappers for each service. Implementations may change; contracts and import paths remain stable.
+
+### Plugin System
+
+Products register via the `ProductPlugin` interface and `ProductRegistry`. Plugins declare capabilities, event subscriptions, and workspace routes. Currently registered: `SalesOSPlugin`, `AuditOSPlugin`, `LocalContentOSPlugin`, `DecisionOSPlugin`.
+
+### Event Bus
+
+Domain event bus with:
+- Named event types per product/domain
+- Dead-letter queue for failed handlers
+- Retry with exponential backoff
+- Event history for audit and replay
+
+### CQRS
+
+Projection framework providing read models for cross-product queries. Read models are materialized from domain events and optimized for specific query patterns.
+
+### Consumer Migration
+
+Sprint 7 migrated **691 files** from direct module imports (`@/lib/sales/...`, `@/lib/audit/...`, etc.) to kernel imports (`@/lib/kernel/*`). All platform consumers now route through the kernel.
+
+### Migration Enforcement
+
+New code importing directly from platform modules (bypassing the kernel) will fail review. The kernel is the only sanctioned import surface for platform services.
+
 ## Download Security Standard
 
 Every file download API route must implement these three layers in order:
@@ -163,7 +221,7 @@ Response headers: `Cache-Control: private, no-store`, `X-Content-Type-Options: n
 - `/organizations` is a protected surface — not yet v0.1 workspace complete.
 - `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 27 routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, pilot readiness dashboard, quality dashboard, review center, and ERP integration (SAP/Oracle/CSV). **L6 Production-hardened** — Full error/loading/not-found boundaries on all routes. All 9 L6 gaps closed. AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. 265+ tests PASS. **Action split (2026-07-13)**: `localcontent-actions.ts` (1,471 lines) decomposed into 8 focused modules under `src/lib/local-content/` (supplier, spend, classification, evidence, findings, workbook, review, project).
 - `DecisionOS` is a production-hardened governed workspace at `/decisions/*` (L6). Full lifecycle (draft → in_review → approved/rejected), evidence upload, bilingual PDF export, signal automation, sector intelligence wiring, cross-decision pattern analysis, decision portfolio view, outcome correlation analytics. Full error/loading/not-found boundaries on all 22 route segments. 42+ action tests, seed data.
-- `SalesOS` is a production-hardened governed commercial intelligence workspace at `/sales/*` (L6). 32 routes with full error/loading/not-found boundaries. Intelligence tab with 12 sub-engines, forecasting engine, CRM sync (HubSpot/Salesforce), conversion funnel analytics, pipeline depth analytics, bilingual UX. 45 test files PASS.
+- `SalesOS` is a production-hardened governed commercial intelligence workspace at `/sales/*` (L6). 32 routes with full error/loading/not-found boundaries. Intelligence tab with 12 sub-engines, forecasting engine, CRM sync (HubSpot/Salesforce), conversion funnel analytics, pipeline depth analytics, bilingual UX. 45 test files PASS. God Object split: `sales-actions.ts` (977 lines) split into 4 focused modules (`sales-actions-helpers`, `sales-interaction-actions`, `sales-agent-actions`, `sales-outreach-actions`). Product plugin registered (`SalesOSPlugin`) with event bus subscriptions for cross-product awareness.
 - `AuditOS` is the most mature operating system with 12-station audit lifecycle, ISQM1 quality management, 8 L6 engines, and interactive demo at `/auditos`. **God Object split (2026-07-13)**: `audit-actions.ts` (3,657 lines) decomposed into 12 focused modules under `src/lib/audit/db/` (e.g., engagement-db, finding-db, evidence-db). Each module owns a single domain concern.
 - **Schema v0.2 (2026-05-28)**: `createdById` added to 10 models, `DecisionEvidence` model added, `platformOrganizationId` added to SunbulClient.
 - **Website repositioning (2026-06-09)**: Navigation changed to `المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية`. Homepage redesigned with 9-section platform-first architecture. Products moved inside `/platform#capabilities`. Proof Center established at `/proof`. Sectors page at `/industries`.
@@ -208,3 +266,4 @@ SalesOS integrates with Institutional Memory via `src/lib/sales/institutional-me
  - **Security layer (2026-07-13)**: `src/lib/security/prompt-sanitization.ts` added to the AQLIYA Intelligence Core security layer. Sanitizes AI prompts before provider dispatch — strips injection attempts, enforces output boundaries, logs sanitization events. Integrated into `AIOrchestrator` pipeline.
  - **Platform caching (2026-07-13)**: `src/lib/platform/cache-strategy.ts` implements `getCachedOrFetch` (5-minute TTL, per-user/org scoped keys) for all 5 primary dashboard server actions. Mutations call `invalidateDashboardCaches()` to bust stale entries. Pattern: write-through invalidation with key-prefix matching.
  - **Pagination standard (2026-07-13)**: All server actions across the platform return paginated results in `{ items, totalCount, hasMore }` format. No unbounded array returns.
+ - **Platform Kernel 2.0 (Sprint 7 complete)**: All 691 consumer files migrated from direct module imports to `@/lib/kernel` imports. Kernel provides 9 bridges (auth, feature-flags, cache, authorization, audit, knowledge, governance, workflowos, prisma), 20+ TypeScript contracts, plugin system (`ProductPlugin`/`ProductRegistry`), domain event bus (with dead-letter queue, retry, history), and CQRS projection framework. The kernel is the sole import surface for platform services.

@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization/action-guard";
+import { enforce } from "@/lib/kernel";
 import {
   buildRecommendationDiff,
   getDiffSummary,

@@ -19,7 +19,7 @@ jest.mock("@/lib/auth", () => ({
   isExpectedAccessDeniedError: (...args) => mockIsExpectedAccessDeniedError(...args),
 }));
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn().mockResolvedValue(undefined),
 }));
 

@@ -11,7 +11,7 @@ import { buildMonitoringSignalsFromRisks } from "@/lib/decision/signal-automatio
 import { validateIntelligenceGate } from "@/lib/decision/intelligence-gate";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization/action-guard";
+import { enforce } from "@/lib/kernel";
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit";
 import { prisma } from "@/lib/prisma";
 

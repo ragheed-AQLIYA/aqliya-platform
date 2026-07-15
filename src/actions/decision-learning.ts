@@ -5,7 +5,7 @@ import { getDecisionPattern } from "@/lib/decision/decision-pattern"
 import { getSectorPatterns } from "@/lib/decision/sector-pattern"
 import { revalidatePath } from "next/cache"
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
-import { enforce } from "@/lib/authorization/action-guard"
+import { enforce } from "@/lib/kernel"
 import { prisma } from "@/lib/prisma"
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit"
 

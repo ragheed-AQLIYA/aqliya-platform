@@ -124,10 +124,7 @@ jest.mock("@/lib/auth", () => ({
 }));
 
 // ─── Mock Authorization ───
-jest.mock("@/lib/authorization", () => ({
-  enforce: jest.fn().mockResolvedValue(undefined),
-}));
-jest.mock("@/lib/authorization/action-guard", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn().mockResolvedValue(undefined),
 }));
 

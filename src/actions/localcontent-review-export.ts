@@ -5,7 +5,7 @@
 "use server";
 
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
 import PDFDocument from "pdfkit";
 import {

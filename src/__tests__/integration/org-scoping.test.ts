@@ -12,14 +12,14 @@ jest.mock("@/lib/auth", () => {
 });
 
 // Mock enforce — the new authorization path
-jest.mock("@/lib/authorization", () => {
+jest.mock("@/lib/kernel", () => {
   return {
     enforce: jest.fn().mockResolvedValue(undefined),
   };
 });
 
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 
 async function cleanup() {
   await prisma.auditLog.deleteMany();

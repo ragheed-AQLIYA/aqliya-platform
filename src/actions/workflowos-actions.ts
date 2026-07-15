@@ -30,7 +30,7 @@ import {
 import { listWorkflowAuditEvents, recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
 import { getUserWorkflowRole } from "@/lib/workflowos/tenant-guard";
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";

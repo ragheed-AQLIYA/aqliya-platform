@@ -26,6 +26,7 @@ export {
   buildEvidenceReviewPrompt,
   buildAuditFindingPrompt,
   buildCommercialClaimReviewPrompt,
+  buildAccountClassificationPrompt,
 } from "./prompt-framework";
 export type {
   GovernanceTaskType,

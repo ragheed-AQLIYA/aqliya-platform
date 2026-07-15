@@ -13,7 +13,7 @@ import { isExpectedAccessDeniedError } from "@/lib/auth";
 import {
   getCurrentUser,
 } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit";
 import { invalidateDashboardCaches } from "@/lib/platform/cache-strategy";
 import { createLogger } from "@/lib/observability/logger";

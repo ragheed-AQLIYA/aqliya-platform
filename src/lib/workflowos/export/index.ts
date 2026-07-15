@@ -1,7 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { requireClientAccess } from "@/lib/workflowos/tenant-guard";
 import { createWorkflowAuditEvent } from "@/lib/workflowos/audit";
 import { generateWorkflowPdf } from "@/lib/workflowos/export/pdf-export";

@@ -7,7 +7,7 @@ jest.mock("@/lib/auth", () => ({
   getCurrentUser: jest.fn(),
 }));
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn(),
 }));
 
@@ -23,7 +23,7 @@ jest.mock("@/lib/prisma", () => ({
 // ── Imports (picks up mocked modules) ──
 
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
 
 // ── Type helpers ──

@@ -10,7 +10,7 @@ import {
 
 import { isExpectedAccessDeniedError } from "@/lib/auth";
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import { logAudit } from "@/lib/decision/decision-audit";
 
 // --- Decision Recommendation ---

@@ -12,7 +12,7 @@ jest.mock("@/lib/auth", () => ({
   getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
 }));
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn().mockResolvedValue(undefined),
 }));
 
@@ -81,7 +81,7 @@ jest.mock("@/lib/local-content/guards", () => ({
 
 import { NextRequest } from "next/server";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 
 const mockAssertEvidence = jest.mocked(assertEvidenceDownloadAccess);
 const mockEnforce = jest.mocked(enforce);

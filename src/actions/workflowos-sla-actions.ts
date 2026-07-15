@@ -1,7 +1,7 @@
 "use server";
 
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 
 export async function checkSlaStatus(organizationId: string) {
   try {

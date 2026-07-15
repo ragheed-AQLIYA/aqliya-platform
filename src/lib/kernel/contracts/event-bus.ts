@@ -1,6 +1,6 @@
 import type { KernelResult } from "../types";
 
-export type EventDomain = "audit" | "workflow" | "ai" | "notification" | "platform" | "auth";
+export type EventDomain = "audit" | "workflow" | "ai" | "notification" | "platform" | "auth" | "lc" | "sales" | "evidence" | "knowledge" | "decision" | "risk" | "compliance";
 
 export interface DomainEvent {
   schemaVersion: string;
