@@ -1,0 +1,56 @@
+import type { EvalSuite } from "../eval-types";
+
+export const decisionAnalysisSuite: EvalSuite = {
+  id: "decision-analysis-v1",
+  name: "DecisionOS Analysis Evaluation",
+  taskType: "analysis",
+  description: "Evaluates AI-generated decision analysis, option comparison, and recommendation quality",
+  testCases: [
+    {
+      id: "decision-01",
+      taskType: "analysis",
+      input: { decisionType: "investment", options: ["Option A: Cloud migration", "Option B: On-premise upgrade"], budget: 500000 },
+      expectedOutput: "Comparative analysis of cloud migration vs on-premise upgrade with cost, risk, and timeline assessment",
+      metric: "contains",
+      severity: "critical",
+      tags: ["decision", "investment"],
+    },
+    {
+      id: "decision-02",
+      taskType: "analysis",
+      input: { decisionType: "hiring", candidates: 3, role: "Senior Engineer", urgency: "high" },
+      expectedOutput: "Candidate comparison with skills assessment, cultural fit evaluation, and hiring recommendation",
+      metric: "contains",
+      severity: "high",
+      tags: ["decision", "hiring"],
+    },
+    {
+      id: "decision-03",
+      taskType: "analysis",
+      input: { decisionType: "vendor_selection", vendors: ["Vendor A", "Vendor B", "Vendor C"], criteria: ["cost", "quality", "support"] },
+      expectedOutput: "Multi-criteria vendor comparison with weighted scoring and risk assessment",
+      metric: "contains",
+      severity: "high",
+      tags: ["decision", "vendor"],
+    },
+    {
+      id: "decision-04",
+      taskType: "analysis",
+      input: { decisionType: "strategic", context: "Market expansion into Saudi Arabia", timeframe: "12 months" },
+      expectedOutput: "Strategic analysis with market assessment, resource requirements, risk factors, and phased implementation plan",
+      metric: "llm_judge",
+      metricConfig: { criteria: "completeness of analysis, quality of recommendations, consideration of risks, actionable next steps" },
+      severity: "critical",
+      tags: ["decision", "strategic"],
+    },
+    {
+      id: "decision-05",
+      taskType: "analysis",
+      input: { decisionType: "risk_assessment", risks: ["Regulatory change", "Technology obsolescence", "Key person dependency"], impact: "high" },
+      expectedOutput: "Risk assessment with probability-impact matrix, mitigation strategies, and monitoring plan",
+      metric: "contains",
+      severity: "critical",
+      tags: ["decision", "risk"],
+    },
+  ],
+};

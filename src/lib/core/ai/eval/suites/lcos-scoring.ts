@@ -1,0 +1,56 @@
+import type { EvalSuite } from "../eval-types";
+
+export const lcosScoringSuite: EvalSuite = {
+  id: "lcos-scoring-v1",
+  name: "LocalContentOS Scoring Evaluation",
+  taskType: "classification",
+  description: "Evaluates AI-generated local content scoring suggestions for accuracy and compliance with Saudi Nitaqat criteria",
+  testCases: [
+    {
+      id: "lcos-01",
+      taskType: "classification",
+      input: { supplierName: "Al-Rashid Trading", locality: "local", ownership: "Saudi", workforce: 85 },
+      expectedOutput: "High local content score: supplier classified as local with Saudi ownership and 85% local workforce",
+      metric: "contains",
+      severity: "critical",
+      tags: ["scoring", "local", "nitaqat"],
+    },
+    {
+      id: "lcos-02",
+      taskType: "classification",
+      input: { supplierName: "Global Corp", locality: "non_local", ownership: "foreign", workforce: 10 },
+      expectedOutput: "Low local content score: supplier classified as non-local with foreign ownership",
+      metric: "contains",
+      severity: "high",
+      tags: ["scoring", "non-local"],
+    },
+    {
+      id: "lcos-03",
+      taskType: "classification",
+      input: { supplierName: "Mixed JV", locality: "mixed", ownership: "joint_venture", workforce: 50 },
+      expectedOutput: "Medium local content score: mixed classification with joint venture ownership",
+      metric: "contains",
+      severity: "medium",
+      tags: ["scoring", "mixed"],
+    },
+    {
+      id: "lcos-04",
+      taskType: "classification",
+      input: { supplierName: "Unknown Supplier", locality: "unclassified", ownership: null, workforce: null },
+      expectedOutput: "Unclassified supplier: requires manual review for locality and ownership determination",
+      metric: "contains",
+      severity: "medium",
+      tags: ["scoring", "unclassified"],
+    },
+    {
+      id: "lcos-05",
+      taskType: "classification",
+      input: { supplierName: "Tech Solutions", locality: "local", ownership: "Saudi", workforce: 95, spend: 500000 },
+      expectedOutput: "Very high local content score: strong Saudi presence with significant spend",
+      metric: "llm_judge",
+      metricConfig: { criteria: "accuracy of scoring, completeness of classification, compliance with Saudi Nitaqat framework" },
+      severity: "critical",
+      tags: ["scoring", "high-value"],
+    },
+  ],
+};

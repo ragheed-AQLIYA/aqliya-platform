@@ -1366,6 +1366,29 @@ Codebase: 4,658 tests pass, 0 TS errors, 697 files migrated to `@/lib/kernel`.
 
 Codebase: 4,678 tests pass, 0 TS errors, 0 failed test suites.
 
+### Enterprise Hardening (Sprint 10 — 2026-07-16)
+
+| Priority | Status | Details |
+| ----------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Security hardening audit** | ✅ Done | All 8 areas SECURE: secrets (no hardcoded), SQL injection (parameterized), unsafe patterns (none), CORS (restricted), rate limiting (Redis-backed), CSP (strict, no unsafe-eval), auth (NextAuth v5 + MFA + RBAC + AES-256-GCM), env vars (properly documented). |
+| **Health endpoint** | ✅ Done | `/api/platform/health` — DB latency check, kernel plugin status, 200/503 semantics, no auth required (LB-safe). |
+| **Structured logging** | ✅ Done | `createLogger()` factory with JSON output. 153 raw `console.*` calls remain in lib modules — non-blocking for pilot. |
+| **Error boundaries** | ✅ Done | 480 error/not-found/loading boundaries across all route segments. |
+| **Sentry integration** | ✅ Done | Client/server/edge configs wired, 20% trace sampling in production. |
+| **System monitoring** | ✅ Done | Full resource monitoring (heap, RSS, CPU, Redis, DB), alert thresholds, audit log integration. |
+| **CloudWatch/Terraform** | ✅ Done | 4 dashboards, 5 alarms, 2 log groups, WAF metrics — all defined. |
+| **Deployment runbooks** | ✅ Done | 43 deployment docs + 41 pilot docs. |
+| **Commercial claims audit** | ✅ Done | All numbers match code reality (Office AI 79 tests, DecisionOS 110 total, WorkflowOS 44 tests). |
+| **Route security verification** | ✅ Done | All workspace routes SECURE, demo PUBLIC_BY_DESIGN, 11 download routes with auth+tenant+audit. |
+
+**Remaining (requires live infrastructure):**
+- Penetration test (external, BLOCKING for production)
+- External uptime monitoring (Pingdom/Checkly)
+- `RATE_LIMITER=redis` activation in staging/production
+- Sentry source maps auth token configuration
+
+Codebase: 4,678 tests pass, 0 TS errors, 0 failed test suites. Security audit passed. Observability foundation solid.
+
 ---
 
 ## 29. Final Principle

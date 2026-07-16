@@ -1,0 +1,56 @@
+import type { EvalSuite } from "../eval-types";
+
+export const salesPipelineSuite: EvalSuite = {
+  id: "sales-pipeline-v1",
+  name: "SalesOS Pipeline Intelligence Evaluation",
+  taskType: "analysis",
+  description: "Evaluates AI-generated deal scoring, health assessment, and pipeline recommendations",
+  testCases: [
+    {
+      id: "sales-01",
+      taskType: "analysis",
+      input: { dealTitle: "Enterprise License", amount: 250000, stage: "proposal", daysInStage: 14 },
+      expectedOutput: "Deal health: Watch. Extended time in proposal stage without movement. Recommend follow-up action.",
+      metric: "contains",
+      severity: "critical",
+      tags: ["pipeline", "health"],
+    },
+    {
+      id: "sales-02",
+      taskType: "analysis",
+      input: { dealTitle: "SMB Package", amount: 15000, stage: "negotiation", daysInStage: 3 },
+      expectedOutput: "Deal health: Healthy. Recent activity and appropriate stage progression.",
+      metric: "contains",
+      severity: "high",
+      tags: ["pipeline", "healthy"],
+    },
+    {
+      id: "sales-03",
+      taskType: "analysis",
+      input: { dealTitle: "Strategic Partnership", amount: 500000, stage: "discovery", daysInStage: 45 },
+      expectedOutput: "Deal health: At Risk. Stalled in early stage. Requires immediate attention or reconsideration.",
+      metric: "contains",
+      severity: "critical",
+      tags: ["pipeline", "at-risk"],
+    },
+    {
+      id: "sales-04",
+      taskType: "analysis",
+      input: { dealTitle: "Renewal", amount: 80000, stage: "closed_won", daysInStage: 0 },
+      expectedOutput: "Deal won. Document lessons learned and update commercial memory.",
+      metric: "contains",
+      severity: "medium",
+      tags: ["pipeline", "won"],
+    },
+    {
+      id: "sales-05",
+      taskType: "analysis",
+      input: { dealTitle: "Competitive Deal", amount: 300000, stage: "proposal", probability: 30, competitor: true },
+      expectedOutput: "Low probability deal with competitive pressure. Recommend differentiated value proposition and risk mitigation strategy.",
+      metric: "llm_judge",
+      metricConfig: { criteria: "accuracy of health assessment, quality of recommendations, consideration of competitive factors" },
+      severity: "high",
+      tags: ["pipeline", "competitive"],
+    },
+  ],
+};
