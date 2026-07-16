@@ -33,7 +33,7 @@ jest.mock("@/lib/auth", () => ({
   ),
 }));
 
-jest.mock("@/lib/authorization", () => ({
+jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn(),
 }));
 
@@ -44,7 +44,7 @@ jest.mock("next/cache", () => ({
 import { describe, expect, it, beforeEach } from "@jest/globals";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { enforce } from "@/lib/authorization";
+import { enforce } from "@/lib/kernel";
 import {
   startWorkflowFromTemplate,
   workflow_listOrgRecords,
