@@ -100,8 +100,10 @@ export function extractImports(content) {
 
 export function extractExports(content) {
   const exports = [];
+  // Count only runtime exports: function, class, const, let, var
+  // Exclude type-only: type, interface, enum (type declarations)
   const re =
-    /export\s+(?:default\s+)?(?:async\s+)?(?:function|const|class|type|interface|enum)\s+(\w+)/g;
+    /export\s+(?:default\s+)?(?:async\s+)?(?:function|const|let|var|class)\s+(\w+)/g;
   let m;
   while ((m = re.exec(content))) {
     exports.push(m[1]);
@@ -138,7 +140,7 @@ export function hasOrganizationScope(content) {
 }
 
 export function hasAuthorizeCall(content) {
-  return /\b(authorize|requireAuth|requireRole|assertCan|withActionGuard|guardAction)\b/.test(
+  return /\b(authorize|requireAuth|requireRole|assertCan|withActionGuard|guardAction|getCurrentUser|enforce|requirePermission|assertProjectAccess|assertAdmin|authenticateScimRequest|getToken|getServerSession|assertOrganizationAccess)\b/.test(
     content
   );
 }

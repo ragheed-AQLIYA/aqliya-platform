@@ -1,0 +1,14 @@
+{
+  "god_objects": 6,
+  "long_functions": 41,
+  "circular_dependencies": 4,
+  "solid_srp_violations": 10,
+  "layer_violations": 4,
+  "domain_boundary_violations": 1,
+  "security_high": 2,
+  "security_critical": 0,
+  "n_plus_one_high": 8,
+  "unbounded_queries": 30,
+  "debt_high": 40,
+  "_generatedAt": "2026-07-18T21:44:04.732Z"
+}
