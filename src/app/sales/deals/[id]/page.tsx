@@ -17,6 +17,9 @@ import { EntityTimeline } from "@/components/entity/entity-timeline";
 import { mapSalesAuditEventsToTimeline } from "@/lib/sales/audit-timeline";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Building2, Briefcase } from "lucide-react";
+import { OutreachTimeline } from "@/components/sales/outreach-timeline";
+import { CreateCampaignButton } from "@/components/sales/create-campaign-button";
+import { DealHealthCard } from "@/components/sales/deal-health-card";
 
 export const dynamic = "force-dynamic";
 
@@ -135,6 +138,18 @@ export default async function SalesDealDetailPage({
               )}
             </CardContent>
           </Card>
+
+          <OutreachTimeline dealId={deal.id} accountId={deal.accountId} />
+
+          <div className="p-3 rounded-lg border bg-card">
+            <CreateCampaignButton
+              dealId={deal.id}
+              dealName={deal.title}
+              contactCount={0}
+            />
+          </div>
+
+          <DealHealthCard dealId={deal.id} />
         </div>
 
         <div>

@@ -11,6 +11,7 @@ import { IntelligenceMemoryView } from "@/components/sales/intelligence-memory-v
 import { MarketIntelligenceView } from "@/components/sales/market-intelligence-view";
 import { ProofEffectivenessView } from "@/components/sales/proof-effectiveness-view";
 import { CommercialKnowledgeGraphPanel } from "@/components/sales/commercial-knowledge-graph-panel";
+import { FindSimilarCompanies } from "@/components/sales/find-similar-companies";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +35,9 @@ export default async function SalesIntelligencePage() {
   }));
 
   return (
-    <IntelligenceHub
+    <div className="space-y-6" dir="rtl">
+      <FindSimilarCompanies />
+      <IntelligenceHub
       marketPanel={<MarketIntelligenceView data={marketView} />}
       proofPanel={<ProofEffectivenessView analysis={proofAnalysis} />}
       memoryPanel={
@@ -49,5 +52,6 @@ export default async function SalesIntelligencePage() {
       }
       graphPanel={<CommercialKnowledgeGraphPanel snapshot={graphSnapshot} />}
     />
+    </div>
   );
 }

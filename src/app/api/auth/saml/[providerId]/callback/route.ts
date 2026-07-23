@@ -4,7 +4,7 @@
 // then redirects to the post-login destination.
 
 import { NextRequest, NextResponse } from "next/server";
-import { encode } from "@auth/core/jwt";
+import { encode } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
 import { validateSamlResponse } from "@/lib/auth/saml/saml-sp";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";

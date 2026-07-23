@@ -1,4 +1,6 @@
 import type { DecisionType, ScenarioType } from "@prisma/client"
+
+export type { DecisionType, ScenarioType }
 import type { DecisionScoringData, DerivedScores } from "./decision-scoring"
 
 export type { DecisionScoringData, DerivedScores } from "./decision-scoring"

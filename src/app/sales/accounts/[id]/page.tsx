@@ -9,6 +9,8 @@ import {
   EnterpriseCardTitle,
 } from "@/components/enterprise/enterprise-card";
 import { StatusBadge } from "@/components/enterprise/status-badge";
+import { EnrichAccountButton } from "@/components/sales/enrich-account-button";
+import { ApolloContactsPanel } from "@/components/sales/apollo-contacts-panel";
 
 export default async function SalesAccountPage({
   params,
@@ -34,6 +36,11 @@ export default async function SalesAccountPage({
         <StatusBadge status={account.status} size="sm" />
       </div>
 
+      <EnrichAccountButton
+        accountId={account.id}
+        accountName={account.nameAr ?? account.name}
+      />
+
       <EnterpriseCard module="sales">
         <EnterpriseCardHeader>
           <EnterpriseCardTitle>جهات الاتصال</EnterpriseCardTitle>
@@ -52,6 +59,11 @@ export default async function SalesAccountPage({
           )}
         </EnterpriseCardContent>
       </EnterpriseCard>
+
+      <ApolloContactsPanel
+        accountName={account.nameAr ?? account.name}
+        accountId={account.id}
+      />
 
       <EnterpriseCard module="sales">
         <EnterpriseCardHeader>

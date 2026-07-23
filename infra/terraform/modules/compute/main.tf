@@ -186,9 +186,9 @@ resource "aws_ecs_task_definition" "app" {
         { name = "CLAMAV_HOST", value = "127.0.0.1" },
         { name = "CLAMAV_PORT", value = "3310" },
         { name = "FF_AI_RAG", value = "true" },
-        { name = "FF_AI_REAL_PROVIDERS", value = var.environment == "production" ? "false" : "true" },
+        { name = "FF_AI_REAL_PROVIDERS", value = (var.environment == "production" || var.environment == "prod") ? "false" : "true" },
         { name = "FF_QUEUE_ENABLED", value = "true" },
-        { name = "FF_TENANT_LIFECYCLE", value = var.environment == "production" ? "true" : "false" },
+        { name = "FF_TENANT_LIFECYCLE", value = (var.environment == "production" || var.environment == "prod") ? "true" : "false" },
         { name = "S3_REGION", value = data.aws_region.current.name },
         { name = "S3_ENDPOINT", value = "https://s3.${data.aws_region.current.name}.amazonaws.com" },
       ]
@@ -274,7 +274,7 @@ resource "aws_lb" "main" {
   security_groups    = [var.alb_security_group_id]
   subnets            = var.public_subnet_ids
 
-  enable_deletion_protection = var.environment == "production"
+  enable_deletion_protection = var.environment == "production" || var.environment == "prod"
 
   tags = {
     Name = "${var.project_name}-${var.environment}-alb"
@@ -290,7 +290,7 @@ resource "aws_lb_target_group" "app" {
 
   health_check {
     enabled             = true
-    path                = "/api/health"
+    path                = "/api/platform/health"
     port                = var.container_port
     protocol            = "HTTP"
     healthy_threshold   = 2
@@ -322,7 +322,7 @@ resource "aws_lb_listener" "https" {
 
 # HTTP listener — prod mode: redirect to HTTPS
 resource "aws_lb_listener" "http_redirect" {
-  count             = var.environment == "production" ? 1 : 0
+  count             = (var.environment == "production" || var.environment == "prod") ? 1 : 0
   load_balancer_arn = aws_lb.main.arn
   port              = 80
   protocol          = "HTTP"
@@ -339,7 +339,7 @@ resource "aws_lb_listener" "http_redirect" {
 
 # HTTP listener — dev mode: forward directly to target group (no HTTPS)
 resource "aws_lb_listener" "http_forward" {
-  count             = var.environment != "production" ? 1 : 0
+  count             = (var.environment != "production" && var.environment != "prod") ? 1 : 0
   load_balancer_arn = aws_lb.main.arn
   port              = 80
   protocol          = "HTTP"
@@ -379,7 +379,7 @@ resource "aws_ecs_service" "app" {
 
   health_check_grace_period_seconds = 60
 
-  enable_execute_command = var.environment != "production"
+  enable_execute_command = var.environment != "production" && var.environment != "prod"
 
   tags = {
     Name = "${var.project_name}-${var.environment}-service"

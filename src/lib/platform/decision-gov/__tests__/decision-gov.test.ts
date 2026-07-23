@@ -42,16 +42,35 @@ function mockModel<T extends { id: string }>(map: Map<string, T>) {
     findMany: jest.fn(async ({ where, orderBy }: { where?: Record<string, unknown>; orderBy?: Record<string, string> } = {}) => {
       let items = Array.from(map.values())
       if (where) {
-        for (const [key, val] of Object.entries(where)) {
-          if (key === 'id') continue
-          if (val && typeof val === 'object' && 'gte' in (val as object)) {
-            const gte = (val as { gte: Date }).gte
-            items = items.filter(i => (i as unknown as Record<string, Date>)[key] >= gte)
-          } else if (val && typeof val === 'object' && 'lte' in (val as object)) {
-            const lte = (val as { lte: Date }).lte
-            items = items.filter(i => (i as unknown as Record<string, Date>)[key] <= lte)
-          } else if (val !== undefined && val !== null) {
-            items = items.filter(i => (i as unknown as Record<string, unknown>)[key] === val)
+        // Handle OR conditions
+        if (where.OR && Array.isArray(where.OR)) {
+          const orConditions = where.OR as Record<string, unknown>[]
+          items = items.filter((i) =>
+            orConditions.some((cond) =>
+              Object.entries(cond).every(([key, val]) => {
+                if (val && typeof val === 'object' && 'lte' in (val as object)) {
+                  const lte = (val as { lte: Date }).lte
+                  return new Date((i as unknown as Record<string, Date>)[key]) <= lte
+                }
+                return (i as unknown as Record<string, unknown>)[key] === val
+              })
+            )
+          )
+        } else {
+          for (const [key, val] of Object.entries(where)) {
+            if (key === 'id' || key === 'OR') continue
+            if (val && typeof val === 'object' && 'gte' in (val as object)) {
+              const gte = (val as { gte: Date }).gte
+              items = items.filter(i => (i as unknown as Record<string, Date>)[key] >= gte)
+            } else             if (val && typeof val === 'object' && 'lte' in (val as object)) {
+              const lte = (val as { lte: Date }).lte
+              items = items.filter(i => (i as unknown as Record<string, Date>)[key] <= lte)
+            } else if (val && typeof val === 'object' && 'in' in (val as object)) {
+              const inVals = (val as { in: string[] }).in
+              items = items.filter(i => inVals.includes((i as unknown as Record<string, string>)[key]))
+            } else if (val !== undefined && val !== null) {
+              items = items.filter(i => (i as unknown as Record<string, unknown>)[key] === val)
+            }
           }
         }
       }

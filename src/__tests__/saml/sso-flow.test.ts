@@ -28,7 +28,7 @@ jest.mock("@/lib/platform/audit-log", () => ({
   writePlatformAuditLog: jest.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock("@auth/core/jwt", () => ({
+jest.mock("next-auth/jwt", () => ({
   encode: jest.fn().mockResolvedValue("mock-jwt-token"),
 }));
 

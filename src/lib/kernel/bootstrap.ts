@@ -155,6 +155,17 @@ export async function initializeKernel(): Promise<Kernel> {
   kernelInstance.registerService("encryption", new EncryptionServiceWrapper());
   kernelInstance.registerService("cache", new CacheLayerWrapper());
 
+  // Wire Outbox Bridge to Event Bus
+  const eventBus = kernelInstance.getService<InstanceType<typeof EventBusWrapper>>("events");
+  const { OutboxBridge } = await import("./implementations/events/outbox-bridge");
+  const outboxBridge = new OutboxBridge();
+  outboxBridge.attach(eventBus);
+
+  // Wire CQRS ProjectionManager to Event Bus
+  const { getProjectionManager } = await import("./cqrs/projection");
+  const projectionManager = getProjectionManager();
+  projectionManager.attachToEventBus(eventBus);
+
   const { getToolRegistry } = await import("@/lib/core/ai/tool-registry/registry");
   kernelInstance.registerService("toolRegistry", getToolRegistry());
 

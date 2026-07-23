@@ -50,6 +50,8 @@ const publicExact = new Set([
   "/auditos",
   "/api/custom-product-submit",
   "/api/pilot-review",
+  "/api/sales/intel/webhook",
+  "/api/sales/intel/oauth",
 ]);
 
 const publicPrefixes = [
@@ -107,6 +109,7 @@ const routeMinRoles: Record<string, string> = {
   "/api/monitoring": "admin",
   "/api/skills": "admin",
   "/api/sales": "viewer",
+  "/api/sales/intel": "viewer",
   "/api/notifications": "viewer",
   "/api/knowledge-mining": "viewer",
   "/institutional-memory": "viewer",
@@ -332,10 +335,12 @@ export const config = {
     "/api/pilot-review",
     "/api/platform/:path*",
     "/api/skills/:path*",
-    "/api/sales/:path*",
-    "/api/notifications/:path*",
-    "/api/knowledge-mining",
-    "/api/knowledge-mining/:path*",
+  "/api/sales/:path*",
+  "/api/sales/intel/:path*",
+  "/api/crm/:path*",
+  "/api/notifications/:path*",
+  "/api/knowledge-mining",
+  "/api/knowledge-mining/:path*",
     "/knowledge-foundation",
     "/knowledge-foundation/:path*",
     "/governance-hub",

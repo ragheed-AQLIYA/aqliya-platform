@@ -278,7 +278,7 @@ resource "aws_sns_topic" "alarms" {
 }
 
 resource "aws_sns_topic_subscription" "alarm_email" {
-  count     = var.environment == "production" ? 1 : 0
+  count     = (var.environment == "production" || var.environment == "prod") ? 1 : 0
   topic_arn = aws_sns_topic.alarms.arn
   protocol  = "email"
   endpoint  = "ops@${var.domain_name}"

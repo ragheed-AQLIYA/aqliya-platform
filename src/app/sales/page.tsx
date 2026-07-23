@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import { getSalesDashboardDataAction } from "@/actions/sales-read-actions";
 import { SalesDashboardClient } from "./sales-dashboard-client";
+import { BatchEnrichButton } from "@/components/sales/batch-enrich-button";
 
 export default async function SalesDashboardPage() {
   const user = await getCurrentUser();
@@ -40,9 +41,14 @@ export default async function SalesDashboardPage() {
   };
 
   return (
-    <SalesDashboardClient
-      stats={stats}
-      hasDbData={accountCount > 0 || dealCount > 0}
-    />
+    <div dir="rtl">
+      <div className="mb-4">
+        <BatchEnrichButton />
+      </div>
+      <SalesDashboardClient
+        stats={stats}
+        hasDbData={accountCount > 0 || dealCount > 0}
+      />
+    </div>
   );
 }

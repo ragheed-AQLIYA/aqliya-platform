@@ -45,6 +45,10 @@ jest.mock("@/lib/auth", () => ({
   isExpectedAccessDeniedError: jest.fn(() => false),
 }));
 
+jest.mock("@/lib/kernel", () => ({
+  enforce: jest.fn().mockResolvedValue(undefined),
+}));
+
 import { describe, expect, it, beforeEach, jest } from "@jest/globals";
 import { prisma } from "@/lib/prisma";
 

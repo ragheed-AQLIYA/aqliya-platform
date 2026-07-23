@@ -70,8 +70,8 @@ resource "aws_db_instance" "primary" {
 
   parameter_group_name = aws_db_parameter_group.postgres.name
 
-  skip_final_snapshot       = var.environment == "production" ? false : true
-  final_snapshot_identifier = var.environment == "production" ? "${var.project_name}-${var.environment}-db-final-${formatdate("YYYY-MM-DD-hhmm", timestamp())}" : null
+  skip_final_snapshot       = (var.environment == "production" || var.environment == "prod") ? false : true
+  final_snapshot_identifier = (var.environment == "production" || var.environment == "prod") ? "${var.project_name}-${var.environment}-db-final-${formatdate("YYYY-MM-DD-hhmm", timestamp())}" : null
 
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
@@ -89,7 +89,7 @@ data "aws_secretsmanager_secret_version" "db_password" {
 }
 
 resource "aws_db_instance" "read_replica" {
-  count = var.environment == "production" ? 1 : 0
+  count = (var.environment == "production" || var.environment == "prod") ? 1 : 0
 
   identifier     = "${var.project_name}-${var.environment}-db-replica"
   engine         = "postgres"
@@ -122,7 +122,7 @@ resource "aws_db_instance" "read_replica" {
 }
 
 resource "aws_db_snapshot" "dr_source" {
-  count = var.enable_cross_region_dr && var.environment == "production" ? 1 : 0
+  count = var.enable_cross_region_dr && (var.environment == "production" || var.environment == "prod") ? 1 : 0
 
   db_instance_identifier = aws_db_instance.primary.identifier
   db_snapshot_identifier = "${var.project_name}-${var.environment}-dr-source-snapshot"
@@ -133,7 +133,7 @@ resource "aws_db_snapshot" "dr_source" {
 }
 
 resource "aws_db_snapshot_copy" "cross_region_dr" {
-  count = var.enable_cross_region_dr && var.environment == "production" ? 1 : 0
+  count = var.enable_cross_region_dr && (var.environment == "production" || var.environment == "prod") ? 1 : 0
 
   provider = aws.dr
 
@@ -151,7 +151,7 @@ output "rds_endpoint" {
 }
 
 output "rds_reader_endpoint" {
-  value = var.environment == "production" ? aws_db_instance.read_replica[0].endpoint : aws_db_instance.primary.endpoint
+  value = (var.environment == "production" || var.environment == "prod") ? aws_db_instance.read_replica[0].endpoint : aws_db_instance.primary.endpoint
 }
 
 output "rds_arn" {

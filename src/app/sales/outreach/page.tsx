@@ -11,6 +11,9 @@ import {
 import { getCurrentUser } from "@/lib/auth";
 import { getSalesPermissionsForRole } from "@/lib/sales/permissions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { OutreachDashboard } from "@/components/sales/outreach-dashboard";
+import { EmailTemplateManager } from "@/components/sales/email-template-manager";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +30,12 @@ export default async function SalesOutreachReviewPage() {
         subtitle="قائمة pending_review — org-scoped · لا إرسال خارجي"
       />
       <SalesPhaseBadge phase="pr9" />
+
+      <div className="flex gap-2 mb-4">
+        <Link href="/sales/outreach/analytics" className="text-sm text-primary hover:underline">
+          📊 تحليلات التواصل
+        </Link>
+      </div>
 
       <Card>
         <CardHeader>
@@ -47,6 +56,14 @@ export default async function SalesOutreachReviewPage() {
           )}
         </CardContent>
       </Card>
+
+      <div className="mt-6">
+        <OutreachDashboard />
+      </div>
+
+      <div className="mt-6">
+        <EmailTemplateManager />
+      </div>
     </div>
   );
 }

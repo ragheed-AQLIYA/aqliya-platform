@@ -23,7 +23,7 @@ const MODEL_NAMES = [
   'tBMappingPattern', 'tBMappingFeedback', 'tBClassificationHistory',
   'salesAccount', 'salesContact', 'salesDeal', 'salesAuditEvent',
   'salesPipeline', 'salesPipelineStage', 'salesInteraction',
-  'salesEvidenceLink', 'salesSignal',
+  'salesEvidenceLink', 'salesSignal', 'salesProposal', 'salesReview', 'salesApproval',
   'ssoProvider', 'scimProvisioningEvent',
   // LocalContentOS models
   'localContentProject', 'localContentSupplier', 'localContentSpendRecord',
@@ -423,6 +423,14 @@ function makeModel(model) {
       getStore(model).push(record)
       return clone(record)
     },
+    createMany: async ({ data }) => {
+      const records = (Array.isArray(data) ? data : [data]).map((d) => normalizeData(model, d))
+      const store = getStore(model)
+      for (const record of records) {
+        store.push(record)
+      }
+      return { count: records.length }
+    },
     findUnique: async (args = {}) => {
       const record = getOne(model, args.where)
       return projectRecord(model, record, args.select, args.include)
@@ -497,4 +505,6 @@ function PrismaClient() {
   this.$transaction = async (fn) => fn(this)
 }
 
-module.exports = { PrismaClient, AuditAction }
+const Prisma = { JsonNull: null, InputJsonValue: {} };
+
+module.exports = { PrismaClient, AuditAction, Prisma }
