@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   listSalesDealsAction,
 } from "@/actions/sales-actions";
+import { bridgeListDeals } from "@/lib/salesos/bridge";
 import {
   SalesPageHeader,
   SalesPhaseBadge,
@@ -17,8 +18,13 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function SalesDealsPage() {
+  // Primary: legacy action (stable, proven)
   const res = await listSalesDealsAction();
   const deals = res.ok ? res.data : [];
+
+  // Secondary: bridge health check (preparing for migration)
+  const bridgeCheck = await bridgeListDeals({ limit: 1 });
+  const _bridgeReady = bridgeCheck.success;
 
   return (
     <div dir="rtl">

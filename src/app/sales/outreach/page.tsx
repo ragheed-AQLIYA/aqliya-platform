@@ -13,6 +13,7 @@ import { getSalesPermissionsForRole } from "@/lib/sales/permissions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OutreachDashboard } from "@/components/sales/outreach-dashboard";
 import { EmailTemplateManager } from "@/components/sales/email-template-manager";
+import { CampaignBuilder } from "@/components/sales/campaign-builder";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -63,6 +64,10 @@ export default async function SalesOutreachReviewPage() {
 
       <div className="mt-6">
         <EmailTemplateManager />
+      </div>
+
+      <div className="mt-6">
+        <CampaignBuilder dealId="" dealName="حملة جديدة" />
       </div>
     </div>
   );
