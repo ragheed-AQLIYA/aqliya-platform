@@ -244,11 +244,6 @@
       "npx prettier --write"
     ]
   },
-  "overrides": {
-    "xlsx": {
-      "$comment": "TECH-DEBT(P2.1): xlsx (SheetJS) v0.18.5 is abandoned with unfixed CVE (Prototype Pollution CVSS 7.8). Replace with exceljs or @suryapratap/xlsx. 28 usages across 5 files in src/lib/. Migration requires async refactor (exceljs is async, xlsx is sync). See AQLIYA_REMEDIATION_PLAN_AR.md §P2.1."
-    }
-  },
   "engines": {
     "node": ">=20.0.0 <=24.x",
     "npm": ">=10.0.0"
