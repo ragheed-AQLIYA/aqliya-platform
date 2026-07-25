@@ -41,7 +41,7 @@ export interface GuardPipelineResult {
 // ─── Guards ───
 
 /** Business guard: account must be active */
-export function accountMustBeActive(_deal: Deal, _ctx: GuardContext): GuardResult {
+function accountMustBeActive(_deal: Deal, _ctx: GuardContext): GuardResult {
   // Domain-level check — account status is not part of the Deal aggregate
   // In production, this queries the account repository. For now, assume active.
   return { allowed: true, reason: "Account is active" };
@@ -79,7 +79,7 @@ export function reviewerNotOwner(deal: Deal, ctx: GuardContext): GuardResult {
 }
 
 /** Governance guard: approval audit trail complete */
-export function approvalAuditComplete(deal: Deal, _ctx: GuardContext): GuardResult {
+function approvalAuditComplete(deal: Deal, _ctx: GuardContext): GuardResult {
   if (deal.reviewDecisions.length === 0) {
     return {
       allowed: false,
@@ -92,7 +92,7 @@ export function approvalAuditComplete(deal: Deal, _ctx: GuardContext): GuardResu
 
 // ─── Phase-to-Guard Mapping ───
 
-export const GUARD_PHASE_MAP: Record<string, { guards: GuardFn[]; phase: GuardPhase }> = {
+const GUARD_PHASE_MAP: Record<string, { guards: GuardFn[]; phase: GuardPhase }> = {
   qualify: { guards: [accountMustBeActive], phase: "business" },
   submit_for_review: { guards: [evidenceGate], phase: "governance" },
   approve: { guards: [reviewerNotOwner], phase: "business" },

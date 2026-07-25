@@ -112,6 +112,7 @@ export async function listProjectsForWorkspace(
   const projects = await prisma.project.findMany({
     where: { workspaceId },
     orderBy: { name: "asc" },
+    take: 100,
   });
 
   return projects.map((p) => toContext(p, "project_id", null));

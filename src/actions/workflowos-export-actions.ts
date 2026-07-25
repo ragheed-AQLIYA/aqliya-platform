@@ -1,5 +1,7 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
@@ -10,6 +12,9 @@ import {
   notifyExportRejected,
 } from "@/lib/workflowos/notification-service";
 import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 function mapAuthError(error: unknown): string {
   const msg = error instanceof Error ? error.message : "";
@@ -92,7 +97,7 @@ export async function requestWorkflowExport(recordId: string) {
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       if (process.env.NODE_ENV !== "test") {
-      console.error("Error requesting Workflow export:", error);
+      logger.error("Error requesting Workflow export:", error instanceof Error ? error : undefined);
       }
     return { success: false, error: mapAuthError(error) };
   }
@@ -138,7 +143,7 @@ export async function approveWorkflowExport(recordId: string) {
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       if (process.env.NODE_ENV !== "test") {
-      console.error("Error approving Workflow export:", error);
+      logger.error("Error approving Workflow export:", error instanceof Error ? error : undefined);
       }
     return { success: false, error: mapAuthError(error) };
   }
@@ -191,7 +196,7 @@ export async function rejectWorkflowExport(
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       if (process.env.NODE_ENV !== "test") {
-      console.error("Error rejecting Workflow export:", error);
+      logger.error("Error rejecting Workflow export:", error instanceof Error ? error : undefined);
       }
     return { success: false, error: mapAuthError(error) };
   }
@@ -212,8 +217,14 @@ export async function downloadWorkflowExport(recordId: string) {
       orderBy: { createdAt: "desc" },
     });
 
-    const auditEvents = await prisma.workflowAuditEvent.findMany({
-      where: { organizationId: record.organizationId, recordId },
+    // [MIGRATED] workflowAuditEvent → platformAuditLog (dual-write with productKey: "workflowos")
+    // const auditEvents = await prisma.workflowAuditEvent.findMany({
+    //   where: { organizationId: record.organizationId, recordId },
+    //   orderBy: { createdAt: "desc" },
+    //   take: 100,
+    // });
+    const auditEvents = await prisma.platformAuditLog.findMany({
+      where: { productKey: "workflowos", organizationId: record.organizationId, targetId: recordId },
       orderBy: { createdAt: "desc" },
       take: 100,
     });
@@ -255,9 +266,9 @@ export async function downloadWorkflowExport(recordId: string) {
       auditEvents: auditEvents.map((e) => ({
         action: e.action,
         actorName: e.actorName,
-        comment: e.comment,
-        fromStatus: e.fromStatus,
-        toStatus: e.toStatus,
+        comment: (e.metadata as Record<string, unknown> | null)?.comment ?? e.eventDescription ?? null,
+        fromStatus: e.beforeState ?? (e.metadata as Record<string, unknown> | null)?.fromStatus ?? null,
+        toStatus: e.afterState ?? (e.metadata as Record<string, unknown> | null)?.toStatus ?? null,
         createdAt: e.createdAt.toISOString(),
       })),
       governance: {
@@ -280,7 +291,7 @@ export async function downloadWorkflowExport(recordId: string) {
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       if (process.env.NODE_ENV !== "test") {
-      console.error("Error downloading Workflow export:", error);
+      logger.error("Error downloading Workflow export:", error instanceof Error ? error : undefined);
       }
     return { success: false, error: mapAuthError(error) };
   }
@@ -306,7 +317,7 @@ export async function getWorkflowExportStatus(recordId: string) {
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       if (process.env.NODE_ENV !== "test") {
-      console.error("Error getting Workflow export status:", error);
+      logger.error("Error getting Workflow export status:", error instanceof Error ? error : undefined);
       }
     return { success: false, error: mapAuthError(error) };
   }
@@ -336,7 +347,7 @@ export async function getCurrentUserPendingExportCount() {
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       if (process.env.NODE_ENV !== "test") {
-      console.error("Error getting pending export count:", error);
+      logger.error("Error getting pending export count:", error instanceof Error ? error : undefined);
       }
     return { success: false, error: "فشل الحصول على إحصائيات التصدير" };
   }
@@ -367,7 +378,7 @@ export async function getPendingExportRequests(organizationId: string) {
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
       if (process.env.NODE_ENV !== "test") {
-      console.error("Error getting pending export requests:", error);
+      logger.error("Error getting pending export requests:", error instanceof Error ? error : undefined);
       }
     return { success: false, error: "Failed to get pending export requests" };
   }

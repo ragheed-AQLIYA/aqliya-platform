@@ -1,6 +1,7 @@
 ﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Kernel } from "@/lib/kernel";
+import { getTracingStatus } from "@/lib/observability/tracing";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export async function GET() {
   // Database connectivity check
   const dbStart = Date.now();
   try {
+    // SAFE: Prisma tagged template literal ($queryRaw) — parameterized, no concatenation.
     await prisma.$queryRaw`SELECT 1`;
     checks.database = { status: "ok", latencyMs: Date.now() - dbStart };
   } catch (e) {
@@ -49,6 +51,23 @@ export async function GET() {
     }
   } catch {
     // Kernel not available — non-blocking, skip
+  }
+
+  // Distributed tracing health check (non-blocking)
+  try {
+    const tracingStatus = getTracingStatus();
+    checks.tracing = {
+      status: tracingStatus.initialized ? "ok" : "error",
+      latencyMs: 0,
+      error: tracingStatus.initialized
+        ? undefined
+        : "Tracing not initialized",
+    };
+  } catch {
+    checks.tracing = {
+      status: "error",
+      error: "Tracing status unavailable",
+    };
   }
 
   // Overall status: healthy only if ALL checks pass

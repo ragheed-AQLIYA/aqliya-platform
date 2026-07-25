@@ -1,7 +1,11 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 
 import * as fs from "fs";
 import { getLocalStoreBaseDir } from "@/lib/platform/storage/local-storage-provider";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export type EnvCheckSeverity = "error" | "warning" | "info";
 
@@ -90,16 +94,16 @@ export function logStartupEnvWarnings(): void {
 
   if (errors.length === 0 && warnings.length === 0) return;
 
-  console.warn("\n=== AQLIYA Runtime Environment Checks ===");
+  logger.warn("\n=== AQLIYA Runtime Environment Checks ===");
 
   for (const check of errors) {
-    console.error(`[ENV ERROR] ${check.key}: ${check.message}`);
+    logger.error(`[ENV ERROR] ${check.key}: ${check.message}`);
   }
   for (const check of warnings) {
-    console.warn(`[ENV WARN] ${check.key}: ${check.message}`);
+    logger.warn("[ENV WARN]${check.key}: ${check.message}");
   }
 
-  console.warn("=========================================\n");
+  logger.warn("=========================================\n");
 }
 
 export async function checkLocalStorageWritable(): Promise<{

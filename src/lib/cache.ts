@@ -6,48 +6,41 @@
  *     return prisma.engagement.findMany({ ... })
  *   }, { ttl: 60_000 })
  *
- * In production, replace Map with Redis/ioredis.
+ * Uses Redis-backed cache adapter when Redis is available.
+ * Falls back to in-memory Map for local development or when Redis is down.
+ * The Redis adapter handles namespace isolation and SCAN-based cleanup.
  */
 
-const cache = new Map<string, { value: unknown; expiry: number }>();
+import { cacheAdapter } from "./platform/redis-cache-adapter"
 
 interface CacheOptions {
-  ttl?: number; // Time to live in milliseconds (default: 30s)
+  ttl?: number // Time to live in milliseconds (default: 30s)
 }
 
-const DEFAULT_TTL = 30_000;
+const DEFAULT_TTL = 30_000
 
 export async function cachedFetch<T>(
   key: string,
   fetcher: () => Promise<T>,
   options?: CacheOptions,
 ): Promise<T> {
-  const ttl = options?.ttl ?? DEFAULT_TTL;
-  const now = Date.now();
-  const cached = cache.get(key);
+  const ttl = options?.ttl ?? DEFAULT_TTL
 
-  if (cached && cached.expiry > now) {
-    return cached.value as T;
+  const cached = await cacheAdapter.get<T>(key)
+  if (cached !== null) {
+    return cached
   }
 
-  const value = await fetcher();
-  cache.set(key, { value, expiry: now + ttl });
+  const value = await fetcher()
+  await cacheAdapter.set(key, value, ttl)
 
-  // Prevent memory leak — clean up old entries periodically
-  if (cache.size > 100) {
-    const cutoff = Date.now();
-    Array.from(cache.entries()).forEach(([k, v]) => {
-      if (v.expiry < cutoff) cache.delete(k);
-    });
-  }
-
-  return value;
+  return value
 }
 
-export function invalidateCache(key: string) {
-  cache.delete(key);
+export async function invalidateCache(key: string): Promise<void> {
+  await cacheAdapter.del(key)
 }
 
-export function clearCache() {
-  cache.clear();
+export async function clearCache(): Promise<void> {
+  await cacheAdapter.clear()
 }

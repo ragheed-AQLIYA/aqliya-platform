@@ -1,4 +1,7 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "knowledge-foundation-events" });
 
 export type KnowledgeFoundationEventType =
   | "knowledge.foundation.version.created"
@@ -57,8 +60,8 @@ export async function emitFoundationEvent(
   ]);
   for (const r of results) {
     if (r.status === "rejected") {
-      console.warn(
-        `[KF Event] Handler failed for ${event.type}: ${r.reason}`,
+      logger.warn(
+        `KF Event handler failed for ${event.type}: ${r.reason}`,
       );
     }
   }

@@ -89,7 +89,7 @@ export default function DecisionRisksPage({
         getWorkflowReadiness(decisionId),
       ]);
 
-      if (risksResult.success && risksResult.data) {
+      if (risksResult.success) {
         setIntake(risksResult.data.intake);
         setFrameworkState(risksResult.data.frameworkState);
         setScenarioState(risksResult.data.scenarioState);
@@ -101,7 +101,7 @@ export default function DecisionRisksPage({
         setError(risksResult.error || "فشل في تحميل تحليل المخاطر");
       }
 
-      if (readinessResult.success && readinessResult.data) {
+      if (readinessResult.success) {
         setReadiness(readinessResult.data);
       }
 
@@ -141,12 +141,12 @@ export default function DecisionRisksPage({
 
     const result = await updateDecisionRiskAnalysis(id, { analyses });
 
-    if (result.success && result.data) {
+    if (result.success) {
       setAnalyses(result.data.riskAnalyses);
       setRiskAnalysisState(result.data.riskAnalysisState);
       setSuccess(true);
       const readinessResult = await getWorkflowReadiness(id);
-      if (readinessResult.success && readinessResult.data) {
+      if (readinessResult.success) {
         setReadiness(readinessResult.data);
       }
       setTimeout(() => setSuccess(false), 3000);

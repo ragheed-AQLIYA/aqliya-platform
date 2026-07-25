@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { getCurrentUser } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
@@ -7,6 +8,9 @@ import { getStorageProvider } from "@/lib/platform/storage";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { prisma } from "@/lib/prisma";
 import { sanitizeErrorResponse } from "@/lib/platform/api-error";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function GET(
   _request: NextRequest,
@@ -99,7 +103,7 @@ export async function GET(
     ) {
       return NextResponse.json({ error: "Evidence not found" }, { status: 404 });
     }
-    console.error("[DecisionEvidenceDownload] Error:", message);
+    logger.error("[DecisionEvidenceDownload] Error", error instanceof Error ? error : new Error(message));
     return NextResponse.json(sanitizeErrorResponse(error), { status: 500 });
   }
 }

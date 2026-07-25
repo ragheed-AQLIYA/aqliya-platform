@@ -1,7 +1,13 @@
-import * as Sentry from "@sentry/nextjs";
+﻿import * as Sentry from "@sentry/nextjs";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
+    // Initialize OpenTelemetry tracing before any other imports.
+    // This ensures HTTP/PG auto-instrumentation hooks are in place
+    // before the rest of the application loads.
+    const { initTracing } = await import("./lib/observability/tracing");
+    initTracing();
+
     const { logStartupEnvWarnings } =
       await import("./lib/platform/runtime-env-check");
     logStartupEnvWarnings();

@@ -1,7 +1,10 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/kernel";
 import {
   requireProjectAccess,
   requireWorkbookAccess,
@@ -51,6 +54,10 @@ import {
 import { computeLcScore } from "@/lib/local-content/workbook/scoring";
 import { parseOrError } from "@/lib/local-content/schemas/common";
 import { populateWorkbookFromTbSchema } from "@/lib/local-content/schemas/workbook";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 // ─── Result type ───
 
@@ -65,7 +72,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     if (process.env.NODE_ENV !== "test") {
-      console.error("[Workbook Action]", message);
+      logger.error("[Workbook Action]", error instanceof Error ? error : undefined);
     }
     return { ok: false, error: message };
   }
@@ -81,7 +88,19 @@ export async function createWorkbookAction(
   if (!parsed.success) return parsed;
   const organizationId = await requireProjectAccess(parsed.data.projectId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
-  return safe(() => createWorkbook(parsed.data.projectId, organizationId, parsed.data.title));
+  {
+    const user = await getCurrentUser();
+    await enforce(user, { type: "project", id: parsed.data.projectId, tenantId: organizationId }, "create");
+  }
+  const result = await safe(() => createWorkbook(parsed.data.projectId, organizationId, parsed.data.title));
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.created", { type: "LcWorkbook", id: parsed.data.projectId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
+  return result;
 }
 
 export async function populateWorkbookAction(
@@ -92,7 +111,18 @@ export async function populateWorkbookAction(
   if (!parsed.success) return parsed;
   const organizationId = await requireProjectAccess(parsed.data.projectId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
+  {
+    const user = await getCurrentUser();
+    await enforce(user, { type: "project", id: parsed.data.projectId, tenantId: organizationId }, "update");
+  }
   const result = await safe(() => populateWorkbookFromProject(parsed.data.projectId, organizationId, parsed.data.title));
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.populated", { type: "LcWorkbook", id: parsed.data.projectId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath(`/local-content/projects/${parsed.data.projectId}`);
   revalidatePath("/local-content/workbook");
   return result;
@@ -114,6 +144,13 @@ export async function populateWorkbookFromTbAction(
   const result = await safe(() =>
     populateWorkbookFromTb(projectId, organizationId, validatedLines, validatedTitle),
   );
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.populated_from_tb", { type: "LcWorkbook", id: projectId }, { severity: "info", metadata: { lineCount: validatedLines.length } });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath(`/local-content/projects/${projectId}`);
   revalidatePath("/local-content/workbook");
   return result;
@@ -146,9 +183,20 @@ export async function updateWorkbookLineAction(
 ) {
   const organizationId = await requireWorkbookLineAccess(lineId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
+  {
+    const user = await getCurrentUser();
+    await enforce(user, { type: "project", id: lineId, tenantId: organizationId }, "update");
+  }
   const result = await safe(() =>
     updateWorkbookLineValue(lineId, organizationId, manualValue, notes),
   );
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.line.updated", { type: "LcWorkbookLine", id: lineId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
@@ -157,6 +205,13 @@ export async function recalculateWorkbookAction(workbookId: string) {
   const organizationId = await requireWorkbookAccess(workbookId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
   const result = await safe(() => recalculateWorkbookStats(workbookId, organizationId));
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.recalculated", { type: "LcWorkbook", id: workbookId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
@@ -164,7 +219,18 @@ export async function recalculateWorkbookAction(workbookId: string) {
 export async function deleteWorkbookAction(workbookId: string) {
   const organizationId = await requireWorkbookAccess(workbookId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
+  {
+    const user = await getCurrentUser();
+    await enforce(user, { type: "project", id: workbookId, tenantId: organizationId }, "delete");
+  }
   const result = await safe(() => deleteWorkbook(workbookId, organizationId));
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.deleted", { type: "LcWorkbook", id: workbookId }, { severity: "warning" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath("/local-content/workbook");
   return result;
 }
@@ -191,6 +257,13 @@ export async function generateDataRequestAction(workbookId: string) {
   const organizationId = await requireWorkbookAccess(workbookId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
   const result = await safe(() => generateDataRequest(workbookId, organizationId));
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.data_request.generated", { type: "LcWorkbook", id: workbookId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
@@ -210,6 +283,13 @@ export async function fulfillDataRequestItemAction(
   const result = await safe(() =>
     fulfillDataRequestItem(itemId, organizationId, responseValue),
   );
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.data_request.fulfilled", { type: "LcDataRequestItem", id: itemId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
@@ -218,6 +298,13 @@ export async function waiveDataRequestItemAction(itemId: string) {
   const organizationId = await requireDataRequestItemAccess(itemId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
   const result = await safe(() => waiveDataRequestItem(itemId, organizationId));
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.data_request.waived", { type: "LcDataRequestItem", id: itemId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
@@ -226,6 +313,13 @@ export async function sendDataRequestAction(requestId: string) {
   const organizationId = await requireDataRequestAccess(requestId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
   const result = await safe(() => sendDataRequest(requestId, organizationId));
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.data_request.sent", { type: "LcDataRequest", id: requestId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
@@ -251,6 +345,13 @@ export async function markWorkbookExportedAction(workbookId: string) {
   const organizationId = await requireWorkbookAccess(workbookId);
   await requirePermission(Permission.WORKBOOK_EXPORT, ResourceType.WORKBOOK);
   const result = await safe(() => markWorkbookExported(workbookId, organizationId));
+  if (result.ok) {
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", organization: { platformOrganizationId: organizationId }, actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.exported", { type: "LcWorkbook", id: workbookId }, { severity: "info" });
+    } catch { /* audit failure non-blocking */ }
+  }
   revalidatePath("/local-content/workbook", "layout");
   return result;
 }
@@ -293,6 +394,12 @@ export async function computeWorkbookScoreAction(workbookId: string) {
         lcScoreComputedAt: new Date(),
       },
     });
+
+    try {
+      const user = await getCurrentUser();
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", actor: { id: user.id, name: user.name, email: user.email } });
+      await alog.record("localcontent.workbook.score_computed", { type: "LcWorkbook", id: workbookId }, { severity: "info", metadata: { score: result.overallScore } });
+    } catch { /* audit failure non-blocking */ }
 
     return result;
   });

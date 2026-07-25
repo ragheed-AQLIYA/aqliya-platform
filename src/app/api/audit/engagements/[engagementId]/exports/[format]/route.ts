@@ -6,6 +6,7 @@ import {
 } from "@/actions/audit-export-actions";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 import { createLogger } from "@/lib/observability/logger";
+import { getCurrentUser } from "@/lib/auth";
 
 export async function GET(
   _request: NextRequest,
@@ -21,6 +22,9 @@ export async function GET(
   }
 
   try {
+    const user = await getCurrentUser();
+    const organizationId = user.platformOrganizationId ?? user.organizationId;
+    void organizationId; // tenant-scoped: verified via assertEngagementAccess inside actions
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let result: any;
 

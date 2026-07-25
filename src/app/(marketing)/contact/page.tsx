@@ -15,10 +15,36 @@ const statusKey: Record<string, keyof typeof publicOsStatus> = {
   "Office AI Assistant": "officeAI",
 };
 
-export const metadata: Metadata = {
-  title: contactPageCopyAr.metadata.title,
-  description: contactPageCopyAr.metadata.description,
-};
+export function generateMetadata(): Metadata {
+  const title = contactPageCopyAr.metadata.title;
+  const description = contactPageCopyAr.metadata.description;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com/contact",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      type: "website",
+      images: [
+        {
+          url: "/og-contact.png",
+          width: 1200,
+          height: 630,
+          alt: "تواصل مع AQLIYA",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-contact.png"],
+    },
+  };
+}
 
 export default function ContactPage() {
   const c = contactPageCopyAr;

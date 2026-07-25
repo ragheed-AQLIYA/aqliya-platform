@@ -1,4 +1,5 @@
 export { type CrmConnector, type ConnectionTestResult, type RateLimitStatus } from "./connector";
+export { type SyncToLocalResult } from "./types";
 export {
   type CrmAccount,
   type CrmContact,
@@ -42,6 +43,11 @@ export {
   runSync,
 } from "./sync-orchestrator";
 export {
+  runSync as runSyncEngine,
+  getLatestSyncStatus,
+  getSyncCounts,
+} from "./sync-engine";
+export {
   createCrmConnection,
   updateCrmConnection,
   deleteCrmConnection,
@@ -51,4 +57,6 @@ export {
   listCrmConnections,
   getCrmConnection,
   listSyncLogs,
+  triggerCrmSyncAction,
+  getCrmSyncStatusAction,
 } from "./actions";

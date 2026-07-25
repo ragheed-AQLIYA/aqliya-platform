@@ -2,6 +2,7 @@
 // Uses file-based persistence for export job records (no schema change required).
 
 import { prisma } from "@/lib/prisma";
+import { createLogger } from "@/lib/observability/logger";
 import type { Prisma } from "@prisma/client";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
@@ -27,6 +28,9 @@ import {
   deliverToS3,
 } from "./delivery";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 // ─── Jobs persistence ───
 
@@ -141,6 +145,7 @@ export async function exportAuditLogs(
     const events = await prisma.platformAuditLog.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      take: 1000,
     });
     const totalEvents = events.length;
     const now = new Date().toISOString();
@@ -319,7 +324,7 @@ function intervalMsForSchedule(
  */
 export function scheduleExport(config: SiemExportConfig): boolean {
   if (activeSchedules.has(config.id)) {
-    console.warn(`[SIEM] Export schedule ${config.id} already active`);
+    logger.warn("[SIEM]Export schedule ${config.id} already active");
     return false;
   }
   const ms = intervalMsForSchedule(config.schedule, config.cronExpression);

@@ -251,22 +251,22 @@ export function domainEvidenceToPrisma(
 
 export function prismaAuditToDomain(row: {
   id: string;
-  organizationId: string;
-  actorId: string;
+  organizationId: string | null;
+  actorId: string | null;
   action: string;
-  targetType: string;
-  targetId: string;
+  targetType: string | null;
+  targetId: string | null;
   metadata: Prisma.JsonValue | null;
   createdAt: Date;
   [key: string]: unknown;
 }): SalesAuditEntry {
   return {
     id: row.id,
-    organizationId: row.organizationId,
+    organizationId: row.organizationId ?? "",
     action: row.action,
-    actorId: row.actorId,
-    targetType: row.targetType,
-    targetId: row.targetId,
+    actorId: row.actorId ?? "unknown",
+    targetType: row.targetType ?? "unknown",
+    targetId: row.targetId ?? "",
     timestamp: row.createdAt.toISOString(),
     metadata: row.metadata as Record<string, unknown> | undefined,
   };
@@ -275,7 +275,7 @@ export function prismaAuditToDomain(row: {
 export function domainAuditToPrisma(
   entry: SalesAuditEntry,
   actorName?: string,
-): Prisma.SalesAuditEventCreateInput {
+) {
   return {
     id: entry.id,
     organizationId: entry.organizationId,

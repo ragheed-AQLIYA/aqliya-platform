@@ -3,6 +3,7 @@
 // All mutations are logged to ScimProvisioningEvent and PlatformAuditLog.
 
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
@@ -43,6 +44,9 @@ function userToScimUser(user: {
   };
 }
 
+
+const logger = createLogger({ product: "platform", action: "unknown" });
+
 // ─── Audit helper ───
 
 async function recordScimEvent(params: {
@@ -78,7 +82,7 @@ async function recordScimEvent(params: {
     });
   } catch {
     // Never throw from audit — log and continue
-    console.warn("[ScimProvisioningEvent] Failed to record event");
+    logger.warn("[ScimProvisioningEvent]Failed to record event");
   }
 }
 

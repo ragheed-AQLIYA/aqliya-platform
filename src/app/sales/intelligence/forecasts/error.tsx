@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { ChartLine, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function IntelligenceForecastsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Intelligence Forecasts error:", error);
+    clientLogger.error("Intelligence Forecasts error:", error);
   }, [error]);
 
   return (

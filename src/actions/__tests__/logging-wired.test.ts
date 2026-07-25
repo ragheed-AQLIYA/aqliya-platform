@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { resolve } from "path";
 
 const files = [
-  { label: "decisions-crud", path: resolve(__dirname, "../decisions-crud.ts") },
+  { label: "decisions-crud/detail", path: resolve(__dirname, "../decisions-crud/detail.ts") },
   { label: "audit-engagement-actions", path: resolve(__dirname, "../audit-engagement-actions.ts") },
   { label: "localcontent-spend-actions", path: resolve(__dirname, "../localcontent-spend-actions.ts") },
   { label: "sales-dashboard-actions", path: resolve(__dirname, "../sales-dashboard-actions.ts") },

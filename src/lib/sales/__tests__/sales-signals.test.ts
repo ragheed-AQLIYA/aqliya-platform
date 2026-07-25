@@ -5,7 +5,7 @@ jest.mock("@/lib/prisma", () => ({
       findMany: jest.fn(),
       update: jest.fn(),
     },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -47,7 +47,7 @@ const BASE_ACCOUNT = {
 describe("SalesOS signals (metadata stub)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
   });
 
   describe("validateCreateSalesSignalInput", () => {
@@ -190,7 +190,7 @@ describe("SalesOS signals (metadata stub)", () => {
       expect(signal.accountId).toBe("acc-1");
       expect(signal.type).toBe("risk");
       expect(prisma.salesAccount.update).toHaveBeenCalled();
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.SIGNAL_CREATED,

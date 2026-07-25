@@ -2,6 +2,7 @@
 // تصدر تذاكر التحميل، تتحقق من الصلاحية، تسجل الأحداث في سجل التدقيق
 
 import { prisma } from "@/lib/prisma";
+import { createLogger } from "@/lib/observability/logger";
 import { principalFromCurrentUser } from "@/lib/platform/access/principal";
 import { can } from "@/lib/platform/access/permissions";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
@@ -39,6 +40,9 @@ function toDownloadTicketData(record: {
     revokedAt: record.revokedAt ?? undefined,
   };
 }
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 function getProductKeyFromResourceType(resourceType: string): string {
   const prefix = resourceType.split(".")[0];
@@ -113,7 +117,7 @@ export async function generateDownloadTicket(
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to generate download ticket";
-    console.warn(`[DownloadGate] generateDownloadTicket failed: ${message}`);
+    logger.warn("[DownloadGate]generateDownloadTicket failed: ${message}");
     return { allowed: false, reason: "Failed to generate download ticket" };
   }
 }
@@ -151,7 +155,7 @@ export async function verifyDownloadTicket(
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to verify download ticket";
-    console.warn(`[DownloadGate] verifyDownloadTicket failed: ${message}`);
+    logger.warn("[DownloadGate]verifyDownloadTicket failed: ${message}");
     return { allowed: false, reason: "Download link is invalid or expired" };
   }
 }
@@ -202,7 +206,7 @@ export async function consumeDownloadTicket(
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to consume download ticket";
-    console.warn(`[DownloadGate] consumeDownloadTicket failed: ${message}`);
+    logger.warn("[DownloadGate]consumeDownloadTicket failed: ${message}");
     return { allowed: false, reason: "Download link is invalid or expired" };
   }
 }

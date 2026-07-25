@@ -3,8 +3,10 @@ import type { CanonicalCandidate } from "./types";
 import ifrsMapping from "../../../knowledge/chart-of-accounts/ifrs-mapping.json";
 
 export async function loadCanonicalCandidates(): Promise<CanonicalCandidate[]> {
+  // Reference dataset — returns all canonical accounts for classification. No limit needed.
   const fromDb = await prisma.auditCanonicalAccount.findMany({
     orderBy: { displayOrder: "asc" },
+    take: 1000,
   });
 
   if (fromDb.length > 0) {

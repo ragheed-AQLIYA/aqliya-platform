@@ -1,6 +1,6 @@
 # Architecture Memory
 
-**Updated:** 2026-07-11T11:27:35.620Z  
+**Updated:** 2026-07-18T18:34:59.325Z  
 **Decisions:** 1
 
 > Engineering Excellence must **not** recommend reverting these without a new ADR.

@@ -3,6 +3,7 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
+import { enforce } from "@/lib/kernel";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 // ─── Types ───
@@ -100,6 +101,7 @@ async function getUserCtx() {
   if (!hasRequiredRole(user, "OPERATOR")) {
     throw new Error("Access denied: OPERATOR role required");
   }
+  await enforce(user, { type: "organization", id: user.organizationId, tenantId: user.organizationId }, "create");
   return {
     organizationId: user.platformOrganizationId ?? user.organizationId,
     userId: user.id,
@@ -231,7 +233,7 @@ export async function getCollections(offset?: number): Promise<{
     const PAGE_SIZE = 50;
     const skip = offset || 0;
     const where = { organizationId: orgId };
-    const [collections, totalCount] = await Promise.all([
+    const [collections, totalCount, orgEventCount] = await Promise.all([
       prisma.institutionalMemoryCollection.findMany({
         where,
         include: { createdBy: { select: { id: true, name: true } } },
@@ -240,23 +242,17 @@ export async function getCollections(offset?: number): Promise<{
         skip,
       }),
       prisma.institutionalMemoryCollection.count({ where }),
+      prisma.institutionalMemoryEvent.count({ where: { organizationId: orgId } }),
     ]);
-    const data: CollectionData[] = await Promise.all(
-      collections.map(async (c: CollectionWithCreator) => {
-        const eventCount = await prisma.institutionalMemoryEvent.count({
-          where: { organizationId: orgId },
-        });
-        return {
-          id: c.id,
-          name: c.name,
-          description: c.description ?? "",
-          filterCriteria: (c.filterCriteria as Record<string, unknown>) ?? {},
-          createdBy: c.createdBy ?? null,
-          eventCount,
-          createdAt: c.createdAt,
-        };
-      }),
-    );
+    const data: CollectionData[] = collections.map((c: CollectionWithCreator) => ({
+      id: c.id,
+      name: c.name,
+      description: c.description ?? "",
+      filterCriteria: (c.filterCriteria as Record<string, unknown>) ?? {},
+      createdBy: c.createdBy ?? null,
+      eventCount: orgEventCount,
+      createdAt: c.createdAt,
+    }));
     return { success: true, data, totalCount, hasMore: skip + PAGE_SIZE < totalCount };
   } catch (error: unknown) {
     if (isAuthRedirectError(error)) throw error;

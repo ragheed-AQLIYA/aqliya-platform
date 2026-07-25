@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { FileText, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function RecommendationError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Recommendation error:", error);
+    clientLogger.error("Recommendation error:", error);
   }, [error]);
 
   return (

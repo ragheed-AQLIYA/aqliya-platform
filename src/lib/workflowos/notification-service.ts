@@ -44,7 +44,7 @@ export async function getUnreadNotifications(recipientId: string) {
   });
 }
 
-export async function markNotificationRead(notificationId: string) {
+async function markNotificationRead(notificationId: string) {
   return prisma.platformNotification.update({
     where: { id: notificationId },
     data: { readAt: new Date() },

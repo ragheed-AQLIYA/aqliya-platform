@@ -15,18 +15,21 @@ export async function listArchivedEngagements(
   if (engagements.length === 0) return [];
 
   const ids = engagements.map((e) => e.id);
-  const archiveEvents = await prisma.auditEvent.findMany({
+  // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+  const archiveEvents = await prisma.platformAuditLog.findMany({
     where: {
-      engagementId: { in: ids },
-      eventType: "engagement.archived",
+      productKey: "audit_os",
+      sourceId: { in: ids },
+      action: "engagement.archived",
     },
-    orderBy: { timestamp: "desc" },
+    orderBy: { createdAt: "desc" },
   });
 
   const eventByEngagement = new Map<string, (typeof archiveEvents)[number]>();
   for (const ev of archiveEvents) {
-    if (!eventByEngagement.has(ev.engagementId)) {
-      eventByEngagement.set(ev.engagementId, ev);
+    const engId = (ev.metadata as Record<string, unknown> | null)?.engagementId as string | undefined;
+    if (engId && !eventByEngagement.has(engId)) {
+      eventByEngagement.set(engId, ev);
     }
   }
 
@@ -36,8 +39,8 @@ export async function listArchivedEngagements(
       engagementId: e.id,
       clientName: e.client?.name ?? "—",
       fiscalPeriod: e.fiscalPeriod,
-      previousStatus: ev?.previousState ?? "published",
-      archivedAt: ev?.timestamp.toISOString() ?? e.updatedAt.toISOString(),
+      previousStatus: ev?.beforeState ?? "published",
+      archivedAt: ev?.createdAt.toISOString() ?? e.updatedAt.toISOString(),
       archivedBy: ev?.actorName ?? null,
     };
   });

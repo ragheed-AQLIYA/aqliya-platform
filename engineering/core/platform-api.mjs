@@ -395,14 +395,37 @@ export async function bootstrap() {
     }
   }
 
-  // 4. Populate Knowledge Graph with all agents
+  // 4. Populate Knowledge Graph with all agents + their dependency edges
   const allAgents = agentEngine.getAllAgents();
+  const allSkills = skillEngine.getAllSkills();
+
+  // First, add all skill nodes
+  for (const skill of allSkills) {
+    knowledgeGraph.addNode(`skill:${skill.id}`, "skill", skill.metadata?.name || skill.id, { layer: skill.metadata?.layer });
+  }
+
+  // Then add agents and their edges
   for (const agent of allAgents) {
     knowledgeGraph.addNode(`agent:${agent.id}`, "agent", agent.metadata?.name || agent.id, { layer: agent.metadata?.layer });
+    // Add dependency edges
+    const deps = agent.metadata?.dependencies || [];
+    for (const dep of deps) {
+      if (!deps.includes("") && dep) {
+        try { knowledgeGraph.addEdge(`agent:${agent.id}`, `agent:${dep}`, "depends_on"); } catch {}
+      }
+    }
+    // Add skill edges
+    const skills = agent.metadata?.skills || [];
+    for (const skillId of skills) {
+      if (skillId) {
+        try { knowledgeGraph.addEdge(`agent:${agent.id}`, `skill:${skillId}`, "uses"); } catch {}
+      }
+    }
   }
 
   // 5. Wire Supervisor
-  console.log(`[AEOS] Supervisor monitoring ${supervisor.checkAgentHealth().length} agents`);
+  const supervisorReport = supervisor.getReport();
+  console.log(`[AEOS] Supervisor — ${supervisorReport.supervisor.agentsMonitored} agents monitored, ${supervisorReport.qualityAlerts.length} alerts`);
 
   // 6. Run kernel governance
   const kernelGovResult = kernelGovernance.enforce({ agentCount: agentEngine.agentCount() });

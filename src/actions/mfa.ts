@@ -1,14 +1,19 @@
 "use server";
 
 import { auth } from "@/lib/auth-config";
+import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { encrypt, decrypt } from "@/lib/auth/encryption";
 import { generateTOTPSecret, generateMFAQRCodeURI, verifyMFAToken, generateBackupCodes, hashBackupCode, verifyBackupCode } from "@/lib/auth/mfa";
+import { auditLogger, Product } from "@/lib/platform/audit-logger";
 
 export async function getMFASetup() {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
+  const currentUser = await getCurrentUser();
+  await enforce(currentUser, { type: "user", id: session.user.id, tenantId: currentUser.organizationId }, "update");
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -26,12 +31,23 @@ export async function getMFASetup() {
     data: { mfaSecret: encrypt(secret) },
   });
 
+  try {
+    const alog = auditLogger({
+      productKey: Product.PLATFORM,
+      sourceSystem: "mfa",
+      actor: { id: session.user.id, name: session.user.name ?? undefined, email: session.user.email ?? undefined },
+    });
+    await alog.record("mfa.setup.initiated", { type: "User", id: user.id }, { severity: "info" });
+  } catch { /* audit must not block */ }
+
   return { enabled: false, secret, qrUri };
 }
 
 export async function enableMFA(token: string) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
+  const currentUser = await getCurrentUser();
+  await enforce(currentUser, { type: "user", id: session.user.id, tenantId: currentUser.organizationId }, "update");
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -55,12 +71,23 @@ export async function enableMFA(token: string) {
     },
   });
 
+  try {
+    const alog = auditLogger({
+      productKey: Product.PLATFORM,
+      sourceSystem: "mfa",
+      actor: { id: session.user.id, name: session.user.name ?? undefined, email: session.user.email ?? undefined },
+    });
+    await alog.record("mfa.enabled", { type: "User", id: user.id }, { severity: "info" });
+  } catch { /* audit must not block */ }
+
   return { success: true, backupCodes };
 }
 
 export async function disableMFA(password: string) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
+  const currentUser = await getCurrentUser();
+  await enforce(currentUser, { type: "user", id: session.user.id, tenantId: currentUser.organizationId }, "update");
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -82,12 +109,23 @@ export async function disableMFA(password: string) {
     },
   });
 
+  try {
+    const alog = auditLogger({
+      productKey: Product.PLATFORM,
+      sourceSystem: "mfa",
+      actor: { id: session.user.id, name: session.user.name ?? undefined, email: session.user.email ?? undefined },
+    });
+    await alog.record("mfa.disabled", { type: "User", id: user.id }, { severity: "info" });
+  } catch { /* audit must not block */ }
+
   return { success: true };
 }
 
 export async function verifyLoginMFA(token: string, backupCode?: string) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
+  const currentUser = await getCurrentUser();
+  await enforce(currentUser, { type: "user", id: session.user.id, tenantId: currentUser.organizationId }, "update");
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },

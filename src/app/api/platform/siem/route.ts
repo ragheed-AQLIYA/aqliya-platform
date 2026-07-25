@@ -1,6 +1,7 @@
 // ─── SIEM Export API Routes ───
 // All routes require ADMIN role + organization context.
 
+import { z } from "zod";
 import { NextResponse } from "next/server";
 import { getCurrentUser, isAdmin } from "@/lib/auth";
 import {
@@ -10,6 +11,38 @@ import {
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import type { SiemFormat, SiemDestination } from "@/lib/platform/siem/types";
 import { VALID_SIEM_FORMATS } from "@/lib/platform/siem/types";
+
+const siemExportSchema = z.object({
+  _action: z.literal("export").optional(),
+  format: z.string().optional(),
+  destination: z.object({
+    type: z.string(),
+    url: z.string().optional(),
+    region: z.string().optional(),
+  }).optional(),
+  filters: z.object({
+    productKey: z.string().optional(),
+    action: z.string().optional(),
+    severity: z.string().optional(),
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
+    actorId: z.string().optional(),
+    targetType: z.string().optional(),
+  }).optional(),
+});
+
+const siemConfigSchema = z.object({
+  _action: z.literal("config"),
+  format: z.string().optional(),
+  label: z.string().max(200).optional(),
+  destination: z.object({
+    type: z.string(),
+    url: z.string().optional(),
+    region: z.string().optional(),
+  }).optional(),
+  schedule: z.string().max(100).optional(),
+  enabled: z.boolean().optional(),
+});
 
 // ─── GET /api/platform/siem — list export jobs ───
 
@@ -59,23 +92,46 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await request.json();
-    if (!body || typeof body !== "object") {
+    let rawBody: unknown;
+    try {
+      rawBody = await request.json();
+    } catch {
       return NextResponse.json(
         { ok: false, error: "Invalid JSON body" },
         { status: 400 },
       );
     }
 
-    const action = body._action ?? "export";
+    if (!rawBody || typeof rawBody !== "object") {
+      return NextResponse.json(
+        { ok: false, error: "Body must be a JSON object" },
+        { status: 400 },
+      );
+    }
+
+    const action = (rawBody as Record<string, unknown>)._action ?? "export";
     const organizationId = user.platformOrganizationId ?? user.organizationId;
 
     if (action === "export") {
-      return handleExport(user.id, organizationId, body);
+      const parsed = siemExportSchema.safeParse(rawBody);
+      if (!parsed.success) {
+        return NextResponse.json(
+          { ok: false, error: parsed.error.issues.map((i) => i.message).join(" ") },
+          { status: 400 },
+        );
+      }
+      return handleExport(user.id, organizationId, parsed.data);
     }
 
     if (action === "config") {
-      return handleConfig(user.id, organizationId, body);
+      const parsed = siemConfigSchema.safeParse(rawBody);
+      if (!parsed.success) {
+        return NextResponse.json(
+          { ok: false, error: parsed.error.issues.map((i) => i.message).join(" ") },
+          { status: 400 },
+        );
+      }
+      return handleConfig(user.id, organizationId, parsed.data);
     }
 
     return NextResponse.json(
@@ -100,9 +156,9 @@ export async function POST(request: Request) {
 async function handleExport(
   actorId: string,
   organizationId: string,
-  body: Record<string, unknown>,
+  data: z.infer<typeof siemExportSchema>,
 ): Promise<NextResponse> {
-  const format = (body.format as string) ?? "json";
+  const format = data.format ?? "json";
   if (!VALID_SIEM_FORMATS.includes(format as SiemFormat)) {
     return NextResponse.json(
       {
@@ -114,18 +170,16 @@ async function handleExport(
   }
 
   // Build destination and filters from request
-  const destination = body.destination
-    ? (body.destination as SiemDestination)
-    : undefined;
-  const filters = body.filters
+  const destination = data.destination as SiemDestination | undefined;
+  const filters = data.filters
     ? {
-        productKey: (body.filters as Record<string, string>).productKey,
-        action: (body.filters as Record<string, string>).action,
-        severity: (body.filters as Record<string, string>).severity,
-        startDate: (body.filters as Record<string, string>).startDate,
-        endDate: (body.filters as Record<string, string>).endDate,
-        actorId: (body.filters as Record<string, string>).actorId,
-        targetType: (body.filters as Record<string, string>).targetType,
+        productKey: data.filters.productKey,
+        action: data.filters.action,
+        severity: data.filters.severity,
+        startDate: data.filters.startDate,
+        endDate: data.filters.endDate,
+        actorId: data.filters.actorId,
+        targetType: data.filters.targetType,
       }
     : undefined;
 
@@ -176,9 +230,9 @@ const configStore = new Map<string, StoredSiemConfig>();
 async function handleConfig(
   actorId: string,
   organizationId: string,
-  body: Record<string, unknown>,
+  data: z.infer<typeof siemConfigSchema>,
 ): Promise<NextResponse> {
-  const format = (body.format as string) ?? "json";
+  const format = data.format ?? "json";
   if (!VALID_SIEM_FORMATS.includes(format as SiemFormat)) {
     return NextResponse.json(
       {
@@ -193,11 +247,11 @@ async function handleConfig(
   const config: StoredSiemConfig = {
     id: configId,
     organizationId,
-    label: (body.label as string) ?? "SIEM Export",
+    label: data.label ?? "SIEM Export",
     format: format as SiemFormat,
-    destination: body.destination as SiemDestination,
-    schedule: (body.schedule as string) ?? "manual",
-    enabled: body.enabled !== false,
+    destination: data.destination as SiemDestination,
+    schedule: data.schedule ?? "manual",
+    enabled: data.enabled !== false,
     updatedAt: new Date().toISOString(),
   };
   configStore.set(configId, config);

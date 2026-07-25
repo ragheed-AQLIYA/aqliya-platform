@@ -9,6 +9,9 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { aiOrchestrator } from "@/lib/core/ai/orchestrator";
 import { runGovernedProductAI } from "@/lib/platform/product-ai-bridge";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "localcontentos", action: "ai-health" });
 
 // ─── Types ───
 
@@ -38,8 +41,6 @@ const OLLAMA_BASE_URL =
 const EXPECTED_GENERATION_MODEL =
   process.env.AI_LOCAL_MODEL ?? "qwen3:8b";
 const EXPECTED_EMBEDDING_MODEL = "nomic-embed-text";
-const LOG_PREFIX = "[LocalContentAIHealth]";
-
 // ─── Public API ───
 
 /**
@@ -94,7 +95,7 @@ export async function checkAiHealth(): Promise<AiHealthReport> {
     recommendation = `حالة صحية غير جيدة: ${errors.join("; ")}`;
   }
 
-  console.info(LOG_PREFIX, "health check complete", {
+  logger.info("health check complete", {
     healthy,
     durationMs: totalMs,
     componentCount: components.length,

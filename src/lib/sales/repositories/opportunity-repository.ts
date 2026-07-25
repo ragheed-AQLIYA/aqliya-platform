@@ -24,6 +24,7 @@ export const opportunityRepository = {
     const rows = await prisma.salesDeal.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
+      take: 1000,
     });
     return rows.map(prismaDealToOpportunity);
   },

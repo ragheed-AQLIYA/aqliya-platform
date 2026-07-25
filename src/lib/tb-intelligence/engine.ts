@@ -338,7 +338,7 @@ export async function classifyTrialBalanceRows(
 }
 
 /** Firm memory only — Phase 3C validation / Year-2 reuse simulation. */
-export async function classifyAccountFirmMemoryOnly(
+async function classifyAccountFirmMemoryOnly(
   input: ClassifyAccountInput,
 ): Promise<ClassificationResult | null> {
   return lookupFirmMemory(
@@ -350,7 +350,7 @@ export async function classifyAccountFirmMemoryOnly(
 }
 
 /** Validation / benchmark entry points — no firm memory, no audit logging. */
-export async function classifyAccountRulesOnly(
+async function classifyAccountRulesOnly(
   input: ClassifyAccountInput,
   candidates?: Awaited<ReturnType<typeof loadCanonicalCandidates>>,
 ): Promise<ClassificationResult | null> {
@@ -358,7 +358,7 @@ export async function classifyAccountRulesOnly(
   return classifyByRules(input, list);
 }
 
-export async function classifyAccountLocalOnly(
+async function classifyAccountLocalOnly(
   input: ClassifyAccountInput,
   candidates?: Awaited<ReturnType<typeof loadCanonicalCandidates>>,
 ): Promise<ClassificationResult | null> {
@@ -366,7 +366,7 @@ export async function classifyAccountLocalOnly(
   return classifyByLocalAi(input, list);
 }
 
-export async function classifyAccountHybridOnly(
+async function classifyAccountHybridOnly(
   input: ClassifyAccountInput,
   candidates?: Awaited<ReturnType<typeof loadCanonicalCandidates>>,
 ): Promise<ClassificationResult | null> {
@@ -384,7 +384,7 @@ export async function classifyAccountHybridOnly(
 }
 
 /** Rules + pattern only — no Local AI (fast Phase 3B re-benchmark). */
-export async function classifyAccountDeterministicHybridOnly(
+async function classifyAccountDeterministicHybridOnly(
   input: ClassifyAccountInput,
   candidates?: Awaited<ReturnType<typeof loadCanonicalCandidates>>,
 ): Promise<ClassificationResult | null> {

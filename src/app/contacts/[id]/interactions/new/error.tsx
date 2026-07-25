@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { MessageCircle, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function NewInteractionError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("New Interaction error:", error);
+    clientLogger.error("New Interaction error:", error);
   }, [error]);
 
   return (

@@ -6,9 +6,13 @@
 // P0: Every learning metric update requires explicit approval.
 
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 
 import { prisma } from "@/lib/prisma";
 import { createAiAuditEvent, AuditActions } from "@/lib/local-content/audit-events";
+
+
+const logger = createLogger({ product: "platform", action: "lib-local-content-workbook-learning-loop" });
 
 // ─── Types ───
 
@@ -101,10 +105,7 @@ export async function updatePatternLearningMetrics(
       metadata: { workbookLineCode: suggestion.workbookLineCode },
     }).catch(() => {});
   } catch (error) {
-    console.warn(
-      "[LocalContentOS LearningLoop] Failed to update metrics:",
-      error instanceof Error ? error.message : "unknown",
-    );
+    logger.warn("[LocalContentOS LearningLoop] Failed to update metrics:", { error: error instanceof Error ? error.message : "unknown", });
   }
 }
 
@@ -162,10 +163,7 @@ export async function recordPatternOutcome(
       suggestion.workbookLineCode,
     );
   } catch (error) {
-    console.warn(
-      "[LocalContentOS LearningLoop] Failed to record outcome:",
-      error instanceof Error ? error.message : "unknown",
-    );
+    logger.warn("[LocalContentOS LearningLoop] Failed to record outcome:", { error: error instanceof Error ? error.message : "unknown", });
   }
 }
 
@@ -236,10 +234,7 @@ async function upsertPatternHealthRecord(
       });
     }
   } catch (error) {
-    console.warn(
-      "[LocalContentOS LearningLoop] Failed to upsert health record:",
-      error instanceof Error ? error.message : "unknown",
-    );
+    logger.warn("[LocalContentOS LearningLoop] Failed to upsert health record:", { error: error instanceof Error ? error.message : "unknown", });
   }
 }
 
@@ -274,10 +269,7 @@ async function recomputePatternHealth(
       });
     }
   } catch (error) {
-    console.warn(
-      "[LocalContentOS LearningLoop] Failed to recompute health:",
-      error instanceof Error ? error.message : "unknown",
-    );
+    logger.warn("[LocalContentOS LearningLoop] Failed to recompute health:", { error: error instanceof Error ? error.message : "unknown", });
   }
 }
 

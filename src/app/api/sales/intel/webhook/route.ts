@@ -9,11 +9,15 @@
  *   X-Webhook-Signature: HMAC-SHA256 signature
  */
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { receiveWebhook } from "@/lib/sales/intelligence/webhook/receiver";
 import type { WebhookProvider } from "@/lib/sales/intelligence/webhook/receiver";
 
 // Import handlers at module load — registers SmartLead/Apollo event processors
 import "@/lib/sales/intelligence/webhook/salesos-handlers";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,7 +53,7 @@ export async function POST(request: NextRequest) {
     const webhookSecret = process.env[secretEnvKey] ?? "";
 
     if (!webhookSecret) {
-      console.warn(`[Webhook] No secret configured for ${providerId}`);
+      logger.warn("[Webhook]No secret configured for ${providerId}");
     }
 
     const result = await receiveWebhook(
@@ -76,10 +80,7 @@ export async function POST(request: NextRequest) {
       eventId: result.eventId,
     });
   } catch (err) {
-    console.error(
-      "[Webhook] Error:",
-      err instanceof Error ? err.message : err,
-    );
+    logger.error("[Webhook] Error:", err instanceof Error ? err : new Error(String(err)));
     return NextResponse.json(
       { error: "Internal webhook processing error" },
       { status: 500 },

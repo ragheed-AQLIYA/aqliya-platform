@@ -54,21 +54,25 @@ export async function generateCandidatesFromPatterns(
 
   // Resolve canonical account IDs from codes
   const codes = [...new Set(qualifying.map((p) => p.canonicalCode))];
-  const canonicals = await prisma.auditCanonicalAccount.findMany({
+    // Bounded by in(codes) — codes derived from qualifying patterns, naturally limited
+    const canonicals = await prisma.auditCanonicalAccount.findMany({
     where: { code: { in: codes } },
     select: { id: true, code: true },
+    take: 100,
   });
   const codeToId = new Map(canonicals.map((c) => [c.code, c.id]));
 
   // Check for existing candidates to avoid duplicates
   const existingPhrases = new Set<string>();
   if (qualifying.length > 0) {
+    // Bounded by in(codes) + status filter — existing candidates for current pattern set
     const existing = await prisma.knowledgeCandidate.findMany({
       where: {
         canonicalCode: { in: codes },
         status: { not: "REJECTED" },
       },
       select: { candidatePhrase: true, canonicalCode: true },
+      take: 100,
     });
     for (const e of existing) {
       existingPhrases.add(

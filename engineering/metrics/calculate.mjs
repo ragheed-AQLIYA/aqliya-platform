@@ -1,6 +1,10 @@
 /**
  * Phase 8 — Engineering Metrics
  * Continuously calculate health scores from agent artifacts.
+ *
+ * Two new governance metrics (2026-07-17):
+ * - Scanner Confidence: measures scanner quality (precision, FP rate)
+ * - Refactoring Debt: measures only real design issues (god objects, long functions, SRP, complexity)
  */
 
 import { readText, engPath, writeText, writeJson, isoNow, exists, ensureDir } from "../lib/fs-utils.mjs";
@@ -25,6 +29,64 @@ function load(name) {
   } catch {
     return null;
   }
+}
+
+/**
+ * Scanner Confidence — how trustworthy are scanner results?
+ * Derived from scanner-quality.json golden dataset metrics.
+ * Returns { precision, falsePositiveRate, grade }.
+ */
+function calculateScannerConfidence() {
+  const quality = load("scanner-quality");
+  if (!quality?.quality) return { precision: null, falsePositiveRate: null, grade: "unknown" };
+
+  const precision = quality.quality.precision ?? null;
+  const fpRate = quality.quality.falsePositiveRate ?? null;
+
+  // Grade: A (≥80%), B (≥60%), C (≥40%), D (<40%)
+  let grade = "D";
+  if (precision != null) {
+    if (precision >= 80) grade = "A";
+    else if (precision >= 60) grade = "B";
+    else if (precision >= 40) grade = "C";
+  }
+
+  return { precision, falsePositiveRate: fpRate, grade };
+}
+
+/**
+ * Refactoring Debt — measures only real design-level issues.
+ * Excludes noise (unused imports, dead code, test-only signals).
+ * Score: 100 = no design debt, 0 = severe design debt.
+ *
+ * Categories counted:
+ * - god-object: files >1000 lines or >30 exports
+ * - long-function: functions >100 lines
+ * - solid-srp: single-responsibility violations
+ * - complexity: high cyclomatic complexity
+ */
+function calculateRefactoringDebt() {
+  const codeHealth = load("code-health");
+  if (!codeHealth?.findings) return null;
+
+  const DESIGN_CATEGORIES = ["god-object", "long-function", "solid-srp", "complexity"];
+
+  const designFindings = codeHealth.findings.filter((f) =>
+    DESIGN_CATEGORIES.includes(f.category)
+  );
+
+  if (designFindings.length === 0) return 100;
+
+  // Weight by severity: critical=5, high=3, medium=1, low=0.5
+  const severityWeight = { critical: 5, high: 3, medium: 1, low: 0.5, info: 0 };
+  const weightedSum = designFindings.reduce(
+    (sum, f) => sum + (severityWeight[f.severity] ?? 0.5),
+    0
+  );
+
+  // Cap at 85 (same formula as other scores)
+  const penalty = Math.min(85, weightedSum);
+  return Math.round(100 - penalty);
 }
 
 export function calculateMetrics() {
@@ -58,6 +120,10 @@ export function calculateMetrics() {
       );
   const maintainability = scores.technicalDebtScore;
 
+  // New governance metrics
+  const scannerConfidence = calculateScannerConfidence();
+  const refactoringDebt = calculateRefactoringDebt();
+
   return {
     generatedAt: isoNow(),
     scores: {
@@ -67,7 +133,12 @@ export function calculateMetrics() {
       repositoryMaturity,
       engineeringMaturity,
       overallRepositoryHealth: avg,
+      // Governance metrics — not averaged into health, displayed separately
+      scannerConfidence: scannerConfidence.precision,
+      scannerGrade: scannerConfidence.grade,
+      refactoringDebt,
     },
+    scannerConfidence,
   };
 }
 
@@ -106,6 +177,9 @@ export function writeMetrics(metrics) {
     codeHealth: s.codeHealthScore,
     architecture: s.architectureHealth,
     debt: s.technicalDebtScore,
+    scannerConfidence: s.scannerConfidence,
+    scannerGrade: s.scannerGrade,
+    refactoringDebt: s.refactoringDebt,
   });
   const prev = exists(historyPath) ? readText(historyPath) : "";
   writeText(historyPath, (prev || "") + line + "\n");

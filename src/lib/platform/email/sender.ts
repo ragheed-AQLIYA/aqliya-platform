@@ -1,6 +1,10 @@
 import nodemailer from "nodemailer"
+import { createLogger } from "@/lib/observability/logger";
 import type { SentMessageInfo } from "nodemailer"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export interface SendEmailInput {
   to: string
@@ -31,7 +35,7 @@ function getTransporter(): nodemailer.Transporter<SentMessageInfo> | null {
       auth: user && pass ? { user, pass } : undefined,
     })
   } else {
-    console.warn("[email] No SMTP configured — emails will be logged only")
+    logger.warn("[email]No SMTP configured — emails will be logged only")
   }
 
   return transporter
@@ -41,7 +45,7 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
   const t = getTransporter()
 
   if (!t) {
-    console.log("[email] Dev fallback — would send:", { to: input.to, subject: input.subject })
+    logger.info("[email] Dev fallback — would send:", { detail: { to: input.to, subject: input.subject } })
     await writePlatformAuditLog({
       productKey: "platform",
       action: "email.dev_fallback",
@@ -78,7 +82,7 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
     return { success: true, messageId: info.messageId }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error("[email] Send failed:", msg)
+    logger.error("[email] Send failed:", err instanceof Error ? err : new Error(String(err)))
 
     await writePlatformAuditLog({
       productKey: "platform",

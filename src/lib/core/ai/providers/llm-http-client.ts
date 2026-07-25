@@ -12,6 +12,9 @@ import type {
   AIResponse,
   AIProviderId,
 } from "@/lib/core/ai/types";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "llm-http-client" });
 
 const LLM_HTTP_TIMEOUT_MS = 30_000; // 30 seconds — shared across all LLM provider HTTP calls
 
@@ -45,7 +48,7 @@ export async function openAiCompatibleComplete(
     });
   } catch (err) {
     if (err instanceof DOMException && err.name === "AbortError") {
-      console.error(`[${providerLabel}] Request timed out after ${LLM_HTTP_TIMEOUT_MS}ms to ${url}`);
+      logger.error(`[${providerLabel}] Request timed out after ${LLM_HTTP_TIMEOUT_MS}ms to ${url}`, err instanceof Error ? err : undefined);
       throw new Error(`${providerLabel} API request timed out after ${LLM_HTTP_TIMEOUT_MS / 1000}s. Please try again or contact support.`);
     }
     throw err;
@@ -104,7 +107,7 @@ export async function anthropicComplete(
     });
   } catch (err) {
     if (err instanceof DOMException && err.name === "AbortError") {
-      console.error(`[anthropic] Request timed out after ${LLM_HTTP_TIMEOUT_MS}ms to ${url}`);
+      logger.error(`[anthropic] Request timed out after ${LLM_HTTP_TIMEOUT_MS}ms to ${url}`, err instanceof Error ? err : undefined);
       throw new Error(`Anthropic API request timed out after ${LLM_HTTP_TIMEOUT_MS / 1000}s. Please try again or contact support.`);
     }
     throw err;

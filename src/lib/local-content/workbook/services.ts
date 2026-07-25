@@ -17,6 +17,7 @@ export async function getWorkbookDashboardSummary(
   organizationId: string,
 ): Promise<WorkbookDashboardSummary> {
   const workbooks = await prisma.lcWorkbook.findMany({
+    take: 100,
     where: {
       project: { organizationId },
     },

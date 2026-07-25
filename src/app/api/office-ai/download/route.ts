@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 // ─── Per-user in-memory rate limiter for downloads ───
 // Note: per-instance only. In multi-instance deployments, rate limiting
@@ -97,10 +101,11 @@ export async function GET(request: NextRequest) {
         status: 400,
       });
     }
+    const organizationId = user.platformOrganizationId;
 
     if (
       !output ||
-      output.task.platformOrganizationId !== user.platformOrganizationId
+      output.task.platformOrganizationId !== organizationId
     ) {
       return new NextResponse("Output not found", { status: 404 });
     }
@@ -181,7 +186,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    console.error("[OfficeAiDownload] Failed to serve output:", error);
+    logger.error("[OfficeAiDownload] Failed to serve output:", error instanceof Error ? error : undefined);
     return new NextResponse("Failed to serve output", { status: 500 });
   }
 }

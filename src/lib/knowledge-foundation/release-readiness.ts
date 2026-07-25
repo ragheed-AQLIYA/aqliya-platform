@@ -37,6 +37,7 @@ export async function evaluateReleaseReadiness(
   });
 
   const bindings = await prisma.knowledgeFoundationVersionCandidate.findMany({
+    take: 100,
     where: { versionId },
     include: {
       candidate: {

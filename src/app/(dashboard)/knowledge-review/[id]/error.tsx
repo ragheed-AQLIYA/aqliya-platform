@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { CheckSquare, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function KnowledgeReviewError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Knowledge Review error:", error);
+    clientLogger.error("Knowledge Review error:", error);
   }, [error]);
 
   return (

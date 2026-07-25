@@ -2,6 +2,7 @@
  * Markdown / JSON report writers.
  */
 
+import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { engPath, writeText, writeJson, isoNow, ensureDir } from "./fs-utils.mjs";
 import { groupBySeverity, summarizeFindings } from "./findings.mjs";
@@ -82,6 +83,7 @@ export function writeAgentReport({
     summary,
     findings,
     meta,
+    scannerQuality: loadScannerQuality(),
   });
 
   return { score, summary, path: `${base}.md` };
@@ -90,5 +92,30 @@ export function writeAgentReport({
 export function writeNamedMarkdown(relativeName, content) {
   const file = path.join(reportsDir(), relativeName);
   writeText(file, content.endsWith("\n") ? content : content + "\n");
+  return file;
+}
+
+/**
+ * Load scanner quality metrics from scanner-quality.json if available.
+ * Returns null if not found.
+ */
+export function loadScannerQuality() {
+  try {
+    const file = path.join(reportsDir(), "scanner-quality.json");
+    if (existsSync(file)) {
+      return JSON.parse(readFileSync(file, "utf8"));
+    }
+  } catch {
+    // Quality metrics not available
+  }
+  return null;
+}
+
+/**
+ * Write scanner quality metrics to scanner-quality.json
+ */
+export function writeScannerQuality(qualityData) {
+  const file = path.join(reportsDir(), "scanner-quality.json");
+  writeJson(file, qualityData);
   return file;
 }

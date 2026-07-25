@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Inbox, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function IntakeError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Intake error:", error);
+    clientLogger.error("Intake error:", error);
   }, [error]);
 
   return (

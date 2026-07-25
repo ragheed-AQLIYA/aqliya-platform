@@ -1,38 +1,38 @@
 {
-  "at": "2026-07-11T11:27:35.615Z",
+  "at": "2026-07-18T18:34:59.322Z",
   "kpis": [
     {
       "id": "code_health",
       "label": "Code Health",
-      "value": 32,
+      "value": 34,
       "delta": 0,
-      "sparkline": "▁▄███"
+      "sparkline": "▇▇▇▇▇▇██"
     },
     {
       "id": "technical_debt",
       "label": "Technical Debt (health)",
-      "value": 58,
+      "value": 59,
       "delta": 0,
-      "sparkline": "▁████"
+      "sparkline": "▇▇▇▇▇▇██"
     },
     {
       "id": "mttr_hours",
       "label": "Mean Time to Fix (hours)",
-      "value": null,
+      "value": 151.5,
       "delta": null,
       "sparkline": "—"
     },
     {
       "id": "reopened_findings",
       "label": "Reopened Findings",
-      "value": 0,
+      "value": 7,
       "delta": null,
       "sparkline": "—"
     },
     {
       "id": "authorization_adoption",
       "label": "Authorization Adoption (%)",
-      "value": 52,
+      "value": 100,
       "delta": null,
       "sparkline": "—"
     },
@@ -47,43 +47,64 @@
       "id": "documentation_coverage",
       "label": "Documentation Score",
       "value": 95,
-      "delta": null,
-      "sparkline": "▁"
+      "delta": 0,
+      "sparkline": "▁▁▁▁▁▁"
     },
     {
       "id": "test_stability",
       "label": "Test Intelligence Score",
       "value": 95,
-      "delta": null,
-      "sparkline": "▁"
+      "delta": 0,
+      "sparkline": "▁▁▁▁▁▁"
     },
     {
       "id": "security_trend",
       "label": "Security Score",
-      "value": 65,
+      "value": 89,
       "delta": 0,
-      "sparkline": "▁████"
+      "sparkline": "▆▆▆▆████"
     },
     {
       "id": "platform_health",
       "label": "Platform Health",
-      "value": 74,
+      "value": 79,
       "delta": 0,
-      "sparkline": "▁▇███"
+      "sparkline": "▇▇▇▇▇▇██"
     },
     {
       "id": "open_findings",
       "label": "Open Findings",
-      "value": 786,
+      "value": 673,
       "delta": null,
       "sparkline": "—"
     },
     {
       "id": "resolved_findings",
       "label": "Resolved Findings (lifetime)",
-      "value": 0,
+      "value": 313,
       "delta": null,
       "sparkline": "—"
+    },
+    {
+      "id": "scanner_confidence",
+      "label": "Scanner Confidence (%)",
+      "value": 48,
+      "delta": null,
+      "sparkline": "▁"
+    },
+    {
+      "id": "scanner_grade",
+      "label": "Scanner Grade",
+      "value": "C",
+      "delta": null,
+      "sparkline": "—"
+    },
+    {
+      "id": "refactoring_debt",
+      "label": "Refactoring Debt",
+      "value": 15,
+      "delta": null,
+      "sparkline": "▁"
     }
   ]
 }

@@ -1,17 +1,23 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { prisma } from "@/lib/prisma";
 import {
   isExpectedAccessDeniedError,
   getCurrentUser,
   hasRequiredRole,
 } from "@/lib/auth";
+import { enforce } from "@/lib/kernel";
 import {
   getTemplate,
   getAllTemplates,
   type DecisionTemplate,
 } from "@/lib/decision/decision-templates";
 import { logAudit } from "@/lib/decision/decision-audit";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 const VALID_DECISION_TYPES = [
   "TENDER",
@@ -38,7 +44,7 @@ export async function getAvailableTemplates() {
     return { success: true, data: templates };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching templates:", error);
+      logger.error("Error fetching templates:", error instanceof Error ? error : undefined);
     }
     return { success: false, error: "Failed to fetch templates" };
   }
@@ -54,7 +60,7 @@ export async function getTemplateById(templateId: string) {
     return { success: true, data: template };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching template:", error);
+      logger.error("Error fetching template:", error instanceof Error ? error : undefined);
     }
     return { success: false, error: "Failed to fetch template" };
   }
@@ -76,6 +82,7 @@ export async function createDecisionFromTemplate(data: {
     if (!hasRequiredRole(user, "OPERATOR")) {
       throw new Error("Access denied: OPERATOR role required");
     }
+    await enforce(user, { type: "decision", id: user.organizationId, tenantId: user.organizationId }, "create");
 
     const template = getTemplate(data.templateId);
     if (!template) {
@@ -113,37 +120,17 @@ export async function createDecisionFromTemplate(data: {
     const assumptions = data.assumptions || template.suggestedAssumptions;
     const alternatives = data.alternatives || template.suggestedAlternatives;
 
-    for (const desc of objectives) {
-      if (desc.trim()) {
-        await prisma.objective.create({
-          data: { decisionId: decision.id, description: desc.trim() },
-        });
-      }
-    }
+    const objectiveData = objectives.filter((d: string) => d.trim()).map((d: string) => ({ decisionId: decision.id, description: d.trim() }));
+    const constraintData = constraints.filter((d: string) => d.trim()).map((d: string) => ({ decisionId: decision.id, description: d.trim() }));
+    const assumptionData = assumptions.filter((d: string) => d.trim()).map((d: string) => ({ decisionId: decision.id, description: d.trim() }));
+    const alternativeData = alternatives.filter((d: string) => d.trim()).map((d: string) => ({ decisionId: decision.id, description: d.trim() }));
 
-    for (const desc of constraints) {
-      if (desc.trim()) {
-        await prisma.constraint.create({
-          data: { decisionId: decision.id, description: desc.trim() },
-        });
-      }
-    }
-
-    for (const desc of assumptions) {
-      if (desc.trim()) {
-        await prisma.assumption.create({
-          data: { decisionId: decision.id, description: desc.trim() },
-        });
-      }
-    }
-
-    for (const desc of alternatives) {
-      if (desc.trim()) {
-        await prisma.alternative.create({
-          data: { decisionId: decision.id, description: desc.trim() },
-        });
-      }
-    }
+    await Promise.all([
+      objectiveData.length > 0 ? prisma.objective.createMany({ data: objectiveData }) : null,
+      constraintData.length > 0 ? prisma.constraint.createMany({ data: constraintData }) : null,
+      assumptionData.length > 0 ? prisma.assumption.createMany({ data: assumptionData }) : null,
+      alternativeData.length > 0 ? prisma.alternative.createMany({ data: alternativeData }) : null,
+    ]);
 
     await logAudit(
       user.id,
@@ -175,7 +162,7 @@ export async function createDecisionFromTemplate(data: {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error creating decision from template:", error);
+      logger.error("Error creating decision from template:", error instanceof Error ? error : undefined);
     }
     return { success: false, error: "Failed to create decision from template" };
   }

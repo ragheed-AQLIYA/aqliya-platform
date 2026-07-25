@@ -5,6 +5,7 @@ import "server-only";
 import { createHash } from "crypto";
 import { buildCommercialClaimReviewPrompt } from "@/lib/governance/prompt-framework";
 import { runGovernedProductAI } from "@/lib/platform/product-ai-bridge";
+import { createLogger } from "@/lib/observability/logger";
 import { getContentRepository } from "./repository-instance";
 import { assertContentItemTransition } from "./workflow";
 import {
@@ -13,15 +14,16 @@ import {
 } from "./tenant-scope";
 import type { ContentItem } from "./types";
 
-const LOG_PREFIX = "[LocalContentOS GovernedAI]";
+const logger = createLogger({ product: "localcontentos", action: "content-studio-ai" });
 
 function logGovernedAI(
   event: string,
   payload: Record<string, unknown>,
 ): void {
   if (process.env.NODE_ENV === "test") return;
-  console.info(LOG_PREFIX, event, {
-    productId: "localcontentos",
+  logger.info(event, {
+    product: "localcontentos",
+    action: event,
     ...payload,
   });
 }

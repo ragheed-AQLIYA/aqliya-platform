@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-11T11:27:40.952Z",
+  "updatedAt": "2026-07-18T18:34:59.508Z",
   "items": {
     "da1ed81c9c3b": {
       "fingerprint": "da1ed81c9c3b",
@@ -10,7 +10,7 @@
       "files": [
         "src/lib/sales/vnext/learning-loop.ts"
       ],
-      "state": "assigned",
+      "state": "closed",
       "priority": 3.4,
       "wave": "Wave-8",
       "history": [
@@ -25,6 +25,42 @@
           "from": "prioritized",
           "note": "prioritized → assigned",
           "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.658Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.718Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.782Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "prioritized",
+          "note": "Reopened after fix — returned to priority queue"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -36,14 +72,77 @@
       "files": [
         "src/lib/local-content/erp/connector-factory.ts"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.518Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.304Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.362Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.418Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "prioritized",
+          "note": "Reopened after fix — returned to priority queue"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -55,14 +154,77 @@
       "files": [
         "src/app/settings/retention/page.tsx"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.576Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.478Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.535Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.601Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "prioritized",
+          "note": "Reopened after fix — returned to priority queue"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -74,14 +236,62 @@
       "files": [
         "src/app/api/workflowos/escalation-check/route.ts"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.632Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.840Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.902Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:27.962Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
         }
       ]
     },
@@ -93,14 +303,62 @@
       "files": [
         "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.690Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.019Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.077Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.135Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
         }
       ]
     },
@@ -112,14 +370,77 @@
       "files": [
         "src/app/api/scim/v2/Users/route.ts"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.749Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.192Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.251Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.308Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "prioritized",
+          "note": "Reopened after fix — returned to priority queue"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -131,14 +452,77 @@
       "files": [
         "src/app/api/scim/v2/Users/[id]/route.ts"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.806Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.366Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.424Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.480Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "prioritized",
+          "note": "Reopened after fix — returned to priority queue"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -150,14 +534,77 @@
       "files": [
         "src/app/api/scim/v2/Groups/route.ts"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.863Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.540Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.601Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.657Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "prioritized",
+          "note": "Reopened after fix — returned to priority queue"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -169,14 +616,77 @@
       "files": [
         "src/app/api/scim/v2/Groups/[id]/route.ts"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.920Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.715Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.773Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.829Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "prioritized",
+          "note": "Reopened after fix — returned to priority queue"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -188,14 +698,62 @@
       "files": [
         "src/app/api/platform/retention/route.ts"
       ],
-      "state": "prioritized",
+      "state": "closed",
       "priority": 3.4,
-      "wave": null,
+      "wave": "Wave-8",
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
           "state": "prioritized",
           "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T07:21:57.246Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:07:35.245Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:15:39.828Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:21:58.873Z",
+          "state": "prioritized",
+          "note": "Synced from Top10 ROI ranking"
+        },
+        {
+          "at": "2026-07-16T23:27:05.978Z",
+          "state": "assigned",
+          "from": "prioritized",
+          "note": "prioritized → assigned",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.891Z",
+          "state": "implemented",
+          "from": "assigned",
+          "note": "assigned → implemented",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:28.948Z",
+          "state": "verified",
+          "from": "implemented",
+          "note": "implemented → verified",
+          "actor": "cli"
+        },
+        {
+          "at": "2026-07-16T23:27:29.008Z",
+          "state": "closed",
+          "from": "verified",
+          "note": "verified → closed",
+          "actor": "cli"
         }
       ]
     },
@@ -378,7 +936,7 @@
       "files": [
         "src/lib/audit/db/index.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -386,6 +944,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -397,7 +960,7 @@
       "files": [
         "src/lib/audit/mock-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -405,6 +968,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -435,7 +1003,7 @@
       "files": [
         "src/actions/audit-actions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -443,6 +1011,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -454,7 +1027,7 @@
       "files": [
         "src/actions/decisions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -462,6 +1035,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -473,7 +1051,7 @@
       "files": [
         "src/lib/sales/seed-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -481,6 +1059,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -492,7 +1075,7 @@
       "files": [
         "src/actions/localcontent-actions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -500,6 +1083,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -606,7 +1194,7 @@
       "files": [
         "src/app/auditos/demo-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -614,6 +1202,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -663,7 +1256,7 @@
       "files": [
         "src/lib/sales/seed-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -671,6 +1264,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -758,7 +1356,7 @@
       "files": [
         "src/__tests__/uat-run.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -766,6 +1364,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1214,7 +1817,7 @@
       "files": [
         "src/lib/audit/db/index.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1222,6 +1825,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1366,7 +1974,7 @@
       "files": [
         "src/actions/decisions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1374,6 +1982,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1423,7 +2036,7 @@
       "files": [
         "src/lib/audit/db/index.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1431,6 +2044,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1461,7 +2079,7 @@
       "files": [
         "src/__mocks__/prisma-client-mock.js"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1469,6 +2087,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1480,7 +2103,7 @@
       "files": [
         "src/actions/decisions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1488,6 +2111,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1499,7 +2127,7 @@
       "files": [
         "src/lib/skill-runtime/__tests__/skill-registry.integration.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1507,6 +2135,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1651,7 +2284,7 @@
       "files": [
         "src/__mocks__/prisma-client-mock.js"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1659,6 +2292,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1708,7 +2346,7 @@
       "files": [
         "src/lib/skill-runtime/__tests__/skill-registry.integration.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1716,6 +2354,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1727,7 +2370,7 @@
       "files": [
         "src/lib/sales/seed-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1735,6 +2378,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1765,7 +2413,7 @@
       "files": [
         "src/lib/platform/content-studio/__tests__/content-studio.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1773,6 +2421,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1822,7 +2475,7 @@
       "files": [
         "src/lib/audit/mock-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1830,6 +2483,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -1860,7 +2518,7 @@
       "files": [
         "src/lib/audit/db/index.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -1868,6 +2526,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2012,7 +2675,7 @@
       "files": [
         "src/actions/audit-actions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2020,6 +2683,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2031,7 +2699,7 @@
       "files": [
         "src/actions/decisions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2039,6 +2707,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2050,7 +2723,7 @@
       "files": [
         "src/actions/localcontent-actions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2058,6 +2731,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2221,7 +2899,7 @@
       "files": [
         "src/lib/platform/org-advanced/__tests__/org-adv.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2229,6 +2907,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2240,7 +2923,7 @@
       "files": [
         "src/lib/platform/audit-bridge/__tests__/audit-bridge.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2248,6 +2931,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2297,7 +2985,7 @@
       "files": [
         "src/lib/platform/audit-risk/__tests__/audit-risk.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2305,6 +2993,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2316,7 +3009,7 @@
       "files": [
         "src/lib/platform/abac/__tests__/abac.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2324,6 +3017,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2354,7 +3052,7 @@
       "files": [
         "src/app/auditos/demo-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2362,6 +3060,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2373,7 +3076,7 @@
       "files": [
         "src/actions/__tests__/workflow-actions.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2381,6 +3084,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2411,7 +3119,7 @@
       "files": [
         "src/lib/platform/rate-limiter/redis-rate-limiter.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2419,6 +3127,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2430,7 +3143,7 @@
       "files": [
         "src/lib/auth/sso-providers.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2438,6 +3151,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2449,7 +3167,7 @@
       "files": [
         "src/app/api/workflowos/documents/[documentId]/download/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2457,6 +3175,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2468,7 +3191,7 @@
       "files": [
         "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2476,6 +3199,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2506,7 +3234,7 @@
       "files": [
         "src/app/api/office-ai/download/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2514,6 +3242,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2525,7 +3258,7 @@
       "files": [
         "src/app/api/notifications/stream/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2533,6 +3266,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2544,7 +3282,7 @@
       "files": [
         "src/app/api/local-content/projects/[projectId]/reports/[reportId]/download/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2552,6 +3290,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2563,7 +3306,7 @@
       "files": [
         "src/app/api/local-content/projects/[projectId]/evidence/[evidenceId]/download/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2571,6 +3314,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2582,7 +3330,7 @@
       "files": [
         "src/app/api/local-content/projects/[projectId]/audit/export/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2590,6 +3338,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2601,7 +3354,7 @@
       "files": [
         "src/app/api/local-content/projects/[projectId]/audit/export/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2609,6 +3362,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2639,7 +3397,7 @@
       "files": [
         "src/app/api/auth/[...nextauth]/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2647,6 +3405,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2658,7 +3421,7 @@
       "files": [
         "src/app/api/auth/saml/[providerId]/metadata/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2666,6 +3429,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2677,7 +3445,7 @@
       "files": [
         "src/app/api/auth/saml/[providerId]/initiate/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2685,6 +3453,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2696,7 +3469,7 @@
       "files": [
         "src/app/api/audit/engagements/[engagementId]/exports/[format]/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2704,6 +3477,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2715,7 +3493,7 @@
       "files": [
         "src/app/api/audit/engagements/[engagementId]/exports/[format]/route.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2723,6 +3501,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2734,7 +3517,7 @@
       "files": [
         "prisma/seed-abac-policies.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2742,6 +3525,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2753,7 +3541,7 @@
       "files": [
         "prisma/seed-audit.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2761,6 +3549,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2772,7 +3565,7 @@
       "files": [
         "prisma/seed-local-content.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2780,6 +3573,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2791,7 +3589,7 @@
       "files": [
         "prisma/seed-localcontent.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2799,6 +3597,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2810,7 +3613,7 @@
       "files": [
         "prisma/seed-organizations.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2818,6 +3621,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2829,7 +3637,7 @@
       "files": [
         "prisma/seed-sso.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2837,6 +3645,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2848,7 +3661,7 @@
       "files": [
         "prisma/seed.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2856,6 +3669,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2867,7 +3685,7 @@
       "files": [
         "src/lib/tb-intelligence/knowledge-mining/kpis.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2875,6 +3693,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2886,7 +3709,7 @@
       "files": [
         "src/lib/platform/office-ai-adv/office-ai-adv-service.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2894,6 +3717,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2905,7 +3733,7 @@
       "files": [
         "src/lib/platform/download/__tests__/download.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2913,6 +3741,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2962,7 +3795,7 @@
       "files": [
         "src/lib/platform/audit-risk/audit-risk-engine.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2970,6 +3803,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -2981,7 +3819,7 @@
       "files": [
         "src/lib/platform/access/rbac-service.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -2989,6 +3827,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3000,7 +3843,7 @@
       "files": [
         "src/lib/platform/access/seed-permissions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3008,6 +3851,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3019,7 +3867,7 @@
       "files": [
         "src/lib/platform/abac/abac-service.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3027,6 +3875,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3038,7 +3891,7 @@
       "files": [
         "src/lib/office-ai/file-extraction-service.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3046,6 +3899,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3057,7 +3915,7 @@
       "files": [
         "src/lib/local-content/workbook/ai-advisor.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3065,6 +3923,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3095,7 +3958,7 @@
       "files": [
         "src/lib/integration/resolver.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3103,6 +3966,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:12:58.516Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3114,7 +3982,7 @@
       "files": [
         "src/lib/core/policy/access/abac-service.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3122,6 +3990,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3152,7 +4025,7 @@
       "files": [
         "src/lib/core/knowledge/rag/embedding-service.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3160,6 +4033,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3171,7 +4049,7 @@
       "files": [
         "src/lib/core/events/outbox-service.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3179,6 +4057,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3190,7 +4073,7 @@
       "files": [
         "src/lib/audit/knowledge-engine.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3198,6 +4081,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3209,7 +4097,7 @@
       "files": [
         "src/lib/audit/db/index.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3217,6 +4105,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3247,7 +4140,7 @@
       "files": [
         "src/actions/decision-templates.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3255,6 +4148,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3266,7 +4164,7 @@
       "files": [
         "src/actions/decisions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3274,6 +4172,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3285,7 +4188,7 @@
       "files": [
         "src/actions/institutional-memory-actions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3293,6 +4196,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3304,7 +4212,7 @@
       "files": [
         "src/actions/localcontent-actions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3312,6 +4220,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3323,7 +4236,7 @@
       "files": [
         "src/actions/simulation.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3331,6 +4244,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:12:58.516Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3359,7 +4277,7 @@
       "files": [
         "src/lib/audit/db/index.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3367,6 +4285,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3378,7 +4301,7 @@
       "files": [
         "src/actions/decisions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3386,6 +4309,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3435,7 +4363,7 @@
       "files": [
         "src/lib/audit/client-acceptance-engine.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3443,6 +4371,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3454,7 +4387,7 @@
       "files": [
         "src/__mocks__/prisma-client-mock.js"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3462,6 +4395,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3473,7 +4411,7 @@
       "files": [
         "src/app/(dashboard)/decisions/[id]/page.tsx"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3481,6 +4419,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3549,7 +4492,7 @@
       "files": [
         "src/lib/skill-runtime/__tests__/skill-registry.integration.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3557,6 +4500,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3568,7 +4516,7 @@
       "files": [
         "src/actions/audit-actions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3576,6 +4524,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3644,7 +4597,7 @@
       "files": [
         "src/lib/audit/mock-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3652,6 +4605,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3682,7 +4640,7 @@
       "files": [
         "src/actions/localcontent-actions.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3690,6 +4648,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3720,7 +4683,7 @@
       "files": [
         "src/__tests__/i18n/no-english-strings.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3728,6 +4691,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3872,7 +4840,7 @@
       "files": [
         "src/lib/platform/content-studio/__tests__/content-studio.test.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3880,6 +4848,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -3929,7 +4902,7 @@
       "files": [
         "src/lib/governance-engine/graph/pipeline/graph-readiness-pipeline.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -3937,6 +4910,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -4081,7 +5059,7 @@
       "files": [
         "src/lib/sales/seed-data.ts"
       ],
-      "state": "finding",
+      "state": "closed",
       "priority": null,
       "wave": null,
       "history": [
@@ -4089,6 +5067,11 @@
           "at": "2026-07-11T11:27:35.804Z",
           "state": "finding",
           "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
         }
       ]
     },
@@ -4182,6 +5165,1379 @@
       "history": [
         {
           "at": "2026-07-11T11:27:35.804Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "1d0bcd21b094": {
+      "fingerprint": "1d0bcd21b094",
+      "title": "Possible Prisma N+1 query pattern",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "prisma/seed-pilot.ts"
+      ],
+      "state": "closed",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        },
+        {
+          "at": "2026-07-17T22:29:37.581Z",
+          "state": "closed",
+          "note": "Auto-closed: absent from latest audit (resolved in memory)"
+        }
+      ]
+    },
+    "ea98b35465ac": {
+      "fingerprint": "ea98b35465ac",
+      "title": "Possible Prisma N+1 query pattern",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/financial-db.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "92a3a5d834a9": {
+      "fingerprint": "92a3a5d834a9",
+      "title": "Possible Prisma N+1 query pattern",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/validation-db.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "dbab8bf767d5": {
+      "fingerprint": "dbab8bf767d5",
+      "title": "Possible Prisma N+1 query pattern",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/localcontent-spend-actions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "ecac26e6b215": {
+      "fingerprint": "ecac26e6b215",
+      "title": "#1 ROI 3.4 — Possible secret material (generic-secret)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/sales/vnext/learning-loop.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "89e5ee87c451": {
+      "fingerprint": "89e5ee87c451",
+      "title": "#2 ROI 3.4 — Possible secret material (generic-secret)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/local-content/erp/connector-factory.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "698c3e87ccc7": {
+      "fingerprint": "698c3e87ccc7",
+      "title": "#3 ROI 3.4 — Possible secret material (generic-secret)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/settings/retention/page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "63faa1192b97": {
+      "fingerprint": "63faa1192b97",
+      "title": "#4 ROI 3.4 — API route may lack auth check",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/api/workflowos/escalation-check/route.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "5204cac8fd8b": {
+      "fingerprint": "5204cac8fd8b",
+      "title": "#5 ROI 3.4 — API route may lack auth check",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "19cba9478eba": {
+      "fingerprint": "19cba9478eba",
+      "title": "#6 ROI 3.4 — API route may lack auth check",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/api/scim/v2/Users/route.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "3ae702918b54": {
+      "fingerprint": "3ae702918b54",
+      "title": "#7 ROI 3.4 — API route may lack auth check",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/api/scim/v2/Users/[id]/route.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "00fb90e18bfe": {
+      "fingerprint": "00fb90e18bfe",
+      "title": "#8 ROI 3.4 — API route may lack auth check",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/api/scim/v2/Groups/route.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "993204c3f990": {
+      "fingerprint": "993204c3f990",
+      "title": "#9 ROI 3.4 — API route may lack auth check",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/api/scim/v2/Groups/[id]/route.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "f893d41b704c": {
+      "fingerprint": "f893d41b704c",
+      "title": "#10 ROI 3.4 — API route may lack auth check",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/api/platform/retention/route.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "46989d0d3c74": {
+      "fingerprint": "46989d0d3c74",
+      "title": "Large module / God Object signal: index.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "63c08b39c2d3": {
+      "fingerprint": "63c08b39c2d3",
+      "title": "Large module / God Object signal: mock-data.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/mock-data.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "ac2df46ea268": {
+      "fingerprint": "ac2df46ea268",
+      "title": "Large module / God Object signal: services.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/services.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "cf9d6b5771f1": {
+      "fingerprint": "cf9d6b5771f1",
+      "title": "Large module / God Object signal: audit-actions.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/audit-actions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "842647f38e96": {
+      "fingerprint": "842647f38e96",
+      "title": "Large module / God Object signal: decisions.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "dbb10cb4c984": {
+      "fingerprint": "dbb10cb4c984",
+      "title": "Large module / God Object signal: seed-data.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "c05b01e99033": {
+      "fingerprint": "c05b01e99033",
+      "title": "Long function buildSalesSeedData (1651 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/sales/seed-data.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "d3608b27f144": {
+      "fingerprint": "d3608b27f144",
+      "title": "Long function runValidation (308 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "26e3a106fbfe": {
+      "fingerprint": "26e3a106fbfe",
+      "title": "Long function getDashboardMetrics (274 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/decisions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "d6f59e311617": {
+      "fingerprint": "d6f59e311617",
+      "title": "Elevated complexity in index.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/index.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "8706aa853003": {
+      "fingerprint": "8706aa853003",
+      "title": "Large module / God Object signal: localcontent-actions.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/localcontent-actions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "448ce75f1418": {
+      "fingerprint": "448ce75f1418",
+      "title": "Client module references server-only concerns",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "899b765ea1c3": {
+      "fingerprint": "899b765ea1c3",
+      "title": "Large module / God Object signal: page.tsx",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "cca2c39ff32b": {
+      "fingerprint": "cca2c39ff32b",
+      "title": "Large module / God Object signal: page.tsx",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "5b41e2d82d3a": {
+      "fingerprint": "5b41e2d82d3a",
+      "title": "Large module / God Object signal: evidence-page.tsx",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/components/audit/evidence/evidence-page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "fa1b2f264118": {
+      "fingerprint": "fa1b2f264118",
+      "title": "Long function ConnectionDetailPanel (330 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/local-content/settings/integrations/page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "5af2bdb2bac8": {
+      "fingerprint": "5af2bdb2bac8",
+      "title": "Large module / God Object signal: store.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/sales/store.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "4919a400bcd1": {
+      "fingerprint": "4919a400bcd1",
+      "title": "Large module / God Object signal: ai-advisor.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "d7538890827c": {
+      "fingerprint": "d7538890827c",
+      "title": "Large module / God Object signal: demo-data.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/auditos/demo-data.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "7912f3702c4d": {
+      "fingerprint": "7912f3702c4d",
+      "title": "Large module / God Object signal: findings-page.tsx",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/components/audit/findings/findings-page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "2a9876943115": {
+      "fingerprint": "2a9876943115",
+      "title": "Large module / God Object signal: page.tsx",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/sales/settings/crm/page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "4f23fdc4b936": {
+      "fingerprint": "4f23fdc4b936",
+      "title": "Elevated complexity in ai-advisor.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/local-content/workbook/ai-advisor.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "d40c962a8b96": {
+      "fingerprint": "d40c962a8b96",
+      "title": "Client module references server-only concerns",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/components/audit/trial-balance/trial-balance-upload.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "3ca356f62d7d": {
+      "fingerprint": "3ca356f62d7d",
+      "title": "Long function buildStatementLinesFromMappings (718 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/statement-builder.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "2183337409f2": {
+      "fingerprint": "2183337409f2",
+      "title": "Long function WorkbookDetailClient (708 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/workbook-detail-client.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T22:09:38.979Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "440593af20e3": {
+      "fingerprint": "440593af20e3",
+      "title": "Client module references server-only concerns",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/components/settings/preferences-form.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "4da0ac60d938": {
+      "fingerprint": "4da0ac60d938",
+      "title": "Long function getDashboardMetrics (331 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/decisions-metrics.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "9a336ba4a104": {
+      "fingerprint": "9a336ba4a104",
+      "title": "Long function runValidation (308 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/validation-db.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "bbd828440785": {
+      "fingerprint": "bbd828440785",
+      "title": "Long function warmDashboardCaches (272 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/platform/cache-strategy.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "a6e2b3a7cdf7": {
+      "fingerprint": "a6e2b3a7cdf7",
+      "title": "Long function AccountBriefView (271 lines)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/components/sales/account-brief-view.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "323868e4f255": {
+      "fingerprint": "323868e4f255",
+      "title": "Low maintainability index (2)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/content-studio/prisma-repository.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "bf70e255e349": {
+      "fingerprint": "bf70e255e349",
+      "title": "Low maintainability index (2)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/decisions-workflow.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "c7829a28ff4f": {
+      "fingerprint": "c7829a28ff4f",
+      "title": "Low maintainability index (4)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/contact-actions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "39a172c16130": {
+      "fingerprint": "39a172c16130",
+      "title": "Low maintainability index (4)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/decisions-crud.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "bec771d4ffa4": {
+      "fingerprint": "bec771d4ffa4",
+      "title": "Low maintainability index (4)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/office-ai-actions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "4807b66a43c0": {
+      "fingerprint": "4807b66a43c0",
+      "title": "Low maintainability index (5)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/platform/content-studio/content-studio-service.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "833f9628f3df": {
+      "fingerprint": "833f9628f3df",
+      "title": "Low maintainability index (5)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/platform/audit-risk/audit-risk-engine.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "a2c2b78a9eee": {
+      "fingerprint": "a2c2b78a9eee",
+      "title": "Low maintainability index (5)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/office-ai/office-ai-task-service.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "60b15bba4715": {
+      "fingerprint": "60b15bba4715",
+      "title": "Low maintainability index (5)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/sales-actions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "b014e0a659e4": {
+      "fingerprint": "b014e0a659e4",
+      "title": "Low maintainability index (6)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/platform/cross-product-ai/cross-product-ai-service.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "c9c13ee588c5": {
+      "fingerprint": "c9c13ee588c5",
+      "title": "Low maintainability index (7)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/sales/v02/knowledge-graph/builder.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "731a95fb80b9": {
+      "fingerprint": "731a95fb80b9",
+      "title": "Low maintainability index (7)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/local-content/workbook/recommendation-engine.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "9716bec9ed53": {
+      "fingerprint": "9716bec9ed53",
+      "title": "Low maintainability index (7)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/engagement-db.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "b6cc71cc6712": {
+      "fingerprint": "b6cc71cc6712",
+      "title": "Low maintainability index (7)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/financial-db.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "380ee3f46e14": {
+      "fingerprint": "380ee3f46e14",
+      "title": "Low maintainability index (7)",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/components/audit/recommendations/recommendations-page.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "35fcdb230a32": {
+      "fingerprint": "35fcdb230a32",
+      "title": "Debt hotspot (priority 96): office-ai-actions.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/office-ai-actions.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "f235ea94d6bb": {
+      "fingerprint": "f235ea94d6bb",
+      "title": "Debt hotspot (priority 94): decisions-workflow.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/decisions-workflow.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "090c10931af5": {
+      "fingerprint": "090c10931af5",
+      "title": "Debt hotspot (priority 90): prisma-repository.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/content-studio/prisma-repository.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "4c9b2961b0fb": {
+      "fingerprint": "4c9b2961b0fb",
+      "title": "Debt hotspot (priority 87): builder.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/sales/v02/knowledge-graph/builder.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "719c12c30429": {
+      "fingerprint": "719c12c30429",
+      "title": "Debt hotspot (priority 87): executive-commercial-dashboard-service.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/sales/services/executive-commercial-dashboard-service.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "ec694cd02e6f": {
+      "fingerprint": "ec694cd02e6f",
+      "title": "Debt hotspot (priority 87): office-ai-task-service.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/office-ai/office-ai-task-service.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "224e000e7dbd": {
+      "fingerprint": "224e000e7dbd",
+      "title": "Debt hotspot (priority 87): services.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/local-content/services.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "a88f3563d947": {
+      "fingerprint": "a88f3563d947",
+      "title": "Debt hotspot (priority 86): build.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/sales/v02/knowledge-graph/build.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "0098c85c72f8": {
+      "fingerprint": "0098c85c72f8",
+      "title": "Debt hotspot (priority 86): cross-product-ai-service.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/platform/cross-product-ai/cross-product-ai-service.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "e9497b3b5dba": {
+      "fingerprint": "e9497b3b5dba",
+      "title": "Debt hotspot (priority 86): decisions-crud.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/actions/decisions-crud.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "956740f11789": {
+      "fingerprint": "956740f11789",
+      "title": "Debt hotspot (priority 85): cache-strategy.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/platform/cache-strategy.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "997f519e1021": {
+      "fingerprint": "997f519e1021",
+      "title": "Debt hotspot (priority 85): financial-db.ts",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/lib/audit/db/financial-db.ts"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
+          "state": "finding",
+          "note": "Ingested from finding memory"
+        }
+      ]
+    },
+    "87526a13bbc8": {
+      "fingerprint": "87526a13bbc8",
+      "title": "Debt hotspot (priority 85): decision-detail-client.tsx",
+      "severity": "high",
+      "product": null,
+      "files": [
+        "src/components/decisions/decision-detail-client.tsx"
+      ],
+      "state": "finding",
+      "priority": null,
+      "wave": null,
+      "history": [
+        {
+          "at": "2026-07-17T23:25:41.370Z",
           "state": "finding",
           "note": "Ingested from finding memory"
         }

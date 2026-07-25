@@ -7,24 +7,21 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import { runGovernedProductAI } from "@/lib/platform/product-ai-bridge";
 import { createAiAuditEvent, AuditActions } from "@/lib/local-content/audit-events";
+import { createLogger } from "@/lib/observability/logger";
 import {
   suggestPatternImprovements,
   explainAccountMatches,
   calibrateWorkbookConfidence,
   listPendingFalsePositives,
 } from "./ai-advisor";
-import { getWorkbookWithLines } from "./population";
 import type { TbLine } from "./types";
 
-// ─── Logging ───
-
-const LOG_PREFIX = "[LocalContentOS AutoAIReview]";
+const logger = createLogger({ product: "localcontentos", action: "ai-auto-review" });
 
 function logReview(event: string, payload: Record<string, unknown>): void {
   if (process.env.NODE_ENV === "test") return;
-  console.info(LOG_PREFIX, event, payload);
+  logger.info(event, { product: "localcontentos", action: event, ...payload });
 }
 
 // ─── Types ───

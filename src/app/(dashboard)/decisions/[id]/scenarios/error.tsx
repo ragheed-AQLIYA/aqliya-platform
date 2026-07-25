@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { GitBranch, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function ScenariosError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Scenarios error:", error);
+    clientLogger.error("Scenarios error:", error);
   }, [error]);
 
   return (

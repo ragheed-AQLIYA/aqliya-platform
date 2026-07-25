@@ -234,6 +234,7 @@ async function loadDealInteractionsForRisk(
       metadata: true,
     },
     orderBy: { occurredAt: "desc" },
+    take: 100,
   });
 
   return rows

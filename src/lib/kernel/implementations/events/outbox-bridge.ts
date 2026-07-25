@@ -1,8 +1,12 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 
 import type { DomainEvent, EventHandler, EventDomain } from "../../contracts/event-bus";
 import { prisma } from "../../prisma";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
+
+
+const logger = createLogger({ product: "platform", action: "lib-kernel-implementations-events-outbox-bridge" });
 
 export class OutboxBridge {
   private registered = false;
@@ -54,10 +58,7 @@ export class OutboxBridge {
         },
       });
     } catch (err) {
-      console.error(
-        `[OutboxBridge] Failed to persist event ${event.domain}.${event.action}:`,
-        err instanceof Error ? err.message : err,
-      );
+      logger.error(`[OutboxBridge] Failed to persist event ${event.domain}.${event.action}:`, err instanceof Error ? err : new Error(String(err)));
     }
   }
 }

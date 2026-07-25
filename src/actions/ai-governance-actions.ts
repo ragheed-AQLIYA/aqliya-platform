@@ -56,12 +56,32 @@ export async function getAiGovernanceStatsAction(): Promise<{
 
     const orgId = user.organizationId;
 
-    // ─── LocalContentOS AI Audit Events ───
-    const lcEvents = await prisma.lcAiAuditEvent.findMany({
-      where: { organizationId: orgId },
+    // ─── LocalContentOS AI Audit Events (from PlatformAuditLog) ───
+    // [MIGRATED] lcAiAuditEvent → platformAuditLog (dual-write with productKey: "local_content", targetType: "AiAuditEvent")
+    // const lcEvents = await prisma.lcAiAuditEvent.findMany({
+    //   where: { organizationId: orgId },
+    //   orderBy: { createdAt: "desc" },
+    //   take: 100,
+    // });
+    const rawLcEvents = await prisma.platformAuditLog.findMany({
+      where: { productKey: "local_content", targetType: "AiAuditEvent", organizationId: orgId },
       orderBy: { createdAt: "desc" },
       take: 100,
     });
+
+    // Map PlatformAuditLog fields to LcAiAuditEvent-compatible shape
+    const lcEvents = rawLcEvents.map((e) => ({
+      id: e.id,
+      action: e.action,
+      status: e.aiStatus ?? e.status ?? "recorded",
+      confidence: e.aiConfidence,
+      durationMs: e.durationMs ?? 0,
+      providerId: e.aiProvider,
+      modelVersion: e.aiModel,
+      promptVersion: e.aiPromptVersion,
+      warningCount: ((e.metadata as Record<string, unknown> | null)?.warningCount as number) ?? 0,
+      createdAt: e.createdAt,
+    }));
 
     const lcTotalEvents = lcEvents.length;
     const lcSuccessCount = lcEvents.filter((e) => e.status === "success").length;

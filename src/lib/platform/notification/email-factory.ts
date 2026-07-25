@@ -5,9 +5,13 @@
 // Pattern: try SecretResolver → catch → fall back to process.env SMTP config
 
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import { secretResolver, SecretPurpose } from "@/lib/integration/secret-resolver";
 import { sendEmail } from "./email-channel";
 import type { DeliveryResult } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export interface EmailOptions {
   recipientEmail: string;
@@ -137,7 +141,7 @@ async function sendWithResolvedConfig(
     return { channel: "email", success: true, deliveredAt };
   } catch (err) {
     const error = err instanceof Error ? err.message : "Unknown SMTP error";
-    console.error("[EmailFactory] Send failed:", error);
+    logger.error("[EmailFactory] Send failed:", err instanceof Error ? err : new Error(String(err)));
     return { channel: "email", success: false, error, deliveredAt };
   }
 }

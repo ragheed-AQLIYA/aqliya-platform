@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-07-11T11:27:40.952Z",
+  "updatedAt": "2026-07-18T18:34:59.508Z",
   "counts": {
-    "finding": 210,
-    "prioritized": 9,
-    "assigned": 1,
+    "finding": 196,
+    "prioritized": 0,
+    "assigned": 0,
     "implemented": 0,
     "verified": 0,
-    "closed": 0,
+    "closed": 96,
     "archived": 0
   }
 }

@@ -16,7 +16,7 @@ function recordAuditEventSafe(input: {
   targetId: string;
   metadata?: Record<string, unknown>;
 }): void {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/audit-trail-runtime exists");
+  throw new Error("PLANNED: SalesOS vnext — audit-trail-runtime not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/integration/core-adoption-enforcer exists
@@ -24,7 +24,7 @@ function enforceCoreOnMutation(input: {
   productSlug: string;
   operation: string;
 }): void {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/integration/core-adoption-enforcer exists");
+  throw new Error("PLANNED: SalesOS vnext — core-adoption-enforcer not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 import type { SalesOpportunity } from "../types";
 import {

@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function ContactDetailError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Contact detail error:", error);
+    clientLogger.error("Contact detail error:", error);
   }, [error]);
 
   return (

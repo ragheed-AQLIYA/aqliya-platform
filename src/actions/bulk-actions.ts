@@ -1,6 +1,7 @@
 "use server"
 
 import { getCurrentUser } from "@/lib/auth"
+import { enforce } from "@/lib/kernel"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { DecisionStatus } from "@prisma/client"
@@ -21,6 +22,7 @@ async function assertAdmin(organizationId: string) {
   if (user.organizationId !== organizationId) {
     throw new Error("Organization mismatch")
   }
+  await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "admin")
   return user
 }
 

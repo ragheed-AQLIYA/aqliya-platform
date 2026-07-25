@@ -11,16 +11,23 @@ export async function GET(
   const { projectId } = await params;
 
   try {
-    const { user } = await assertProjectAccess(projectId, "view");
+    const { user, project } = await assertProjectAccess(projectId, "view");
+    const organizationId = project.organizationId;
     await requirePermission(Permission.AUDIT_LOG_ACCESS, ResourceType.AUDIT_LOG);
 
-    const events = await prisma.localContentAuditEvent.findMany({
-      where: { projectId },
+    // [MIGRATED] localContentAuditEvent → platformAuditLog (dual-write with productKey: "local_content")
+    // const events = await prisma.localContentAuditEvent.findMany({
+    //   where: { projectId },
+    //   orderBy: { createdAt: "desc" },
+    //   take: 10000,
+    // });
+    const events = await prisma.platformAuditLog.findMany({
+      where: { productKey: "local_content", projectId },
       orderBy: { createdAt: "desc" },
       take: 10000,
     });
 
-    const header = "timestamp,action,actorId,actorName,entityType,entityId,metadata\n";
+    const header = "timestamp,action,actorId,actorName,targetType,targetId,metadata\n";
     const rows = events
       .map((e) =>
         [
@@ -28,8 +35,8 @@ export async function GET(
           e.action,
           e.actorId,
           e.actorName ?? "",
-          e.entityType,
-          e.entityId,
+          e.targetType,
+          e.targetId,
           (e.metadata ? JSON.stringify(e.metadata) : "").replace(/,/g, ";"),
         ].join(","),
       )

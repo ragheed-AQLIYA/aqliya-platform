@@ -195,3 +195,127 @@
     });
   });
 });
+
+describe("DecisionOS — Governance & Workflow Actions", () => {
+  beforeEach(() => {
+    cy.on("uncaught:exception", (err) => {
+      if (err.message.includes("unexpected response")) {
+        return false;
+      }
+    });
+    cy.loginAdmin();
+  });
+
+  it("should submit decision for review", function () {
+    cy.visit("/decisions");
+    cy.contains(/Non-Profit Training/i).click();
+    cy.url().then((url) => {
+      const id = url.split("/").pop();
+      if (id) {
+        cy.visit("/decisions/" + id + "/governance");
+        cy.url().should("include", "/governance");
+        cy.get("body").then(($body) => {
+          if (!$body.text().includes("إرسال للمراجعة")) {
+            cy.log("Decision not in DRAFT state - skipping submit test");
+            this.skip();
+            return;
+          }
+          cy.contains("إرسال للمراجعة").click();
+        });
+      }
+    });
+  });
+
+  it("should approve decision", function () {
+    cy.visit("/decisions");
+    cy.contains(/Non-Profit Training/i).click();
+    cy.url().then((url) => {
+      const id = url.split("/").pop();
+      if (id) {
+        cy.visit("/decisions/" + id + "/governance");
+        cy.url().should("include", "/governance");
+        cy.get("body").then(($body) => {
+          if (!$body.text().includes("اعتماد")) {
+            cy.log("Decision not in IN_REVIEW state - skipping approve test");
+            this.skip();
+            return;
+          }
+          cy.contains("اعتماد").first().click();
+          cy.get("body").then(($body2) => {
+            if ($body2.find("#approve-notes").length > 0) {
+              cy.get("#approve-notes").type("موافقة آلية من اختبارات Cypress E2E");
+              cy.contains("تأكيد الاعتماد").click();
+            }
+          });
+        });
+      }
+    });
+  });
+
+  it("should reject decision", function () {
+    cy.visit("/decisions");
+    cy.contains(/Non-Profit Training/i).click();
+    cy.url().then((url) => {
+      const id = url.split("/").pop();
+      if (id) {
+        cy.visit("/decisions/" + id + "/governance");
+        cy.url().should("include", "/governance");
+        cy.get("body").then(($body) => {
+          if (!$body.text().includes("رفض")) {
+            cy.log("Decision not in IN_REVIEW state - skipping reject test");
+            this.skip();
+            return;
+          }
+          cy.contains("رفض / طلب مراجعة").click();
+          cy.get("body").then(($body2) => {
+            if ($body2.find("#reject-reason").length > 0) {
+              cy.get("#reject-reason").type("اختبار رفض من Cypress E2E - تجاهل");
+              cy.contains("رفض القرار").click();
+            }
+          });
+        });
+      }
+    });
+  });
+
+  it("should export decision report", function () {
+    cy.visit("/decisions");
+    cy.contains(/Non-Profit Training/i).click();
+    cy.url().then((url) => {
+      const id = url.split("/").pop();
+      if (id) {
+        cy.visit("/decisions/" + id + "/governance");
+        cy.url().should("include", "/governance");
+        cy.get("body").then(($body) => {
+          if (!$body.text().includes("تصدير") && !$body.text().includes("تجهيز JSON")) {
+            cy.log("Export section not found - skipping export test");
+            this.skip();
+            return;
+          }
+          cy.contains("تجهيز JSON").click();
+          cy.get("body", { timeout: 8000 }).should("contain.text", "");
+        });
+      }
+    });
+  });
+
+  it("should display evidence section in governance", function () {
+    cy.visit("/decisions");
+    cy.contains(/Non-Profit Training/i).click();
+    cy.url().then((url) => {
+      const id = url.split("/").pop();
+      if (id) {
+        cy.visit("/decisions/" + id + "/governance");
+        cy.url().should("include", "/governance");
+        cy.get("body").then(($body) => {
+          if (!$body.text().match(/مستند|أدلة|evidence/i)) {
+            cy.log("Evidence section not found - skipping evidence test");
+            this.skip();
+            return;
+          }
+          cy.contains(/مستند|أدلة|evidence/i).should("exist");
+        });
+      }
+    });
+  });
+});

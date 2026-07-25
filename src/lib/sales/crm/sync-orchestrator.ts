@@ -324,7 +324,7 @@ export async function runSync(
         });
         if (admins.length > 0 && connection) {
           await notifyOnEvent("on_error", organizationId, connectionId, {
-            productKey: "sales_os",
+            productKey: "salesos",
             templateKey: "sales_crm_sync_error",
             recipientId: admins[0].id,
             templateVars: {
@@ -388,7 +388,7 @@ async function logSyncAuditEvent(
   actor?: { id: string; name?: string },
 ): Promise<void> {
   await writePlatformAuditLog({
-    productKey: "sales_os",
+    productKey: "salesos",
     action: `crm.sync.${resourceType}.${status}`,
     platformOrganizationId: organizationId,
     sourceSystem: "crm-sync",

@@ -20,7 +20,8 @@ export async function getPlatformProductCounts() {
     prisma.workflowRecord.count().catch(() => 0),
     prisma.localContact.count().catch(() => 0),
     prisma.localContentProject.count().catch(() => 0),
-    prisma.platformAuditLog.count().catch(() => 0),
+    // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+    prisma.platformAuditLog.count({ where: { productKey: "audit_os" } }),
   ]);
 
   return {
@@ -71,7 +72,8 @@ export async function getMonitoringMetrics() {
     prisma.risk.count().catch(() => 0),
     prisma.institutionalMemoryEvent.count().catch(() => 0),
     prisma.knowledgeFoundationVersion.count().catch(() => 0),
-    prisma.auditEvent.count(),
+    // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+    prisma.platformAuditLog.count({ where: { productKey: "audit_os" } }),
   ]);
 
   return counts;

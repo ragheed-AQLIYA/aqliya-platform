@@ -1,7 +1,12 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function checkSlaStatus(organizationId: string) {
   try {
@@ -33,7 +38,7 @@ export async function checkSlaStatus(organizationId: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
-      console.error("Error checking SLA status:", error);
+      logger.error("Error checking SLA status:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل الحصول على حالة SLA" };
   }
 }
@@ -45,7 +50,7 @@ export async function getSlaInfoForRecord(recordId: string) {
     return { success: true, data: info };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
-      console.error("Error getting SLA info:", error);
+      logger.error("Error getting SLA info:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل الحصول على معلومات SLA" };
   }
 }

@@ -39,7 +39,7 @@ export const DEFAULT_SLA_POLICY: SLAPolicy = {
 
 // ─── Segment-aware policy ───
 
-export const SEGMENT_SLA_POLICIES: Record<SLASegment, SLAPolicy> = {
+const SEGMENT_SLA_POLICIES: Record<SLASegment, SLAPolicy> = {
   enterprise: {
     policyId: "salesos-sla-enterprise",
     name: "Enterprise SLA",
@@ -77,6 +77,6 @@ export function resolvePolicy(segment?: SLASegment | string): SLAPolicy {
   return policy ?? DEFAULT_SLA_POLICY;
 }
 
-export function getRule(policy: SLAPolicy, stageName: string): SLARule {
+function getRule(policy: SLAPolicy, stageName: string): SLARule {
   return policy.rules.find((r) => r.stageName === stageName) ?? policy.defaultRule;
 }

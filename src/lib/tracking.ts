@@ -1,3 +1,7 @@
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "unknown" });
+
 const isBrowser = typeof window !== "undefined";
 
 export function trackEvent(event: string, data?: Record<string, string>) {
@@ -11,6 +15,6 @@ export function trackEvent(event: string, data?: Record<string, string>) {
   };
 
   if (process.env.NODE_ENV === "development") {
-    console.log("[AQLIYA]", payload);
+    logger.info("[AQLIYA]", { payload });
   }
 }

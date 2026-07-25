@@ -1,38 +1,20 @@
 {
-  "at": "2026-07-11T11:27:35.412Z",
-  "overall": 82,
+  "at": "2026-07-18T18:34:59.128Z",
+  "overall": 100,
   "rules": [
     {
       "id": "NO_PRISMA_IN_CLIENT",
-      "score": 99,
-      "violations": 3,
-      "samples": [
-        "src/app/local-content/settings/integrations/page.tsx",
-        "src/app/(dashboard)/decisions/[id]/tender/page.tsx",
-        "src/app/(dashboard)/decisions/[id]/outcome/page.tsx"
-      ],
+      "score": 100,
+      "violations": 0,
+      "samples": [],
       "title": "No Prisma from Client Components",
       "weight": 20
     },
     {
       "id": "ACTIONS_USE_ENFORCE",
-      "score": 52,
-      "violations": 13,
-      "samples": [
-        "src/actions/contact-export-actions.ts",
-        "src/actions/contact-review-actions.ts",
-        "src/actions/content-evidence-actions.ts",
-        "src/actions/decision-templates.ts",
-        "src/actions/ingestion-actions.ts",
-        "src/actions/institutional-memory-actions.ts",
-        "src/actions/localcontent-audit-admin-actions.ts",
-        "src/actions/localcontent-review-actions.ts",
-        "src/actions/localcontent-workbook-actions.ts",
-        "src/actions/mfa.ts",
-        "src/actions/office-ai-actions.ts",
-        "src/actions/registration-actions.ts",
-        "src/actions/tenant-actions.ts"
-      ],
+      "score": 100,
+      "violations": 0,
+      "samples": [],
       "title": "Mutating Server Actions use enforce()/authorize()",
       "weight": 25
     },
@@ -62,16 +44,9 @@
     },
     {
       "id": "DOWNLOAD_ROUTES_TENANT_SCOPED",
-      "score": 45,
-      "violations": 6,
-      "samples": [
-        "src/app/api/workflowos/documents/[documentId]/download/route.ts",
-        "src/app/api/workflowos/clients/[clientId]/records/[recordId]/export/pdf/route.ts",
-        "src/app/api/office-ai/download/route.ts",
-        "src/app/api/local-content/projects/[projectId]/reports/[reportId]/download/route.ts",
-        "src/app/api/local-content/projects/[projectId]/audit/export/route.ts",
-        "src/app/api/audit/engagements/[engagementId]/exports/[format]/route.ts"
-      ],
+      "score": 100,
+      "violations": 0,
+      "samples": [],
       "title": "Download/export routes reference organizationId",
       "weight": 10
     }

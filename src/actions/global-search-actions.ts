@@ -1,7 +1,12 @@
 "use server"
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { prisma } from "@/lib/prisma"
 import { getCurrentUser } from "@/lib/auth"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export interface SearchResult {
   id: string
@@ -161,7 +166,7 @@ export async function globalSearchAction(query: string, limit = 20): Promise<Sea
     results.sort((a, b) => b.score - a.score)
     return results.slice(0, limit)
   } catch (error) {
-    console.error("Global search error:", error)
+    logger.error("Global search error:", error instanceof Error ? error : undefined)
     return []
   }
 }

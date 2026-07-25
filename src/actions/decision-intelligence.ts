@@ -1,5 +1,7 @@
 "use server"
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { prisma } from "@/lib/prisma"
 import { validateIntelligenceGate } from "@/lib/decision/intelligence-gate"
 import { generateStrategicInsight } from "@/lib/decision/insight"
@@ -11,6 +13,9 @@ import {
 } from "@/lib/decision/decision-ai-bridge"
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth"
 import { enforce } from "@/lib/kernel"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function getDecisionForIntelligence(decisionId: string) {
   try {
@@ -54,7 +59,7 @@ export async function getDecisionForIntelligence(decisionId: string) {
     return { success: true, data: decision }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error('Error fetching decision for intelligence:', error)
+      logger.error("Error fetching decision for intelligence:", error instanceof Error ? error : undefined)
     }
     return { success: false, error: "Failed to fetch decision" }
   }
@@ -110,7 +115,7 @@ export async function generateStrategicInsightAction(decisionId: string) {
     return { success: true, data: insight }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error('Error generating strategic insight:', error)
+      logger.error("Error generating strategic insight:", error instanceof Error ? error : undefined)
     }
     return { success: false, error: "Failed to generate strategic insight" }
   }
@@ -159,7 +164,7 @@ export async function generateWhatToDoNowAction(decisionId: string) {
     return { success: true, data: whatToDo }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error('Error generating what to do now:', error)
+      logger.error("Error generating what to do now:", error instanceof Error ? error : undefined)
     }
     return { success: false, error: "Failed to generate what to do now" }
   }
@@ -208,7 +213,7 @@ export async function generateExecutiveOverviewAction(decisionId: string) {
     return { success: true, data: overview }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error('Error generating executive overview:', error)
+      logger.error("Error generating executive overview:", error instanceof Error ? error : undefined)
     }
     return { success: false, error: "Failed to generate executive overview" }
   }

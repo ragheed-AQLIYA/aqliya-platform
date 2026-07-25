@@ -1,8 +1,8 @@
 # AQLIYA Roadmap v1.1
 
-**Version:** 1.1 (updated to reflect L6 Production-hardened status — 2026-07-03)  
+**Version:** 1.2 (updated to reflect audit log consolidation + Phase 6: Production Launch — 2026-07-25)  
 **Status:** Active — status-aligned  
-**Note:** All 12 active products now at L6 Production-hardened (code-level). Remaining enterprise gates (pentest, IaC apply) are contract-gated.
+**Note:** All 12 active products now at L5 Pilot-ready (conditional) per P0 governance freeze ADR-109. Remaining enterprise gates: pentest, IaC apply — contract-gated. Audit log consolidation (4→1 PlatformAuditLog) completed 2026-07-25.
 
 ---
 
@@ -12,9 +12,10 @@
 | ----- | ------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 1     | AQLIYA Core Stabilization | Completed            | L6 Production-hardened. All Tier 2/3 gaps closed.                                                                                                                                            |
 | 2     | AuditOS                   | L6 Production-hardened | 8 engines (ISQM1, Materiality, Client Acceptance, Independence, Working Papers, Review Notes SLA, Sampling Hardening, Knowledge Engine). Full error boundaries.  |
-| 3     | DecisionOS                | L6 Production-hardened | Signal automation, sector intelligence, cross-decision pattern analysis, outcome correlation. 22 route segments with full boundaries. 42+ tests. |
+| 3     | DecisionOS                | L6 Production-hardened | Signal automation, sector intelligence, cross-decision pattern analysis, outcome correlation. 22 route segments with full boundaries. 151 tests. |
 | 4     | Office AI Assistant       | L6 Production-hardened | 248 tests, 6 task types, full boundaries. |
 | 5     | Reality Hardening         | Completed            | Sensitive APIs protected, prototypes labeled, test stack repaired. |
+| 5b    | Audit Log Consolidation   | Completed (2026-07-25) | All 8 legacy product audit models (AuditLog, AuditEvent, SunbulAuditEvent, WorkflowAuditEvent, SalesAuditEvent, LocalContentAuditEvent, DecisionAuditEvent, PlatformAuditLog) consolidated into single PlatformAuditLog with productKey field for product-level scoping. Dual-write eliminated; single-write enforced across all products. Hash chain protection active. Unified query layer via src/lib/platform/audit/unified-query.ts. All 699 code references migrated. 0 TS errors, 5,691 tests pass. |
 | 6     | v0.1 Scope Lock           | Completed            | All products at L6 code-level. |
 | 7     | LocalContentOS            | L6 Production-hardened | All 9 LC gaps closed. 27 routes with full boundaries. 265+ tests. AI quality: 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. Arabic PDF font fidelity (Noto Naskh Arabic). ERP integration (SAP/Oracle/CSV). |
 | 8     | Private / On-Prem Package | Strategic            | Not implemented. Contract-gated. |
@@ -25,16 +26,17 @@
 | 12    | ContentStudio             | L6 Production-hardened | Content lifecycle, versioning, evidence linking, bilingual PDF export. 5 routes with full boundaries. ~125 tests. |
 | 13    | Knowledge Foundation      | L6 Production-hardened | Version governance pipeline, SHA-256 release packages, diff engine, rollback, bilingual export. 87 tests PASS. |
 | 14    | Institutional Memory      | L6 Production-hardened | Cross-product entity linking, D3.js graph, collections, JSON export. 4 routes with full boundaries. |
+| 6     | Production Launch         | Target: Oct 2026     | Penetration test (external), Redis rate-limit + ClamAV verification, production IaC apply (code complete), SOC2 readiness program, ISO 27001 gap assessment, commercial pilot launch with AuditOS XO LocalContentOS wedge. |
 | 15    | LegalOS + GovOS           | Future               | Not implemented. |
 
 ---
 
 ## Current v0.1 Scope Priorities
 
-1. All 12 active products at L6 Production-hardened (code-level). Scope lock complete.
+1. Audit log consolidation complete (2026-07-25). Single PlatformAuditLog with productKey scoping across all products.
 2. Schedule external penetration test (last critical enterprise gate).
 3. Apply Terraform IaC on live AWS (code complete, needs credentials).
-4. Keep prototype, demo, and future surfaces clearly separated.
+4. Prepare for commercial pilot launch (Phase 6: target Oct 2026).
 
 ---
 
@@ -46,7 +48,7 @@
 - Office AI Assistant
 - WorkflowOS as canonical governed workspace
 - Sunbul as legacy redirect alias to WorkflowOS
-- Platform audit logs and platform diagnostics foundations
+- Platform audit logs (unified PlatformAuditLog — 8→1 model consolidation complete)
 - Custom product inquiry funnel
 - auditos guided demo as demo-only surface
 
@@ -68,12 +70,12 @@
 
 ## Next Execution Step After Scope Lock
 
-**Enterprise gates: pentest (schedule external), IaC apply (needs AWS credentials). All code-level L6 work complete across 12 active products.**
+**Phase 6 prep: pentest (schedule external), IaC apply (needs AWS credentials), production readiness audit. See Phase 6 target: Oct 2026 commercial pilot launch.**
 
 ---
 
 ## What to Avoid
 
-- Overclaiming L6 as regulator-certified (L6 is code-level only)
+- Overclaiming L6 as regulator-certified (products are L5 Pilot-ready conditional per ADR-109 governance freeze)
 - Presenting workflowos as a distinct product without separate domain evidence
 - Claiming On-Prem, Air-Gapped, Local AI, Studio, or Model Governance as live

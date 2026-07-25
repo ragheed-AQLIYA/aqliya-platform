@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Auth layer — NextAuth.js v5
  * Replaces static user + dev-user-email cookie
  */
@@ -7,6 +7,12 @@ import type { UserRole } from "@prisma/client";
 export type RequiredRole = UserRole;
 
 import { auth } from "@/lib/auth-next";
+
+/**
+ * Cookie security: NextAuth v5 sets httpOnly=true, sameSite="lax",
+ * and secure=auto (true in production) on session cookies by default.
+ * No additional cookie configuration needed in this file.
+ */
 
 export interface CurrentUser {
   id: string;

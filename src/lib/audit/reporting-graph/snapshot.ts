@@ -61,18 +61,19 @@ export async function listGraphSnapshots(
     stats: ReportingGraphStats;
   }>
 > {
-  const events = await prisma.auditEvent.findMany({
-    where: { engagementId, eventType: SNAPSHOT_EVENT },
-    orderBy: { timestamp: "desc" },
+  // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+  const events = await prisma.platformAuditLog.findMany({
+    where: { productKey: "audit_os", sourceId: engagementId, action: SNAPSHOT_EVENT },
+    orderBy: { createdAt: "desc" },
     take: 20,
   });
 
   return events.map((ev) => {
     const meta = (ev.metadata ?? {}) as Record<string, unknown>;
     return {
-      id: ev.targetId,
-      milestone: String(meta.milestone ?? ev.newState ?? "unknown"),
-      capturedAt: String(meta.capturedAt ?? ev.timestamp.toISOString()),
+      id: ev.targetId ?? "",
+      milestone: String(meta.milestone ?? ev.afterState ?? "unknown"),
+      capturedAt: String(meta.capturedAt ?? ev.createdAt.toISOString()),
       stats: (meta.stats ?? {
         tbAccounts: 0,
         mappings: 0,
@@ -89,10 +90,12 @@ export async function getGraphSnapshotById(
   engagementId: string,
   snapshotId: string,
 ): Promise<GraphSnapshotRecord | null> {
-  const ev = await prisma.auditEvent.findFirst({
+  // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+  const ev = await prisma.platformAuditLog.findFirst({
     where: {
-      engagementId,
-      eventType: SNAPSHOT_EVENT,
+      productKey: "audit_os",
+      sourceId: engagementId,
+      action: SNAPSHOT_EVENT,
       targetId: snapshotId,
     },
   });
@@ -106,7 +109,7 @@ export async function getGraphSnapshotById(
     id: snapshotId,
     engagementId,
     milestone: (meta.milestone as "approval" | "manual") ?? "manual",
-    capturedAt: String(meta.capturedAt ?? ev.timestamp.toISOString()),
+    capturedAt: String(meta.capturedAt ?? ev.createdAt.toISOString()),
     stats: graph.stats,
     graph,
   };

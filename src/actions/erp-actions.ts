@@ -1,9 +1,14 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { revalidatePath } from "next/cache";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import * as erp from "@/lib/local-content/erp/services";
 
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -18,7 +23,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
       return { ok: false, error: "صلاحية مرفوضة", code: "FORBIDDEN" };
     }
     const message = error instanceof Error ? error.message : "خطأ غير معروف";
-    console.error("[ErpActions]", message);
+    logger.error("[ErpActions]", error instanceof Error ? error : undefined);
     return { ok: false, error: message };
   }
 }

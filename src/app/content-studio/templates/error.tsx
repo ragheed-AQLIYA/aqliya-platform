@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { FileText, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function TemplatesError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Templates error:", error);
+    clientLogger.error("Templates error:", error);
   }, [error]);
 
   return (

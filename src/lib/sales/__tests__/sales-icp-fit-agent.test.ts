@@ -1,7 +1,7 @@
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     salesAccount: { findFirst: jest.fn(), update: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -21,7 +21,7 @@ const ACTOR = { id: "user-1", name: "Test User" };
 describe("SalesOS ICP Fit Agent stub (PR-15)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
   });
 
   describe("computeIcpFitStub", () => {
@@ -102,7 +102,7 @@ describe("SalesOS ICP Fit Agent stub (PR-15)", () => {
 
       expect(result.score.agentGenerated).toBe(true);
       expect(result.score.reviewed).toBe(false);
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.AGENT_ICP_SCORED,

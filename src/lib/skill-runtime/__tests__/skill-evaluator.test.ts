@@ -175,6 +175,11 @@ jest.mock("@/lib/core/ai/orchestrator", () => ({
   },
 }))
 
+jest.mock("glob", () => ({
+  glob: jest.fn().mockResolvedValue(["file1.ts", "file2.ts"]),
+  globSync: jest.fn().mockReturnValue(["file1.ts", "file2.ts"]),
+}));
+
 import {
   evaluateSkill,
   evaluateSkillsByLevel,

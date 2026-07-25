@@ -1,6 +1,10 @@
 ﻿import "server-only"
 import { getRagEmbeddingProvider } from "@/lib/core/knowledge/rag/embedding-provider"
+import { createLogger } from "@/lib/observability/logger";
 import type { EmbeddingProvider as RagEmbeddingProvider } from "@/lib/core/ai/types"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export interface EmbeddingProvider {
   embed(text: string): Promise<number[]>
@@ -102,7 +106,7 @@ export class LocalEmbeddingProvider implements EmbeddingProvider {
       });
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {
-        console.error(`[ollama-embeddings] Request timed out after ${LOCAL_EMBEDDING_TIMEOUT_MS}ms to ${url}`);
+        logger.error(`[ollama-embeddings] Request timed out after ${LOCAL_EMBEDDING_TIMEOUT_MS}ms to ${url}`);
         throw new Error(`Ollama embeddings request timed out after ${LOCAL_EMBEDDING_TIMEOUT_MS / 1000}s. Please try again.`);
       }
       throw err;

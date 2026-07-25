@@ -40,17 +40,12 @@ describe("UnifiedAuditQuery", () => {
   })
 
   describe("getUnifiedAuditSummary", () => {
-    it("returns summary for all 4 models", async () => {
+    it("returns summary for PlatformAuditLog", async () => {
       const mod = await import("../unified-query")
       const summary = await mod.getUnifiedAuditSummary()
       expect(summary).toHaveProperty("PlatformAuditLog")
-      expect(summary).toHaveProperty("AuditLog")
-      expect(summary).toHaveProperty("AuditEvent")
-      expect(summary).toHaveProperty("SunbulAuditEvent")
-      for (const key of Object.keys(summary)) {
-        expect(summary[key]).toHaveProperty("total")
-        expect(summary[key]).toHaveProperty("lastEvent")
-      }
+      expect(summary.PlatformAuditLog).toHaveProperty("total")
+      expect(summary.PlatformAuditLog).toHaveProperty("lastEvent")
     })
   })
 })

@@ -146,6 +146,7 @@ export async function listClientWorkspacesForPlatformOrganization(
   const workspaces = await prisma.clientWorkspace.findMany({
     where: { platformOrganizationId },
     orderBy: { name: "asc" },
+    take: 100,
   });
 
   return workspaces.map((ws) => toContext(ws, "workspace_id", null));

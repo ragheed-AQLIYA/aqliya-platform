@@ -4,8 +4,12 @@
 // Strict mode available for callers that want throws on failure.
 
 import { prisma } from "@/lib/prisma";
+import { createLogger } from "@/lib/observability/logger";
 import type { Prisma } from "@prisma/client";
-import { stampPlatformAuditEvent } from "@/lib/core/contracts/event-envelope";
+import {
+  type PlatformAuditLogInput,
+  stampPlatformAuditEvent,
+} from "@/lib/core/contracts/event-envelope";
 import {
   buildOutboxPayloadFromAuditLog,
   insertOutboxEvent,
@@ -15,43 +19,7 @@ import {
 
 // ─── Types ───
 
-export interface PlatformAuditLogInput {
-  productKey: string;
-  action: string;
-
-  platformOrganizationId?: string;
-  clientWorkspaceId?: string;
-  projectId?: string;
-  environment?: string;
-
-  actorId?: string;
-  actorType?: string;
-  actorEmail?: string;
-  actorName?: string;
-
-  targetType?: string;
-  targetId?: string;
-  targetLabel?: string;
-
-  severity?: string;
-  status?: string;
-
-  sourceSystem?: string;
-  sourceModel?: string;
-  sourceId?: string;
-  requestId?: string;
-  sessionId?: string;
-  ipAddress?: string;
-  userAgent?: string;
-
-  aiProvider?: string;
-  aiModel?: string;
-  aiPromptVersion?: string;
-  aiOutputReviewStatus?: string;
-
-  evidenceRefs?: Record<string, unknown>[];
-  metadata?: Record<string, unknown>;
-}
+export type { PlatformAuditLogInput };
 
 export interface PlatformAuditLogWriteOptions {
   /**
@@ -60,6 +28,9 @@ export interface PlatformAuditLogWriteOptions {
    */
   strict?: boolean;
 }
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export interface PlatformAuditLogWriteResult {
   ok: boolean;
@@ -138,6 +109,17 @@ export async function writePlatformAuditLog(
       aiPromptVersion: stamped.aiPromptVersion ?? null,
       aiOutputReviewStatus: stamped.aiOutputReviewStatus ?? null,
 
+      organizationId: stamped.organizationId ?? null,
+      beforeState: stamped.beforeState ?? null,
+      afterState: stamped.afterState ?? null,
+      eventDescription: stamped.eventDescription ?? null,
+      aiRelated: stamped.aiRelated ?? false,
+      aiConfidence: stamped.aiConfidence ?? null,
+      aiStatus: stamped.aiStatus ?? null,
+      inputSummary: (stamped.inputSummary ?? undefined) as Prisma.InputJsonValue | undefined,
+      outputSummary: (stamped.outputSummary ?? undefined) as Prisma.InputJsonValue | undefined,
+      durationMs: stamped.durationMs ?? null,
+
       evidenceRefs: (stamped.evidenceRefs ?? undefined) as unknown as
         | Prisma.InputJsonValue
         | undefined,
@@ -176,7 +158,7 @@ export async function writePlatformAuditLog(
       throw err;
     }
     if (process.env.NODE_ENV !== "test") {
-      console.warn(`[PlatformAuditLog] Write failed: ${message}`);
+      logger.warn("[PlatformAuditLog]Write failed: ${message}");
     }
     return { ok: false, error: message };
   }

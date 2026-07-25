@@ -4,7 +4,7 @@ import { SALESOS_PRODUCT_KEY } from "../core-adoption";
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/workflow/product-templates exists
 function getWorkflowTemplateForProduct(productSlug: string): { id: string; gates: { id: string; name: string; required: boolean }[] } | null {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/workflow/product-templates exists");
+  throw new Error("PLANNED: SalesOS vnext — workflow/product-templates not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 
 export interface SalesWorkspaceMetadata {

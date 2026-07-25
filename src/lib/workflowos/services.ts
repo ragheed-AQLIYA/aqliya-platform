@@ -28,12 +28,14 @@ export async function listWorkflowClientsForUser() {
     return prisma.sunbulClient.findMany({
       where: filter,
       orderBy: { createdAt: "desc" },
+      take: 10000,
     });
   }
 
   const memberships = await prisma.sunbulUserMembership.findMany({
     where: { userId: user.id, status: "Active" },
     include: { client: true },
+    take: 10000,
   });
 
   return memberships.map((m) => m.client);
@@ -154,6 +156,7 @@ export async function listWorkflowMemberships(clientId: string) {
   return prisma.sunbulUserMembership.findMany({
     where: { clientId },
     orderBy: { createdAt: "desc" },
+    take: 10000,
   });
 }
 
@@ -274,6 +277,7 @@ export async function listWorkflowRecords(clientId: string) {
   return prisma.sunbulRecord.findMany({
     where,
     orderBy: { createdAt: "desc" },
+    take: 10000,
   });
 }
 
@@ -534,10 +538,11 @@ export async function listWorkflowDocuments(
   return prisma.sunbulDocument.findMany({
     where: { clientId, recordId },
     orderBy: { createdAt: "desc" },
+    take: 10000,
   });
 }
 
-export async function deleteWorkflowDocument(
+async function deleteWorkflowDocument(
   clientId: string,
   recordId: string,
   documentId: string,
@@ -611,5 +616,6 @@ export async function listWorkflowReviews(clientId: string, recordId: string) {
   return prisma.sunbulReview.findMany({
     where: { clientId, recordId },
     orderBy: { createdAt: "desc" },
+    take: 10000,
   });
 }

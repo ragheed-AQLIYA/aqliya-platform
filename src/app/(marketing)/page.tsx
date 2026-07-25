@@ -8,13 +8,41 @@ import {
   SystemCardGrid,
   ProofSection,
 } from "@/components/marketing/home-sections";
+import { FAQSection } from "@/components/marketing/faq-section";
 import { homeCopyAr } from "@/lib/marketing/copy-plain";
 import { publicCapabilityNote, publicOsStatus } from "@/lib/marketing/public-status";
 
-export const metadata: Metadata = {
-  title: homeCopyAr.metadata.title,
-  description: homeCopyAr.metadata.description,
-};
+export function generateMetadata(): Metadata {
+  const title = homeCopyAr.metadata.title;
+  const description = homeCopyAr.metadata.description;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      alternateLocale: "en_US",
+      type: "website",
+      images: [
+        {
+          url: "/og-home.png",
+          width: 1200,
+          height: 630,
+          alt: "AQLIYA - منصة ذكاء مؤسسي محكوم",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-home.png"],
+    },
+  };
+}
 
 const systems = [
   { title: "AuditOS", note: publicCapabilityNote.auditOS, status: publicOsStatus.auditOS.label, href: "/products/audit" },
@@ -29,6 +57,8 @@ const platformLayers = [
   { num: "03", title: "مشغّلات الذكاء", desc: "AI يُساعد ويقترح  لا يقرّر ولا يعتمد بدون الإنسان" },
   { num: "04", title: "أنظمة التشغيل", desc: "كل نظام يرث الحوكمة والذكاء  لا إعادة بناء من الصفر" },
 ];
+
+
 
 export default function HomePage() {
   const c = homeCopyAr;
@@ -93,6 +123,8 @@ export default function HomePage() {
       <ProofSection
         data={{ ...c.proof, ctaHref: "/proof" }}
       />
+
+      <FAQSection />
 
       <ConversionBand
         title={c.conversion.title}

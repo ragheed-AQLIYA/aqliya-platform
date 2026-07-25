@@ -27,7 +27,6 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   // Clean existing data
-  await prisma.salesAuditEvent.deleteMany();
   await prisma.salesApproval.deleteMany();
   await prisma.salesReview.deleteMany();
   await prisma.salesProposal.deleteMany();
@@ -38,7 +37,6 @@ async function main() {
   await prisma.salesAccount.deleteMany();
   await prisma.salesPipelineStage.deleteMany();
   await prisma.salesPipeline.deleteMany();
-  await prisma.auditLog.deleteMany();
   await prisma.decisionReport.deleteMany();
   await prisma.approval.deleteMany();
   await prisma.recommendation.deleteMany();
@@ -387,34 +385,51 @@ async function main() {
   });
 
   // Create AuditLogs for Tender
-  await prisma.auditLog.createMany({
+  // [PHASE 5] Removed — migrated to PlatformAuditLog
+  // Decision audit logs are now auto-generated via writePlatformAuditLog
+  await prisma.platformAuditLog.createMany({
     data: [
       {
-        decisionId: tenderDecision.id,
+        platformOrganizationId: platformOrg.id,
         organizationId: org.id,
-        userId: admin.id,
+        productKey: "decisionos",
+        actorId: admin.id,
+        actorName: admin.name,
         action: "DECISION_CREATED",
-        entity: "Decision",
-        after: JSON.stringify({ title: tenderDecision.title, status: "DRAFT" }),
+        targetType: "Decision",
+        targetId: tenderDecision.id,
+        targetLabel: tenderDecision.title,
+        severity: "info",
+        beforeState: JSON.stringify({ status: "DRAFT" }),
+        afterState: JSON.stringify({ title: tenderDecision.title, status: "DRAFT" }),
+        metadata: { source: "seed" },
       },
       {
-        decisionId: tenderDecision.id,
+        platformOrganizationId: platformOrg.id,
         organizationId: org.id,
-        userId: admin.id,
+        productKey: "decisionos",
+        actorId: admin.id,
+        actorName: admin.name,
         action: "DECISION_UPDATED",
-        entity: "TenderProfile",
-        after: JSON.stringify({
-          clientName: "Social Development Non-Profit Organization",
-        }),
+        targetType: "TenderProfile",
+        targetId: tenderDecision.id,
+        severity: "info",
+        afterState: JSON.stringify({ clientName: "Social Development Non-Profit Organization" }),
+        metadata: { source: "seed" },
       },
       {
-        decisionId: tenderDecision.id,
+        platformOrganizationId: platformOrg.id,
         organizationId: org.id,
-        userId: admin.id,
+        productKey: "decisionos",
+        actorId: admin.id,
+        actorName: admin.name,
         action: "DECISION_UPDATED",
-        entity: "Decision",
-        before: "DRAFT",
-        after: "IN_REVIEW",
+        targetType: "Decision",
+        targetId: tenderDecision.id,
+        severity: "info",
+        beforeState: "DRAFT",
+        afterState: "IN_REVIEW",
+        metadata: { source: "seed" },
       },
     ],
   });

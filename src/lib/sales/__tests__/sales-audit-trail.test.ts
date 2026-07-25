@@ -1,6 +1,6 @@
-jest.mock("@/lib/prisma", () => ({
+﻿jest.mock("@/lib/prisma", () => ({
   prisma: {
-    salesAuditEvent: { findMany: jest.fn() },
+    platformAuditLog: { findMany: jest.fn() },
   },
 }));
 
@@ -18,7 +18,7 @@ import {
 describe("SalesOS org audit trail (PR-12)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.findMany.mockResolvedValue([]);
+    prisma.platformAuditLog.findMany.mockResolvedValue([]);
   });
 
   describe("parseSalesAuditTrailFilters", () => {
@@ -59,8 +59,9 @@ describe("SalesOS org audit trail (PR-12)", () => {
   });
 
   describe("buildSalesAuditTrailWhere", () => {
-    it("scopes by organizationId only by default", () => {
+    it("scopes by organizationId and productKey by default", () => {
       expect(buildSalesAuditTrailWhere("org-a", {})).toEqual({
+        productKey: "salesos",
         organizationId: "org-a",
       });
     });
@@ -72,6 +73,7 @@ describe("SalesOS org audit trail (PR-12)", () => {
           actionPrefix: "sales.account",
         }),
       ).toEqual({
+        productKey: "salesos",
         organizationId: "org-a",
         targetType: "SalesAccount",
         action: { startsWith: "sales.account" },
@@ -89,7 +91,7 @@ describe("SalesOS org audit trail (PR-12)", () => {
 
   describe("listOrgSalesAuditEvents", () => {
     it("queries org-scoped events with default limit 100", async () => {
-      prisma.salesAuditEvent.findMany.mockResolvedValue([
+      prisma.platformAuditLog.findMany.mockResolvedValue([
         {
           id: "evt-1",
           action: SalesAuditActions.DEAL_CREATED,
@@ -104,9 +106,9 @@ describe("SalesOS org audit trail (PR-12)", () => {
 
       const rows = await listOrgSalesAuditEvents("org-a");
       expect(rows).toHaveLength(1);
-      expect(prisma.salesAuditEvent.findMany).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { organizationId: "org-a" },
+          where: { productKey: "salesos", organizationId: "org-a" },
           orderBy: { createdAt: "desc" },
           take: SALES_AUDIT_TRAIL_DEFAULT_LIMIT,
         }),
@@ -123,9 +125,10 @@ describe("SalesOS org audit trail (PR-12)", () => {
         cursor: "evt-cursor",
       });
 
-      expect(prisma.salesAuditEvent.findMany).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
+            productKey: "salesos",
             organizationId: "org-b",
             targetType: "SalesDeal",
             action: { startsWith: "sales.deal" },
@@ -143,8 +146,9 @@ describe("SalesOS org audit trail (PR-12)", () => {
         actionPrefix: "sales",
       });
 
-      const call = prisma.salesAuditEvent.findMany.mock.calls[0][0];
+      const call = prisma.platformAuditLog.findMany.mock.calls[0][0];
       expect(call.where.organizationId).toBe("org-isolated");
+      expect(call.where.productKey).toBe("salesos");
     });
   });
 });

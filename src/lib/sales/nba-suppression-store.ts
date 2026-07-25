@@ -2,9 +2,13 @@
 // Suppresses SalesNextBestActionItem ids (heuristic + vNext rule ids). Fail-soft I/O.
 
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import fs from "fs/promises";
 import path from "path";
 import type { SalesNextBestActionItem } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "lib-sales-nba-suppression-store" });
 
 export type NbaSuppressionKind = "dismiss" | "snooze";
 
@@ -105,10 +109,7 @@ async function saveNbaSuppressionOverlay(
       "utf8",
     );
   } catch (error) {
-    console.error(
-      `[SalesOS NBA] suppression file save failed for org ${organizationId}:`,
-      error instanceof Error ? error.message : error,
-    );
+    logger.error(`[SalesOS NBA] suppression file save failed for org ${organizationId}:`, error instanceof Error ? error : new Error(String(error)));
   }
 }
 

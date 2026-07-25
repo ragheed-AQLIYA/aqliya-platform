@@ -50,6 +50,7 @@ async function loadPreferences(
     const prefs = await prisma.userNotificationPreference.findMany({
       where: { userId: recipientId, notificationType, enabled: true },
       select: { channel: true },
+      take: 100,
     });
     return new Set(prefs.map((p) => p.channel as NotificationChannel));
   } catch {

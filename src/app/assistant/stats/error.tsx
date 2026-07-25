@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { BarChart3, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function AssistantStatsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Assistant Stats error:", error);
+    clientLogger.error("Assistant Stats error:", error);
   }, [error]);
 
   return (

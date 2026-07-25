@@ -1,17 +1,6 @@
-﻿// ─── Unit Test: LocalContentOS Audit Events Dual-Write ───
+﻿// ─── Unit Test: LocalContentOS Audit Events Single-Write ───
 // Tests that createLocalContentAuditEvent and createAiAuditEvent
-// correctly dual-write to PlatformAuditLog.
-
-jest.mock("@/lib/prisma", () => ({
-  prisma: {
-    localContentAuditEvent: {
-      create: jest.fn(),
-    },
-    lcAiAuditEvent: {
-      create: jest.fn(),
-    },
-  },
-}));
+// correctly write to PlatformAuditLog only (single-write, no old model).
 
 jest.mock("@/lib/platform/audit-log", () => ({
   writePlatformAuditLog: jest.fn().mockResolvedValue({ ok: true }),
@@ -22,7 +11,6 @@ jest.mock("@/lib/platform/audit/audit-store", () => ({
 }));
 
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
 import {
@@ -31,9 +19,6 @@ import {
   AuditActions,
 } from "@/lib/local-content/audit-events";
 import { Product } from "@/lib/platform/audit-logger";
-
-const mockLocalContentAuditCreate = prisma.localContentAuditEvent.create as jest.Mock;
-const mockLcAiAuditCreate = prisma.lcAiAuditEvent.create as jest.Mock;
 
 // ─── createLocalContentAuditEvent ───
 
@@ -53,38 +38,26 @@ describe("createLocalContentAuditEvent", () => {
 
   // ─── Happy path ───
 
-  it("writes to localContentAuditEvent and dual-writes with LOCAL_CONTENT productKey", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-1" });
-
+  it("writes to PlatformAuditLog with LOCAL_CONTENT productKey (single-write)", async () => {
     await createLocalContentAuditEvent(baseInput);
-
-    expect(mockLocalContentAuditCreate).toHaveBeenCalledTimes(1);
-    expect(mockLocalContentAuditCreate).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        projectId: "proj-1",
-        actorId: "user-1",
-        action: "project.created",
-        entityType: "Project",
-        entityId: "proj-1",
-      }),
-    });
 
     expect(writePlatformAuditLog).toHaveBeenCalledTimes(1);
     expect(writePlatformAuditLog).toHaveBeenCalledWith({
       productKey: Product.LOCAL_CONTENT,
-      action: "local_content.project.created",
+      action: "project.created",
       projectId: "proj-1",
       platformOrganizationId: undefined,
       actorId: "user-1",
       actorName: "Test User",
       targetType: "Project",
       targetId: "proj-1",
+      beforeState: undefined,
+      afterState: undefined,
       metadata: undefined,
     });
   });
 
   it("passes platformOrganizationId when provided", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-2" });
     const input = { ...baseInput, platformOrganizationId: "plat-org-1" };
 
     await createLocalContentAuditEvent(input);
@@ -96,8 +69,7 @@ describe("createLocalContentAuditEvent", () => {
     );
   });
 
-  it("passes metadata to both writes", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-3" });
+  it("passes metadata to the write", async () => {
     const metadata = { reason: "test" };
     const input = { ...baseInput, metadata };
 
@@ -110,36 +82,25 @@ describe("createLocalContentAuditEvent", () => {
 
   // ─── Error handling ───
 
-  it("logs warning and does NOT throw when primary write fails, and still fires dual-write", async () => {
-    mockLocalContentAuditCreate.mockRejectedValue(new Error("DB timeout"));
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+  it("does NOT throw when primary write returns { ok: false } (writePlatformAuditLog is safe)", async () => {
+    (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({ ok: false, error: "DB timeout" });
 
     await expect(createLocalContentAuditEvent(baseInput)).resolves.not.toThrow();
 
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining("[LocalContentOS] Audit event write failed: DB timeout"),
-    );
-
-    // Dual-write still fires
     expect(writePlatformAuditLog).toHaveBeenCalledTimes(1);
-
-    warnSpy.mockRestore();
   });
 
-  it("does NOT throw when dual-write returns { ok: false } (writePlatformAuditLog is safe)", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-4" });
+  it("does NOT throw when writePlatformAuditLog returns { ok: false }", async () => {
     (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({ ok: false, error: "Write failed" });
 
     await expect(createLocalContentAuditEvent(baseInput)).resolves.not.toThrow();
 
-    expect(mockLocalContentAuditCreate).toHaveBeenCalledTimes(1);
     expect(writePlatformAuditLog).toHaveBeenCalledTimes(1);
   });
 
   // ─── Edge cases ───
 
   it("handles missing platformOrganizationId gracefully", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-5" });
     const input = {
       projectId: "proj-2",
       actorId: "user-2",
@@ -157,22 +118,19 @@ describe("createLocalContentAuditEvent", () => {
     );
   });
 
-  it("prefixes action with local_content. in the dual-write", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-6" });
-
+  it("passes action directly (no local_content. prefix in action)", async () => {
     await createLocalContentAuditEvent(baseInput);
 
     expect(writePlatformAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({
-        action: "local_content.project.created",
+        action: "project.created",
       }),
     );
   });
 
   // ─── Hash chain ───
 
-  it("appends to hash chain when dual-write returns ok:true with id", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-7" });
+  it("appends to hash chain when write returns ok:true with id", async () => {
     (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({
       ok: true,
       id: "plat-log-1",
@@ -183,13 +141,12 @@ describe("createLocalContentAuditEvent", () => {
     expect(appendToAuditChain).toHaveBeenCalledTimes(1);
     expect(appendToAuditChain).toHaveBeenCalledWith(
       "plat-log-1",
-      "local_content.project.created",
+      "project.created",
       "user-1",
     );
   });
 
-  it("does NOT append to hash chain when dual-write returns ok:false", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-8" });
+  it("does NOT append to hash chain when write returns ok:false", async () => {
     (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({
       ok: false,
       id: "plat-log-2",
@@ -200,8 +157,7 @@ describe("createLocalContentAuditEvent", () => {
     expect(appendToAuditChain).not.toHaveBeenCalled();
   });
 
-  it("does NOT append to hash chain when dual-write returns ok:true without id", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-9" });
+  it("does NOT append to hash chain when write returns ok:true without id", async () => {
     (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({ ok: true });
 
     await createLocalContentAuditEvent(baseInput);
@@ -209,8 +165,7 @@ describe("createLocalContentAuditEvent", () => {
     expect(appendToAuditChain).not.toHaveBeenCalled();
   });
 
-  it("passes before/after values to the primary write only", async () => {
-    mockLocalContentAuditCreate.mockResolvedValue({ id: "audit-7" });
+  it("passes before/after values to the write", async () => {
     const input = {
       ...baseInput,
       before: JSON.stringify({ status: "draft" }),
@@ -219,12 +174,12 @@ describe("createLocalContentAuditEvent", () => {
 
     await createLocalContentAuditEvent(input);
 
-    expect(mockLocalContentAuditCreate).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        before: JSON.stringify({ status: "draft" }),
-        after: JSON.stringify({ status: "active" }),
+    expect(writePlatformAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        beforeState: JSON.stringify({ status: "draft" }),
+        afterState: JSON.stringify({ status: "active" }),
       }),
-    });
+    );
   });
 });
 
@@ -254,32 +209,23 @@ describe("createAiAuditEvent", () => {
 
   // ─── Happy path ───
 
-  it("writes to lcAiAuditEvent and dual-writes with LOCAL_CONTENT productKey", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-1" });
-
+  it("writes to PlatformAuditLog with LOCAL_CONTENT productKey (single-write)", async () => {
     await createAiAuditEvent(baseInput);
-
-    expect(mockLcAiAuditCreate).toHaveBeenCalledTimes(1);
-    expect(mockLcAiAuditCreate).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        organizationId: "org-1",
-        action: "ai.review_run",
-        status: "success",
-      }),
-    });
 
     expect(writePlatformAuditLog).toHaveBeenCalledTimes(1);
     expect(writePlatformAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({
         productKey: Product.LOCAL_CONTENT,
-        action: "local_content.ai.ai.review_run",
-        platformOrganizationId: "org-1",
+        action: "ai.review_run",
+        organizationId: "org-1",
         projectId: "proj-1",
         actorId: "user-1",
         aiProvider: "openai",
         aiModel: "gpt-4",
         aiPromptVersion: "v2",
+        aiRelated: true,
         targetType: "AiAuditEvent",
+        targetId: "ai.review_run",
         severity: "info",
       }),
     );
@@ -288,8 +234,6 @@ describe("createAiAuditEvent", () => {
   // ─── Severity mapping ───
 
   it("maps status 'success' to severity 'info'", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-2" });
-
     await createAiAuditEvent({ ...baseInput, status: "success" });
 
     expect(writePlatformAuditLog).toHaveBeenCalledWith(
@@ -298,8 +242,6 @@ describe("createAiAuditEvent", () => {
   });
 
   it("maps status 'partial' to severity 'warning'", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-3" });
-
     await createAiAuditEvent({ ...baseInput, status: "partial" });
 
     expect(writePlatformAuditLog).toHaveBeenCalledWith(
@@ -308,8 +250,6 @@ describe("createAiAuditEvent", () => {
   });
 
   it("maps status 'failed' to severity 'error'", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-4" });
-
     await createAiAuditEvent({ ...baseInput, status: "failed" });
 
     expect(writePlatformAuditLog).toHaveBeenCalledWith(
@@ -320,18 +260,17 @@ describe("createAiAuditEvent", () => {
   // ─── Metadata merging ───
 
   it("merges metadata with workbookId, confidence, warningCount, durationMs", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-5" });
     const customMeta = { extraField: "value" };
 
     await createAiAuditEvent({ ...baseInput, metadata: customMeta });
 
     expect(writePlatformAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({
+        aiConfidence: 0.85,
+        durationMs: 1500,
         metadata: expect.objectContaining({
           workbookId: "wb-1",
-          confidence: 0.85,
           warningCount: 0,
-          durationMs: 1500,
           extraField: "value",
         }),
       }),
@@ -340,36 +279,25 @@ describe("createAiAuditEvent", () => {
 
   // ─── Error handling ───
 
-  it("logs warning and does NOT throw when primary write fails, and still fires dual-write", async () => {
-    mockLcAiAuditCreate.mockRejectedValue(new Error("AI audit DB error"));
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+  it("does NOT throw when write returns { ok: false } (writePlatformAuditLog is safe)", async () => {
+    (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({ ok: false, error: "AI audit DB error" });
 
     await expect(createAiAuditEvent(baseInput)).resolves.not.toThrow();
 
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining("[LocalContentOS] AI audit event write failed: AI audit DB error"),
-    );
-
-    // Dual-write still fires
     expect(writePlatformAuditLog).toHaveBeenCalledTimes(1);
-
-    warnSpy.mockRestore();
   });
 
-  it("does NOT throw when dual-write returns { ok: false } (writePlatformAuditLog is safe)", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-6" });
+  it("does NOT throw when writePlatformAuditLog returns { ok: false }", async () => {
     (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({ ok: false, error: "Write failed" });
 
     await expect(createAiAuditEvent(baseInput)).resolves.not.toThrow();
 
-    expect(mockLcAiAuditCreate).toHaveBeenCalledTimes(1);
     expect(writePlatformAuditLog).toHaveBeenCalledTimes(1);
   });
 
   // ─── Edge case: minimal input ───
 
   it("handles minimal input without optional fields", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-7" });
     const minimalInput = {
       organizationId: "org-2",
       action: "ai.pattern_suggested",
@@ -378,28 +306,17 @@ describe("createAiAuditEvent", () => {
 
     await createAiAuditEvent(minimalInput);
 
-    expect(mockLcAiAuditCreate).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        organizationId: "org-2",
-        action: "ai.pattern_suggested",
-        projectId: null,
-        actorId: null,
-        providerId: null,
-        warningCount: 0,
-        durationMs: 0,
-      }),
-    });
-
     expect(writePlatformAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({
-        action: "local_content.ai.ai.pattern_suggested",
+        action: "ai.pattern_suggested",
+        organizationId: "org-2",
         projectId: undefined,
         severity: "info",
+        aiConfidence: undefined,
+        durationMs: undefined,
         metadata: expect.objectContaining({
           workbookId: undefined,
-          confidence: undefined,
           warningCount: undefined,
-          durationMs: undefined,
         }),
       }),
     );
@@ -407,8 +324,7 @@ describe("createAiAuditEvent", () => {
 
   // ─── Hash chain for AI audit events ───
 
-  it("appends to hash chain for AI audit when dual-write returns ok:true with id", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-8" });
+  it("appends to hash chain for AI audit when write returns ok:true with id", async () => {
     (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({
       ok: true,
       id: "plat-log-ai-1",
@@ -419,13 +335,12 @@ describe("createAiAuditEvent", () => {
     expect(appendToAuditChain).toHaveBeenCalledTimes(1);
     expect(appendToAuditChain).toHaveBeenCalledWith(
       "plat-log-ai-1",
-      "local_content.ai.ai.review_run",
+      "ai.review_run",
       "user-1",
     );
   });
 
-  it("does NOT append to hash chain for AI audit when dual-write returns ok:false", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-9" });
+  it("does NOT append to hash chain for AI audit when write returns ok:false", async () => {
     (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({
       ok: false,
       id: "plat-log-ai-2",
@@ -437,7 +352,6 @@ describe("createAiAuditEvent", () => {
   });
 
   it("uses 'system' as fallback actorId in hash chain when actorId is not provided", async () => {
-    mockLcAiAuditCreate.mockResolvedValue({ id: "ai-audit-10" });
     (writePlatformAuditLog as jest.Mock).mockResolvedValueOnce({
       ok: true,
       id: "plat-log-ai-3",
@@ -452,9 +366,8 @@ describe("createAiAuditEvent", () => {
 
     expect(appendToAuditChain).toHaveBeenCalledWith(
       "plat-log-ai-3",
-      "local_content.ai.ai.pattern_suggested",
+      "ai.pattern_suggested",
       "system",
     );
   });
 });
-

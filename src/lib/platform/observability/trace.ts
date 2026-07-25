@@ -1,4 +1,9 @@
+import { createLogger } from "@/lib/observability/logger";
+
 ﻿import "server-only"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 /**
  * Lightweight trace context for observability.
@@ -32,16 +37,16 @@ export function wrapWithTrace<T>(name: string, fn: () => Promise<T>): Promise<T>
     .then((result) => {
       endTrace(traceId)
       const duration = Date.now() - startTime
-      // TODO: emit trace event to observability backend
+      // NOTE: Trace emission to observability backend planned for v0.2 (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)
       if (process.env.NODE_ENV === "development") {
-        console.debug(`[trace] ${name} — ${duration}ms`)
+        logger.debug(`[trace] ${name} — ${duration}ms`)
       }
       return result
     })
     .catch((error) => {
       endTrace(traceId)
       const duration = Date.now() - startTime
-      console.error(`[trace] ${name} FAILED after ${duration}ms:`, error instanceof Error ? error.message : error)
+      logger.error(`[trace] ${name} FAILED after ${duration}ms:`, error instanceof Error ? error : new Error(String(error)))
       throw error
     })
 }

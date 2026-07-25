@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { buildExportMetadata } from "@/lib/platform/production-export";
 import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function GET(
   _request: NextRequest,
@@ -36,8 +40,14 @@ export async function GET(
       orderBy: { createdAt: "desc" },
     });
 
-    const auditEvents = await prisma.workflowAuditEvent.findMany({
-      where: { organizationId: record.organizationId, recordId },
+    // [MIGRATED v2] workflowAuditEvent → PlatformAuditLog (single-write)
+    // const auditEvents = await prisma.workflowAuditEvent.findMany({
+    //   where: { organizationId: record.organizationId, recordId },
+    //   orderBy: { createdAt: "desc" },
+    //   take: 100,
+    // });
+    const auditEvents = await prisma.platformAuditLog.findMany({
+      where: { productKey: "workflowos", organizationId: record.organizationId, targetId: recordId },
       orderBy: { createdAt: "desc" },
       take: 100,
     });
@@ -86,9 +96,9 @@ export async function GET(
       auditEvents: auditEvents.map((e) => ({
         action: e.action,
         actorName: e.actorName,
-        comment: e.comment,
-        fromStatus: e.fromStatus,
-        toStatus: e.toStatus,
+        comment: (e.metadata as Record<string, unknown> | null)?.comment ?? e.eventDescription ?? null,
+        fromStatus: e.beforeState ?? (e.metadata as Record<string, unknown> | null)?.fromStatus ?? null,
+        toStatus: e.afterState ?? (e.metadata as Record<string, unknown> | null)?.toStatus ?? null,
         createdAt: e.createdAt.toISOString(),
       })),
       governance: {
@@ -118,7 +128,7 @@ export async function GET(
         { status: 401 },
       );
     }
-    console.error("[WorkflowExportDownload] Error:", message);
+    logger.error("[WorkflowExportDownload] Error:", error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json({ error: "Export download failed" }, { status: 500 });
   }
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Layout, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function FrameworkError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Framework error:", error);
+    clientLogger.error("Framework error:", error);
   }, [error]);
 
   return (

@@ -50,6 +50,7 @@ export async function listOrganizations(
       },
     },
     orderBy: { createdAt: "desc" },
+    take: 100,
   });
 
   return orgs.map((org) => ({
@@ -112,6 +113,7 @@ export async function getOrganizationDetail(
     const sunbulClients = await prisma.sunbulClient.findMany({
       where: { platformOrganizationId: platformOrgId },
       select: { id: true },
+      take: 100,
     });
     sunbulClientCount = sunbulClients.length;
 

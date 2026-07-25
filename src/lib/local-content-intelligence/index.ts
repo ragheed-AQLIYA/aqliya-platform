@@ -101,6 +101,7 @@ export async function extractLocalContentSignalsFromEngagement(
     where: { engagementId },
     select: { accountCode: true, mappingHints: true },
     orderBy: { createdAt: "desc" },
+    take: 100,
   });
 
   const hintsByCode = new Map<string, string[]>();

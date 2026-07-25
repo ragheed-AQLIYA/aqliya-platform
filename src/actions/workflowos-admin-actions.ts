@@ -1,7 +1,12 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function getAdminDashboardMetrics(organizationId: string) {
   try {
@@ -32,7 +37,7 @@ export async function getAdminDashboardMetrics(organizationId: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
-      console.error("Error getting admin metrics:", error);
+      logger.error("Error getting admin metrics:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل الحصول على مقاييس لوحة التحكم" };
   }
 }
@@ -85,7 +90,7 @@ export async function exportMetricsCSV(organizationId: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error))
-      console.error("Error exporting metrics:", error);
+      logger.error("Error exporting metrics:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل تصدير المقاييس" };
   }
 }

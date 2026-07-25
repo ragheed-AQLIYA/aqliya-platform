@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Globe, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function SectorError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Sector error:", error);
+    clientLogger.error("Sector error:", error);
   }, [error]);
 
   return (

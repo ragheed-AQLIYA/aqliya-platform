@@ -84,7 +84,7 @@ const mockPrisma = {
   auditReviewComment: { findMany: () => [], findUnique: () => null, count: () => 0 },
   auditApprovalRecord: { findMany: () => [], count: () => 0 },
   auditPublicationPackage: { findFirst: () => null },
-  auditEvent: { findMany: () => [], count: () => 0, create: () => ({}), createMany: () => ({}) },
+  platformAuditLog: { findMany: () => [], count: () => 0, create: () => ({}), createMany: () => ({}) },
   auditAiOutput: { findMany: () => [], create: () => ({}), count: () => 0 },
   auditCanonicalAccount: { findMany: () => [], findUnique: () => null, create: () => ({}) },
   auditValidationRun: { findFirst: () => null },

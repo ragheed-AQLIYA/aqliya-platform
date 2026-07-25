@@ -1,7 +1,7 @@
 import { createLogger } from './logger';
 import * as fs from 'node:fs';
 
-const log = createLogger('github-actions');
+const log = createLogger({ product: "governance-engine", action: "github-actions" });
 
 export async function postPRComment(body: string): Promise<void> {
   log.info('PR comment (stub)', { bodyLength: body.length, preview: body.slice(0, 120) });
@@ -29,7 +29,13 @@ export async function annotatePR(
   }>,
 ): Promise<void> {
   for (const a of annotations) {
-    const level = a.severity === 'error' ? 'error' : a.severity === 'warning' ? 'warn' : 'info';
-    log[level](`${a.file}:${a.line} — ${a.message}`, { severity: a.severity });
+    const msg = `${a.file}:${a.line} — ${a.message}`;
+    if (a.severity === 'error') {
+      log.error(msg, undefined, { severity: a.severity });
+    } else if (a.severity === 'warning') {
+      log.warn(msg, { severity: a.severity });
+    } else {
+      log.info(msg, { severity: a.severity });
+    }
   }
 }

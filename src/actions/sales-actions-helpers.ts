@@ -8,6 +8,9 @@ import {
 } from "@/lib/sales/guards";
 import { type ActionResult, safe as _safe, type ErrorCode } from "@/lib/platform/action-result";
 import type { SalesOrgScope } from "@/lib/sales/services";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "sales-os", action: "actions-helpers" });
 
 export function mapSalesError(error: unknown): { code: ErrorCode; message: string } | null {
   if (error instanceof SalesAccessError) {
@@ -81,8 +84,8 @@ export async function logPlatformAudit(params: {
       { metadata: params.metadata },
     );
   } catch (error) {
-    console.warn(
-      `[SalesOS] Platform audit write failed: ${error instanceof Error ? error.message : "unknown"}`,
+    logger.warn(
+      `Platform audit write failed: ${error instanceof Error ? error.message : "unknown"}`,
     );
   }
 }

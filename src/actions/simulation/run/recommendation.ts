@@ -1,12 +1,17 @@
 "use server"
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { prisma } from "@/lib/prisma"
 import { generateRecommendation } from "@/lib/recommendation/tender-recommendation"
 import { generateGenericRecommendation, canGenerateRecommendation, type RecommendationInput } from "@/lib/recommendation/recommendation-engine"
 import { deriveScores } from "@/lib/simulation/simulation-engine"
-import { buildScoringInputFromDecision } from "../common"
+import { buildScoringInputFromDecision, adaptDecisionToScoringInput, isValidDecisionType } from "../common"
 import type { ScenarioScore } from "./common"
 import type { ScenarioScores } from "@/lib/simulation/tender-simulation"
+
+
+const logger = createLogger({ product: "platform", action: "actions-simulation-run-recommendation" });
 
 export async function handleRecommendation(
   decision: {
@@ -69,14 +74,18 @@ export async function handleRecommendation(
     }
   } else {
     const riskLevel = (decision.risks?.[0]?.level as "LOW" | "MEDIUM" | "HIGH") ?? "MEDIUM"
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prisma Decision includes all ScoringDecisionInput fields
-    const scoringData = buildScoringInputFromDecision(decision as any)
+    const scoringInput = adaptDecisionToScoringInput(decision)
+    const scoringData = buildScoringInputFromDecision(scoringInput)
     const derived = deriveScores(scoringData)
+
+    if (!isValidDecisionType(decision.type)) {
+      logger.warn("Invalid decision type for recommendation", { decisionType: decision.type })
+      return
+    }
 
     const recommendationInput: RecommendationInput = {
       decisionId: decision.id,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- decision.type is string matching DecisionType enum
-      decisionType: decision.type as any,
+      decisionType: decision.type,
       scenarioScores,
       riskLevel,
       strategicFitScore: derived.strategicFitScore,
@@ -88,7 +97,7 @@ export async function handleRecommendation(
 
     const prereqs = canGenerateRecommendation(recommendationInput)
     if (!prereqs.canRun) {
-      console.warn("Cannot generate recommendation:", prereqs.missingInputs)
+      logger.warn("Cannot generate recommendation:", { detail: prereqs.missingInputs })
     } else {
       const recommendation = generateGenericRecommendation(recommendationInput)
 

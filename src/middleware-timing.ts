@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import type { NextRequest } from "next/server";
 
-export function timingMiddleware(request: NextRequest) {
+
+const logger = createLogger({ product: "platform", action: "middleware" });
+
+function timingMiddleware(request: NextRequest) {
   const start = Date.now();
   const response = NextResponse.next();
 
@@ -9,7 +13,7 @@ export function timingMiddleware(request: NextRequest) {
 
   const duration = Date.now() - start;
   if (duration > 5000) {
-    console.warn(`[SLOW] ${request.method} ${request.url} took ${duration}ms`);
+    logger.warn("[SLOW]${request.method} ${request.url} took ${duration}ms");
   }
 
   return response;

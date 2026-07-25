@@ -17,6 +17,40 @@ This guide helps you get started using the platform in the pilot environment.
 
 ---
 
+## ما الجديد / What's New (يوليو 2026)
+
+> **آخر تحديث:** 2026-07-25 | **Last Updated:** 2026-07-25
+
+### دمج سجل التدقيق / Unified Audit Trail
+
+تم دمج جميع سجلات التدقيق الخاصة بالمنتجات في نموذج **PlatformAuditLog** الموحد.
+All product-specific audit logs have been merged into a single unified **PlatformAuditLog** model.
+
+- **قبل / Before:** كل منتج كان له جدول تدقيق منفصل (AuditEvent، AuditLog، SalesAuditEvent، إلخ)
+  Each product had its own audit table (AuditEvent, AuditLog, SalesAuditEvent, etc.)
+- **بعد / After:** سجل واحد موحد `PlatformAuditLog` يغطي جميع المنتجات والمنصة
+  One unified `PlatformAuditLog` table covering all products and platform events
+- **الفوائد / Benefits:**
+  - رؤية موحدة لكل الأحداث / Single unified view of all events
+  - تتبع كامل عبر المنتجات / Cross-product traceability
+  - سلسلة تدقيق مشفرة / Cryptographic hash chain verification
+  - دعم الذكاء الاصطناعي مع درجة ثقة / AI event tracking with confidence scores
+  - تحليل موحد للصلاحيات / Unified RBAC audit analysis
+
+### تحسينات البيانات التجريبية / Pilot Data Improvements
+
+- **180+ سجل مؤسسي** سعودي واقعي عبر جميع المنتجات
+  **180+ Saudi institutional records** across all product areas
+- **20 سجل تدقيق موحد** تغطي 6 منتجات
+  **20 unified audit log entries** covering 6 product areas
+- **8 مستخدمين** بأدوار وصلاحيات مختلفة
+  **8 users** with distinct roles and permissions
+
+---
+
+
+---
+
 ## المبادئ الأساسية / Core Principles
 
 | المبدأ / Principle | الشرح / Description |
@@ -214,6 +248,41 @@ Important outputs require review and approval before export:
 2. مراجعة من مراجع / Review by reviewer
 3. اعتماد من مدير / Approval by manager
 4. تصدير / Export
+
+
+### سجل التدقيق الموحد / Unified Audit Trail (PlatformAuditLog)
+
+جميع الأحداث في المنصة مسجلة في سجل تدقيق موحد واحد.
+All platform events are logged in a single unified audit trail.
+
+**ما يتم تسجيله / What is logged:**
+
+| الحقل / Field | الوصف / Description |
+|---------------|---------------------|
+| **productKey** | المنتج (auditos، decisionos، salesos، إلخ) / Product area |
+| **action** | نوع الإجراء (إنشاء، تعديل، اعتماد، إلخ) / Action type |
+| **actorId / actorName** | من قام بالإجراء / Who performed the action |
+| **targetType / targetId** | ما هو المستهدف / What was affected |
+| **severity** | مستوى الخطورة (info، warning، critical) |
+| **eventDescription** | وصف كامل للحدث / Full event description |
+| **aiRelated** | هل الحدث متعلق بالذكاء الاصطناعي؟ / AI involvement |
+| **aiConfidence** | درجة ثقة الذكاء الاصطناعي / AI confidence score |
+| **evidenceRefs** | الأدلة المرتبطة / Linked evidence |
+
+**الوصول إلى السجل / Accessing the audit trail:**
+
+1. انتقل إلى **الإعدادات > سجل التدقيق** / Navigate to **Settings > Audit Logs**
+2. استخدم الفلاتر حسب المنتج، نوع الإجراء، المستخدم / Filter by product, action type, user
+3. تحقق من سلامة السلسلة (Hash Chain) / Verify chain integrity
+4. صدّر السجل للتحليل الخارجي / Export for external analysis
+
+**التحقق من سلسلة التجزئة / Hash Chain Verification:**
+
+- انتقل إلى **الإعدادات > التحقق من السلسلة** / Navigate to **Settings > Chain Verification**
+- كل سجل تدقيق مرتبط بالسجل السابق بتجزئة مشفرة
+  Each audit log entry is cryptographically linked to the previous entry
+- أي تعديل غير مصرح به سيظهر فوراً
+  Any unauthorized modification is immediately detectable
 
 ### عزل البيانات / Data Isolation
 

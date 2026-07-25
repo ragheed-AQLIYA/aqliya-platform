@@ -2,26 +2,36 @@ import type {
   SunbulUserRole as WorkflowUserRole,
   SunbulRecordStatus as WorkflowRecordStatus,
   SunbulReviewStatus as WorkflowReviewStatus,
-  SunbulAuditAction as WorkflowAuditAction,
   SunbulClient as WorkflowClient,
   SunbulUserMembership as WorkflowMembership,
   SunbulRecord as WorkflowRecord,
   SunbulDocument as WorkflowDocument,
   SunbulReview as WorkflowReview,
-  SunbulAuditEvent as WorkflowAuditEvent,
 } from "@prisma/client";
+
+export type WorkflowAuditAction = string;
+
+export interface WorkflowAuditEvent {
+  id: string;
+  clientId: string;
+  recordId: string | null;
+  actorId: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  metadata: Record<string, unknown> | null;
+  createdAt: Date;
+}
 
 export type {
   WorkflowUserRole,
   WorkflowRecordStatus,
   WorkflowReviewStatus,
-  WorkflowAuditAction,
   WorkflowClient,
   WorkflowMembership,
   WorkflowRecord,
   WorkflowDocument,
   WorkflowReview,
-  WorkflowAuditEvent,
 };
 
 export interface CreateWorkflowRecordInput {

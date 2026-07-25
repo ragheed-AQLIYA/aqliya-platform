@@ -9,44 +9,30 @@ import {
   validateCreateSalesSignalInput,
   type CreateSalesSignalInput,
 } from "./validation";
+import {
+  VALID_SIGNAL_TYPES,
+  type SalesSignal,
+  type SalesSignalSeverity,
+  type SalesSignalType,
+  type SalesSignalView,
+  type SalesSignalWithAccount,
+} from "./signals-view";
+
+export {
+  VALID_SIGNAL_TYPES,
+  VALID_SIGNAL_SEVERITIES,
+  signalTypeLabelAr,
+  signalSeverityLabelAr,
+  type SalesSignalType,
+  type SalesSignalSeverity,
+  type SalesSignal,
+  type SalesSignalView,
+  type SalesSignalWithAccount,
+} from "./signals-view";
 
 /** Phase 2 stub — signals stored in SalesAccount.metadata.signals[] (max 50, no dedicated table). */
 
 export const MAX_SIGNALS_PER_ACCOUNT = 50;
-
-export const VALID_SIGNAL_TYPES = [
-  "intent",
-  "engagement",
-  "risk",
-  "news",
-  "other",
-] as const;
-
-export type SalesSignalType = (typeof VALID_SIGNAL_TYPES)[number];
-
-export const VALID_SIGNAL_SEVERITIES = ["low", "medium", "high"] as const;
-
-export type SalesSignalSeverity = (typeof VALID_SIGNAL_SEVERITIES)[number];
-
-export interface SalesSignal {
-  id: string;
-  type: SalesSignalType;
-  title: string;
-  summary?: string | null;
-  severity?: SalesSignalSeverity | null;
-  source?: string | null;
-  detectedAt: string;
-  createdById?: string | null;
-  createdAt: string;
-}
-
-export interface SalesSignalView extends SalesSignal {
-  accountId: string;
-}
-
-export interface SalesSignalWithAccount extends SalesSignalView {
-  accountName: string;
-}
 
 export interface ListSignalsOptions {
   type?: string;
@@ -200,6 +186,7 @@ export async function listSignalsForOrganization(
     where,
     select: { id: true, name: true, metadata: true },
     orderBy: { updatedAt: "desc" },
+    take: 10000,
   });
 
   const flattened: SalesSignalWithAccount[] = [];
@@ -279,34 +266,4 @@ export async function createSalesSignal(
   });
 
   return { ...signal, accountId: account.id };
-}
-
-export function signalTypeLabelAr(type: SalesSignalType): string {
-  switch (type) {
-    case "intent":
-      return "نية شراء";
-    case "engagement":
-      return "تفاعل";
-    case "risk":
-      return "مخاطر";
-    case "news":
-      return "أخبار";
-    default:
-      return "أخرى";
-  }
-}
-
-export function signalSeverityLabelAr(
-  severity: SalesSignalSeverity | null | undefined,
-): string {
-  switch (severity) {
-    case "high":
-      return "مرتفع";
-    case "medium":
-      return "متوسط";
-    case "low":
-      return "منخفض";
-    default:
-      return "—";
-  }
 }

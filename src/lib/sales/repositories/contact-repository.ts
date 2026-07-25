@@ -25,6 +25,7 @@ export const contactRepository = {
     const rows = await prisma.salesContact.findMany({
       where: { organizationId, accountId },
       orderBy: { createdAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaContactToDomain);
   },
@@ -35,6 +36,7 @@ export const contactRepository = {
     const rows = await prisma.salesContact.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaContactToDomain);
   },

@@ -152,7 +152,7 @@ export async function importTemplate(
   return { success: true };
 }
 
-export async function listAvailableTemplates(
+async function listAvailableTemplates(
   organizationId: string,
 ): Promise<{ success: boolean; data?: unknown[]; error?: string }> {
   const user = await getCurrentUser();
@@ -180,6 +180,7 @@ export async function listAvailableTemplates(
       organizationId: true,
       createdAt: true,
     },
+    take: 10000,
   });
 
   return { success: true, data: templates };

@@ -63,29 +63,41 @@ export async function resolveIntegrations(
     results.push(mapToRecord(ti, "tenant-integration"));
   }
 
-  // 2. Fall back to legacy connections for CRM / ERP
+  // 2. Fall back to legacy connections for CRM / ERP (in parallel)
+  const legacyQueries: Promise<void>[] = [];
+
   if (type === "CRM" || type === "crm") {
-    const crmRecords = await prisma.crmConnection.findMany({
-      where: { organizationId },
-      orderBy: { createdAt: "desc" },
-    });
-    for (const crm of crmRecords) {
-      if (!results.some((r) => r.provider === crm.provider)) {
-        results.push(mapLegacyCrmToRecord(crm));
-      }
-    }
+    legacyQueries.push(
+      prisma.crmConnection.findMany({
+        where: { organizationId },
+        orderBy: { createdAt: "desc" },
+      }).then((crmRecords) => {
+        for (const crm of crmRecords) {
+          if (!results.some((r) => r.provider === crm.provider)) {
+            results.push(mapLegacyCrmToRecord(crm));
+          }
+        }
+      })
+    );
   }
 
   if (type === "ERP" || type === "erp") {
-    const erpRecords = await prisma.erpConnection.findMany({
-      where: { organizationId },
-      orderBy: { createdAt: "desc" },
-    });
-    for (const erp of erpRecords) {
-      if (!results.some((r) => r.provider === erp.provider)) {
-        results.push(mapLegacyErpToRecord(erp));
-      }
-    }
+    legacyQueries.push(
+      prisma.erpConnection.findMany({
+        where: { organizationId },
+        orderBy: { createdAt: "desc" },
+      }).then((erpRecords) => {
+        for (const erp of erpRecords) {
+          if (!results.some((r) => r.provider === erp.provider)) {
+            results.push(mapLegacyErpToRecord(erp));
+          }
+        }
+      })
+    );
+  }
+
+  if (legacyQueries.length > 0) {
+    await Promise.all(legacyQueries);
   }
 
   return results;

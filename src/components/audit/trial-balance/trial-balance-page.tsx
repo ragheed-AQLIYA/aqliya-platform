@@ -33,6 +33,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
+import { createClientLogger } from "@/lib/observability/client-logger";
 import { TrialBalanceUpload } from "@/components/audit/trial-balance/trial-balance-upload";
 import type { TrialBalance, TrialBalanceLine, Engagement } from "@/types/audit";
 import {
@@ -70,6 +71,7 @@ const TrustIcon = ({ state }: { state: string }) =>
   );
 
 export default function TrialBalancePage() {
+  const clientLogger = createClientLogger("TrialBalancePage");
   const t = useTranslations("audit.trialBalance");
   const params = useParams();
   const engagementId = params.engagementId as string;
@@ -97,7 +99,7 @@ export default function TrialBalancePage() {
       })
       .catch((err) => {
         if (cancelled) return;
-        console.error("[TrialBalancePage] load failed:", err);
+        clientLogger.error("load failed", err);
         setLoadError(
           err instanceof Error ? err.message : "تعذر تحميل ميزان المراجعة",
         );

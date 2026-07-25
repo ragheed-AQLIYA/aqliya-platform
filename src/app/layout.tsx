@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Noto_Sans_Arabic } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -65,10 +65,10 @@ export default async function RootLayout({
       <body
         className={`${notoSansArabic.variable} h-full font-sans antialiased`}
       >
-        <SkipToContent />
         <SwUnregister />
         <script
           type="application/ld+json"
+        // SAFE: Static JSON-LD schema data from json-ld.tsx — not user-generated.
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -78,6 +78,7 @@ export default async function RootLayout({
         />
         <NextIntlClientProvider messages={messages ?? {}}>
           <A11yProvider>
+            <SkipToContent />
             <WebVitals />
             <Analytics />
             {children}

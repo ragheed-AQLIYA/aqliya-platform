@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, RefreshCw, ArrowLeft } from "lucide-react";
@@ -14,7 +16,7 @@ export default function ProjectError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[Project Error Boundary]", error);
+    clientLogger.error("[Project Error Boundary]", error);
   }, [error]);
 
   const router = useRouter();

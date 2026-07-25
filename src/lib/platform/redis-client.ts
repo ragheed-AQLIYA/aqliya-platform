@@ -1,6 +1,10 @@
 import "server-only"
+import { createLogger } from "@/lib/observability/logger";
 
 import { Redis } from "ioredis"
+
+
+const logger = createLogger({ product: "platform", action: "lib-platform-redis-client" });
 
 const globalForRedis = globalThis as unknown as { redisClient?: Redis }
 
@@ -25,7 +29,7 @@ export function getRedisClient(): Redis {
   })
 
   client.on("error", (err) => {
-    console.error("[redis] connection error:", err.message)
+    logger.error("[redis] connection error:", err instanceof Error ? err : new Error(String(err)))
   })
   // Periodic reconnection probe for production resilience
   const RECONNECT_INTERVAL = 60000; // 60 seconds

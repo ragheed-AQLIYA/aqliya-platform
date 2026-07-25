@@ -64,6 +64,18 @@ const mockPrisma = {
       mockStore.officeAiTask.push(record)
       return record
     }),
+    createMany: jest.fn(async ({ data }: any) => {
+      const rows = Array.isArray(data) ? data : []
+      for (const row of rows) {
+        mockStore.officeAiTask.push({
+          id: nextId('task'),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          ...row,
+        })
+      }
+      return { count: rows.length }
+    }),
     findMany: jest.fn(async ({ where, orderBy }: any) => {
       let results = filterStore('officeAiTask', where)
       if (orderBy?.createdAt === 'desc') {

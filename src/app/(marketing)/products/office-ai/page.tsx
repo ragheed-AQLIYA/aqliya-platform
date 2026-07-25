@@ -5,11 +5,37 @@ import {
   EnterpriseCTA,
 } from "@/components/enterprise";
 
-export const metadata: Metadata = {
-  title: "Office AI Assistant  مساعد مؤسسي ذكي | AQLIYA",
-  description:
-    "Office AI Assistant هو المساعد المؤسسي الذكي المشترك عبر جميع أنظمة عقلية  يقدّم مهام ذكية ضمن بيئة محكومة مع مراجعة بشرية وأدلة وسجل تدقيقي كامل.",
-};
+export function generateMetadata(): Metadata {
+  const title = "Office AI Assistant  مساعد مؤسسي ذكي | AQLIYA";
+  const description =
+    "Office AI Assistant هو المساعد المؤسسي الذكي المشترك عبر جميع أنظمة عقلية  يقدّم مهام ذكية ضمن بيئة محكومة مع مراجعة بشرية وأدلة وسجل تدقيق كامل.";
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com/products/office-ai",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      type: "website",
+      images: [
+        {
+          url: "/og-office-ai.png",
+          width: 1200,
+          height: 630,
+          alt: "Office AI Assistant - مساعد مؤسسي ذكي | AQLIYA",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-office-ai.png"],
+    },
+  };
+}
 
 export default function OfficeAIProductPage() {
   return (

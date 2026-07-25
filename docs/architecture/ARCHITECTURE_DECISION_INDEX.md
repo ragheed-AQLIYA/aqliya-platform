@@ -1,4 +1,4 @@
-# AQLIYA Architecture Decision Index
+﻿# AQLIYA Architecture Decision Index
 
 > **Status:** Draft v0.1 | **Date:** 2026-06-28 | **Author:** OpenCode
 > **Type:** Reference — maps all architecture decisions to their owning documents, ADRs, and impacts.
@@ -35,6 +35,19 @@
 | **ADR-014** | Business Capability Map — top-level business capability layer above platform capabilities | ✅ Constitutional | — (self) | `AQLIYA_ARCHITECTURE_CONSTITUTION.md` | All product blueprints, new product proposals, FinanceOS/HROS roadmap | 2026-06-28 |
 | **ADR-015** | Product Capability Layer — product-specific capabilities between Business Capabilities and Domains | ✅ Constitutional | — (self) | `AQLIYA_ARCHITECTURE_CONSTITUTION.md` | All product blueprints, domain modeling, SalesOS v2 Blueprint template | 2026-06-28 |
 | **ADR-016** | **Architectural Closure** — Architecture Program baseline v1.0 closed. Engineering Program authorized. No new architecture documents, ADRs, or principle changes without evidence from implementation. | ✅ Accepted | 12 (all) | `SALESOS_V2_BLUEPRINT.md` (final review) | Engineering program, all future product blueprints, PRDs, specifications. | 2026-06-28 |
+| **ADR-100** | Platform Boundaries — modular monolith; Kernel-only shared deps; commercial wedges AuditOS+LCOS | ✅ Accepted | 1, 2, 13 | `adr/ADR-100-PLATFORM-BOUNDARIES.md` | All products, Kernel, commercial docs | 2026-07-19 |
+| **ADR-101** | Kernel Design — `@/lib/kernel` sole platform import surface; contracts/plugins/events/CQRS-read | ✅ Accepted | 2, 3, 8–12 | `adr/ADR-101-KERNEL-DESIGN.md` | Kernel, all consumers | 2026-07-19 |
+| **ADR-102** | Database Strategy — Postgres+Prisma; migrate deploy; no client Prisma; mega-schema deferred split | ✅ Accepted | — | `adr/ADR-102-DATABASE-STRATEGY.md` | prisma/, CI, Terraform RDS | 2026-07-19 |
+| **ADR-103** | Tenant Isolation — app-layer org guards; ADMIN explicit; GOV-05 downloads | ✅ Accepted | — | `adr/ADR-103-TENANT-ISOLATION.md` | authz, middleware, APIs | 2026-07-19 |
+| **ADR-104** | Plugin Architecture — ProductPlugin mandatory for Audit/LCOS/Sales/Decision/Workflow/Office AI | ✅ Accepted (migration incomplete) | 1, 9–11 | `adr/ADR-104-PLUGIN-ARCHITECTURE.md` | `src/products/*`, bootstrap | 2026-07-19 |
+| **ADR-105** | API Contract Standardization — Server Actions primary; paginated lists; Route Handlers for streams/integrations | ✅ Accepted | — | `adr/ADR-105-API-CONTRACT-STANDARDIZATION.md` | actions/, api/ | 2026-07-19 |
+| **ADR-106** | Event Architecture — bus + outbox + optional Bull; no product↔product imports | ✅ Accepted | 1 | `adr/ADR-106-EVENT-ARCHITECTURE.md` | Kernel events, outbox, queue | 2026-07-19 |
+| **ADR-107** | AI Architecture — hybrid governed AI; sanitization; human approval; quotas honesty | ✅ Accepted | — | `adr/ADR-107-AI-ARCHITECTURE.md` | `src/lib/core/ai/`, ADR-001 | 2026-07-19 |
+| **ADR-108** | Deployment Strategy — ECS/CloudFront/RDS/Redis; canonical envs; On-Prem out of scope | ✅ Accepted | — | `adr/ADR-108-DEPLOYMENT-STRATEGY.md` | Terraform, workflows, ADR-DEPLOY-001 | 2026-07-19 |
+| **ADR-109** | Documentation Governance — authority order; maturity freeze; ADR-100+ series; exclusions bind claims | ✅ Accepted | — | `adr/ADR-109-DOCUMENTATION-GOVERNANCE.md` | All docs, Matrix, commercial | 2026-07-19 |
+| **ADR-110** | Audit Log Merge — 8 models → single PlatformAuditLog; productKey segmentation; no dual-write | ✅ Accepted | 1, 2, 13 | `adr/ADR-110-AUDIT-LOG-MERGE.md` | prisma/, audit-log.ts, unified-query, all products | 2026-07-25 |
+
+> **Numbering note (ADR-109):** Constitution Decision Map IDs ADR-001–016 are *principle indices*. File ADRs under `docs/architecture/adr/ADR-1xx-*.md` are the executable governance series. Historical file `ADR-001-AI-RUNTIME-STRATEGY.md` is unrelated to Constitution ADR-001 (SalesOS freeze).
 
 ---
 
@@ -47,8 +60,19 @@ Each ADR is documented in two places:
 
 | ADR | Full Rationale In |
 |---|---|
-| ADR-001 | `SALESOS_ARCHITECTURE_REALITY_ASSESSMENT.md` — Architecture Decision Record section |
+| ADR-001 (Constitution index) | `SALESOS_ARCHITECTURE_REALITY_ASSESSMENT.md` — Architecture Decision Record section |
 | ADR-002 through ADR-012 | `AQLIYA_ARCHITECTURE_CONSTITUTION.md` — each principle section includes rationale |
+| ADR-100 | `docs/architecture/adr/ADR-100-PLATFORM-BOUNDARIES.md` |
+| ADR-101 | `docs/architecture/adr/ADR-101-KERNEL-DESIGN.md` |
+| ADR-102 | `docs/architecture/adr/ADR-102-DATABASE-STRATEGY.md` |
+| ADR-103 | `docs/architecture/adr/ADR-103-TENANT-ISOLATION.md` |
+| ADR-104 | `docs/architecture/adr/ADR-104-PLUGIN-ARCHITECTURE.md` |
+| ADR-105 | `docs/architecture/adr/ADR-105-API-CONTRACT-STANDARDIZATION.md` |
+| ADR-106 | `docs/architecture/adr/ADR-106-EVENT-ARCHITECTURE.md` |
+| ADR-107 | `docs/architecture/adr/ADR-107-AI-ARCHITECTURE.md` |
+| ADR-108 | `docs/architecture/adr/ADR-108-DEPLOYMENT-STRATEGY.md` |
+| ADR-109 | `docs/architecture/adr/ADR-109-DOCUMENTATION-GOVERNANCE.md` |
+| File ADR-001 (AI Runtime) | `docs/architecture/ADR-001-AI-RUNTIME-STRATEGY.md` — distinct from Constitution ADR-001 |
 
 ---
 

@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { isExpectedAccessDeniedError } from "@/lib/auth";
 import { getSalesDashboardStats } from "@/lib/sales/services";
@@ -27,7 +27,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
     const logger = createLogger({ product: "salesos", action: "safe" });
     const message = error instanceof Error ? error.message : "Unknown error";
     logger.error("SalesOS dashboard action failed", error as Error);
-    console.error("[SalesOS Dashboard Action]", message);
+    logger.error("[SalesOS Dashboard Action]", error instanceof Error ? error : undefined);
     return { ok: false, error: message };
   }
 }

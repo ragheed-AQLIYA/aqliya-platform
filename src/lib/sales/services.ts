@@ -557,8 +557,11 @@ export async function listSalesDealAuditEvents(
   organizationId: string,
   limit = 50,
 ) {
-  return prisma.salesAuditEvent.findMany({
+  // OLD: return prisma.salesAuditEvent.findMany({
+  // Migrated to platformAuditLog with productKey: "salesos"
+  return prisma.platformAuditLog.findMany({
     where: {
+      productKey: "salesos",
       organizationId,
       OR: [
         { targetType: "SalesDeal", targetId: dealId },

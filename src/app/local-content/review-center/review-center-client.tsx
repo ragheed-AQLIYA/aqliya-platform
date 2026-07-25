@@ -1,26 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import type {
   ReviewQueue,
   ReviewQueueItem,
 } from "@/actions/localcontent-review-actions";
-
-// ─── Props ───
+import { useReviewCenter } from "./use-review-center";
+import { ReviewHeader } from "./components/review-header";
+import { BulkReviewBar } from "./components/bulk-review-bar";
+import { ReviewQueueItemCard } from "./components/review-queue-item";
+import { AuditEvents } from "./components/audit-events";
 
 interface AuditEventItem {
   id: string;
@@ -40,350 +32,80 @@ interface ReviewCenterProps {
   recentAuditEvents?: AuditEventItem[];
 }
 
-// ─── Type Badge Config ───
-
-const typeConfig: Record<
-  string,
-  { label: string; color: string; border: string }
-> = {
-  explanation: {
-    label: "تفسير / Explanation",
-    color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-    border: "border-l-blue-500",
-  },
-  suggestion: {
-    label: "اقتراح / Suggestion",
-    color: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
-    border: "border-l-purple-500",
-  },
-  false_positive: {
-    label: "إيجابية كاذبة / FP",
-    color: "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200",
-    border: "border-l-amber-500",
-  },
-};
-
-// ─── Main Component ───
-
 export function ReviewCenter({
   initialQueue,
-  organizationId,
   auditEventCount = 0,
   recentAuditEvents = [],
 }: ReviewCenterProps) {
-  const router = useRouter();
-  const [queue] = useState<ReviewQueue>(initialQueue);
-  const [activeTab, setActiveTab] = useState("all");
-  const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [reviewNotes, setReviewNotes] = useState("");
-  const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
-  const [statusMessage, setStatusMessage] = useState<{
-    type: "success" | "error";
-    text: string;
-  } | null>(null);
-  const [exporting, setExporting] = useState(false);
-  // Filter items based on active tab
-  const filteredItems =
-    activeTab === "all"
-      ? queue.items
-      : queue.items.filter((item) => item.type === activeTab);
+  const {
+    queue,
+    activeTab,
+    setActiveTab,
+    selected,
+    setSelected,
+    reviewNotes,
+    setReviewNotes,
+    processingIds,
+    statusMessage,
+    exporting,
+    setExporting,
+    filteredItems,
+    showStatus,
+    handleReview,
+    handleBulkReview,
+    toggleSelect,
+    toggleSelectAll,
+  } = useReviewCenter(initialQueue);
 
-  // Clear status message after 5s
-  useEffect(() => {
-    if (statusMessage) {
-      const timer = setTimeout(() => setStatusMessage(null), 5000);
-      return () => clearTimeout(timer);
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const mod = await import("@/actions/localcontent-review-export");
+      const res = await mod.exportReviewSummaryPdfAction();
+      if (res.success && res.data) {
+        const binaryStr = atob(res.data.base64);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) {
+          bytes[i] = binaryStr.charCodeAt(i);
+        }
+        const blob = new Blob([bytes], { type: res.data.contentType });
+        const url = URL.createObjectURL(blob);
+        const a = window.document.createElement("a");
+        a.href = url;
+        a.download = res.data.filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        showStatus("success", "✅ تم تصدير التقرير بنجاح");
+      } else {
+        showStatus("error", res.error || "فشل التصدير");
+      }
+    } catch {
+      showStatus("error", "فشل تصدير التقرير");
+    } finally {
+      setExporting(false);
     }
-  }, [statusMessage]);
-
-  const showStatus = (type: "success" | "error", text: string) => {
-    setStatusMessage({ type, text });
   };
-
-  // ── Review single item ──
-  const handleReview = useCallback(
-    async (item: ReviewQueueItem, decision: string) => {
-      setProcessingIds((prev) => new Set(prev).add(item.id));
-      setStatusMessage(null);
-
-      try {
-        if (item.type === "suggestion") {
-          const mod = await import(
-            "@/actions/localcontent-review-actions"
-          );
-          const res = await mod.reviewSuggestionAction(
-            item.id,
-            decision as "approved" | "rejected",
-            reviewNotes || `Reviewed via review center: ${decision}`,
-          );
-          if (!res.success)
-            throw new Error(res.error || "Review failed");
-        } else {
-          const mod = await import(
-            "@/actions/localcontent-review-actions"
-          );
-          const res = await mod.reviewExplanationAction(
-            item.id,
-            decision as "confirmed" | "rejected",
-            reviewNotes || `Reviewed via review center: ${decision}`,
-          );
-          if (!res.success)
-            throw new Error(res.error || "Review failed");
-        }
-
-        showStatus("success", `✅ ${item.title} — ${decision}`);
-        router.refresh();
-      } catch (err) {
-        showStatus(
-          "error",
-          `❌ ${err instanceof Error ? err.message : "Something went wrong"}`,
-        );
-      } finally {
-        setProcessingIds((prev) => {
-          const next = new Set(prev);
-          next.delete(item.id);
-          return next;
-        });
-      }
-    },
-    [reviewNotes, router],
-  );
-
-  // ── Bulk review ──
-  const handleBulkReview = useCallback(
-    async (decision: string) => {
-      if (selected.size === 0) return;
-      setStatusMessage(null);
-
-      const items = filteredItems.filter((item) => selected.has(item.id));
-      const types = [...new Set(items.map((i) => i.type))];
-      const decisionType = types.length === 1 ? types[0] : "mixed";
-
-      try {
-        const mod = await import(
-          "@/actions/localcontent-review-actions"
-        );
-        const res = await mod.batchReviewAction(
-          decisionType === "suggestion" ? "suggestion" : "explanation",
-          Array.from(selected),
-          decision as "approved" | "rejected",
-          reviewNotes || `Bulk review: ${decision}`,
-        );
-
-        if (res.success) {
-          showStatus("success", `✅ Bulk review complete: ${res.processed} processed`);
-        } else {
-          showStatus("error", `⚠️ ${res.errors} errors, ${res.processed} processed`);
-        }
-
-        setSelected(new Set());
-        router.refresh();
-      } catch (err) {
-        showStatus(
-          "error",
-          `❌ ${err instanceof Error ? err.message : "Bulk review failed"}`,
-        );
-      }
-    },
-    [selected, filteredItems, reviewNotes, router],
-  );
-
-  // ── Toggle selection ──
-  const toggleSelect = useCallback(
-    (id: string) => {
-      setSelected((prev) => {
-        const next = new Set(prev);
-        if (next.has(id)) next.delete(id);
-        else next.add(id);
-        return next;
-      });
-    },
-    [],
-  );
-
-  const toggleSelectAll = useCallback(() => {
-    if (selected.size === filteredItems.length) {
-      setSelected(new Set());
-    } else {
-      setSelected(new Set(filteredItems.map((i) => i.id)));
-    }
-  }, [filteredItems, selected]);
 
   return (
     <div className="min-h-screen p-6" dir="rtl">
-      {/* ── Header ── */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <h1 className="text-2xl font-bold">مركز المراجعة</h1>
-            <p className="text-sm text-muted-foreground">
-              Review Center — Queued AI outputs awaiting human review
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={exporting}
-              onClick={async () => {
-                setExporting(true);
-                try {
-                  const mod = await import(
-                    "@/actions/localcontent-review-export"
-                  );
-                  const res = await mod.exportReviewSummaryPdfAction();
-                  if (res.success && res.data) {
-                    // Decode base64 → Uint8Array → Blob
-                    const binaryStr = atob(res.data.base64);
-                    const bytes = new Uint8Array(binaryStr.length);
-                    for (let i = 0; i < binaryStr.length; i++) {
-                      bytes[i] = binaryStr.charCodeAt(i);
-                    }
-                    const blob = new Blob([bytes], {
-                      type: res.data.contentType,
-                    });
-                    const url = URL.createObjectURL(blob);
-                    const a = window.document.createElement("a");
-                    a.href = url;
-                    a.download = res.data.filename;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    showStatus("success", "✅ تم تصدير التقرير بنجاح");
-                  } else {
-                    showStatus("error", res.error || "فشل التصدير");
-                  }
-                } catch {
-                  showStatus("error", "فشل تصدير التقرير");
-                } finally {
-                  setExporting(false);
-                }
-              }}
-            >
-              {exporting ? "جاري التصدير..." : "📄 تصدير ملخص PDF"}
-            </Button>
-            <Link href="/local-content/ai-advisor">
-              <Button variant="outline" size="sm">
-                ← لوحة المستشار / Advisor Panel
-              </Button>
-            </Link>
-          </div>
-        </div>
+      <ReviewHeader
+        queue={queue}
+        auditEventCount={auditEventCount}
+        exporting={exporting}
+        onExport={handleExport}
+        statusMessage={statusMessage}
+      />
 
-        {/* ── Stats Bar ── */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-          <Card>
-            <CardHeader className="py-2 px-3">
-              <CardTitle className="text-xs text-muted-foreground">
-                إجمالي المعلقة / Total Pending
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="py-1 px-3">
-              <span className="text-xl font-bold">{queue.total}</span>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="py-2 px-3">
-              <CardTitle className="text-xs text-muted-foreground">
-                تفسيرات / Explanations
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="py-1 px-3">
-              <span className="text-xl font-bold text-blue-600">
-                {queue.counts.explanations}
-              </span>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="py-2 px-3">
-              <CardTitle className="text-xs text-muted-foreground">
-                اقتراحات / Suggestions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="py-1 px-3">
-              <span className="text-xl font-bold text-purple-600">
-                {queue.counts.suggestions}
-              </span>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="py-2 px-3">
-              <CardTitle className="text-xs text-muted-foreground">
-                ذاكرة المنظمة / Org Memory
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="py-1 px-3">
-              <span className="text-xl font-bold text-green-600">
-                {queue.stats.totalMemoryRecords}
-              </span>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="py-2 px-3">
-              <CardTitle className="text-xs text-muted-foreground">
-                أحداث التدقيق / Audit Events
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="py-1 px-3">
-              <span className="text-xl font-bold text-amber-600">
-                {auditEventCount}
-              </span>
-            </CardContent>
-          </Card>
-        </div>
+      <BulkReviewBar
+        selectedCount={selected.size}
+        reviewNotes={reviewNotes}
+        onReviewNotesChange={setReviewNotes}
+        onApprove={() => handleBulkReview("approved")}
+        onReject={() => handleBulkReview("rejected")}
+        onClear={() => setSelected(new Set())}
+        processing={processingIds.size > 0}
+      />
 
-        {/* ── Status Message ── */}
-        {statusMessage && (
-          <div
-            className={`rounded-md px-4 py-2 text-sm mb-4 ${
-              statusMessage.type === "success"
-                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-            }`}
-          >
-            {statusMessage.text}
-          </div>
-        )}
-      </div>
-
-      {/* ── Bulk Review Bar ── */}
-      {selected.size > 0 && (
-        <div className="sticky top-0 z-10 rounded-lg border bg-background p-3 mb-4 flex items-center gap-3 shadow-sm">
-          <span className="text-sm font-medium">
-            {selected.size} مختارة / selected
-          </span>
-          <Input
-            placeholder="ملاحظات جماعية..."
-            className="flex-1 h-8 text-sm"
-            value={reviewNotes}
-            onChange={(e) => setReviewNotes(e.target.value)}
-          />
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => handleBulkReview("approved")}
-            disabled={processingIds.size > 0}
-          >
-            ✅ اعتماد الكل / Approve All
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => handleBulkReview("rejected")}
-            disabled={processingIds.size > 0}
-          >
-            ❌ رفض الكل / Reject All
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setSelected(new Set())}
-          >
-            إلغاء / Clear
-          </Button>
-        </div>
-      )}
-
-      {/* ── Tabs ── */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
         <TabsList>
           <TabsTrigger value="all">
@@ -401,7 +123,6 @@ export function ReviewCenter({
         </TabsList>
       </Tabs>
 
-      {/* ── Select All toggle ── */}
       {filteredItems.length > 0 && (
         <div className="flex items-center gap-2 mb-3">
           <Checkbox
@@ -415,7 +136,6 @@ export function ReviewCenter({
         </div>
       )}
 
-      {/* ── Queue Items ── */}
       {filteredItems.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="rounded-full bg-muted p-6 mb-4">
@@ -443,186 +163,22 @@ export function ReviewCenter({
         </div>
       ) : (
         <div className="space-y-3">
-          {filteredItems.map((item) => {
-            const cfg = typeConfig[item.type] ?? typeConfig.explanation;
-            const isProcessing = processingIds.has(item.id);
-            const isSelected = selected.has(item.id);
-
-            return (
-              <Card
-                key={item.id}
-                className={`border-l-4 ${cfg.border} ${isSelected ? "ring-2 ring-primary" : ""}`}
-              >
-                <CardHeader className="py-3 px-4">
-                  <div className="flex items-start gap-3">
-                    <Checkbox
-                      checked={isSelected}
-                      onCheckedChange={() => toggleSelect(item.id)}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <CardTitle className="text-sm font-medium truncate">
-                          {item.title}
-                        </CardTitle>
-                        <Badge
-                          variant="outline"
-                          className={`text-xs ${cfg.color}`}
-                        >
-                          {cfg.label}
-                        </Badge>
-                        {item.riskLevel && (
-                          <Badge
-                            variant={
-                              item.riskLevel === "high"
-                                ? "destructive"
-                                : item.riskLevel === "medium"
-                                  ? "default"
-                                  : "secondary"
-                            }
-                            className="text-xs"
-                          >
-                            {item.riskLevel === "high"
-                              ? "عالي"
-                              : item.riskLevel === "medium"
-                                ? "متوسط"
-                                : "منخفض"}
-                          </Badge>
-                        )}
-                      </div>
-                      <CardDescription className="text-xs">
-                        <span className="font-mono">{item.workbookLineCode}</span>
-                        {" · "}
-                        <span>{item.detail.substring(0, 120)}</span>
-                        {" · "}
-                        <span className="text-muted-foreground">
-                          {Math.round((Date.now() - item.createdAt.getTime()) / 86400000)}d ago
-                        </span>
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="py-2 px-4 pb-3">
-                  <div className="flex items-center gap-2">
-                    <Input
-                      placeholder="ملاحظات المراجعة..."
-                      className="flex-1 h-8 text-sm"
-                      onChange={(e) => setReviewNotes(e.target.value)}
-                      disabled={isProcessing}
-                    />
-                    {item.type === "suggestion" ? (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() =>
-                            handleReview(item, "rejected")
-                          }
-                          disabled={isProcessing}
-                        >
-                          ❌ رفض / Reject
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() =>
-                            handleReview(item, "approved")
-                          }
-                          disabled={isProcessing}
-                        >
-                          ✅ اعتماد / Approve
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() =>
-                            handleReview(item, "rejected")
-                          }
-                          disabled={isProcessing}
-                        >
-                          ❌ رفض / Reject
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() =>
-                            handleReview(item, "confirmed")
-                          }
-                          disabled={isProcessing}
-                        >
-                          ✅ تأكيد / Confirm
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+          {filteredItems.map((item) => (
+            <ReviewQueueItemCard
+              key={item.id}
+              item={item}
+              isSelected={selected.has(item.id)}
+              isProcessing={processingIds.has(item.id)}
+              reviewNotes={reviewNotes}
+              onToggleSelect={toggleSelect}
+              onReviewNotesChange={setReviewNotes}
+              onReview={handleReview}
+            />
+          ))}
         </div>
       )}
 
-      {/* ── Recent Audit Events ── */}
-      {recentAuditEvents.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold mb-3">
-            📋 آخر أحداث التدقيق / Recent Audit Events
-          </h2>
-          <Card>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b bg-muted/50">
-                    <th className="text-right px-3 py-2 font-medium">الإجراء / Action</th>
-                    <th className="text-right px-3 py-2 font-medium">الحالة / Status</th>
-                    <th className="text-right px-3 py-2 font-medium">الثقة / Confidence</th>
-                    <th className="text-right px-3 py-2 font-medium">المدة (مللي) / Duration</th>
-                    <th className="text-right px-3 py-2 font-medium">التاريخ / Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentAuditEvents.map((event) => (
-                    <tr key={event.id} className="border-b hover:bg-muted/30">
-                      <td className="px-3 py-2 font-mono text-xs">{event.action}</td>
-                      <td className="px-3 py-2">
-                        <Badge
-                          variant={
-                            event.status === "success"
-                              ? "default"
-                              : event.status === "partial"
-                                ? "secondary"
-                                : "destructive"
-                          }
-                          className="text-xs"
-                        >
-                          {event.status}
-                        </Badge>
-                      </td>
-                      <td className="px-3 py-2">
-                        {event.confidence != null
-                          ? `${Math.round(event.confidence * 100)}%`
-                          : "—"}
-                      </td>
-                      <td className="px-3 py-2 font-mono text-xs">
-                        {event.durationMs.toLocaleString()}ms
-                      </td>
-                      <td className="px-3 py-2 text-xs text-muted-foreground">
-                        {new Date(event.createdAt).toLocaleDateString("ar-SA", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </div>
-      )}
+      <AuditEvents events={recentAuditEvents} />
     </div>
   );
 }

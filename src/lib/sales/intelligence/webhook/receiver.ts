@@ -5,6 +5,7 @@
  * Features: signature verification, event routing, audit logging, retry queue.
  */
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import { createHash, timingSafeEqual } from "crypto";
 import { prisma } from "@/lib/prisma";
 import type { OutreachEvent } from "../types";
@@ -173,10 +174,7 @@ export async function receiveWebhook(
     try {
       await handler(payload);
     } catch (err) {
-      console.error(
-        `[Webhook] Handler failed for ${exactKey}:`,
-        err instanceof Error ? err.message : err,
-      );
+      logger.error(`[Webhook] Handler failed for ${exactKey}:`, err instanceof Error ? err : new Error(String(err)));
     }
   }
 
@@ -186,6 +184,9 @@ export async function receiveWebhook(
 // ── Outreach Event Converter ──
 
 import { SmartLeadConnector } from "../smartlead/smartlead-connector";
+
+
+const logger = createLogger({ product: "platform", action: "lib-sales-intelligence-webhook-receiver" });
 
 export function convertToOutreachEvent(
   payload: WebhookEventPayload,

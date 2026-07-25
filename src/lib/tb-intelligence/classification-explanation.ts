@@ -118,7 +118,7 @@ export function buildExplanationFromResult(
   };
 }
 
-export function parseStoredExplanation(
+function parseStoredExplanation(
   raw: unknown,
 ): MappingClassificationExplanation | null {
   if (!raw || typeof raw !== "object") return null;
@@ -194,7 +194,7 @@ type HistoryRow = {
   classificationDetail: unknown;
 };
 
-export function buildExplanationFromHistoryRow(
+function buildExplanationFromHistoryRow(
   row: HistoryRow,
   pattern?: PatternGovernanceRow | null,
   mappingType?: AccountMapping["mappingType"],
@@ -285,9 +285,11 @@ export async function getMappingClassificationExplanations(
   const orgId = await resolveFirmMemoryOrganizationIdFromEngagement(engagementId);
   const accountCodes = mappings.map((m) => m.sourceAccountCode);
 
+  // Bounded by engagementId — one engagement has a limited number of classification rows
   const historyRows = await prisma.tBClassificationHistory.findMany({
     where: { engagementId },
     orderBy: { createdAt: "desc" },
+    take: 5000,
     select: {
       accountCode: true,
       canonicalCode: true,
@@ -306,6 +308,7 @@ export async function getMappingClassificationExplanations(
 
   const patternsByCode = new Map<string, PatternGovernanceRow>();
   if (orgId && accountCodes.length > 0) {
+    // Bounded by organizationId + in(accountCodes) — input array is naturally limited
     const patterns = await prisma.tBMappingPattern.findMany({
       where: {
         organizationId: orgId,

@@ -12,7 +12,7 @@ export interface ApiResponse<T = unknown> {
   };
 }
 
-export function successResponse<T>(
+function successResponse<T>(
   data: T,
   meta?: Record<string, unknown>,
 ): ApiResponse<T> {

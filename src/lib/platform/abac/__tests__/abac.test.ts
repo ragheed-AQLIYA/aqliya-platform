@@ -71,6 +71,20 @@ function makeModel<T extends Record<string, unknown>>(model: string) {
       getStore<T>(model).push(record);
       return clone(record);
     },
+    createMany: async ({ data }: { data: T[] }) => {
+      const store = getStore<T>(model);
+      for (const row of data) {
+        store.push(
+          clone({
+            id: nextId(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            ...row,
+          } as T),
+        );
+      }
+      return { count: data.length };
+    },
     findUnique: async ({
       where,
       include,

@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/kernel";
 import { requirePermission, Permission, ResourceType } from "@/actions/localcontent-rbac";
 
 const AUDIT_RETENTION_DAYS = 7 * 365; // 7 years for financial data
@@ -11,13 +12,15 @@ export async function archiveOldAuditEventsAction(
   beforeDate?: Date,
 ): Promise<{ success: boolean; count?: number; error?: string }> {
   try {
-    await getCurrentUser();
+    const user = await getCurrentUser();
+    await enforce(user, { type: "audit_log", id: "global", tenantId: user.organizationId }, "admin");
     await requirePermission(Permission.AUDIT_LOG_ACCESS, ResourceType.AUDIT_LOG);
 
     const cutoff = beforeDate ?? new Date(Date.now() - AUDIT_RETENTION_DAYS * 24 * 60 * 60 * 1000);
 
-    const result = await prisma.localContentAuditEvent.updateMany({
+    const result = await prisma.platformAuditLog.updateMany({
       where: {
+        productKey: "local_content",
         createdAt: { lt: cutoff },
         action: { not: "archived" },
       },

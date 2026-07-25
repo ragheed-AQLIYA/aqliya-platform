@@ -1,3 +1,7 @@
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "unknown" });
+
 // ─── API Error Sanitization ───
 // Utility for safe error responses that never leak internal details.
 // Use in API route catch blocks to ensure consistent, secure error handling.
@@ -72,7 +76,7 @@ export function sanitizeError(error: unknown): {
   }
 
   // Default: return generic message, log the real error server-side
-  console.error("[API Error]", msg);
+  logger.error("[API Error]", error);
   return { message: "Internal server error", code: "INTERNAL_ERROR" };
 }
 

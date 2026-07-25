@@ -4,6 +4,9 @@
 // Falls back to demo actor only in development mode.
 
 import { prisma } from "@/lib/prisma";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "auditos", action: "actor-context" });
 
 export interface AuditActor {
   actorId: string;
@@ -88,7 +91,7 @@ export async function getAuditActor(): Promise<AuditActor> {
       throw new Error(message);
     }
 
-    console.warn(
+    logger.warn(
       "[AuditActor] DEV FALLBACK ACTIVE — using hardcoded demo actor. " +
         "Set AUDIT_DEV_FALLBACK_ENABLED=false or run in production to disable.",
     );

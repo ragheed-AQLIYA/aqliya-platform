@@ -18,20 +18,21 @@ export async function collectAuditActivitySignals(
   organizationId: string,
   limit = 50,
 ): Promise<RuntimeSignal[]> {
-  const events = await prisma.auditEvent.findMany({
-    where: { engagement: { organizationId } },
-    orderBy: { timestamp: "desc" },
+  // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+  const events = await prisma.platformAuditLog.findMany({
+    where: { productKey: "audit_os", platformOrganizationId: organizationId },
+    orderBy: { createdAt: "desc" },
     take: limit,
     select: {
       id: true,
-      eventType: true,
+      action: true,
       actorId: true,
       actorName: true,
       targetType: true,
       targetId: true,
-      description: true,
-      timestamp: true,
-      engagementId: true,
+      eventDescription: true,
+      createdAt: true,
+      metadata: true,
     },
   });
 
@@ -40,15 +41,17 @@ export async function collectAuditActivitySignals(
     organizationId,
     productSlug: "audit" as const,
     kind: "activity" as const,
-    action: e.eventType,
-    resourceType: e.targetType,
-    resourceId: e.targetId,
-    timestamp: e.timestamp.toISOString(),
-    actorId: e.actorId,
-    actorName: e.actorName,
-    summaryAr: e.description || `تدقيق: ${e.eventType}`,
-    summaryEn: e.description || `Audit: ${e.eventType}`,
-    metadata: { engagementId: e.engagementId },
+    action: e.action,
+    resourceType: e.targetType ?? "",
+    resourceId: e.targetId ?? "",
+    timestamp: e.createdAt.toISOString(),
+    actorId: e.actorId ?? undefined,
+    actorName: e.actorName ?? undefined,
+    summaryAr: e.eventDescription || `تدقيق: ${e.action}`,
+    summaryEn: e.eventDescription || `Audit: ${e.action}`,
+    metadata: {
+      engagementId: (e.metadata as Record<string, unknown> | null)?.engagementId ?? undefined,
+    },
   }));
 }
 

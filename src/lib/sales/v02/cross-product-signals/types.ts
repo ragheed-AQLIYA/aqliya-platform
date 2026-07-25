@@ -1,6 +1,6 @@
 // ─── SalesOS v0.2 cross-product commercial signal contracts ───
 
-// TODO: platform/signals/types — inline for TS2307 resolution
+// NOTE: Inline RuntimeSignalSeverity pending @/lib/platform/signals/types stabilization (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)
 export type RuntimeSignalSeverity = "critical" | "warning" | "info" | "high" | "low" | "medium";
 
 /** v0.2 sources wired in Agent 8 (AuditOS + LocalContentOS + SalesOS). */

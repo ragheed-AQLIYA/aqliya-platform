@@ -6,6 +6,7 @@ export type ProductPageContent = {
   metadata: { title: string; description: string };
   eyebrow: string;
   productName: string;
+  productNameAr?: string;
   statusLabel: string;
   problemLine: string;
   outcomeLine: string;

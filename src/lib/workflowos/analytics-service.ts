@@ -91,6 +91,7 @@ export async function getThroughputMetrics(
         createdAt: { not: null as unknown as Date },
       },
       select: { createdAt: true, completedAt: true },
+      take: 10000,
     }),
   ]);
 
@@ -130,6 +131,7 @@ export async function getSLACompliance(
       completedAt: true,
       priority: true,
     },
+    take: 10000,
   });
 
   const onTime = records.filter(
@@ -175,6 +177,7 @@ export async function getStepBreakdown(
       stepResults: true,
       createdAt: true,
     },
+    take: 10000,
   });
 
   const typeMap: Record<string, number[]> = {};
@@ -223,6 +226,7 @@ export async function getAvgCompletionTime(
       createdAt: { not: null as unknown as Date },
     },
     select: { createdAt: true, completedAt: true },
+    take: 10000,
   });
 
   if (records.length === 0) return { avgHours: null, recordCount: 0 };
@@ -250,6 +254,7 @@ export async function getDailyThroughput(
       createdAt: { gte: since },
     },
     select: { createdAt: true, completedAt: true },
+    take: 10000,
   });
 
   const dateMap: Record<string, { completed: number; created: number }> = {};

@@ -1,18 +1,29 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import type { SalesAuditEntry } from "../store";
 import {
   prismaAuditToDomain,
-  domainAuditToPrisma,
 } from "./entity-mappers";
 
 export const auditRepository = {
+  // ═══════════════════════════════════════════════════════
+  // Migrated from salesAuditEvent to platformAuditLog
+  // productKey: "salesos" filters to the correct product scope
+  // Old queries kept as comments for reference
+  // ═══════════════════════════════════════════════════════
   async findByOrganization(
     organizationId: string,
   ): Promise<SalesAuditEntry[]> {
-    const rows = await prisma.salesAuditEvent.findMany({
-      where: { organizationId },
+    // OLD: const rows = await prisma.salesAuditEvent.findMany({
+    // OLD:   where: { organizationId },
+    // OLD:   orderBy: { createdAt: "desc" },
+    // OLD:   take: 10000,
+    // OLD: });
+    const rows = await prisma.platformAuditLog.findMany({
+      where: { productKey: "salesos", organizationId },
       orderBy: { createdAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaAuditToDomain);
   },
@@ -22,15 +33,29 @@ export const auditRepository = {
     targetType: string,
     targetId: string,
   ): Promise<SalesAuditEntry[]> {
-    const rows = await prisma.salesAuditEvent.findMany({
-      where: { organizationId, targetType, targetId },
+    // OLD: const rows = await prisma.salesAuditEvent.findMany({
+    // OLD:   where: { organizationId, targetType, targetId },
+    // OLD:   orderBy: { createdAt: "desc" },
+    // OLD:   take: 10000,
+    // OLD: });
+    const rows = await prisma.platformAuditLog.findMany({
+      where: { productKey: "salesos", organizationId, targetType, targetId },
       orderBy: { createdAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaAuditToDomain);
   },
 
   async create(entry: SalesAuditEntry, actorName?: string): Promise<void> {
-    const data = domainAuditToPrisma(entry, actorName);
-    await prisma.salesAuditEvent.create({ data });
+    await writePlatformAuditLog({
+      productKey: "salesos",
+      action: entry.action,
+      organizationId: entry.organizationId,
+      actorId: entry.actorId,
+      actorName: actorName,
+      targetType: entry.targetType,
+      targetId: entry.targetId,
+      metadata: entry.metadata,
+    });
   },
 };

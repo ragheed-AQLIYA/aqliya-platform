@@ -27,69 +27,161 @@ import { emit } from "./event-engine.mjs";
  * @param {string} content
  * @returns {object}
  */
+/**
+ * Parse a YAML file supporting nested objects, lists, and multiline strings.
+ * @param {string} content
+ * @returns {object}
+ */
 function parseSimpleYaml(content) {
+  const lines = content.split("\n").map((l) => l.replace(/\r$/, ""));
   const result = {};
-  const lines = content.split("\n");
-  let currentKey = null;
-  let currentList = null;
-  let inMultiline = false;
-  let multilineKey = null;
-  let multilineValue = [];
+  let i = 0;
 
-  for (const line of lines) {
-    // Multiline continuation
-    if (inMultiline) {
-      if (line.trim() === "" || line.match(/^\S/)) {
-        // End of multiline
-        result[multilineKey] = multilineValue.join("\n").trim();
-        inMultiline = false;
-        multilineValue = [];
-      } else {
-        multilineValue.push(line.trim());
-        continue;
+  function getIndent(line) {
+    const m = line.match(/^(\s*)/);
+    return m ? m[1].length : 0;
+  }
+
+  function parseScalar(value) {
+    if (value === "" || value === "~" || value === "null") return null;
+    if (value === "true") return true;
+    if (value === "false") return false;
+    if (/^-?\d+$/.test(value)) return parseInt(value, 10);
+    if (/^-?\d+\.\d+$/.test(value)) return parseFloat(value);
+    // Strip quotes
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      return value.slice(1, -1);
+    }
+    // Inline array: [item1, item2, item3]
+    if (value.startsWith("[") && value.endsWith("]")) {
+      const inner = value.slice(1, -1).trim();
+      if (inner === "") return [];
+      return inner.split(",").map((item) => parseScalar(item.trim()));
+    }
+    // Inline object: { key1: val1, key2: val2 }
+    if (value.startsWith("{") && value.endsWith("}")) {
+      const inner = value.slice(1, -1).trim();
+      if (inner === "") return {};
+      const obj = {};
+      // Simple comma-separated key: value pairs
+      // Split on ", " but not inside nested structures
+      const pairs = inner.split(/,\s*(?=\w+:)/);
+      for (const pair of pairs) {
+        const colonIdx = pair.indexOf(":");
+        if (colonIdx > 0) {
+          const k = pair.slice(0, colonIdx).trim();
+          const v = pair.slice(colonIdx + 1).trim();
+          obj[k] = parseScalar(v);
+        }
       }
+      return obj;
     }
+    return value;
+  }
 
-    if (line.trim() === "" || line.startsWith("#")) continue;
+  while (i < lines.length) {
+    const raw = lines[i];
+    const trimmed = raw.trim();
 
-    // Multiline start: "key: |"
-    const mlMatch = line.match(/^(\w[\w_]*):\s*\|\s*$/);
+    // Skip blanks and comments
+    if (trimmed === "" || trimmed.startsWith("#")) { i++; continue; }
+
+    const indent = getIndent(raw);
+
+    // Multiline: key: |
+    const mlMatch = trimmed.match(/^(\w[\w_-]*):\s*\|\s*$/);
     if (mlMatch) {
-      inMultiline = true;
-      multilineKey = mlMatch[1];
+      const key = mlMatch[1];
+      const bodyLines = [];
+      i++;
+      while (i < lines.length) {
+        const nextRaw = lines[i];
+        const nextTrimmed = nextRaw.trim();
+        if (nextTrimmed === "") { bodyLines.push(""); i++; continue; }
+        if (getIndent(nextRaw) <= indent) break;
+        bodyLines.push(nextRaw.trimStart());
+        i++;
+      }
+      result[key] = bodyLines.join("\n").trim();
       continue;
     }
 
-    // List item: "  - value"
-    const listMatch = line.match(/^\s+-\s+(.+)$/);
-    if (listMatch && currentList !== null) {
-      result[currentList].push(listMatch[1].trim());
-      continue;
-    }
-
-    // Key: value
-    const kvMatch = line.match(/^(\w[\w_]*):\s*(.*)$/);
+    // List: key: followed by indented "- " items
+    const kvMatch = trimmed.match(/^(\w[\w_-]*):\s*(.*)$/);
     if (kvMatch) {
       const key = kvMatch[1];
       const value = kvMatch[2].trim();
-      if (value === "") {
-        currentList = key;
-        result[key] = [];
-      } else if (value === "null") {
-        result[key] = null;
-      } else if (/^\d+$/.test(value)) {
-        result[key] = parseInt(value, 10);
-      } else if (/^\d+\.\d+$/.test(value)) {
-        result[key] = parseFloat(value);
-      } else {
-        result[key] = value;
-      }
-    }
-  }
 
-  // Handle trailing multiline
-  if (inMultiline && multilineKey) {
-    result[multilineKey] = multilineValue.join("\n").trim();
+      if (value === "") {
+        // Peek next non-blank line to decide: list or object
+        let j = i + 1;
+        while (j < lines.length && lines[j].trim() === "") j++;
+        if (j < lines.length) {
+          const nextTrimmed = lines[j].trim();
+          if (nextTrimmed.startsWith("- ")) {
+            // It's a list
+            const list = [];
+            i = j;
+            while (i < lines.length) {
+              const lt = lines[i].trim();
+              if (lt === "") { i++; continue; }
+              if (!lt.startsWith("- ")) break;
+              list.push(parseScalar(lt.slice(2)));
+              i++;
+            }
+            result[key] = list;
+            continue;
+          } else if (getIndent(lines[j]) > indent) {
+            // It's a nested object
+            const obj = {};
+            i = j;
+            while (i < lines.length) {
+              const lt = lines[i].trim();
+              if (lt === "") { i++; continue; }
+              if (getIndent(lines[i]) <= indent) break;
+              const m = lt.match(/^(\w[\w_-]*):\s*(.*)$/);
+              if (m) {
+                const subKey = m[1];
+                const subVal = m[2].trim();
+                if (subVal === "") {
+                  // Sub-list inside nested object
+                  i++;
+                  const subList = [];
+                  while (i < lines.length) {
+                    const slt = lines[i].trim();
+                    if (slt === "") { i++; continue; }
+                    if (slt.startsWith("- ")) {
+                      subList.push(parseScalar(slt.slice(2)));
+                      i++;
+                    } else {
+                      break;
+                    }
+                  }
+                  obj[subKey] = subList;
+                  continue;
+                } else {
+                  obj[subKey] = parseScalar(subVal);
+                }
+              }
+              i++;
+            }
+            result[key] = obj;
+            continue;
+          }
+        }
+        // Empty key with no following content → null
+        result[key] = null;
+        i++;
+        continue;
+      }
+
+      // Inline value
+      result[key] = parseScalar(value);
+      i++;
+      continue;
+    }
+
+    i++;
   }
 
   return result;

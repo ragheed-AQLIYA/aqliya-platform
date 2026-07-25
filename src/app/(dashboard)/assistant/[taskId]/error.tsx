@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Bot, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function TaskDetailError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Office AI Assistant task detail error:", error);
+    clientLogger.error("Office AI Assistant task detail error:", error);
   }, [error]);
 
   return (

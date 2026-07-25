@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Brain, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function AISettingsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("AI Settings error:", error);
+    clientLogger.error("AI Settings error:", error);
   }, [error]);
 
   return (

@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { AuditErrorCard } from "@/components/audit/error/audit-error-card";
@@ -12,7 +14,7 @@ export default function EngagementError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[Engagement Error Boundary]", error);
+    clientLogger.error("[Engagement Error Boundary]", error);
   }, [error]);
 
   const router = useRouter();

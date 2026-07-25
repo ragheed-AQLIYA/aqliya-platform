@@ -4,6 +4,9 @@
  * Ready for future OpenTelemetry integration.
  */
 
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "localcontent", action: "tracing" });
 const traceContext = new Map<string, string>();
 
 export function getCorrelationId(): string {
@@ -28,16 +31,7 @@ export function withTrace<T>(name: string, fn: () => Promise<T>): Promise<T> {
 
   return fn().finally(() => {
     const duration = Date.now() - start;
-    if (typeof console !== "undefined") {
-      console.log(JSON.stringify({
-        timestamp: new Date().toISOString(),
-        level: "info",
-        message: `trace:${name}`,
-        module: "lcostracing",
-        correlationId: cid,
-        duration,
-      }));
-    }
+    logger.info(`trace:${name}`, { correlationId: cid, duration });
   });
 }
 

@@ -1,6 +1,9 @@
 import type { ProductPlugin, PluginDependencies } from "@/lib/kernel/plugin/product-plugin";
 import type { KernelHealth, ProductRoute, ProductSchema } from "@/lib/kernel/types";
 import type { DomainEvent, EventHandler } from "@/lib/kernel/contracts/event-bus";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "audit-os", action: "plugin" });
 
 export class AuditOSPlugin implements ProductPlugin {
   readonly id = "audit-os";
@@ -18,15 +21,11 @@ export class AuditOSPlugin implements ProductPlugin {
 
     const handleCrossProductEvidence: EventHandler = async (event: DomainEvent) => {
       if (event.productSlug === "audit-os") return;
-      console.log(
-        `[AuditOS] Cross-product evidence event: ${event.action} from ${event.productSlug} — resource ${event.resourceId}`,
-      );
+      logger.info(`Cross-product evidence event: ${event.action} from ${event.productSlug} — resource ${event.resourceId}`);
     };
 
     const handleKnowledgePattern: EventHandler = async (event: DomainEvent) => {
-      console.log(
-        `[AuditOS] Knowledge pattern recorded: ${event.action} — resource ${event.resourceId}`,
-      );
+      logger.info(`Knowledge pattern recorded: ${event.action} — resource ${event.resourceId}`);
     };
 
     eventBus.subscribe("evidence", "*", handleCrossProductEvidence);

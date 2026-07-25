@@ -53,7 +53,12 @@ function validateNoPrismaClient() {
     const content = readText(f) || "";
     if (!isClientModule(content)) continue;
     const imps = extractImports(content);
-    if (imps.some((i) => i.includes("prisma"))) violations.push(rel(f));
+    if (imps.some((i) => i.includes("prisma"))) {
+      // Type-only imports from @prisma/client are safe (erased at compile time)
+      const hasRuntimePrismaImport = /import\s+(?!type\s).*from\s+['"]@prisma\/client['"]/i.test(content) ||
+        /import\s+(?!type\s).*from\s+['"].*prisma(?!\/client)['"]/i.test(content);
+      if (hasRuntimePrismaImport) violations.push(rel(f));
+    }
   }
   const score = violations.length === 0 ? 100 : Math.max(0, 100 - violations.length * 15);
   return {
@@ -77,6 +82,7 @@ function validateCloudfrontWafAdr() {
   // Light read of known module files
   const candidates = [
     "infra/terraform/modules/networking/main.tf",
+    "infra/terraform/modules/storage/main.tf",
     "infra/terraform/main.tf",
     "docs/adr/ADR-DEPLOY-001-CLOUDFRONT-WAF-ATTACHMENT.md",
   ];
@@ -85,7 +91,8 @@ function validateCloudfrontWafAdr() {
   for (const c of candidates) {
     const content = readText(abs(c)) || "";
     if (/web_acl_id/.test(content)) foundWebAcl = true;
-    if (/aws_wafv2_web_acl_association/.test(content)) foundLegacyAssoc = true;
+    // Only flag aws_wafv2_web_acl_association in .tf files (mentioned in ADR docs as rejected approach)
+    if (c.endsWith(".tf") && /aws_wafv2_web_acl_association/.test(content)) foundLegacyAssoc = true;
   }
   if (foundWebAcl && !foundLegacyAssoc) compliance = 100;
   else if (foundWebAcl && foundLegacyAssoc) {

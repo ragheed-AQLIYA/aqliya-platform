@@ -19,8 +19,30 @@ export async function collectLocalContentActivitySignals(
   organizationId: string,
   limit = 50,
 ): Promise<RuntimeSignal[]> {
-  const events = await prisma.localContentAuditEvent.findMany({
-    where: { project: { organizationId } },
+  // [MIGRATED] localContentAuditEvent → platformAuditLog (dual-write with productKey: "local_content")
+  // const events = await prisma.localContentAuditEvent.findMany({
+  //   where: { project: { organizationId } },
+  //   orderBy: { createdAt: "desc" },
+  //   take: limit,
+  //   select: {
+  //     id: true,
+  //     projectId: true,
+  //     actorId: true,
+  //     actorName: true,
+  //     action: true,
+  //     entityType: true,
+  //     entityId: true,
+  //     createdAt: true,
+  //   },
+  // });
+
+  const projectIds = (await prisma.localContentProject.findMany({
+    where: { organizationId },
+    select: { id: true },
+  })).map((p) => p.id);
+
+  const events = projectIds.length === 0 ? [] : await prisma.platformAuditLog.findMany({
+    where: { productKey: "local_content", projectId: { in: projectIds } },
     orderBy: { createdAt: "desc" },
     take: limit,
     select: {
@@ -29,8 +51,8 @@ export async function collectLocalContentActivitySignals(
       actorId: true,
       actorName: true,
       action: true,
-      entityType: true,
-      entityId: true,
+      targetType: true,
+      targetId: true,
       createdAt: true,
     },
   });
@@ -41,8 +63,8 @@ export async function collectLocalContentActivitySignals(
     productSlug: "local_content" as const,
     kind: "activity" as const,
     action: e.action,
-    resourceType: e.entityType,
-    resourceId: e.entityId,
+    resourceType: e.targetType ?? "",
+    resourceId: e.targetId ?? "",
     timestamp: e.createdAt.toISOString(),
     actorId: e.actorId,
     actorName: e.actorName ?? undefined,

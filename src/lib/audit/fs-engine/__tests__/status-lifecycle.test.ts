@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+﻿import { prisma } from "@/lib/prisma";
 
 jest.mock("@/lib/prisma", () => ({
   prisma: {
@@ -7,10 +7,18 @@ jest.mock("@/lib/prisma", () => ({
       findMany: jest.fn(),
       update: jest.fn(),
     },
-    auditEvent: {
-      create: jest.fn(),
+    platformAuditLog: {
+      findUnique: jest.fn(),
     },
   },
+}));
+
+jest.mock("@/lib/platform/audit-log", () => ({
+  writePlatformAuditLog: jest.fn().mockResolvedValue({ ok: true, id: "pal-1" }),
+}));
+
+jest.mock("@/lib/platform/audit/audit-store", () => ({
+  appendToAuditChain: jest.fn().mockResolvedValue(undefined),
 }));
 
 import {
@@ -19,6 +27,23 @@ import {
   markAllFinancialStatementsReviewed,
   approveAllFinancialStatementsForEngagement,
 } from "@/lib/audit/fs-engine/status-lifecycle";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+
+const palRecord = {
+  id: "pal-1",
+  action: "financial_statement.status_changed",
+  productKey: "audit_os",
+  actorId: "user-1",
+  actorName: "Test User",
+  targetType: "financial_statement",
+  targetId: "s-1",
+  beforeState: null,
+  afterState: "",
+  eventDescription: "",
+  aiRelated: false,
+  metadata: null,
+  createdAt: new Date(),
+};
 
 describe("canTransitionFsStatus", () => {
   it("allows draft→reviewed only", () => {
@@ -37,7 +62,9 @@ describe("transitionFinancialStatementStatus", () => {
   beforeEach(() => {
     mockedPrisma.auditFinancialStatement.findFirst.mockReset();
     mockedPrisma.auditFinancialStatement.update.mockReset();
-    mockedPrisma.auditEvent.create.mockReset();
+    jest.clearAllMocks();
+    // Default: findUnique returns a valid PAL record
+    mockedPrisma.platformAuditLog.findUnique.mockResolvedValue(palRecord);
   });
 
   it("throws when statement not found", async () => {
@@ -73,7 +100,7 @@ describe("transitionFinancialStatementStatus", () => {
     ).rejects.toThrow("Invalid FS status transition: draft → approved");
   });
 
-  it("transitions draft→reviewed and creates audit event", async () => {
+  it("transitions draft→reviewed and writes audit event via writePlatformAuditLog", async () => {
     mockedPrisma.auditFinancialStatement.findFirst.mockResolvedValue({
       id: "s-1",
       engagementId: "e1",
@@ -81,7 +108,6 @@ describe("transitionFinancialStatementStatus", () => {
       status: "draft",
     } as any);
     mockedPrisma.auditFinancialStatement.update.mockResolvedValue({} as any);
-    mockedPrisma.auditEvent.create.mockResolvedValue({} as any);
 
     await transitionFinancialStatementStatus({
       engagementId: "e1",
@@ -95,14 +121,15 @@ describe("transitionFinancialStatementStatus", () => {
       where: { id: "s-1" },
       data: { status: "reviewed" },
     });
-    expect(mockedPrisma.auditEvent.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        eventType: "financial_statement.status_changed",
+    expect(writePlatformAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        productKey: "audit_os",
+        action: "financial_statement.status_changed",
         actorId: "user-1",
-        previousState: "draft",
-        newState: "reviewed",
+        beforeState: "draft",
+        afterState: "reviewed",
       }),
-    });
+    );
   });
 });
 
@@ -113,7 +140,8 @@ describe("markAllFinancialStatementsReviewed", () => {
     mockedPrisma.auditFinancialStatement.findMany.mockReset();
     mockedPrisma.auditFinancialStatement.findFirst.mockReset();
     mockedPrisma.auditFinancialStatement.update.mockReset();
-    mockedPrisma.auditEvent.create.mockReset();
+    jest.clearAllMocks();
+    mockedPrisma.platformAuditLog.findUnique.mockResolvedValue(palRecord);
   });
 
   it("returns 0 when no drafts exist", async () => {
@@ -140,7 +168,6 @@ describe("markAllFinancialStatementsReviewed", () => {
       status: "draft",
     } as any);
     mockedPrisma.auditFinancialStatement.update.mockResolvedValue({} as any);
-    mockedPrisma.auditEvent.create.mockResolvedValue({} as any);
 
     const count = await markAllFinancialStatementsReviewed({
       engagementId: "e1",
@@ -149,9 +176,8 @@ describe("markAllFinancialStatementsReviewed", () => {
     });
 
     expect(count).toBe(2);
-    // Called once per statement + once per transition
     expect(mockedPrisma.auditFinancialStatement.update).toHaveBeenCalledTimes(2);
-    expect(mockedPrisma.auditEvent.create).toHaveBeenCalledTimes(2);
+    expect(writePlatformAuditLog).toHaveBeenCalledTimes(2);
   });
 });
 
@@ -162,7 +188,8 @@ describe("approveAllFinancialStatementsForEngagement", () => {
     mockedPrisma.auditFinancialStatement.findMany.mockReset();
     mockedPrisma.auditFinancialStatement.findFirst.mockReset();
     mockedPrisma.auditFinancialStatement.update.mockReset();
-    mockedPrisma.auditEvent.create.mockReset();
+    jest.clearAllMocks();
+    mockedPrisma.platformAuditLog.findUnique.mockResolvedValue(palRecord);
   });
 
   it("returns 0 when no pending statements", async () => {
@@ -184,33 +211,29 @@ describe("approveAllFinancialStatementsForEngagement", () => {
       status: "reviewed",
     } as any);
     mockedPrisma.auditFinancialStatement.update.mockResolvedValue({} as any);
-    mockedPrisma.auditEvent.create.mockResolvedValue({} as any);
 
     const count = await approveAllFinancialStatementsForEngagement("e1", "user-1", "Admin");
 
     expect(count).toBe(1);
-    // 1 transition: reviewed→approved (no draft→reviewed because already reviewed)
+    // 1 transition: reviewed→approved
     expect(mockedPrisma.auditFinancialStatement.update).toHaveBeenCalledTimes(1);
-    expect(mockedPrisma.auditEvent.create).toHaveBeenCalledTimes(1);
+    expect(writePlatformAuditLog).toHaveBeenCalledTimes(1);
   });
 
   it("promotes drafts through reviewed→approved pipeline", async () => {
-    // First findMany returns draft, then transition needs findFirst → draft → reviewed → approved
     mockedPrisma.auditFinancialStatement.findMany.mockResolvedValue([
       { id: "s-1", engagementId: "e1", statementType: "balance_sheet", status: "draft" },
     ] as any);
-    // findFirst returns draft first, then reviewed (after DB update)
     mockedPrisma.auditFinancialStatement.findFirst
       .mockResolvedValueOnce({ id: "s-1", engagementId: "e1", statementType: "balance_sheet", status: "draft" } as any)
       .mockResolvedValueOnce({ id: "s-1", engagementId: "e1", statementType: "balance_sheet", status: "reviewed" } as any);
     mockedPrisma.auditFinancialStatement.update.mockResolvedValue({} as any);
-    mockedPrisma.auditEvent.create.mockResolvedValue({} as any);
 
     const count = await approveAllFinancialStatementsForEngagement("e1", "user-1", "Admin");
 
     expect(count).toBe(1);
-    // 2 transitions: draft→reviewed + reviewed→approved = 2 updates + 2 creates
+    // 2 transitions: draft→reviewed + reviewed→approved = 2 updates + 2 writes
     expect(mockedPrisma.auditFinancialStatement.update).toHaveBeenCalledTimes(2);
-    expect(mockedPrisma.auditEvent.create).toHaveBeenCalledTimes(2);
+    expect(writePlatformAuditLog).toHaveBeenCalledTimes(2);
   });
 });

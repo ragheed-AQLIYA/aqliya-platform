@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Monitor, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function SIEMSettingsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("SIEM Settings error:", error);
+    clientLogger.error("SIEM Settings error:", error);
   }, [error]);
 
   return (

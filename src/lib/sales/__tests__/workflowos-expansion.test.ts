@@ -18,9 +18,7 @@ jest.mock("@/lib/prisma", () => ({
       findMany: jest.fn(),
       count: jest.fn().mockResolvedValue(0),
     },
-    workflowAuditEvent: {
-      create: jest.fn(),
-    },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -32,6 +30,13 @@ jest.mock("@/lib/auth", () => ({
       error?.message === "Unauthenticated",
   ),
 }));
+
+
+jest.mock("@/lib/platform/audit-log", () => ({ writePlatformAuditLog: jest.fn().mockResolvedValue({ ok: true }) }));
+
+jest.mock("@/lib/platform/audit/audit-store", () => ({ appendToAuditChain: jest.fn().mockResolvedValue(undefined) }));
+
+jest.mock("@/lib/platform/audit-logger", () => ({ Product: { WORKFLOWOS: "workflowos" } }));
 
 jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn(),
@@ -207,11 +212,6 @@ describe("WorkflowOS Expansion", () => {
 
   describe("logWorkflowAuditEvent", () => {
     it("creates an audit event", async () => {
-      (prisma.workflowAuditEvent.create as jest.Mock).mockResolvedValue({
-        id: "audit-1",
-        action: "status_change",
-      });
-
       const result = await logWorkflowAuditEvent({
         recordId: "record-1",
         organizationId: "org-1",
@@ -222,12 +222,11 @@ describe("WorkflowOS Expansion", () => {
       });
 
       expect(result.success).toBe(true);
-      expect(prisma.workflowAuditEvent.create).toHaveBeenCalledWith({
-        data: expect.objectContaining({
-          recordId: "record-1",
-          action: "status_change",
-        }),
-      });
+      const { writePlatformAuditLog: wfPal } = require("@/lib/platform/audit-log");
+      expect(wfPal).toHaveBeenCalledWith(expect.objectContaining({
+        targetId: "record-1",
+        action: "workflowos.status_change",
+      }));
     });
   });
 

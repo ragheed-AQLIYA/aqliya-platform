@@ -1,10 +1,15 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -19,7 +24,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
       return { ok: false, error: "Access denied", code: "FORBIDDEN" };
     }
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[Contact Actions]", message);
+    logger.error("[Contact Actions]", error instanceof Error ? error : undefined);
     return { ok: false, error: message };
   }
 }
@@ -222,12 +227,14 @@ export async function createContactRelation(
   return safe(async () => {
     const user = await getCurrentUser();
 
-    const source = await prisma.localContact.findFirst({
-      where: { id: sourceId, organizationId: user.organizationId },
-    });
-    const target = await prisma.localContact.findFirst({
-      where: { id: targetId, organizationId: user.organizationId },
-    });
+    const [source, target] = await Promise.all([
+      prisma.localContact.findFirst({
+        where: { id: sourceId, organizationId: user.organizationId },
+      }),
+      prisma.localContact.findFirst({
+        where: { id: targetId, organizationId: user.organizationId },
+      }),
+    ]);
 
     if (!source || !target) {
       throw new Error("Source or target contact not found");
@@ -357,11 +364,13 @@ export async function uploadContactEvidence(params: {
   evidenceType?: string;
 }) {
   return safe(async () => {
-    const user = await getCurrentUser();
-    const contact = await prisma.localContact.findUnique({
-      where: { id: params.contactId },
-      select: { organizationId: true },
-    });
+    const [user, contact] = await Promise.all([
+      getCurrentUser(),
+      prisma.localContact.findUnique({
+        where: { id: params.contactId },
+        select: { organizationId: true },
+      }),
+    ]);
     if (!contact || contact.organizationId !== user.organizationId) {
       throw new Error("Contact not found or access denied");
     }
@@ -416,11 +425,13 @@ export async function createContactReview(params: {
   findings?: string;
 }) {
   return safe(async () => {
-    const user = await getCurrentUser();
-    const contact = await prisma.localContact.findUnique({
-      where: { id: params.contactId },
-      select: { organizationId: true },
-    });
+    const [user, contact] = await Promise.all([
+      getCurrentUser(),
+      prisma.localContact.findUnique({
+        where: { id: params.contactId },
+        select: { organizationId: true },
+      }),
+    ]);
     if (!contact || contact.organizationId !== user.organizationId) {
       throw new Error("Contact not found or access denied");
     }
@@ -465,11 +476,13 @@ export async function listContactReviews(contactId: string, offset?: number) {
 
 export async function approveContactReview(reviewId: string, note?: string) {
   return safe(async () => {
-    const user = await getCurrentUser();
-    const review = await prisma.contactReview.findUnique({
-      where: { id: reviewId },
-      select: { organizationId: true, id: true, contactId: true },
-    });
+    const [user, review] = await Promise.all([
+      getCurrentUser(),
+      prisma.contactReview.findUnique({
+        where: { id: reviewId },
+        select: { organizationId: true, id: true, contactId: true },
+      }),
+    ]);
     if (!review || review.organizationId !== user.organizationId) {
       throw new Error("Review not found or access denied");
     }
@@ -498,11 +511,13 @@ export async function approveContactReview(reviewId: string, note?: string) {
 
 export async function rejectContactReview(reviewId: string, note?: string) {
   return safe(async () => {
-    const user = await getCurrentUser();
-    const review = await prisma.contactReview.findUnique({
-      where: { id: reviewId },
-      select: { organizationId: true, id: true, contactId: true },
-    });
+    const [user, review] = await Promise.all([
+      getCurrentUser(),
+      prisma.contactReview.findUnique({
+        where: { id: reviewId },
+        select: { organizationId: true, id: true, contactId: true },
+      }),
+    ]);
     if (!review || review.organizationId !== user.organizationId) {
       throw new Error("Review not found or access denied");
     }
@@ -573,17 +588,19 @@ async function logContactAuditEvent(params: {
       },
     });
   } catch (e) {
-    console.error("[Contact Audit Log Error]", e);
+    logger.error("[Contact Audit Log Error]", e instanceof Error ? e : undefined);
   }
 }
 
 export async function getContactRiskFlags(contactId: string) {
   return safe(async () => {
-    const user = await getCurrentUser();
-    const contact = await prisma.localContact.findUnique({
-      where: { id: contactId },
-      select: { id: true, organizationId: true, metadata: true },
-    });
+    const [user, contact] = await Promise.all([
+      getCurrentUser(),
+      prisma.localContact.findUnique({
+        where: { id: contactId },
+        select: { id: true, organizationId: true, metadata: true },
+      }),
+    ]);
     if (!contact || contact.organizationId !== user.organizationId) {
       throw new Error("Contact not found or access denied");
     }
@@ -597,11 +614,13 @@ export async function addContactRiskFlag(
   flag: Omit<RiskFlag, "id" | "createdAt" | "createdBy">,
 ) {
   return safe(async () => {
-    const user = await getCurrentUser();
-    const contact = await prisma.localContact.findUnique({
-      where: { id: contactId },
-      select: { id: true, organizationId: true, metadata: true },
-    });
+    const [user, contact] = await Promise.all([
+      getCurrentUser(),
+      prisma.localContact.findUnique({
+        where: { id: contactId },
+        select: { id: true, organizationId: true, metadata: true },
+      }),
+    ]);
     if (!contact || contact.organizationId !== user.organizationId) {
       throw new Error("Contact not found or access denied");
     }
@@ -645,11 +664,13 @@ export async function addContactRiskFlag(
 
 export async function resolveContactRiskFlag(contactId: string, flagId: string) {
   return safe(async () => {
-    const user = await getCurrentUser();
-    const contact = await prisma.localContact.findUnique({
-      where: { id: contactId },
-      select: { id: true, organizationId: true, metadata: true },
-    });
+    const [user, contact] = await Promise.all([
+      getCurrentUser(),
+      prisma.localContact.findUnique({
+        where: { id: contactId },
+        select: { id: true, organizationId: true, metadata: true },
+      }),
+    ]);
     if (!contact || contact.organizationId !== user.organizationId) {
       throw new Error("Contact not found or access denied");
     }
@@ -727,32 +748,34 @@ export async function getContactAuditTrail(contactId: string) {
 
 export async function exportContactProfile(contactId: string) {
   return safe(async () => {
-    const user = await getCurrentUser();
-    const contact = await prisma.localContact.findUnique({
-      where: { id: contactId },
-      select: {
-        id: true,
-        organizationId: true,
-        name: true,
-        email: true,
-        phone: true,
-        position: true,
-        department: true,
-        organizationName: true,
-        sensitivityLevel: true,
-        exportStatus: true,
-        notes: true,
-        tags: true,
-        isActive: true,
-        createdAt: true,
-        updatedAt: true,
-        evidence: { orderBy: { createdAt: "desc" } },
-        reviews: { include: { approvals: true }, orderBy: { createdAt: "desc" } },
-        interactions: { orderBy: { occurredAt: "desc" }, take: 50 },
-        outgoingRelations: { include: { targetContact: { select: { name: true } } } },
-        incomingRelations: { include: { sourceContact: { select: { name: true } } } },
-      },
-    });
+    const [user, contact] = await Promise.all([
+      getCurrentUser(),
+      prisma.localContact.findUnique({
+        where: { id: contactId },
+        select: {
+          id: true,
+          organizationId: true,
+          name: true,
+          email: true,
+          phone: true,
+          position: true,
+          department: true,
+          organizationName: true,
+          sensitivityLevel: true,
+          exportStatus: true,
+          notes: true,
+          tags: true,
+          isActive: true,
+          createdAt: true,
+          updatedAt: true,
+          evidence: { orderBy: { createdAt: "desc" } },
+          reviews: { include: { approvals: true }, orderBy: { createdAt: "desc" } },
+          interactions: { orderBy: { occurredAt: "desc" }, take: 50 },
+          outgoingRelations: { include: { targetContact: { select: { name: true } } } },
+          incomingRelations: { include: { sourceContact: { select: { name: true } } } },
+        },
+      }),
+    ]);
     if (!contact || contact.organizationId !== user.organizationId) {
       throw new Error("Contact not found or access denied");
     }

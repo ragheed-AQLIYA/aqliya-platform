@@ -2,7 +2,7 @@ jest.mock("@/lib/prisma", () => ({
   prisma: {
     salesDeal: { findFirst: jest.fn(), update: jest.fn() },
     salesInteraction: { findFirst: jest.fn(), findMany: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -41,7 +41,7 @@ const SAMPLE_INTERACTION = {
 describe("SalesOS follow-up agent (PR-18)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
     prisma.salesDeal.update.mockResolvedValue(BASE_DEAL);
     prisma.salesInteraction.findMany.mockResolvedValue([SAMPLE_INTERACTION]);
   });
@@ -103,7 +103,7 @@ describe("SalesOS follow-up agent (PR-18)", () => {
           }),
         }),
       );
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.FOLLOWUP_DRAFTED,
@@ -178,7 +178,7 @@ describe("SalesOS follow-up agent (PR-18)", () => {
           }),
         }),
       );
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.DEAL_NEXT_ACTION_SET,

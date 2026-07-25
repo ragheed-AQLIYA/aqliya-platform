@@ -3,6 +3,7 @@ import {
   listSalesDealsAction,
   listSalesPipelineStagesAction,
 } from "@/actions/sales-actions";
+import { getPipelineAnalyticsAction } from "@/actions/sales-analytics-actions";
 import {
   SalesPageHeader,
   SalesPhaseBadge,
@@ -12,6 +13,10 @@ import {
   type SalesDealListItem,
 } from "@/components/sales/sales-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PipelineAnalytics } from "./components/pipeline-analytics";
+import { listDealHealthAction } from "@/actions/sales-deal-health";
+import { DealHealthBadge } from "./components/deal-health-badge";
+import type { HealthLevel } from "@/lib/platform/sales-intelligence/sales-intel-service/common";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +33,15 @@ function sumDealAmounts(deals: SalesDealListItem[]): number {
   return deals.reduce((sum, d) => sum + (d.amount ?? 0), 0);
 }
 
-function PipelineDealCard({ deal }: { deal: SalesDealListItem }) {
+function PipelineDealCard({
+  deal,
+  healthScore,
+  healthLevel,
+}: {
+  deal: SalesDealListItem;
+  healthScore?: number;
+  healthLevel?: HealthLevel;
+}) {
   return (
     <Link
       href={`/sales/deals/${deal.id}`}
@@ -36,7 +49,12 @@ function PipelineDealCard({ deal }: { deal: SalesDealListItem }) {
     >
       <div className="flex items-center justify-between gap-2">
         <span className="font-medium">{deal.title}</span>
-        <SalesDealStatusBadge status={deal.status} />
+        <div className="flex items-center gap-1.5">
+          {healthLevel && (
+            <DealHealthBadge healthLevel={healthLevel} score={healthScore ?? 0} />
+          )}
+          <SalesDealStatusBadge status={deal.status} />
+        </div>
       </div>
       <div className="text-muted-foreground mt-0.5">{deal.account.name}</div>
       <div className="text-muted-foreground mt-0.5">
@@ -47,14 +65,18 @@ function PipelineDealCard({ deal }: { deal: SalesDealListItem }) {
 }
 
 export default async function SalesPipelinePage() {
-  const [dealsRes, stagesRes] = await Promise.all([
+  const [dealsRes, stagesRes, analyticsRes] = await Promise.all([
     listSalesDealsAction(),
     listSalesPipelineStagesAction(),
+    getPipelineAnalyticsAction(),
   ]);
 
   const deals = dealsRes.ok ? dealsRes.data : [];
   const stages = stagesRes.ok ? stagesRes.data : [];
   const openDeals = deals.filter((d) => d.status === "open");
+
+  const healthData = await listDealHealthAction(openDeals.map((d) => d.id));
+  const healthMap = new Map(healthData.map((h) => [h.dealId, h]));
   const closedDeals = deals.filter((d) => d.status === "won" || d.status === "lost");
   const activeStages = stages.filter((s) => !s.isClosed);
 
@@ -118,15 +140,25 @@ export default async function SalesPipelinePage() {
         </div>
       ) : null}
 
+      {analyticsRes.ok ? (
+        <div className="mb-6">
+          <h2 className="mb-3 text-lg font-bold">تحليلات المسار</h2>
+          <PipelineAnalytics data={analyticsRes.data} />
+        </div>
+      ) : null}
+
       {unassigned.length > 0 ? (
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-sm">بدون مرحلة</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {unassigned.map((deal) => (
-              <PipelineDealCard key={deal.id} deal={deal} />
-            ))}
+            {unassigned.map((deal) => {
+              const h = healthMap.get(deal.id);
+              return (
+                <PipelineDealCard key={deal.id} deal={deal} healthScore={h?.score} healthLevel={h?.healthLevel} />
+              );
+            })}
           </CardContent>
         </Card>
       ) : null}
@@ -147,9 +179,12 @@ export default async function SalesPipelinePage() {
                 {columnDeals.length === 0 ? (
                   <p className="text-xs text-muted-foreground">—</p>
                 ) : (
-                  columnDeals.map((deal) => (
-                    <PipelineDealCard key={deal.id} deal={deal} />
-                  ))
+                    columnDeals.map((deal) => {
+                      const h = healthMap.get(deal.id);
+                      return (
+                        <PipelineDealCard key={deal.id} deal={deal} healthScore={h?.score} healthLevel={h?.healthLevel} />
+                      );
+                    })
                 )}
               </CardContent>
             </Card>
@@ -172,9 +207,12 @@ export default async function SalesPipelinePage() {
             </p>
           </CardHeader>
           <CardContent className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {closedDeals.map((deal) => (
-              <PipelineDealCard key={deal.id} deal={deal} />
-            ))}
+            {closedDeals.map((deal) => {
+              const h = healthMap.get(deal.id);
+              return (
+                <PipelineDealCard key={deal.id} deal={deal} healthScore={h?.score} healthLevel={h?.healthLevel} />
+              );
+            })}
           </CardContent>
         </Card>
       ) : null}

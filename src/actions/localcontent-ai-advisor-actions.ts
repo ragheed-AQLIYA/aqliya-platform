@@ -1,5 +1,7 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
@@ -27,6 +29,9 @@ import {
 } from "@/actions/localcontent-rbac";
 import type { TbLine } from "@/lib/local-content/workbook/types";
 
+
+const logger = createLogger({ product: "platform", action: "unknown" });
+
 // ─── Result type ───
 
 type ActionResult<T> =
@@ -39,7 +44,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
     return { ok: true, data };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[AI Advisor Action]", message);
+    logger.error("[AI Advisor Action]", error instanceof Error ? error : undefined);
     return { ok: false, error: message };
   }
 }

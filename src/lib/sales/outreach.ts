@@ -423,6 +423,7 @@ export async function listPendingReviewDrafts(
       account: { select: { id: true, name: true } },
     },
     orderBy: { updatedAt: "desc" },
+    take: 10000,
   });
 
   const queue: OutreachDraftQueueItem[] = [];

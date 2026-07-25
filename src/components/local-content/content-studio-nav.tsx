@@ -12,6 +12,7 @@ const links = [
   { href: "/local-content/campaigns", label: "الحملات" },
   { href: "/local-content/review", label: "المراجعة" },
   { href: "/local-content/outputs", label: "المخرجات" },
+  { href: "/local-content/reports", label: "التقارير" },
 ];
 
 export function ContentStudioNav() {

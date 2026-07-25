@@ -1,4 +1,8 @@
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
+import { createLogger } from "@/lib/observability/logger";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export function isFsV2Enabled(): boolean {
   return isEnabled("audit.fs-v2");
@@ -32,7 +36,7 @@ export async function maybeRebuildFinancialStatements(
     await rebuildFinancialStatementsV2(engagementId);
     return true;
   } catch (err) {
-    console.error(`[FS Engine v2] rebuild failed for ${engagementId}`, err);
+    logger.error(`[FS Engine v2] rebuild failed for ${engagementId}`, err instanceof Error ? err : undefined);
     throw err;
   }
 }

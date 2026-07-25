@@ -63,6 +63,7 @@ async function generateCandidateSynonymsArtifact(
 ): Promise<string> {
   await ensureArtifactDir();
 
+  // Bounded by in(candidateIds) — IDs from caller, naturally limited
   const rows = await prisma.knowledgeCandidate.findMany({
     where: { id: { in: candidateIds }, status: "APPROVED" },
     select: {
@@ -74,6 +75,7 @@ async function generateCandidateSynonymsArtifact(
       supportCount: true,
       organizationCount: true,
     },
+    take: 100,
   });
   const candidates = rows as unknown as SynonymEntry[];
 
@@ -115,6 +117,7 @@ async function generateCandidateRulePackArtifact(
 ): Promise<string> {
   await ensureArtifactDir();
 
+  // Bounded by in(candidateIds) — IDs from caller, naturally limited
   const rows = await prisma.knowledgeCandidate.findMany({
     where: { id: { in: candidateIds }, status: "APPROVED" },
     select: {
@@ -126,6 +129,7 @@ async function generateCandidateRulePackArtifact(
       supportCount: true,
       organizationCount: true,
     },
+    take: 100,
   });
   const candidates = rows as unknown as RuleEntry[];
 
@@ -244,9 +248,11 @@ export async function batchPromoteCandidates(params: {
   artifactType: "candidate-synonyms" | "candidate-rule-pack";
   notes?: string;
 }): Promise<{ promoted: number; artifactPath: string }> {
+  // Bounded by status:"APPROVED" — only approved candidates eligible for promotion
   const approved = await prisma.knowledgeCandidate.findMany({
     where: { status: "APPROVED" },
     select: { id: true },
+    take: 100,
   });
 
   if (approved.length === 0) {

@@ -1,8 +1,12 @@
 import "server-only"
+import { createLogger } from "@/lib/observability/logger";
 
 import Queue from "bull"
 import { getRedisUrl } from "@/lib/platform/redis-config"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export interface QueueTask {
   id: string
@@ -47,11 +51,11 @@ export function getQueue(): Queue.Queue {
   })
 
   queue.on("error", (err) => {
-    console.error("[queue] Bull error:", err.message)
+    logger.error("[queue] Bull error:", err instanceof Error ? err : new Error(String(err)))
   })
 
   queue.on("failed", (job, err) => {
-    console.error(`[queue] Job ${job.id} (${job.data.type}) failed:`, err.message)
+    logger.error(`[queue] Job ${job.id} (${job.data.type}) failed:`, err instanceof Error ? err : new Error(String(err)))
   })
 
   globalForQueue.bullQueue = queue
@@ -138,5 +142,5 @@ export async function startWorkers(): Promise<void> {
     await handler(task)
   })
 
-  console.log(`[queue] Worker started with ${handlers.size} registered handler(s)`)
+  logger.info("[queue]Worker started with ${handlers.size} registered handler(s)")
 }

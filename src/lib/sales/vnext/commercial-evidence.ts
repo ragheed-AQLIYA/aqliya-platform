@@ -4,7 +4,7 @@ import { SALESOS_PRODUCT_KEY } from "../core-adoption";
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/registry/runtime exists
 function validateProductEvidenceType(productSlug: string, typeId: string): boolean {
-  // TODO: SalesOS vnext placeholder — implement when @/lib/platform/registry/runtime exists
+  // NOTE: Feature planned for v0.2 — see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md
   return false;
 }
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Shield, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function AIGovernanceError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("AI Governance error:", error);
+    clientLogger.error("AI Governance error:", error);
   }, [error]);
 
   return (

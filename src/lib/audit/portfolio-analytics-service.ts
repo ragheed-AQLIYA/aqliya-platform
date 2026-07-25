@@ -43,11 +43,13 @@ export async function getOrganizationPortfolioAnalytics(
       where: { engagementId: { in: ids } },
       _count: { _all: true },
     }),
-    prisma.auditEvent.findMany({
-      where: { engagementId: { in: ids } },
-      orderBy: { timestamp: "desc" },
-      distinct: ["engagementId"],
-      select: { engagementId: true, timestamp: true },
+    // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+    // Note: PlatformAuditLog does not support Prisma's distinct on a JSON sub-field.
+    // We fetch events grouped by sourceId (engagementId) and dedupe in-memory.
+    prisma.platformAuditLog.findMany({
+      where: { productKey: "audit_os", sourceId: { in: ids } },
+      orderBy: { createdAt: "desc" },
+      select: { sourceId: true, createdAt: true },
     }),
   ]);
 
@@ -61,7 +63,7 @@ export async function getOrganizationPortfolioAnalytics(
     approvals.map((a) => [a.engagementId, a._count._all]),
   );
   const eventMap = new Map(
-    lastEvents.map((e) => [e.engagementId, e.timestamp.toISOString()]),
+    lastEvents.map((e) => [e.sourceId, e.createdAt.toISOString()]),
   );
 
   const rows = engagements.map((e) => ({

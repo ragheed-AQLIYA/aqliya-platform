@@ -1,12 +1,42 @@
+import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { getToken, encode } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
 import { decrypt } from "@/lib/auth/encryption";
 import { verifyMFAToken, verifyBackupCode } from "@/lib/auth/mfa";
 
+const mfaVerifySchema = z.object({
+  token: z.string().optional(),
+  backupCode: z.string().optional(),
+}).refine((data) => data.token || data.backupCode, {
+  message: "Either token or backupCode is required",
+});
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
+
 export async function POST(req: NextRequest) {
   try {
-    const { token, backupCode } = await req.json();
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid JSON body", code: "VALIDATION_ERROR" },
+        { status: 400 },
+      );
+    }
+
+    const parsed = mfaVerifySchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message ?? "Invalid request", code: "VALIDATION_ERROR" },
+        { status: 400 },
+      );
+    }
+
+    const { token, backupCode } = parsed.data;
 
     const sessionToken = await getToken({
       req,
@@ -87,7 +117,7 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (err) {
-    console.error("MFA verify error:", err);
+    logger.error("MFA verify error:", err instanceof Error ? err : undefined);
     return NextResponse.json(
       { error: "Internal server error", code: "INTERNAL_ERROR" },
       { status: 500 },

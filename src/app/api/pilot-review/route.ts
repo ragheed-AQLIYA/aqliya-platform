@@ -1,26 +1,37 @@
+import { z } from "zod";
 import { NextResponse } from "next/server";
 import { checkRateLimit, clientIpRateLimitKey } from "@/lib/rate-limit";
+import { verifyPow } from "@/lib/security/pow";
 
-const MAX_FIELD_LENGTH = 2000;
 const MAX_BODY_BYTES = 50_000;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 8;
 
-const REQUIRED_FIELDS = ["name", "email", "organization", "useCase"] as const;
+const pilotReviewSchema = z.object({
+  name: z.string().min(1).max(2000),
+  email: z.string().email(),
+  organization: z.string().min(1).max(2000),
+  useCase: z.string().min(1).max(2000),
+  role: z.string().max(2000).optional(),
+  productInterest: z.string().max(2000).optional(),
+  interest: z.string().max(2000).optional(),
+  dataType: z.string().max(2000).optional(),
+  currentWorkflow: z.string().max(2000).optional(),
+  goal: z.string().max(2000).optional(),
+  pow: z.object({
+    token: z.string(),
+    nonce: z.string(),
+    hash: z.string(),
+  }),
+});
+
+type PilotReviewInput = z.infer<typeof pilotReviewSchema>;
 
 const DEFAULTS = {
   productInterest: "غير متأكد — أحتاج توجيهًا",
   dataType: "غير محدد — سأناقشه مع الفريق",
   goal: "يُناقش في جلسة التشخيص",
 } as const;
-
-function isNonEmptyString(v: unknown): v is string {
-  return typeof v === "string" && v.trim().length > 0;
-}
-
-function looksLikeEmail(v: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-}
 
 interface PilotReviewPayload {
   name: string;
@@ -103,75 +114,36 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!body || typeof body !== "object") {
+    const parsed = pilotReviewSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
-        { ok: false, error: "Body must be a JSON object." },
+        { ok: false, error: parsed.error.issues.map((i) => i.message).join(" ") },
         { status: 400 },
       );
     }
 
-    const errors: string[] = [];
+    const data = parsed.data;
 
-    for (const field of REQUIRED_FIELDS) {
-      const val = body[field];
-      if (!isNonEmptyString(val)) {
-        errors.push(`Missing or empty required field: ${field}`);
-      } else if (val.length > MAX_FIELD_LENGTH) {
-        errors.push(`Field too long: ${field} (max ${MAX_FIELD_LENGTH} chars)`);
-      }
-    }
-
-    if (
-      body.email &&
-      isNonEmptyString(body.email) &&
-      !looksLikeEmail(body.email)
-    ) {
-      errors.push("Invalid email format.");
-    }
-
-    for (const key of Object.keys(body)) {
-      const val = body[key];
-      if (typeof val === "string" && val.length > MAX_FIELD_LENGTH) {
-        errors.push(`Field too long: ${key} (max ${MAX_FIELD_LENGTH} chars)`);
-      }
-    }
-
-    if (errors.length > 0) {
+    // Verify proof-of-work
+    const powResult = verifyPow(data.pow);
+    if (!powResult.valid) {
       return NextResponse.json(
-        { ok: false, error: errors.join(" ") },
-        { status: 400 },
+        { ok: false, error: `Verification failed: ${powResult.reason}` },
+        { status: 403 },
       );
     }
 
     const payload: PilotReviewPayload = {
-      name: (body.name as string).trim(),
-      email: (body.email as string).trim(),
-      organization: (body.organization as string).trim(),
-      useCase: (body.useCase as string).trim(),
-      role:
-        typeof body.role === "string" && body.role.trim()
-          ? body.role.trim()
-          : undefined,
-      productInterest:
-        typeof body.productInterest === "string" && body.productInterest.trim()
-          ? body.productInterest.trim()
-          : DEFAULTS.productInterest,
-      interest:
-        typeof body.interest === "string" && body.interest.trim()
-          ? body.interest.trim()
-          : undefined,
-      dataType:
-        typeof body.dataType === "string" && body.dataType.trim()
-          ? body.dataType.trim()
-          : DEFAULTS.dataType,
-      currentWorkflow:
-        typeof body.currentWorkflow === "string" && body.currentWorkflow.trim()
-          ? body.currentWorkflow.trim()
-          : undefined,
-      goal:
-        typeof body.goal === "string" && body.goal.trim()
-          ? body.goal.trim()
-          : DEFAULTS.goal,
+      name: data.name.trim(),
+      email: data.email.trim(),
+      organization: data.organization.trim(),
+      useCase: data.useCase.trim(),
+      role: data.role?.trim() || undefined,
+      productInterest: data.productInterest?.trim() || DEFAULTS.productInterest,
+      interest: data.interest?.trim() || undefined,
+      dataType: data.dataType?.trim() || DEFAULTS.dataType,
+      currentWorkflow: data.currentWorkflow?.trim() || undefined,
+      goal: data.goal?.trim() || DEFAULTS.goal,
     };
     safeDevLog(payload);
 

@@ -12,6 +12,7 @@
  */
 
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -24,6 +25,9 @@ import { FoundationKpiCards } from "@/components/knowledge-foundation/kpi-cards"
 import { CandidatePoolOverviewCard } from "@/components/knowledge-foundation/candidate-pool-overview-card";
 import { VersionTable } from "@/components/knowledge-foundation/version-table";
 import { PlusCircle, FileDiff, History } from "lucide-react";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export const dynamic = "force-dynamic";
 
@@ -47,18 +51,18 @@ export default async function KnowledgeFoundationPage() {
     const t0 = Date.now();
     versions = await listVersions();
     const elapsed = Date.now() - t0;
-    console.error(JSON.stringify({
+    logger.debug("render-event", {
       event: "KF_DIAG_QUERY_OK",
       query: "listVersions",
       elapsed,
       resultType: typeof versions,
       isArray: Array.isArray(versions),
       length: Array.isArray(versions) ? (versions as unknown[]).length : null,
-    }));
+    });
   } catch (e: unknown) {
     const err = e instanceof Error ? e : new Error(String(e));
     const prismaCode = (err as unknown as Record<string, unknown>).code;
-    console.error(JSON.stringify({
+    logger.debug("render-event", {
       event: "KF_DIAG_QUERY_FAIL",
       query: "listVersions",
       exception: err.message,
@@ -66,7 +70,7 @@ export default async function KnowledgeFoundationPage() {
       stack: (err.stack || "").split("\n").slice(0, 6).join("\n"),
       prismaErrorCode: typeof prismaCode === "string" ? prismaCode : null,
       failedBeforeRender: true,
-    }));
+    });
     throw err; // preserve original SSR failure behavior
   }
 
@@ -75,17 +79,17 @@ export default async function KnowledgeFoundationPage() {
     const t0 = Date.now();
     kpis = await getFoundationDashboardKPIs();
     const elapsed = Date.now() - t0;
-    console.error(JSON.stringify({
+    logger.debug("render-event", {
       event: "KF_DIAG_QUERY_OK",
       query: "getFoundationDashboardKPIs",
       elapsed,
       resultType: typeof kpis,
       hasActiveVersion: typeof kpis === "object" && kpis !== null ? "activeVersion" in kpis : false,
-    }));
+    });
   } catch (e: unknown) {
     const err = e instanceof Error ? e : new Error(String(e));
     const prismaCode = (err as unknown as Record<string, unknown>).code;
-    console.error(JSON.stringify({
+    logger.debug("render-event", {
       event: "KF_DIAG_QUERY_FAIL",
       query: "getFoundationDashboardKPIs",
       exception: err.message,
@@ -93,7 +97,7 @@ export default async function KnowledgeFoundationPage() {
       stack: (err.stack || "").split("\n").slice(0, 6).join("\n"),
       prismaErrorCode: typeof prismaCode === "string" ? prismaCode : null,
       failedBeforeRender: true,
-    }));
+    });
     throw err;
   }
 
@@ -103,17 +107,17 @@ export default async function KnowledgeFoundationPage() {
       const t0 = Date.now();
       poolOverview = await getFoundationCandidatePoolOverview();
       const elapsed = Date.now() - t0;
-      console.error(JSON.stringify({
+      logger.debug("render-event", {
         event: "KF_DIAG_QUERY_OK",
         query: "getFoundationCandidatePoolOverview",
         elapsed,
         resultType: typeof poolOverview,
         keys: poolOverview ? Object.keys(poolOverview) : null,
-      }));
+      });
     } catch (e: unknown) {
       const err = e instanceof Error ? e : new Error(String(e));
       const prismaCode = (err as unknown as Record<string, unknown>).code;
-      console.error(JSON.stringify({
+      logger.debug("render-event", {
         event: "KF_DIAG_QUERY_FAIL",
         query: "getFoundationCandidatePoolOverview",
         exception: err.message,
@@ -121,18 +125,18 @@ export default async function KnowledgeFoundationPage() {
         stack: (err.stack || "").split("\n").slice(0, 6).join("\n"),
       prismaErrorCode: typeof prismaCode === "string" ? prismaCode : null,
         failedBeforeRender: true,
-      }));
+      });
       throw err;
     }
   }
 
-  console.error(JSON.stringify({
+  logger.debug("render-event", {
     event: "KF_DIAG_ALL_OK",
     queries: ["listVersions", "getFoundationDashboardKPIs", ...(isOperator ? ["getFoundationCandidatePoolOverview"] : [])],
-  }));
+  });
 
   // ─── RENDER PHASE BEGINS ───
-  console.error(JSON.stringify({ event: "KF_DIAG_RENDER_START" }));
+  logger.debug("render-event", { event: "KF_DIAG_RENDER_START" });
 
   return (
     <div className="space-y-6 p-6" dir="rtl">
@@ -218,14 +222,14 @@ export default async function KnowledgeFoundationPage() {
   } catch (e: unknown) {
     const err = e instanceof Error ? e : new Error(String(e));
     const prismaCode = (err as unknown as Record<string, unknown>).code;
-    console.error(JSON.stringify({
+    logger.debug("render-event", {
       event: "KF_DIAG_FATAL",
       exception: err.message,
       name: err.name,
       stack: (err.stack || "").split("\n").slice(0, 15).join("\n"),
       prismaErrorCode: typeof prismaCode === "string" ? prismaCode : null,
       failedInRender: true,
-    }));
+    });
     throw err;
   }
 }

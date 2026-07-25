@@ -34,7 +34,7 @@ const RISK_SCORE_MAP = {
   HIGH: 40,
 };
 
-export function calculateFinancialScore(
+function calculateFinancialScore(
   contractValue: number,
   estimatedCost: number,
   marginEstimate: number,
@@ -58,7 +58,7 @@ export function calculateFinancialScore(
   return Math.min(Math.max(baseScore, 0), 100);
 }
 
-export function calculateCapacityScore(
+function calculateCapacityScore(
   requiredCapacity: number,
   internalAvailableCapacity: number,
   scenarioType: 'BEST_CASE' | 'EXPECTED_CASE' | 'WORST_CASE'
@@ -98,7 +98,7 @@ export function calculateRiskScore(
   return Math.min(Math.max(baseScore * scenarioMultiplier, 0), 100);
 }
 
-export function calculateFeasibilityScore(
+function calculateFeasibilityScore(
   financialScore: number,
   capacityScore: number,
   riskScore: number
@@ -111,7 +111,7 @@ export function calculateFeasibilityScore(
   );
 }
 
-export function calculateOverallDecisionScore(
+function calculateOverallDecisionScore(
   financialScore: number,
   capacityScore: number,
   riskScore: number,

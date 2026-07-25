@@ -23,6 +23,7 @@ export async function detectMissingData(
   const lines = await prisma.lcWorkbookLine.findMany({
     where: { workbookId, workbook: { project: { organizationId } } },
     orderBy: [{ section: "asc" }, { displayOrder: "asc" }],
+    take: 100,
   });
 
   const items: MissingDataItemView[] = [];
@@ -154,6 +155,7 @@ export async function generateDataRequest(
   // Get the populated workbook lines to link items (org-scoped)
   const lines = await prisma.lcWorkbookLine.findMany({
     where: { workbookId, workbook: { project: { organizationId } } },
+    take: 100,
   });
   const lineMap = new Map(lines.map((l) => [l.code, l]));
 
@@ -212,6 +214,7 @@ export async function getWorkbookDataRequests(
     where: { workbookId, workbook: { project: { organizationId } } },
     include: { items: { orderBy: { createdAt: "asc" } } },
     orderBy: { createdAt: "desc" },
+    take: 100,
   })) as DataRequestWithItems[];
 }
 

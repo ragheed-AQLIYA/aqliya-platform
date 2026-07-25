@@ -10,7 +10,10 @@ import {
   rel,
   lineCount,
 } from "../lib/fs-utils.mjs";
+import { buildExclusionFn } from "../config.mjs";
 import { finding, scoreFromFindings } from "../lib/findings.mjs";
+
+const isExcluded = buildExclusionFn("technicalDebt");
 import { writeAgentReport } from "../lib/report.mjs";
 import {
   estimateComplexity,
@@ -48,11 +51,11 @@ export async function run() {
     const anys = (content.match(/\bas any\b|: any\b/g) || []).length;
     anyCasts += anys;
 
-    const isLegacy =
-      /\/archived\/|legacy|deprecated|sunbul\/|old-/i.test(fileRel) ||
-      /@deprecated|LEGACY|TODO: remove/i.test(content);
+    // Legacy detection: path-based only (not content-based).
+    // A single @deprecated tag in an active file should not flag the entire file.
+    const isLegacy = /\/archived\/|legacy|deprecated|sunbul\/|old-/i.test(fileRel);
 
-    if (isLegacy) {
+    if (isLegacy && !isExcluded(fileRel)) {
       legacyPaths += 1;
       findings.push(
         finding({
@@ -74,7 +77,7 @@ export async function run() {
       tsIgnore: ignores,
     });
 
-    if (debtPoints >= 40 || mi < 45 || todos >= 5 || ignores >= 3 || loc >= 600) {
+    if ((debtPoints >= 40 || mi < 45 || todos >= 5 || ignores >= 3 || loc >= 600) && !isExcluded(fileRel)) {
       hotspots.push({
         file: fileRel,
         loc,

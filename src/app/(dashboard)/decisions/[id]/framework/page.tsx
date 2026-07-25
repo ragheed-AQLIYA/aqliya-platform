@@ -94,7 +94,7 @@ export default function DecisionFrameworkPage({
         getWorkflowReadiness(decisionId),
       ]);
 
-      if (frameworkResult.success && frameworkResult.data) {
+      if (frameworkResult.success) {
         const framework = frameworkResult.data
           .framework as FrameworkRecord | null;
         setIntake(frameworkResult.data.intake);
@@ -118,7 +118,7 @@ export default function DecisionFrameworkPage({
         setError(frameworkResult.error || "Failed to load decision framework");
       }
 
-      if (readinessResult.success && readinessResult.data) {
+      if (readinessResult.success) {
         setReadiness(readinessResult.data);
       }
 
@@ -144,12 +144,12 @@ export default function DecisionFrameworkPage({
 
     const result = await updateDecisionFramework(id, formData);
 
-    if (result.success && result.data) {
+    if (result.success) {
       setFormData(result.data.framework);
       setFrameworkState(result.data.frameworkState);
       setSuccess(true);
       const readinessResult = await getWorkflowReadiness(id);
-      if (readinessResult.success && readinessResult.data) {
+      if (readinessResult.success) {
         setReadiness(readinessResult.data);
       }
       setTimeout(() => setSuccess(false), 3000);

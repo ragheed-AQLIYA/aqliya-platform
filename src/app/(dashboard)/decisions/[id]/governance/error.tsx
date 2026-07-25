@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Shield, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function GovernanceError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Governance error:", error);
+    clientLogger.error("Governance error:", error);
   }, [error]);
 
   return (

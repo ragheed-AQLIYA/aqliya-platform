@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { GitCompare, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function DifferencesError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Differences error:", error);
+    clientLogger.error("Differences error:", error);
   }, [error]);
 
   return (

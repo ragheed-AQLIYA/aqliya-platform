@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { createClientLogger } from "@/lib/observability/client-logger";
 import { AuditErrorCard } from "@/components/audit/error/audit-error-card";
 
 interface AuditWorkflowTabErrorProps {
@@ -15,9 +16,11 @@ export function AuditWorkflowTabError({
   reset,
   tabTitleAr,
 }: AuditWorkflowTabErrorProps) {
+  const clientLogger = createClientLogger("AuditWorkflowTabError");
+
   useEffect(() => {
-    console.error(`[AuditOS ${tabTitleAr} Error]`, error);
-  }, [error, tabTitleAr]);
+    clientLogger.error(`AuditOS ${tabTitleAr} Error`, error);
+  }, [error, tabTitleAr, clientLogger]);
 
   const router = useRouter();
   const params = useParams();

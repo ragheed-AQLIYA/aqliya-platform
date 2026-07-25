@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Eye, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function ReviewError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Review error:", error);
+    clientLogger.error("Review error:", error);
   }, [error]);
 
   return (

@@ -10,6 +10,7 @@ import {
   assertProjectAccess,
   ProjectAccessError,
 } from "@/lib/local-content/guards";
+import { enforce } from "@/lib/kernel";
 import { parseOrError } from "@/lib/local-content/schemas/common";
 import {
   createSupplierSchema,
@@ -52,7 +53,8 @@ export async function createLocalContentSupplierAction(
   const { name, crNumber, localityClassification, localContentPercentage, ownershipType, workforceLocalPct } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_supplier");
+    const { user, project } = await assertProjectAccess(projectId, "create_supplier");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "create");
     await requirePermission(Permission.SUPPLIER_MANAGEMENT, ResourceType.SUPPLIER);
 
     const supplier = await createSupplier(
@@ -96,7 +98,8 @@ export async function updateLocalContentSupplierAction(
   const { name, crNumber, localityClassification, localContentPercentage, ownershipType, workforceLocalPct } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_supplier");
+    const { user, project } = await assertProjectAccess(projectId, "create_supplier");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "update");
     await requirePermission(Permission.SUPPLIER_MANAGEMENT, ResourceType.SUPPLIER);
     const existing = await prisma.localContentSupplier.findUnique({
       where: { id: supplierId },
@@ -147,7 +150,8 @@ export async function deleteLocalContentSupplierAction(
   supplierId: string,
 ): Promise<ActionResult<void>> {
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_supplier");
+    const { user, project } = await assertProjectAccess(projectId, "create_supplier");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "delete");
     await requirePermission(Permission.SUPPLIER_MANAGEMENT, ResourceType.SUPPLIER);
     await deleteSupplier(projectId, supplierId, {
       id: user.id,

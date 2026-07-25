@@ -26,6 +26,7 @@ export async function getSecretsDueForRotation(): Promise<VaultEntryData[]> {
         },
       ],
     },
+    take: 100,
   })
 
   const due: VaultEntryData[] = []
@@ -144,6 +145,7 @@ export async function bulkRotateByCategory(
       deletedAt: null,
       status: { not: "ARCHIVED" },
     },
+    take: 100,
   })
 
   let rotated = 0
@@ -174,6 +176,7 @@ export async function getRotationHealth(): Promise<{
       deletedAt: null,
       status: { not: "ARCHIVED" },
     },
+    take: 100,
   })
 
   const now = new Date()

@@ -1,4 +1,7 @@
 ﻿import type { RateLimiter, RateLimiterType, RateLimitConfig, RateLimitResult } from "./types";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "memory-rate-limiter" });
 
 const DEFAULT_CONFIG: RateLimitConfig = {
   maxRequests: 60,
@@ -13,7 +16,7 @@ export class MemoryRateLimiter implements RateLimiter {
 
   constructor(options?: { suppressWarning?: boolean }) {
     if (!options?.suppressWarning) {
-      console.warn(
+      logger.warn(
         "Using in-memory rate limiter — not suitable for production multi-instance deployment",
       );
     }

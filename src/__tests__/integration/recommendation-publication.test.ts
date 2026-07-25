@@ -17,22 +17,10 @@ jest.mock("@/lib/auth", () => ({
 
 const { getCurrentUser } = require("@/lib/auth");
 
-// Mock auditLog.create to avoid foreign key issues
-jest.mock("@/lib/prisma", () => {
-  const actual = jest.requireActual("@/lib/prisma");
-  return {
-    prisma: {
-      ...actual.prisma,
-      auditLog: {
-        ...actual.prisma.auditLog,
-        create: jest.fn().mockResolvedValue({}),
-      },
-    },
-  };
-});
+jest.mock("@/lib/prisma", () => ({ prisma: jest.requireActual("@/lib/prisma").prisma }));
 
 async function cleanup() {
-  await prisma.auditLog.deleteMany();
+  await prisma.platformAuditLog.deleteMany();
   await prisma.decisionRiskAlert.deleteMany();
   await prisma.decisionMonitoringSignal.deleteMany();
   await prisma.decisionPattern.deleteMany();

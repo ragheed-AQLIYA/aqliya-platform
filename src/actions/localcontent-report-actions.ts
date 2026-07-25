@@ -22,8 +22,183 @@ import {
   logToPlatform,
   revalidateLocalContentPaths,
 } from "@/actions/localcontent-shared";
+import { prisma } from "@/lib/kernel";
+import { getCurrentUser } from "@/lib/auth";
 
-// ─── Report Actions ───
+// ─── Report Types ───
+
+export type LcScoreReportRow = {
+  projectId: string;
+  projectName: string;
+  reportingPeriod: string;
+  score: number | null;
+  totalSpend: number;
+  localPercentage: number;
+};
+
+export type SpendReportRow = {
+  category: string;
+  total: number;
+  local: number;
+  international: number;
+  localPct: number;
+};
+
+export type SupplierReportRow = {
+  classification: string;
+  count: number;
+  totalSpend: number;
+};
+
+// ─── Dashboard Report Actions ───
+
+export async function getLcScoreReportAction(): Promise<
+  ActionResult<LcScoreReportRow[]>
+> {
+  return safe(async () => {
+    const user = await getCurrentUser();
+    await requirePermission(Permission.REPORT_MANAGEMENT, ResourceType.REPORT);
+
+    const projects = await prisma.localContentProject.findMany({
+      where: { organizationId: user.organizationId },
+      select: {
+        id: true,
+        name: true,
+        reportingPeriod: true,
+        localContentScore: true,
+        spendRecords: {
+          select: { amount: true, category: true, supplierId: true },
+        },
+        suppliers: {
+          select: { id: true, localityClassification: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+    });
+
+    const localSupplierIds = new Set(
+      projects.flatMap((p) =>
+        p.suppliers
+          .filter((s) => s.localityClassification === "local")
+          .map((s) => s.id),
+      ),
+    );
+
+    return projects.map((p) => {
+      const totalSpend = p.spendRecords.reduce((s, r) => s + r.amount, 0);
+      const localSpend = p.spendRecords
+        .filter((r) => localSupplierIds.has(r.supplierId))
+        .reduce((s, r) => s + r.amount, 0);
+      return {
+        projectId: p.id,
+        projectName: p.name,
+        reportingPeriod: p.reportingPeriod,
+        score: p.localContentScore,
+        totalSpend,
+        localPercentage: totalSpend > 0 ? (localSpend / totalSpend) * 100 : 0,
+      };
+    });
+  });
+}
+
+export async function getSpendReportAction(): Promise<
+  ActionResult<SpendReportRow[]>
+> {
+  return safe(async () => {
+    const user = await getCurrentUser();
+    await requirePermission(Permission.REPORT_MANAGEMENT, ResourceType.REPORT);
+
+    const projects = await prisma.localContentProject.findMany({
+      where: { organizationId: user.organizationId },
+      select: {
+        spendRecords: {
+          select: {
+            amount: true,
+            category: true,
+            supplier: {
+              select: { localityClassification: true },
+            },
+          },
+        },
+      },
+      take: 100,
+    });
+
+    const allRecords = projects.flatMap((p) => p.spendRecords);
+    const byCategory = new Map<string, SpendReportRow>();
+
+    for (const r of allRecords) {
+      const cat = r.category || "other";
+      const existing = byCategory.get(cat) || {
+        category: cat,
+        total: 0,
+        local: 0,
+        international: 0,
+        localPct: 0,
+      };
+      existing.total += r.amount;
+      if (r.supplier?.localityClassification === "local") {
+        existing.local += r.amount;
+      } else {
+        existing.international += r.amount;
+      }
+      existing.localPct =
+        existing.total > 0 ? (existing.local / existing.total) * 100 : 0;
+      byCategory.set(cat, existing);
+    }
+
+    return Array.from(byCategory.values()).sort(
+      (a, b) => b.total - a.total,
+    );
+  });
+}
+
+export async function getSupplierReportAction(): Promise<
+  ActionResult<SupplierReportRow[]>
+> {
+  return safe(async () => {
+    const user = await getCurrentUser();
+    await requirePermission(Permission.REPORT_MANAGEMENT, ResourceType.REPORT);
+
+    const projects = await prisma.localContentProject.findMany({
+      where: { organizationId: user.organizationId },
+      select: {
+        suppliers: {
+          select: {
+            localityClassification: true,
+            spendRecords: { select: { amount: true } },
+          },
+        },
+      },
+      take: 100,
+    });
+
+    const allSuppliers = projects.flatMap((p) => p.suppliers);
+    const byClass = new Map<string, SupplierReportRow>();
+
+    for (const s of allSuppliers) {
+      const cls = s.localityClassification || "unclassified";
+      const existing = byClass.get(cls) || {
+        classification: cls,
+        count: 0,
+        totalSpend: 0,
+      };
+      existing.count++;
+      existing.totalSpend += s.spendRecords.reduce(
+        (sum, r) => sum + r.amount,
+        0,
+      );
+      byClass.set(cls, existing);
+    }
+
+    return Array.from(byClass.values()).sort(
+      (a, b) => b.totalSpend - a.totalSpend,
+    );
+  });
+}
+
+// ─── Existing Report Actions ───
 
 export async function listLocalContentReportsAction(
   projectId: string,

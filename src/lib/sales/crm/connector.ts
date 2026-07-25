@@ -5,6 +5,7 @@ import type {
   CrmContact,
   CrmOpportunity,
   CrmProvider,
+  SyncToLocalResult,
 } from "./types";
 
 export interface RateLimitStatus {
@@ -31,4 +32,10 @@ export interface CrmConnector {
   fetchOpportunities(since?: Date): Promise<CrmOpportunity[]>;
 
   getRateLimitStatus(): Promise<RateLimitStatus>;
+
+  syncToLocal?(
+    organizationId: string,
+    entities: { accounts: CrmAccount[]; contacts: CrmContact[]; opportunities: CrmOpportunity[] },
+    conflictPolicy?: string,
+  ): Promise<SyncToLocalResult>;
 }

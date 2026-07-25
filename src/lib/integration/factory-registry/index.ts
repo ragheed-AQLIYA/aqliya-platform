@@ -1,0 +1,1 @@
+export { registerAllFactories } from "./register";

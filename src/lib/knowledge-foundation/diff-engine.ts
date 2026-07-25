@@ -159,6 +159,7 @@ function buildSummary(
 
 export async function getDiffForVersion(versionId: string) {
   const diffs = await prisma.knowledgeFoundationDiff.findMany({
+    take: 100,
     where: {
       OR: [{ fromVersionId: versionId }, { toVersionId: versionId }],
     },

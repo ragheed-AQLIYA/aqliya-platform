@@ -1,5 +1,7 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { revalidatePath } from "next/cache";
 import { isExpectedAccessDeniedError } from "@/lib/auth";
 import { SalesAuditActions } from "@/lib/sales/audit-events";
@@ -10,6 +12,9 @@ import {
   SalesAccessError,
 } from "@/lib/sales/guards";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -27,7 +32,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
       return { ok: false, error: "Access denied", code: "FORBIDDEN" };
     }
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[SalesOS ICP Action]", message);
+    logger.error("[SalesOS ICP Action]", error instanceof Error ? error : undefined);
     return { ok: false, error: message };
   }
 }

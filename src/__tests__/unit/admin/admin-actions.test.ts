@@ -19,7 +19,7 @@ const mockPrisma = {
   organization: { count: jest.fn() },
   auditEngagement: { count: jest.fn() },
   decision: { count: jest.fn() },
-  auditEvent: { count: jest.fn() },
+  platformAuditLog: { count: jest.fn() },
   auditEvidence: { count: jest.fn() },
 }
 jest.mock("@/lib/prisma", () => ({
@@ -144,7 +144,7 @@ describe("Admin Actions", () => {
       mockPrisma.organization.count.mockResolvedValue(3)
       mockPrisma.auditEngagement.count.mockResolvedValue(25)
       mockPrisma.decision.count.mockResolvedValue(50)
-      mockPrisma.auditEvent.count.mockResolvedValue(1000)
+      mockPrisma.platformAuditLog.count.mockResolvedValue(1000)
       mockPrisma.auditEvidence.count.mockResolvedValue(200)
 
       const stats = await getPlatformStats("org-1")
@@ -163,7 +163,7 @@ describe("Admin Actions", () => {
       mockPrisma.organization.count.mockResolvedValue(0)
       mockPrisma.auditEngagement.count.mockResolvedValue(0)
       mockPrisma.decision.count.mockResolvedValue(0)
-      mockPrisma.auditEvent.count.mockResolvedValue(0)
+      mockPrisma.platformAuditLog.count.mockResolvedValue(0)
       mockPrisma.auditEvidence.count.mockResolvedValue(0)
 
       await getPlatformStats("org-x")

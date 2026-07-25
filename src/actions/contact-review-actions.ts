@@ -1,9 +1,15 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
+import { enforce } from "@/lib/kernel";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -18,7 +24,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
       return { ok: false, error: "Access denied", code: "FORBIDDEN" };
     }
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[Contact Review Actions]", message);
+    logger.error("[Contact Review Actions]", error instanceof Error ? error : undefined);
     return { ok: false, error: message };
   }
 }
@@ -51,7 +57,7 @@ async function logAuditEvent(params: {
       },
     });
   } catch (e) {
-    console.error("[Audit Log Error]", e);
+    logger.error("[Audit Log Error]", e instanceof Error ? e : undefined);
   }
 }
 
@@ -64,6 +70,7 @@ export async function assignReviewer(
 ) {
   return safe(async () => {
     const user = await getCurrentUser();
+    await enforce(user, { type: "contact", id: contactId, tenantId: user.organizationId }, "review");
     const contact = await prisma.localContact.findUnique({
       where: { id: contactId },
       select: { id: true, organizationId: true, platformOrganizationId: true },
@@ -113,6 +120,7 @@ export async function assignReviewer(
 export async function completeReview(reviewId: string, notes?: string) {
   return safe(async () => {
     const user = await getCurrentUser();
+    await enforce(user, { type: "contact", id: reviewId, tenantId: user.organizationId }, "update");
     const review = await prisma.contactReview.findUnique({
       where: { id: reviewId },
       select: { id: true, organizationId: true, contactId: true, reviewerId: true, status: true },

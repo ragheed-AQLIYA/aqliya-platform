@@ -1,10 +1,58 @@
 import "server-only";
 
 import { randomUUID } from "crypto";
-import type { PlatformAuditLogInput } from "@/lib/platform/audit-log";
 
 /** IC-P3-05 — canonical platform event envelope (pre-bus). */
 export const CORE_EVENT_SCHEMA_VERSION = "1.0" as const;
+
+export interface PlatformAuditLogInput {
+  productKey: string;
+  action: string;
+
+  platformOrganizationId?: string;
+  clientWorkspaceId?: string;
+  projectId?: string;
+  environment?: string;
+
+  actorId?: string;
+  actorType?: string;
+  actorEmail?: string;
+  actorName?: string;
+
+  targetType?: string;
+  targetId?: string;
+  targetLabel?: string;
+
+  severity?: string;
+  status?: string;
+
+  sourceSystem?: string;
+  sourceModel?: string;
+  sourceId?: string;
+  requestId?: string;
+  sessionId?: string;
+  ipAddress?: string;
+  userAgent?: string;
+
+  aiProvider?: string;
+  aiModel?: string;
+  aiPromptVersion?: string;
+  aiOutputReviewStatus?: string;
+
+  organizationId?: string | null;
+  beforeState?: string | null;
+  afterState?: string | null;
+  eventDescription?: string | null;
+  aiRelated?: boolean;
+  aiConfidence?: number | null;
+  aiStatus?: string | null;
+  inputSummary?: Record<string, unknown> | null;
+  outputSummary?: Record<string, unknown> | null;
+  durationMs?: number | null;
+
+  evidenceRefs?: Record<string, unknown>[];
+  metadata?: Record<string, unknown>;
+}
 
 export type CoreEventDomain =
   | "audit"

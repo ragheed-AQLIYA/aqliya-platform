@@ -95,6 +95,7 @@ export async function listEvidenceLinksForDeal(
     },
     select: linkSelect,
     orderBy: { createdAt: "desc" },
+    take: 10000,
   });
   return enrichLinks(links, scope);
 }
@@ -111,6 +112,7 @@ export async function listEvidenceLinksForAccount(
     },
     select: linkSelect,
     orderBy: { createdAt: "desc" },
+    take: 10000,
   });
   return enrichLinks(links, scope);
 }

@@ -1,3 +1,9 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# ⚠️ DEPRECATED DIRECTORY — DO NOT DEPLOY FROM HERE (ADR-108 / P0 2026-07-19)
+# Canonical production Terraform: infra/terraform/environments/prod/
+# This file is historical reference only (me-south-1 / "production" naming).
+# ═══════════════════════════════════════════════════════════════════════════
+
 environment = "production"
 domain_name = "aqliya.com"
 

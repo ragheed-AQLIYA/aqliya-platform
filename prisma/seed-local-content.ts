@@ -357,7 +357,6 @@ const spendRecords: {
 
 async function main() {
   console.log("Cleaning existing LocalContentOS data...");
-  await prisma.localContentAuditEvent.deleteMany();
   await prisma.localContentReport.deleteMany();
   await prisma.localContentApproval.deleteMany();
   await prisma.localContentReview.deleteMany();
@@ -715,79 +714,72 @@ async function main() {
   });
   console.log(`  Approval: ${approval.id}`);
 
-  const auditEvents = await Promise.all([
-    prisma.localContentAuditEvent.create({
-      data: {
-        id: "lc-audit-01",
-        projectId: project.id,
+  // [PHASE 5] Removed — migrated to PlatformAuditLog
+  await prisma.platformAuditLog.createMany({
+    data: [
+      {
+        productKey: "localcontentos",
         actorId: "admin-demo",
         actorName: "Ahmed Al-Mansouri",
         action: "project.created",
-        entityType: "LocalContentProject",
-        entityId: project.id,
+        targetType: "LocalContentProject",
+        targetId: project.id,
+        severity: "info",
+        metadata: { source: "seed-local-content" },
       },
-    }),
-    prisma.localContentAuditEvent.create({
-      data: {
-        id: "lc-audit-02",
-        projectId: project.id,
+      {
+        productKey: "localcontentos",
         actorId: "admin-demo",
         actorName: "Ahmed Al-Mansouri",
         action: "suppliers.imported",
-        entityType: "LocalContentSupplier",
-        entityId: createdSuppliers[0].id,
-        metadata: { count: createdSuppliers.length },
+        targetType: "LocalContentSupplier",
+        targetId: createdSuppliers[0].id,
+        severity: "info",
+        metadata: { source: "seed-local-content", count: createdSuppliers.length },
       },
-    }),
-    prisma.localContentAuditEvent.create({
-      data: {
-        id: "lc-audit-03",
-        projectId: project.id,
+      {
+        productKey: "localcontentos",
         actorId: "admin-demo",
         actorName: "Ahmed Al-Mansouri",
         action: "spend.imported",
-        entityType: "LocalContentSpendRecord",
-        entityId: createdSpend[0].id,
-        metadata: { count: createdSpend.length },
+        targetType: "LocalContentSpendRecord",
+        targetId: createdSpend[0].id,
+        severity: "info",
+        metadata: { source: "seed-local-content", count: createdSpend.length },
       },
-    }),
-    prisma.localContentAuditEvent.create({
-      data: {
-        id: "lc-audit-04",
-        projectId: project.id,
+      {
+        productKey: "localcontentos",
         actorId: "admin-demo",
         actorName: "Ahmed Al-Mansouri",
         action: "classifications.completed",
-        entityType: "LocalContentClassification",
-        entityId: classifications[0].id,
-        metadata: { count: classifications.length },
+        targetType: "LocalContentClassification",
+        targetId: classifications[0].id,
+        severity: "info",
+        metadata: { source: "seed-local-content", count: classifications.length },
       },
-    }),
-    prisma.localContentAuditEvent.create({
-      data: {
-        id: "lc-audit-05",
-        projectId: project.id,
+      {
+        productKey: "localcontentos",
         actorId: "reviewer-demo",
         actorName: "Sara Al-Otaibi",
         action: "review.submitted",
-        entityType: "LocalContentReview",
-        entityId: review.id,
+        targetType: "LocalContentReview",
+        targetId: review.id,
+        severity: "info",
+        metadata: { source: "seed-local-content" },
       },
-    }),
-    prisma.localContentAuditEvent.create({
-      data: {
-        id: "lc-audit-06",
-        projectId: project.id,
+      {
+        productKey: "localcontentos",
         actorId: "approver-demo",
         actorName: "Mohammad Al-Harbi",
         action: "approval.decided",
-        entityType: "LocalContentApproval",
-        entityId: approval.id,
-        metadata: { decision: "approved" },
+        targetType: "LocalContentApproval",
+        targetId: approval.id,
+        severity: "info",
+        metadata: { source: "seed-local-content", decision: "approved" },
       },
-    }),
-  ]);
-  console.log(`  Audit events: ${auditEvents.length}`);
+    ],
+  });
+  console.log(`  Audit events: 6`);
 
   // ─── Workbook Seed ───
   console.log("\nSeeding Workbook Engine demo data...");

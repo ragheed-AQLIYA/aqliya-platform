@@ -7,7 +7,6 @@
 import "server-only";
 import { secretResolver, SecretPurpose } from "@/lib/integration/secret-resolver";
 import { createStorageProvider } from "./index";
-import { LocalStorageProvider, getLocalStoreBaseDir } from "./local-storage-provider";
 import { S3StorageProvider } from "./s3-storage-provider";
 import type { StorageProvider } from "./types";
 

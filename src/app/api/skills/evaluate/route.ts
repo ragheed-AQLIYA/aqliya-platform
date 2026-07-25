@@ -8,6 +8,7 @@
 //   { } or { "level": "all" }                         — all skills
 // ============================================================
 
+import { z } from "zod"
 import { NextRequest, NextResponse } from "next/server"
 import { readdirSync, existsSync } from "fs"
 import { join } from "path"
@@ -24,6 +25,13 @@ import type {
   BatchEvaluationResult,
 } from "@/lib/skill-runtime/evaluator-types"
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error"
+
+const skillEvaluateSchema = z.object({
+  skillId: z.string().optional(),
+  level: z.union([z.number(), z.string()]).optional(),
+}).refine((data) => data.skillId !== undefined || data.level !== undefined, {
+  message: "Provide 'skillId' (string) or 'level' (number)",
+});
 
 // ─── Constants ───
 
@@ -157,29 +165,22 @@ export async function POST(request: NextRequest) {
 
   try {
     // Parse body
-    let body: Record<string, unknown>
+    let body: unknown
     try {
       body = await request.json()
     } catch {
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
     }
 
-    const { skillId, level } = body as { skillId?: string; level?: number | string }
-
-    // Validate: at least one filter
-    if (!skillId && level === undefined) {
+    const parsed = skillEvaluateSchema.safeParse(body)
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Provide 'skillId' (string) or 'level' (number)" },
+        { error: parsed.error.issues.map((i) => i.message).join(" ") },
         { status: 400 },
       )
     }
 
-    if (skillId && typeof skillId !== "string") {
-      return NextResponse.json(
-        { error: "'skillId' must be a string" },
-        { status: 400 },
-      )
-    }
+    const { skillId, level } = parsed.data
 
     // Convert level — allow "all" or number
     let resolvedLevel: number | undefined

@@ -46,11 +46,25 @@ export async function exportWorkflowRecord(
     orderBy: { createdAt: "desc" },
   });
 
-  const auditEvents = await prisma.sunbulAuditEvent.findMany({
-    where: { clientId: input.clientId, recordId: input.recordId },
+  // [MIGRATED v2] SunbulAuditEvent → PlatformAuditLog (single-write)
+  // const auditEvents = await prisma.sunbulAuditEvent.findMany({
+  //   where: { clientId: input.clientId, recordId: input.recordId },
+  //   orderBy: { createdAt: "desc" },
+  //   take: 50,
+  // });
+  const platformAuditEvents = await prisma.platformAuditLog.findMany({
+    where: { productKey: "workflowos", clientWorkspaceId: input.clientId, targetId: input.recordId },
     orderBy: { createdAt: "desc" },
     take: 50,
+    select: { action: true, actorId: true, targetType: true, createdAt: true },
   });
+
+  const auditEvents = platformAuditEvents.map((e) => ({
+    action: e.action,
+    actorId: e.actorId ?? "",
+    entityType: e.targetType ?? "",
+    createdAt: e.createdAt,
+  }));
 
   const labelAr = {
     platform: "سير العمل الذكي",

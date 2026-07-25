@@ -35,29 +35,30 @@ export async function embedAndStore(
   const totalTokenCount = embedResponse.usage?.totalTokens ?? 0
 
   let savedCount = 0
-  for (let i = 0; i < chunks.length; i++) {
-    const chunk = chunks[i]
-    const embedding = embedResponse.embeddings[i]
-    if (!embedding) continue
+  const createdRows = await prisma.documentChunk.createManyAndReturn({
+    data: chunks.map((chunk) => ({
+      documentId: chunk.documentId,
+      organizationId: chunk.organizationId,
+      chunkIndex: chunk.chunkIndex,
+      content: chunk.content,
+      tokenCount: chunk.tokenCount,
+      metadata: chunk.metadata as Prisma.InputJsonValue,
+      createdBy: userId,
+    })),
+  })
 
-    const row = await prisma.documentChunk.create({
-      data: {
-        documentId: chunk.documentId,
-        organizationId: chunk.organizationId,
-        chunkIndex: chunk.chunkIndex,
-        content: chunk.content,
-        tokenCount: chunk.tokenCount,
-        metadata: chunk.metadata as Prisma.InputJsonValue,
-        createdBy: userId,
-      },
-    })
-    try {
-      await storeChunkEmbedding(row.id, embedding)
-    } catch {
-      /* pgvector may be unavailable in dev — chunks still persisted for text fallback */
-    }
-    savedCount++
-  }
+  const rowsByIndex = new Map(createdRows.map((r) => [r.chunkIndex, r]))
+
+  await Promise.allSettled(
+    chunks.map((chunk, i) => {
+      const embedding = embedResponse.embeddings[i]
+      const row = rowsByIndex.get(chunk.chunkIndex)
+      if (!embedding || !row) return Promise.resolve()
+      return storeChunkEmbedding(row.id, embedding)
+    }),
+  )
+
+  savedCount = createdRows.length
 
   await writePlatformAuditLog({
     productKey: "ai_core",

@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
+import { createClientLogger } from "@/lib/observability/client-logger";
+
+const clientLogger = createClientLogger("GlobalError");
 
 export default function GlobalError({
   error,
@@ -10,7 +13,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Global error:", error);
+    clientLogger.error("Global error", error);
   }, [error]);
 
   return (

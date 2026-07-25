@@ -18,7 +18,7 @@ export interface SlaInfo {
   stepLabel: string;
 }
 
-export function calculateDueAt(from: Date, slaMinutes: number): Date {
+function calculateDueAt(from: Date, slaMinutes: number): Date {
   return new Date(from.getTime() + slaMinutes * 60 * 1000);
 }
 
@@ -50,7 +50,7 @@ export function getSlaStatus(
   return "on_track";
 }
 
-export function getSlaConfig(
+function getSlaConfig(
   steps: unknown[],
   stepIndex: number,
 ): StepSlaConfig | null {
@@ -83,6 +83,7 @@ export async function checkOverdue(): Promise<{
       steps: true,
       currentStep: true,
     },
+    take: 10000,
   });
 
   const overdue: { id: string; title: string; status: SlaStatus }[] = [];

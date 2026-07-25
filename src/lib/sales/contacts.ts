@@ -45,5 +45,6 @@ export async function listContactsForAccount(
     },
     select: contactSelect,
     orderBy: [{ name: "asc" }, { createdAt: "asc" }],
+    take: 10000,
   });
 }

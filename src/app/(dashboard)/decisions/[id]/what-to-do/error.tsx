@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { HelpCircle, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function WhatToDoError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("What To Do error:", error);
+    clientLogger.error("What To Do error:", error);
   }, [error]);
 
   return (

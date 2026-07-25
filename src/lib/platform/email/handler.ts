@@ -1,7 +1,11 @@
 import "server-only"
+import { createLogger } from "@/lib/observability/logger";
 import { registerHandler } from "@/lib/platform/operations/queue-runtime"
 import { sendEmail } from "./sender"
 import type { QueueTask } from "@/lib/platform/operations/queue-runtime"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export function registerEmailHandler(): void {
   registerHandler("send_email", async (task: QueueTask) => {
@@ -22,5 +26,5 @@ export function registerEmailHandler(): void {
     }
   })
 
-  console.log("[email] send_email handler registered")
+  logger.info("[email]send_email handler registered")
 }

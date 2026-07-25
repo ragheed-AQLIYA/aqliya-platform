@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { FilePlus, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function CreateContentError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Create Content error:", error);
+    clientLogger.error("Create Content error:", error);
   }, [error]);
 
   return (

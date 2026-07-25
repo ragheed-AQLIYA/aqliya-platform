@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ShieldBan } from "lucide-react"
 import Link from "next/link"
+import { clientLogger } from "@/lib/observability/client-logger"
 
 export default function DashboardError({
   error,
@@ -14,7 +15,7 @@ export default function DashboardError({
   reset: () => void
 }) {
   useEffect(() => {
-    console.error(error)
+    clientLogger.error("Dashboard error", error)
   }, [error])
 
   // Check if this is an expected auth denial

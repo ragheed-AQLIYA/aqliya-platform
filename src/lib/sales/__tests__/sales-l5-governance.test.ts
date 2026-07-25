@@ -5,7 +5,7 @@ jest.mock("@/lib/prisma", () => ({
     salesProposal: { create: jest.fn(), findFirst: jest.fn(), update: jest.fn() },
     salesReview: { create: jest.fn(), findFirst: jest.fn(), findMany: jest.fn(), update: jest.fn() },
     salesApproval: { create: jest.fn(), findMany: jest.fn(), findFirst: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
     salesEvidenceLink: { count: jest.fn() },
   },
 }));
@@ -32,7 +32,7 @@ const actor = { id: "user-1", name: "Tester", role: "OPERATOR" };
 describe("SalesOS L5 governance", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({});
+    prisma.platformAuditLog.create.mockResolvedValue({});
   });
 
   describe("submitOpportunityForReview", () => {
@@ -57,7 +57,7 @@ describe("SalesOS L5 governance", () => {
 
       expect(result.reviewId).toBe("rev-1");
       expect(result.proposalId).toBe("prop-1");
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.PROPOSAL_SUBMITTED,
@@ -94,7 +94,7 @@ describe("SalesOS L5 governance", () => {
       );
 
       expect(prisma.salesApproval.create).toHaveBeenCalled();
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.GOVERNANCE_APPROVAL_GRANTED,

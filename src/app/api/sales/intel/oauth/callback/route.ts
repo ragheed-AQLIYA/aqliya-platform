@@ -7,12 +7,16 @@
  * Query params: code, state, error, provider
  */
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import {
   exchangeCodeForTokens,
   OAUTH2_PROVIDERS,
 } from "@/lib/sales/intelligence/oauth/oauth2-client";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
+
+
+const logger = createLogger({ product: "platform", action: "app-api-sales-intel-oauth-callback-route" });
 
 export async function GET(request: NextRequest) {
   try {
@@ -86,10 +90,7 @@ export async function GET(request: NextRequest) {
       ),
     );
   } catch (err) {
-    console.error(
-      "[OAuth2] Callback error:",
-      err instanceof Error ? err.message : err,
-    );
+    logger.error("[OAuth2] Callback error", err instanceof Error ? err : new Error(String(err)));
     return NextResponse.redirect(
       new URL(
         `/sales/settings/crm?oauth_error=${encodeURIComponent("Token exchange failed")}`,

@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Rocket, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function PilotReadinessError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Pilot Readiness error:", error);
+    clientLogger.error("Pilot Readiness error:", error);
   }, [error]);
 
   return (

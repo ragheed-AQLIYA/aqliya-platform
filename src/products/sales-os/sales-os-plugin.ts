@@ -1,6 +1,9 @@
 import type { ProductPlugin, PluginDependencies } from "@/lib/kernel/plugin/product-plugin";
 import type { KernelHealth, ProductRoute, ProductSchema } from "@/lib/kernel/types";
 import type { DomainEvent, EventHandler } from "@/lib/kernel/contracts/event-bus";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "sales-os", action: "plugin" });
 
 export class SalesOSPlugin implements ProductPlugin {
   readonly id = "sales-os";
@@ -18,24 +21,18 @@ export class SalesOSPlugin implements ProductPlugin {
 
     const handleDealEvents: EventHandler = async (event: DomainEvent) => {
       if (event.productSlug === "sales-os") return;
-      console.log(
-        `[SalesOS] Cross-product deal event: ${event.action} from ${event.productSlug} — resource ${event.resourceId}`,
-      );
+      logger.info(`Cross-product deal event: ${event.action} from ${event.productSlug} — resource ${event.resourceId}`);
     };
 
     const handleAuditEvents: EventHandler = async (event: DomainEvent) => {
       if (event.domain === "audit" && event.action === "review.completed") {
-        console.log(
-          `[SalesOS] Audit review completed: ${event.resourceId} — checking for linked deals`,
-        );
+        logger.info(`Audit review completed: ${event.resourceId} — checking for linked deals`);
       }
     };
 
     const handleLCOSEvents: EventHandler = async (event: DomainEvent) => {
       if (event.domain === "lc" && event.action === "project.classified") {
-        console.log(
-          `[SalesOS] Local content classification completed: ${event.resourceId} — checking for supplier overlap`,
-        );
+        logger.info(`Local content classification completed: ${event.resourceId} — checking for supplier overlap`);
       }
     };
 

@@ -49,7 +49,7 @@ const TARGET_TYPE_OPTIONS = [
   { value: "SalesReport", label: "تقرير" },
 ];
 
-function targetLink(targetType: string, targetId: string): string | null {
+function targetLink(targetType: string | null, targetId: string | null): string | null {
   if (targetType === "SalesDeal") return `/sales/deals/${targetId}`;
   if (targetType === "SalesAccount") return `/sales/accounts/${targetId}`;
   return null;
@@ -208,11 +208,11 @@ export default async function SalesAuditTrailPage({
                                   href={href}
                                   className="text-primary hover:underline"
                                 >
-                                  {event.targetId.slice(0, 8)}…
+                                  {event.targetId?.slice(0, 8) ?? "—"}…
                                 </Link>
                               </>
                             ) : (
-                              <> · {event.targetId.slice(0, 8)}…</>
+                              <> · {event.targetId?.slice(0, 8) ?? "—"}…</>
                             )}
                           </span>
                         </div>

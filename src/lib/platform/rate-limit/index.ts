@@ -2,6 +2,9 @@ import "server-only";
 import type { RateLimiterProvider } from "./types";
 import { MemoryRateLimiterProvider } from "./memory-provider";
 import { RedisRateLimiterProvider } from "./redis-provider";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "rate-limit" });
 
 export type { RateLimiterProvider, RateLimitResult } from "./types";
 
@@ -22,8 +25,8 @@ export function getRateLimiterProvider(): RateLimiterProvider {
   if (mode === "redis") {
     const url = process.env.REDIS_URL;
     if (!url) {
-      console.warn(
-        "[rate-limit] RATE_LIMITER=redis but REDIS_URL is not set. Falling back to memory.",
+      logger.warn(
+        "RATE_LIMITER=redis but REDIS_URL is not set. Falling back to memory.",
       );
       _provider = new MemoryRateLimiterProvider();
     } else {

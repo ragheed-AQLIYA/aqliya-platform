@@ -1,4 +1,8 @@
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
+import { createLogger } from "@/lib/observability/logger";
+
+
+const logger = createLogger({ product: "platform", action: "lib-audit-reconciliation-index" });
 
 export function isReconciliationEnabled(): boolean {
   return isEnabled("audit.reconciliation");
@@ -31,9 +35,6 @@ export async function maybeRunReconciliationAfterPipeline(
     );
     await runReconciliationForEngagement(engagementId);
   } catch (err) {
-    console.error(
-      `[Reconciliation] pipeline hook failed for ${engagementId}`,
-      err,
-    );
+    logger.error(`[Reconciliation] pipeline hook failed for ${engagementId}`, err instanceof Error ? err : new Error(String(err)));
   }
 }

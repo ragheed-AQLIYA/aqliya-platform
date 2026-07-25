@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Shield, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function SSOSettingsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("SSO Settings error:", error);
+    clientLogger.error("SSO Settings error:", error);
   }, [error]);
 
   return (

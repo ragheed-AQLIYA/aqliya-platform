@@ -6,6 +6,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
+import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
 
 export async function getLcAuditEvents(organizationId: string) {
@@ -14,10 +15,21 @@ export async function getLcAuditEvents(organizationId: string) {
     throw new Error("Access denied");
   }
 
+  // [MIGRATED] lcAiAuditEvent → platformAuditLog (dual-write with productKey: "local_content", targetType: "AiAuditEvent")
+  // const [auditEventCount, recentAuditEvents] = await Promise.all([
+  //   prisma.lcAiAuditEvent.count({ where: { organizationId } }),
+  //   prisma.lcAiAuditEvent.findMany({
+  //     where: { organizationId },
+  //     orderBy: { createdAt: "desc" },
+  //     take: 10,
+  //   }),
+  // ]);
   const [auditEventCount, recentAuditEvents] = await Promise.all([
-    prisma.lcAiAuditEvent.count({ where: { organizationId } }),
-    prisma.lcAiAuditEvent.findMany({
-      where: { organizationId },
+    prisma.platformAuditLog.count({
+      where: { productKey: "local_content", targetType: "AiAuditEvent", platformOrganizationId: organizationId },
+    }),
+    prisma.platformAuditLog.findMany({
+      where: { productKey: "local_content", targetType: "AiAuditEvent", platformOrganizationId: organizationId },
       orderBy: { createdAt: "desc" },
       take: 10,
     }),
@@ -28,9 +40,9 @@ export async function getLcAuditEvents(organizationId: string) {
     recentAuditEvents: recentAuditEvents.map((e) => ({
       id: e.id,
       action: e.action,
-      status: e.status,
-      confidence: e.confidence ?? undefined,
-      durationMs: e.durationMs,
+      status: String((e.metadata as Record<string, unknown> | null)?.status ?? e.status ?? "recorded"),
+      confidence: (e.metadata as Record<string, unknown> | null)?.confidence as number | undefined,
+      durationMs: Number(((e.metadata as Record<string, unknown> | null)?.durationMs) ?? 0),
       createdAt: e.createdAt.toISOString(),
     })),
   };
@@ -193,6 +205,7 @@ export async function reviewSuggestionAction(
 
   try {
     const orgId = await requirePatternSuggestionAccess(suggestionId);
+    await enforce(user, { type: "project", id: suggestionId, tenantId: orgId }, "update");
     await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
 
     const result = await reviewPatternSuggestion(
@@ -227,6 +240,7 @@ export async function reviewExplanationAction(
 
   try {
     const orgId = await requireMatchReviewAccess(matchReviewId);
+    await enforce(user, { type: "project", id: matchReviewId, tenantId: orgId }, "update");
     await requirePermission(Permission.AI_REVIEW, ResourceType.PATTERN_SUGGESTION);
 
     const result = await reviewFalsePositive(
@@ -263,6 +277,7 @@ export async function createPatternOverrideAction(
   if (organizationId !== user.organizationId) {
     return { success: false, error: "Access denied: organization mismatch" };
   }
+  await enforce(user, { type: "project", id: organizationId, tenantId: organizationId }, "create");
   await requirePermission(Permission.REVIEW_OVERRIDE, ResourceType.REVIEW);
 
   try {
@@ -313,6 +328,7 @@ export async function batchReviewAction(
 ): Promise<{ success: boolean; processed: number; errors: number; error?: string }> {
   const user = await getCurrentUser();
   if (!user) return { success: false, processed: 0, errors: 1, error: "Not authenticated" };
+  await enforce(user, { type: "project", id: ids[0] ?? "", tenantId: user.organizationId }, "update");
   await requirePermission(Permission.REVIEW_APPROVAL, ResourceType.REVIEW);
 
   let processed = 0;

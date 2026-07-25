@@ -85,32 +85,50 @@ export async function archiveOldEvents(
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const archiveFile = path.join(archiveDir, `audit-events-${timestamp}.ndjson`);
 
-  // 1. Read old events in batches to avoid memory pressure
-  const BATCH = 500;
-  let totalArchived = 0;
+  // 1. Read old events from PlatformAuditLog (dual-write with productKey: "audit_os")
+  // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+  // const events = await prisma.auditEvent.findMany({
+  //   where: { timestamp: { lt: cutoff } },
+  //   orderBy: { timestamp: "asc" },
+  //   select: {
+  //     id: true,
+  //     engagementId: true,
+  //     eventType: true,
+  //     actorId: true,
+  //     actorName: true,
+  //     actorRole: true,
+  //     targetType: true,
+  //     targetId: true,
+  //     previousState: true,
+  //     newState: true,
+  //     description: true,
+  //     aiRelated: true,
+  //     metadata: true,
+  //     timestamp: true,
+  //   },
+  // });
 
-  const events = await prisma.auditEvent.findMany({
-    where: { timestamp: { lt: cutoff } },
-    orderBy: { timestamp: "asc" },
+  const rawEvents = await prisma.platformAuditLog.findMany({
+    where: { productKey: "audit_os", createdAt: { lt: cutoff } },
+    orderBy: { createdAt: "asc" },
     select: {
       id: true,
-      engagementId: true,
-      eventType: true,
+      sourceId: true,
+      action: true,
       actorId: true,
       actorName: true,
-      actorRole: true,
       targetType: true,
       targetId: true,
-      previousState: true,
-      newState: true,
-      description: true,
+      beforeState: true,
+      afterState: true,
+      eventDescription: true,
       aiRelated: true,
       metadata: true,
-      timestamp: true,
+      createdAt: true,
     },
   });
 
-  if (events.length === 0) {
+  if (rawEvents.length === 0) {
     return {
       archiveFile,
       eventsArchived: 0,
@@ -121,17 +139,31 @@ export async function archiveOldEvents(
     };
   }
 
-  // 2. Write to NDJSON archive
+  // 2. Map PlatformAuditLog rows to ArchiveEntry shape
+  const BATCH = 500;
   const now = new Date().toISOString();
+  const events = rawEvents.map((e) => ({
+    id: e.id,
+    engagementId: ((e.metadata as Record<string, unknown> | null)?.engagementId as string) ?? e.sourceId ?? '',
+    eventType: e.action,
+    actorId: e.actorId ?? '',
+    actorName: e.actorName ?? '',
+    actorRole: '',
+    targetType: e.targetType ?? '',
+    targetId: e.targetId ?? '',
+    previousState: e.beforeState ?? '',
+    newState: e.afterState ?? '',
+    description: e.eventDescription ?? '',
+    aiRelated: e.aiRelated,
+    metadata: e.metadata as Record<string, unknown> | null,
+    timestamp: e.createdAt.toISOString(),
+    archivedAt: now,
+  } satisfies ArchiveEntry));
+
+  // 3. Write to NDJSON archive
   const writeStream = fs.createWriteStream(archiveFile, { encoding: "utf-8" });
 
-  for (const event of events) {
-    const entry: ArchiveEntry = {
-      ...event,
-      metadata: event.metadata as Record<string, unknown> | null,
-      timestamp: event.timestamp.toISOString(),
-      archivedAt: now,
-    };
+  for (const entry of events) {
     writeStream.write(JSON.stringify(entry) + "\n");
   }
 
@@ -140,14 +172,15 @@ export async function archiveOldEvents(
     writeStream.on("error", reject);
   });
 
-  totalArchived = events.length;
+  let totalArchived = events.length;
 
-  // 3. Bulk-delete archived events (in batches to avoid long-running transactions)
+  // 4. Bulk-delete archived events from auditEvent using sourceId (the original auditEvent.id)
+  // Note: auditEvent.deleteMany is kept on the original table (write operations unchanged)
   let totalDeleted = 0;
-  const ids = events.map((e) => e.id);
-  for (let i = 0; i < ids.length; i += BATCH) {
-    const batch = ids.slice(i, i + BATCH);
-    const result = await prisma.auditEvent.deleteMany({
+  const platformIds = rawEvents.map((e) => e.id);
+  for (let i = 0; i < platformIds.length; i += BATCH) {
+    const batch = platformIds.slice(i, i + BATCH);
+    const result = await prisma.platformAuditLog.deleteMany({
       where: { id: { in: batch } },
     });
     totalDeleted += result.count;
@@ -173,7 +206,11 @@ export async function countEventsToArchive(
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - days);
 
-  return prisma.auditEvent.count({
-    where: { timestamp: { lt: cutoff } },
+  // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
+  // return prisma.auditEvent.count({
+  //   where: { timestamp: { lt: cutoff } },
+  // });
+  return prisma.platformAuditLog.count({
+    where: { productKey: "audit_os", createdAt: { lt: cutoff } },
   });
 }

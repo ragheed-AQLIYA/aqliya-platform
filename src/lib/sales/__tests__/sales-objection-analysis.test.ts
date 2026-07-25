@@ -7,7 +7,7 @@ jest.mock("@/lib/prisma", () => ({
     salesInteraction: {
       findFirst: jest.fn(),
     },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -35,7 +35,7 @@ const BASE_DEAL = {
 describe("SalesOS objection analysis agent (PR-16)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
     prisma.salesDeal.update.mockResolvedValue(BASE_DEAL);
   });
 
@@ -134,7 +134,7 @@ describe("SalesOS objection analysis agent (PR-16)", () => {
         }),
       );
 
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.OBJECTION_ANALYZED,

@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Building2, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function OrganizationsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Organizations error:", error);
+    clientLogger.error("Organizations error:", error);
   }, [error]);
 
   return (

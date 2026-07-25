@@ -46,11 +46,13 @@ function mimeTypeForFileType(fileType: string): string {
 
 export async function getDecisionEvidenceAction(decisionId: string, offset?: number) {
   try {
-    const user = await getCurrentUser();
-    const decisionLookup = await prisma.decision.findUnique({
-      where: { id: decisionId },
-      select: { organizationId: true },
-    });
+    const [user, decisionLookup] = await Promise.all([
+      getCurrentUser(),
+      prisma.decision.findUnique({
+        where: { id: decisionId },
+        select: { organizationId: true },
+      }),
+    ]);
     if (!decisionLookup) {
       return { success: false, error: "Decision not found" };
     }
@@ -80,11 +82,13 @@ export async function uploadDecisionEvidenceAction(params: {
   description?: string;
 }) {
   try {
-    const user = await getCurrentUser();
-    const decisionLookup = await prisma.decision.findUnique({
-      where: { id: params.decisionId },
-      select: { organizationId: true },
-    });
+    const [user, decisionLookup] = await Promise.all([
+      getCurrentUser(),
+      prisma.decision.findUnique({
+        where: { id: params.decisionId },
+        select: { organizationId: true },
+      }),
+    ]);
     if (!decisionLookup) {
       return { success: false, error: "Decision not found" };
     }

@@ -1,13 +1,11 @@
 "use client";
 
 import { useReportWebVitals } from "next/web-vitals";
+import { clientLogger } from "@/lib/observability/client-logger";
 
 export function WebVitals() {
   useReportWebVitals((metric) => {
-    console.log(metric);
-    // In production, send to analytics:
-    // const body = JSON.stringify(metric)
-    // navigator.sendBeacon("/api/vitals", body)
+    clientLogger.info("Web vital", { name: metric.name, value: metric.rating, id: metric.id });
   });
   return null;
 }

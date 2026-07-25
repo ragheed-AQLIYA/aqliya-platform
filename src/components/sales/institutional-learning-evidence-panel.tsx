@@ -1,4 +1,6 @@
 export {
   InstitutionalLearningPanel as InstitutionalLearningEvidencePanel,
-  hasInstitutionalLearningData as hasWaveCInstitutionalLearningData,
 } from "./institutional-learning-panel";
+export {
+  hasInstitutionalLearningData as hasWaveCInstitutionalLearningData,
+} from "./hooks/use-institutional-learning-panel";

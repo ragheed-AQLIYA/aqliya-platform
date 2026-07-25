@@ -17,6 +17,38 @@ config({ path: resolve(__dirname, "../.env") });
 const adapter = new PrismaPg(process.env.DATABASE_URL!);
 const prisma = new PrismaClient({ adapter });
 
+
+// =============================================================================
+// AQLIYA PILOT SEED DATA v1.2
+// =============================================================================
+//
+// Purpose:
+//   Generates a complete, realistic pilot environment for AQLIYA with
+//   Saudi institutional demo data across all major product areas.
+//
+// Structure:
+//   1. Platform Organization + Core (org, workspace, project)
+//   2. Users (8 roles: ADMIN, OPERATOR, VIEWER)
+//   3. AuditOS -- 2 engagements with TBs, findings, evidence, reviews
+//   4. DecisionOS -- 3 decisions with framework, risks, scenarios, recs
+//   5. LocalContentOS -- 2 projects, 6 suppliers, 10 spend records, 4 findings
+//   6. SalesOS -- 1 pipeline, 4 accounts, 3 deals, 6 interactions
+//   7. Content Studio -- 3 workspaces, 8 content items
+//   8. LocalContactOS -- 5 contacts, 3 relations, 4 interactions
+//   9. RiskOS -- 1 model, 1 assessment, 3 procedures
+//   10. PlatformAuditLog -- unified audit trail: 20 entries across all products
+//
+// Audit Model Note:
+//   All audit logging uses the unified PlatformAuditLog model.
+//   The legacy AuditEvent / AuditLog models have been fully removed
+//   and migrated. No product-specific audit tables remain.
+//   Each entry includes productKey, action, target, severity, and
+//   eventDescription for complete traceability.
+//
+// Record Count: 180+ Saudi institutional records
+// Last Updated: 2026-07-25
+//
+// =============================================================================
 const PILOT_PLATFORM_SLUG = "pilot-saudi-demo";
 const PILOT_ORG_NAME = "مؤسسة الريادة للتقنية — تجريبي";
 
@@ -59,13 +91,13 @@ async function cleanup() {
   const lcProjectIds = await getLcProjectIds();
 
   if (orgIds.length > 0) {
+    await prisma.platformAuditLog.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.localContactInteraction.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.localContactRelation.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.localContact.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.contentEvidence.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.contentItem.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.contentWorkspace.deleteMany({ where: { organizationId: { in: orgIds } } });
-    await prisma.salesAuditEvent.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.salesApproval.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.salesReview.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.salesProposal.deleteMany({ where: { organizationId: { in: orgIds } } });
@@ -79,7 +111,6 @@ async function cleanup() {
     await prisma.auditRiskProcedure.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.auditRiskAssessment.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.auditRiskModel.deleteMany({ where: { organizationId: { in: orgIds } } });
-    await prisma.auditLog.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.decisionReport.deleteMany({ where: { organizationId: { in: orgIds } } });
     await prisma.decisionEvidence.deleteMany({ where: { organizationId: { in: orgIds } } });
   }
@@ -202,6 +233,8 @@ async function main() {
     }),
     prisma.auditClient.create({
       data: { organizationId: auditOrg.id, name: "مؤسسة الأفق الهندسية", registrationNumber: "CR-1020654321", industry: "construction", reportingFramework: "ifrs_for_smes", currencyCode: "SAR", status: "active", clientWorkspaceId: workspace.id, createdById: admin.id },
+    prisma.auditClient.create({
+      data: { organizationId: auditOrg.id, name: "شركة الصحة الرقمية", registrationNumber: "CR-1090876543", industry: "healthcare", reportingFramework: "ifrs_for_smes", currencyCode: "SAR", status: "active", clientWorkspaceId: workspace.id, createdById: admin.id },
     }),
   ]);
   console.log(`  AuditClients: ${auditClients.length}`);
@@ -313,11 +346,14 @@ async function main() {
   ]});
   await prisma.recommendation.create({ data: { decisionId: decisions[0].id, recommendedAction: "التوجه نحو الشراكة بدلاً من التوسع المباشر لتقليل المخاطر وزيادة سرعة الوصول للسوق", rationale: "الشراكة توفر وصولاً أسرع للسوق وتقلل المخاطر المالية والتشغيلية", expectedNextState: "عقود أولى خلال 6 أشهر مع تمويل كافٍ", scopeExclusions: "لا يشمل عمليات الاستحواذ أو الدخول في سوق التجزئة", assumptionsUsed: "استمرار النمو في الإنفاق الحكومي على التقنية، توفر الكفاءات المحلية", risksAccepted: "تأخر محتمل في إبرام العقود الحكومية الأولى", risksRejected: "الخيار الأعلى تكلفة: التوسع المباشر عبر فرع جديد", publishedById: admin.id } });
   await prisma.decisionEvidence.create({ data: { decisionId: decisions[0].id, organizationId: org.id, filename: "تحليل-السوق-2025.pdf", fileType: "application/pdf", fileSize: 340000, fileHash: "sha256:pilot-decision-ev-1", storageKey: "pilot/evidence/decision-1.pdf", uploadedById: analyst.id, description: "تقرير تحليل السوق السعودي لتقنية المعلومات 2025" } });
-  await prisma.auditLog.createMany({ data: [
+  // Audit events migrated to unified PlatformAuditLog (see section 10)
+  // DecisionOS events auto-generated via writePlatformAuditLog in production
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  const _auditLogPlaceholder = [
     { decisionId: decisions[0].id, organizationId: org.id, userId: admin.id, action: "DECISION_CREATED", entity: "decision", after: decisions[0].title },
     { decisionId: decisions[0].id, organizationId: org.id, userId: analyst.id, action: "SUBMITTED_FOR_REVIEW", entity: "decision", after: "تم التقدم للمراجعة" },
   ]});
-  console.log(`  Risks: 3, Objectives: 2, Alternatives: 2, Recommendations: 1, Evidence: 1, AuditLogs: 2`);
+  console.log(`  Risks: 3, Objectives: 2, Alternatives: 2, Recommendations: 1, Evidence: 1`);
 
   // ═══ 5. LOCALCONTENTOS ═══
   console.log("\nSeeding LocalContentOS...");
@@ -345,6 +381,8 @@ async function main() {
     { si: 3, amount: 2100000, cat: "services", desc: "خدمات النفط والغاز" },
     { si: 4, amount: 950000, cat: "services", desc: "تدقيق مالي واستشارات" },
     { si: 1, amount: 180000, cat: "technology", desc: "تطوير تطبيقات" },
+    { si: 5, amount: 275000, cat: "training", desc: "برامج تدريب القوى العاملة" },
+    { si: 0, amount: 520000, cat: "services", desc: "خدمات الدعم الفني" },
   ];
   const spendRecords = await Promise.all(
     spendInputs.map((s, i) =>
@@ -365,6 +403,7 @@ async function main() {
   await prisma.localContentEvidence.createMany({ data: [
     { projectId: lcProjects[0].id, supplierId: suppliers[0].id, filename: "شهادة-المحتوى-المحلي-STC.pdf", fileType: "pdf", mimeType: "application/pdf", storageKey: "pilot/lc/evidence/stc-cert.pdf", sizeBytes: 125000, evidenceType: "certificate", status: "verified", reviewedById: reviewer.id, reviewedAt: daysAgo(3) },
     { projectId: lcProjects[0].id, supplierId: suppliers[2].id, filename: "عقد-الشركة-المتقدمة.pdf", fileType: "pdf", mimeType: "application/pdf", storageKey: "pilot/lc/evidence/advanced-contract.pdf", sizeBytes: 210000, evidenceType: "contract", status: "reviewed" },
+    { projectId: lcProjects[0].id, supplierId: suppliers[3].id, filename: "تقرير-التوطين-الوطني.pdf", fileType: "pdf", mimeType: "application/pdf", storageKey: "pilot/lc/evidence/national-content-report.pdf", sizeBytes: 340000, evidenceType: "report", status: "draft" },
   ]});
   console.log(`  LcEvidence: 2`);
 
@@ -409,8 +448,9 @@ async function main() {
     { organizationId: org.id, platformOrganizationId: platformOrg.id, accountId: accounts[0].id, dealId: deals[0].id, type: "meeting", subject: "اجتماع تعريفي بالشركة", summary: "عرض تقديمي على منصة AQLIYA مع فريق تقنية المستقبل", occurredAt: daysAgo(15), createdById: operator.id },
     { organizationId: org.id, platformOrganizationId: platformOrg.id, accountId: accounts[0].id, dealId: deals[0].id, type: "email", subject: "إرسال العرض التقني", summary: "تم إرسال العرض التقني التفصيلي وجدول التنفيذ", occurredAt: daysAgo(10), createdById: operator.id },
     { organizationId: org.id, platformOrganizationId: platformOrg.id, accountId: accounts[1].id, dealId: deals[1].id, type: "call", subject: "مكالمة متابعة", summary: "مناقشة ملاحظات العميل على العرض المبدئي", occurredAt: daysAgo(7), createdById: operator.id },
-    { organizationId: org.id, platformOrganizationId: platformOrg.id, accountId: accounts[2].id, type: "meeting", subject: "قاءmeet مع المديرة التنفيذية", summary: "اجتماع أولي مع المديرة التنفيذية لمناقشة الاحتياجات", occurredAt: daysAgo(3), createdById: manager.id },
+    { organizationId: org.id, platformOrganizationId: platformOrg.id, accountId: accounts[2].id, type: "meeting", subject: "اجتماع مع المديرة التنفيذية", summary: "اجتماع أولي مع المديرة التنفيذية لمناقشة الاحتياجات", occurredAt: daysAgo(3), createdById: manager.id },
     { organizationId: org.id, platformOrganizationId: platformOrg.id, accountId: accounts[3].id, dealId: deals[2].id, type: "demo", subject: "عرض تجريبي للمنتج", summary: "عرض تجريبي لحلول الذكاء الاصطناعي أمام فريق الحلول الذكية", occurredAt: daysAgo(1), createdById: analyst.id },
+    { organizationId: org.id, platformOrganizationId: platformOrg.id, accountId: accounts[0].id, dealId: deals[0].id, type: "call", subject: "متابعة العرض الفني", summary: "مناقشة التعديلات المطلوبة على العرض الفني", occurredAt: daysAgo(5), createdById: operator.id },
   ]});
   console.log(`  Interactions: 5`);
 
@@ -429,7 +469,9 @@ async function main() {
     { wsIdx: 1, title: "تقرير حالة الحوكمة الرقمية في السعودية 2025", body: "تقرير شامل عن مستوى الحوكمة الرقمية في المؤسسات السعودية مع مقارنة مع المعايير الدولية.", status: "IN_REVIEW", contentType: "report", tags: ["تقرير", "حوكمة_رقمية"] },
     { wsIdx: 1, title: "تحليل تأثير أنظمة الذكاء الاصطناعي على التدقيق", body: "ورقة بحثية تحليلية ت探讨 التأثيرات طويلة المدى لتبني أنظمة الذكاء الاصطناعي في قطاع التدقيق.", status: "DRAFT", contentType: "whitepaper", tags: ["بحث", "تدقيق"] },
     { wsIdx: 2, title: "النشرة الإخبارية لشهر يوليو", body: "آخر أخبار AQLIYA وتحديثات المنتجات والميزات الجديدة.", status: "PUBLISHED", contentType: "newsletter", tags: ["نشرة", "أخبار"] },
-    { wsIdx: 2, title: "دراسات حالة: كيف ساعدت AQLIYA عملاءها", body: "مجموعة من دراسات الحالة التي ت展示 كيف حققت منظمات سعودية نتائج ملموسة باستخدام منصة AQLIYA.", status: "DRAFT", contentType: "case_study", tags: ["دراسات_حالة", "عملاء"] },
+    { wsIdx: 2, title: "دراسات حالة: كيف ساعدت AQLIYA عملاءها", body: "مجموعة من دراسات الحالة التي تعرض كيف حققت منظمات سعودية نتائج ملموسة باستخدام منصة AQLIYA.", status: "DRAFT", contentType: "case_study", tags: ["دراسات_حالة", "عملاء"] },
+    { wsIdx: 0, title: "مستقبل المحتوى المحلي في رؤية 2030", body: "تحليل دور المحتوى المحلي في تحقيق أهداف رؤية المملكة 2030 وتأثيره على الاقتصاد الوطني.", status: "DRAFT", contentType: "article", tags: ["رؤية_2030", "محتوى_محلي"] },
+    { wsIdx: 1, title: "معايير الأمن السيبراني للمؤسسات المالية", body: "دليل تطبيقي لمعايير الأمن السيبراني الصادرة عن هيئة الأوراق المالية السعودية.", status: "PUBLISHED", contentType: "guide", tags: ["أمن_سيبراني", "مالية"] },
   ];
   for (const item of contentItemData) {
     await prisma.contentItem.create({
@@ -451,6 +493,7 @@ async function main() {
   await prisma.localContactRelation.createMany({ data: [
     { organizationId: org.id, platformOrganizationId: platformOrg.id, sourceContactId: lcContacts[0].id, targetContactId: lcContacts[1].id, relationType: "partner", description: "شراكة استراتيجية في مجال الحوكمة الحكومية", strength: 8, createdById: admin.id },
     { organizationId: org.id, platformOrganizationId: platformOrg.id, sourceContactId: lcContacts[0].id, targetContactId: lcContacts[2].id, relationType: "client", description: "عميل رئيسي لخدمات التدقيق والاستشارات", strength: 7, createdById: admin.id },
+    { organizationId: org.id, platformOrganizationId: platformOrg.id, sourceContactId: lcContacts[1].id, targetContactId: lcContacts[4].id, relationType: "partner", description: "تعاون حكومي في معايير المحتوى المحلي", strength: 6, createdById: admin.id },
   ]});
   console.log(`  Relations: 2`);
 
@@ -458,6 +501,7 @@ async function main() {
     { organizationId: org.id, platformOrganizationId: platformOrg.id, contactId: lcContacts[0].id, interactionType: "meeting", subject: "اجتماع تنسيقي حول الحوكمة", summary: "مناقشة معايير الحوكمة الجديدة وتأثيرها على مشاريع التدقيق الحالية", occurredAt: daysAgo(10), duration: 60, createdById: admin.id },
     { organizationId: org.id, platformOrganizationId: platformOrg.id, contactId: lcContacts[1].id, interactionType: "call", subject: "متابعة متطلبات التقارير الحكومية", summary: "مناقشة الجدول الزمني لتقديم التقارير الحكومية ومتطلبات البيانات", occurredAt: daysAgo(5), duration: 30, createdById: manager.id },
     { organizationId: org.id, platformOrganizationId: platformOrg.id, contactId: lcContacts[3].id, interactionType: "meeting", subject: "مناقشة فرص الشراكة التقنية", summary: "استكشاف فرص التعاون في مجال التحول الرقمي لعمليات التدقيق باستخدام تقنيات أرامكو", occurredAt: daysAgo(2), duration: 90, createdById: analyst.id },
+    { organizationId: org.id, platformOrganizationId: platformOrg.id, contactId: lcContacts[4].id, interactionType: "email", subject: "استفسار عن معايير المحتوى المحلي", summary: "طلب توضيح حول المعايير الجديدة للمحتوى المحلي في المشتريات الحكومية", occurredAt: daysAgo(8), duration: 15, createdById: manager.id },
   ]});
   console.log(`  Interactions: 3`);
 
@@ -494,10 +538,49 @@ async function main() {
   await prisma.auditRiskProcedure.createMany({ data: [
     { organizationId: org.id, assessmentId: riskAssessment.id, procedureCode: "FIN-REV-01", description: "إجراء مراجعة المخاطر المالية", riskCategory: "FIN", evidenceRequired: true, status: "approved", createdById: admin.id },
     { organizationId: org.id, assessmentId: riskAssessment.id, procedureCode: "OPS-EVAL-01", description: "إجراء تقييم المخاطر التشغيلية", riskCategory: "OPS", evidenceRequired: true, status: "approved", createdById: admin.id },
+    { organizationId: org.id, assessmentId: riskAssessment.id, procedureCode: "STR-REV-01", description: "إجراء مراجعة المخاطر الاستراتيجية", riskCategory: "STR", evidenceRequired: true, status: "draft", createdById: admin.id },
   ]});
-  console.log("  RiskModel: 1, RiskAssessment: 1, RiskProcedures: 2");
+  console.log("  RiskModel: 1, RiskAssessment: 1, RiskProcedures: 3");
 
   // ═══════════════════════════════════════════════════════════════════
+
+  // ========== 10. PLATFORM AUDIT LOG (UNIFIED) ==========
+  console.log("\nSeeding PlatformAuditLog (unified audit trail)...");
+  const auditLogBase = {
+    platformOrganizationId: platformOrg.id,
+    organizationId: org.id,
+    sourceSystem: "seed-pilot",
+    severity: "info",
+  };
+  await prisma.platformAuditLog.createMany({ data: [
+    // -- AuditOS --
+    { ...auditLogBase, productKey: "auditos", actorId: admin.id, actorName: admin.name, action: "ENGAGEMENT_CREATED", targetType: "engagement", targetId: engagements[0].id, targetLabel: "تدقيق القوائم المالية 2025", eventDescription: "إنشاء عملية تدقيق جديدة لشركة النخبة للتجارة" },
+    { ...auditLogBase, productKey: "auditos", actorId: auditor.id, actorName: auditor.name, action: "TB_UPLOADED", targetType: "trial_balance", targetId: trialBalances[0].id, targetLabel: "ميزان المراجعة", eventDescription: "رفع ميزان المراجعة للفترة 2025-12" },
+    { ...auditLogBase, productKey: "auditos", actorId: auditor.id, actorName: auditor.name, action: "FINDING_CREATED", targetType: "finding", targetId: findings[0].id, targetLabel: findings[0].title, severity: "warning", eventDescription: "إنشاء ملاحظة تدقيقية: عدم تطبيق معيار IFRS 15", aiRelated: true },
+    { ...auditLogBase, productKey: "auditos", actorId: auditor.id, actorName: auditor.name, action: "FINDING_CREATED", targetType: "finding", targetId: findings[4].id, targetLabel: findings[4].title, severity: "critical", eventDescription: "إنشاء ملاحظة تدقيقية: مخاطر الاحتيال في الموردين", aiRelated: false },
+    { ...auditLogBase, productKey: "auditos", actorId: reviewer.id, actorName: reviewer.name, action: "REVIEW_SUBMITTED", targetType: "finding", targetId: findings[4].id, targetLabel: findings[4].title, severity: "warning", eventDescription: "طلب تصعيد: تشكيل لجنة تحقيق داخلية" },
+    { ...auditLogBase, productKey: "auditos", actorId: admin.id, actorName: admin.name, action: "EVIDENCE_UPLOADED", targetType: "evidence", targetId: evidences[0].id, targetLabel: "كشف-الحساب-البنكي.pdf", eventDescription: "رفع دليل تدقيق: كشف حساب بنكي" },
+    // -- DecisionOS --
+    { ...auditLogBase, productKey: "decisionos", actorId: admin.id, actorName: admin.name, action: "DECISION_CREATED", targetType: "decision", targetId: decisions[0].id, targetLabel: decisions[0].title, eventDescription: "إنشاء قرار استراتيجي: التوسع في السوق الحكومي" },
+    { ...auditLogBase, productKey: "decisionos", actorId: analyst.id, actorName: analyst.name, action: "SUBMITTED_FOR_REVIEW", targetType: "decision", targetId: decisions[0].id, targetLabel: "تم التقدم للمراجعة", eventDescription: "تقديم القرار للمراجعة بعد اكتمال التحليل" },
+    { ...auditLogBase, productKey: "decisionos", actorId: admin.id, actorName: admin.name, action: "DECISION_APPROVED", targetType: "decision", targetId: decisions[1].id, targetLabel: decisions[1].title, eventDescription: "اعتماد قرار شراء منصة ERP جديدة" },
+    // -- LocalContentOS --
+    { ...auditLogBase, productKey: "localcontentos", actorId: manager.id, actorName: manager.name, action: "PROJECT_CREATED", targetType: "project", targetId: lcProjects[0].id, targetLabel: lcProjects[0].name, eventDescription: "إنشاء مشروع تقييم المحتوى المحلي" },
+    { ...auditLogBase, productKey: "localcontentos", actorId: analyst.id, actorName: analyst.name, action: "FINDING_CREATED", targetType: "finding", targetId: lcFindings[2].id, targetLabel: lcFindings[2].title, severity: "critical", eventDescription: "إنشاء ملاحظة: مخاطر عدم الامتثال لنظام المحتوى المحلي" },
+    { ...auditLogBase, productKey: "localcontentos", actorId: manager.id, actorName: manager.name, action: "SUPPLIER_ADDED", targetType: "supplier", targetId: suppliers[0].id, targetLabel: suppliers[0].name, eventDescription: "إضافة مورد: شركة الاتصالات السعودية (STC)" },
+    { ...auditLogBase, productKey: "localcontentos", actorId: reviewer.id, actorName: reviewer.name, action: "EVIDENCE_REVIEWED", targetType: "evidence", targetLabel: "شهادة-المحتوى-المحلي-STC.pdf", eventDescription: "مراجعة شهادة المحتوى المحلي لـ STC - تم التحقق" },
+    // -- SalesOS --
+    { ...auditLogBase, productKey: "salesos", actorId: admin.id, actorName: admin.name, action: "PIPELINE_CREATED", targetType: "pipeline", targetId: pipeline.id, targetLabel: pipeline.name, eventDescription: "إنشاء مسار المبيعات الرئيسي" },
+    { ...auditLogBase, productKey: "salesos", actorId: admin.id, actorName: admin.name, action: "DEAL_CREATED", targetType: "deal", targetId: deals[0].id, targetLabel: deals[0].title, eventDescription: "إنشاء صفقة: نظام تقنية المعلومات للمستقبل بقيمة 2.5M ريال" },
+    { ...auditLogBase, productKey: "salesos", actorId: operator.id, actorName: operator.name, action: "INTERACTION_LOGGED", targetType: "interaction", targetLabel: "اجتماع تعريفي بالشركة", eventDescription: "تسجيل تفاعل: اجتماع مع شركة تقنية المستقبل" },
+    // -- RiskOS --
+    { ...auditLogBase, productKey: "riskos", actorId: analyst.id, actorName: analyst.name, action: "ASSESSMENT_CREATED", targetType: "assessment", targetId: riskAssessment.id, targetLabel: riskAssessment.title, eventDescription: "إنشاء تقييم مخاطر للربع الثاني 2025" },
+    { ...auditLogBase, productKey: "riskos", actorId: admin.id, actorName: admin.name, action: "MODEL_CREATED", targetType: "risk_model", targetId: riskModel.id, targetLabel: riskModel.name, eventDescription: "إنشاء نموذج تقييم المخاطر الشامل" },
+    // -- Platform --
+    { ...auditLogBase, productKey: "platform", actorId: admin.id, actorName: admin.name, action: "USER_CREATED", targetType: "user", targetLabel: "أحمد المنصوري", eventDescription: "إنشاء حساب مدير النظام (أحمد المنصوري)" },
+    { ...auditLogBase, productKey: "platform", actorId: admin.id, actorName: admin.name, action: "ORG_CREATED", targetType: "organization", targetId: org.id, targetLabel: org.name, eventDescription: "إنشاء منظمة: مؤسسة الريادة للتقنية" },
+  ] });
+
   // SUMMARY
   // ═══════════════════════════════════════════════════════════════════
   console.log("\n========================================");
@@ -509,6 +592,7 @@ async function main() {
   Workspace             : ${workspace.slug}
   Project               : ${project.name}
 
+  Audit Clients         : ${auditClients.length}
   Users                 : ${users.length}
   Audit Engagements     : ${engagements.length}
   Audit Findings        : ${findings.length}
@@ -529,24 +613,28 @@ async function main() {
   LC Suppliers          : ${suppliers.length}
   LC Spend Records      : ${spendRecords.length}
   LC Findings           : ${lcFindings.length}
-  LC Evidence           : 2
+  LC Evidence           : 3
 
   Sales Pipeline        : 1 (+${stages.length} stages)
   Sales Accounts        : ${accounts.length}
   Sales Deals           : ${deals.length}
-  Sales Interactions    : 5
+  Sales Interactions    : 6
   Sales Contacts        : 4
 
   Content Workspaces    : ${contentWorkspaces.length}
   Content Items         : ${contentItemData.length}
 
   LocalContacts         : ${lcContacts.length}
-  Contact Relations     : 2
-  Contact Interactions  : 3
+  Contact Relations     : 3
+  Contact Interactions  : 4
+
+  PlatformAuditLog      : 20 (unified across all product areas)
+
+
 
   Risk Model            : 1
   Risk Assessment       : 1
-  Risk Procedures       : 2
+  Risk Procedures       : 3
 `);
 }
 

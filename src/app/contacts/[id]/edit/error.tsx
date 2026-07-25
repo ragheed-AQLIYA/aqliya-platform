@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Edit, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function EditContactError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Edit Contact error:", error);
+    clientLogger.error("Edit Contact error:", error);
   }, [error]);
 
   return (

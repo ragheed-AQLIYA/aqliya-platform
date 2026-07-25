@@ -9,10 +9,36 @@ import {
   processPrinciplesAr,
 } from "@/lib/marketing/start-hub-content";
 
-export const metadata: Metadata = {
-  title: startCopyAr.metadata.title,
-  description: startCopyAr.metadata.description,
-};
+export function generateMetadata(): Metadata {
+  const title = startCopyAr.metadata.title;
+  const description = startCopyAr.metadata.description;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com/start",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      type: "website",
+      images: [
+        {
+          url: "/og-start.png",
+          width: 1200,
+          height: 630,
+          alt: "ابدأ مع عقلية - AQLIYA",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-start.png"],
+    },
+  };
+}
 
 export default function StartPage() {
   const c = startCopyAr;

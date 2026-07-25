@@ -1,7 +1,7 @@
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     salesDeal: { findFirst: jest.fn(), findMany: jest.fn(), update: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -34,7 +34,7 @@ const BASE_DEAL = {
 describe("SalesOS governed outreach (PR-9)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
     prisma.salesDeal.update.mockResolvedValue(BASE_DEAL);
   });
 
@@ -117,7 +117,7 @@ describe("SalesOS governed outreach (PR-9)", () => {
           }),
         }),
       );
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.OUTREACH_DRAFT_CREATED,
@@ -216,7 +216,7 @@ describe("SalesOS governed outreach (PR-9)", () => {
 
       expect(updated.status).toBe("approved");
       expect(updated.reviewedById).toBe("user-1");
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.OUTREACH_REVIEWED,

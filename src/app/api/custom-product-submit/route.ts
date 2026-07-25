@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { checkRateLimit, clientIpRateLimitKey } from "@/lib/rate-limit";
+import { verifyPow } from "@/lib/security/pow";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "custom-product-submit" });
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 6;
@@ -39,11 +43,28 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
+
+    // Verify proof-of-work
+    const pow = body.pow as { token?: string; nonce?: string; hash?: string } | undefined;
+    if (!pow?.token || !pow?.nonce || !pow?.hash) {
+      return NextResponse.json(
+        { error: "Proof-of-work required. Request a challenge first." },
+        { status: 403 },
+      );
+    }
+    const powResult = verifyPow({ token: pow.token, nonce: pow.nonce, hash: pow.hash });
+    if (!powResult.valid) {
+      return NextResponse.json(
+        { error: `Verification failed: ${powResult.reason}` },
+        { status: 403 },
+      );
+    }
+
     const data = schema.parse(body);
 
     // Log for production monitoring (visible in Vercel Logs)
-    console.log(
-      `[CustomProductRequest] ${data.orgName} | ${data.systemCategory} | ${data.contactEmail}`,
+    logger.info(
+      `Custom product request: ${data.orgName} | ${data.systemCategory} | ${data.contactEmail}`,
     );
 
     // Resend integration — activate by setting RESEND_API_KEY env var
@@ -58,8 +79,8 @@ export async function POST(request: Request) {
         (process.env.NODE_ENV === "development" ? "requests@aqliya.com" : "");
 
       if (!receiverEmail || !senderEmail) {
-        console.warn(
-          "[CustomProductSubmit] Missing REQUEST_RECEIVER_EMAIL or REQUEST_SENDER_EMAIL — skipping email",
+        logger.warn(
+          "Missing REQUEST_RECEIVER_EMAIL or REQUEST_SENDER_EMAIL — skipping email",
         );
       } else {
         const res = await fetch("https://api.resend.com/emails", {
@@ -78,7 +99,7 @@ export async function POST(request: Request) {
         });
 
         if (!res.ok) {
-          console.error("[ResendError]", await res.text());
+          logger.error("Resend email send failed", undefined, { status: res.status });
         }
       }
     }
@@ -91,7 +112,7 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-    console.error("[CustomProductSubmitError]", err);
+    logger.error("Custom product submit error", err instanceof Error ? err : undefined);
     return NextResponse.json(
       { error: "حدث خطأ. يرجى المحاولة مرة أخرى." },
       { status: 500 },

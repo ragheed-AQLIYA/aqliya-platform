@@ -1,4 +1,5 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 
 import { prisma } from "@/lib/prisma";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
@@ -6,6 +7,9 @@ import { recordAuditOsAuditEvent } from "@/lib/audit/audit-events";
 import { evaluateIsaRule, type IsaEvaluationContext } from "./isa-rule-checks";
 import { loadIsaKnowledgeRules } from "./isa-rules-loader";
 import type { IsaRulesRunResult } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 function parseTeamMembers(team: unknown): Array<{ role?: string }> {
   if (!team) return [];
@@ -115,6 +119,6 @@ export async function maybeRunIsaRulesAfterFsRebuild(
   try {
     await runIsaRulesForEngagement(engagementId);
   } catch (err) {
-    console.error(`[ISA Rules] post-FS hook failed for ${engagementId}`, err);
+    logger.error(`[ISA Rules] post-FS hook failed for ${engagementId}`, err instanceof Error ? err : undefined);
   }
 }

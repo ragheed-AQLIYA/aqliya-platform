@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { getDecisions, getDashboardMetrics } from "@/actions/decisions";
+import { getDecisionMonthlyTrends } from "@/actions/decisions-monthly-trends";
+import { MonthlyTrendsChart } from "@/components/decisions/monthly-trends-chart";
 import { DecisionDashboard } from "@/components/decisions/decision-dashboard";
 import type { DashboardMetrics } from "@/components/decisions/decision-dashboard";
 import { KPICard } from "@/components/enterprise/kpi-card";
@@ -81,9 +83,10 @@ export default async function DecisionsPage({
   const takeParam = typeof sp.take === "string" ? parseInt(sp.take, 10) : DEFAULT_TAKE;
   const displayCount = Number.isFinite(takeParam) && takeParam > 0 ? takeParam : DEFAULT_TAKE;
 
-  const [decisionsResult, metricsResult] = await Promise.all([
+  const [decisionsResult, metricsResult, trendsResult] = await Promise.all([
     getDecisions({ take: displayCount }),
     getDashboardMetrics(),
+    getDecisionMonthlyTrends(),
   ]);
 
   const decisions =
@@ -175,6 +178,11 @@ export default async function DecisionsPage({
             module="decision"
           />
         </div>
+      )}
+
+      {/* Monthly Trends Chart */}
+      {trendsResult.success && trendsResult.data && (
+        <MonthlyTrendsChart trends={trendsResult.data} />
       )}
 
       {/* Dashboard Metrics */}

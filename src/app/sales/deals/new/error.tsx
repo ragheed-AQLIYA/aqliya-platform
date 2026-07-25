@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertTriangle, RefreshCw } from "lucide-react";
@@ -14,7 +16,7 @@ export default function SalesDealNewError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[SalesOS Deal New Error Boundary]", error);
+    clientLogger.error("[SalesOS Deal New Error Boundary]", error);
   }, [error]);
 
   return (

@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { FolderKanban, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function ProjectsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Projects error:", error);
+    clientLogger.error("Projects error:", error);
   }, [error]);
 
   return (

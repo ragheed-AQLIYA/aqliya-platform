@@ -4,9 +4,9 @@ import * as path from "node:path";
 
 jest.mock("@/lib/prisma", () => ({
   prisma: {
-    auditEvent: {
-      findMany: jest.fn(),
+    platformAuditLog: {
       deleteMany: jest.fn(),
+      findMany: jest.fn(),
       count: jest.fn(),
     },
   },
@@ -15,33 +15,14 @@ jest.mock("@/lib/prisma", () => ({
 import { archiveOldEvents, countEventsToArchive } from "../archival";
 
 const mockedPrisma = jest.requireMock("@/lib/prisma").prisma as {
-  auditEvent: {
-    findMany: jest.Mock;
+  platformAuditLog: {
     deleteMany: jest.Mock;
+    findMany: jest.Mock;
     count: jest.Mock;
   };
 };
 
 const FIXED_NOW = new Date("2026-07-03T00:00:00.000Z");
-
-function buildEvent(id: string, timestamp: string) {
-  return {
-    id,
-    engagementId: "eng-1",
-    eventType: "engagement.updated",
-    actorId: "user-1",
-    actorName: "Partner One",
-    actorRole: "partner",
-    targetType: "engagement",
-    targetId: "eng-1",
-    previousState: "draft",
-    newState: "approved",
-    description: `Updated ${id}`,
-    aiRelated: false,
-    metadata: { source: "unit-test", id },
-    timestamp: new Date(timestamp),
-  };
-}
 
 describe("audit archival service", () => {
   let archiveDir: string;
@@ -53,9 +34,9 @@ describe("audit archival service", () => {
     process.env.AUDIT_ARCHIVE_DIR = archiveDir;
     jest.clearAllMocks();
     jest.useFakeTimers().setSystemTime(FIXED_NOW);
-    mockedPrisma.auditEvent.deleteMany.mockResolvedValue({ count: 0 });
-    mockedPrisma.auditEvent.findMany.mockResolvedValue([]);
-    mockedPrisma.auditEvent.count.mockResolvedValue(0);
+    mockedPrisma.platformAuditLog.deleteMany.mockResolvedValue({ count: 0 });
+    mockedPrisma.platformAuditLog.findMany.mockResolvedValue([]);
+    mockedPrisma.platformAuditLog.count.mockResolvedValue(0);
   });
 
   afterEach(() => {
@@ -65,14 +46,15 @@ describe("audit archival service", () => {
   });
 
   it("counts archive candidates using the explicit retention window", async () => {
-    mockedPrisma.auditEvent.count.mockResolvedValue(7);
+    mockedPrisma.platformAuditLog.count.mockResolvedValue(7);
 
     const result = await countEventsToArchive(30);
 
     expect(result).toBe(7);
-    expect(mockedPrisma.auditEvent.count).toHaveBeenCalledWith({
+    expect(mockedPrisma.platformAuditLog.count).toHaveBeenCalledWith({
       where: {
-        timestamp: {
+        productKey: "audit_os",
+        createdAt: {
           lt: new Date("2026-06-03T00:00:00.000Z"),
         },
       },
@@ -81,14 +63,15 @@ describe("audit archival service", () => {
 
   it("falls back to the default retention when the env value is invalid", async () => {
     process.env.AUDIT_RETENTION_DAYS = "not-a-number";
-    mockedPrisma.auditEvent.count.mockResolvedValue(3);
+    mockedPrisma.platformAuditLog.count.mockResolvedValue(3);
 
     const result = await countEventsToArchive();
 
     expect(result).toBe(3);
-    expect(mockedPrisma.auditEvent.count).toHaveBeenCalledWith({
+    expect(mockedPrisma.platformAuditLog.count).toHaveBeenCalledWith({
       where: {
-        timestamp: {
+        productKey: "audit_os",
+        createdAt: {
           lt: new Date("2025-07-03T00:00:00.000Z"),
         },
       },
@@ -103,15 +86,15 @@ describe("audit archival service", () => {
     expect(report.retentionDays).toBe(90);
     expect(path.dirname(report.archiveFile)).toBe(archiveDir);
     expect(fs.existsSync(report.archiveFile)).toBe(false);
-    expect(mockedPrisma.auditEvent.deleteMany).not.toHaveBeenCalled();
+    expect(mockedPrisma.platformAuditLog.deleteMany).not.toHaveBeenCalled();
   });
 
   it("writes NDJSON entries and deletes archived records", async () => {
-    mockedPrisma.auditEvent.findMany.mockResolvedValue([
-      buildEvent("event-1", "2025-01-02T10:00:00.000Z"),
-      buildEvent("event-2", "2025-01-03T11:30:00.000Z"),
+    mockedPrisma.platformAuditLog.findMany.mockResolvedValue([
+      { id: "plat-1", sourceId: "event-1", action: "", actorId: "", actorName: "", targetType: "", targetId: "", beforeState: "", afterState: "", eventDescription: "", aiRelated: false, metadata: { engagementId: "" }, createdAt: new Date("2025-01-02T10:00:00.000Z") },
+      { id: "plat-2", sourceId: "event-2", action: "", actorId: "", actorName: "", targetType: "", targetId: "", beforeState: "", afterState: "", eventDescription: "", aiRelated: false, metadata: { engagementId: "" }, createdAt: new Date("2025-01-03T11:30:00.000Z") },
     ]);
-    mockedPrisma.auditEvent.deleteMany.mockResolvedValue({ count: 2 });
+    mockedPrisma.platformAuditLog.deleteMany.mockResolvedValue({ count: 2 });
 
     const report = await archiveOldEvents(180);
 
@@ -127,25 +110,37 @@ describe("audit archival service", () => {
 
     expect(lines).toHaveLength(2);
     expect(lines[0]).toMatchObject({
-      id: "event-1",
+      id: "plat-1",
       timestamp: "2025-01-02T10:00:00.000Z",
       archivedAt: FIXED_NOW.toISOString(),
-      metadata: { source: "unit-test", id: "event-1" },
+      metadata: { engagementId: "" },
     });
-    expect(mockedPrisma.auditEvent.deleteMany).toHaveBeenCalledWith({
+    expect(mockedPrisma.platformAuditLog.deleteMany).toHaveBeenCalledWith({
       where: {
-        id: { in: ["event-1", "event-2"] },
+        id: { in: ["plat-1", "plat-2"] },
       },
     });
   });
 
   it("deletes archived records in batches of 500", async () => {
-    const events = Array.from({ length: 501 }, (_, index) =>
-      buildEvent(`event-${index + 1}`, "2025-01-01T00:00:00.000Z"),
-    );
+    const events = Array.from({ length: 501 }, (_, index) => ({
+      id: `plat-${index + 1}`,
+      sourceId: `event-${index + 1}`,
+      action: "",
+      actorId: "",
+      actorName: "",
+      targetType: "",
+      targetId: "",
+      beforeState: "",
+      afterState: "",
+      eventDescription: "",
+      aiRelated: false,
+      metadata: { engagementId: "", source: "unit-test" },
+      createdAt: new Date("2025-01-01T00:00:00.000Z"),
+    }));
 
-    mockedPrisma.auditEvent.findMany.mockResolvedValue(events);
-    mockedPrisma.auditEvent.deleteMany
+    mockedPrisma.platformAuditLog.findMany.mockResolvedValue(events);
+    mockedPrisma.platformAuditLog.deleteMany
       .mockResolvedValueOnce({ count: 500 })
       .mockResolvedValueOnce({ count: 1 });
 
@@ -153,24 +148,25 @@ describe("audit archival service", () => {
 
     expect(report.eventsArchived).toBe(501);
     expect(report.eventsDeleted).toBe(501);
-    expect(mockedPrisma.auditEvent.deleteMany).toHaveBeenCalledTimes(2);
+    expect(mockedPrisma.platformAuditLog.deleteMany).toHaveBeenCalledTimes(2);
     expect(
-      mockedPrisma.auditEvent.deleteMany.mock.calls[0]?.[0]?.where?.id?.in,
+      mockedPrisma.platformAuditLog.deleteMany.mock.calls[0]?.[0]?.where?.id?.in,
     ).toHaveLength(500);
     expect(
-      mockedPrisma.auditEvent.deleteMany.mock.calls[1]?.[0]?.where?.id?.in,
+      mockedPrisma.platformAuditLog.deleteMany.mock.calls[1]?.[0]?.where?.id?.in,
     ).toHaveLength(1);
   });
 
   it("clamps retention to minimum 1 day when zero or negative is passed", async () => {
-    mockedPrisma.auditEvent.count.mockResolvedValue(99);
+    mockedPrisma.platformAuditLog.count.mockResolvedValue(99);
 
     const result = await countEventsToArchive(0);
 
     expect(result).toBe(99);
-    expect(mockedPrisma.auditEvent.count).toHaveBeenCalledWith({
+    expect(mockedPrisma.platformAuditLog.count).toHaveBeenCalledWith({
       where: {
-        timestamp: {
+        productKey: "audit_os",
+        createdAt: {
           lt: new Date("2026-07-02T00:00:00.000Z"), // today - 1 day
         },
       },
@@ -178,10 +174,10 @@ describe("audit archival service", () => {
   });
 
   it("writes the archive file inside AUDIT_ARCHIVE_DIR", async () => {
-    mockedPrisma.auditEvent.findMany.mockResolvedValue([
-      buildEvent("event-edge", "2025-01-01T00:00:00.000Z"),
+    mockedPrisma.platformAuditLog.findMany.mockResolvedValue([
+      { id: "plat-edge", sourceId: "event-edge", action: "", actorId: "", actorName: "", targetType: "", targetId: "", beforeState: "", afterState: "", eventDescription: "", aiRelated: false, metadata: { engagementId: "" }, createdAt: new Date("2025-01-01T00:00:00.000Z") },
     ]);
-    mockedPrisma.auditEvent.deleteMany.mockResolvedValue({ count: 1 });
+    mockedPrisma.platformAuditLog.deleteMany.mockResolvedValue({ count: 1 });
 
     const report = await archiveOldEvents(365);
 

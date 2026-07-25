@@ -2,7 +2,9 @@
 
 import "server-only";
 
-import { logger } from "@/lib/logger";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "localcontent", action: "content-repository" });
 import type { ContentStudioRepository } from "./repository-interface";
 import { FileContentStudioRepository } from "./file-repository";
 import { PrismaContentStudioRepository } from "./prisma-repository";
@@ -44,7 +46,6 @@ function guardFileBackendResolution(
 
   logger.warn(
     "File content backend active in production-like environment; institutional path expects Prisma with DATABASE_URL",
-    "local-content-content",
     { reason: resolution.reason },
   );
   return resolution;

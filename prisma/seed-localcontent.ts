@@ -28,74 +28,8 @@ async function main() {
     where: { platformOrganizationId: platformOrg.id, slug: "gulf-trading" },
   });
 
-  // ── Helper ───────────────────────────────────────────────────
-  const auditEvent = (projectId: string, actorId: string, actorName: string, action: string, entityType: string, entityId: string, metadata?: any) =>
-    prisma.localContentAuditEvent.create({
-      data: { projectId, actorId, actorName, action, entityType, entityId, metadata },
-    });
+  // [PHASE 5] Removed — localContentAuditEvent deprecated, audit events auto-generated via writePlatformAuditLog
 
-  // ── Projects ─────────────────────────────────────────────────
-  const projects = [
-    {
-      name: "مشروع تطوير المحتوى المحلي 2026",
-      reportingPeriod: "2026-Q1",
-      scopeDescription: "تقييم وتطوير المحتوى المحلي للمؤسسة للربع الأول 2026، مع تركيز على رفع نسبة المحتوى المحلي في المشتريات والخدمات.",
-      status: "Approved",
-      localContentScore: 42.5,
-    },
-    {
-      name: "مبادرة توطين المشتريات",
-      reportingPeriod: "2026-H1",
-      scopeDescription: "مبادرة استراتيجية لتوطين المشتريات وزيادة الاعتماد على الموردين المحليين في النصف الأول من 2026.",
-      status: "InReview",
-      localContentScore: 35.0,
-    },
-    {
-      name: "برنامج تعزيز المحتوى السعودي",
-      reportingPeriod: "2026-Q2",
-      scopeDescription: "برنامج شامل لتعزيز المحتوى السعودي في العقود والمناقصات الحكومية وفق متطلبات هيئة المحتوى المحلي.",
-      status: "DataCollection",
-      localContentScore: null,
-    },
-    {
-      name: "مشروع تقييم الموردين",
-      reportingPeriod: "2026-Q1",
-      scopeDescription: "تقييم شامل للموردين من حيث نسبة المحتوى المحلي والتوطين والامتثال لمتطلبات الهيئة.",
-      status: "ClassificationInProgress",
-      localContentScore: null,
-    },
-    {
-      name: "حوكمة الإنفاق المحلي",
-      reportingPeriod: "2026-H1",
-      scopeDescription: "حوكمة الإنفاق المحلي وربط المصروفات بنسب المحتوى المحلي لكل مورد وفئة إنفاق.",
-      status: "Draft",
-      localContentScore: null,
-    },
-  ];
-
-  const createdProjects: any[] = [];
-  for (const p of projects) {
-    const project = await prisma.localContentProject.create({
-      data: {
-        organizationId: org.id,
-        platformOrganizationId: platformOrg.id,
-        clientWorkspaceId: workspace?.id,
-        projectId: workspace ? undefined : undefined,
-        name: p.name,
-        reportingPeriod: p.reportingPeriod,
-        scopeDescription: p.scopeDescription,
-        status: p.status,
-        localContentScore: p.localContentScore,
-        createdById: admin.id,
-        createdByName: admin.name,
-      },
-    });
-    createdProjects.push(project);
-    await auditEvent(project.id, admin.id, admin.name, "project_created", "LocalContentProject", project.id, {
-      name: p.name,
-      status: p.status,
-    });
-  }
   console.log(`Created ${createdProjects.length} LocalContentProjects`);
 
   // ── Suppliers ────────────────────────────────────────────────

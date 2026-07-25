@@ -106,6 +106,18 @@ const mockPrisma = {
       mockStore.auditRiskProcedure.push(record)
       return record
     }),
+    createMany: jest.fn(async ({ data }: any) => {
+      const rows = Array.isArray(data) ? data : []
+      for (const row of rows) {
+        mockStore.auditRiskProcedure.push({
+          id: nextId('procedure'),
+          ...row,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+      }
+      return { count: rows.length }
+    }),
     findUnique: jest.fn(async ({ where }: any) => {
       return findInStore('auditRiskProcedure', where) ?? null
     }),

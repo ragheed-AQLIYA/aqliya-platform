@@ -64,29 +64,6 @@ enum OutcomeStatus {
   UNKNOWN
 }
 
-enum AuditAction {
-  DECISION_CREATED
-  DECISION_UPDATED
-  RECOMMENDATION_UPDATED
-  PATTERN_EXTRACTED
-  ALERT_RESOLVED
-  SECTOR_ASSIGNED
-  BENCHMARK_CREATED
-  OUTPUT_PUBLISHED
-  OUTPUT_UNPUBLISHED
-  SUBMITTED_FOR_REVIEW
-  DECISION_APPROVED
-  DECISION_APPROVED_WITH_CONDITIONS
-  DECISION_REJECTED
-  REVISION_REQUESTED
-  SNAPSHOT_PUBLISHED
-  CURRENT_PUBLISHED_WITHOUT_APPROVAL
-  STALE_PUBLISH_BLOCKED
-  STALE_PUBLISH_OVERRIDE
-  OUTCOME_CREATED
-  OUTCOME_UPDATED
-  OUTCOME_REVIEWED
-}
 
 // ==================== Integration & Access Enums ====================
 
@@ -335,6 +312,27 @@ model PlatformAuditLog {
   createdAt              DateTime        @default(now())
   hashChainEntry         HashChainEntry?
 
+  /// Organization-level tenant isolation.
+  organizationId        String?
+  /// Unified "before" state snapshot.
+  beforeState           String?
+  /// Unified "after" state snapshot.
+  afterState            String?
+  /// Human-readable description of the event.
+  eventDescription      String?
+  /// Flag indicating AI involvement in this event.
+  aiRelated             Boolean         @default(false)
+  /// AI confidence score (0.0-1.0) when applicable.
+  aiConfidence          Float?
+  /// AI action status: success, partial, or failed.
+  aiStatus              String?
+  /// Summary of the AI input payload.
+  inputSummary          Json?
+  /// Summary of the AI output payload.
+  outputSummary         Json?
+  /// Operation duration in milliseconds.
+  durationMs            Int?
+
   @@index([platformOrganizationId, createdAt])
   @@index([clientWorkspaceId, createdAt])
   @@index([projectId, createdAt])
@@ -344,6 +342,8 @@ model PlatformAuditLog {
   @@index([targetType, targetId])
   @@index([sourceSystem, sourceId])
   @@index([createdAt])
+  @@index([organizationId, createdAt])
+  @@index([organizationId, action, createdAt])
 }
 
 model PlatformOutboxEvent {
@@ -568,7 +568,6 @@ model Organization {
   name             String
   users            User[]
   decisions        Decision[]
-  auditLogs        AuditLog[]
   signals          DecisionMonitoringSignal[]
   alerts           DecisionRiskAlert[]
   decisionPatterns DecisionPattern[]
@@ -697,7 +696,6 @@ model User {
   approvedDecisions                     Decision[]                            @relation("DecisionApprover")
   approvals                             Approval[]                            @relation("ApprovalApprover")
   reviewedOutcomes                      DecisionOutcome[]                     @relation("OutcomeReviewer")
-  auditLogs                             AuditLog[]
   publishedRecommendations              Recommendation[]                      @relation("RecommendationPublisher")
   accounts                              Account[]
   sessions                              Session[]
@@ -776,7 +774,6 @@ model Decision {
   recommendation    Recommendation?
   approvals         Approval[]
   outcome           DecisionOutcome?
-  auditLogs         AuditLog[]
   reports           DecisionReport[]
   signals           DecisionMonitoringSignal[]
   alerts            DecisionRiskAlert[]
@@ -1114,24 +1111,6 @@ model DecisionOutcome {
   @@index([outcomeStatus])
 }
 
-model AuditLog {
-  id             String       @id @default(cuid())
-  decisionId     String
-  decision       Decision     @relation(fields: [decisionId], references: [id], onDelete: Restrict)
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  userId         String
-  user           User         @relation(fields: [userId], references: [id])
-  action         AuditAction
-  entity         String?
-  before         String?
-  after          String?
-  createdAt      DateTime     @default(now())
-
-  @@index([organizationId])
-  @@index([decisionId])
-  @@index([userId, createdAt])
-}
 
 // ==================== A-3 Intelligence Layer ====================
 
@@ -1375,7 +1354,6 @@ model AuditEngagement {
   reviewComments         AuditReviewComment[]
   approvalRecords        AuditApprovalRecord[]
   publications           AuditPublicationPackage[]
-  events                 AuditEvent[]
   aiOutputs              AuditAiOutput[]
   pilotFeedback          PilotFeedback[]
   pilotBlockers          ProductionBlocker[]
@@ -1735,26 +1713,6 @@ model AuditPublicationPackage {
   @@index([engagementId])
 }
 
-model AuditEvent {
-  id            String          @id @default(cuid())
-  engagementId  String
-  engagement    AuditEngagement @relation(fields: [engagementId], references: [id], onDelete: Cascade)
-  eventType     String
-  actorId       String
-  actorName     String
-  actorRole     String
-  targetType    String
-  targetId      String
-  previousState String          @default("")
-  newState      String          @default("")
-  description   String
-  aiRelated     Boolean         @default(false)
-  metadata      Json?
-  timestamp     DateTime        @default(now())
-  createdAt     DateTime        @default(now())
-
-  @@index([engagementId, eventType, timestamp])
-}
 
 model AuditAiOutput {
   id               String          @id @default(cuid())
@@ -1923,23 +1881,6 @@ enum SunbulReviewStatus {
   Returned
 }
 
-enum SunbulAuditAction {
-  CLIENT_CREATED
-  CLIENT_UPDATED
-  MEMBERSHIP_CREATED
-  MEMBERSHIP_ROLE_CHANGED
-  MEMBERSHIP_STATUS_CHANGED
-  RECORD_CREATED
-  RECORD_UPDATED
-  RECORD_SUBMITTED
-  RECORD_APPROVED
-  RECORD_RETURNED
-  RECORD_ARCHIVED
-  RECORD_EXPORTED
-  REVIEW_CREATED
-  DOCUMENT_CREATED
-  DOCUMENT_DELETED
-}
 
 model SunbulClient {
   id                     String   @id @default(cuid())
@@ -1958,7 +1899,6 @@ model SunbulClient {
   records              SunbulRecord[]
   documents            SunbulDocument[]
   reviews              SunbulReview[]
-  auditEvents          SunbulAuditEvent[]
 
   @@index([status])
   @@index([createdAt])
@@ -2042,24 +1982,6 @@ model SunbulReview {
   @@index([reviewerId])
 }
 
-model SunbulAuditEvent {
-  id         String            @id @default(cuid())
-  clientId   String
-  client     SunbulClient      @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  recordId   String?
-  actorId    String
-  action     SunbulAuditAction
-  entityType String
-  entityId   String
-  metadata   Json?
-  createdAt  DateTime          @default(now())
-
-  @@index([clientId])
-  @@index([recordId])
-  @@index([actorId])
-  @@index([action])
-  @@index([createdAt])
-}
 
 // ==================== LocalContentOS (Strategic Second Product) ====================
 
@@ -2088,7 +2010,6 @@ model LocalContentProject {
   reviews         LocalContentReview[]
   approvals       LocalContentApproval[]
   reports         LocalContentReport[]
-  auditEvents     LocalContentAuditEvent[]
   workbooks       LcWorkbook[]
 
   @@index([organizationId, createdAt])
@@ -2290,26 +2211,6 @@ model LocalContentReport {
   @@index([createdAt])
 }
 
-model LocalContentAuditEvent {
-  id         String              @id @default(cuid())
-  projectId  String
-  project    LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  actorId    String
-  actorName  String?
-  action     String
-  entityType String
-  entityId   String
-  before     String?
-  after      String?
-  metadata   Json?
-  createdAt  DateTime            @default(now())
-
-  @@index([projectId, createdAt])
-  @@index([actorId, createdAt])
-  @@index([action])
-  @@index([entityType, entityId])
-  @@index([createdAt])
-}
 
 // ─── LocalContentOS Content Studio (governed workflow — separate from compliance LocalContent*) ───
 
@@ -2744,25 +2645,6 @@ model SalesApproval {
   @@index([proposalId])
 }
 
-model SalesAuditEvent {
-  id                     String   @id @default(cuid())
-  organizationId         String
-  platformOrganizationId String?
-  actorId                String
-  actorName              String?
-  action                 String
-  targetType             String
-  targetId               String
-  metadata               Json?
-  createdAt              DateTime @default(now())
-
-  @@index([organizationId, createdAt])
-  @@index([platformOrganizationId, createdAt])
-  @@index([actorId, createdAt])
-  @@index([action])
-  @@index([targetType, targetId])
-  @@index([createdAt])
-}
 
 // ==================== Intelligence Core — RAG (IC-01 pgvector) ====================
 // Embedding storage strategy:
@@ -2953,26 +2835,6 @@ model LocalContactInteraction {
   @@index([platformOrganizationId, createdAt])
 }
 
-// ─── WorkflowOS L5: Audit + Evidence ────────────────────────────────────
-
-model WorkflowAuditEvent {
-  id                     String   @id @default(cuid())
-  organizationId         String
-  platformOrganizationId String?
-  recordId               String
-  actorId                String
-  actorName              String?
-  action                 String // created | advanced | completed | rejected | cancelled | assigned | updated
-  fromStatus             String?
-  toStatus               String?
-  comment                String?
-  metadata               Json?
-  createdAt              DateTime @default(now())
-
-  @@index([organizationId, recordId, createdAt])
-  @@index([organizationId, actorId, createdAt])
-  @@index([platformOrganizationId, createdAt])
-}
 
 model WorkflowEvidence {
   id                     String   @id @default(cuid())
@@ -3954,6 +3816,7 @@ model KnowledgeCandidateEvidence {
 
   @@index([candidateId])
   @@index([evidenceType, evidenceId])
+  @@index([organizationId])
 }
 
 model KnowledgePromotionHistory {
@@ -5435,31 +5298,6 @@ model LcOrganizationMatchMemory {
 
 // ── LocalContentOS AI Advisor V3 — AI Audit Events ──
 
-/// Captures every AI action for traceability
-/// Phase 6 — Full AI auditability
-model LcAiAuditEvent {
-  id             String   @id @default(cuid())
-  organizationId String
-  projectId      String?
-  workbookId     String?
-  action         String // AI_REVIEW_RUN, PATTERN_SUGGESTED, RECOMMENDATION_GENERATED, SIMULATION_RUN, etc.
-  actorId        String?
-  providerId     String? // local, deterministic, openai, anthropic, cloud
-  modelVersion   String? // qwen3:8b, gpt-4, etc.
-  promptVersion  String? // prompt template version used
-  confidence     Float? // confidence of the AI output
-  status         String // success, partial, failed
-  inputSummary   Json? // Summary of what was sent
-  outputSummary  Json? // Summary of what was returned
-  warningCount   Int      @default(0)
-  durationMs     Int      @default(0)
-  metadata       Json?
-  createdAt      DateTime @default(now())
-
-  @@index([organizationId, action])
-  @@index([organizationId, workbookId])
-  @@index([organizationId, createdAt])
-}
 
 /// Stores AI-generated recommendations for improving local content score
 /// Phase 2 — Recommendation Engine
@@ -5837,3 +5675,4 @@ model ComponentMateriality {
   @@index([groupEngagementId])
   @@index([planningMaterialityId])
 }
+

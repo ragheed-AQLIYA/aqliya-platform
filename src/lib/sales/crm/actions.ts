@@ -55,7 +55,7 @@ export async function createCrmConnection(
   });
 
   await writePlatformAuditLog({
-    productKey: "sales_os",
+    productKey: "salesos",
     action: "crm.connection.created",
     platformOrganizationId: orgId,
     actorId: user.id,
@@ -111,7 +111,7 @@ export async function updateCrmConnection(
   });
 
   await writePlatformAuditLog({
-    productKey: "sales_os",
+    productKey: "salesos",
     action: "crm.connection.updated",
     platformOrganizationId: orgId,
     actorId: user.id,
@@ -138,7 +138,7 @@ export async function deleteCrmConnection(
   await prisma.crmConnection.delete({ where: { id: connectionId } });
 
   await writePlatformAuditLog({
-    productKey: "sales_os",
+    productKey: "salesos",
     action: "crm.connection.deleted",
     platformOrganizationId: orgId,
     actorId: user.id,
@@ -190,7 +190,7 @@ export async function toggleSync(
   });
 
   await writePlatformAuditLog({
-    productKey: "sales_os",
+    productKey: "salesos",
     action: enabled ? "crm.connection.sync_enabled" : "crm.connection.sync_disabled",
     platformOrganizationId: orgId,
     actorId: user.id,
@@ -248,4 +248,45 @@ export async function listSyncLogs(
   const user = await getCurrentUser();
   const orgId = await requireOrg(organizationId);
   return orchestratorListLogs(connectionId, orgId, limit);
+}
+
+// ─── Additional server actions ───
+
+export async function triggerCrmSyncAction(organizationId: string, connectionId: string) {
+  const user = await getCurrentUser();
+  const orgId = await requireOrg(organizationId);
+  return runSync(connectionId, orgId, { id: user.id, name: user.name ?? undefined });
+}
+
+export async function getCrmSyncStatusAction(organizationId: string, connectionId: string) {
+  const user = await getCurrentUser();
+  await requireOrg(organizationId);
+
+  const log = await prisma.crmSyncLog.findFirst({
+    where: { connectionId, organizationId },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      status: true,
+      totalRecords: true,
+      createdRecords: true,
+      updatedRecords: true,
+      failedRecords: true,
+      skippedRecords: true,
+      createdAt: true,
+      completedAt: true,
+      errorDetails: true,
+    },
+  });
+
+  const connection = await prisma.crmConnection.findFirst({
+    where: { id: connectionId, organizationId },
+    select: { lastSyncAt: true, lastSyncStatus: true },
+  });
+
+  return {
+    lastSyncAt: connection?.lastSyncAt ?? null,
+    lastSyncStatus: connection?.lastSyncStatus ?? null,
+    latestLog: log,
+  };
 }

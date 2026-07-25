@@ -101,9 +101,11 @@ export async function recordReviewMappingFeedback(params: {
 export async function getLatestClassificationSources(
   engagementId: string,
 ): Promise<Record<string, ClassificationSource>> {
+  // Bounded by engagementId — one engagement has a limited number of classification rows
   const rows = await prisma.tBClassificationHistory.findMany({
     where: { engagementId },
     orderBy: { createdAt: "desc" },
+    take: 5000,
     select: { accountCode: true, source: true },
   });
 

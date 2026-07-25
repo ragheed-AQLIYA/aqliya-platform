@@ -3,10 +3,14 @@
 // Renders nothing — pure side-effect.
 
 import { bootstrap } from "@/lib/platform/bootstrap";
+import { createLogger } from "@/lib/observability/logger";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 // Run bootstrap at module import time (Server Component)
 bootstrap().catch((err) =>
-  console.error("[BootstrapInit] Bootstrap failed:", err),
+  logger.error("[BootstrapInit] Bootstrap failed:", err instanceof Error ? err : undefined),
 );
 
 export function BootstrapInit() {

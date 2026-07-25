@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import {
@@ -8,6 +9,15 @@ import {
 } from "@/lib/platform/agent-memory";
 
 export const dynamic = "force-dynamic";
+
+const agentMemoryPostSchema = z.object({
+  agentId: z.string().min(1),
+  memoryKey: z.string().min(1),
+  memoryValue: z.unknown(),
+  agentType: z.string().optional(),
+  ttl: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+});
 
 export async function GET(request: NextRequest) {
   try {
@@ -74,15 +84,25 @@ export async function POST(request: NextRequest) {
       throw new Error("Access denied: OPERATOR role required");
     }
 
-    const body = await request.json();
-    const { agentId, memoryKey, memoryValue, agentType, ttl, tags } = body;
-
-    if (!agentId || !memoryKey || memoryValue === undefined) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
       return NextResponse.json(
-        { success: false, error: { code: "VALIDATION_ERROR", message: "agentId, memoryKey, and memoryValue are required" }, meta: { timestamp: new Date().toISOString() } },
+        { success: false, error: { code: "VALIDATION_ERROR", message: "Invalid JSON body" }, meta: { timestamp: new Date().toISOString() } },
         { status: 400 },
       );
     }
+
+    const parsed = agentMemoryPostSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: { code: "VALIDATION_ERROR", message: parsed.error.issues.map((i) => i.message).join(" ") }, meta: { timestamp: new Date().toISOString() } },
+        { status: 400 },
+      );
+    }
+
+    const { agentId, memoryKey, memoryValue, agentType, ttl, tags } = parsed.data;
 
     await setAgentMemory(user.organizationId, {
       agentId,

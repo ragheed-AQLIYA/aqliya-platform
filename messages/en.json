@@ -28,7 +28,17 @@
     "error": "Error",
     "success": "Success",
     "required": "Required",
-    "optional": "Optional"
+    "optional": "Optional",
+    "skipToContent": "Skip to content",
+    "topBarTagline": "Private Governed Institutional Intelligence Platform",
+    "topBarStatus": "Institutional operating platform — managed cloud",
+    "switchToEnglish": "Switch to English",
+    "switchToArabic": "Switch to Arabic",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mobileNavigation": "Mobile main navigation",
+    "mainNavigation": "Main navigation",
+    "bookSession": "Book a Diagnostic Session"
   },
   "settings": {
     "title": "Settings",
@@ -795,6 +805,40 @@
         "platformOrgNotFound": "Workspace's platform org not found",
         "unknown": "Unknown error"
       }
+    }
+  },
+  "faq": {
+    "home": {
+      "count": "5",
+      "title": "Frequently Asked Questions",
+      "eyebrow": "FAQ",
+      "q1": "What is AQLIYA?",
+      "a1": "AQLIYA is a Private Governed Institutional Intelligence Platform that helps institutions build governed, evidence-based intelligent systems inside a controlled environment, with governance, evidence, permissions, and audit trail.",
+      "q2": "Is AQLIYA compliant with Saudi regulations?",
+      "a2": "Yes, AQLIYA is designed with Saudi regulatory compliance in mind, including data residency, Arabic-first UX, and governance controls aligned with local standards.",
+      "q3": "What products are included?",
+      "a3": "AQLIYA includes AuditOS, LocalContentOS, DecisionOS, SalesOS, and Office AI Assistant — all governed by a shared intelligence core.",
+      "q4": "How does the pilot work?",
+      "a4": "We set up a sandbox environment with sample data, walk through real workflows, and validate fit before any commitment.",
+      "q5": "Is my data secure?",
+      "a5": "AQLIYA enforces tenant isolation, RBAC, encrypted storage, full audit trails, and evidence-linked outputs. AI assists — humans decide."
+    },
+    "pricing": {
+      "count": "6",
+      "title": "Pricing & Plans FAQ",
+      "eyebrow": "FAQ",
+      "q1": "Is there a free trial?",
+      "a1": "Yes, we provide a free trial environment with limited access to AuditOS to understand the platform before making a decision.",
+      "q2": "How is the Professional plan priced?",
+      "a2": "Pricing depends on the number of activated systems, organization size, and customization scope. We typically offer monthly and annual plans with discounts.",
+      "q3": "What's the difference between cloud and private deployment?",
+      "a3": "Cloud deployment is fully managed by AQLIYA with automatic updates. Private deployment is within the organization's infrastructure with full control over data and infrastructure.",
+      "q4": "Can I upgrade between plans later?",
+      "a4": "Yes, you can start with the Starter plan and upgrade to Professional or Enterprise at any time while preserving your data and settings.",
+      "q5": "Do prices include training and support?",
+      "a5": "The Professional plan includes team training, path setup, and priority support. The Enterprise plan includes all of this with a dedicated account manager and security consulting.",
+      "q6": "Are there offers for government or non-profit entities?",
+      "a6": "Yes, we offer tailored terms for government entities and non-profit organizations. Contact us to discuss available options."
     }
   },
   "decisions": {

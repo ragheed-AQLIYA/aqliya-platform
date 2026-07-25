@@ -13,6 +13,7 @@ import {
   assertProjectAccess,
   ProjectAccessError,
 } from "@/lib/local-content/guards";
+import { enforce } from "@/lib/kernel";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { RATE_LIMIT_PRESETS } from "@/lib/platform/rate-limiter/presets";
@@ -66,7 +67,8 @@ export async function createLocalContentEvidenceAction(
   const { filename, supplierId, spendRecordId, fileType, mimeType, evidenceType } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_evidence");
+    const { user, project } = await assertProjectAccess(projectId, "create_evidence");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "create");
     await requirePermission(Permission.EVIDENCE_UPLOAD, ResourceType.EVIDENCE);
 
     const evidence = await createEvidenceEntry(
@@ -126,7 +128,8 @@ export async function updateLocalContentEvidenceStatusAction(
   const { status: validatedStatus } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "review_evidence");
+    const { user, project } = await assertProjectAccess(projectId, "review_evidence");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "update");
     await requirePermission(Permission.REVIEW_MANAGEMENT, ResourceType.REVIEW);
     const existing = await prisma.localContentEvidence.findUnique({
       where: { id: evidenceId },
@@ -173,7 +176,8 @@ export async function deleteLocalContentEvidenceAction(
   evidenceId: string,
 ): Promise<ActionResult<void>> {
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_evidence");
+    const { user, project } = await assertProjectAccess(projectId, "create_evidence");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "delete");
     await requirePermission(Permission.EVIDENCE_DELETION, ResourceType.EVIDENCE);
     const deletedEvidence = await deleteEvidence(projectId, evidenceId, {
       id: user.id,
@@ -222,7 +226,8 @@ export async function uploadLocalContentEvidenceFileAction(
   }
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_evidence");
+    const { user, project } = await assertProjectAccess(projectId, "create_evidence");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "create");
     await requirePermission(Permission.EVIDENCE_UPLOAD, ResourceType.EVIDENCE);
     // Rate limit: file upload + scan is I/O heavy
     const { allowed } = await checkRateLimit(`lcos:upload:${user.id}`, RATE_LIMIT_PRESETS.LCOS_EXPORT);
@@ -321,16 +326,16 @@ export async function uploadLocalContentEvidenceFileAction(
       },
     });
 
-    const project = await prisma.localContentProject.findUnique({
+    const projectRecord = await prisma.localContentProject.findUnique({
       where: { id: projectId },
       select: { organizationId: true },
     });
-    if (project?.organizationId) {
+    if (projectRecord?.organizationId) {
       const { linkLocalContentEvidenceAfterUpload } = await import(
         "@/lib/core/evidence/link-after-upload"
       );
       await linkLocalContentEvidenceAfterUpload({
-        organizationId: project.organizationId,
+        organizationId: projectRecord.organizationId,
         projectId,
         evidenceId: evidence.id,
         filename: evidence.filename,

@@ -2,7 +2,7 @@ jest.mock("@/lib/prisma", () => ({
   prisma: {
     salesDeal: { findFirst: jest.fn(), update: jest.fn() },
     salesEvidenceLink: { count: jest.fn(), findMany: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -42,7 +42,7 @@ const DRAFT_MEMO = {
 describe("SalesOS conversion memo (PR-13)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
     prisma.salesDeal.update.mockResolvedValue(BASE_DEAL);
     prisma.salesEvidenceLink.count.mockResolvedValue(1);
     prisma.salesEvidenceLink.findMany.mockResolvedValue([
@@ -98,7 +98,7 @@ describe("SalesOS conversion memo (PR-13)", () => {
           }),
         }),
       );
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.CONVERSION_MEMO_UPDATED,

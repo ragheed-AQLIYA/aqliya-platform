@@ -26,10 +26,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import dynamic from "next/dynamic";
 import { getTraceabilityAction } from "@/actions/audit-actions";
 import type { AuditEvent, Engagement } from "@/types/audit";
-import { TraceabilityDrawer } from "@/components/audit/shared/traceability-drawer";
 import type { TraceabilityNode } from "@/components/audit/shared/traceability-drawer";
+
+const TraceabilityDrawer = dynamic(
+  () =>
+    import("@/components/audit/shared/traceability-drawer").then(
+      (m) => ({ default: m.TraceabilityDrawer }),
+    ),
+  { ssr: false, loading: () => <div className="h-20 animate-pulse rounded-md bg-muted" /> },
+);
 import {
   getAuditEventsAction,
   getEngagementAction,

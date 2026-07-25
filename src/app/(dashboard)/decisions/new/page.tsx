@@ -97,7 +97,7 @@ export default function NewDecisionPage() {
       targetDate: formData.targetDate || undefined,
     })
 
-    if (result.success && result.data) {
+    if (result.success) {
       router.push(`/decisions/${result.data.id}`)
       router.refresh()
     } else {

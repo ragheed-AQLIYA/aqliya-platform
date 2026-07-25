@@ -11,10 +11,17 @@
  * - body.reviewerId is IGNORED — session.user.id is used instead
  */
 
+import { z } from "zod";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth-next";
 import { applyReviewDecision, submitForReview } from "@/lib/tb-intelligence/knowledge-mining/review-workflow";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
+
+const knowledgeReviewSchema = z.object({
+  action: z.enum(["submit", "approve", "reject"]),
+  candidateId: z.string().min(1),
+  notes: z.string().max(5000).optional(),
+});
 
 function requireRole(user: Record<string, unknown>, minRole: "ADMIN" | "OPERATOR" | "VIEWER"): void {
   const role = user.role as string | undefined;
@@ -33,40 +40,47 @@ export async function POST(request: Request) {
     requireRole(session.user as Record<string, unknown>, "OPERATOR");
 
     const user = session.user as Record<string, unknown>;
-    const body = await request.json();
 
-    if (!body.action || !body.candidateId) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
+
+    const parsed = knowledgeReviewSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "action and candidateId are required" },
+        { error: parsed.error.issues.map((i) => i.message).join(" ") },
         { status: 400 },
       );
     }
 
+    const { action, candidateId, notes } = parsed.data;
+
     let result;
 
-    switch (body.action) {
+    switch (action) {
       case "submit":
         // reviewerId was caller-supplied — IGNORED; derived from session
-        result = await submitForReview(body.candidateId, user.id as string);
+        result = await submitForReview(candidateId, user.id as string);
         break;
       case "approve":
         result = await applyReviewDecision({
-          candidateId: body.candidateId,
+          candidateId,
           reviewerId: user.id as string, // session-derived, not caller-supplied
           decision: "APPROVED",
-          notes: body.notes,
+          notes,
         });
         break;
       case "reject":
         result = await applyReviewDecision({
-          candidateId: body.candidateId,
+          candidateId,
           reviewerId: user.id as string, // session-derived, not caller-supplied
           decision: "REJECTED",
-          notes: body.notes,
+          notes,
         });
         break;
-      default:
-        return NextResponse.json({ error: `Unknown action: ${body.action}` }, { status: 400 });
     }
 
     return NextResponse.json(result);

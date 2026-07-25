@@ -1,10 +1,10 @@
 {
-  "at": "2026-07-11T11:27:35.609Z",
+  "at": "2026-07-18T18:34:59.315Z",
   "cards": [
     {
       "product": "AuditOS",
-      "ready": 67,
-      "releaseReady": false,
+      "ready": 100,
+      "releaseReady": true,
       "checks": [
         {
           "name": "Tests",
@@ -13,8 +13,8 @@
         },
         {
           "name": "Security",
-          "ok": false,
-          "detail": "platform security 65"
+          "ok": true,
+          "detail": "platform security 89"
         },
         {
           "name": "Docs",
@@ -23,18 +23,18 @@
         },
         {
           "name": "Authorization",
-          "ok": false,
+          "ok": true,
           "detail": "enforce adoption rule"
         },
         {
           "name": "Architecture",
           "ok": true,
-          "detail": "compliance 82%"
+          "detail": "compliance 100%"
         },
         {
           "name": "Performance",
-          "ok": false,
-          "detail": "score 57 — warn if below"
+          "ok": true,
+          "detail": "score 72 — warn if below"
         },
         {
           "name": "Pilot",
@@ -56,8 +56,8 @@
     },
     {
       "product": "DecisionOS",
-      "ready": 67,
-      "releaseReady": false,
+      "ready": 100,
+      "releaseReady": true,
       "checks": [
         {
           "name": "Tests",
@@ -66,8 +66,8 @@
         },
         {
           "name": "Security",
-          "ok": false,
-          "detail": "platform security 65"
+          "ok": true,
+          "detail": "platform security 89"
         },
         {
           "name": "Docs",
@@ -76,18 +76,18 @@
         },
         {
           "name": "Authorization",
-          "ok": false,
+          "ok": true,
           "detail": "enforce adoption rule"
         },
         {
           "name": "Architecture",
           "ok": true,
-          "detail": "compliance 82%"
+          "detail": "compliance 100%"
         },
         {
           "name": "Performance",
-          "ok": false,
-          "detail": "score 57 — warn if below"
+          "ok": true,
+          "detail": "score 72 — warn if below"
         },
         {
           "name": "Pilot",
@@ -109,8 +109,8 @@
     },
     {
       "product": "LocalContentOS",
-      "ready": 67,
-      "releaseReady": false,
+      "ready": 100,
+      "releaseReady": true,
       "checks": [
         {
           "name": "Tests",
@@ -119,8 +119,8 @@
         },
         {
           "name": "Security",
-          "ok": false,
-          "detail": "platform security 65"
+          "ok": true,
+          "detail": "platform security 89"
         },
         {
           "name": "Docs",
@@ -129,18 +129,18 @@
         },
         {
           "name": "Authorization",
-          "ok": false,
+          "ok": true,
           "detail": "enforce adoption rule"
         },
         {
           "name": "Architecture",
           "ok": true,
-          "detail": "compliance 82%"
+          "detail": "compliance 100%"
         },
         {
           "name": "Performance",
-          "ok": false,
-          "detail": "score 57 — warn if below"
+          "ok": true,
+          "detail": "score 72 — warn if below"
         },
         {
           "name": "Pilot",
@@ -162,8 +162,8 @@
     },
     {
       "product": "SalesOS",
-      "ready": 67,
-      "releaseReady": false,
+      "ready": 100,
+      "releaseReady": true,
       "checks": [
         {
           "name": "Tests",
@@ -172,8 +172,8 @@
         },
         {
           "name": "Security",
-          "ok": false,
-          "detail": "platform security 65"
+          "ok": true,
+          "detail": "platform security 89"
         },
         {
           "name": "Docs",
@@ -182,18 +182,18 @@
         },
         {
           "name": "Authorization",
-          "ok": false,
+          "ok": true,
           "detail": "enforce adoption rule"
         },
         {
           "name": "Architecture",
           "ok": true,
-          "detail": "compliance 82%"
+          "detail": "compliance 100%"
         },
         {
           "name": "Performance",
-          "ok": false,
-          "detail": "score 57 — warn if below"
+          "ok": true,
+          "detail": "score 72 — warn if below"
         },
         {
           "name": "Pilot",
@@ -215,8 +215,8 @@
     },
     {
       "product": "WorkflowOS",
-      "ready": 67,
-      "releaseReady": false,
+      "ready": 100,
+      "releaseReady": true,
       "checks": [
         {
           "name": "Tests",
@@ -225,8 +225,8 @@
         },
         {
           "name": "Security",
-          "ok": false,
-          "detail": "platform security 65"
+          "ok": true,
+          "detail": "platform security 89"
         },
         {
           "name": "Docs",
@@ -235,18 +235,18 @@
         },
         {
           "name": "Authorization",
-          "ok": false,
+          "ok": true,
           "detail": "enforce adoption rule"
         },
         {
           "name": "Architecture",
           "ok": true,
-          "detail": "compliance 82%"
+          "detail": "compliance 100%"
         },
         {
           "name": "Performance",
-          "ok": false,
-          "detail": "score 57 — warn if below"
+          "ok": true,
+          "detail": "score 72 — warn if below"
         },
         {
           "name": "Pilot",
@@ -268,8 +268,8 @@
     },
     {
       "product": "RiskOS",
-      "ready": 67,
-      "releaseReady": false,
+      "ready": 100,
+      "releaseReady": true,
       "checks": [
         {
           "name": "Tests",
@@ -278,8 +278,8 @@
         },
         {
           "name": "Security",
-          "ok": false,
-          "detail": "platform security 65"
+          "ok": true,
+          "detail": "platform security 89"
         },
         {
           "name": "Docs",
@@ -288,18 +288,18 @@
         },
         {
           "name": "Authorization",
-          "ok": false,
+          "ok": true,
           "detail": "enforce adoption rule"
         },
         {
           "name": "Architecture",
           "ok": true,
-          "detail": "compliance 82%"
+          "detail": "compliance 100%"
         },
         {
           "name": "Performance",
-          "ok": false,
-          "detail": "score 57 — warn if below"
+          "ok": true,
+          "detail": "score 72 — warn if below"
         },
         {
           "name": "Pilot",
@@ -321,8 +321,8 @@
     },
     {
       "product": "LocalContactOS",
-      "ready": 67,
-      "releaseReady": false,
+      "ready": 100,
+      "releaseReady": true,
       "checks": [
         {
           "name": "Tests",
@@ -331,8 +331,8 @@
         },
         {
           "name": "Security",
-          "ok": false,
-          "detail": "platform security 65"
+          "ok": true,
+          "detail": "platform security 89"
         },
         {
           "name": "Docs",
@@ -341,18 +341,18 @@
         },
         {
           "name": "Authorization",
-          "ok": false,
+          "ok": true,
           "detail": "enforce adoption rule"
         },
         {
           "name": "Architecture",
           "ok": true,
-          "detail": "compliance 82%"
+          "detail": "compliance 100%"
         },
         {
           "name": "Performance",
-          "ok": false,
-          "detail": "score 57 — warn if below"
+          "ok": true,
+          "detail": "score 72 — warn if below"
         },
         {
           "name": "Pilot",
@@ -374,8 +374,8 @@
     },
     {
       "product": "ContentStudio",
-      "ready": 67,
-      "releaseReady": false,
+      "ready": 100,
+      "releaseReady": true,
       "checks": [
         {
           "name": "Tests",
@@ -384,8 +384,8 @@
         },
         {
           "name": "Security",
-          "ok": false,
-          "detail": "platform security 65"
+          "ok": true,
+          "detail": "platform security 89"
         },
         {
           "name": "Docs",
@@ -394,18 +394,18 @@
         },
         {
           "name": "Authorization",
-          "ok": false,
+          "ok": true,
           "detail": "enforce adoption rule"
         },
         {
           "name": "Architecture",
           "ok": true,
-          "detail": "compliance 82%"
+          "detail": "compliance 100%"
         },
         {
           "name": "Performance",
-          "ok": false,
-          "detail": "score 57 — warn if below"
+          "ok": true,
+          "detail": "score 72 — warn if below"
         },
         {
           "name": "Pilot",

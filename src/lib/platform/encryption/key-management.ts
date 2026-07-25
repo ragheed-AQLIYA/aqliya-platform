@@ -196,6 +196,7 @@ export async function listKeys(status?: string): Promise<EncryptionKeyData[]> {
   const records = await prisma.encryptionKey.findMany({
     where,
     orderBy: { createdAt: "desc" },
+    take: 100,
   })
 
   return records.map(buildKeyData)

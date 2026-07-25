@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { RefreshCw } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { clientLogger } from "@/lib/observability/client-logger";
 
 interface ProductErrorProps {
   error: Error & { digest?: string };
@@ -14,7 +15,7 @@ interface ProductErrorProps {
 
 export function ProductError({ error, reset, icon: Icon, arTitle, enTitle }: ProductErrorProps) {
   useEffect(() => {
-    console.error(`${enTitle} error:`, error);
+    clientLogger.error(`${enTitle} error`, error);
   }, [error, enTitle]);
 
   return (

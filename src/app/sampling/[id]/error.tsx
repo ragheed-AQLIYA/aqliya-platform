@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Beaker, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function SampleError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Sample error:", error);
+    clientLogger.error("Sample error:", error);
   }, [error]);
 
   return (

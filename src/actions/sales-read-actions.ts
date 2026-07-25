@@ -9,6 +9,9 @@ import {
   requireSalesPermission,
   SalesAccessError,
 } from "@/lib/sales/guards";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "sales-os", action: "read-actions" });
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -26,7 +29,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
       return { ok: false, error: "Access denied", code: "FORBIDDEN" };
     }
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[SalesOS Read Action]", message);
+    logger.error("Read action failed", error instanceof Error ? error : undefined, { message });
     return { ok: false, error: message };
   }
 }

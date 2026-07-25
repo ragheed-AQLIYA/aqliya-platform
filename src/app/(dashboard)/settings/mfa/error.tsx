@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Shield, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function MultiFactorAuthError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Multi-Factor Auth error:", error);
+    clientLogger.error("Multi-Factor Auth error:", error);
   }, [error]);
 
   return (

@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { prisma } from "@/lib/prisma";
 import { requireSalesPermission } from "@/lib/sales/guards";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { checkRateLimit } from "@/lib/rate-limit";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 // ─── Per-user rate limits (shared via Redis when RATE_LIMITER=redis) ───
 const EXPORT_WINDOW_MS = 60_000;
@@ -116,7 +120,7 @@ export async function GET(_request: NextRequest) {
       return new NextResponse("Access denied", { status: 403 });
     }
 
-    console.error("[SalesExport] Failed:", error);
+    logger.error("[SalesExport] Failed:", error instanceof Error ? error : undefined);
     return new NextResponse("Failed to generate export", { status: 500 });
   }
 }

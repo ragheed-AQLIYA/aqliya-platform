@@ -11,6 +11,9 @@ import {
   validateCoreEventEnvelope,
 } from "@/lib/core/events/schema-registry";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "outbox-service" });
 
 export const PLATFORM_AUDIT_OUTBOX_EVENT = "platform.audit.recorded";
 
@@ -76,8 +79,8 @@ export function buildOutboxPayloadFromAuditLog(params: {
   if (isEnabled("platform.event-schema-registry")) {
     const validation = validateCoreEventEnvelope(envelope, eventType);
     if (!validation.valid) {
-      console.warn(
-        `[Outbox] Invalid event envelope for ${eventType}: ${validation.errors.join("; ")}`,
+      logger.warn(
+        `Invalid event envelope for ${eventType}: ${validation.errors.join("; ")}`,
       );
       return null;
     }

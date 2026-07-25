@@ -233,6 +233,7 @@ export async function getVersions(): Promise<VersionListItem[]> {
   const actor = await getCurrentUser();
   
   const versions = await prisma.knowledgeFoundationVersion.findMany({
+    take: 100,
     orderBy: { createdAt: "desc" },
     include: {
       createdBy: { select: { id: true, name: true } },
@@ -356,6 +357,7 @@ export async function getFoundationKPIs(): Promise<FoundationKPIs> {
       where: { includedInRelease: true },
     }),
     prisma.knowledgeCandidate.findMany({
+      take: 100,
       where: { status: "PROMOTED" },
       select: {
         id: true,
@@ -380,6 +382,7 @@ export async function getFoundationKPIs(): Promise<FoundationKPIs> {
   }
 
   const boundIds = await prisma.knowledgeFoundationVersionCandidate.findMany({
+    take: 100,
     select: { candidateId: true },
   });
   const boundIdSet = new Set(boundIds.map((b) => b.candidateId));

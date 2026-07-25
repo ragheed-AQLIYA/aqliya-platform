@@ -6,6 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSamlAuthorizeUrl } from "@/lib/auth/saml/saml-sp";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "saml-initiate" });
 
 export const runtime = "nodejs";
 
@@ -32,8 +35,8 @@ export async function GET(
   if (!provider) {
     // Return uniform redirect for both missing providers and invalid configs
     // to prevent ID enumeration (information disclosure).
-    console.warn(
-      `[SAML] Provider not found or disabled: ${providerId}`,
+    logger.warn(
+      `Provider not found or disabled: ${providerId}`,
     );
     await writePlatformAuditLog({
       productKey: "platform",

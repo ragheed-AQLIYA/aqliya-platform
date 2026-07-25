@@ -211,7 +211,7 @@ async function main() {
       if (dec.hasAudit) {
         const auditEntries = getAuditForDecision(dec.id, decision.id, adminUser.organizationId, adminUser.id, dec.status);
         for (const entry of auditEntries) {
-          await tx.auditLog.create({ data: entry });
+          await tx.platformAuditLog.create({ data: { ...entry, productKey: "decisionos", severity: "info", sourceSystem: "seed-decisionos" } });
         }
         console.log("    -> Audit entries:", auditEntries.length);
       }

@@ -15,10 +15,36 @@ import {
   proofScenarios,
 } from "@/lib/marketing/copy-proof";
 
-export const metadata: Metadata = {
-  title: proofPageCopyAr.metadata.title,
-  description: proofPageCopyAr.metadata.description,
-};
+export function generateMetadata(): Metadata {
+  const title = proofPageCopyAr.metadata.title;
+  const description = proofPageCopyAr.metadata.description;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com/proof",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      type: "website",
+      images: [
+        {
+          url: "/og-proof.png",
+          width: 1200,
+          height: 630,
+          alt: "مركز الإثبات - AQLIYA",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-proof.png"],
+    },
+  };
+}
 
 export default function ProofCenterPage() {
   const c = proofPageCopyAr;

@@ -1,5 +1,7 @@
 "use client"
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { useTranslations } from "next-intl"
@@ -14,9 +16,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { getValidationRunAction, getEngagementAction } from "@/actions/audit-read-actions"
-import { ReconciliationPanel } from "@/components/audit/reconciliation/reconciliation-panel"
-import { IfrsRulesPanel } from "@/components/audit/rules/ifrs-rules-panel"
-import { SocpaRulesPanel } from "@/components/audit/rules/socpa-rules-panel"
+import dynamic from "next/dynamic"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
+
+const ReconciliationPanel = dynamic(() => import("@/components/audit/reconciliation/reconciliation-panel").then(m => ({ default: m.ReconciliationPanel })), { ssr: false, loading: () => <div className="h-24 animate-pulse rounded-md bg-muted" /> })
+const IfrsRulesPanel = dynamic(() => import("@/components/audit/rules/ifrs-rules-panel").then(m => ({ default: m.IfrsRulesPanel })), { ssr: false, loading: () => <div className="h-24 animate-pulse rounded-md bg-muted" /> })
+const SocpaRulesPanel = dynamic(() => import("@/components/audit/rules/socpa-rules-panel").then(m => ({ default: m.SocpaRulesPanel })), { ssr: false, loading: () => <div className="h-24 animate-pulse rounded-md bg-muted" /> })
 
 const severityIcons: Record<string, React.ReactNode> = { error: <XCircle className="size-4 text-red-500" />, warning: <AlertTriangle className="size-4 text-amber-500" />, info: <Info className="size-4 text-blue-500" /> }
 const checkIcons: Record<string, React.ReactNode> = {
@@ -65,7 +72,7 @@ export default function ValidationPage() {
         setValidation(v)
       }
     } catch (e) {
-      console.error('Failed to dispose issue', e)
+      logger.error("Failed to dispose issue", e instanceof Error ? e : undefined)
     } finally {
       setDisposeDialog(null)
       setDisposeRationale("")

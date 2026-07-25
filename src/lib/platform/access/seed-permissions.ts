@@ -82,25 +82,25 @@ const PERMISSION_DEFINITIONS: PermissionDef[] = [
  * آمن للتشغيل المتكرر — يستخدم upsert على slug.
  */
 export async function seedSystemPermissions(): Promise<number> {
-  let count = 0;
-
-  for (const def of PERMISSION_DEFINITIONS) {
-    await prisma.permission.upsert({
-      where: { slug: def.slug },
-      update: {
-        name: def.name,
-        group: def.group,
-        description: def.description ?? null,
-      },
-      create: {
-        name: def.name,
-        slug: def.slug,
-        group: def.group,
-        description: def.description ?? null,
-      },
-    });
-    count++;
-  }
+  const results = await Promise.all(
+    PERMISSION_DEFINITIONS.map((def) =>
+      prisma.permission.upsert({
+        where: { slug: def.slug },
+        update: {
+          name: def.name,
+          group: def.group,
+          description: def.description ?? null,
+        },
+        create: {
+          name: def.name,
+          slug: def.slug,
+          group: def.group,
+          description: def.description ?? null,
+        },
+      }),
+    ),
+  );
+  const count = results.length;
 
   await getOrCreateSystemRoles();
 

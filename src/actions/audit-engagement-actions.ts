@@ -456,11 +456,13 @@ export async function publishEngagementAction(engagementId: string) {
   await assertEngagementAccess(engagementId, actor);
   await enforceAuditRateLimit(actor, "publish_engagement", "mutation");
 
-  const engagement = await svcGetEngagement(actor.organizationId, engagementId);
+  const [engagement, evidence] = await Promise.all([
+    svcGetEngagement(actor.organizationId, engagementId),
+    svcGetEvidence(engagementId),
+  ]);
   if (!engagement) {
     throw new Error("Engagement not found");
   }
-  const evidence = await svcGetEvidence(engagementId);
   const evidenceRequirements =
     buildEvidenceRequirementsFromEvidenceList(evidence);
   const governanceCheck = checkPublicationGovernance({

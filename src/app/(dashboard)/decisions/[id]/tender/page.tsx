@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select"
 import { DecisionTabs } from "@/components/decisions/decision-tabs"
 import { getTenderProfile, createOrUpdateTenderProfile } from "@/actions/tender"
-import { RiskLevel } from "@prisma/client"
+import type { RiskLevel } from "@prisma/client"
 import { useState, useEffect } from "react"
 
 export default function TenderPage({ params }: { params: Promise<{ id: string }> }) {

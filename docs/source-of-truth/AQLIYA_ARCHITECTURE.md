@@ -16,7 +16,7 @@ AQLIYA Platform Company
 │   ├── Evidence Graph
 │   ├── Institutional Memory
 │   ├── RBAC / Permissions
-│   ├── Audit Logs
+│   ├── Audit Logs (PlatformAuditLog — unified, single-write, productKey-scoped)
 │   ├── Model Governance
 │   ├── Document Intelligence
 │   ├── Reporting Engine
@@ -51,7 +51,7 @@ AQLIYA Platform Company
 │   ├── Sunbul Workspace        (/sunbul) — legacy redirect → /workflowos
 ├── Governance (cross-cutting)
 │   ├── RBAC                     (multi-level permissions)
-│   ├── Audit Trail              (immutable event log)
+│   ├── Audit Trail              (immutable event log — unified PlatformAuditLog)
 │   ├── Evidence Chain           (source-to-output traceability)
 │   ├── AI Governance            (human-in-the-loop enforcement)
 │   ├── Tenant Isolation         (per-organization data boundaries)
@@ -200,6 +200,50 @@ Sprint 7 migrated **691 files** from direct module imports (`@/lib/sales/...`, `
 
 New code importing directly from platform modules (bypassing the kernel) will fail review. The kernel is the only sanctioned import surface for platform services.
 
+
+## Audit Log Consolidation (2026-07-25)
+
+**Status:** Complete — 8→1 model merge.
+
+### Before (8 legacy models)
+Each product maintained its own audit event model, creating schema fragmentation and dual-write complexity:
+
+| Legacy Model              | Product        | Status      |
+| ------------------------- | -------------- | ----------- |
+| `AuditLog`                | DecisionOS     | Removed     |
+| `AuditEvent`              | AuditOS        | Removed     |
+| `SunbulAuditEvent`        | WorkflowOS     | Removed     |
+| `WorkflowAuditEvent`      | WorkflowOS     | Removed     |
+| `SalesAuditEvent`         | SalesOS        | Removed     |
+| `LocalContentAuditEvent`  | LocalContentOS | Removed     |
+| `DecisionAuditEvent`      | DecisionOS     | Removed     |
+| `PlatformAuditLog` (v1)   | Platform       | Upgraded    |
+
+### After (single unified model)
+Single `PlatformAuditLog` model with `productKey` field for product-level scoping:
+
+- **`productKey`** — Scopes entries to product (e.g., `"audit_os"`, `"sales_os"`, `"decision_os"`, `"local_content"`, `"workflowos"`, `"knowledge-foundation"`)
+- **`sourceModel`** — Legacy model name for traceability (e.g., `"PlatformAuditLog"`, `"AuditEvent"`)
+- **`sourceId`** — Original record ID if migrated
+- **Hash chain protection** — `HashChainEntry` relation for immutability
+- **Single-write enforcement** — All 699 consumer code references write exclusively to `prisma.platformAuditLog`
+- **Unified query layer** — `src/lib/platform/audit/unified-query.ts` provides product-scoped search, summaries, and normalization
+
+### Dual-Write Elimination
+
+Previously, products wrote to both legacy models AND PlatformAuditLog (dual-write). All dual-write code has been eliminated; every audit event now writes to PlatformAuditLog exclusively. Migration comments (`[MIGRATED]`, `[MIGRATED v2]`) in code document the transition for each consumer.
+
+### Data Flow (Updated)
+
+```
+Product Action → writePlatformAuditLog({ productKey, action, ... })
+               → prisma.platformAuditLog.create()
+               → hashChainEntry (immutability)
+               → Unified query (productKey-scoped reads)
+```
+
+All download API routes, mutations, AI operations, and workflow transitions use this single path.
+
 ## Download Security Standard
 
 Every file download API route must implement these three layers in order:
@@ -219,9 +263,9 @@ Response headers: `Cache-Control: private, no-store`, `X-Content-Type-Options: n
 - `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L6 Production-hardened). Template workflows, SLA monitoring, gated export, full error/loading/not-found boundaries, 31 action tests, seed data, monitoring dashboard metric.
 - `Sunbul` is a legacy redirect alias: `/sunbul/*` routes → `permanentRedirect(302)` to `/workflowos/*`.
 - `/organizations` is a protected surface — not yet v0.1 workspace complete.
-- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 27 routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, pilot readiness dashboard, quality dashboard, review center, and ERP integration (SAP/Oracle/CSV). **L6 Production-hardened** — Full error/loading/not-found boundaries on all routes. All 9 L6 gaps closed. AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. 265+ tests PASS. **Action split (2026-07-13)**: `localcontent-actions.ts` (1,471 lines) decomposed into 8 focused modules under `src/lib/local-content/` (supplier, spend, classification, evidence, findings, workbook, review, project).
-- `DecisionOS` is a production-hardened governed workspace at `/decisions/*` (L6). Full lifecycle (draft → in_review → approved/rejected), evidence upload, bilingual PDF export, signal automation, sector intelligence wiring, cross-decision pattern analysis, decision portfolio view, outcome correlation analytics. Full error/loading/not-found boundaries on all 22 route segments. 42+ action tests, seed data.
-- `SalesOS` is a production-hardened governed commercial intelligence workspace at `/sales/*` (L6). 32 routes with full error/loading/not-found boundaries. Intelligence tab with 12 sub-engines, forecasting engine, CRM sync (HubSpot/Salesforce), conversion funnel analytics, pipeline depth analytics, bilingual UX. 45 test files PASS. God Object split: `sales-actions.ts` (977 lines) split into 4 focused modules (`sales-actions-helpers`, `sales-interaction-actions`, `sales-agent-actions`, `sales-outreach-actions`). Product plugin registered (`SalesOSPlugin`) with event bus subscriptions for cross-product awareness.
+- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 27 routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, pilot readiness dashboard, quality dashboard, review center, and ERP integration (SAP/Oracle/CSV). **L6 Production-hardened** — Full error/loading/not-found boundaries on all routes. All 9 L6 gaps closed. AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. 321+ tests PASS. **Action split (2026-07-13)**: `localcontent-actions.ts` (1,471 lines) decomposed into 8 focused modules under `src/lib/local-content/` (supplier, spend, classification, evidence, findings, workbook, review, project).
+- `DecisionOS` is a production-hardened governed workspace at `/decisions/*` (L6). Full lifecycle (draft → in_review → approved/rejected), evidence upload, bilingual PDF export, signal automation, sector intelligence wiring, cross-decision pattern analysis, decision portfolio view, outcome correlation analytics. Full error/loading/not-found boundaries on all 22 route segments. 275 tests (273 pass), seed data.
+- `SalesOS` is a production-hardened governed commercial intelligence workspace at `/sales/*` (L6). 32 routes with full error/loading/not-found boundaries. Intelligence tab with 12 sub-engines, forecasting engine, CRM sync (HubSpot/Salesforce), conversion funnel analytics, pipeline depth analytics, bilingual UX. 878+ tests across 86 test files PASS. God Object split: `sales-actions.ts` (977 lines) split into 4 focused modules (`sales-actions-helpers`, `sales-interaction-actions`, `sales-agent-actions`, `sales-outreach-actions`). Product plugin registered (`SalesOSPlugin`) with event bus subscriptions for cross-product awareness.
 - `AuditOS` is the most mature operating system with 12-station audit lifecycle, ISQM1 quality management, 8 L6 engines, and interactive demo at `/auditos`. **God Object split (2026-07-13)**: `audit-actions.ts` (3,657 lines) decomposed into 12 focused modules under `src/lib/audit/db/` (e.g., engagement-db, finding-db, evidence-db). Each module owns a single domain concern.
 - **Schema v0.2 (2026-05-28)**: `createdById` added to 10 models, `DecisionEvidence` model added, `platformOrganizationId` added to SunbulClient.
 - **Website repositioning (2026-06-09)**: Navigation changed to `المنصة | القطاعات | الإثبات | الحوكمة | عن عقلية`. Homepage redesigned with 9-section platform-first architecture. Products moved inside `/platform#capabilities`. Proof Center established at `/proof`. Sectors page at `/industries`.

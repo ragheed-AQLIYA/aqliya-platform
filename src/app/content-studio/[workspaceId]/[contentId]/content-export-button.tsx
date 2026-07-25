@@ -1,9 +1,14 @@
 "use client";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { useState } from "react";
 import { FileDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { exportContentAction } from "../../actions";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export function ContentExportButton({ contentId }: { contentId: string }) {
   const [loading, setLoading] = useState(false);
@@ -27,10 +32,10 @@ export function ContentExportButton({ contentId }: { contentId: string }) {
         a.click();
         URL.revokeObjectURL(url);
       } else {
-        console.error("[ContentStudio Export] Failed:", result.error);
+        logger.error("[ContentStudio Export] Failed:", new Error(result.error ?? "Export failed"));
       }
     } catch (err) {
-      console.error("[ContentStudio Export] Error:", err);
+      logger.error("[ContentStudio Export] Error:", err instanceof Error ? err : undefined);
     } finally {
       setLoading(false);
     }

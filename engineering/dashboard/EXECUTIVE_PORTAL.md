@@ -1,52 +1,54 @@
 # Executive Engineering Portal
 
-**Generated:** 2026-07-11T11:27:35.812Z
+**Generated:** 2026-07-18T18:34:59.514Z
 
 ## Platform Pulse
 
 ```
-Health  ▁▇███  74  ↗ +0
+Health  ▁▆▇▇▇▇▇▇██  79  ↗ +0
 ```
 
 | المؤشر / Indicator | القيمة / Value | Trend |
 | ------------------ | -------------: | ----- |
-| Platform Health | 74 | = +0 |
+| Platform Health | 79 | = +0 |
 | Products at Pilot Ready | 8 | — |
 | Products at Production Ready | 8 | — |
-| Architecture Compliance | 82% | — |
-| ADR Validation | 59% | — |
-| Authorization Migration / Adoption | 52% | — |
-| Technical Debt Trend | 58 | = +0 |
-| Security Trend | 65 | = +0 |
-| Performance Trend | 57 | = +0 |
+| Architecture Compliance | 100% | — |
+| ADR Validation | 100% | — |
+| Authorization Migration / Adoption | 100% | — |
+| Technical Debt Trend | 59 | = +0 |
+| Security Trend | 89 | = +0 |
+| Performance Trend | 72 | = +0 |
 | Findings in Wave Pipeline | 0 | — |
 | Findings Awaiting Verify | 0 | — |
-| Findings Closed | 0 | — |
+| Findings Closed | 96 | — |
+| Scanner Confidence | 48% (C) | — |
+| Refactoring Debt | 15 | — |
 
 ## Release Readiness (products)
 
 | Product | Ready | Ship? |
 | ------- | ----: | ----- |
-| AuditOS | 67% | Not yet |
-| DecisionOS | 67% | Not yet |
-| LocalContentOS | 67% | Not yet |
-| SalesOS | 67% | Not yet |
-| WorkflowOS | 67% | Not yet |
-| RiskOS | 67% | Not yet |
-| LocalContactOS | 67% | Not yet |
-| ContentStudio | 67% | Not yet |
+| AuditOS | 100% | Yes |
+| DecisionOS | 100% | Yes |
+| LocalContentOS | 100% | Yes |
+| SalesOS | 100% | Yes |
+| WorkflowOS | 100% | Yes |
+| RiskOS | 100% | Yes |
+| LocalContactOS | 100% | Yes |
+| ContentStudio | 100% | Yes |
 
 
 ## Finding Execution Pipeline (not a report factory)
 
 | State | Count |
 | ----- | ----: |
-| finding | 210 |
-| prioritized | 10 |
+| finding | 196 |
+| prioritized | 0 |
 | assigned | 0 |
 | implemented | 0 |
 | verified | 0 |
-| closed | 0 |
+| closed | 96 |
 | archived | 0 |
 
 ## Operating Model

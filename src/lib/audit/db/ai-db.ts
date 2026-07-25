@@ -1,7 +1,11 @@
 import { prisma } from "@/lib/prisma";
+import { createLogger } from "@/lib/observability/logger";
 import type { Prisma } from "@prisma/client";
 import type { AIAssistanceOutput } from "@/types/audit";
 import { toAiOutput } from "./types";
+
+
+const logger = createLogger({ product: "auditos", action: "ai-db" });
 
 export async function getAISuggestions(
   engagementId: string,
@@ -17,9 +21,9 @@ export async function getAISuggestions(
     if (suggestions.length === 0) return [];
     return suggestions.map(toAiOutput);
   } catch (error) {
-    console.warn(
+    logger.warn(
       `[AuditDB] getAISuggestions(${engagementId}) error`,
-      error,
+      { error: error instanceof Error ? error?.message : String(error) },
     );
     return [];
   }
@@ -39,9 +43,9 @@ export async function acceptAISuggestion(
       },
     });
   } catch (error) {
-    console.error(
+    logger.error(
       `[AuditDB] acceptAISuggestion(${suggestionId}) failed. Mock fallback disabled for mutation path.`,
-      error,
+      error instanceof Error ? error : undefined,
     );
     throw new Error(
       `AuditOS mutation unavailable: acceptAISuggestion(${suggestionId}). Mock fallback disabled.`,
@@ -89,9 +93,9 @@ export async function getAIOutputsForEntity(
     });
     return outputs.map(toAiOutput);
   } catch (error) {
-    console.warn(
+    logger.warn(
       `[AuditDB] getAIOutputsForEntity(${engagementId}) error`,
-      error,
+      { error: error instanceof Error ? error?.message : String(error) },
     );
     return [];
   }
@@ -118,7 +122,7 @@ export async function updateAIOutputStatus(
     });
     return toAiOutput(ai);
   } catch (error) {
-    console.warn(`[AuditDB] updateAIOutputStatus(${id}) error`, error);
+    logger.warn("[AuditDB] updateAIOutputStatus(${id}) error", { error: error instanceof Error ? error?.message : String(error) });
     return null;
   }
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Lightbulb, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function InsightError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Insight error:", error);
+    clientLogger.error("Insight error:", error);
   }, [error]);
 
   return (

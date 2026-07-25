@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Calendar, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function SchedulesError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Schedules error:", error);
+    clientLogger.error("Schedules error:", error);
   }, [error]);
 
   return (

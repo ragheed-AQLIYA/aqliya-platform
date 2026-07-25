@@ -3,7 +3,7 @@ import { defineProduct, type ProductDefinition } from "@/lib/core/product-runtim
 export const SALESOS_PRODUCT_KEY = "sales"
 
 /** Runtime manifest for SalesOS — mirrors V1 registry; adoption detail in core-adoption docs. */
-export const SALESOS_PRODUCT_DEFINITION: ProductDefinition = {
+const SALESOS_PRODUCT_DEFINITION: ProductDefinition = {
   key: SALESOS_PRODUCT_KEY,
   name: "SalesOS",
   description:
@@ -147,4 +147,4 @@ export const SALESOS_PRODUCT_DEFINITION: ProductDefinition = {
   ],
 }
 
-export const SALESOS_MANIFEST = defineProduct(SALESOS_PRODUCT_DEFINITION)
+const SALESOS_MANIFEST = defineProduct(SALESOS_PRODUCT_DEFINITION)

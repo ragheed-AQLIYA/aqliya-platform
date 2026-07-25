@@ -1,5 +1,9 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import type { RateLimiterProvider, RateLimitResult } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "lib-platform-rate-limit-redis-provider" });
 
 // Dynamic import: ioredis is an optional production dependency.
 // The import is only resolved at runtime when RATE_LIMITER=redis.
@@ -27,7 +31,7 @@ export class RedisRateLimiterProvider implements RateLimiterProvider {
     const { default: Redis } = await import("ioredis");
     const client = new Redis(this.url) as Redis;
     client.on("error", (err: Error) =>
-      console.error("[RedisRateLimiter]", err.message),
+      logger.error("[RedisRateLimiter]", err instanceof Error ? err : new Error(String(err))),
     );
     this.client = client;
     return client;

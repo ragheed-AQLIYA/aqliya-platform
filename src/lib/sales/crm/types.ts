@@ -133,6 +133,14 @@ export interface StageMapping {
   probability?: number;
 }
 
+// ─── SyncToLocal result ───
+
+export interface SyncToLocalResult {
+  accounts: { created: number; updated: number; skipped: number; failed: number };
+  contacts: { created: number; updated: number; skipped: number; failed: number };
+  opportunities: { created: number; updated: number; skipped: number; failed: number };
+}
+
 // ─── Connector errors ───
 
 export class CrmConnectionError extends Error {

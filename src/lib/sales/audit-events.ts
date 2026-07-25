@@ -1,8 +1,6 @@
-import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { Product } from "@/lib/platform/audit-logger";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
-import type { Prisma } from "@prisma/client";
 
 export const SalesAuditActions = {
   DEAL_CREATED: "sales.deal.created",
@@ -56,34 +54,11 @@ export interface SalesAuditEventInput {
 export async function recordSalesAuditEvent(
   input: SalesAuditEventInput,
 ): Promise<void> {
-  try {
-    await prisma.salesAuditEvent.create({
-      data: {
-        organizationId: input.organizationId,
-        platformOrganizationId: input.platformOrganizationId ?? null,
-        actorId: input.actorId,
-        actorName: input.actorName ?? null,
-        action: input.action,
-        targetType: input.targetType,
-        targetId: input.targetId,
-        metadata: (input.metadata ?? undefined) as
-          | Prisma.InputJsonValue
-          | undefined,
-      },
-    });
-  } catch (error) {
-    console.warn(
-      `[SalesOS] Audit event write failed: ${error instanceof Error ? error.message : "unknown"}`,
-    );
-  }
-
-  // ── Dual-write to PlatformAuditLog + hash chain ──
-  // Enables cross-product audit queries via the unified platform audit trail.
-  // Hash chain provides tamper evidence for the platform audit entry.
   const platformResult = await writePlatformAuditLog({
     productKey: Product.SALES_OS,
     action: input.action,
     platformOrganizationId: input.platformOrganizationId ?? undefined,
+    organizationId: input.organizationId,
     actorId: input.actorId,
     actorName: input.actorName,
     targetType: input.targetType,
@@ -93,7 +68,6 @@ export async function recordSalesAuditEvent(
       | undefined,
   });
 
-  // ── Append to hash chain (best-effort, never throws) ──
   if (platformResult.ok && platformResult.id) {
     await appendToAuditChain(
       platformResult.id,

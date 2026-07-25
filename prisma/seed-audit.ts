@@ -108,7 +108,6 @@ async function ensurePlatformLoginUsers(platformOrganizationId: string) {
 async function main() {
   console.log("Cleaning existing AuditOS data...");
   await prisma.auditAiOutput.deleteMany();
-  await prisma.auditEvent.deleteMany();
   await prisma.auditPublicationPackage.deleteMany();
   await prisma.auditApprovalRecord.deleteMany();
   await prisma.auditReviewComment.deleteMany();
@@ -1691,112 +1690,10 @@ async function main() {
       },
     ],
   });
-  // Record audit events for evidence creation and linking
-  for (const ev of evidenceData) {
-    await prisma.auditEvent.create({
-      data: {
-        engagementId: engagement.id,
-        eventType: "evidence.created",
-        actorId: ev.uploadedBy || "system",
-        actorName: ev.uploadedBy || "System",
-        actorRole: "operator",
-        targetType: "evidence",
-        targetId: ev.id,
-        newState: ev.state,
-        description: `Evidence created: ${ev.filename}`,
-        aiRelated: false,
-        timestamp: ev.uploadedAt || now,
-      },
-    });
-  }
-  await prisma.auditEvent.createMany({
-    data: [
-      {
-        id: "ae-ev-1",
-        engagementId: engagement.id,
-        eventType: "evidence.linked",
-        actorId: "usr-ahmed",
-        actorName: "Ahmed Al Ghamdi",
-        actorRole: "operator",
-        targetType: "account",
-        targetId: "all",
-        newState: "linked",
-        description: "Evidence linked to Trial Balance",
-        aiRelated: false,
-        timestamp: new Date("2025-04-15T10:35:00Z"),
-      },
-      {
-        id: "ae-ev-2",
-        engagementId: engagement.id,
-        eventType: "evidence.linked",
-        actorId: "usr-ahmed",
-        actorName: "Ahmed Al Ghamdi",
-        actorRole: "operator",
-        targetType: "account",
-        targetId: "tb-line-1",
-        newState: "linked",
-        description: "Evidence linked to Cash and Bank",
-        aiRelated: false,
-        timestamp: new Date("2025-04-20T09:05:00Z"),
-      },
-      {
-        id: "ae-ev-3",
-        engagementId: engagement.id,
-        eventType: "evidence.linked",
-        actorId: "usr-sarah",
-        actorName: "Sarah Al Otaibi",
-        actorRole: "reviewer",
-        targetType: "account",
-        targetId: "tb-line-2",
-        newState: "linked",
-        description: "Evidence linked to Accounts Receivable",
-        aiRelated: false,
-        timestamp: new Date("2025-04-22T14:05:00Z"),
-      },
-      {
-        id: "ae-ev-4",
-        engagementId: engagement.id,
-        eventType: "evidence.linked",
-        actorId: "usr-ahmed",
-        actorName: "Ahmed Al Ghamdi",
-        actorRole: "operator",
-        targetType: "account",
-        targetId: "tb-line-5",
-        newState: "linked",
-        description: "Evidence linked to Property and Equipment",
-        aiRelated: false,
-        timestamp: new Date("2025-04-25T11:05:00Z"),
-      },
-      {
-        id: "ae-ev-5",
-        engagementId: engagement.id,
-        eventType: "evidence.linked",
-        actorId: "usr-sarah",
-        actorName: "Sarah Al Otaibi",
-        actorRole: "reviewer",
-        targetType: "account",
-        targetId: "tb-line-10",
-        newState: "linked",
-        description: "Evidence linked to Short-term Loan",
-        aiRelated: false,
-        timestamp: new Date("2025-04-28T10:05:00Z"),
-      },
-      {
-        id: "ae-ev-m1",
-        engagementId: engagement.id,
-        eventType: "evidence.linked",
-        actorId: "system",
-        actorName: "System",
-        actorRole: "operator",
-        targetType: "account",
-        targetId: "tb-line-3",
-        newState: "linked",
-        description: "Evidence linked to Inventory",
-        aiRelated: false,
-        timestamp: new Date("2025-04-16T00:00:00Z"),
-      },
-    ],
-  });
+  // [PHASE 5] Removed — migrated to PlatformAuditLog
+  // Evidence creation audit events are now auto-generated via writePlatformAuditLog
+  // [PHASE 5] Removed — migrated to PlatformAuditLog
+  // Evidence link audit events are now auto-generated via writePlatformAuditLog
   console.log(`  Evidence: ${evidenceData.length}, Links: 6`);
 
   // ─── Findings ───
@@ -2227,27 +2124,9 @@ async function main() {
       timestamp: new Date("2025-05-02T09:00:00Z"),
     },
   ];
-  for (const ev of eventsData) {
-    await prisma.auditEvent.create({
-      data: {
-        id: ev.id,
-        engagementId: engagement.id,
-        eventType: ev.eventType,
-        actorId: ev.actorId,
-        actorName: ev.actorName,
-        actorRole: ev.actorRole,
-        targetType: ev.targetType,
-        targetId: ev.targetId,
-        previousState: (ev as any).previousState ?? "",
-        newState: ev.newState,
-        description: ev.description,
-        aiRelated: (ev as any).aiRelated ?? false,
-        metadata: (ev as any).metadata ?? undefined,
-        timestamp: ev.timestamp,
-      },
-    });
-  }
-  console.log(`  Audit Events: ${eventsData.length}`);
+  // [PHASE 5] Removed — migrated to PlatformAuditLog
+  // Engagement audit events are now auto-generated via writePlatformAuditLog
+  console.log(`  Audit Events: ${eventsData.length} (migrated to PlatformAuditLog)`);
 
   // ─── AI Outputs ───
   await prisma.auditAiOutput.createMany({

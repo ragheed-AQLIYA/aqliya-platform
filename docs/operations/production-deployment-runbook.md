@@ -1,9 +1,10 @@
-# AQLIYA Production Deployment Runbook
+﻿# AQLIYA Production Deployment Runbook
 
-> **Version:** 1.5  
-> **Last updated:** 2026-06-21  
+> **Version:** 1.6  
+> **Last updated:** 2026-07-25  
 > **Scope:** Production deployment of AQLIYA platform (Next.js 16, PostgreSQL 16, Prisma 7, Node.js 22)  
 > **Changelog:**
+> - v1.6 (2026-07-25): Audit model merge complete — PlatformAuditLog is sole audit model (no legacy AuditEvent/AuditLog). Added health endpoint matrix (4 endpoints). Added PlatformAuditLog migration verification steps. Updated rollback to include audit model integrity checks. Updated all model references.
 > - v1.5 (2026-06-21): Pilot Launch Closure — ClamAV ECS sidecar in Terraform, `RATE_LIMITER=redis` + `SCANNER_PROVIDER=clamav` env vars, closure scripts (`platform:pilot-closure`, scanner smoke, rate-limit load), restore-drill RTO/RPO reporting, Pilot Launch Certificate.
 > - v1.4 (2026-06-21): Tier 3 enterprise prep — Intelligence Core operator APIs, SSO/SCIM hardening checklist, Redis rate limiter verification, ABAC enforce pilot env vars.
 > - v1.3 (2026-06-17): Added SAML SSO, ClamAV scanner, rate limiter guidance, ECS rollback, restore-drill script, CI Postgres service. Reflected current validated build state.
@@ -264,27 +265,70 @@ Expected after hardening: `[]` (empty array). If stale, update the row to match 
 
 ---
 
-## 5. Health Check Endpoints
+### PlatformAuditLog Migration Verification
 
-| Endpoint | Purpose | Expected response |
-|----------|---------|-------------------|
-| `GET /api/health` | Application + DB liveness | `{ "status": "ok", "timestamp": "...", "uptime": ... }` |
-| `GET /api/health/db` | Database connectivity | `{ "status": "ok", "db": "connected" }` |
-
-### Smoke check after deploy
+After every migration, verify the audit model is intact:
 
 ```bash
-# Application health
-curl -s http://localhost:3000/api/health
+# Verify PlatformAuditLog is operational
+npm run platform:verify-audit-logs
 
-# Database connectivity
-curl -s http://localhost:3000/api/health/db
+# Check that write operations still produce audit entries
+npm run platform:audit-log:dry
+```
+
+```sql
+-- Verify table structure (no missing columns from migration)
+SELECT column_name, data_type 
+FROM information_schema.columns 
+WHERE table_name = 'PlatformAuditLog'
+ORDER BY ordinal_position;
+
+-- Verify HashChainEntry relationship integrity
+SELECT 
+  (SELECT count(*) FROM "PlatformAuditLog") AS audit_logs,
+  (SELECT count(*) FROM "HashChainEntry") AS hash_chain_entries,
+  (SELECT count(*) FROM "HashChainEntry" WHERE "chainVerified" IS NOT NULL) AS verified_entries;
+```
+
+> **Note:** As of v1.6, `PlatformAuditLog` is the sole audit model in AQLIYA. Legacy `AuditEvent` and `AuditLog` models have been fully merged. All audit references in code, docs, and runbooks now use `PlatformAuditLog` exclusively.
+
+---
+
+## 5. Health Check Endpoints
+
+| Endpoint | Purpose | Auth Required | Expected Response |
+|----------|---------|---------------|-------------------|
+| `GET /api/health/live` | Kubernetes liveness — process up only (no DB) | No | `{"status":"ok","probe":"live","uptime":...}` — HTTP 200 |
+| `GET /api/health` | Application liveness — DB connectivity + auth secret check | No | `{"status":"ok","checks":{"database":...}}` — HTTP 200 |
+| `GET /api/health/ready` | Enterprise readiness — DB + storage + pgvector + Redis + AI + auth | No | `{"status":"ok","checks":{...}}` — HTTP 200 |
+| `GET /api/platform/health` | Platform health — DB latency + kernel plugin status + tracing | No | `{"status":"healthy","checks":{"database":...}}` — HTTP 200 |
+
+> **Note:** The `/api/health/db` endpoint does not exist. Use `/api/health` for DB liveness and `/api/platform/health` for DB latency. All health endpoints are exempt from authentication (middleware bypass).
+
+### Smoke Check After Deploy
+
+```bash
+# Kubernetes-style liveness (process only, fastest)
+curl -s http://localhost:3000/api/health/live | jq .
+# Expected: {"status":"ok","probe":"live"} — HTTP 200
+
+# Application liveness (DB + auth)
+curl -s http://localhost:3000/api/health | jq .
+# Expected: {"status":"ok",...} — HTTP 200
+
+# Enterprise readiness (full dependency check)
+curl -s http://localhost:3000/api/health/ready | jq .
+# Expected: {"status":"ok",...} — HTTP 200
+
+# Platform health (DB latency + kernel + tracing)
+curl -s http://localhost:3000/api/platform/health | jq .
+# Expected: {"status":"healthy",...} — HTTP 200
 
 # Public routes accessible
 curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/
 curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/auditos
 ```
-
 ---
 
 ## 6. Rollback Procedure
@@ -324,11 +368,35 @@ pg_restore -d aqliya_prod /backups/aqliya_prod_<date>.dump
 pm2 restart aqliya
 ```
 
+### Option C — Audit Model Integrity Check After Rollback
+
+After any rollback involving database changes, verify the audit model:
+
+```sql
+-- 1. Verify PlatformAuditLog is intact and populated
+SELECT count(*) AS total_entries, 
+       max("createdAt") AS latest_entry
+FROM "PlatformAuditLog";
+
+-- 2. Verify HashChainEntry has no orphaned records
+SELECT count(*) AS orphan_count
+FROM "HashChainEntry" hce
+LEFT JOIN "PlatformAuditLog" pal ON pal.id = hce."auditLogId"
+WHERE pal.id IS NULL;
+-- Expected: 0 rows
+
+-- 3. Verify recent audit activity
+SELECT action, "actorEmail", "productKey", "createdAt"
+FROM "PlatformAuditLog"
+ORDER BY "createdAt" DESC
+LIMIT 10;
+```
+
 ### Rollback triggers
 
 Deploy immediately if:
 
-- Health check returns non-200 for >30s
+- Any health endpoint (`/api/health`, `/api/health/live`, `/api/health/ready`, `/api/platform/health`) returns non-200 for >30s
 - Database migration fails
 - Error rate exceeds 5%
 - Auth/login flow is broken
@@ -343,7 +411,7 @@ Check each of these after every deployment:
 ### Application
 
 - [ ] App responds at `NEXT_PUBLIC_APP_URL` (200)
-- [ ] `/api/health` returns 200
+- [ ] All 4 health endpoints pass: `/api/health/live` (200), `/api/health` (200), `/api/health/ready` (200), `/api/platform/health` (200)
 - [ ] Login flow completes (email + password)
 - [ ] Protected routes redirect unauthenticated users
 - [ ] No 4xx/5xx errors in logs
@@ -406,7 +474,7 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/audit
 
 ### Governance
 
-- [ ] Audit events logged for mutations
+- [ ] `PlatformAuditLog` entries recorded for all mutations (check `/settings/audit-logs`)
 - [ ] RBAC restricts admin-only actions from non-admin users
 - [ ] Tenant isolation: org A cannot see org B's data
 

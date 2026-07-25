@@ -14,6 +14,7 @@ export const evidenceRepository = {
     const rows = await prisma.salesEvidenceLink.findMany({
       where: { organizationId, dealId },
       orderBy: { createdAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaEvidenceToDomain);
   },
@@ -24,6 +25,7 @@ export const evidenceRepository = {
     const rows = await prisma.salesEvidenceLink.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaEvidenceToDomain);
   },

@@ -11,7 +11,6 @@ import type {
   LcAiReviewRun,
   LcIndustryPatternMemory,
   LcOrganizationMatchMemory,
-  LcAiAuditEvent,
 } from "@prisma/client";
 
 // ─── Mocks (hoisted before imports) ───
@@ -82,8 +81,6 @@ const mockLcAiReviewRunFindMany = jest.fn();
 const mockLcIndustryPatternMemoryFindMany = jest.fn();
 const mockLcOrganizationMatchMemoryCount = jest.fn();
 const mockLcOrganizationMatchMemoryFindMany = jest.fn();
-const mockLcAiAuditEventCount = jest.fn();
-const mockLcAiAuditEventFindMany = jest.fn();
 
 jest.mock("@/lib/prisma", () => ({
   prisma: {
@@ -114,10 +111,6 @@ jest.mock("@/lib/prisma", () => ({
     lcOrganizationMatchMemory: {
       count: mockLcOrganizationMatchMemoryCount,
       findMany: mockLcOrganizationMatchMemoryFindMany,
-    },
-    lcAiAuditEvent: {
-      count: mockLcAiAuditEventCount,
-      findMany: mockLcAiAuditEventFindMany,
     },
   },
 }));
@@ -275,31 +268,6 @@ function makeOrgMemory(
     createdById: "user-1",
     createdAt: new Date("2026-06-01"),
     updatedAt: new Date("2026-06-01"),
-    ...overrides,
-  };
-}
-
-function makeAuditEvent(
-  overrides?: Partial<LcAiAuditEvent>,
-): LcAiAuditEvent {
-  return {
-    id: `audit-${Math.random().toString(36).slice(2, 8)}`,
-    organizationId: "org-1",
-    projectId: null,
-    workbookId: null,
-    action: "PATTERN_SUGGESTED",
-    actorId: "user-1",
-    providerId: "deterministic",
-    modelVersion: null,
-    promptVersion: null,
-    confidence: 85,
-    status: "success",
-    inputSummary: null,
-    outputSummary: null,
-    warningCount: 0,
-    durationMs: 150,
-    metadata: null,
-    createdAt: new Date("2026-06-15"),
     ...overrides,
   };
 }

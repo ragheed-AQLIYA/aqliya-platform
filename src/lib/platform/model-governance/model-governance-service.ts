@@ -122,6 +122,7 @@ export async function listModels(organizationId?: string, status?: string) {
     where: where as Prisma.AiModelRegistryWhereInput,
     include: { deployments: { where: { isActive: true } } },
     orderBy: { createdAt: "desc" },
+    take: 100,
   });
 }
 
@@ -303,6 +304,7 @@ export async function getActiveDeployments(modelId?: string) {
     where: where as Prisma.AiModelDeploymentWhereInput,
     include: { model: { select: { id: true, name: true, provider: true, version: true } } },
     orderBy: { deployedAt: "desc" },
+    take: 100,
   });
 }
 
@@ -314,6 +316,7 @@ export async function getModelGovernanceStats(organizationId?: string): Promise<
 
   const allModels = await prisma.aiModelRegistry.findMany({
     where: where as Prisma.AiModelRegistryWhereInput,
+    take: 100,
   });
 
   const byStatus: Record<string, number> = {};

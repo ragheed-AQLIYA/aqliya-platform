@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Share2, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function NewRelationError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("New Relation error:", error);
+    clientLogger.error("New Relation error:", error);
   }, [error]);
 
   return (

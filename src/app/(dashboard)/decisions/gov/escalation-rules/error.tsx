@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { ArrowUpCircle, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function EscalationRulesError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Escalation Rules error:", error);
+    clientLogger.error("Escalation Rules error:", error);
   }, [error]);
 
   return (

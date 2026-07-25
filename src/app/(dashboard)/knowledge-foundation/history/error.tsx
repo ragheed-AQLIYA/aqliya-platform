@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { History, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function HistoryError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("History error:", error);
+    clientLogger.error("History error:", error);
   }, [error]);
 
   return (

@@ -352,8 +352,21 @@ export async function getOutreachEventsAction(dealId: string): Promise<{
     });
     if (!deal) return { success: false, error: "Deal not found" };
 
-    const events = await prisma.salesAuditEvent.findMany({
+    // [MIGRATED] salesAuditEvent → platformAuditLog (dual-write with productKey: "salesos")
+    // const events = await prisma.salesAuditEvent.findMany({
+    //   where: {
+    //     organizationId: user.organizationId,
+    //     targetType: "SalesDeal",
+    //     targetId: dealId,
+    //     action: { startsWith: "outreach." },
+    //   },
+    //   orderBy: { createdAt: "desc" },
+    //   take: 30,
+    //   select: { id: true, action: true, actorName: true, createdAt: true, metadata: true },
+    // });
+    const events = await prisma.platformAuditLog.findMany({
       where: {
+        productKey: "salesos",
         organizationId: user.organizationId,
         targetType: "SalesDeal",
         targetId: dealId,
@@ -396,8 +409,18 @@ export async function getOutreachAnalyticsAction(): Promise<{
   try {
     const user = await getAuth();
 
-    const events = await prisma.salesAuditEvent.findMany({
+    // [MIGRATED] salesAuditEvent → platformAuditLog (dual-write with productKey: "salesos")
+    // const events = await prisma.salesAuditEvent.findMany({
+    //   where: {
+    //     organizationId: user.organizationId,
+    //     action: { startsWith: "outreach." },
+    //     createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
+    //   },
+    //   select: { action: true },
+    // });
+    const events = await prisma.platformAuditLog.findMany({
       where: {
+        productKey: "salesos",
         organizationId: user.organizationId,
         action: { startsWith: "outreach." },
         createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
@@ -481,8 +504,19 @@ export async function scoreDealLeadsAction(dealId: string): Promise<{
     factors.push({ name: "مرحلة الصفقة", score: stageScore, weight: 0.25 });
 
     // Factor 4: Outreach engagement (from audit events)
-    const outreachEvents = await prisma.salesAuditEvent.findMany({
+    // [MIGRATED] salesAuditEvent → platformAuditLog (dual-write with productKey: "salesos")
+    // const outreachEvents = await prisma.salesAuditEvent.findMany({
+    //   where: {
+    //     organizationId: user.organizationId,
+    //     targetType: "SalesDeal",
+    //     targetId: dealId,
+    //     action: { startsWith: "outreach." },
+    //   },
+    //   select: { action: true },
+    // });
+    const outreachEvents = await prisma.platformAuditLog.findMany({
       where: {
+        productKey: "salesos",
         organizationId: user.organizationId,
         targetType: "SalesDeal",
         targetId: dealId,

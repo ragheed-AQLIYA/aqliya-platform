@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { createLogger } from "@/lib/observability/logger";
 import type {
   ReviewComment,
   ApprovalRecord,
@@ -10,6 +11,8 @@ import {
   toDisclosureNote,
   protectedAuditReadUnavailable,
 } from "./types";
+
+const logger = createLogger({ product: "audit", action: "review-db" });
 
 export async function getReviewComments(
   engagementId: string,
@@ -23,6 +26,9 @@ export async function getReviewComments(
   } catch (error) {
     protectedAuditReadUnavailable(`getReviewComments(${engagementId})`, error);
   }
+
+const logger = createLogger({ product: "platform", action: "unknown" });
+
 }
 
 export async function getOpenReviewCount(
@@ -174,7 +180,7 @@ export async function updateDisclosureNote(
     });
     return toDisclosureNote(note, reviewComments.map(toReviewComment));
   } catch (error) {
-    console.warn(`[AuditDB] updateDisclosureNote(${id}) error`, error);
+    logger.warn("[AuditDB] updateDisclosureNote(${id}) error", { error: error instanceof Error ? error?.message : String(error) });
     return null;
   }
 }

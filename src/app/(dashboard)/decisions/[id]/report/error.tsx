@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { FileBarChart, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function ReportError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Report error:", error);
+    clientLogger.error("Report error:", error);
   }, [error]);
 
   return (

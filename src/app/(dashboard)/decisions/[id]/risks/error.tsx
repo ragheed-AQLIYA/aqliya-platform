@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function RisksError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Risks error:", error);
+    clientLogger.error("Risks error:", error);
   }, [error]);
 
   return (

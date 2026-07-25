@@ -1,8 +1,20 @@
+import { z } from "zod"
 import { NextRequest, NextResponse } from "next/server"
 import { evaluateWithGate, getGateThreshold, registerGateThreshold } from "@/lib/core/ai/eval-gate"
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 
 export const dynamic = "force-dynamic"
+
+const evalGatePostSchema = z.object({
+  suiteId: z.string().min(1),
+  taskType: z.string().min(1),
+  actualOutput: z.string().min(1),
+});
+
+const evalGatePutSchema = z.object({
+  suiteId: z.string().min(1),
+  threshold: z.number().min(0).max(1),
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,14 +22,24 @@ export async function POST(request: NextRequest) {
     if (!hasRequiredRole(user, "OPERATOR")) {
       throw new Error("Access denied: OPERATOR role required");
     }
-    const body = await request.json()
-    const { suiteId, taskType, actualOutput } = body
 
-    if (!suiteId || !taskType || actualOutput === undefined) {
-      return NextResponse.json({ success: false, error: { code: "VALIDATION_ERROR", message: "suiteId, taskType, and actualOutput are required" } }, { status: 400 })
+    let body: unknown;
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json({ success: false, error: { code: "VALIDATION_ERROR", message: "Invalid JSON body" } }, { status: 400 })
     }
 
-    const result = await evaluateWithGate(suiteId, taskType, String(actualOutput), user.organizationId ?? undefined)
+    const parsed = evalGatePostSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: { code: "VALIDATION_ERROR", message: parsed.error.issues.map((i) => i.message).join(" ") } },
+        { status: 400 },
+      )
+    }
+
+    const { suiteId, taskType, actualOutput } = parsed.data;
+    const result = await evaluateWithGate(suiteId, taskType, actualOutput, user.organizationId ?? undefined)
     return NextResponse.json({ success: true, data: result })
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Unknown error"
@@ -52,13 +74,25 @@ export async function PUT(request: NextRequest) {
     if (!hasRequiredRole(user, "ADMIN")) {
       throw new Error("Access denied: ADMIN role required");
     }
-    const body = await request.json()
-    const { suiteId, threshold } = body
-    if (!suiteId || threshold === undefined) {
-      return NextResponse.json({ success: false, error: { code: "VALIDATION_ERROR", message: "suiteId and threshold are required" } }, { status: 400 })
+
+    let body: unknown;
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json({ success: false, error: { code: "VALIDATION_ERROR", message: "Invalid JSON body" } }, { status: 400 })
     }
-    registerGateThreshold(suiteId, Number(threshold))
-    return NextResponse.json({ success: true, data: { suiteId, threshold: Number(threshold) } })
+
+    const parsed = evalGatePutSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: { code: "VALIDATION_ERROR", message: parsed.error.issues.map((i) => i.message).join(" ") } },
+        { status: 400 },
+      )
+    }
+
+    const { suiteId, threshold } = parsed.data;
+    registerGateThreshold(suiteId, threshold)
+    return NextResponse.json({ success: true, data: { suiteId, threshold } })
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Unknown error"
     if (msg === "Unauthenticated") return NextResponse.json({ success: false, error: { code: "UNAUTHENTICATED" } }, { status: 401 })

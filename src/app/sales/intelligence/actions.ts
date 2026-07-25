@@ -18,6 +18,9 @@ import type {
   CreateForecastInput,
   ForecastPeriod,
 } from "@/lib/platform/sales-intelligence";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "sales-os", action: "intelligence-actions" });
 
 type ActionResult<T> =
   | { ok: true; data: T }
@@ -32,7 +35,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
       return { ok: false, error: "Access denied", code: "FORBIDDEN" };
     }
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[SalesIntel]", message);
+    logger.error("Sales intelligence action failed", error instanceof Error ? error : undefined, { message });
     return { ok: false, error: message };
   }
 }

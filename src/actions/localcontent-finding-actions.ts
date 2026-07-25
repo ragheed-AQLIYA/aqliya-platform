@@ -10,6 +10,7 @@ import {
   assertProjectAccess,
   ProjectAccessError,
 } from "@/lib/local-content/guards";
+import { enforce } from "@/lib/kernel";
 import { parseOrError } from "@/lib/local-content/schemas/common";
 import {
   createFindingSchema,
@@ -52,7 +53,8 @@ export async function createLocalContentFindingAction(
   const { type, title, description, severity, linkedSupplierId, linkedSpendRecordId } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "manage_findings");
+    const { user, project } = await assertProjectAccess(projectId, "manage_findings");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "create");
     await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
 
     const finding = await createFinding(
@@ -102,7 +104,8 @@ export async function updateLocalContentFindingAction(
   const { type, title, description, severity, linkedSupplierId, linkedSpendRecordId } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "manage_findings");
+    const { user, project } = await assertProjectAccess(projectId, "manage_findings");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "update");
     await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
     const existing = await prisma.localContentFinding.findUnique({
       where: { id: findingId },
@@ -161,7 +164,8 @@ export async function deleteLocalContentFindingAction(
   findingId: string,
 ): Promise<ActionResult<void>> {
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "manage_findings");
+    const { user, project } = await assertProjectAccess(projectId, "manage_findings");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "delete");
     await requirePermission(Permission.FINDING_MANAGEMENT, ResourceType.FINDING);
     await deleteFinding(projectId, findingId, {
       id: user.id,

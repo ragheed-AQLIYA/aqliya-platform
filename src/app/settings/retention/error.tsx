@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Archive, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function RetentionPolicyError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Retention Policy error:", error);
+    clientLogger.error("Retention Policy error:", error);
   }, [error]);
 
   return (

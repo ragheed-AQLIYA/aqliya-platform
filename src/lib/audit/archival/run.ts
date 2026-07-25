@@ -11,6 +11,9 @@
  *   npx tsx src/lib/audit/archival/run.ts --retention 180
  */
 import { archiveOldEvents, countEventsToArchive } from "./index";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "audit_os", action: "archival" });
 
 async function main() {
   const args = process.argv.slice(2);
@@ -23,16 +26,16 @@ async function main() {
 
   if (dryRun) {
     const count = await countEventsToArchive(retentionDays);
-    console.log(JSON.stringify({ dryRun: true, eventsToArchive: count }, null, 2));
+    logger.info("Dry run summary", { dryRun: true, eventsToArchive: count });
     process.exit(0);
   }
 
   const report = await archiveOldEvents(retentionDays);
-  console.log(JSON.stringify(report, null, 2));
+  logger.info("Archival complete", { report });
   process.exit(report.eventsArchived >= 0 ? 0 : 1);
 }
 
 main().catch((err) => {
-  console.error("Archival failed:", err);
+  logger.error("Archival failed", err as Error);
   process.exit(1);
 });

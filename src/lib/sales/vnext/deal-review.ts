@@ -35,22 +35,22 @@ function createReviewState(input: {
   ownerId: string;
   evidenceComplete: boolean;
 }): ReviewApprovalPackage {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+  throw new Error("PLANNED: SalesOS vnext — review-approval-runtime not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
 function getRequiredApprovers(productSlug: string): { reviewerRoles: string[]; approverRoles: string[] } {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+  throw new Error("PLANNED: SalesOS vnext — review-approval-runtime not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
 function transitionReviewState(pkg: ReviewApprovalPackage, action: string, actor: ReviewApprovalActor): unknown {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+  throw new Error("PLANNED: SalesOS vnext — review-approval-runtime not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
 function validateApprovalAction(pkg: ReviewApprovalPackage, actor: ReviewApprovalActor, decision: string): { allowed: boolean; reason?: string } {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+  throw new Error("PLANNED: SalesOS vnext — review-approval-runtime not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 
 export interface DealReviewContext {

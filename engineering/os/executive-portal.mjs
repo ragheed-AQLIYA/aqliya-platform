@@ -53,6 +53,11 @@ export async function buildExecutivePortal() {
   const debt = cur.technicalDebtScore ?? cur.debt;
   const debtPrev = prev.technicalDebtScore ?? prev.debt;
 
+  // Governance metrics
+  const scannerConf = cur.scannerConfidence ?? null;
+  const scannerGrade = cur.scannerGrade ?? "—";
+  const refDebt = cur.refactoringDebt ?? null;
+
   const lifeCounts = Object.values(board.items || {}).reduce((acc, i) => {
     acc[i.state] = (acc[i.state] || 0) + 1;
     return acc;
@@ -71,6 +76,9 @@ export async function buildExecutivePortal() {
     ["Findings in Wave Pipeline", (lifeCounts.assigned || 0) + (lifeCounts.implemented || 0), null],
     ["Findings Awaiting Verify", lifeCounts.implemented || 0, null],
     ["Findings Closed", lifeCounts.closed || 0, null],
+    // Governance metrics
+    ["Scanner Confidence", scannerConf != null ? `${scannerConf}% (${scannerGrade})` : "—", null],
+    ["Refactoring Debt", refDebt ?? "—", null],
   ];
 
   const spark = sparkline(

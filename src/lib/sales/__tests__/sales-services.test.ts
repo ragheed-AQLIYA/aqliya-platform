@@ -24,7 +24,7 @@ jest.mock("@/lib/prisma", () => ({
       findMany: jest.fn(),
       findFirst: jest.fn(),
     },
-    salesAuditEvent: {
+    platformAuditLog: {
       create: jest.fn(),
     },
     salesEvidenceLink: {
@@ -80,7 +80,7 @@ describe("SalesOS services", () => {
       account: { id: "acct-1", name: "Acct" },
       stage: null,
     });
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "audit-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "audit-1" });
 
     await createSalesDeal(
       ORG_A,
@@ -88,7 +88,7 @@ describe("SalesOS services", () => {
       { ...ACTOR, platformOrganizationId: "plat-1" },
     );
 
-    expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+    expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           action: SalesAuditActions.DEAL_CREATED,
@@ -116,7 +116,7 @@ describe("SalesOS services", () => {
       account: { id: "acct-1", name: "Acct" },
       stage: { id: "stage-new", name: "Negotiation", slug: "negotiation", sortOrder: 7 },
     });
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "audit-2" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "audit-2" });
 
     await updateSalesDeal(
       "deal-1",
@@ -125,7 +125,7 @@ describe("SalesOS services", () => {
       ACTOR,
     );
 
-    expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+    expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           action: SalesAuditActions.DEAL_STAGE_CHANGED,

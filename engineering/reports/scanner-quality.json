@@ -1,0 +1,31 @@
+{
+  "generatedAt": "2026-07-18T17:24:37.760Z",
+  "testResults": {
+    "passed": 88,
+    "failed": 0,
+    "total": 88
+  },
+  "goldenDataset": {
+    "truePositives": 12,
+    "falsePositives": 13,
+    "acceptedRisks": 5,
+    "cleanCases": 8
+  },
+  "quality": {
+    "precision": 48,
+    "falsePositiveRate": 52,
+    "totalGoldenCases": 38,
+    "securityCases": {
+      "truePositives": 8,
+      "falsePositives": 8,
+      "acceptedRisks": 4,
+      "cleanCases": 4
+    },
+    "performanceCases": {
+      "truePositives": 4,
+      "falsePositives": 5,
+      "acceptedRisks": 1,
+      "cleanCases": 4
+    }
+  }
+}

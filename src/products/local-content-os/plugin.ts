@@ -1,6 +1,9 @@
 import type { ProductPlugin, PluginDependencies } from "@/lib/kernel/plugin/product-plugin";
 import type { KernelHealth, ProductRoute, ProductSchema } from "@/lib/kernel/types";
 import type { DomainEvent, EventHandler } from "@/lib/kernel/contracts/event-bus";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "local-content-os", action: "plugin" });
 
 export class LocalContentOSPlugin implements ProductPlugin {
   readonly id = "local-content-os";
@@ -18,15 +21,11 @@ export class LocalContentOSPlugin implements ProductPlugin {
 
     const handleAuditOSEvidence: EventHandler = async (event: DomainEvent) => {
       if (event.productSlug === "local-content-os") return;
-      console.log(
-        `[LocalContentOS] AuditOS evidence event: ${event.action} — resource ${event.resourceId}`,
-      );
+      logger.info(`AuditOS evidence event: ${event.action} — resource ${event.resourceId}`);
     };
 
     const handleAIOutput: EventHandler = async (event: DomainEvent) => {
-      console.log(
-        `[LocalContentOS] AI output generated: ${event.action} — resource ${event.resourceId}`,
-      );
+      logger.info(`AI output generated: ${event.action} — resource ${event.resourceId}`);
     };
 
     eventBus.subscribe("evidence", "*", handleAuditOSEvidence);

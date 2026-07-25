@@ -3,7 +3,11 @@
 // 3_000 for availability checks.
 
 import type { AIProvider, AIRequest, AIResponse, AIProviderStatus } from "@/lib/core/ai/types";
+import { createLogger } from "@/lib/observability/logger";
 import { aiRequestToCompletion, completionToAiResponse } from "./llm-http-client";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 const LOCAL_EXECUTION_TIMEOUT_MS = 30_000; // 30 seconds for LLM execution
 const LOCAL_AVAILABILITY_TIMEOUT_MS = 3_000; // 3 seconds for health checks
@@ -70,7 +74,7 @@ export class LocalAIProvider implements AIProvider {
       });
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {
-        console.error(`[ollama] Request timed out after ${LOCAL_EXECUTION_TIMEOUT_MS}ms to ${url}`);
+        logger.error(`[ollama] Request timed out after ${LOCAL_EXECUTION_TIMEOUT_MS}ms to ${url}`);
         throw new Error(`Ollama API request timed out after ${LOCAL_EXECUTION_TIMEOUT_MS / 1000}s. Please try again or check local model availability.`);
       }
       throw err;

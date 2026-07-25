@@ -1,487 +1,19 @@
 {
   "agent": "code-health",
   "title": "Code Health Report",
-  "generatedAt": "2026-07-11T02:08:04.505Z",
-  "score": 32,
+  "generatedAt": "2026-07-21T16:59:04.357Z",
+  "score": 50,
   "summary": {
-    "total": 290,
+    "total": 212,
     "critical": 0,
-    "high": 116,
-    "medium": 49,
+    "high": 58,
+    "medium": 29,
     "low": 120,
     "info": 5
   },
   "findings": [
     {
       "id": "F-0001",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/components/sales/deal-conversion-memo-panel.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0002",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/components/audit/trial-balance/trial-balance-upload.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0003",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/components/audit/pilot/pilot-page.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0004",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/components/audit/governance/GovernanceContextPanel.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0005",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/components/audit/engagement/engagement-tabs.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0006",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/app/sales/sales-dashboard-client.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0007",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/app/local-content/settings/integrations/page.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0008",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/app/(dashboard)/decisions/[id]/tender/page.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0009",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Client module references server-only concerns",
-      "evidence": "use client + prisma/fs/crypto server APIs",
-      "files": [
-        "src/app/(dashboard)/decisions/[id]/outcome/page.tsx"
-      ],
-      "category": "solid-srp",
-      "suggestion": "Move data access to Server Actions / lib services.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0010",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: index.ts",
-      "evidence": "3657 lines, 77 named exports",
-      "files": [
-        "src/lib/audit/db/index.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0011",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: mock-data.ts",
-      "evidence": "2456 lines, 25 named exports",
-      "files": [
-        "src/lib/audit/mock-data.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0012",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: services.ts",
-      "evidence": "1931 lines, 81 named exports",
-      "files": [
-        "src/lib/audit/services.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0013",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: audit-actions.ts",
-      "evidence": "1775 lines, 50 named exports",
-      "files": [
-        "src/actions/audit-actions.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0014",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: decisions.ts",
-      "evidence": "1696 lines, 21 named exports",
-      "files": [
-        "src/actions/decisions.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0015",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: seed-data.ts",
-      "evidence": "1695 lines, 2 named exports",
-      "files": [
-        "src/lib/sales/seed-data.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0016",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: localcontent-actions.ts",
-      "evidence": "1449 lines, 38 named exports",
-      "files": [
-        "src/actions/localcontent-actions.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0017",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: page.tsx",
-      "evidence": "1304 lines, 2 named exports",
-      "files": [
-        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0018",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: page.tsx",
-      "evidence": "1237 lines, 2 named exports",
-      "files": [
-        "src/app/local-content/settings/integrations/page.tsx"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0019",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: evidence-page.tsx",
-      "evidence": "1216 lines, 2 named exports",
-      "files": [
-        "src/components/audit/evidence/evidence-page.tsx"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0020",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: store.ts",
-      "evidence": "1162 lines, 71 named exports",
-      "files": [
-        "src/lib/sales/store.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0021",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: ai-advisor.ts",
-      "evidence": "1162 lines, 15 named exports",
-      "files": [
-        "src/lib/local-content/workbook/ai-advisor.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0022",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: demo-data.ts",
-      "evidence": "1153 lines, 11 named exports",
-      "files": [
-        "src/app/auditos/demo-data.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0023",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: findings-page.tsx",
-      "evidence": "1148 lines, 2 named exports",
-      "files": [
-        "src/components/audit/findings/findings-page.tsx"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0024",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Large module / God Object signal: page.tsx",
-      "evidence": "1138 lines, 2 named exports",
-      "files": [
-        "src/app/sales/settings/crm/page.tsx"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0025",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: services.ts",
-      "evidence": "961 lines, 32 named exports",
-      "files": [
-        "src/lib/local-content/services.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0026",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: sales-actions.ts",
-      "evidence": "917 lines, 51 named exports",
-      "files": [
-        "src/actions/sales-actions.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0027",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: prisma-repository.ts",
-      "evidence": "897 lines, 39 named exports",
-      "files": [
-        "src/lib/sales/prisma-repository.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0028",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: workflowos-actions.ts",
-      "evidence": "824 lines, 36 named exports",
-      "files": [
-        "src/actions/workflowos-actions.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0029",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: content-studio-service.ts",
-      "evidence": "763 lines, 33 named exports",
-      "files": [
-        "src/lib/platform/content-studio/content-studio-service.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0030",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: income-statement-presentation.ts",
-      "evidence": "670 lines, 39 named exports",
-      "files": [
-        "src/lib/audit/db/income-statement-presentation.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0031",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: evidence-adapter.ts",
-      "evidence": "581 lines, 38 named exports",
-      "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0032",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: types.ts",
-      "evidence": "573 lines, 55 named exports",
-      "files": [
-        "src/lib/sales/types.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0033",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: index.ts",
-      "evidence": "473 lines, 49 named exports",
-      "files": [
-        "src/types/audit/index.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0034",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: audit-read-actions.ts",
-      "evidence": "426 lines, 30 named exports",
-      "files": [
-        "src/actions/audit-read-actions.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0035",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: index.ts",
-      "evidence": "379 lines, 33 named exports",
-      "files": [
-        "src/lib/sales/v02/knowledge-graph/index.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0036",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Large module / God Object signal: types.ts",
-      "evidence": "378 lines, 47 named exports",
-      "files": [
-        "src/lib/integration/types.ts"
-      ],
-      "category": "god-object",
-      "suggestion": "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0037",
       "agent": "code-health",
       "severity": "medium",
       "title": "Large module / God Object signal: primitives.ts",
@@ -494,514 +26,98 @@
       "scoreImpact": 3
     },
     {
-      "id": "F-0038",
+      "id": "F-0002",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "React God Component: RCS 38 — use-approval-page.tsx",
+      "evidence": "202 LOC, 17 useState, 6 components, density=9.9/100L, inline=0",
+      "files": [
+        "src/components/audit/approval/components/use-approval-page.tsx"
+      ],
+      "category": "react-complexity",
+      "suggestion": "Extract sub-components, convert useState chains to useReducer, or split into container/presentational.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0003",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "React God Component: RCS 18 — connection-form-dialog.tsx",
+      "evidence": "289 LOC, 15 useState, 10 components, density=5.2/100L, inline=11",
+      "files": [
+        "src/app/local-content/settings/integrations/components/connection-form-dialog.tsx"
+      ],
+      "category": "react-complexity",
+      "suggestion": "Extract sub-components, convert useState chains to useReducer, or split into container/presentational.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0004",
       "agent": "code-health",
       "severity": "high",
-      "title": "Long function buildSalesSeedData (1651 lines)",
-      "evidence": "Lines 44–1694",
+      "title": "Long function useFindingsPage (359 lines)",
+      "evidence": "Lines 108–466",
       "files": [
-        "src/lib/sales/seed-data.ts"
+        "src/components/audit/findings/components/use-findings-page.ts"
       ],
       "category": "long-function",
       "suggestion": "Extract helpers; keep orchestration thin.",
       "scoreImpact": 8
     },
     {
-      "id": "F-0039",
+      "id": "F-0005",
       "agent": "code-health",
       "severity": "high",
-      "title": "Long function buildStatementLinesFromMappings (718 lines)",
-      "evidence": "Lines 121–838",
+      "title": "Long function useEvidencePage (344 lines)",
+      "evidence": "Lines 31–374",
       "files": [
-        "src/lib/audit/db/statement-builder.ts"
+        "src/components/audit/evidence/components/use-evidence-page.ts"
       ],
       "category": "long-function",
       "suggestion": "Extract helpers; keep orchestration thin.",
       "scoreImpact": 8
     },
     {
-      "id": "F-0040",
+      "id": "F-0006",
       "agent": "code-health",
       "severity": "high",
-      "title": "Long function WorkbookDetailClient (708 lines)",
-      "evidence": "Lines 89–796",
+      "title": "Long function ConnectionDetailPanel (329 lines)",
+      "evidence": "Lines 76–404",
       "files": [
-        "src/app/local-content/workbook/[workbookId]/workbook-detail-client.tsx"
+        "src/app/local-content/settings/integrations/components/connection-detail-panel.tsx"
       ],
       "category": "long-function",
       "suggestion": "Extract helpers; keep orchestration thin.",
       "scoreImpact": 8
     },
     {
-      "id": "F-0041",
+      "id": "F-0007",
       "agent": "code-health",
       "severity": "high",
-      "title": "Long function ClientAcceptanceDashboard (662 lines)",
-      "evidence": "Lines 78–739",
+      "title": "Long function useGovernancePage (313 lines)",
+      "evidence": "Lines 83–395",
       "files": [
-        "src/components/audit/acceptance/client-acceptance-dashboard.tsx"
+        "src/app/(dashboard)/decisions/[id]/governance/components/use-governance-page.ts"
       ],
       "category": "long-function",
       "suggestion": "Extract helpers; keep orchestration thin.",
       "scoreImpact": 8
     },
     {
-      "id": "F-0042",
+      "id": "F-0008",
       "agent": "code-health",
       "severity": "high",
-      "title": "Long function PilotPageContent (654 lines)",
-      "evidence": "Lines 120–773",
+      "title": "Long function ConnectionFormDialogContent (294 lines)",
+      "evidence": "Lines 36–329",
       "files": [
-        "src/components/audit/pilot/pilot-page.tsx"
+        "src/app/sales/settings/crm/components/connection-form-dialog.tsx"
       ],
       "category": "long-function",
       "suggestion": "Extract helpers; keep orchestration thin.",
       "scoreImpact": 8
     },
     {
-      "id": "F-0043",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function main (645 lines)",
-      "evidence": "Lines 47–691",
-      "files": [
-        "src/__tests__/uat-run.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0044",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function ReviewNotesBoard (598 lines)",
-      "evidence": "Lines 57–654",
-      "files": [
-        "src/components/audit/review-notes/review-notes-board.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0045",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function ReviewCenter (561 lines)",
-      "evidence": "Lines 68–628",
-      "files": [
-        "src/app/local-content/review-center/review-center-client.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0046",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function QualityDashboardClient (519 lines)",
-      "evidence": "Lines 110–628",
-      "files": [
-        "src/app/local-content/quality-dashboard/quality-dashboard-client.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0047",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function IndependenceDashboard (491 lines)",
-      "evidence": "Lines 56–546",
-      "files": [
-        "src/components/audit/independence/independence-dashboard.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0048",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function MaterialityEnginePage (489 lines)",
-      "evidence": "Lines 74–562",
-      "files": [
-        "src/components/audit/materiality/materiality-engine-page.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0049",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function QualityDashboard (459 lines)",
-      "evidence": "Lines 40–498",
-      "files": [
-        "src/components/audit/quality/quality-dashboard.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0050",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function TrialBalanceUpload (434 lines)",
-      "evidence": "Lines 391–824",
-      "files": [
-        "src/components/audit/trial-balance/trial-balance-upload.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0051",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function buildKnowledgeGraphFromSnapshot (430 lines)",
-      "evidence": "Lines 99–528",
-      "files": [
-        "src/lib/sales/v02/knowledge-graph/builder.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0052",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function CustomProductForm (419 lines)",
-      "evidence": "Lines 344–762",
-      "files": [
-        "src/components/forms/custom-product-form.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0053",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function DecisionDashboard (399 lines)",
-      "evidence": "Lines 83–481",
-      "files": [
-        "src/components/decisions/decision-dashboard.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0054",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function ExecutiveCommercialDashboard (380 lines)",
-      "evidence": "Lines 41–420",
-      "files": [
-        "src/components/sales/executive-commercial-dashboard.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0055",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function AiGovernanceClient (374 lines)",
-      "evidence": "Lines 95–468",
-      "files": [
-        "src/app/settings/ai-governance/ai-governance-client.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0056",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function OverviewTab (372 lines)",
-      "evidence": "Lines 71–442",
-      "files": [
-        "src/components/audit/engagement/overview-tab.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0057",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function AiInsightsPanel (369 lines)",
-      "evidence": "Lines 82–450",
-      "files": [
-        "src/app/local-content/workbook/[workbookId]/ai-insights-panel.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0058",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function WorkbookAiAdvisorClient (367 lines)",
-      "evidence": "Lines 193–559",
-      "files": [
-        "src/app/local-content/projects/[projectId]/workbook/[workbookId]/ai-advisor/workbook-ai-advisor-client.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0059",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function buildKnowledgeGraphFromSnapshot (359 lines)",
-      "evidence": "Lines 148–506",
-      "files": [
-        "src/lib/sales/v02/knowledge-graph/build.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0060",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function runLocalContentPipeline (358 lines)",
-      "evidence": "Lines 82–439",
-      "files": [
-        "src/lib/local-content/pipeline-orchestrator.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0061",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function ModelGovernanceClient (346 lines)",
-      "evidence": "Lines 52–397",
-      "files": [
-        "src/app/settings/models/model-governance-client.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0062",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function TbImportDialog (341 lines)",
-      "evidence": "Lines 30–370",
-      "files": [
-        "src/app/local-content/workbook/[workbookId]/tb-import-dialog.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0063",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function ConnectionDetailPanel (330 lines)",
-      "evidence": "Lines 571–900",
-      "files": [
-        "src/app/local-content/settings/integrations/page.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0064",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function CandidateDetailClient (325 lines)",
-      "evidence": "Lines 83–407",
-      "files": [
-        "src/components/knowledge-review/candidate-detail.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0065",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function VersionDetailClient (313 lines)",
-      "evidence": "Lines 68–380",
-      "files": [
-        "src/components/knowledge-foundation/version-detail-client.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0066",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function ContactForm (309 lines)",
-      "evidence": "Lines 28–336",
-      "files": [
-        "src/app/(marketing)/contact/contact-form.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0067",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function runValidation (308 lines)",
-      "evidence": "Lines 1230–1537",
-      "files": [
-        "src/lib/audit/db/index.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0068",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function ContentEvidenceSection (297 lines)",
-      "evidence": "Lines 60–356",
-      "files": [
-        "src/app/content-studio/[workspaceId]/[contentId]/content-evidence-section.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0069",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function getDecisionExportData (296 lines)",
-      "evidence": "Lines 93–388",
-      "files": [
-        "src/actions/decision-export.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0070",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function CommandCenterView (294 lines)",
-      "evidence": "Lines 89–382",
-      "files": [
-        "src/components/sales/command-center-view.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0071",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function WorkflowAdminDashboard (293 lines)",
-      "evidence": "Lines 126–418",
-      "files": [
-        "src/components/workflowos/workflow-admin-dashboard.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0072",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function ExportApprovalDialog (289 lines)",
-      "evidence": "Lines 35–323",
-      "files": [
-        "src/components/contacts/export-approval-dialog.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0073",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function runSimulationAndRecommendation (279 lines)",
-      "evidence": "Lines 12–290",
-      "files": [
-        "src/actions/simulation.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0074",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function evaluateIfrsRule (278 lines)",
-      "evidence": "Lines 77–354",
-      "files": [
-        "src/lib/audit/rules/ifrs-rule-checks.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0075",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function getDashboardMetrics (274 lines)",
-      "evidence": "Lines 1157–1430",
-      "files": [
-        "src/actions/decisions.ts"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0076",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Long function AccountIntelligenceProfile (272 lines)",
-      "evidence": "Lines 42–313",
-      "files": [
-        "src/components/sales/account-intelligence-profile.tsx"
-      ],
-      "category": "long-function",
-      "suggestion": "Extract helpers; keep orchestration thin.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0077",
+      "id": "F-0009",
       "agent": "code-health",
       "severity": "high",
       "title": "Long function buildKnowledgeFoundationPDF (271 lines)",
@@ -1014,1069 +130,1043 @@
       "scoreImpact": 8
     },
     {
-      "id": "F-0078",
+      "id": "F-0010",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function buildKnowledgeFoundationPDF (262 lines)",
+      "evidence": "Lines 12–273",
+      "files": [
+        "src/lib/knowledge-foundation/kf-export/pdf-export.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0011",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function ConnectionFormDialog (250 lines)",
+      "evidence": "Lines 39–288",
+      "files": [
+        "src/app/local-content/settings/integrations/components/connection-form-dialog.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0012",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function generateMockResponse (243 lines)",
+      "evidence": "Lines 4–246",
+      "files": [
+        "src/lib/core/ai/providers/mock-provider/templates.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0013",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function useRecommendationsPage (238 lines)",
+      "evidence": "Lines 49–286",
+      "files": [
+        "src/components/audit/recommendations/use-recommendations-page.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0014",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function buildFindingsPhase (232 lines)",
+      "evidence": "Lines 5–236",
+      "files": [
+        "src/lib/sales/v02/knowledge-graph/builder/findings.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0015",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function useRetentionSettings (219 lines)",
+      "evidence": "Lines 6–224",
+      "files": [
+        "src/app/settings/retention/components/use-retention-settings.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0016",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function useRecommendationPage (216 lines)",
+      "evidence": "Lines 92–307",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/recommendation/components/use-recommendation-page.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0017",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function runErpImport (211 lines)",
+      "evidence": "Lines 18–228",
+      "files": [
+        "src/lib/local-content/erp/import-pipeline/run-erp-import.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0018",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function exportContactAsPdf (207 lines)",
+      "evidence": "Lines 13–219",
+      "files": [
+        "src/actions/contact-export-actions/pdf.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0019",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function getDecisionExportData (206 lines)",
+      "evidence": "Lines 16–221",
+      "files": [
+        "src/actions/decision-export/index.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0020",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function useSsoSettings (205 lines)",
+      "evidence": "Lines 86–290",
+      "files": [
+        "src/app/(dashboard)/settings/sso/components/use-sso-settings.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0021",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Long function useStatementsPage (201 lines)",
+      "evidence": "Lines 86–286",
+      "files": [
+        "src/components/audit/statements/hooks/use-statements-page.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0022",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function deriveWinLossPatterns (199 lines)",
+      "evidence": "Lines 16–214",
+      "files": [
+        "src/lib/sales/v02/institutional-learning/engine/patterns.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0023",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function getTraceability (199 lines)",
+      "evidence": "Lines 3–201",
+      "files": [
+        "src/lib/audit/db/publication-db/traceability.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0024",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function getFullTraceability (198 lines)",
+      "evidence": "Lines 4–201",
+      "files": [
+        "src/lib/audit/db/publication-db/full-traceability.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0025",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function verifyReleaseIntegrity (191 lines)",
+      "evidence": "Lines 20–210",
+      "files": [
+        "src/lib/knowledge-foundation/release-integrity/integrity-verifier.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0026",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function useReviewPage (189 lines)",
+      "evidence": "Lines 31–219",
+      "files": [
+        "src/components/audit/review/components/use-review-page.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0027",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function useWorkbookDetail (189 lines)",
+      "evidence": "Lines 58–246",
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/use-workbook-detail.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0028",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function useCrmSettings (184 lines)",
+      "evidence": "Lines 53–236",
+      "files": [
+        "src/app/sales/settings/crm/components/use-crm-settings.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0029",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function useTbImport (183 lines)",
+      "evidence": "Lines 14–196",
+      "files": [
+        "src/app/local-content/workbook/[workbookId]/components/use-tb-import.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0030",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function generateReviewPdf (182 lines)",
+      "evidence": "Lines 40–221",
+      "files": [
+        "src/actions/localcontent-review-export/pdf-builder.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0031",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function useTrialBalanceUpload (181 lines)",
+      "evidence": "Lines 19–199",
+      "files": [
+        "src/components/audit/trial-balance/components/use-trial-balance-upload.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0032",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function WorkflowWorkflowActions (180 lines)",
+      "evidence": "Lines 23–202",
+      "files": [
+        "src/components/workflowos/workflow-workflow-actions.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0033",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function useMateriality (180 lines)",
+      "evidence": "Lines 40–219",
+      "files": [
+        "src/components/audit/materiality/use-materiality.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0034",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function GraphCanvas (180 lines)",
+      "evidence": "Lines 7–186",
+      "files": [
+        "src/app/institutional-memory/graph/components/graph-canvas.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0035",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function ApprovalActions (180 lines)",
+      "evidence": "Lines 44–223",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/governance/components/approval-actions.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0036",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function rebuildFinancialStatementsForEngagement (179 lines)",
+      "evidence": "Lines 7–185",
+      "files": [
+        "src/lib/audit/db/financial-db/rebuild.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0037",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function getPlatformNotificationsAction (177 lines)",
+      "evidence": "Lines 7–183",
+      "files": [
+        "src/actions/platform-overview-actions/notifications.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0038",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function useIndependence (176 lines)",
+      "evidence": "Lines 70–245",
+      "files": [
+        "src/components/audit/independence/components/use-independence.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0039",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function ContentEditForm (173 lines)",
+      "evidence": "Lines 34–206",
+      "files": [
+        "src/app/content-studio/[workspaceId]/[contentId]/edit/content-edit-form.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0040",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function publishRecommendationAction (173 lines)",
+      "evidence": "Lines 14–186",
+      "files": [
+        "src/actions/decisions-workflow/publishing.ts"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0041",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function IcpTerritoryAdminPanel (172 lines)",
+      "evidence": "Lines 18–189",
+      "files": [
+        "src/components/sales/icp-territory-admin-panel.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0042",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function ProductPageTemplate (172 lines)",
+      "evidence": "Lines 54–225",
+      "files": [
+        "src/components/marketing/v2/product-page-template.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0043",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Long function VerificationChecklistView (172 lines)",
+      "evidence": "Lines 30–201",
+      "files": [
+        "src/components/local-content/verification-checklist-view.tsx"
+      ],
+      "category": "long-function",
+      "suggestion": "Extract helpers; keep orchestration thin.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0044",
       "agent": "code-health",
       "severity": "info",
-      "title": "Additional long functions truncated (228 more)",
-      "evidence": "Total long functions ≥100 lines: 268",
+      "title": "Additional long functions truncated (240 more)",
+      "evidence": "Total long functions ≥100 lines: 280",
       "files": [],
       "category": "long-function",
       "suggestion": "",
       "scoreImpact": 0
     },
     {
-      "id": "F-0079",
+      "id": "F-0045",
       "agent": "code-health",
-      "severity": "high",
-      "title": "Elevated complexity in index.ts",
-      "evidence": "Decision density ≈ 214, MI=0",
+      "severity": "medium",
+      "title": "Elevated complexity in utils.ts",
+      "evidence": "Decision density ≈ 69, MI=10",
       "files": [
-        "src/lib/audit/db/index.ts"
+        "src/components/audit/trial-balance/components/utils.ts"
       ],
       "category": "complexity",
       "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0046",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Elevated complexity in common.ts",
+      "evidence": "Decision density ≈ 57, MI=14",
+      "files": [
+        "src/lib/local-content/workbook/population/common.ts"
+      ],
+      "category": "complexity",
+      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0047",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Elevated complexity in scoring.ts",
+      "evidence": "Decision density ≈ 49, MI=22",
+      "files": [
+        "src/lib/skill-runtime/evaluator/scoring.ts"
+      ],
+      "category": "complexity",
+      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0048",
+      "agent": "code-health",
+      "severity": "medium",
+      "title": "Elevated complexity in common.ts",
+      "evidence": "Decision density ≈ 41, MI=11",
+      "files": [
+        "src/lib/sales/store/common.ts"
+      ],
+      "category": "complexity",
+      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "scoreImpact": 3
+    },
+    {
+      "id": "F-0049",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (4)",
+      "evidence": "MI=4 (warn < 45)",
+      "files": [
+        "src/actions/contact-actions.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0050",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (7)",
+      "evidence": "MI=7 (warn < 45)",
+      "files": [
+        "src/lib/local-content/workbook/recommendation-engine.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0051",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (7)",
+      "evidence": "MI=7 (warn < 45)",
+      "files": [
+        "src/actions/audit-engagement-actions.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0052",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (8)",
+      "evidence": "MI=8 (warn < 45)",
+      "files": [
+        "src/lib/workflowos/services.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0053",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (8)",
+      "evidence": "MI=8 (warn < 45)",
+      "files": [
+        "src/lib/sales/agents/objection-analysis.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0054",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (8)",
+      "evidence": "MI=8 (warn < 45)",
+      "files": [
+        "src/lib/local-content/content/file-repository.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0055",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (8)",
+      "evidence": "MI=8 (warn < 45)",
+      "files": [
+        "src/lib/governance-engine/graph/pipeline/graph-readiness-pipeline.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0056",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (8)",
+      "evidence": "MI=8 (warn < 45)",
+      "files": [
+        "src/lib/content-studio/file-repository.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0057",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (9)",
+      "evidence": "MI=9 (warn < 45)",
+      "files": [
+        "src/lib/sales/services.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0058",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (9)",
+      "evidence": "MI=9 (warn < 45)",
+      "files": [
+        "src/lib/auth/scim-service.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0059",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (10)",
+      "evidence": "MI=10 (warn < 45)",
+      "files": [
+        "src/lib/sales/icp-learning-snapshot.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0060",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (10)",
+      "evidence": "MI=10 (warn < 45)",
+      "files": [
+        "src/lib/sales/v02/proof-effectiveness/index.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0061",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (10)",
+      "evidence": "MI=10 (warn < 45)",
+      "files": [
+        "src/components/audit/trial-balance/components/utils.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0062",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (11)",
+      "evidence": "MI=11 (warn < 45)",
+      "files": [
+        "src/lib/sales/store/common.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0063",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (11)",
+      "evidence": "MI=11 (warn < 45)",
+      "files": [
+        "src/lib/platform/sampling/sampling-engine.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0064",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (11)",
+      "evidence": "MI=11 (warn < 45)",
+      "files": [
+        "src/lib/office-ai/file-extraction-service.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0065",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (11)",
+      "evidence": "MI=11 (warn < 45)",
+      "files": [
+        "src/actions/local-content-workspace-actions.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0066",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/tb-intelligence/firm-memory-engine.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0067",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/sales/outreach.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0068",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/sales/v02/executive-commercial.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0069",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/sales/v02/institutional-learning/synthesize.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0070",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/sales/crm/sync-orchestrator.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0071",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/sales/agents/follow-up.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0072",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/local-content/erp/services.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0073",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/integration/failover-engine.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0074",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/integration/secret-resolver/implementation.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0075",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/governance/retrieval-router.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0076",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/lib/audit/isqm1-engine.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0077",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/app/(dashboard)/decisions/[id]/outcome/page.tsx"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0078",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/actions/institutional-memory-actions.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
+      "scoreImpact": 8
+    },
+    {
+      "id": "F-0079",
+      "agent": "code-health",
+      "severity": "high",
+      "title": "Low maintainability index (12)",
+      "evidence": "MI=12 (warn < 45)",
+      "files": [
+        "src/actions/registration-actions.ts"
+      ],
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0080",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in ai-advisor.ts",
-      "evidence": "Decision density ≈ 139, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/lib/local-content/workbook/ai-advisor.ts"
+        "src/lib/sales/v02/proof-effectiveness/analytics.ts"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0081",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in prisma-client-mock.js",
-      "evidence": "Decision density ≈ 126, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/__mocks__/prisma-client-mock.js"
+        "src/lib/platform/feature-flags/registry.ts"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0082",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in decisions.ts",
-      "evidence": "Decision density ≈ 120, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/actions/decisions.ts"
+        "src/lib/platform/decision-gov/decision-gov-service.ts"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0083",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in skill-registry.integration.test.ts",
-      "evidence": "Decision density ≈ 114, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/lib/skill-runtime/__tests__/skill-registry.integration.test.ts"
+        "src/lib/governance-engine/graph/decision-framework/decision-aggregator.ts"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0084",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in services.ts",
-      "evidence": "Decision density ≈ 109, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/lib/audit/services.ts"
+        "src/lib/core/ai/orchestrator.ts"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0085",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in runtime.ts",
-      "evidence": "Decision density ≈ 104, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/lib/skill-runtime/runtime.ts"
+        "src/lib/audit/materiality-engine.ts"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0086",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in evaluator.ts",
-      "evidence": "Decision density ≈ 97, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/lib/skill-runtime/evaluator.ts"
+        "src/lib/audit/reconciliation/reconciliation-checks.ts"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0087",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in population.ts",
-      "evidence": "Decision density ≈ 90, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/lib/local-content/workbook/population.ts"
+        "src/components/audit/findings/components/use-findings-page.ts"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0088",
       "agent": "code-health",
       "severity": "high",
-      "title": "Elevated complexity in trial-balance-upload.tsx",
-      "evidence": "Decision density ≈ 86, MI=0",
+      "title": "Low maintainability index (13)",
+      "evidence": "MI=13 (warn < 45)",
       "files": [
-        "src/components/audit/trial-balance/trial-balance-upload.tsx"
+        "src/app/risk/assessments/[id]/page.tsx"
       ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
+      "category": "maintainability",
+      "suggestion": "",
       "scoreImpact": 8
     },
     {
       "id": "F-0089",
       "agent": "code-health",
-      "severity": "high",
-      "title": "Elevated complexity in page.tsx",
-      "evidence": "Decision density ≈ 86, MI=0",
-      "files": [
-        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0090",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Elevated complexity in workflowos-actions.ts",
-      "evidence": "Decision density ≈ 80, MI=0",
-      "files": [
-        "src/actions/workflowos-actions.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0091",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in approval.ts",
-      "evidence": "Decision density ≈ 72, MI=0",
-      "files": [
-        "src/actions/approval.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0092",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in sales-intel-service.ts",
-      "evidence": "Decision density ≈ 67, MI=1",
-      "files": [
-        "src/lib/platform/sales-intelligence/sales-intel-service.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0093",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in audit-bridge-service.ts",
-      "evidence": "Decision density ≈ 67, MI=1",
-      "files": [
-        "src/lib/platform/audit-bridge/audit-bridge-service.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0094",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in recommendation-engine.ts",
-      "evidence": "Decision density ≈ 64, MI=12",
-      "files": [
-        "src/lib/recommendation/recommendation-engine.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0095",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in dossier-generator.ts",
-      "evidence": "Decision density ≈ 64, MI=3",
-      "files": [
-        "src/lib/governance-engine/generators/dossier-generator.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0096",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in income-statement-presentation.ts",
-      "evidence": "Decision density ≈ 63, MI=3",
-      "files": [
-        "src/lib/audit/db/income-statement-presentation.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0097",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in statement-builder.ts",
-      "evidence": "Decision density ≈ 57, MI=1",
-      "files": [
-        "src/lib/audit/db/statement-builder.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0098",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in audit-actions.ts",
-      "evidence": "Decision density ≈ 56, MI=0",
-      "files": [
-        "src/actions/audit-actions.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0099",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in secret-resolver.ts",
-      "evidence": "Decision density ≈ 55, MI=4",
-      "files": [
-        "src/lib/integration/secret-resolver.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0100",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in localcontent-actions.ts",
-      "evidence": "Decision density ≈ 54, MI=0",
-      "files": [
-        "src/actions/localcontent-actions.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0101",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in builder.ts",
-      "evidence": "Decision density ≈ 52, MI=7",
-      "files": [
-        "src/lib/sales/v02/knowledge-graph/builder.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0102",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in build.ts",
-      "evidence": "Decision density ≈ 51, MI=8",
-      "files": [
-        "src/lib/sales/v02/knowledge-graph/build.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0103",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in content-studio.test.ts",
-      "evidence": "Decision density ≈ 51, MI=0",
-      "files": [
-        "src/lib/platform/content-studio/__tests__/content-studio.test.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0104",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in no-english-strings.test.ts",
-      "evidence": "Decision density ≈ 50, MI=9",
-      "files": [
-        "src/__tests__/i18n/no-english-strings.test.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0105",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in audit-risk-engine.ts",
-      "evidence": "Decision density ≈ 50, MI=5",
-      "files": [
-        "src/lib/platform/audit-risk/audit-risk-engine.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0106",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in org-adv-service.ts",
-      "evidence": "Decision density ≈ 49, MI=8",
-      "files": [
-        "src/lib/platform/org-advanced/org-adv-service.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0107",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in deterministic-generators.ts",
-      "evidence": "Decision density ≈ 48, MI=13",
-      "files": [
-        "src/lib/office-ai/deterministic-generators.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0108",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in institutional-memory-service.ts",
-      "evidence": "Decision density ≈ 48, MI=2",
-      "files": [
-        "src/lib/core/memory/institutional-memory-service.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0109",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in cross-product-ai-service.ts",
-      "evidence": "Decision density ≈ 47, MI=6",
-      "files": [
-        "src/lib/platform/cross-product-ai/cross-product-ai-service.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0110",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in store.ts",
-      "evidence": "Decision density ≈ 46, MI=0",
-      "files": [
-        "src/lib/sales/store.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0111",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in commercial-memory.ts",
-      "evidence": "Decision density ≈ 46, MI=8",
-      "files": [
-        "src/lib/sales/vnext/commercial-memory.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0112",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in executive-commercial-dashboard-service.ts",
-      "evidence": "Decision density ≈ 46, MI=5",
-      "files": [
-        "src/lib/sales/services/executive-commercial-dashboard-service.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0113",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in office-ai-task-service.ts",
-      "evidence": "Decision density ≈ 46, MI=5",
-      "files": [
-        "src/lib/office-ai/office-ai-task-service.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0114",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in factory-registry.ts",
-      "evidence": "Decision density ≈ 46, MI=18",
-      "files": [
-        "src/lib/integration/factory-registry.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0115",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in audit-adapter.ts",
-      "evidence": "Decision density ≈ 45, MI=15",
-      "files": [
-        "src/products/sales/core-adapters/audit-adapter.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0116",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in model-governance.test.ts",
-      "evidence": "Decision density ≈ 45, MI=11",
-      "files": [
-        "src/lib/platform/model-governance/__tests__/model-governance.test.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0117",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in audit-bridge.test.ts",
-      "evidence": "Decision density ≈ 45, MI=3",
-      "files": [
-        "src/lib/platform/audit-bridge/__tests__/audit-bridge.test.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0118",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Elevated complexity in claim-registry.ts",
-      "evidence": "Decision density ≈ 45, MI=12",
-      "files": [
-        "src/lib/governance-engine/registry/claim-registry.ts"
-      ],
-      "category": "complexity",
-      "suggestion": "Reduce branching; extract strategy/table-driven logic.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0119",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/__mocks__/prisma-client-mock.js"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0120",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/skill-runtime/evaluator.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0121",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/skill-runtime/runtime.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0122",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/skill-runtime/__tests__/skill-registry.integration.test.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0123",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/sales/seed-data.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0124",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/sales/store.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0125",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/platform/content-studio/__tests__/content-studio.test.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0126",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/local-content/workbook/ai-advisor.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0127",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/local-content/workbook/population.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0128",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/audit/mock-data.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0129",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/audit/services.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0130",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/lib/audit/db/index.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0131",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/components/audit/trial-balance/trial-balance-upload.tsx"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0132",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/components/audit/findings/findings-page.tsx"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0133",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/components/audit/evidence/evidence-page.tsx"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0134",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/app/sales/settings/crm/page.tsx"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0135",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/app/local-content/settings/integrations/page.tsx"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0136",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/app/(dashboard)/decisions/[id]/governance/page.tsx"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0137",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/actions/approval.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0138",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/actions/audit-actions.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0139",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/actions/decisions.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0140",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/actions/localcontent-actions.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0141",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (0)",
-      "evidence": "MI=0 (warn < 45)",
-      "files": [
-        "src/actions/workflowos-actions.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0142",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (1)",
-      "evidence": "MI=1 (warn < 45)",
-      "files": [
-        "src/lib/platform/sales-intelligence/sales-intel-service.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0143",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (1)",
-      "evidence": "MI=1 (warn < 45)",
-      "files": [
-        "src/lib/platform/audit-bridge/audit-bridge-service.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0144",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (1)",
-      "evidence": "MI=1 (warn < 45)",
-      "files": [
-        "src/lib/audit/db/statement-builder.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0145",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (2)",
-      "evidence": "MI=2 (warn < 45)",
-      "files": [
-        "src/lib/sales/prisma-repository.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0146",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (2)",
-      "evidence": "MI=2 (warn < 45)",
-      "files": [
-        "src/lib/local-content/services.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0147",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (2)",
-      "evidence": "MI=2 (warn < 45)",
-      "files": [
-        "src/lib/local-content/content/prisma-repository.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0148",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (2)",
-      "evidence": "MI=2 (warn < 45)",
-      "files": [
-        "src/lib/core/memory/institutional-memory-service.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0149",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (3)",
-      "evidence": "MI=3 (warn < 45)",
-      "files": [
-        "src/lib/platform/org-advanced/__tests__/org-adv.test.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0150",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (3)",
-      "evidence": "MI=3 (warn < 45)",
-      "files": [
-        "src/lib/platform/audit-bridge/__tests__/audit-bridge.test.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0151",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (3)",
-      "evidence": "MI=3 (warn < 45)",
-      "files": [
-        "src/lib/governance-engine/generators/dossier-generator.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0152",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (3)",
-      "evidence": "MI=3 (warn < 45)",
-      "files": [
-        "src/lib/audit/db/income-statement-presentation.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0153",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (4)",
-      "evidence": "MI=4 (warn < 45)",
-      "files": [
-        "src/lib/platform/audit-risk/__tests__/audit-risk.test.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0154",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (4)",
-      "evidence": "MI=4 (warn < 45)",
-      "files": [
-        "src/lib/platform/abac/__tests__/abac.test.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0155",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (4)",
-      "evidence": "MI=4 (warn < 45)",
-      "files": [
-        "src/lib/integration/secret-resolver.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0156",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (4)",
-      "evidence": "MI=4 (warn < 45)",
-      "files": [
-        "src/app/auditos/demo-data.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0157",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (4)",
-      "evidence": "MI=4 (warn < 45)",
-      "files": [
-        "src/actions/__tests__/workflow-actions.test.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0158",
-      "agent": "code-health",
-      "severity": "high",
-      "title": "Low maintainability index (5)",
-      "evidence": "MI=5 (warn < 45)",
-      "files": [
-        "src/lib/sales/services/executive-commercial-dashboard-service.ts"
-      ],
-      "category": "maintainability",
-      "suggestion": "",
-      "scoreImpact": 8
-    },
-    {
-      "id": "F-0159",
-      "agent": "code-health",
       "severity": "info",
-      "title": "Additional low-MI files truncated (1696 more)",
-      "evidence": "Total below warn threshold: 1736",
+      "title": "Additional low-MI files truncated (2056 more)",
+      "evidence": "Total below warn threshold: 2096",
       "files": [],
       "category": "maintainability",
       "suggestion": "",
       "scoreImpact": 0
     },
     {
-      "id": "F-0160",
+      "id": "F-0090",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused export: onRequestError",
@@ -2089,759 +1179,564 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0161",
+      "id": "F-0091",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: timingMiddleware",
+      "title": "Possibly unused export: analyzeMap2Errors",
       "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/middleware-timing.ts"
+        "src/lib/tb-intelligence/map2-refinement.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0162",
+      "id": "F-0092",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: RecommendationStatus",
+      "title": "Possibly unused export: COA_SYNONYM_RULES",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/types/audit/index.ts"
+        "src/lib/tb-intelligence/synonyms.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0163",
+      "id": "F-0093",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: ApprovalStatus",
+      "title": "Possibly unused export: getPendingReviewCandidates",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/tb-intelligence/knowledge-mining/review-workflow.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0094",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: countSkippedSteps",
       "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/types/audit/index.ts"
+        "src/lib/skill-runtime/runtime/engine/output-collector.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0164",
+      "id": "F-0095",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: PublicationStatus",
+      "title": "Possibly unused export: scoreObjectAccuracy",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/types/audit/index.ts"
+        "src/lib/skill-runtime/evaluator/scoring.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0165",
+      "id": "F-0096",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: AiOutputStatus",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/types/audit/index.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0166",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: LinkType",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/types/audit/index.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0167",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: EngagementType",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/types/audit/index.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0168",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: ValidationCheckType",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/types/audit/index.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0169",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: ValidationStatus",
+      "title": "Possibly unused export: getSimulationSummary",
       "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/types/audit/index.ts"
+        "src/lib/simulation/simulation-engine.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0170",
+      "id": "F-0097",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: FinancialPeriod",
+      "title": "Possibly unused export: toDealDetailViewModel",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/salesos/viewmodel/deal-viewmodel.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0098",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: PrismaDealRepository",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/salesos/infrastructure/prisma-deal-repository.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0099",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: PERMISSION_MAP",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/salesos/api/auth-context.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0100",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: parseConversionMemo",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/sales/conversion-memo.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0101",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: getProductEvidenceTypes",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/sales/core-adoption.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0102",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: getProductOutputTypes",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/sales/core-adoption.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0103",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: getProductWorkflowTemplates",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/sales/core-adoption.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0104",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: canExportOutput",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/sales/core-adoption.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0105",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: getOutputMetadata",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/sales/core-adoption.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0106",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: buildGovernedAIContract",
+      "evidence": "Symbol appears ~2 times in src",
+      "files": [
+        "src/lib/sales/core-adoption.ts"
+      ],
+      "category": "unused-export",
+      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0107",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused export: salesosRegistryContract",
       "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/types/audit/index.ts"
+        "src/lib/sales/core-adoption.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0171",
+      "id": "F-0108",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: SALESOS_PRODUCT_DEFINITION",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/products/sales/product-definition.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0172",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: SALESOS_MANIFEST",
+      "title": "Possibly unused export: salesosWorkflowTemplate",
       "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/product-definition.ts"
+        "src/lib/sales/core-adoption.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0173",
+      "id": "F-0109",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: SALES_CORE_AUDIT_PREFIXES",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: salesosEvidenceCatalog",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/audit-adapter.ts"
+        "src/lib/sales/core-adoption.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0174",
+      "id": "F-0110",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: mapSalesToContractCategory",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: salesosOutputCatalog",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/audit-adapter.ts"
+        "src/lib/sales/core-adoption.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0175",
+      "id": "F-0111",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: getAuditLedger",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: salesosAICapabilities",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/audit-adapter.ts"
+        "src/lib/sales/core-adoption.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0176",
+      "id": "F-0112",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: recordSalesMutationAudit",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: linkEvidenceToAccount",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/audit-adapter.ts"
+        "src/lib/sales/evidence-links.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0177",
+      "id": "F-0113",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: EvidenceBackedRecommendationCheck",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: unlinkEvidenceFromAccount",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/evidence-links.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0178",
+      "id": "F-0114",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: getSalesEvidenceStore",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: countEvidenceLinksForAccount",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/evidence-links.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0179",
+      "id": "F-0115",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: resetSalesEvidenceStoreForTests",
+      "title": "Possibly unused export: resolveEvidenceForSalesOrg",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/evidence-resolver.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0180",
+      "id": "F-0116",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: linkProofAssetToCore",
+      "title": "Possibly unused export: latestReviewDecision",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/governance.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0181",
+      "id": "F-0117",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: mapProofAssetToCoreRef",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: buildICPLearningFromOrg",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/icp-learning.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0182",
+      "id": "F-0118",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: buildProofEvidenceLinkageMap",
+      "title": "Possibly unused export: SALES_L5_CRITERIA_VERSION",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/l5-acceptance.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0183",
+      "id": "F-0119",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: traceProofUsage",
+      "title": "Possibly unused export: submitSalesOpportunityForReview",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/l5-governance.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0184",
+      "id": "F-0120",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: checkEvidenceBackedRecommendation",
+      "title": "Possibly unused export: approveSalesOpportunity",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/l5-governance.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0185",
+      "id": "F-0121",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: syncSalesEvidenceRefToCore",
+      "title": "Possibly unused export: rejectSalesOpportunity",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/l5-governance.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0186",
+      "id": "F-0122",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: linkSalesProofToCore",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: listNbaSuppressions",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/nba-suppression-store.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0187",
+      "id": "F-0123",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: syncAllSalesProofAssetsToCore",
+      "title": "Possibly unused export: NBA_SNOOZE_HOURS",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/nba-ui-filter.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0188",
+      "id": "F-0124",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: collectSalesEvidenceAlerts",
+      "title": "Possibly unused export: isNbaUiStateActive",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/nba-ui-filter.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0189",
+      "id": "F-0125",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: collectSalesProofEvidenceAlertSignals",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: filterNextBestActionsByUiState",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/nba-ui-filter.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0190",
+      "id": "F-0126",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: bridgeProofAssetsToEvidenceRefs",
+      "title": "Possibly unused export: linkProofAssetToOpportunity",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/proof-linkage-service.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0191",
+      "id": "F-0127",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: proofAssetToEvidenceRef",
+      "title": "Possibly unused export: linkProofAssetToAccount",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/proof-linkage-service.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0192",
+      "id": "F-0128",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: detectMissingCommercialEvidence",
+      "title": "Possibly unused export: buildProofLinkagePlan",
       "evidence": "Symbol appears ~2 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/proof-linkage.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0193",
+      "id": "F-0129",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused export: detectObjectionsWithoutProof",
-      "evidence": "Symbol appears ~2 times in src",
+      "title": "Possibly unused export: linkProofEvidence",
+      "evidence": "Symbol appears ~1 times in src",
       "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
+        "src/lib/sales/proof-linkage.ts"
       ],
       "category": "unused-export",
       "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0194",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: detectStaleProofAssets",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0195",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: evaluateSalesEvidenceCoverage",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0196",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: SalesProofEvidenceBridge",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0197",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: SalesProofUsageTrace",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0198",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: SalesEvidenceAlert",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0199",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused export: SalesEvidenceAlertKind",
-      "evidence": "Symbol appears ~2 times in src",
-      "files": [
-        "src/products/sales/core-adapters/evidence-adapter.ts"
-      ],
-      "category": "unused-export",
-      "suggestion": "Confirm with IDE unused-symbol analysis before removal.",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0200",
+      "id": "F-0130",
       "agent": "code-health",
       "severity": "info",
-      "title": "Additional unused-export candidates truncated (1926 more)",
-      "evidence": "Total candidates: 1966",
+      "title": "Additional unused-export candidates truncated (1366 more)",
+      "evidence": "Total candidates: 1406",
       "files": [],
       "category": "unused-export",
       "suggestion": "",
       "scoreImpact": 0
     },
     {
-      "id": "F-0201",
+      "id": "F-0131",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused import: getSecretCacheSize",
+      "title": "Possibly unused import: coreEvidenceIdForProofAsset",
       "evidence": "Imported symbol not referenced after import statement",
       "files": [
-        "src/__tests__/unit/secret-resolver-concurrency.test.ts"
+        "src/products/sales/core-adapters/alerts.ts"
       ],
       "category": "unused-import",
       "suggestion": "",
       "scoreImpact": 1
     },
     {
-      "id": "F-0202",
+      "id": "F-0132",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused import: secretResolver",
+      "title": "Possibly unused import: SkillManifestError",
       "evidence": "Imported symbol not referenced after import statement",
       "files": [
-        "src/__tests__/unit/secret-resolver-rotation.test.ts"
+        "src/lib/skill-runtime/runtime/steps.ts"
       ],
       "category": "unused-import",
       "suggestion": "",
       "scoreImpact": 1
     },
     {
-      "id": "F-0203",
+      "id": "F-0133",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused import: getSecretCacheSize",
+      "title": "Possibly unused import: loadManifest",
       "evidence": "Imported symbol not referenced after import statement",
       "files": [
-        "src/__tests__/unit/secret-resolver-rotation.test.ts"
+        "src/lib/skill-runtime/evaluator/dataset-loader.ts"
       ],
       "category": "unused-import",
       "suggestion": "",
       "scoreImpact": 1
     },
     {
-      "id": "F-0204",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: renderHook",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/__tests__/unit/smoke.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0205",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: act",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/__tests__/unit/smoke.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0206",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: getDecisionRecommendation",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/__tests__/integration/recommendation-publication.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0207",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: getWorkflowExportStatus",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/__tests__/integration/workflowos-export.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0208",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: notifyExportRequested",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/__tests__/integration/workflowos-export.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0209",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: MEMORY_TRUST_MIN_REVIEWERS",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/tb-intelligence/__tests__/firm-memory-governance.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0210",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: mkdirSync",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/skill-runtime/__tests__/skill-evaluator.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0211",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: writeFileSync",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/skill-runtime/__tests__/skill-evaluator.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0212",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: rmSync",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/skill-runtime/__tests__/skill-evaluator.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0213",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: evaluateGuardPipeline",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/salesos/workflow/__tests__/orchestrator.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0214",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: toDealDetailViewModel",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/salesos/viewmodel/__tests__/deal-viewmodel.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0215",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: getNodesByKind",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/__tests__/knowledge-graph.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0216",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: getOutgoingEdges",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/__tests__/knowledge-graph.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0217",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: industryRefId",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/__tests__/knowledge-graph.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0218",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: beforeEach",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/__tests__/next-action-engine.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0219",
+      "id": "F-0134",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: listCrossProductProofCandidates",
@@ -2854,46 +1749,7 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0220",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: STRATEGIC_RULE_IDS",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/vnext/__tests__/commercial-recommendations.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0221",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: INSTITUTIONAL_LEARNING_LABEL",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/vnext/__tests__/institutional-learning.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0222",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: listObjections",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/v02/__tests__/proof-effectiveness.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0223",
+      "id": "F-0135",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: //   collectCrossProductCommercialSignals",
@@ -2906,7 +1762,7 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0224",
+      "id": "F-0136",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: //   deriveInstitutionalCommercialSignals",
@@ -2919,7 +1775,7 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0225",
+      "id": "F-0137",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: //   collectCrossProductRuntimeInputs",
@@ -2932,7 +1788,7 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0226",
+      "id": "F-0138",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: //",
@@ -2945,33 +1801,7 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0227",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: CrmAuthError",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/crm/__tests__/connector.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0228",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: CrmRateLimitError",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/sales/crm/__tests__/connector.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0229",
+      "id": "F-0139",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: PLATFORM_AUDIT_OUTBOX_EVENT",
@@ -2984,33 +1814,7 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0230",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: LocalStorageProvider",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/platform/storage/storage-factory.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0231",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: getLocalStoreBaseDir",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/platform/storage/storage-factory.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0232",
+      "id": "F-0140",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: join",
@@ -3023,20 +1827,7 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0233",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: LIFECYCLE_EVENT_TYPES",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/platform/org-advanced/org-adv-service.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0234",
+      "id": "F-0141",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: getRedisUrl",
@@ -3049,46 +1840,20 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0235",
+      "id": "F-0142",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused import: afterAll",
+      "title": "Possibly unused import: START_TIME",
       "evidence": "Imported symbol not referenced after import statement",
       "files": [
-        "src/lib/platform/office-ai-adv/__tests__/office-ai-adv.test.ts"
+        "src/lib/platform/monitoring/system-monitor/alerts.ts"
       ],
       "category": "unused-import",
       "suggestion": "",
       "scoreImpact": 1
     },
     {
-      "id": "F-0236",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: ADV_STRINGS",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/platform/office-ai-adv/__tests__/office-ai-adv.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0237",
-      "agent": "code-health",
-      "severity": "low",
-      "title": "Possibly unused import: registerHandler",
-      "evidence": "Imported symbol not referenced after import statement",
-      "files": [
-        "src/lib/platform/email/__tests__/sender.test.ts"
-      ],
-      "category": "unused-import",
-      "suggestion": "",
-      "scoreImpact": 1
-    },
-    {
-      "id": "F-0238",
+      "id": "F-0143",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: computeHash",
@@ -3101,741 +1866,978 @@
       "scoreImpact": 1
     },
     {
-      "id": "F-0239",
+      "id": "F-0144",
       "agent": "code-health",
       "severity": "low",
       "title": "Possibly unused import: prisma",
       "evidence": "Imported symbol not referenced after import statement",
       "files": [
-        "src/lib/platform/audit/__tests__/unified-query.test.ts"
+        "src/lib/local-content/workbook/ai-health.ts"
       ],
       "category": "unused-import",
       "suggestion": "",
       "scoreImpact": 1
     },
     {
-      "id": "F-0240",
+      "id": "F-0145",
       "agent": "code-health",
       "severity": "low",
-      "title": "Possibly unused import: classifySupplier",
+      "title": "Possibly unused import: runGovernedProductAI",
       "evidence": "Imported symbol not referenced after import statement",
       "files": [
-        "src/lib/local-content/__tests__/services.test.ts"
+        "src/lib/local-content/workbook/ai-health.ts"
       ],
       "category": "unused-import",
       "suggestion": "",
       "scoreImpact": 1
     },
     {
-      "id": "F-0241",
+      "id": "F-0146",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: WORKBOOK_TEMPLATE",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/local-content/workbook/missing-data.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0147",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: recalculateWorkbookStats",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/local-content/workbook/services.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0148",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: getLineValue",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/local-content/workbook/simulation-engine.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0149",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: requireTransition",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/local-content/workbook/population/from-project.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0150",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: prisma",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/local-content/pipeline-orchestrator/index.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0151",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: recordGovernanceEvent",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/integration/secret-resolver/implementation.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0152",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: SecretResolverImpl",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/integration/secret-resolver/index.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0153",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: ExecutionContext",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/governance-engine/rules/gr-002-derived-artifacts.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0154",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: ExecutionContext",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/governance-engine/rules/gr-003-evidence-manifest.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0155",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: ExecutionContext",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/governance-engine/rules/gr-004-glossary-precision.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0156",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: ExecutionContext",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/governance-engine/rules/gr-005-three-tier-review.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0157",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: ID_PATTERNS",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/governance-engine/registry/loader.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0158",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: fmtDate",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/decision/decision-export-formats/markdown.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0159",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: prisma",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/audit/services/trial-balance.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0160",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: classifyRevenuePresentationSegment",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/audit/db/income-statement-presentation-amounts.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0161",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: GENERIC_PRESENTATION_POLICY_V1",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/audit/db/income-statement-presentation-policy.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0162",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: makeLine",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/audit/db/statement-builder/equity-statement.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0163",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: policyUsesAuditedHeadlineRules",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/audit/db/statement-builder/income-statement.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0164",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: getPresentationAmountForKind",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/audit/db/statement-builder/income-statement.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0165",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: SHALFA_POLICY_FALLBACK",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/lib/audit/db/income-statement-presentation-classify/predicates.ts"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0166",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: Badge",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/components/workflowos/export-button.tsx"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0167",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: Activity",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/components/workflowos/workflow-audit-trail.tsx"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0168",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: TabsContent",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/components/sales/opportunity-pipeline.tsx"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0169",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: RefreshCw",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/components/sales/review-decision-panel.tsx"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0170",
+      "agent": "code-health",
+      "severity": "low",
+      "title": "Possibly unused import: Scale",
+      "evidence": "Imported symbol not referenced after import statement",
+      "files": [
+        "src/components/contacts/components/export-pending-approval.tsx"
+      ],
+      "category": "unused-import",
+      "suggestion": "",
+      "scoreImpact": 1
+    },
+    {
+      "id": "F-0171",
       "agent": "code-health",
       "severity": "info",
-      "title": "Additional unused-import candidates truncated (176 more)",
-      "evidence": "Total candidates: 216",
+      "title": "Additional unused-import candidates truncated (85 more)",
+      "evidence": "Total candidates: 125",
       "files": [],
       "category": "unused-import",
       "suggestion": "",
       "scoreImpact": 0
     },
     {
-      "id": "F-0242",
+      "id": "F-0172",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: \"/audit\",…",
+      "evidence": "Shared across 3 files: );…",
       "files": [
-        "src/middleware.ts",
-        "src/__tests__/cross-tenant-isolation.test.ts"
+        "src/products/sales-os/sales-os-plugin.ts",
+        "src/products/local-content-os/plugin.ts",
+        "src/products/audit-os/audit-os-plugin.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0243",
+      "id": "F-0173",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: \"Draft\",…",
+      "evidence": "Shared across 3 files: }…",
       "files": [
-        "src/__tests__/unit/lcos-state-machine.test.ts",
-        "src/lib/local-content/types.ts"
+        "src/products/sales-os/sales-os-plugin.ts",
+        "src/products/local-content-os/plugin.ts",
+        "src/products/audit-os/audit-os-plugin.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0244",
+      "id": "F-0174",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: \"DataCollection\",…",
+      "evidence": "Shared across 2 files: select: {…",
       "files": [
-        "src/__tests__/unit/lcos-state-machine.test.ts",
-        "src/lib/local-content/types.ts"
+        "src/lib/auth-config.ts",
+        "src/app/api/auth/saml/[providerId]/callback/route.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0245",
+      "id": "F-0175",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: incrementCounter(\"SECRET_USED\", {…",
+      "evidence": "Shared across 2 files: clientId: string,…",
       "files": [
-        "src/__tests__/unit/secret-resolver-concurrency.test.ts",
-        "src/__tests__/unit/secret-resolver-rotation.test.ts"
+        "src/lib/workflowos/services.ts",
+        "src/lib/workflowos/storage.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0246",
+      "id": "F-0176",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: organizationId: orgId,…",
+      "evidence": "Shared across 2 files: if ([\"10\", \"11\", \"12\"].includes(prefix)) return \"asset\";…",
       "files": [
-        "src/__tests__/unit/secret-resolver-concurrency.test.ts",
-        "src/__tests__/unit/secret-resolver-rotation.test.ts"
+        "src/lib/tb-intelligence/coa-loader.ts",
+        "src/lib/audit/services/trial-balance.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0247",
+      "id": "F-0177",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: purpose: SecretPurpose.CRM_SYNC,…",
+      "evidence": "Shared across 2 files: if ([\"13\", \"14\"].includes(prefix)) return \"non-current-asset\";…",
       "files": [
-        "src/__tests__/unit/secret-resolver-concurrency.test.ts",
-        "src/__tests__/unit/secret-resolver-rotation.test.ts"
+        "src/lib/tb-intelligence/coa-loader.ts",
+        "src/lib/audit/services/trial-balance.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0248",
+      "id": "F-0178",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: hasTrialBalance: false,…",
+      "evidence": "Shared across 2 files: skillId,…",
       "files": [
-        "src/__tests__/unit/workflow-gating.test.ts",
-        "src/__tests__/unit/audit/workflow-next-action.test.ts"
+        "src/lib/skill-runtime/evaluator/batch-evaluator.ts",
+        "src/lib/skill-runtime/evaluator/evaluate-skill.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0249",
+      "id": "F-0179",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: hasMappings: false,…",
+      "evidence": "Shared across 2 files: skillName: skillId,…",
       "files": [
-        "src/__tests__/unit/workflow-gating.test.ts",
-        "src/__tests__/unit/audit/workflow-next-action.test.ts"
+        "src/lib/skill-runtime/evaluator/batch-evaluator.ts",
+        "src/lib/skill-runtime/evaluator/evaluate-skill.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0250",
+      "id": "F-0180",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: hasConfirmedMappings: false,…",
+      "evidence": "Shared across 2 files: function scenarioLabel(type: ScenarioType): string {…",
       "files": [
-        "src/__tests__/unit/workflow-gating.test.ts",
-        "src/__tests__/unit/audit/workflow-next-action.test.ts"
+        "src/lib/simulation/simulation-adapters.ts",
+        "src/lib/simulation/simulation-engine.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0251",
+      "id": "F-0181",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: hasFinancialStatements: false,…",
+      "evidence": "Shared across 2 files: return type.replace(\"_\", \" \")…",
       "files": [
-        "src/__tests__/unit/workflow-gating.test.ts",
-        "src/__tests__/unit/audit/workflow-next-action.test.ts"
+        "src/lib/simulation/simulation-adapters.ts",
+        "src/lib/simulation/simulation-engine.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0252",
+      "id": "F-0182",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: jest.mock(\"@/lib/prisma\", () => {…",
+      "evidence": "Shared across 2 files: }…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-diff-engine.test.ts",
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/simulation/simulation-adapters.ts",
+        "src/lib/simulation/simulation-engine.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0253",
+      "id": "F-0183",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: jest.mock(\"@/lib/auth\", () => ({…",
+      "evidence": "Shared across 2 files: function scenarioUpside(type: ScenarioType, score: number): string {…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts"
+        "src/lib/simulation/simulation-adapters.ts",
+        "src/lib/simulation/simulation-engine.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0254",
+      "id": "F-0184",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: getCurrentUser: mockGetCurrentUser,…",
+      "evidence": "Shared across 2 files: if (type === \"BEST_CASE\") return `Best case achieves ${score}/100 — all favorabl…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts"
+        "src/lib/simulation/simulation-adapters.ts",
+        "src/lib/simulation/simulation-engine.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0255",
+      "id": "F-0185",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: }));…",
+      "evidence": "Shared across 2 files: if (type === \"EXPECTED_CASE\") return `Expected case at ${score}/100 — most likel…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts"
+        "src/lib/simulation/simulation-adapters.ts",
+        "src/lib/simulation/simulation-engine.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0256",
+      "id": "F-0186",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: jest.mock(\"next/cache\", () => ({ revalidatePath: jest.fn() }));…",
+      "evidence": "Shared across 2 files: return `Worst case at ${score}/100 — adverse conditions but still within managea…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts"
+        "src/lib/simulation/simulation-adapters.ts",
+        "src/lib/simulation/simulation-engine.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0257",
+      "id": "F-0187",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: jest.mock(\"@/lib/knowledge-foundation/events\", () => ({…",
+      "evidence": "Shared across 3 files: if (Number.isNaN(d.getTime())) return \"—\";…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts"
+        "src/lib/sales/account-brief-pack.ts",
+        "src/lib/sales/pilot-handoff-pack.ts",
+        "src/components/sales/pilot-handoff-pack-view.tsx"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0258",
+      "id": "F-0188",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: emitFoundationEvent: jest.fn().mockResolvedValue(undefined),…",
+      "evidence": "Shared across 3 files: return new Intl.DateTimeFormat(\"ar-SA\", {…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts"
+        "src/lib/sales/account-brief-pack.ts",
+        "src/lib/sales/pilot-handoff-pack.ts",
+        "src/components/sales/pilot-handoff-pack-view.tsx"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0259",
+      "id": "F-0189",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: onFoundationEvent: jest.fn().mockReturnValue(() => {}),…",
+      "evidence": "Shared across 3 files: dateStyle: \"medium\",…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/account-brief-pack.ts",
+        "src/lib/sales/pilot-handoff-pack.ts",
+        "src/components/sales/pilot-handoff-pack-view.tsx"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0260",
+      "id": "F-0190",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: onAnyFoundationEvent: jest.fn().mockReturnValue(() => {}),…",
+      "evidence": "Shared across 2 files: }…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/conversion-memo.ts",
+        "src/lib/sales/agents/follow-up.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0261",
+      "id": "F-0191",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: clearFoundationHandlers: jest.fn(),…",
+      "evidence": "Shared across 2 files: async function loadDealWithMetadata(dealId: string, organizationId: string) {…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/conversion-memo.ts",
+        "src/lib/sales/agents/follow-up.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0262",
+      "id": "F-0192",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: }));…",
+      "evidence": "Shared across 2 files: const deal = await prisma.salesDeal.findFirst({…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/conversion-memo.ts",
+        "src/lib/sales/agents/follow-up.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0263",
+      "id": "F-0193",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: jest.mock(\"@/lib/knowledge-foundation/release-integrity\", () => ({…",
+      "evidence": "Shared across 2 files: where: { id: dealId, organizationId },…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/conversion-memo.ts",
+        "src/lib/sales/agents/follow-up.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0264",
+      "id": "F-0194",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: verifyReleaseIntegrity: jest.fn().mockResolvedValue({…",
+      "evidence": "Shared across 2 files: select: {…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/conversion-memo.ts",
+        "src/lib/sales/agents/follow-up.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0265",
+      "id": "F-0195",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: valid: true,…",
+      "evidence": "Shared across 2 files: export const MAX_INSTITUTIONAL_MEMORY_PER_ACCOUNT = 100;…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0266",
+      "id": "F-0196",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: blockers: [],…",
+      "evidence": "Shared across 2 files: export const INSTITUTIONAL_MEMORY_TYPES = […",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0267",
+      "id": "F-0197",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: hashMatch: true,…",
+      "evidence": "Shared across 2 files: \"audit\",…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0268",
+      "id": "F-0198",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: chainValid: true,…",
+      "evidence": "Shared across 2 files: \"review_decision\",…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0269",
+      "id": "F-0199",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 3 files: artifactFound: true,…",
+      "evidence": "Shared across 2 files: function parseMetadata(value: unknown): Record<string, unknown> {…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/phase-27-hotfix-regression.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0270",
+      "id": "F-0200",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: manifestFound: true,…",
+      "evidence": "Shared across 2 files: if (value && typeof value === \"object\" && !Array.isArray(value)) {…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0271",
+      "id": "F-0201",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: provenanceFound: true,…",
+      "evidence": "Shared across 2 files: return value as Record<string, unknown>;…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0272",
+      "id": "F-0202",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: releaseRowValid: true,…",
+      "evidence": "Shared across 2 files: }…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0273",
+      "id": "F-0203",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: releaseId: \"kfr-mock\",…",
+      "evidence": "Shared across 2 files: const raw = parseMetadata(metadata).institutionalMemory;…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0274",
+      "id": "F-0204",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: previousReleaseId: null,…",
+      "evidence": "Shared across 2 files: if (!Array.isArray(raw)) return [];…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0275",
+      "id": "F-0205",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: previousReleaseHash: null,…",
+      "evidence": "Shared across 2 files: const entries: InstitutionalMemoryEntry[] = [];…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0276",
+      "id": "F-0206",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: }),…",
+      "evidence": "Shared across 2 files: for (const item of raw) {…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0277",
+      "id": "F-0207",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: }));…",
+      "evidence": "Shared across 2 files: if (!item || typeof item !== \"object\" || Array.isArray(item)) continue;…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0278",
+      "id": "F-0208",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: jest.mock(\"@/lib/knowledge-foundation/audit-handler\", () => ({…",
+      "evidence": "Shared across 2 files: const row = item as Record<string, unknown>;…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0279",
+      "id": "F-0209",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: registerFoundationAuditHandler: jest.fn(),…",
+      "evidence": "Shared across 2 files: const type = parseMemoryType(row.type);…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0280",
+      "id": "F-0210",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: }));…",
+      "evidence": "Shared across 2 files: const summary =…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0281",
+      "id": "F-0211",
       "agent": "code-health",
       "severity": "low",
       "title": "Duplicated code block across modules",
-      "evidence": "Shared across 2 files: const mockFindUniqueOrThrow = jest.fn();…",
+      "evidence": "Shared across 2 files: typeof row.summary === \"string\" && row.summary.trim()…",
       "files": [
-        "src/__tests__/unit/knowledge-foundation/knowledge-foundation-release.test.ts",
-        "src/__tests__/unit/knowledge-foundation/release-governance.test.ts"
+        "src/lib/sales/institutional-memory-shared.ts",
+        "src/lib/sales/institutional-memory.ts"
       ],
       "category": "duplication",
       "suggestion": "Extract shared helper into src/lib/ or product shared module.",
       "scoreImpact": 1
     },
     {
-      "id": "F-0282",
+      "id": "F-0212",
       "agent": "code-health",
       "severity": "info",
-      "title": "Additional duplication groups truncated (3685 more)",
-      "evidence": "Total groups: 3725",
+      "title": "Additional duplication groups truncated (6280 more)",
+      "evidence": "Total groups: 6320",
       "files": [],
       "category": "duplication",
       "suggestion": "",
       "scoreImpact": 0
-    },
-    {
-      "id": "F-0283",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Possible circular dependency",
-      "evidence": "src/lib/platform/audit-log.ts ↔ src/lib/core/contracts/event-envelope.ts",
-      "files": [
-        "src/lib/platform/audit-log.ts",
-        "src/lib/core/contracts/event-envelope.ts"
-      ],
-      "category": "circular-dependency",
-      "suggestion": "Introduce a lower-level shared module or invert dependency.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0284",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Possible circular dependency",
-      "evidence": "src/lib/authorization/action-guard.ts ↔ src/lib/authorization/authorize.ts",
-      "files": [
-        "src/lib/authorization/action-guard.ts",
-        "src/lib/authorization/authorize.ts"
-      ],
-      "category": "circular-dependency",
-      "suggestion": "Introduce a lower-level shared module or invert dependency.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0285",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Possible circular dependency",
-      "evidence": "src/lib/authorization/action-guard.ts ↔ src/lib/authorization/index.ts",
-      "files": [
-        "src/lib/authorization/action-guard.ts",
-        "src/lib/authorization/index.ts"
-      ],
-      "category": "circular-dependency",
-      "suggestion": "Introduce a lower-level shared module or invert dependency.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0286",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Possible circular dependency",
-      "evidence": "src/lib/authorization/action-guard.ts ↔ src/lib/authorization/types.ts",
-      "files": [
-        "src/lib/authorization/action-guard.ts",
-        "src/lib/authorization/types.ts"
-      ],
-      "category": "circular-dependency",
-      "suggestion": "Introduce a lower-level shared module or invert dependency.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0287",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Possible circular dependency",
-      "evidence": "src/lib/authorization/authorize.ts ↔ src/lib/authorization/index.ts",
-      "files": [
-        "src/lib/authorization/authorize.ts",
-        "src/lib/authorization/index.ts"
-      ],
-      "category": "circular-dependency",
-      "suggestion": "Introduce a lower-level shared module or invert dependency.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0288",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Possible circular dependency",
-      "evidence": "src/lib/authorization/authorize.ts ↔ src/lib/authorization/types.ts",
-      "files": [
-        "src/lib/authorization/authorize.ts",
-        "src/lib/authorization/types.ts"
-      ],
-      "category": "circular-dependency",
-      "suggestion": "Introduce a lower-level shared module or invert dependency.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0289",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Possible circular dependency",
-      "evidence": "src/lib/authorization/index.ts ↔ src/lib/authorization/types.ts",
-      "files": [
-        "src/lib/authorization/index.ts",
-        "src/lib/authorization/types.ts"
-      ],
-      "category": "circular-dependency",
-      "suggestion": "Introduce a lower-level shared module or invert dependency.",
-      "scoreImpact": 3
-    },
-    {
-      "id": "F-0290",
-      "agent": "code-health",
-      "severity": "medium",
-      "title": "Possible circular dependency",
-      "evidence": "src/lib/audit/rules/__tests__/ifrs-rules.test.ts ↔ src/lib/audit/rules/__tests__/socpa-rules.test.ts",
-      "files": [
-        "src/lib/audit/rules/__tests__/ifrs-rules.test.ts",
-        "src/lib/audit/rules/__tests__/socpa-rules.test.ts"
-      ],
-      "category": "circular-dependency",
-      "suggestion": "Introduce a lower-level shared module or invert dependency.",
-      "scoreImpact": 3
     }
   ],
   "meta": {
-    "filesAnalyzed": 2848,
-    "duplicationGroups": 3725,
-    "unusedExportCandidates": 1966
+    "filesAnalyzed": 4160,
+    "duplicationGroups": 6320,
+    "unusedExportCandidates": 1406
+  },
+  "scannerQuality": {
+    "generatedAt": "2026-07-18T17:24:37.760Z",
+    "testResults": {
+      "passed": 88,
+      "failed": 0,
+      "total": 88
+    },
+    "goldenDataset": {
+      "truePositives": 12,
+      "falsePositives": 13,
+      "acceptedRisks": 5,
+      "cleanCases": 8
+    },
+    "quality": {
+      "precision": 48,
+      "falsePositiveRate": 52,
+      "totalGoldenCases": 38,
+      "securityCases": {
+        "truePositives": 8,
+        "falsePositives": 8,
+        "acceptedRisks": 4,
+        "cleanCases": 4
+      },
+      "performanceCases": {
+        "truePositives": 4,
+        "falsePositives": 5,
+        "acceptedRisks": 1,
+        "cleanCases": 4
+      }
+    }
   }
 }

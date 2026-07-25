@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Users, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function TeamSettingsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Team Settings error:", error);
+    clientLogger.error("Team Settings error:", error);
   }, [error]);
 
   return (

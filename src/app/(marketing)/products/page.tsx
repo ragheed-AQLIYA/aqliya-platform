@@ -7,11 +7,37 @@ import {
   tier1ProductCards,
 } from "@/lib/marketing/product-pages-content";
 
-export const metadata: Metadata = {
-  title: "أنظمة التشغيل | AQLIYA",
-  description:
-    "أنظمة تشغيل مؤسسية  AuditOS، DecisionOS، LocalContentOS  على نواة حوكمة واحدة.",
-};
+export function generateMetadata(): Metadata {
+  const title = "أنظمة التشغيل | AQLIYA";
+  const description =
+    "أنظمة تشغيل مؤسسية  AuditOS، DecisionOS، LocalContentOS  على نواة حوكمة واحدة.";
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com/products",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      type: "website",
+      images: [
+        {
+          url: "/og-products.png",
+          width: 1200,
+          height: 630,
+          alt: "أنظمة التشغيل المؤسسية - AQLIYA",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-products.png"],
+    },
+  };
+}
 
 function ProductCard({
   card,

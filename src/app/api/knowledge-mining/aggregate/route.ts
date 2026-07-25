@@ -10,9 +10,17 @@
  * - Actor identity ALWAYS derived from session, never from caller
  */
 
+import { z } from "zod";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth-next";
 import { aggregatePatterns } from "@/lib/tb-intelligence/knowledge-mining";
+
+const aggregateSchema = z.object({
+  minSupportCount: z.number().int().min(1).optional(),
+  minOrganizationCount: z.number().int().min(1).optional(),
+  minConfidence: z.number().min(0).max(1).optional(),
+  organizationId: z.string().optional(),
+});
 
 function requireRole(user: Record<string, unknown>, minRole: "ADMIN" | "OPERATOR" | "VIEWER"): void {
   const role = user.role as string | undefined;
@@ -30,12 +38,19 @@ export async function POST(request: Request) {
     }
     requireRole(session.user as Record<string, unknown>, "OPERATOR");
 
-    const body = await request.json().catch(() => ({}));
+    let raw: unknown;
+    try {
+      raw = await request.json();
+    } catch {
+      raw = {};
+    }
+    const parsed = aggregateSchema.safeParse(raw);
+    const data = parsed.success ? parsed.data : {};
     const patterns = await aggregatePatterns({
-      minSupportCount: body.minSupportCount ?? 2,
-      minOrganizationCount: body.minOrganizationCount ?? 1,
-      minConfidence: body.minConfidence ?? 0.6,
-      organizationId: body.organizationId ?? undefined,
+      minSupportCount: data.minSupportCount ?? 2,
+      minOrganizationCount: data.minOrganizationCount ?? 1,
+      minConfidence: data.minConfidence ?? 0.6,
+      organizationId: data.organizationId ?? undefined,
     });
     return NextResponse.json({ patterns, count: patterns.length });
   } catch (error) {

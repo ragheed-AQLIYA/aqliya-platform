@@ -168,10 +168,12 @@ export async function getSalesFounderReport(
       prisma.salesDeal.findMany({
         where: { organizationId },
         select: { status: true },
+        take: 10000,
       }),
       prisma.salesAccount.findMany({
         where: { organizationId },
         select: { metadata: true },
+        take: 10000,
       }),
       prisma.salesDeal.findMany({
         where: { organizationId, status: "open" },
@@ -181,6 +183,7 @@ export async function getSalesFounderReport(
           metadata: true,
           account: { select: { name: true } },
         },
+        take: 10000,
       }),
       prisma.salesEvidenceLink.count({ where: { organizationId } }),
     ]);

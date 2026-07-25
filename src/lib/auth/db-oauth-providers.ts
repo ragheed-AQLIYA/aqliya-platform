@@ -1,8 +1,12 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 
 import type { OAuthConfig } from "next-auth/providers";
 import { prisma } from "@/lib/prisma";
 import { buildProviderConfig } from "@/lib/auth/sso-providers";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 /** NextAuth provider id for a DB-backed SSO record (unique per org config). */
 export function dbSsoProviderAuthId(ssoProviderId: string): string {
@@ -44,7 +48,7 @@ export async function loadEnabledDbOAuthProviders(): Promise<
 
     return providers;
   } catch (error) {
-    console.error("Failed to load DB SSO providers:", error);
+    logger.error("Failed to load DB SSO providers:", error instanceof Error ? error : undefined);
     return [];
   }
 }

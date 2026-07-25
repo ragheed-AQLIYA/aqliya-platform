@@ -1,6 +1,6 @@
 // ─── Pure pattern detectors for institutional commercial signals ───
 
-// TODO: platform/signals/types — inline for TS2307 resolution
+// NOTE: Inline RuntimeSignal type pending @/lib/platform/signals/types stabilization (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)
 interface RuntimeSignal {
   id: string;
   organizationId: string;

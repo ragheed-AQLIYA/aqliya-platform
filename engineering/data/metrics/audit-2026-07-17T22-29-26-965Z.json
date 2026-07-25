@@ -1,0 +1,20 @@
+{
+  "auditId": "audit-2026-07-17T22-29-26-965Z",
+  "at": "2026-07-17T22:29:26.965Z",
+  "scores": {
+    "codeHealthScore": 32,
+    "securityScore": 89,
+    "performanceScore": 70,
+    "documentationScore": 95,
+    "testScore": 95,
+    "dependencyScore": 93,
+    "technicalDebtScore": 58,
+    "architectureHealth": 73,
+    "uiQualityScore": 97,
+    "maintainability": 58,
+    "developerExperience": 73,
+    "repositoryMaturity": 78,
+    "engineeringMaturity": 83,
+    "overallRepositoryHealth": 78
+  }
+}

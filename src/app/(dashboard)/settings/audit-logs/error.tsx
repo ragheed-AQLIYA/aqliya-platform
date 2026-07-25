@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { ScrollText, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function AuditLogsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Audit Logs error:", error);
+    clientLogger.error("Audit Logs error:", error);
   }, [error]);
 
   return (

@@ -2,11 +2,15 @@
 // يتحقق من التذكرة، يقرأ الملف، يبني الاستجابة، يستهلك التذكرة
 
 import { NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { prisma } from "@/lib/prisma";
 import { buildDownloadResponse } from "@/lib/platform/download";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { generateDownloadTicket, verifyDownloadTicket, consumeDownloadTicket } from "./download-gate";
 import type { DownloadTicketInput } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 function getProductKeyFromResourceType(resourceType: string): string {
   return resourceType.split(".")[0];
@@ -90,7 +94,7 @@ export async function handleSecureDownload(
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Download failed";
-    console.warn(`[DownloadHandler] handleSecureDownload failed: ${message}`);
+    logger.warn("[DownloadHandler]handleSecureDownload failed: ${message}");
     return getDownloadErrorResponse(500);
   }
 }

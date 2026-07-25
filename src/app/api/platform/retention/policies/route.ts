@@ -1,8 +1,17 @@
+import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { getAllPolicies, setPolicyOverride, resetPolicyOverride } from "@/lib/core/policy/retention/policies";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+
+const policyOverrideSchema = z.object({
+  modelName: z.string().min(1).max(200),
+  retentionDays: z.number().int().min(1),
+  action: z.enum(["delete", "archive", "anonymize"]).optional(),
+  enabled: z.boolean().optional(),
+  notifyBeforeDelete: z.boolean().optional(),
+});
 
 export async function GET() {
   try {
@@ -24,24 +33,29 @@ export async function PUT(request: NextRequest) {
     if (!hasRequiredRole(user, "ADMIN")) {
       throw new Error("Access denied: ADMIN role required");
     }
-    const body = (await request.json()) as {
-      modelName: string;
-      retentionDays: number;
-      action: "delete" | "archive" | "anonymize";
-      enabled: boolean;
-      notifyBeforeDelete?: boolean;
-    };
-
-    if (!body.modelName || typeof body.retentionDays !== "number") {
-      return NextResponse.json({ error: "modelName and retentionDays are required" }, { status: 400 });
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
+    const parsed = policyOverrideSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues.map((i) => i.message).join(" ") },
+        { status: 400 },
+      );
+    }
+
+    const { modelName, retentionDays, action, enabled, notifyBeforeDelete } = parsed.data;
+
     const entry = setPolicyOverride({
-      modelName: body.modelName,
-      retentionDays: body.retentionDays,
-      action: body.action,
-      enabled: body.enabled,
-      notifyBeforeDelete: body.notifyBeforeDelete ?? false,
+      modelName,
+      retentionDays,
+      action: action ?? "delete",
+      enabled: enabled ?? true,
+      notifyBeforeDelete: notifyBeforeDelete ?? false,
       organizationId: user.platformOrganizationId,
     });
 
@@ -51,9 +65,9 @@ export async function PUT(request: NextRequest) {
       actorId: user.id,
       actorEmail: user.email,
       targetType: "RetentionPolicy",
-      targetId: body.modelName,
+      targetId: modelName,
       severity: "info",
-      metadata: { retentionDays: body.retentionDays, action: body.action, enabled: body.enabled },
+      metadata: { retentionDays, action, enabled },
     });
 
     return NextResponse.json({ policy: entry });

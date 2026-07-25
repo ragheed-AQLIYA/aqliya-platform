@@ -18,7 +18,6 @@ export {
   archiveWorkflowRecord,
   createWorkflowDocumentMetadata,
   listWorkflowDocuments,
-  deleteWorkflowDocument,
   createWorkflowReview,
   listWorkflowReviews,
 } from "@/lib/workflowos/services";
@@ -44,7 +43,6 @@ export type {
 } from "@/lib/workflowos/audit";
 
 export {
-  getUserWorkflowMemberships,
   canAccessWorkflowClient,
   requireClientAccess,
   requireWorkflowAdmin,
@@ -56,7 +54,6 @@ export type { WorkflowMembershipInfo } from "@/lib/workflowos/tenant-guard";
 export {
   checkPendingExports,
   escalateExportRequest,
-  getEscalatedRecords,
 } from "@/lib/workflowos/escalation-service";
 
 export type { EscalationResult } from "@/lib/workflowos/escalation-service";
@@ -64,7 +61,6 @@ export type { EscalationResult } from "@/lib/workflowos/escalation-service";
 export {
   createNotification,
   getUnreadNotifications,
-  markNotificationRead,
   getReviewersForOrganization,
   getManagersForOrganization,
   notifyExportRequested,

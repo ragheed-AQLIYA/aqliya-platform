@@ -1,15 +1,15 @@
 {
-  "at": "2026-07-11T11:27:34.655Z",
+  "at": "2026-07-18T18:34:58.372Z",
   "stats": {
-    "nodes": 3330,
-    "edges": 3521,
+    "nodes": 3637,
+    "edges": 3883,
     "products": 12,
-    "actions": 92,
-    "tests": 373,
+    "actions": 126,
+    "tests": 411,
     "testsCoveringAuth": 6,
-    "enforceUsages": 234,
-    "enforceFiles": 35,
-    "enforceProducts": 7
+    "enforceUsages": 325,
+    "enforceFiles": 58,
+    "enforceProducts": 9
   },
   "symbols": [
     {
@@ -17,16 +17,18 @@
       "type": "symbol",
       "name": "enforce",
       "definedIn": "src/lib/authorization/action-guard.ts",
-      "usageCount": 234,
-      "fileCount": 35,
+      "usageCount": 325,
+      "fileCount": 58,
       "products": [
         "Platform",
         "DecisionOS",
-        "Core",
         "WorkflowOS",
+        "Core",
         "SalesOS",
         "LocalContentOS",
-        "AuditOS"
+        "AuditOS",
+        "InstitutionalMemory",
+        "OfficeAI"
       ]
     },
     {
@@ -34,8 +36,8 @@
       "type": "symbol",
       "name": "authorize",
       "definedIn": "src/lib/authorization/authorize.ts",
-      "usageCount": 87,
-      "fileCount": 11,
+      "usageCount": 94,
+      "fileCount": 14,
       "products": [
         "Platform",
         "Core",
@@ -47,8 +49,8 @@
       "type": "symbol",
       "name": "prisma",
       "definedIn": "src/lib/prisma.ts",
-      "usageCount": 4295,
-      "fileCount": 364,
+      "usageCount": 4550,
+      "fileCount": 390,
       "products": [
         "Platform",
         "DecisionOS",
@@ -60,8 +62,8 @@
         "AuditOS",
         "LocalContactOS",
         "InstitutionalMemory",
-        "RiskOS",
-        "ContentStudio"
+        "ContentStudio",
+        "RiskOS"
       ]
     }
   ]

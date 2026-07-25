@@ -22,50 +22,63 @@ export class AuditKnowledgeEngine {
     if (!engagement) return { patternsCreated: 0 };
 
     const orgId = engagement.organizationId;
-    let count = 0;
+
+    const patternKeys = findings.map(
+      (f) => `finding:${f.findingType}:${f.severity}`,
+    );
+
+    const existingPatterns = await prisma.knowledgePattern.findMany({
+      where: {
+        organizationId: orgId,
+        patternType: "finding",
+        patternKey: { in: patternKeys },
+      },
+    });
+
+    const existingMap = new Map(existingPatterns.map((p) => [p.patternKey, p]));
+
+    const toUpdate: { id: string; existing: typeof existingPatterns[0]; finding: typeof findings[0] }[] = [];
+    const toCreate: typeof findings = [];
 
     for (const finding of findings) {
-      // Create or increment pattern for this finding type/severity
       const patternKey = `finding:${finding.findingType}:${finding.severity}`;
-      const existing = await prisma.knowledgePattern.findUnique({
-        where: {
-          organizationId_patternType_patternKey: {
-            organizationId: orgId,
-            patternType: "finding",
-            patternKey,
-          },
-        },
-      });
-
+      const existing = existingMap.get(patternKey);
       if (existing) {
-        await prisma.knowledgePattern.update({
-          where: { id: existing.id },
-          data: {
-            occurrenceCount: existing.occurrenceCount + 1,
-            lastObservedAt: new Date(),
-            confidenceScore: Math.min((existing.occurrenceCount + 1) / 10, 0.95),
-          },
-        });
+        toUpdate.push({ id: existing.id, existing, finding });
       } else {
-        await prisma.knowledgePattern.create({
-          data: {
-            organizationId: orgId,
-            patternType: "finding",
-            patternKey,
-            patternLabel: `${finding.findingType}: ${finding.severity}`,
-            occurrenceCount: 1,
-            confidenceScore: 0.1,
-            metadata: {
-              commonSeverities: [finding.severity],
-              commonTypes: [finding.findingType],
-            },
-          },
-        });
-        count++;
+        toCreate.push(finding);
       }
     }
 
-    return { patternsCreated: count, totalProcessed: findings.length };
+    await Promise.all(
+      toUpdate.map((item) =>
+        prisma.knowledgePattern.update({
+          where: { id: item.id },
+          data: {
+            occurrenceCount: item.existing.occurrenceCount + 1,
+            lastObservedAt: new Date(),
+            confidenceScore: Math.min((item.existing.occurrenceCount + 1) / 10, 0.95),
+          },
+        }),
+      ),
+    );
+
+    await prisma.knowledgePattern.createMany({
+      data: toCreate.map((finding) => ({
+        organizationId: orgId,
+        patternType: "finding",
+        patternKey: `finding:${finding.findingType}:${finding.severity}`,
+        patternLabel: `${finding.findingType}: ${finding.severity}`,
+        occurrenceCount: 1,
+        confidenceScore: 0.1,
+        metadata: {
+          commonSeverities: [finding.severity],
+          commonTypes: [finding.findingType],
+        },
+      })),
+    });
+
+    return { patternsCreated: toCreate.length, totalProcessed: findings.length };
   }
 
   async listPatterns(organizationId: string, patternType?: string) {
@@ -105,9 +118,9 @@ export class AuditKnowledgeEngine {
 
     const recommendations = [];
 
-    for (const pattern of patterns) {
-      const recommendation = await prisma.knowledgeRecommendation.create({
-        data: {
+    if (patterns.length > 0) {
+      const created = await prisma.knowledgeRecommendation.createMany({
+        data: patterns.map((pattern) => ({
           engagementId,
           patternId: pattern.id,
           recommendationType: "risk_suggestion",
@@ -115,9 +128,16 @@ export class AuditKnowledgeEngine {
           context: `تم اكتشاف هذا النمط في ${pattern.occurrenceCount} مهمة مشابهة`,
           relevanceScore: pattern.confidenceScore,
           confidenceScore: pattern.confidenceScore,
-        },
+        })),
       });
-      recommendations.push(recommendation);
+
+      const saved = await prisma.knowledgeRecommendation.findMany({
+        where: { engagementId },
+        include: { knowledgePattern: true },
+        orderBy: { createdAt: "desc" },
+        take: created.count,
+      });
+      recommendations.push(...saved);
     }
 
     return recommendations;

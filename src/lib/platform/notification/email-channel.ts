@@ -1,5 +1,9 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import type { DeliveryResult, NotificationSeverity } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export interface EmailOptions {
   recipientEmail: string;
@@ -47,10 +51,10 @@ export async function sendEmail(options: EmailOptions): Promise<DeliveryResult> 
   const config = getSmtpConfig();
 
   if (!isSmtpConfigured(config)) {
-    console.log("[Notification][Email] SMTP not configured. Dev mode log:");
-    console.log(`  To: ${options.recipientEmail}`);
-    console.log(`  Subject: ${options.subject}`);
-    console.log(`  Body: ${options.body.slice(0, 200)}...`);
+    logger.info("[Notification][Email] SMTP not configured. Dev mode log:");
+    logger.info(`  To: ${options.recipientEmail}`);
+    logger.info(`  Subject: ${options.subject}`);
+    logger.info(`  Body: ${options.body.slice(0, 200)}...`);
     return {
       channel: "email",
       success: true,
@@ -83,7 +87,7 @@ export async function sendEmail(options: EmailOptions): Promise<DeliveryResult> 
     return { channel: "email", success: true, deliveredAt };
   } catch (err) {
     const error = err instanceof Error ? err.message : "Unknown SMTP error";
-    console.error("[Notification][Email] Send failed:", error);
+    logger.error("[Notification][Email] Send failed:", err instanceof Error ? err : new Error(String(err)));
     return { channel: "email", success: false, error, deliveredAt };
   }
 }

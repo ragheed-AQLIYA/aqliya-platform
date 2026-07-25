@@ -4,7 +4,7 @@ import { SALESOS_PRODUCT_KEY } from "../core-adoption";
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/workflow/product-templates exists
 function getWorkflowTemplateForProduct(productSlug: string): { id: string; gates: { id: string; name: string; required: boolean }[] } | null {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/workflow/product-templates exists");
+  throw new Error("PLANNED: SalesOS vnext — workflow/product-templates not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 
 // SALESOS_VNEXT_PLACEHOLDER: inline type — replace when @/lib/platform/contracts/review-approval-contract exists
@@ -27,7 +27,7 @@ function createReviewState(input: {
 
 // SALESOS_VNEXT_PLACEHOLDER: inline stub — replace when @/lib/platform/contracts/review-approval-runtime exists
 function transitionReviewState(pkg: { evidenceComplete?: boolean; status?: string }, action: string, actor: ReviewApprovalActor): { evidenceComplete?: boolean; status: string } {
-  throw new Error("TODO: SalesOS vnext placeholder — implement when @/lib/platform/contracts/review-approval-runtime exists");
+  throw new Error("PLANNED: SalesOS vnext — review-approval-runtime not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)");
 }
 
 export type ProposalWorkflowStage =

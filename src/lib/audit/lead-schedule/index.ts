@@ -1,4 +1,5 @@
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
+import { createLogger } from "@/lib/observability/logger";
 import { syncReportingGraphForEngagement } from "@/lib/audit/reporting-graph/graph-sync-service";
 import {
   generateLeadSchedulesFromMappings,
@@ -10,6 +11,9 @@ import {
 export function isLeadScheduleAutoEnabled(): boolean {
   return isEnabled("audit.lead-schedule-auto");
 }
+
+
+const logger = createLogger({ product: "platform", action: "lib-audit-lead-schedule-index" });
 
 export {
   generateLeadSchedulesFromMappings,
@@ -36,9 +40,6 @@ export async function maybeGenerateLeadSchedules(
     await generateLeadSchedulesFromMappings(engagementId);
     await syncReportingGraphForEngagement(engagementId, "mapping");
   } catch (err) {
-    console.error(
-      `[LeadSchedule] auto-generate failed (${trigger}) for ${engagementId}`,
-      err,
-    );
+    logger.error(`[LeadSchedule] auto-generate failed (${trigger}) for ${engagementId}`, err instanceof Error ? err : new Error(String(err)));
   }
 }

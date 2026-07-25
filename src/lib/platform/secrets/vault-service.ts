@@ -199,6 +199,7 @@ export async function listSecrets(
   const entries = await prisma.vaultEntry.findMany({
     where,
     orderBy: { createdAt: "desc" },
+    take: 100,
   })
 
   return entries.map((entry) => ({

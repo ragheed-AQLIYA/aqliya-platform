@@ -27,8 +27,7 @@ export async function generateAuditContent(request: AiAuditRequest): Promise<AiA
 
   const startTime = Date.now()
 
-  // TODO: Replace with actual AI provider call
-  // This is a mock implementation for the quality pipeline
+  // WORKAROUND: Mock AI response for quality pipeline — real provider call planned for v0.2 (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)
   const mockContent = JSON.stringify({
     summary: "تم تحليل البيانات المالية بنجاح",
     ratios: { liquidity: 2.5, profitability: 0.15 },

@@ -1,11 +1,6 @@
 export {
   classifyTrialBalanceAccount,
   classifyTrialBalanceRows,
-  classifyAccountRulesOnly,
-  classifyAccountLocalOnly,
-  classifyAccountHybridOnly,
-  classifyAccountDeterministicHybridOnly,
-  classifyAccountFirmMemoryOnly,
   parseErpStatementSide,
 } from "./engine";
 export {

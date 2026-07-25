@@ -9,12 +9,12 @@ import type { SalesActor, SalesOrgScope } from "./services";
 
 /** PR-21a — deterministic commercial claim gate (no LLM). */
 
-export const CLAIM_MARKER_PATTERNS = [
+const CLAIM_MARKER_PATTERNS = [
   /\[\[claim\]\]/i,
   /\[COMMERCIAL_CLAIM\]/i,
 ] as const;
 
-export const RISKY_PHRASE_RULES = [
+const RISKY_PHRASE_RULES = [
   { id: "l6_maturity", pattern: /\bL6\b/i, label: "L6" },
   { id: "production_ready", pattern: /production[-\s]?ready/i, label: "production-ready" },
   {
@@ -138,7 +138,7 @@ export function validateClaimText(text: string): ClaimTextValidation {
   return { hasClaimMarkers, flaggedPhrases, requiresReview };
 }
 
-export function outreachDraftClaimText(subject: string, body: string): string {
+function outreachDraftClaimText(subject: string, body: string): string {
   return `${subject}\n${body}`;
 }
 
@@ -253,7 +253,7 @@ export function assertCommercialClaimReviewed(input: {
   }
 }
 
-export function assertAccountBriefClaimGate(input: {
+function assertAccountBriefClaimGate(input: {
   metadata: unknown;
   briefText: string;
 }): void {

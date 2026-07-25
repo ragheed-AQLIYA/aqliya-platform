@@ -17,23 +17,23 @@ import type { CrossProductSignalAggregation } from "./types";
 //   collectCrossProductRuntimeInputs,
 // } from "@/lib/platform/signals/cross-product-commercial";
 
-// TODO: implement when platform/signals/cross-product-commercial exists
+// NOTE: Feature planned for v0.2 — see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md
 async function collectCrossProductCommercialSignals(
   _organizationId: string,
   _ownerId: string,
 ): Promise<CrossProductSignalAggregation> {
   throw new Error(
-    "TODO: implement when platform/signals/cross-product-commercial exists",
+    "PLANNED: platform/signals/cross-product-commercial not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)",
   );
 }
 async function deriveInstitutionalCommercialSignals(): Promise<void> {
   throw new Error(
-    "TODO: implement when platform/signals/cross-product-commercial exists",
+    "PLANNED: platform/signals/cross-product-commercial not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)",
   );
 }
 async function collectCrossProductRuntimeInputs(): Promise<void> {
   throw new Error(
-    "TODO: implement when platform/signals/cross-product-commercial exists",
+    "PLANNED: platform/signals/cross-product-commercial not yet available (see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md)",
   );
 }
 

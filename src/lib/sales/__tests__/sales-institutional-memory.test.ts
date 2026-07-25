@@ -5,7 +5,7 @@ jest.mock("@/lib/prisma", () => ({
       update: jest.fn(),
     },
     salesDeal: { findMany: jest.fn() },
-    salesAuditEvent: { findMany: jest.fn() },
+    platformAuditLog: { findMany: jest.fn() },
   },
 }));
 
@@ -192,7 +192,7 @@ describe("SalesOS institutional memory (metadata stub)", () => {
           },
         },
       ]);
-      prisma.salesAuditEvent.findMany.mockResolvedValue([
+      prisma.platformAuditLog.findMany.mockResolvedValue([
         {
           id: "evt-icp",
           action: SalesAuditActions.AGENT_ICP_SCORED,
@@ -248,7 +248,7 @@ describe("SalesOS institutional memory (metadata stub)", () => {
           },
         },
       ]);
-      prisma.salesAuditEvent.findMany.mockResolvedValue([]);
+      prisma.platformAuditLog.findMany.mockResolvedValue([]);
 
       const result = await syncInstitutionalMemoryForAccount("acc-1", SCOPE);
 

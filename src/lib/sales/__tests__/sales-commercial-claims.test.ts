@@ -1,7 +1,7 @@
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     salesDeal: { findFirst: jest.fn(), update: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -33,7 +33,7 @@ const BASE_DEAL = {
 describe("SalesOS commercial claims (PR-21a)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
     prisma.salesDeal.update.mockResolvedValue(BASE_DEAL);
     prisma.salesDeal.findFirst.mockResolvedValue(BASE_DEAL);
   });
@@ -70,7 +70,7 @@ describe("SalesOS commercial claims (PR-21a)", () => {
 
       expect(review?.status).toBe("flagged");
       expect(readCommercialClaimReviews(metadata)).toHaveLength(1);
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.CLAIM_FLAGGED,
@@ -133,7 +133,7 @@ describe("SalesOS commercial claims (PR-21a)", () => {
       });
 
       expect(review.status).toBe("reviewed");
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.CLAIM_REVIEWED,

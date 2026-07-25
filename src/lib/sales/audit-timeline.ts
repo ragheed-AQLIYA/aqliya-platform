@@ -3,7 +3,7 @@ import { SalesAuditActions } from "./audit-events";
 export interface SalesAuditTimelineRow {
   id: string;
   action: string;
-  actorId: string;
+  actorId: string | null;
   actorName: string | null;
   metadata: unknown;
   createdAt: Date;
@@ -39,7 +39,7 @@ export function mapSalesAuditEventsToTimeline(events: SalesAuditTimelineRow[]) {
       type: isStageChange ? ("status_change" as const) : ("action" as const),
       title: ACTION_LABELS[event.action] ?? event.action,
       description,
-      actor: event.actorName ?? event.actorId,
+      actor: (event.actorName ?? event.actorId) ?? undefined,
     };
   });
 }

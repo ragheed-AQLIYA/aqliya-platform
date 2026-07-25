@@ -110,6 +110,7 @@ class SecretsVaultImpl implements SecretsVault {
   async list(): Promise<SecretEntry[]> {
     const rows = await prisma.platformSecret.findMany({
       orderBy: { createdAt: "desc" },
+      take: 100,
     })
 
     return rows.map((r) => ({

@@ -1,29 +1,27 @@
 "use client";
 
-import { useTransition } from "react";
-import Link from "next/link";
 import { StatusBadge } from "@/components/enterprise/status-badge";
-import {
-  EnterpriseCard,
-  EnterpriseCardContent,
-  EnterpriseCardHeader,
-  EnterpriseCardTitle,
-} from "@/components/enterprise/enterprise-card";
-import { Button } from "@/components/ui/button";
-import {
-  submitOpportunityReviewAction,
-  approveOpportunityAction,
-  linkEvidenceAction,
-  requestClaimReviewAction,
-} from "@/actions/sales-actions";
 import { OpportunityWinLossCapture } from "@/components/sales/opportunity-win-loss-capture";
+import { OpportunityHeader } from "@/components/sales/components/opportunity-header";
+import { OpportunityRisksCard } from "@/components/sales/components/opportunity-risks-card";
+import { OpportunityWorkflowCard } from "@/components/sales/components/opportunity-workflow-card";
+import { OpportunityAISummaryCard } from "@/components/sales/components/opportunity-ai-summary-card";
+import { OpportunityProofLinkageCard } from "@/components/sales/components/opportunity-proof-linkage-card";
+import { OpportunityEvidenceCard } from "@/components/sales/components/opportunity-evidence-card";
+import { useOpportunityDetail } from "@/components/sales/components/use-opportunity-detail";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SalesAuditActions } from "@/lib/sales/audit-events";
 import type { SalesAccount, SalesOpportunity } from "@/lib/sales/types";
 import type { SalesEvidenceRef } from "@/lib/sales/store";
 import type { ProofLinkageSummary } from "@/lib/sales/proof-linkage-service";
+import type { ReviewApprovalPackage } from "@/components/sales/components/opportunity-types";
 
-interface ReviewApprovalPackage {
-  status: string;
-  evidenceComplete: boolean;
+interface StageHistoryEntry {
+  id: string;
+  action: string;
+  actorName: string | null;
+  metadata: Record<string, unknown> | null;
+  createdAt: Date;
 }
 
 interface OpportunityDetailProps {
@@ -36,6 +34,56 @@ interface OpportunityDetailProps {
   captureWinLossAction?: (
     formData: FormData,
   ) => Promise<{ ok: true; winLossReason: string }>;
+  stageHistory?: StageHistoryEntry[];
+}
+
+function StageHistoryCard({ events, stages }: { events: StageHistoryEntry[]; stages?: { id: string; name: string }[] }) {
+  const stageChanges = events.filter(
+    (e) =>
+      e.action === SalesAuditActions.DEAL_STAGE_CHANGED ||
+      e.action === "sales.opportunity.stage_changed",
+  );
+  if (stageChanges.length === 0) return null;
+
+  const stageName = (id: string | null) => {
+    if (!id) return "بدون مرحلة";
+    const found = stages?.find((s) => s.id === id);
+    return found?.name ?? id;
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-sm">سجل تغيير المراحل</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          {stageChanges.map((evt) => {
+            const meta = evt.metadata ?? {};
+            const fromId = (meta.fromStageId as string) ?? null;
+            const toId = (meta.toStageId as string) ?? null;
+            return (
+              <div key={evt.id} className="flex items-start gap-3 text-sm">
+                <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-status-warning" />
+                <div className="min-w-0">
+                  <p>
+                    <span className="text-muted-foreground">من </span>
+                    <span className="font-medium">{stageName(fromId)}</span>
+                    <span className="text-muted-foreground"> ← </span>
+                    <span className="font-medium">{stageName(toId)}</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {evt.actorName ? `${evt.actorName} · ` : ""}
+                    {new Date(evt.createdAt).toLocaleString("ar-SA")}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function OpportunityDetailView({
@@ -45,210 +93,51 @@ export function OpportunityDetailView({
   reviewPackage,
   exportGate,
   proofLinkage,
+  stageHistory,
 }: OpportunityDetailProps) {
-  const [pending, startTransition] = useTransition();
-
-  function handleSubmitReview() {
-    startTransition(async () => {
-      await submitOpportunityReviewAction(opportunity.id);
-      window.location.reload();
-    });
-  }
-
-  function handleApprove() {
-    startTransition(async () => {
-      await approveOpportunityAction(opportunity.id);
-      window.location.reload();
-    });
-  }
-
-  function handleLinkEvidence() {
-    startTransition(async () => {
-      await linkEvidenceAction(
-        opportunity.id,
-        "qualification_note",
-        "Qualification evidence — v1 seed",
-      );
-      window.location.reload();
-    });
-  }
-
-  function handleAIReview() {
-    startTransition(async () => {
-      await requestClaimReviewAction(opportunity.id);
-      window.location.reload();
-    });
-  }
+  const {
+    pending,
+    handleSubmitReview,
+    handleApprove,
+    handleLinkEvidence,
+    handleAIReview,
+  } = useOpportunityDetail(opportunity.id);
 
   const opportunityRisks = opportunity.risks ?? [];
 
   return (
     <div className="space-y-6" dir="rtl">
-      <div>
-        <Link
-          href="/sales/opportunities"
-          className="text-sm text-muted-foreground hover:underline"
-        >
-          ← المسار
-        </Link>
-        <h1 className="mt-2 text-h2 font-black">{opportunity.name}</h1>
-        {account && (
-          <p className="text-sm text-muted-foreground">
-            الحساب:{" "}
-            <Link
-              href={`/sales/accounts/${account.id}`}
-              className="text-primary hover:underline"
-            >
-              {account.nameAr ?? account.name}
-            </Link>
-          </p>
-        )}
-      </div>
+      <OpportunityHeader opportunity={opportunity} account={account} />
 
       <div className="flex flex-wrap gap-2">
         <StatusBadge status={opportunity.stage} />
         <StatusBadge status={reviewPackage.status} size="sm" />
       </div>
 
-      {opportunityRisks.length > 0 && (
-        <EnterpriseCard module="sales">
-          <EnterpriseCardHeader>
-            <EnterpriseCardTitle>مخاطر مسجّلة على الفرصة</EnterpriseCardTitle>
-          </EnterpriseCardHeader>
-          <EnterpriseCardContent>
-            <ul className="list-inside list-disc text-sm">
-              {opportunityRisks.map((r) => (
-                <li key={r}>{r}</li>
-              ))}
-            </ul>
-          </EnterpriseCardContent>
-        </EnterpriseCard>
-      )}
+      <OpportunityRisksCard risks={opportunityRisks} />
 
       <div className="grid gap-4 md:grid-cols-2">
-        <EnterpriseCard module="sales">
-          <EnterpriseCardHeader>
-            <EnterpriseCardTitle>حالة سير العمل</EnterpriseCardTitle>
-          </EnterpriseCardHeader>
-          <EnterpriseCardContent className="space-y-3">
-            <p className="text-sm">
-              مراجعة: {opportunity.reviewStatus ?? "Draft"}
-            </p>
-            <p className="text-sm">
-              اعتماد: {opportunity.approvalStatus ?? "Draft"}
-            </p>
-            <p className="text-sm">
-              أدلة مكتملة: {reviewPackage.evidenceComplete ? "نعم" : "لا"}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {(opportunity.reviewStatus === "Draft" ||
-                opportunity.reviewStatus === "Returned") && (
-                <Button
-                  size="sm"
-                  disabled={pending || !reviewPackage.evidenceComplete}
-                  onClick={handleSubmitReview}
-                >
-                  إرسال للمراجعة
-                </Button>
-              )}
-              {opportunity.reviewStatus === "InReview" && (
-                <Button size="sm" disabled={pending} onClick={handleApprove}>
-                  اعتماد
-                </Button>
-              )}
-              {evidence.length === 0 && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={pending}
-                  onClick={handleLinkEvidence}
-                >
-                  ربط دليل تأهيل
-                </Button>
-              )}
-            </div>
-          </EnterpriseCardContent>
-        </EnterpriseCard>
-
-        <EnterpriseCard module="sales">
-          <EnterpriseCardHeader>
-            <EnterpriseCardTitle>المخرجات والذكاء</EnterpriseCardTitle>
-          </EnterpriseCardHeader>
-          <EnterpriseCardContent className="space-y-3">
-            <p className="text-sm">
-              تصدير الملخص:{" "}
-              {exportGate.allowed ? "مسموح" : (exportGate.reason ?? "محظور")}
-            </p>
-            <Button
-              size="sm"
-              variant="secondary"
-              disabled={pending}
-              onClick={handleAIReview}
-            >
-              طلب مراجعة ادعاء (AI محكوم)
-            </Button>
-          </EnterpriseCardContent>
-        </EnterpriseCard>
+        <OpportunityWorkflowCard
+          opportunity={opportunity}
+          reviewPackage={reviewPackage}
+          evidenceCount={evidence.length}
+          pending={pending}
+          onSubmitReview={handleSubmitReview}
+          onApprove={handleApprove}
+          onLinkEvidence={handleLinkEvidence}
+        />
+        <OpportunityAISummaryCard
+          exportGate={exportGate}
+          pending={pending}
+          onAIReview={handleAIReview}
+        />
       </div>
 
-      {proofLinkage && (
-        <EnterpriseCard module="sales" className="border-dashed">
-          <EnterpriseCardHeader>
-            <EnterpriseCardTitle>أصول الإثبات (proof linkage)</EnterpriseCardTitle>
-            <p className="text-xs text-muted-foreground">
-              تغطية أدلة:{" "}
-              {proofLinkage.evidenceCoverage.coveragePct}%
-              — مسودة توصيات
-            </p>
-          </EnterpriseCardHeader>
-          <EnterpriseCardContent className="space-y-3 text-sm">
-            {proofLinkage.linkedAssets.length > 0 ? (
-              <ul className="space-y-1">
-                {proofLinkage.linkedAssets.map((a) => (
-                  <li key={a.id}>
-                    {a.title}{" "}
-                    <span className="text-muted-foreground">
-                      ({a.assetType})
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted-foreground">لا أصول إثبات مرتبطة بعد</p>
-            )}
-            {proofLinkage.missingAssetTypes.length > 0 && (
-              <p className="text-xs text-amber-700 dark:text-amber-400">
-                أنواع ناقصة للمرحلة:{" "}
-                {proofLinkage.missingAssetTypes.join("، ")}
-              </p>
-            )}
-            {proofLinkage.recommendations.map((rec) => (
-              <p key={rec} className="text-xs text-muted-foreground">
-                {rec}
-              </p>
-            ))}
-          </EnterpriseCardContent>
-        </EnterpriseCard>
-      )}
+      {proofLinkage && <OpportunityProofLinkageCard proofLinkage={proofLinkage} />}
 
-      <EnterpriseCard>
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle>الأدلة التجارية المرتبطة</EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent>
-          {evidence.length === 0 ? (
-            <p className="text-sm text-muted-foreground">لا توجد أدلة بعد</p>
-          ) : (
-            <ul className="space-y-2">
-              {evidence.map((e) => (
-                <li key={e.id} className="text-sm">
-                  {e.label} ({e.typeId})
-                </li>
-              ))}
-            </ul>
-          )}
-        </EnterpriseCardContent>
-      </EnterpriseCard>
+      <OpportunityEvidenceCard evidence={evidence} />
+
+      {stageHistory ? <StageHistoryCard events={stageHistory} /> : null}
 
       <OpportunityWinLossCapture opportunity={opportunity} />
     </div>

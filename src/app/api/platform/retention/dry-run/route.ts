@@ -1,8 +1,13 @@
+import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { dryRun } from "@/lib/core/policy/retention/engine";
 import { getPolicyForModel } from "@/lib/core/policy/retention/policies";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+
+const dryRunSchema = z.object({
+  modelName: z.string().optional(),
+}).passthrough();
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,11 +15,18 @@ export async function POST(request: NextRequest) {
     if (!hasRequiredRole(user, "ADMIN")) {
       throw new Error("Access denied: ADMIN role required");
     }
-    const body = (await request.json().catch(() => ({}))) as { modelName?: string };
+    let rawBody: unknown;
+    try {
+      rawBody = await request.json();
+    } catch {
+      rawBody = {};
+    }
+    const parsed = dryRunSchema.safeParse(rawBody);
+    const data = parsed.success ? parsed.data : {};
 
     let targetPolicy;
-    if (body.modelName) {
-      targetPolicy = getPolicyForModel(body.modelName, user.platformOrganizationId);
+    if (data.modelName) {
+      targetPolicy = getPolicyForModel(data.modelName, user.platformOrganizationId);
       if (!targetPolicy) {
         return NextResponse.json({ error: "Unknown model" }, { status: 400 });
       }

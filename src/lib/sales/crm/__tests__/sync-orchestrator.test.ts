@@ -79,7 +79,7 @@ describe("SyncOrchestrator", () => {
     jest.clearAllMocks();
 
     // Clear in-memory stores
-    const models = ["crmConnection", "crmSyncLog", "salesAccount", "salesContact", "salesDeal", "salesAuditEvent"];
+    const models = ["crmConnection", "crmSyncLog", "salesAccount", "salesContact", "salesDeal"];
     for (const model of models) {
       await prisma[model as keyof typeof prisma].deleteMany({} as Record<string, never>);
     }

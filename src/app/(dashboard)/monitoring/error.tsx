@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Activity, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function MonitoringError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Monitoring error:", error);
+    clientLogger.error("Monitoring error:", error);
   }, [error]);
 
   return (

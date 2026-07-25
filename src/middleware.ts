@@ -40,6 +40,7 @@ const publicExact = new Set([
   "/pilot-proof",
   "/soc2-roadmap",
   "/platform",
+  "/pricing",
   "/privacy",
   "/proof-library",
   "/products",

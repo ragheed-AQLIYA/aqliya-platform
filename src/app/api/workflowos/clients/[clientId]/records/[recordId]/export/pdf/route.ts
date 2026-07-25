@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
+import { getCurrentUser } from "@/lib/auth";
 import { exportWorkflowRecord } from "@/lib/workflowos/export";
 import { buildDownloadResponse } from "@/lib/platform/download";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function GET(
   _request: NextRequest,
@@ -8,6 +13,8 @@ export async function GET(
 ) {
   try {
     const { clientId, recordId } = await params;
+    const user = await getCurrentUser();
+    const organizationId = user.platformOrganizationId ?? user.organizationId;
 
     const result = await exportWorkflowRecord({ clientId, recordId });
 
@@ -35,7 +42,7 @@ export async function GET(
     if (message.includes("not found")) {
       return NextResponse.json({ error: message }, { status: 404 });
     }
-    console.error("[WorkflowExport] Error:", message);
+    logger.error("[WorkflowExport] Error:", error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json({ error: "Export failed" }, { status: 500 });
   }
 }

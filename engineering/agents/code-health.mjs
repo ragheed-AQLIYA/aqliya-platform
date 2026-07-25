@@ -5,7 +5,9 @@
  */
 
 import path from "node:path";
-import { CODE_HEALTH } from "../config.mjs";
+import { CODE_HEALTH, REACT_COMPLEXITY, buildExclusionFn } from "../config.mjs";
+
+const isExcluded = buildExclusionFn("codeHealth");
 import {
   collectSourceFiles,
   readText,
@@ -21,9 +23,40 @@ import {
   extractImports,
   extractExports,
   blockFingerprints,
+  computeRcs,
 } from "../lib/ast-lite.mjs";
 
 const AGENT = "code-health";
+
+/**
+ * Check if content has actual server-only module imports (not type-only, not string literals, not import paths).
+ * This avoids false positives like:
+ *   - `import type { X } from "@prisma/client"` (type-only, safe)
+ *   - `audit-fs-actions` (import path substring)
+ *   - `"fs" | "audit"` (string literal)
+ *   - `npx prisma db seed` (string literal)
+ */
+function hasActualServerImport(content) {
+  // Remove import type declarations (type-only imports are safe, erased at compile time)
+  let cleaned = content.replace(/import\s+type\s+.*?from\s+['"][^'"]+['"]\s*;?\s*/gs, "");
+  // Strip out block and line comments
+  cleaned = cleaned.replace(/\/\/.*$/gm, "");
+  cleaned = cleaned.replace(/\/\*[\s\S]*?\*\//g, "");
+
+  // Check for actual runtime imports/usage of server-only modules.
+  // Import paths like "audit-fs-actions" won't match because we check exact module names.
+  // String literals like '"fs"' won't match because we require 'from' keyword.
+  return (
+    /from\s+['"]fs['"]/.test(cleaned) ||
+    /from\s+['"]node:fs['"]/.test(cleaned) ||
+    /require\s*\(\s*['"](?:node:)?fs['"]\s*\)/.test(cleaned) ||
+    /from\s+['"](?:@prisma\/client|prisma)['"]/.test(cleaned) ||
+    /require\s*\(\s*['"](?:@prisma\/client|prisma)['"]\s*\)/.test(cleaned) ||
+    /\bcreateHash\b/.test(cleaned) ||
+    /from\s+['"](?:node:)?child_process['"]/.test(cleaned) ||
+    /require\s*\(\s*['"](?:node:)?child_process['"]\s*\)/.test(cleaned)
+  );
+}
 
 export async function run() {
   const files = collectSourceFiles(["src"]);
@@ -37,9 +70,11 @@ export async function run() {
   const miCandidates = [];
   const complexityCandidates = [];
   const godCandidates = [];
+  const reactComplexityCandidates = [];
 
   for (const absFile of files) {
     const fileRel = rel(absFile);
+    if (isExcluded(fileRel)) continue;
     const content = readText(absFile);
     if (!content) continue;
     const loc = lineCount(content);
@@ -53,6 +88,19 @@ export async function run() {
         exports: exports.length,
         severity: loc >= CODE_HEALTH.godObjectLines ? "high" : "medium",
       });
+    }
+
+    // React Complexity (RFC-001) — only for .tsx files
+    if (fileRel.endsWith(".tsx")) {
+      const rcs = computeRcs(content, loc, REACT_COMPLEXITY);
+      const isGodComponent =
+        rcs.score >= REACT_COMPLEXITY.godComponentRcs ||
+        rcs.useState >= REACT_COMPLEXITY.godComponentUseState ||
+        loc >= REACT_COMPLEXITY.godComponentLoc ||
+        rcs.fanout >= REACT_COMPLEXITY.godComponentFanout;
+      if (isGodComponent) {
+        reactComplexityCandidates.push({ fileRel, loc, rcs });
+      }
     }
 
     // Long functions
@@ -95,8 +143,9 @@ export async function run() {
       });
     }
 
-    // SOLID — SRP smell: mixed "use client" with prisma-ish names
-    if (/['"]use client['"]/.test(content) && /prisma|createHash|fs\.|child_process/.test(content)) {
+    // SOLID — SRP smell: mixed "use client" with actual server-only module imports
+    const isClientComponent = /['"]use client['"]/.test(content);
+    if (isClientComponent && hasActualServerImport(content)) {
       findings.push(
         finding({
           agent: AGENT,
@@ -126,6 +175,25 @@ export async function run() {
           files: [g.fileRel],
           suggestion:
             "Split by responsibility (SRP). Prefer domain modules under src/lib/<domain>/.",
+        })
+      );
+    });
+
+  // Emit React Complexity findings (RFC-001)
+  reactComplexityCandidates
+    .sort((a, b) => b.rcs.score - a.rcs.score)
+    .slice(0, 20)
+    .forEach((r) => {
+      findings.push(
+        finding({
+          agent: AGENT,
+          severity: r.rcs.score >= 85 ? "high" : "medium",
+          category: "react-complexity",
+          title: `React God Component: RCS ${r.rcs.score} — ${path.basename(r.fileRel)}`,
+          evidence: `${r.loc} LOC, ${r.rcs.useState} useState, ${r.rcs.fanout} components, density=${r.rcs.hookDensity.toFixed(1)}/100L, inline=${r.rcs.inlineCallbacks}`,
+          files: [r.fileRel],
+          suggestion:
+            "Extract sub-components, convert useState chains to useReducer, or split into container/presentational.",
         })
       );
     });
@@ -247,6 +315,7 @@ export async function run() {
   let unusedImportCount = 0;
   for (const absFile of files) {
     const fileRel = rel(absFile);
+    if (isExcluded(fileRel)) continue;
     const content = readText(absFile);
     if (!content) continue;
     const namedImportRe =
@@ -345,7 +414,14 @@ export async function run() {
       const targetHint = imp.replace(/^@\//, "src/");
       for (const [other, otherImps] of importGraph) {
         if (other === file) continue;
-        if (!other.startsWith(targetHint) && other !== targetHint + ".ts") continue;
+        if (
+          !(
+            other === targetHint ||
+            other.startsWith(targetHint + "/") ||
+            other === targetHint + ".ts"
+          )
+        )
+          continue;
         const back = otherImps.some(
           (oi) => oi.startsWith("@/") && file.startsWith(oi.replace(/^@\//, "src/"))
         );

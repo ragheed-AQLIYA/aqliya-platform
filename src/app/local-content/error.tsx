@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AlertTriangle, ArrowLeft, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { clientLogger } from "@/lib/observability/client-logger";
 
 export default function LocalContentError({
   error,
@@ -16,7 +17,7 @@ export default function LocalContentError({
   const router = useRouter();
 
   useEffect(() => {
-    console.error("[LocalContentOS Error Boundary]", error);
+    clientLogger.error("[LocalContentOS Error Boundary]", error);
   }, [error]);
 
   return (

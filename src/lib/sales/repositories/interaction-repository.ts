@@ -23,6 +23,7 @@ export const interactionRepository = {
     const rows = await prisma.salesInteraction.findMany({
       where: { organizationId },
       orderBy: { occurredAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaInteractionToDomain);
   },
@@ -34,6 +35,7 @@ export const interactionRepository = {
     const rows = await prisma.salesInteraction.findMany({
       where: { organizationId, dealId },
       orderBy: { occurredAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaInteractionToDomain);
   },
@@ -45,6 +47,7 @@ export const interactionRepository = {
     const rows = await prisma.salesInteraction.findMany({
       where: { organizationId, accountId },
       orderBy: { occurredAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaInteractionToDomain);
   },

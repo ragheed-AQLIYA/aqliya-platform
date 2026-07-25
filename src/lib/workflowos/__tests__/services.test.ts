@@ -76,7 +76,7 @@ jest.mock("@/lib/prisma", () => ({
         return membershipStore[idx];
       }),
     },
-    sunbulAuditEvent: {
+    platformAuditLog: {
       create: jest.fn(async ({ data }: { data: Record<string, unknown> }) => {
         const record = { id: `audit-${auditEventStore.length + 1}`, createdAt: new Date(), ...data };
         auditEventStore.push(record);

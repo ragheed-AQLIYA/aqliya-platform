@@ -1,6 +1,10 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export function isIfrsRulesEnabled(): boolean {
   return isEnabled("audit.ifrs-rules");
@@ -61,7 +65,7 @@ export async function maybeRunIfrsRulesAfterFsRebuild(
     const { runIfrsRulesForEngagement } = await import("./ifrs-rules-engine");
     await runIfrsRulesForEngagement(engagementId);
   } catch (err) {
-    console.error(`[IFRS Rules] post-FS hook failed for ${engagementId}`, err);
+    logger.error(`[IFRS Rules] post-FS hook failed for ${engagementId}`, err instanceof Error ? err : undefined);
   }
 }
 
@@ -75,6 +79,6 @@ export async function maybeRunSocpaRulesAfterFsRebuild(
     const { runSocpaRulesForEngagement } = await import("./socpa-rules-engine");
     await runSocpaRulesForEngagement(engagementId);
   } catch (err) {
-    console.error(`[SOCPA Rules] post-FS hook failed for ${engagementId}`, err);
+    logger.error(`[SOCPA Rules] post-FS hook failed for ${engagementId}`, err instanceof Error ? err : undefined);
   }
 }

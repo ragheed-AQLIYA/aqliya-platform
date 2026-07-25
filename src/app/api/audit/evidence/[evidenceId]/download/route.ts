@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { getCurrentUser } from "@/lib/auth";
 import { getStorageProvider } from "@/lib/audit/storage";
 import { enforceAuditRateLimit } from "@/lib/audit/rate-limit";
@@ -7,6 +8,9 @@ import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { enforce } from "@/lib/kernel";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function GET(
   request: NextRequest,
@@ -105,7 +109,7 @@ export async function GET(
     const { message, code } = sanitizeError(error);
     const status = httpStatusFromCode(code);
     if (status === 500) {
-      console.error("[EvidenceDownload] Error serving file:", error);
+      logger.error("[EvidenceDownload] Error serving file:", error instanceof Error ? error : undefined);
       return NextResponse.json({ error: "Failed to serve file" }, { status: 500 });
     }
     return NextResponse.json({ error: message }, { status });

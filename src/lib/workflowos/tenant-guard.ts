@@ -13,11 +13,13 @@ export interface WorkflowMembershipInfo {
   status: string;
 }
 
-export async function getUserWorkflowMemberships(
+async function getUserWorkflowMemberships(
   userId: string,
 ): Promise<WorkflowMembershipInfo[]> {
+  // Bounded by userId + status:"Active" — a user has at most a small number of active memberships
   const memberships = await prisma.sunbulUserMembership.findMany({
     where: { userId, status: "Active" },
+    take: 100,
     include: {
       client: {
         select: { id: true, name: true, slug: true },

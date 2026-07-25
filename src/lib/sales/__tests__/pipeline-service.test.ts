@@ -15,7 +15,7 @@ const mockSalesAccountFindMany = jest.fn();
 const mockSalesPipelineFindFirst = jest.fn();
 const mockSalesPipelineStageFindFirst = jest.fn();
 const mockSalesPipelineStageFindMany = jest.fn();
-const mockSalesAuditEventCreate = jest.fn();
+const mockPlatformAuditLogCreate = jest.fn();
 const mockSalesEvidenceLinkCount = jest.fn();
 const mockSalesDealGroupBy = jest.fn().mockResolvedValue([]);
 
@@ -40,14 +40,16 @@ jest.mock("@/lib/prisma", () => ({
       findFirst: mockSalesPipelineStageFindFirst,
       findMany: mockSalesPipelineStageFindMany,
     },
-    salesAuditEvent: {
-      create: mockSalesAuditEventCreate,
+    platformAuditLog: {
+      create: mockPlatformAuditLogCreate,
     },
     salesEvidenceLink: {
       count: mockSalesEvidenceLinkCount,
     },
   },
 }));
+
+const mockWritePlatformAuditLog = jest.fn().mockResolvedValue({ ok: true, id: "audit-plat-1" });
 
 jest.mock("@/lib/platform/audit-logger", () => ({
   auditLogger: jest.fn(() => ({
@@ -57,7 +59,7 @@ jest.mock("@/lib/platform/audit-logger", () => ({
 }));
 
 jest.mock("@/lib/platform/audit-log", () => ({
-  writePlatformAuditLog: jest.fn().mockResolvedValue({ ok: true, id: "audit-plat-1" }),
+  writePlatformAuditLog: mockWritePlatformAuditLog,
 }));
 
 jest.mock("@/lib/platform/audit/audit-store", () => ({
@@ -124,7 +126,7 @@ function mockDealResponse(overrides = {}) {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  mockSalesAuditEventCreate.mockResolvedValue({ id: "audit-n" });
+  mockPlatformAuditLogCreate.mockResolvedValue({ id: "audit-n" });
 });
 
 
@@ -370,9 +372,11 @@ describe("createSalesDeal (Prisma service)", () => {
         data: expect.objectContaining({ organizationId: ORG_ID, title: "New Deal", amount: 50000 }),
       }),
     );
-    expect(mockSalesAuditEventCreate).toHaveBeenCalledWith(
+    expect(mockWritePlatformAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({ action: SalesAuditActions.DEAL_CREATED, targetType: "SalesDeal" }),
+        productKey: "sales_os",
+        action: SalesAuditActions.DEAL_CREATED,
+        targetType: "SalesDeal",
       }),
     );
   });
@@ -428,8 +432,8 @@ describe("updateSalesDeal (Prisma service)", () => {
 
     expect(deal.title).toBe("Updated");
     expect(mockSalesDealUpdate).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "deal-upd" } }));
-    expect(mockSalesAuditEventCreate).toHaveBeenCalledWith(
-      expect.objectContaining({ data: expect.objectContaining({ action: SalesAuditActions.DEAL_UPDATED }) }),
+    expect(mockWritePlatformAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({ productKey: "sales_os", action: SalesAuditActions.DEAL_UPDATED }),
     );
   });
 
@@ -452,12 +456,11 @@ describe("updateSalesDeal (Prisma service)", () => {
 
     await updateSalesDeal("deal-stage", { organizationId: ORG_ID }, { stageId: "stage-nego" }, ACTOR);
 
-    expect(mockSalesAuditEventCreate).toHaveBeenCalledWith(
+    expect(mockWritePlatformAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({
-          action: SalesAuditActions.DEAL_STAGE_CHANGED,
-          metadata: expect.objectContaining({ fromStageId: "stage-disco", toStageId: "stage-nego" }),
-        }),
+        productKey: "sales_os",
+        action: SalesAuditActions.DEAL_STAGE_CHANGED,
+        metadata: expect.objectContaining({ fromStageId: "stage-disco", toStageId: "stage-nego" }),
       }),
     );
   });
@@ -468,11 +471,11 @@ describe("updateSalesDeal (Prisma service)", () => {
       stage: { id: "stage-same", name: "Same", slug: "same", sortOrder: 1 } }));
 
     mockSalesPipelineStageFindFirst.mockResolvedValue({ id: "stage-same", slug: "same" });
-    mockSalesAuditEventCreate.mockClear();
+    mockWritePlatformAuditLog.mockClear();
     await updateSalesDeal("deal-same", { organizationId: ORG_ID }, { stageId: "stage-same", title: "New Title" }, ACTOR);
 
-    const stageChangedCall = mockSalesAuditEventCreate.mock.calls.find(
-      (call) => call[0]?.data?.action === SalesAuditActions.DEAL_STAGE_CHANGED,
+    const stageChangedCall = mockWritePlatformAuditLog.mock.calls.find(
+      (call) => call[0]?.action === SalesAuditActions.DEAL_STAGE_CHANGED,
     );
     expect(stageChangedCall).toBeUndefined();
   });
@@ -514,7 +517,7 @@ describe("pipeline lifecycle integration", () => {
     mockSalesDealFindFirst.mockReset();
     mockSalesDealUpdate.mockReset();
     mockSalesEvidenceLinkCount.mockReset();
-    mockSalesAuditEventCreate.mockClear();
+    mockWritePlatformAuditLog.mockClear();
   });
 
   it("simulates full pipeline: discovery -> negotiation -> (blocked) -> closed_won with evidence", async () => {

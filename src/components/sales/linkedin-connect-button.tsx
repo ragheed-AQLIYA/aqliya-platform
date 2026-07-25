@@ -1,8 +1,13 @@
 "use client";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link2, Loader2 } from "lucide-react";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export function LinkedInConnectButton() {
   const [loading, setLoading] = useState(false);
@@ -40,7 +45,7 @@ export function LinkedInConnectButton() {
 
       window.location.href = `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;
     } catch (err) {
-      console.error("LinkedIn OAuth error:", err);
+      logger.error("LinkedIn OAuth error:", err instanceof Error ? err : undefined);
     }
     setLoading(false);
   };

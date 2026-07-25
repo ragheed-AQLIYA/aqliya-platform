@@ -12,7 +12,7 @@ import {
   signalSeverityLabelAr,
   signalTypeLabelAr,
   type SalesSignalView,
-} from "@/lib/sales/signals";
+} from "@/lib/sales/signals-view";
 import { Activity, RefreshCw } from "lucide-react";
 
 const TYPE_OPTIONS = [

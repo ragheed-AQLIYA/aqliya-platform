@@ -1,7 +1,11 @@
 import "server-only"
+import { createLogger } from "@/lib/observability/logger";
 
 import { PrismaClient } from "@prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
@@ -19,7 +23,7 @@ function createPrismaClient() {
   if (!databaseUrl) {
     if (isBuildPhase) {
       // Build-time: return no-op client. Real client is initialized at runtime.
-      console.warn("[prisma] DATABASE_URL not set during build — returning no-op client")
+      logger.warn("[prisma]DATABASE_URL not set during build — returning no-op client")
       return {} as PrismaClient
     }
     throw new Error("DATABASE_URL is required to initialize PrismaClient")

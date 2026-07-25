@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+﻿import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import * as fs from "fs"
 import * as path from "path"
@@ -47,6 +47,7 @@ async function livenessChecks(): Promise<{
 
   const dbStart = Date.now()
   try {
+    // SAFE: Prisma tagged template literal ($queryRaw) — parameterized, no concatenation.
     await prisma.$queryRaw`SELECT 1`
     checks.database = { ok: true, latencyMs: Date.now() - dbStart }
   } catch (error) {

@@ -126,6 +126,7 @@ export async function getUserConflicts(
       rule: true,
     },
     orderBy: { detectedAt: "desc" },
+    take: 100,
   });
 }
 
@@ -148,6 +149,7 @@ export async function checkForConflict(
       roleA: { select: { id: true, name: true } },
       roleB: { select: { id: true, name: true } },
     },
+    take: 100,
   });
 
   if (activeRules.length === 0) return null;
@@ -159,6 +161,7 @@ export async function checkForConflict(
       isActive: true,
     },
     select: { roleId: true },
+    take: 100,
   }) as { roleId: string }[];
 
   const assignedRoleIds = new Set(userAssignments.map((a) => a.roleId));
@@ -235,6 +238,7 @@ export async function getOrganizationRules(
   return prisma.separationOfDutyRule.findMany({
     where: { isActive: true },
     orderBy: { createdAt: "desc" },
+    take: 100,
   });
 }
 

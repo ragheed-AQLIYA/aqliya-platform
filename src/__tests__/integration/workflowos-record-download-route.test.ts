@@ -11,12 +11,16 @@ jest.mock("@/lib/kernel", () => ({
   enforce: jest.fn(),
 }));
 
+jest.mock("@/lib/workflowos/audit", () => ({
+  recordWorkflowAuditEvent: jest.fn(),
+}));
+
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     workflowRecord: { findUnique: jest.fn() },
     workflowEvidence: { findMany: jest.fn() },
-    workflowAuditEvent: { findMany: jest.fn(), create: jest.fn() },
     workflowTemplate: { findUnique: jest.fn() },
+    platformAuditLog: { findMany: jest.fn().mockResolvedValue([]) },
   },
 }));
 
@@ -25,6 +29,7 @@ jest.mock("@/lib/prisma", () => ({
 import { getCurrentUser } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
+import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
 
 // ── Type helpers ──
 
@@ -196,13 +201,12 @@ describe("GET /api/workflowos/records/[recordId]/download", () => {
     mock(prisma.workflowEvidence.findMany).mockResolvedValue([
       makeEvidenceItem({ filename: "photo.jpg", fileType: "image/jpeg", description: "Site photo" }),
     ]);
-    mock(prisma.workflowAuditEvent.findMany).mockResolvedValue([
-      makeAuditEvent({ action: "status_changed", actorName: "Operator User" }),
+    mock(prisma.platformAuditLog.findMany).mockResolvedValue([
+      { id: "pal-1", action: "status_changed", actorName: "Operator User", eventDescription: null, beforeState: null, afterState: null, metadata: { comment: "" }, createdAt: new Date("2026-06-15T00:00:00Z") },
     ]);
     mock(prisma.workflowTemplate.findUnique).mockResolvedValue(
       makeTemplate({ name: "Inspection Template", category: "quality" }),
     );
-    mock(prisma.workflowAuditEvent.create).mockResolvedValue({});
 
     const { GET } = await import("@/app/api/workflowos/records/[recordId]/download/route");
     const req = new Request("http://localhost/api/workflowos/records/rec-1/download") as unknown as NextRequest;
@@ -261,24 +265,21 @@ describe("GET /api/workflowos/records/[recordId]/download", () => {
     mock(getCurrentUser).mockResolvedValue(user);
     mock(prisma.workflowRecord.findUnique).mockResolvedValue(makeRecord());
     mock(prisma.workflowEvidence.findMany).mockResolvedValue([]);
-    mock(prisma.workflowAuditEvent.findMany).mockResolvedValue([]);
+    mock(prisma.platformAuditLog.findMany).mockResolvedValue([]);
     mock(prisma.workflowTemplate.findUnique).mockResolvedValue(makeTemplate());
-
     const { GET } = await import("@/app/api/workflowos/records/[recordId]/download/route");
     const req = new Request("http://localhost/api/workflowos/records/rec-1/download") as unknown as NextRequest;
     await GET(req, {
       params: Promise.resolve({ recordId: "rec-1" }),
     });
 
-    expect(mock(prisma.workflowAuditEvent.create)).toHaveBeenCalledWith(
+    expect(mock(recordWorkflowAuditEvent)).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({
-          organizationId: "org-1",
-          recordId: "rec-1",
-          actorId: "user-audit",
-          action: "export_downloaded",
-          comment: "تم تنزيل التصدير",
-        }),
+        organizationId: "org-1",
+        recordId: "rec-1",
+        actorId: "user-audit",
+        action: "export_downloaded",
+        comment: "تم تنزيل التصدير",
       }),
     );
   });

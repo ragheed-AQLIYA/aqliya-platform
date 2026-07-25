@@ -5,12 +5,16 @@
 // Pattern: tick() → iterate all orgs → check each integration → aggregate results
 
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import { prisma } from "@/lib/prisma";
 import { providerRegistry } from "./provider-registry";
 import { incrementCounter } from "./metrics";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { IntegrationType, IntegrationStatus } from "./types";
 import type { HealthCheckResult } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 // ═══════════════════════════════════════════════════
 //  CONFIG
@@ -81,11 +85,11 @@ class HealthRuntimeImpl implements IntegrationHealthRuntime {
     if (this.timer) return; // already running
     // Run first tick immediately
     this.tick().catch((err) =>
-      console.error("[HealthRuntime] Initial tick failed:", err),
+      logger.error("[HealthRuntime] Initial tick failed:", err instanceof Error ? err : undefined),
     );
     this.timer = setInterval(() => {
       this.tick().catch((err) =>
-        console.error("[HealthRuntime] Tick failed:", err),
+        logger.error("[HealthRuntime] Tick failed:", err instanceof Error ? err : undefined),
       );
     }, this.config.tickIntervalMs);
   }

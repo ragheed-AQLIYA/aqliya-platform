@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { PlusCircle, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function NewDecisionError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("New Decision error:", error);
+    clientLogger.error("New Decision error:", error);
   }, [error]);
 
   return (

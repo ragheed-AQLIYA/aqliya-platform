@@ -5,6 +5,9 @@ import type {
   EmbeddingRequest,
   EmbeddingResponse,
 } from "@/lib/core/ai/types"
+import { createLogger } from "@/lib/observability/logger"
+
+const logger = createLogger({ product: "platform", action: "openai-embedding-provider" })
 
 const DEFAULT_MODEL = "text-embedding-3-small"
 const EMBEDDING_HTTP_TIMEOUT_MS = 30_000;
@@ -38,7 +41,7 @@ export class OpenAIEmbeddingProvider implements EmbeddingProvider {
       })
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {
-        console.error(`[openai-embeddings] Request timed out after ${EMBEDDING_HTTP_TIMEOUT_MS}ms`);
+        logger.error(`Request timed out after ${EMBEDDING_HTTP_TIMEOUT_MS}ms`, err instanceof Error ? err : undefined);
         throw new Error(`OpenAI embeddings request timed out after ${EMBEDDING_HTTP_TIMEOUT_MS / 1000}s. Please try again.`);
       }
       throw err;

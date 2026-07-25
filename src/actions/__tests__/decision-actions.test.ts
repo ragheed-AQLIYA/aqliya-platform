@@ -73,6 +73,7 @@ jest.mock("@/lib/decision/decision-audit", () => ({
   logDecisionAudit: jest.fn().mockResolvedValue(undefined),
   logAudit: jest.fn().mockResolvedValue(undefined),
   toAuditJson: jest.fn((o) => JSON.stringify(o)),
+  getDecisionAuditLogs: jest.fn().mockResolvedValue([]),
 }));
 
 jest.mock("@/lib/platform/audit-logger", () => ({

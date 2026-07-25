@@ -146,6 +146,28 @@ export async function runKpiEngine() {
       delta: null,
       sparkline: "—",
     },
+    // Governance metrics — scanner quality + design debt
+    {
+      id: "scanner_confidence",
+      label: "Scanner Confidence (%)",
+      value: cur.scannerConfidence ?? null,
+      delta: delta(prev.scannerConfidence, cur.scannerConfidence),
+      sparkline: sparkline(series.map((s) => s.scannerConfidence).filter((v) => v != null)),
+    },
+    {
+      id: "scanner_grade",
+      label: "Scanner Grade",
+      value: cur.scannerGrade ?? "—",
+      delta: null,
+      sparkline: "—",
+    },
+    {
+      id: "refactoring_debt",
+      label: "Refactoring Debt",
+      value: cur.refactoringDebt ?? null,
+      delta: delta(prev.refactoringDebt, cur.refactoringDebt),
+      sparkline: sparkline(series.map((s) => s.refactoringDebt).filter((v) => v != null)),
+    },
   ];
 
   // Append KPI snapshot to history

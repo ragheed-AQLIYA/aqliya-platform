@@ -20,6 +20,9 @@ import { createSalesApproval } from "./repositories/approvals";
 import { assertDealInOrg } from "./repositories/org-scope";
 import { SALES_REVIEW_TARGET_DEAL } from "./l5-types";
 import type { SalesActor, SalesOrgScope } from "./services";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "sales-os", action: "l5-governance" });
 
 export interface SubmitOpportunityReviewResult {
   reviewId: string;
@@ -64,8 +67,8 @@ export async function submitSalesOpportunityForReview(
       { submittedAt: new Date() },
     );
   } catch (err) {
-    console.warn(
-      `[SalesOS L5] Proposal table unavailable, metadata-only fallback: ${
+    logger.warn(
+      `Proposal table unavailable, metadata-only fallback: ${
         err instanceof Error ? err.message : "unknown"
       }`,
     );
@@ -89,8 +92,8 @@ export async function submitSalesOpportunityForReview(
     );
     reviewId = review.id;
   } catch (err) {
-    console.warn(
-      `[SalesOS L5] Review table unavailable: ${
+    logger.warn(
+      `Review table unavailable: ${
         err instanceof Error ? err.message : "unknown"
       }`,
     );

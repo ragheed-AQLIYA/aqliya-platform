@@ -314,8 +314,11 @@ export async function collectInstitutionalMemoryCandidates(
 
   const auditEvents =
     dealIds.length > 0
-      ? await prisma.salesAuditEvent.findMany({
+      ? await prisma.platformAuditLog.findMany({
+          // OLD: prisma.salesAuditEvent.findMany
+          // Migrated to platformAuditLog with productKey: "salesos"
           where: {
+            productKey: "salesos",
             organizationId: scope.organizationId,
             OR: [
               { targetType: "SalesAccount", targetId: accountId },
@@ -335,8 +338,11 @@ export async function collectInstitutionalMemoryCandidates(
             createdAt: true,
           },
         })
-      : await prisma.salesAuditEvent.findMany({
+      : await prisma.platformAuditLog.findMany({
+          // OLD: prisma.salesAuditEvent.findMany
+          // Migrated to platformAuditLog with productKey: "salesos"
           where: {
+            productKey: "salesos",
             organizationId: scope.organizationId,
             targetType: "SalesAccount",
             targetId: accountId,
@@ -355,8 +361,20 @@ export async function collectInstitutionalMemoryCandidates(
           },
         });
 
+  const validAuditEvents = auditEvents.filter(
+    (e) => e.actorId != null && e.targetType != null && e.targetId != null,
+  ) as Array<{
+    id: string;
+    action: string;
+    actorId: string;
+    targetType: string;
+    targetId: string;
+    metadata: unknown;
+    createdAt: Date;
+  }>;
+
   const auditEntries = buildAuditMemoryEntries(
-    auditEvents,
+    validAuditEvents,
     dealTitleById,
     existingRefs,
   );

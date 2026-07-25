@@ -5,7 +5,7 @@ jest.mock("@/lib/prisma", () => ({
       update: jest.fn(),
     },
     salesDeal: { count: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -50,7 +50,7 @@ const BASE_ACCOUNT = {
 describe("SalesOS account research agent stub (PR-14)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
     prisma.salesAccount.update.mockResolvedValue(BASE_ACCOUNT);
     prisma.salesDeal.count.mockResolvedValue(2);
     prisma.salesAccount.findFirst.mockResolvedValue(BASE_ACCOUNT);
@@ -112,7 +112,7 @@ describe("SalesOS account research agent stub (PR-14)", () => {
         }),
       );
 
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.RESEARCH_GENERATED,
@@ -161,7 +161,7 @@ describe("SalesOS account research agent stub (PR-14)", () => {
 
       expect(run.status).toBe("reviewed");
       expect(run.reviewedById).toBe(ADMIN.id);
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.RESEARCH_REVIEWED,

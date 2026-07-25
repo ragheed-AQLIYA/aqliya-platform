@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { FileText, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function TenderError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Tender error:", error);
+    clientLogger.error("Tender error:", error);
   }, [error]);
 
   return (

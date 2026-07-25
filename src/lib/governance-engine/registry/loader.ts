@@ -14,7 +14,7 @@ import type {
 } from '../types/entities';
 import { ID_PATTERNS } from '../types/identifiers';
 import { RegistryError, FreezeViolation } from '../types/errors';
-import { parseClaimRegistry, parseEvidenceFromClaimRegistry, parseSourcesFromClaimRegistry } from './claim-registry';
+import { parseClaimRegistry, parseEvidenceFromClaimRegistry, parseSourcesFromClaimRegistry } from './claim-registry/index';
 import { parseProductRegistry } from './product-registry';
 import { parseDecisionRegistry } from './decision-registry';
 

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-namespace */
+﻿/* eslint-disable @typescript-eslint/no-namespace */
 declare namespace Cypress {
   interface Chainable {
     shouldBeRTL(): Chainable<JQuery<HTMLElement>>;
@@ -6,6 +6,7 @@ declare namespace Cypress {
     loginAdmin(): Chainable<void>;
     loginOperator(): Chainable<void>;
     visitWorkspace(path: string, expectedText: string): Chainable<void>;
+    clearAuthCookies(): Chainable<void>;
   }
 }
 
@@ -66,4 +67,13 @@ Cypress.Commands.add("visitWorkspace", (path: string, expectedText: string) => {
   cy.url({ timeout: 20000 }).should("not.include", "/login");
   cy.get("html").should("have.attr", "dir", "rtl");
   cy.contains(expectedText, { timeout: 30000 }).should("exist");
+});
+
+/** Clear all authentication-related cookies to simulate logout. */
+Cypress.Commands.add("clearAuthCookies", () => {
+  cy.clearCookie("authjs.session-token");
+  cy.clearCookie("__Secure-authjs.session-token");
+  cy.clearCookie("authjs.callback-url");
+  cy.clearCookie("authjs.csrf-token");
+  cy.clearCookies();
 });

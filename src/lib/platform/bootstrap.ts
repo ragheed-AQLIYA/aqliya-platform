@@ -3,6 +3,10 @@
 // Imported by the root layout to ensure early initialization.
 
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 let initialized = false;
 
@@ -30,12 +34,9 @@ export async function bootstrap(): Promise<void> {
     getHealthRuntime().start();
 
     const elapsed = Date.now() - startMs;
-    console.log(`[Bootstrap] Platform initialized in ${elapsed}ms`);
+    logger.info("[Bootstrap]Platform initialized in ${elapsed}ms");
   } catch (err) {
-    console.error(
-      "[Bootstrap] Initialization failed:",
-      err instanceof Error ? err.message : String(err),
-    );
+    logger.error("[Bootstrap] Initialization failed:", err instanceof Error ? err : new Error(String(err)));
     // Bootstrap failure should not crash the app
   }
 }

@@ -2,7 +2,7 @@ jest.mock("@/lib/prisma", () => ({
   prisma: {
     salesDeal: { findFirst: jest.fn(), update: jest.fn() },
     salesInteraction: { findMany: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -32,7 +32,7 @@ const BASE_DEAL = {
 describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
     prisma.salesInteraction.findMany.mockResolvedValue([]);
     prisma.salesDeal.findFirst.mockResolvedValue(BASE_DEAL);
     prisma.salesDeal.update.mockImplementation(async ({ data }) => ({
@@ -149,7 +149,7 @@ describe("SalesOS Deal Risk Agent stub (PR-17)", () => {
       const parsed = readDealRiskAssessment(updateArg.data.metadata);
       expect(parsed?.severity).toBe(result.assessment.severity);
 
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.AGENT_DEAL_RISK_COMPUTED,

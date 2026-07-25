@@ -420,19 +420,19 @@ export async function extractOfficeAiFileContent(
 export async function extractAllTaskFiles(taskId: string): Promise<void> {
   const files = await prisma.officeAiFile.findMany({
     where: { taskId, extractionStatus: null },
+    take: 100,
   });
 
-  for (const file of files) {
-    const extType = detectSupportedExtractionType(file.fileType);
-    if (!extType) {
-      await prisma.officeAiFile.update({
-        where: { id: file.id },
-        data: { extractionStatus: "skipped", extractedAt: new Date() },
-      });
-      continue;
-    }
-    await extractOfficeAiFileContent(file.id);
+  const unsupported = files.filter((f) => !detectSupportedExtractionType(f.fileType));
+  if (unsupported.length > 0) {
+    await prisma.officeAiFile.updateMany({
+      where: { id: { in: unsupported.map((f) => f.id) } },
+      data: { extractionStatus: "skipped", extractedAt: new Date() },
+    });
   }
+
+  const supported = files.filter((f) => detectSupportedExtractionType(f.fileType));
+  await Promise.all(supported.map((f) => extractOfficeAiFileContent(f.id)));
 }
 
 export async function reExtractFileContent(

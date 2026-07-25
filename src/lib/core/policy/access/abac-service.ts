@@ -93,16 +93,14 @@ export async function createPolicy(
   });
 
   if (input.conditions && input.conditions.length > 0) {
-    for (const cond of input.conditions) {
-      await prisma.abacPolicyCondition.create({
-        data: {
-          policyId: policy.id,
-          attribute: cond.attribute,
-          operator: cond.operator as AbacOperator,
-          value: cond.value,
-        },
-      });
-    }
+    await prisma.abacPolicyCondition.createMany({
+      data: input.conditions.map((cond) => ({
+        policyId: policy.id,
+        attribute: cond.attribute,
+        operator: cond.operator as AbacOperator,
+        value: cond.value,
+      })),
+    });
   }
 
   return { id: policy.id };
@@ -138,14 +136,14 @@ export async function updatePolicy(
     await prisma.abacPolicyCondition.deleteMany({
       where: { policyId: id },
     });
-    for (const cond of input.conditions) {
-      await prisma.abacPolicyCondition.create({
-        data: {
+    if (input.conditions.length > 0) {
+      await prisma.abacPolicyCondition.createMany({
+        data: input.conditions.map((cond) => ({
           policyId: id,
           attribute: cond.attribute,
           operator: cond.operator as AbacOperator,
           value: cond.value,
-        },
+        })),
       });
     }
   }

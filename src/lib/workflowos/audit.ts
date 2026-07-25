@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { Product } from "@/lib/platform/audit-logger";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
-import type { Prisma } from "@prisma/client";
 import type { WorkflowAuditAction } from "@/lib/workflowos/types";
 import { requireClientAccess } from "@/lib/workflowos/tenant-guard";
 
@@ -31,36 +30,23 @@ export interface RecordWorkflowAuditEventInput {
   metadata?: Record<string, unknown>;
 }
 
-/** L5 WorkflowAuditEvent write with PlatformAuditLog dual-write + hash chain. */
+/** L5 single-write to PlatformAuditLog + hash chain. */
 export async function recordWorkflowAuditEvent(
   input: RecordWorkflowAuditEventInput,
 ) {
-  const result = await prisma.workflowAuditEvent.create({
-    data: {
-      organizationId: input.organizationId,
-      platformOrganizationId: input.platformOrganizationId ?? null,
-      recordId: input.recordId,
-      actorId: input.actorId,
-      actorName: input.actorName ?? null,
-      action: input.action,
-      fromStatus: input.fromStatus ?? null,
-      toStatus: input.toStatus ?? null,
-      comment: input.comment ?? null,
-      metadata: (input.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
-    },
-  });
-
   const platformResult = await writePlatformAuditLog({
     productKey: Product.WORKFLOWOS,
     action: `workflowos.${input.action}`,
     platformOrganizationId: input.platformOrganizationId ?? input.organizationId,
+    organizationId: input.organizationId,
     actorId: input.actorId,
     targetType: "WorkflowRecord",
     targetId: input.recordId,
-    sourceModel: "WorkflowAuditEvent",
-    sourceId: result.id,
+    beforeState: input.fromStatus,
+    afterState: input.toStatus,
     metadata: {
       ...(input.metadata ?? {}),
+      actorName: input.actorName ?? undefined,
       fromStatus: input.fromStatus ?? undefined,
       toStatus: input.toStatus ?? undefined,
       comment: input.comment ?? undefined,
@@ -74,26 +60,11 @@ export async function recordWorkflowAuditEvent(
       input.actorId,
     );
   }
-
-  return result;
 }
 
 export async function createWorkflowAuditEvent(
   input: CreateWorkflowAuditEventInput,
 ) {
-  const result = await prisma.sunbulAuditEvent.create({
-    data: {
-      clientId: input.clientId,
-      recordId: input.recordId ?? null,
-      actorId: input.actorId,
-      action: input.action,
-      entityType: input.entityType,
-      entityId: input.entityId,
-      metadata: (input.metadata ?? {}) as Prisma.InputJsonValue,
-    },
-  });
-
-  // ── Dual-write to PlatformAuditLog + hash chain ──
   const platformResult = await writePlatformAuditLog({
     productKey: Product.WORKFLOWOS,
     action: `workflowos.${input.action}`,
@@ -101,14 +72,11 @@ export async function createWorkflowAuditEvent(
     actorId: input.actorId,
     targetType: input.entityType,
     targetId: input.entityId,
-    sourceModel: "SunbulAuditEvent",
-    sourceId: result.id,
     metadata: (input.metadata ?? undefined) as
       | Record<string, unknown>
       | undefined,
   });
 
-  // ── Append to hash chain (best-effort, never throws) ──
   if (platformResult.ok && platformResult.id) {
     await appendToAuditChain(
       platformResult.id,
@@ -116,8 +84,6 @@ export async function createWorkflowAuditEvent(
       input.actorId,
     );
   }
-
-  return result;
 }
 
 export async function listWorkflowAuditEvents(options: {
@@ -128,22 +94,46 @@ export async function listWorkflowAuditEvents(options: {
 }) {
   await requireClientAccess(options.clientId);
 
-  const where: { clientId: string; recordId?: string } = {
-    clientId: options.clientId,
+  // [MIGRATED v2] SunbulAuditEvent → PlatformAuditLog (single-write)
+  // const [events, total] = await Promise.all([
+  //   prisma.sunbulAuditEvent.findMany({
+  //     where,
+  //     orderBy: { createdAt: "desc" },
+  //     take: options.limit ?? 50,
+  //     skip: options.offset ?? 0,
+  //   }),
+  //   prisma.sunbulAuditEvent.count({ where }),
+  // ]);
+
+  const platformWhere: Record<string, unknown> = {
+    productKey: "workflowos",
+    clientWorkspaceId: options.clientId,
   };
   if (options.recordId) {
-    where.recordId = options.recordId;
+    platformWhere.targetId = options.recordId;
   }
 
-  const [events, total] = await Promise.all([
-    prisma.sunbulAuditEvent.findMany({
-      where,
+  const [platformEvents, total] = await Promise.all([
+    prisma.platformAuditLog.findMany({
+      where: platformWhere as never,
       orderBy: { createdAt: "desc" },
       take: options.limit ?? 50,
       skip: options.offset ?? 0,
     }),
-    prisma.sunbulAuditEvent.count({ where }),
+    prisma.platformAuditLog.count({ where: platformWhere as never }),
   ]);
+
+  const events = platformEvents.map((e) => ({
+    id: e.id,
+    clientId: e.clientWorkspaceId ?? options.clientId,
+    recordId: e.targetId ?? null,
+    actorId: e.actorId ?? "",
+    action: e.action,
+    entityType: e.targetType ?? "",
+    entityId: e.targetId ?? "",
+    metadata: e.metadata as Record<string, unknown> | null,
+    createdAt: e.createdAt,
+  }));
 
   return { events, total };
 }

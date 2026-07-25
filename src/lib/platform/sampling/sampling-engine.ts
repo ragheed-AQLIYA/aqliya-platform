@@ -388,6 +388,7 @@ export async function listPlans(orgId: string): Promise<SamplingPlan[]> {
   const plans = await prisma.samplingPlan.findMany({
     where: { organizationId: orgId },
     orderBy: { createdAt: 'desc' },
+    take: 100,
   })
   return plans.map(mapPlan)
 }
@@ -401,6 +402,7 @@ export async function getResultsByPlan(planId: string): Promise<SamplingResult[]
   const results = await prisma.samplingResult.findMany({
     where: { planId },
     orderBy: { executedAt: 'desc' },
+    take: 100,
   })
   return results.map(mapResult)
 }

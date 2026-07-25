@@ -1,7 +1,11 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import type { DeliveryResult, NotificationPayload } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function sendInApp(
   payload: NotificationPayload,
@@ -26,7 +30,7 @@ export async function sendInApp(
     return { channel: "in_app", success: true, deliveredAt };
   } catch (err) {
     const error = err instanceof Error ? err.message : "Failed to create in-app notification";
-    console.error("[Notification][InApp] Failed:", error);
+    logger.error("[Notification][InApp] Failed:", err instanceof Error ? err : new Error(String(err)));
     return { channel: "in_app", success: false, error, deliveredAt };
   }
 }

@@ -20,6 +20,9 @@ import type {
   EngagementAlert,
   TrustState,
 } from "@/types/audit";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "audit-os", action: "db-types" });
 
 function toEngagementTeamMember(data: unknown): EngagementTeamMember[] {
   if (Array.isArray(data)) return data as EngagementTeamMember[];
@@ -578,13 +581,13 @@ export function protectedAuditReadUnavailable(
   error?: unknown,
 ): never {
   if (error) {
-    console.error(
-      `[AuditDB] ${scope} failed. Mock fallback disabled for protected /audit workspace.`,
-      error,
+    logger.error(
+      `${scope} failed. Mock fallback disabled for protected /audit workspace.`,
+      error instanceof Error ? error : undefined,
     );
   } else {
-    console.error(
-      `[AuditDB] ${scope} failed. Mock fallback disabled for protected /audit workspace.`,
+    logger.error(
+      `${scope} failed. Mock fallback disabled for protected /audit workspace.`,
     );
   }
 
@@ -612,4 +615,44 @@ export {
   toAuditEvent,
   toAiOutput,
   toAuditUser,
+  toAuditEventFromPlatformLog,
 };
+
+// ─── PlatformAuditLog → toAuditEvent adapter ───
+// Maps a PlatformAuditLog row (with productKey: "audit_os") into the shape
+// expected by toAuditEvent(). EngagementId is extracted from metadata JSON
+// (dual-write stores it there). ActorRole is not available in PlatformAuditLog.
+function toAuditEventFromPlatformLog(pal: {
+  id: string;
+  action: string;
+  actorId: string | null;
+  actorName: string | null;
+  targetType: string | null;
+  targetId: string | null;
+  beforeState: string | null;
+  afterState: string | null;
+  eventDescription: string | null;
+  aiRelated: boolean;
+  metadata: unknown;
+  createdAt: Date;
+}) {
+  return toAuditEvent({
+    id: pal.id,
+    engagementId:
+      (pal.metadata as Record<string, unknown> | null)?.engagementId as
+        | string
+        | undefined ?? "",
+    eventType: pal.action,
+    actorId: pal.actorId ?? "",
+    actorName: pal.actorName ?? "",
+    actorRole: "",
+    targetType: pal.targetType ?? "",
+    targetId: pal.targetId ?? "",
+    previousState: pal.beforeState,
+    newState: pal.afterState ?? "",
+    description: pal.eventDescription ?? "",
+    aiRelated: pal.aiRelated,
+    metadata: pal.metadata,
+    timestamp: pal.createdAt,
+  });
+}

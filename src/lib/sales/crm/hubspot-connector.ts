@@ -1,5 +1,7 @@
 import "server-only";
 
+import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { CrmConnector, ConnectionTestResult, RateLimitStatus } from "./connector";
 import type {
   CrmAccount,
@@ -7,6 +9,7 @@ import type {
   CrmOpportunity,
   CrmProvider,
   HubSpotConfig,
+  SyncToLocalResult,
 } from "./types";
 import { CrmAuthError, CrmConnectionError, CrmRateLimitError } from "./types";
 
@@ -301,5 +304,148 @@ export class HubSpotConnector implements CrmConnector {
       remaining: this.remaining,
       resetAt: this.resetAt,
     };
+  }
+
+  async syncToLocal(
+    organizationId: string,
+    entities: { accounts: CrmAccount[]; contacts: CrmContact[]; opportunities: CrmOpportunity[] },
+    conflictPolicy = "crm_wins",
+  ): Promise<SyncToLocalResult> {
+    const result: SyncToLocalResult = {
+      accounts: { created: 0, updated: 0, skipped: 0, failed: 0 },
+      contacts: { created: 0, updated: 0, skipped: 0, failed: 0 },
+      opportunities: { created: 0, updated: 0, skipped: 0, failed: 0 },
+    };
+
+    for (const acct of entities.accounts) {
+      try {
+        const existing = await prisma.salesAccount.findFirst({
+          where: { organizationId, metadata: { path: ["crmId"], equals: acct.id } },
+          select: { id: true },
+        });
+        if (existing) {
+          if (conflictPolicy === "crm_wins") {
+            await prisma.salesAccount.update({
+              where: { id: existing.id },
+              data: {
+                name: acct.name,
+                industry: acct.industry ?? null,
+                metadata: {
+                  crmId: acct.id,
+                  crmWebsite: acct.website,
+                  crmPhone: acct.phone,
+                  crmDescription: acct.description,
+                } as Prisma.InputJsonValue,
+              },
+            });
+            result.accounts.updated++;
+          } else {
+            result.accounts.skipped++;
+          }
+        } else {
+          await prisma.salesAccount.create({
+            data: {
+              organizationId,
+              name: acct.name,
+              industry: acct.industry ?? null,
+              metadata: {
+                crmId: acct.id,
+                crmWebsite: acct.website,
+                crmPhone: acct.phone,
+                crmDescription: acct.description,
+              } as Prisma.InputJsonValue,
+              createdById: "crm-sync",
+              updatedById: "crm-sync",
+            },
+          });
+          result.accounts.created++;
+        }
+      } catch {
+        result.accounts.failed++;
+      }
+    }
+
+    for (const ct of entities.contacts) {
+      try {
+        const existing = await prisma.salesContact.findFirst({
+          where: { organizationId, email: ct.email ?? undefined },
+          select: { id: true, email: true },
+        });
+        if (existing) {
+          if (conflictPolicy === "crm_wins") {
+            await prisma.salesContact.update({
+              where: { id: existing.id },
+              data: {
+                name: `${ct.firstName} ${ct.lastName}`.trim(),
+                email: ct.email ?? null,
+                role: ct.title ?? null,
+              },
+            });
+            result.contacts.updated++;
+          } else {
+            result.contacts.skipped++;
+          }
+        } else {
+          await prisma.salesContact.create({
+            data: {
+              organizationId,
+              accountId: "SYNC_PENDING",
+              name: `${ct.firstName} ${ct.lastName}`.trim(),
+              email: ct.email ?? null,
+              role: ct.title ?? null,
+              createdById: "crm-sync",
+            },
+          });
+          result.contacts.created++;
+        }
+      } catch {
+        result.contacts.failed++;
+      }
+    }
+
+    for (const opp of entities.opportunities) {
+      try {
+        const existing = await prisma.salesDeal.findFirst({
+          where: { organizationId, metadata: { path: ["crmId"], equals: opp.id } },
+          select: { id: true },
+        });
+        if (existing) {
+          if (conflictPolicy === "crm_wins") {
+            await prisma.salesDeal.update({
+              where: { id: existing.id },
+              data: {
+                title: opp.name,
+                amount: opp.amount ?? null,
+                currency: opp.currency ?? "SAR",
+                probability: opp.probability ?? null,
+                expectedCloseDate: opp.closeDate ? new Date(opp.closeDate) : null,
+              },
+            });
+            result.opportunities.updated++;
+          } else {
+            result.opportunities.skipped++;
+          }
+        } else {
+          await prisma.salesDeal.create({
+            data: {
+              organizationId,
+              accountId: "SYNC_PENDING",
+              title: opp.name,
+              amount: opp.amount ?? null,
+              currency: opp.currency ?? "SAR",
+              probability: opp.probability ?? null,
+              expectedCloseDate: opp.closeDate ? new Date(opp.closeDate) : null,
+              createdById: "crm-sync",
+              updatedById: "crm-sync",
+            },
+          });
+          result.opportunities.created++;
+        }
+      } catch {
+        result.opportunities.failed++;
+      }
+    }
+
+    return result;
   }
 }

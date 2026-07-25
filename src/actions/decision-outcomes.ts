@@ -1,5 +1,7 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { prisma } from "@/lib/prisma";
 import {
   isExpectedAccessDeniedError,
@@ -8,6 +10,9 @@ import {
 import { enforce } from "@/lib/kernel";
 import type { OutcomeStatus, Prisma } from "@prisma/client";
 import { logAudit } from "@/lib/decision/decision-audit";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function getDecisionOutcome(decisionId: string) {
   try {
@@ -55,7 +60,7 @@ export async function getDecisionOutcome(decisionId: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching outcome:", error);
+      logger.error("Error fetching outcome:", error instanceof Error ? error : undefined);
     }
     return { success: false, error: "Failed to fetch outcome" };
   }
@@ -135,7 +140,7 @@ export async function upsertDecisionOutcome(data: {
     return { success: true, data: outcome };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error upserting outcome:", error);
+      logger.error("Error upserting outcome:", error instanceof Error ? error : undefined);
     }
     return { success: false, error: "Failed to save outcome" };
   }
@@ -177,7 +182,7 @@ export async function reviewDecisionOutcome(decisionId: string) {
     return { success: true, data: outcome };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error reviewing outcome:", error);
+      logger.error("Error reviewing outcome:", error instanceof Error ? error : undefined);
     }
     return { success: false, error: "Failed to review outcome" };
   }
@@ -240,7 +245,7 @@ export async function getOutcomeSummaryForDecision(decisionId: string) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching outcome summary:", error);
+      logger.error("Error fetching outcome summary:", error instanceof Error ? error : undefined);
     }
     return { success: false, error: "Failed to fetch outcome summary" };
   }
@@ -310,7 +315,7 @@ export async function getOrganizationOutcomeMetrics(offset?: number) {
     };
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error("Error fetching outcome metrics:", error);
+      logger.error("Error fetching outcome metrics:", error instanceof Error ? error : undefined);
     }
     return { success: false, error: "Failed to fetch outcome metrics" };
   }

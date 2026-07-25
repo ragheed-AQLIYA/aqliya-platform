@@ -24,6 +24,7 @@ export async function verifyAllChains(): Promise<ChainVerificationResult> {
       },
     },
     orderBy: { createdAt: "asc" },
+    take: 1000,
   })
 
   const chainData: ChainEntryData[] = entries.map((e) => ({

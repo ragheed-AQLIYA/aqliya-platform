@@ -1,0 +1,228 @@
+import "server-only";
+
+import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { createErpConnectorFromDb } from "../connector-factory";
+import { mapErpSpendToLocalContent } from "../field-mapping";
+import type { SpendRecordInputFromErp } from "../field-mapping";
+import type { ErpImportBatchStatus, PipelineResult, RecordIssue } from "../types";
+import {
+  PRODUCT_KEY,
+  type ImportOptions,
+  findOrCreateSupplier,
+  createSupplierFromErp,
+  validateMappedRecord,
+} from "./common";
+
+export async function runErpImport(
+  options: ImportOptions,
+): Promise<PipelineResult> {
+  const { connector, record } = await createErpConnectorFromDb(
+    options.connectionId,
+  );
+
+  const customMapping =
+    typeof record.fieldMapping === "object" && record.fieldMapping !== null
+      ? (record.fieldMapping as Record<string, string>)
+      : undefined;
+
+  const provider = record.provider;
+
+  // ── Step 1: Fetch data ──
+
+  const [spendRecords, suppliers] = await Promise.all([
+    connector.fetchSpendRecords(options.since),
+    connector.fetchSuppliers(options.since),
+  ]);
+
+  // ── Step 2: Start sync log ──
+
+  const syncLog = await prisma.erpSyncLog.create({
+    data: {
+      connectionId: options.connectionId,
+      organizationId: options.organizationId,
+      direction: "import",
+      status: "running",
+      totalRecords: spendRecords.length,
+    },
+  });
+
+  // ── Step 3: Map fields ──
+
+  const mappedRecords: SpendRecordInputFromErp[] = [];
+  const allIssues: RecordIssue[] = [];
+  let errorCount = 0;
+
+  for (let i = 0; i < spendRecords.length; i++) {
+    try {
+      const mapped = await mapErpSpendToLocalContent(
+        spendRecords[i]!,
+        provider,
+        customMapping,
+      );
+      mappedRecords.push(mapped);
+
+      const issues = validateMappedRecord(mapped, i + 1);
+      allIssues.push(...issues);
+      if (issues.some((iss) => iss.severity === "error")) {
+        errorCount++;
+      }
+    } catch (err) {
+      errorCount++;
+      allIssues.push({
+        rowNumber: i + 1,
+        field: "record",
+        issue: `خطأ في معالجة السجل: ${err instanceof Error ? err.message : "غير معروف"}`,
+        severity: "error",
+      });
+    }
+  }
+
+  // ── Step 4: Determine batch status ──
+
+  const hasErrors = allIssues.some((iss) => iss.severity === "error");
+  const hasWarnings = allIssues.some((iss) => iss.severity === "warning");
+  const hasHighAmount = allIssues.some(
+    (iss) => iss.field === "amount" && iss.severity === "warning",
+  );
+
+  let batchStatus: ErpImportBatchStatus;
+  if (hasErrors) {
+    batchStatus = "needs_review";
+  } else if (hasHighAmount || hasWarnings) {
+    batchStatus = "needs_review";
+  } else if (options.autoApprove) {
+    batchStatus = "imported";
+  } else {
+    batchStatus = "validated";
+  }
+
+  // ── Step 5: Create import batch ──
+
+  const batch = await prisma.erpImportBatch.create({
+    data: {
+      connectionId: options.connectionId,
+      organizationId: options.organizationId,
+      status: batchStatus,
+      sourceType: "api",
+      totalLines: mappedRecords.length,
+      validLines: mappedRecords.length - errorCount,
+      errorLines: errorCount,
+      metadata: {
+        issues: allIssues,
+        supplierCount: suppliers.length,
+        recordCount: mappedRecords.length,
+      } as unknown as Prisma.InputJsonValue,
+      createdById: options.actorId ?? null,
+    },
+  });
+
+  // ── Step 6: If auto-approved or approved, import to LocalContentSpendRecord ──
+
+  let importedCount = 0;
+  if (batchStatus === "imported" || (batchStatus as ErpImportBatchStatus) === "approved") {
+    const projectId = options.projectId;
+    if (projectId) {
+      for (let i = 0; i < mappedRecords.length; i++) {
+        const mapped = mappedRecords[i]!;
+        const rowIssues = allIssues.filter((iss) => iss.rowNumber === i + 1);
+        if (rowIssues.some((iss) => iss.severity === "error")) continue;
+
+        let supplierId: string | null = null;
+        try {
+          supplierId = await findOrCreateSupplier(
+            options.organizationId,
+            projectId,
+            mapped,
+          );
+          if (!supplierId) {
+            supplierId = await createSupplierFromErp(
+              projectId,
+              mapped,
+              options.organizationId,
+              options.actorId,
+            );
+          }
+
+          await prisma.localContentSpendRecord.create({
+            data: {
+              projectId,
+              supplierId,
+              amount: mapped.amount,
+              currency: mapped.currency,
+              category: mapped.category,
+              contractReference: mapped.contractReference ?? null,
+              period: mapped.period,
+              description: mapped.description ?? null,
+              createdById: options.actorId ?? null,
+              metadata: {
+                sourceSystem: provider,
+                sourceId: mapped.sourceId,
+                erpBatchId: batch.id,
+                erpConnectionId: options.connectionId,
+              } as Prisma.InputJsonValue,
+            },
+          });
+          importedCount++;
+        } catch (err) {
+          errorCount++;
+          allIssues.push({
+            rowNumber: i + 1,
+            field: "import",
+            issue: `فشل استيراد السجل: ${err instanceof Error ? err.message : "غير معروف"}`,
+            severity: "error",
+          });
+        }
+      }
+    }
+  }
+
+  // ── Step 7: Update sync log ──
+
+  await prisma.erpSyncLog.update({
+    where: { id: syncLog.id },
+    data: {
+      status: "success",
+      importedRecords: importedCount,
+      failedRecords: errorCount,
+      errorDetails:
+        allIssues.length > 0
+          ? (allIssues as unknown as Prisma.InputJsonValue)
+          : undefined,
+      completedAt: new Date(),
+    },
+  });
+
+  // ── Step 8: Audit log ──
+
+  await writePlatformAuditLog({
+    productKey: PRODUCT_KEY,
+    action: "erp.import.completed",
+    actorId: options.actorId,
+    actorName: options.actorName,
+    targetType: "ErpImportBatch",
+    targetId: batch.id,
+    targetLabel: `ERP import from ${provider}`,
+    severity: errorCount > 0 ? "warning" : "info",
+    metadata: {
+      connectionId: options.connectionId,
+      totalRecords: mappedRecords.length,
+      importedCount,
+      errorCount,
+      status: batchStatus,
+      syncLogId: syncLog.id,
+    },
+  });
+
+  return {
+    batchId: batch.id,
+    connectionId: options.connectionId,
+    status: batchStatus,
+    totalRecords: mappedRecords.length,
+    importedRecords: importedCount,
+    failedRecords: errorCount,
+    issues: allIssues,
+    syncLogId: syncLog.id,
+  };
+}

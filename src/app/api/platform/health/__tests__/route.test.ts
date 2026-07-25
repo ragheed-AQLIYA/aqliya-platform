@@ -6,6 +6,19 @@ jest.mock("@/lib/prisma", () => ({
   },
 }));
 
+jest.mock("@/lib/kernel", () => ({
+  Kernel: {
+    getInstance: jest.fn().mockReturnValue({
+      isInitialized: jest.fn().mockReturnValue(false),
+    }),
+  },
+}));
+
+jest.mock("@/lib/observability/tracing", () => ({
+  getTracingStatus: jest.fn().mockReturnValue({ initialized: true }),
+}));
+
+
 import { prisma } from "@/lib/prisma";
 
 describe("platform health check route", () => {

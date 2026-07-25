@@ -6,17 +6,17 @@ import {
   type OutputDocument,
   type OutputFormat,
 } from "@/lib/core/output"
-// SALESOS_PLACEHOLDER: TODO: implement when @/lib/platform/output/engine exists
+// NOTE: Feature planned for v0.2 — see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md
 function getOutputsByProduct(_productKey: string): { id: string; labelEn?: string; labelAr?: string }[] {
   return []
 }
 
-// SALESOS_PLACEHOLDER: TODO: implement when @/lib/platform/output/engine exists
+// NOTE: Feature planned for v0.2 — see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md
 function getRequiredApprovalForOutput(_productSlug: string, _outputTypeId: string): boolean {
   return false
 }
 
-// SALESOS_PLACEHOLDER: TODO: implement when @/lib/platform/operations/unified-output-queue exists
+// NOTE: Feature planned for v0.2 — see docs/strategy/AQLIYA_STRATEGIC_ROADMAP.md
 function registerOutputQueueEntry(_entry: {
   id: string;
   organizationId: string;
@@ -147,16 +147,16 @@ function buildFileUrl(
   return `memory://sales-output/${opportunityId}/${outputTypeId}`
 }
 
-export function getSalesOutputService(): InMemoryOutputService {
+function getSalesOutputService(): InMemoryOutputService {
   return resolveOutputService()
 }
 
-export function resetSalesOutputServiceForTests(): void {
+function resetSalesOutputServiceForTests(): void {
   ;(globalThis as SalesOutputGlobal)[GLOBAL_SALES_OUTPUT_SERVICE_KEY] =
     new InMemoryOutputService()
 }
 
-export function buildSalesOutputSnapshotContent(params: {
+function buildSalesOutputSnapshotContent(params: {
   outputTypeId: SalesOutputTypeId
   organizationId: string
   opportunityId: string
@@ -196,7 +196,7 @@ export function buildSalesOutputSnapshotContent(params: {
   )
 }
 
-export async function syncSalesOutputToCore(params: {
+async function syncSalesOutputToCore(params: {
   organizationId: string
   platformOrganizationId?: string | null
   opportunityId: string
@@ -349,7 +349,7 @@ export async function syncSalesOutputToCore(params: {
   }
 }
 
-export async function syncApprovedSalesOutputsToCore(params: {
+async function syncApprovedSalesOutputsToCore(params: {
   organizationId: string
   platformOrganizationId?: string | null
   opportunityId: string

@@ -22,7 +22,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
 
 async function cleanup() {
-  await prisma.auditLog.deleteMany();
+  await prisma.platformAuditLog.deleteMany();
   await prisma.decisionRiskAlert.deleteMany();
   await prisma.decisionMonitoringSignal.deleteMany();
   await prisma.decisionPattern.deleteMany();

@@ -1,12 +1,23 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  EnterpriseCard,
-  EnterpriseCardContent,
-  EnterpriseCardHeader,
-  EnterpriseCardTitle,
-} from "@/components/enterprise/enterprise-card";
-import { StatusBadge } from "@/components/enterprise/status-badge";
+import { Loader2, RefreshCw, PhoneCall, FileText, PlusCircle } from "lucide-react";
 import { NextBestActionPanel } from "./next-best-action-panel";
+import { AccountProfileHeader } from "./components/account-profile-header";
+import { AccountProfileMetrics } from "./components/account-profile-metrics";
+import { AccountProfileContacts } from "./components/account-profile-contacts";
+import { AccountProfileOpportunities } from "./components/account-profile-opportunities";
+import { AccountProfileTimeline } from "./components/account-profile-timeline";
+import { AccountProfileMeetings } from "./components/account-profile-meetings";
+import { AccountProfileSignals } from "./components/account-profile-signals";
+import { AccountProfileObjections } from "./components/account-profile-objections";
+import { AccountProfileCompetitors } from "./components/account-profile-competitors";
+import { AccountProfileProofAssets } from "./components/account-profile-proof-assets";
+import { AccountProfileAIBrief } from "./components/account-profile-ai-brief";
+import { Button } from "@/components/ui/button";
+import { generateAccountResearchAction } from "@/actions/sales-actions/accounts";
 import type {
   SalesAccount,
   SalesContact,
@@ -37,6 +48,7 @@ interface AccountProfileProps {
   nextActions: SalesNextBestActionItem[];
   signals: IntelligenceSignal[];
   accountId: string;
+  onIntelligenceRefreshed?: () => void;
 }
 
 export function AccountIntelligenceProfile(props: AccountProfileProps) {
@@ -55,259 +67,84 @@ export function AccountIntelligenceProfile(props: AccountProfileProps) {
     nextActions,
     signals,
     accountId,
+    onIntelligenceRefreshed,
   } = props;
+
+  const [refreshing, setRefreshing] = useState(false);
+  const router = useRouter();
+
+  const handleRefreshIntelligence = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const result = await generateAccountResearchAction(accountId);
+      if (result.ok) {
+        router.refresh();
+        onIntelligenceRefreshed?.();
+      }
+    } finally {
+      setRefreshing(false);
+    }
+  }, [accountId, router, onIntelligenceRefreshed]);
 
   return (
     <div className="space-y-6" dir="rtl">
-      <div>
-        <Link
-          href="/sales/accounts"
-          className="text-sm text-muted-foreground hover:underline"
-        >
-          ← الحسابات
-        </Link>
-        <h1 className="mt-2 text-h2 font-black">
-          {account.nameAr ?? account.name}
-        </h1>
-        <StatusBadge status={account.status} size="sm" />
-      </div>
-
-      {/* Overview */}
-      <section>
-        <h2 className="mb-3 text-lg font-semibold">نظرة عامة</h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          <EnterpriseCard module="sales">
-            <EnterpriseCardContent className="pt-6">
-              <p className="text-xs text-muted-foreground">صحة الحساب</p>
-              <p className="text-2xl font-bold">{intelligence.healthScore}%</p>
-              <p className="text-sm">{intelligence.healthLevel}</p>
-            </EnterpriseCardContent>
-          </EnterpriseCard>
-          <EnterpriseCard module="sales">
-            <EnterpriseCardContent className="pt-6">
-              <p className="text-xs text-muted-foreground">قيمة المسار</p>
-              <p className="text-2xl font-bold">
-                {intelligence.pipelineValue.toLocaleString("ar-SA")}
-              </p>
-            </EnterpriseCardContent>
-          </EnterpriseCard>
-          <EnterpriseCard module="sales">
-            <EnterpriseCardContent className="pt-6">
-              <p className="text-xs text-muted-foreground">تفاعلات</p>
-              <p className="text-2xl font-bold">{interactionCount}</p>
-            </EnterpriseCardContent>
-          </EnterpriseCard>
-        </div>
-      </section>
-
-      <NextBestActionPanel actions={nextActions} title="الإجراء التالي — هذا الحساب" />
-
-      {/* Contacts */}
-      <EnterpriseCard module="sales">
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle>جهات الاتصال</EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent>
-          {contacts.length === 0 ? (
-            <p className="text-sm text-muted-foreground">لا جهات اتصال</p>
-          ) : (
-            <ul className="space-y-2 text-sm">
-              {contacts.map((c) => (
-                <li key={c.id}>
-                  {c.name} — {c.title}
-                  {c.email && (
-                    <span className="text-muted-foreground"> · {c.email}</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </EnterpriseCardContent>
-      </EnterpriseCard>
-
-      {/* Opportunities */}
-      <EnterpriseCard module="sales">
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle>الفرص</EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent>
-          <form
-            action={async (formData) => {
-              "use server";
-              const { createOpportunityFromAccountAction } =
-                await import("@/actions/sales-actions");
-              await createOpportunityFromAccountAction(accountId, formData);
-            }}
-            className="mb-4 flex flex-wrap gap-2"
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <AccountProfileHeader account={account} />
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/sales/interactions/new?accountId=${accountId}`}
+            className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm font-medium hover:bg-muted hover:text-foreground"
           >
-            <input
-              name="name"
-              placeholder="اسم الفرصة"
-              className="rounded-md border px-2 py-1 text-sm"
-              required
-            />
-            <input
-              name="valueEstimate"
-              placeholder="القيمة التقديرية"
-              className="w-28 rounded-md border px-2 py-1 text-sm"
-            />
-            <button
-              type="submit"
-              className="rounded-md bg-primary px-3 py-1 text-sm text-primary-foreground"
-            >
-              إنشاء فرصة
-            </button>
-          </form>
-          <ul className="space-y-2">
-            {opportunities.map((o) => (
-              <li key={o.id}>
-                <Link
-                  href={`/sales/opportunities/${o.id}`}
-                  className="text-sm text-primary hover:underline"
-                >
-                  {o.name} — {o.stage}
-                  {o.valueEstimate != null &&
-                    ` · ${o.valueEstimate.toLocaleString("ar-SA")} ر.س`}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </EnterpriseCardContent>
-      </EnterpriseCard>
-
-      {/* Activity timeline */}
-      {interactionTimeline.length > 0 && (
-        <EnterpriseCard module="sales">
-          <EnterpriseCardHeader>
-            <EnterpriseCardTitle>خط زمني للنشاط</EnterpriseCardTitle>
-          </EnterpriseCardHeader>
-          <EnterpriseCardContent>
-            <ul className="space-y-2 text-sm">
-              {interactionTimeline.map((t) => (
-                <li key={t.id} className="rounded border px-2 py-1">
-                  <span className="text-xs text-muted-foreground">
-                    {t.loggedAt.slice(0, 10)} · {t.type}
-                  </span>
-                  <p>{t.labelAr}</p>
-                </li>
-              ))}
-            </ul>
-          </EnterpriseCardContent>
-        </EnterpriseCard>
-      )}
-
-      {/* Meetings */}
-      <EnterpriseCard module="sales">
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle>الاجتماعات والمكالمات</EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent>
-          {meetings.length === 0 ? (
-            <p className="text-sm text-muted-foreground">لا اجتماعات مسجّلة</p>
-          ) : (
-            <ul className="space-y-2 text-sm">
-              {meetings.map((m) => (
-                <li key={m.id} className="rounded border px-2 py-1">
-                  {m.loggedAt.slice(0, 10)} — {m.summary}
-                </li>
-              ))}
-            </ul>
-          )}
-        </EnterpriseCardContent>
-      </EnterpriseCard>
-
-      {/* Signals */}
-      <EnterpriseCard module="sales">
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle>إشارات</EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent>
-          <ul className="space-y-1 text-sm">
-            {signals.map((s) => (
-              <li key={s.id}>
-                {s.label}: {s.value}% (ثقة {Math.round(s.confidence * 100)}%)
-              </li>
-            ))}
-          </ul>
-        </EnterpriseCardContent>
-      </EnterpriseCard>
-
-      {/* Objections */}
-      <EnterpriseCard module="sales">
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle>الاعتراضات</EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent>
-          {objections.length === 0 ? (
-            <p className="text-sm text-muted-foreground">لا اعتراضات مستخرجة</p>
-          ) : (
-            <ul className="list-inside list-disc text-sm">
-              {objections.map((o) => (
-                <li key={o.id}>
-                  {o.labelAr} ({o.count}×)
-                </li>
-              ))}
-            </ul>
-          )}
-        </EnterpriseCardContent>
-      </EnterpriseCard>
-
-      {/* Competitors */}
-      <EnterpriseCard module="sales">
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle>المنافسون</EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent>
-          <ul className="space-y-2 text-sm">
-            {competitors.map((c) => (
-              <li key={c.id}>
-                <strong>{c.name}</strong> — {c.contextAr}
-              </li>
-            ))}
-          </ul>
-        </EnterpriseCardContent>
-      </EnterpriseCard>
-
-      {/* Proof assets */}
-      <EnterpriseCard module="sales">
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle>أصول الإثبات</EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent>
-          {proofAssets.length === 0 ? (
-            <p className="text-sm text-muted-foreground">لا أدلة مرتبطة</p>
-          ) : (
-            <ul className="space-y-1 text-sm">
-              {proofAssets.map((p) => (
-                <li key={p.id}>
-                  {p.label} ({p.typeId})
-                </li>
-              ))}
-            </ul>
-          )}
-        </EnterpriseCardContent>
-      </EnterpriseCard>
-
-      {/* AI Brief DRAFT */}
-      <EnterpriseCard module="sales" className="border-amber-300 dark:border-amber-800">
-        <EnterpriseCardHeader>
-          <EnterpriseCardTitle className="flex items-center gap-2">
-            <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-200">
-              DRAFT
-            </span>
-            ملخص ذكاء اصطناعي
-          </EnterpriseCardTitle>
-        </EnterpriseCardHeader>
-        <EnterpriseCardContent className="space-y-3 text-sm">
-          <p className="text-muted-foreground">{aiBriefDraft.disclaimerAr}</p>
-          {aiBriefDraft.sections.map((s) => (
-            <div key={s.titleAr}>
-              <p className="font-medium">{s.titleAr}</p>
-              <p className="text-muted-foreground">{s.bodyAr}</p>
-            </div>
-          ))}
-        </EnterpriseCardContent>
-      </EnterpriseCard>
+            <PhoneCall className="h-4 w-4" />
+            تسجيل تفاعل
+          </Link>
+          <Link
+            href={`/sales/notes/new?accountId=${accountId}`}
+            className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm font-medium hover:bg-muted hover:text-foreground"
+          >
+            <FileText className="h-4 w-4" />
+            إضافة ملاحظة
+          </Link>
+          <Link
+            href={`/sales/opportunities/new?accountId=${accountId}`}
+            className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm font-medium hover:bg-muted hover:text-foreground"
+          >
+            <PlusCircle className="h-4 w-4" />
+            إنشاء فرصة
+          </Link>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefreshIntelligence}
+            disabled={refreshing}
+            className="shrink-0"
+          >
+            {refreshing ? (
+              <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+            ) : (
+              <RefreshCw className="ml-1 h-4 w-4" />
+            )}
+            {refreshing ? "جاري التحديث..." : "تحديث الذكاء"}
+          </Button>
+        </div>
+      </div>
+      <AccountProfileMetrics
+        intelligence={intelligence}
+        interactionCount={interactionCount}
+      />
+      <NextBestActionPanel actions={nextActions} title="الإجراء التالي — هذا الحساب" />
+      <AccountProfileContacts contacts={contacts} />
+      <AccountProfileOpportunities
+        opportunities={opportunities}
+        accountId={accountId}
+      />
+      <AccountProfileTimeline entries={interactionTimeline} />
+      <AccountProfileMeetings meetings={meetings} />
+      <AccountProfileSignals signals={signals} />
+      <AccountProfileObjections objections={objections} />
+      <AccountProfileCompetitors competitors={competitors} />
+      <AccountProfileProofAssets assets={proofAssets} />
+      <AccountProfileAIBrief brief={aiBriefDraft} />
     </div>
   );
 }

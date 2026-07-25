@@ -15,6 +15,9 @@ import {
   ConcurrencyError,
   NotFoundError,
 } from "../domain/errors";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "sales-os", action: "safe-wrapper" });
 
 // ─── ActionResult (SPEC-01b §1.1) ───
 
@@ -67,7 +70,7 @@ export async function safe<T>(
     }
 
     // Unexpected error
-    console.error("[OpportunityManagement API]", error);
+    logger.error("OpportunityManagement API unexpected error", error instanceof Error ? error : undefined, { rawError: String(error) });
     return { ok: false, error: "An unexpected error occurred", code: "FORBIDDEN", correlationId };
   }
 }

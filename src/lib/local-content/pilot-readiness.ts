@@ -138,6 +138,7 @@ async function measurePopulationAccuracy(
       status: { in: ["populated", "partial", "complete", "exported"] },
     },
     select: { completionPct: true },
+    take: 100,
   });
 
   const avgCompletion =
@@ -252,6 +253,7 @@ async function measureRecommendationQuality(
   const outcomes = await prisma.lcRecommendationOutcome.findMany({
     where: { organizationId },
     select: { accuracyScore: true },
+    take: 100,
   });
   const accuracyScores = outcomes
     .map((o) => o.accuracyScore)
@@ -384,6 +386,7 @@ async function measurePatternLearningHealth(
 ): Promise<ReadinessMetric> {
   const healthRecords = await prisma.lcPatternHealthRecord.findMany({
     where: { organizationId },
+    take: 100,
   });
 
   if (healthRecords.length === 0) {
@@ -414,8 +417,12 @@ async function measurePatternLearningHealth(
 async function measureAuditCoverage(
   organizationId: string,
 ): Promise<ReadinessMetric> {
-  const count = await prisma.lcAiAuditEvent.count({
-    where: { organizationId },
+  // [MIGRATED] lcAiAuditEvent → platformAuditLog (dual-write with productKey: "local_content", targetType: "AiAuditEvent")
+  // const count = await prisma.lcAiAuditEvent.count({
+  //   where: { organizationId },
+  // });
+  const count = await prisma.platformAuditLog.count({
+    where: { productKey: "local_content", targetType: "AiAuditEvent", organizationId },
   });
 
   const score = Math.min(100, count * 5);

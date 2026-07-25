@@ -1,8 +1,7 @@
 // Governance Engine — Entity Resolver
 // Sprint 2: Cross-registry reference resolution
 
-import { Claim, Evidence, Product, Decision, Authority, Source, GovernanceRegistries } from '../types/entities';
-import { EntityNotFoundError, CircularDependencyError } from '../types/errors';
+import { Claim, Evidence, Product, Authority, Source, GovernanceRegistries } from '../types/entities';
 
 export interface ResolutionResult {
   resolved: number;

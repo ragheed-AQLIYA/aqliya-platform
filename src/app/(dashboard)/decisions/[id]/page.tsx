@@ -1,5 +1,6 @@
 import { DecisionDetailClient } from "@/components/decisions/decision-detail-client";
 import { DecisionSectorIntelligencePanel } from "@/components/decisions/decision-sector-intelligence-panel";
+import { RecentActivity } from "@/components/decisions/components/recent-activity";
 import { getDecisionById } from "@/actions/decisions";
 import { evaluateDecisionIntake } from "@/lib/decision/intake";
 import { evaluateDecisionFramework } from "@/lib/decision/framework";
@@ -75,6 +76,9 @@ export default async function DecisionDetailPage({
           typeConfig,
         }}
       />
+      <div className="p-8 pt-0">
+        <RecentActivity decisionId={id} />
+      </div>
       <DecisionSectorIntelligencePanel
         decisionId={id}
         organizationId={decision.organizationId}

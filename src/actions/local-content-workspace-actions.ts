@@ -1,5 +1,7 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { revalidatePath } from "next/cache";
 import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS } from "@/lib/platform/cache-strategy";
 import { redirect } from "next/navigation";
@@ -39,6 +41,9 @@ import {
 import { verifySource } from "@/lib/content-studio/evidence";
 import type { ContentFormat } from "@/lib/content-studio/types";
 
+
+const logger = createLogger({ product: "platform", action: "unknown" });
+
 type ActionResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: string; code?: string };
@@ -52,7 +57,7 @@ async function safe<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
       return { ok: false, error: "Access denied", code: "FORBIDDEN" };
     }
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[LocalContentOS Workspace Action]", message);
+    logger.error("[LocalContentOS Workspace Action]", error instanceof Error ? error : undefined);
     return { ok: false, error: message };
   }
 }

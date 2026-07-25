@@ -8,7 +8,7 @@ jest.mock("@/lib/prisma", () => ({
       create: jest.fn(),
       update: jest.fn(),
     },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -46,7 +46,7 @@ const BASE_ROW = {
 describe("SalesOS interactions CRUD", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+    prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
   });
 
   describe("validateUpdateSalesInteractionInput", () => {
@@ -101,7 +101,7 @@ describe("SalesOS interactions CRUD", () => {
           data: expect.objectContaining({ subject: "Updated subject" }),
         }),
       );
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.INTERACTION_UPDATED,
@@ -151,7 +151,7 @@ describe("SalesOS interactions CRUD", () => {
           }),
         }),
       );
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.INTERACTION_DELETED,

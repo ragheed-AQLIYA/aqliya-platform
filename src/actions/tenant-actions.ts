@@ -1,6 +1,7 @@
 "use server"
 
 import { getCurrentUser } from "@/lib/auth"
+import { enforce } from "@/lib/kernel"
 import { prisma } from "@/lib/prisma"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import { requireEnabled } from "@/lib/platform/feature-flags/registry"
@@ -122,6 +123,7 @@ export interface CreateTenantInput {
 export async function createTenantAction(input: CreateTenantInput): Promise<{ id: string; slug: string }> {
   requireEnabled("tenant.lifecycle")
   const user = await getCurrentUser()
+  await enforce(user, { type: "organization", id: user.organizationId, tenantId: user.organizationId }, "create")
 
   const slug = input.slug || toSlug(input.name)
 
@@ -168,6 +170,7 @@ export async function updateTenantAction(
 ): Promise<void> {
   requireEnabled("tenant.lifecycle")
   const user = await getCurrentUser()
+  await enforce(user, { type: "organization", id: id, tenantId: user.organizationId }, "update")
   await assertPlatformOrgAccess(id, user.organizationId)
 
   const existing = await prisma.platformOrganization.findUnique({ where: { id } })
@@ -208,6 +211,7 @@ export async function updateTenantAction(
 export async function archiveTenantAction(id: string): Promise<void> {
   requireEnabled("tenant.lifecycle")
   const user = await getCurrentUser()
+  await enforce(user, { type: "organization", id: id, tenantId: user.organizationId }, "update")
   await assertPlatformOrgAccess(id, user.organizationId)
 
   const existing = await prisma.platformOrganization.findUnique({ where: { id } })
@@ -236,6 +240,7 @@ export async function archiveTenantAction(id: string): Promise<void> {
 export async function activateTenantAction(id: string): Promise<void> {
   requireEnabled("tenant.lifecycle")
   const user = await getCurrentUser()
+  await enforce(user, { type: "organization", id: id, tenantId: user.organizationId }, "update")
   await assertPlatformOrgAccess(id, user.organizationId)
 
   const existing = await prisma.platformOrganization.findUnique({ where: { id } })

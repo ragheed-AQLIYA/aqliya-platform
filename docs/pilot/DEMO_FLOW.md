@@ -206,6 +206,10 @@ This script presents AQLIYA in 6 acts. Each act focuses on a different platform 
 ## ملاحظات للمقدم / Notes for Presenter
 
 ### قبل العرض / Before the Demo
+- تأكد من أن سجل التدقيق الموحد يحتوي على بيانات تجريبية
+- Make sure the unified audit trail has pilot data
+- تحقق من عمل فلاتر المنتجات في صفحة سجل التدقيق
+- Verify product filters work on the audit log page
 - تأكد من أن البيئة التجريبية تعمل
 - Make sure the pilot environment is running
 - تأكد من وجود بيانات تجريبية كافية

@@ -67,7 +67,7 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
         getWorkflowReadiness(decisionId),
       ])
 
-      if (intakeResult.success && intakeResult.data) {
+      if (intakeResult.success) {
         const decision = intakeResult.data
         setFormData({
           title: decision.title,
@@ -83,7 +83,7 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
         setError(intakeResult.error || "Failed to load decision intake")
       }
 
-      if (readinessResult.success && readinessResult.data) {
+      if (readinessResult.success) {
         setReadiness(readinessResult.data)
       }
 
@@ -109,11 +109,11 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
 
     const result = await updateDecisionIntake(id, formData)
 
-    if (result.success && result.data) {
+    if (result.success) {
       setIntake(result.data.intake)
       setSuccess(true)
       const readinessResult = await getWorkflowReadiness(id)
-      if (readinessResult.success && readinessResult.data) {
+      if (readinessResult.success) {
         setReadiness(readinessResult.data)
       }
       setTimeout(() => setSuccess(false), 3000)

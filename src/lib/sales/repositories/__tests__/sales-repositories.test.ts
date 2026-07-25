@@ -36,11 +36,14 @@ jest.mock("@/lib/prisma", () => ({
       create: jest.fn(),
       deleteMany: jest.fn(),
     },
-    salesAuditEvent: {
+    platformAuditLog: {
       findMany: jest.fn(),
-      create: jest.fn(),
     },
   },
+}));
+
+jest.mock("@/lib/platform/audit-log", () => ({
+  writePlatformAuditLog: jest.fn().mockResolvedValue({ ok: true, id: "pal-1" }),
 }));
 
 import { describe, expect, it, beforeEach, jest } from "@jest/globals";
@@ -53,6 +56,7 @@ import { evidenceRepository } from "../evidence-repository";
 import { auditRepository } from "../audit-repository";
 import type { SalesAccount, SalesContact, SalesOpportunity, SalesInteractionLog } from "../../types";
 import type { SalesAuditEntry, SalesEvidenceRef } from "../../store";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 
 const ORG_A = "org-a";
 const ORG_B = "org-b";
@@ -341,14 +345,13 @@ describe("SalesOS Repositories", () => {
     };
 
     it("findByOrganization returns mapped audit entries", async () => {
-      (prisma.salesAuditEvent.findMany as jest.Mock).mockResolvedValue([mockAudit]);
+      (prisma.platformAuditLog.findMany as jest.Mock).mockResolvedValue([mockAudit]);
       const results = await auditRepository.findByOrganization(ORG_A);
       expect(results).toHaveLength(1);
       expect(results[0].action).toBe("sales.deal.created");
     });
 
-    it("create calls prisma.salesAuditEvent.create", async () => {
-      (prisma.salesAuditEvent.create as jest.Mock).mockResolvedValue(mockAudit);
+    it("create calls writePlatformAuditLog with mapped fields", async () => {
       const entry: SalesAuditEntry = {
         id: "audit-1",
         organizationId: ORG_A,
@@ -359,9 +362,15 @@ describe("SalesOS Repositories", () => {
         timestamp: "2026-06-04T00:00:00.000Z",
       };
       await auditRepository.create(entry, "Test User");
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledTimes(1);
-      const callArg = (prisma.salesAuditEvent.create as jest.Mock).mock.calls[0][0];
-      expect(callArg.data.actorName).toBe("Test User");
+      expect(writePlatformAuditLog).toHaveBeenCalledTimes(1);
+      const callArg = (writePlatformAuditLog as jest.Mock).mock.calls[0][0];
+      expect(callArg.productKey).toBe("salesos");
+      expect(callArg.action).toBe("sales.deal.created");
+      expect(callArg.actorId).toBe("user-1");
+      expect(callArg.actorName).toBe("Test User");
+      expect(callArg.targetType).toBe("deal");
+      expect(callArg.targetId).toBe("deal-1");
+      expect(callArg.organizationId).toBe(ORG_A);
     });
   });
 });

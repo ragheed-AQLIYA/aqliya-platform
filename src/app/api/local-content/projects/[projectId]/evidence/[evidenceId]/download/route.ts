@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { assertProjectAccess } from "@/lib/local-content/guards";
 import { enforce } from "@/lib/kernel";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
@@ -6,6 +7,9 @@ import { buildDownloadResponse } from "@/lib/platform/download";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { assertEvidenceDownloadAccess } from "@/lib/core/evidence";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function GET(
   _request: NextRequest,
@@ -71,7 +75,7 @@ export async function GET(
     const { message, code } = sanitizeError(error);
     const status = httpStatusFromCode(code);
     if (status === 500) {
-      console.error("[LocalContentEvidenceDownload] Error:", error);
+      logger.error("[LocalContentEvidenceDownload] Error:", error instanceof Error ? error : undefined);
       return NextResponse.json({ error: "Failed to serve file" }, { status: 500 });
     }
     return NextResponse.json({ error: message }, { status });

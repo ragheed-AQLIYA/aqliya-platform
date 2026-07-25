@@ -1,5 +1,5 @@
 {
-  "at": "2026-07-11T11:27:35.605Z",
+  "at": "2026-07-18T18:34:59.312Z",
   "stages": [
     "Vision",
     "PRD",
@@ -17,8 +17,8 @@
       "product": "AuditOS",
       "maturity": "L6 Production-hardened",
       "level": 6,
-      "fileCount": 380,
-      "highFindings": 54,
+      "fileCount": 408,
+      "highFindings": 52,
       "stages": {
         "Vision": true,
         "PRD": true,
@@ -27,7 +27,7 @@
         "UX": true,
         "Tests": true,
         "Security": "warn",
-        "Performance": "warn",
+        "Performance": true,
         "Pilot": true,
         "Production": true
       },
@@ -39,7 +39,7 @@
         "UX": "✅",
         "Tests": "✅",
         "Security": "⚠️",
-        "Performance": "⚠️",
+        "Performance": "✅",
         "Pilot": "✅",
         "Production": "✅"
       }
@@ -48,8 +48,8 @@
       "product": "DecisionOS",
       "maturity": "**L6 Production-hardened**",
       "level": 6,
-      "fileCount": 2370,
-      "highFindings": 19,
+      "fileCount": 2564,
+      "highFindings": 20,
       "stages": {
         "Vision": true,
         "PRD": true,
@@ -58,7 +58,7 @@
         "UX": true,
         "Tests": true,
         "Security": "warn",
-        "Performance": "warn",
+        "Performance": true,
         "Pilot": true,
         "Production": true
       },
@@ -70,7 +70,7 @@
         "UX": "✅",
         "Tests": "✅",
         "Security": "⚠️",
-        "Performance": "⚠️",
+        "Performance": "✅",
         "Pilot": "✅",
         "Production": "✅"
       }
@@ -79,8 +79,8 @@
       "product": "LocalContentOS",
       "maturity": "**L6 Production-hardened**",
       "level": 6,
-      "fileCount": 295,
-      "highFindings": 33,
+      "fileCount": 313,
+      "highFindings": 34,
       "stages": {
         "Vision": true,
         "PRD": true,
@@ -89,7 +89,7 @@
         "UX": true,
         "Tests": true,
         "Security": "warn",
-        "Performance": "warn",
+        "Performance": true,
         "Pilot": true,
         "Production": true
       },
@@ -101,7 +101,7 @@
         "UX": "✅",
         "Tests": "✅",
         "Security": "⚠️",
-        "Performance": "⚠️",
+        "Performance": "✅",
         "Pilot": "✅",
         "Production": "✅"
       }
@@ -110,8 +110,8 @@
       "product": "SalesOS",
       "maturity": "**L6 Production-hardened**",
       "level": 6,
-      "fileCount": 527,
-      "highFindings": 21,
+      "fileCount": 538,
+      "highFindings": 27,
       "stages": {
         "Vision": true,
         "PRD": true,
@@ -120,7 +120,7 @@
         "UX": true,
         "Tests": true,
         "Security": "warn",
-        "Performance": "warn",
+        "Performance": true,
         "Pilot": true,
         "Production": true
       },
@@ -132,7 +132,7 @@
         "UX": "✅",
         "Tests": "✅",
         "Security": "⚠️",
-        "Performance": "⚠️",
+        "Performance": "✅",
         "Pilot": "✅",
         "Production": "✅"
       }
@@ -141,8 +141,8 @@
       "product": "WorkflowOS",
       "maturity": "L6 Production-hardened",
       "level": 6,
-      "fileCount": 154,
-      "highFindings": 8,
+      "fileCount": 189,
+      "highFindings": 6,
       "stages": {
         "Vision": true,
         "PRD": true,
@@ -151,7 +151,7 @@
         "UX": true,
         "Tests": true,
         "Security": "warn",
-        "Performance": "warn",
+        "Performance": true,
         "Pilot": true,
         "Production": true
       },
@@ -163,7 +163,7 @@
         "UX": "✅",
         "Tests": "✅",
         "Security": "⚠️",
-        "Performance": "⚠️",
+        "Performance": "✅",
         "Pilot": "✅",
         "Production": "✅"
       }
@@ -181,8 +181,8 @@
         "API": true,
         "UX": true,
         "Tests": true,
-        "Security": "warn",
-        "Performance": "warn",
+        "Security": true,
+        "Performance": true,
         "Pilot": true,
         "Production": true
       },
@@ -193,8 +193,8 @@
         "API": "✅",
         "UX": "✅",
         "Tests": "✅",
-        "Security": "⚠️",
-        "Performance": "⚠️",
+        "Security": "✅",
+        "Performance": "✅",
         "Pilot": "✅",
         "Production": "✅"
       }
@@ -212,8 +212,8 @@
         "API": true,
         "UX": true,
         "Tests": true,
-        "Security": "warn",
-        "Performance": "warn",
+        "Security": true,
+        "Performance": true,
         "Pilot": true,
         "Production": true
       },
@@ -224,8 +224,8 @@
         "API": "✅",
         "UX": "✅",
         "Tests": "✅",
-        "Security": "⚠️",
-        "Performance": "⚠️",
+        "Security": "✅",
+        "Performance": "✅",
         "Pilot": "✅",
         "Production": "✅"
       }
@@ -234,8 +234,8 @@
       "product": "ContentStudio",
       "maturity": "**L6 Production-hardened**",
       "level": 6,
-      "fileCount": 36,
-      "highFindings": 3,
+      "fileCount": 55,
+      "highFindings": 4,
       "stages": {
         "Vision": true,
         "PRD": true,
@@ -244,7 +244,7 @@
         "UX": true,
         "Tests": true,
         "Security": "warn",
-        "Performance": "warn",
+        "Performance": true,
         "Pilot": true,
         "Production": true
       },
@@ -256,7 +256,7 @@
         "UX": "✅",
         "Tests": "✅",
         "Security": "⚠️",
-        "Performance": "⚠️",
+        "Performance": "✅",
         "Pilot": "✅",
         "Production": "✅"
       }

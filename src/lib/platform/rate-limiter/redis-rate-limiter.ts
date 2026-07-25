@@ -1,6 +1,10 @@
 ﻿import type { RateLimiter, RateLimitConfig, RateLimitResult } from "./types"
 import { MemoryRateLimiter } from "./memory-rate-limiter"
+import { createLogger } from "@/lib/observability/logger";
 import { getRedisClient } from "@/lib/platform/redis-client"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 const DEFAULT_CONFIG: RateLimitConfig = {
   maxRequests: 60,
@@ -58,7 +62,7 @@ export class RedisRateLimiter implements RateLimiter {
 
   private warnFallback(reason: string): void {
     if (!this.warnedFallback) {
-      console.warn(`[rate-limit] RATE_LIMITER=redis but ${reason} -- using in-memory fallback`)
+      logger.warn("[rate-limit]RATE_LIMITER=redis but ${reason} -- using in-memory fallback")
       this.warnedFallback = true
     }
   }

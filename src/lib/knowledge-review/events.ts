@@ -1,3 +1,7 @@
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "platform", action: "lib-knowledge-review-events" });
+
 /**
  * Phase 8.1 — Knowledge Review Event Foundation.
  *
@@ -113,10 +117,7 @@ export async function emitReviewEvent(
 
   for (const result of results) {
     if (result.status === "rejected") {
-      console.warn(
-        `[knowledge-review/events] Handler failed for event ${event.type}:`,
-        result.reason,
-      );
+      logger.warn(`[knowledge-review/events] Handler failed for event ${event.type}:`, { detail: result.reason, });
     }
   }
 }

@@ -8,11 +8,37 @@ import {
 } from "@/lib/marketing/public-status";
 import { WorkflowChain } from "@/components/enterprise";
 
-export const metadata: Metadata = {
-  title: "عن عقلية | AQLIYA",
-  description:
-    "وُجدت عقلية لأن المؤسسة تحتاج ذكاءً يمكن الوثوق به ومساءلته  لا فقط ذكاءً أسرع. منصة تشغيل مؤسسية للقرارات والعمليات والأدلة.",
-};
+export function generateMetadata(): Metadata {
+  const title = "عن عقلية | AQLIYA";
+  const description =
+    "وُجدت عقلية لأن المؤسسة تحتاج ذكاءً يمكن الوثوق به ومساءلته  لا فقط ذكاءً أسرع. منصة تشغيل مؤسسية للقرارات والعمليات والأدلة.";
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com/about",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      type: "website",
+      images: [
+        {
+          url: "/og-about.png",
+          width: 1200,
+          height: 630,
+          alt: "عن AQLIYA - منصة ذكاء مؤسسي محكوم",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-about.png"],
+    },
+  };
+}
 
 const whyAqliyaExists = [
   "المشكلة ليست نقص أدوات الذكاء الاصطناعي فقط، بل مخرجات بلا أدلة ومسارات بلا محاسبة.",

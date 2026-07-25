@@ -1,6 +1,10 @@
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import { createHmac, timingSafeEqual } from "crypto";
 import type { DeliveryResult } from "./types";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 1000;
@@ -81,6 +85,6 @@ export async function sendWebhook(
     }
   }
 
-  console.error(`[Notification][Webhook] Failed after ${MAX_RETRIES} attempts: ${lastError}`);
+  logger.error(`[Notification][Webhook] Failed after ${MAX_RETRIES} attempts: ${lastError}`);
   return { channel: "webhook", success: false, error: lastError, deliveredAt };
 }

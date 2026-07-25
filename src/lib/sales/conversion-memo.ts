@@ -165,6 +165,7 @@ async function listDealEvidenceLinkIds(
       targetId: dealId,
     },
     select: { id: true, evidenceId: true },
+    take: 10000,
   });
   const ids = new Set<string>();
   for (const link of links) {

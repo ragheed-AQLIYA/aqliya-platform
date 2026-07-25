@@ -26,19 +26,13 @@ type CoverageRow = {
  * Get operational KPIs for the knowledge mining pipeline.
  */
 export async function getKnowledgeMiningKPIs(): Promise<KnowledgeMiningKPIs> {
-  const [totalCandidates, byStatusResult, evidenceCount, patternsResult] =
+  const [totalCandidates, byStatusGrouped, evidenceCount, patternsResult] =
     await Promise.all([
       prisma.knowledgeCandidate.count(),
-      Promise.all(
-        (
-          ["CANDIDATE", "UNDER_REVIEW", "APPROVED", "REJECTED", "PROMOTED"] as const
-        ).map(async (status) => {
-          const count = await prisma.knowledgeCandidate.count({
-            where: { status },
-          });
-          return { status, count };
-        }),
-      ),
+      prisma.knowledgeCandidate.groupBy({
+        by: ["status"],
+        _count: { _all: true },
+      }),
       prisma.knowledgeCandidateEvidence.count(),
       prisma.knowledgeCandidate.findMany({
         where: { status: { not: "REJECTED" } },
@@ -52,6 +46,11 @@ export async function getKnowledgeMiningKPIs(): Promise<KnowledgeMiningKPIs> {
         },
       }),
     ]);
+
+  const byStatusResult = byStatusGrouped.map((row) => ({
+    status: row.status,
+    count: row._count._all,
+  }));
 
   const byStatus = {} as Record<KnowledgeCandidateStatus, number>;
   for (const item of byStatusResult) {

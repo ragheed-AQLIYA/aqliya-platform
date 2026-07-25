@@ -5,7 +5,7 @@
  * Findings only — not a penetration test.
  */
 
-import { SECURITY } from "../config.mjs";
+import { SECURITY, buildExclusionFn } from "../config.mjs";
 import {
   collectSourceFiles,
   readText,
@@ -16,6 +16,9 @@ import {
 import { finding, scoreFromFindings } from "../lib/findings.mjs";
 import { writeAgentReport } from "../lib/report.mjs";
 import { isClientModule, hasAuthorizeCall, hasOrganizationScope } from "../lib/ast-lite.mjs";
+
+/** Security scanner excludes tests + mocks (seeds may contain real secrets) */
+const isExcluded = buildExclusionFn("security");
 
 const AGENT = "security";
 
@@ -152,11 +155,14 @@ export async function run() {
     const content = readText(absFile);
     if (!content) continue;
 
+    // Skip excluded files (tests, seeds, mocks, fixtures)
+    if (isExcluded(fileRel)) continue;
+
     // Secrets
     for (const pat of SECURITY.secretPatterns) {
       if (pat.re.test(content)) {
-        // skip .example and test fixtures lightly
-        if (/\.example|__tests__|fixtures|mock/i.test(fileRel)) continue;
+        // Apply per-pattern exclusions
+        if (pat.exclude && pat.exclude.test(content)) continue;
         findings.push(
           finding({
             agent: AGENT,
@@ -193,7 +199,10 @@ export async function run() {
 
     // SSRF — fetch with user-controlled URL heuristics
     if (/fetch\s*\(\s*[a-zA-Z_][\w.]*\s*[,)]/.test(content) && /req\.|searchParams|body\.|input\./.test(content)) {
-      if (/api\/|actions\//.test(fileRel)) {
+      // Exclude if the fetch URL comes from an environment variable (not user input)
+      const fetchVarMatch = content.match(/fetch\s*\(\s*([a-zA-Z_][\w.]*)\s*[,)]/);
+      const urlFromEnv = fetchVarMatch && content.includes(`${fetchVarMatch[1]} = process.env`);
+      if (!urlFromEnv && /api\/|actions\//.test(fileRel)) {
         findings.push(
           finding({
             agent: AGENT,
@@ -214,7 +223,7 @@ export async function run() {
       const hasAuth =
         hasAuthorizeCall(content) ||
         /auth\(|getServerSession|requireUser|currentUser|getCurrentUser|session/.test(content);
-      if (!hasAuth && !/health|ready|public|demo|csrf/.test(fileRel)) {
+      if (!hasAuth && !/health|ready|public|demo|csrf|auth\/\[|auth\/saml/.test(fileRel)) {
         findings.push(
           finding({
             agent: AGENT,

@@ -1,8 +1,9 @@
 ﻿# Production Environment Configuration
 
-**Status:** Active ✅  
+**Status:** Active ✅ — **canonical production Terraform (ADR-108)**  
 **Convention:** `prod` for Terraform env key, ECR repos, ECS clusters  
-**Region:** eu-north-1
+**Region:** eu-north-1  
+**P0 (2026-07-19):** Do not deploy from `environments/production/` (deprecated).
 
 ## Naming Convention
 

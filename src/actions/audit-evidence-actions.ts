@@ -20,6 +20,9 @@ import { createHash } from "crypto";
 import { validateFileContent } from "@/lib/security/file-validation";
 import { publishDomainEvent } from "@/lib/kernel/publish";
 import { publishAuditOSEvent } from "@/lib/kernel/events/audit-events";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "audit-os", action: "evidence-actions" });
 
 const ALLOWED_FILE_TYPES = [
   "pdf",
@@ -105,8 +108,8 @@ export async function createEvidenceAction(params: {
 
 /** @deprecated Use updateEvidenceStateWithEventAction instead — records audit event */
 export async function updateEvidenceStateAction(id: string, state: string) {
-  console.warn(
-    "[AuditActions] updateEvidenceStateAction called without audit event — use updateEvidenceStateWithEventAction instead",
+  logger.warn(
+    "updateEvidenceStateAction called without audit event — use updateEvidenceStateWithEventAction instead",
   );
   const actor = await getAuditActor();
   requireRole(actor, ["admin", "operator", "reviewer"]);

@@ -25,7 +25,7 @@ async function cleanupTbPipeline() {
   await prisma.auditAccountMapping.deleteMany();
   await prisma.auditTrialBalanceLine.deleteMany();
   await prisma.auditTrialBalance.deleteMany();
-  await prisma.auditEvent.deleteMany();
+  await prisma.platformAuditLog.deleteMany({ where: { productKey: "audit_os" } });
   await prisma.auditCanonicalAccount.deleteMany();
   await prisma.auditEngagement.deleteMany();
   await prisma.auditClient.deleteMany();

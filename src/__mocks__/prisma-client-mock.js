@@ -9,19 +9,19 @@ const MODEL_NAMES = [
   'auditCanonicalAccount', 'auditFinancialStatement', 'auditDisclosureNote',
   'auditEvidence', 'auditEvidenceLink', 'auditFinding', 'auditRecommendation',
   'auditReviewComment', 'auditApprovalRecord', 'auditPublicationPackage',
-  'auditEvent', 'auditAiOutput', 'auditValidationRun', 'auditValidationIssue',
+  'auditAiOutput', 'auditValidationRun', 'auditValidationIssue',
   'auditValidationDisposition', 'organization', 'user', 'decision', 'tenderProfile',
   'objective', 'constraint', 'assumption', 'alternative', 'risk', 'approval',
-  'recommendation', 'simulationResult', 'scenario', 'auditLog', 'decisionReport',
+  'recommendation', 'simulationResult', 'scenario', 'decisionReport',
   'decisionFramework', 'decisionScenario', 'decisionRiskAnalysis', 'decisionRiskAlert',
   'decisionMonitoringSignal', 'decisionPattern', 'sectorPattern', 'pilotFeedback',
   'pilotSignoff', 'productionBlocker', 'sector', 'sectorBenchmark', 'sectorPlaybook',
   'sectorRule', 'decisionOutcome', 'decisionEvidence', 'sunbulClient', 'sunbulUserMembership', 'sunbulRecord',
-  'sunbulDocument', 'sunbulReview', 'sunbulAuditEvent',
+  'sunbulDocument', 'sunbulReview',
   'crmConnection', 'crmSyncLog',
   'tenantIntegration',
   'tBMappingPattern', 'tBMappingFeedback', 'tBClassificationHistory',
-  'salesAccount', 'salesContact', 'salesDeal', 'salesAuditEvent',
+  'salesAccount', 'salesContact', 'salesDeal',
   'salesPipeline', 'salesPipelineStage', 'salesInteraction',
   'salesEvidenceLink', 'salesSignal', 'salesProposal', 'salesReview', 'salesApproval',
   'ssoProvider', 'scimProvisioningEvent',
@@ -29,7 +29,7 @@ const MODEL_NAMES = [
   'localContentProject', 'localContentSupplier', 'localContentSpendRecord',
   'localContentClassification', 'localContentEvidence', 'localContentFinding',
   'localContentReview', 'localContentApproval', 'localContentReport',
-  'localContentAuditEvent',
+  
 ]
 
 const AuditAction = {
@@ -256,7 +256,7 @@ function resolveRelation(model, record, key) {
       if (key === 'approver') return getOne('user', { id: record.approverId })
       if (key === 'recommendation') return getOne('recommendation', { decisionId: record.id })
       if (key === 'approvals') return getMany('approval', { decisionId: record.id })
-      if (key === 'auditLogs') return getMany('auditLog', { decisionId: record.id })
+      if (key === 'auditLogs') return getMany('platformAuditLog', { decisionId: record.id })
       if (key === 'tenderProfile') return getOne('tenderProfile', { decisionId: record.id })
       if (key === 'framework') return getOne('decisionFramework', { decisionId: record.id })
       if (key === 'decisionScenarios') return getMany('decisionScenario', { decisionId: record.id })
@@ -282,7 +282,7 @@ function resolveRelation(model, record, key) {
       if (key === 'approver') return getOne('user', { id: record.approverId })
       if (key === 'recommendation') return getOne('recommendation', { id: record.recommendationId })
       break
-    case 'auditLog':
+    case 'platformAuditLog':
       if (key === 'decision') return getOne('decision', { id: record.decisionId })
       if (key === 'organization') return getOne('organization', { id: record.organizationId })
       if (key === 'user') return getOne('user', { id: record.userId })
@@ -387,7 +387,7 @@ function inferModelName(key) {
     approver: 'user',
     recommendation: 'recommendation',
     approvals: 'approval',
-    auditLogs: 'auditLog',
+    auditLogs: 'platformAuditLog',
     tenderProfile: 'tenderProfile',
     framework: 'decisionFramework',
     decisionScenarios: 'decisionScenario',
@@ -507,4 +507,4 @@ function PrismaClient() {
 
 const Prisma = { JsonNull: null, InputJsonValue: {} };
 
-module.exports = { PrismaClient, AuditAction, Prisma }
+module.exports = { PrismaClient, Prisma }

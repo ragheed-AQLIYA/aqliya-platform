@@ -11,6 +11,10 @@
 // Future: connect to observability, SIEM, or progress reporters.
 
 import type { PipelineStage, StageOutcome, PipelineProvenance } from './pipeline-types';
+import { createLogger } from "@/lib/observability/logger";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 // ---------------------------------------------------------------------------
 // Event Types
@@ -118,7 +122,7 @@ export class PipelineEventEmitter {
       // Handle async handlers (fire and forget in v1)
       if (result instanceof Promise) {
         result.catch((err) => {
-          console.warn(`[PipelineEvent] Handler error: ${err instanceof Error ? err.message : String(err)}`);
+          logger.warn("[PipelineEvent]Handler error: ${err instanceof Error ? err.message : String(err)}");
         });
       }
     }

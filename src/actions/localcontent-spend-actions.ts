@@ -8,6 +8,7 @@ import {
   createClassification,
 } from "@/lib/local-content/services";
 import { assertProjectAccess } from "@/lib/local-content/guards";
+import { enforce } from "@/lib/kernel";
 import { notifyOnEvent } from "@/lib/platform/notification/integration";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { parseLocalContentCSV } from "@/lib/local-content/import";
@@ -60,7 +61,8 @@ export async function createLocalContentSpendRecordAction(
   const { supplierId, amount, category, currency, contractReference, period, description } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_spend");
+    const { user, project } = await assertProjectAccess(projectId, "create_spend");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "create");
     await requirePermission(Permission.SPEND_DATA_ENTRY, ResourceType.SPEND_RECORD);
 
     const record = await createSpendRecord(
@@ -105,7 +107,8 @@ export async function importLocalContentSpendCsvAction(
   const { csvText: validatedCsv } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_spend");
+    const { user, project } = await assertProjectAccess(projectId, "create_spend");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "create");
     await requirePermission(Permission.IMPORT, ResourceType.IMPORT_BATCH);
     // Rate limit: CSV import is DB-heavy (creates suppliers + spend records)
     const { allowed } = await checkRateLimit(`lcos:import:${user.id}`, { maxRequests: 5, windowMs: 60_000 });
@@ -121,17 +124,82 @@ export async function importLocalContentSpendCsvAction(
     let created = 0;
     const errors: string[] = [];
 
+    const supplierNames = [...new Set(result.validRows.map((r) => r.supplierName))];
+    const crNumbers = [...new Set(
+      result.validRows.filter((r) => r.supplierRegistrationNumber).map((r) => r.supplierRegistrationNumber!),
+    )];
+
+    const [existingByName, existingByCr] = await Promise.all([
+      prisma.localContentSupplier.findMany({
+        where: { projectId, name: { in: supplierNames } },
+      }),
+      crNumbers.length > 0
+        ? prisma.localContentSupplier.findMany({
+            where: { projectId, crNumber: { in: crNumbers } },
+          })
+        : Promise.resolve([]),
+    ]);
+
+    const supplierMap = new Map<string, typeof existingByName[number]>();
+    for (const s of existingByName) supplierMap.set(s.name, s);
+    for (const s of existingByCr) supplierMap.set(`cr:${s.crNumber}`, s);
+
+    const missingNames = supplierNames.filter((n) => !supplierMap.has(n));
+    const missingCrMap = new Map<string, string>(); // crNumber -> supplierName
+    for (const row of result.validRows) {
+      if (row.supplierRegistrationNumber && !supplierMap.has(`cr:${row.supplierRegistrationNumber}`)) {
+        missingCrMap.set(row.supplierRegistrationNumber, row.supplierName);
+      }
+    }
+
+    if (missingNames.length > 0) {
+      const createdSuppliers = await prisma.localContentSupplier.createMany({
+        data: missingNames.map((name) => ({
+          projectId,
+          name,
+          crNumber: null,
+          localityClassification: "unclassified",
+        })),
+      });
+      if (createdSuppliers.count > 0) {
+        const fresh = await prisma.localContentSupplier.findMany({
+          where: { projectId, name: { in: missingNames } },
+        });
+        for (const s of fresh) supplierMap.set(s.name, s);
+      }
+    }
+
+    for (const [crNum, supplierName] of missingCrMap) {
+      if (!supplierMap.has(`cr:${crNum}`)) {
+        const existing = supplierMap.get(supplierName);
+        if (existing) {
+          supplierMap.set(`cr:${crNum}`, existing);
+        } else {
+          const newSupplier = await prisma.localContentSupplier.create({
+            data: {
+              projectId,
+              name: supplierName,
+              crNumber: crNum,
+              localityClassification: "unclassified",
+            },
+          });
+          supplierMap.set(`cr:${crNum}`, newSupplier);
+          supplierMap.set(supplierName, newSupplier);
+        }
+      }
+    }
+
+    const resolveSupplier = (row: typeof result.validRows[number]) => {
+      if (row.supplierRegistrationNumber) {
+        const byCr = supplierMap.get(`cr:${row.supplierRegistrationNumber}`);
+        if (byCr) return byCr;
+      }
+      return supplierMap.get(row.supplierName) ?? null;
+    };
+
     for (const row of result.validRows) {
       try {
-        let supplier = await prisma.localContentSupplier.findFirst({
-          where: { projectId, name: row.supplierName },
-        });
-
-        if (!supplier && row.supplierRegistrationNumber) {
-          supplier = await prisma.localContentSupplier.findFirst({
-            where: { projectId, crNumber: row.supplierRegistrationNumber },
-          });
-        }
+        let supplier = resolveSupplier(row);
 
         if (!supplier) {
           supplier = await prisma.localContentSupplier.create({
@@ -142,6 +210,10 @@ export async function importLocalContentSpendCsvAction(
               localityClassification: "unclassified",
             },
           });
+          supplierMap.set(row.supplierName, supplier);
+          if (row.supplierRegistrationNumber) {
+            supplierMap.set(`cr:${row.supplierRegistrationNumber}`, supplier);
+          }
         }
 
         await createSpendRecord(
@@ -246,7 +318,8 @@ export async function classifyLocalContentSpendRecordAction(
   const { supplierId, spendRecordId, localPercentage, classificationBasis, confidence, notes } = parsed.data;
 
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "classify");
+    const { user, project } = await assertProjectAccess(projectId, "classify");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "update");
     await requirePermission(Permission.SPEND_DATA_ENTRY, ResourceType.SPEND_RECORD);
 
     const classification = await createClassification(
@@ -300,7 +373,8 @@ export async function deleteLocalContentSpendRecordAction(
   recordId: string,
 ): Promise<ActionResult<void>> {
   return safe(async () => {
-    const { user } = await assertProjectAccess(projectId, "create_spend");
+    const { user, project } = await assertProjectAccess(projectId, "create_spend");
+    await enforce(user, { type: "project", id: projectId, tenantId: project.organizationId }, "delete");
     await requirePermission(Permission.SPEND_DATA_ENTRY, ResourceType.SPEND_RECORD);
     await deleteSpendRecord(projectId, recordId, {
       id: user.id,

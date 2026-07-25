@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+﻿import { PrismaClient } from "@prisma/client";
 
 export type SalesOSSeedResult = {
   pipelineId: string;
@@ -14,7 +14,6 @@ export async function seedSalesOS(
   adminId: string,
 ): Promise<SalesOSSeedResult> {
   // Clean existing SalesOS data (FK-safe order: children before parents)
-  await prisma.salesAuditEvent.deleteMany();
   await prisma.salesApproval.deleteMany();
   await prisma.salesReview.deleteMany();
   await prisma.salesProposal.deleteMany();
@@ -298,44 +297,47 @@ export async function seedSalesOS(
     ]);
     console.log(`  Evidence links: 2`);
 
-    // ─── Audit Events ───
-    await Promise.all([
-      tx.salesAuditEvent.create({
-        data: {
+    // ─── Audit Events (migrated to PlatformAuditLog) ───
+    await tx.platformAuditLog.createMany({
+      data: [
+        {
           organizationId: orgId,
           platformOrganizationId: platformOrgId,
+          productKey: "salesos",
           actorId: adminId,
           actorName: "Ahmed Al-Mansouri",
           action: "pipeline.created",
           targetType: "SalesPipeline",
           targetId: pipeline.id,
+          severity: "info",
+          metadata: { source: "seed" },
         },
-      }),
-      tx.salesAuditEvent.create({
-        data: {
+        {
           organizationId: orgId,
           platformOrganizationId: platformOrgId,
+          productKey: "salesos",
           actorId: adminId,
           actorName: "Ahmed Al-Mansouri",
           action: "accounts.imported",
           targetType: "SalesAccount",
           targetId: accounts[0].id,
-          metadata: { count: accounts.length },
+          severity: "info",
+          metadata: { source: "seed", count: accounts.length },
         },
-      }),
-      tx.salesAuditEvent.create({
-        data: {
+        {
           organizationId: orgId,
           platformOrganizationId: platformOrgId,
+          productKey: "salesos",
           actorId: adminId,
           actorName: "Ahmed Al-Mansouri",
           action: "deal.stage_changed",
           targetType: "SalesDeal",
           targetId: deals[2].id,
-          metadata: { from: "proposal", to: "negotiation" },
+          severity: "info",
+          metadata: { source: "seed", from: "proposal", to: "negotiation" },
         },
-      }),
-    ]);
+      ],
+    });
     console.log(`  Audit events: 3`);
 
     return {

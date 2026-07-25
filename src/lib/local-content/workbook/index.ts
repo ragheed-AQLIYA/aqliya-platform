@@ -2,7 +2,7 @@
 
 export * from "./types";
 export * from "./template";
-export * from "./population";
+export * from "./population/index";
 export * from "./missing-data";
 export * from "./services";
 export * from "./ai-advisor";

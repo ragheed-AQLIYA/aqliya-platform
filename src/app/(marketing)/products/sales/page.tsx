@@ -9,11 +9,37 @@ import {
 } from "@/components/enterprise";
 import { publicOsStatus } from "@/lib/marketing/public-status";
 
-export const metadata: Metadata = {
-  title: "SalesOS  نظام تشغيل تطوير الأعمال والمبيعات | AQLIYA",
-  description:
-    "SalesOS نظام تشغيل تطوير الأعمال والمبيعات ضمن عقلية  يحل تحديات تشغيلية محددة داخل المؤسسة مثل إدارة الحسابات والفرص والاجتماعات والعروض والعقود والذاكرة البيعية مع حوكمة وأدلة وسجل تدقيقي كامل.",
-};
+export function generateMetadata(): Metadata {
+  const title = "SalesOS  نظام تشغيل تطوير الأعمال والمبيعات | AQLIYA";
+  const description =
+    "SalesOS نظام تشغيل تطوير الأعمال والمبيعات ضمن عقلية  يحل تحديات تشغيلية محددة داخل المؤسسة مثل إدارة الحسابات والفرص والاجتماعات والعروض والعقود والذاكرة البيعية مع حوكمة وأدلة وسجل تدقيقي كامل.";
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com/products/sales",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      type: "website",
+      images: [
+        {
+          url: "/og-salesos.png",
+          width: 1200,
+          height: 630,
+          alt: "SalesOS - نظام الذاكرة التجارية | AQLIYA",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-salesos.png"],
+    },
+  };
+}
 
 const outputs = [
   "ICP Profiles",

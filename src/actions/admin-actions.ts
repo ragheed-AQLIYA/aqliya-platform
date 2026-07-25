@@ -1,6 +1,7 @@
-"use server"
+﻿"use server"
 
 import { getCurrentUser } from "@/lib/auth"
+import { enforce } from "@/lib/kernel"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import type { $Enums } from "@prisma/client"
@@ -10,6 +11,7 @@ async function assertAdmin(_organizationId?: string) {
   const user = await getCurrentUser()
   if (!user) throw new Error("Authentication required")
   if (user.role !== "ADMIN") throw new Error("Admin access required")
+  await enforce(user, { type: "settings", id: _organizationId ?? user.organizationId, tenantId: _organizationId ?? user.organizationId }, "admin")
   return user
 }
 
@@ -96,7 +98,7 @@ export async function getPlatformStats(organizationId: string) {
     prisma.organization.count(),
     prisma.auditEngagement.count({ where: { organizationId } }),
     prisma.decision.count({ where: { organizationId } }),
-    prisma.auditEvent.count(),
+    prisma.platformAuditLog.count({ where: { productKey: "audit_os" } }),
     prisma.auditEvidence.count(),
   ])
 
@@ -145,6 +147,7 @@ export async function checkDatabaseHealth() {
   await assertAdmin();
   const dbStart = Date.now();
   try {
+    // SAFE: Prisma tagged template literal ($queryRaw) — parameterized, no concatenation.
     await prisma.$queryRaw`SELECT 1`;
     return { ok: true, latency: Date.now() - dbStart };
   } catch {

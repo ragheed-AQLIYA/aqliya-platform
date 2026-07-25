@@ -153,38 +153,61 @@ const SYSTEM_PERMISSIONS: SystemPermissionMap = {
 // ─── إنشاء أو ضمان وجود الأدوار النظامية ───
 
 export async function getOrCreateSystemRoles(): Promise<void> {
-  for (const roleDef of SYSTEM_ROLES) {
-    const role = await prisma.role.upsert({
-      where: { slug: roleDef.slug },
-      update: { name: roleDef.name },
-      create: {
-        name: roleDef.name,
-        slug: roleDef.slug,
-        type: "SYSTEM",
-        description: `System ${roleDef.name} role`,
-      },
-    });
+  const roles = await Promise.all(
+    SYSTEM_ROLES.map((roleDef) =>
+      prisma.role.upsert({
+        where: { slug: roleDef.slug },
+        update: { name: roleDef.name },
+        create: {
+          name: roleDef.name,
+          slug: roleDef.slug,
+          type: "SYSTEM",
+          description: `System ${roleDef.name} role`,
+        },
+      }),
+    ),
+  );
 
+  const roleMap = new Map(roles.map((r) => [r.slug, r]));
+
+  const allPermDefs: { slug: string; group: string; roleSlug: string }[] = [];
+  for (const roleDef of SYSTEM_ROLES) {
     const perms = SYSTEM_PERMISSIONS[roleDef.slug] ?? [];
     for (const permDef of perms) {
-      const slug = permDef.slug;
-      const perm = await prisma.permission.upsert({
-        where: { slug },
-        update: { name: slug, group: permDef.group },
-        create: {
-          name: slug,
-          slug,
-          group: permDef.group,
-        },
-      });
-
-      await prisma.rolePermission.upsert({
-        where: { roleId_permissionId: { roleId: role.id, permissionId: perm.id } },
-        update: {},
-        create: { roleId: role.id, permissionId: perm.id },
-      });
+      allPermDefs.push({ slug: permDef.slug, group: permDef.group, roleSlug: roleDef.slug });
     }
   }
+
+  const permissions = await Promise.all(
+    allPermDefs.map((permDef) =>
+      prisma.permission.upsert({
+        where: { slug: permDef.slug },
+        update: { name: permDef.slug, group: permDef.group },
+        create: {
+          name: permDef.slug,
+          slug: permDef.slug,
+          group: permDef.group,
+        },
+      }),
+    ),
+  );
+
+  const permMap = new Map(permissions.map((p) => [p.slug, p]));
+
+  const rolePermissionData = allPermDefs.map((permDef) => ({
+    roleId: roleMap.get(permDef.roleSlug)!.id,
+    permissionId: permMap.get(permDef.slug)!.id,
+  }));
+
+  await Promise.all(
+    rolePermissionData.map((data) =>
+      prisma.rolePermission.upsert({
+        where: { roleId_permissionId: { roleId: data.roleId, permissionId: data.permissionId } },
+        update: {},
+        create: { roleId: data.roleId, permissionId: data.permissionId },
+      }),
+    ),
+  );
 }
 
 // ─── منح دور لمستخدم ───
@@ -305,6 +328,7 @@ export async function getUserRoles(
       },
     },
     orderBy: { createdAt: "desc" },
+    take: 100,
   });
 }
 
@@ -333,6 +357,7 @@ export async function hasPermission(
         },
       },
     },
+    take: 100,
   });
 
   for (const assignment of assignments) {
@@ -372,6 +397,7 @@ export async function getEffectivePermissions(
         },
       },
     },
+    take: 100,
   });
 
   const slugs = new Set<string>();

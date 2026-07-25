@@ -2,12 +2,16 @@
 // مخزن التدقيق غير القابل للتعديل - يكتب و يتحقق من سلسلة التجزئة
 
 import "server-only"
+import { createLogger } from "@/lib/observability/logger";
 
 import { prisma } from "@/lib/prisma"
 import { computeHash, findNonce, verifyChain } from "./hash-chain"
 import type { HashChainProof, ChainVerificationResult } from "./types"
 import type { ChainEntryData } from "./hash-chain"
 import type { Prisma } from "@prisma/client"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 async function loadEntryData(
   auditLogId: string,
@@ -74,7 +78,7 @@ export async function appendToAuditChain(
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error"
     if (process.env.NODE_ENV !== "test") {
-      console.warn(`[AuditChain] Append failed: ${message}`)
+      logger.warn("[AuditChain]Append failed: ${message}")
     }
     return null
   }
@@ -340,7 +344,7 @@ export async function searchAuditLogs(
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error"
     if (process.env.NODE_ENV !== "test") {
-      console.warn(`[AuditSearch] Query failed: ${message}`)
+      logger.warn("[AuditSearch]Query failed: ${message}")
     }
     return { entries: [], total: 0, hasMore: false }
   }

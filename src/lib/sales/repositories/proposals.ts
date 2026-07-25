@@ -50,6 +50,7 @@ export async function listSalesProposalsForDeal(
   return prisma.salesProposal.findMany({
     where: { dealId, ...orgWhere(scope) },
     orderBy: { updatedAt: "desc" },
+    take: 500,
   });
 }
 

@@ -57,7 +57,7 @@ export type StratifiedSplit = {
 const TEST_RATIO = 0.2;
 
 /** Deterministic 80/20 stratified split within each metric category. */
-export function stratifiedSplit80_20(
+function stratifiedSplit80_20(
   rows: LabeledAccountRow[],
 ): StratifiedSplit {
   const byCat = new Map<string, LabeledAccountRow[]>();
@@ -98,7 +98,7 @@ export function stratifiedSplit80_20(
   return { train, test, splitByCategory };
 }
 
-export function summarizeHoldout(rows: HoldoutEvalRow[]): HoldoutSummary {
+function summarizeHoldout(rows: HoldoutEvalRow[]): HoldoutSummary {
   const total = rows.length;
   const exact = rows.filter((r) => r.correct).length;
   const byCat: Record<string, { total: number; exact: number }> = {};
@@ -141,7 +141,7 @@ export type MineAndEvalOptions = {
   allowExactName?: boolean;
 };
 
-export function mineAndEvalHoldout(
+function mineAndEvalHoldout(
   train: ErpTrainingRow[],
   test: LabeledAccountRow[],
   candidates: CanonicalCandidate[],
@@ -195,7 +195,7 @@ export function mineAndEvalHoldout(
   };
 }
 
-export function labelRows(
+function labelRows(
   rows: Array<{
     accountCode: string;
     accountName: string;

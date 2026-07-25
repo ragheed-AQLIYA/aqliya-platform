@@ -15,7 +15,7 @@ import {
   Users,
   Scale,
 } from "lucide-react";
-import { getGovernanceDashboardAction, type GovernanceItem } from "@/actions/governance-actions";
+import { getGovernanceDashboardAction, type GovernanceItem } from "@/actions/governance-actions/index";
 import { GovernanceClient } from "./governance-client";
 
 export const dynamic = "force-dynamic";

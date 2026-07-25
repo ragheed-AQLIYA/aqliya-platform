@@ -1,9 +1,11 @@
 "use server"
 
 import { getCurrentUser } from "@/lib/auth"
+import { enforce } from "@/lib/kernel"
 import { prisma } from "@/lib/prisma"
 import type { Prisma } from "@prisma/client"
 import { revalidatePath } from "next/cache"
+import { auditLogger, Product } from "@/lib/platform/audit-logger"
 
 export type UserPreferences = {
   language: "ar" | "en"
@@ -59,6 +61,7 @@ export async function getUserPreferences(): Promise<UserPreferences> {
 export async function updateUserPreferences(updates: Partial<UserPreferences>) {
   const user = await getCurrentUser()
   if (!user) throw new Error("Authentication required")
+  await enforce(user, { type: "user", id: user.id, tenantId: user.organizationId }, "update")
 
   const current = await getUserPreferences()
   const merged = { ...current, ...updates }
@@ -67,6 +70,15 @@ export async function updateUserPreferences(updates: Partial<UserPreferences>) {
     where: { id: user.id },
     data: { preferences: merged as Prisma.InputJsonValue },
   })
+
+  try {
+    const alog = auditLogger({
+      productKey: Product.PLATFORM,
+      sourceSystem: "user_preferences",
+      actor: { id: user.id, name: user.name ?? undefined, email: user.email ?? undefined },
+    });
+    await alog.record("user.preferences.updated", { type: "User", id: user.id }, { severity: "info" });
+  } catch { /* audit must not block */ }
 
   revalidatePath("/settings")
   return merged

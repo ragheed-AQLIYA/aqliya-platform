@@ -243,6 +243,46 @@ export async function getSignalsAction(decisionId: string) {
   }
 }
 
+// Org-wide signals dashboard
+export async function getAllSignalsAction() {
+  const user = await getCurrentUser();
+  try {
+    const signals = await prisma.decisionMonitoringSignal.findMany({
+      where: { organizationId: user.organizationId },
+      include: {
+        decision: { select: { id: true, title: true, status: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    return { data: signals };
+  } catch {
+    return { error: "Failed to fetch signals" };
+  }
+}
+
+// Batch acknowledge signals (NEW → ACKNOWLEDGED)
+export async function batchAcknowledgeSignalsAction(signalIds: string[]) {
+  const user = await getCurrentUser();
+  try {
+    await prisma.decisionMonitoringSignal.updateMany({
+      where: {
+        id: { in: signalIds },
+        organizationId: user.organizationId,
+        status: "NEW",
+      },
+      data: {
+        status: "ACKNOWLEDGED",
+        acknowledgedBy: user.id,
+        acknowledgedAt: new Date(),
+      },
+    });
+    revalidatePath("/decisions/signals");
+    return { success: true };
+  } catch {
+    return { error: "Failed to acknowledge signals" };
+  }
+}
+
 // View alerts - requires operator (or admin)
 export async function getAlertsAction(decisionId: string) {
   const user = await getCurrentUser();

@@ -1,24 +1,24 @@
 # Repository Knowledge Graph
 
-**Generated:** 2026-07-11T11:27:34.655Z
+**Generated:** 2026-07-18T18:34:58.372Z
 
 ## Stats
 
 | Metric | Value |
 | ------ | ----- |
-| Nodes | 3330 |
-| Edges | 3521 |
+| Nodes | 3637 |
+| Edges | 3883 |
 | Products | 12 |
-| Actions | 92 |
-| Tests | 373 |
+| Actions | 126 |
+| Tests | 411 |
 
 ## Key Symbol: enforce()
 
 ```
 enforce()
-  ↓ used in ~234 references
-  ↓ across 35 files
-  ↓ products: Platform, DecisionOS, Core, WorkflowOS, SalesOS, LocalContentOS, AuditOS
+  ↓ used in ~325 references
+  ↓ across 58 files
+  ↓ products: Platform, DecisionOS, WorkflowOS, Core, SalesOS, LocalContentOS, AuditOS, InstitutionalMemory, OfficeAI
   ↓ covered by 6 auth-related tests
 ```
 
@@ -26,9 +26,9 @@ enforce()
 
 | Symbol | Usages | Files | Products |
 | ------ | ------ | ----- | -------- |
-| `enforce()` | 234 | 35 | Platform, DecisionOS, Core, WorkflowOS, SalesOS, LocalContentOS, AuditOS |
-| `authorize()` | 87 | 11 | Platform, Core, LocalContentOS |
-| `prisma()` | 4295 | 364 | Platform, DecisionOS, WorkflowOS, LocalContentOS, OfficeAI, Core, SalesOS, AuditOS, LocalContactOS, InstitutionalMemory, RiskOS, ContentStudio |
+| `enforce()` | 325 | 58 | Platform, DecisionOS, WorkflowOS, Core, SalesOS, LocalContentOS, AuditOS, InstitutionalMemory, OfficeAI |
+| `authorize()` | 94 | 14 | Platform, Core, LocalContentOS |
+| `prisma()` | 4550 | 390 | Platform, DecisionOS, WorkflowOS, LocalContentOS, OfficeAI, Core, SalesOS, AuditOS, LocalContactOS, InstitutionalMemory, ContentStudio, RiskOS |
 
 ## How Agents Use This
 

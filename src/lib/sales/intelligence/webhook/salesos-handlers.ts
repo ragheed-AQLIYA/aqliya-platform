@@ -7,10 +7,15 @@
  * Called by: src/lib/sales/intelligence/webhook/receiver.ts
  */
 import "server-only";
+import { createLogger } from "@/lib/observability/logger";
 import { prisma } from "@/lib/prisma";
+import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { registerWebhookHandler, convertToOutreachEvent } from "@/lib/sales/intelligence/webhook/receiver";
 import type { WebhookEventPayload } from "@/lib/sales/intelligence/webhook/receiver";
 import type { Prisma } from "@prisma/client";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 // ── SmartLead: Email replied → Update deal stage ──
 
@@ -50,22 +55,21 @@ registerWebhookHandler("smartlead", "EMAIL_REPLIED", async (event) => {
         },
       });
 
-      await prisma.salesAuditEvent.create({
-        data: {
-          organizationId: contact.accountId,
-          platformOrganizationId: "system",
-          actorId: "system",
-          actorName: "SmartLead Webhook",
-          action: "deal.stage_advanced.via_outreach_reply",
-          targetType: "SalesDeal",
-          targetId: deal.id,
-          metadata: {
-            previousStage: deal.pipelineStage,
-            newStage: "negotiation",
-            eventId: outreachEvent.id,
-            campaignId: outreachEvent.campaignId,
-          } as Prisma.InputJsonValue,
-        },
+      await writePlatformAuditLog({
+        productKey: "salesos",
+        action: "deal.stage_advanced.via_outreach_reply",
+        platformOrganizationId: "system",
+        organizationId: contact.accountId,
+        actorId: "system",
+        actorName: "SmartLead Webhook",
+        targetType: "SalesDeal",
+        targetId: deal.id,
+        metadata: {
+          previousStage: deal.pipelineStage,
+          newStage: "negotiation",
+          eventId: outreachEvent.id,
+          campaignId: outreachEvent.campaignId,
+        } as Record<string, unknown>,
       });
     }
   }
@@ -98,20 +102,19 @@ registerWebhookHandler("smartlead", "MEETING_BOOKED", async (event) => {
         data: { status: "qualified" },
       });
 
-      await prisma.salesAuditEvent.create({
-        data: {
-          organizationId: contact.accountId,
-          platformOrganizationId: "system",
-          actorId: "system",
-          actorName: "SmartLead Webhook",
-          action: "deal.qualified.via_meeting_booked",
-          targetType: "SalesDeal",
-          targetId: deals[0].id,
-          metadata: {
-            eventId: outreachEvent.id,
-            campaignId: outreachEvent.campaignId,
-          } as Prisma.InputJsonValue,
-        },
+      await writePlatformAuditLog({
+        productKey: "salesos",
+        action: "deal.qualified.via_meeting_booked",
+        platformOrganizationId: "system",
+        organizationId: contact.accountId,
+        actorId: "system",
+        actorName: "SmartLead Webhook",
+        targetType: "SalesDeal",
+        targetId: deals[0].id,
+        metadata: {
+          eventId: outreachEvent.id,
+          campaignId: outreachEvent.campaignId,
+        } as Record<string, unknown>,
       });
     }
   }
@@ -129,21 +132,20 @@ registerWebhookHandler("smartlead", "EMAIL_BOUNCED", async (event) => {
   });
 
   if (contact?.accountId) {
-    await prisma.salesAuditEvent.create({
-      data: {
-        organizationId: contact.accountId,
-        platformOrganizationId: "system",
-        actorId: "system",
-        actorName: "SmartLead Webhook",
-        action: "outreach.bounced",
-        targetType: "SalesContact",
-        targetId: contact.id,
-        metadata: {
-          eventId: outreachEvent.id,
-          campaignId: outreachEvent.campaignId,
-          warning: "Contact email bounced — verify or update contact info",
-        } as Prisma.InputJsonValue,
-      },
+    await writePlatformAuditLog({
+      productKey: "salesos",
+      action: "outreach.bounced",
+      platformOrganizationId: "system",
+      organizationId: contact.accountId,
+      actorId: "system",
+      actorName: "SmartLead Webhook",
+      targetType: "SalesContact",
+      targetId: contact.id,
+      metadata: {
+        eventId: outreachEvent.id,
+        campaignId: outreachEvent.campaignId,
+        warning: "Contact email bounced — verify or update contact info",
+      } as Record<string, unknown>,
     });
   }
 });
@@ -211,4 +213,4 @@ registerWebhookHandler("smartlead", "*", async (event) => {
   });
 });
 
-console.log("[SalesOS] Webhook handlers registered: SmartLead (EMAIL_REPLIED, MEETING_BOOKED, EMAIL_BOUNCED, *), Apollo (*)");
+logger.info("[SalesOS]Webhook handlers registered: SmartLead (EMAIL_REPLIED, MEETING_BOOKED, EMAIL_BOUNCED, *), Apollo (*)");

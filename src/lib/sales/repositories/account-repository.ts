@@ -24,6 +24,7 @@ export const accountRepository = {
     const rows = await prisma.salesAccount.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
+      take: 10000,
     });
     return rows.map(prismaAccountToDomain);
   },

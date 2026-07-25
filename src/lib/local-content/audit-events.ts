@@ -1,12 +1,9 @@
 // LocalContentOS audit event writer
-// Uses domain-specific audit events for detailed traceability.
-// Dual-writes to PlatformAuditLog for cross-product visibility.
+// Single-write to PlatformAuditLog for unified cross-product audit trail.
 
-import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { Product } from "@/lib/platform/audit-logger";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
-import type { Prisma } from "@prisma/client";
 
 export interface AuditEventInput {
   projectId: string;
@@ -24,48 +21,24 @@ export interface AuditEventInput {
 export async function createLocalContentAuditEvent(
   input: AuditEventInput,
 ): Promise<void> {
-  try {
-    await prisma.localContentAuditEvent.create({
-      data: {
-        projectId: input.projectId,
-        actorId: input.actorId,
-        actorName: input.actorName ?? null,
-        action: input.action,
-        entityType: input.entityType,
-        entityId: input.entityId,
-        before: input.before ?? null,
-        after: input.after ?? null,
-        metadata: (input.metadata ?? undefined) as
-          | Prisma.InputJsonValue
-          | undefined,
-      },
-    });
-  } catch (error) {
-    console.warn(
-      `[LocalContentOS] Audit event write failed: ${error instanceof Error ? error.message : "unknown"}`,
-    );
-  }
-
-  // ── Dual-write to PlatformAuditLog + hash chain ──
   const platformResult = await writePlatformAuditLog({
     productKey: Product.LOCAL_CONTENT,
-    action: `local_content.${input.action}`,
-    projectId: input.projectId,
+    action: input.action,
     platformOrganizationId: input.platformOrganizationId ?? undefined,
     actorId: input.actorId,
     actorName: input.actorName,
+    projectId: input.projectId,
     targetType: input.entityType,
     targetId: input.entityId,
-    metadata: (input.metadata ?? undefined) as
-      | Record<string, unknown>
-      | undefined,
+    beforeState: input.before,
+    afterState: input.after,
+    metadata: input.metadata as Record<string, unknown> | undefined,
   });
 
-  // ── Append to hash chain (best-effort, never throws) ──
   if (platformResult.ok && platformResult.id) {
     await appendToAuditChain(
       platformResult.id,
-      `local_content.${input.action}`,
+      input.action,
       input.actorId,
     );
   }
@@ -133,66 +106,41 @@ export interface AiAuditInput {
 }
 
 /**
- * Write an AI audit event to the LcAiAuditEvent table.
+ * Write an AI audit event via PlatformAuditLog.
  * Never throws — best-effort write for traceability.
- * Dual-writes to PlatformAuditLog with AI provenance fields.
  */
 export async function createAiAuditEvent(
   input: AiAuditInput,
 ): Promise<void> {
-  try {
-    await prisma.lcAiAuditEvent.create({
-      data: {
-        organizationId: input.organizationId,
-        projectId: input.projectId ?? null,
-        workbookId: input.workbookId ?? null,
-        action: input.action,
-        actorId: input.actorId ?? null,
-        providerId: input.providerId ?? null,
-        modelVersion: input.modelVersion ?? null,
-        promptVersion: input.promptVersion ?? null,
-        confidence: input.confidence ?? null,
-        status: input.status,
-        inputSummary: (input.inputSummary ?? undefined) as Prisma.InputJsonValue | undefined,
-        outputSummary: (input.outputSummary ?? undefined) as Prisma.InputJsonValue | undefined,
-        warningCount: input.warningCount ?? 0,
-        durationMs: input.durationMs ?? 0,
-        metadata: (input.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
-      },
-    });
-  } catch (error) {
-    console.warn(
-      `[LocalContentOS] AI audit event write failed: ${error instanceof Error ? error.message : "unknown"}`,
-    );
-  }
-
-  // ── Dual-write to PlatformAuditLog (with AI provenance + hash chain) ──
   const platformResult = await writePlatformAuditLog({
     productKey: Product.LOCAL_CONTENT,
-    action: `local_content.ai.${input.action}`,
-    platformOrganizationId: input.organizationId,
+    action: input.action,
+    organizationId: input.organizationId,
     projectId: input.projectId,
     actorId: input.actorId,
     aiProvider: input.providerId,
     aiModel: input.modelVersion,
     aiPromptVersion: input.promptVersion,
+    aiRelated: true,
+    aiConfidence: input.confidence,
+    aiStatus: input.status,
+    inputSummary: input.inputSummary,
+    outputSummary: input.outputSummary,
+    durationMs: input.durationMs,
     targetType: "AiAuditEvent",
     targetId: input.action,
     severity: input.status === "failed" ? "error" : input.status === "partial" ? "warning" : "info",
     metadata: {
       ...(input.metadata ?? {}),
       workbookId: input.workbookId,
-      confidence: input.confidence,
       warningCount: input.warningCount,
-      durationMs: input.durationMs,
     } as Record<string, unknown>,
   });
 
-  // ── Append to hash chain (best-effort, never throws) ──
   if (platformResult.ok && platformResult.id) {
     await appendToAuditChain(
       platformResult.id,
-      `local_content.ai.${input.action}`,
+      input.action,
       input.actorId ?? "system",
     );
   }

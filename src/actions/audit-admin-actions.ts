@@ -4,6 +4,9 @@
 import { getAuditActor, requireRole, recordAuditOsAuditEvent } from "@/lib/kernel"
 // Inline DB access via prisma to avoid circular dependencies
 import { prisma } from "@/lib/prisma"
+import { createLogger } from "@/lib/observability/logger"
+
+const logger = createLogger({ product: "audit-os", action: "admin-actions" });
 
 export interface AuditUserResult {
   id: string
@@ -31,7 +34,7 @@ async function recordOrgEvent(actor: { actorId: string; actorName: string; actor
       select: { id: true },
     })
     if (!engagement) {
-      console.warn(`[AdminAudit] No engagement found for org ${actor.organizationId}; skipping audit event for ${params.eventType}`)
+      logger.warn(`No engagement found for org ${actor.organizationId}; skipping audit event for ${params.eventType}`)
       return
     }
     await recordAuditOsAuditEvent({
@@ -47,7 +50,7 @@ async function recordOrgEvent(actor: { actorId: string; actorName: string; actor
       description: params.description,
     })
   } catch (e) {
-    console.warn(`[AdminAudit] Failed to record audit event ${params.eventType}:`, (e as Error).message)
+    logger.warn(`Failed to record audit event ${params.eventType}: ${e instanceof Error ? e.message : "unknown"}`)
   }
 }
 

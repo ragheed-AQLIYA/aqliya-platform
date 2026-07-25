@@ -11,10 +11,17 @@
  * - body.promotedBy is IGNORED — session.user.id is used instead
  */
 
+import { z } from "zod";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth-next";
 import { promoteCandidates } from "@/lib/tb-intelligence/knowledge-mining/promotion-service";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
+
+const knowledgePromoteSchema = z.object({
+  candidateId: z.string().min(1),
+  artifactType: z.enum(["candidate-synonyms", "candidate-rule-pack"]),
+  notes: z.string().max(5000).optional(),
+});
 
 function requireRole(user: Record<string, unknown>, minRole: "ADMIN" | "OPERATOR" | "VIEWER"): void {
   const role = user.role as string | undefined;
@@ -33,27 +40,29 @@ export async function POST(request: Request) {
     requireRole(session.user as Record<string, unknown>, "OPERATOR");
 
     const user = session.user as Record<string, unknown>;
-    const body = await request.json();
 
-    if (!body.candidateId || !body.artifactType) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
+
+    const parsed = knowledgePromoteSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "candidateId and artifactType are required" },
+        { error: parsed.error.issues.map((i) => i.message).join(" ") },
         { status: 400 },
       );
     }
 
-    if (!["candidate-synonyms", "candidate-rule-pack"].includes(body.artifactType)) {
-      return NextResponse.json(
-        { error: "artifactType must be 'candidate-synonyms' or 'candidate-rule-pack'" },
-        { status: 400 },
-      );
-    }
+    const { candidateId, artifactType, notes } = parsed.data;
 
     const result = await promoteCandidates({
-      candidateId: body.candidateId,
+      candidateId,
       promotedBy: user.id as string, // session-derived, not caller-supplied
-      artifactType: body.artifactType,
-      notes: body.notes,
+      artifactType,
+      notes,
     });
 
     return NextResponse.json(result);

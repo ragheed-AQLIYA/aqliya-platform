@@ -1,10 +1,15 @@
 "use server"
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { prisma } from "@/lib/prisma"
 import { RiskLevel } from "@prisma/client"
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth"
 import { enforce } from "@/lib/kernel"
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit"
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function getTenderProfile(decisionId: string) {
   try {
@@ -24,7 +29,7 @@ export async function getTenderProfile(decisionId: string) {
     return { success: true, data: tender }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error('Error fetching tender profile:', error)
+      logger.error("Error fetching tender profile:", error instanceof Error ? error : undefined)
     }
     return { success: false, error: "Failed to fetch tender profile" }
   }
@@ -120,7 +125,7 @@ export async function createOrUpdateTenderProfile(
     }
   } catch (error) {
     if (!isExpectedAccessDeniedError(error)) {
-      console.error('Error saving tender profile:', error)
+      logger.error("Error saving tender profile:", error instanceof Error ? error : undefined)
     }
     return { success: false, error: "Failed to save tender profile" }
   }

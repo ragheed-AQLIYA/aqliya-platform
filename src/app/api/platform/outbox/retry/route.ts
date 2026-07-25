@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { NextResponse } from "next/server";
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { AuditEngine } from "@/lib/core/audit";
@@ -5,6 +6,10 @@ import { retryFailedOutboxEvents } from "@/lib/core/events/outbox-service";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export const dynamic = "force-dynamic";
+
+const outboxRetrySchema = z.object({
+  ids: z.array(z.string().min(1)).max(100).optional(),
+}).passthrough();
 
 /** ADMIN — reset failed outbox rows to pending for operator replay. */
 export async function POST(request: Request) {
@@ -15,9 +20,15 @@ export async function POST(request: Request) {
     }
     let ids: string[] | undefined;
     try {
-      const body = (await request.json()) as { ids?: string[] };
-      if (Array.isArray(body?.ids) && body.ids.length > 0) {
-        ids = body.ids;
+      let rawBody: unknown;
+      try {
+        rawBody = await request.json();
+      } catch {
+        rawBody = {};
+      }
+      const parsed = outboxRetrySchema.safeParse(rawBody);
+      if (parsed.success && Array.isArray(parsed.data.ids) && parsed.data.ids.length > 0) {
+        ids = parsed.data.ids;
       }
     } catch {
       ids = undefined;

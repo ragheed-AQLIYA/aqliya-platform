@@ -8,6 +8,53 @@ type GovernanceCard = {
   detail: string;
 };
 
+/**
+ * Product screenshot placeholder — displays a styled mockup of the product interface.
+ * Replace with actual screenshots when available.
+ */
+function ProductScreenshotPlaceholder({
+  productName,
+  productNameAr,
+  locale = "ar",
+}: {
+  productName: string;
+  productNameAr: string;
+  locale?: "ar" | "en";
+}) {
+  const displayName = locale === "ar" ? productNameAr : productName;
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-background via-background to-primary/5 shadow-2xl">
+      {/* Title bar */}
+      <div className="flex items-center gap-2 border-b border-border/40 bg-muted/30 px-4 py-2.5">
+        <div className="flex gap-1.5">
+          <span className="h-3 w-3 rounded-full bg-red-400/60" />
+          <span className="h-3 w-3 rounded-full bg-yellow-400/60" />
+          <span className="h-3 w-3 rounded-full bg-green-400/60" />
+        </div>
+        <span className="mx-auto text-[10px] font-medium text-muted-foreground">
+          {displayName}
+        </span>
+      </div>
+      {/* Mockup content */}
+      <div className="flex min-h-[280px] items-center justify-center p-8 sm:min-h-[360px]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+            <svg className="h-8 w-8 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <p className="text-sm font-semibold text-muted-foreground">
+            {locale === "ar" ? "صورة واجهة النظام" : "Product Interface Screenshot"}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground/60">
+            {locale === "ar" ? "قريبًا" : "Coming soon"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function defaultGovernance(locale: "ar" | "en"): GovernanceCard[] {
   return locale === "ar"
     ? [
@@ -82,6 +129,15 @@ export function ProductPageTemplate({
           </>
         }
       />
+
+      {/* ─── Product Screenshot ────────────────── */}
+      <section className="mx-auto w-full max-w-5xl px-6 -mt-4 pb-8">
+        <ProductScreenshotPlaceholder
+          productName={content.productName}
+          productNameAr={content.productNameAr ?? content.productName}
+          locale={locale}
+        />
+      </section>
 
       {/* ─── Problem → Solution ──────────────── */}
       <section className="mx-auto w-full max-w-7xl px-6 py-14">

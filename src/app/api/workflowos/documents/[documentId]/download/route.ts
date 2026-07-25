@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createLogger } from "@/lib/observability/logger";
 import { getCurrentUser } from "@/lib/auth";
 import { retrieveWorkflowDocument } from "@/lib/workflowos/storage";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { buildDownloadResponse } from "@/lib/platform/download";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export async function GET(
   _request: NextRequest,
@@ -27,7 +31,8 @@ export async function GET(
 
     const { requireClientAccess } =
       await import("@/lib/workflowos/tenant-guard");
-    await requireClientAccess(docRecord.clientId);
+    const ctx = await requireClientAccess(docRecord.clientId);
+    const organizationId = ctx.platformOrganizationId ?? ctx.organizationId;
 
     const { document, file } = await retrieveWorkflowDocument(
       docRecord.clientId,
@@ -72,7 +77,7 @@ export async function GET(
     if (message.includes("Access denied")) {
       return NextResponse.json({ error: message }, { status: 403 });
     }
-    console.error("[WorkflowDownload] Error:", message);
+    logger.error("[WorkflowDownload] Error:", error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json(
       { error: "Failed to serve file" },
       { status: 500 },

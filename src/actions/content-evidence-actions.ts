@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, hasRequiredRole, isExpectedAccessDeniedError } from "@/lib/auth";
+import { enforce } from "@/lib/kernel";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { createHash } from "crypto";
@@ -84,6 +85,7 @@ async function requireContentAccess(
   if (content.organizationId !== user.organizationId) {
     throw new Error("صلاحية غير كافية");
   }
+  await enforce(user, { type: "evidence", id: contentId, tenantId: content.organizationId }, role === "VIEWER" ? "read" : "create");
   return { user, content };
 }
 

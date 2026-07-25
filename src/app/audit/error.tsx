@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AuditErrorCard } from "@/components/audit/error/audit-error-card";
+import { clientLogger } from "@/lib/observability/client-logger";
 
 export default function AuditError({
   error,
@@ -12,7 +13,7 @@ export default function AuditError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[AuditOS Error Boundary]", error);
+    clientLogger.error("[AuditOS Error Boundary]", error);
   }, [error]);
 
   const router = useRouter();

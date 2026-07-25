@@ -54,16 +54,137 @@ export const SECURITY = {
   secretPatterns: [
     { id: "aws-key", re: /AKIA[0-9A-Z]{16}/, severity: "critical" },
     { id: "private-key", re: /-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----/, severity: "critical" },
-    { id: "generic-secret", re: /(api[_-]?key|secret|password|token)\s*[:=]\s*['"][^'"]{12,}['"]/i, severity: "high" },
+    {
+      id: "generic-secret",
+      re: /(api[_-]?key|secret|password|token)\s*[:=]\s*['"][^'"]{12,}['"]/i,
+      severity: "high",
+      // Exclude lines that are env var references, URLs, type defs, or UI labels
+      exclude: /process\.env|interface\s|type\s|https?:\/\/|['"]\s*[;,})\n]/i,
+    },
     { id: "jwt-hardcoded", re: /eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}/, severity: "high" },
   ],
   dangerousApis: [
-    { id: "eval", re: /\beval\s*\(/, severity: "high" },
+    // eval: exclude Redis EVAL (client.eval) — negative lookbehind for dot
+    { id: "eval", re: /(?<![.\w])eval\s*\(/, severity: "high" },
+    // dangerouslySetInnerHTML: only flag in client components (checked separately)
     { id: "dangerouslySetInnerHTML", re: /dangerouslySetInnerHTML/, severity: "medium" },
     { id: "innerHTML", re: /\.innerHTML\s*=/, severity: "medium" },
     { id: "raw-sql", re: /\$queryRaw(Unsafe)?`|\$executeRaw(Unsafe)?`/, severity: "medium" },
-    { id: "child-process", re: /child_process|execSync|exec\(/, severity: "medium" },
+    // child-process: exclude RegExp.exec() via negative lookbehind for dot
+    { id: "child-process", re: /child_process|execSync|(?<!\.)exec\s*\(/, severity: "medium" },
   ],
+  /** File patterns to skip (tests, seeds, mocks, fixtures) */
+  fileExclusions: [
+    /__tests__/,
+    /\.test\.(ts|tsx|js|jsx)$/,
+    /\.spec\.(ts|tsx|js|jsx)$/,
+    /fixtures/,
+    /mocks?\/?$/i,
+    /\.example/i,
+  ],
+};
+
+/**
+ * Categorized file exclusions for quality scanners.
+ * Each scanner declares which categories it uses.
+ */
+export const EXCLUSION_CATEGORIES = {
+  /** Unit / integration tests — never production code */
+  TEST: [
+    /__tests__/,
+    /\.test\.(ts|tsx|js|jsx)$/,
+    /\.spec\.(ts|tsx|js|jsx)$/,
+  ],
+  /** Mock objects and test doubles */
+  MOCK: [
+    /__mocks__/,
+    /mock-data\.ts$/i,
+  ],
+  /** Seed data, fixtures, rehearsal scripts */
+  SEED: [
+    /seed[-_]?data/i,
+    /\.seed\./,
+    /uat-run\.ts$/,
+    /rehearsal-check\.ts$/,
+  ],
+  /** Demo / marketing routes */
+  DEMO: [
+    /demo-data\.ts$/i,
+    /\/auditos\/demo/,
+  ],
+  /** TypeScript declaration files */
+  TYPE_DECL: [
+    /\/types\.ts$/,
+    /\/types\/.*index\.ts$/,
+  ],
+};
+
+/**
+ * Composite exclusion set — all categories combined.
+ * Used by scanners that want the broadest exclusion.
+ */
+export const FILE_EXCLUSIONS = Object.values(EXCLUSION_CATEGORIES).flat();
+
+/**
+ * Scanner-specific exclusion presets.
+ * Each scanner picks the categories relevant to its domain.
+ */
+export const SCANNER_EXCLUSIONS = {
+  /** Code health: exclude tests, mocks, seeds, demos, types */
+  codeHealth: ["TEST", "MOCK", "SEED", "DEMO", "TYPE_DECL"],
+  /** Technical debt: exclude tests, mocks, seeds, demos */
+  technicalDebt: ["TEST", "MOCK", "SEED", "DEMO"],
+  /** Security: exclude tests, mocks (seeds may contain real secrets) */
+  security: ["TEST", "MOCK"],
+  /** Performance: exclude tests, mocks, seeds, demos */
+  performance: ["TEST", "MOCK", "SEED", "DEMO"],
+};
+
+/**
+ * Build the exclusion set for a given scanner.
+ * @param {"codeHealth"|"technicalDebt"|"security"|"performance"} scanner
+ * @returns {(fileRel: string) => boolean}
+ */
+export function buildExclusionFn(scanner) {
+  const cats = SCANNER_EXCLUSIONS[scanner] || [];
+  const res = cats.flatMap((c) => EXCLUSION_CATEGORIES[c] || []);
+  return (fileRel) => res.some((re) => re.test(fileRel));
+}
+
+/** Legacy convenience — backward compat for existing scanners */
+export function isExcludedFile(fileRel) {
+  return FILE_EXCLUSIONS.some((re) => re.test(fileRel));
+}
+
+/** React Complexity Metrics (RFC-001) */
+export const REACT_COMPLEXITY = {
+  /** God component thresholds */
+  godComponentRcs: 70,
+  godComponentUseState: 15,
+  godComponentLoc: 500,
+  godComponentHookDensity: 10,
+  godComponentFanout: 40,
+
+  /** Long function body (excluding JSX return) */
+  longFunctionBody: 200,
+
+  /** Sub-score thresholds: [safe, warn, critical] */
+  hookDensity: [3, 8, 10],
+  stateComplexity: [5, 15, 20],
+  fanout: [10, 30, 40],
+  nestingDepth: [4, 8, 10],
+  inlineCallbacks: [5, 15, 20],
+  effectSideEffects: [2, 5, 8],
+
+  /** RCS weights (must sum to 1.0) */
+  weights: {
+    hookDensity: 0.25,
+    stateComplexity: 0.20,
+    fanout: 0.20,
+    nestingDepth: 0.15,
+    inlineCallbacks: 0.10,
+    effectSideEffects: 0.10,
+  },
 };
 
 /** Performance heuristics */

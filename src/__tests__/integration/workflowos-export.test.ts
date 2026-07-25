@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, jest, beforeEach } from "@jest/globals";
+import { describe, it, expect, jest, beforeEach } from "@jest/globals";
 
 // ─── Mocks (hoisted before imports) ───
 
@@ -19,16 +19,16 @@ jest.mock("@/lib/kernel", () => ({
   enforce: mockEnforce,
 }));
 
+jest.mock("@/lib/workflowos/audit", () => ({
+  recordWorkflowAuditEvent: jest.fn(),
+}));
+
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     workflowRecord: {
       findUnique: jest.fn(),
       update: jest.fn(),
       count: jest.fn(),
-      findMany: jest.fn(),
-    },
-    workflowAuditEvent: {
-      create: jest.fn(),
       findMany: jest.fn(),
     },
     workflowEvidence: {
@@ -40,6 +40,8 @@ jest.mock("@/lib/prisma", () => ({
     user: {
       findUnique: jest.fn(),
     },
+    platformAuditLog: { findMany: jest.fn().mockResolvedValue([]) },
+    // Note: platformAuditLog used for all audit events - consolidated single-write
   },
 }));
 
@@ -56,6 +58,7 @@ jest.mock("next/cache", () => ({
 // ─── Imports (pick up mocked modules) ───
 
 import { prisma } from "@/lib/prisma";
+import { recordWorkflowAuditEvent } from "@/lib/workflowos/audit";
 import {
   requestWorkflowExport,
   approveWorkflowExport,
@@ -168,9 +171,6 @@ describe("WorkflowOS Export Flow", () => {
         exportRequestedById: "user-1",
       });
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
-      mock(prisma.workflowAuditEvent.create).mockResolvedValue(
-        makeAuditEvent(),
-      );
 
       const result = await requestWorkflowExport("record-1");
 
@@ -234,9 +234,6 @@ describe("WorkflowOS Export Flow", () => {
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowRecord.update).mockResolvedValue(updatedRecord);
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
-      mock(prisma.workflowAuditEvent.create).mockResolvedValue(
-        makeAuditEvent({ action: "export_approved" }),
-      );
 
       const result = await approveWorkflowExport("record-1");
 
@@ -288,9 +285,6 @@ describe("WorkflowOS Export Flow", () => {
       mock(prisma.workflowRecord.findUnique).mockResolvedValue(record);
       mock(prisma.workflowRecord.update).mockResolvedValue(updatedRecord);
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
-      mock(prisma.workflowAuditEvent.create).mockResolvedValue(
-        makeAuditEvent({ action: "export_rejected" }),
-      );
 
       const result = await rejectWorkflowExport(
         "record-1",
@@ -351,13 +345,14 @@ describe("WorkflowOS Export Flow", () => {
           createdAt: new Date("2026-06-10"),
         },
       ]);
-      mock(prisma.workflowAuditEvent.findMany).mockResolvedValue([
+      mock(prisma.platformAuditLog.findMany).mockResolvedValue([
         {
           action: "export_requested",
           actorName: "Test User",
-          comment: "طلب تصدير السجل",
-          fromStatus: null,
-          toStatus: null,
+          eventDescription: "",
+          beforeState: "",
+          afterState: "",
+          metadata: { comment: "طلب تصدير السجل" },
           createdAt: new Date("2026-06-15"),
         },
       ]);
@@ -366,9 +361,6 @@ describe("WorkflowOS Export Flow", () => {
         category: "audit",
       });
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
-      mock(prisma.workflowAuditEvent.create).mockResolvedValue(
-        makeAuditEvent({ action: "export_downloaded" }),
-      );
 
       const result = await downloadWorkflowExport("record-1");
 
@@ -467,20 +459,14 @@ describe("WorkflowOS Export Flow", () => {
         exportRequestedById: "user-1",
       });
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
-      mock(prisma.workflowAuditEvent.create).mockResolvedValue(
-        makeAuditEvent(),
-      );
 
       await requestWorkflowExport("record-1");
 
-      // Verify audit event was created with correct action
-      expect(prisma.workflowAuditEvent.create).toHaveBeenCalledWith(
+      expect(recordWorkflowAuditEvent).toHaveBeenCalledWith(
         expect.objectContaining({
-          data: expect.objectContaining({
-            action: "export_requested",
-            recordId: "record-1",
-            actorId: "user-1",
-          }),
+          action: "export_requested",
+          recordId: "record-1",
+          actorId: "user-1",
         }),
       );
     });
@@ -497,17 +483,12 @@ describe("WorkflowOS Export Flow", () => {
         exportStatus: "approved",
       });
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
-      mock(prisma.workflowAuditEvent.create).mockResolvedValue(
-        makeAuditEvent({ action: "export_approved" }),
-      );
 
       await approveWorkflowExport("record-1");
 
-      expect(prisma.workflowAuditEvent.create).toHaveBeenCalledWith(
+      expect(recordWorkflowAuditEvent).toHaveBeenCalledWith(
         expect.objectContaining({
-          data: expect.objectContaining({
-            action: "export_approved",
-          }),
+          action: "export_approved",
         }),
       );
     });
@@ -524,17 +505,12 @@ describe("WorkflowOS Export Flow", () => {
         exportStatus: "rejected",
       });
       mock(prisma.user.findUnique).mockResolvedValue(makeUser());
-      mock(prisma.workflowAuditEvent.create).mockResolvedValue(
-        makeAuditEvent({ action: "export_rejected" }),
-      );
 
       await rejectWorkflowExport("record-1", "Missing data");
 
-      expect(prisma.workflowAuditEvent.create).toHaveBeenCalledWith(
+      expect(recordWorkflowAuditEvent).toHaveBeenCalledWith(
         expect.objectContaining({
-          data: expect.objectContaining({
-            action: "export_rejected",
-          }),
+          action: "export_rejected",
         }),
       );
     });

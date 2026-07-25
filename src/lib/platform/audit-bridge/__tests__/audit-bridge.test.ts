@@ -157,8 +157,109 @@ const mockPrisma = {
     }),
   },
   platformAuditLog: {
+    findFirst: jest.fn(async ({ where }: any) => {
+      const { productKey, sourceModel, sourceId } = where;
+      if (sourceModel === 'AuditEvent') {
+        const event = findInStore('auditEvent', { id: sourceId });
+        if (!event) return null;
+        return {
+          id: "pal_audit_".concat(event.id),
+          productKey,
+          sourceModel,
+          sourceId,
+          action: event.eventType,
+          actorId: event.actorId,
+          targetType: event.targetType,
+          targetId: event.targetId,
+          metadata: { ...(event.metadata ?? {}), engagementId: event.engagement?.organizationId },
+          beforeState: event.previousState ?? null,
+          afterState: event.newState ?? null,
+          createdAt: event.timestamp ?? event.createdAt,
+        };
+      }
+      if (sourceModel === 'AuditLog') {
+        const log = findInStore('auditLog', { id: sourceId });
+        if (!log) return null;
+        return {
+          id: "pal_dec_".concat(log.id),
+          productKey,
+          sourceModel,
+          sourceId,
+          action: log.action,
+          actorId: log.userId,
+          targetType: log.entity ?? 'decision',
+          targetId: log.decisionId ?? '',
+          beforeState: log.before ?? null,
+          afterState: log.after ?? null,
+          organizationId: log.organizationId ?? '',
+          createdAt: log.createdAt,
+          metadata: {},
+        };
+      }
+      return findInStore('platformAuditLog', where) ?? null;
+    }),
+    findMany: jest.fn(async ({ where, orderBy, take }: any) => {
+      const { productKey, sourceModel } = where ?? {};
+      if (sourceModel === 'AuditEvent') {
+        let events = [...mockStore.auditEvent];
+        if (where?.action) events = events.filter(e => e.eventType === where.action);
+        if (where?.actorId) events = events.filter(e => e.actorId === where.actorId);
+        if (where?.sourceId) events = events.filter(e => e.engagement?.organizationId === where.sourceId);
+        if (orderBy?.createdAt === 'desc') {
+          events = [...events].sort((a, b) =>
+            new Date(b.createdAt ?? b.timestamp).getTime() - new Date(a.createdAt ?? a.timestamp).getTime()
+          );
+        }
+        if (typeof take === 'number') events = events.slice(0, take);
+        return events.map(event => ({
+          id: "pal_audit_".concat(event.id),
+          productKey,
+          sourceModel,
+          sourceId: event.id,
+          action: event.eventType,
+          actorId: event.actorId,
+          targetType: event.targetType,
+          targetId: event.targetId,
+          metadata: { ...(event.metadata ?? {}), engagementId: event.engagement?.organizationId },
+          beforeState: event.previousState ?? null,
+          afterState: event.newState ?? null,
+          createdAt: event.timestamp ?? event.createdAt,
+        }));
+      }
+      if (sourceModel === 'AuditLog') {
+        let logs = [...mockStore.auditLog];
+        if (where?.action) logs = logs.filter(l => l.action === where.action);
+        if (where?.organizationId) logs = logs.filter(l => l.organizationId === where.organizationId);
+        if (where?.actorId) logs = logs.filter(l => l.userId === where.actorId);
+        if (orderBy?.createdAt === 'desc') {
+          logs = [...logs].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+        if (typeof take === 'number') logs = logs.slice(0, take);
+        return logs.map(log => ({
+          id: "pal_dec_".concat(log.id),
+          productKey,
+          sourceModel,
+          sourceId: log.id,
+          action: log.action,
+          actorId: log.userId,
+          targetType: log.entity ?? 'decision',
+          targetId: log.decisionId ?? '',
+          beforeState: log.before ?? null,
+          afterState: log.after ?? null,
+          organizationId: log.organizationId ?? '',
+          createdAt: log.createdAt,
+          metadata: {},
+        }));
+      }
+      let results = filterStore('platformAuditLog', where);
+      if (orderBy?.createdAt === 'desc') {
+        results = [...results].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      }
+      if (typeof take === 'number') results = results.slice(0, take);
+      return results;
+    }),
     create: jest.fn(async ({ data }: any) => {
-      const record = { id: `audit_${idCounter++}`, ...data, createdAt: new Date() }
+      const record = { id: "audit_".concat(idCounter++), ...data, createdAt: new Date() }
       mockStore.platformAuditLog.push(record)
       return record
     }),
@@ -330,7 +431,7 @@ describe('bridgeAuditEvent', () => {
   })
 
   it('handles adapter fetch failure gracefully', async () => {
-    mockPrisma.auditEvent.findUnique.mockRejectedValueOnce(new Error('DB error') as never)
+    mockPrisma.platformAuditLog.findFirst.mockRejectedValueOnce(new Error('DB error') as never)
 
     const result = await bridgeAuditEvent('auditos', 'evt-1', 'org-1')
     expect(result.ok).toBe(false)
@@ -422,7 +523,7 @@ describe('bulkB ridge', () => {
     const event1 = makeAuditEventEvent({ eventType: 'OK' })
     mockStore.auditEvent.push(event1)
 
-    mockPrisma.auditEvent.findUnique
+    mockPrisma.platformAuditLog.findFirst
       .mockResolvedValueOnce(event1 as never)
       .mockRejectedValueOnce(new Error('Network error') as never)
       .mockResolvedValueOnce(event1 as never)

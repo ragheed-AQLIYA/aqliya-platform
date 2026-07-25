@@ -1,8 +1,12 @@
 // ─── SIEM Delivery Channels ───
 
 import { writeFile } from "node:fs/promises";
+import { createLogger } from "@/lib/observability/logger";
 import { join } from "node:path";
 import { getStorageProvider } from "@/lib/platform/storage";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 export interface DeliveryResult {
   ok: boolean;
@@ -58,7 +62,7 @@ export async function deliverToHttp(
     return { ok: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.warn(`[SIEM] HTTP delivery failed: ${message}`);
+    logger.warn("[SIEM]HTTP delivery failed: ${message}");
     return { ok: false, error: message };
   }
 }
@@ -86,7 +90,7 @@ export async function deliverToSplunk(
     return { ok: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.warn(`[SIEM] Splunk HEC delivery failed: ${message}`);
+    logger.warn("[SIEM]Splunk HEC delivery failed: ${message}");
     return { ok: false, error: message };
   }
 }
@@ -103,7 +107,7 @@ export async function deliverToFile(
     return { ok: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.warn(`[SIEM] File delivery failed: ${message}`);
+    logger.warn("[SIEM]File delivery failed: ${message}");
     return { ok: false, error: message };
   }
 }
@@ -126,7 +130,7 @@ export async function deliverToS3(
     return { ok: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.warn(`[SIEM] S3 delivery failed: ${message}`);
+    logger.warn("[SIEM]S3 delivery failed: ${message}");
     return { ok: false, error: message };
   }
 }

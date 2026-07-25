@@ -323,37 +323,51 @@ export async function getActiveEscalations(): Promise<EscalationCheck[]> {
 
   const activeRules = await prisma.decisionEscalationRule.findMany({
     where: { isActive: true },
+    take: 100,
   })
 
   const results: EscalationCheck[] = []
+
+  const orConditions = activeRules.map((rule) => {
+    const deadline = new Date(
+      now.getTime() - rule.escalateAfterHours * 60 * 60 * 1000,
+    )
+    return {
+      organizationId: rule.organizationId,
+      status: 'IN_REVIEW' as const,
+      updatedAt: { lte: deadline },
+      ...(rule.decisionTemplateId
+        ? { id: rule.decisionTemplateId }
+        : {}),
+    }
+  })
+
+  const allOverdue = await prisma.decision.findMany({
+    where: { OR: orConditions },
+    select: { id: true, title: true, updatedAt: true, organizationId: true },
+    take: 100,
+  })
 
   for (const rule of activeRules) {
     const deadline = new Date(
       now.getTime() - rule.escalateAfterHours * 60 * 60 * 1000,
     )
-
-    const overdueDecisions = await prisma.decision.findMany({
-      where: {
-        organizationId: rule.organizationId,
-        status: 'IN_REVIEW',
-        updatedAt: { lte: deadline },
-        ...(rule.decisionTemplateId
-          ? { id: rule.decisionTemplateId }
-          : {}),
-      },
-      select: { id: true, title: true, updatedAt: true },
-    })
-
-    for (const d of overdueDecisions) {
-      results.push({
-        decisionId: d.id,
-        decisionTitle: d.title,
-        escalationRuleId: rule.id,
-        targetRoleSlug: rule.targetRoleSlug,
-        deadlinePassedAt: new Date(
-          d.updatedAt.getTime() + rule.escalateAfterHours * 60 * 60 * 1000,
-        ),
-      })
+    for (const d of allOverdue) {
+      if (
+        d.organizationId === rule.organizationId &&
+        d.updatedAt <= deadline &&
+        (!rule.decisionTemplateId || d.id === rule.decisionTemplateId)
+      ) {
+        results.push({
+          decisionId: d.id,
+          decisionTitle: d.title,
+          escalationRuleId: rule.id,
+          targetRoleSlug: rule.targetRoleSlug,
+          deadlinePassedAt: new Date(
+            d.updatedAt.getTime() + rule.escalateAfterHours * 60 * 60 * 1000,
+          ),
+        })
+      }
     }
   }
 
@@ -362,18 +376,22 @@ export async function getActiveEscalations(): Promise<EscalationCheck[]> {
 
 export async function processEscalations(): Promise<number> {
   const escalations = await getActiveEscalations()
+  if (escalations.length === 0) return 0
+
+  const escDecisionIds = escalations.map(e => e.decisionId)
+  const existingEvents = await prisma.decisionGovEvent.findMany({
+    where: {
+      decisionId: { in: escDecisionIds },
+      action: 'ESCALATE',
+    },
+    select: { decisionId: true, escalationRuleId: true },
+  })
+  const existingKeySet = new Set(existingEvents.map(e => `${e.decisionId}:${e.escalationRuleId}`))
+
   let count = 0
 
   for (const esc of escalations) {
-    const existingEvents = await prisma.decisionGovEvent.count({
-      where: {
-        decisionId: esc.decisionId,
-        action: 'ESCALATE',
-        escalationRuleId: esc.escalationRuleId,
-      },
-    })
-
-    if (existingEvents > 0) {
+    if (existingKeySet.has(`${esc.decisionId}:${esc.escalationRuleId}`)) {
       continue
     }
 
@@ -415,6 +433,7 @@ export async function getDecisionEventLog(
   const events = await prisma.decisionGovEvent.findMany({
     where: { decisionId },
     orderBy: { createdAt: 'asc' },
+    take: 100,
   })
 
   return events.map((e) => ({

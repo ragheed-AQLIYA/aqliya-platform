@@ -295,8 +295,7 @@ describe("L0-07: Cross-Tenant Isolation", () => {
       "DecisionEvidence",
       "DecisionMonitoringSignal",
       "DecisionRiskAlert",
-      "AuditLog",
-      "LocalContentProject",
+            "LocalContentProject",
       "SalesAccount",
       "SalesDeal",
       "SalesInteraction",
@@ -304,8 +303,7 @@ describe("L0-07: Cross-Tenant Isolation", () => {
       "SalesProposal",
       "SalesReview",
       "SalesApproval",
-      "SalesAuditEvent",
-      "SalesPipeline",
+            "SalesPipeline",
       "SalesPipelineStage",
     ]
 
@@ -341,8 +339,7 @@ describe("L0-07: Cross-Tenant Isolation", () => {
       const engagementChainModels = [
         "AuditFinding",
         "AuditRecommendation",
-        "AuditEvent",
-        "AuditReviewComment",
+                "AuditReviewComment",
         "AuditApprovalRecord",
         "AuditEvidence",
         "AuditTrialBalance",

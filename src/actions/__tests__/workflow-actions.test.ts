@@ -1,4 +1,4 @@
-﻿// ─── Unit/Integration Test: WorkflowOS Actions ───
+// ─── Unit/Integration Test: WorkflowOS Actions ───
 // Tests template CRUD, workflow record lifecycle, evidence, and export approval.
 // Uses mocked Prisma — no database required.
 
@@ -75,12 +75,15 @@ jest.mock("@/lib/prisma", () => ({
       findMany: mockWorkflowEvidenceFindMany,
       count: mockWorkflowEvidenceCount,
     },
-    workflowAuditEvent: {
+    platformAuditLog: {
       create: mockWorkflowAuditEventCreate,
       findMany: mockWorkflowAuditEventFindMany,
     },
     user: {
       findUnique: mockUserFindUnique,
+    },
+    platformAuditLog: {
+      findMany: jest.fn().mockResolvedValue([]),
     },
     $transaction: jest.fn((ops) => Promise.all(ops)),
   },
@@ -769,6 +772,7 @@ describe("downloadWorkflowExport", () => {
     mockWorkflowAuditEventFindMany.mockResolvedValue([]);
     mockWorkflowTemplateFindUnique.mockResolvedValue({ name: "نموذج مراجعة العقود", category: "review" });
     mockWorkflowAuditEventCreate.mockResolvedValue({});
+    // platformAuditLog already mocked in jest.mock above
 
     const result = await downloadWorkflowExport("record-1");
 

@@ -18,8 +18,9 @@ export async function GET(
   const { projectId, reportId } = await params;
 
   try {
-    const user = await getCurrentUser();
-    await assertProjectAccess(projectId, "view");
+    const ctx = await assertProjectAccess(projectId, "view");
+    const user = ctx.user;
+    const organizationId = ctx.project.organizationId;
 
     const report = await prisma.localContentReport.findUnique({
       where: { id: reportId },

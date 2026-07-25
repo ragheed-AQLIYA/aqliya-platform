@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { clientLogger } from "@/lib/observability/client-logger";
 
 export default function SalesError({
   error,
@@ -14,7 +15,7 @@ export default function SalesError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[SalesOS Error Boundary]", error);
+    clientLogger.error("[SalesOS Error Boundary]", error);
   }, [error]);
 
   return (

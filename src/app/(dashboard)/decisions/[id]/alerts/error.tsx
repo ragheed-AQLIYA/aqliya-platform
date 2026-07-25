@@ -1,5 +1,7 @@
 "use client";
 
+import { clientLogger } from "@/lib/observability/client-logger";
+
 import { Bell, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -11,7 +13,7 @@ export default function AlertsError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Alerts error:", error);
+    clientLogger.error("Alerts error:", error);
   }, [error]);
 
   return (

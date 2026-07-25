@@ -2,7 +2,7 @@
 
 import { runGenericSimulation, canRunSimulation, type SimulationInput, deriveScores } from "@/lib/simulation/simulation-engine"
 import { runSimulation, type TenderInput } from "@/lib/simulation/tender-simulation"
-import { buildScoringInputFromDecision } from "../common"
+import { buildScoringInputFromDecision, adaptDecisionToScoringInput, isValidDecisionType } from "../common"
 import type { ScenarioScore, SimulationExecutionResult } from "./common"
 
 export async function runSimulationCore(
@@ -53,13 +53,16 @@ export async function runSimulationCore(
       overallDecisionScore: r.overallDecisionScore,
     }))
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prisma Decision includes all fields needed by ScoringDecisionInput
-    const scoringData = buildScoringInputFromDecision(decision as any)
+    const scoringInput = adaptDecisionToScoringInput(decision)
+    const scoringData = buildScoringInputFromDecision(scoringInput)
     const derived = deriveScores(scoringData)
     const riskLevel = (decision.risks?.[0]?.level as "LOW" | "MEDIUM" | "HIGH") ?? "MEDIUM"
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- decision.type is a string matching DecisionType union
-    const prereqs = canRunSimulation(decision.type as any, {
+    if (!isValidDecisionType(decision.type)) {
+      return { success: false, error: `Invalid decision type: ${decision.type}`, missingInputs: [], recommendedNextStep: "Fix decision type" }
+    }
+
+    const prereqs = canRunSimulation(decision.type, {
       strategicFitScore: derived.strategicFitScore,
       riskLevel,
     })
@@ -69,8 +72,7 @@ export async function runSimulationCore(
 
     const simulationInput: SimulationInput = {
       decisionId,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- decision.type is a string casting to DecisionType enum
-      decisionType: decision.type as any,
+      decisionType: decision.type,
       strategicFitScore: derived.strategicFitScore,
       riskLevel,
       derivedScores: derived,

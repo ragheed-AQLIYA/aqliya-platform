@@ -54,7 +54,7 @@
 
 ### SalesOS, organizations, settings
 
-- `SalesOS` current runtime surface is L6 Production-hardened commercial intelligence workspace at `/sales/*` (32 routes, 45 test files, full boundaries, 12 intelligence sub-engines, CRM sync, forecasting).
+- `SalesOS` current runtime surface is L6 Production-hardened commercial intelligence workspace at `/sales/*` (32 routes, 878+ tests across 86 test files, full boundaries, 12 intelligence sub-engines, CRM sync, forecasting).
 - `/organizations/*` surface is L5 pilot-ready with real Prisma data.
 - `/settings` generic surface is internal preview/prototype only (L2 shell for main page, L4 for sub-routes).
 - These must not be shown as implemented v0.1 operational modules (except SalesOS which is production-hardened).
@@ -123,7 +123,7 @@
 
 ### LocalContentOS and SimulationOS
 
-- `LocalContentOS` = strategic second product with real workspace at `/local-content/*` (L6 Production-hardened). All 9 LC gaps closed: supplier scoring engine, tender matching, multi-reviewer approval routing, classification rule admin, Arabic PDF font fidelity, spend analytics, trend analytics, ERP integration (SAP/Oracle/CSV), Content Studio scope definition. 27 routes with full error/loading/not-found boundaries. 265+ tests PASS. AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. Marketing page at `/products/local-content` is not the workspace.
+- `LocalContentOS` = strategic second product with real workspace at `/local-content/*` (L6 Production-hardened). All 9 LC gaps closed: supplier scoring engine, tender matching, multi-reviewer approval routing, classification rule admin, Arabic PDF font fidelity, spend analytics, trend analytics, ERP integration (SAP/Oracle/CSV), Content Studio scope definition. 27 routes with full error/loading/not-found boundaries. 321+ tests PASS. AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. Marketing page at `/products/local-content` is not the workspace.
 - `SimulationOS` = current marketing/category label, not standalone runtime
 
 ## Release-Scope Mapping

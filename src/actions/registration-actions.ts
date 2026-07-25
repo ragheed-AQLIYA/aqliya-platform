@@ -25,6 +25,18 @@ function toSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
 }
 
+/**
+ * Self-registration server action — pre-auth flow.
+ *
+ * This action runs BEFORE any user session exists. enforce() cannot be
+ * called because there is no authenticated user to authorize. Access is
+ * gated by:
+ *   1. requireEnabled("tenant.self-service") — feature flag
+ *   2. Duplicate slug/email checks
+ *   3. Input validation
+ *
+ * Exempted from ACTIONS_USE_ENFORCE compliance rule (see compliance.mjs).
+ */
 export async function registerTenantAction(
   input: RegisterTenantInput,
 ): Promise<RegisterTenantResult> {
@@ -50,12 +62,13 @@ export async function registerTenantAction(
     throw new Error("اسم المؤسسة غير صالح — يجب أن يحتوي على أحرف لاتينية")
   }
 
-  const existingOrg = await prisma.platformOrganization.findUnique({ where: { slug } })
+  const [existingOrg, existingUser] = await Promise.all([
+    prisma.platformOrganization.findUnique({ where: { slug } }),
+    prisma.user.findUnique({ where: { email: adminEmail } }),
+  ])
   if (existingOrg) {
     throw new Error(`يوجد مؤسسة مسجلة بالفعل بالاسم "${organizationName}"`)
   }
-
-  const existingUser = await prisma.user.findUnique({ where: { email: adminEmail } })
   if (existingUser) {
     throw new Error("البريد الإلكتروني مسجل بالفعل")
   }

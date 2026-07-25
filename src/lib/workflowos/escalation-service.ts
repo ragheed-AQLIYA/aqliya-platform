@@ -90,7 +90,7 @@ export async function escalateExportRequest(
   return record;
 }
 
-export async function getEscalatedRecords(organizationId: string) {
+async function getEscalatedRecords(organizationId: string) {
   return prisma.workflowRecord.findMany({
     where: {
       organizationId,

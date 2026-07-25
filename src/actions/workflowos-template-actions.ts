@@ -1,5 +1,7 @@
 "use server";
 
+import { createLogger } from "@/lib/observability/logger";
+
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
@@ -7,6 +9,9 @@ import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { revalidatePath } from "next/cache";
 import crypto from "node:crypto";
 import type { Prisma } from "@prisma/client";
+
+
+const logger = createLogger({ product: "platform", action: "unknown" });
 
 function mapAuthError(error: unknown): string {
   const msg = error instanceof Error ? error.message : "";
@@ -69,7 +74,7 @@ export async function createTemplate(data: {
     revalidatePath("/workflowos/templates");
     return { success: true, data: template };
   } catch (error) {
-    if (!isExpectedAccessDeniedError(error)) console.error("Error creating template:", error);
+    if (!isExpectedAccessDeniedError(error)) logger.error("Error creating template:", error instanceof Error ? error : undefined);
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -118,7 +123,7 @@ export async function updateTemplate(
     revalidatePath("/workflowos/templates");
     return { success: true, data: template };
   } catch (error) {
-    if (!isExpectedAccessDeniedError(error)) console.error("Error updating template:", error);
+    if (!isExpectedAccessDeniedError(error)) logger.error("Error updating template:", error instanceof Error ? error : undefined);
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -152,7 +157,7 @@ export async function publishTemplate(id: string) {
     revalidatePath("/workflowos/templates");
     return { success: true, data: template };
   } catch (error) {
-    if (!isExpectedAccessDeniedError(error)) console.error("Error publishing template:", error);
+    if (!isExpectedAccessDeniedError(error)) logger.error("Error publishing template:", error instanceof Error ? error : undefined);
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -179,7 +184,7 @@ export async function archiveTemplate(id: string) {
     revalidatePath("/workflowos/templates");
     return { success: true, data: template };
   } catch (error) {
-    if (!isExpectedAccessDeniedError(error)) console.error("Error archiving template:", error);
+    if (!isExpectedAccessDeniedError(error)) logger.error("Error archiving template:", error instanceof Error ? error : undefined);
     return { success: false, error: mapAuthError(error) };
   }
 }
@@ -197,7 +202,7 @@ export async function listTemplates(status?: string) {
     });
     return { success: true, data: templates };
   } catch (error) {
-    if (!isExpectedAccessDeniedError(error)) console.error("Error listing templates:", error);
+    if (!isExpectedAccessDeniedError(error)) logger.error("Error listing templates:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل جلب القوالب" };
   }
 }
@@ -265,7 +270,7 @@ export async function registerWebhookAction(
     });
     return { success: true, data: newConfig };
   } catch (error) {
-    console.error("Error registering webhook:", error);
+    logger.error("Error registering webhook:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل تسجيل webhook" };
   }
 }
@@ -286,7 +291,7 @@ export async function testWebhookAction(organizationId: string, webhookId: strin
     );
     return { success: true, data: result };
   } catch (error) {
-    console.error("Error testing webhook:", error);
+    logger.error("Error testing webhook:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل اختبار webhook" };
   }
 }
@@ -297,7 +302,7 @@ export async function listWebhooksAction(organizationId: string) {
     const configs = await getWebhookConfigs(organizationId);
     return { success: true, data: configs };
   } catch (error) {
-    console.error("Error listing webhooks:", error);
+    logger.error("Error listing webhooks:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل جلب webhooks" };
   }
 }
@@ -320,7 +325,7 @@ export async function deleteWebhookAction(organizationId: string, webhookId: str
     });
     return { success: true };
   } catch (error) {
-    console.error("Error deleting webhook:", error);
+    logger.error("Error deleting webhook:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل حذف webhook" };
   }
 }

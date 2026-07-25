@@ -85,7 +85,7 @@ export default async function AuditTrailPage({
                         {ACTION_LABELS[e.action] || e.action}
                       </Badge>
                       <span className="text-[10px] text-muted-foreground">
-                        {e.entityType} {e.entityId.slice(0, 8)}
+                        {e.targetType} {(e.targetId ?? "").slice(0, 8)}
                       </span>
                     </div>
                   </div>

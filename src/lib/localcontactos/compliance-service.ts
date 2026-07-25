@@ -105,11 +105,13 @@ export async function getExportComplianceSummary(
   const exportRequests = await prisma.contactExportRequest.findMany({
     where: { contactId },
     select: { status: true },
+    take: 100,
   });
 
   const reviews = await prisma.contactReview.findMany({
     where: { organizationId: user.organizationId, contactId },
     select: { status: true },
+    take: 100,
   });
 
   return {

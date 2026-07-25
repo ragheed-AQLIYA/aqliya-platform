@@ -4,7 +4,7 @@
  * memory, bundle, slow API heuristics. Findings only.
  */
 
-import { PERFORMANCE } from "../config.mjs";
+import { PERFORMANCE, buildExclusionFn } from "../config.mjs";
 import {
   collectSourceFiles,
   readText,
@@ -18,6 +18,9 @@ import { writeAgentReport } from "../lib/report.mjs";
 import { isClientModule, extractImports } from "../lib/ast-lite.mjs";
 
 const AGENT = "performance";
+
+/** Performance scanner excludes tests, mocks, seeds, demos */
+const isExcluded = buildExclusionFn("performance");
 
 export async function run() {
   const findings = [];
@@ -62,14 +65,17 @@ export async function run() {
   for (const absFile of files) {
     const fileRel = rel(absFile);
     if (fileRel.endsWith(".prisma")) continue;
+    // Skip excluded files (tests, seeds, mocks, fixtures)
+    if (isExcluded(fileRel)) continue;
     const content = readText(absFile);
     if (!content) continue;
 
     // N+1: await inside for/map with prisma
-    if (
-      /for\s*\([^)]+\)\s*\{[\s\S]{0,200}?await\s+prisma\./m.test(content) ||
-      /\.map\s*\(\s*async\s*\([\s\S]{0,200}?await\s+prisma\./m.test(content)
-    ) {
+    // Exclude .map(async) wrapped in Promise.all (parallelized, not sequential N+1)
+    const hasPromiseAllMap = /Promise\.all\s*\(\s*[\s\S]*?\.map\s*\(\s*async/.test(content);
+    const forN1 = /for\s*\([^)]+\)\s*\{[\s\S]{0,200}?await\s+prisma\./m.test(content);
+    const mapN1 = /\.map\s*\(\s*async\s*\([\s\S]{0,200}?await\s+prisma\./m.test(content) && !hasPromiseAllMap;
+    if (forN1 || mapN1) {
       n1Suspects += 1;
       findings.push(
         finding({
@@ -86,11 +92,9 @@ export async function run() {
 
     // findMany without take/limit
     if (PERFORMANCE.prismaFindManyWithoutTake) {
-      const fm = content.match(/prisma\.\w+\.findMany\s*\(\s*\{/g) || [];
-      for (let i = 0; i < fm.length; i++) {
-        // rough: if file has findMany but no take nearby — flag once per file
-      }
-      if (/findMany\s*\(/.test(content) && !/\btake\s*:/.test(content) && /prisma\./.test(content)) {
+      // Strip comments to avoid matching findMany in JSDoc/examples
+      const codeOnly = content.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      if (/prisma\.\w+\.findMany\s*\(/.test(codeOnly) && !/\btake\s*:/.test(codeOnly) && /prisma\./.test(codeOnly)) {
         findManyNoTake += 1;
         if (findManyNoTake <= 30) {
           findings.push(
@@ -158,8 +162,12 @@ export async function run() {
 
     // Server actions — large files / many sequential awaits
     if (fileRel.startsWith("src/actions/")) {
-      const awaits = (content.match(/\bawait\b/g) || []).length;
-      if (awaits >= 25) {
+      // Count only awaits NOT inside Promise.all (parallelized awaits are fine)
+      const promiseAllAwaits = (content.match(/Promise\.all(?:Settled)?\s*\(\s*[[\s\S]*?\]\s*\)/g) || [])
+        .reduce((sum, block) => sum + (block.match(/\bawait\b/g) || []).length, 0);
+      const totalAwaits = (content.match(/\bawait\b/g) || []).length;
+      const sequentialAwaits = totalAwaits - promiseAllAwaits;
+      if (sequentialAwaits >= 40) {
         actionHeavy += 1;
         findings.push(
           finding({
@@ -167,7 +175,7 @@ export async function run() {
             severity: "medium",
             category: "server-actions",
             title: "Server action module with many awaits",
-            evidence: `${awaits} await expressions`,
+            evidence: `${sequentialAwaits} sequential await expressions (${totalAwaits} total, ${promiseAllAwaits} parallelized)`,
             files: [fileRel],
             suggestion: "Parallelize independent awaits; cache stable reads.",
           })

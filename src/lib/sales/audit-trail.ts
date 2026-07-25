@@ -4,7 +4,7 @@ import { SalesAuditActions } from "./audit-events";
 
 export const SALES_AUDIT_TRAIL_DEFAULT_LIMIT = 100;
 export const SALES_AUDIT_TRAIL_MAX_LIMIT = 100;
-export const DEFAULT_AUDIT_TRAIL_LIMIT = SALES_AUDIT_TRAIL_DEFAULT_LIMIT;
+const DEFAULT_AUDIT_TRAIL_LIMIT = SALES_AUDIT_TRAIL_DEFAULT_LIMIT;
 
 export interface SalesAuditTrailFilters {
   targetType?: string;
@@ -18,10 +18,10 @@ export interface SalesAuditTrailFilters {
 export interface SalesAuditTrailRow {
   id: string;
   action: string;
-  actorId: string;
+  actorId: string | null;
   actorName: string | null;
-  targetType: string;
-  targetId: string;
+  targetType: string | null;
+  targetId: string | null;
   metadata: unknown;
   createdAt: Date;
 }
@@ -85,8 +85,12 @@ export function parseSalesAuditTrailFilters(params: {
 export function buildSalesAuditTrailWhere(
   organizationId: string,
   filters: SalesAuditTrailFilters = {},
-): Prisma.SalesAuditEventWhereInput {
-  const where: Prisma.SalesAuditEventWhereInput = { organizationId };
+): Prisma.PlatformAuditLogWhereInput {
+  // Migrated from SalesAuditEventWhereInput — added productKey: "salesos"
+  const where: Prisma.PlatformAuditLogWhereInput = {
+    productKey: "salesos",
+    organizationId,
+  };
 
   if (filters.targetType) {
     where.targetType = filters.targetType;
@@ -118,7 +122,9 @@ export async function listOrgSalesAuditEvents(
     SALES_AUDIT_TRAIL_MAX_LIMIT,
   );
 
-  return prisma.salesAuditEvent.findMany({
+  // OLD: return prisma.salesAuditEvent.findMany({
+  // Migrated to platformAuditLog with productKey: "salesos"
+  return prisma.platformAuditLog.findMany({
     where: buildSalesAuditTrailWhere(organizationId, filters),
     orderBy: { createdAt: "desc" },
     take: limit,
@@ -168,7 +174,7 @@ export function salesAuditActionLabelAr(action: string): string {
   return ACTION_LABELS_AR[action] ?? action;
 }
 
-export function resolveSalesAuditTargetHref(
+function resolveSalesAuditTargetHref(
   targetType: string,
   targetId: string,
 ): string | null {

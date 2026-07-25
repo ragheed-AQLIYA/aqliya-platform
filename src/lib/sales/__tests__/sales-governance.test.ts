@@ -3,7 +3,7 @@ jest.mock("@/lib/prisma", () => ({
     salesDeal: { findFirst: jest.fn(), update: jest.fn() },
     salesPipelineStage: { findFirst: jest.fn() },
     salesEvidenceLink: { count: jest.fn() },
-    salesAuditEvent: { create: jest.fn() },
+    platformAuditLog: { create: jest.fn() },
   },
 }));
 
@@ -148,7 +148,7 @@ describe("SalesOS governance (PR-10)", () => {
         stage: { slug: "pilot_active" },
       });
       prisma.salesDeal.update.mockResolvedValue({ id: "deal-1" });
-      prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-1" });
+      prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-1" });
 
       const record = await recordReviewDecision(
         { organizationId: "org-a", platformOrganizationId: "plat-1" },
@@ -162,7 +162,7 @@ describe("SalesOS governance (PR-10)", () => {
 
       expect(record.decision).toBe("approved");
       expect(prisma.salesDeal.update).toHaveBeenCalled();
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.GOVERNANCE_REVIEW_DECISION,
@@ -198,7 +198,7 @@ describe("SalesOS governance (PR-10)", () => {
         account: { id: "acc-1", name: "Acct" },
         stage: { id: "stage-won", name: "Won", slug: "won", sortOrder: 8 },
       });
-      prisma.salesAuditEvent.create.mockResolvedValue({ id: "evt-gov" });
+      prisma.platformAuditLog.create.mockResolvedValue({ id: "evt-gov" });
 
       await updateSalesDeal(
         "deal-1",
@@ -210,7 +210,7 @@ describe("SalesOS governance (PR-10)", () => {
         { id: "user-1", role: "OPERATOR" },
       );
 
-      expect(prisma.salesAuditEvent.create).toHaveBeenCalledWith(
+      expect(prisma.platformAuditLog.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             action: SalesAuditActions.GOVERNANCE_OVERRIDE,

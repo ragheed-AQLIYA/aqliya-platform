@@ -17,6 +17,9 @@ import {
 } from "./reconciliation-checks";
 import { isFsV2Enabled } from "@/lib/audit/fs-engine";
 import type { ReconciliationRunResult } from "./types";
+import { createLogger } from "@/lib/observability/logger";
+
+const logger = createLogger({ product: "audit-os", action: "reconciliation-engine" });
 
 function isMissingTableError(err: unknown): boolean {
   return (
@@ -35,8 +38,8 @@ async function loadLeadSchedules(engagementId: string) {
     });
   } catch (err) {
     if (isMissingTableError(err)) {
-      console.warn(
-        `[Reconciliation] LeadSchedule unavailable — schedule ties skipped for ${engagementId}`,
+      logger.warn(
+        `LeadSchedule unavailable — schedule ties skipped for ${engagementId}`,
       );
       return [];
     }
@@ -172,9 +175,9 @@ export async function runReconciliationForEngagement(
     );
     await syncReconciliationToReportingGraph(engagementId, result);
   } catch (err) {
-    console.error(
-      `[Reconciliation] graph sync failed for ${engagementId}`,
-      err,
+    logger.error(
+      `Reconciliation graph sync failed for ${engagementId}`,
+      err instanceof Error ? err : undefined,
     );
   }
 

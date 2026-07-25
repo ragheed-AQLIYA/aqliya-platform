@@ -76,7 +76,7 @@ export default function DecisionScenariosPage({
         getWorkflowReadiness(decisionId),
       ]);
 
-      if (scenariosResult.success && scenariosResult.data) {
+      if (scenariosResult.success) {
         setIntake(scenariosResult.data.intake);
         setFrameworkState(scenariosResult.data.frameworkState);
         setScenarioState(scenariosResult.data.scenarioState);
@@ -86,7 +86,7 @@ export default function DecisionScenariosPage({
         setError(scenariosResult.error || "Failed to load decision scenarios");
       }
 
-      if (readinessResult.success && readinessResult.data) {
+      if (readinessResult.success) {
         setReadiness(readinessResult.data);
       }
 
@@ -121,12 +121,12 @@ export default function DecisionScenariosPage({
 
     const result = await updateDecisionScenarios(id, { scenarios });
 
-    if (result.success && result.data) {
+    if (result.success) {
       setScenarios(result.data.decisionScenarios);
       setScenarioState(result.data.scenarioState);
       setSuccess(true);
       const readinessResult = await getWorkflowReadiness(id);
-      if (readinessResult.success && readinessResult.data) {
+      if (readinessResult.success) {
         setReadiness(readinessResult.data);
       }
       setTimeout(() => setSuccess(false), 3000);

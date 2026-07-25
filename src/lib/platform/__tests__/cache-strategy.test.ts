@@ -31,11 +31,16 @@ jest.mock("@/lib/prisma", () => ({
   },
 }));
 
+const mockRedisClient = jest.requireMock("@/lib/platform/redis-client");
+const { isRedisAvailable } = mockRedisClient;
+
 import {
   getCacheKey,
   getCachedOrFetch,
+  invalidateCacheByPrefix,
   invalidateDashboardCaches,
   invalidateProductCache,
+  warmDashboardCaches,
   DASHBOARD_CACHE_TTL_MS,
   ENTITY_CACHE_TTL_MS,
 } from "@/lib/platform/cache-strategy";
@@ -43,6 +48,18 @@ import { cacheAdapter } from "@/lib/platform/redis-cache-adapter";
 
 beforeEach(() => {
   jest.clearAllMocks();
+  // Restore default prisma mock implementations that may have been overridden
+  const prismaMock = jest.requireMock("@/lib/prisma");
+  prismaMock.prisma.decision.findMany.mockResolvedValue([]);
+  prismaMock.prisma.decision.count.mockResolvedValue(0);
+  prismaMock.prisma.workflowRecord.findMany.mockResolvedValue([]);
+  prismaMock.prisma.workflowRecord.count.mockResolvedValue(0);
+  prismaMock.prisma.localContentReview.findMany.mockResolvedValue([]);
+  prismaMock.prisma.salesReview.findMany.mockResolvedValue([]);
+  prismaMock.prisma.auditRiskAssessment.findMany.mockResolvedValue([]);
+  prismaMock.prisma.auditFinding.findMany.mockResolvedValue([]);
+  prismaMock.prisma.auditAiOutput.count.mockResolvedValue(0);
+  prismaMock.prisma.platformAuditLog.count.mockResolvedValue(0);
 });
 
 describe("getCacheKey", () => {
@@ -138,6 +155,33 @@ describe("getCachedOrFetch", () => {
   });
 });
 
+describe("invalidateCacheByPrefix", () => {
+  it("calls del with the given prefix", async () => {
+    (cacheAdapter.del as jest.Mock).mockResolvedValue(undefined);
+
+    await invalidateCacheByPrefix("dashboard:decision:org-abc");
+
+    expect(cacheAdapter.del).toHaveBeenCalledTimes(1);
+    expect(cacheAdapter.del).toHaveBeenCalledWith("dashboard:decision:org-abc");
+  });
+
+  it("accepts arbitrary prefix strings", async () => {
+    (cacheAdapter.del as jest.Mock).mockResolvedValue(undefined);
+
+    await invalidateCacheByPrefix("custom:prefix:*");
+    expect(cacheAdapter.del).toHaveBeenCalledWith("custom:prefix:*");
+  });
+
+  it("propagates errors from cacheAdapter.del when mock rejects", async () => {
+    (cacheAdapter.del as jest.Mock).mockRejectedValue(new Error("Redis connection lost"));
+
+    // The real cacheAdapter.del in redis-cache-adapter.ts catches errors internally.
+    // However, since the adapter is mocked in tests, the mock rejection propagates
+    // as invalidateCacheByPrefix does not have its own try/catch.
+    await expect(invalidateCacheByPrefix("failing:key")).rejects.toThrow("Redis connection lost");
+  });
+});
+
 describe("invalidateDashboardCaches", () => {
   it("clears all three dashboard cache prefixes for org", async () => {
     (cacheAdapter.del as jest.Mock).mockResolvedValue(undefined);
@@ -159,6 +203,116 @@ describe("invalidateProductCache", () => {
 
     expect(cacheAdapter.del).toHaveBeenCalledTimes(1);
     expect(cacheAdapter.del).toHaveBeenCalledWith("audit:engagement:eng-123");
+  });
+});
+
+describe("warmDashboardCaches", () => {
+  it("returns skipped when Redis is not available", async () => {
+    (isRedisAvailable as jest.Mock).mockResolvedValue(false);
+
+    const result = await warmDashboardCaches("org-skipped");
+
+    expect(result).toEqual([
+      {
+        key: "dashboard:*",
+        status: "skipped",
+        error: "Redis not available — skipping cache warming",
+      },
+    ]);
+    expect(cacheAdapter.set).not.toHaveBeenCalled();
+  });
+
+  it("warms all three dashboard caches when Redis is available", async () => {
+    (isRedisAvailable as jest.Mock).mockResolvedValue(true);
+    (cacheAdapter.set as jest.Mock).mockResolvedValue(undefined);
+
+    const result = await warmDashboardCaches("org-123");
+
+    // Expect exactly 3 warmed results
+    expect(result).toHaveLength(3);
+    expect(result.map((r) => r.status)).toEqual(["warmed", "warmed", "warmed"]);
+    expect(result.map((r) => r.key)).toEqual([
+      "dashboard:decision:org-123:metrics",
+      "dashboard:platform:org-123:health",
+      "dashboard:governance:org-123:items",
+    ]);
+
+    // Verify cache was set 3 times with dashboard TTL
+    expect(cacheAdapter.set).toHaveBeenCalledTimes(3);
+    expect(cacheAdapter.set).toHaveBeenCalledWith(
+      "dashboard:decision:org-123:metrics",
+      expect.any(Object),
+      DASHBOARD_CACHE_TTL_MS,
+    );
+    expect(cacheAdapter.set).toHaveBeenCalledWith(
+      "dashboard:platform:org-123:health",
+      expect.any(Object),
+      DASHBOARD_CACHE_TTL_MS,
+    );
+    expect(cacheAdapter.set).toHaveBeenCalledWith(
+      "dashboard:governance:org-123:items",
+      expect.any(Object),
+      DASHBOARD_CACHE_TTL_MS,
+    );
+  });
+
+  it("collects partial failures without stopping other warmers", async () => {
+    (isRedisAvailable as jest.Mock).mockResolvedValue(true);
+
+    // Make the decision warmer fail; use mockImplementation to isolate scope
+    const prismaMock = jest.requireMock("@/lib/prisma");
+    prismaMock.prisma.decision.findMany.mockRejectedValue(new Error("Decision DB timeout"));
+
+    const result = await warmDashboardCaches("org-fail");
+
+    // First warmer should be "failed", the other two "warmed"
+    expect(result).toHaveLength(3);
+    expect(result[0].status).toBe("failed");
+    expect(result[0].key).toBe("dashboard:decision:org-fail:metrics");
+    expect(result[0].error).toBe("Decision DB timeout");
+    expect(result[1].status).toBe("warmed");
+    expect(result[2].status).toBe("warmed");
+  });
+
+  it("stores computed metrics with correct structure", async () => {
+    (isRedisAvailable as jest.Mock).mockResolvedValue(true);
+    (cacheAdapter.set as jest.Mock).mockResolvedValue(undefined);
+
+    const result = await warmDashboardCaches("org-struct");
+
+    // Verify decision metrics structure
+    const decisionSetCall = (cacheAdapter.set as jest.Mock).mock.calls.find(
+      (c: unknown[]) => (c[0] as string).startsWith("dashboard:decision:"),
+    );
+    expect(decisionSetCall).toBeDefined();
+    const decisionValue = decisionSetCall[1];
+    expect(decisionValue).toHaveProperty("totalDecisions");
+    expect(decisionValue).toHaveProperty("approvedCount");
+    expect(decisionValue).toHaveProperty("byStatus");
+    expect(decisionValue).toHaveProperty("governanceMetrics");
+
+    // Verify platform health structure
+    const healthSetCall = (cacheAdapter.set as jest.Mock).mock.calls.find(
+      (c: unknown[]) => (c[0] as string).startsWith("dashboard:platform:"),
+    );
+    expect(healthSetCall).toBeDefined();
+    const healthValue = healthSetCall[1];
+    expect(healthValue).toHaveProperty("healthScore");
+    expect(healthValue).toHaveProperty("aiRunsToday");
+    expect(healthValue).toHaveProperty("status");
+
+    // Verify governance items structure
+    const govSetCall = (cacheAdapter.set as jest.Mock).mock.calls.find(
+      (c: unknown[]) => (c[0] as string).startsWith("dashboard:governance:"),
+    );
+    expect(govSetCall).toBeDefined();
+    const govValue = govSetCall[1];
+    expect(govValue).toHaveProperty("items");
+    expect(govValue).toHaveProperty("stats");
+    expect(govValue.stats).toHaveProperty("totalPending");
+
+    // All three warmers returned warmed
+    expect(result.map((r) => r.status)).toEqual(["warmed", "warmed", "warmed"]);
   });
 });
 

@@ -4,11 +4,37 @@ import { SectionEyebrow } from "@/components/enterprise";
 import { OperatingSystemMapVisual } from "@/components/visuals";
 import { publicOsStatus } from "@/lib/marketing/public-status";
 
-export const metadata: Metadata = {
-  title: "المنصة | AQLIYA Intelligence Core",
-  description:
-    "البنية الأساسية المشتركة التي تعتمد عليها جميع أنظمة عقلية  حوكمة، سير عمل، أدلة، وسجل تدقيق في نواة واحدة.",
-};
+export function generateMetadata(): Metadata {
+  const title = "المنصة | AQLIYA Intelligence Core";
+  const description =
+    "البنية الأساسية المشتركة التي تعتمد عليها جميع أنظمة عقلية  حوكمة، سير عمل، أدلة، وسجل تدقيق في نواة واحدة.";
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: "https://aqliya.com/platform",
+      siteName: "AQLIYA",
+      locale: "ar_SA",
+      type: "website",
+      images: [
+        {
+          url: "/og-platform.png",
+          width: 1200,
+          height: 630,
+          alt: "AQLIYA Intelligence Core - بنية المنصة",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-platform.png"],
+    },
+  };
+}
 
 const deploymentModels = [
   {
