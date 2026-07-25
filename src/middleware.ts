@@ -53,6 +53,7 @@ const publicExact = new Set([
   "/api/pilot-review",
   "/api/sales/intel/webhook",
   "/api/sales/intel/oauth",
+  "/api/platform/health",
 ]);
 
 const publicPrefixes = [

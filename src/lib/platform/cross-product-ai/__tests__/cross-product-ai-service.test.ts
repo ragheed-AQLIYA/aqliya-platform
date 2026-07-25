@@ -361,7 +361,10 @@ describe("CrossProductAI Service (refactored)", () => {
     })
 
     it("supports pagination with limit and offset", async () => {
+      // Create 10 sessions with staggered timestamps for deterministic sort
+      const baseTime = Date.now()
       for (let i = 0; i < 10; i++) {
+        // Override Date.now for the mock's createdAt via direct store manipulation
         await createAiSession({
           organizationId: "org-1",
           userId: "user-1",
@@ -369,21 +372,32 @@ describe("CrossProductAI Service (refactored)", () => {
           sourceAction: `action-${i}`,
           requestText: `Session ${i}`,
         })
+        // Ensure unique createdAt by backdating the store entry
+        // (mock creates with new Date() — we override after creation)
+        const entry = mockStore.aiCrossProductSession[mockStore.aiCrossProductSession.length - 1]
+        if (entry) entry.createdAt = new Date(baseTime + i * 1000)
       }
 
       // Default limit=50 gives all 10
       const all = await listSessions({})
       expect(all).toHaveLength(10)
 
-      // limit=3
+      // limit=3 — should return the 3 newest (desc order: Session 9, 8, 7)
       const limited = await listSessions({ limit: 3 })
       expect(limited).toHaveLength(3)
+      expect(limited[0].requestText).toBe("Session 9")
+      expect(limited[1].requestText).toBe("Session 8")
+      expect(limited[2].requestText).toBe("Session 7")
 
       // offset=5, limit=3
+      // createdAt desc: newest first → [9,8,7,6,5,4,3,2,1,0]
+      // skip 5 → skip 9,8,7,6,5 → remaining [4,3,2,1,0]
+      // take 3 → [4,3,2]
       const paginated = await listSessions({ limit: 3, offset: 5 })
       expect(paginated).toHaveLength(3)
-      // Sessions are ordered by createdAt desc, so offset 5 should skip the first 5
-      expect(paginated[0].requestText).toBe("Session 5")
+      expect(paginated[0].requestText).toBe("Session 4")
+      expect(paginated[1].requestText).toBe("Session 3")
+      expect(paginated[2].requestText).toBe("Session 2")
     })
   })
 

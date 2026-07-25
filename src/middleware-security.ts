@@ -63,8 +63,10 @@ const securityHeaders = {
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "Permissions-Policy":
     "camera=(), microphone=(), geolocation=(), interest-cohort=()",
-  // Strict CSP — no unsafe-inline or unsafe-eval.
-  // If pages use inline scripts, they must use nonces or hashes.
+  // Strict CSP — no unsafe-eval.
+  // style-src 'unsafe-inline' is required for Tailwind CSS v4 + shadcn/ui
+  // which generate inline styles during server rendering.
+  // script-src remains 'self' only (no unsafe-inline for scripts).
   "Content-Security-Policy":
     "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.sentry.io;",
   "X-Powered-By": "",
