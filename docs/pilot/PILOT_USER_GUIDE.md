@@ -1,4 +1,4 @@
-# دليل المستخدم الأولي / Pilot User Guide
+﻿# دليل المستخدم الأولي / Pilot User Guide
 
 > AQLIYA v0.1 — Pilot Program
 > Date: 2026-07-13
@@ -337,6 +337,61 @@ A: The error will be logged. Check the audit trail or contact support.
 - البريد الإلكتروني / Email: support@aqliya.com
 - التوثيق / Documentation: /docs
 - سجل التدقيق / Audit Trail: متوفر في كل صفحة / Available on every page
+
+
+---
+
+## Pilot Data Summary / ملخص البيانات التجريبية
+
+> **Updated:** 2026-07-25 | **Total:** 163+ institutional records across 8 product areas
+
+### Overview / نظرة عامة
+
+| Category / الفئة | Count / العدد | Details / تفاصيل |
+|-------------------|---------------|-------------------|
+| **Demo Users** | **8** | 2 ADMIN, 5 OPERATOR, 1 VIEWER |
+| **AuditOS** | **3 clients, 2 engagements** | 12 TB lines, 5 findings, 3 evidence, 2 review comments |
+| **DecisionOS** | **3 decisions** | 3 scenarios, 3 risks, 1 framework, 1 recommendation |
+| **LocalContentOS** | **2 projects** | 5 suppliers, 10 spend records, 3 findings, 3 evidence |
+| **SalesOS** | **4 accounts** | 1 pipeline (5 stages), 3 deals, 6 interactions |
+| **RiskOS** | **1 model, 1 assessment** | 3 risk procedures |
+| **Content Studio** | **3 workspaces** | 8 content items (3 PUBLISHED, 4 DRAFT, 1 IN_REVIEW) |
+| **LocalContactOS** | **5 contacts** | 3 relations, 4 interactions |
+| **PlatformAuditLog** | **20 entries** | 6 auditos, 3 decisionos, 4 localcontentos, 3 salesos, 2 riskos, 2 platform |
+
+### Demo Users / المستخدمين التجريبيين
+
+| Email | Name / الاسم | Role / الدور | Password |
+|-------|-------------|--------------|----------|
+| admin.pilot@aqliya.com | أحمد المنصوري | ADMIN | pilot123 |
+| partner.pilot@aqliya.com | خالد العتيبي | ADMIN | pilot123 |
+| manager.pilot@aqliya.com | سارة القحطاني | OPERATOR | pilot123 |
+| auditor.pilot@aqliya.com | محمد السبيعي | OPERATOR | pilot123 |
+| reviewer.pilot@aqliya.com | نورة الحربي | OPERATOR | pilot123 |
+| operator.pilot@aqliya.com | فهد الدوسري | OPERATOR | pilot123 |
+| analyst.pilot@aqliya.com | لينا الشمري | OPERATOR | pilot123 |
+| viewer.pilot@aqliya.com | عبدالله المطيري | VIEWER | pilot123 |
+
+### PlatformAuditLog Coverage / تغطية سجل التدقيق الموحد
+
+| Product Key | Entries | Sample Actions |
+|-------------|---------|----------------|
+| `auditos` | 6 | ENGAGEMENT_CREATED, TB_UPLOADED, FINDING_CREATED, REVIEW_SUBMITTED, EVIDENCE_UPLOADED |
+| `decisionos` | 3 | DECISION_CREATED, SUBMITTED_FOR_REVIEW, DECISION_APPROVED |
+| `localcontentos` | 4 | PROJECT_CREATED, FINDING_CREATED, SUPPLIER_ADDED, EVIDENCE_REVIEWED |
+| `salesos` | 3 | PIPELINE_CREATED, DEAL_CREATED, INTERACTION_LOGGED |
+| `riskos` | 2 | ASSESSMENT_CREATED, MODEL_CREATED |
+| `platform` | 2 | USER_CREATED, ORG_CREATED |
+
+### Verification Status / حالة التحقق
+
+| Check | Status |
+|-------|--------|
+| TypeScript Compilation | ✅ PASS |
+| Prisma Schema | ✅ PASS |
+| FK Consistency | ✅ PASS |
+| No Legacy Models | ✅ PASS (unified PlatformAuditLog only) |
+| Bilingual Data | ✅ Arabic-first, English metadata |
 
 ---
 

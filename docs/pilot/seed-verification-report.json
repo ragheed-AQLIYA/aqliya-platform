@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-07-25T07:07:06.631Z",
+  "seedFile": "C:\\Users\\PC\\Documents\\Aqliya\\prisma\\seed-pilot.ts",
+  "fileStats": {
+    "bytes": 54716,
+    "lines": 652
+  },
+  "typescript": {
+    "status": "PASS",
+    "message": "TypeScript compilation passed"
+  },
+  "prismaSchema": {
+    "status": "PASS",
+    "message": "Prisma schema is valid"
+  },
+  "users": {
+    "total": 8,
+    "admins": 2,
+    "operators": 5,
+    "viewers": 1
+  },
+  "auditOS": {
+    "auditClients": 3,
+    "engagements": 2,
+    "trialBalances": 1,
+    "tbLinesPerTB": 6,
+    "totalTBLines": 12,
+    "accountMappings": 1,
+    "evidence": 3,
+    "findings": 5,
+    "reviewComments": 1
+  },
+  "decisionOS": {
+    "decisions": 3,
+    "frameworks": 1,
+    "scenarios": 3,
+    "risks": 7,
+    "objectives": 1,
+    "alternatives": 2,
+    "recommendations": 1,
+    "evidence": 1
+  },
+  "localContentOS": {
+    "projects": 2,
+    "suppliers": 5,
+    "spendRecords": 13,
+    "findings": 3,
+    "evidenceEntries": 4
+  },
+  "salesOS": {
+    "pipelines": 1,
+    "stages": 5,
+    "accounts": 4,
+    "contacts": 13,
+    "deals": 3,
+    "interactions": 10
+  },
+  "riskOS": {
+    "riskModels": 1,
+    "riskAssessments": 1,
+    "riskProcedures": 3
+  },
+  "contentStudio": {
+    "workspaces": 3,
+    "items": 8
+  },
+  "localContactOS": {
+    "contacts": 5,
+    "relations": 3,
+    "interactions": 4
+  },
+  "platformAuditLog": {
+    "total": 20,
+    "auditos": 6,
+    "decisionos": 3,
+    "localcontentos": 4,
+    "salesos": 3,
+    "riskos": 2,
+    "platform": 2
+  },
+  "bilingual": {
+    "users": {
+      "total": 8,
+      "arabic": 8,
+      "bilingual": 8,
+      "arabicOnly": 0
+    },
+    "auditFindings": {
+      "total": 5,
+      "arabic": 5,
+      "bilingual": 5,
+      "arabicOnly": 0
+    },
+    "decisionTitles": {
+      "total": 3,
+      "arabic": 3,
+      "bilingual": 3,
+      "arabicOnly": 0
+    },
+    "lcProjects": {
+      "total": 2,
+      "arabic": 2,
+      "bilingual": 2,
+      "arabicOnly": 0
+    }
+  },
+  "fkConsistency": {
+    "status": "PASS",
+    "issues": []
+  },
+  "requiredFields": {
+    "createdByIdRefs": 60,
+    "status": "MANUAL_REVIEW"
+  },
+  "noLegacyModels": {
+    "status": "PASS",
+    "found": []
+  },
+  "totalInstitutionalRecords": 163
+}

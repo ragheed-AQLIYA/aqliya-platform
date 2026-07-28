@@ -58,6 +58,8 @@
     "seed:audit": "tsx prisma/seed-audit.ts",
     "seed:localcontent": "tsx prisma/seed-localcontent.ts",
     "seed:local-content": "tsx prisma/seed-local-content.ts",
+    "seed:pilot": "tsx prisma/seed-pilot.ts",
+    "verify:pilot": "node scripts/pilot/verify-pilot.mjs",
     "tb:preview": "tsx -r ./scripts/mock-server-only.cjs scripts/audit/tb-classification-preview.ts",
     "tb:upload": "tsx -r ./scripts/mock-server-only.cjs scripts/audit/tb-upload-demo.ts",
     "lc:matrix:import": "tsx scripts/localcontent/import-lc-verification-matrix.ts",

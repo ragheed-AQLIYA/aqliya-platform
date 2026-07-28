@@ -232,7 +232,7 @@ async function main() {
       data: { organizationId: auditOrg.id, name: "شركة النخبة للتجارة", registrationNumber: "CR-1010123456", industry: "retail", reportingFramework: "ifrs_for_smes", currencyCode: "SAR", status: "active", clientWorkspaceId: workspace.id, createdById: admin.id },
     }),
     prisma.auditClient.create({
-      data: { organizationId: auditOrg.id, name: "مؤسسة الأفق الهندسية", registrationNumber: "CR-1020654321", industry: "construction", reportingFramework: "ifrs_for_smes", currencyCode: "SAR", status: "active", clientWorkspaceId: workspace.id, createdById: admin.id },
+      data: { organizationId: auditOrg.id, name: "مؤسسة الأفق الهندسية", registrationNumber: "CR-1020654321", industry: "construction", reportingFramework: "ifrs_for_smes", currencyCode: "SAR", status: "active", clientWorkspaceId: workspace.id, createdById: admin.id }}),
     prisma.auditClient.create({
       data: { organizationId: auditOrg.id, name: "شركة الصحة الرقمية", registrationNumber: "CR-1090876543", industry: "healthcare", reportingFramework: "ifrs_for_smes", currencyCode: "SAR", status: "active", clientWorkspaceId: workspace.id, createdById: admin.id },
     }),
@@ -352,7 +352,7 @@ async function main() {
   const _auditLogPlaceholder = [
     { decisionId: decisions[0].id, organizationId: org.id, userId: admin.id, action: "DECISION_CREATED", entity: "decision", after: decisions[0].title },
     { decisionId: decisions[0].id, organizationId: org.id, userId: analyst.id, action: "SUBMITTED_FOR_REVIEW", entity: "decision", after: "تم التقدم للمراجعة" },
-  ]});
+  ]);
   console.log(`  Risks: 3, Objectives: 2, Alternatives: 2, Recommendations: 1, Evidence: 1`);
 
   // ═══ 5. LOCALCONTENTOS ═══
@@ -487,6 +487,7 @@ async function main() {
     prisma.localContact.create({ data: { organizationId: org.id, platformOrganizationId: platformOrg.id, name: "د. نورة القحطاني", email: "noura@gov.sa", phone: "+966509876543", position: "مديرة قسم الحوكمة", department: "وزارة المالية", organizationName: "حكومة المملكة العربية السعودية", sensitivityLevel: "sensitive", notes: "مديرة قسم الحوكمة في وزارة المالية. مسؤولة عن معايير التدقيق الحكومية.", tags: ["حكومة", "حوكمة"], createdById: admin.id } }),
     prisma.localContact.create({ data: { organizationId: org.id, platformOrganizationId: platformOrg.id, name: "فهد العتيبي", email: "fahad@stc.com.sa", position: "مدير التطوير التجاري", department: "التجاري", organizationName: "شركة الاتصالات السعودية (STC)", sensitivityLevel: "normal", notes: "مدير التطوير التجاري. نقطة اتصال للشراكات الحكومية.", tags: ["شراكة", "STC"], createdById: admin.id } }),
     prisma.localContact.create({ data: { organizationId: org.id, platformOrganizationId: platformOrg.id, name: "م. سلطان الدوسري", email: "sultan@aramco.com", position: "مسؤول تقنية المعلومات", department: "تقنية المعلومات", organizationName: "أرامكو السعودية", sensitivityLevel: "sensitive", notes: "مسؤول تقنية المعلومات في أرامكو. نقطة اتصال لمشاريع التحول الرقمي.", tags: ["أرامكو", "تقنية"], createdById: admin.id } }),
+    prisma.localContact.create({ data: { organizationId: org.id, platformOrganizationId: platformOrg.id, name: "سارة المالكي", email: "sara@lcgp.gov.sa", phone: "+966507654321", position: "مديرة المحتوى المحلي", department: "هيئة المحتوى المحلي", organizationName: "هيئة المحتوى المحلي والمشتريات الحكومية", sensitivityLevel: "normal", notes: "مديرة المحتوى المحلي في الهيئة. نقطة اتصال لمعايير المحتوى المحلي والمشتريات الحكومية.", tags: ["حكومة", "محتوى_محلي"], createdById: admin.id } }),
   ]);
   console.log(`  Contacts: ${lcContacts.length}`);
 
@@ -495,7 +496,7 @@ async function main() {
     { organizationId: org.id, platformOrganizationId: platformOrg.id, sourceContactId: lcContacts[0].id, targetContactId: lcContacts[2].id, relationType: "client", description: "عميل رئيسي لخدمات التدقيق والاستشارات", strength: 7, createdById: admin.id },
     { organizationId: org.id, platformOrganizationId: platformOrg.id, sourceContactId: lcContacts[1].id, targetContactId: lcContacts[4].id, relationType: "partner", description: "تعاون حكومي في معايير المحتوى المحلي", strength: 6, createdById: admin.id },
   ]});
-  console.log(`  Relations: 2`);
+  console.log(`  Relations: 3`);
 
   await prisma.localContactInteraction.createMany({ data: [
     { organizationId: org.id, platformOrganizationId: platformOrg.id, contactId: lcContacts[0].id, interactionType: "meeting", subject: "اجتماع تنسيقي حول الحوكمة", summary: "مناقشة معايير الحوكمة الجديدة وتأثيرها على مشاريع التدقيق الحالية", occurredAt: daysAgo(10), duration: 60, createdById: admin.id },
