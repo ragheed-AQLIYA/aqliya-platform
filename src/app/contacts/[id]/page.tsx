@@ -13,6 +13,7 @@ import { ReviewsSection } from "./components/sections/reviews-section";
 import { RiskFlagsSection } from "./components/sections/risk-flags-section";
 import { ComplianceSection } from "./components/sections/compliance-section";
 import { ExportApprovalSection } from "./components/sections/export-approval-section";
+import { Relationship360 } from "@/components/contacts/relationship-360";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -47,6 +48,10 @@ export default async function ContactDetailPage({ params }: PageProps) {
               incomingRelations={contact.incomingRelations}
             />
             <InteractionsCard contactId={contact.id} interactions={contact.interactions} />
+            <div className="bg-card rounded-lg border p-4">
+              <h3 className="font-bold text-lg mb-4">🔗 العلاقات المتقاطعة — Relationship 360</h3>
+              <Relationship360 contactId={contact.id} />
+            </div>
             <EvidenceSection contactId={contact.id} orgId={user.organizationId} />
             <ReviewsSection
               contactId={contact.id}

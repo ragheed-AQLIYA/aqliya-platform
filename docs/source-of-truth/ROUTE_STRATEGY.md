@@ -339,8 +339,10 @@ These pages serve as detail references for specialized operating systems. They a
 | ---------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------ |
 | `/contacts`                        | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Contact registry with search + sensitivity filter |
 | `/contacts/dashboard`              | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | KPIs, charts, recent activity |
+| `/contacts/graph`                  | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Relationship graph visualization (force-directed) |
+| `/contacts/analytics`              | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Advanced analytics + smart recommendations |
 | `/contacts/new`                    | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Create contact     |
-| `/contacts/[id]`                   | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Detail: info, relations, interactions, evidence, reviews, export, risk flags |
+| `/contacts/[id]`                   | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Detail: info, relations, interactions, evidence, reviews, export, risk flags, Relationship360 |
 | `/contacts/[id]/edit`              | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Edit contact form (pre-populated) |
 | `/contacts/[id]/relations/new`     | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Add relation       |
 | `/contacts/[id]/interactions/new`  | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Log interaction    |
