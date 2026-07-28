@@ -55,7 +55,7 @@ jest.mock("@/lib/platform/audit-logger", () => ({
   auditLogger: jest.fn(() => ({
     record: jest.fn().mockResolvedValue({ ok: true }),
   })),
-  Product: { SALES_OS: "sales_os" },
+  Product: { SALES_OS: "salesos" },
 }));
 
 jest.mock("@/lib/platform/audit-log", () => ({
@@ -374,7 +374,7 @@ describe("createSalesDeal (Prisma service)", () => {
     );
     expect(mockWritePlatformAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({
-        productKey: "sales_os",
+        productKey: "salesos",
         action: SalesAuditActions.DEAL_CREATED,
         targetType: "SalesDeal",
       }),
@@ -433,7 +433,7 @@ describe("updateSalesDeal (Prisma service)", () => {
     expect(deal.title).toBe("Updated");
     expect(mockSalesDealUpdate).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "deal-upd" } }));
     expect(mockWritePlatformAuditLog).toHaveBeenCalledWith(
-      expect.objectContaining({ productKey: "sales_os", action: SalesAuditActions.DEAL_UPDATED }),
+      expect.objectContaining({ productKey: "salesos", action: SalesAuditActions.DEAL_UPDATED }),
     );
   });
 
@@ -458,7 +458,7 @@ describe("updateSalesDeal (Prisma service)", () => {
 
     expect(mockWritePlatformAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({
-        productKey: "sales_os",
+        productKey: "salesos",
         action: SalesAuditActions.DEAL_STAGE_CHANGED,
         metadata: expect.objectContaining({ fromStageId: "stage-disco", toStageId: "stage-nego" }),
       }),

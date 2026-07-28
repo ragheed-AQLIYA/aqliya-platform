@@ -115,7 +115,7 @@ export async function executeGovernedAI(
     .join(" ");
 
   const governed = await runGovernedProductAI({
-    productKey: "localcontentos",
+    productKey: "local_content",
     useCase: "commercial_claim_review",
     organizationId,
     userId: options.actorId,

@@ -74,7 +74,7 @@ jest.mock("@/lib/platform/audit-logger", () => ({
   auditLogger: jest.fn(() => ({
     record: jest.fn().mockResolvedValue({ ok: true }),
   })),
-  Product: { SALES_OS: "sales_os" },
+  Product: { SALES_OS: "salesos" },
 }));
 
 // Mock platform audit log (dual-write)

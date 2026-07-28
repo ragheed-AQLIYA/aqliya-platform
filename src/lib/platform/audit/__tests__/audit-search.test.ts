@@ -68,11 +68,11 @@ describe("searchAuditLogs", () => {
     mockPrisma.platformAuditLog.findMany.mockResolvedValue([])
     mockPrisma.platformAuditLog.count.mockResolvedValue(0)
 
-    await searchAuditLogs({ productKey: "sales_os" })
+    await searchAuditLogs({ productKey: "salesos" })
 
     expect(mockPrisma.platformAuditLog.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: expect.objectContaining({ productKey: "sales_os" }),
+        where: expect.objectContaining({ productKey: "salesos" }),
       }),
     )
   })

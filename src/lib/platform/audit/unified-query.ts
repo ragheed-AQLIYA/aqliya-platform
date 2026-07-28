@@ -10,7 +10,6 @@ export type ProductKey =
   | "audit_os"
   | "decision_os"
   | "salesos"
-  | "sales_os"
   | "workflowos"
   | "local_content"
   | "sunbul"

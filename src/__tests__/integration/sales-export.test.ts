@@ -17,7 +17,7 @@ jest.mock("@/lib/prisma", () => ({
 
 jest.mock("@/lib/platform/audit-logger", () => ({
   auditLogger: jest.fn(() => ({ record: jest.fn() })),
-  Product: { SALES_OS: "sales_os" },
+  Product: { SALES_OS: "salesos" },
 }));
 
 // ─── Imports (pick up mocked modules) ───
@@ -167,7 +167,7 @@ describe("GET /api/sales/export", () => {
     expect(mock(auditLogger)).toHaveBeenCalledTimes(1);
     expect(mock(auditLogger)).toHaveBeenCalledWith(
       expect.objectContaining({
-        productKey: "sales_os",
+        productKey: "salesos",
         sourceSystem: "sales_export",
       }),
     );
