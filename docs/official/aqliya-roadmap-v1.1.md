@@ -1,8 +1,8 @@
 # AQLIYA Roadmap v1.1
 
-**Version:** 1.2 (updated to reflect audit log consolidation + Phase 6: Production Launch — 2026-07-25)  
+**Version:** 1.3 (updated to reflect P0 fixes + pilot launch tooling — 2026-07-28)  
 **Status:** Active — status-aligned  
-**Note:** All 12 active products now at L5 Pilot-ready (conditional) per P0 governance freeze ADR-109. Remaining enterprise gates: pentest, IaC apply — contract-gated. Audit log consolidation (4→1 PlatformAuditLog) completed 2026-07-25.
+**Note:** All 12 active products now at L5 Pilot-ready (conditional) per P0 governance freeze ADR-109. P0 production blockers fixed (CRM tenant isolation, health endpoint, CSP). Pilot launch tooling complete. Remaining enterprise gates: pentest, IaC apply — contract-gated. Audit log consolidation (8→1 PlatformAuditLog) completed 2026-07-25. GO/NO-GO: CONDITIONAL GO (21/23 BLOCKING).
 
 ---
 
