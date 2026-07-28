@@ -9,8 +9,8 @@
 > **Authority:** See `docs/DOCUMENTATION_AUTHORITY.md` for the documentation hierarchy.  
 > **Cross-reference:** `docs/official/AQLIYA_MASTER_REFERENCE.md`, `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md`  
 > **Owner:** Platform Architect  
-> **Last Reviewed:** 2026-07-22  
-> **Last updated:** 2026-07-22 — Full L6 status sync across all products
+> **Last Reviewed:** 2026-07-28  
+> **Last updated:** 2026-07-28 — Fixed 4 redirect routes, added 12 missing AuditOS routes + sampling + retention
 
 ---
 
@@ -62,12 +62,12 @@ The primary navigation presents AQLIYA as a platform, not a product company:
 | `/security`           | AQLIYA Platform| Enterprise security    | Public           | Active                | RBAC, audit trail, encryption, deployment controls |
 | `/deployment`         | AQLIYA Platform| Deployment models      | Public           | Active                | Cloud / Private / Air-Gapped |
 | `/demo`               | AQLIYA Platform| Interactive demo landing| Public           | Active                | Demo walkthrough landing |
-| `/executive-brief`    | AQLIYA Platform| Executive summary      | Public           | Active                | Canonical 4-page brief for leadership |
-| `/executive-briefing` | AQLIYA Platform| Redirect alias         | Public           | Active                | Redirect → `/executive-brief` |
-| `/pilot-proof`        | AQLIYA Platform| Pilot framework        | Public           | Active                | 28 evaluation criteria + scenarios |
-| `/pilot-outcomes`     | AQLIYA Platform| Pilot outcomes hub     | Public           | Active                | Honest placeholder until ≥2 completed pilots |
+| `/executive-brief`    | AQLIYA Platform| Redirect               | Public           | Redirect              | Redirect → `/proof#executive-brief` (next.config.mjs) |
+| `/executive-briefing` | AQLIYA Platform| Redirect alias         | Public           | Redirect              | Redirect → `/proof#executive-brief` (next.config.mjs) |
+| `/pilot-proof`        | AQLIYA Platform| Redirect               | Public           | Redirect              | Redirect → `/proof#evaluation-framework` (next.config.mjs) |
+| `/pilot-outcomes`     | AQLIYA Platform| Redirect               | Public           | Redirect              | Redirect → `/proof#outcomes` (next.config.mjs) |
 | `/soc2-roadmap`       | AQLIYA Platform| SOC2 target roadmap    | Public           | Active                | Not a certification claim; Q-targets |
-| `/proof-library`      | AQLIYA Platform| Evidence library       | Public           | Active                | Sample outputs on mock data |
+| `/proof-library`      | AQLIYA Platform| Redirect               | Public           | Redirect              | Redirect → `/proof#evidence-samples` (next.config.mjs) |
 | `/contact`            | AQLIYA Platform| Pilot request form     | Public           | Active                | Integrated pilot/demo/contact form |
 | `/procurement-pack`   | AQLIYA Platform| Procurement hub        | Public           | Active                | PDF pack: brief, security, DPA, residency, SOW |
 | `/print/*`            | AQLIYA Platform| Printable trust assets | Public           | Active                | noindex; executive brief AR/EN, security, DPA, etc. |
@@ -80,7 +80,8 @@ The primary navigation presents AQLIYA as a platform, not a product company:
 | `/privacy`            | AQLIYA Platform| Privacy policy         | Public           | Active                | Honest about no SOC2 yet |
 | `/insights`           | AQLIYA Platform| Articles index         | Public           | Active                | Thought leadership |
 | `/insights/*`         | AQLIYA Platform| Individual articles    | Public           | Active                |                                        |
-| `/buyers/*`           | AQLIYA Platform| Buyer persona guides   | Public           | Active                | Audit partner, CFO, CIO, government |
+| `/buyers`             | AQLIYA Platform| Redirect               | Public           | Redirect              | Redirect → `/start` (next.config.mjs); sub-pages active |
+| `/buyers/*`           | AQLIYA Platform| Buyer persona guides   | Public           | Active                | Audit partner, CFO, CIO, government, procurement |
 | `/use-cases`          | AQLIYA Platform| Use case listing       | Public           | Active                |                                        |
 | `/how-we-work`        | AQLIYA Platform| Methodology page       | Public           | Active                 | 4-phase methodology, trust principle, AI governance, CTA |
 
@@ -127,6 +128,15 @@ These pages serve as detail references for specialized operating systems. They a
 | `/audit/engagements/[engagementId]/validation`      | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      |                            |
 | `/audit/engagements/[engagementId]/audit-trail`     | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      |                            |
 | `/audit/engagements/[engagementId]/pilot`           | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Pilot-specific             |
+| `/audit/engagements/[engagementId]/materiality`     | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.3 Component Materiality   |
+| `/audit/engagements/[engagementId]/sampling`        | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.4 Sampling Hardening    |
+| `/audit/engagements/[engagementId]/lead-schedules`  | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.5 Working Papers — lead schedules |
+| `/audit/engagements/[engagementId]/factory-map`     | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Factory memory map         |
+| `/audit/engagements/[engagementId]/exports`         | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Export tab                 |
+| `/audit/quality`                                    | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.7 ISQM1 Quality         |
+| `/audit/acceptance`                                 | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.1 Client Acceptance     |
+| `/audit/independence`                               | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.2 Independence           |
+| `/audit/knowledge`                                  | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.8 Knowledge Engine       |
 
 ### AuditOS — Guided Demo
 
@@ -138,6 +148,14 @@ These pages serve as detail references for specialized operating systems. They a
 | `/auditos/statements`    | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
 | `/auditos/evidence`      | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
 | `/auditos/traceability`  | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
+152:
+153: ### Sampling — Governed Workspace
+154:
+155: | Route             | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                      |
+156: | ----------------- | -------------- | ------------------ | ---------------- | --------------------- | -------------------------- |
+157: | `/sampling`       | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Sampling list/dashboard    |
+158: | `/sampling/[id]`  | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Sampling detail            |
+159:
 
 ### DecisionOS — Production-hardened Governed Workspace (L6)
 
@@ -299,6 +317,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/settings/skills/evaluate`       | Platform       | Settings/admin | Protected        | Active (L4)           | Skills evaluation dashboard       |
 | `/settings/ai-governance`         | Platform       | Settings/admin | Protected        | Active (L4)           | Centralized AI governance dashboard: AI audit events across products, stats, model/provider tracking |
 | `/settings/models`                | Platform       | Settings/admin | Protected        | Active (L4)           | Model Governance: AI model registry with lifecycle (register→review→approve→deploy→deprecate). ADMIN only. |
+| `/settings/retention`             | Platform       | Settings/admin | Protected        | Active (L4)           | Data retention policy configuration |
 | `/monitoring`                     | Platform       | Settings/admin | Protected        | Active (L4)           | Real aggregate counts             |
 
 ### WorkflowOS — Production-hardened Governed Workspace (L6)
