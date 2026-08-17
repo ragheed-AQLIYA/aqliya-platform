@@ -10,6 +10,10 @@ export async function seedOfficeAI(
   orgId: string,
   adminId: string,
 ): Promise<OfficeAISeedResult> {
+  if (process.env.NODE_ENV === "production" && !process.env.ALLOW_SEED_IN_PROD) {
+    throw new Error("Seeding in production is not allowed. Set ALLOW_SEED_IN_PROD to override.");
+  }
+
   // Clean existing Office AI data
   await prisma.officeAiFile.deleteMany();
   await prisma.officeAiOutput.deleteMany();

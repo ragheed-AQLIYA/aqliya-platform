@@ -92,8 +92,8 @@ export async function POST(req: NextRequest) {
 
     const cookieName =
       process.env.NODE_ENV === "production"
-        ? "__Secure-next-auth.session-token"
-        : "next-auth.session-token";
+        ? "__Secure-authjs.session-token"
+        : "authjs.session-token";
 
     const newJwt = await encode({
       token: {
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
         mfaVerified: true,
       },
       secret: process.env.AUTH_SECRET!,
-      salt: cookieName,
+      salt: "authjs.session-token",
     });
 
     const response = NextResponse.json({ success: true });

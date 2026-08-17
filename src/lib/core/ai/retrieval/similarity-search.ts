@@ -41,6 +41,9 @@ async function searchPgvector(
   queryEmbedding: number[],
   options: Required<SearchOptions>,
 ): Promise<SearchResult[]> {
+  const safeK = Math.max(1, Math.min(options.k, 1000))
+  const safeMinScore = Math.max(0, Math.min(options.minScore, 1))
+
   const conditions: string[] = ['"embedding" IS NOT NULL']
   const params: unknown[] = []
   let paramIdx = 1
@@ -55,17 +58,21 @@ async function searchPgvector(
   }
 
   const whereClause = conditions.join(" AND ")
-  const vectorStr = JSON.stringify(queryEmbedding)
-  const vectorParam = `$${paramIdx}`
+  const vectorParam = `$${paramIdx++}`
+  params.push(JSON.stringify(queryEmbedding))
+  const minScoreParam = `$${paramIdx++}`
+  params.push(safeMinScore)
+  const limitParam = `$${paramIdx++}`
+  params.push(safeK)
 
   const sql = `
     SELECT id, "documentId", content, "chunkIndex", "tokenCount", metadata, "createdAt",
            1 - (embedding <=> ${vectorParam}::vector) AS score
     FROM "DocumentChunk"
     WHERE ${whereClause}
-      AND 1 - (embedding <=> ${vectorParam}::vector) >= ${options.minScore}
+      AND 1 - (embedding <=> ${vectorParam}::vector) >= ${minScoreParam}
     ORDER BY embedding <=> ${vectorParam}::vector
-    LIMIT ${options.k}
+    LIMIT ${limitParam}
   `
 
   const rows = await prisma.$queryRawUnsafe<Array<{
@@ -77,7 +84,7 @@ async function searchPgvector(
     metadata: unknown
     createdAt: Date
     score: number
-  }>>(sql, ...params, vectorStr)
+  }>>(sql, ...params)
 
   return rows.map((r) => ({
     chunkId: r.id,

@@ -8,6 +8,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { createLogger } from "@/lib/observability/logger";
+import { getToken } from "next-auth/jwt";
 import {
   exchangeCodeForTokens,
   OAUTH2_PROVIDERS,
@@ -42,6 +43,34 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // ── CSRF protection: validate state against HTTP-only cookie ──
+    const cookieState = request.cookies.get("oauth_state")?.value;
+    if (!state || !cookieState || state !== cookieState) {
+      return NextResponse.redirect(
+        new URL(
+          `/sales/settings/crm?oauth_error=${encodeURIComponent("Invalid or missing state parameter")}`,
+          request.url,
+        ),
+      );
+    }
+
+    // ── Authenticate user to scope tokens to their organization ──
+    const sessionToken = await getToken({
+      req: request,
+      secret: process.env.AUTH_SECRET,
+      salt: "authjs.session-token",
+    });
+    if (!sessionToken?.sub) {
+      return NextResponse.redirect(
+        new URL(
+          `/sales/settings/crm?oauth_error=${encodeURIComponent("Session expired — please log in again")}`,
+          request.url,
+        ),
+      );
+    }
+
+    const orgId = (sessionToken.organizationId as string) ?? "system";
+
     // Build OAuth config for the provider
     const baseConfig = OAUTH2_PROVIDERS[provider];
     if (!baseConfig) {
@@ -60,17 +89,18 @@ export async function GET(request: NextRequest) {
       redirectUri: `${request.nextUrl.origin}/api/sales/intel/oauth/callback?provider=${provider}`,
     };
 
-    // Exchange code for tokens
-    const tokens = await exchangeCodeForTokens(config, code);
+    // Retrieve PKCE code verifier from HTTP-only cookie
+    const codeVerifier = request.cookies.get("oauth_verifier")?.value;
 
-    // Persist tokens (tenant-scoped via state param containing orgId)
-    const orgId = state ?? "system";
+    // Exchange code for tokens
+    const tokens = await exchangeCodeForTokens(config, code, codeVerifier);
 
     await prisma.platformAuditLog.create({
       data: {
         platformOrganizationId: orgId,
         productKey: "salesos",
         actorName: `oauth-${provider}`,
+        actorId: sessionToken.sub as string,
         action: "oauth.token_exchanged",
         targetType: "OAuth2Token",
         targetId: provider,
@@ -82,13 +112,16 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Redirect back to settings with success
-    return NextResponse.redirect(
+    // Clear OAuth cookies
+    const response = NextResponse.redirect(
       new URL(
         `/sales/settings/crm?oauth_success=${provider}`,
         request.url,
       ),
     );
+    response.cookies.set("oauth_state", "", { maxAge: 0, path: "/" });
+    response.cookies.set("oauth_verifier", "", { maxAge: 0, path: "/" });
+    return response;
   } catch (err) {
     logger.error("[OAuth2] Callback error", err instanceof Error ? err : new Error(String(err)));
     return NextResponse.redirect(

@@ -164,6 +164,10 @@ async function cleanup() {
 }
 
 async function main() {
+  if (process.env.NODE_ENV === "production" && !process.env.ALLOW_SEED_IN_PROD) {
+    throw new Error("Seeding in production is not allowed. Set ALLOW_SEED_IN_PROD to override.");
+  }
+
   await cleanup();
   console.log("\nSeeding pilot data...\n");
 

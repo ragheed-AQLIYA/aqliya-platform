@@ -13,6 +13,10 @@ export async function seedSalesOS(
   orgId: string,
   adminId: string,
 ): Promise<SalesOSSeedResult> {
+  if (process.env.NODE_ENV === "production" && !process.env.ALLOW_SEED_IN_PROD) {
+    throw new Error("Seeding in production is not allowed. Set ALLOW_SEED_IN_PROD to override.");
+  }
+
   // Clean existing SalesOS data (FK-safe order: children before parents)
   await prisma.salesApproval.deleteMany();
   await prisma.salesReview.deleteMany();

@@ -104,16 +104,173 @@ function extractTextFromCsv(buffer: Buffer): {
 }
 
 // ─── XLSX Extractor ───
+//
+// Defense-in-depth for ZIP / decompression bombs:
+//
+// Layer 1 — Compressed size limit (MAX_XLSX_SIZE = 10MB)
+//     Rejects oversized compressed files before any processing.
+//
+// Layer 2 — ZIP Central Directory pre-validation (prevalidateZipBuffer)
+//     Parses the ZIP central directory structure WITHOUT decompressing
+//     file entries. Counts entries, sums declared uncompressed sizes,
+//     and checks per-entry compression ratios. This runs BEFORE
+//     XLSX.read() so it prevents the library from attempting to
+//     decompress bomb payloads.
+//
+// Layer 3 — Cell count check (post-parse)
+//     After XLSX.read() successfully parses the workbook, validates
+//     total cell count across all sheets.
+//
+// NOTE: XLSX.read() with type:"buffer" fully decompresses the ZIP
+// into memory. A crafted ZIP with valid central directory entries
+// but malicious compressed data could still cause issues. Layers 1+2
+// protect against the practical attack surface:
+//   - 10MB compressed size limit prevents large payloads
+//   - Central directory validation catches entry count and ratio bombs
+//   - Cell count check catches bombs that slip through both layers
+// For true isolation (untrusted XLSX from external sources), consider
+// worker-process sandboxing or WASM-based parsing. For Office AI
+// extraction (internal documents), these three layers are sufficient.
+
+const MAX_ZIP_ENTRIES = 200;
+const MAX_ZIP_UNCOMPRESSED_SIZE = 50 * 1024 * 1024; // 50 MB
+const MAX_ENTRY_COMPRESSION_RATIO = 100; // 100:1 compressed:uncompressed
+
+/**
+ * Pre-validate a ZIP/XLSX buffer by parsing the Central Directory.
+ * Does NOT decompress any entries — reads only metadata from the
+ * fixed-size central directory structure at the end of the ZIP.
+ *
+ * Returns { valid: true } if safe, or { valid: false, reason } if bomb detected.
+ *
+ * Exported for security testing.
+ */
+export function prevalidateZipBuffer(
+  buffer: Buffer,
+): { valid: true } | { valid: false; reason: string } {
+  if (buffer.length < 22) {
+    return { valid: false, reason: "XLSX buffer too small to be valid ZIP" };
+  }
+
+  // Find End of Central Directory (EOCD) record — scans backwards from end
+  // EOCD signature: 0x50 0x4B 0x05 0x06 (little-endian)
+  let eocdOffset = -1;
+  const searchLimit = Math.max(0, buffer.length - 65557);
+  for (let i = buffer.length - 22; i >= searchLimit; i--) {
+    if (
+      buffer[i] === 0x50 &&
+      buffer[i + 1] === 0x4b &&
+      buffer[i + 2] === 5 &&
+      buffer[i + 3] === 6
+    ) {
+      eocdOffset = i;
+      break;
+    }
+  }
+
+  if (eocdOffset < 0) {
+    return { valid: false, reason: "XLSX buffer missing ZIP End of Central Directory" };
+  }
+
+  const entryCount = buffer.readUInt16LE(eocdOffset + 10);
+  const cdSize = buffer.readUInt32LE(eocdOffset + 12);
+  const cdOffset = buffer.readUInt32LE(eocdOffset + 16);
+
+  if (entryCount > MAX_ZIP_ENTRIES) {
+    return {
+      valid: false,
+      reason: `XLSX ZIP contains ${entryCount} entries (max ${MAX_ZIP_ENTRIES}) — possible ZIP bomb`,
+    };
+  }
+
+  if (cdOffset + cdSize > buffer.length) {
+    return { valid: false, reason: "XLSX ZIP central directory extends beyond buffer" };
+  }
+
+  // Parse Central Directory entries to check compression ratios
+  let totalUncompressedSize = 0;
+  const seenNames = new Set<string>();
+
+  let pos = cdOffset;
+  for (let i = 0; i < entryCount && pos + 46 <= cdOffset + cdSize; i++) {
+    const sig = buffer.readUInt32LE(pos);
+    if (sig !== 0x02014b50) {
+      return { valid: false, reason: `XLSX ZIP invalid central directory entry at offset ${pos}` };
+    }
+
+    const compMethod = buffer.readUInt16LE(pos + 10);
+    const compSize = buffer.readUInt32LE(pos + 20);
+    const uncompSize = buffer.readUInt32LE(pos + 24);
+    const nameLen = buffer.readUInt16LE(pos + 28);
+    const extraLen = buffer.readUInt16LE(pos + 30);
+    const commentLen = buffer.readUInt16LE(pos + 32);
+    const name = buffer.toString("utf8", pos + 46, pos + 46 + nameLen);
+
+    // Check for duplicate entries (ZIP bomb technique)
+    if (seenNames.has(name)) {
+      return {
+        valid: false,
+        reason: `XLSX ZIP contains duplicate entry "${name}" — possible ZIP bomb`,
+      };
+    }
+    seenNames.add(name);
+
+    // Check per-entry compression ratio (deflate method only)
+    if (compMethod === 8 && compSize > 0 && uncompSize > 0) {
+      const ratio = uncompSize / compSize;
+      if (ratio > MAX_ENTRY_COMPRESSION_RATIO) {
+        return {
+          valid: false,
+          reason: `XLSX ZIP entry "${name}" has compression ratio ${ratio.toFixed(0)}:1 (max ${MAX_ENTRY_COMPRESSION_RATIO}:1) — possible decompression bomb`,
+        };
+      }
+    }
+
+    totalUncompressedSize += uncompSize;
+    pos += 46 + nameLen + extraLen + commentLen;
+  }
+
+  if (totalUncompressedSize > MAX_ZIP_UNCOMPRESSED_SIZE) {
+    return {
+      valid: false,
+      reason: `XLSX ZIP total uncompressed size ${(totalUncompressedSize / 1024 / 1024).toFixed(1)} MB (max ${MAX_ZIP_UNCOMPRESSED_SIZE / 1024 / 1024} MB) — possible ZIP bomb`,
+    };
+  }
+
+  return { valid: true };
+}
 
 function extractTextFromXlsx(buffer: Buffer): {
   text: string;
   meta: Record<string, unknown>;
 } {
+  // Layer 2: Pre-decompression ZIP structure validation
+  const zipCheck = prevalidateZipBuffer(buffer);
+  if (!zipCheck.valid) {
+    throw new Error(`XLSX rejected: ${zipCheck.reason}`);
+  }
+
   const workbook = XLSX.read(buffer, {
     type: "buffer",
     cellFormula: false,
     cellHTML: false,
   });
+
+  // Layer 3: Post-parse cell count check (catches bombs that bypass layers 1-2)
+  const MAX_TOTAL_CELLS = 100_000;
+  let totalCells = 0;
+  for (const name of workbook.SheetNames) {
+    const sheet = workbook.Sheets[name];
+    const ref = sheet["!ref"] || "A1";
+    const range = XLSX.utils.decode_range(ref);
+    totalCells += (range.e.r - range.s.r + 1) * (range.e.c - range.s.c + 1);
+  }
+  if (totalCells > MAX_TOTAL_CELLS) {
+    throw new Error(
+      `XLSX exceeds maximum total cell count (${MAX_TOTAL_CELLS}) — possible ZIP bomb`,
+    );
+  }
+
   const sheetNames = workbook.SheetNames.slice(0, MAX_XLSX_SHEETS);
   const truncated = workbook.SheetNames.length > MAX_XLSX_SHEETS;
 

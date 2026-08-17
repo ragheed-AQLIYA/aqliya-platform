@@ -4,6 +4,10 @@ export async function seedKnowledgeMining(
   prisma: PrismaClient,
   platformOrgId: string,
 ) {
+  if (process.env.NODE_ENV === "production" && !process.env.ALLOW_SEED_IN_PROD) {
+    throw new Error("Seeding in production is not allowed. Set ALLOW_SEED_IN_PROD to override.");
+  }
+
   // Find canonical accounts for reference
   const canonicalAccounts = await prisma.auditCanonicalAccount.findMany({
     select: { id: true, code: true, name: true, category: true },

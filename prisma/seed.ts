@@ -26,6 +26,10 @@ const adapter = new PrismaPg(process.env.DATABASE_URL!);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  if (process.env.NODE_ENV === "production" && !process.env.ALLOW_SEED_IN_PROD) {
+    throw new Error("Seeding in production is not allowed. Set ALLOW_SEED_IN_PROD to override.");
+  }
+
   // Clean existing data
   await prisma.salesApproval.deleteMany();
   await prisma.salesReview.deleteMany();
@@ -1751,7 +1755,7 @@ async function main() {
   console.log("Knowledge Mining seed complete");
 
   // ─── SSO/SCIM Provider Seed ───
-  await seedSsoProviders(prisma, platformOrg.id);
+  await seedSsoProviders(prisma, org.id);
   console.log("SSO providers seeded (Google Workspace, GitHub, Azure AD, SAML)");
 
   // Guarantee demo login passwords (safe after partial seeds / audit re-seeds)

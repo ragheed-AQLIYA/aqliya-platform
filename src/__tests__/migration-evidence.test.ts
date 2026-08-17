@@ -18,7 +18,7 @@ const KNOWLEDGE_FOUNDATION_VERSIONING = "20260622100000_knowledge_foundation_ver
     const KF_RELEASE_TRUST_CHAIN = "20260622140000_knowledge_foundation_release_trust_chain"
     const KNOLEDGE_CANDIDATE_FK = "20260623000000_add_knowledge_candidate_fk"
     const CONTENT_EVIDENCE = "20260703000001_add_content_evidence"
-const ENUMS_ONDELETE = "20260724180519_add_platform_audit_log_merge_fields"
+const LATEST_APPLIED_MIGRATION = "20260803150000_add_user_preferences"
 
 /** Migrations excluded from applied-chain ordering (e.g. create-only, not yet applied). */
 const MIGRATIONS_EXCLUDED_FROM_APPLIED_CHAIN = [INSTITUTIONAL_MEMORY_MIGRATION, "20260724232330_drop_deprecated_audit_models"] as const
@@ -524,7 +524,7 @@ describe("Migration Evidence", () => {
     })
 
     it("is the latest applied migration in the repository", () => {
-      expect(latestAppliedMigration()).toBe(ENUMS_ONDELETE)
+      expect(latestAppliedMigration()).toBe(LATEST_APPLIED_MIGRATION)
     })
 
     it("is additive-only (no DROP or RENAME)", () => {

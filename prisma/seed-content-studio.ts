@@ -14,6 +14,10 @@ export async function seedContentStudio(
   reviewerId: string,
   approverId: string,
 ): Promise<ContentStudioSeedResult> {
+  if (process.env.NODE_ENV === "production" && !process.env.ALLOW_SEED_IN_PROD) {
+    throw new Error("Seeding in production is not allowed. Set ALLOW_SEED_IN_PROD to override.");
+  }
+
   // Clean existing ContentStudio data (FK-safe order)
   await prisma.contentVersion.deleteMany();
   await prisma.contentItem.deleteMany();

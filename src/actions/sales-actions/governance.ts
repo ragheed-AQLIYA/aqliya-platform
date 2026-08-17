@@ -188,6 +188,9 @@ export async function scaffoldUploadSalesProofAssetFileAction(input: {
 }) {
   return safe(async () => {
     const ctx = await requireSalesPermission("salesos:create");
+    if (ctx.organizationId !== input.organizationId) {
+      throw new SalesAccessError("Organization mismatch", "FORBIDDEN");
+    }
     const { scaffoldSalesProofFileUpload } = await import(
       "@/lib/sales/proof-file-upload-scaffold"
     );

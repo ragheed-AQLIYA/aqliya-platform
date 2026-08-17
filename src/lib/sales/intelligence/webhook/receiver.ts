@@ -6,7 +6,7 @@
  */
 import "server-only";
 import { createLogger } from "@/lib/observability/logger";
-import { createHash, timingSafeEqual } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 import { prisma } from "@/lib/prisma";
 import type { OutreachEvent } from "../types";
 import type { Prisma } from "@prisma/client";
@@ -45,8 +45,8 @@ export function verifySignature(
       case "smartlead":
       case "apollo": {
         // HMAC-SHA256 verification
-        const computed = createHash("sha256")
-          .update(body + secret)
+        const computed = createHmac("sha256", secret)
+          .update(body)
           .digest("hex");
         const sigBuf = Buffer.from(signature, "hex");
         const compBuf = Buffer.from(computed, "hex");
@@ -55,10 +55,13 @@ export function verifySignature(
       }
       default:
         // Simple HMAC
-        const hmac = createHash("sha256")
-          .update(body + secret)
+        const hmac = createHmac("sha256", secret)
+          .update(body)
           .digest("hex");
-        return signature === hmac;
+        const sigBuf = Buffer.from(signature, "hex");
+        const compBuf = Buffer.from(hmac, "hex");
+        if (sigBuf.length !== compBuf.length) return false;
+        return timingSafeEqual(sigBuf, compBuf);
     }
   } catch {
     return false;

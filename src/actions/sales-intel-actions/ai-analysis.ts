@@ -1,9 +1,13 @@
 /**
  * SalesOS AI Intelligence — Real LLM-powered deal analysis.
+ *
+ * Authorization:
+ *   - Requires salesos:update permission (writes AI analysis to deal metadata)
+ *   - Organization-scoped deal query
  */
 "use server";
 
-import { getCurrentUser } from "@/lib/kernel";
+import { requireSalesPermission } from "@/lib/sales/guards";
 import { prisma } from "@/lib/prisma";
 import { aiOrchestrator } from "@/lib/core/ai/orchestrator";
 import type { Prisma } from "@prisma/client";
@@ -19,12 +23,11 @@ export async function analyzeDealWithAI(dealId: string): Promise<{
   };
   error?: string;
 }> {
-  const user = await getCurrentUser();
-  if (!user) return { success: false, error: "Authentication required" };
+  const ctx = await requireSalesPermission("salesos:update");
 
   try {
     const deal = await prisma.salesDeal.findFirst({
-      where: { id: dealId, organizationId: user.organizationId },
+      where: { id: dealId, organizationId: ctx.organizationId },
       select: {
         id: true,
         title: true,
@@ -57,9 +60,9 @@ export async function analyzeDealWithAI(dealId: string): Promise<{
         technologies: Array.isArray(enriched.technologies) ? enriched.technologies.join(", ") : "N/A",
         instruction: "Analyze this sales deal. Provide: 1) 2-sentence summary, 2) 3 concrete next steps in Arabic, 3) 2-3 risks. Respond as JSON: {\"summary\":\"...\", \"nextSteps\":[\"...\"], \"risks\":[\"...\"]}",
       },
-      organizationId: user.organizationId ?? undefined,
-      userId: user.id,
-      userRole: user.role ?? "viewer",
+      organizationId: ctx.organizationId ?? undefined,
+      userId: ctx.user.id,
+      userRole: ctx.user.role ?? "viewer",
     });
 
     // Parse AI response
@@ -97,10 +100,10 @@ export async function analyzeDealWithAI(dealId: string): Promise<{
     // Log
     await prisma.platformAuditLog.create({
       data: {
-        platformOrganizationId: user.platformOrganizationId ?? undefined,
+        platformOrganizationId: ctx.platformOrganizationId ?? undefined,
         productKey: "salesos",
-        actorId: user.id,
-        actorName: user.name ?? "unknown",
+        actorId: ctx.user.id,
+        actorName: ctx.user.name ?? "unknown",
         action: "ai.deal_analysis.generated",
         targetType: "SalesDeal",
         targetId: dealId,

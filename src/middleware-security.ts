@@ -66,9 +66,12 @@ const securityHeaders = {
   // Strict CSP — no unsafe-eval.
   // style-src 'unsafe-inline' is required for Tailwind CSS v4 + shadcn/ui
   // which generate inline styles during server rendering.
-  // script-src remains 'self' only (no unsafe-inline for scripts).
+  // script-src 'unsafe-inline' is required in development for Next.js dev mode inline scripts.
+  // In production, script-src remains 'self' only (no unsafe-inline for scripts).
   "Content-Security-Policy":
-    "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.sentry.io;",
+    process.env.NODE_ENV === "production"
+      ? "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.sentry.io;"
+      : "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.sentry.io;",
   "X-Powered-By": "",
 };
 

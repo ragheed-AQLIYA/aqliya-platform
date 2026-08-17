@@ -1,6 +1,7 @@
 "use client";
 
 import { createLogger } from "@/lib/observability/logger";
+import { storeOAuthStateAction } from "@/actions/sales-oauth-actions";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,14 @@ export function LinkedInConnectButton() {
       const codeVerifier = generateCodeVerifier();
       const codeChallenge = await generateCodeChallenge(codeVerifier);
 
+      // Store state and verifier server-side in HTTP-only cookie for CSRF protection
+      const storeResult = await storeOAuthStateAction(state, codeVerifier);
+      if (!storeResult.ok) {
+        alert("فشل في تهيئة جلسة OAuth. يرجى المحاولة مرة أخرى.");
+        setLoading(false);
+        return;
+      }
+
       const params = new URLSearchParams({
         response_type: "code",
         client_id: clientId,
@@ -39,9 +48,6 @@ export function LinkedInConnectButton() {
         code_challenge: codeChallenge,
         code_challenge_method: "S256",
       });
-
-      sessionStorage.setItem("linkedin_code_verifier", codeVerifier);
-      sessionStorage.setItem("linkedin_oauth_state", state);
 
       window.location.href = `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;
     } catch (err) {

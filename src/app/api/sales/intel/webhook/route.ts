@@ -53,7 +53,11 @@ export async function POST(request: NextRequest) {
     const webhookSecret = process.env[secretEnvKey] ?? "";
 
     if (!webhookSecret) {
-      logger.warn("[Webhook]No secret configured for ${providerId}");
+      logger.warn("[Webhook] No secret configured for ${providerId}");
+      return NextResponse.json(
+        { error: "Webhook secret not configured" },
+        { status: 503 },
+      );
     }
 
     const result = await receiveWebhook(

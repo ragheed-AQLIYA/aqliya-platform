@@ -121,6 +121,10 @@ interface DecisionData {
 }
 
 async function main() {
+  if (process.env.NODE_ENV === "production" && !process.env.ALLOW_SEED_IN_PROD) {
+    throw new Error("Seeding in production is not allowed. Set ALLOW_SEED_IN_PROD to override.");
+  }
+
   console.log("Checking for existing admin user...");
 
   // Look up the admin user (created by prisma/seed.ts)

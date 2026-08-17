@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from "crypto";
+import { createHash, createHmac, randomBytes } from "crypto";
 
 const TOTP_DIGITS = 6;
 const TOTP_INTERVAL = 30;
@@ -53,7 +53,7 @@ export function generateTOTPToken(secret: string, timestamp: number = Math.floor
   counterBuf.writeBigInt64BE(BigInt(counter));
 
   const key = base32Decode(secret);
-  const hmac = createHash("sha1").update(key).update(counterBuf).digest();
+  const hmac = createHmac("sha1", key).update(counterBuf).digest();
   const offset = hmac[hmac.length - 1] & 0xf;
   const binaryCode = ((hmac[offset] & 0x7f) << 24) |
     ((hmac[offset + 1] & 0xff) << 16) |

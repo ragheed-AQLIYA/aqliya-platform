@@ -28,6 +28,8 @@ async function searchVector(
   const queryVector = queryEmbedding.embeddings[0]
   if (!queryVector) return []
 
+  const safeLimit = Math.max(1, Math.min(limit, 1000))
+
   const conditions = ['"embedding" IS NOT NULL']
   const params: unknown[] = []
   let paramIdx = 1
@@ -42,8 +44,10 @@ async function searchVector(
   }
 
   const whereClause = conditions.join(" AND ")
-  const vectorParam = `$${paramIdx}`
-  const vectorStr = JSON.stringify(queryVector)
+  const vectorParam = `$${paramIdx++}`
+  params.push(JSON.stringify(queryVector))
+  const limitParam = `$${paramIdx++}`
+  params.push(safeLimit)
 
   const sql = `
     SELECT id, "documentId", content, metadata,
@@ -51,7 +55,7 @@ async function searchVector(
     FROM "DocumentChunk"
     WHERE ${whereClause}
     ORDER BY embedding <=> ${vectorParam}::vector
-    LIMIT ${limit}
+    LIMIT ${limitParam}
   `
 
   const rows = await prisma.$queryRawUnsafe<Array<{
@@ -60,7 +64,7 @@ async function searchVector(
     content: string
     metadata: unknown
     similarity: number
-  }>>(sql, ...params, vectorStr)
+  }>>(sql, ...params)
 
   return rows
     .filter((r) => r.similarity >= minSimilarity)

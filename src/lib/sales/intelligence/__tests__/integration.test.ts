@@ -223,9 +223,9 @@ describe("Sales Intelligence Module", () => {
 
       const body = JSON.stringify({ event_type: "EMAIL_REPLIED" });
       const secret = "test-webhook-secret";
-      const { createHash } = await import("crypto");
-      const signature = createHash("sha256")
-        .update(body + secret)
+      const { createHmac } = await import("crypto");
+      const signature = createHmac("sha256", secret)
+        .update(body)
         .digest("hex");
 
       const valid = verifySignature(body, signature, secret, "smartlead");
@@ -256,9 +256,9 @@ describe("Sales Intelligence Module", () => {
       });
 
       const body = JSON.stringify({ event_type: "EMAIL_REPLIED" });
-      const { createHash } = await import("crypto");
+      const { createHmac } = await import("crypto");
       const secret = "test-secret";
-      const sig = createHash("sha256").update(body + secret).digest("hex");
+      const sig = createHmac("sha256", secret).update(body).digest("hex");
 
       const result = await receiveWebhook(
         {

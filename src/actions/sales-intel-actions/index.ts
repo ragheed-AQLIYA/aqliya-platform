@@ -1,9 +1,18 @@
 /**
  * Sales Intelligence Server Actions — Barrel
+ *
+ * Authorization model:
+ *   Every action requires `requireSalesPermission(permission)` which provides:
+ *     1. Authentication (getCurrentUser)
+ *     2. RBAC enforcement (role-based permission check)
+ *     3. Organization context (tenant isolation)
+ *
+ *   Read-only intel queries  → "salesos:read"
+ *   Write / mutation actions → "salesos:create" or "salesos:update"
  */
 "use server";
 
-import { getCurrentUser, enforce } from "@/lib/kernel";
+import { requireSalesPermission, type SalesOrgAccessContext } from "@/lib/sales/guards";
 import { createSalesIntelProvider } from "@/lib/sales/intelligence";
 import type {
   SalesIntelProviderId,
@@ -19,19 +28,13 @@ import type { Prisma } from "@prisma/client";
 
 // ── Helpers ──
 
-async function getAuth() {
-  const user = await getCurrentUser();
-  if (!user) throw new Error("Authentication required");
-  return user;
-}
-
-async function getProvider(providerId: SalesIntelProviderId) {
-  await getAuth();
+/** Create an intel provider. Caller MUST already be authorized. */
+function getProvider(providerId: SalesIntelProviderId) {
   return createSalesIntelProvider(providerId);
 }
 
 async function logIntelAction(
-  user: Awaited<ReturnType<typeof getAuth>>,
+  ctx: SalesOrgAccessContext,
   providerId: string,
   action: string,
   metadata?: Record<string, unknown>,
@@ -39,10 +42,10 @@ async function logIntelAction(
   try {
     await prisma.platformAuditLog.create({
       data: {
-        platformOrganizationId: user.platformOrganizationId ?? undefined,
+        platformOrganizationId: ctx.platformOrganizationId ?? undefined,
         productKey: "salesos",
-        actorId: user.id,
-        actorName: user.name ?? "unknown",
+        actorId: ctx.user.id,
+        actorName: ctx.user.name ?? "unknown",
         action: `sales_intel.${action}`,
         targetType: "SalesIntelligence",
         targetId: providerId,
@@ -59,13 +62,13 @@ export async function enrichCompanyAction(
   domain: string,
 ): Promise<{ success: boolean; data?: EnrichedCompany; error?: string }> {
   try {
-    const user = await getAuth();
-    const provider = await getProvider(providerId);
+    const ctx = await requireSalesPermission("salesos:read");
+    const provider = getProvider(providerId);
     if (!provider.enrichCompany) {
       return { success: false, error: `${providerId} does not support company enrichment` };
     }
     const result = await provider.enrichCompany(domain);
-    await logIntelAction(user, providerId, "enrich_company", { domain });
+    await logIntelAction(ctx, providerId, "enrich_company", { domain });
     return { success: true, data: result };
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : "Enrichment failed" };
@@ -79,13 +82,13 @@ export async function searchCompaniesAction(
   criteria: CompanySearchCriteria,
 ): Promise<{ success: boolean; data?: EnrichedCompany[]; total?: number; error?: string }> {
   try {
-    const user = await getAuth();
-    const provider = await getProvider(providerId);
+    const ctx = await requireSalesPermission("salesos:read");
+    const provider = getProvider(providerId);
     if (!provider.searchCompanies) {
       return { success: false, error: `${providerId} does not support company search` };
     }
     const result = await provider.searchCompanies(criteria);
-    await logIntelAction(user, providerId, "search_companies", { count: result.length });
+    await logIntelAction(ctx, providerId, "search_companies", { count: result.length });
     return { success: true, data: result, total: result.length };
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : "Search failed" };
@@ -99,13 +102,13 @@ export async function findContactsAction(
   criteria: ContactSearchCriteria,
 ): Promise<{ success: boolean; data?: EnrichedContact[]; total?: number; error?: string }> {
   try {
-    const user = await getAuth();
-    const provider = await getProvider(providerId);
+    const ctx = await requireSalesPermission("salesos:read");
+    const provider = getProvider(providerId);
     if (!provider.findContacts) {
       return { success: false, error: `${providerId} does not support contact finding` };
     }
     const result = await provider.findContacts(criteria);
-    await logIntelAction(user, providerId, "find_contacts", { count: result.length });
+    await logIntelAction(ctx, providerId, "find_contacts", { count: result.length });
     return { success: true, data: result, total: result.length };
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : "Contact search failed" };
@@ -119,13 +122,13 @@ export async function verifyEmailAction(
   email: string,
 ): Promise<{ success: boolean; status?: string; confidence?: number; error?: string }> {
   try {
-    const user = await getAuth();
-    const provider = await getProvider(providerId);
+    const ctx = await requireSalesPermission("salesos:read");
+    const provider = getProvider(providerId);
     if (!provider.verifyEmail) {
       return { success: false, error: `${providerId} does not support email verification` };
     }
     const result = await provider.verifyEmail(email);
-    await logIntelAction(user, providerId, "verify_email", { email });
+    await logIntelAction(ctx, providerId, "verify_email", { email });
     return { success: true, ...result };
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : "Verification failed" };
@@ -138,13 +141,13 @@ export async function waterfallEnrichAction(
   request: WaterfallEnrichmentRequest,
 ): Promise<{ success: boolean; data?: WaterfallEnrichmentResult; error?: string }> {
   try {
-    const user = await getAuth();
-    const provider = await getProvider("clay");
+    const ctx = await requireSalesPermission("salesos:read");
+    const provider = getProvider("clay");
     if (!provider.waterfallEnrich) {
       return { success: false, error: "Clay waterfall enrichment not available" };
     }
     const result = await provider.waterfallEnrich(request);
-    await logIntelAction(user, "clay", "waterfall_enrich", { attempts: result.attempts });
+    await logIntelAction(ctx, "clay", "waterfall_enrich", { attempts: result.attempts });
     return { success: true, data: result };
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : "Waterfall enrichment failed" };
@@ -157,7 +160,8 @@ export async function checkIntelProviderHealthAction(
   providerId: SalesIntelProviderId,
 ): Promise<{ success: boolean; status?: string; latencyMs?: number; rateLimitRemaining?: number; error?: string }> {
   try {
-    const provider = await getProvider(providerId);
+    await requireSalesPermission("salesos:read");
+    const provider = getProvider(providerId);
     const result = await provider.testConnection();
     const rateLimit = provider.getRateLimitState?.();
     return { success: result.success, status: result.success ? "healthy" : "unhealthy", latencyMs: result.latencyMs, rateLimitRemaining: rateLimit?.remaining, error: result.error };
@@ -169,6 +173,7 @@ export async function checkIntelProviderHealthAction(
 // ── List Providers ──
 
 export async function listIntelProvidersAction(): Promise<{ success: boolean; providers: SalesIntelProviderId[] }> {
+  await requireSalesPermission("salesos:read");
   const { listRegisteredProviders } = await import("@/lib/sales/intelligence");
   return { success: true, providers: listRegisteredProviders() };
 }
@@ -189,13 +194,13 @@ export async function batchEnrichAccountsAction(
   providerOrder: ("apollo" | "ocean" | "clay")[] = ["apollo", "ocean", "clay"],
 ): Promise<{ success: boolean; data?: BatchEnrichResult; error?: string }> {
   const start = Date.now();
-  const user = await getAuth();
+  const ctx = await requireSalesPermission("salesos:update");
 
   const result: BatchEnrichResult = { totalAccounts: 0, enrichedAccounts: 0, totalContacts: 0, enrichedContacts: 0, failedAccounts: [], failedContacts: [], durationMs: 0 };
 
   try {
     const accounts = await prisma.salesAccount.findMany({
-      where: { organizationId: user.organizationId, status: "active" },
+      where: { organizationId: ctx.organizationId, status: "active" },
       select: { id: true, name: true, industry: true },
       take: 50,
     });
@@ -228,9 +233,9 @@ export async function batchEnrichAccountsAction(
 export async function enrichAccountContactsAction(
   accountId: string,
 ): Promise<{ success: boolean; data?: { contacts: EnrichedContact[]; total: number }; error?: string }> {
-  const user = await getAuth();
+  const ctx = await requireSalesPermission("salesos:create");
   try {
-    const account = await prisma.salesAccount.findFirst({ where: { id: accountId, organizationId: user.organizationId }, select: { id: true, name: true } });
+    const account = await prisma.salesAccount.findFirst({ where: { id: accountId, organizationId: ctx.organizationId }, select: { id: true, name: true } });
     if (!account) return { success: false, error: "Account not found" };
 
     let contacts: EnrichedContact[] = [];
@@ -248,9 +253,9 @@ export async function enrichAccountContactsAction(
 
     for (const c of contacts.slice(0, 10)) {
       if (!c.email) continue;
-      const exists = await prisma.salesContact.findFirst({ where: { email: c.email, organizationId: user.organizationId } });
+      const exists = await prisma.salesContact.findFirst({ where: { email: c.email, organizationId: ctx.organizationId } });
       if (!exists) {
-        await prisma.salesContact.create({ data: { organizationId: user.organizationId ?? "", accountId: account.id, name: c.fullName ?? `${c.firstName ?? ""} ${c.lastName ?? ""}`.trim() ?? c.email, email: c.email, title: c.title, role: c.department, sensitivityLevel: "standard", createdById: user.id } });
+        await prisma.salesContact.create({ data: { organizationId: ctx.organizationId ?? "", accountId: account.id, name: c.fullName ?? `${c.firstName ?? ""} ${c.lastName ?? ""}`.trim() ?? c.email, email: c.email, title: c.title, role: c.department, sensitivityLevel: "standard", createdById: ctx.user.id } });
       }
     }
 
@@ -268,10 +273,10 @@ export async function createOutreachCampaignAction(params: {
   contactIds: string[];
   steps: Array<{ type: "email" | "linkedin_message" | "delay"; template?: string; subject?: string; delayDays?: number }>;
 }): Promise<{ success: boolean; campaignId?: string; error?: string }> {
-  const user = await getAuth();
+  const ctx = await requireSalesPermission("salesos:create");
   try {
     const deal = await prisma.salesDeal.findFirst({
-      where: { id: params.dealId, organizationId: user.organizationId },
+      where: { id: params.dealId, organizationId: ctx.organizationId },
       select: { id: true, accountId: true },
     });
     if (!deal) return { success: false, error: "Deal not found" };
@@ -297,10 +302,10 @@ export async function createOutreachCampaignAction(params: {
 
         await prisma.platformAuditLog.create({
           data: {
-            platformOrganizationId: user.platformOrganizationId ?? undefined,
+            platformOrganizationId: ctx.platformOrganizationId ?? undefined,
             productKey: "salesos",
-            actorId: user.id,
-            actorName: user.name ?? "unknown",
+            actorId: ctx.user.id,
+            actorName: ctx.user.name ?? "unknown",
             action: "outreach.campaign_created",
             targetType: "SalesDeal",
             targetId: params.dealId,
@@ -345,29 +350,17 @@ export async function getOutreachEventsAction(dealId: string): Promise<{
   error?: string;
 }> {
   try {
-    const user = await getAuth();
+    const ctx = await requireSalesPermission("salesos:read");
     const deal = await prisma.salesDeal.findFirst({
-      where: { id: dealId, organizationId: user.organizationId },
+      where: { id: dealId, organizationId: ctx.organizationId },
       select: { id: true, accountId: true },
     });
     if (!deal) return { success: false, error: "Deal not found" };
 
-    // [MIGRATED] salesAuditEvent → platformAuditLog (dual-write with productKey: "salesos")
-    // const events = await prisma.salesAuditEvent.findMany({
-    //   where: {
-    //     organizationId: user.organizationId,
-    //     targetType: "SalesDeal",
-    //     targetId: dealId,
-    //     action: { startsWith: "outreach." },
-    //   },
-    //   orderBy: { createdAt: "desc" },
-    //   take: 30,
-    //   select: { id: true, action: true, actorName: true, createdAt: true, metadata: true },
-    // });
     const events = await prisma.platformAuditLog.findMany({
       where: {
         productKey: "salesos",
-        organizationId: user.organizationId,
+        organizationId: ctx.organizationId,
         targetType: "SalesDeal",
         targetId: dealId,
         action: { startsWith: "outreach." },
@@ -407,21 +400,12 @@ export async function getOutreachAnalyticsAction(): Promise<{
   error?: string;
 }> {
   try {
-    const user = await getAuth();
+    const ctx = await requireSalesPermission("salesos:read");
 
-    // [MIGRATED] salesAuditEvent → platformAuditLog (dual-write with productKey: "salesos")
-    // const events = await prisma.salesAuditEvent.findMany({
-    //   where: {
-    //     organizationId: user.organizationId,
-    //     action: { startsWith: "outreach." },
-    //     createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
-    //   },
-    //   select: { action: true },
-    // });
     const events = await prisma.platformAuditLog.findMany({
       where: {
         productKey: "salesos",
-        organizationId: user.organizationId,
+        organizationId: ctx.organizationId,
         action: { startsWith: "outreach." },
         createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
       },
@@ -466,10 +450,10 @@ export async function scoreDealLeadsAction(dealId: string): Promise<{
   };
   error?: string;
 }> {
-  const user = await getAuth();
+  const ctx = await requireSalesPermission("salesos:update");
   try {
     const deal = await prisma.salesDeal.findFirst({
-      where: { id: dealId, organizationId: user.organizationId },
+      where: { id: dealId, organizationId: ctx.organizationId },
       select: {
         id: true,
         title: true,
@@ -517,7 +501,7 @@ export async function scoreDealLeadsAction(dealId: string): Promise<{
     const outreachEvents = await prisma.platformAuditLog.findMany({
       where: {
         productKey: "salesos",
-        organizationId: user.organizationId,
+        organizationId: ctx.organizationId,
         targetType: "SalesDeal",
         targetId: dealId,
         action: { startsWith: "outreach." },
@@ -572,6 +556,6 @@ export async function scoreDealLeadsAction(dealId: string): Promise<{
 
 // Re-export autoEnrich as wrapper to satisfy "use server" constraints
 import { autoEnrichAccount as _autoEnrichAccount } from "./auto-enrich";
-export async function autoEnrichAccount(accountId: string, accountName: string, organizationId: string) {
-  return _autoEnrichAccount(accountId, accountName, organizationId);
+export async function autoEnrichAccount(accountId: string, accountName: string) {
+  return _autoEnrichAccount(accountId, accountName);
 }

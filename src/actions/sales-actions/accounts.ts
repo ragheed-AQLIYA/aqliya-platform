@@ -59,7 +59,7 @@ export async function createSalesAccountAction(formData: FormData) {
 
     // Auto-enrich: fire-and-forget in background after account creation
     import("@/actions/sales-intel-actions/auto-enrich")
-      .then((m) => m.autoEnrichAccount(account.id, name, ctx.organizationId))
+      .then((m) => m.autoEnrichAccount(account.id, name))
       .catch(() => { /* enrichment is best-effort */ });
 
     return account;
