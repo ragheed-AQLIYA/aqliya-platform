@@ -48,8 +48,8 @@ import {
 import type { AccountCodeRange, TbLine } from "../types";
 
 describe("WorkbookTemplate", () => {
-  it("should have exactly 22 lines", () => {
-    expect(WORKBOOK_TEMPLATE.lines.length).toBe(22);
+  it("should have 62 lines (32 legacy + 30 official template v.2)", () => {
+    expect(WORKBOOK_TEMPLATE.lines.length).toBe(62);
   });
 
   it("should have version string", () => {
@@ -65,9 +65,15 @@ describe("WorkbookTemplate", () => {
     expect(sections.has("cost_of_sales")).toBe(true);
     expect(sections.has("gross_profit")).toBe(true);
     expect(sections.has("supplier_spend")).toBe(true);
+    expect(sections.has("lc_assessment")).toBe(true);
     expect(sections.has("workforce")).toBe(true);
-    expect(sections.has("assets")).toBe(true);
+    expect(sections.has("goods_services")).toBe(true);
+    expect(sections.has("additional_disclosure")).toBe(true);
+    expect(sections.has("capex")).toBe(true);
+    expect(sections.has("capacity_building")).toBe(true);
+    expect(sections.has("depreciation")).toBe(true);
     expect(sections.has("declarations")).toBe(true);
+    expect(sections.has("appendix_a")).toBe(true);
   });
 
   it("should find template line by code", () => {
@@ -192,11 +198,10 @@ describe("AccountCodeRange filtering", () => {
     expect(line!.accountCodeRanges![0].excludePrefixes).toContain("1106");
   });
 
-  it("AST-01 template should exclude gain/loss accounts (4)", () => {
+  it("AST-01 template should match depreciation expense accounts (prefix 3)", () => {
     const line = getTemplateLineByCode("AST-01");
     expect(line?.accountCodeRanges).toBeDefined();
-    expect(line!.accountCodeRanges![0].prefix).toBe("1");
-    expect(line!.accountCodeRanges![0].excludePrefixes).toContain("4");
+    expect(line!.accountCodeRanges![0].prefix).toBe("3");
   });
 
   it("REV-01 template should only match revenue prefix 4", () => {
@@ -270,24 +275,24 @@ describe("Aggregate TB values with code ranges", () => {
     expect(value).toBe(199000000);
   });
 
-  it("should exclude gain on sale accounts from asset matching", () => {
+  it("should exclude gain on sale accounts from depreciation matching", () => {
     const lines = [
-      { accountCode: "1201000101", accountName: "أصول ثابتة - معدات", debit: 9500000, credit: 0 },
+      { accountCode: "3204010050", accountName: "مصروف إهلاك", debit: 9500000, credit: 0 },
       { accountCode: "4402010001", accountName: "أ.خ بيع أصول ثابتة", debit: 47905, credit: 0 },
     ];
     const value = aggregateTbValues(lines, "AST-01");
-    expect(value).not.toBeNull();
+    // AST-01 now matches depreciation expense (prefix 3), not asset accounts
     expect(value).toBe(9500000);
   });
 
-  it("should match آلات ومعدات asset account with code prefix 1", () => {
+  it("should match مصروف إهلاك depreciation expense accounts", () => {
     const lines = [
-      { accountCode: "1301010006", accountName: "آلات ومعدات", debit: 9583752.34, credit: 0 },
-      { accountCode: "3204010071", accountName: "مصروفات معدات وادوات صيانه", debit: 51479.31, credit: 0 },
+      { accountCode: "3204010050", accountName: "مصروف إهلاك أصول", debit: 9583752.34, credit: 0 },
+      { accountCode: "3204010051", accountName: "مصروف إهلاك معدات", debit: 51479.31, credit: 0 },
     ];
     const value = aggregateTbValues(lines, "AST-01");
-    expect(value).not.toBeNull();
-    expect(value).toBe(9583752.34);
+    // AST-01 matches depreciation expense (prefix 3)
+    expect(value).toBe(9583752.34 + 51479.31);
   });
 
   it("should match تكلفة مردم account for COS", () => {
@@ -416,10 +421,14 @@ describe("Full pipeline integration (dedup + aggregate + formula)", () => {
     expect(value).toBeCloseTo(expected, 1);
   });
 
-  it("should aggregate asset accounts (prefix 1, exclude 4) into AST-01", () => {
-    const value = aggregateTbValues(tbLines, "AST-01");
-    const expected = 9583752.34 + 299837.95;
-    expect(value).toBeCloseTo(expected, 1);
+  it("should aggregate depreciation expense accounts (prefix 3) into AST-01", () => {
+    // AST-01 is now depreciation expense, not asset accounts
+    const depLines: TbLine[] = [
+      { accountCode: "3204010050", accountName: "مصروف إهلاك أصول", debit: 9583752.34, credit: 0 },
+      { accountCode: "3204010051", accountName: "مصروف إهلاك مباني", debit: 299837.95, credit: 0 },
+    ];
+    const value = aggregateTbValues(depLines, "AST-01");
+    expect(value).toBeCloseTo(9583752.34 + 299837.95, 1);
   });
 
   it("should aggregate payroll accounts into WRK-04", () => {
@@ -453,14 +462,14 @@ describe("Full pipeline integration (dedup + aggregate + formula)", () => {
 // ─── buildLinesData tests ───
 
 describe("buildLinesData", () => {
-  it("should return 22 lines matching template count", () => {
+  it("should return 62 lines matching template count", () => {
     // Pass explicit nulls for all template codes
     const explicitNulls: Record<string, number | null> = {};
     for (const tmpl of WORKBOOK_TEMPLATE.lines) {
       explicitNulls[tmpl.code] = null;
     }
     const result = buildLinesData(explicitNulls, "wb-1");
-    expect(result.linesData.length).toBe(22);
+    expect(result.linesData.length).toBe(62);
     expect(result.autoFilledCount).toBe(0);
   });
 
@@ -528,7 +537,7 @@ describe("buildLinesData", () => {
     };
     const result = buildLinesData(tbValues, "wb-1");
     expect(result.autoFilledCount).toBeGreaterThanOrEqual(5);
-    expect(result.autoFilledCount).toBeLessThanOrEqual(22);
+    expect(result.autoFilledCount).toBeLessThanOrEqual(62);
   });
 
   it("should set workbookId on all lines", () => {
@@ -637,9 +646,9 @@ describe("populateWorkbookFromProject", () => {
     title: "Workbook - Test Project (2025-Q2)",
     reportingPeriod: "2025-Q2",
     status: "populated",
-    totalLines: 22,
+    totalLines: 32,
     autoFilledLines: 0,
-    missingLines: 22,
+    missingLines: 32,
     completionPct: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -649,7 +658,7 @@ describe("populateWorkbookFromProject", () => {
   const mockUpdatedWorkbook = {
     ...mockCreatedWorkbook,
     autoFilledLines: 3,
-    missingLines: 19,
+    missingLines: 29,
     completionPct: 14,
     status: "partial",
   };
@@ -673,7 +682,7 @@ describe("populateWorkbookFromProject", () => {
     const aiReview = require("../ai-auto-review");
     aiReview.runWorkbookAiReview.mockResolvedValue(undefined);
     prisma.lcWorkbook.create.mockResolvedValue(mockCreatedWorkbook);
-    prisma.lcWorkbookLine.createMany.mockResolvedValue({ count: 22 });
+    prisma.lcWorkbookLine.createMany.mockResolvedValue({ count: 32 });
     prisma.lcWorkbook.update.mockResolvedValue(mockUpdatedWorkbook);
     prisma.lcWorkbookLine.findMany.mockResolvedValue(mockLines);
   });
@@ -702,7 +711,7 @@ describe("populateWorkbookFromProject", () => {
     expect(prisma.lcWorkbookLine.createMany).toHaveBeenCalledTimes(1);
     expect(prisma.lcWorkbook.update).toHaveBeenCalledTimes(1);
     expect(result.workbookId).toBe("wb-1");
-    expect(result.totalLines).toBe(22);
+    expect(result.totalLines).toBe(32);
   });
 
   it("should return existing workbook if already populated", async () => {
@@ -755,9 +764,9 @@ describe("populateWorkbookFromTb", () => {
     title: "Workbook - TB Project (2025-Q1)",
     reportingPeriod: "2025-Q1",
     status: "populated",
-    totalLines: 22,
+    totalLines: 32,
     autoFilledLines: 0,
-    missingLines: 22,
+    missingLines: 32,
     completionPct: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -767,7 +776,7 @@ describe("populateWorkbookFromTb", () => {
   const mockUpdatedWorkbook = {
     ...mockCreatedWorkbook,
     autoFilledLines: 5,
-    missingLines: 17,
+    missingLines: 27,
     completionPct: 23,
     status: "partial",
   };
@@ -798,7 +807,7 @@ describe("populateWorkbookFromTb", () => {
     const aiReview = require("../ai-auto-review");
     aiReview.runWorkbookAiReview.mockResolvedValue(undefined);
     prisma.lcWorkbook.create.mockResolvedValue(mockCreatedWorkbook);
-    prisma.lcWorkbookLine.createMany.mockResolvedValue({ count: 22 });
+    prisma.lcWorkbookLine.createMany.mockResolvedValue({ count: 32 });
     prisma.lcWorkbook.update.mockResolvedValue(mockUpdatedWorkbook);
     prisma.lcWorkbookLine.findMany.mockResolvedValue(mockLines);
   });
@@ -850,7 +859,7 @@ describe("populateWorkbookFromTb", () => {
   it("should handle empty TB lines gracefully", async () => {
     const result = await populateWorkbookFromTb("proj-2", "org-1", []);
     expect(result.workbookId).toBeDefined();
-    expect(result.totalLines).toBe(22);
+    expect(result.totalLines).toBe(32);
   });
 });
 

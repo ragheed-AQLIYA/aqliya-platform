@@ -1,7 +1,7 @@
 // ─── LocalContentOS — Trial Balance XLSX Loader ───
 // Thin adapter: reads real client TB XLSX files and returns TbLine[].
 // No schema changes, no new dependencies.
-// Reuses existing `xlsx` package already in the dependency tree.
+// Uses @/lib/xlsx abstraction (ExcelJS wrapper).
 //
 // Expected format (Arabic headers, two sheets):
 //   Sheet "ميزان المراجعة (2)" — Balance Sheet accounts
@@ -16,7 +16,8 @@
 // P0: Source file is the authority. No synthetic data.
 
 import { readFileSync } from "fs";
-import * as XLSX from "xlsx";
+import { readBuffer, sheetToJsonArrays } from "@/lib/xlsx";
+import { validateXlsxArchive } from "@/lib/security/xlsx-validation";
 import type { TbLine } from "./types";
 
 // ─── Column Index Constants ───
@@ -40,21 +41,22 @@ const COL_CREDIT = 8;
  * @param filePath - Absolute or relative path to the .xlsx file
  * @returns TbLine[] — array of trial balance lines ready for workbook population
  */
-export function parseTbXlsx(filePath: string): TbLine[] {
+export async function parseTbXlsx(filePath: string): Promise<TbLine[]> {
   const buffer = readFileSync(filePath);
-  const workbook = XLSX.read(buffer, { type: "buffer", cellDates: false });
+
+  // ZIP bomb defense: validate archive structure before readBuffer()
+  const zipCheck = validateXlsxArchive(buffer);
+  if (!zipCheck.valid) {
+    throw new Error(`XLSX rejected: ${zipCheck.reason}`);
+  }
+
+  const workbook = await readBuffer(buffer);
 
   const allLines: TbLine[] = [];
   const seenKeys = new Set<string>();
 
-  for (const sheetName of workbook.SheetNames) {
-    const sheet = workbook.Sheets[sheetName];
-    if (!sheet) continue;
-
-    const rows = XLSX.utils.sheet_to_json(sheet, {
-      header: 1,
-      defval: "",
-    }) as unknown[][];
+  for (const sheet of workbook.worksheets) {
+    const rows = sheetToJsonArrays(sheet, { includeEmpty: true }) as unknown[][];
 
     if (rows.length < 2) continue; // Need header + at least 1 data row
 
@@ -135,12 +137,19 @@ export interface TbParseStats {
  * Parse XLSX and return both TbLine[] and parsing statistics.
  * Useful for rehearsal reports and validation.
  */
-export function parseTbXlsxWithStats(filePath: string): {
+export async function parseTbXlsxWithStats(filePath: string): Promise<{
   lines: TbLine[];
   stats: TbParseStats;
-} {
+}> {
   const buffer = readFileSync(filePath);
-  const workbook = XLSX.read(buffer, { type: "buffer", cellDates: false });
+
+  // ZIP bomb defense: validate archive structure before readBuffer()
+  const zipCheck = validateXlsxArchive(buffer);
+  if (!zipCheck.valid) {
+    throw new Error(`XLSX rejected: ${zipCheck.reason}`);
+  }
+
+  const workbook = await readBuffer(buffer);
 
   const allLines: TbLine[] = [];
   const seenKeys = new Set<string>();
@@ -151,15 +160,11 @@ export function parseTbXlsxWithStats(filePath: string): {
   let totalCredit = 0;
   const sheetsFound: string[] = [];
 
-  for (const sheetName of workbook.SheetNames) {
-    const sheet = workbook.Sheets[sheetName];
-    if (!sheet) continue;
+  for (const sheet of workbook.worksheets) {
+    const sheetName = sheet.name;
     sheetsFound.push(sheetName);
 
-    const rows = XLSX.utils.sheet_to_json(sheet, {
-      header: 1,
-      defval: "",
-    }) as unknown[][];
+    const rows = sheetToJsonArrays(sheet, { includeEmpty: true }) as unknown[][];
 
     if (rows.length < 2) continue;
 

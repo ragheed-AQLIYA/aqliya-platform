@@ -131,6 +131,7 @@ const SECTION_AR_LABELS: Record<string, string> = {
   supplier_spend: "المشتريات",
   workforce: "الموارد البشرية",
   assets: "الأصول",
+  capacity_building: "بناء القدرات",
   declarations: "الإقرارات",
 };
 
@@ -187,6 +188,7 @@ const PREFIX_TO_SECTION: Record<string, string> = {
   SPN: "supplier_spend",
   WRK: "workforce",
   AST: "assets",
+  CAP: "capacity_building",
   DEC: "declarations",
   INF: "company_info",
 };

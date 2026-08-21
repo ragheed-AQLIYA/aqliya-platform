@@ -44,16 +44,22 @@ export const VALID_ITEM_CATEGORIES = [
 ] as const;
 export type ItemCategory = (typeof VALID_ITEM_CATEGORIES)[number];
 
-/** Workbook sections (from canonical template) */
+/** Workbook sections (from canonical template v.2 — 11 official sections) */
 export const WORKBOOK_SECTIONS = [
-  "company_info",
-  "revenue",
-  "cost_of_sales",
-  "gross_profit",
-  "supplier_spend",
-  "workforce",
-  "assets",
-  "declarations",
+  "company_info",          // Section 1: Facility Info
+  "revenue",               // Legacy revenue (kept for IKTVA compatibility)
+  "cost_of_sales",         // Legacy cost of sales (kept for IKTVA compatibility)
+  "gross_profit",          // Legacy gross profit (kept for IKTVA compatibility)
+  "supplier_spend",        // Legacy supplier spend (kept for IKTVA compatibility)
+  "lc_assessment",         // Section 2: LC% Assessment (formula summary)
+  "workforce",             // Section 3: Workforce
+  "goods_services",        // Section 4: Goods & Services (supplier grid)
+  "additional_disclosure", // Section 4.1: Additional Disclosure (goods < 50%)
+  "capex",                 // Section 5: Capital Expenditure
+  "capacity_building",     // Section 6: Capacity Building
+  "depreciation",          // Section 7: Depreciation (FAR reconciliation)
+  "declarations",          // Declarations / close-out
+  "appendix_a",            // Appendix A: Supplier Detail Grid
 ] as const;
 export type WorkbookSection = (typeof WORKBOOK_SECTIONS)[number];
 
