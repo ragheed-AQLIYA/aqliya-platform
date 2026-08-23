@@ -451,7 +451,9 @@ export async function computeLcgpaWorkbookScoreAction(
     // Get current user
     const user = await getCurrentUser();
 
-    // Build ranked suppliers with rank assignment (descending spend)
+    // Build ranked suppliers with rank assignment (descending spend).
+    // When no suppliers are provided, the service auto-loads them from the
+    // project's spend records (loadProjectSuppliersFromSpend).
     const suppliers = (options?.suppliers ?? [])
       .sort((a, b) => b.spend - a.spend)
       .map((s, i) => ({
@@ -463,8 +465,10 @@ export async function computeLcgpaWorkbookScoreAction(
     const result = await computeLcgpaWorkbookScore(prisma, {
       workbookId,
       projectId: workbook.projectId,
-      suppliers,
-      totalGoodsServicesCost: options?.totalGoodsServicesCost ?? 0,
+      ...(suppliers.length > 0 ? { suppliers } : {}),
+      ...(options?.totalGoodsServicesCost !== undefined
+        ? { totalGoodsServicesCost: options.totalGoodsServicesCost }
+        : {}),
       computedById: user?.id ?? null,
       policy: {
         ...(options?.allowUnboundDataset ? { allowUnboundDataset: true } : {}),

@@ -5,6 +5,7 @@
 
 import {
   computeLcgpaWorkbookScore,
+  loadProjectSuppliersFromSpend,
   type LcgpaWorkbookScoreInput,
 } from "../workbook-scoring-lcgpa";
 import { makeDataset } from "../regulatory/__tests__/dataset-helpers";
@@ -36,7 +37,19 @@ function makeLine(overrides: Partial<LcWorkbookLine>): LcWorkbookLine {
   };
 }
 
-function makeDbMock(datasets = [], lines = []): Partial<PrismaClient> {
+function makeDbMock(
+  datasets = [],
+  lines = [],
+  opts: {
+    spendGroups?: Array<{ supplierId: string; _sum: { amount: number | null } }>;
+    supplierRows?: Array<{
+      id: string;
+      name: string;
+      localityClassification: string | null;
+      localContentPercentage: number | null;
+    }>;
+  } = {},
+): Partial<PrismaClient> {
   return {
     lcRegulatoryDataset: {
       findMany: async () => datasets,
@@ -48,6 +61,12 @@ function makeDbMock(datasets = [], lines = []): Partial<PrismaClient> {
     lcCalculationRun: {
       create: async (args: Record<string, unknown>) => args,
     } as unknown as PrismaClient["lcCalculationRun"],
+    localContentSpendRecord: {
+      groupBy: async () => opts.spendGroups ?? [],
+    } as unknown as PrismaClient["localContentSpendRecord"],
+    localContentSupplier: {
+      findMany: async () => opts.supplierRows ?? [],
+    } as unknown as PrismaClient["localContentSupplier"],
   };
 }
 
@@ -291,5 +310,201 @@ describe("computeLcgpaWorkbookScore", () => {
     });
 
     expect(result.overallLcPct).toBe(100);
+  });
+});
+
+// ─── loadProjectSuppliersFromSpend ───
+
+describe("loadProjectSuppliersFromSpend", () => {
+  const SPEND_GROUPS = [
+    { supplierId: "s-b", _sum: { amount: 3000 } },
+    { supplierId: "s-a", _sum: { amount: 7000 } },
+    { supplierId: "s-c", _sum: { amount: null } },
+    { supplierId: "s-ghost", _sum: { amount: 500 } }, // no supplier row
+  ];
+  const SUPPLIER_ROWS = [
+    {
+      id: "s-a",
+      name: "Alpha",
+      localityClassification: "local",
+      localContentPercentage: 80,
+    },
+    {
+      id: "s-b",
+      name: "Beta",
+      localityClassification: "weird_value", // invalid → unclassified
+      localContentPercentage: null,
+    },
+    // s-c intentionally missing from supplier rows too
+  ];
+
+  it("aggregates spend per supplier, ranks descending, totals consistently", async () => {
+    const db = makeDbMock([], [], {
+      spendGroups: SPEND_GROUPS,
+      supplierRows: SUPPLIER_ROWS,
+    }) as PrismaClient;
+
+    const { suppliers, totalGoodsServicesCost } =
+      await loadProjectSuppliersFromSpend(db, "proj-1");
+
+    // s-c has null sum → filtered out (spend must be > 0)
+    expect(suppliers).toHaveLength(3);
+
+    // Rank order: s-a (7000) → s-b (3000) → s-ghost (500)
+    expect(suppliers.map((s) => s.supplierId)).toEqual([
+      "s-a",
+      "s-b",
+      "s-ghost",
+    ]);
+    expect(suppliers[0].rank).toBe(1);
+    expect(suppliers[2].rank).toBe(3);
+
+    // Total = sum of the same records used for aggregation
+    expect(totalGoodsServicesCost).toBe(10500);
+
+    // Classification mapping
+    expect(suppliers[0].localityClassification).toBe("local");
+    expect(suppliers[1].localityClassification).toBe("unclassified");
+    // Ghost supplier falls back to id as name, unclassified
+    expect(suppliers[2].name).toBe("s-ghost");
+    expect(suppliers[2].localityClassification).toBe("unclassified");
+  });
+
+  it("returns empty result when project has no spend records", async () => {
+    const db = makeDbMock([], [], {}) as PrismaClient;
+
+    const { suppliers, totalGoodsServicesCost } =
+      await loadProjectSuppliersFromSpend(db, "proj-empty");
+
+    expect(suppliers).toEqual([]);
+    expect(totalGoodsServicesCost).toBe(0);
+  });
+
+  it("breaks spend ties by supplierId lexicographically", async () => {
+    const db = makeDbMock([], [], {
+      spendGroups: [
+        { supplierId: "t-2", _sum: { amount: 1000 } },
+        { supplierId: "t-1", _sum: { amount: 1000 } },
+        { supplierId: "t-10", _sum: { amount: 1000 } },
+      ],
+      supplierRows: [],
+    }) as PrismaClient;
+
+    const { suppliers } = await loadProjectSuppliersFromSpend(db, "proj-1");
+
+    expect(suppliers.map((s) => s.supplierId)).toEqual(["t-1", "t-10", "t-2"]);
+  });
+});
+
+// ─── Auto-load fallback in computeLcgpaWorkbookScore ───
+
+describe("computeLcgpaWorkbookScore — supplier auto-load fallback", () => {
+  it("auto-loads suppliers from spend when none are provided explicitly", async () => {
+    const dataset = makeDataset("v1", [product("2801")], {
+      status: "ACTIVE",
+      effectiveFrom: new Date("2026-01-01"),
+    });
+    const db = makeDbMock([dataset], [], {
+      spendGroups: [{ supplierId: "2801", _sum: { amount: 4000 } }],
+      supplierRows: [
+        {
+          id: "2801",
+          name: "Local Supplier",
+          localityClassification: "local",
+          localContentPercentage: 75,
+        },
+      ],
+    }) as PrismaClient;
+
+    const result = await computeLcgpaWorkbookScore(db, {
+      workbookId: "wb-1",
+      projectId: "proj-1",
+      computedById: null,
+    });
+
+    // G&S pillar used auto-loaded data. Engine rule: "local" → 100%
+    // effective LC% (declared 75 is ignored for local suppliers).
+    expect(result.lcGoodsServices).toBe(4000);
+    // Binding resolved via product code from auto-loaded supplier
+    expect(result.recordable).toBe(true);
+    expect(result.regulatoryDatasetVersion).toBe(dataset.datasetVersion);
+    // Total costs include the auto-loaded G&S base
+    expect(result.totalCosts).toBeGreaterThanOrEqual(4000);
+  });
+
+  it("explicit suppliers take precedence over auto-load", async () => {
+    const dataset = makeDataset("v1", [product("2801")], {
+      status: "ACTIVE",
+      effectiveFrom: new Date("2026-01-01"),
+    });
+    const db = makeDbMock([dataset], [], {
+      spendGroups: [{ supplierId: "9999", _sum: { amount: 999999 } }],
+      supplierRows: [
+        {
+          id: "9999",
+          name: "Should Not Be Used",
+          localityClassification: "non_local",
+          localContentPercentage: 0,
+        },
+      ],
+    }) as PrismaClient;
+
+    const result = await computeLcgpaWorkbookScore(db, {
+      workbookId: "wb-1",
+      projectId: "proj-1",
+      suppliers: [
+        {
+          supplierId: "2801",
+          name: "Explicit Supplier",
+          spend: 200,
+          localityClassification: "local",
+          localContentPercentage: 50,
+          rank: 1,
+        },
+      ],
+      totalGoodsServicesCost: undefined,
+    });
+
+    // Explicit supplier used: "local" → 100% effective → 200 LC.
+    // Auto-loaded 999999 spend ignored entirely.
+    expect(result.lcGoodsServices).toBe(200);
+  });
+
+  it("defaults totalGoodsServicesCost to explicit-supplier sum when omitted", async () => {
+    const dataset = makeDataset("v1", [product("2801")], {
+      status: "ACTIVE",
+      effectiveFrom: new Date("2026-01-01"),
+    });
+    const db = makeDbMock([dataset], []) as PrismaClient;
+
+    const result = await computeLcgpaWorkbookScore(db, {
+      workbookId: "wb-1",
+      projectId: "proj-1",
+      suppliers: [
+        {
+          supplierId: "2801",
+          name: "Supplier A",
+          spend: 600,
+          localityClassification: "mixed",
+          localContentPercentage: 40,
+          rank: 1,
+        },
+        {
+          supplierId: "2802",
+          name: "Supplier B",
+          spend: 400,
+          localityClassification: "local",
+          localContentPercentage: 90,
+          rank: 2,
+        },
+      ],
+      // totalGoodsServicesCost omitted
+    });
+
+    // Total = 600 + 400 = 1000 (derived, not 0)
+    // Selected top supplier by rank rule: mixed classified at declared pct
+    // LC_GS ≥ (600×0.4 + 400×0.9)/1000 — just assert total consistency
+    expect(result.trace.inputs.goodsServices.totalGoodsServicesCost).toBe(1000);
+    expect(result.totalCosts).toBeGreaterThan(0);
   });
 });

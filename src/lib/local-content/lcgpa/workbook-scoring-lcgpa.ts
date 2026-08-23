@@ -28,10 +28,14 @@ export interface LcgpaWorkbookScoreInput {
   workbookId: string;
   /** Project ID that owns the workbook. */
   projectId: string;
-  /** Ranked suppliers for the G&S pillar. */
-  suppliers: RankedSupplier[];
-  /** Total goods & services cost for the G&S pillar. */
-  totalGoodsServicesCost: number;
+  /**
+   * Ranked suppliers for the G&S pillar.
+   * When omitted, suppliers are auto-loaded from the project's spend records
+   * via loadProjectSuppliersFromSpend (DB-backed, ranked by descending spend).
+   */
+  suppliers?: RankedSupplier[];
+  /** Total goods & services cost for the G&S pillar. Defaults to auto-loaded sum. */
+  totalGoodsServicesCost?: number;
   /** User who triggered the calculation. */
   computedById?: string | null;
   /** Binding policy override (default: strict). */
@@ -69,6 +73,84 @@ export interface LcgpaWorkbookScoreResult {
   trace: ReturnType<typeof createBoundCalculationTrace>;
 }
 
+// ─── Project Supplier Loader ───
+
+/**
+ * Load ranked suppliers from the project's real spend records.
+ *
+ * Aggregates LocalContentSpendRecord amounts grouped by supplierId, joins
+ * supplier classification data (locality + declared LC%), ranks by
+ * descending spend with lexicographic tie-break, and returns the grand
+ * total as totalGoodsServicesCost.
+ *
+ * Deterministic rule: totalGoodsServicesCost equals the sum of exactly the
+ * same spend records used for supplier aggregation, keeping LC%_GS
+ * internally consistent.
+ */
+export async function loadProjectSuppliersFromSpend(
+  db: PrismaClient,
+  projectId: string,
+): Promise<{ suppliers: RankedSupplier[]; totalGoodsServicesCost: number }> {
+  // Aggregate spend per supplier
+  const grouped = await db.localContentSpendRecord.groupBy({
+    by: ["supplierId"],
+    where: { projectId },
+    _sum: { amount: true },
+  });
+
+  if (grouped.length === 0) {
+    return { suppliers: [], totalGoodsServicesCost: 0 };
+  }
+
+  // Fetch classification data for the referenced suppliers
+  const supplierRows = await db.localContentSupplier.findMany({
+    where: { id: { in: grouped.map((g) => g.supplierId) } },
+    select: {
+      id: true,
+      name: true,
+      localityClassification: true,
+      localContentPercentage: true,
+    },
+  });
+
+  const byId = new Map(supplierRows.map((s) => [s.id, s]));
+
+  const VALID_LOCALITY = new Set<string>(["local", "non_local", "mixed"]);
+
+  const enriched = grouped
+    .map((g) => {
+      const row = byId.get(g.supplierId);
+      const rawLocality = row?.localityClassification ?? null;
+      const locality = (
+        rawLocality && VALID_LOCALITY.has(rawLocality)
+          ? rawLocality
+          : "unclassified"
+      ) as RankedSupplier["localityClassification"];
+      return {
+        supplierId: g.supplierId,
+        name: row?.name ?? g.supplierId,
+        spend: g._sum.amount ?? 0,
+        localityClassification: locality,
+        localContentPercentage: row?.localContentPercentage ?? null,
+      };
+    })
+    .filter((s) => s.spend > 0);
+
+  // Rank by descending spend, tie-break by supplierId lexicographic
+  const sorted = [...enriched].sort(
+    (a, b) => b.spend - a.spend || a.supplierId.localeCompare(b.supplierId),
+  );
+
+  const suppliers: RankedSupplier[] = sorted.map((s, i) => ({
+    ...s,
+    rank: i + 1,
+  }));
+
+  const totalGoodsServicesCost = suppliers.reduce((sum, s) => sum + s.spend, 0);
+
+  return { suppliers, totalGoodsServicesCost };
+}
+
 // ─── Core Service ───
 
 /**
@@ -88,8 +170,6 @@ export async function computeLcgpaWorkbookScore(
   const {
     workbookId,
     projectId,
-    suppliers,
-    totalGoodsServicesCost,
     computedById,
     policy,
   } = input;
@@ -99,18 +179,34 @@ export async function computeLcgpaWorkbookScore(
     where: { workbookId },
   });
 
-  // 2. Extract LCGPA pillar inputs from workbook lines
+  // 2. Resolve G&S inputs — explicit suppliers take precedence; otherwise
+  //    auto-load ranked suppliers from the project's real spend records.
+  const explicitSuppliers = input.suppliers;
+  let suppliers: RankedSupplier[];
+  let totalGoodsServicesCost: number;
+  if (explicitSuppliers && explicitSuppliers.length > 0) {
+    suppliers = explicitSuppliers;
+    totalGoodsServicesCost =
+      input.totalGoodsServicesCost ??
+      explicitSuppliers.reduce((sum, s) => sum + s.spend, 0);
+  } else {
+    const loaded = await loadProjectSuppliersFromSpend(db, projectId);
+    suppliers = loaded.suppliers;
+    totalGoodsServicesCost = loaded.totalGoodsServicesCost;
+  }
+
+  // 3. Extract LCGPA pillar inputs from workbook lines
   const pillarInputs = extractLcgpaInputs(lines, suppliers, totalGoodsServicesCost);
 
-  // 3. Load resolvable regulatory datasets from DB
+  // 4. Load resolvable regulatory datasets from DB
   const datasets = await loadResolvableDatasets(db);
 
-  // 4. Collect product codes from suppliers (for binding resolution)
+  // 5. Collect product codes from suppliers (for binding resolution)
   const productCodes = suppliers
     .map((s) => s.supplierId)
     .filter((id): id is string => Boolean(id));
 
-  // 5. Run bound calculation (binding resolves BEFORE computation)
+  // 6. Run bound calculation (binding resolves BEFORE computation)
   const calculationDate = new Date();
   const bound = computeLcgpaWithBinding({
     datasets,
@@ -122,7 +218,7 @@ export async function computeLcgpaWorkbookScore(
     policy,
   });
 
-  // 6. Create audit-grade trace
+  // 7. Create audit-grade trace
   const trace = createBoundCalculationTrace(
     {
       datasets,
@@ -135,7 +231,7 @@ export async function computeLcgpaWorkbookScore(
     bound,
   );
 
-  // 7. Persist if recordable
+  // 8. Persist if recordable
   if (bound.recordable) {
     await recordBoundCalculationRun(db, {
       projectId,
