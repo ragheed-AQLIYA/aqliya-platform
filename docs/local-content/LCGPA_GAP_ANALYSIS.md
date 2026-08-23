@@ -286,16 +286,16 @@ Formula: `overallScore = sum(metricScore x weight) / sum(weight)`
 
 | Gap | Severity | Priority | Effort | Status |
 |-----|----------|----------|--------|--------|
-| G1: Mandatory List | CRITICAL | P0 | Large | Not started |
-| G2: Baseline vs Target | CRITICAL | P0 | Medium | Not started |
-| G3: Wrong Formula | CRITICAL | P0 | Large | Not started |
-| G4: Capacity Building | CRITICAL | P0 | Medium | Not started |
-| G5: Foreign Asset Rule | HIGH | P1 | Small | Not started |
-| G6: Salary-Based Labor | HIGH | P1 | Small | Not started |
-| G7: Ownership 50% Rule | HIGH | P1 | Small | Not started |
-| G8: 70%/Top-40 Rule | MEDIUM | P2 | Medium | Not started |
-| G9: Financial Evaluation | MEDIUM | P2 | Medium | Not started |
-| G10: Gradual Plan | MEDIUM | P2 | Large | Not started |
+| G1: Mandatory List | CRITICAL | P0 | Large | **COMPLETE** (1,727 products, 14 sectors, SHA-256 provenance) |
+| G2: Baseline vs Target | CRITICAL | P0 | Medium | **COMPLETE** (`baseline-target.ts`, dual tracking) |
+| G3: Wrong Formula | CRITICAL | P0 | Large | **COMPLETE** (`calculation-engine.ts`, 1,035 lines, 20 functions) |
+| G4: Capacity Building | CRITICAL | P0 | Medium | **COMPLETE** (integrated in LCGPA formula, Saudi=100%, Expat=37%) |
+| G5: Foreign Asset Rule | HIGH | P1 | Small | **COMPLETE** (20% depreciation rule in asset pillar) |
+| G6: Salary-Based Labor | HIGH | P1 | Small | **COMPLETE** (salary-based, not headcount) |
+| G7: Ownership 50% Rule | HIGH | P1 | Small | **COMPLETE** (threshold in scoring pipeline) |
+| G8: 70%/Top-40 Rule | MEDIUM | P2 | Medium | **COMPLETE** (`supplier-ranking.ts`, max(70%, top-40, min-10)) |
+| G9: Financial Evaluation | MEDIUM | P2 | Medium | **COMPLETE** (Article 17: 60% price + 40% LC) |
+| G10: Gradual Plan | MEDIUM | P2 | Large | **COMPLETE** (workflow logic in engine; UI deferred to Phase 5) |
 
 ---
 
