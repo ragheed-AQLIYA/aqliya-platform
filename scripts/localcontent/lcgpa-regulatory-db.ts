@@ -13,8 +13,28 @@
  * The rest of the repo's scripts construct PrismaClient directly for the same
  * reason; this module just gives the regulatory scripts one place to do it.
  */
+import { existsSync, readFileSync } from "fs";
+import { join } from "path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+
+/** Best-effort .env loading for CLI scripts (no dotenv dependency). */
+function loadEnvIfMissing(): void {
+  if (process.env.DATABASE_URL) return;
+  const envPath = join(process.cwd(), ".env");
+  if (!existsSync(envPath)) return;
+  for (const line of readFileSync(envPath, "utf-8").split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq < 0) continue;
+    const key = trimmed.slice(0, eq).trim();
+    const val = trimmed.slice(eq + 1).trim().replace(/^["']|["']$/g, "");
+    if (!process.env[key]) process.env[key] = val;
+  }
+}
+
+loadEnvIfMissing();
 
 let _db: PrismaClient | null = null;
 

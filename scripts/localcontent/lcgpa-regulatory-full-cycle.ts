@@ -45,6 +45,7 @@ import {
 import {
   loadEngineState,
   persistCase,
+  persistCycle,
   persistDataset,
 } from "@/lib/local-content/lcgpa/regulatory/persistence";
 
@@ -140,10 +141,19 @@ async function main(): Promise<void> {
   const report: ReportEntry[] = [];
   const parser = createParserRegistry();
 
+  // Collect all cycle outputs for batch persistence
+  const allCycleOutputs: Array<{
+    sources: RegulatorySource[];
+    checks: import("@/lib/local-content/lcgpa/regulatory").SourceCheckResult[];
+    results: import("@/lib/local-content/lcgpa/regulatory/persistence").PersistableResult[];
+    alerts: import("@/lib/local-content/lcgpa/regulatory").RegulatoryAlert[];
+    document?: { titleAr?: string; titleEn?: string | null; documentType?: string };
+  }> = [];
+
   // ── Phase 1: Ingest all sources ──────────────────────────────────────
   console.log("\n╔══════════════════════════════════════╗");
   console.log("║  PHASE 1: INGEST ARTIFACTS          ║");
-  console.log("╚══════════════════════════════════════╝\n");
+  console.log("╚════════════════════════════════════╝\n");
 
   const preserved = loadPreservedArtifacts();
   const registry = buildSeedRegistry(clock);
@@ -242,11 +252,41 @@ async function main(): Promise<void> {
       conflicts: result.diff?.changes.length ?? 0,
     });
 
-    // Commit if requested
+    // Collect for batch persistence
+    allCycleOutputs.push({
+      sources: out.sources,
+      checks: out.checks,
+      results: out.results,
+      alerts: out.alerts,
+      document: { titleAr: doc.titleAr, titleEn: doc.titleEn, documentType: doc.documentType },
+    });
+
     if (commit && result.dataset) {
-      // Persistence would go here in production
-      console.log(`  COMMIT  (would persist ${result.dataset.products.length} products)`);
+      console.log(`  QUEUED  ${result.dataset.products.length} products for commit`);
     }
+  }
+
+  // ── Batch commit ──────────────────────────────────────────────────────
+  if (commit && allCycleOutputs.length > 0) {
+    console.log("\n╔══════════════════════════════════════╗");
+    console.log("║  COMMITTING TO DATABASE             ║");
+    console.log("╚══════════════════════════════════════╝\n");
+
+    const client = db();
+    for (const cycle of allCycleOutputs) {
+      const summary = await persistCycle(client, {
+        sources: cycle.sources,
+        checks: cycle.checks,
+        results: cycle.results,
+        alerts: cycle.alerts,
+        correlationId: `full-cycle-${Date.now()}`,
+        document: cycle.document,
+      });
+      console.log(`  Persisted: ${summary.datasetsCreated} datasets, ${summary.artifacts} artifacts, ${summary.alerts} alerts, ${summary.changes} changes`);
+    }
+
+    await disconnect();
+    console.log("\n  ✅ Database commit complete");
   }
 
   // ── Phase 2: Effective Date Resolution ────────────────────────────────
