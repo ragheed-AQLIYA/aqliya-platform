@@ -43,6 +43,43 @@ export function isInForce(dataset: RegulatoryDataset, asOf: Date): boolean {
   return true;
 }
 
+/**
+ * Dataset-precedence tier at equal dataset-level effectiveFrom.
+ *
+ * DR-2026-08-23-01 (Operator Delegate, Owner Directive Session 2026-08-23):
+ * MANDATORY_LIST datasets are the primary enforcement instrument and outrank
+ * MINIMUM_LC schedules when both are in force from the same date. A MIN_LC
+ * schedule must never shadow a mandatory-list product that is already in
+ * force. Final tie-break remains createdAt (newest first) for determinism.
+ */
+function precedenceTier(d: RegulatoryDataset): number {
+  return /MANDATORY_LIST/i.test(d.datasetVersion) ? 0 : 1;
+}
+
+/**
+ * All resolvable datasets in force at `asOf`, ranked by:
+ *   1. newest dataset-level effectiveFrom,
+ *   2. mandatory-list precedence (DR-2026-08-23-01),
+ *   3. newest createdAt.
+ */
+export function rankInForceCandidates(
+  datasets: RegulatoryDataset[],
+  asOf: Date,
+): RegulatoryDataset[] {
+  return datasets
+    .filter((d) => RESOLVABLE_STATUSES.has(d.status))
+    .filter((d) => isInForce(d, asOf))
+    .sort((a, b) => {
+      const fa = effectiveFromTime(a) ?? 0;
+      const fb = effectiveFromTime(b) ?? 0;
+      if (fb !== fa) return fb - fa;
+      const pa = precedenceTier(a);
+      const pb = precedenceTier(b);
+      if (pa !== pb) return pa - pb;
+      return b.createdAt.getTime() - a.createdAt.getTime();
+    });
+}
+
 // ─── Current / future / historical resolution ───
 
 export interface RegulatoryStateResolution {
@@ -64,15 +101,7 @@ export function resolveRegulatoryState(
   datasets: RegulatoryDataset[],
   asOf: Date,
 ): RegulatoryStateResolution {
-  const candidates = datasets
-    .filter((d) => RESOLVABLE_STATUSES.has(d.status))
-    .filter((d) => isInForce(d, asOf))
-    .sort((a, b) => {
-      const fa = effectiveFromTime(a) ?? 0;
-      const fb = effectiveFromTime(b) ?? 0;
-      if (fb !== fa) return fb - fa;
-      return b.createdAt.getTime() - a.createdAt.getTime();
-    });
+  const candidates = rankInForceCandidates(datasets, asOf);
 
   if (candidates.length === 0) {
     const withoutDates = datasets.filter(
@@ -141,14 +170,20 @@ export interface ProductStateResolution {
 /**
  * Resolve one product's regulatory state at an explicit instant.
  * Returns UNKNOWN rather than substituting a value when nothing is in force.
+ *
+ * Per DR-2026-08-23-01: resolution falls through ranked candidates — a product
+ * binds against the highest-ranked candidate dataset whose product row is in
+ * force at `asOf`. A future-dated row in one schedule never shadows an
+ * already-in-force row in a mandatory list.
  */
 export function resolveProductState(
   datasets: RegulatoryDataset[],
   productCode: string,
   asOf: Date,
 ): ProductStateResolution {
-  const state = resolveRegulatoryState(datasets, asOf);
-  if (!state.dataset) {
+  const candidates = rankInForceCandidates(datasets, asOf);
+  if (candidates.length === 0) {
+    const state = resolveRegulatoryState(datasets, asOf);
     return {
       productCode,
       asOf,
@@ -160,55 +195,73 @@ export function resolveProductState(
       rationale: state.rationale,
     };
   }
-  const product =
-    state.dataset.products.find((p) => p.productCode === productCode) ?? null;
-  if (!product) {
+
+  // First blocking observation per category, kept for the final rationale
+  // when no candidate yields an in-force row.
+  let notYetEffective: { dataset: RegulatoryDataset; rationale: string } | null = null;
+  let expired: { dataset: RegulatoryDataset; rationale: string } | null = null;
+
+  for (const dataset of candidates) {
+    const product =
+      dataset.products.find((p) => p.productCode === productCode) ?? null;
+    if (!product) continue;
+
+    // A product may carry its own effectivity window inside a dataset already in force.
+    if (product.effectiveFrom && asOf.getTime() < product.effectiveFrom.getTime()) {
+      if (!notYetEffective) {
+        notYetEffective = {
+          dataset,
+          rationale: `PRODUCT_NOT_YET_EFFECTIVE: ${productCode} becomes effective ${product.effectiveFrom.toISOString().slice(0, 10)}, after the requested instant.`,
+        };
+      }
+      continue; // fall through to the next-ranked candidate
+    }
+    if (product.effectiveTo && asOf.getTime() >= product.effectiveTo.getTime()) {
+      if (!expired) {
+        expired = {
+          dataset,
+          rationale: `PRODUCT_EXPIRED: ${productCode} ceased to apply on ${product.effectiveTo.toISOString().slice(0, 10)}.`,
+        };
+      }
+      continue; // fall through to the next-ranked candidate
+    }
+
     return {
       productCode,
       asOf,
-      product: null,
-      datasetVersion: state.dataset.datasetVersion,
-      ruleVersion: state.dataset.ruleVersion,
-      provenance: state.dataset.provenance,
-      outcome: "UNKNOWN",
-      rationale: `PRODUCT_NOT_IN_FORCE: ${productCode} is not present in ${state.dataset.datasetVersion}, the dataset in force at ${asOf.toISOString().slice(0, 10)}.`,
-    };
-  }
-  // A product may carry its own effectivity window inside a dataset already in force.
-  if (product.effectiveFrom && asOf.getTime() < product.effectiveFrom.getTime()) {
-    return {
-      productCode,
-      asOf,
-      product: null,
-      datasetVersion: state.dataset.datasetVersion,
-      ruleVersion: state.dataset.ruleVersion,
-      provenance: state.dataset.provenance,
-      outcome: "UNKNOWN",
-      rationale: `PRODUCT_NOT_YET_EFFECTIVE: ${productCode} becomes effective ${product.effectiveFrom.toISOString().slice(0, 10)}, after the requested instant.`,
-    };
-  }
-  if (product.effectiveTo && asOf.getTime() >= product.effectiveTo.getTime()) {
-    return {
-      productCode,
-      asOf,
-      product: null,
-      datasetVersion: state.dataset.datasetVersion,
-      ruleVersion: state.dataset.ruleVersion,
-      provenance: state.dataset.provenance,
-      outcome: "UNKNOWN",
-      rationale: `PRODUCT_EXPIRED: ${productCode} ceased to apply on ${product.effectiveTo.toISOString().slice(0, 10)}.`,
+      product,
+      datasetVersion: dataset.datasetVersion,
+      ruleVersion: dataset.ruleVersion,
+      provenance: dataset.provenance,
+      outcome: "RESOLVED",
+      rationale: `RESOLVED: ${productCode} is in force per ${dataset.datasetVersion} at ${asOf.toISOString().slice(0, 10)}.`,
     };
   }
 
+  const blocker = notYetEffective ?? expired;
+  if (blocker) {
+    return {
+      productCode,
+      asOf,
+      product: null,
+      datasetVersion: blocker.dataset.datasetVersion,
+      ruleVersion: blocker.dataset.ruleVersion,
+      provenance: blocker.dataset.provenance,
+      outcome: "UNKNOWN",
+      rationale: blocker.rationale,
+    };
+  }
+
+  const top = candidates[0];
   return {
     productCode,
     asOf,
-    product,
-    datasetVersion: state.dataset.datasetVersion,
-    ruleVersion: state.dataset.ruleVersion,
-    provenance: state.dataset.provenance,
-    outcome: "RESOLVED",
-    rationale: state.rationale,
+    product: null,
+    datasetVersion: top.datasetVersion,
+    ruleVersion: top.ruleVersion,
+    provenance: top.provenance,
+    outcome: "UNKNOWN",
+    rationale: `PRODUCT_NOT_IN_FORCE: ${productCode} is not present in any dataset in force at ${asOf.toISOString().slice(0, 10)} (considered: ${candidates.map((c) => c.datasetVersion).join(", ")}).`,
   };
 }
 

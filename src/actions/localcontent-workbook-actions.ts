@@ -444,23 +444,24 @@ export async function computeLcgpaWorkbookScoreAction(
       computedById: user?.id ?? null,
     });
 
-    try {
-      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", actor: { id: user?.id, name: user?.name, email: user?.email } });
-      await alog.record(
-        "localcontent.workbook.lcgpa_score_computed",
-        { type: "LcWorkbook", id: workbookId },
-        {
-          severity: "info",
-          metadata: {
-            overallLcPct: result.overallLcPct,
-            totalCosts: result.totalCosts,
-            ruleVersion: result.ruleVersion,
-            regulatoryDatasetVersion: result.regulatoryDatasetVersion,
-            recordable: result.recordable,
-          },
+    // Audit is BLOCKING for regulatory scores (security review 2026-08-23,
+    // MEDIUM finding): an unlogged LCGPA score must never be returned, since
+    // the audit event is the operator-facing record that the calculation ran.
+    const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", actor: { id: user?.id, name: user?.name, email: user?.email } });
+    await alog.record(
+      "localcontent.workbook.lcgpa_score_computed",
+      { type: "LcWorkbook", id: workbookId },
+      {
+        severity: "info",
+        metadata: {
+          overallLcPct: result.overallLcPct,
+          totalCosts: result.totalCosts,
+          ruleVersion: result.ruleVersion,
+          regulatoryDatasetVersion: result.regulatoryDatasetVersion,
+          recordable: result.recordable,
         },
-      );
-    } catch { /* audit failure non-blocking */ }
+      },
+    );
 
     return result;
   });

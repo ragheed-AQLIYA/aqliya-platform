@@ -170,25 +170,35 @@ async function main() {
     console.log(`  ${ok ? "✅" : "❌"} ${label}`);
   }
 
-  // ── 4. Verify persistence in LcCalculationRun ──
+  // ── 4. Verify persistence in LcCalculationRun (T8 — recordable path) ──
+  // Per DR-2026-08-23-01, codes 0001/0010 resolve via the in-force mandatory
+  // lists (GOV/SOC precedence over the future-dated MIN_LC schedule), so the
+  // strict gate must now ALLOW recording with full binding provenance.
   const runs = await prisma.lcCalculationRun.findMany({
     where: { workbookId: wb.id },
     orderBy: { createdAt: "desc" },
     take: 1,
   });
   const run = runs[0];
-  // The currently selected active dataset contains these products with a
-  // future product effective date, so strict policy must block persistence.
-  // This is an intentional fail-closed assertion until regulatory activation
-  // state is reconciled by an authorized operator.
-  const runOk = !result.recordable && !run;
-  checks.push(["Strict gate blocks unresolved/future binding", runOk]);
+  const runOk =
+    !!run &&
+    typeof run.overallLcPct === "number" &&
+    Math.abs(run.overallLcPct - result.overallLcPct) < 1e-9 &&
+    !!run.regulatoryDatasetVersion &&
+    !!run.regulatoryArtifactSha256 &&
+    run.regulatoryAsOf instanceof Date &&
+    !Number.isNaN(run.regulatoryAsOf.getTime());
+  checks.push([
+    "Recordable: LcCalculationRun persisted with datasetVersion+sha256+asOf",
+    runOk && result.recordable === true,
+  ]);
   if (run) {
     console.log("\n[db] LcCalculationRun:", {
       id: run.id,
       overallLcPct: run.overallLcPct,
       datasetVersion: run.regulatoryDatasetVersion,
       artifactSha256: run.regulatoryArtifactSha256?.slice(0, 16),
+      asOf: run.regulatoryAsOf?.toISOString(),
     });
   }
 

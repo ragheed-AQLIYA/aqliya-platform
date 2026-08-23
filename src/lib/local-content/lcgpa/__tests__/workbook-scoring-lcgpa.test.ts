@@ -515,3 +515,94 @@ describe("computeLcgpaWorkbookScore — supplier auto-load fallback", () => {
     expect(result.totalCosts).toBeGreaterThan(0);
   });
 });
+
+// ─── Persistence gates (Lead Coordinator T9) ───
+
+describe("computeLcgpaWorkbookScore — persistence gates", () => {
+  function captureRunMock(db: Partial<PrismaClient>) {
+    const calls: Array<Record<string, unknown>> = [];
+    (
+      db.lcCalculationRun as unknown as {
+        create: (args: Record<string, unknown>) => Promise<unknown>;
+      }
+    ).create = async (args: Record<string, unknown>) => {
+      calls.push(args);
+      return args;
+    };
+    return calls;
+  }
+
+  it("recordable result writes exactly one calculation run", async () => {
+    const dataset = makeDataset("v1", [product("2801")], {
+      status: "ACTIVE",
+      effectiveFrom: new Date("2026-01-01"),
+    });
+    const db = makeDbMock([dataset], [], {
+      spendRows: [
+        { supplierId: "supplier-cuid", amount: 4000, metadata: { lcgpaProductCode: "2801" } },
+      ],
+      supplierRows: [
+        { id: "supplier-cuid", name: "Local", localityClassification: "local", localContentPercentage: null },
+      ],
+    }) as PrismaClient;
+    const calls = captureRunMock(db);
+
+    await computeLcgpaWorkbookScore(db, {
+      workbookId: "wb-1",
+      projectId: "proj-1",
+      computedById: null,
+    });
+
+    expect(calls).toHaveLength(1);
+  });
+
+  it("non-recordable result writes zero runs", async () => {
+    const db = makeDbMock([], [], {}) as PrismaClient; // no datasets → unbound
+    const calls = captureRunMock(db);
+
+    const result = await computeLcgpaWorkbookScore(db, {
+      workbookId: "wb-1",
+      projectId: "proj-1",
+      computedById: null,
+    });
+
+    expect(result.recordable).toBe(false);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("allowIncompleteResolution persists UNKNOWN without substitution", async () => {
+    const dataset = makeDataset("v1", [product("2801")], {
+      status: "ACTIVE",
+      effectiveFrom: new Date("2026-01-01"),
+    });
+    const db = makeDbMock([dataset], [], {}) as PrismaClient;
+    const calls = captureRunMock(db);
+
+    const result = await computeLcgpaWorkbookScore(db, {
+      workbookId: "wb-1",
+      projectId: "proj-1",
+      suppliers: [
+        {
+          supplierId: "cuid-a",
+          name: "Unmapped",
+          spend: 500,
+          localityClassification: "local",
+          localContentPercentage: null,
+          rank: 1,
+          regulatoryProductCodes: ["9999"], // not in dataset
+        },
+      ],
+      policy: { allowIncompleteResolution: true },
+    });
+
+    expect(result.recordable).toBe(true);
+    expect(result.trace.regulatoryBinding.unresolved).toEqual(["9999"]);
+    expect(calls).toHaveLength(1);
+
+    const data = calls[0].data as {
+      regulatoryResolution?: Array<{ productCode: string; outcome: string }>;
+    };
+    const row = data.regulatoryResolution?.find((r) => r.productCode === "9999");
+    expect(row?.outcome).toBe("UNKNOWN");
+  });
+});
