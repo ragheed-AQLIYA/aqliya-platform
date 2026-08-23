@@ -10,6 +10,7 @@ import { WorkbookHeader } from "./components/workbook-header";
 import { CompletionBar } from "./components/completion-bar";
 import { SectionGrid } from "./components/section-grid";
 import { ScoreCard } from "./components/score-card";
+import { LcgpaScoreCard } from "./components/lcgpa-score-card";
 import { LinesTab } from "./components/lines-tab";
 import { MissingDataTab } from "./components/missing-data-tab";
 import { DataRequestsTab } from "./components/data-requests-tab";
@@ -55,6 +56,14 @@ export function WorkbookDetailClient({
           onToggleDetail={() => actions.setShowScoreDetail((prev) => !prev)}
         />
       )}
+
+      <LcgpaScoreCard
+        score={state.lcgpaResult}
+        isLoading={state.isLoading === "lcgpa-score"}
+        showDetail={state.showLcgpaDetail}
+        onCompute={() => void actions.handleComputeLcgpaScore()}
+        onToggleDetail={() => actions.setShowLcgpaDetail((prev) => !prev)}
+      />
 
       <Tabs defaultValue="lines">
         <TabsList>

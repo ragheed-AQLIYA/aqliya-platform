@@ -17,11 +17,13 @@ import {
   getDataRequestTextAction,
   markWorkbookExportedAction,
   computeWorkbookScoreAction,
+  computeLcgpaWorkbookScoreAction,
 } from "@/actions/localcontent-workbook-actions";
 import {
   evaluateAllTabGates,
   buildGateContext,
 } from "@/lib/local-content/workflow-gating";
+import type { LcgpaScoreDisplayData } from "./components/lcgpa-score-card";
 
 export interface WorkbookDetailState {
   editingLine: string | null;
@@ -30,7 +32,9 @@ export interface WorkbookDetailState {
   actionMsg: string | null;
   isLoading: string | null;
   scoreResult: LcScoreResult | null;
+  lcgpaResult: LcgpaScoreDisplayData | null;
   showScoreDetail: boolean;
+  showLcgpaDetail: boolean;
   sections: Record<string, WorkbookWithLines["lines"]>;
   isEditable: boolean;
   canExport: boolean;
@@ -48,11 +52,13 @@ export interface WorkbookDetailActions {
   handleExport: () => Promise<void>;
   handleFinalizeExport: () => Promise<void>;
   handleComputeScore: () => Promise<void>;
+  handleComputeLcgpaScore: () => Promise<void>;
   handleViewRequestText: (requestId: string) => Promise<void>;
   setEditingLine: (val: string | null) => void;
   setEditValue: (val: string) => void;
   setEditNotes: (val: string) => void;
   setShowScoreDetail: (val: boolean | ((prev: boolean) => boolean)) => void;
+  setShowLcgpaDetail: (val: boolean | ((prev: boolean) => boolean)) => void;
 }
 
 export function useWorkbookDetail(
@@ -65,7 +71,9 @@ export function useWorkbookDetail(
   const [actionMsg, setActionMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [scoreResult, setScoreResult] = useState<LcScoreResult | null>(null);
+  const [lcgpaResult, setLcgpaResult] = useState<LcgpaScoreDisplayData | null>(null);
   const [showScoreDetail, setShowScoreDetail] = useState(false);
+  const [showLcgpaDetail, setShowLcgpaDetail] = useState(false);
 
   const showAction = useCallback((msg: string) => {
     setActionMsg(msg);
@@ -197,6 +205,23 @@ export function useWorkbookDetail(
     setIsLoading(null);
   }, [workbook.id, showAction]);
 
+  const handleComputeLcgpaScore = useCallback(async () => {
+    setIsLoading("lcgpa-score");
+    const res = await computeLcgpaWorkbookScoreAction(workbook.id);
+    if (!res.ok) {
+      showAction(`خطأ: ${res.error}`);
+    } else if (res.data) {
+      setLcgpaResult(res.data as LcgpaScoreDisplayData);
+      setShowLcgpaDetail(true);
+      if (res.data.recordable) {
+        showAction("تم احتساب نتيجة LCGPA وربطها بالإصدار التنظيمي ✅");
+      } else {
+        showAction("تم الاحتساب — النتيجة غير قابلة للتسجيل (لا يوجد إصدار تنظيمي مرتبط)");
+      }
+    }
+    setIsLoading(null);
+  }, [workbook.id, showAction]);
+
   const handleViewRequestText = useCallback(async (requestId: string) => {
     const res = await getDataRequestTextAction(requestId);
     if (res.ok && res.data) {
@@ -217,7 +242,9 @@ export function useWorkbookDetail(
     actionMsg,
     isLoading,
     scoreResult,
+    lcgpaResult,
     showScoreDetail,
+    showLcgpaDetail,
     sections,
     isEditable,
     canExport,
@@ -235,11 +262,13 @@ export function useWorkbookDetail(
     handleExport,
     handleFinalizeExport,
     handleComputeScore,
+    handleComputeLcgpaScore,
     handleViewRequestText,
     setEditingLine,
     setEditValue,
     setEditNotes,
     setShowScoreDetail,
+    setShowLcgpaDetail,
   };
 
   return { state, actions };
