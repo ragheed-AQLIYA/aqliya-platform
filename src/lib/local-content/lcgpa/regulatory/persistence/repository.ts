@@ -58,6 +58,28 @@ type Db = PrismaClient;
 // ─── Hydrate ───
 
 /**
+ * Lightweight query: load only datasets whose status permits temporal resolution,
+ * WITH their products hydrated. Designed for request-path use (server actions)
+ * where the full engine state (sources, cases, journal) is not needed.
+ *
+ * The temporal resolution layer (`effective-date.ts`) handles ACTIVE + SUPERSEDED
+ * datasets and enforces effectiveFrom/effectiveTo windows — no filtering by status
+ * at query time.
+ */
+export async function loadResolvableDatasets(
+  db: Db,
+): Promise<RegulatoryDataset[]> {
+  const rows = await db.lcRegulatoryDataset.findMany({
+    where: { status: { in: ["ACTIVE", "SUPERSEDED"] } },
+    orderBy: { createdAt: "asc" },
+    include: {
+      products: { orderBy: { productCode: "asc" } },
+    },
+  });
+  return (rows as unknown as DatasetRow[]).map(toDataset);
+}
+
+/**
  * Load the regulatory state the pure engine needs.
  *
  * Only datasets that can participate in resolution or diffing are hydrated with

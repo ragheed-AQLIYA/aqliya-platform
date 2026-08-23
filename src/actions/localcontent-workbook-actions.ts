@@ -404,3 +404,92 @@ export async function computeWorkbookScoreAction(workbookId: string) {
     return result;
   });
 }
+
+/**
+ * Compute the LCGPA score for a workbook with full regulatory binding.
+ *
+ * Unlike computeWorkbookScoreAction (IKTVA-style weighted metrics), this action:
+ * - Queries ACTIVE/SUPERSEDED regulatory datasets from the database
+ * - Extracts LCGPA pillar inputs from workbook lines
+ * - Resolves the regulatory binding BEFORE computing
+ * - Persists the result with full provenance to LcCalculationRun
+ *
+ * The binding gate refuses to record when no dataset was in force or products
+ * didn't resolve, unless an explicit BindingPolicy opts out.
+ */
+export async function computeLcgpaWorkbookScoreAction(
+  workbookId: string,
+  options?: {
+    suppliers?: Array<{
+      supplierId: string;
+      name: string;
+      spend: number;
+      localityClassification: "local" | "non_local" | "mixed" | "unclassified";
+      localContentPercentage?: number | null;
+      sectorLcRate?: number;
+    }>;
+    totalGoodsServicesCost?: number;
+    allowUnboundDataset?: boolean;
+    allowIncompleteResolution?: boolean;
+  },
+) {
+  await requireWorkbookAccess(workbookId);
+  await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
+  return safe(async () => {
+    const { prisma } = await import("@/lib/prisma");
+    const { computeLcgpaWorkbookScore } = await import(
+      "@/lib/local-content/lcgpa/workbook-scoring-lcgpa"
+    );
+
+    // Resolve the project ID (needed for calculation run record)
+    const workbook = await prisma.lcWorkbook.findUnique({
+      where: { id: workbookId },
+      select: { projectId: true },
+    });
+    if (!workbook) throw new Error("WORKBOOK_NOT_FOUND");
+
+    // Get current user
+    const user = await getCurrentUser();
+
+    // Build ranked suppliers with rank assignment (descending spend)
+    const suppliers = (options?.suppliers ?? [])
+      .sort((a, b) => b.spend - a.spend)
+      .map((s, i) => ({
+        ...s,
+        localContentPercentage: s.localContentPercentage ?? null,
+        rank: i + 1,
+      }));
+
+    const result = await computeLcgpaWorkbookScore(prisma, {
+      workbookId,
+      projectId: workbook.projectId,
+      suppliers,
+      totalGoodsServicesCost: options?.totalGoodsServicesCost ?? 0,
+      computedById: user?.id ?? null,
+      policy: {
+        ...(options?.allowUnboundDataset ? { allowUnboundDataset: true } : {}),
+        ...(options?.allowIncompleteResolution ? { allowIncompleteResolution: true } : {}),
+      },
+    });
+
+    try {
+      const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", actor: { id: user?.id, name: user?.name, email: user?.email } });
+      await alog.record(
+        "localcontent.workbook.lcgpa_score_computed",
+        { type: "LcWorkbook", id: workbookId },
+        {
+          severity: "info",
+          metadata: {
+            overallLcPct: result.overallLcPct,
+            totalCosts: result.totalCosts,
+            ruleVersion: result.ruleVersion,
+            regulatoryDatasetVersion: result.regulatoryDatasetVersion,
+            recordable: result.recordable,
+          },
+        },
+      );
+    } catch { /* audit failure non-blocking */ }
+
+    return result;
+  });
+}
